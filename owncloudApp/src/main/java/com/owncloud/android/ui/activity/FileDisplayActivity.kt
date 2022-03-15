@@ -45,6 +45,7 @@ import android.os.IBinder
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -128,8 +129,24 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private var uploadBroadcastReceiver: UploadBroadcastReceiver? = null
     private var lastSslUntrustedServerResult: RemoteOperationResult<*>? = null
 
-    private var leftFragmentContainer: View? = null
-    private var rightFragmentContainer: View? = null
+    /**
+     * FileDisplayActivity is based on those two containers.
+     * Left one is used for showing a list of files - listMainFileFragment
+     * Right one is used for showing previews, details... - secondFragment
+     *
+     * We should rename them to a more accurate names.
+     *
+     * When one is shown, the other is hidden. The main logic for this is inside [updateFragmentsVisibility]
+     */
+    private var leftFragmentContainer: FrameLayout? = null
+    private var rightFragmentContainer: FrameLayout? = null
+
+    private val listMainFileFragment: MainFileListFragment?
+        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES) as MainFileListFragment?
+
+    private val secondFragment: FileFragment?
+        get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
+
     private var selectAllMenuItem: MenuItem? = null
     private var mainMenu: Menu? = null
 
@@ -146,12 +163,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     var filesUploadHelper: FilesUploadHelper? = null
         internal set
-
-    private val listMainFileFragment: MainFileListFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES) as MainFileListFragment?
-
-    private val secondFragment: FileFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
 
     private val isFabOpen: Boolean
         get() = listMainFileFragment?.getFabMain()?.isExpanded ?: false
@@ -236,7 +247,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         super.onPostCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            createMinFragments()
+            initAndShowListOfFiles()
         }
 
         setBackgroundText()
@@ -299,19 +310,14 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
     }
 
-    // TODO Change to start using new MainListFragment
-    private fun createMinFragments() {
-        // TODO Remove commented code
-        /*val listOfFiles = OCFileListFragment.newInstance(false, fileListOption, false, false, true)
-        listOfFiles.setSearchListener(findViewById(R.id.root_toolbar_search_view))*/
-
-        val mainListOfFiles = MainFileListFragment.newInstance()
-        mainListOfFiles.fileActions = this
+    private fun initAndShowListOfFiles() {
+        val mainListOfFiles = MainFileListFragment.newInstance().apply {
+            fileActions = this@FileDisplayActivity
+            setSearchListener(findViewById(R.id.root_toolbar_search_view))
+        }
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.left_fragment_container, mainListOfFiles, TAG_LIST_OF_FILES)
         transaction.commit()
-
-        mainListOfFiles.setSearchListener(findViewById(R.id.root_toolbar_search_view))
     }
 
     private fun initFragmentsWithFile() {
@@ -405,24 +411,19 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         binding.navCoordinatorLayout.bottomNavView.isVisible = show
     }
 
+    /**
+     * Handle the visibility of the two main containers in the activity.
+     *
+     * Showing list of files should hide right container
+     * Showing preview or details should hide left container
+     *
+     * @param existsSecondFragment - true if showing details or preview of a file
+     */
     private fun updateFragmentsVisibility(existsSecondFragment: Boolean) {
-        if (existsSecondFragment) {
-            if (leftFragmentContainer?.visibility != View.GONE) {
-                leftFragmentContainer?.visibility = View.GONE
-            }
-            if (rightFragmentContainer?.visibility != View.VISIBLE) {
-                rightFragmentContainer?.visibility = View.VISIBLE
-            }
-            showBottomNavBar(show = false)
-        } else {
-            if (leftFragmentContainer?.visibility != View.VISIBLE) {
-                leftFragmentContainer?.visibility = View.VISIBLE
-                showBottomNavBar(show = true)
-            }
-            if (rightFragmentContainer?.visibility != View.GONE) {
-                rightFragmentContainer?.visibility = View.GONE
-            }
-        }
+        leftFragmentContainer?.isVisible = !existsSecondFragment
+        rightFragmentContainer?.isVisible = existsSecondFragment
+
+        showBottomNavBar(show = !existsSecondFragment)
     }
 
     private fun cleanSecondFragment() {
