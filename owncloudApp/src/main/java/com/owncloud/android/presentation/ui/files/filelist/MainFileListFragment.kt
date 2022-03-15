@@ -77,19 +77,15 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment
 import com.owncloud.android.ui.fragment.FileDetailFragment
 import com.owncloud.android.ui.fragment.FileFragment
-import com.owncloud.android.ui.preview.PreviewAudioFragment
-import com.owncloud.android.ui.preview.PreviewImageFragment
-import com.owncloud.android.ui.preview.PreviewTextFragment
-import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.java.KoinJavaComponent.get
 import timber.log.Timber
 
-class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener,
+class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener,
     SortOptionsView.CreateFolderListener,
-    CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener {
+    CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener, FileListAdapter.FileListAdapterListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
     private val filesViewModel by viewModel<FilesViewModel>()
@@ -192,65 +188,9 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
             context = requireContext(),
             layoutManager = layoutManager,
             isShowingJustFolders = isShowingJustFolders(),
-            listener = object :
-                FileListAdapter.FileListAdapterListener {
-                override fun onItemClick(ocFile: OCFile, position: Int) {
-                    fileActions?.onCurrentFolderUpdated(ocFile)
-                    if (actionMode != null) {
-                        toggleSelection(position)
-                    } else {
-                        if (ocFile.isFolder) {
-                            mainFileListViewModel.listDirectory(ocFile)
-                            filesViewModel.refreshFolder(ocFile.remotePath)
-                        } else { /// Click on a file
-                            if (PreviewImageFragment.canBePreviewed(ocFile)) {
-                                // preview image - it handles the sync, if needed
-                                fileActions?.setImagePreview(ocFile)
-                            } else if (PreviewTextFragment.canBePreviewed(ocFile)) {
-                                fileActions?.initTextPreview(ocFile)
-                            } else if (PreviewAudioFragment.canBePreviewed(ocFile)) {
-                                // media preview
-                                fileActions?.initAudioPreview(ocFile)
+            listener = this@MainFileListFragment
+        )
 
-                            } else if (PreviewVideoFragment.canBePreviewed(ocFile) && !mainFileListViewModel.fileIsDownloading(
-                                    ocFile,
-                                    AccountUtils.getCurrentOwnCloudAccount(context)
-                                )
-                            ) {
-                                // FIXME: 13/10/2020 : New_arch: Av.Offline
-                                // Available offline exception, don't initialize streaming
-                                // if (!file.isAvailableLocally() && file.isAvailableOffline()) {
-                                if (ocFile.isAvailableLocally) {
-                                    // sync file content, then open with external apps
-                                    fileActions?.startSyncAndOpenFile(ocFile)
-                                } else {
-                                    // media preview
-                                    fileActions?.initVideoPreview(ocFile)
-                                }
-
-                                // If the file is already downloaded sync it, just to update it if there is a
-                                // new available file version
-                                if (ocFile.isAvailableLocally) {
-                                    fileActions?.initSync(ocFile)
-                                }
-                            } else {
-                                fileActions?.initSyncAndOpenFile(ocFile)
-                            }
-                        }
-                    }
-                }
-
-                override fun onLongItemClick(ocFile: OCFile, position: Int): Boolean {
-                    if (isPickingAFolder()) return false
-
-                    if (actionMode == null) {
-                        actionMode = (activity as AppCompatActivity).startSupportActionMode(actionModeCallback)
-                    }
-                    toggleSelection(position)
-                    return true
-                }
-
-            })
         binding.recyclerViewMainFileList.adapter = fileListAdapter
 
         // Set Swipe to refresh and its listener
@@ -669,6 +609,30 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
         return false
     }
 
+    override fun onItemClick(ocFile: OCFile, position: Int) {
+        if (actionMode != null) {
+            toggleSelection(position)
+            return
+        }
+
+        if (ocFile.isFolder) {
+            mainFileListViewModel.navigateTo(ocFile)
+            filesViewModel.refreshFolder(ocFile.remotePath)
+        } else { // Click on a file
+            fileActions?.onFileClicked(ocFile)
+        }
+    }
+
+    override fun onLongItemClick(ocFile: OCFile, position: Int): Boolean {
+        if (isPickingAFolder()) return false
+
+        if (actionMode == null) {
+            actionMode = (requireActivity() as AppCompatActivity).startSupportActionMode(actionModeCallback)
+        }
+        toggleSelection(position)
+        return true
+    }
+
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
 
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -789,13 +753,7 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
 
     interface FileActions {
         fun onCurrentFolderUpdated(newCurrentFolder: OCFile)
-        fun setImagePreview(file: OCFile)
-        fun initTextPreview(file: OCFile)
-        fun initAudioPreview(file: OCFile)
-        fun initVideoPreview(file: OCFile)
-        fun startSyncAndOpenFile(file: OCFile)
-        fun initSync(file: OCFile)
-        fun initSyncAndOpenFile(file: OCFile)
+        fun onFileClicked(file: OCFile)
         fun initDownloadForSending(file: OCFile)
         fun cancelFileTransference(file: ArrayList<OCFile>)
         fun setBottomBarVisibility(isVisible: Boolean)
