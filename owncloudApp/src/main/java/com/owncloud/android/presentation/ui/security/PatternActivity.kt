@@ -30,9 +30,9 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.andrognito.patternlockview.PatternLockView
 import com.andrognito.patternlockview.PatternLockView.Dot
@@ -79,7 +79,7 @@ class PatternActivity : AppCompatActivity(), IEnableBiometrics {
 
         setContentView(R.layout.activity_pattern_lock)
 
-        val activityPatternLockLayout = findViewById<LinearLayout>(R.id.activityPatternLockLayout)
+        val activityPatternLockLayout = findViewById<ConstraintLayout>(R.id.activityPatternLockLayout)
         bCancel = findViewById(R.id.cancel_pattern)
         patternHeader = findViewById(R.id.header_pattern)
         patternExplanation = findViewById(R.id.explanation_pattern)
