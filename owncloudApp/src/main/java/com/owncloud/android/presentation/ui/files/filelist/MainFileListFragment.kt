@@ -289,8 +289,12 @@ class MainFileListFragment() : Fragment(), SortDialogListener, SortOptionsView.S
         binding.swipeRefreshMainFileList.cancel()
     }
 
+    fun navigateToFolderId(folderId: Long) {
+        mainFileListViewModel.navigateTo(folderId)
+    }
+
     fun listDirectory(directory: OCFile) {
-        mainFileListViewModel.listDirectory(directory = directory)
+        mainFileListViewModel.navigateTo(ocFile = directory)
     }
 
     fun listCurrentDirectory() {
