@@ -76,18 +76,9 @@
             app:normalStateColor="@color/primary"
             app:wrongStateColor="@color/primary">
 
-    <requestFocus />
+            <requestFocus />
 
-</com.andrognito.patternlockview.PatternLockView>
+        </com.andrognito.patternlockview.PatternLockView>
     </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
-
-    <Button
-        android:id="@+id/cancel_pattern"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/patternContainer"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="cancel"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
