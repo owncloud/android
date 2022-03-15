@@ -37,7 +37,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -97,7 +96,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         );
 
         if (savedInstanceState == null) {
-            createFragments();
+            initAndShowListOfFilesFragment();
         }
 
         // sets callback listeners for UI elements
@@ -145,7 +144,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         }
     }
 
-    private void createFragments() {
+    private void initAndShowListOfFilesFragment() {
         MainFileListFragment mainListOfFiles = MainFileListFragment.newInstance(false, true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, mainListOfFiles, TAG_LIST_OF_FOLDERS);
@@ -326,6 +325,15 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     public void onBackPressed() {
         MainFileListFragment listOfFiles = getListOfFilesFragment();
         if (listOfFiles != null) {  // should never be null, indeed
+            OCFile fileBeforeBrowsingUp = listOfFiles.getCurrentFile();
+            if (fileBeforeBrowsingUp != null &&
+                    fileBeforeBrowsingUp.getParentId() != null &&
+                    fileBeforeBrowsingUp.getParentId() == OCFile.ROOT_PARENT_ID
+            ) {
+                // If we are already at root, let's finish the picker. No sense to keep browsing up.
+                finish();
+                return;
+            }
             listOfFiles.onBrowseUp();
             setFile(listOfFiles.getCurrentFile());
             updateNavigationElementsInActionBar();
@@ -333,15 +341,19 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     protected void updateNavigationElementsInActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        OCFile currentDir = getCurrentFolder();
+        OCFile currentDir;
+
+        try {
+            currentDir = getCurrentFolder();
+        } catch (NullPointerException e) {
+            currentDir = getFile();
+        }
+
         boolean atRoot = (currentDir == null || currentDir.getParentId() == 0);
-        actionBar.setDisplayHomeAsUpEnabled(!atRoot);
-        actionBar.setHomeButtonEnabled(!atRoot);
-        actionBar.setTitle(
-                atRoot
-                        ? getString(R.string.default_display_name_for_root_folder)
-                        : currentDir.getFileName()
+        updateStandardToolbar(
+                atRoot ? getString(R.string.default_display_name_for_root_folder) : currentDir.getFileName(),
+                !atRoot,
+                !atRoot
         );
     }
 
