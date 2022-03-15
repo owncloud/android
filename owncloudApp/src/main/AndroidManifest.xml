@@ -226,6 +226,7 @@
             android:theme="@style/Theme.ownCloud.Fullscreen" />
         <activity
             android:name=".presentation.ui.security.PatternActivity"
+            android:theme="@style/Theme.ownCloud"
             android:screenOrientation="portrait"/>
         <activity android:name=".presentation.ui.security.BiometricActivity" />
         <activity
