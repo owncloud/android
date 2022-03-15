@@ -65,6 +65,7 @@ import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedExcept
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -1633,6 +1634,62 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         })
     }
 
+    override fun onCurrentFolderUpdated(newCurrentFolder: OCFile) {
+        updateToolbar(newCurrentFolder)
+        file = newCurrentFolder
+    }
+
+    override fun onFileClicked(file: OCFile) {
+        when {
+            PreviewImageFragment.canBePreviewed(file) -> {
+                // preview image - it handles the sync, if needed
+                startImagePreview(file)
+            }
+            PreviewTextFragment.canBePreviewed(file) -> {
+                startTextPreview(file)
+                fileOperationsHelper.syncFile(file)
+            }
+            PreviewAudioFragment.canBePreviewed(file) -> {
+                // media preview
+                startAudioPreview(file, 0)
+                fileOperationsHelper.syncFile(file)
+            }
+            PreviewVideoFragment.canBePreviewed(file) && !WorkManager.getInstance(this).isDownloadPending(account, file) -> {
+                // FIXME: 13/10/2020 : New_arch: Av.Offline
+                // Available offline exception, don't initialize streaming
+                // if (!file.isAvailableLocally() && file.isAvailableOffline()) {
+                if (file.isAvailableLocally) {
+                    // sync file content, then open with external apps
+                    startSyncThenOpen(file)
+                } else {
+                    // media preview
+                    startVideoPreview(file, 0)
+                }
+
+                // If the file is already downloaded sync it, just to update it if there is a
+                // new available file version
+                if (file.isAvailableLocally) {
+                    fileOperationsHelper.syncFile(file)
+                }
+            }
+            else -> {
+                startSyncThenOpen(file)
+            }
+        }
+    }
+
+    override fun initDownloadForSending(file: OCFile) {
+        startDownloadForSending(file)
+    }
+
+    override fun cancelFileTransference(files: ArrayList<OCFile>) {
+        cancelTransference(files)
+    }
+
+    override fun setBottomBarVisibility(isVisible: Boolean) {
+        showBottomNavBar(isVisible)
+    }
+
     companion object {
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
         private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
@@ -1650,52 +1707,5 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         const val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
         const val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
         const val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
-    }
-
-    override fun onCurrentFolderUpdated(newCurrentFolder: OCFile) {
-        updateToolbar(newCurrentFolder)
-        file = newCurrentFolder
-    }
-
-    override fun setImagePreview(file: OCFile) {
-        startImagePreview(file)
-    }
-
-    override fun initTextPreview(file: OCFile) {
-        startTextPreview(file)
-        fileOperationsHelper.syncFile(file)
-    }
-
-    override fun initAudioPreview(file: OCFile) {
-        startAudioPreview(file, 0)
-        fileOperationsHelper.syncFile(file)
-    }
-
-    override fun initVideoPreview(file: OCFile) {
-        startVideoPreview(file, 0)
-    }
-
-    override fun startSyncAndOpenFile(file: OCFile) {
-        startSyncThenOpen(file)
-    }
-
-    override fun initSync(file: OCFile) {
-        fileOperationsHelper.syncFile(file)
-    }
-
-    override fun initSyncAndOpenFile(file: OCFile) {
-        startSyncThenOpen(file)
-    }
-
-    override fun initDownloadForSending(file: OCFile) {
-        startDownloadForSending(file)
-    }
-
-    override fun cancelFileTransference(files: ArrayList<OCFile>) {
-        cancelTransference(files)
-    }
-
-    override fun setBottomBarVisibility(isVisible: Boolean) {
-        showBottomNavBar(isVisible)
     }
 }

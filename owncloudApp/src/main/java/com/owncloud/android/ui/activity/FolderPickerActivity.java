@@ -375,41 +375,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     @Override
-    public void setImagePreview(@NonNull OCFile file) {
-
-    }
-
-    @Override
-    public void initTextPreview(@NonNull OCFile file) {
-
-    }
-
-    @Override
-    public void initAudioPreview(@NonNull OCFile file) {
-
-    }
-
-    @Override
-    public void initVideoPreview(@NonNull OCFile file) {
-
-    }
-
-    @Override
-    public void startSyncAndOpenFile(@NonNull OCFile file) {
-
-    }
-
-    @Override
-    public void initSync(@NonNull OCFile file) {
-
-    }
-
-    @Override
-    public void initSyncAndOpenFile(@NonNull OCFile file) {
-
-    }
-
-    @Override
     public void initDownloadForSending(@NonNull OCFile file) {
 
     }
@@ -422,6 +387,11 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     @Override
     public void setBottomBarVisibility(boolean isVisible) {
 
+    }
+
+    @Override
+    public void onFileClicked(@NonNull OCFile file) {
+        // Nothing to do. Clicking on files is not allowed.
     }
 
     private class SyncBroadcastReceiver extends BroadcastReceiver {
