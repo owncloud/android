@@ -78,10 +78,6 @@ class MainFileListViewModel(
     val getSearchedFilesData: LiveData<Event<UIResult<List<OCFile>>>>
         get() = _getSearchedFilesData
 
-    private fun getFilesList(folderId: Long) {
-        //fileIdLiveData.postValue(folderId)
-    }
-
     private fun getSearchFilesList(fileListOption: FileListOption, folderId: Long, searchText: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             getSearchFolderContentUseCase.execute(
@@ -97,11 +93,6 @@ class MainFileListViewModel(
                 }
             }
         }
-    }
-
-    // FIXME: I think that this function is not needed at all. File list is automatically refreshed with database via LiveData.
-    fun listCurrentDirectory() {
-        //getFilesList(file.id!!)
     }
 
     fun navigateTo(ocFile: OCFile) {
