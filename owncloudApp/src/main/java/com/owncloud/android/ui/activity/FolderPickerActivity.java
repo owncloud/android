@@ -138,7 +138,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     private void initAndShowListOfFilesFragment() {
-        MainFileListFragment mainListOfFiles = MainFileListFragment.newInstance(false, true);
+        MainFileListFragment mainListOfFiles = MainFileListFragment.newInstance(true);
         mainListOfFiles.setFileActions(this);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, mainListOfFiles, TAG_LIST_OF_FOLDERS);
