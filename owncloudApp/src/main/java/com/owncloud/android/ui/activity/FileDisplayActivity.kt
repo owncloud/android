@@ -481,6 +481,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         fileListFragment?.listDirectory(reloadData)*/
         if (file != null) {
             val fileListFragment = listMainFileFragment
+            listMainFileFragment?.fileActions = this
             fileListFragment?.listDirectory(file)
         }
     }
