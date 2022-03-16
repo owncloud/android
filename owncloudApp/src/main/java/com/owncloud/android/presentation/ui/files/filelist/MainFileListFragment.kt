@@ -3,7 +3,7 @@
  *
  * @author Fernando Sanz Velasco
  * @author Jose Antonio Barros Ramos
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -187,7 +187,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         fileListAdapter = FileListAdapter(
             context = requireContext(),
             layoutManager = layoutManager,
-            isShowingJustFolders = isShowingJustFolders(),
+            isPickerMode = isPickingAFolder(),
             listener = this@MainFileListFragment
         )
 
@@ -268,11 +268,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     fun listDirectory(directory: OCFile) {
         mainFileListViewModel.navigateTo(ocFile = directory)
-    }
-
-    private fun isShowingJustFolders(): Boolean {
-        val args = arguments
-        return args != null && args.getBoolean(ARG_JUST_FOLDERS, false)
     }
 
     private fun registerListAdapterDataObserver() {
@@ -761,18 +756,15 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     companion object {
         private val MY_PACKAGE = MainFileListFragment::class.java.`package`.name ?: "com.owncloud.android.ui.fragment"
-        val ARG_JUST_FOLDERS = "${MainFileListFragment::class.java.canonicalName}.JUST_FOLDERS"
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
         val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
         val KEY_FILE = "$MY_PACKAGE.extra.FILE"
 
         @JvmStatic
         fun newInstance(
-            justFolders: Boolean = false,
             pickingAFolder: Boolean = false
         ): MainFileListFragment {
             val args = Bundle()
-            args.putBoolean(ARG_JUST_FOLDERS, justFolders)
             args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
             return MainFileListFragment().apply { arguments = args }
         }
