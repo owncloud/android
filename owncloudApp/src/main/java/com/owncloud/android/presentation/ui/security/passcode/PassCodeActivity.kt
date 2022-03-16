@@ -30,7 +30,6 @@ package com.owncloud.android.presentation.ui.security.passcode
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
@@ -54,7 +53,6 @@ import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBiometrics {
 
@@ -182,7 +180,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
         val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
         for (i in 0 until numberOfPasscodeDigits) {
             passCodeEditTexts[i]?.setOnClickListener { hideSoftKeyboard() }
-            passCodeEditTexts[i]?.addTextChangedListener(PassCodeDigitTextWatcher(i, i == numberOfPasscodeDigits - 1))
             passCodeEditTexts[i]?.onFocusChangeListener = OnFocusChangeListener { _: View, _: Boolean ->
                 // TODO WIP: should take advantage of hasFocus to reduce processing
                 for (j in 0 until i) {
@@ -203,6 +200,14 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
         if (passcode.length < numberOfPasscodeDigits && !binding.lockTime.isVisible) {
             passcode.append(number.toString())
             passCodeEditTexts[passcode.length - 1]?.text = Editable.Factory.getInstance().newEditable(number.toString())
+
+            //si no es el ultimo
+            if (passcode.length < numberOfPasscodeDigits) {
+                passCodeEditTexts[passcode.length]?.requestFocus()
+                passCodeEditTexts[passcode.length - 1]?.isEnabled = false
+            } else {//si es el ultimo
+                processFullPassCode()
+            }
         }
     }
 
@@ -413,56 +418,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
         } else {
             PassCodeManager.onActivityStopped(this)
             finish()
-        }
-    }
-
-    /**
-     * Constructor
-     *
-     * @param index         Position in the pass code of the input field that will be bound to
-     * this watcher.
-     * @param lastOne       'True' means that watcher corresponds to the last position of the
-     * pass code.
-     */
-    private inner class PassCodeDigitTextWatcher(private val index: Int, private val lastOne: Boolean) : TextWatcher {
-        private operator fun next(): Int {
-            return if (lastOne) 0 else index.plus(1)
-        }
-
-        /**
-         * Performs several actions when the user types a digit in an input field:
-         * - saves the input digit to the state of the activity; this will allow retyping the
-         * pass code to confirm it.
-         * - moves the focus automatically to the next field
-         * - for the last field, triggers the processing of the full pass code
-         *
-         * @param changedText     Changed text
-         */
-        override fun afterTextChanged(changedText: Editable) {
-            if (changedText.isNotEmpty()) {
-                passCodeEditTexts[next()]?.requestFocus()
-                passCodeEditTexts[index]?.isEnabled = false
-                if (lastOne) {
-                    processFullPassCode()
-                }
-            } else {
-                Timber.d("Text box $index was cleaned")
-            }
-        }
-
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-// nothing to do
-        }
-
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-// nothing to do
-        }
-
-        init {
-            require(index >= 0) {
-                "Invalid index in " + PassCodeDigitTextWatcher::class.java.simpleName +
-                        " constructor"
-            }
         }
     }
 
