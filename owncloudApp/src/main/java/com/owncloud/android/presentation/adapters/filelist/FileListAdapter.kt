@@ -48,7 +48,7 @@ import com.owncloud.android.utils.PreferenceUtils
 
 class FileListAdapter(
     private val context: Context,
-    private val isShowingJustFolders: Boolean,
+    private val isPickerMode: Boolean,
     private val layoutManager: StaggeredGridLayoutManager,
     private val listener: FileListAdapterListener,
 ) : SelectableAdapter<RecyclerView.ViewHolder>() {
@@ -285,7 +285,7 @@ class FileListAdapter(
             }
 
         } else { // Is Footer
-            if (viewType == ViewType.FOOTER.ordinal && !isShowingJustFolders) {
+            if (viewType == ViewType.FOOTER.ordinal && !isPickerMode) {
                 val view = holder as FooterViewHolder
                 val file = files[position] as OCFooterFile
                 (view.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams).apply {
