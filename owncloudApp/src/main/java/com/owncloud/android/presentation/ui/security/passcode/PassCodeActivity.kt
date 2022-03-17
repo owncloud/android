@@ -181,7 +181,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
         for (i in 0 until numberOfPasscodeDigits) {
             passCodeEditTexts[i]?.setOnClickListener { hideSoftKeyboard() }
             passCodeEditTexts[i]?.onFocusChangeListener = OnFocusChangeListener { _: View, _: Boolean ->
-                // TODO WIP: should take advantage of hasFocus to reduce processing
+                // Return the focus to the first EditText without number
                 for (j in 0 until i) {
                     if (passCodeEditTexts[j]?.text.toString() == "") {  // TODO WIP validation
                         // could be done in a global way, with a single OnFocusChangeListener for all the
@@ -201,11 +201,10 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
             passcode.append(number.toString())
             passCodeEditTexts[passcode.length - 1]?.text = Editable.Factory.getInstance().newEditable(number.toString())
 
-            //si no es el ultimo
             if (passcode.length < numberOfPasscodeDigits) {
                 passCodeEditTexts[passcode.length]?.requestFocus()
                 passCodeEditTexts[passcode.length - 1]?.isEnabled = false
-            } else {//si es el ultimo
+            } else {
                 processFullPassCode()
             }
         }
