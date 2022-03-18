@@ -51,12 +51,14 @@ import com.owncloud.android.AppRater
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
+import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.extensions.showMessageInToast
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder
 import com.owncloud.android.files.services.FileUploader
@@ -152,6 +154,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         checkPasscodeEnforced(this)
 
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
+
+        val dataIntent: Uri? = intent.data
+        manageDataIntent(dataIntent)
 
         /// Load of saved instance state
         if (savedInstanceState != null) {
@@ -1645,6 +1650,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     override fun optionLockSelected(type: LockType) {
         manageOptionLockSelected(type)
+    }
+
+    private fun manageDataIntent(uri: Uri?) {
+        if (uri != null && AccountUtils.getAccounts(applicationContext).isEmpty()) {
+            showMessageInToast(getString(R.string.no_account_configured))
+        }
     }
 
     companion object {
