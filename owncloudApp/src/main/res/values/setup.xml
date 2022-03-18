@@ -120,4 +120,7 @@
     <!-- Screenshots -->
     <bool name="allow_screenshots">true</bool>
 
+    <!--Deep Links -->
+    <string name="url_link_host">*</string>
+
 </resources>
