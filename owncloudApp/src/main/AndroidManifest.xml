@@ -90,7 +90,19 @@
         <activity
             android:name=".ui.activity.FileDisplayActivity"
             android:theme="@style/Theme.ownCloud.Toolbar.Drawer"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="demo.owncloud.com"
+                    android:pathPrefix="/f"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.activity.ManageAccountsActivity" />
         <activity
             android:name=".ui.activity.ReceiveExternalFilesActivity"
