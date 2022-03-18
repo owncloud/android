@@ -70,6 +70,14 @@ fun Activity.showMessageInSnackbar(
     Snackbar.make(findViewById(layoutId), message, duration).show()
 }
 
+fun Activity.showMessageInToast(
+    message: CharSequence,
+    duration: Int = Toast.LENGTH_LONG
+) {
+    Toast.makeText(this, message, duration).show()
+}
+
+
 fun Activity.showErrorInToast(
     genericErrorMessageId: Int,
     throwable: Throwable?,
