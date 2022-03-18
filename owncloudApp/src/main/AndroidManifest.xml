@@ -94,8 +94,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="demo.owncloud.com"
-                    android:pathPrefix="/f"
+                    android:host="@string/url_link_host"
+                    android:pathPrefix="/f/"
                     android:scheme="https" />
             </intent-filter>
         </activity>
