@@ -68,8 +68,11 @@
         android:supportsPictureInPicture="false"
         android:theme="@style/Theme.ownCloud.Toolbar"
         tools:targetApi="n">
-        <activity android:name=".presentation.ui.settings.PrivacyPolicyActivity"></activity>
-        <activity android:name=".presentation.ui.settings.SettingsActivity"></activity>
+        <activity
+            android:name=".ui.activity.ReleaseNotesActivity"
+            android:exported="false" />
+        <activity android:name=".presentation.ui.settings.PrivacyPolicyActivity" />
+        <activity android:name=".presentation.ui.settings.SettingsActivity" />
         <activity android:name=".presentation.ui.migration.StorageMigrationActivity" />
         <activity
             android:name=".ui.activity.SplashActivity"
