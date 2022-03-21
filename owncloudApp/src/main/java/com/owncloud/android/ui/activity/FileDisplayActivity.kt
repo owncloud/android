@@ -155,9 +155,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
 
-        val dataIntent: Uri? = intent.data
-        manageDataIntent(dataIntent)
-
         /// Load of saved instance state
         if (savedInstanceState != null) {
             Timber.d(savedInstanceState.toString())
@@ -225,6 +222,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
+
+        val dataIntent: Uri? = intent.data
+        manageDataIntent(dataIntent)
 
         if (savedInstanceState == null) {
             createMinFragments()
@@ -1655,8 +1655,17 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private fun manageDataIntent(uri: Uri?) {
         if (uri != null && AccountUtils.getAccounts(applicationContext).isEmpty()) {
             showMessageInToast(getString(R.string.no_account_configured))
+        } else if (uri != null) {
+            isFileDiscovered(uri).let { OCFile ->
+                if (OCFile != null) {
+                } else {
+                    showMessageInToast(getString(R.string.no_file_found))
+                }
+            }
         }
     }
+
+    private fun isFileDiscovered(uri: Uri?): OCFile? = storageManager.getFileByPrivateLink(uri.toString())
 
     companion object {
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
