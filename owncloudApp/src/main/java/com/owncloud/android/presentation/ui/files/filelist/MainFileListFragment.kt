@@ -59,7 +59,6 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.fold
 import com.owncloud.android.presentation.observers.EmptyDataObserver
-import com.owncloud.android.presentation.onSuccess
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment.Companion.newInstance
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment.SortDialogListener
@@ -228,23 +227,28 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         mainFileListViewModel.currentFileLiveData.observe(viewLifecycleOwner) {
             fileActions?.onCurrentFolderUpdated(it)
         }
+        mainFileListViewModel.folderContentLiveData.observe(viewLifecycleOwner) {}
 
-        // Observe the folder content.
-        mainFileListViewModel.folderContentLiveData.observe(viewLifecycleOwner, Event.EventObserver { folderContent ->
-            val filesList = when (fileListOption) {
-                FileListOption.ALL_FILES -> folderContent
-                FileListOption.AV_OFFLINE -> folderContent.filter { it.keepInSync == 1 }
-                FileListOption.SHARED_BY_LINK -> folderContent.filter { it.sharedByLink || it.sharedWithSharee == true }
-            }
-            updateFileListData(filesList)
-        })
+        // Observe the file list ui state.
+        mainFileListViewModel.fileListUiStateLiveData.observe(viewLifecycleOwner) { fileListUiState ->
+            val fileListPreFilters = fileListUiState.folderContent
+            val searchFilter = fileListUiState.searchFilter
+            val fileListOption = fileListUiState.fileListOption
 
-        // Observe the action of retrieving the list of searched files from DB.
-        mainFileListViewModel.getSearchedFilesData.observe(viewLifecycleOwner, Event.EventObserver {
-            it.onSuccess { data ->
-                updateFileListData(filesList = data ?: emptyList())
-            }
-        })
+            val fileListPostFilters = fileListPreFilters
+                .filter { fileToFilter ->
+                    fileToFilter.fileName.contains(searchFilter, ignoreCase = true)
+                }
+                .filter {
+                    when (fileListOption) {
+                        FileListOption.AV_OFFLINE -> it.keepInSync == 1
+                        FileListOption.SHARED_BY_LINK -> it.sharedByLink || it.sharedWithSharee == true
+                        else -> true
+                    }
+                }
+
+            updateFileListData(fileListPostFilters)
+        }
 
         filesViewModel.refreshFolder.observe(viewLifecycleOwner, Event.EventObserver {
             it.fold(
@@ -268,7 +272,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     }
 
     fun listDirectory(directory: OCFile) {
-        mainFileListViewModel.navigateTo(ocFile = directory)
+        mainFileListViewModel.updateFolderToDisplay(newFolderToDisplay = directory)
     }
 
     private fun registerListAdapterDataObserver() {
@@ -329,7 +333,8 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
     fun updateFileListOption(newFileListOption: FileListOption, file: OCFile) {
         fileListOption = newFileListOption
-        mainFileListViewModel.listDirectory(file)
+        mainFileListViewModel.updateFolderToDisplay(file)
+        mainFileListViewModel.updateFileListOption(newFileListOption)
         updateFab(newFileListOption)
     }
 
@@ -451,7 +456,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     override fun onQueryTextSubmit(query: String?): Boolean = false
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        newText?.let { mainFileListViewModel.listSearchCurrentDirectory(fileListOption, it) }
+        newText?.let { mainFileListViewModel.updateSearchFilter(it) }
         return true
     }
 
@@ -612,7 +617,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         }
 
         if (ocFile.isFolder) {
-            mainFileListViewModel.navigateTo(ocFile)
+            mainFileListViewModel.updateFolderToDisplay(ocFile)
             filesViewModel.refreshFolder(ocFile.remotePath)
         } else { // Click on a file
             fileActions?.onFileClicked(ocFile)
