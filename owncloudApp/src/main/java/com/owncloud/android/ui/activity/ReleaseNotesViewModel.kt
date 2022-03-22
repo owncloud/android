@@ -6,7 +6,7 @@ import com.owncloud.android.features.ReleaseNotesList
 
 class ReleaseNotesViewModel : ViewModel() {
 
-    fun getReleaseNotes(): List<ReleaseNote>{
+    fun getReleaseNotes(): List<ReleaseNote> {
         return ReleaseNotesList().getReleaseNotes()
     }
 }

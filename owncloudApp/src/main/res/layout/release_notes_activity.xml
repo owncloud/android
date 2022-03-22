@@ -66,6 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_padding"
+        android:padding="@dimen/standard_padding"
         android:theme="@style/Button.Primary"
         android:text="@string/release_notes_proceed"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -26,14 +26,26 @@ class ReleaseNotesList {
 
     private val releaseNotesList = listOf(
         ReleaseNote("Account List", "There is a fresh look for the single account overview.", ReleaseNoteType.BUGFIX),
-        ReleaseNote("Biometrical Unlock", "When protection the app with a pin code, biometrical unlock will be suggested as a default", ReleaseNoteType.CHANGE),
+        ReleaseNote(
+            "Biometrical Unlock",
+            "When protection the app with a pin code, biometrical unlock will be suggested as a default",
+            ReleaseNoteType.CHANGE
+        ),
         ReleaseNote("Account List", "There is a fresh look for the single account overview.", ReleaseNoteType.ENHANCEMENT),
-        ReleaseNote("Biometrical Unlock", "When protection the app with a pin code, biometrical unlock will be suggested as a default", ReleaseNoteType.CHANGE),
+        ReleaseNote(
+            "Biometrical Unlock",
+            "When protection the app with a pin code, biometrical unlock will be suggested as a default",
+            ReleaseNoteType.SECURITY
+        ),
         ReleaseNote("Account List", "There is a fresh look for the single account overview.", ReleaseNoteType.SECURITY),
-        ReleaseNote("Biometrical Unlock", "When protection the app with a pin code, biometrical unlock will be suggested as a default", ReleaseNoteType.BUGFIX)
+        ReleaseNote(
+            "Biometrical Unlock",
+            "When protection the app with a pin code, biometrical unlock will be suggested as a default",
+            ReleaseNoteType.BUGFIX
+        )
     )
 
-    fun getReleaseNotes(): List<ReleaseNote>{
+    fun getReleaseNotes(): List<ReleaseNote> {
         return releaseNotesList
     }
 }

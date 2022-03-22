@@ -22,11 +22,10 @@ package com.owncloud.android.enums
 import androidx.annotation.DrawableRes
 import com.owncloud.android.R
 
-enum class ReleaseNoteType(@DrawableRes val drawableRes: Int){
-    BUGFIX(R.drawable.ic_settings),
+enum class ReleaseNoteType(@DrawableRes val drawableRes: Int) {
+    BUGFIX(R.drawable.ic_healing),
     CHANGE(R.drawable.ic_autorenew),
-    ENHANCEMENT(R.drawable.ic_design),
-    SECURITY(R.drawable.ic_security)
-
+    ENHANCEMENT(R.drawable.ic_architecture),
+    SECURITY(R.drawable.ic_lock)
 
 }
