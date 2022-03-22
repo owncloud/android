@@ -223,12 +223,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
-        val dataIntent: Uri? = intent.data
-        manageDataIntent(dataIntent)
-
         if (savedInstanceState == null) {
             createMinFragments()
         }
+
+        val dataIntent: Uri? = intent.data
+        manageDataIntent(dataIntent)
 
         setBackgroundText()
     }
@@ -299,7 +299,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private fun initFragmentsWithFile() {
         if (account != null && file != null) {
             /// First fragment
-            listOfFilesFragment?.listDirectory(currentDir)
+            listOfFilesFragment?.listDirectory(file)
                 ?: Timber.e("Still have a chance to lose the initialization of list fragment >(")
 
             /// Second fragment
@@ -420,7 +420,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     fun refreshListOfFilesFragment(reloadData: Boolean) {
         val fileListFragment = listOfFilesFragment
-        fileListFragment?.listDirectory(reloadData)
+        if (intent.data == null) {
+            fileListFragment?.listDirectory(reloadData)
+        } else {
+            fileListFragment?.listDirectory(isFileDiscovered(intent.data))
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -1658,6 +1663,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         } else if (uri != null) {
             isFileDiscovered(uri).let { OCFile ->
                 if (OCFile != null) {
+                    openFile(OCFile)
                 } else {
                     showMessageInToast(getString(R.string.no_file_found))
                 }
@@ -1666,6 +1672,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     private fun isFileDiscovered(uri: Uri?): OCFile? = storageManager.getFileByPrivateLink(uri.toString())
+
+    private fun openFile(file: OCFile) {
+        setFile(file)
+        setAccount(AccountUtils.getOwnCloudAccountByName(this, file.owner))
+        initFragmentsWithFile()
+    }
 
     companion object {
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
