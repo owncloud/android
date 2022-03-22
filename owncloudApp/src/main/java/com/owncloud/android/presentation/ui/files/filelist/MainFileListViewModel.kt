@@ -29,9 +29,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkManager
+import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.db.PreferenceManager
-import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
@@ -40,11 +40,11 @@ import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseC
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.isDownloadPending
-import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 
 class MainFileListViewModel(
@@ -63,41 +63,24 @@ class MainFileListViewModel(
     val currentFileLiveData: LiveData<OCFile>
         get() = _currentFileLiveData
 
+    /** LiveData to maintain the current file list state */
+    private val _fileListUiStateLiveData = MutableLiveData<FileListUiState>()
+    val fileListUiStateLiveData: LiveData<FileListUiState>
+        get() = _fileListUiStateLiveData
+
     /** LiveData to maintain the folder content for the current file displayed.
      * It is automatically updated after updating the _currentFileLiveData
      */
     private val _folderContentLiveData: LiveData<Event<List<OCFile>>> =
         Transformations.switchMap(currentFileLiveData) { folder ->
-            getFolderContentAsLiveDataUseCase.execute(GetFolderContentAsLiveDataUseCase.Params(folderId = folder.id!!))
-                .map { Event(it) }
+            getFolderContentAsLiveDataUseCase.execute(GetFolderContentAsLiveDataUseCase.Params(folderId = folder.id!!)).map { folderContent ->
+                val newFileListUiState = composeFileListUiState(folderToDisplay = folder, folderContent = folderContent)
+                _fileListUiStateLiveData.postValue(newFileListUiState)
+                Event(folderContent)
+            }
         }
     val folderContentLiveData: LiveData<Event<List<OCFile>>>
         get() = _folderContentLiveData
-
-    private val _getSearchedFilesData = MutableLiveData<Event<UIResult<List<OCFile>>>>()
-    val getSearchedFilesData: LiveData<Event<UIResult<List<OCFile>>>>
-        get() = _getSearchedFilesData
-
-    private fun getSearchFilesList(fileListOption: FileListOption, folderId: Long, searchText: String) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getSearchFolderContentUseCase.execute(
-                GetSearchFolderContentUseCase.Params(
-                    fileListOption = fileListOption,
-                    folderId = folderId,
-                    search = searchText
-                )
-            ).let {
-                when (it) {
-                    is UseCaseResult.Error -> _getSearchedFilesData.postValue(Event(UIResult.Error(it.getThrowableOrNull())))
-                    is UseCaseResult.Success -> _getSearchedFilesData.postValue(Event(UIResult.Success(it.getDataOrNull())))
-                }
-            }
-        }
-    }
-
-    fun navigateTo(ocFile: OCFile) {
-        _currentFileLiveData.postValue(ocFile)
-    }
 
     fun navigateTo(fileId: Long) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
@@ -106,16 +89,6 @@ class MainFileListViewModel(
                 _currentFileLiveData.postValue(it)
             }
         }
-    }
-
-    fun listDirectory(directory: OCFile) {
-        navigateTo(ocFile = directory)
-        //file = directory
-        //getFilesList(directory.id!!)
-    }
-
-    fun listSearchCurrentDirectory(fileListOption: FileListOption, searchText: String) {
-        getSearchFilesList(fileListOption, currentFileLiveData.value!!.id!!, searchText)
     }
 
     fun getFile(): OCFile {
@@ -192,13 +165,67 @@ class MainFileListViewModel(
                 parentDir = if (fileByIdResult.isSuccess) fileByIdResult.getDataOrNull() else null
             }
 
-            navigateTo(parentDir!!)
+            updateFolderToDisplay(parentDir!!)
         }
     }
 
     fun fileIsDownloading(file: OCFile, account: Account): Boolean {
         return workManager.isDownloadPending(account, file)
     }
+
+    fun updateFolderToDisplay(newFolderToDisplay: OCFile) {
+        _currentFileLiveData.postValue(newFolderToDisplay)
+    }
+
+    fun updateSearchFilter(newSearchFilter: String) {
+        _fileListUiStateLiveData.postValue(
+            composeFileListUiState(searchFilter = newSearchFilter)
+        )
+    }
+
+    fun updateFileListOption(newFileListOption: FileListOption) {
+        _fileListUiStateLiveData.postValue(
+            composeFileListUiState(fileListOption = newFileListOption)
+        )
+    }
+
+    private fun composeFileListUiState(
+        account: Account? = _fileListUiStateLiveData.value?.account,
+        folderToDisplay: OCFile? = _fileListUiStateLiveData.value?.folderToDisplay,
+        folderContent: List<OCFile>? = _fileListUiStateLiveData.value?.folderContent,
+        fileListOption: FileListOption? = _fileListUiStateLiveData.value?.fileListOption,
+        searchFilter: String? = _fileListUiStateLiveData.value?.searchFilter,
+    ): FileListUiState {
+        Timber.i("================ Composing a new file list Ui state ==============")
+        Timber.i("Account received from parameter: $account")
+        Timber.i("FolderToDisplay received from parameter: $folderToDisplay")
+        Timber.i("FolderContent received from parameter: $folderContent")
+        Timber.i("FileListOption received from parameter: $fileListOption")
+        Timber.i("SearchFilter received from parameter: $searchFilter")
+
+        return FileListUiState(
+            account = account ?: AccountUtils.getCurrentOwnCloudAccount(contextProvider.getContext()),
+            folderToDisplay = folderToDisplay!!,
+            folderContent = folderContent ?: emptyList(),
+            fileListOption = fileListOption ?: FileListOption.ALL_FILES,
+            searchFilter = searchFilter ?: ""
+        ).also {
+            Timber.i("================ Already composed a new file list Ui state ==============")
+            Timber.i("Account: ${it.account.name}")
+            Timber.i("File list option: ${it.fileListOption}")
+            Timber.i("Search filter text: ${it.searchFilter}")
+            Timber.i("Folder to display: id[${it.folderToDisplay.id}], fileName[${it.folderToDisplay.fileName}]")
+            Timber.i("Folder content: size[${it.folderContent.size}]")
+        }
+    }
+
+    data class FileListUiState(
+        val account: Account,
+        val folderToDisplay: OCFile,
+        val folderContent: List<OCFile>,
+        val fileListOption: FileListOption,
+        val searchFilter: String,
+    )
 
     companion object {
         private const val RECYCLER_VIEW_PREFERRED = "RECYCLER_VIEW_PREFERRED"
