@@ -57,9 +57,14 @@ class ReleaseNotesActivity : AppCompatActivity() {
         if (context is ReleaseNotesActivity) {
             return
         }
-        //if (shouldShow(context)) {
-        context.startActivity(Intent(context, ReleaseNotesActivity::class.java))
-        //}
+        if (shouldShow(context) && !releaseNotesViewModel.getReleaseNotes().isEmpty()) {
+            context.startActivity(Intent(context, ReleaseNotesActivity::class.java))
+        }
+    }
+
+    private fun shouldShow(context: Context): Boolean{
+        //TODO
+        return true
     }
 
     private fun setData() {

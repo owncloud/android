@@ -46,6 +46,7 @@ class ReleaseNotesList {
     )
 
     fun getReleaseNotes(): List<ReleaseNote> {
-        return releaseNotesList
+        return emptyList()
+        //return releaseNotesList
     }
 }
