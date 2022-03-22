@@ -97,6 +97,11 @@
                     android:host="@string/url_link_host"
                     android:pathPrefix="/f/"
                     android:scheme="https" />
+
+                <data
+                    android:host="@string/url_link_host"
+                    android:pathPrefix="/f/"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.ManageAccountsActivity" />

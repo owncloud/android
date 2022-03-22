@@ -1113,6 +1113,7 @@ class FileDataStorageManager {
             isDownloading = it.getIntFromColumnOrThrow(FILE_IS_DOWNLOADING) == 1
             etagInConflict = it.getStringFromColumnOrThrow(FILE_ETAG_IN_CONFLICT)
             privateLink = it.getStringFromColumnOrThrow(FILE_PRIVATE_LINK)
+            owner = it.getStringFromColumnOrThrow(FILE_ACCOUNT_OWNER)
         }
     }
 

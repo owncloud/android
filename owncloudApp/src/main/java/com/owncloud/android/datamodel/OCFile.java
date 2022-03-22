@@ -116,6 +116,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     private boolean mSharedByLink;
     private boolean mSharedWithSharee;
     private String mPrivateLink;
+    private String mOwner;
 
     /**
      * URI to the local path of the file contents, if stored in the device; cached after first call
@@ -125,7 +126,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     /**
      * Exportable URI to the local path of the file contents, if stored in the device.
-     *
+     * <p>
      * Cached after first call, until changed.
      */
     private Uri mExposedFileUri;
@@ -133,7 +134,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     /**
      * Create new {@link OCFile} with given path.
-     *
+     * <p>
      * The path received must be URL-decoded. Path separator must be File.separator, and it must be the first
      * character in 'path'.
      *
@@ -179,6 +180,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         mEtagInConflict = source.readString();
         mSharedWithSharee = source.readInt() == 1;
         mPrivateLink = source.readString();
+        mOwner = source.readString();
 
     }
 
@@ -206,6 +208,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         dest.writeString(mEtagInConflict);
         dest.writeInt(mSharedWithSharee ? 1 : 0);
         dest.writeString(mPrivateLink);
+        dest.writeString(mOwner);
     }
 
     /**
@@ -352,7 +355,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     /**
      * Set a UNIX timestamp of the time the time the file was modified.
-     *
+     * <p>
      * To update with the value returned by the server in every synchronization of the properties
      * of this file.
      *
@@ -374,7 +377,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     /**
      * Set a UNIX timestamp of the time the time the file was modified.
-     *
+     * <p>
      * To update with the value returned by the server in every synchronization of THE CONTENTS
      * of this file.
      *
@@ -396,7 +399,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     /**
      * Sets the name of the file
-     *
+     * <p>
      * Does nothing if the new name is null, empty or includes "/" ; or if the file is the root
      * directory
      */
@@ -507,6 +510,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
 
     /**
      * get remote path of parent file
+     *
      * @return remote path
      */
     public String getParentRemotePath() {
@@ -547,7 +551,7 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     }
 
     /**
-     * @return      'True' when
+     * @return 'True' when
      */
     public boolean isAvailableOffline() {
         return (mAvailableOfflineStatus != AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE);
@@ -651,8 +655,8 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
     }
 
     /**
-     * @param   type        Type to match in the file MIME type; it's MUST include the trailing "/"
-     * @return              'True' if the file MIME type matches the received parameter in the type part.
+     * @param type Type to match in the file MIME type; it's MUST include the trailing "/"
+     * @return 'True' if the file MIME type matches the received parameter in the type part.
      */
     private boolean isOfType(String type) {
         return (
@@ -749,5 +753,13 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
         setSharedWithSharee(sourceFile.isSharedWithSharee());
         setTreeEtag(sourceFile.getTreeEtag());
         setEtagInConflict(sourceFile.getEtagInConflict());
+    }
+
+    public String getOwner() {
+        return mOwner;
+    }
+
+    public void setOwner(String owner) {
+        mOwner = (owner == null) ? "" : owner;
     }
 }
