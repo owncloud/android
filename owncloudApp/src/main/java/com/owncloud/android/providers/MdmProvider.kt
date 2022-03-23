@@ -41,7 +41,8 @@ class MdmProvider(
 
     fun cacheStringRestriction(key: String, idMessageFeedback: Int) {
         if (!restrictions.containsKey(key)) {
-            // If we do not receive the key, do nothing
+            // If we do not receive the key, remove the configuration and use the setup value instead
+            preferencesProvider.removePreference(key = key)
             return
         }
 
@@ -60,7 +61,8 @@ class MdmProvider(
 
     fun cacheBooleanRestriction(key: String, idMessageFeedback: Int) {
         if (!restrictions.containsKey(key)) {
-            // If we do not receive the key, do nothing
+            // If we do not receive the key, remove the configuration and use the setup value instead
+            preferencesProvider.removePreference(key = key)
             return
         }
 
