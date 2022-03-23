@@ -191,7 +191,7 @@ class LoginActivityTest {
         assertViewsDisplayed(
             showHostUrlFrame = false,
             showHostUrlInput = false,
-            showCenteredRefreshButton = false,
+            showCenteredRefreshButton = true,
             showEmbeddedCheckServerButton = false
         )
 
