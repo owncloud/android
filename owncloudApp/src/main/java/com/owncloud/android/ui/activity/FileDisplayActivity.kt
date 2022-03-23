@@ -1660,7 +1660,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private fun manageDataIntent(uri: Uri?) {
         if (uri != null && AccountUtils.getAccounts(applicationContext).isEmpty()) {
             showMessageInToast(getString(R.string.no_account_configured))
-        } else if (uri != null) {
+        } else if (uri != null && AccountUtils.getAccounts(applicationContext).size == 1) {
             isFileDiscovered(uri).let { OCFile ->
                 if (OCFile != null) {
                     openFile(OCFile)
