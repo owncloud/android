@@ -19,8 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent">
@@ -31,8 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         app:layout_constraintBottom_toTopOf="@id/key4Container"
         app:layout_constraintEnd_toStartOf="@id/key2Container"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/key1"
@@ -52,8 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         style="@style/numberkeyboard_keyContainer"
         app:layout_constraintBottom_toTopOf="@id/key5Container"
         app:layout_constraintEnd_toStartOf="@id/key3Container"
-        app:layout_constraintStart_toEndOf="@id/key1Container"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toEndOf="@id/key1Container">
 
         <TextView
             android:id="@+id/key2"
@@ -72,8 +70,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         android:id="@+id/key3Container"
         style="@style/numberkeyboard_keyContainer"
         app:layout_constraintBottom_toTopOf="@id/key6Container"
-        app:layout_constraintStart_toEndOf="@id/key2Container"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/key2Container">
 
         <TextView
             android:id="@+id/key3"
@@ -94,8 +92,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         app:layout_constraintBottom_toTopOf="@id/key7Container"
         app:layout_constraintEnd_toStartOf="@id/key5Container"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/key1Container">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/key4"
@@ -115,8 +112,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         style="@style/numberkeyboard_keyContainer"
         app:layout_constraintBottom_toTopOf="@id/key8Container"
         app:layout_constraintEnd_toStartOf="@id/key6Container"
-        app:layout_constraintStart_toEndOf="@id/key4Container"
-        app:layout_constraintTop_toBottomOf="@id/key2Container">
+        app:layout_constraintStart_toEndOf="@id/key4Container">
 
         <TextView
             android:id="@+id/key5"
@@ -135,8 +131,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         android:id="@+id/key6Container"
         style="@style/numberkeyboard_keyContainer"
         app:layout_constraintBottom_toTopOf="@id/key9Container"
-        app:layout_constraintStart_toEndOf="@id/key5Container"
-        app:layout_constraintTop_toBottomOf="@id/key3Container">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/key5Container">
 
         <TextView
             android:id="@+id/key6"
@@ -157,8 +153,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         app:layout_constraintBottom_toTopOf="@id/biometricBtnContainer"
         app:layout_constraintEnd_toStartOf="@id/key8Container"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/key4Container">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/key7"
@@ -178,8 +173,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         style="@style/numberkeyboard_keyContainer"
         app:layout_constraintBottom_toTopOf="@id/key0Container"
         app:layout_constraintEnd_toStartOf="@id/key9Container"
-        app:layout_constraintStart_toEndOf="@id/key7Container"
-        app:layout_constraintTop_toBottomOf="@id/key5Container">
+        app:layout_constraintStart_toEndOf="@id/key7Container">
 
         <TextView
             android:id="@+id/key8"
@@ -198,8 +192,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         android:id="@+id/key9Container"
         style="@style/numberkeyboard_keyContainer"
         app:layout_constraintBottom_toTopOf="@id/backspaceBtnContainer"
-        app:layout_constraintStart_toEndOf="@id/key8Container"
-        app:layout_constraintTop_toBottomOf="@id/key6Container">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/key8Container">
 
         <TextView
             android:id="@+id/key9"
@@ -220,15 +214,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/key0Container"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/key7Container">
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/biometricBtn"
-            style="@style/numberkeyboard_key"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/numberkeyboard_key_bg_transparent"
             android:clickable="false"
             android:contentDescription="@string/numberkeyboard_biometric_button_content_description"
             android:padding="@dimen/standard_padding"
@@ -243,8 +234,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         style="@style/numberkeyboard_keyContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/backspaceBtnContainer"
-        app:layout_constraintStart_toEndOf="@id/biometricBtnContainer"
-        app:layout_constraintTop_toBottomOf="@id/key8Container">
+        app:layout_constraintStart_toEndOf="@id/biometricBtnContainer">
 
         <TextView
             android:id="@+id/key0"
@@ -263,18 +253,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         android:id="@+id/backspaceBtnContainer"
         style="@style/numberkeyboard_keyContainer"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/key0Container"
-        app:layout_constraintTop_toBottomOf="@id/key9Container">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/key0Container">
 
         <ImageView
             android:id="@+id/backspaceBtn"
-            style="@style/numberkeyboard_key"
+            android:layout_margin="@dimen/passcode_margin_buttons"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/numberkeyboard_key_bg_transparent"
             android:contentDescription="@string/numberkeyboard_backspace_button_content_description"
             android:padding="@dimen/standard_padding"
-            android:scaleType="center"
             app:srcCompat="@drawable/numberkeyboard_ic_backspace" />
 
     </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
