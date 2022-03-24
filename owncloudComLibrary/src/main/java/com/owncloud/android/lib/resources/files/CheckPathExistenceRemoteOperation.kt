@@ -62,10 +62,8 @@ class CheckPathExistenceRemoteOperation(
                 setConnectionTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
             }
 
-<<<<<<< HEAD
-=======
             propFindMethod.followRedirects = false
->>>>>>> 27ecf79c (remove redundant intercept of httpclient with httpmethod)
+
             var status = client.executeHttpMethod(propFindMethod)
             /* PROPFIND method
              * 404 NOT FOUND: path doesn't exist,

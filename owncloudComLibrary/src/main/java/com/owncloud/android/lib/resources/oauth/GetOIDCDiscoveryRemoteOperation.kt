@@ -55,7 +55,7 @@ class GetOIDCDiscoveryRemoteOperation : RemoteOperation<OIDCDiscoveryResponse>()
                 addRequestHeader(OCS_API_HEADER, OCS_API_HEADER_VALUE)
             }
 
-            getMethod.setFollowRedirects(true)
+            getMethod.followRedirects = true
             val status = client.executeHttpMethod(getMethod)
 
             val responseBody = getMethod.getResponseBodyAsString()

@@ -40,12 +40,12 @@ import java.util.concurrent.TimeUnit
 abstract class HttpBaseMethod constructor(url: URL) {
     var httpUrl: HttpUrl = url.toHttpUrlOrNull() ?: throw MalformedURLException()
     var request: Request
-    private var _followPermanentRedirects = false
+    var followPermanentRedirects = false
     abstract var response: Response
     var call: Call? = null
 
-    var followRedirects: Boolean? = true
-    var retryOnConnectionFailure: Boolean? = false
+    var followRedirects: Boolean = true
+    var retryOnConnectionFailure: Boolean = false
     var connectionTimeoutVal: Long? = null
     var connectionTimeoutUnit: TimeUnit? = null
     var readTimeoutVal: Long? = null

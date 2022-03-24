@@ -37,14 +37,9 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-<<<<<<< HEAD
 import com.owncloud.android.lib.common.ConnectionValidator;
 import com.owncloud.android.lib.common.OwnCloudClient;
-=======
-import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
->>>>>>> 5e555278 (get okhttp singleton removal changes to compile)
 import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
@@ -55,13 +50,8 @@ import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
-import com.owncloud.android.lib.resources.files.UploadRemoteFileOperation;
-<<<<<<< HEAD
-=======
 import info.hannes.timber.DebugTree;
->>>>>>> 5e555278 (get okhttp singleton removal changes to compile)
 import timber.log.Timber;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -84,30 +74,20 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-<<<<<<< HEAD
-        Timber.plant();
-=======
         Timber.plant(new DebugTree());
->>>>>>> 5e555278 (get okhttp singleton removal changes to compile)
         mHandler = new Handler();
 
         final Uri serverUri = Uri.parse(getString(R.string.server_base_url));
 
         SingleSessionManager.setUserAgent(getUserAgent());
-<<<<<<< HEAD
-<<<<<<< HEAD
         SingleSessionManager.setConnectionValidator(new ConnectionValidator(this, false));
         mClient = new OwnCloudClient(serverUri,
                SingleSessionManager.getConnectionValidator(),
                 true,
                 SingleSessionManager.getDefaultSingleton());
-=======
-        mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, true);
-=======
-        mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true);
->>>>>>> 530f8644 (apply required fixes)
 
->>>>>>> 5e555278 (get okhttp singleton removal changes to compile)
+        mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true);
+
         mClient.setCredentials(
                 OwnCloudCredentialsFactory.newBasicCredentials(
                         getString(R.string.username),

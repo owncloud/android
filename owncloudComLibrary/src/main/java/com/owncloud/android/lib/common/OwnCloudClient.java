@@ -150,12 +150,15 @@ public class OwnCloudClient extends HttpClient {
     }
 
     private boolean shouldConnectionValidatorBeCalled(HttpBaseMethod method, int status) {
-        return !mFollowRedirects &&
-                !method.getFollowRedirects() &&
-                mConnectionValidator != null &&
-                (status == HttpConstants.HTTP_MOVED_TEMPORARILY ||
-                        (!(mCredentials instanceof OwnCloudAnonymousCredentials) &&
-                                status == HttpConstants.HTTP_UNAUTHORIZED));
+
+        return mConnectionValidator != null && (
+                (!(mCredentials instanceof OwnCloudAnonymousCredentials) &&
+                        status == HttpConstants.HTTP_UNAUTHORIZED
+                ) || (!mFollowRedirects &&
+                        !method.getFollowRedirects() &&
+                        status == HttpConstants.HTTP_MOVED_TEMPORARILY
+                )
+        );
     }
 
     /**

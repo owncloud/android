@@ -38,7 +38,7 @@ class OCServerInfoService : ServerInfoService {
 
     override fun checkPathExistence(
         path: String,
-        isUserLogged: Boolean,
+        isUserLoggedIn: Boolean,
         client: OwnCloudClient
     ): RemoteOperationResult<Boolean> =
         CheckPathExistenceRemoteOperation(
