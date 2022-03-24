@@ -25,28 +25,35 @@ import com.owncloud.android.enums.ReleaseNoteType
 class ReleaseNotesList {
 
     private val releaseNotesList = listOf(
-        ReleaseNote("Account List", "There is a fresh look for the single account overview.", ReleaseNoteType.BUGFIX),
         ReleaseNote(
-            "Biometrical Unlock",
-            "When protection the app with a pin code, biometrical unlock will be suggested as a default",
-            ReleaseNoteType.CHANGE
+            title = "Account List",
+            subtitle = "There is a fresh look for the single account overview.",
+            type = ReleaseNoteType.BUGFIX),
+        ReleaseNote(
+            title = "Biometrical Unlock",
+            subtitle = "When protection the app with a pin code, biometrical unlock will be suggested as a default",
+            type = ReleaseNoteType.BUGFIX
         ),
-        ReleaseNote("Account List", "There is a fresh look for the single account overview.", ReleaseNoteType.ENHANCEMENT),
+        ReleaseNote(
+            title = "Account List",
+            subtitle = "There is a fresh look for the single account overview.",
+            type = ReleaseNoteType.ENHANCEMENT
+        ),
         ReleaseNote(
             "Biometrical Unlock",
             "When protection the app with a pin code, biometrical unlock will be suggested as a default",
-            ReleaseNoteType.SECURITY
+            ReleaseNoteType.ENHANCEMENT
         ),
         ReleaseNote("Account List", "There is a fresh look for the single account overview.", ReleaseNoteType.SECURITY),
         ReleaseNote(
             "Biometrical Unlock",
             "When protection the app with a pin code, biometrical unlock will be suggested as a default",
-            ReleaseNoteType.BUGFIX
+            ReleaseNoteType.CHANGE
         )
     )
 
     fun getReleaseNotes(): List<ReleaseNote> {
-        return emptyList()
-        //return releaseNotesList
+        //return emptyList()
+        return releaseNotesList
     }
 }

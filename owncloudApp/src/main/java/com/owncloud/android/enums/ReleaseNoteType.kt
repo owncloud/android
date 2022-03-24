@@ -27,5 +27,4 @@ enum class ReleaseNoteType(@DrawableRes val drawableRes: Int) {
     CHANGE(R.drawable.ic_autorenew),
     ENHANCEMENT(R.drawable.ic_architecture),
     SECURITY(R.drawable.ic_lock)
-
 }

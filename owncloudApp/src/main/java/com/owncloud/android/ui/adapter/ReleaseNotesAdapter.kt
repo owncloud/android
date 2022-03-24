@@ -64,8 +64,6 @@ class ReleaseNotesAdapter() :
     fun setData(releaseNotes: List<ReleaseNote>){
         dataSet.clear()
         dataSet.addAll(releaseNotes)
-        println("DATA: ${dataSet.size} $dataSet")
-        println("ITEMS: $itemCount")
     }
 
     // Return the size of your dataset (invoked by the layout manager)

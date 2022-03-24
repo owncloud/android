@@ -650,7 +650,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">New in ownCloud</string>
-    <string name="release_notes_footer">Thank you for using ownCloud.\nIf you like our App, please leave a Google Play review.\n❤️</string>
+    <string name="release_notes_footer">Thank you for using ownCloud.\nIf you like our App, please leave a review.\n❤️</string>
     <string name="release_notes_proceed">Proceed</string>
 
 </resources>
