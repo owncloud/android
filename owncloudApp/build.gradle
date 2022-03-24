@@ -167,7 +167,6 @@ android {
         }
         mdm {
             dimension "management"
-            applicationIdSuffix ".mdm"
         }
     }
 
