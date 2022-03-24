@@ -6,7 +6,7 @@
         android:restrictionType="string"
         android:title="@string/server_url_configuration_title"
         android:description="@string/server_url_configuration_description"
-        android:defaultValue="demo.owncloud.com" />
+        android:defaultValue="" />
     <restriction
         android:key="server_url_input_visibility_configuration"
         android:restrictionType="bool"
