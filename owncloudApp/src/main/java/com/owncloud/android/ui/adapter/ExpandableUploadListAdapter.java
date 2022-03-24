@@ -77,7 +77,6 @@ import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEF
 /**
  * This Adapter populates a ListView with following types of uploads: pending,
  * active, completed. Filtering possible.
- *
  */
 public class ExpandableUploadListAdapter extends BaseExpandableListAdapter implements Observer {
 
@@ -271,7 +270,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
             try {
                 Account account = AccountUtils.getOwnCloudAccountByName(mParentActivity, upload.getAccountName());
                 OwnCloudAccount oca = new OwnCloudAccount(account, mParentActivity);
-                String accountName =  oca.getDisplayName() + " @ " +
+                String accountName = oca.getDisplayName() + " @ " +
                         DisplayUtils.convertIdn(account.name.substring(account.name.lastIndexOf("@") + 1), false);
                 accountNameTextView.setText(accountName);
             } catch (Exception e) {
@@ -356,7 +355,8 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                     String localPath = upload.getLocalPath();
                     boolean isDocumentUri = DocumentFile.isDocumentUri(parent.getContext(), Uri.parse(localPath));
                     if (isDocumentUri) {
-                        CancelUploadWithIdUseCase cancelUploadWithIdUseCase = new CancelUploadWithIdUseCase(WorkManager.getInstance(parent.getContext()));
+                        CancelUploadWithIdUseCase cancelUploadWithIdUseCase =
+                                new CancelUploadWithIdUseCase(WorkManager.getInstance(parent.getContext()));
                         cancelUploadWithIdUseCase.execute(new CancelUploadWithIdUseCase.Params(upload));
                     } else {
                         FileUploader.FileUploaderBinder uploaderBinder = mParentActivity.getFileUploaderBinder();
@@ -450,9 +450,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                     // generate new Thumbnail
                     if (allowedToCreateNewThumbnail) {
                         final ThumbnailsCacheManager.ThumbnailGenerationTask task =
-                                new ThumbnailsCacheManager.ThumbnailGenerationTask(
-                                        fileIcon, mParentActivity.getStorageManager(), mParentActivity.getAccount()
-                                );
+                                new ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, mParentActivity.getAccount());
                         if (thumbnail == null) {
                             thumbnail = ThumbnailsCacheManager.mDefaultImg;
                         }
@@ -517,7 +515,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
      * Gets the status text to show to the user according to the status and last result of the
      * the given upload.
      *
-     * @param upload        Upload to describe.
+     * @param upload Upload to describe.
      * @return Text describing the status of the given upload.
      */
     private String getStatusText(OCUpload upload) {

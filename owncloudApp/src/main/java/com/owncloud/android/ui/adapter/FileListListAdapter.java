@@ -294,9 +294,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                         // generate new Thumbnail
                         if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
                             final ThumbnailsCacheManager.ThumbnailGenerationTask task =
-                                    new ThumbnailsCacheManager.ThumbnailGenerationTask(
-                                            fileIcon, mStorageManager, mAccount
-                                    );
+                                    new ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, mAccount);
                             final ThumbnailsCacheManager.AsyncThumbnailDrawable asyncDrawable =
                                     new ThumbnailsCacheManager.AsyncThumbnailDrawable(
                                             mContext.getResources(),
