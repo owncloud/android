@@ -27,7 +27,7 @@
         android:text="@string/pass_code_enter_pass_code"
         android:textColor="@android:color/black"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/explanation_pattern"
+        app:layout_constraintBottom_toTopOf="@id/explanation_pattern"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,11 +43,11 @@
         android:text="@string/pattern_configure_your_pattern_explanation"
         android:textAppearance="@android:style/TextAppearance.Small"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/error_pattern"
+        app:layout_constraintBottom_toTopOf="@id/error_pattern"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header_pattern" />
+        app:layout_constraintTop_toBottomOf="@id/header_pattern" />
 
     <TextView
         android:id="@+id/error_pattern"
@@ -56,11 +56,11 @@
         android:layout_marginTop="@dimen/standard_margin"
         android:textColor="@color/warning"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/patternContainer"
+        app:layout_constraintBottom_toTopOf="@id/patternContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/explanation_pattern" />
+        app:layout_constraintTop_toBottomOf="@id/explanation_pattern" />
 
     <com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout
         android:id="@+id/patternContainer"
@@ -73,7 +73,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="@id/leftGuideline"
-        app:layout_constraintTop_toBottomOf="@+id/error_pattern">
+        app:layout_constraintTop_toBottomOf="@id/error_pattern">
 
         <com.andrognito.patternlockview.PatternLockView
             android:id="@+id/pattern_lock_view"
