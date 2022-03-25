@@ -22,7 +22,7 @@ package com.owncloud.android.datamodel
 import com.owncloud.android.enums.ReleaseNoteType
 
 data class ReleaseNote(
-    val title: String,
-    val subtitle: String,
+    val title: Int,
+    val subtitle: Int,
     val type: ReleaseNoteType
 )

@@ -30,8 +30,6 @@ import com.owncloud.android.MainApp.Companion.versionCode
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ReleaseNotesActivityBinding
 import com.owncloud.android.features.ReleaseNotesList
-import com.owncloud.android.presentation.ui.authentication.LoginActivity
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.ui.adapter.ReleaseNotesAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -79,15 +77,24 @@ class ReleaseNotesActivity : AppCompatActivity() {
         val showReleaseNotes = context.resources.getBoolean(R.bool.release_notes_enabled) //&& !BuildConfig.DEBUG
 
         return firstRunAfterUpdate() && showReleaseNotes &&
-                ReleaseNotesList().getReleaseNotes().isNotEmpty() &&
-                (context is LoginActivity ||
-                        (context !is FileDisplayActivity &&
-                                context !is PassCodeActivity)
-                        )
+                ReleaseNotesList().getReleaseNotes().isNotEmpty()
     }
 
     private fun setData() {
         releaseNotesAdapter.setData(releaseNotesViewModel.getReleaseNotes())
+
+        val header = String.format(
+            getString(R.string.release_notes_header),
+            getString(R.string.app_name)
+        )
+
+        val footer = String.format(
+            getString(R.string.release_notes_footer),
+            getString(R.string.app_name)
+        )
+
+        binding.txtHeader.text = header
+        binding.txtFooter.text = footer
     }
 
     private fun updateVersionCode() {
@@ -97,7 +104,7 @@ class ReleaseNotesActivity : AppCompatActivity() {
         editor.apply()
     }
 
-    private fun firstRunAfterUpdate(): Boolean{
+    private fun firstRunAfterUpdate(): Boolean {
         return getLastSeenVersionCode() != versionCode
     }
 

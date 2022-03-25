@@ -256,12 +256,13 @@ class MainApp : Application() {
 
         val versionCode: Int
             get() {
-                return try {
+                /*return try {
                     val thisPackageName = appContext.packageName
                     appContext.packageManager.getPackageInfo(thisPackageName, 0).versionCode
                 } catch (e: PackageManager.NameNotFoundException) {
                     0
-                }
+                }*/
+                return 22345650
             }
 
         val authority: String

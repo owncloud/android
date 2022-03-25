@@ -19,6 +19,7 @@
 
 package com.owncloud.android.features
 
+import com.owncloud.android.R
 import com.owncloud.android.datamodel.ReleaseNote
 import com.owncloud.android.enums.ReleaseNoteType
 
@@ -26,29 +27,34 @@ class ReleaseNotesList {
 
     private val releaseNotesList = listOf(
         ReleaseNote(
-            title = "Account List",
-            subtitle = "There is a fresh look for the single account overview.",
-            type = ReleaseNoteType.BUGFIX),
-        ReleaseNote(
-            title = "Biometrical Unlock",
-            subtitle = "When protection the app with a pin code, biometrical unlock will be suggested as a default",
+            title = R.string.release_note_account_list_title,
+            subtitle = R.string.release_note_account_list_subtitle,
             type = ReleaseNoteType.BUGFIX
         ),
         ReleaseNote(
-            title = "Account List",
-            subtitle = "There is a fresh look for the single account overview.",
+            title = R.string.release_note_account_biometrical_unlock_title,
+            subtitle = R.string.release_note_account_biometrical_unlock_subtitle,
+            type = ReleaseNoteType.BUGFIX
+        ),
+        ReleaseNote(
+            title = R.string.release_note_account_list_title,
+            subtitle = R.string.release_note_account_list_subtitle,
             type = ReleaseNoteType.ENHANCEMENT
         ),
         ReleaseNote(
-            "Biometrical Unlock",
-            "When protection the app with a pin code, biometrical unlock will be suggested as a default",
-            ReleaseNoteType.ENHANCEMENT
+            title = R.string.release_note_account_biometrical_unlock_title,
+            subtitle = R.string.release_note_account_biometrical_unlock_subtitle,
+            type = ReleaseNoteType.ENHANCEMENT
         ),
-        ReleaseNote("Account List", "There is a fresh look for the single account overview.", ReleaseNoteType.SECURITY),
         ReleaseNote(
-            "Biometrical Unlock",
-            "When protection the app with a pin code, biometrical unlock will be suggested as a default",
-            ReleaseNoteType.CHANGE
+            title = R.string.release_note_account_list_title,
+            subtitle = R.string.release_note_account_list_subtitle,
+            type = ReleaseNoteType.SECURITY
+        ),
+        ReleaseNote(
+            title = R.string.release_note_account_biometrical_unlock_title,
+            subtitle = R.string.release_note_account_biometrical_unlock_subtitle,
+            type = ReleaseNoteType.CHANGE
         )
     )
 

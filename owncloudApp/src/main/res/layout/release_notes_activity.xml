@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
   @author David Crespo Ríos
@@ -19,10 +18,10 @@
   -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.activity.ReleaseNotesActivity">
 
     <TextView
@@ -33,33 +32,32 @@
         android:text="@string/release_notes_header"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/releaseNotes"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="@dimen/standard_padding"
-        app:layout_constraintBottom_toTopOf="@id/txtAcknowledgment"
+        app:layout_constraintBottom_toTopOf="@id/txtFooter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtHeader"
-        tools:listitem="@layout/release_notes_item">
-    </androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/release_notes_item"></androidx.recyclerview.widget.RecyclerView>
 
     <TextView
-        android:id="@+id/txtAcknowledgment"
+        android:id="@+id/txtFooter"
+        style="@style/Theme.ownCloud"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_padding"
-        android:text="@string/release_notes_footer"
-        style="@style/Theme.ownCloud"
         android:gravity="center"
+        android:text="@string/release_notes_footer"
         app:layout_constraintBottom_toTopOf="@id/btnProceed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnProceed"
@@ -67,9 +65,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_padding"
         android:padding="@dimen/standard_padding"
-        android:theme="@style/Button.Primary"
         android:text="@string/release_notes_proceed"
+        android:theme="@style/Button.Primary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

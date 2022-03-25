@@ -55,13 +55,13 @@ class ReleaseNotesAdapter() :
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
         viewHolder.binding.apply {
-            titleReleaseNote.text = dataSet[position].title
-            subtitleReleaseNote.text = dataSet[position].subtitle
+            titleReleaseNote.setText(dataSet[position].title)
+            subtitleReleaseNote.setText(dataSet[position].subtitle)
             iconReleaseNote.setImageResource(dataSet[position].type.drawableRes)
         }
     }
 
-    fun setData(releaseNotes: List<ReleaseNote>){
+    fun setData(releaseNotes: List<ReleaseNote>) {
         dataSet.clear()
         dataSet.addAll(releaseNotes)
     }
