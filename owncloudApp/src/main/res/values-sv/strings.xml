@@ -223,6 +223,7 @@
   <string name="sync_current_folder_was_removed">Mappen %1$s existerar inte längre</string>
   <string name="pass_code_enter_pass_code">Var god ange ditt lösenord</string>
   <string name="pass_code_configure_your_pass_code">Skriv in ditt lösenord</string>
+  <string name="pass_code_configure_your_pass_code_migration">Skriv in en ny %1$d-siffrig kod</string>
   <string name="pass_code_configure_your_pass_code_explanation">Lösenordet kommer efterfrågas varje gång du startar appen</string>
   <string name="pass_code_reenter_your_pass_code">Var god ange ditt lösenord igen</string>
   <string name="pass_code_remove_your_pass_code">Ta bort lösenordet</string>
