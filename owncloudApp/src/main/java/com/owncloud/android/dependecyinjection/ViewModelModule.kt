@@ -39,7 +39,7 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityVie
 import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.ui.activity.ReleaseNotesViewModel
+import com.owncloud.android.ui.viewmodels.ReleaseNotesViewModel
 import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module

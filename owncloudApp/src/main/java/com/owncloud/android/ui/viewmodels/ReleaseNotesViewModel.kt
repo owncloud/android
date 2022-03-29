@@ -1,4 +1,4 @@
-package com.owncloud.android.ui.activity
+package com.owncloud.android.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.datamodel.ReleaseNote

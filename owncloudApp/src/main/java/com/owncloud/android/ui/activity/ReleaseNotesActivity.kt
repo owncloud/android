@@ -30,11 +30,11 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.versionCode
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ReleaseNotesActivityBinding
-import com.owncloud.android.features.FeatureList
 import com.owncloud.android.features.ReleaseNotesList
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.ui.adapter.ReleaseNotesAdapter
+import com.owncloud.android.ui.viewmodels.ReleaseNotesViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReleaseNotesActivity : AppCompatActivity() {
