@@ -25,11 +25,15 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.versionCode
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ReleaseNotesActivityBinding
+import com.owncloud.android.features.FeatureList
 import com.owncloud.android.features.ReleaseNotesList
+import com.owncloud.android.presentation.ui.authentication.LoginActivity
+import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.ui.adapter.ReleaseNotesAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -69,15 +73,18 @@ class ReleaseNotesActivity : AppCompatActivity() {
             return
         }
         if (shouldShow(context)) {
+            println("ENTRO $context")
             context.startActivity(Intent(context, ReleaseNotesActivity::class.java))
         }
     }
 
     private fun shouldShow(context: Context): Boolean {
-        val showReleaseNotes = context.resources.getBoolean(R.bool.release_notes_enabled) //&& !BuildConfig.DEBUG
+        val showReleaseNotes = context.resources.getBoolean(R.bool.release_notes_enabled) && !BuildConfig.DEBUG
 
-        return firstRunAfterUpdate() && showReleaseNotes &&
-                ReleaseNotesList().getReleaseNotes().isNotEmpty()
+        return showReleaseNotes && ReleaseNotesList().getReleaseNotes().isNotEmpty() &&
+                (firstRunAfterUpdate() && context is LoginActivity ||
+                        ((!(firstRunAfterUpdate() && context is FileDisplayActivity) &&
+                                context !is PassCodeActivity)))
     }
 
     private fun setData() {

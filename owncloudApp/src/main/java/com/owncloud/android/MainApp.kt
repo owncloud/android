@@ -110,7 +110,10 @@ class MainApp : Application() {
                 ) {
                     StorageMigrationActivity.runIfNeeded(activity)
                     if (isFirstRun()) {
-                        WhatsNewActivity.runIfNeeded(activity)
+                        //When it is LoginActivity to start it only once
+                        if (activity is LoginActivity) {
+                            WhatsNewActivity.runIfNeeded(activity)
+                        }
                     } else {
                         ReleaseNotesActivity().runIfNeeded(activity)
                     }
@@ -256,13 +259,12 @@ class MainApp : Application() {
 
         val versionCode: Int
             get() {
-                /*return try {
+                return try {
                     val thisPackageName = appContext.packageName
                     appContext.packageManager.getPackageInfo(thisPackageName, 0).versionCode
                 } catch (e: PackageManager.NameNotFoundException) {
                     0
-                }*/
-                return 22345650
+                }
             }
 
         val authority: String

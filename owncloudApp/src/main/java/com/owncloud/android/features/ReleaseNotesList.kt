@@ -25,41 +25,9 @@ import com.owncloud.android.enums.ReleaseNoteType
 
 class ReleaseNotesList {
 
-    private val releaseNotesList = listOf(
-        ReleaseNote(
-            title = R.string.release_note_account_list_title,
-            subtitle = R.string.release_note_account_list_subtitle,
-            type = ReleaseNoteType.BUGFIX
-        ),
-        ReleaseNote(
-            title = R.string.release_note_account_biometrical_unlock_title,
-            subtitle = R.string.release_note_account_biometrical_unlock_subtitle,
-            type = ReleaseNoteType.BUGFIX
-        ),
-        ReleaseNote(
-            title = R.string.release_note_account_list_title,
-            subtitle = R.string.release_note_account_list_subtitle,
-            type = ReleaseNoteType.ENHANCEMENT
-        ),
-        ReleaseNote(
-            title = R.string.release_note_account_biometrical_unlock_title,
-            subtitle = R.string.release_note_account_biometrical_unlock_subtitle,
-            type = ReleaseNoteType.ENHANCEMENT
-        ),
-        ReleaseNote(
-            title = R.string.release_note_account_list_title,
-            subtitle = R.string.release_note_account_list_subtitle,
-            type = ReleaseNoteType.SECURITY
-        ),
-        ReleaseNote(
-            title = R.string.release_note_account_biometrical_unlock_title,
-            subtitle = R.string.release_note_account_biometrical_unlock_subtitle,
-            type = ReleaseNoteType.CHANGE
-        )
-    )
+    private val releaseNotesList = emptyList<ReleaseNote>()
 
     fun getReleaseNotes(): List<ReleaseNote> {
-        //return emptyList()
         return releaseNotesList
     }
 }

@@ -41,6 +41,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.features.FeatureList;
@@ -121,9 +122,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     }
 
     static private boolean shouldShow(Context context) {
-        boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled);// && !BuildConfig.DEBUG;
-
-        return showWizard && !(context instanceof FileDisplayActivity);
+        return context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG;
     }
 
     @Override
