@@ -142,8 +142,7 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
                 // generate new Thumbnail
                 if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
                     final ThumbnailsCacheManager.ThumbnailGenerationTask task =
-                            new ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, mStorageManager,
-                                    mAccount);
+                            new ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, mAccount);
                     if (thumbnail == null) {
                         thumbnail = ThumbnailsCacheManager.mDefaultImg;
                     }
@@ -183,8 +182,7 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         if (mFiles.isEmpty()) {
             mOnSearchQueryUpdateListener.updateEmptyListMessage(
                     mContext.getString(R.string.local_file_list_search_with_no_matches));
-        }
-        else {
+        } else {
             mOnSearchQueryUpdateListener.updateEmptyListMessage(mContext.getString(R.string.empty));
         }
 

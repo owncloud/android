@@ -36,7 +36,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -57,7 +56,6 @@ import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
-
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
@@ -441,9 +439,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                     // generate new Thumbnail
                     if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, iv)) {
                         final ThumbnailsCacheManager.ThumbnailGenerationTask task =
-                                new ThumbnailsCacheManager.ThumbnailGenerationTask(
-                                        iv, mContainerActivity.getStorageManager(), mAccount
-                                );
+                                new ThumbnailsCacheManager.ThumbnailGenerationTask(iv, mAccount);
                         if (thumbnail == null) {
                             thumbnail = ThumbnailsCacheManager.mDefaultImg;
                         }
