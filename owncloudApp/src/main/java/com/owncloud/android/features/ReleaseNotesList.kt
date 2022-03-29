@@ -19,9 +19,7 @@
 
 package com.owncloud.android.features
 
-import com.owncloud.android.R
 import com.owncloud.android.datamodel.ReleaseNote
-import com.owncloud.android.enums.ReleaseNoteType
 
 class ReleaseNotesList {
 
