@@ -31,8 +31,6 @@ import com.owncloud.android.MainApp.Companion.versionCode
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ReleaseNotesActivityBinding
 import com.owncloud.android.features.ReleaseNotesList
-import com.owncloud.android.presentation.ui.authentication.LoginActivity
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.ui.adapter.ReleaseNotesAdapter
 import com.owncloud.android.ui.viewmodels.ReleaseNotesViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -54,7 +52,6 @@ class ReleaseNotesActivity : AppCompatActivity() {
         setContentView(binding.root)
         setData()
         initView()
-        updateVersionCode()
     }
 
     private fun initView() {
@@ -64,6 +61,7 @@ class ReleaseNotesActivity : AppCompatActivity() {
         }
 
         binding.btnProceed.setOnClickListener {
+            updateVersionCode()
             setResult(RESULT_OK)
             finish()
         }
@@ -74,18 +72,14 @@ class ReleaseNotesActivity : AppCompatActivity() {
             return
         }
         if (shouldShow(context)) {
-            println("show $context")
             context.startActivity(Intent(context, ReleaseNotesActivity::class.java))
         }
     }
 
     private fun shouldShow(context: Context): Boolean {
-        val showReleaseNotes = context.resources.getBoolean(R.bool.release_notes_enabled) //&& !BuildConfig.DEBUG
+        val showReleaseNotes = context.resources.getBoolean(R.bool.release_notes_enabled) && !BuildConfig.DEBUG
 
-        return showReleaseNotes && ReleaseNotesList().getReleaseNotes().isNotEmpty() &&
-                (firstRunAfterUpdate() && context is LoginActivity ||
-                        (((firstRunAfterUpdate() && context is FileDisplayActivity) &&
-                                context !is PassCodeActivity)))
+        return firstRunAfterUpdate() && showReleaseNotes && ReleaseNotesList().getReleaseNotes().isNotEmpty()
     }
 
     private fun setData() {

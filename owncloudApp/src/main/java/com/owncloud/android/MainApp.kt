@@ -29,6 +29,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import androidx.core.content.pm.PackageInfoCompat
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
@@ -115,8 +116,9 @@ class MainApp : Application() {
                             WhatsNewActivity.runIfNeeded(activity)
                         }
                     } else {
-                        println("else: $activity")
-                        ReleaseNotesActivity().runIfNeeded(activity)
+                        if (activity is FileDisplayActivity || activity is LoginActivity) {
+                            ReleaseNotesActivity().runIfNeeded(activity)
+                        }
                     }
                 }
 
@@ -152,12 +154,6 @@ class MainApp : Application() {
                 PatternManager.onActivityStopped(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     BiometricManager.onActivityStopped(activity)
-                }
-                if (activity is PassCodeActivity ||
-                    activity is PatternActivity ||
-                    activity is BiometricActivity
-                ) {
-                    ReleaseNotesActivity().runIfNeeded(activity)
                 }
             }
 
@@ -261,8 +257,9 @@ class MainApp : Application() {
         val versionCode: Int
             get() {
                 return try {
-                    val thisPackageName = appContext.packageName
-                    appContext.packageManager.getPackageInfo(thisPackageName, 0).versionCode+9
+                    val pInfo: PackageInfo = appContext.packageManager.getPackageInfo(appContext.packageName, 0)
+                    val longVersionCode: Long = PackageInfoCompat.getLongVersionCode(pInfo)
+                    longVersionCode.toInt()
                 } catch (e: PackageManager.NameNotFoundException) {
                     0
                 }
