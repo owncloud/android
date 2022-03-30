@@ -91,7 +91,13 @@ fun Activity.goToUrl(
         val uriUrl = Uri.parse(url)
         val intent = Intent(Intent.ACTION_VIEW, uriUrl)
         if (flags != null) intent.addFlags(flags)
-        startActivity(intent)
+
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        } else {
+            showMessageInSnackbar(message = this.getString(R.string.file_list_no_app_for_perform_action))
+            Timber.e("No Activity found to handle Intent")
+        }
     }
 }
 
@@ -106,7 +112,13 @@ fun Activity.sendEmail(
         putExtra(Intent.EXTRA_SUBJECT, subject)
         if (text != null) putExtra(Intent.EXTRA_TEXT, text)
     }
-    startActivity(intent)
+
+    if (intent.resolveActivity(packageManager) != null) {
+        startActivity(intent)
+    } else {
+        showMessageInSnackbar(message = this.getString(R.string.file_list_no_app_for_perform_action))
+        Timber.e("No Activity found to handle Intent")
+    }
 }
 
 private fun getIntentForSavedMimeType(data: Uri, type: String): Intent {
