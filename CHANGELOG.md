@@ -13,6 +13,7 @@ Summary
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 * Enhancement - Improvements for the UI in the file details screen: [#3557](https://github.com/owncloud/android/issues/3557)
+* Enhancement - Improvements for the UI in the pattern screen: [#3580](https://github.com/owncloud/android/issues/3580)
 
 Details
 -------
@@ -57,6 +58,13 @@ Details
 
    https://github.com/owncloud/android/issues/3557
    https://github.com/owncloud/android/pull/3569
+
+* Enhancement - Improvements for the UI in the pattern screen: [#3580](https://github.com/owncloud/android/issues/3580)
+
+   Redesign of the pattern screen. Cancel button deleted and new back arrow in the toolbar.
+
+   https://github.com/owncloud/android/issues/3580
+   https://github.com/owncloud/android/pull/3587
 
 Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
 =======================================
