@@ -23,6 +23,7 @@ package com.owncloud.android.providers
 import android.content.Context
 import android.content.RestrictionsManager
 import androidx.annotation.BoolRes
+import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
 import androidx.enterprise.feedback.KeyedAppState
 import androidx.enterprise.feedback.KeyedAppStatesReporter
@@ -117,6 +118,15 @@ class MdmProvider(
         val setupValue = context.resources.getBoolean(booleanKey)
 
         return if (isMdmFlavor()) preferencesProvider.getBoolean(key = mdmKey, defaultValue = setupValue) else setupValue
+    }
+
+    fun getBrandingInteger(
+        @MDMConfigurations mdmKey: String,
+        @IntegerRes integerKey: Int
+    ): Int {
+        val setupValue = context.resources.getInteger(integerKey)
+
+        return if (isMdmFlavor()) preferencesProvider.getInt(key = mdmKey, defaultValue = setupValue) else setupValue
     }
 
     private fun sendFeedback(
