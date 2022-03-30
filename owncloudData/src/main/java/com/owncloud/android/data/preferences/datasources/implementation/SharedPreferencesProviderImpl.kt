@@ -47,4 +47,6 @@ class SharedPreferencesProviderImpl(
     override fun containsPreference(key: String) = sharedPreferences.contains(key)
 
     override fun removePreference(key: String) = editor.remove(key).apply()
+
+    override fun contains(key: String) = sharedPreferences.contains(key)
 }

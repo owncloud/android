@@ -11,6 +11,7 @@ Summary
 * Bugfix - Security flags for recording screen: [#3468](https://github.com/owncloud/android/issues/3468)
 * Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
+* Enhancement - Provide app feedback to MDM admins: [#3420](https://github.com/owncloud/android/issues/3420)
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 * Enhancement - Improvements for the UI in the file details screen: [#3557](https://github.com/owncloud/android/issues/3557)
 
@@ -42,6 +43,14 @@ Details
 
    https://github.com/owncloud/android/issues/3440
    https://github.com/owncloud/android/pull/3547
+
+* Enhancement - Provide app feedback to MDM admins: [#3420](https://github.com/owncloud/android/issues/3420)
+
+   Now, when a MDM configuration is applied for the first time or changed by an IT administrator,
+   the app sends feedback that will be shown in the EMM console.
+
+   https://github.com/owncloud/android/issues/3420
+   https://github.com/owncloud/android/pull/3480
 
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 

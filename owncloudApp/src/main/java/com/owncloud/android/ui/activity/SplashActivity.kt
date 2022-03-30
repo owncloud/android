@@ -20,14 +20,13 @@
 
 package com.owncloud.android.ui.activity
 
-import android.content.Context
 import android.content.Intent
-import android.content.RestrictionsManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.R
+import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 
@@ -37,28 +36,13 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (BuildConfig.FLAVOR == MainApp.MDM_FLAVOR) {
-            handleRestrictions()
+            val mdmProvider = MdmProvider(this)
+            mdmProvider.cacheStringRestriction(CONFIGURATION_SERVER_URL, R.string.server_url_configuration_feedback_ok)
+            mdmProvider.cacheBooleanRestriction(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, R.string.server_url_input_visibility_configuration_feedback_ok)
         }
 
         startActivity(Intent(this, FileDisplayActivity::class.java))
         finish()
     }
 
-    private fun handleRestrictions() {
-        val restrictionsManager = getSystemService(Context.RESTRICTIONS_SERVICE) as RestrictionsManager
-        val restrictions = restrictionsManager.applicationRestrictions
-        cacheRestrictions(restrictions)
-    }
-
-    private fun cacheRestrictions(restrictions: Bundle) {
-        val preferencesProvider = SharedPreferencesProviderImpl(this)
-        if (restrictions.containsKey(CONFIGURATION_SERVER_URL)) {
-            val confServerUrl = restrictions.getString(CONFIGURATION_SERVER_URL)
-            confServerUrl?.let { preferencesProvider.putString(CONFIGURATION_SERVER_URL, it) }
-        }
-        if (restrictions.containsKey(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)) {
-            val confServerUrlInputVisibility = restrictions.getBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY)
-            preferencesProvider.putBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, confServerUrlInputVisibility)
-        }
-    }
 }

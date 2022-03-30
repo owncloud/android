@@ -36,4 +36,6 @@ interface SharedPreferencesProvider {
     fun containsPreference(key: String): Boolean
 
     fun removePreference(key: String)
+
+    fun contains(key: String): Boolean
 }
