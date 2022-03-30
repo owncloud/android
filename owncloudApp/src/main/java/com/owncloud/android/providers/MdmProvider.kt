@@ -79,6 +79,26 @@ class MdmProvider(
         }
     }
 
+    fun cacheIntegerRestriction(key: String, idMessageFeedback: Int) {
+        if (!restrictions.containsKey(key)) {
+            // If we do not receive the key, remove the configuration and use the setup value instead
+            preferencesProvider.removePreference(key = key)
+            return
+        }
+
+        val newRestriction = restrictions.getInt(key)
+        val isRestrictionAlreadyCached = preferencesProvider.contains(key)
+        val oldRestriction = preferencesProvider.getInt(key, 0)
+
+        preferencesProvider.putInt(key, newRestriction)
+        if (!isRestrictionAlreadyCached || (newRestriction != oldRestriction)) {
+            sendFeedback(
+                key = key,
+                message = context.getString(idMessageFeedback)
+            )
+        }
+    }
+
     fun getBrandingString(
         @MDMConfigurations mdmKey: String,
         @StringRes stringKey: Int,
