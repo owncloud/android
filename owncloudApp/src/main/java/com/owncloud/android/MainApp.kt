@@ -53,6 +53,7 @@ import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.security.PatternManager
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
 import com.owncloud.android.providers.LogsProvider
+import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.*
 import org.koin.android.ext.koin.androidContext
@@ -302,8 +303,9 @@ class MainApp : Application() {
 
         private fun checkLockDelayEnforced(context: Context) {
             val preferences = SharedPreferencesProviderImpl(context)
+            val mdmProvider = MdmProvider(context)
 
-            val lockDelayEnforced = context.resources.getInteger(R.integer.lock_delay_enforced)
+            val lockDelayEnforced = mdmProvider.getBrandingInteger(CONFIGURATION_LOCK_DELAY_TIME, R.integer.lock_delay_enforced)
             val lockTimeout = LockTimeout.parseFromInteger(lockDelayEnforced)
 
             if (lockTimeout != LockTimeout.DISABLED) {

@@ -37,10 +37,11 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (BuildConfig.FLAVOR == MainApp.MDM_FLAVOR) {
-            val mdmProvider = MdmProvider(this)
-            mdmProvider.cacheStringRestriction(CONFIGURATION_SERVER_URL, R.string.server_url_configuration_feedback_ok)
-            mdmProvider.cacheBooleanRestriction(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, R.string.server_url_input_visibility_configuration_feedback_ok)
-            mdmProvider.cacheIntegerRestriction(CONFIGURATION_LOCK_DELAY_TIME, R.string.lock_delay_configuration_feedback_ok)
+            with(MdmProvider(this)) {
+                cacheStringRestriction(CONFIGURATION_SERVER_URL, R.string.server_url_configuration_feedback_ok)
+                cacheBooleanRestriction(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, R.string.server_url_input_visibility_configuration_feedback_ok)
+                cacheIntegerRestriction(CONFIGURATION_LOCK_DELAY_TIME, R.string.lock_delay_configuration_feedback_ok)
+            }
         }
 
         startActivity(Intent(this, FileDisplayActivity::class.java))
