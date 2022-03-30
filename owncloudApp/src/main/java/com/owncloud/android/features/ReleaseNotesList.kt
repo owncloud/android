@@ -19,11 +19,19 @@
 
 package com.owncloud.android.features
 
+import com.owncloud.android.R
 import com.owncloud.android.datamodel.ReleaseNote
+import com.owncloud.android.enums.ReleaseNoteType
 
 class ReleaseNotesList {
 
-    private val releaseNotesList = emptyList<ReleaseNote>()
+    private val releaseNotesList = //emptyList<ReleaseNote>()
+        listOf(
+            com.owncloud.android.datamodel.ReleaseNote(
+                title = R.string.release_note_account_list_title,
+                subtitle = R.string.release_note_account_list_subtitle,
+                type = ReleaseNoteType.BUGFIX
+            ))
 
     fun getReleaseNotes(): List<ReleaseNote> {
         return releaseNotesList

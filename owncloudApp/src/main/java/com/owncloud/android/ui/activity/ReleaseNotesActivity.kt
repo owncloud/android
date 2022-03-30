@@ -64,6 +64,7 @@ class ReleaseNotesActivity : AppCompatActivity() {
         }
 
         binding.btnProceed.setOnClickListener {
+            setResult(RESULT_OK)
             finish()
         }
     }
@@ -73,17 +74,17 @@ class ReleaseNotesActivity : AppCompatActivity() {
             return
         }
         if (shouldShow(context)) {
-            println("ENTRO $context")
+            println("show $context")
             context.startActivity(Intent(context, ReleaseNotesActivity::class.java))
         }
     }
 
     private fun shouldShow(context: Context): Boolean {
-        val showReleaseNotes = context.resources.getBoolean(R.bool.release_notes_enabled) && !BuildConfig.DEBUG
+        val showReleaseNotes = context.resources.getBoolean(R.bool.release_notes_enabled) //&& !BuildConfig.DEBUG
 
         return showReleaseNotes && ReleaseNotesList().getReleaseNotes().isNotEmpty() &&
                 (firstRunAfterUpdate() && context is LoginActivity ||
-                        ((!(firstRunAfterUpdate() && context is FileDisplayActivity) &&
+                        (((firstRunAfterUpdate() && context is FileDisplayActivity) &&
                                 context !is PassCodeActivity)))
     }
 

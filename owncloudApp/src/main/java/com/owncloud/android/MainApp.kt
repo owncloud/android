@@ -115,6 +115,7 @@ class MainApp : Application() {
                             WhatsNewActivity.runIfNeeded(activity)
                         }
                     } else {
+                        println("else: $activity")
                         ReleaseNotesActivity().runIfNeeded(activity)
                     }
                 }
@@ -261,7 +262,7 @@ class MainApp : Application() {
             get() {
                 return try {
                     val thisPackageName = appContext.packageName
-                    appContext.packageManager.getPackageInfo(thisPackageName, 0).versionCode
+                    appContext.packageManager.getPackageInfo(thisPackageName, 0).versionCode+9
                 } catch (e: PackageManager.NameNotFoundException) {
                     0
                 }
