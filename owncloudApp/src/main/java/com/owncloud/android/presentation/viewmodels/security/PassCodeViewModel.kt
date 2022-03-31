@@ -22,6 +22,7 @@ package com.owncloud.android.presentation.viewmodels.security
 
 import android.os.CountDownTimer
 import android.os.SystemClock
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,13 +35,15 @@ import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIME
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ATTEMPTS
 import com.owncloud.android.providers.ContextProvider
+import java.lang.StringBuilder
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
 import kotlin.math.pow
 
 class PassCodeViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
-    private val contextProvider: ContextProvider
+    private val contextProvider: ContextProvider,
+    private val action: String
 ) : ViewModel() {
 
     private val _getTimeToUnlockLiveData = MutableLiveData<Event<String>>()
@@ -51,10 +54,102 @@ class PassCodeViewModel(
     val getFinishedTimeToUnlockLiveData: LiveData<Event<Boolean>>
         get() = _getFinishedTimeToUnlockLiveData
 
+    private var _passcode = MutableLiveData<String>()
+    val passcode: LiveData<String>
+        get() = _passcode
+
+    private var _state = MutableLiveData<String>()
+    val state: LiveData<String>
+        get() = _state
+
+    private var passcodeString = StringBuilder()
+    lateinit var firstPasscode: String
+    private var confirmingPassCode = false
+
+    fun onNumberClicked(number: Int) {
+        val numberOfPasscodeDigits = (getPassCode()?.length ?: getNumberOfPassCodeDigits())
+        if (passcodeString.length < numberOfPasscodeDigits && getTimeToUnlockLeft() == 0.toLong()) {
+            passcodeString.append(number.toString())
+            _passcode.postValue(passcodeString.toString())
+
+            if (passcodeString.length == numberOfPasscodeDigits) {
+                processFullPassCode()
+            }
+        }
+    }
+
+    fun onBackspaceClicked() {
+        if (passcodeString.isNotEmpty()) {
+            passcodeString.deleteCharAt(passcodeString.length - 1)
+            _passcode.postValue(passcodeString.toString())
+        }
+    }
+
+    /**
+     * Processes the passcode entered by the user just after the last digit was in.
+     *
+     * Takes into account the action requested to the activity, the currently saved pass code and
+     * the previously typed pass code, if any.
+     */
+    fun processFullPassCode() {
+        when (action) {
+            ACTION_CHECK -> {
+                handleActionCheck()
+            }
+            ACTION_CHECK_WITH_RESULT -> {
+                handleActionCheckWithResult()
+            }
+            ACTION_REQUEST_WITH_RESULT -> {
+                handleActionRequestWithResult()
+            }
+        }
+    }
+
+    private fun handleActionCheck() {
+        if (checkPassCodeIsValid(passcodeString.toString())) {
+            // pass code accepted in request, user is allowed to access the app
+            setLastUnlockTimestamp()
+            val passCode = getPassCode()
+            if (passCode != null && passCode.length < getNumberOfPassCodeDigits()) {
+                setMigrationRequired(true)
+                removePassCode()
+                _state.postValue("ACTION_CHECK_OK?")
+            }
+            _state.postValue("ACTION_CHECK_OK")
+            resetNumberOfAttempts()
+        } else {
+            increaseNumberOfAttempts()
+            passcodeString = StringBuilder()
+            _state.postValue("ACTION_CHECK_ERROR")
+        }
+    }
+
+    private fun handleActionCheckWithResult() {
+        if (checkPassCodeIsValid(passcodeString.toString())) {
+            removePassCode()
+            _state.postValue("ACTION_CHECK_WITH_RESULT_OK")
+        } else {
+            _state.postValue("ACTION_CHECK_WITH_RESULT_ERROR")
+        }
+    }
+
+    private fun handleActionRequestWithResult() {
+        // enabling pass code
+        if (!confirmingPassCode) {
+            requestPassCodeConfirmation()
+            _state.postValue("ACTION_REQUEST_WITH_RESULT_NO_CONFIRM")
+        } else if (confirmPassCode()) {
+            setPassCode()
+            _state.postValue("ACTION_REQUEST_WITH_RESULT_CONFIRM")
+        } else {
+            _state.postValue("ACTION_REQUEST_WITH_RESULT_ERROR")
+        }
+    }
+
     fun getPassCode() = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
 
-    fun setPassCode(passcode: String) {
-        preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode)
+    fun setPassCode() {
+        preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, firstPasscode)
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
     }
 
@@ -131,5 +226,32 @@ class PassCodeViewModel(
 
     fun setBiometricsState(enabled: Boolean) {
         preferencesProvider.putBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, enabled)
+    }
+
+    /**
+     * Ask to the user for retyping the pass code just entered before saving it as the current pass
+     * code.
+     */
+    private fun requestPassCodeConfirmation() {
+        confirmingPassCode = true
+        firstPasscode = passcodeString.toString()
+        passcodeString = StringBuilder()
+    }
+
+    /**
+     * Compares pass code retyped by the user in the input fields with the value entered just
+     * before.
+     *
+     * @return     'True' if retyped pass code equals to the entered before.
+     */
+    private fun confirmPassCode(): Boolean {
+        confirmingPassCode = false
+        return firstPasscode == passcodeString.toString()
+    }
+
+    companion object {
+        const val ACTION_REQUEST_WITH_RESULT = "ACTION_REQUEST_WITH_RESULT"
+        const val ACTION_CHECK_WITH_RESULT = "ACTION_CHECK_WITH_RESULT"
+        const val ACTION_CHECK = "ACTION_CHECK"
     }
 }

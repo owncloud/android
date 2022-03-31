@@ -38,7 +38,6 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.databinding.PasscodelockBinding
@@ -53,11 +52,17 @@ import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBiometrics {
 
     // ViewModel
-    private val passCodeViewModel by viewModel<PassCodeViewModel>()
+    private val passCodeViewModel: PassCodeViewModel by viewModel {
+        parametersOf(
+            intent.action
+        )
+    }
+
     private val biometricViewModel by viewModel<BiometricViewModel>()
 
     private var _binding: PasscodelockBinding? = null
@@ -65,6 +70,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
 
     private lateinit var passCodeEditTexts: Array<EditText?>
 
+    private var numberOfPasscodeDigits = 0
     private lateinit var passcode: StringBuilder
     private lateinit var firstPasscode: String
     private var confirmingPassCode = false
@@ -91,7 +97,8 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
 
         setContentView(binding.root)
 
-        passCodeEditTexts = arrayOfNulls(passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
+        numberOfPasscodeDigits = passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits()
+        passCodeEditTexts = arrayOfNulls(numberOfPasscodeDigits)
         passcode = StringBuilder()
 
         // Allow or disallow touches with other visible windows
@@ -195,98 +202,13 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
     }
 
     override fun onNumberClicked(number: Int) {
-        val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
+        println("number clicked $number")
+        passCodeViewModel.onNumberClicked(number)
 
-        if (passcode.length < numberOfPasscodeDigits && !binding.lockTime.isVisible) {
-            passcode.append(number.toString())
-            passCodeEditTexts[passcode.length - 1]?.text = Editable.Factory.getInstance().newEditable(number.toString())
-
-            if (passcode.length < numberOfPasscodeDigits) {
-                passCodeEditTexts[passcode.length]?.requestFocus()
-                passCodeEditTexts[passcode.length - 1]?.isEnabled = false
-            } else {
-                processFullPassCode()
-            }
-        }
     }
 
     override fun onBackspaceButtonClicked() {
-        if (passcode.length > 0) {
-            passcode.deleteCharAt(passcode.length - 1)
-            passCodeEditTexts[passcode.length]?.apply {
-                isEnabled = true
-                setText("")
-                requestFocus()
-            }
-        }
-    }
-
-    /**
-     * Processes the pass code entered by the user just after the last digit was in.
-     *
-     * Takes into account the action requested to the activity, the currently saved pass code and
-     * the previously typed pass code, if any.
-     */
-    private fun processFullPassCode() {
-        when (intent.action) {
-            ACTION_CHECK -> {
-                handleActionCheck()
-            }
-            ACTION_CHECK_WITH_RESULT -> {
-                handleActionCheckWithResult()
-            }
-            ACTION_REQUEST_WITH_RESULT -> {
-                handleActionRequestWithResult()
-            }
-        }
-    }
-
-    private fun handleActionCheck() {
-        if (passCodeViewModel.checkPassCodeIsValid(passcode.toString())) {
-            // pass code accepted in request, user is allowed to access the app
-            binding.error.visibility = View.INVISIBLE
-            passCodeViewModel.setLastUnlockTimestamp()
-            val passCode = passCodeViewModel.getPassCode()
-            if (passCode != null && passCode.length < passCodeViewModel.getNumberOfPassCodeDigits()) {
-                passCodeViewModel.setMigrationRequired(true)
-                passCodeViewModel.removePassCode()
-                val intent = Intent(baseContext, PassCodeActivity::class.java)
-                intent.apply {
-                    action = ACTION_REQUEST_WITH_RESULT
-                    flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    putExtra(EXTRAS_MIGRATION, true)
-                }
-                startActivity(intent)
-            }
-            passCodeViewModel.resetNumberOfAttempts()
-            PassCodeManager.onActivityStopped(this)
-            finish()
-        } else {
-            showErrorAndRestart(
-                errorMessage = R.string.pass_code_wrong, headerMessage = getString(R.string.pass_code_enter_pass_code),
-                explanationVisibility = View.INVISIBLE
-            )
-            passCodeViewModel.increaseNumberOfAttempts()
-            if (passCodeViewModel.getNumberOfAttempts() >= NUM_ATTEMPTS_WITHOUT_TIMER) {
-                lockScreen()
-            }
-        }
-    }
-
-    private fun handleActionCheckWithResult() {
-        if (passCodeViewModel.checkPassCodeIsValid(passcode.toString())) {
-            passCodeViewModel.removePassCode()
-            val resultIntent = Intent()
-            setResult(RESULT_OK, resultIntent)
-            binding.error.visibility = View.INVISIBLE
-            notifyDocumentProviderRoots(applicationContext)
-            finish()
-        } else {
-            showErrorAndRestart(
-                errorMessage = R.string.pass_code_wrong, headerMessage = getString(R.string.pass_code_enter_pass_code),
-                explanationVisibility = View.INVISIBLE
-            )
-        }
+        passCodeViewModel.onBackspaceClicked()
     }
 
     private fun subscribeToViewModel() {
@@ -300,6 +222,122 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
             }
             passCodeEditTexts.first()?.requestFocus()
         })
+        passCodeViewModel.state.observe(this) { state ->
+            when (state) {
+                "ACTION_CHECK_OK" -> {
+                    handleActionCheckOk()
+                }
+                "ACTION_CHECK_OK?" -> {
+                    handleActionCheckOk2()
+                }
+                "ACTION_CHECK_ERROR" -> {
+                    handleActionCheckError()
+                }
+                "ACTION_CHECK_WITH_RESULT_OK" -> {
+                    handleActionCheckWithResultOk()
+                }
+                "ACTION_CHECK_WITH_RESULT_ERROR" -> {
+                    handleActionCheckWithResultError()
+                }
+                "ACTION_REQUEST_WITH_RESULT_NO_CONFIRM" -> {
+                    handleActionRequestWithResultNoConfirming()
+                }
+                "ACTION_REQUEST_WITH_RESULT_CONFIRM" -> {
+                    handleActionRequestWithResultConfirm()
+                }
+                "ACTION_REQUEST_WITH_RESULT_ERROR" -> {
+                    handleActionRequestWithResultError()
+                }
+            }
+        }
+        passCodeViewModel.passcode.observe(this) { passcode ->
+            if (passcode.isNotEmpty()) {
+                passCodeEditTexts[passcode.length - 1]?.apply {
+                    text = Editable.Factory.getInstance().newEditable(passcode.last().toString())
+                    isEnabled = false
+                }
+            }
+
+            if (passcode.length < numberOfPasscodeDigits) {
+                //Backspace
+                passCodeEditTexts[passcode.length]?.apply {
+                    isEnabled = true
+                    setText("")
+                    requestFocus()
+                }
+            }
+        }
+    }
+
+    private fun handleActionCheckOk() {
+        // pass code accepted in request, user is allowed to access the app
+        binding.error.visibility = View.INVISIBLE
+
+        PassCodeManager.onActivityStopped(this)
+        finish()
+
+    }
+
+    private fun handleActionCheckOk2() {
+        binding.error.visibility = View.INVISIBLE
+
+        val intent = Intent(baseContext, PassCodeActivity::class.java)
+        intent.apply {
+            action = ACTION_REQUEST_WITH_RESULT
+            flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            putExtra(EXTRAS_MIGRATION, true)
+        }
+        startActivity(intent)
+
+        PassCodeManager.onActivityStopped(this)
+        finish()
+    }
+
+    private fun handleActionCheckError() {
+        showErrorAndRestart(
+            errorMessage = R.string.pass_code_wrong, headerMessage = getString(R.string.pass_code_enter_pass_code),
+            explanationVisibility = View.INVISIBLE
+        )
+        if (passCodeViewModel.getNumberOfAttempts() >= NUM_ATTEMPTS_WITHOUT_TIMER) {
+            lockScreen()
+        }
+    }
+
+    private fun handleActionCheckWithResultOk() {
+        val resultIntent = Intent()
+        setResult(RESULT_OK, resultIntent)
+        binding.error.visibility = View.INVISIBLE
+        notifyDocumentProviderRoots(applicationContext)
+        finish()
+    }
+
+    private fun handleActionCheckWithResultError() {
+        showErrorAndRestart(
+            errorMessage = R.string.pass_code_wrong, headerMessage = getString(R.string.pass_code_enter_pass_code),
+            explanationVisibility = View.INVISIBLE
+        )
+    }
+
+    private fun handleActionRequestWithResultNoConfirming() {
+        binding.error.visibility = View.INVISIBLE
+        requestPassCodeConfirmation()
+    }
+
+    private fun handleActionRequestWithResultConfirm() {
+        // confirmed: user typed the same pass code twice
+        if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) passCodeViewModel.setMigrationRequired(false)
+        savePassCodeAndExit()
+    }
+
+    private fun handleActionRequestWithResultError() {
+        val headerMessage = if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) getString(
+            R.string.pass_code_configure_your_pass_code_migration,
+            passCodeViewModel.getNumberOfPassCodeDigits()
+        )
+        else getString(R.string.pass_code_configure_your_pass_code)
+        showErrorAndRestart(
+            errorMessage = R.string.pass_code_mismatch, headerMessage = headerMessage, explanationVisibility = View.VISIBLE
+        )
     }
 
     private fun lockScreen() {
@@ -310,27 +348,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                 editText?.isEnabled = false
             }
             passCodeViewModel.initUnlockTimer()
-        }
-    }
-
-    private fun handleActionRequestWithResult() {
-// enabling pass code
-        if (!confirmingPassCode) {
-            binding.error.visibility = View.INVISIBLE
-            requestPassCodeConfirmation()
-        } else if (confirmPassCode()) {
-// confirmed: user typed the same pass code twice
-            if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) passCodeViewModel.setMigrationRequired(false)
-            savePassCodeAndExit()
-        } else {
-            val headerMessage = if (intent.extras?.getBoolean(EXTRAS_MIGRATION) == true) getString(
-                R.string.pass_code_configure_your_pass_code_migration,
-                passCodeViewModel.getNumberOfPassCodeDigits()
-            )
-            else getString(R.string.pass_code_configure_your_pass_code)
-            showErrorAndRestart(
-                errorMessage = R.string.pass_code_mismatch, headerMessage = headerMessage, explanationVisibility = View.VISIBLE
-            )
         }
     }
 
@@ -355,20 +372,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
         binding.header.setText(R.string.pass_code_reenter_your_pass_code)
         binding.explanation.visibility = View.INVISIBLE
         confirmingPassCode = true
-        firstPasscode = passcode.toString()
-        passcode = StringBuilder()
-
-    }
-
-    /**
-     * Compares pass code retyped by the user in the input fields with the value entered just
-     * before.
-     *
-     * @return     'True' if retyped pass code equals to the entered before.
-     */
-    private fun confirmPassCode(): Boolean {
-        confirmingPassCode = false
-        return firstPasscode == passcode.toString()
     }
 
     /**
@@ -409,7 +412,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
      * Saves the pass code input by the user as the current pass code.
      */
     private fun savePassCodeAndExit() {
-        passCodeViewModel.setPassCode(passcode.toString())
         setResult(RESULT_OK, resultIntent)
         notifyDocumentProviderRoots(applicationContext)
         if (biometricViewModel.isBiometricLockAvailable()) {
