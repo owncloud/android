@@ -122,7 +122,15 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
         OwnCloudVersion serverVersion = null;
 
         // get 'fresh data' from the database
-        mLocalFolder = getStorageManager().getFileByPath(mLocalFolder.getRemotePath());
+        OCFile tempFile = getStorageManager().getFileByPath(mLocalFolder.getRemotePath());
+
+        if (tempFile != null) {
+            mLocalFolder = tempFile;
+        } else {
+            Timber.w("File with path: " + mLocalFolder.getRemotePath() + " and account " + mAccount.name
+                    + " could not be retrieved from database " + "for account : "
+                    + getStorageManager().getAccount().name + " Let's try to synchronize it anyway");
+        }
 
         // only in root folder: sync server version and user profile
         if (OCFile.ROOT_PATH.equals(mLocalFolder.getRemotePath()) && syncVersionAndProfileEnabled) {
