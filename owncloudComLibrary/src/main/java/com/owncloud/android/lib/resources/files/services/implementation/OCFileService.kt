@@ -33,6 +33,6 @@ class OCFileService(override val client: OwnCloudClient) :
     override fun checkPathExistence(path: String, isUserLogged: Boolean): RemoteOperationResult<Boolean> =
         CheckPathExistenceRemoteOperation(
             remotePath = path,
-            isUserLogged = isUserLogged
+            isUserLoggedIn = isUserLogged
         ).execute(client)
 }

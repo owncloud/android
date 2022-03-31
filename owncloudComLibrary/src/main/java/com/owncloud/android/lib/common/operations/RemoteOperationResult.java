@@ -34,6 +34,7 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import okhttp3.Headers;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.json.JSONException;
 import timber.log.Timber;
 
@@ -59,13 +60,15 @@ public class RemoteOperationResult<T>
      * Generated - should be refreshed every time the class changes!!
      */
     private static final long serialVersionUID = 4968939884332372230L;
+    private static final String LOCATION = "location";
+    private static final String WWW_AUTHENTICATE = "www-authenticate";
 
     private boolean mSuccess = false;
     private int mHttpCode = -1;
     private String mHttpPhrase = null;
     private Exception mException = null;
     private ResultCode mCode = ResultCode.UNKNOWN_ERROR;
-    private String mRedirectedLocation;
+    private String mRedirectedLocation = "";
     private List<String> mAuthenticate = new ArrayList<>();
     private String mLastPermanentLocation = null;
     private T mData = null;
@@ -112,6 +115,14 @@ public class RemoteOperationResult<T>
      */
     public RemoteOperationResult(Exception e) {
         mException = e;
+        //TODO: Do propper exception handling and remove this
+        Timber.e("---------------------------------" +
+                        "\nCreate RemoteOperationResult from exception." +
+                        "\n Message: %s" +
+                        "\n Stacktrace: %s" +
+                        "\n---------------------------------",
+                ExceptionUtils.getMessage(e),
+                ExceptionUtils.getStackTrace(e));
 
         if (e instanceof OperationCancelledException) {
             mCode = ResultCode.CANCELLED;
@@ -248,11 +259,11 @@ public class RemoteOperationResult<T>
         this(httpCode, httpPhrase);
         if (headers != null) {
             for (Map.Entry<String, List<String>> header : headers.toMultimap().entrySet()) {
-                if ("location".equals(header.getKey().toLowerCase())) {
+                if (LOCATION.equalsIgnoreCase(header.getKey())) {
                     mRedirectedLocation = header.getValue().get(0);
                     continue;
                 }
-                if ("www-authenticate".equals(header.getKey().toLowerCase())) {
+                if (WWW_AUTHENTICATE.equalsIgnoreCase(header.getKey())) {
                     for (String value: header.getValue()) {
                         mAuthenticate.add(value.toLowerCase());
                     }
@@ -321,7 +332,7 @@ public class RemoteOperationResult<T>
                     mHttpPhrase = errorMessage;
                 }
             } catch (Exception e) {
-                Timber.w("Error reading exception from server: %s", e.getMessage());
+                Timber.w("Error reading exception from server: %s\nTrace: %s", e.getMessage(), ExceptionUtils.getStackTrace(e));
                 // mCode stays as set in this(success, httpCode, headers)
             }
         }

@@ -47,7 +47,7 @@ internal class StatusRequester {
         redirectedUrl: String
     ) = redirectedToNonSecureLocationBefore ||
             (baseUrl.startsWith(HTTPS_SCHEME) &&
-            !redirectedUrl.startsWith(HTTPS_SCHEME))
+                    !redirectedUrl.startsWith(HTTPS_SCHEME))
 
     fun updateLocationWithRedirectPath(oldLocation: String, redirectedLocation: String): String {
         /** Redirection with different endpoint.
@@ -73,36 +73,18 @@ internal class StatusRequester {
     data class RequestResult(
         val getMethod: GetMethod,
         val status: Int,
-        val redirectedToUnsecureLocation: Boolean,
         val lastLocation: String
     )
 
-    fun requestAndFollowRedirects(baseLocation: String, client: OwnCloudClient): RequestResult {
-        var currentLocation = baseLocation + OwnCloudClient.STATUS_PATH
-        var redirectedToUnsecureLocation = false
+    fun request(baseLocation: String, client: OwnCloudClient): RequestResult {
+        val currentLocation = baseLocation + OwnCloudClient.STATUS_PATH
         var status: Int
 
-        while (true) {
-            val getMethod = getGetMethod(currentLocation)
+        val getMethod = getGetMethod(currentLocation)
+        getMethod.setFollowPermanentRedirects(true)
+        status = client.executeHttpMethod(getMethod)
 
-            status = client.executeHttpMethod(getMethod)
-            val result =
-                if (status.isSuccess()) RemoteOperationResult<OwnCloudVersion>(RemoteOperationResult.ResultCode.OK)
-                else RemoteOperationResult(getMethod)
-
-            if (result.redirectedLocation.isNullOrEmpty() || result.isSuccess) {
-                return RequestResult(getMethod, status, redirectedToUnsecureLocation, currentLocation)
-            } else {
-                val nextLocation = updateLocationWithRedirectPath(currentLocation, result.redirectedLocation)
-                redirectedToUnsecureLocation =
-                    isRedirectedToNonSecureConnection(
-                        redirectedToUnsecureLocation,
-                        currentLocation,
-                        nextLocation
-                    )
-                currentLocation = nextLocation
-            }
-        }
+        return RequestResult(getMethod, status, getMethod.getFinalUrl().toString())
     }
 
     private fun Int.isSuccess() = this == HttpConstants.HTTP_OK
@@ -122,12 +104,8 @@ internal class StatusRequester {
         // the version object will be returned even if the version is invalid, no error code;
         // every app will decide how to act if (ocVersion.isVersionValid() == false)
         val result: RemoteOperationResult<RemoteServerInfo> =
-            if (requestResult.redirectedToUnsecureLocation) {
-                RemoteOperationResult(RemoteOperationResult.ResultCode.OK_REDIRECT_TO_NON_SECURE_CONNECTION)
-            } else {
-                if (baseUrl.startsWith(HTTPS_SCHEME)) RemoteOperationResult(RemoteOperationResult.ResultCode.OK_SSL)
-                else RemoteOperationResult(RemoteOperationResult.ResultCode.OK_NO_SSL)
-            }
+            if (baseUrl.startsWith(HTTPS_SCHEME)) RemoteOperationResult(RemoteOperationResult.ResultCode.OK_SSL)
+            else RemoteOperationResult(RemoteOperationResult.ResultCode.OK_NO_SSL)
         val finalUrl = URL(requestResult.lastLocation)
         val finalBaseUrl = URL(
             finalUrl.protocol,

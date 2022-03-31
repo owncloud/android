@@ -132,10 +132,6 @@ public class HttpClient {
         return sLogInterceptor;
     }
 
-    public static List<Cookie> getCookiesFromUrl(HttpUrl httpUrl) {
-        return sCookieStore.get(httpUrl.host());
-    }
-
     public Context getContext() {
         return sContext;
     }

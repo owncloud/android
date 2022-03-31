@@ -27,7 +27,6 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.webdav.DavUtils.allPropset
 import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod
-import com.owncloud.android.lib.common.network.RedirectionPath
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -44,26 +43,18 @@ import java.util.concurrent.TimeUnit
  * @author Abel García de Prada
  *
  * @param remotePath      Path to append to the URL owned by the client instance.
- * @param isUserLogged    When `true`, the username won't be added at the end of the PROPFIND url since is not
+ * @param isUserLoggedIn    When `true`, the username won't be added at the end of the PROPFIND url since is not
  *                        needed to check user credentials
  */
 class CheckPathExistenceRemoteOperation(
     val remotePath: String? = "",
-    val isUserLogged: Boolean
+    val isUserLoggedIn: Boolean
 ) : RemoteOperation<Boolean>() {
-    /**
-     * Gets the sequence of redirections followed during the execution of the operation.
-     *
-     * @return Sequence of redirections followed, if any, or NULL if the operation was not executed.
-     */
-    var redirectionPath: RedirectionPath? = null
-        private set
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Boolean> {
-        val previousFollowRedirects = client.followRedirects()
         return try {
             val stringUrl =
-                if (isUserLogged) client.baseFilesWebDavUri.toString()
+                if (isUserLoggedIn) client.baseFilesWebDavUri.toString()
                 else client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(remotePath)
 
             val propFindMethod = PropfindMethod(URL(stringUrl), 0, allPropset).apply {
@@ -71,12 +62,7 @@ class CheckPathExistenceRemoteOperation(
                 setConnectionTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
             }
 
-            client.setFollowRedirects(false)
             var status = client.executeHttpMethod(propFindMethod)
-            if (previousFollowRedirects) {
-                redirectionPath = client.followRedirection(propFindMethod)
-                status = redirectionPath?.lastStatus!!
-            }
             /* PROPFIND method
              * 404 NOT FOUND: path doesn't exist,
              * 207 MULTI_STATUS: path exists.
@@ -94,15 +80,8 @@ class CheckPathExistenceRemoteOperation(
                 "Existence check for ${client.userFilesWebDavUri}${WebdavUtils.encodePath(remotePath)} : ${result.logMessage}"
             )
             result
-        } finally {
-            client.setFollowRedirects(previousFollowRedirects)
         }
     }
-
-    /**
-     * @return 'True' if the operation was executed and at least one redirection was followed.
-     */
-    fun wasRedirected() = redirectionPath?.redirectionsCount ?: 0 > 0
 
     private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_MULTI_STATUS
 

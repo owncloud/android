@@ -50,7 +50,7 @@ class PropfindMethod(
     public override fun onExecute(): Int {
         davResource.propfind(
             depth = depth,
-            reqProp = *propertiesToRequest,
+            reqProp = propertiesToRequest,
             listOfHeaders = super.getRequestHeadersAsHashMap(),
             callback = { response: Response, hrefRelation: HrefRelation? ->
                 when (hrefRelation) {
