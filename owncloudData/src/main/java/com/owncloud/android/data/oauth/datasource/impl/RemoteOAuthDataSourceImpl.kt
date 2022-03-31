@@ -40,7 +40,7 @@ class RemoteOAuthDataSourceImpl(
 ) : RemoteOAuthDataSource {
 
     override fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration {
-        val ownCloudClient = clientManager.getClientForUnExistingAccount(baseUrl, false)
+        val ownCloudClient = clientManager.getClientForAnonymousCredentials(baseUrl, false)
 
         val serverConfiguration = executeRemoteOperation {
             oidcService.getOIDCServerDiscovery(ownCloudClient)
@@ -50,7 +50,7 @@ class RemoteOAuthDataSourceImpl(
     }
 
     override fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse {
-        val ownCloudClient = clientManager.getClientForUnExistingAccount(tokenRequest.baseUrl, false)
+        val ownCloudClient = clientManager.getClientForAnonymousCredentials(tokenRequest.baseUrl, false)
 
         val tokenResponse = executeRemoteOperation {
             oidcService.performTokenRequest(
@@ -64,7 +64,7 @@ class RemoteOAuthDataSourceImpl(
 
     override fun registerClient(clientRegistrationRequest: ClientRegistrationRequest): ClientRegistrationInfo {
         val ownCloudClient =
-            clientManager.getClientForUnExistingAccount(clientRegistrationRequest.registrationEndpoint, false)
+            clientManager.getClientForAnonymousCredentials(clientRegistrationRequest.registrationEndpoint, false)
 
         val remoteClientRegistrationInfo = executeRemoteOperation {
             oidcService.registerClientWithRegistrationEndpoint(

@@ -66,7 +66,7 @@ class OCRemoteServerInfoDataSourceTest {
     fun init() {
         ocRemoteServerInfoDatasource = OCRemoteServerInfoDataSource(ocServerInfoService, clientManager)
 
-        every { clientManager.getClientForUnExistingAccount(any(), any()) } returns ocClientMocked
+        every { clientManager.getClientForAnonymousCredentials(any(), any()) } returns ocClientMocked
     }
 
     @Test
