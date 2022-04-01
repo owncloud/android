@@ -70,6 +70,13 @@ Details
    https://github.com/owncloud/android/issues/3557
    https://github.com/owncloud/android/pull/3569
 
+* Enhancement - Improvements for the UI in the pattern screen: [#3580](https://github.com/owncloud/android/issues/3580)
+
+   Redesign of the pattern screen. Cancel button deleted and new back arrow in the toolbar.
+
+   https://github.com/owncloud/android/issues/3580
+   https://github.com/owncloud/android/pull/3587
+
 * Enhancement - Release Notes: [#3442](https://github.com/owncloud/android/issues/3442)
 
    New release notes to show news in updates.
