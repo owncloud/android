@@ -650,7 +650,7 @@
 
     <!-- Release Notes -->
     <string name="release_notes_header">New in %1$s</string>
-    <string name="release_notes_footer">Thank you for using %1$s.\n❤️</string>
+    <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_note_account_list_title">Account List</string>
     <string name="release_note_account_list_subtitle">There is a fresh look for the single account overview.</string>

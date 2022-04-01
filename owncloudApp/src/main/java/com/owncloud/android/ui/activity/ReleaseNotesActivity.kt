@@ -23,13 +23,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.versionCode
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ReleaseNotesActivityBinding
+import com.owncloud.android.db.PreferenceManager.getDefaultSharedPreferences
 import com.owncloud.android.features.ReleaseNotesList
 import com.owncloud.android.ui.adapter.ReleaseNotesAdapter
 import com.owncloud.android.ui.viewmodels.ReleaseNotesViewModel
@@ -44,7 +44,6 @@ class ReleaseNotesActivity : AppCompatActivity() {
     val binding get() = _binding!!
 
     private val releaseNotesAdapter = ReleaseNotesAdapter()
-    private val KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,25 +60,10 @@ class ReleaseNotesActivity : AppCompatActivity() {
         }
 
         binding.btnProceed.setOnClickListener {
-            updateVersionCode()
+            releaseNotesViewModel.updateVersionCode()
             setResult(RESULT_OK)
             finish()
         }
-    }
-
-    fun runIfNeeded(context: Context) {
-        if (context is ReleaseNotesActivity) {
-            return
-        }
-        if (shouldShow(context)) {
-            context.startActivity(Intent(context, ReleaseNotesActivity::class.java))
-        }
-    }
-
-    private fun shouldShow(context: Context): Boolean {
-        val showReleaseNotes = context.resources.getBoolean(R.bool.release_notes_enabled) && !BuildConfig.DEBUG
-
-        return firstRunAfterUpdate() && showReleaseNotes && ReleaseNotesList().getReleaseNotes().isNotEmpty()
     }
 
     private fun setData() {
@@ -99,19 +83,31 @@ class ReleaseNotesActivity : AppCompatActivity() {
         binding.txtFooter.text = footer
     }
 
-    private fun updateVersionCode() {
-        val pref = PreferenceManager.getDefaultSharedPreferences(this)
-        val editor = pref.edit()
-        editor.putInt(KEY_LAST_SEEN_VERSION_CODE, versionCode)
-        editor.apply()
-    }
+    companion object {
+        private val KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode"
 
-    private fun firstRunAfterUpdate(): Boolean {
-        return getLastSeenVersionCode() != versionCode
-    }
+        fun runIfNeeded(context: Context) {
+            if (context is ReleaseNotesActivity) {
+                return
+            }
+            if (shouldShow(context)) {
+                context.startActivity(Intent(context, ReleaseNotesActivity::class.java))
+            }
+        }
 
-    private fun getLastSeenVersionCode(): Int {
-        val pref = com.owncloud.android.db.PreferenceManager.getDefaultSharedPreferences(MainApp.appContext)
-        return pref.getInt(KEY_LAST_SEEN_VERSION_CODE, 0)
+        private fun shouldShow(context: Context): Boolean {
+            val showReleaseNotes = context.resources.getBoolean(R.bool.release_notes_enabled) && !BuildConfig.DEBUG
+
+            return firstRunAfterUpdate() && showReleaseNotes && ReleaseNotesList.getReleaseNotes().isNotEmpty()
+        }
+
+        private fun firstRunAfterUpdate(): Boolean {
+            return getLastSeenVersionCode() != versionCode
+        }
+
+        private fun getLastSeenVersionCode(): Int {
+            val pref = getDefaultSharedPreferences(MainApp.appContext)
+            return pref.getInt(KEY_LAST_SEEN_VERSION_CODE, 0)
+        }
     }
 }

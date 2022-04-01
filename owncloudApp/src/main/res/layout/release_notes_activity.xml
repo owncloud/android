@@ -45,7 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtHeader"
-        tools:listitem="@layout/release_notes_item"></androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/release_notes_item" />
 
     <TextView
         android:id="@+id/txtFooter"

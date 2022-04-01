@@ -23,9 +23,11 @@ import com.owncloud.android.datamodel.ReleaseNote
 
 class ReleaseNotesList {
 
-    private val releaseNotesList = emptyList<ReleaseNote>()
+    companion object {
+        private val releaseNotesList = emptyList<ReleaseNote>()
 
-    fun getReleaseNotes(): List<ReleaseNote> {
-        return releaseNotesList
+        fun getReleaseNotes(): List<ReleaseNote> {
+            return releaseNotesList
+        }
     }
 }
