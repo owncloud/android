@@ -74,7 +74,11 @@ class MainFileListViewModel(
     private val _folderContentLiveData: LiveData<Event<List<OCFile>>> =
         Transformations.switchMap(currentFileLiveData) { folder ->
             getFolderContentAsLiveDataUseCase.execute(GetFolderContentAsLiveDataUseCase.Params(folderId = folder.id!!)).map { folderContent ->
-                val newFileListUiState = composeFileListUiState(folderToDisplay = folder, folderContent = folderContent)
+                val newFileListUiState = composeFileListUiState(
+                    folderToDisplay = folder,
+                    folderContent = folderContent,
+                    searchFilter = if (fileListUiStateLiveData.value?.folderToDisplay != folder) "" else null
+                )
                 _fileListUiStateLiveData.postValue(newFileListUiState)
                 Event(folderContent)
             }
