@@ -53,8 +53,6 @@ import com.owncloud.android.ui.whatsnew.ProgressIndicator;
  */
 public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPageChangeListener {
 
-    private static final String KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode";
-
     private ImageButton mForwardFinishButton;
     private ProgressIndicator mProgress;
     private ViewPager mPager;
@@ -92,7 +90,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         // Wizard already shown
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(KEY_LAST_SEEN_VERSION_CODE, MainApp.Companion.getVersionCode());
+        editor.putInt(MainApp.Companion.getKEY_LAST_SEEN_VERSION_CODE(), MainApp.Companion.getVersionCode());
         editor.apply();
     }
 

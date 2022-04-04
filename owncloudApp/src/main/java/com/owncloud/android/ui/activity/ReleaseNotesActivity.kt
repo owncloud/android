@@ -84,8 +84,6 @@ class ReleaseNotesActivity : AppCompatActivity() {
     }
 
     companion object {
-        private val KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode"
-
         fun runIfNeeded(context: Context) {
             if (context is ReleaseNotesActivity) {
                 return
@@ -107,7 +105,7 @@ class ReleaseNotesActivity : AppCompatActivity() {
 
         private fun getLastSeenVersionCode(): Int {
             val pref = getDefaultSharedPreferences(MainApp.appContext)
-            return pref.getInt(KEY_LAST_SEEN_VERSION_CODE, 0)
+            return pref.getInt(MainApp.KEY_LAST_SEEN_VERSION_CODE, 0)
         }
     }
 }

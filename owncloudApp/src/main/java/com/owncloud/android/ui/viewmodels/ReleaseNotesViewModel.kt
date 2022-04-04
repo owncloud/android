@@ -20,6 +20,7 @@
 package com.owncloud.android.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.versionCode
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.ReleaseNote
@@ -28,13 +29,12 @@ import com.owncloud.android.features.ReleaseNotesList
 class ReleaseNotesViewModel(
     private val preferencesProvider: SharedPreferencesProvider
 ) : ViewModel() {
-    private val KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode"
 
     fun getReleaseNotes(): List<ReleaseNote> {
         return ReleaseNotesList.getReleaseNotes()
     }
 
     fun updateVersionCode() {
-        preferencesProvider.putInt(KEY_LAST_SEEN_VERSION_CODE, versionCode)
+        preferencesProvider.putInt(MainApp.KEY_LAST_SEEN_VERSION_CODE, versionCode)
     }
 }

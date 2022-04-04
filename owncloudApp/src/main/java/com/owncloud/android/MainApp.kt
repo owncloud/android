@@ -79,7 +79,6 @@ import timber.log.Timber
  * classes
  */
 class MainApp : Application() {
-    private val KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode"
 
     override fun onCreate() {
         super.onCreate()
@@ -247,6 +246,8 @@ class MainApp : Application() {
             private set
         var enabledLogging: Boolean = false
             private set
+
+        val KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode"
 
         /**
          * Next methods give access in code to some constants that need to be defined in string resources to be referred
