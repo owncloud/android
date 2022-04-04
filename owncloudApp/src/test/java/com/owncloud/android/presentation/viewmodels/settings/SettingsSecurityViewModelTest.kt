@@ -27,7 +27,7 @@ import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
-import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.providers.MdmProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -41,13 +41,13 @@ import org.junit.Test
 class SettingsSecurityViewModelTest : ViewModelTest() {
     private lateinit var securityViewModel: SettingsSecurityViewModel
     private lateinit var preferencesProvider: SharedPreferencesProvider
-    private lateinit var contextProvider: ContextProvider
+    private lateinit var mdmProvider: MdmProvider
 
     @Before
     fun setUp() {
         preferencesProvider = mockk(relaxUnitFun = true)
-        contextProvider = mockk(relaxUnitFun = true)
-        securityViewModel = SettingsSecurityViewModel(preferencesProvider, contextProvider)
+        mdmProvider = mockk(relaxUnitFun = true)
+        securityViewModel = SettingsSecurityViewModel(preferencesProvider, mdmProvider)
     }
 
     @Test
@@ -140,7 +140,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
     @Test
     fun `is security enforced enabled - ok - true`() {
-        every { contextProvider.getInt(any()) } returns LockEnforcedType.EITHER_ENFORCED.ordinal
+        every { mdmProvider.getBrandingInteger(any(), R.integer.lock_enforced) } returns LockEnforcedType.EITHER_ENFORCED.ordinal
 
         val result = securityViewModel.isSecurityEnforcedEnabled()
         assertTrue(result)
@@ -149,7 +149,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
     @Test
     fun `is security enforced enabled - ok - false`() {
-        every { contextProvider.getInt(any()) } returns LockEnforcedType.DISABLED.ordinal
+        every { mdmProvider.getBrandingInteger(any(), R.integer.lock_enforced) } returns LockEnforcedType.DISABLED.ordinal
 
         val result = securityViewModel.isSecurityEnforcedEnabled()
         assertFalse(result)
@@ -157,26 +157,18 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
 
     @Test
     fun `is lock delay enforced enabled - ok - true`() {
-        every { contextProvider.getInt(any()) } returns 1
+        every { mdmProvider.getBrandingInteger(any(), R.integer.lock_delay_enforced) } returns 1
 
         val isEnabled = securityViewModel.isLockDelayEnforcedEnabled()
         assertTrue(isEnabled)
-
-        verify(exactly = 1) {
-            contextProvider.getInt(R.integer.lock_delay_enforced)
-        }
     }
 
     @Test
     fun `is lock delay enforced enabled - ok - false`() {
-        every { contextProvider.getInt(any()) } returns 0
+        every { mdmProvider.getBrandingInteger(any(), R.integer.lock_delay_enforced) } returns 0
 
         val isEnabled = securityViewModel.isLockDelayEnforcedEnabled()
         assertFalse(isEnabled)
-
-        verify(exactly = 1) {
-            contextProvider.getInt(R.integer.lock_delay_enforced)
-        }
     }
 }
 
