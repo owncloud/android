@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Security flags for recording screen: [#3468](https://github.com/owncloud/android/issues/3468)
 * Bugfix - Crash when changing orientation in Details view: [#3571](https://github.com/owncloud/android/issues/3571)
+* Bugfix - Lock displays shown again: [#3591](https://github.com/owncloud/android/issues/3591)
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 * Enhancement - Improvements for the UI in the file details screen: [#3557](https://github.com/owncloud/android/issues/3557)
@@ -34,6 +35,15 @@ Details
 
    https://github.com/owncloud/android/issues/3571
    https://github.com/owncloud/android/pull/3589
+
+* Bugfix - Lock displays shown again: [#3591](https://github.com/owncloud/android/issues/3591)
+
+   Previously, if you clicked on passcode or pattern lock to remove it, and then you clicked on
+   cancel, the lock display was shown again to put the passcode or pattern. Now, if you cancel it,
+   you come back to settings screen.
+
+   https://github.com/owncloud/android/issues/3591
+   https://github.com/owncloud/android/pull/3592
 
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 

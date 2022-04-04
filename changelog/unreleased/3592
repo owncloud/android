@@ -1,0 +1,8 @@
+Bugfix: Lock displays shown again
+
+Previously, if you clicked on passcode or pattern lock to remove it, and then you clicked on cancel,
+the lock display was shown again to put the passcode or pattern. Now, if you cancel it, you come back
+to settings screen.
+
+https://github.com/owncloud/android/issues/3591
+https://github.com/owncloud/android/pull/3592
