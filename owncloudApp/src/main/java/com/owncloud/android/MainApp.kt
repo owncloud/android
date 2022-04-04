@@ -51,19 +51,15 @@ import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity
 import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.BiometricManager
-import com.owncloud.android.presentation.ui.security.LockTimeout
-import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.security.PatternManager
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeManager
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
 import com.owncloud.android.providers.LogsProvider
-import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.SplashActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
-import com.owncloud.android.utils.CONFIGURATION_LOCK_DELAY_TIME
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.DebugInjector
 import com.owncloud.android.utils.FILE_SYNC_CONFLICT_CHANNEL_ID
@@ -172,7 +168,6 @@ class MainApp : Application() {
                 Timber.v("${activity.javaClass.simpleName} onDestroy() ending")
             }
         })
-
 
     }
 
