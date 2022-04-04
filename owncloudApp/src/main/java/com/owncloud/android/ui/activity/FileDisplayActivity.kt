@@ -1663,7 +1663,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         } else if (uri != null && AccountUtils.getAccounts(applicationContext).size == 1) {
             isFileDiscovered(uri).let { OCFile ->
                 if (OCFile != null) {
-                    openFile(OCFile)
+                    manageItem(OCFile)
                 } else {
                     showMessageInToast(getString(R.string.no_file_found))
                 }
@@ -1673,10 +1673,16 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private fun isFileDiscovered(uri: Uri?): OCFile? = storageManager.getFileByPrivateLink(uri.toString())
 
-    private fun openFile(file: OCFile) {
+    private fun manageItem(file: OCFile) {
+        onBrowsedDownTo(file)
         setFile(file)
         setAccount(AccountUtils.getOwnCloudAccountByName(this, file.owner))
-        initFragmentsWithFile()
+
+        if (PreviewImageFragment.canBePreviewed(file)) {
+            startImagePreview(file)
+        } else {
+            initFragmentsWithFile()
+        }
     }
 
     companion object {
