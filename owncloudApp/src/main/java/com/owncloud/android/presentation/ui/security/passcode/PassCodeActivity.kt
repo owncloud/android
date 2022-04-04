@@ -204,7 +204,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
     override fun onNumberClicked(number: Int) {
         println("number clicked $number")
         passCodeViewModel.onNumberClicked(number)
-
     }
 
     override fun onBackspaceButtonClicked() {
@@ -227,8 +226,8 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                 "ACTION_CHECK_OK" -> {
                     handleActionCheckOk()
                 }
-                "ACTION_CHECK_OK?" -> {
-                    handleActionCheckOk2()
+                "ACTION_CHECK_MIGRATION" -> {
+                    handleActionCheckMigration()
                 }
                 "ACTION_CHECK_ERROR" -> {
                     handleActionCheckError()
@@ -275,10 +274,9 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
 
         PassCodeManager.onActivityStopped(this)
         finish()
-
     }
 
-    private fun handleActionCheckOk2() {
+    private fun handleActionCheckMigration() {
         binding.error.visibility = View.INVISIBLE
 
         val intent = Intent(baseContext, PassCodeActivity::class.java)

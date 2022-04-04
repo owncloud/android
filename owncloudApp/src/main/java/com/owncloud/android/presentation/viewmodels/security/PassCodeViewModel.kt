@@ -67,14 +67,19 @@ class PassCodeViewModel(
     private var confirmingPassCode = false
 
     fun onNumberClicked(number: Int) {
+        println("PASSS: ${passcodeString.length}")
         val numberOfPasscodeDigits = (getPassCode()?.length ?: getNumberOfPassCodeDigits())
         if (passcodeString.length < numberOfPasscodeDigits && getTimeToUnlockLeft() == 0.toLong()) {
+            println("INININ")
             passcodeString.append(number.toString())
             _passcode.postValue(passcodeString.toString())
 
             if (passcodeString.length == numberOfPasscodeDigits) {
                 processFullPassCode()
             }
+        }else{
+            println("numberOfPasscodeDigits $numberOfPasscodeDigits")
+            println("getTimeToUnlockLeft ${getTimeToUnlockLeft()}") //TODO NO ES 0
         }
     }
 
@@ -113,13 +118,14 @@ class PassCodeViewModel(
             if (passCode != null && passCode.length < getNumberOfPassCodeDigits()) {
                 setMigrationRequired(true)
                 removePassCode()
-                _state.postValue("ACTION_CHECK_OK?")
+                _state.postValue("ACTION_CHECK_MIGRATION")
             }
             _state.postValue("ACTION_CHECK_OK")
             resetNumberOfAttempts()
         } else {
             increaseNumberOfAttempts()
             passcodeString = StringBuilder()
+            println("RESETEADO")
             _state.postValue("ACTION_CHECK_ERROR")
         }
     }
@@ -129,6 +135,7 @@ class PassCodeViewModel(
             removePassCode()
             _state.postValue("ACTION_CHECK_WITH_RESULT_OK")
         } else {
+            passcodeString = StringBuilder()
             _state.postValue("ACTION_CHECK_WITH_RESULT_ERROR")
         }
     }
@@ -142,6 +149,7 @@ class PassCodeViewModel(
             setPassCode()
             _state.postValue("ACTION_REQUEST_WITH_RESULT_CONFIRM")
         } else {
+            passcodeString = StringBuilder()
             _state.postValue("ACTION_REQUEST_WITH_RESULT_ERROR")
         }
     }
@@ -188,6 +196,9 @@ class PassCodeViewModel(
     fun getTimeToUnlockLeft(): Long {
         val timeLocked = 1.5.pow(getNumberOfAttempts()).toLong().times(1000)
         val lastUnlockAttempt = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, 0)
+        println("XXX: ${getNumberOfAttempts()}")
+        println("XXX: $timeLocked --- $lastUnlockAttempt")
+        println("XXX: ${lastUnlockAttempt + timeLocked} - ${SystemClock.elapsedRealtime()} = ${(lastUnlockAttempt + timeLocked) - SystemClock.elapsedRealtime()}")
         return max(0, (lastUnlockAttempt + timeLocked) - SystemClock.elapsedRealtime())
     }
 
