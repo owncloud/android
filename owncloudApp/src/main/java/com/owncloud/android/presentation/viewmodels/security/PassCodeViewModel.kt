@@ -69,7 +69,7 @@ class PassCodeViewModel(
     fun onNumberClicked(number: Int) {
         println("PASSS: ${passcodeString.length}")
         val numberOfPasscodeDigits = (getPassCode()?.length ?: getNumberOfPassCodeDigits())
-        if (passcodeString.length < numberOfPasscodeDigits && getTimeToUnlockLeft() == 0.toLong()) {
+        if (passcodeString.length < numberOfPasscodeDigits && (getNumberOfAttempts() < 3 || getTimeToUnlockLeft() == 0.toLong())) {
             println("INININ")
             passcodeString.append(number.toString())
             _passcode.postValue(passcodeString.toString())
