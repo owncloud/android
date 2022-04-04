@@ -22,7 +22,6 @@ package com.owncloud.android.presentation.viewmodels.security
 
 import android.os.CountDownTimer
 import android.os.SystemClock
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,7 +31,10 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
+import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.Status
+import com.owncloud.android.presentation.ui.security.passcode.PasscodeType
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ATTEMPTS
 import com.owncloud.android.providers.ContextProvider
 import java.lang.StringBuilder
@@ -43,7 +45,7 @@ import kotlin.math.pow
 class PassCodeViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
     private val contextProvider: ContextProvider,
-    private val action: String
+    private val action: PasscodeAction
 ) : ViewModel() {
 
     private val _getTimeToUnlockLiveData = MutableLiveData<Event<String>>()
@@ -58,28 +60,23 @@ class PassCodeViewModel(
     val passcode: LiveData<String>
         get() = _passcode
 
-    private var _state = MutableLiveData<String>()
-    val state: LiveData<String>
-        get() = _state
+    private var _status = MutableLiveData<Status>()
+    val status: LiveData<Status>
+        get() = _status
 
     private var passcodeString = StringBuilder()
-    lateinit var firstPasscode: String
+    private lateinit var firstPasscode: String
     private var confirmingPassCode = false
 
     fun onNumberClicked(number: Int) {
-        println("PASSS: ${passcodeString.length}")
         val numberOfPasscodeDigits = (getPassCode()?.length ?: getNumberOfPassCodeDigits())
         if (passcodeString.length < numberOfPasscodeDigits && (getNumberOfAttempts() < 3 || getTimeToUnlockLeft() == 0.toLong())) {
-            println("INININ")
             passcodeString.append(number.toString())
             _passcode.postValue(passcodeString.toString())
 
             if (passcodeString.length == numberOfPasscodeDigits) {
                 processFullPassCode()
             }
-        }else{
-            println("numberOfPasscodeDigits $numberOfPasscodeDigits")
-            println("getTimeToUnlockLeft ${getTimeToUnlockLeft()}") //TODO NO ES 0
         }
     }
 
@@ -96,21 +93,21 @@ class PassCodeViewModel(
      * Takes into account the action requested to the activity, the currently saved pass code and
      * the previously typed pass code, if any.
      */
-    fun processFullPassCode() {
+    private fun processFullPassCode() {
         when (action) {
-            ACTION_CHECK -> {
-                handleActionCheck()
+            PasscodeAction.CHECK -> {
+                actionCheckPasscode()
             }
-            ACTION_CHECK_WITH_RESULT -> {
-                handleActionCheckWithResult()
+            PasscodeAction.REMOVE -> {
+                actionRemovePasscode()
             }
-            ACTION_REQUEST_WITH_RESULT -> {
-                handleActionRequestWithResult()
+            PasscodeAction.CREATE -> {
+                actionCreatePasscode()
             }
         }
     }
 
-    private fun handleActionCheck() {
+    private fun actionCheckPasscode() {
         if (checkPassCodeIsValid(passcodeString.toString())) {
             // pass code accepted in request, user is allowed to access the app
             setLastUnlockTimestamp()
@@ -118,39 +115,38 @@ class PassCodeViewModel(
             if (passCode != null && passCode.length < getNumberOfPassCodeDigits()) {
                 setMigrationRequired(true)
                 removePassCode()
-                _state.postValue("ACTION_CHECK_MIGRATION")
+                _status.postValue(Status(PasscodeAction.CHECK, PasscodeType.MIGRATION))
             }
-            _state.postValue("ACTION_CHECK_OK")
+            _status.postValue(Status(PasscodeAction.CHECK, PasscodeType.OK))
             resetNumberOfAttempts()
         } else {
             increaseNumberOfAttempts()
             passcodeString = StringBuilder()
-            println("RESETEADO")
-            _state.postValue("ACTION_CHECK_ERROR")
+            _status.postValue(Status(PasscodeAction.CHECK, PasscodeType.ERROR))
         }
     }
 
-    private fun handleActionCheckWithResult() {
+    private fun actionRemovePasscode() {
         if (checkPassCodeIsValid(passcodeString.toString())) {
             removePassCode()
-            _state.postValue("ACTION_CHECK_WITH_RESULT_OK")
+            _status.postValue(Status(PasscodeAction.REMOVE, PasscodeType.OK))
         } else {
             passcodeString = StringBuilder()
-            _state.postValue("ACTION_CHECK_WITH_RESULT_ERROR")
+            _status.postValue(Status(PasscodeAction.REMOVE, PasscodeType.ERROR))
         }
     }
 
-    private fun handleActionRequestWithResult() {
+    private fun actionCreatePasscode() {
         // enabling pass code
         if (!confirmingPassCode) {
             requestPassCodeConfirmation()
-            _state.postValue("ACTION_REQUEST_WITH_RESULT_NO_CONFIRM")
+            _status.postValue(Status(PasscodeAction.CREATE, PasscodeType.NO_CONFIRM))
         } else if (confirmPassCode()) {
             setPassCode()
-            _state.postValue("ACTION_REQUEST_WITH_RESULT_CONFIRM")
+            _status.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
         } else {
             passcodeString = StringBuilder()
-            _state.postValue("ACTION_REQUEST_WITH_RESULT_ERROR")
+            _status.postValue(Status(PasscodeAction.CREATE, PasscodeType.ERROR))
         }
     }
 
@@ -190,15 +186,11 @@ class PassCodeViewModel(
         preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, SystemClock.elapsedRealtime())
     }
 
-    fun resetNumberOfAttempts() =
-        preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, 0)
+    fun resetNumberOfAttempts() = preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, 0)
 
     fun getTimeToUnlockLeft(): Long {
         val timeLocked = 1.5.pow(getNumberOfAttempts()).toLong().times(1000)
         val lastUnlockAttempt = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, 0)
-        println("XXX: ${getNumberOfAttempts()}")
-        println("XXX: $timeLocked --- $lastUnlockAttempt")
-        println("XXX: ${lastUnlockAttempt + timeLocked} - ${SystemClock.elapsedRealtime()} = ${(lastUnlockAttempt + timeLocked) - SystemClock.elapsedRealtime()}")
         return max(0, (lastUnlockAttempt + timeLocked) - SystemClock.elapsedRealtime())
     }
 
@@ -232,7 +224,7 @@ class PassCodeViewModel(
             val pinChar = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE_D + i, null)
             pinChar?.let { pinString += pinChar }
         }
-        return if (pinString.isEmpty()) null else pinString
+        return pinString.ifEmpty { null }
     }
 
     fun setBiometricsState(enabled: Boolean) {
@@ -258,11 +250,5 @@ class PassCodeViewModel(
     private fun confirmPassCode(): Boolean {
         confirmingPassCode = false
         return firstPasscode == passcodeString.toString()
-    }
-
-    companion object {
-        const val ACTION_REQUEST_WITH_RESULT = "ACTION_REQUEST_WITH_RESULT"
-        const val ACTION_CHECK_WITH_RESULT = "ACTION_CHECK_WITH_RESULT"
-        const val ACTION_CHECK = "ACTION_CHECK"
     }
 }
