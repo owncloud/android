@@ -26,6 +26,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.presentation.ui.security.LockTimeout
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.utils.CONFIGURATION_LOCK_DELAY_TIME
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
@@ -36,16 +39,29 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val mdmProvider = MdmProvider(this)
+
         if (BuildConfig.FLAVOR == MainApp.MDM_FLAVOR) {
-            with(MdmProvider(this)) {
+            with(mdmProvider) {
                 cacheStringRestriction(CONFIGURATION_SERVER_URL, R.string.server_url_configuration_feedback_ok)
                 cacheBooleanRestriction(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, R.string.server_url_input_visibility_configuration_feedback_ok)
                 cacheIntegerRestriction(CONFIGURATION_LOCK_DELAY_TIME, R.string.lock_delay_configuration_feedback_ok)
             }
         }
 
+        checkLockDelayEnforced(mdmProvider)
+
         startActivity(Intent(this, FileDisplayActivity::class.java))
         finish()
     }
 
+    private fun checkLockDelayEnforced(mdmProvider: MdmProvider) {
+
+        val lockDelayEnforced = mdmProvider.getBrandingInteger(CONFIGURATION_LOCK_DELAY_TIME, R.integer.lock_delay_enforced)
+        val lockTimeout = LockTimeout.parseFromInteger(lockDelayEnforced)
+
+        if (lockTimeout != LockTimeout.DISABLED) {
+            SharedPreferencesProviderImpl(this@SplashActivity).putString(PREFERENCE_LOCK_TIMEOUT, lockTimeout.name)
+        }
+    }
 }

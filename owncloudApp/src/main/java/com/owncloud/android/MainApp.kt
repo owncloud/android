@@ -173,7 +173,7 @@ class MainApp : Application() {
             }
         })
 
-        checkLockDelayEnforced(appContext)
+
     }
 
     private fun startLogsIfEnabled() {
@@ -320,18 +320,6 @@ class MainApp : Application() {
         fun getLastSeenVersionCode(): Int {
             val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
             return pref.getInt(PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, 0)
-        }
-
-        private fun checkLockDelayEnforced(context: Context) {
-            val preferences = SharedPreferencesProviderImpl(context)
-            val mdmProvider = MdmProvider(context)
-
-            val lockDelayEnforced = mdmProvider.getBrandingInteger(CONFIGURATION_LOCK_DELAY_TIME, R.integer.lock_delay_enforced)
-            val lockTimeout = LockTimeout.parseFromInteger(lockDelayEnforced)
-
-            if (lockTimeout != LockTimeout.DISABLED) {
-                preferences.putString(PREFERENCE_LOCK_TIMEOUT, lockTimeout.name)
-            }
         }
     }
 }
