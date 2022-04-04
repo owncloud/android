@@ -31,10 +31,13 @@ import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.providers.MdmProvider
+import com.owncloud.android.utils.CONFIGURATION_LOCK_DELAY_TIME
 
 class SettingsSecurityViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
-    private val contextProvider: ContextProvider
+    private val contextProvider: ContextProvider,
+    private val mdmProvider: MdmProvider,
 ) : ViewModel() {
 
     fun isPatternSet() = preferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
@@ -50,5 +53,11 @@ class SettingsSecurityViewModel(
     fun getBiometricsState(): Boolean = preferencesProvider.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false)
 
     fun isSecurityEnforcedEnabled() = parseFromInteger(contextProvider.getInt(R.integer.lock_enforced)) != LockEnforcedType.DISABLED
-    fun isLockDelayEnforcedEnabled() = LockTimeout.parseFromInteger(contextProvider.getInt(R.integer.lock_delay_enforced)) != LockTimeout.DISABLED
+
+    fun isLockDelayEnforcedEnabled() = LockTimeout.parseFromInteger(
+        mdmProvider.getBrandingInteger(
+            mdmKey = CONFIGURATION_LOCK_DELAY_TIME,
+            integerKey = R.integer.lock_delay_enforced
+        )
+    ) != LockTimeout.DISABLED
 }

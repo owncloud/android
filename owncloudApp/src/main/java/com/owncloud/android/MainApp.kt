@@ -148,7 +148,6 @@ class MainApp : Application() {
         })
 
         initDependencyInjection()
-        checkLockDelayEnforced(appContext)
     }
 
     private fun startLogsIfEnabled() {
@@ -298,18 +297,6 @@ class MainApp : Application() {
                         remoteDataSourceModule
                     )
                 )
-            }
-        }
-
-        private fun checkLockDelayEnforced(context: Context) {
-            val preferences = SharedPreferencesProviderImpl(context)
-            val mdmProvider = MdmProvider(context)
-
-            val lockDelayEnforced = mdmProvider.getBrandingInteger(CONFIGURATION_LOCK_DELAY_TIME, R.integer.lock_delay_enforced)
-            val lockTimeout = LockTimeout.parseFromInteger(lockDelayEnforced)
-
-            if (lockTimeout != LockTimeout.DISABLED) {
-                preferences.putString(PREFERENCE_LOCK_TIMEOUT, lockTimeout.name)
             }
         }
     }
