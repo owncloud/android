@@ -420,7 +420,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     fun refreshListOfFilesFragment(reloadData: Boolean) {
         val fileListFragment = listOfFilesFragment
-        if (intent.data == null) {
+        if (intent.data == null || isAlreadyHandledDeepLink) {
             fileListFragment?.listDirectory(reloadData)
         } else {
             fileListFragment?.listDirectory(isFileDiscovered(intent.data))
@@ -1683,6 +1683,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         } else {
             initFragmentsWithFile()
         }
+
+        isAlreadyHandledDeepLink = true
     }
 
     companion object {
