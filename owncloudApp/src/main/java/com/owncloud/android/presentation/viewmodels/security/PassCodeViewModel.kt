@@ -37,6 +37,7 @@ import com.owncloud.android.presentation.ui.security.passcode.Status
 import com.owncloud.android.presentation.ui.security.passcode.PasscodeType
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ATTEMPTS
 import com.owncloud.android.providers.ContextProvider
+import timber.log.Timber
 import java.lang.StringBuilder
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
@@ -64,17 +65,24 @@ class PassCodeViewModel(
     val status: LiveData<Status>
         get() = _status
 
+    private var numberOfPasscodeDigits: Int
     private var passcodeString = StringBuilder()
     private lateinit var firstPasscode: String
     private var confirmingPassCode = false
 
+    init {
+        numberOfPasscodeDigits = (getPassCode()?.length ?: getNumberOfPassCodeDigits())
+    }
+
     fun onNumberClicked(number: Int) {
-        val numberOfPasscodeDigits = (getPassCode()?.length ?: getNumberOfPassCodeDigits())
+
+        Timber.i("NUMBER $numberOfPasscodeDigits")
         if (passcodeString.length < numberOfPasscodeDigits && (getNumberOfAttempts() < 3 || getTimeToUnlockLeft() == 0.toLong())) {
             passcodeString.append(number.toString())
             _passcode.postValue(passcodeString.toString())
 
             if (passcodeString.length == numberOfPasscodeDigits) {
+                Timber.i("CONFIRMING? $confirmingPassCode")
                 processFullPassCode()
             }
         }
@@ -155,11 +163,13 @@ class PassCodeViewModel(
     fun setPassCode() {
         preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, firstPasscode)
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
+        numberOfPasscodeDigits = (getPassCode()?.length ?: getNumberOfPassCodeDigits())
     }
 
     fun removePassCode() {
         preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_PASSCODE)
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+        numberOfPasscodeDigits = (getPassCode()?.length ?: getNumberOfPassCodeDigits())
     }
 
     fun checkPassCodeIsValid(passcode: String): Boolean {
