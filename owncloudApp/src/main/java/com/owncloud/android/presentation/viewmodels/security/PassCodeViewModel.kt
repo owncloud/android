@@ -75,14 +75,11 @@ class PassCodeViewModel(
     }
 
     fun onNumberClicked(number: Int) {
-
-        Timber.i("NUMBER $numberOfPasscodeDigits")
         if (passcodeString.length < numberOfPasscodeDigits && (getNumberOfAttempts() < 3 || getTimeToUnlockLeft() == 0.toLong())) {
             passcodeString.append(number.toString())
             _passcode.postValue(passcodeString.toString())
 
             if (passcodeString.length == numberOfPasscodeDigits) {
-                Timber.i("CONFIRMING? $confirmingPassCode")
                 processFullPassCode()
             }
         }
