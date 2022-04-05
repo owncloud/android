@@ -23,6 +23,7 @@ package com.owncloud.android.providers
 import android.content.Context
 import android.content.RestrictionsManager
 import androidx.annotation.BoolRes
+import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
 import androidx.enterprise.feedback.KeyedAppState
 import androidx.enterprise.feedback.KeyedAppStatesReporter
@@ -79,6 +80,26 @@ class MdmProvider(
         }
     }
 
+    fun cacheIntegerRestriction(key: String, idMessageFeedback: Int) {
+        if (!restrictions.containsKey(key)) {
+            // If we do not receive the key, remove the configuration and use the setup value instead
+            preferencesProvider.removePreference(key = key)
+            return
+        }
+
+        val newRestriction = restrictions.getInt(key)
+        val isRestrictionAlreadyCached = preferencesProvider.contains(key)
+        val oldRestriction = preferencesProvider.getInt(key, 0)
+
+        preferencesProvider.putInt(key, newRestriction)
+        if (!isRestrictionAlreadyCached || (newRestriction != oldRestriction)) {
+            sendFeedback(
+                key = key,
+                message = context.getString(idMessageFeedback)
+            )
+        }
+    }
+
     fun getBrandingString(
         @MDMConfigurations mdmKey: String,
         @StringRes stringKey: Int,
@@ -97,6 +118,15 @@ class MdmProvider(
         val setupValue = context.resources.getBoolean(booleanKey)
 
         return if (isMdmFlavor()) preferencesProvider.getBoolean(key = mdmKey, defaultValue = setupValue) else setupValue
+    }
+
+    fun getBrandingInteger(
+        @MDMConfigurations mdmKey: String,
+        @IntegerRes integerKey: Int
+    ): Int {
+        val setupValue = context.resources.getInteger(integerKey)
+
+        return if (isMdmFlavor()) preferencesProvider.getInt(key = mdmKey, defaultValue = setupValue) else setupValue
     }
 
     private fun sendFeedback(
@@ -119,4 +149,9 @@ class MdmProvider(
     }
 
     private fun isMdmFlavor() = BuildConfig.FLAVOR == MDM_FLAVOR
+
+    companion object {
+        // Use this key if only interested in setup value. When all keys added to MDM, remove this
+        const val NO_MDM_RESTRICTION_YET = "NO_MDM_RESTRICTION_YET"
+    }
 }
