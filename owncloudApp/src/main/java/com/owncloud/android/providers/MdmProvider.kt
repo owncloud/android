@@ -31,6 +31,7 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.MDM_FLAVOR
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.utils.MDMConfigurations
+import timber.log.Timber
 
 class MdmProvider(
     private val context: Context
@@ -58,6 +59,7 @@ class MdmProvider(
                 message = context.getString(idMessageFeedback)
             )
         }
+        Timber.i("MDM | key: $key | New value: $newRestriction | Old value: $oldRestriction")
     }
 
     fun cacheBooleanRestriction(key: String, idMessageFeedback: Int) {
@@ -78,6 +80,7 @@ class MdmProvider(
                 message = context.getString(idMessageFeedback)
             )
         }
+        Timber.i("MDM | key: $key | New value: $newRestriction | Old value: $oldRestriction")
     }
 
     fun cacheIntegerRestriction(key: String, idMessageFeedback: Int) {
@@ -98,6 +101,7 @@ class MdmProvider(
                 message = context.getString(idMessageFeedback)
             )
         }
+        Timber.i("MDM | key: $key | New value: $newRestriction | Old value: $oldRestriction")
     }
 
     fun getBrandingString(
