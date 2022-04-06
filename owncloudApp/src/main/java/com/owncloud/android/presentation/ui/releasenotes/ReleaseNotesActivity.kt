@@ -96,8 +96,9 @@ class ReleaseNotesActivity : AppCompatActivity() {
         private fun shouldShow(context: Context): Boolean {
             val showReleaseNotes = context.resources.getBoolean(R.bool.release_notes_enabled) && !BuildConfig.DEBUG
 
-            return firstRunAfterUpdate() && showReleaseNotes && ReleaseNotesViewModel.releaseNotesList.isNotEmpty()
-                    && (context is FileDisplayActivity || context is LoginActivity)
+            return firstRunAfterUpdate() && showReleaseNotes &&
+                    ReleaseNotesViewModel.releaseNotesList.isNotEmpty() &&
+                    (context is FileDisplayActivity || context is LoginActivity)
         }
 
         private fun firstRunAfterUpdate(): Boolean {
