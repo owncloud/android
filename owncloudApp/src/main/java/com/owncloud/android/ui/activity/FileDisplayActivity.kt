@@ -58,7 +58,6 @@ import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.extensions.showMessageInToast
 import com.owncloud.android.files.services.FileDownloader
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder
 import com.owncloud.android.files.services.FileUploader
@@ -228,7 +227,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         val dataIntent: Uri? = intent.data
-        manageDataIntent(dataIntent)
+        dataIntent?.let {
+            handleDeepLink(dataIntent)
+        }
 
         setBackgroundText()
     }
@@ -299,7 +300,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private fun initFragmentsWithFile() {
         if (account != null && file != null) {
             /// First fragment
-            listOfFilesFragment?.listDirectory(file)
+            listOfFilesFragment?.listDirectory(currentDir)
                 ?: Timber.e("Still have a chance to lose the initialization of list fragment >(")
 
             /// Second fragment
@@ -423,7 +424,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         if (intent.data == null || isAlreadyHandledDeepLink) {
             fileListFragment?.listDirectory(reloadData)
         } else {
-            fileListFragment?.listDirectory(isFileDiscovered(intent.data))
+            fileListFragment?.listDirectory(getFileDiscovered(intent.data))
         }
 
     }
@@ -1657,21 +1658,21 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         manageOptionLockSelected(type)
     }
 
-    private fun manageDataIntent(uri: Uri?) {
+    private fun handleDeepLink(uri: Uri?) {
         if (uri != null && AccountUtils.getAccounts(applicationContext).isEmpty()) {
-            showMessageInToast(getString(R.string.no_account_configured))
+            showMessageInSnackbar(message = getString(R.string.no_account_configured))
         } else if (uri != null && AccountUtils.getAccounts(applicationContext).size == 1) {
-            isFileDiscovered(uri).let { OCFile ->
-                if (OCFile != null) {
-                    manageItem(OCFile)
+            getFileDiscovered(uri).let { oCFile ->
+                if (oCFile != null) {
+                    manageItem(oCFile)
                 } else {
-                    showMessageInToast(getString(R.string.no_file_found))
+                    showMessageInSnackbar(message = getString(R.string.no_file_found))
                 }
             }
         }
     }
 
-    private fun isFileDiscovered(uri: Uri?): OCFile? = storageManager.getFileByPrivateLink(uri.toString())
+    private fun getFileDiscovered(uri: Uri?): OCFile? = storageManager.getFileByPrivateLink(uri.toString())
 
     private fun manageItem(file: OCFile) {
         onBrowsedDownTo(file)

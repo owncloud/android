@@ -98,12 +98,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="@string/url_link_host"
+                    android:host="@string/deep_link_host"
                     android:pathPrefix="/f/"
                     android:scheme="https" />
 
                 <data
-                    android:host="@string/url_link_host"
+                    android:host="@string/deep_link_host"
                     android:pathPrefix="/f/"
                     android:scheme="http" />
             </intent-filter>
