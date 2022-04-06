@@ -26,15 +26,18 @@ package com.owncloud.android.settings.security
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.widget.EditText
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
@@ -49,10 +52,10 @@ import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import com.owncloud.android.testutil.security.OC_PASSCODE_6_DIGITS
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withChildCountAndId
-import com.owncloud.android.utils.matchers.withText
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
+import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -185,7 +188,7 @@ class PassCodeActivityTest {
     @Test
     fun passcodeView() {
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
         with(R.id.header) {
             isDisplayed(true)
@@ -210,11 +213,8 @@ class PassCodeActivityTest {
     @Test
     fun firstTry() {
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        //Set a passcode
-        //setPassCode1()
-        //passcodeLiveData.postValue("1111")
         statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.NO_CONFIRM))
 
         with(R.id.header) {
@@ -231,13 +231,9 @@ class PassCodeActivityTest {
         every { biometricViewModel.isBiometricLockAvailable() } returns true
 
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        //Set a passcode
-        setPassCode1()
-
-        //Second passcode
-        setPassCode1()
+        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
 
         // Click dialog's enable option
         onView(withText(R.string.common_yes)).perform(click())
@@ -249,13 +245,9 @@ class PassCodeActivityTest {
     @Test
     fun secondTryIncorrect() {
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        //Set a passcode
-        setPassCode1()
-
-        //Second passcode (wrong)
-        setPassCode2()
+        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.ERROR))
 
         with(R.id.header) {
             isDisplayed(true)
@@ -275,11 +267,8 @@ class PassCodeActivityTest {
 
     @Test
     fun deletePasscodeView() {
-        // Save a passcode in Preferences
-        storePasscode()
-
         // Open Activity in passcode deletion mode
-        openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_REMOVE)
 
         with(R.id.header) {
             isDisplayed(true)
@@ -295,32 +284,20 @@ class PassCodeActivityTest {
 
     @Test
     fun deletePasscodeCorrect() {
-        every { passCodeViewModel.checkPassCodeIsValid(any()) } returns true
-
-        // Save a passcode in Preferences
-        storePasscode(OC_PASSCODE_6_DIGITS)
-
         // Open Activity in passcode deletion mode
-        openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_REMOVE)
 
-        //Delete passcode
-        setPassCode1()
+        statusLiveData.postValue(Status(PasscodeAction.REMOVE, PasscodeType.OK))
 
-        verify { passCodeViewModel.removePassCode() }
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
     }
 
     @Test
     fun deletePasscodeIncorrect() {
-        every { passCodeViewModel.checkPassCodeIsValid(any()) } returns false
-
-        // Save a passcode in Preferences
-        storePasscode(OC_PASSCODE_6_DIGITS)
-
         // Open Activity in passcode deletion mode
-        openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_REMOVE)
 
-        //Delete passcode (Incorrect passcode)
-        setPassCode2()
+        statusLiveData.postValue(Status(PasscodeAction.REMOVE, PasscodeType.ERROR))
 
         with(R.id.header) {
             isDisplayed(true)
@@ -341,12 +318,9 @@ class PassCodeActivityTest {
         every { biometricViewModel.isBiometricLockAvailable() } returns true
 
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        //Set a passcode
-        setPassCode1()
-        //Second passcode
-        setPassCode1()
+        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
 
         onView(withText(R.string.biometric_dialog_title)).check(matches(isDisplayed()))
         onView(withText(R.string.common_yes)).check(matches(isDisplayed()))
@@ -358,12 +332,9 @@ class PassCodeActivityTest {
         every { biometricViewModel.isBiometricLockAvailable() } returns true
 
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        //Set a passcode
-        setPassCode1()
-        //Second passcode
-        setPassCode1()
+        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
 
         onView(withText(R.string.common_yes)).perform(click())
 
@@ -376,12 +347,9 @@ class PassCodeActivityTest {
         every { biometricViewModel.isBiometricLockAvailable() } returns true
 
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        //Set a passcode
-        setPassCode1()
-        //Second passcode
-        setPassCode1()
+        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
 
         onView(withText(R.string.common_no)).perform(click())
 
@@ -394,25 +362,5 @@ class PassCodeActivityTest {
             action = mode
         }
         activityScenario = ActivityScenario.launch(intent)
-    }
-
-    private fun setPassCode1() {
-        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits()) {
-            onView(withId(R.id.key1)).perform(click())
-        }
-    }
-
-    private fun setPassCode2() {
-        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits()) {
-            onView(withId(R.id.key2)).perform(click())
-        }
-    }
-
-    private fun storePasscode(passcode: String = OC_PASSCODE_6_DIGITS) {
-        val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
-
-        appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode.substring(0, passCodeViewModel.getNumberOfPassCodeDigits()))
-        appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
-        appPrefs.apply()
     }
 }

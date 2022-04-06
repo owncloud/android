@@ -27,8 +27,6 @@ import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_ATTE
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity.Companion.ACTION_CHECK
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity.Companion.ACTION_REQUEST_WITH_RESULT
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity.Companion.PREFERENCE_PASSCODE
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity.Companion.PREFERENCE_PASSCODE_D
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity.Companion.PREFERENCE_SET_PASSCODE
@@ -421,7 +419,7 @@ class PassCodeViewModelTest : ViewModelTest() {
         assertFalse(passCodeCheckResult)
 
         verify(exactly = 2) {
-            preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any())
+            preferencesProvider.getString(PREFERENCE_PASSCODE, any())
         }
     }
 
@@ -611,17 +609,5 @@ class PassCodeViewModelTest : ViewModelTest() {
         val timeToUnlockLeft = passCodeViewModel.getTimeToUnlockLeft()
 
         assertEquals(3000, timeToUnlockLeft)
-    }
-
-    private fun setPasscodeOk() {
-        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits()) {
-            passCodeViewModel.onNumberClicked(1)
-        }
-    }
-
-    private fun setPasscodeWrong() {
-        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits()) {
-            passCodeViewModel.onNumberClicked(2)
-        }
     }
 }

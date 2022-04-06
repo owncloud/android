@@ -141,10 +141,10 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             } else {
                 val intent = Intent(activity, PassCodeActivity::class.java)
                 if (newValue as Boolean) {
-                    intent.action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+                    intent.action = PassCodeActivity.ACTION_CREATE
                     enablePasscodeLauncher.launch(intent)
                 } else {
-                    intent.action = PassCodeActivity.ACTION_CHECK_WITH_RESULT
+                    intent.action = PassCodeActivity.ACTION_REMOVE
                     disablePasscodeLauncher.launch(intent)
                 }
             }

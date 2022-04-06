@@ -92,7 +92,7 @@ class BiometricActivity : AppCompatActivity() {
                     if (biometricViewModel.shouldAskForNewPassCode()) {
                         biometricViewModel.removePassCode()
                         val intent = Intent(baseContext, PassCodeActivity::class.java)
-                        intent.action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+                        intent.action = PassCodeActivity.ACTION_CREATE
                         intent.putExtra(PassCodeActivity.EXTRAS_MIGRATION, true)
                         startActivity(intent)
                     }

@@ -119,7 +119,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                 binding.explanation.visibility = View.INVISIBLE
                 supportActionBar?.setDisplayHomeAsUpEnabled(false) //Don´t show the back arrow
             }
-            ACTION_REQUEST_WITH_RESULT -> { //Create a new password
+            ACTION_CREATE -> { //Create a new password
                 if (confirmingPassCode) {
                     //the app was in the passcode confirmation
                     requestPassCodeConfirmation()
@@ -146,7 +146,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
                     }
                 }
             }
-            ACTION_CHECK_WITH_RESULT -> { //Remove password
+            ACTION_REMOVE -> { // Remove password
                 // pass code preference has just been disabled in Preferences;
                 // will confirm user knows pass code, then remove it
                 binding.header.text = getString(R.string.pass_code_remove_your_pass_code)
@@ -275,7 +275,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
 
         val intent = Intent(baseContext, PassCodeActivity::class.java)
         intent.apply {
-            action = ACTION_REQUEST_WITH_RESULT
+            action = ACTION_CREATE
             flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
             putExtra(EXTRAS_MIGRATION, true)
         }
@@ -298,7 +298,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
     private fun actionRemoveOk() {
         val resultIntent = Intent()
         setResult(RESULT_OK, resultIntent)
-        binding.error.visibility = View.INVISIBLE
         notifyDocumentProviderRoots(applicationContext)
         finish()
     }
@@ -388,9 +387,9 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) {
-            if ((ACTION_REQUEST_WITH_RESULT == intent.action &&
+            if ((ACTION_CREATE == intent.action &&
                         intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) != true) ||
-                ACTION_CHECK_WITH_RESULT == intent.action
+                ACTION_REMOVE == intent.action
             ) {
                 finish()
             } // else, do nothing, but report that the key was consumed to stay alive
@@ -428,10 +427,10 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
 
     private fun getPasscodeAction(action: String?): PasscodeAction {
         when (action) {
-            ACTION_CHECK_WITH_RESULT -> {
+            ACTION_REMOVE -> {
                 return PasscodeAction.REMOVE
             }
-            ACTION_REQUEST_WITH_RESULT -> {
+            ACTION_CREATE -> {
                 return PasscodeAction.CREATE
             }
             else -> {
@@ -441,8 +440,8 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
     }
 
     companion object {
-        const val ACTION_REQUEST_WITH_RESULT = "ACTION_REQUEST_WITH_RESULT"
-        const val ACTION_CHECK_WITH_RESULT = "ACTION_CHECK_WITH_RESULT"
+        const val ACTION_CREATE = "ACTION_REQUEST_WITH_RESULT"
+        const val ACTION_REMOVE = "ACTION_CHECK_WITH_RESULT"
         const val ACTION_CHECK = "ACTION_CHECK"
 
         // NOTE: PREFERENCE_SET_PASSCODE must have the same value as settings_security.xml-->android:key for passcode preference

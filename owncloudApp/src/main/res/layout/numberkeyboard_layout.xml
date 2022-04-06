@@ -40,7 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             android:layout_height="match_parent"
             android:background="@drawable/numberkeyboard_key_bg"
             android:padding="@dimen/standard_padding"
-            android:text="@string/numberkeyboard_one"
+            android:text="@string/numberkeyboard_two"
             android:textColor="@drawable/numberkeyboard_key_text_color"
             android:textStyle="bold" />
 

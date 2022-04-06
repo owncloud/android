@@ -54,7 +54,7 @@ object PassCodeManager {
             askUserForPasscode(activity)
         } else if (preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_MIGRATION_REQUIRED, false)) {
             val intent = Intent(appContext, PassCodeActivity::class.java).apply {
-                action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+                action = PassCodeActivity.ACTION_CREATE
                 flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 putExtra(PassCodeActivity.EXTRAS_MIGRATION, true)
             }
