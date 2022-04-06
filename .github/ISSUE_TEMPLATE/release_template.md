@@ -16,6 +16,7 @@ assignees: ''
  - [ ] [DIS] Create a folder for the new version like $majorVersion.$minorVersion.$patchVersion_YYYY-MM-DD
  - [ ] [DIS] Move all changelog files from the unreleased folder to the new version folder
  - [ ] [DIS] Update screenshots, if needed, in README.md
+ - [ ] [DIS] Add ReleaseNotes replacing `emptyList` with `listOf` and adding inside `ReleaseNote()` with String resources
  - [ ] [QA] Design Test plan
  - [ ] [QA] Regression Test plan
  - [ ] [DIS] Generate test bundle from `release/X.X.X` branch in owncloud/android
