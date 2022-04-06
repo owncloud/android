@@ -56,7 +56,7 @@ class PassCodeViewModelTest : ViewModelTest() {
     @Before
     fun setUp() {
         preferencesProvider = mockk(relaxed = true)
-        contextProvider = mockk(relaxed= true)
+        contextProvider = mockk(relaxed = true)
     }
 
     @Test

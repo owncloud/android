@@ -115,7 +115,6 @@ class PassCodeActivityTest {
         every { passCodeViewModel.status } returns statusLiveData
         every { passCodeViewModel.passcode } returns passcodeLiveData
 
-
     }
 
     @After
@@ -357,10 +356,47 @@ class PassCodeActivityTest {
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
     }
 
+    @Test
+    fun buttonClick() {
+        // Open Activity in passcode check mode
+        openPasscodeActivity(PassCodeActivity.ACTION_CHECK)
+
+        onView(withId(R.id.key1)).perform(click())
+
+        // Check if required amount of input fields are actually displayed
+        with(R.id.layout_code) {
+            isDisplayed(true)
+            withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
+        }
+
+        withParent(withId(R.id.layout_code)).matches(withText("2444"))
+
+    }
+
     private fun openPasscodeActivity(mode: String) {
         val intent = Intent(context, PassCodeActivity::class.java).apply {
             action = mode
         }
         activityScenario = ActivityScenario.launch(intent)
+    }
+
+    private fun setPassCode1() {
+        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits()) {
+            onView(withId(R.id.key1)).perform(click())
+        }
+    }
+
+    private fun setPassCode2() {
+        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits()) {
+            onView(withId(R.id.key2)).perform(click())
+        }
+    }
+
+    private fun storePasscode(passcode: String = OC_PASSCODE_6_DIGITS) {
+        val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
+
+        appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode.substring(0, passCodeViewModel.getNumberOfPassCodeDigits()))
+        appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
+        appPrefs.apply()
     }
 }
