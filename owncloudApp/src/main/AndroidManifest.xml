@@ -69,7 +69,7 @@
         android:theme="@style/Theme.ownCloud.Toolbar"
         tools:targetApi="n">
         <activity
-            android:name=".ui.activity.ReleaseNotesActivity"
+            android:name=".presentation.ui.releasenotes.ReleaseNotesActivity"
             android:exported="false" />
         <activity android:name=".presentation.ui.settings.PrivacyPolicyActivity" />
         <activity android:name=".presentation.ui.settings.SettingsActivity" />

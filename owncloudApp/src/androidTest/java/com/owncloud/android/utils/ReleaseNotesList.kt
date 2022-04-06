@@ -20,23 +20,23 @@
 package com.owncloud.android.utils
 
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.ReleaseNote
-import com.owncloud.android.enums.ReleaseNoteType
+import com.owncloud.android.presentation.ui.releasenotes.ReleaseNote
+import com.owncloud.android.presentation.ui.releasenotes.ReleaseNoteType
 
 val releaseNotesList = listOf(
     ReleaseNote(
-        title = R.string.release_note_account_list_title,
-        subtitle = R.string.release_note_account_list_subtitle,
+        title = R.string.release_notes_header,
+        subtitle = R.string.release_notes_footer,
         type = ReleaseNoteType.BUGFIX
     ),
     ReleaseNote(
-        title = R.string.release_note_account_biometrical_unlock_title,
-        subtitle = R.string.release_note_account_biometrical_unlock_subtitle,
+        title = R.string.release_notes_header,
+        subtitle = R.string.release_notes_footer,
         type = ReleaseNoteType.BUGFIX
     ),
     ReleaseNote(
-        title = R.string.release_note_account_list_title,
-        subtitle = R.string.release_note_account_list_subtitle,
+        title = R.string.release_notes_header,
+        subtitle = R.string.release_notes_footer,
         type = ReleaseNoteType.ENHANCEMENT
     )
 )

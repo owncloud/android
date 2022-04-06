@@ -25,7 +25,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ReleaseNotesItemBinding
-import com.owncloud.android.datamodel.ReleaseNote
+import com.owncloud.android.presentation.ui.releasenotes.ReleaseNote
 
 class ReleaseNotesAdapter() :
     RecyclerView.Adapter<ReleaseNotesAdapter.ViewHolder>() {
@@ -54,10 +54,11 @@ class ReleaseNotesAdapter() :
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
+        val releaseNote = dataSet[position]
         viewHolder.binding.apply {
-            titleReleaseNote.setText(dataSet[position].title)
-            subtitleReleaseNote.setText(dataSet[position].subtitle)
-            iconReleaseNote.setImageResource(dataSet[position].type.drawableRes)
+            titleReleaseNote.setText(releaseNote.title)
+            subtitleReleaseNote.setText(releaseNote.subtitle)
+            iconReleaseNote.setImageResource(releaseNote.type.drawableRes)
         }
     }
 

@@ -46,6 +46,7 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.features.FeatureList;
 import com.owncloud.android.features.FeatureList.FeatureItem;
+import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.ui.whatsnew.ProgressIndicator;
 
 /**
@@ -90,7 +91,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         // Wizard already shown
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(MainApp.Companion.getKEY_LAST_SEEN_VERSION_CODE(), MainApp.Companion.getVersionCode());
+        editor.putInt(MainApp.Companion.getPreferenceKeyLastSeenVersionCode(), MainApp.Companion.getVersionCode());
         editor.apply();
     }
 
@@ -120,7 +121,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     }
 
     static private boolean shouldShow(Context context) {
-        return context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG;
+        return context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG
+                && context instanceof LoginActivity; // When it is LoginActivity to start it only once
     }
 
     @Override

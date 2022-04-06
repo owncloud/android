@@ -17,24 +17,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.ui.viewmodels
+package com.owncloud.android.presentation.viewmodels.releasenotes
 
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.versionCode
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.datamodel.ReleaseNote
-import com.owncloud.android.features.ReleaseNotesList
+import com.owncloud.android.presentation.ui.releasenotes.ReleaseNote
 
 class ReleaseNotesViewModel(
     private val preferencesProvider: SharedPreferencesProvider
 ) : ViewModel() {
 
     fun getReleaseNotes(): List<ReleaseNote> {
-        return ReleaseNotesList.getReleaseNotes()
+        return releaseNotesList
     }
 
     fun updateVersionCode() {
-        preferencesProvider.putInt(MainApp.KEY_LAST_SEEN_VERSION_CODE, versionCode)
+        preferencesProvider.putInt(MainApp.PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, versionCode)
+    }
+
+    companion object {
+        val releaseNotesList = emptyList<ReleaseNote>()
     }
 }

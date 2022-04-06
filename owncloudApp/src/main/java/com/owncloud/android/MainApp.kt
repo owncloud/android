@@ -58,8 +58,7 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragm
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.SplashActivity
-import com.owncloud.android.ui.activity.ReleaseNotesActivity
-import com.owncloud.android.ui.activity.SplashActivity
+import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.DebugInjector
@@ -106,22 +105,18 @@ class MainApp : Application() {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 Timber.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
 
-                // If there's any lock protection, don't show wizard at this point, show it when lock activities
-                // have finished
+                /* If there's any lock protection, don't show wizard at this point,
+                   show it when lock activities have finished */
                 if (activity !is PassCodeActivity &&
                     activity !is PatternActivity &&
                     activity !is BiometricActivity
                 ) {
                     StorageMigrationActivity.runIfNeeded(activity)
                     if (isFirstRun()) {
-                        //When it is LoginActivity to start it only once
-                        if (activity is LoginActivity) {
-                            WhatsNewActivity.runIfNeeded(activity)
-                        }
+                        WhatsNewActivity.runIfNeeded(activity)
+
                     } else {
-                        if (activity is FileDisplayActivity || activity is LoginActivity) {
-                            ReleaseNotesActivity.runIfNeeded(activity)
-                        }
+                        ReleaseNotesActivity.runIfNeeded(activity)
                     }
                 }
 
@@ -237,18 +232,13 @@ class MainApp : Application() {
         return AccountUtils.getCurrentOwnCloudAccount(appContext) == null
     }
 
-    private fun getLastSeenVersionCode(): Int {
-        val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
-        return pref.getInt(KEY_LAST_SEEN_VERSION_CODE, 0)
-    }
-
     companion object {
         lateinit var appContext: Context
             private set
         var enabledLogging: Boolean = false
             private set
 
-        val KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode"
+        const val PREFERENCE_KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode"
 
         /**
          * Next methods give access in code to some constants that need to be defined in string resources to be referred
@@ -314,6 +304,15 @@ class MainApp : Application() {
                     )
                 )
             }
+        }
+
+        fun getPreferenceKeyLastSeenVersionCode(): String {
+            return PREFERENCE_KEY_LAST_SEEN_VERSION_CODE
+        }
+
+        fun getLastSeenVersionCode(): Int {
+            val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
+            return pref.getInt(PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, 0)
         }
 
         private fun checkLockDelayEnforced(context: Context) {

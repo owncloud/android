@@ -25,8 +25,9 @@ import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.owncloud.android.R
+import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
 import com.owncloud.android.utils.releaseNotesList
-import com.owncloud.android.ui.viewmodels.ReleaseNotesViewModel
+import com.owncloud.android.presentation.viewmodels.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.utils.click
 import com.owncloud.android.utils.matchers.assertChildCount
 import com.owncloud.android.utils.matchers.isDisplayed

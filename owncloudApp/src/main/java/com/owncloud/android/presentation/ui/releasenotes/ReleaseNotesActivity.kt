@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.ui.activity
+package com.owncloud.android.presentation.ui.releasenotes
 
 import android.content.Context
 import android.content.Intent
@@ -29,10 +29,10 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.versionCode
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ReleaseNotesActivityBinding
-import com.owncloud.android.db.PreferenceManager.getDefaultSharedPreferences
-import com.owncloud.android.features.ReleaseNotesList
+import com.owncloud.android.presentation.ui.authentication.LoginActivity
 import com.owncloud.android.ui.adapter.ReleaseNotesAdapter
-import com.owncloud.android.ui.viewmodels.ReleaseNotesViewModel
+import com.owncloud.android.presentation.viewmodels.releasenotes.ReleaseNotesViewModel
+import com.owncloud.android.ui.activity.FileDisplayActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReleaseNotesActivity : AppCompatActivity() {
@@ -96,16 +96,12 @@ class ReleaseNotesActivity : AppCompatActivity() {
         private fun shouldShow(context: Context): Boolean {
             val showReleaseNotes = context.resources.getBoolean(R.bool.release_notes_enabled) && !BuildConfig.DEBUG
 
-            return firstRunAfterUpdate() && showReleaseNotes && ReleaseNotesList.getReleaseNotes().isNotEmpty()
+            return firstRunAfterUpdate() && showReleaseNotes && ReleaseNotesViewModel.releaseNotesList.isNotEmpty()
+                    && (context is FileDisplayActivity || context is LoginActivity)
         }
 
         private fun firstRunAfterUpdate(): Boolean {
-            return getLastSeenVersionCode() != versionCode
-        }
-
-        private fun getLastSeenVersionCode(): Int {
-            val pref = getDefaultSharedPreferences(MainApp.appContext)
-            return pref.getInt(MainApp.KEY_LAST_SEEN_VERSION_CODE, 0)
+            return MainApp.getLastSeenVersionCode() != versionCode
         }
     }
 }
