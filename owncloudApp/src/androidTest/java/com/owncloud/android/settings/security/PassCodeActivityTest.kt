@@ -26,18 +26,14 @@ package com.owncloud.android.settings.security
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.widget.EditText
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
@@ -49,13 +45,10 @@ import com.owncloud.android.presentation.ui.security.passcode.Status
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
-import com.owncloud.android.testutil.security.OC_PASSCODE_6_DIGITS
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withChildCountAndId
 import io.mockk.every
 import io.mockk.mockk
-import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -356,47 +349,10 @@ class PassCodeActivityTest {
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
     }
 
-    @Test
-    fun buttonClick() {
-        // Open Activity in passcode check mode
-        openPasscodeActivity(PassCodeActivity.ACTION_CHECK)
-
-        onView(withId(R.id.key1)).perform(click())
-
-        // Check if required amount of input fields are actually displayed
-        with(R.id.layout_code) {
-            isDisplayed(true)
-            withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
-        }
-
-        withParent(withId(R.id.layout_code)).matches(withText("2444"))
-
-    }
-
     private fun openPasscodeActivity(mode: String) {
         val intent = Intent(context, PassCodeActivity::class.java).apply {
             action = mode
         }
         activityScenario = ActivityScenario.launch(intent)
-    }
-
-    private fun setPassCode1() {
-        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits()) {
-            onView(withId(R.id.key1)).perform(click())
-        }
-    }
-
-    private fun setPassCode2() {
-        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits()) {
-            onView(withId(R.id.key2)).perform(click())
-        }
-    }
-
-    private fun storePasscode(passcode: String = OC_PASSCODE_6_DIGITS) {
-        val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
-
-        appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode.substring(0, passCodeViewModel.getNumberOfPassCodeDigits()))
-        appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
-        appPrefs.apply()
     }
 }
