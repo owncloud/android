@@ -73,7 +73,7 @@ public class FileActivity extends DrawerActivity
     public static final String EXTRA_ACCOUNT = "com.owncloud.android.ui.activity.ACCOUNT";
     public static final String EXTRA_FROM_NOTIFICATION =
             "com.owncloud.android.ui.activity.FROM_NOTIFICATION";
-    public static final String ALREADY_HANDLED_DEEP_LINK =
+    public static final String EXTRA_ALREADY_HANDLED_DEEP_LINK =
             "com.owncloud.android.ui.activity.ALREADY_HANDLED_DEEP_LINK";
     public static final String EXTRA_FILE_LIST_OPTION = "EXTRA_FILE_LIST_OPTION";
 
@@ -135,7 +135,7 @@ public class FileActivity extends DrawerActivity
         if (savedInstanceState != null) {
             mFile = savedInstanceState.getParcelable(FileActivity.EXTRA_FILE);
             mFromNotification = savedInstanceState.getBoolean(FileActivity.EXTRA_FROM_NOTIFICATION);
-            mAlreadyHandledDeepLink = savedInstanceState.getBoolean(FileActivity.ALREADY_HANDLED_DEEP_LINK);
+            mAlreadyHandledDeepLink = savedInstanceState.getBoolean(FileActivity.EXTRA_ALREADY_HANDLED_DEEP_LINK);
             mFileOperationsHelper.setOpIdWaitingFor(
                     savedInstanceState.getLong(KEY_WAITING_FOR_OP_ID, Long.MAX_VALUE)
             );
@@ -219,7 +219,7 @@ public class FileActivity extends DrawerActivity
         super.onSaveInstanceState(outState);
         outState.putParcelable(FileActivity.EXTRA_FILE, mFile);
         outState.putBoolean(FileActivity.EXTRA_FROM_NOTIFICATION, mFromNotification);
-        outState.putBoolean(FileActivity.ALREADY_HANDLED_DEEP_LINK, mAlreadyHandledDeepLink);
+        outState.putBoolean(FileActivity.EXTRA_ALREADY_HANDLED_DEEP_LINK, mAlreadyHandledDeepLink);
         outState.putLong(KEY_WAITING_FOR_OP_ID, mFileOperationsHelper.getOpIdWaitingFor());
         if (getSupportActionBar() != null && getSupportActionBar().getTitle() != null) {
             // Null check in case the actionbar is used in ActionBar.NAVIGATION_MODE_LIST

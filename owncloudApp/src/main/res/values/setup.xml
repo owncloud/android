@@ -118,6 +118,6 @@
     <bool name="clear_cookies_on_validation">false</bool>
 
     <!--Deep Links -->
-    <string name="url_link_host">*</string>
+    <string name="deep_link_host">*</string>
 
 </resources>
