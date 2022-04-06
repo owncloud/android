@@ -40,6 +40,9 @@ import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
+import com.owncloud.android.presentation.ui.security.passcode.PasscodeType
+import com.owncloud.android.presentation.ui.security.passcode.Status
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
@@ -67,6 +70,8 @@ class PassCodeActivityTest {
 
     private lateinit var timeToUnlockLiveData: MutableLiveData<Event<String>>
     private lateinit var finishTimeToUnlockLiveData: MutableLiveData<Event<Boolean>>
+    private lateinit var statusLiveData: MutableLiveData<Status>
+    private lateinit var passcodeLiveData: MutableLiveData<String>
 
     private lateinit var passCodeViewModel: PassCodeViewModel
     private lateinit var biometricViewModel: BiometricViewModel
@@ -79,6 +84,9 @@ class PassCodeActivityTest {
 
         timeToUnlockLiveData = MutableLiveData()
         finishTimeToUnlockLiveData = MutableLiveData()
+        statusLiveData = MutableLiveData()
+        passcodeLiveData = MutableLiveData()
+
 
         stopKoin()
 
@@ -101,6 +109,10 @@ class PassCodeActivityTest {
         every { passCodeViewModel.getNumberOfAttempts() } returns 0
         every { passCodeViewModel.getTimeToUnlockLiveData } returns timeToUnlockLiveData
         every { passCodeViewModel.getFinishedTimeToUnlockLiveData } returns finishTimeToUnlockLiveData
+        every { passCodeViewModel.status } returns statusLiveData
+        every { passCodeViewModel.passcode } returns passcodeLiveData
+
+
     }
 
     @After
@@ -201,7 +213,9 @@ class PassCodeActivityTest {
         openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
 
         //Set a passcode
-        setPassCode1()
+        //setPassCode1()
+        //passcodeLiveData.postValue("1111")
+        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.NO_CONFIRM))
 
         with(R.id.header) {
             isDisplayed(true)

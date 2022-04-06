@@ -37,7 +37,6 @@ import com.owncloud.android.presentation.ui.security.passcode.Status
 import com.owncloud.android.presentation.ui.security.passcode.PasscodeType
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ATTEMPTS
 import com.owncloud.android.providers.ContextProvider
-import timber.log.Timber
 import java.lang.StringBuilder
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
