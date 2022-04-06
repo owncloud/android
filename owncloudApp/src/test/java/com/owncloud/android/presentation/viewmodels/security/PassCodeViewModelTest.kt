@@ -59,16 +59,24 @@ class PassCodeViewModelTest : ViewModelTest() {
         contextProvider = mockk(relaxed = true)
     }
 
+    private fun launchTest(
+        passcodeDigits: Int = OC_PASSCODE_4_DIGITS.length,
+        passcode: String? = OC_PASSCODE_4_DIGITS,
+        passcodeD: String? = null,
+        lockAttempts: Int = 0,
+        lastUnlockAttempt: Long = 0
+    ) {
+        every { contextProvider.getInt(R.integer.passcode_digits) } returns passcodeDigits   //getNumberOfPassCodeDigits()
+        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns passcode  //getPassCode()
+        for (i in 0..4)
+            every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + i, null) } returns passcodeD  //loadPinFromOldFormatIfPossible()
+        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns lockAttempts    //getNumberOfAttempts()
+        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns lastUnlockAttempt   //getTimeToUnlockLeft()
+    }
+
     @Test
     fun `on number clicked - ok`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 0    //getNumberOfAttempts()
-        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns 0   //getTimeToUnlockLeft()
+        launchTest()
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -79,14 +87,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `on number clicked - 4 numbers`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns 0   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns null  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 0    //getNumberOfAttempts()
-        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns 0   //getTimeToUnlockLeft()
+        launchTest(passcodeDigits = 0, passcode = null)
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -95,19 +96,16 @@ class PassCodeViewModelTest : ViewModelTest() {
         passCodeViewModel.onNumberClicked(1)
         passCodeViewModel.onNumberClicked(1)
 
-        assertEquals("1111", passCodeViewModel.passcode.value)
+        assertEquals(OC_PASSCODE_4_DIGITS, passCodeViewModel.passcode.value)
     }
 
     @Test
     fun `on number clicked - 3 or more attemps`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns 0   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns null  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 3    //getNumberOfAttempts()
-        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns 0   //getTimeToUnlockLeft()
+        launchTest(
+            passcodeDigits = 0,
+            passcode = null,
+            lockAttempts = 3
+        )
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -118,19 +116,12 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `on number clicked - lock time`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns 0   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns null  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 3    //getNumberOfAttempts()
-        every {
-            preferencesProvider.getLong(
-                PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP,
-                any()
-            )
-        } returns SystemClock.elapsedRealtime()   //getTimeToUnlockLeft()
+        launchTest(
+            passcodeDigits = 0,
+            passcode = null,
+            lockAttempts = 3,
+            lastUnlockAttempt = SystemClock.elapsedRealtime()
+        )
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -141,14 +132,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `process full passcode - check - ok`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 0    //getNumberOfAttempts()
-        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns 0   //getTimeToUnlockLeft()
+        launchTest()
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -166,14 +150,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `process full passcode - check - passcode not valid`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 0    //getNumberOfAttempts()
-        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns 0   //getTimeToUnlockLeft()
+        launchTest()
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -192,14 +169,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `process full passcode - remove - ok`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 0    //getNumberOfAttempts()
-        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns 0   //getTimeToUnlockLeft()
+        launchTest()
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.REMOVE)
 
@@ -218,14 +188,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `process full passcode - remove - passcode not valid`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 0    //getNumberOfAttempts()
-        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns 0   //getTimeToUnlockLeft()
+        launchTest()
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.REMOVE)
 
@@ -239,15 +202,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `process full passcode - create - no confirm`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns 0   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns null  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 0    //getNumberOfAttempts()
-        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns 0   //getTimeToUnlockLeft()
-
+        launchTest(passcodeDigits = 0, passcode = null)
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CREATE)
 
         passCodeViewModel.onNumberClicked(1)
@@ -260,14 +215,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `process full passcode - create - confirm`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns 0   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns null  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 0    //getNumberOfAttempts()
-        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns 0   //getTimeToUnlockLeft()
+        launchTest(passcodeDigits = 0, passcode = null)
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CREATE)
 
@@ -291,14 +239,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `process full passcode - create - error`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns 0   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns null  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 0    //getNumberOfAttempts()
-        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns 0   //getTimeToUnlockLeft()
+        launchTest(passcodeDigits = 0, passcode = null)
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CREATE)
 
@@ -317,12 +258,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `get passcode - ok`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
+        launchTest()
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -337,16 +273,11 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `check passcode is valid - ok`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
+        launchTest()
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
-        val passCode = "1111"
+        val passCode = OC_PASSCODE_4_DIGITS
 
         val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
 
@@ -359,16 +290,11 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `check passcode is valid - ko - saved passcode is null`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns 0   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns null  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
+        launchTest(passcodeDigits = 0, passcode = null)
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
-        val passCode = "1111"
+        val passCode = OC_PASSCODE_4_DIGITS
 
         val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
 
@@ -381,16 +307,10 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `check passcode is valid - ko - saved passcode is empty`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns "".length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns ""  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-
+        launchTest(passcodeDigits = "".length, passcode = "")
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
-        val passCode = "1111"
+        val passCode = OC_PASSCODE_4_DIGITS
 
         val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
 
@@ -403,12 +323,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `check passcode is valid - ko - different digit`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
+        launchTest()
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -425,12 +340,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `check passcode is valid - ko - null digit`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
+        launchTest()
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -452,20 +362,13 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `get number of passcode digits - ok - digits is equal or greater than 4`() {
-        val numberDigits = 4
-
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns numberDigits   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
+        launchTest()
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
         val getNumberDigits = passCodeViewModel.getNumberOfPassCodeDigits()
 
-        assertEquals(numberDigits, getNumberDigits)
+        assertEquals(OC_PASSCODE_4_DIGITS.length, getNumberDigits)
 
         verify(exactly = 1) {
             contextProvider.getInt(R.integer.passcode_digits)
@@ -476,12 +379,7 @@ class PassCodeViewModelTest : ViewModelTest() {
     fun `get number of passcode digits - ok - digits is less than 4`() {
         val numberDigits = 3
 
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns numberDigits   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
+        launchTest(passcodeDigits = numberDigits)
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -497,12 +395,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `set migration required - ok`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
+        launchTest()
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -517,12 +410,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `set last unlock timestamp - ok`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
+        launchTest()
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -535,13 +423,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `get number of attempts - ok`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 3    //getNumberOfAttempts()
+        launchTest(lockAttempts = 3)
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -556,13 +438,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `increase number of attempts - ok`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 3    //getNumberOfAttempts()
+        launchTest(lockAttempts = 3)
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -576,13 +452,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `reset number of attempts - ok`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 3    //getNumberOfAttempts()
+        launchTest(lockAttempts = 3)
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
@@ -595,14 +465,7 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `get time to unlock left - ok`() {
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 1, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 2, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 3, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + 4, null) } returns null  //loadPinFromOldFormatIfPossible()
-        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns 3    //getNumberOfAttempts()
-        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns 0   //getTimeToUnlockLeft()
+        launchTest(lockAttempts = 3)
 
         passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
