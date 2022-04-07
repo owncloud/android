@@ -34,28 +34,21 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
 import com.owncloud.android.presentation.ui.security.passcode.PasscodeType
 import com.owncloud.android.presentation.ui.security.passcode.Status
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
-import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withChildCountAndId
 import io.mockk.every
 import io.mockk.mockk
-import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -71,13 +64,9 @@ class PassCodeActivityTest {
 
     private lateinit var context: Context
 
-    private lateinit var preferencesProvider: SharedPreferencesProvider
-    private lateinit var contextProvider: ContextProvider
-
     private lateinit var timeToUnlockLiveData: MutableLiveData<Event<String>>
     private lateinit var finishTimeToUnlockLiveData: MutableLiveData<Event<Boolean>>
     private lateinit var statusLiveData: MutableLiveData<Status>
-    private lateinit var passcodeLiveData: MutableLiveData<String>
 
     private lateinit var passCodeViewModel: PassCodeViewModel
     private lateinit var biometricViewModel: BiometricViewModel
@@ -91,7 +80,6 @@ class PassCodeActivityTest {
         timeToUnlockLiveData = MutableLiveData()
         finishTimeToUnlockLiveData = MutableLiveData()
         statusLiveData = MutableLiveData()
-        passcodeLiveData = MutableLiveData()
 
 
         stopKoin()
@@ -116,8 +104,6 @@ class PassCodeActivityTest {
         every { passCodeViewModel.getTimeToUnlockLiveData } returns timeToUnlockLiveData
         every { passCodeViewModel.getFinishedTimeToUnlockLiveData } returns finishTimeToUnlockLiveData
         every { passCodeViewModel.status } returns statusLiveData
-        every { passCodeViewModel.passcode } returns passcodeLiveData
-
     }
 
     @After
@@ -357,58 +343,6 @@ class PassCodeActivityTest {
 
         // Checking that the result returned is OK
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
-    }
-
-    @Test
-    fun buttonClick() {
-        preferencesProvider = mockk(relaxed = true)
-        contextProvider = mockk(relaxed = true)
-
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getInt(SettingsSecurityFragment.PREFERENCE_LOCK_ATTEMPTS, any()) } returns 0    //getNumberOfAttempts()
-        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns 0   //getTimeToUnlockLeft()
-
-        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
-
-        // Open Activity in passcode check mode
-        openPasscodeActivity(PassCodeActivity.ACTION_CHECK)
-
-        onView(withId(R.id.key1)).perform(click())
-
-        onView(
-            allOf(
-                withParent(withId(R.id.layout_code)),
-                withText("•")
-            )
-        ).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun backspaceClick() {
-        preferencesProvider = mockk(relaxed = true)
-        contextProvider = mockk(relaxed = true)
-
-        every { contextProvider.getInt(R.integer.passcode_digits) } returns OC_PASSCODE_4_DIGITS.length   //getNumberOfPassCodeDigits()
-        every { preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any()) } returns OC_PASSCODE_4_DIGITS  //getPassCode()
-        every { preferencesProvider.getInt(SettingsSecurityFragment.PREFERENCE_LOCK_ATTEMPTS, any()) } returns 0    //getNumberOfAttempts()
-        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns 0   //getTimeToUnlockLeft()
-
-        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
-
-        // Open Activity in passcode check mode
-        openPasscodeActivity(PassCodeActivity.ACTION_CHECK)
-
-        onView(withId(R.id.key1)).perform(click())
-        onView(withId(R.id.key1)).perform(click())
-        onView(withId(R.id.backspaceBtn)).perform(click())
-
-        onView(
-            allOf(
-                withParent(withId(R.id.layout_code)),
-                withText("•")
-            )
-        ).check(matches((isDisplayed())))
     }
 
     private fun openPasscodeActivity(mode: String) {

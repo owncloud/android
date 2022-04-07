@@ -40,7 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             android:layout_height="match_parent"
             android:background="@drawable/numberkeyboard_key_bg"
             android:padding="@dimen/standard_padding"
-            android:text="@string/numberkeyboard_two"
+            android:text="@string/numberkeyboard_one"
             android:textColor="@drawable/numberkeyboard_key_text_color"
             android:textStyle="bold" />
 
@@ -258,9 +258,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         <ImageView
             android:id="@+id/backspaceBtn"
-            android:layout_margin="@dimen/passcode_margin_buttons"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/passcode_margin_buttons"
             android:contentDescription="@string/numberkeyboard_backspace_button_content_description"
             android:padding="@dimen/standard_padding"
             app:srcCompat="@drawable/numberkeyboard_ic_backspace" />
