@@ -56,7 +56,7 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:$ktxFragmentVersion"
 
     // Preferences
-    implementation 'androidx.preference:preference-ktx:1.1.1'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 
     // Tests
     testImplementation project(':owncloudTestUtil')
