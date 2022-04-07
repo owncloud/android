@@ -67,6 +67,7 @@ class PassCodeActivityTest {
     private lateinit var timeToUnlockLiveData: MutableLiveData<Event<String>>
     private lateinit var finishTimeToUnlockLiveData: MutableLiveData<Event<Boolean>>
     private lateinit var statusLiveData: MutableLiveData<Status>
+    private lateinit var passcodeLiveData: MutableLiveData<String>
 
     private lateinit var passCodeViewModel: PassCodeViewModel
     private lateinit var biometricViewModel: BiometricViewModel
@@ -80,6 +81,7 @@ class PassCodeActivityTest {
         timeToUnlockLiveData = MutableLiveData()
         finishTimeToUnlockLiveData = MutableLiveData()
         statusLiveData = MutableLiveData()
+        passcodeLiveData = MutableLiveData()
 
 
         stopKoin()
@@ -104,6 +106,8 @@ class PassCodeActivityTest {
         every { passCodeViewModel.getTimeToUnlockLiveData } returns timeToUnlockLiveData
         every { passCodeViewModel.getFinishedTimeToUnlockLiveData } returns finishTimeToUnlockLiveData
         every { passCodeViewModel.status } returns statusLiveData
+        every { passCodeViewModel.passcode } returns passcodeLiveData
+
     }
 
     @After
