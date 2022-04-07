@@ -22,11 +22,14 @@ package com.owncloud.android.presentation.viewmodels.releasenotes
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.versionCode
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.releasenotes.ReleaseNote
+import com.owncloud.android.providers.ContextProvider
 
 class ReleaseNotesViewModel(
-    private val preferencesProvider: SharedPreferencesProvider
+    private val preferencesProvider: SharedPreferencesProvider,
+    private val contextProvider: ContextProvider
 ) : ViewModel() {
 
     fun getReleaseNotes(): List<ReleaseNote> {
@@ -35,6 +38,10 @@ class ReleaseNotesViewModel(
 
     fun updateVersionCode() {
         preferencesProvider.putInt(MainApp.PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, versionCode)
+    }
+
+    fun shouldWhatsNewSectionBeVisible(): Boolean {
+        return contextProvider.getBoolean(R.bool.release_notes_enabled) && getReleaseNotes().isNotEmpty()
     }
 
     companion object {

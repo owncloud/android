@@ -70,5 +70,5 @@ val viewModelModule = module {
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get()) }
     viewModel { PatternViewModel(get()) }
     viewModel { BiometricViewModel(get(), get()) }
-    viewModel { ReleaseNotesViewModel(get()) }
+    viewModel { ReleaseNotesViewModel(get(), get()) }
 }

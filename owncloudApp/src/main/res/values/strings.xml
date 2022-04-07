@@ -35,6 +35,7 @@
     <string name="prefs_subsection_logging">Logging</string>
     <string name="prefs_subsection_more">More</string>
     <string name="prefs_subsection_security">Security</string>
+    <string name="prefs_subsection_whatsnew">What´s new in the latest version?</string>
     <string name="prefs_subsection_security_summary">Set locks to access the app and allow touches with other visible windows</string>
     <string name="prefs_subsection_logging_summary">Keep track of logs produced by the execution of the app</string>
     <string name="prefs_subsection_more_summary">App info, feedback and others</string>
