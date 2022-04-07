@@ -85,6 +85,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
 
+        subsectionWhatsNew?.setOnPreferenceClickListener {
+            val intent = Intent(context, ReleaseNotesActivity::class.java)
+            startActivity(intent)
+            true
+        }
+
         prefAboutApp?.apply {
             summary = String.format(
                 getString(R.string.prefs_app_version_summary),
