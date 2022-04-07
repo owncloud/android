@@ -73,7 +73,8 @@
         <activity android:name=".presentation.ui.migration.StorageMigrationActivity" />
         <activity
             android:name=".ui.activity.SplashActivity"
-            android:theme="@style/Theme.ownCloud.Splash">
+            android:theme="@style/Theme.ownCloud.Splash"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -88,7 +89,8 @@
             android:name=".ui.activity.ReceiveExternalFilesActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
-            android:taskAffinity="">
+            android:taskAffinity=""
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -169,10 +171,12 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="@string/file_provider_authority"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/exposed_filepaths" />
+                android:resource="@xml/exposed_filepaths"
+                tools:replace="android:resource" />
         </provider>
 
         <service android:name=".services.OperationsService" />
@@ -207,7 +211,8 @@
             android:label="@string/share_dialog_title"
             android:launchMode="singleTop"
             android:theme="@style/Theme.ownCloud"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>

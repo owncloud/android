@@ -46,6 +46,7 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
+import com.owncloud.android.utils.NotificationUtils;
 import timber.log.Timber;
 
 import java.io.File;
@@ -543,7 +544,6 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
             // nobody is bound
             processStopRequest(true);
         }
-        return;
     }
 
     /**
@@ -583,7 +583,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         mNotificationBuilder.setContentIntent(PendingIntent.getActivity(getApplicationContext(),
                 (int) System.currentTimeMillis(),
                 showDetailsIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT));
+                NotificationUtils.INSTANCE.getPendingIntentFlags()));
         mNotificationBuilder.setWhen(System.currentTimeMillis());
         mNotificationBuilder.setTicker(ticker);
         mNotificationBuilder.setContentTitle(ticker);
@@ -618,7 +618,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         mNotificationBuilder.setContentIntent(PendingIntent.getActivity(getApplicationContext(),
                 (int) System.currentTimeMillis(),
                 showDetailsIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT));
+                NotificationUtils.INSTANCE.getPendingIntentFlags()));
         mNotificationBuilder.setContentTitle(ticker);
         mNotificationBuilder.setContentText(content);
         mNotificationBuilder.setChannelId(MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID);

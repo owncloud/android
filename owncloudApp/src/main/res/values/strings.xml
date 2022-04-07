@@ -148,6 +148,7 @@
     <string name="file_list_empty_shared_by_links">No files have been shared by link.</string>
     <string name="file_list_loading">Loading&#8230;</string>
     <string name="file_list_no_app_for_file_type">No app found for file type</string>
+    <string name="file_list_no_app_for_perform_action">No app found for this action</string>
     <string name="local_file_list_empty">There are no files in this folder.</string>
     <string name="local_file_list_empty_just_folders">There are no folders in this folder.</string>
     <string name="local_file_list_search_with_no_matches">No matches for this search</string>

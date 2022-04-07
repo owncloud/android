@@ -30,6 +30,7 @@ import android.accounts.Account
 import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -61,6 +62,7 @@ import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
+import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
@@ -458,10 +460,16 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             state = oauthViewModel.oidcState
         )
 
-        customTabsIntent.launchUrl(
-            this,
-            authorizationEndpointUri
-        )
+        try {
+            customTabsIntent.launchUrl(
+                this,
+                authorizationEndpointUri
+            )
+        } catch (e: ActivityNotFoundException) {
+            binding.serverStatusText.visibility = INVISIBLE
+            showMessageInSnackbar(message = this.getString(R.string.file_list_no_app_for_perform_action))
+            Timber.e("No Activity found to handle Intent")
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {

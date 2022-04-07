@@ -47,6 +47,12 @@ import java.util.Random
 
 object NotificationUtils {
 
+    val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    } else {
+        PendingIntent.FLAG_UPDATE_CURRENT
+    }
+
     @JvmStatic
     fun newNotificationBuilder(context: Context, channelId: String): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, channelId).apply {
@@ -109,7 +115,13 @@ object NotificationUtils {
                 addFlags(Intent.FLAG_FROM_BACKGROUND)
             }
 
-        return PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), updateCredentialsIntent, PendingIntent.FLAG_ONE_SHOT)
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT
+        } else {
+            PendingIntent.FLAG_ONE_SHOT
+        }
+
+        return PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), updateCredentialsIntent, pendingIntent)
     }
 
     fun composePendingIntentToUploadList(context: Context): PendingIntent {
@@ -117,7 +129,7 @@ object NotificationUtils {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         }
 
-        return PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), showUploadListIntent, 0)
+        return PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), showUploadListIntent, pendingIntentFlags)
     }
 
     fun composePendingIntentToCameraUploads(context: Context, notificationKey: String): PendingIntent {
@@ -126,7 +138,7 @@ object NotificationUtils {
             putExtra(KEY_NOTIFICATION_INTENT, notificationKey)
         }
 
-        return PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), openSettingsActivity, 0)
+        return PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), openSettingsActivity, pendingIntentFlags)
     }
 
     @JvmStatic
@@ -175,7 +187,7 @@ object NotificationUtils {
         notificationBuilder.setContentIntent(
             PendingIntent.getActivity(
                 context, System.currentTimeMillis().toInt(),
-                showConflictActivityIntent, 0
+                showConflictActivityIntent, pendingIntentFlags
             )
         )
         var notificationId = 0
