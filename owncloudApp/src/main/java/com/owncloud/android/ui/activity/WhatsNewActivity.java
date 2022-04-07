@@ -91,7 +91,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         // Wizard already shown
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(MainApp.Companion.getPreferenceKeyLastSeenVersionCode(), MainApp.Companion.getVersionCode());
+        editor.putInt(MainApp.PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, MainApp.Companion.getVersionCode());
         editor.apply();
     }
 

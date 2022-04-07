@@ -67,12 +67,13 @@ class ReleaseNotesActivityTest {
         }
 
         every { releaseNotesViewModel.getReleaseNotes() } returns releaseNotesList
+
+        val intent = Intent(context, ReleaseNotesActivity::class.java)
+        activityScenario = ActivityScenario.launch(intent)
     }
 
     @Test
     fun releaseNotesView() {
-        openReleaseNotesActivity()
-
         val header = String.format(
             context.getString(R.string.release_notes_header),
             context.getString(R.string.app_name)
@@ -100,8 +101,6 @@ class ReleaseNotesActivityTest {
 
     @Test
     fun releaseNotesProceedButton() {
-        openReleaseNotesActivity()
-
         R.id.btnProceed.click()
 
         assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
@@ -109,12 +108,6 @@ class ReleaseNotesActivityTest {
 
     @Test
     fun test_childCount() {
-        openReleaseNotesActivity()
         R.id.releaseNotes.assertChildCount(3)
-    }
-
-    private fun openReleaseNotesActivity() {
-        val intent = Intent(context, ReleaseNotesActivity::class.java)
-        activityScenario = ActivityScenario.launch(intent)
     }
 }

@@ -306,10 +306,6 @@ class MainApp : Application() {
             }
         }
 
-        fun getPreferenceKeyLastSeenVersionCode(): String {
-            return PREFERENCE_KEY_LAST_SEEN_VERSION_CODE
-        }
-
         fun getLastSeenVersionCode(): Int {
             val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
             return pref.getInt(PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, 0)
