@@ -79,6 +79,7 @@ import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
+import com.owncloud.android.presentation.viewmodels.activity.FileDisplayViewModel
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
@@ -99,6 +100,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
 import kotlin.coroutines.CoroutineContext
@@ -108,6 +110,9 @@ import kotlin.coroutines.CoroutineContext
  */
 class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEnforceableRefreshListener,
     CoroutineScope, ISecurityEnforced {
+
+    private val viewModel by viewModel<FileDisplayViewModel>()
+
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -228,7 +233,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         val dataIntent: Uri? = intent.data
         dataIntent?.let {
-            handleDeepLink(dataIntent)
+            handleDeepLink(it)
         }
 
         setBackgroundText()
@@ -1658,16 +1663,20 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         manageOptionLockSelected(type)
     }
 
-    private fun handleDeepLink(uri: Uri?) {
-        if (uri != null && AccountUtils.getAccounts(applicationContext).isEmpty()) {
-            showMessageInSnackbar(message = getString(R.string.no_account_configured))
-        } else if (uri != null && AccountUtils.getAccounts(applicationContext).size == 1) {
+    private fun handleDeepLink(uri: Uri) {
+        if (AccountUtils.getAccounts(applicationContext).size == 1) {
             getFileDiscovered(uri).let { oCFile ->
                 if (oCFile != null) {
                     manageItem(oCFile)
                 } else {
                     showMessageInSnackbar(message = getString(R.string.no_file_found))
                 }
+            }
+        } else {
+            val accounts = viewModel.getPotentialAccountsToOpenDeepLink(uri)
+            if (accounts.isEmpty()) {
+                showMessageInSnackbar(message = getString(R.string.no_account_configured))
+                return
             }
         }
     }

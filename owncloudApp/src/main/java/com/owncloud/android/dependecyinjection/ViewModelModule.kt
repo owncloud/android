@@ -23,6 +23,7 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.MainApp
+import com.owncloud.android.presentation.viewmodels.activity.FileDisplayViewModel
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
@@ -71,4 +72,5 @@ val viewModelModule = module {
     viewModel { PatternViewModel(get()) }
     viewModel { BiometricViewModel(get(), get()) }
     viewModel { ReleaseNotesViewModel(get(), get()) }
+    viewModel { FileDisplayViewModel(get()) }
 }

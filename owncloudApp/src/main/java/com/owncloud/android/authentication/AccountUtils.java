@@ -119,6 +119,14 @@ public class AccountUtils {
         }
     }
 
+    public static String getHostOfAccount(String accountName) {
+        if (accountName != null) {
+            return accountName.substring(accountName.lastIndexOf("@") + 1);
+        } else {
+            return null;
+        }
+    }
+
     /**
      * Returns owncloud account identified by accountName or null if it does not exist.
      * @param context
