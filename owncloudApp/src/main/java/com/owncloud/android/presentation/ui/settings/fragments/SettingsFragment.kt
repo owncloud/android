@@ -70,7 +70,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 true
             }
         } else {
-            settingsScreen?.removePreference(prefPrivacyPolicy)
+            settingsScreen?.removePreferenceFromScreen(prefPrivacyPolicy)
         }
 
         prefAboutApp?.apply {
@@ -98,5 +98,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
         private const val SUBSECTION_PICTURE_UPLOADS = "picture_uploads_subsection"
         private const val SUBSECTION_VIDEO_UPLOADS = "video_uploads_subsection"
         private const val SUBSECTION_MORE = "more_subsection"
+
+        // Remove preference with nullability check
+        fun PreferenceScreen?.removePreferenceFromScreen(preference: Preference?) {
+            preference?.let { this?.removePreference(it) }
+        }
     }
 }
