@@ -31,7 +31,7 @@ android {
         versionName = "1.0.14"
     }
 
-    lintOptions {
+    lint {
         abortOnError false
         ignoreWarnings true
     }
