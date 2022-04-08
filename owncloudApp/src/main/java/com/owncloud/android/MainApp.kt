@@ -32,6 +32,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.content.pm.PackageInfoCompat
 import com.owncloud.android.authentication.AccountUtils
+import android.view.WindowManager
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
@@ -105,8 +106,13 @@ class MainApp : Application() {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 Timber.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
 
-                /* If there's any lock protection, don't show wizard at this point,
-                   show it when lock activities have finished */
+                // To prevent taking screenshots in the whole app
+                if (!BuildConfig.DEBUG && !baseContext.resources.getBoolean(R.bool.allow_screenshots)) {
+                    activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                }
+
+                // If there's any lock protection, don't show wizard at this point, show it when lock activities
+                // have finished
                 if (activity !is PassCodeActivity &&
                     activity !is PatternActivity &&
                     activity !is BiometricActivity
