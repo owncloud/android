@@ -143,6 +143,7 @@
   <string name="file_list_empty_shared_by_links">S\’janë ndarë kartela me të tjerë përmes lidhjeje.</string>
   <string name="file_list_loading">Po ngarkohet…</string>
   <string name="file_list_no_app_for_file_type">S\’u gjet aplikacion për llojin e kartelës</string>
+  <string name="file_list_no_app_for_perform_action">S’u gjet aplikacion për këtë veprim</string>
   <string name="local_file_list_empty">Në këtë dosje s\’ka kartela.</string>
   <string name="local_file_list_empty_just_folders">S\’ka dosje brenda kësaj dosjeje.</string>
   <string name="local_file_list_search_with_no_matches">S\’ka përputhje për këtë kërkim</string>
