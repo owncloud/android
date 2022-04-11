@@ -50,6 +50,7 @@ import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
+import com.owncloud.android.usecases.GetPrivateLinkDiscoveredUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -88,6 +89,7 @@ val useCaseModule = module {
 
     // Server
     factory { GetServerInfoAsyncUseCase(get()) }
+    factory { GetPrivateLinkDiscoveredUseCase(get()) }
 
     // Camera Uploads
     factory { GetCameraUploadsConfigurationUseCase(get()) }

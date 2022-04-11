@@ -72,5 +72,5 @@ val viewModelModule = module {
     viewModel { PatternViewModel(get()) }
     viewModel { BiometricViewModel(get(), get()) }
     viewModel { ReleaseNotesViewModel(get(), get()) }
-    viewModel { FileDisplayViewModel(get()) }
+    viewModel { FileDisplayViewModel(get(), get(), get()) }
 }

@@ -23,11 +23,17 @@ package com.owncloud.android.presentation.viewmodels.activity
 import android.accounts.Account
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.GetPrivateLinkDiscoveredUseCase
+import kotlinx.coroutines.launch
 
 class FileDisplayViewModel(
-    private val contextProvider: ContextProvider
+    private val contextProvider: ContextProvider,
+    private val getPrivateLinkDiscoveredUseCase: GetPrivateLinkDiscoveredUseCase,
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
     fun getPotentialAccountsToOpenDeepLink(uri: Uri): List<Account> {
@@ -35,6 +41,12 @@ class FileDisplayViewModel(
 
         return accounts.filter { account ->
             uri.authority == AccountUtils.getHostOfAccount(account.name)
+        }
+    }
+
+    fun getPrivateLink(url: String){
+        viewModelScope.launch(coroutinesDispatcherProvider.io){
+            getPrivateLinkDiscoveredUseCase.execute(GetPrivateLinkDiscoveredUseCase.Params(url))
         }
     }
 }

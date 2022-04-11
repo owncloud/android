@@ -110,6 +110,10 @@ class OCShareRepository(
         localShareDataSource.deleteShare(remoteId)
     }
 
+    override fun checkPrivateLink(url: String): String {
+        return remoteShareDataSource.checkPrivateLink(url)
+    }
+
     /******************************************************************************************************
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/

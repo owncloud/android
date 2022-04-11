@@ -78,4 +78,8 @@ interface ShareRepository {
     fun refreshSharesFromNetwork(filePath: String, accountName: String)
 
     fun deleteShare(remoteId: String)
+
+    fun checkPrivateLink(
+        url: String
+    ): String
 }

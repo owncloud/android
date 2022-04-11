@@ -107,4 +107,10 @@ class OCRemoteShareDataSource(
             shareService.deleteShare(remoteId)
         }
     }
+
+    override fun checkPrivateLink(url: String): String {
+        return executeRemoteOperation {
+            shareService.checkPrivateLink(url)
+        }
+    }
 }

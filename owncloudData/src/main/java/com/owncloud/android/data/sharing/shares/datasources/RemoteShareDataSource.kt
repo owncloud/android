@@ -56,4 +56,8 @@ interface RemoteShareDataSource {
     fun deleteShare(
         remoteId: String
     )
+
+    fun checkPrivateLink(
+        url: String
+    ): String
 }

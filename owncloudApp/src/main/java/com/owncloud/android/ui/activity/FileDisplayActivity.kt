@@ -1670,16 +1670,16 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             return
         }
         //Get first from accounts.
-        accounts.forEach { account ->
-            val fileDataStorageManager = FileDataStorageManager(this, account, contentResolver)
-            val file = fileDataStorageManager.getFileByPrivateLink(uri.toString())
-            if (file != null) {
-                manageItem(file)
-            } else {
-
-                // Call success -> ok else show toast  showMessageInSnackbar(message = getString(R.string.no_file_found))
-            }
+        val account = accounts.first()
+        val fileDataStorageManager = FileDataStorageManager(this, account, contentResolver)
+        val file = fileDataStorageManager.getFileByPrivateLink(uri.toString())
+        if (file != null) {
+            manageItem(file)
+        } else {
+            viewModel.getPrivateLink(uri.toString())
+            // Call success -> ok else show toast  showMessageInSnackbar(message = getString(R.string.no_file_found))
         }
+
     }
 
     private fun getFileDiscovered(uri: Uri?): OCFile? = storageManager.getFileByPrivateLink(uri.toString())
