@@ -38,7 +38,7 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$archLifecycleVersion"
     kapt "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
 
     implementation "androidx.room:room-runtime:$roomVersion"
@@ -121,16 +121,11 @@ android {
         test.java.srcDirs += "src/test-common/java"
     }
 
-    lintOptions {
+    lint {
         abortOnError true
+        htmlOutput file('../lint-app-report.html')
         ignoreWarnings false
-
         xmlReport false
-        htmlOutput file("../lint-app-report.html")
-    }
-
-    packagingOptions {
-        exclude 'META-INF/LICENSE.txt'
     }
 
     adbOptions {
