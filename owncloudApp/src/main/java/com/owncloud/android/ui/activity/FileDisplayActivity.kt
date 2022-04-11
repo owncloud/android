@@ -1664,19 +1664,20 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     private fun handleDeepLink(uri: Uri) {
-        if (AccountUtils.getAccounts(applicationContext).size == 1) {
-            getFileDiscovered(uri).let { oCFile ->
-                if (oCFile != null) {
-                    manageItem(oCFile)
-                } else {
-                    showMessageInSnackbar(message = getString(R.string.no_file_found))
-                }
-            }
-        } else {
-            val accounts = viewModel.getPotentialAccountsToOpenDeepLink(uri)
-            if (accounts.isEmpty()) {
-                showMessageInSnackbar(message = getString(R.string.no_account_configured))
-                return
+        val accounts = viewModel.getPotentialAccountsToOpenDeepLink(uri)
+        if (accounts.isEmpty()) {
+            showMessageInSnackbar(message = getString(R.string.no_account_configured))
+            return
+        }
+        //Get first from accounts.
+        accounts.forEach { account ->
+            val fileDataStorageManager = FileDataStorageManager(this, account, contentResolver)
+            val file = fileDataStorageManager.getFileByPrivateLink(uri.toString())
+            if (file != null) {
+                manageItem(file)
+            } else {
+
+                // Call success -> ok else show toast  showMessageInSnackbar(message = getString(R.string.no_file_found))
             }
         }
     }
