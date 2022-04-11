@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlinVersion = '1.6.10'
+        kotlinVersion = '1.6.20'
         moshiVersion = "1.13.0"
     }
 
@@ -11,7 +11,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jlleitschuh.gradle:ktlint-gradle:10.2.1"
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:7.1.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
