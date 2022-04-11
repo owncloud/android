@@ -10,6 +10,7 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * @author John Kalimeris
+ * @author David Crespo Ríos
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2020 ownCloud GmbH.
  * <p>
@@ -29,6 +30,7 @@ package com.owncloud.android.ui.adapter;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.SparseBooleanArray;
@@ -69,17 +71,17 @@ import java.util.Vector;
  */
 public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
-    private Context mContext;
+    private final Context mContext;
     private Vector<OCFile> mImmutableFilesList = null; // List containing the database files, doesn't change with search
     private Vector<OCFile> mFiles = null; // List that can be changed when using search
-    private boolean mJustFolders;
-    private boolean mOnlyAvailableOffline;
-    private boolean mSharedByLinkFiles;
-    private boolean mFolderPicker;
+    private final boolean mJustFolders;
+    private final boolean mOnlyAvailableOffline;
+    private final boolean mSharedByLinkFiles;
+    private final boolean mFolderPicker;
 
     private FileDataStorageManager mStorageManager;
     private Account mAccount;
-    private ComponentsGetter mTransferServiceGetter;
+    private final ComponentsGetter mTransferServiceGetter;
 
     public FileListListAdapter(
             boolean justFolders,
@@ -413,6 +415,17 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
         mFiles = FileStorageUtils.sortFolder(mFiles, FileStorageUtils.mSortOrderFileDisp,
                 FileStorageUtils.mSortAscendingFileDisp);
+
+        final SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(mContext);
+        boolean showHiddenFiles = prefs.getBoolean("show_hidden_files", false);
+
+        if (!showHiddenFiles) {
+            for (int i = 0; i < mFiles.size(); i++) {
+                if (mFiles.get(i).getFileName().startsWith(".")) {
+                    mFiles.remove(i);
+                }
+            }
+        }
         notifyDataSetChanged();
     }
 

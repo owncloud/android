@@ -3,8 +3,9 @@
  *
  * @author David González Verdugo
  * @author Juan Carlos Garrote Gascón
+ * @author David Crespo Ríos
  *
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -31,6 +32,7 @@ import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
+import com.owncloud.android.presentation.viewmodels.settings.SettingsAdvancedViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
@@ -62,6 +64,7 @@ val viewModelModule = module {
     viewModel { SettingsMoreViewModel(get()) }
     viewModel { SettingsPictureUploadsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SettingsVideoUploadsViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { SettingsAdvancedViewModel(get()) }
     viewModel { RemoveAccountDialogViewModel(get(), get(), get(), get()) }
     viewModel { PassCodeViewModel(get(), get()) }
     viewModel { LogListViewModel(get()) }

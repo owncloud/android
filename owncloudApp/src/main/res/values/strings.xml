@@ -71,6 +71,9 @@
     <string name="prefs_camera_video_upload_path_title">Video upload path</string>
     <string name="prefs_camera_video_upload_on_wifi">Upload videos via wifi only</string>
     <string name="prefs_camera_video_upload_on_charging">Upload videos only when charging</string>
+    <string name="prefs_subsection_advanced">Advanced</string>
+    <string name="prefs_subsection_advanced_summary">Set settings to choose whether to show hidden files</string>
+    <string name="prefs_show_hidden_files">Show hidden files</string>
     <string name="prefs_log_open_logs_list_view">Log files</string>
     <string name="prefs_log_no_logs_list_view">Empty log folder!</string>
     <string name="prefs_log_title">Enable logging</string>
