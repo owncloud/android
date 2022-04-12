@@ -15,6 +15,7 @@ Summary
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 * Enhancement - Improvements for the UI in the file details screen: [#3557](https://github.com/owncloud/android/issues/3557)
 * Enhancement - Improvements for the UI in the pattern screen: [#3580](https://github.com/owncloud/android/issues/3580)
+* Enhancement - New option to show or not hidden files: [#2578](https://github.com/owncloud/android/issues/2578)
 
 Details
 -------
@@ -75,6 +76,13 @@ Details
 
    https://github.com/owncloud/android/issues/3580
    https://github.com/owncloud/android/pull/3587
+
+* Enhancement - New option to show or not hidden files: [#2578](https://github.com/owncloud/android/issues/2578)
+
+   Enable it to show hidden files and folders
+
+   https://github.com/owncloud/android/issues/2578
+   https://github.com/owncloud/android/pull/3624
 
 Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
 =======================================
