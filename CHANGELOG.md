@@ -84,13 +84,6 @@ Details
    https://github.com/owncloud/android/issues/3442
    https://github.com/owncloud/android/pull/3594
 
-* Enhancement - Improvements for the UI in the pattern screen: [#3580](https://github.com/owncloud/android/issues/3580)
-
-   Redesign of the pattern screen. Cancel button deleted and new back arrow in the toolbar.
-
-   https://github.com/owncloud/android/issues/3580
-   https://github.com/owncloud/android/pull/3587
-
 Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.20.0 relevant to
