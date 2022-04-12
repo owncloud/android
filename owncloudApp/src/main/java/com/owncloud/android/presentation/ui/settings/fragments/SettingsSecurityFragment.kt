@@ -40,6 +40,7 @@ import com.owncloud.android.presentation.ui.security.LockTimeout
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment.Companion.removePreferenceFromScreen
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -169,10 +170,10 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
         // Biometric lock
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            screenSecurity?.removePreference(prefBiometric)
+            screenSecurity?.removePreferenceFromScreen(prefBiometric)
         } else if (prefBiometric != null) {
             if (!BiometricManager.isHardwareDetected()) { // Biometric not supported
-                screenSecurity?.removePreference(prefBiometric)
+                screenSecurity?.removePreferenceFromScreen(prefBiometric)
             } else {
                 if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) { // Disable biometric lock if Passcode or Pattern locks are disabled
                     disableBiometric()
