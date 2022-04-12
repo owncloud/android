@@ -83,6 +83,8 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private Account mAccount;
     private final ComponentsGetter mTransferServiceGetter;
 
+    private static final String SHOW_HIDDEN_FILES = "show_hidden_files";
+
     public FileListListAdapter(
             boolean justFolders,
             boolean onlyAvailableOffline,
@@ -417,12 +419,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 FileStorageUtils.mSortAscendingFileDisp);
 
         final SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(mContext);
-        boolean showHiddenFiles = prefs.getBoolean("show_hidden_files", false);
+        boolean showHiddenFiles = prefs.getBoolean(SHOW_HIDDEN_FILES, true);
 
         if (!showHiddenFiles) {
             for (int i = 0; i < mFiles.size(); i++) {
                 if (mFiles.get(i).getFileName().startsWith(".")) {
                     mFiles.remove(i);
+                    i--; // Otherwise it will skip the element after the removed index
                 }
             }
         }

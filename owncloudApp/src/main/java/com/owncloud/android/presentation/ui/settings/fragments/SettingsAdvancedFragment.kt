@@ -50,7 +50,7 @@ class SettingsAdvancedFragment : PreferenceFragmentCompat() {
 
     private fun initPreferenceListeners() {
         prefShowHiddenFiles?.setOnPreferenceClickListener {
-            advancedViewModel.setHiddenFiles(prefShowHiddenFiles?.isChecked ?: false)
+            advancedViewModel.setShowHiddenFiles(prefShowHiddenFiles?.isChecked ?: true)
             true
         }
     }
