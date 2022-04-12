@@ -13,7 +13,7 @@ def commitSHA1 = 'COMMIT_SHA1'
 def gitRemote = 'GIT_REMOTE'
 
 dependencies {
-    implementation 'com.google.firebase:firebase-analytics:20.1.0'
+    implementation 'com.google.firebase:firebase-analytics:20.1.2'
     implementation 'com.google.firebase:firebase-crashlytics:18.2.9'
 
     implementation 'com.github.hannesa2:githubAppUpdate:1.4'
