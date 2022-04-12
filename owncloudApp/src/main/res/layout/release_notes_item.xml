@@ -30,6 +30,7 @@
         android:layout_height="50dp"
         android:layout_marginHorizontal="@dimen/standard_margin"
         style="@style/Theme.ownCloud"
+        android:contentDescription="@string/release_notes_icon"
         app:layout_constraintBottom_toBottomOf="@id/subtitleReleaseNote"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/titleReleaseNote" />
@@ -42,10 +43,11 @@
         style="@style/Theme.ownCloud"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/iconReleaseNote"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem[4]" />
 
-    <TextView
+    <com.codesgood.views.JustifiedTextView
         android:id="@+id/subtitleReleaseNote"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -53,6 +55,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iconReleaseNote"
         app:layout_constraintTop_toBottomOf="@id/titleReleaseNote"
-        tools:text="@tools:sample/lorem[10]" />
+        tools:text="@tools:sample/lorem[40]" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
