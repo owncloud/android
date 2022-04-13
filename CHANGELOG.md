@@ -16,6 +16,7 @@ Summary
 * Enhancement - Improvements for the UI in the file details screen: [#3557](https://github.com/owncloud/android/issues/3557)
 * Enhancement - Improvements for the UI in the pattern screen: [#3580](https://github.com/owncloud/android/issues/3580)
 * Enhancement - Release Notes: [#3442](https://github.com/owncloud/android/issues/3442)
+* Enhancement - What´s new option: [#3352](https://github.com/owncloud/android/issues/3352)
 
 Details
 -------
@@ -83,6 +84,13 @@ Details
 
    https://github.com/owncloud/android/issues/3442
    https://github.com/owncloud/android/pull/3594
+
+* Enhancement - What´s new option: [#3352](https://github.com/owncloud/android/issues/3352)
+
+   New option to check what was included in the latest version.
+
+   https://github.com/owncloud/android/issues/3352
+   https://github.com/owncloud/android/pull/3616
 
 Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
 =======================================
