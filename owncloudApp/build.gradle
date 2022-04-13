@@ -59,7 +59,7 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.0'
 
     //Justify Text
-    implementation 'com.codesgood:justifiedtextview:1.1.0'
+    implementation 'com.codesgood:justifiedtextview:2.0.1'
     // Tests
     testImplementation project(':owncloudTestUtil')
     testImplementation "junit:junit:$junitVersion"
