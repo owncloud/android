@@ -35,11 +35,14 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
+import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
+import com.owncloud.android.presentation.viewmodels.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
+import com.owncloud.android.utils.releaseNotesList
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
@@ -56,16 +59,18 @@ class SettingsFragmentTest {
 
     private lateinit var fragmentScenario: FragmentScenario<SettingsFragment>
 
-    private lateinit var subsectionSecurity: Preference
-    private lateinit var subsectionLogging: Preference
-    private lateinit var subsectionPictureUploads: Preference
-    private lateinit var subsectionVideoUploads: Preference
-    private lateinit var subsectionMore: Preference
+    private var subsectionSecurity: Preference? = null
+    private var subsectionLogging: Preference? = null
+    private var subsectionPictureUploads: Preference? = null
+    private var subsectionVideoUploads: Preference? = null
+    private var subsectionMore: Preference? = null
     private var prefPrivacyPolicy: Preference? = null
-    private lateinit var prefAboutApp: Preference
+    private var subsectionWhatsNew: Preference? = null
+    private var prefAboutApp: Preference? = null
 
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var moreViewModel: SettingsMoreViewModel
+    private lateinit var releaseNotesViewModel: ReleaseNotesViewModel
     private lateinit var context: Context
 
     private lateinit var version: String
@@ -75,6 +80,7 @@ class SettingsFragmentTest {
         context = InstrumentationRegistry.getInstrumentation().targetContext
         settingsViewModel = mockk(relaxUnitFun = true)
         moreViewModel = mockk(relaxUnitFun = true)
+        releaseNotesViewModel = mockk(relaxUnitFun = true)
 
         stopKoin()
 
@@ -87,6 +93,9 @@ class SettingsFragmentTest {
                     }
                     viewModel {
                         moreViewModel
+                    }
+                    viewModel {
+                        releaseNotesViewModel
                     }
                 }
             )
@@ -109,20 +118,27 @@ class SettingsFragmentTest {
         unmockkAll()
     }
 
-    private fun launchTest(attachedAccount: Boolean, moreSectionVisible: Boolean = true, privacyPolicyEnabled: Boolean = true) {
+    private fun launchTest(
+        attachedAccount: Boolean,
+        moreSectionVisible: Boolean = true,
+        privacyPolicyEnabled: Boolean = true,
+        whatsNewSectionVisible: Boolean = true
+    ) {
         every { settingsViewModel.isThereAttachedAccount() } returns attachedAccount
         every { moreViewModel.shouldMoreSectionBeVisible() } returns moreSectionVisible
         every { moreViewModel.isPrivacyPolicyEnabled() } returns privacyPolicyEnabled
+        every { releaseNotesViewModel.shouldWhatsNewSectionBeVisible() } returns whatsNewSectionVisible
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
         fragmentScenario.onFragment { fragment ->
-            subsectionSecurity = fragment.findPreference(SUBSECTION_SECURITY)!!
-            subsectionLogging = fragment.findPreference(SUBSECTION_LOGGING)!!
-            subsectionPictureUploads = fragment.findPreference(SUBSECTION_PICTURE_UPLOADS)!!
-            subsectionVideoUploads = fragment.findPreference(SUBSECTION_VIDEO_UPLOADS)!!
-            subsectionMore = fragment.findPreference(SUBSECTION_MORE)!!
+            subsectionSecurity = fragment.findPreference(SUBSECTION_SECURITY)
+            subsectionLogging = fragment.findPreference(SUBSECTION_LOGGING)
+            subsectionPictureUploads = fragment.findPreference(SUBSECTION_PICTURE_UPLOADS)
+            subsectionVideoUploads = fragment.findPreference(SUBSECTION_VIDEO_UPLOADS)
+            subsectionMore = fragment.findPreference(SUBSECTION_MORE)
             prefPrivacyPolicy = fragment.findPreference(PREFERENCE_PRIVACY_POLICY)
-            prefAboutApp = fragment.findPreference(PREFERENCE_ABOUT_APP)!!
+            subsectionWhatsNew = fragment.findPreference(SUBSECTION_WHATSNEW)
+            prefAboutApp = fragment.findPreference(PREFERENCE_ABOUT_APP)
         }
     }
 
@@ -130,7 +146,7 @@ class SettingsFragmentTest {
     fun settingsViewCommon() {
         launchTest(attachedAccount = false)
 
-        subsectionSecurity.verifyPreference(
+        subsectionSecurity?.verifyPreference(
             keyPref = SUBSECTION_SECURITY,
             titlePref = context.getString(R.string.prefs_subsection_security),
             summaryPref = context.getString(R.string.prefs_subsection_security_summary),
@@ -138,7 +154,7 @@ class SettingsFragmentTest {
             enabled = true
         )
 
-        subsectionLogging.verifyPreference(
+        subsectionLogging?.verifyPreference(
             keyPref = SUBSECTION_LOGGING,
             titlePref = context.getString(R.string.prefs_subsection_logging),
             summaryPref = context.getString(R.string.prefs_subsection_logging_summary),
@@ -146,7 +162,7 @@ class SettingsFragmentTest {
             enabled = true
         )
 
-        subsectionMore.verifyPreference(
+        subsectionMore?.verifyPreference(
             keyPref = SUBSECTION_MORE,
             titlePref = context.getString(R.string.prefs_subsection_more),
             summaryPref = context.getString(R.string.prefs_subsection_more_summary),
@@ -154,7 +170,21 @@ class SettingsFragmentTest {
             enabled = true
         )
 
-        prefAboutApp.verifyPreference(
+        prefPrivacyPolicy?.verifyPreference(
+            keyPref = PREFERENCE_PRIVACY_POLICY,
+            titlePref = context.getString(R.string.prefs_privacy_policy),
+            visible = true,
+            enabled = true
+        )
+
+        subsectionWhatsNew?.verifyPreference(
+            keyPref = SUBSECTION_WHATSNEW,
+            titlePref = context.getString(R.string.prefs_subsection_whatsnew),
+            visible = true,
+            enabled = true
+        )
+
+        prefAboutApp?.verifyPreference(
             keyPref = PREFERENCE_ABOUT_APP,
             titlePref = context.getString(R.string.prefs_app_version),
             summaryPref = version,
@@ -167,29 +197,17 @@ class SettingsFragmentTest {
     fun settingsViewNoAccountAttached() {
         launchTest(attachedAccount = false)
 
-        subsectionPictureUploads.verifyPreference(
+        subsectionPictureUploads?.verifyPreference(
             keyPref = SUBSECTION_PICTURE_UPLOADS,
             titlePref = context.getString(R.string.prefs_subsection_picture_uploads),
             summaryPref = context.getString(R.string.prefs_subsection_picture_uploads_summary),
             visible = false
         )
 
-        subsectionVideoUploads.verifyPreference(
+        subsectionVideoUploads?.verifyPreference(
             keyPref = SUBSECTION_VIDEO_UPLOADS,
             titlePref = context.getString(R.string.prefs_subsection_video_uploads),
             summaryPref = context.getString(R.string.prefs_subsection_video_uploads_summary),
-            visible = false
-        )
-    }
-
-    @Test
-    fun settingsMoreSectionHidden() {
-        launchTest(attachedAccount = false, moreSectionVisible = false)
-
-        subsectionMore.verifyPreference(
-            keyPref = SUBSECTION_MORE,
-            titlePref = context.getString(R.string.prefs_subsection_more),
-            summaryPref = context.getString(R.string.prefs_subsection_more_summary),
             visible = false
         )
     }
@@ -198,7 +216,7 @@ class SettingsFragmentTest {
     fun settingsViewAccountAttached() {
         launchTest(attachedAccount = true)
 
-        subsectionPictureUploads.verifyPreference(
+        subsectionPictureUploads?.verifyPreference(
             keyPref = SUBSECTION_PICTURE_UPLOADS,
             titlePref = context.getString(R.string.prefs_subsection_picture_uploads),
             summaryPref = context.getString(R.string.prefs_subsection_picture_uploads_summary),
@@ -206,12 +224,35 @@ class SettingsFragmentTest {
             enabled = true
         )
 
-        subsectionVideoUploads.verifyPreference(
+        subsectionVideoUploads?.verifyPreference(
             keyPref = SUBSECTION_VIDEO_UPLOADS,
             titlePref = context.getString(R.string.prefs_subsection_video_uploads),
             summaryPref = context.getString(R.string.prefs_subsection_video_uploads_summary),
             visible = true,
             enabled = true
+        )
+    }
+
+    @Test
+    fun settingsMoreSectionHidden() {
+        launchTest(attachedAccount = false, moreSectionVisible = false)
+
+        subsectionMore?.verifyPreference(
+            keyPref = SUBSECTION_MORE,
+            titlePref = context.getString(R.string.prefs_subsection_more),
+            summaryPref = context.getString(R.string.prefs_subsection_more_summary),
+            visible = false
+        )
+    }
+
+    @Test
+    fun settingsWhatsNewSectionHidden() {
+        launchTest(attachedAccount = false, whatsNewSectionVisible = false)
+
+        subsectionWhatsNew?.verifyPreference(
+            keyPref = SUBSECTION_WHATSNEW,
+            titlePref = context.getString(R.string.prefs_subsection_whatsnew),
+            visible = false
         )
     }
 
@@ -221,6 +262,15 @@ class SettingsFragmentTest {
 
         onView(withText(R.string.prefs_privacy_policy)).perform(click())
         Intents.intended(IntentMatchers.hasComponent(PrivacyPolicyActivity::class.java.name))
+    }
+
+    @Test
+    fun whatsnewOpensPrivacyReleaseNotesActivity() {
+        launchTest(attachedAccount = false)
+        every { releaseNotesViewModel.getReleaseNotes() } returns releaseNotesList
+
+        onView(withText(R.string.prefs_subsection_whatsnew)).perform(click())
+        Intents.intended(IntentMatchers.hasComponent(ReleaseNotesActivity::class.java.name))
     }
 
     @Test
@@ -242,5 +292,6 @@ class SettingsFragmentTest {
         private const val SUBSECTION_MORE = "more_subsection"
         private const val PREFERENCE_PRIVACY_POLICY = "privacyPolicy"
         private const val PREFERENCE_ABOUT_APP = "about_app"
+        private const val SUBSECTION_WHATSNEW = "whatsNew"
     }
 }
