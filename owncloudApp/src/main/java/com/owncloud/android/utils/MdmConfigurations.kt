@@ -25,6 +25,7 @@ import androidx.annotation.StringDef
 const val CONFIGURATION_LOCK_DELAY_TIME = "lock_delay_time_configuration"
 const val CONFIGURATION_SERVER_URL = "server_url_configuration"
 const val CONFIGURATION_SERVER_URL_INPUT_VISIBILITY = "server_url_input_visibility_configuration"
+const val CONFIGURATION_ALLOW_SCREENSHOTS = "allow_screenshots_configuration"
 
 @StringDef(
     CONFIGURATION_LOCK_DELAY_TIME,

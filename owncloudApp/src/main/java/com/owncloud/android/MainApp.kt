@@ -57,9 +57,11 @@ import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeManager
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
 import com.owncloud.android.providers.LogsProvider
+import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.SplashActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
+import com.owncloud.android.utils.CONFIGURATION_ALLOW_SCREENSHOTS
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.DebugInjector
 import com.owncloud.android.utils.FILE_SYNC_CONFLICT_CHANNEL_ID
@@ -105,8 +107,8 @@ class MainApp : Application() {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 Timber.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
 
-                // To prevent taking screenshots in the whole app
-                if (!BuildConfig.DEBUG && !baseContext.resources.getBoolean(R.bool.allow_screenshots)) {
+                // To prevent taking screenshots in MDM
+                if (!areScreenshotsAllowed()) {
                     activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
                 }
 
@@ -186,6 +188,17 @@ class MainApp : Application() {
         if (enabledLogging) {
             LogsProvider(applicationContext).startLogging()
         }
+    }
+
+    /**
+     * Screenshots allowed in debug mode. Devs and tests <3
+     * Otherwise, depends on branding.
+     */
+    private fun areScreenshotsAllowed(): Boolean {
+        if (BuildConfig.DEBUG) return true
+
+        val mdmProvider = MdmProvider(applicationContext)
+        return mdmProvider.getBrandingBoolean(CONFIGURATION_ALLOW_SCREENSHOTS, R.bool.allow_screenshots)
     }
 
     private fun createNotificationChannels() {
