@@ -14,6 +14,7 @@ Summary
 * Enhancement - Provide app feedback to MDM admins: [#3420](https://github.com/owncloud/android/issues/3420)
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
 * Enhancement - Improvements for the UI in the file details screen: [#3557](https://github.com/owncloud/android/issues/3557)
+* Enhancement - Option to allow screenshots or not in Android Enterprise: [#3625](https://github.com/owncloud/android/issues/3625)
 
 Details
 -------
@@ -67,6 +68,13 @@ Details
 
    https://github.com/owncloud/android/issues/3557
    https://github.com/owncloud/android/pull/3569
+
+* Enhancement - Option to allow screenshots or not in Android Enterprise: [#3625](https://github.com/owncloud/android/issues/3625)
+
+   New parameter to manage screenshots can be configured via MDM.
+
+   https://github.com/owncloud/android/issues/3625
+   https://github.com/owncloud/android/pull/3627
 
 Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
 =======================================
