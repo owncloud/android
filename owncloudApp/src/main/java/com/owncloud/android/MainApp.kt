@@ -97,7 +97,7 @@ class MainApp : Application() {
                 Timber.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
 
                 // To prevent taking screenshots in MDM
-                if (/* !BuildConfig.DEBUG && */!isScreenshotsAllowed()) {
+                if (!BuildConfig.DEBUG && !isScreenshotsAllowed()) {
                     activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
                 }
 
@@ -176,7 +176,7 @@ class MainApp : Application() {
         }
     }
 
-    private fun isScreenshotsAllowed(): Boolean{
+    private fun isScreenshotsAllowed(): Boolean {
         return mdmProvider.getBrandingBoolean(CONFIGURATION_ALLOW_SCREENSHOTS, R.bool.allow_screenshots)
     }
 
