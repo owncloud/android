@@ -23,4 +23,4 @@ done
 
 echo "========= Check Library =========="
 cd owncloud-android-library
-./verify_licenses_script.sh
+./check_code_script.sh
