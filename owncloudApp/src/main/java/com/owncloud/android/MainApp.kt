@@ -30,6 +30,8 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
+import android.widget.Toast
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
@@ -51,6 +53,7 @@ import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.security.PatternManager
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
 import com.owncloud.android.providers.LogsProvider
+import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.*
 import org.koin.android.ext.koin.androidContext
@@ -66,6 +69,8 @@ import timber.log.Timber
  * classes
  */
 class MainApp : Application() {
+    private lateinit var mdmProvider: MdmProvider
+
     override fun onCreate() {
         super.onCreate()
 
@@ -84,10 +89,17 @@ class MainApp : Application() {
         // initialise thumbnails cache on background thread
         ThumbnailsCacheManager.InitDiskCacheTask().execute()
 
+        mdmProvider = MdmProvider(appContext)
+
         // register global protection with pass code, pattern lock and biometric lock
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 Timber.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
+
+                // To prevent taking screenshots in MDM
+                if (/* !BuildConfig.DEBUG && */!isScreenshotsAllowed()) {
+                    activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                }
 
                 // If there's any lock protection, don't show wizard at this point, show it when lock activities
                 // have finished
@@ -162,6 +174,10 @@ class MainApp : Application() {
         if (enabledLogging) {
             LogsProvider(applicationContext).startLogging()
         }
+    }
+
+    private fun isScreenshotsAllowed(): Boolean{
+        return mdmProvider.getBrandingBoolean(CONFIGURATION_ALLOW_SCREENSHOTS, R.bool.allow_screenshots)
     }
 
     private fun createNotificationChannels() {

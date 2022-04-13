@@ -19,5 +19,11 @@
         android:title="@string/server_url_input_visibility_configuration_title"
         android:description="@string/server_url_input_visibility_configuration_description"
         android:defaultValue="true" />
+    <restriction
+        android:key="allow_screenshots_configuration"
+        android:restrictionType="bool"
+        android:title="@string/allow_screenshots_configuration_title"
+        android:description="@string/allow_screenshots_configuration_description"
+        android:defaultValue="true" />
 
 </restrictions>

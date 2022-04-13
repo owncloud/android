@@ -113,4 +113,6 @@
     <integer name="lock_enforced">0</integer>
     <integer name="lock_delay_enforced">0</integer>
 
+    <!-- Screenshots -->
+    <bool name="allow_screenshots">true</bool>
 </resources>
