@@ -1677,7 +1677,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private fun manageItem(file: OCFile) {
         onBrowsedDownTo(file)
         setFile(file)
-        setAccount(AccountUtils.getOwnCloudAccountByName(this, file.owner))
+        account = AccountUtils.getOwnCloudAccountByName(this, file.owner)
+
+        if(file.isFolder){
+            refreshListOfFilesFragment(true)
+            return
+        }
 
         if (PreviewImageFragment.canBePreviewed(file)) {
             startImagePreview(file)
