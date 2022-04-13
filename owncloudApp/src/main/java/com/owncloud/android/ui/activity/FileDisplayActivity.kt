@@ -1679,7 +1679,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         setFile(file)
         account = AccountUtils.getOwnCloudAccountByName(this, file.owner)
 
-        if(file.isFolder){
+        if (file.isFolder) {
             refreshListOfFilesFragment(true)
             return
         }
