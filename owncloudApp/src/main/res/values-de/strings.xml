@@ -143,6 +143,7 @@
   <string name="file_list_empty_shared_by_links">Es wurden keine Dateien per Link geteilt.</string>
   <string name="file_list_loading">Lade…</string>
   <string name="file_list_no_app_for_file_type">Keine App für diesen Dateityp gefunden</string>
+  <string name="file_list_no_app_for_perform_action">Keine Anwendung für diese Aktion gefunden</string>
   <string name="local_file_list_empty">Es befinden sich keine Dateien in diesem Ordner.</string>
   <string name="local_file_list_empty_just_folders">Es befinden sich keine Ordner in diesem Ordner.</string>
   <string name="local_file_list_search_with_no_matches">Keine Treffer für diese Suche</string>
@@ -160,6 +161,7 @@
   <string name="filedetails_modified">Geändert:</string>
   <string name="filedetails_download">Herunterladen</string>
   <string name="filedetails_file_image_content_description">Bilddatei</string>
+  <string name="filedetails_cancel_btn_content_description">Herunterladen abbrechen-Knopf</string>
   <string name="filedetails_sync_file">Synchronisation</string>
   <string name="filedetails_renamed_in_upload_msg">Datei wurde wärend des Uploads zu %1$s umbenannt</string>
   <string name="list_layout">Layout der Liste</string>
@@ -578,6 +580,7 @@
   <string name="prefs_logs_summary">Protokolle können sensible Informationen enthalten. Die gemeinsame Nutzung von Protokollen mit anderen liegt in der alleinigen Verantwortung des Benutzers</string>
   <string name="synchronizing_account">Konto wird synchronisiert</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_explanation">Es wurde(n) %1$s der Daten auf externem Speicher gefunden. Diese werden auf den sicheren Speicher auf dem Gerät verschoben. Verbleibende Dateien auf externem Speicher werden nach der Migration aufgeräumt, um Duplikate und Sicherheitslücken vorzubeugen.</string>
   <string name="scoped_storage_wizard_intro">Ihre App wurde aktualisiert. Dieses Anwendungs-Update migriert Ihre Dateien an einen sichereren Ort auf Ihrem Gerät. Diese einmalige Datenmigration ist erforderlich und kann bis zu einer Minute oder länger dauern.</string>
   <string name="scoped_storage_wizard_intro_button">Lass uns loslegen</string>
   <string name="scoped_storage_wizard_not_enough_space_warning">⚠️ Ihr freier Speicherplatz auf Ihrem Gerät ist zurzeit begrenzt. Einige Dateien werden möglicherweise nicht migriert. Bitte überprüfen Sie, ob alle heruntergeladenen Dateien nach Abschluss des Vorgangs heruntergeladen bleiben.</string>
@@ -590,4 +593,7 @@
   <!--Security Enforced-->
   <string name="security_enforced_title">Bitte wählen Sie eine Option, um diese App zu sperren:</string>
   <string name="security_enforced_first_option">PIN gesperrt</string>
+  <string name="security_enforced_second_option">Sperre mit Muster</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Fortfahren</string>
 </resources>

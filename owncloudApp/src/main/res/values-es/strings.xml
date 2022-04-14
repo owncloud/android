@@ -565,4 +565,6 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Código de bloqueo</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Proceder</string>
 </resources>

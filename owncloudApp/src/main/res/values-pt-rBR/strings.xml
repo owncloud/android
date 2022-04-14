@@ -591,4 +591,6 @@
   <string name="security_enforced_title">Por favor, selecione uma opção para bloquear o aplicativo:</string>
   <string name="security_enforced_first_option">Bloqueio de senha</string>
   <string name="security_enforced_second_option">Bloqueio Padrão</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Prosseguir</string>
 </resources>

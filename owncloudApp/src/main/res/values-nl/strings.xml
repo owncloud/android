@@ -541,4 +541,6 @@ Neem contact op met uw beheerder</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Pincode slot</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Ga verder</string>
 </resources>

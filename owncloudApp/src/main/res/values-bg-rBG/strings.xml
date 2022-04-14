@@ -542,4 +542,6 @@
   <!--Security Enforced-->
   <string name="security_enforced_title">Моля, изберете начин за заключване на приложението</string>
   <string name="security_enforced_first_option">Заключваща парола</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Продължи</string>
 </resources>

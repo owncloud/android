@@ -480,4 +480,6 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Захистити паролем</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Продовжити</string>
 </resources>

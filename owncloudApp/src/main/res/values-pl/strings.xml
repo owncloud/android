@@ -527,4 +527,6 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Blokada hasłem</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Wykonaj</string>
 </resources>

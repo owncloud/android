@@ -484,4 +484,6 @@ Te rog ia legătura cu administratorul</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Parolă de blocare</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Continuă</string>
 </resources>

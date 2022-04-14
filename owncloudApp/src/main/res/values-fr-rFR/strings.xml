@@ -554,7 +554,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="button_later_name">PLUS TARD</string>
   <string name="button_rate_now_name">EVALUER MAINTENANT</string>
   <plurals name="items_selected_count">
-    <item quantity="one">%d sélectionnés</item>
+    <item quantity="one">%d sélectionné</item>
     <item quantity="other">%d sélectionnés</item>
   </plurals>
   <!--Welcome to oC intro features-->
@@ -591,4 +591,5 @@ Téléchargez-le ici : %2$s</string>
   <string name="security_enforced_title">Veuillez sélectionner une option pour verrouiller l\'application:</string>
   <string name="security_enforced_first_option">Code de sécurité</string>
   <string name="security_enforced_second_option">Verrouillage par motif</string>
+  <!--Release Notes-->
 </resources>

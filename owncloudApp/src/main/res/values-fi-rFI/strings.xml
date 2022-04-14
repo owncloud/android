@@ -462,4 +462,6 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Suojakoodilukitus</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Jatka</string>
 </resources>
