@@ -34,22 +34,20 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.owncloud.android.R;
 import com.owncloud.android.ui.activity.FileActivity;
 import timber.log.Timber;
 
 /**
- * An activity that plays media using {@link SimpleExoPlayer}.
+ * An activity that plays media using {@link ExoPlayer}.
  */
-public class PreviewVideoActivity extends FileActivity implements ExoPlayer.EventListener,
-        PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
+public class PreviewVideoActivity extends FileActivity
+        implements PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
 
     /**
      * Key to receive a flag signaling if the video should be started immediately
@@ -61,10 +59,10 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
      */
     public static final String EXTRA_START_POSITION = "START_POSITION";
 
-    private PlayerView exoPlayerView;
+    private StyledPlayerView exoPlayerView;
 
     private boolean mExoPlayerBooted = false;
-    private SimpleExoPlayer player;
+    private ExoPlayer player;
     private DefaultTrackSelector trackSelector;
 
     private boolean mAutoplay; // when 'true', the playback starts immediately with the activity
@@ -151,8 +149,24 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
         // Create a default TrackSelector
         AdaptiveTrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-        player = new SimpleExoPlayer.Builder(this).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
-        player.addListener(this);
+        player = new ExoPlayer.Builder(this).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
+        player.addListener(new Player.Listener() {
+            @Override
+            public void onPlayWhenReadyChanged(boolean playWhenReady, int playbackState) {
+                if (playbackState == ExoPlayer.STATE_READY) {
+                    if (player != null && !mExoPlayerBooted) {
+                        mExoPlayerBooted = true;
+                        player.seekTo(mPlaybackPosition);
+                        player.setPlayWhenReady(mAutoplay);
+                    }
+                }
+            }
+            @Override
+            public void onPlayerError(@NonNull PlaybackException error) {
+                Timber.e(error, "Error in video player");
+                showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError((ExoPlaybackException) error, getBaseContext()));
+            }
+        });
         exoPlayerView.setPlayer(player);
         // Prepare video player asynchronously
         new PrepareVideoPlayerAsyncTask(getApplicationContext(), this, getFile(), getAccount()
@@ -190,16 +204,6 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
         mPlaybackPosition = C.TIME_UNSET;
     }
 
-    // Video player eventListener implementation
-
-    @Override
-    public void onPlayerError(@NonNull PlaybackException error) {
-
-        Timber.e(error, "Error in video player");
-
-        showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError((ExoPlaybackException) error, this));
-    }
-
     /**
      * Show an alert dialog with the error produced while playing the video
      *
@@ -212,27 +216,6 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
                 .setPositiveButton(android.R.string.VideoView_error_button, (dialog, whichButton) -> finish())
                 .setCancelable(false)
                 .show();
-    }
-
-    @Override
-    public void onLoadingChanged(boolean isLoading) {
-        // Do nothing.
-    }
-
-    @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if (playbackState == ExoPlayer.STATE_READY) {
-            if (player != null && !mExoPlayerBooted) {
-                mExoPlayerBooted = true;
-                player.seekTo(mPlaybackPosition);
-                player.setPlayWhenReady(mAutoplay);
-            }
-        }
-    }
-
-    @Override
-    public void onTracksChanged(@NonNull TrackGroupArray trackGroups, @NonNull TrackSelectionArray trackSelections) {
-        // Do nothing
     }
 
     // Back button behaviour
