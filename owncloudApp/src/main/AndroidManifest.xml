@@ -86,7 +86,8 @@
         <activity
             android:name=".ui.activity.FileDisplayActivity"
             android:theme="@style/Theme.ownCloud.Toolbar.Drawer"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 

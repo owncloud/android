@@ -78,6 +78,7 @@ import com.owncloud.android.operations.RemoveFileOperation
 import com.owncloud.android.operations.RenameFileOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
 import com.owncloud.android.presentation.viewmodels.activity.FileDisplayViewModel
 import com.owncloud.android.syncadapter.FileSyncAdapter
@@ -237,6 +238,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         setBackgroundText()
+
     }
 
     /**
@@ -1664,9 +1666,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     private fun handleDeepLink(uri: Uri) {
+
+        observeLiveData()
+
         val accounts = viewModel.getPotentialAccountsToOpenDeepLink(uri)
         if (accounts.isEmpty()) {
-            showMessageInSnackbar(message = getString(R.string.no_account_configured))
+            showMessageInSnackbar(message = getString(R.string.no_account_found))
             return
         }
         //Get first from accounts.
@@ -1679,7 +1684,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             viewModel.getPrivateLink(uri.toString())
             // Call success -> ok else show toast  showMessageInSnackbar(message = getString(R.string.no_file_found))
         }
-
     }
 
     private fun getFileDiscovered(uri: Uri?): OCFile? = storageManager.getFileByPrivateLink(uri.toString())
@@ -1696,6 +1700,16 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         isAlreadyHandledDeepLink = true
+    }
+
+    private fun observeLiveData() {
+        viewModel.privateLink.observe(this) {
+            when (val uiResult = it.peekContent()) {
+                is UIResult.Loading -> {}
+                is UIResult.Success -> {}
+                is UIResult.Error -> {}
+            }
+        }
     }
 
     companion object {

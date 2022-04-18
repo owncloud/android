@@ -57,7 +57,5 @@ interface RemoteShareDataSource {
         remoteId: String
     )
 
-    fun checkPrivateLink(
-        url: String
-    ): String
+    fun checkPrivateLink(url: String): String
 }

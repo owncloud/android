@@ -22,13 +22,16 @@ package com.owncloud.android.presentation.viewmodels.activity
 
 import android.accounts.Account
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.GetPrivateLinkDiscoveredUseCase
-import kotlinx.coroutines.launch
 
 class FileDisplayViewModel(
     private val contextProvider: ContextProvider,
@@ -44,9 +47,21 @@ class FileDisplayViewModel(
         }
     }
 
-    fun getPrivateLink(url: String){
-        viewModelScope.launch(coroutinesDispatcherProvider.io){
+    /*fun getPrivateLink(url: String) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
             getPrivateLinkDiscoveredUseCase.execute(GetPrivateLinkDiscoveredUseCase.Params(url))
         }
-    }
+    }*/
+
+    private val _privateLink = MediatorLiveData<Event<UIResult<String>>>()
+    val privateLink: LiveData<Event<UIResult<String>>> = _privateLink
+
+    fun getPrivateLink(url: String) =
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            showLoading = false,
+            liveData = _privateLink,
+            useCase = getPrivateLinkDiscoveredUseCase,
+            useCaseParams = GetPrivateLinkDiscoveredUseCase.Params(url)
+        )
 }

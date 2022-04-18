@@ -656,7 +656,7 @@
     <string name="release_notes_icon">Release note icon</string>
 
     <!--Deep Links-->
-    <string name="no_account_configured">No account configured previously</string>
+    <string name="no_account_found">There are no accounts to open this file</string>
     <string name="no_file_found">No file found</string>
 
 </resources>
