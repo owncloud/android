@@ -49,10 +49,10 @@
         app:title="@string/prefs_subsection_video_uploads" />
 
     <Preference
+        app:allowDividerAbove="true"
         app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment"
-        app:icon="@drawable/ic_help_circle_grey"
+        app:icon="@drawable/ic_settings"
         app:key="advanced_subsection"
-        app:summary="@string/prefs_subsection_advanced_summary"
         app:title="@string/prefs_subsection_advanced" />
 
     <Preference
