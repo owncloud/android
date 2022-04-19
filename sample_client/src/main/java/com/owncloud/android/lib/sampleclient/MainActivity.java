@@ -74,7 +74,6 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        Timber.plant(new DebugTree());
         mHandler = new Handler();
 
         final Uri serverUri = Uri.parse(getString(R.string.server_base_url));
@@ -85,8 +84,6 @@ public class MainActivity extends Activity implements OnRemoteOperationListener,
                SingleSessionManager.getConnectionValidator(),
                 true,
                 SingleSessionManager.getDefaultSingleton());
-
-        mClient = OwnCloudClientFactory.createOwnCloudClient(serverUri, this, true);
 
         mClient.setCredentials(
                 OwnCloudCredentialsFactory.newBasicCredentials(

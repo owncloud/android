@@ -61,15 +61,14 @@ public class HttpClient {
     private OkHttpClient mOkHttpClient = null;
 
     protected HttpClient(Context context) {
+        if(context == null) {
+            Timber.e("Context may not be NULL!");
+            throw new NullPointerException("Context may not be NULL!");
+        }
         mContext = context;
     }
 
     public OkHttpClient getOkHttpClient() {
-        if (mContext == null) {
-            Timber.e("Context not initialized call HttpClient.setContext(applicationContext) in the MainApp.onCrate()");
-            throw new RuntimeException("Context not initialized call HttpClient.setContext(applicationContext) in the" +
-                    " MainApp.onCrate()");
-        }
         if (mOkHttpClient == null) {
             try {
                 final X509TrustManager trustManager = new AdvancedX509TrustManager(

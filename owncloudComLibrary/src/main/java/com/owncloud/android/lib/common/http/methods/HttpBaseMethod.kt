@@ -60,8 +60,8 @@ abstract class HttpBaseMethod constructor(url: URL) {
     @Throws(Exception::class)
     open fun execute(httpClient: HttpClient): Int {
         val okHttpClient = httpClient.okHttpClient.newBuilder().apply {
-            retryOnConnectionFailure?.let { retryOnConnectionFailure(it) }
-            followRedirects?.let { followRedirects(it) }
+            retryOnConnectionFailure.let { retryOnConnectionFailure(it) }
+            followRedirects.let { followRedirects(it) }
             readTimeoutUnit?.let { unit ->
                 readTimeoutVal?.let { readTimeout(it, unit) }
             }
@@ -152,12 +152,7 @@ abstract class HttpBaseMethod constructor(url: URL) {
     //         Setter
     //////////////////////////////
     // Connection parameters
-    /*
-    open fun setRetryOnConnectionFailure(retryOnConnectionFailure: Boolean) {
-        retryOnConnectionFailureVal = true
-    }
 
-     */
 
     open fun setReadTimeout(readTimeout: Long, timeUnit: TimeUnit) {
         readTimeoutVal = readTimeout
