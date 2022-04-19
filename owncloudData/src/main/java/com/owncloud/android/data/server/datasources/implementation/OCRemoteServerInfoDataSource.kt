@@ -41,8 +41,9 @@ class OCRemoteServerInfoDataSource(
         // Use the same client across the whole login process to keep cookies updated.
         val owncloudClient = clientManager.getClientForAnonymousCredentials(path, false)
 
+        // Step 1: Check whether the root folder exists.
         var checkPathExistenceResult =
-            serverInfoService.checkPathExistence(path, isUserLoggedIn = false, owncloudClient)
+            serverInfoService.checkPathExistence(path = path, isUserLoggedIn = false, client = owncloudClient)
 
         // Step 2: Check if server is available (If server is in maintenance for example, throw exception with specific message)
         if (checkPathExistenceResult.httpCode == HttpConstants.HTTP_SERVICE_UNAVAILABLE) {
