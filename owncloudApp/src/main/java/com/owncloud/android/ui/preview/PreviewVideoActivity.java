@@ -42,7 +42,6 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.owncloud.android.R;
 import com.owncloud.android.ui.activity.FileActivity;
 import timber.log.Timber;
