@@ -530,4 +530,6 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">密码锁</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">继续</string>
 </resources>

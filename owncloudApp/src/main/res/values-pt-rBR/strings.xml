@@ -33,6 +33,7 @@
   <string name="prefs_subsection_logging">Gravando no Log</string>
   <string name="prefs_subsection_more">Mais</string>
   <string name="prefs_subsection_security">Segurança</string>
+  <string name="prefs_subsection_whatsnew">O que há de novo na versão mais recente?</string>
   <string name="prefs_subsection_security_summary">Defina segurança para acesso ao aplicativo e permitir toques com outras janelas visíveis</string>
   <string name="prefs_subsection_logging_summary">Acompanhe os logs produzidos pela execução do aplicativo</string>
   <string name="prefs_subsection_more_summary">Informações do aplicativo, retorno de informações e outros</string>
@@ -143,6 +144,7 @@
   <string name="file_list_empty_shared_by_links">Nenhum arquivo foi compartilhado por linque.</string>
   <string name="file_list_loading">Carregando...</string>
   <string name="file_list_no_app_for_file_type">Nenhum aplicativo encontrado para esse tipo de arquivo</string>
+  <string name="file_list_no_app_for_perform_action">Nenhum aplicativo encontrado para esta ação</string>
   <string name="local_file_list_empty">Não existe nenhum arquivo nesta pasta.</string>
   <string name="local_file_list_empty_just_folders">Não existem pastas nessa pasta.</string>
   <string name="local_file_list_search_with_no_matches">Nenhum resultado para esta pesquisa</string>
@@ -159,6 +161,8 @@
   <string name="filedetails_created">Criado:</string>
   <string name="filedetails_modified">Modificado:</string>
   <string name="filedetails_download">Baixar</string>
+  <string name="filedetails_file_image_content_description">Imagem do Arquivo</string>
+  <string name="filedetails_cancel_btn_content_description">Botão Cancelar Baixar Arquivo</string>
   <string name="filedetails_sync_file">Sincronizar</string>
   <string name="filedetails_renamed_in_upload_msg">Arquivo foi renomeado para %1$s durante o envio</string>
   <string name="list_layout">Layout da lista</string>
@@ -591,4 +595,9 @@
   <string name="security_enforced_title">Por favor, selecione uma opção para bloquear o aplicativo:</string>
   <string name="security_enforced_first_option">Bloqueio de senha</string>
   <string name="security_enforced_second_option">Bloqueio Padrão</string>
+  <!--Release Notes-->
+  <string name="release_notes_header">Novo em %1$s</string>
+  <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>
+  <string name="release_notes_proceed">Prosseguir</string>
+  <string name="release_notes_icon">Ícone de nota de lançamento</string>
 </resources>

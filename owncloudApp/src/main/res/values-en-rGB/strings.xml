@@ -541,4 +541,6 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Passcode lock</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Proceed</string>
 </resources>

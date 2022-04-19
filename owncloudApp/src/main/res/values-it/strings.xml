@@ -552,4 +552,6 @@ Il Download del file inizierà automaticamente</string>
   <string name="scoped_storage_wizard_migrate_and_clean_button">Migra adesso</string>
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Blocco con codice di sicurezza</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Procedi</string>
 </resources>

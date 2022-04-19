@@ -40,6 +40,7 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityVie
 import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.presentation.viewmodels.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -71,4 +72,5 @@ val viewModelModule = module {
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get()) }
     viewModel { PatternViewModel(get()) }
     viewModel { BiometricViewModel(get(), get()) }
+    viewModel { ReleaseNotesViewModel(get(), get()) }
 }

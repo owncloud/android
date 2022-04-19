@@ -5,6 +5,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
+ * @author David Crespo Ríos
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,6 +30,8 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import androidx.core.content.pm.PackageInfoCompat
+import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
@@ -55,8 +58,14 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragm
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.SplashActivity
+import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
-import com.owncloud.android.utils.*
+import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
+import com.owncloud.android.utils.DebugInjector
+import com.owncloud.android.utils.FILE_SYNC_CONFLICT_CHANNEL_ID
+import com.owncloud.android.utils.FILE_SYNC_NOTIFICATION_CHANNEL_ID
+import com.owncloud.android.utils.MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID
+import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -70,6 +79,7 @@ import timber.log.Timber
  * classes
  */
 class MainApp : Application() {
+
     override fun onCreate() {
         super.onCreate()
 
@@ -88,19 +98,26 @@ class MainApp : Application() {
         // initialise thumbnails cache on background thread
         ThumbnailsCacheManager.InitDiskCacheTask().execute()
 
+        initDependencyInjection()
+
         // register global protection with pass code, pattern lock and biometric lock
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 Timber.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
 
-                // If there's any lock protection, don't show wizard at this point, show it when lock activities
-                // have finished
+                /* If there's any lock protection, don't show wizard at this point,
+                   show it when lock activities have finished */
                 if (activity !is PassCodeActivity &&
                     activity !is PatternActivity &&
                     activity !is BiometricActivity
                 ) {
                     StorageMigrationActivity.runIfNeeded(activity)
-                    WhatsNewActivity.runIfNeeded(activity)
+                    if (isFirstRun()) {
+                        WhatsNewActivity.runIfNeeded(activity)
+
+                    } else {
+                        ReleaseNotesActivity.runIfNeeded(activity)
+                    }
                 }
 
                 PreferenceManager.migrateFingerprintToBiometricKey(applicationContext)
@@ -136,12 +153,6 @@ class MainApp : Application() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     BiometricManager.onActivityStopped(activity)
                 }
-                if (activity is PassCodeActivity ||
-                    activity is PatternActivity ||
-                    activity is BiometricActivity
-                ) {
-                    WhatsNewActivity.runIfNeeded(activity)
-                }
             }
 
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
@@ -153,7 +164,6 @@ class MainApp : Application() {
             }
         })
 
-        initDependencyInjection()
         checkLockDelayEnforced(appContext)
     }
 
@@ -215,13 +225,20 @@ class MainApp : Application() {
         )
     }
 
-    companion object {
-        private const val BETA_VERSION = "beta"
+    private fun isFirstRun(): Boolean {
+        if (getLastSeenVersionCode() != 0) {
+            return false
+        }
+        return AccountUtils.getCurrentOwnCloudAccount(appContext) == null
+    }
 
+    companion object {
         lateinit var appContext: Context
             private set
         var enabledLogging: Boolean = false
             private set
+
+        const val PREFERENCE_KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode"
 
         /**
          * Next methods give access in code to some constants that need to be defined in string resources to be referred
@@ -234,12 +251,12 @@ class MainApp : Application() {
         val versionCode: Int
             get() {
                 return try {
-                    val thisPackageName = appContext.packageName
-                    appContext.packageManager.getPackageInfo(thisPackageName, 0).versionCode
+                    val pInfo: PackageInfo = appContext.packageManager.getPackageInfo(appContext.packageName, 0)
+                    val longVersionCode: Long = PackageInfoCompat.getLongVersionCode(pInfo)
+                    longVersionCode.toInt()
                 } catch (e: PackageManager.NameNotFoundException) {
                     0
                 }
-
             }
 
         val authority: String
@@ -272,23 +289,6 @@ class MainApp : Application() {
                 return String.format(appString, version)
             }
 
-        val isBeta: Boolean
-            get() {
-                var isBeta = false
-                try {
-                    val packageName = appContext.packageName
-                    val packageInfo = appContext.packageManager.getPackageInfo(packageName, 0)
-                    val versionName = packageInfo.versionName
-                    if (versionName.contains(BETA_VERSION)) {
-                        isBeta = true
-                    }
-                } catch (e: PackageManager.NameNotFoundException) {
-                    Timber.e(e)
-                }
-
-                return isBeta
-            }
-
         fun initDependencyInjection() {
             stopKoin()
             startKoin {
@@ -304,6 +304,11 @@ class MainApp : Application() {
                     )
                 )
             }
+        }
+
+        fun getLastSeenVersionCode(): Int {
+            val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
+            return pref.getInt(PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, 0)
         }
 
         private fun checkLockDelayEnforced(context: Context) {

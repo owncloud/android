@@ -72,6 +72,13 @@
 
     <Preference
         app:allowDividerAbove="true"
+        app:icon="@drawable/ic_settings_whats_new"
+        app:iconSpaceReserved="false"
+        app:key="whatsNew"
+        app:title="@string/prefs_subsection_whatsnew" />
+
+    <Preference
+        app:allowDividerAbove="true"
         app:iconSpaceReserved="false"
         app:key="about_app"
         app:title="@string/prefs_app_version" />

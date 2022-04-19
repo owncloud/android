@@ -35,6 +35,7 @@
     <string name="prefs_subsection_logging">Logging</string>
     <string name="prefs_subsection_more">More</string>
     <string name="prefs_subsection_security">Security</string>
+    <string name="prefs_subsection_whatsnew">What´s new in the latest version?</string>
     <string name="prefs_subsection_security_summary">Set locks to access the app and allow touches with other visible windows</string>
     <string name="prefs_subsection_logging_summary">Keep track of logs produced by the execution of the app</string>
     <string name="prefs_subsection_more_summary">App info, feedback and others</string>
@@ -650,4 +651,9 @@
     <string name="security_enforced_first_option">Passcode lock</string>
     <string name="security_enforced_second_option">Pattern lock</string>
 
+    <!-- Release Notes -->
+    <string name="release_notes_header">New in %1$s</string>
+    <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
+    <string name="release_notes_proceed">Proceed</string>
+    <string name="release_notes_icon">Release note icon</string>
 </resources>

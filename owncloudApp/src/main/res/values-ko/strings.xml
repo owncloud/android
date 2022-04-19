@@ -466,4 +466,6 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">암호 잠금</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">진행</string>
 </resources>

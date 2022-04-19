@@ -531,4 +531,6 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Contrasenya</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Procedeix</string>
 </resources>

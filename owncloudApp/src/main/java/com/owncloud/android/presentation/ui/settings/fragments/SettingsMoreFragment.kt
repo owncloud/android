@@ -28,6 +28,7 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.sendEmail
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment.Companion.removePreferenceFromScreen
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -61,7 +62,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
                 true
             }
         } else {
-            moreScreen?.removePreference(prefHelp)
+            moreScreen?.removePreferenceFromScreen(prefHelp)
         }
 
         // Sync contacts, calendars and tasks
@@ -72,7 +73,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
                 true
             }
         } else {
-            moreScreen?.removePreference(prefSync)
+            moreScreen?.removePreferenceFromScreen(prefSync)
         }
 
         // Recommend
@@ -89,7 +90,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
                 true
             }
         } else {
-            moreScreen?.removePreference(prefRecommend)
+            moreScreen?.removePreferenceFromScreen(prefRecommend)
         }
 
         // Feedback
@@ -102,7 +103,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
                 true
             }
         } else {
-            moreScreen?.removePreference(prefFeedback)
+            moreScreen?.removePreferenceFromScreen(prefFeedback)
         }
 
         // Imprint
@@ -113,7 +114,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
                 true
             }
         } else {
-            moreScreen?.removePreference(prefImprint)
+            moreScreen?.removePreferenceFromScreen(prefImprint)
         }
     }
 
