@@ -1,0 +1,6 @@
+Enhancement: New option to show or not hidden files
+
+Enable it to show hidden files and folders
+
+https://github.com/owncloud/android/issues/2578
+https://github.com/owncloud/android/pull/3624

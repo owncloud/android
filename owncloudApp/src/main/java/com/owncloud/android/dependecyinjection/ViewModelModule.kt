@@ -32,6 +32,7 @@ import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
+import com.owncloud.android.presentation.viewmodels.settings.SettingsAdvancedViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
@@ -64,6 +65,7 @@ val viewModelModule = module {
     viewModel { SettingsMoreViewModel(get()) }
     viewModel { SettingsPictureUploadsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SettingsVideoUploadsViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { SettingsAdvancedViewModel(get()) }
     viewModel { RemoveAccountDialogViewModel(get(), get(), get(), get()) }
     viewModel { PassCodeViewModel(get(), get()) }
     viewModel { LogListViewModel(get()) }

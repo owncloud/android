@@ -10,6 +10,7 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * @author John Kalimeris
+ * @author David Crespo Ríos
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2020 ownCloud GmbH.
  * <p>
@@ -29,6 +30,7 @@ package com.owncloud.android.ui.adapter;
 
 import android.accounts.Account;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.SparseBooleanArray;
@@ -46,6 +48,8 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
@@ -53,6 +57,7 @@ import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.extensions.VectorExtKt;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.utils.DisplayUtils;
@@ -69,17 +74,17 @@ import java.util.Vector;
  */
 public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
-    private Context mContext;
+    private final Context mContext;
     private Vector<OCFile> mImmutableFilesList = null; // List containing the database files, doesn't change with search
     private Vector<OCFile> mFiles = null; // List that can be changed when using search
-    private boolean mJustFolders;
-    private boolean mOnlyAvailableOffline;
-    private boolean mSharedByLinkFiles;
-    private boolean mFolderPicker;
+    private final boolean mJustFolders;
+    private final boolean mOnlyAvailableOffline;
+    private final boolean mSharedByLinkFiles;
+    private final boolean mFolderPicker;
 
     private FileDataStorageManager mStorageManager;
     private Account mAccount;
-    private ComponentsGetter mTransferServiceGetter;
+    private final ComponentsGetter mTransferServiceGetter;
 
     public FileListListAdapter(
             boolean justFolders,
@@ -413,6 +418,14 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
         mFiles = FileStorageUtils.sortFolder(mFiles, FileStorageUtils.mSortOrderFileDisp,
                 FileStorageUtils.mSortAscendingFileDisp);
+
+        SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProviderImpl(mContext);
+        boolean showHiddenFiles = sharedPreferencesProvider.getBoolean(SettingsAdvancedFragment.PREF_SHOW_HIDDEN_FILES, false);
+
+        if (!showHiddenFiles) {
+            filterByHiddenFiles();
+        }
+
         notifyDataSetChanged();
     }
 
@@ -472,6 +485,15 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     public void clearFilterBySearch() {
         mFiles = (Vector<OCFile>) mImmutableFilesList.clone();
         notifyDataSetChanged();
+    }
+
+    public void filterByHiddenFiles() {
+        for (int i = 0; i < mFiles.size(); i++) {
+            if (mFiles.get(i).getFileName().startsWith(".")) {
+                mFiles.remove(i);
+                i--; // Otherwise it will skip the element after the removed index
+            }
+        }
     }
 
     private enum ViewType {LIST_ITEM, GRID_IMAGE, GRID_ITEM}
