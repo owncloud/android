@@ -65,7 +65,7 @@ public class PreviewVideoActivity extends FileActivity implements Player.Listene
     private PlayerView exoPlayerView;
 
     private boolean mExoPlayerBooted = false;
-    private SimpleExoPlayer player;
+    private ExoPlayer player;
     private DefaultTrackSelector trackSelector;
 
     private boolean mAutoplay; // when 'true', the playback starts immediately with the activity
@@ -152,8 +152,25 @@ public class PreviewVideoActivity extends FileActivity implements Player.Listene
         // Create a default TrackSelector
         AdaptiveTrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-        player = new SimpleExoPlayer.Builder(this).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
-        player.addListener(this);
+        player = new ExoPlayer.Builder(this).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
+        player.addListener(new Player.Listener() {
+            @Override
+            public void onPlayWhenReadyChanged(boolean playWhenReady, int playbackState) {
+                if (playbackState == ExoPlayer.STATE_READY) {
+                    if (player != null && !mExoPlayerBooted) {
+                        mExoPlayerBooted = true;
+                        player.seekTo(mPlaybackPosition);
+                        player.setPlayWhenReady(mAutoplay);
+                    }
+                }
+            }
+
+            @Override
+            public void onPlayerError(@NonNull PlaybackException error) {
+                Timber.e(error, "Error in video player");
+                showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError((ExoPlaybackException) error, getBaseContext()));
+            }
+        });
         exoPlayerView.setPlayer(player);
         // Prepare video player asynchronously
         new PrepareVideoPlayerAsyncTask(getApplicationContext(), this, getFile(), getAccount()
