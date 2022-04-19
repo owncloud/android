@@ -1,3 +1,22 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author David Crespo Ríos
+ * Copyright (C) 2022 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.settings.advanced
 
 import android.content.Context
@@ -6,7 +25,6 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.SwitchPreferenceCompat
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
@@ -54,22 +72,22 @@ class SettingsAdvancedFragmentTest {
             )
         }
 
-        Intents.init()
-
         every { advancedViewModel.isHiddenFilesShown() } returns true
 
         fragmentScenario = launchFragmentInContainer(themeResId = R.style.Theme_ownCloud)
+
+        fragmentScenario.onFragment { fragment ->
+            prefShowHiddenFiles = fragment.findPreference(PREF_SHOW_HIDDEN_FILES)
+        }
     }
 
     @After
     fun tearDown() {
-        Intents.release()
         unmockkAll()
     }
 
     @Test
     fun advancedView() {
-        prefShowHiddenFiles = getPreference(PREF_SHOW_HIDDEN_FILES)
         assertNotNull(prefShowHiddenFiles)
         prefShowHiddenFiles?.verifyPreference(
             keyPref = PREF_SHOW_HIDDEN_FILES,
@@ -81,19 +99,10 @@ class SettingsAdvancedFragmentTest {
 
     @Test
     fun disableShowHiddenFiles() {
-        prefShowHiddenFiles = getPreference(PREF_SHOW_HIDDEN_FILES)
         prefShowHiddenFiles?.isChecked = advancedViewModel.isHiddenFilesShown()
 
         onView(withText(context.getString(R.string.prefs_show_hidden_files))).perform(click())
 
         prefShowHiddenFiles?.isChecked?.let { assertFalse(it) }
-    }
-
-    private fun getPreference(key: String): SwitchPreferenceCompat? {
-        var preference: SwitchPreferenceCompat? = null
-        fragmentScenario.onFragment { fragment ->
-            preference = fragment.findPreference(key)
-        }
-        return preference
     }
 }

@@ -28,7 +28,7 @@ class SettingsAdvancedViewModel(
 ) : ViewModel() {
 
     fun isHiddenFilesShown(): Boolean {
-        return preferencesProvider.getBoolean(PREF_SHOW_HIDDEN_FILES, true)
+        return preferencesProvider.getBoolean(PREF_SHOW_HIDDEN_FILES, false)
     }
 
     fun setShowHiddenFiles(hide: Boolean) {

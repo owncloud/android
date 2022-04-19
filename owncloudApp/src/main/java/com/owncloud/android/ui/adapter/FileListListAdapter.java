@@ -48,6 +48,8 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider;
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
@@ -55,6 +57,7 @@ import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.extensions.VectorExtKt;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.utils.DisplayUtils;
@@ -82,8 +85,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     private FileDataStorageManager mStorageManager;
     private Account mAccount;
     private final ComponentsGetter mTransferServiceGetter;
-
-    private static final String SHOW_HIDDEN_FILES = "show_hidden_files";
 
     public FileListListAdapter(
             boolean justFolders,
@@ -418,17 +419,13 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         mFiles = FileStorageUtils.sortFolder(mFiles, FileStorageUtils.mSortOrderFileDisp,
                 FileStorageUtils.mSortAscendingFileDisp);
 
-        final SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(mContext);
-        boolean showHiddenFiles = prefs.getBoolean(SHOW_HIDDEN_FILES, true);
+        SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProviderImpl(mContext);
+        boolean showHiddenFiles = sharedPreferencesProvider.getBoolean(SettingsAdvancedFragment.PREF_SHOW_HIDDEN_FILES, false);
 
         if (!showHiddenFiles) {
-            for (int i = 0; i < mFiles.size(); i++) {
-                if (mFiles.get(i).getFileName().startsWith(".")) {
-                    mFiles.remove(i);
-                    i--; // Otherwise it will skip the element after the removed index
-                }
-            }
+            filterByHiddenFiles();
         }
+
         notifyDataSetChanged();
     }
 
@@ -488,6 +485,15 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
     public void clearFilterBySearch() {
         mFiles = (Vector<OCFile>) mImmutableFilesList.clone();
         notifyDataSetChanged();
+    }
+
+    public void filterByHiddenFiles() {
+        for (int i = 0; i < mFiles.size(); i++) {
+            if (mFiles.get(i).getFileName().startsWith(".")) {
+                mFiles.remove(i);
+                i--; // Otherwise it will skip the element after the removed index
+            }
+        }
     }
 
     private enum ViewType {LIST_ITEM, GRID_IMAGE, GRID_ITEM}

@@ -21,6 +21,7 @@ package com.owncloud.android.presentation.ui.settings.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.owncloud.android.R
@@ -49,8 +50,8 @@ class SettingsAdvancedFragment : PreferenceFragmentCompat() {
     }
 
     private fun initPreferenceListeners() {
-        prefShowHiddenFiles?.setOnPreferenceClickListener {
-            advancedViewModel.setShowHiddenFiles(prefShowHiddenFiles?.isChecked ?: true)
+        prefShowHiddenFiles?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
+            advancedViewModel.setShowHiddenFiles(newValue as Boolean)
             true
         }
     }
