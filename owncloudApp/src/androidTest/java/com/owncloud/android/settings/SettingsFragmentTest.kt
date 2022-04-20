@@ -49,6 +49,7 @@ import io.mockk.unmockkAll
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -264,8 +265,9 @@ class SettingsFragmentTest {
         Intents.intended(IntentMatchers.hasComponent(PrivacyPolicyActivity::class.java.name))
     }
 
+    @Ignore("Flaky test")
     @Test
-    fun whatsnewOpensPrivacyReleaseNotesActivity() {
+    fun whatsnewOpensReleaseNotesActivity() {
         launchTest(attachedAccount = false)
         every { releaseNotesViewModel.getReleaseNotes() } returns releaseNotesList
 
