@@ -112,7 +112,7 @@
             fab:fab_colorPressed="@color/owncloud_blue"
             fab:fab_icon="@drawable/ic_action_upload"
             fab:fab_size="mini"
-            fab:fab_title="" />
+            fab:fab_title="@string/actionbar_upload" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_mkdir"
@@ -122,7 +122,7 @@
             fab:fab_colorPressed="@color/owncloud_blue"
             fab:fab_icon="@drawable/ic_action_create_dir"
             fab:fab_size="mini"
-            fab:fab_title="" />
+            fab:fab_title="@string/actionbar_mkdir" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
