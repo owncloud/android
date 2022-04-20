@@ -88,7 +88,7 @@ dependencies {
 
     debugImplementation "androidx.fragment:fragment-testing:1.4.1"
     debugImplementation 'com.facebook.stetho:stetho:1.6.0'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9'
 }
 
 android {
