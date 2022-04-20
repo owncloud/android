@@ -476,11 +476,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     }
 
     @Override
-    public void onLoadingChanged(boolean isLoading) {
-        // Do nothing.
-    }
-
-    @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         // If player is already, show full screen button
         if (playbackState == ExoPlayer.STATE_READY) {
@@ -494,11 +489,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         } else if (playbackState == ExoPlayer.STATE_ENDED) {
             fullScreenButton.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onTracksChanged(@NonNull TrackGroupArray trackGroups, @NonNull TrackSelectionArray trackSelections) {
-        // Do nothing
     }
 
     // File extra methods
