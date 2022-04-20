@@ -165,9 +165,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     var filesUploadHelper: FilesUploadHelper? = null
         internal set
 
-    private val isFabOpen: Boolean
-        get() = listMainFileFragment?.getFabMain()?.isExpanded ?: false
-
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -618,7 +615,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     override fun onBackPressed() {
-        val isFabOpen = isFabOpen
+        val isFabOpen = listMainFileFragment?.isFabExpanded() ?: false
 
         /*
          * BackPressed priority/hierarchy:
@@ -634,7 +631,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             super.onBackPressed()
         } else if (!isDrawerOpen() && isFabOpen) {
             // close fab
-            listMainFileFragment?.getFabMain()?.collapse()
+            listMainFileFragment?.collapseFab()
         } else {
             // Every single menu is collapsed. We can navigate up.
             if (secondFragment != null) {
