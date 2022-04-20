@@ -24,16 +24,87 @@
 
 package com.owncloud.android.lib.resources.webfinger
 
+import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.http.HttpConstants
+import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
+import com.owncloud.android.lib.common.http.methods.nonwebdav.HttpMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.status.HttpScheme
+import com.owncloud.android.lib.resources.webfinger.responses.WebfingerJrdResponse
+import com.squareup.moshi.Moshi
+import timber.log.Timber
+import java.net.URL
 
 class GetOCInstanceViaWebfingerOperation(
+    private val lockupServerDomain:String,
     private val rel:String,
     private val resource:String
 ) : RemoteOperation<String>() {
 
-    override fun run(client: OwnCloudClient?): RemoteOperationResult<String> {
-        TODO("Not yet implemented")
+    private fun buildRequestUri() =
+        Uri.parse(lockupServerDomain).buildUpon()
+            .scheme(HttpScheme.HTTPS_SCHEME)
+            .path(WEBFINGER_PATH)
+            .appendQueryParameter("rel", rel)
+            .appendQueryParameter("resource", resource)
+            .build()
+
+    private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
+
+    private fun parseResponse(response: String): WebfingerJrdResponse {
+        val moshi = Moshi.Builder().build()
+        val adapter = moshi.adapter(WebfingerJrdResponse::class.java)
+        return adapter.fromJson(response)!!
+    }
+
+    private fun onResultUnsuccessful(
+        method: HttpMethod,
+        response: String?,
+        status: Int
+    ): RemoteOperationResult<String> {
+        Timber.e("Failed requesting webfinger info")
+        if (response != null) {
+            Timber.e("*** status code: $status; response message: $response")
+        } else {
+            Timber.e("*** status code: $status")
+        }
+        return RemoteOperationResult<String>(method)
+    }
+
+    private fun onRequestSuccessful(rawResponse:String): RemoteOperationResult<String> {
+        val response = parseResponse(rawResponse)
+        for(i in response.links) {
+            if (i.rel == rel) {
+                val operationResult = RemoteOperationResult<String>(RemoteOperationResult.ResultCode.OK)
+                operationResult.data = i.href
+                return operationResult
+            }
+        }
+        Timber.e("Could not find ownCloud relevant information in webfinger response: $rawResponse")
+        throw java.lang.Exception("Could not find ownCloud relevant information in webfinger response")
+    }
+
+    override fun run(client: OwnCloudClient): RemoteOperationResult<String> {
+        val requestUri = buildRequestUri()
+        val getMethod = GetMethod(URL(requestUri.toString()))
+        return try {
+            val status = client.executeHttpMethod(getMethod)
+            val response = getMethod.getResponseBodyAsString()!!
+
+            if (isSuccess(status)) {
+                onRequestSuccessful(response)
+            } else {
+                onResultUnsuccessful(getMethod, response, status)
+            }
+        } catch(e: Exception) {
+            Timber.e(e, "Requesting webfinger info failed")
+            RemoteOperationResult<String>(e)
+        }
+    }
+
+    companion object {
+        val WEBFINGER_PATH = "/.well-known/webfinger"
     }
 }
