@@ -43,8 +43,10 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -400,29 +402,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         // Create the player
         player = new ExoPlayer.Builder(requireContext()).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
 
-        player.addListener(new Player.Listener() {
-            @Override
-            public void onPlayWhenReadyChanged(boolean playWhenReady, int playbackState) {
-                // If player is already, show full screen button
-                if (playbackState == ExoPlayer.STATE_READY) {
-                    fullScreenButton.setVisibility(View.VISIBLE);
-                    if (player != null && !mExoPlayerBooted) {
-                        mExoPlayerBooted = true;
-                        player.seekTo(mPlaybackPosition);
-                        player.setPlayWhenReady(mAutoplay);
-                    }
-
-                } else if (playbackState == ExoPlayer.STATE_ENDED) {
-                    fullScreenButton.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onPlayerError(@NonNull PlaybackException error) {
-                Timber.e(error, "Error in video player");
-                showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError((ExoPlaybackException) error, getContext()));
-            }
-        });
+        player.addListener(this);
 
         // Bind the player to the view.
         exoPlayerView.setPlayer(player);
@@ -456,6 +436,16 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         mPlaybackPosition = player.getCurrentPosition();
     }
 
+    // Video player eventListener implementation
+
+    @Override
+    public void onPlayerError(@NonNull PlaybackException error) {
+
+        Timber.e(error, "Error in video player");
+
+        showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError((ExoPlaybackException) error, getContext()));
+    }
+
     /**
      * Show an alert dialog with the error produced while playing the video and initialize a
      * specific behaviour when necessary
@@ -483,6 +473,32 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                         })
                 .setCancelable(false)
                 .show();
+    }
+
+    @Override
+    public void onLoadingChanged(boolean isLoading) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        // If player is already, show full screen button
+        if (playbackState == ExoPlayer.STATE_READY) {
+            fullScreenButton.setVisibility(View.VISIBLE);
+            if (player != null && !mExoPlayerBooted) {
+                mExoPlayerBooted = true;
+                player.seekTo(mPlaybackPosition);
+                player.setPlayWhenReady(mAutoplay);
+            }
+
+        } else if (playbackState == ExoPlayer.STATE_ENDED) {
+            fullScreenButton.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onTracksChanged(@NonNull TrackGroupArray trackGroups, @NonNull TrackSelectionArray trackSelections) {
+        // Do nothing
     }
 
     // File extra methods

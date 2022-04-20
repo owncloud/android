@@ -35,7 +35,6 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
@@ -47,7 +46,7 @@ import com.owncloud.android.ui.activity.FileActivity;
 import timber.log.Timber;
 
 /**
- * An activity that plays media using {@link SimpleExoPlayer}.
+ * An activity that plays media using {@link ExoPlayer}.
  */
 public class PreviewVideoActivity extends FileActivity implements Player.Listener,
         PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
@@ -153,24 +152,7 @@ public class PreviewVideoActivity extends FileActivity implements Player.Listene
         AdaptiveTrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = new ExoPlayer.Builder(this).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
-        player.addListener(new Player.Listener() {
-            @Override
-            public void onPlayWhenReadyChanged(boolean playWhenReady, int playbackState) {
-                if (playbackState == ExoPlayer.STATE_READY) {
-                    if (player != null && !mExoPlayerBooted) {
-                        mExoPlayerBooted = true;
-                        player.seekTo(mPlaybackPosition);
-                        player.setPlayWhenReady(mAutoplay);
-                    }
-                }
-            }
-
-            @Override
-            public void onPlayerError(@NonNull PlaybackException error) {
-                Timber.e(error, "Error in video player");
-                showAlertDialog(PreviewVideoErrorAdapter.handlePreviewVideoError((ExoPlaybackException) error, getBaseContext()));
-            }
-        });
+        player.addListener(this);
         exoPlayerView.setPlayer(player);
         // Prepare video player asynchronously
         new PrepareVideoPlayerAsyncTask(getApplicationContext(), this, getFile(), getAccount()
