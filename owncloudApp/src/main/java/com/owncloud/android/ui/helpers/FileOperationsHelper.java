@@ -24,6 +24,7 @@
 package com.owncloud.android.ui.helpers;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -37,6 +38,7 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare;
 import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -420,15 +422,17 @@ public class FileOperationsHelper {
         Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
         intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
         intentToShareLink.setType("text/plain");
-        String username = com.owncloud.android.lib.common.accounts.AccountUtils.getUsernameForAccount(
-                mFileActivity.getAccount()
+        String displayName = AccountManager.get(mFileActivity.getApplicationContext()).getUserData(
+                mFileActivity.getAccount(),
+                AccountUtils.Constants.KEY_DISPLAY_NAME
         );
-        if (username != null) {
+
+        if (displayName != null) {
             intentToShareLink.putExtra(
                     Intent.EXTRA_SUBJECT,
                     mFileActivity.getString(
                             R.string.subject_user_shared_with_you,
-                            username,
+                            displayName,
                             mFileActivity.getFile().getFileName()
                     )
             );
