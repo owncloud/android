@@ -35,23 +35,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/titleReleaseNote" />
 
-    <com.codesgood.views.JustifiedTextView
+    <TextView
         android:id="@+id/titleReleaseNote"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin"
+        android:justificationMode="inter_word"
         style="@style/Theme.ownCloud"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/iconReleaseNote"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/lorem[4]" />
+        tools:text="@tools:sample/lorem[40]" />
 
-    <com.codesgood.views.JustifiedTextView
+    <TextView
         android:id="@+id/subtitleReleaseNote"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/standard_margin"
+        android:justificationMode="inter_word"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iconReleaseNote"
         app:layout_constraintTop_toBottomOf="@id/titleReleaseNote"
