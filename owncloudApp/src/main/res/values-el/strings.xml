@@ -56,6 +56,8 @@
   <string name="prefs_camera_video_upload_summary">Αυτόματη μεταφόρτωση βίντεο που ελήφθησαν από την κάμερα</string>
   <string name="prefs_camera_video_upload_path_title">Διαδρομή μεταφορτώσεων βίντεο</string>
   <string name="prefs_camera_video_upload_on_wifi">Μεταφόρτωση βίντεο μόνο μέσω wifi</string>
+  <string name="prefs_subsection_advanced">Για προχωρημένους</string>
+  <string name="prefs_show_hidden_files">Προβολή κρυφών αρχείων</string>
   <string name="prefs_log_title">Σύνδεση εφικτή</string>
   <string name="prefs_log_summary">Χρησιμοποιείται για την καταγραφή προβλημάτων</string>
   <string name="prefs_log_title_history">Αρχείο καταγραφής</string>

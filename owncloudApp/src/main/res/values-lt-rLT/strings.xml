@@ -44,6 +44,8 @@
   <string name="prefs_camera_video_upload_summary">Automatiškai įkelti video iš kameros</string>
   <string name="prefs_camera_video_upload_path_title">Video įkėlimo kelias</string>
   <string name="prefs_camera_video_upload_on_wifi">Įkelti video tik veikiant WiFi</string>
+  <string name="prefs_subsection_advanced">Išplėstiniai</string>
+  <string name="prefs_show_hidden_files">Rodyti paslėptus failus</string>
   <string name="prefs_log_title">Įjungti žurnalą</string>
   <string name="prefs_log_summary">Tai naudojama problemų žurnalo vedimui</string>
   <string name="prefs_log_title_history">Žurnalo istorija</string>

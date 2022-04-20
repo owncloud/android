@@ -47,6 +47,7 @@
   <string name="prefs_camera_video_upload_summary">Carrega automàticament els vídeos fets amb la càmera</string>
   <string name="prefs_camera_video_upload_path_title">Vídeos</string>
   <string name="prefs_camera_video_upload_on_wifi">Pujar videos només via WiFi</string>
+  <string name="prefs_subsection_advanced">Avançat</string>
   <string name="prefs_log_title">Habilita els registres</string>
   <string name="prefs_log_summary">Això s\'usa per registrar problemes</string>
   <string name="prefs_log_title_history">Historial dels registres</string>

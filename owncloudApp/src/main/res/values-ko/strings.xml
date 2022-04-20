@@ -41,6 +41,8 @@
   <string name="prefs_camera_video_upload_summary">카메라로 찍은 동영상 자동으로 업로드</string>
   <string name="prefs_camera_video_upload_path_title">동영상 업로드 경로</string>
   <string name="prefs_camera_video_upload_on_wifi">Wi-Fi에서만 동영상 업로드</string>
+  <string name="prefs_subsection_advanced">고급</string>
+  <string name="prefs_show_hidden_files">숨김 파일 보이기</string>
   <string name="prefs_log_title">로그 활성화</string>
   <string name="prefs_log_summary">문제점을 기록하는 데 사용됩니다</string>
   <string name="prefs_log_title_history">과거 기록</string>

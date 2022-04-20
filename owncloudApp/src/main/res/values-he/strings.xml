@@ -55,6 +55,8 @@
   <string name="prefs_camera_video_upload_summary">העלאת סרטונים שהוקלטו במצלמה</string>
   <string name="prefs_camera_video_upload_path_title">נתיב להעלאת סרטונים</string>
   <string name="prefs_camera_video_upload_on_wifi">העלאת סרטים על בסיס חיבור wifi בלבד</string>
+  <string name="prefs_subsection_advanced">מתקדם</string>
+  <string name="prefs_show_hidden_files">הצגת קבצים נסתרים</string>
   <string name="prefs_log_title">מאפשר התחברות</string>
   <string name="prefs_log_summary">משמש לתיעוד בעיות</string>
   <string name="prefs_log_title_history">הסטורית התחברות</string>

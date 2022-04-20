@@ -51,6 +51,7 @@
   <string name="prefs_camera_video_upload_summary">Автоматично завантажувати відео з камери</string>
   <string name="prefs_camera_video_upload_path_title">Шлях для завантаження відео</string>
   <string name="prefs_camera_video_upload_on_wifi">Завантажувати відео лише за наявності WiFi</string>
+  <string name="prefs_subsection_advanced">Додатково</string>
   <string name="prefs_log_title">Увімкнути ведення журналу</string>
   <string name="prefs_log_summary">Використовується для реєстрації помилок</string>
   <string name="prefs_log_title_history">Історія журналювання</string>

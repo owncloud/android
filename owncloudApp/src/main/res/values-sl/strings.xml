@@ -44,6 +44,8 @@
   <string name="prefs_camera_video_upload_summary">Hipno pošiljanje posnetkov, zajetih s kamero, na strežnik</string>
   <string name="prefs_camera_video_upload_path_title">Mapa v oblaku za odlaganje posnetkov</string>
   <string name="prefs_camera_video_upload_on_wifi">Pošiljaj posnetke le prek Wifi</string>
+  <string name="prefs_subsection_advanced">Napredne možnosti</string>
+  <string name="prefs_show_hidden_files">Pokaži skrite datoteke</string>
   <string name="prefs_log_title">Omogoči beleženje</string>
   <string name="prefs_log_summary">Uporablja se za beleženje težav in napak</string>
   <string name="prefs_log_title_history">Zgodovina beleženja</string>

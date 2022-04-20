@@ -55,6 +55,8 @@
   <string name="prefs_camera_video_upload_summary">Kamera ile kaydedilen vidyoları otomatik olarak karşıya yükle</string>
   <string name="prefs_camera_video_upload_path_title">Video yükleme yolu</string>
   <string name="prefs_camera_video_upload_on_wifi">Videoları sadece kablosuz bağlantıda (WiFi) yükle</string>
+  <string name="prefs_subsection_advanced">Gelişmiş</string>
+  <string name="prefs_show_hidden_files">Gizli dosyaları göster</string>
   <string name="prefs_log_title">Günlüğü etkinleştir</string>
   <string name="prefs_log_summary">Bu, sorunları günlük dosyasına kaydetmek için kullanılır</string>
   <string name="prefs_log_title_history">Günlük geçmişi</string>

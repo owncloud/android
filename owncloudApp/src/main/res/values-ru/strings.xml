@@ -62,6 +62,8 @@
   <string name="prefs_camera_video_upload_summary">Автоматически загружать видео, записанные камерой</string>
   <string name="prefs_camera_video_upload_path_title">Путь загрузки видео</string>
   <string name="prefs_camera_video_upload_on_wifi">Загрузка видео только через wifi</string>
+  <string name="prefs_subsection_advanced">Дополнительно</string>
+  <string name="prefs_show_hidden_files">Показать скрытые файлы</string>
   <string name="prefs_log_title">Включить журналирование</string>
   <string name="prefs_log_summary">Используется для регистрации ошибок</string>
   <string name="prefs_log_title_history">История журналов</string>

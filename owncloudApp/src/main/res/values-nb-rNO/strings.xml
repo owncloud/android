@@ -49,6 +49,8 @@
   <string name="prefs_camera_video_upload_summary">Automatisk last opp videoer tatt med kamera</string>
   <string name="prefs_camera_video_upload_path_title">Video opplastings-sti</string>
   <string name="prefs_camera_video_upload_on_wifi">Last opp videoer kun via WiFi</string>
+  <string name="prefs_subsection_advanced">Avansert</string>
+  <string name="prefs_show_hidden_files">Vis skjulte filer</string>
   <string name="prefs_log_title">Aktiver loggføring</string>
   <string name="prefs_log_summary">Denne er brukt til å loggføre problemer</string>
   <string name="prefs_log_title_history">Loggføringshistorikk</string>

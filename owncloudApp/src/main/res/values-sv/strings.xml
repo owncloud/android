@@ -54,6 +54,8 @@
   <string name="prefs_camera_video_upload_summary">Ladda upp videor filmade av kameran automatiskt </string>
   <string name="prefs_camera_video_upload_on_wifi">Ladda upp videor endast via wifi</string>
   <string name="prefs_camera_video_upload_on_charging">Ladda endast upp videor under laddning</string>
+  <string name="prefs_subsection_advanced">Avancerad</string>
+  <string name="prefs_show_hidden_files">Visa dolda filer</string>
   <string name="prefs_log_open_logs_list_view">Logfiler</string>
   <string name="prefs_log_no_logs_list_view">Tom logmapp!</string>
   <string name="prefs_log_title">Aktivera Loggning</string>

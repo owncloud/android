@@ -49,6 +49,8 @@
   <string name="prefs_camera_video_upload_summary">Unggah video yang direkam secara otomatis oleh kamera</string>
   <string name="prefs_camera_video_upload_path_title">Jalur unggah video</string>
   <string name="prefs_camera_video_upload_on_wifi">Unggah video hanya melalui WiFi</string>
+  <string name="prefs_subsection_advanced">Lanjutan</string>
+  <string name="prefs_show_hidden_files">Tampilkan berkas tersembunyi</string>
   <string name="prefs_log_title">Aktifkan pencatatan</string>
   <string name="prefs_log_summary">Ini digunakan untuk mencatat masalah</string>
   <string name="prefs_log_title_history">History pencatatan</string>

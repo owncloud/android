@@ -42,6 +42,8 @@
   <string name="prefs_camera_video_upload_summary">カメラで撮影した動画を自動アップロード</string>
   <string name="prefs_camera_video_upload_path_title">動画アップロードパス</string>
   <string name="prefs_camera_video_upload_on_wifi">WiFi経由でのみ動画をアップロード</string>
+  <string name="prefs_subsection_advanced">詳細設定</string>
+  <string name="prefs_show_hidden_files">隠しファイルを表示</string>
   <string name="prefs_log_title">ログの有効化</string>
   <string name="prefs_log_summary">これは問題をログに記録するのに使用します。</string>
   <string name="prefs_log_title_history">ログの履歴</string>

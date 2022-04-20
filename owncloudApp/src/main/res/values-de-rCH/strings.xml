@@ -55,6 +55,8 @@
   <string name="prefs_camera_video_upload_summary">Automatischer Upload von Videos</string>
   <string name="prefs_camera_video_upload_path_title">Pfad für Video-Upload</string>
   <string name="prefs_camera_video_upload_on_wifi">Videos nur über Wifi hochladen</string>
+  <string name="prefs_subsection_advanced">Fortgeschritten</string>
+  <string name="prefs_show_hidden_files">Versteckte Dateien anzeigen</string>
   <string name="prefs_log_title">Protokollierung aktivieren</string>
   <string name="prefs_log_summary">Dies wird zur Protokollierung von Problemen genutzt</string>
   <string name="prefs_log_title_history">Log Historie</string>

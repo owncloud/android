@@ -41,6 +41,8 @@
   <string name="prefs_camera_video_upload_summary">Lähetä automaattisesti kameralla kuvatut videot</string>
   <string name="prefs_camera_video_upload_path_title">Kansio lähetetyille videoille</string>
   <string name="prefs_camera_video_upload_on_wifi">Lähetä videot vain wifi-yhteyden kautta</string>
+  <string name="prefs_subsection_advanced">Lisäasetukset</string>
+  <string name="prefs_show_hidden_files">Näytä piilotetut tiedostot</string>
   <string name="prefs_log_title">Käytä lokitusta</string>
   <string name="prefs_log_summary">Tätä käytetään ongelmien lokitukseen</string>
   <string name="prefs_log_title_history">Lokihistoria</string>

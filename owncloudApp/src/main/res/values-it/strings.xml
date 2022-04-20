@@ -66,6 +66,8 @@
   <string name="prefs_camera_video_upload_summary">Carica automaticamente video registrati dalla videocamera</string>
   <string name="prefs_camera_video_upload_path_title">Percorso caricamento video</string>
   <string name="prefs_camera_video_upload_on_wifi">Carica i video solo tramite wifi</string>
+  <string name="prefs_subsection_advanced">Avanzate</string>
+  <string name="prefs_show_hidden_files">Mostra i file nascosti</string>
   <string name="prefs_log_title">Abilita la registrazione</string>
   <string name="prefs_log_summary">Usato per registrare i problemi nei log</string>
   <string name="prefs_log_title_history">Cronologia di registrazione</string>

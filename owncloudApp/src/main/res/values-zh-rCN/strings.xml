@@ -55,6 +55,8 @@
   <string name="prefs_camera_video_upload_summary">自动上传相机拍摄的视频</string>
   <string name="prefs_camera_video_upload_path_title">视频上传路径</string>
   <string name="prefs_camera_video_upload_on_wifi">仅通过 WIFI 上传图片。</string>
+  <string name="prefs_subsection_advanced">高级</string>
+  <string name="prefs_show_hidden_files">显示隐藏文件</string>
   <string name="prefs_log_open_logs_list_view">日志文件</string>
   <string name="prefs_log_no_logs_list_view">空白日志文件夹</string>
   <string name="prefs_log_title">开启日志</string>

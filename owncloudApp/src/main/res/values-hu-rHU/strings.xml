@@ -52,6 +52,8 @@
   <string name="prefs_camera_video_upload_summary">A fényképezőgép által készített videók automatikus feltöltése</string>
   <string name="prefs_camera_video_upload_path_title">Videó feltöltési útvonal</string>
   <string name="prefs_camera_video_upload_on_wifi">Videókat csak wifin tölthet fel</string>
+  <string name="prefs_subsection_advanced">Haladó</string>
+  <string name="prefs_show_hidden_files">Rejtett fájlok megjelenítése</string>
   <string name="prefs_log_title">Naplózás engedélyezése</string>
   <string name="prefs_log_summary">Ez használható a problémák naplózásához</string>
   <string name="prefs_log_title_history">Naplózás előzménye</string>

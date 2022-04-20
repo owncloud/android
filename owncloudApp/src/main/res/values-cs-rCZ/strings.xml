@@ -61,6 +61,8 @@
   <string name="prefs_camera_video_upload_summary">Automaticky nahrát video snímané kamerou</string>
   <string name="prefs_camera_video_upload_path_title">Cesta k nahrání videa</string>
   <string name="prefs_camera_video_upload_on_wifi">Odesílat videa pouze přes wifi</string>
+  <string name="prefs_subsection_advanced">Pokročilé</string>
+  <string name="prefs_show_hidden_files">Zobrazit skryté soubory</string>
   <string name="prefs_log_title">Povolit logování</string>
   <string name="prefs_log_summary">Použito k zaznamenávání problémů</string>
   <string name="prefs_log_title_history">Historie logování</string>

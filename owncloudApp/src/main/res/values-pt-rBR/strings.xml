@@ -70,6 +70,8 @@
   <string name="prefs_camera_video_upload_path_title">Caminho para vídeos enviados</string>
   <string name="prefs_camera_video_upload_on_wifi">Envio de vídeos apenas por wifi</string>
   <string name="prefs_camera_video_upload_on_charging">Envie vídeos apenas durante o carregamento</string>
+  <string name="prefs_subsection_advanced">Avançado</string>
+  <string name="prefs_show_hidden_files">Mostrar arquivos escondidos</string>
   <string name="prefs_log_open_logs_list_view">Arquivos log</string>
   <string name="prefs_log_no_logs_list_view">Pasta de log vazia! </string>
   <string name="prefs_log_title">Habilitar login</string>

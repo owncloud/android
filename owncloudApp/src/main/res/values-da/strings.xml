@@ -47,6 +47,8 @@
   <string name="prefs_camera_video_upload">Videoupload</string>
   <string name="prefs_camera_video_upload_summary">Automatisk upload af videoer optaget med kamera</string>
   <string name="prefs_camera_video_upload_on_wifi">Upload videoer udelukkende via wifi</string>
+  <string name="prefs_subsection_advanced">Avanceret</string>
+  <string name="prefs_show_hidden_files">Vis skjulte filer</string>
   <string name="prefs_log_title">Slå logning til</string>
   <string name="prefs_log_summary">Dette bruges til at logregistrere problemer</string>
   <string name="prefs_log_title_history">Logningshistorik</string>

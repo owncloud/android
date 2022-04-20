@@ -53,6 +53,8 @@
   <string name="prefs_camera_video_upload_summary">Téléverser automatiquement les vidéos enregistrées par la caméra</string>
   <string name="prefs_camera_video_upload_path_title">Chemin d\'accès au répertoire de téléversement des vidéos</string>
   <string name="prefs_camera_video_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
+  <string name="prefs_subsection_advanced">Avancé</string>
+  <string name="prefs_show_hidden_files">Afficher les fichiers cachés</string>
   <string name="prefs_log_title">Activer la journalisation</string>
   <string name="prefs_log_summary">Utilisé pour enregistrer les problèmes dans les logs</string>
   <string name="prefs_log_title_history">Historique de la journalisation</string>

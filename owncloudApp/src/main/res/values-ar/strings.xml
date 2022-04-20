@@ -55,6 +55,8 @@
   <string name="prefs_camera_video_upload_summary">حمِّل مقاطع الفيديو التي سجلتها الكاميرا تلقائيًا</string>
   <string name="prefs_camera_video_upload_path_title">مسار تحميل الفيديو</string>
   <string name="prefs_camera_video_upload_on_wifi">تحميل مقاطع الفيديو عبر wifi فقط</string>
+  <string name="prefs_subsection_advanced">الإعدادات المتقدمة</string>
+  <string name="prefs_show_hidden_files">عرض الملفات المخفية</string>
   <string name="prefs_log_title">تمكين التسجيل</string>
   <string name="prefs_log_summary">يُستخدم هذا لتسجيل المشكلات</string>
   <string name="prefs_log_title_history">محفوظات التسجيل</string>

@@ -47,6 +47,8 @@
   <string name="prefs_camera_video_upload_summary">Automatické nahratie videií z fotoaparátu/kamery</string>
   <string name="prefs_camera_video_upload_path_title">Cesta pre nahratie videa</string>
   <string name="prefs_camera_video_upload_on_wifi">Nahrávanie videí je povolené len cez WIFI</string>
+  <string name="prefs_subsection_advanced">Rozšírené</string>
+  <string name="prefs_show_hidden_files">Zobraziť skryté súbory</string>
   <string name="prefs_log_title">Povoliť logovanie</string>
   <string name="prefs_log_summary">Toto je použité pre logovanie problémov</string>
   <string name="prefs_log_title_history">História logov</string>

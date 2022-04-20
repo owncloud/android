@@ -55,6 +55,7 @@
   <string name="prefs_camera_video_upload_summary">Cargar videos automáticamente tomados desde la cámara</string>
   <string name="prefs_camera_video_upload_path_title">Ruta de carga del video</string>
   <string name="prefs_camera_video_upload_on_wifi">Cargar videos solamente con WiFi</string>
+  <string name="prefs_subsection_advanced">Avanzado</string>
   <string name="prefs_log_title">Activar bitacora</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial de la bitacora</string>

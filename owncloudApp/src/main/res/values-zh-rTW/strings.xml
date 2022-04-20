@@ -62,6 +62,8 @@
   <string name="prefs_camera_video_upload_summary">將照相機所拍攝完成的影像自動地上傳</string>
   <string name="prefs_camera_video_upload_path_title">影片上傳路徑</string>
   <string name="prefs_camera_video_upload_on_wifi">經由 wifi 上傳視訊</string>
+  <string name="prefs_subsection_advanced">進階</string>
+  <string name="prefs_show_hidden_files">顯示隱藏檔案</string>
   <string name="prefs_log_title">啓用記錄</string>
   <string name="prefs_log_summary">這個用來記錄執行的動作以找出問題點</string>
   <string name="prefs_log_title_history">歷史記錄</string>

@@ -55,6 +55,8 @@
   <string name="prefs_camera_video_upload_summary">Automatisch video’s uploaden die met de camera gemaakt zijn</string>
   <string name="prefs_camera_video_upload_path_title">Video upload bestemming</string>
   <string name="prefs_camera_video_upload_on_wifi">Upload videos alleen via WiFi</string>
+  <string name="prefs_subsection_advanced">Geavanceerd</string>
+  <string name="prefs_show_hidden_files">Toon verborgen bestanden</string>
   <string name="prefs_log_title">Logging inschakelen</string>
   <string name="prefs_log_summary">Dit wordt gebruikt om problemen te loggen.</string>
   <string name="prefs_log_title_history">Logging geschiedenis</string>

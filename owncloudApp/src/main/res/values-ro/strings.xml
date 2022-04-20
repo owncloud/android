@@ -43,6 +43,8 @@
   <string name="prefs_camera_video_upload">Încărcări videoclipuri</string>
   <string name="prefs_camera_video_upload_summary">Încarcă automat clipurile video înregistrate cu camera</string>
   <string name="prefs_camera_video_upload_on_wifi">Încărcare videoclipuri doar pe conexiunea wifi</string>
+  <string name="prefs_subsection_advanced">Avansat</string>
+  <string name="prefs_show_hidden_files">Arată fișierele ascunse</string>
   <string name="prefs_log_title">Activează înregistrarea / jurnalizarea activităților</string>
   <string name="prefs_log_summary">Acesta este folosit pentru a înregistra problemele</string>
   <string name="prefs_log_title_history">Istoric activități jurnalizate</string>

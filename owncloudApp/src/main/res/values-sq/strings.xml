@@ -69,6 +69,8 @@
   <string name="prefs_camera_video_upload_path_title">Shteg ngarkimesh videosh</string>
   <string name="prefs_camera_video_upload_on_wifi">Videot ngarkoji vetëm përmes wifi-it</string>
   <string name="prefs_camera_video_upload_on_charging">Ngarko video vetëm kur ngarkohet bateria</string>
+  <string name="prefs_subsection_advanced">Të mëtejshme</string>
+  <string name="prefs_show_hidden_files">Shfaq kartela të fshehura</string>
   <string name="prefs_log_open_logs_list_view">Kartela regjistër</string>
   <string name="prefs_log_no_logs_list_view">Zbraz dosje regjistrash!</string>
   <string name="prefs_log_title">Aktivizo regjistrimet</string>

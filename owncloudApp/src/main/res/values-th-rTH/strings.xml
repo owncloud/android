@@ -67,6 +67,8 @@
   <string name="prefs_camera_video_upload_path_title">Path สำหรับอัปโหลดวิดีโอ</string>
   <string name="prefs_camera_video_upload_on_wifi">อัปโหลดวิดีโอผ่านทาง WiFi เท่านั้น</string>
   <string name="prefs_camera_video_upload_on_charging">อัปโหลดวิดีโอเมื่อชาร์จเท่านั้น</string>
+  <string name="prefs_subsection_advanced">ขั้นสูง</string>
+  <string name="prefs_show_hidden_files">แสดงไฟล์ที่ซ่อนอยู่</string>
   <string name="prefs_log_open_logs_list_view">ไฟล์ log</string>
   <string name="prefs_log_no_logs_list_view">โฟลเดอร์ log ว่างเปล่า</string>
   <string name="prefs_log_title">เปิดใช้ระบบบันทึกข้อมูล</string>

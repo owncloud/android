@@ -46,6 +46,8 @@
   <string name="prefs_camera_video_upload_summary">Automatycznie wrzuć filmy zrobione przez kamerę</string>
   <string name="prefs_camera_video_upload_path_title">Ścieżka wrzucania filmu</string>
   <string name="prefs_camera_video_upload_on_wifi">Wysyłaj filmy tylko przez WiFi</string>
+  <string name="prefs_subsection_advanced">Zaawansowane</string>
+  <string name="prefs_show_hidden_files">Pokaż ukryte pliki</string>
   <string name="prefs_log_title">Włącz historię logowania</string>
   <string name="prefs_log_summary">To jest używane do logowania problemów</string>
   <string name="prefs_log_title_history">Historia logowania</string>
