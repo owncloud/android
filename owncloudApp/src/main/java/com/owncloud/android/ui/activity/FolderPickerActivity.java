@@ -98,9 +98,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         // Action bar setup
         setupStandardToolbar(null, false, false, true);
 
-        // sets message for empty list of folders
-        setBackgroundText();
-
         // Set action button text
         setActionButtonText();
 
@@ -143,28 +140,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, mainListOfFiles, TAG_LIST_OF_FOLDERS);
         transaction.commit();
-    }
-
-    /**
-     * Show a text message on screen view for notifying user if content is
-     * loading or folder is empty
-     */
-    public void setBackgroundText() {
-        MainFileListFragment listFragment = getListOfFilesFragment();
-        if (listFragment != null) {
-            int message = R.string.file_list_loading;
-            if (!mSyncInProgress) {
-                // In case folder list is empty
-                message = R.string.file_list_empty_moving;
-                listFragment.getProgressBar();
-                listFragment.getProgressBar().setVisibility(View.GONE);
-                listFragment.getShadowView();
-                listFragment.getShadowView().setVisibility(View.VISIBLE);
-            }
-            listFragment.setMessageForEmptyList(getString(message));
-        } else {
-            Timber.e("MainFileListFragment is null");
-        }
     }
 
     private void setActionButtonText() {
@@ -218,8 +193,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         if (fileListFragment != null) {
             fileListFragment.setProgressBarAsIndeterminate(true);
         }
-
-        setBackgroundText();
     }
 
     @Override
@@ -473,8 +446,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                 if (fileListFragment != null) {
                     fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
                 }
-
-                setBackgroundText();
             }
         }
     }
