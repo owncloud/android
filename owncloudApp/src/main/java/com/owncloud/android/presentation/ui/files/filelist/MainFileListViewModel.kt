@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkManager
+import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.db.PreferenceManager
@@ -221,6 +222,17 @@ class MainFileListViewModel(
             Timber.i("Folder to display: id[${it.folderToDisplay.id}], fileName[${it.folderToDisplay.fileName}]")
             Timber.i("Folder content: size[${it.folderContent.size}]")
         }
+    }
+
+    fun getMessageForEmptyList(pickingAFolder: Boolean = false): String {
+        if (pickingAFolder) return contextProvider.getString(R.string.file_list_empty_moving)
+
+        val stringId = when (fileListUiStateLiveData.value?.fileListOption) {
+            FileListOption.AV_OFFLINE -> R.string.file_list_empty_available_offline
+            FileListOption.SHARED_BY_LINK -> R.string.file_list_empty_shared_by_links
+            else -> R.string.file_list_empty
+        }
+        return contextProvider.getString(stringId)
     }
 
     data class FileListUiState(

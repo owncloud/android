@@ -31,7 +31,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
@@ -274,8 +273,13 @@ class MainFileListFragment : Fragment(),
 
     private fun showOrHideEmptyView(filesList: List<OCFile>) {
         val isFileListEmpty = filesList.isEmpty()
-        binding.emptyDataParent.root.isVisible = isFileListEmpty
         binding.recyclerViewMainFileList.isVisible = !isFileListEmpty
+
+        with(binding.emptyDataParent) {
+            root.isVisible = isFileListEmpty
+            listEmptyDatasetSubTitle.text = mainFileListViewModel.getMessageForEmptyList(isPickingAFolder())
+            // We should use a different icon and title for each [FileListOption]
+        }
     }
 
     override fun onSortTypeListener(sortType: SortType, sortOrder: SortOrder) {
@@ -718,23 +722,6 @@ class MainFileListFragment : Fragment(),
             // TODO Sync file
         } else {
             filesViewModel.refreshFolder(file.remotePath)
-        }
-    }
-
-    fun getProgressBar(): ProgressBar {
-        return binding.syncProgressBar
-    }
-
-    fun getShadowView(): View {
-        return binding.shadowView
-    }
-
-    fun setMessageForEmptyList(message: String) {
-        binding.emptyDataParent.root.visibility = View.VISIBLE
-        binding.emptyDataParent.apply {
-            listEmptyDatasetIcon.visibility = View.GONE
-            listEmptyDatasetTitle.visibility = View.GONE
-            listEmptyDatasetSubTitle.text = message
         }
     }
 
