@@ -100,12 +100,12 @@
 
                 <data
                     android:host="@string/deep_link_host"
-                    android:pathPrefix="/f/"
+                    android:pathPrefix="@string/deep_link_path_prefix"
                     android:scheme="https" />
 
                 <data
                     android:host="@string/deep_link_host"
-                    android:pathPrefix="/f/"
+                    android:pathPrefix="@string/deep_link_path_prefix"
                     android:scheme="http" />
             </intent-filter>
         </activity>

@@ -122,5 +122,6 @@
 
     <!--Deep Links -->
     <string name="deep_link_host">*</string>
+    <string name="deep_link_path_prefix">/f/</string>
 
 </resources>
