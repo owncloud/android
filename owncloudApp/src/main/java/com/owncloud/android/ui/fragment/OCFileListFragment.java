@@ -462,11 +462,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
         if (hasFocus) {
             setMessageForEmptyList(getString(R.string.local_file_list_search_with_no_matches));
         } else { // Set default message for empty list of files
-            if (requireActivity() instanceof FileDisplayActivity) {
-                ((FileDisplayActivity) requireActivity()).setBackgroundText();
-            } else if (requireActivity() instanceof FolderPickerActivity) {
-                ((FolderPickerActivity) requireActivity()).setBackgroundText();
-            }
+//            if (requireActivity() instanceof FileDisplayActivity) {
+//                ((FileDisplayActivity) requireActivity()).setBackgroundText();
+//            } else if (requireActivity() instanceof FolderPickerActivity) {
+//                ((FolderPickerActivity) requireActivity()).setBackgroundText();
+//            }
         }
     }
 

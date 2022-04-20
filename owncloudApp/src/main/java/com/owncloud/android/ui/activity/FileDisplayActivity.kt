@@ -251,8 +251,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             initAndShowListOfFiles()
         }
 
-        setBackgroundText()
-
         startListeningToOperations()
     }
 
@@ -816,8 +814,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
                 listMainFileFragment?.setProgressBarAsIndeterminate(syncInProgress)
                 Timber.d("Setting progress visibility to $syncInProgress")
-
-                setBackgroundText()
             }
 
             if (synchResult?.code == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
@@ -833,32 +829,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
                 }
             }
-        }
-    }
-
-    /**
-     * Show a text message on screen view for notifying user if content is
-     * loading or folder is empty
-     */
-    fun setBackgroundText() {
-        val ocFileListFragment = listMainFileFragment
-        if (ocFileListFragment != null) {
-            selectAllMenuItem?.isVisible = ocFileListFragment.enableSelectAll
-            var message = R.string.file_list_loading
-            if (!syncInProgress) {
-                // In case file list is empty
-                message =
-                    when (fileListOption) {
-                        FileListOption.AV_OFFLINE -> R.string.file_list_empty_available_offline
-                        FileListOption.SHARED_BY_LINK -> R.string.file_list_empty_shared_by_links
-                        else -> R.string.file_list_empty
-                    }
-                ocFileListFragment.getProgressBar().visibility = View.GONE
-                ocFileListFragment.getShadowView().visibility = View.VISIBLE
-            }
-            listMainFileFragment?.setMessageForEmptyList(getString(message))
-        } else {
-            Timber.e("OCFileListFragment is null")
         }
     }
 
@@ -1363,7 +1333,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
                     listMainFileFragment?.setProgressBarAsIndeterminate(true)
 
-                    setBackgroundText()
                 }   // else: NOTHING ; lets' not refresh when the user rotates the device but there is
                 // another window floating over
             },
