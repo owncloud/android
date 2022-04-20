@@ -51,14 +51,12 @@ import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.extensions.cancel
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.fold
-import com.owncloud.android.presentation.observers.EmptyDataObserver
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment.Companion.newInstance
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment.SortDialogListener
@@ -79,18 +77,18 @@ import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.java.KoinJavaComponent.get
 import timber.log.Timber
 
-class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.SortOptionsListener,
+class MainFileListFragment : Fragment(),
+    CreateFolderDialogFragment.CreateFolderListener,
+    FileListAdapter.FileListAdapterListener,
+    SearchView.OnQueryTextListener,
+    SortDialogListener,
     SortOptionsView.CreateFolderListener,
-    CreateFolderDialogFragment.CreateFolderListener, SearchView.OnQueryTextListener, FileListAdapter.FileListAdapterListener {
+    SortOptionsView.SortOptionsListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
     private val filesViewModel by viewModel<FilesViewModel>()
-
-    private val KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED"
-    private val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
@@ -168,7 +166,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         setHasOptionsMenu(true)
         statusBarColorActionMode = ContextCompat.getColor(requireContext(), R.color.action_mode_status_bar_background)
 
-        //Set view and footer correctly
+        // Set view and footer correctly
         if (mainFileListViewModel.isGridModeSetAsPreferred()) {
             layoutManager =
                 StaggeredGridLayoutManager(ColumnQuantity(requireContext(), R.layout.grid_item).calculateNoOfColumns(), RecyclerView.VERTICAL)
@@ -180,7 +178,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
 
         binding.optionsLayout.viewTypeSelected = viewType
 
-        //Set RecyclerView and its adapter.
+        // Set RecyclerView and its adapter.
         binding.recyclerViewMainFileList.layoutManager = layoutManager
 
         fileListAdapter = FileListAdapter(
@@ -197,7 +195,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
             filesViewModel.refreshFolder(mainFileListViewModel.getFile().remotePath)
         }
 
-        //Set SortOptions and its listeners
+        // Set SortOptions and its listeners
         binding.optionsLayout.let {
             it.onSortOptionsListener = this
             if (isPickingAFolder()) {
@@ -262,8 +260,7 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         files = filesList
         val sortedFiles = mainFileListViewModel.sortList(files)
         fileListAdapter.updateFileList(filesToAdd = sortedFiles)
-        registerListAdapterDataObserver()
-        binding.swipeRefreshMainFileList.cancel()
+        showOrHideEmptyView(sortedFiles)
     }
 
     fun navigateToFolderId(folderId: Long) {
@@ -274,9 +271,10 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         mainFileListViewModel.updateFolderToDisplay(newFolderToDisplay = directory)
     }
 
-    private fun registerListAdapterDataObserver() {
-        val emptyDataObserver = EmptyDataObserver(binding.recyclerViewMainFileList, binding.emptyDataParent.root)
-        fileListAdapter.registerAdapterDataObserver(emptyDataObserver)
+    private fun showOrHideEmptyView(filesList: List<OCFile>) {
+        val isFileListEmpty = filesList.isEmpty()
+        binding.emptyDataParent.root.isVisible = isFileListEmpty
+        binding.recyclerViewMainFileList.isVisible = !isFileListEmpty
     }
 
     override fun onSortTypeListener(sortType: SortType, sortOrder: SortOrder) {
@@ -433,8 +431,6 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
     }
 
     override fun onFolderNameSet(newFolderName: String, parentFolder: OCFile) {
-        val filesViewModel = get(FilesViewModel::class.java)
-
         filesViewModel.createFolder(parentFolder, newFolderName)
         filesViewModel.createFolder.observe(viewLifecycleOwner, Event.EventObserver { uiResult: UIResult<Unit> ->
             if (uiResult is UIResult.Error) {
@@ -764,6 +760,9 @@ class MainFileListFragment : Fragment(), SortDialogListener, SortOptionsView.Sor
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
         val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
         val KEY_FILE = "$MY_PACKAGE.extra.FILE"
+
+        private const val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
+        private const val KEY_FAB_EVER_CLICKED = "FAB_EVER_CLICKED"
 
         @JvmStatic
         fun newInstance(
