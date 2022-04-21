@@ -207,16 +207,7 @@ class MainFileListFragment : Fragment(),
 
     private fun toggleSelection(position: Int) {
         fileListAdapter.toggleSelection(position)
-        fileListAdapter.selectedItemCount.also {
-            if (it == 0) {
-                actionMode?.finish()
-            } else {
-                actionMode?.apply {
-                    title = it.toString()
-                    invalidate()
-                }
-            }
-        }
+        updateActionModeAfterTogglingSelected()
     }
 
     private fun subscribeToViewModels() {
@@ -528,22 +519,16 @@ class MainFileListFragment : Fragment(),
             }
         }
 
-        /// actions possible on a batch of files
+        /// Actions possible on a batch of files
         when (menuId) {
             R.id.file_action_select_all -> {
-                // Last item on list is the footer, so that element must be excluded from selection
-                for (i in 0 until fileListAdapter.itemCount - 1) {
-                    if (!fileListAdapter.isSelected(i)) {
-                        toggleSelection(i)
-                    }
-                }
+                fileListAdapter.selectAll()
+                updateActionModeAfterTogglingSelected()
                 return true
             }
             R.id.action_select_inverse -> {
-                // Last item on list is the footer, so that element must be excluded from selection
-                for (i in 0 until fileListAdapter.itemCount - 1) {
-                    toggleSelection(i)
-                }
+                fileListAdapter.selectInverse()
+                updateActionModeAfterTogglingSelected()
                 return true
             }
             R.id.action_remove_file -> {
@@ -591,6 +576,21 @@ class MainFileListFragment : Fragment(),
         }
 
         return false
+    }
+
+    /**
+     * Update or remove the actionMode after applying any change to the selected items.
+     */
+    private fun updateActionModeAfterTogglingSelected() {
+        val selectedItems = fileListAdapter.selectedItemCount
+        if (selectedItems == 0) {
+            actionMode?.finish()
+        } else {
+            actionMode?.apply {
+                title = selectedItems.toString()
+                invalidate()
+            }
+        }
     }
 
     override fun onItemClick(ocFile: OCFile, position: Int) {
