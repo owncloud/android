@@ -155,6 +155,16 @@ class FileListAdapter(
         return checkedItems
     }
 
+    fun selectAll() {
+        // Last item on list is the footer, so that element must be excluded from selection
+        selectAll(totalItems = files.size - 1)
+    }
+
+    fun selectInverse() {
+        // Last item on list is the footer, so that element must be excluded from selection
+        toggleSelectionInBulk(totalItems = files.size - 1)
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         val viewType = getItemViewType(position)
