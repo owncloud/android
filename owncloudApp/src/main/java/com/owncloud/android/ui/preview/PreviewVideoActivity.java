@@ -65,7 +65,7 @@ public class PreviewVideoActivity extends FileActivity implements Player.Listene
     private PlayerView exoPlayerView;
 
     private boolean mExoPlayerBooted = false;
-    private SimpleExoPlayer player;
+    private ExoPlayer player;
     private DefaultTrackSelector trackSelector;
 
     private boolean mAutoplay; // when 'true', the playback starts immediately with the activity
@@ -152,7 +152,7 @@ public class PreviewVideoActivity extends FileActivity implements Player.Listene
         // Create a default TrackSelector
         AdaptiveTrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-        player = new SimpleExoPlayer.Builder(this).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
+        player = new ExoPlayer.Builder(this).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
         player.addListener(this);
         exoPlayerView.setPlayer(player);
         // Prepare video player asynchronously
