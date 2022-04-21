@@ -46,7 +46,7 @@ abstract class SelectableAdapter<VH : RecyclerView.ViewHolder?> :
         } else {
             selectedItems.put(position, true)
         }
-        notifyDataSetChanged()
+        notifyItemChanged(position)
     }
 
     /**
