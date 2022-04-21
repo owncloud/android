@@ -35,6 +35,7 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
@@ -64,7 +65,7 @@ public class PreviewVideoActivity extends FileActivity implements Player.Listene
     private PlayerView exoPlayerView;
 
     private boolean mExoPlayerBooted = false;
-    private ExoPlayer player;
+    private SimpleExoPlayer player;
     private DefaultTrackSelector trackSelector;
 
     private boolean mAutoplay; // when 'true', the playback starts immediately with the activity
@@ -151,7 +152,7 @@ public class PreviewVideoActivity extends FileActivity implements Player.Listene
         // Create a default TrackSelector
         AdaptiveTrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-        player = new ExoPlayer.Builder(this).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
+        player = new SimpleExoPlayer.Builder(this).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
         player.addListener(this);
         exoPlayerView.setPlayer(player);
         // Prepare video player asynchronously
