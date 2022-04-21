@@ -7,8 +7,9 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Abel García de Prada
+ * @author Fernando Sanz Velasco
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -1685,7 +1686,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         if (PreviewImageFragment.canBePreviewed(file)) {
-            startImagePreview(file)
+            showDetails(file)
         } else {
             initFragmentsWithFile()
         }
