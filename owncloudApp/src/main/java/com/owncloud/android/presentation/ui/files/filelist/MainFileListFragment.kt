@@ -31,6 +31,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
@@ -40,6 +41,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.MainFileListFragmentBinding
@@ -53,6 +56,7 @@ import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
 import com.owncloud.android.presentation.fold
+import com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment.Companion.newInstance
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment.SortDialogListener
@@ -109,6 +113,7 @@ class MainFileListFragment : Fragment(),
     private var statusBarColor: Int? = null
 
     var fileActions: FileActions? = null
+    var uploadActions: UploadActions? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -383,7 +388,7 @@ class MainFileListFragment : Fragment(),
      */
     private fun registerFabUploadListener() {
         binding.fabUpload.setOnClickListener {
-            // TO BE DONE
+            openBottomSheetToUploadFiles()
             collapseFab()
         }
     }
@@ -393,6 +398,30 @@ class MainFileListFragment : Fragment(),
     }
 
     fun isFabExpanded() = binding.fabMain.isExpanded
+
+    private fun openBottomSheetToUploadFiles() {
+        val uploadBottomSheet = layoutInflater.inflate(R.layout.upload_bottom_sheet_fragment, null)
+        val dialog = BottomSheetDialog(requireContext())
+        dialog.setContentView(uploadBottomSheet)
+        val uploadFromFilesItemView: BottomSheetFragmentItemView = uploadBottomSheet.findViewById(R.id.upload_from_files_item_view)
+        val uploadFromCameraItemView: BottomSheetFragmentItemView = uploadBottomSheet.findViewById(R.id.upload_from_camera_item_view)
+        val uploadToTextView = uploadBottomSheet.findViewById<TextView>(R.id.upload_to_text_view)
+        uploadFromFilesItemView.setOnClickListener {
+            uploadActions?.uploadFromFileSystem()
+            dialog.hide()
+        }
+        uploadFromCameraItemView.setOnClickListener {
+            uploadActions?.uploadFromCamera()
+            dialog.hide()
+        }
+        uploadToTextView.text = String.format(
+            resources.getString(R.string.upload_to),
+            resources.getString(R.string.app_name)
+        )
+        val uploadBottomSheetBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(uploadBottomSheet.parent as View)
+        dialog.setOnShowListener { uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.measuredHeight) }
+        dialog.show()
+    }
 
     override fun onFolderNameSet(newFolderName: String, parentFolder: OCFile) {
         filesViewModel.createFolder(parentFolder, newFolderName)
@@ -696,6 +725,11 @@ class MainFileListFragment : Fragment(),
         fun initDownloadForSending(file: OCFile)
         fun cancelFileTransference(file: ArrayList<OCFile>)
         fun setBottomBarVisibility(isVisible: Boolean)
+    }
+
+    interface UploadActions {
+        fun uploadFromCamera()
+        fun uploadFromFileSystem()
     }
 
     companion object {
