@@ -121,7 +121,7 @@ import kotlin.coroutines.CoroutineContext
  * Displays, what files the user has available in his ownCloud. This is the main view.
  */
 class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEnforceableRefreshListener,
-    CoroutineScope, MainFileListFragment.FileActions, ISecurityEnforced {
+    CoroutineScope, MainFileListFragment.FileActions, MainFileListFragment.UploadActions, ISecurityEnforced {
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -309,6 +309,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private fun initAndShowListOfFiles() {
         val mainListOfFiles = MainFileListFragment.newInstance().apply {
             fileActions = this@FileDisplayActivity
+            uploadActions = this@FileDisplayActivity
             setSearchListener(findViewById(R.id.root_toolbar_search_view))
         }
         val transaction = supportFragmentManager.beginTransaction()
@@ -1627,6 +1628,21 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         showBottomNavBar(isVisible)
     }
 
+    override fun uploadFromCamera() {
+        filesUploadHelper?.uploadFromCamera(REQUEST_CODE__UPLOAD_FROM_CAMERA)
+    }
+
+    override fun uploadFromFileSystem() {
+        val action = Intent(Intent.ACTION_GET_CONTENT).apply {
+            setType(ALL_FILES_SAF_REGEX).addCategory(Intent.CATEGORY_OPENABLE)
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
+        startActivityForResult(
+            Intent.createChooser(action, getString(R.string.upload_chooser_title)),
+            REQUEST_CODE__SELECT_CONTENT_FROM_APPS
+        )
+    }
+
     companion object {
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
         private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
@@ -1636,6 +1652,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         private const val KEY_WAITING_TO_SEND = "WAITING_TO_SEND"
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
+
+        private const val ALL_FILES_SAF_REGEX = "*/*"
 
         const val ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS"
 
