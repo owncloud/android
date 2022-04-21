@@ -68,7 +68,7 @@ abstract class SelectableAdapter<VH : RecyclerView.ViewHolder?> :
      * Indicates the list of selected items
      * @return List of selected items ids
      */
-     fun getSelectedItems(): List<Int> {
+    fun getSelectedItems(): List<Int> {
         val items: MutableList<Int> = ArrayList(selectedItems.size())
         for (i in 0 until selectedItems.size()) {
             items.add(selectedItems.keyAt(i))
@@ -76,8 +76,25 @@ abstract class SelectableAdapter<VH : RecyclerView.ViewHolder?> :
         return items
     }
 
-    companion object {
-        private val TAG = SelectableAdapter::class.java.simpleName
+    /**
+     * Toggle selected items in bulk. Basically to do a select inverse.
+     * Doing it individually will cost a lot of time since we do a notifyDataSetChanged for each item.
+     */
+    fun toggleSelectionInBulk(totalItems: Int) {
+        for (i in 0 until totalItems) {
+            if (selectedItems[i, false]) {
+                selectedItems.delete(i)
+            } else {
+                selectedItems.put(i, true)
+            }
+        }
+        notifyDataSetChanged()
     }
 
+    fun selectAll(totalItems: Int) {
+        for (i in 0 until totalItems) {
+            selectedItems.put(i, true)
+        }
+        notifyDataSetChanged()
+    }
 }
