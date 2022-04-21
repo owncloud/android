@@ -19,6 +19,7 @@ Summary
 * Enhancement - Prevent taking screenshots: [#3596](https://github.com/owncloud/android/issues/3596)
 * Enhancement - What´s new option: [#3352](https://github.com/owncloud/android/issues/3352)
 * Enhancement - New option to show or not hidden files: [#2578](https://github.com/owncloud/android/issues/2578)
+* Enhancement - Full name is shown in shares: [#1106](https://github.com/owncloud/android/issues/1106)
 
 Details
 -------
@@ -107,6 +108,13 @@ Details
 
    https://github.com/owncloud/android/issues/2578
    https://github.com/owncloud/android/pull/3624
+
+* Enhancement - Full name is shown in shares: [#1106](https://github.com/owncloud/android/issues/1106)
+
+   Full name is shown when using public share instead of username.
+
+   https://github.com/owncloud/android/issues/1106
+   https://github.com/owncloud/android/pull/3636
 
 Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
 =======================================
