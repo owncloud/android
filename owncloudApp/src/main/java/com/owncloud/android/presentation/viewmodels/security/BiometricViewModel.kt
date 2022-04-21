@@ -33,7 +33,7 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.providers.ContextProvider
 import timber.log.Timber
 import java.security.KeyStore

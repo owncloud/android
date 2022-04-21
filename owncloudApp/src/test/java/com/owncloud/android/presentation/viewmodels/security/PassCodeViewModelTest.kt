@@ -26,7 +26,13 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity.Companion.PREFERENCE_PASSCODE
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity.Companion.PREFERENCE_PASSCODE_D
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity.Companion.PREFERENCE_SET_PASSCODE
+import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
+import com.owncloud.android.presentation.ui.security.passcode.PasscodeType
+import com.owncloud.android.presentation.ui.security.passcode.Status
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ATTEMPTS
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
@@ -49,128 +55,320 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Before
     fun setUp() {
-        preferencesProvider = mockk(relaxUnitFun = true)
-        contextProvider = mockk(relaxUnitFun = true)
-        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider)
+        preferencesProvider = mockk(relaxed = true)
+        contextProvider = mockk(relaxed = true)
+    }
+
+    private fun launchTest(
+        passcodeDigits: Int = OC_PASSCODE_4_DIGITS.length,
+        passcode: String? = OC_PASSCODE_4_DIGITS,
+        passcodeD: String? = null,
+        lockAttempts: Int = 0,
+        lastUnlockAttempt: Long = 0
+    ) {
+        every { contextProvider.getInt(R.integer.passcode_digits) } returns passcodeDigits   //getNumberOfPassCodeDigits()
+        every { preferencesProvider.getString(PREFERENCE_PASSCODE, any()) } returns passcode  //getPassCode()
+        for (i in 0..4)
+            every { preferencesProvider.getString(PREFERENCE_PASSCODE_D + i, null) } returns passcodeD  //loadPinFromOldFormatIfPossible()
+        every { preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any()) } returns lockAttempts    //getNumberOfAttempts()
+        every { preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, any()) } returns lastUnlockAttempt   //getTimeToUnlockLeft()
+    }
+
+    @Test
+    fun `on number clicked - ok`() {
+        launchTest()
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
+
+        passCodeViewModel.onNumberClicked(1)
+
+        assertEquals("1", passCodeViewModel.passcode.value)
+    }
+
+    @Test
+    fun `on number clicked - 4 numbers`() {
+        launchTest(passcodeDigits = 0, passcode = null)
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
+
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+
+        assertEquals(OC_PASSCODE_4_DIGITS, passCodeViewModel.passcode.value)
+    }
+
+    @Test
+    fun `on number clicked - 3 or more attemps`() {
+        launchTest(
+            passcodeDigits = 0,
+            passcode = null,
+            lockAttempts = 3
+        )
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
+
+        passCodeViewModel.onNumberClicked(1)
+
+        assertEquals(null, passCodeViewModel.passcode.value)
+    }
+
+    @Test
+    fun `on number clicked - lock time`() {
+        launchTest(
+            passcodeDigits = 0,
+            passcode = null,
+            lockAttempts = 3,
+            lastUnlockAttempt = SystemClock.elapsedRealtime()
+        )
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
+
+        passCodeViewModel.onNumberClicked(1)
+
+        assertEquals(null, passCodeViewModel.passcode.value)
+    }
+
+    @Test
+    fun `process full passcode - check - ok`() {
+        launchTest()
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
+
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+
+        assertEquals(Status(PasscodeAction.CHECK, PasscodeType.OK), passCodeViewModel.status.value)
+
+        verify(exactly = 1) {
+            preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, 0)
+        }
+    }
+
+    @Test
+    fun `process full passcode - check - passcode not valid`() {
+        launchTest()
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
+
+        passCodeViewModel.onNumberClicked(2)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+
+        assertEquals(Status(PasscodeAction.CHECK, PasscodeType.ERROR), passCodeViewModel.status.value)
+
+        verify(exactly = 1) {
+            preferencesProvider.putInt(PREFERENCE_LOCK_ATTEMPTS, any())
+            preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_ATTEMPT_TIMESTAMP, SystemClock.elapsedRealtime())
+        }
+    }
+
+    @Test
+    fun `process full passcode - remove - ok`() {
+        launchTest()
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.REMOVE)
+
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+
+        assertEquals(Status(PasscodeAction.REMOVE, PasscodeType.OK), passCodeViewModel.status.value)
+
+        verify(exactly = 1) {
+            preferencesProvider.removePreference(PREFERENCE_PASSCODE)
+            preferencesProvider.putBoolean(PREFERENCE_SET_PASSCODE, false)
+        }
+    }
+
+    @Test
+    fun `process full passcode - remove - passcode not valid`() {
+        launchTest()
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.REMOVE)
+
+        passCodeViewModel.onNumberClicked(2)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+
+        assertEquals(Status(PasscodeAction.REMOVE, PasscodeType.ERROR), passCodeViewModel.status.value)
+    }
+
+    @Test
+    fun `process full passcode - create - no confirm`() {
+        launchTest(passcodeDigits = 0, passcode = null)
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CREATE)
+
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+
+        assertEquals(Status(PasscodeAction.CREATE, PasscodeType.NO_CONFIRM), passCodeViewModel.status.value)
+    }
+
+    @Test
+    fun `process full passcode - create - confirm`() {
+        launchTest(passcodeDigits = 0, passcode = null)
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CREATE)
+
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+
+        assertEquals(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM), passCodeViewModel.status.value)
+
+        verify(exactly = 1) {
+            preferencesProvider.putString(PREFERENCE_PASSCODE, any())
+            preferencesProvider.putBoolean(PREFERENCE_SET_PASSCODE, true)
+        }
+    }
+
+    @Test
+    fun `process full passcode - create - error`() {
+        launchTest(passcodeDigits = 0, passcode = null)
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CREATE)
+
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+
+        passCodeViewModel.onNumberClicked(2)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+        passCodeViewModel.onNumberClicked(1)
+
+        assertEquals(Status(PasscodeAction.CREATE, PasscodeType.ERROR), passCodeViewModel.status.value)
     }
 
     @Test
     fun `get passcode - ok`() {
-        every { preferencesProvider.getString(any(), any()) } returns OC_PASSCODE_4_DIGITS
+        launchTest()
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
         val getPassCode = passCodeViewModel.getPassCode()
 
         assertEquals(OC_PASSCODE_4_DIGITS, getPassCode)
 
-        verify(exactly = 1) {
-            preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any())
-        }
-    }
-
-    @Test
-    fun `set passcode - ok`() {
-        passCodeViewModel.setPassCode(OC_PASSCODE_4_DIGITS)
-
-        verify(exactly = 1) {
-            preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, OC_PASSCODE_4_DIGITS)
-            preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
-        }
-    }
-
-    @Test
-    fun `remove passcode - ok`() {
-        passCodeViewModel.removePassCode()
-
-        verify(exactly = 1) {
-            preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_PASSCODE)
-            preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+        verify(exactly = 2) {
+            preferencesProvider.getString(PREFERENCE_PASSCODE, any())
         }
     }
 
     @Test
     fun `check passcode is valid - ok`() {
-        every { preferencesProvider.getString(any(), any()) } returns OC_PASSCODE_4_DIGITS
+        launchTest()
 
-        val passCodeDigits: Array<String?> = arrayOf("1", "1", "1", "1")
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
-        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCodeDigits)
+        val passCode = OC_PASSCODE_4_DIGITS
+
+        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
 
         assertTrue(passCodeCheckResult)
 
-        verify(exactly = 1) {
-            preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any())
+        verify(exactly = 2) {
+            preferencesProvider.getString(PREFERENCE_PASSCODE, any())
         }
     }
 
     @Test
     fun `check passcode is valid - ko - saved passcode is null`() {
-        every { preferencesProvider.getString(any(), any()) } returns null
+        launchTest(passcodeDigits = 0, passcode = null)
 
-        val passCodeDigits: Array<String?> = arrayOf("1", "1", "1", "1")
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
-        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCodeDigits)
+        val passCode = OC_PASSCODE_4_DIGITS
+
+        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
 
         assertFalse(passCodeCheckResult)
 
-        verify(exactly = 1) {
-            preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any())
+        verify(exactly = 2) {
+            preferencesProvider.getString(PREFERENCE_PASSCODE, any())
         }
     }
 
     @Test
     fun `check passcode is valid - ko - saved passcode is empty`() {
-        every { preferencesProvider.getString(any(), any()) } returns ""
+        launchTest(passcodeDigits = "".length, passcode = "")
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
-        val passCodeDigits: Array<String?> = arrayOf("1", "1", "1", "1")
+        val passCode = OC_PASSCODE_4_DIGITS
 
-        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCodeDigits)
+        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
 
         assertFalse(passCodeCheckResult)
 
-        verify(exactly = 1) {
-            preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any())
+        verify(exactly = 2) {
+            preferencesProvider.getString(PREFERENCE_PASSCODE, any())
         }
     }
 
     @Test
     fun `check passcode is valid - ko - different digit`() {
-        every { preferencesProvider.getString(any(), any()) } returns OC_PASSCODE_4_DIGITS
+        launchTest()
 
-        val passCodeDigits: Array<String?> = arrayOf("1", "2", "1", "1")
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
-        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCodeDigits)
+        val passCode = "1211"
+
+        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode)
 
         assertFalse(passCodeCheckResult)
 
-        verify(exactly = 1) {
-            preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any())
+        verify(exactly = 2) {
+            preferencesProvider.getString(PREFERENCE_PASSCODE, any())
         }
     }
 
     @Test
     fun `check passcode is valid - ko - null digit`() {
-        every { preferencesProvider.getString(any(), any()) } returns OC_PASSCODE_4_DIGITS
+        launchTest()
 
-        val passCodeDigits: Array<String?> = arrayOf("1", null, "1", "1")
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
-        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCodeDigits)
+        val nullDigit: String? = null
+        val passCode: StringBuilder = StringBuilder()
+        passCode.append("1")
+        passCode.append("1")
+        passCode.append(nullDigit)
+        passCode.append("1")
+
+        val passCodeCheckResult = passCodeViewModel.checkPassCodeIsValid(passCode.toString())
 
         assertFalse(passCodeCheckResult)
 
-        verify(exactly = 1) {
-            preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, any())
+        verify(exactly = 2) {
+            preferencesProvider.getString(PREFERENCE_PASSCODE, any())
         }
     }
 
     @Test
     fun `get number of passcode digits - ok - digits is equal or greater than 4`() {
-        val numberDigits = 4
+        launchTest()
 
-        every { contextProvider.getInt(any()) } returns numberDigits
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
         val getNumberDigits = passCodeViewModel.getNumberOfPassCodeDigits()
 
-        assertEquals(numberDigits, getNumberDigits)
+        assertEquals(OC_PASSCODE_4_DIGITS.length, getNumberDigits)
 
         verify(exactly = 1) {
             contextProvider.getInt(R.integer.passcode_digits)
@@ -181,7 +379,9 @@ class PassCodeViewModelTest : ViewModelTest() {
     fun `get number of passcode digits - ok - digits is less than 4`() {
         val numberDigits = 3
 
-        every { contextProvider.getInt(any()) } returns numberDigits
+        launchTest(passcodeDigits = numberDigits)
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
         val getNumberDigits = passCodeViewModel.getNumberOfPassCodeDigits()
 
@@ -195,6 +395,10 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `set migration required - ok`() {
+        launchTest()
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
+
         val required = true
 
         passCodeViewModel.setMigrationRequired(required)
@@ -206,6 +410,10 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `set last unlock timestamp - ok`() {
+        launchTest()
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
+
         passCodeViewModel.setLastUnlockTimestamp()
 
         verify(exactly = 1) {
@@ -215,20 +423,24 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `get number of attempts - ok`() {
-        every { preferencesProvider.getInt(any(), any()) } returns 3
+        launchTest(lockAttempts = 3)
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
         val numberOfAttempts = passCodeViewModel.getNumberOfAttempts()
 
         assertEquals(3, numberOfAttempts)
 
         verify(exactly = 1) {
-            preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, 0)
+            preferencesProvider.getInt(PREFERENCE_LOCK_ATTEMPTS, any())
         }
     }
 
     @Test
     fun `increase number of attempts - ok`() {
-        every { preferencesProvider.getInt(any(), any()) } returns 3
+        launchTest(lockAttempts = 3)
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
         passCodeViewModel.increaseNumberOfAttempts()
 
@@ -240,6 +452,10 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `reset number of attempts - ok`() {
+        launchTest(lockAttempts = 3)
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
+
         passCodeViewModel.resetNumberOfAttempts()
 
         verify(exactly = 1) {
@@ -249,8 +465,9 @@ class PassCodeViewModelTest : ViewModelTest() {
 
     @Test
     fun `get time to unlock left - ok`() {
-        every { preferencesProvider.getInt(any(), any()) } returns 3
-        every { preferencesProvider.getLong(any(), any()) } returns 0
+        launchTest(lockAttempts = 3)
+
+        passCodeViewModel = PassCodeViewModel(preferencesProvider, contextProvider, PasscodeAction.CHECK)
 
         val timeToUnlockLeft = passCodeViewModel.getTimeToUnlockLeft()
 

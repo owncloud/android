@@ -27,7 +27,7 @@ import com.owncloud.android.enums.LockEnforcedType
 import com.owncloud.android.enums.LockEnforcedType.Companion.parseFromInteger
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.LockTimeout
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.providers.ContextProvider

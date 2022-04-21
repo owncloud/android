@@ -23,6 +23,7 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.MainApp
+import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
@@ -57,6 +58,10 @@ val viewModelModule = module {
         OCShareViewModel(filePath, accountName, get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
 
+    viewModel { (action: PasscodeAction) ->
+        PassCodeViewModel(get(), get(), action)
+    }
+
     viewModel { OCAuthenticationViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { OAuthViewModel(get(), get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
@@ -67,7 +72,6 @@ val viewModelModule = module {
     viewModel { SettingsVideoUploadsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SettingsAdvancedViewModel(get()) }
     viewModel { RemoveAccountDialogViewModel(get(), get(), get(), get()) }
-    viewModel { PassCodeViewModel(get(), get()) }
     viewModel { LogListViewModel(get()) }
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get()) }
     viewModel { PatternViewModel(get()) }

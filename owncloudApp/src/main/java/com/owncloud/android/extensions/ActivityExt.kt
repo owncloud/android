@@ -46,7 +46,7 @@ import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.presentation.ui.security.BiometricActivity
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
@@ -320,7 +320,7 @@ fun Activity.manageOptionLockSelected(type: LockType) {
 
     when (type) {
         LockType.PASSCODE -> startActivity(Intent(this, PassCodeActivity::class.java).apply {
-            action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+            action = PassCodeActivity.ACTION_CREATE
             putExtra(EXTRAS_LOCK_ENFORCED, true)
         })
         LockType.PATTERN -> startActivity(Intent(this, PatternActivity::class.java).apply {

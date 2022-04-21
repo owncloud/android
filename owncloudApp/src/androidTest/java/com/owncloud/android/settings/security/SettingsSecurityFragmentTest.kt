@@ -42,7 +42,7 @@ import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER
@@ -205,7 +205,7 @@ class SettingsSecurityFragmentTest {
 
         launchTest()
 
-        mockIntent(RESULT_OK, PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        mockIntent(RESULT_OK, PassCodeActivity.ACTION_CREATE)
         onView(withText(R.string.prefs_passcode)).perform(click())
         intended(hasComponent(PassCodeActivity::class.java.name))
     }
@@ -227,7 +227,7 @@ class SettingsSecurityFragmentTest {
         launchTest()
 
         mockIntent(
-            action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+            action = PassCodeActivity.ACTION_CREATE
         )
         onView(withText(R.string.prefs_passcode)).perform(click())
         assertTrue(prefPasscode.isChecked)
@@ -297,7 +297,7 @@ class SettingsSecurityFragmentTest {
 
         firstEnablePasscode()
         mockIntent(
-            action = PassCodeActivity.ACTION_CHECK_WITH_RESULT
+            action = PassCodeActivity.ACTION_REMOVE
         )
         onView(withText(R.string.prefs_passcode)).perform(click())
         assertFalse(prefPasscode.isChecked)
@@ -474,7 +474,7 @@ class SettingsSecurityFragmentTest {
         every { securityViewModel.isPatternSet() } returns false
 
         mockIntent(
-            action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+            action = PassCodeActivity.ACTION_CREATE
         )
         onView(withText(R.string.prefs_passcode)).perform(click())
     }

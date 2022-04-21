@@ -4,6 +4,7 @@
  * @author Jesus Recio (@jesmrec)
  * @author Christian Schabesberger (@theScrabi)
  * @author Juan Carlos Garrote Gascón (@JuancaG05)
+ * @author David Crespo Ríos (@davcres)
  *
  * Copyright (C) 2021 ownCloud GmbH.
  *
@@ -30,32 +31,27 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
+import com.owncloud.android.presentation.ui.security.passcode.PasscodeType
+import com.owncloud.android.presentation.ui.security.passcode.Status
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.testutil.security.OC_PASSCODE_4_DIGITS
-import com.owncloud.android.testutil.security.OC_PASSCODE_6_DIGITS
-import com.owncloud.android.utils.click
 import com.owncloud.android.utils.matchers.isDisplayed
-import com.owncloud.android.utils.matchers.nthChildOf
 import com.owncloud.android.utils.matchers.withChildCountAndId
-import com.owncloud.android.utils.matchers.withText
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -70,9 +66,8 @@ class PassCodeActivityTest {
 
     private lateinit var timeToUnlockLiveData: MutableLiveData<Event<String>>
     private lateinit var finishTimeToUnlockLiveData: MutableLiveData<Event<Boolean>>
-
-    private val defaultPassCode = arrayOf('1', '1', '1', '1', '1', '1')
-    private val wrongPassCode = arrayOf('1', '1', '1', '2', '2', '2')
+    private lateinit var statusLiveData: MutableLiveData<Status>
+    private lateinit var passcodeLiveData: MutableLiveData<String>
 
     private lateinit var passCodeViewModel: PassCodeViewModel
     private lateinit var biometricViewModel: BiometricViewModel
@@ -85,6 +80,9 @@ class PassCodeActivityTest {
 
         timeToUnlockLiveData = MutableLiveData()
         finishTimeToUnlockLiveData = MutableLiveData()
+        statusLiveData = MutableLiveData()
+        passcodeLiveData = MutableLiveData()
+
 
         stopKoin()
 
@@ -107,6 +105,9 @@ class PassCodeActivityTest {
         every { passCodeViewModel.getNumberOfAttempts() } returns 0
         every { passCodeViewModel.getTimeToUnlockLiveData } returns timeToUnlockLiveData
         every { passCodeViewModel.getFinishedTimeToUnlockLiveData } returns finishTimeToUnlockLiveData
+        every { passCodeViewModel.status } returns statusLiveData
+        every { passCodeViewModel.passcode } returns passcodeLiveData
+
     }
 
     @After
@@ -128,14 +129,26 @@ class PassCodeActivityTest {
         R.id.explanation.isDisplayed(false)
 
         // Check if required amount of input fields are actually displayed
-        with(R.id.passCodeTxtLayout) {
+        with(R.id.layout_code) {
             isDisplayed(true)
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
 
-        R.id.cancel.isDisplayed(false)
-
         R.id.lock_time.isDisplayed(false)
+
+        R.id.numberKeyboard.isDisplayed(true)
+        R.id.key0.isDisplayed(true)
+        R.id.key1.isDisplayed(true)
+        R.id.key2.isDisplayed(true)
+        R.id.key3.isDisplayed(true)
+        R.id.key4.isDisplayed(true)
+        R.id.key5.isDisplayed(true)
+        R.id.key6.isDisplayed(true)
+        R.id.key7.isDisplayed(true)
+        R.id.key8.isDisplayed(true)
+        R.id.key9.isDisplayed(true)
+        R.id.backspaceBtn.isDisplayed(true)
+        R.id.biometricBtn.isDisplayed(false)
     }
 
     @Test
@@ -156,12 +169,10 @@ class PassCodeActivityTest {
         R.id.explanation.isDisplayed(false)
 
         // Check if required amount of input fields are actually displayed
-        with(R.id.passCodeTxtLayout) {
+        with(R.id.layout_code) {
             isDisplayed(true)
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
-
-        R.id.cancel.isDisplayed(false)
 
         R.id.lock_time.isDisplayed(true)
     }
@@ -169,7 +180,7 @@ class PassCodeActivityTest {
     @Test
     fun passcodeView() {
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
         with(R.id.header) {
             isDisplayed(true)
@@ -181,43 +192,30 @@ class PassCodeActivityTest {
         }
 
         // Check if required amount of input fields are actually displayed
-        with(R.id.passCodeTxtLayout) {
+        with(R.id.layout_code) {
             isDisplayed(true)
             withChildCountAndId(passCodeViewModel.getNumberOfPassCodeDigits(), R.id.passCodeEditText)
         }
 
-        with(R.id.cancel) {
-            isDisplayed(true)
-            withText(android.R.string.cancel)
-        }
-
         R.id.lock_time.isDisplayed(false)
-    }
 
-    @Ignore("Flaky test, it fails many times")
-    @Test
-    fun passcodeViewCancelButton() {
-        // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
-
-        R.id.cancel.click()
-
-        assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
+        R.id.error.isDisplayed(false)
     }
 
     @Test
     fun firstTry() {
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        // First typing
-        typePasscode(defaultPassCode)
+        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.NO_CONFIRM))
 
         with(R.id.header) {
             isDisplayed(true)
             withText(R.string.pass_code_reenter_your_pass_code)
         }
         onView(withText(R.string.pass_code_configure_your_pass_code)).check(doesNotExist())
+
+        R.id.error.isDisplayed(false)
     }
 
     @Test
@@ -225,12 +223,9 @@ class PassCodeActivityTest {
         every { biometricViewModel.isBiometricLockAvailable() } returns true
 
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        // First typing
-        typePasscode(defaultPassCode)
-        // Second typing
-        typePasscode(defaultPassCode)
+        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
 
         // Click dialog's enable option
         onView(withText(R.string.common_yes)).perform(click())
@@ -242,13 +237,9 @@ class PassCodeActivityTest {
     @Test
     fun secondTryIncorrect() {
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        // First typing
-        // Type incorrect passcode
-        typePasscode(defaultPassCode)
-        // Second typing
-        typePasscode(wrongPassCode)
+        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.ERROR))
 
         with(R.id.header) {
             isDisplayed(true)
@@ -262,90 +253,43 @@ class PassCodeActivityTest {
             isDisplayed(true)
             withText(R.string.pass_code_mismatch)
         }
-    }
 
-    @Test
-    fun cancelFirstTry() {
-        // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
-
-        for (i in 0..2) {
-            onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText("1"))
-        }
-
-        R.id.cancel.click()
-        assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
-    }
-
-    @Test
-    fun cancelSecondTry() {
-        // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
-
-        // First typing
-        typePasscode(defaultPassCode)
-
-        // Type incomplete passcode
-        for (i in 0..1) {
-            onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText("1"))
-        }
-
-        R.id.cancel.click()
-        assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
+        R.id.lock_time.isDisplayed(false)
     }
 
     @Test
     fun deletePasscodeView() {
-        // Save a passcode in Preferences
-        storePasscode()
-
         // Open Activity in passcode deletion mode
-        openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_REMOVE)
 
         with(R.id.header) {
             isDisplayed(true)
             withText(R.string.pass_code_remove_your_pass_code)
         }
-    }
 
-    @Ignore("Flaky test, it fails many times")
-    @Test
-    fun deletePasscodeViewCancelButton() {
-        // Open Activity in passcode deletion mode
-        openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
+        R.id.explanation.isDisplayed(false)
 
-        R.id.cancel.click()
-        assertEquals(activityScenario.result.resultCode, Activity.RESULT_CANCELED)
+        R.id.error.isDisplayed(false)
+
+        R.id.lock_time.isDisplayed(false)
     }
 
     @Test
     fun deletePasscodeCorrect() {
-        every { passCodeViewModel.checkPassCodeIsValid(any()) } returns true
-
-        // Save a passcode in Preferences
-        storePasscode(OC_PASSCODE_6_DIGITS)
-
         // Open Activity in passcode deletion mode
-        openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_REMOVE)
 
-        // Type correct passcode
-        typePasscode(defaultPassCode)
+        statusLiveData.postValue(Status(PasscodeAction.REMOVE, PasscodeType.OK))
 
-        verify { passCodeViewModel.removePassCode() }
+        assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
     }
 
     @Test
     fun deletePasscodeIncorrect() {
-        every { passCodeViewModel.checkPassCodeIsValid(any()) } returns false
-
-        // Save a passcode in Preferences
-        storePasscode(OC_PASSCODE_6_DIGITS)
-
         // Open Activity in passcode deletion mode
-        openPasscodeActivity(PassCodeActivity.ACTION_CHECK_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_REMOVE)
 
-        // Type incorrect passcode
-        typePasscode(wrongPassCode)
+        statusLiveData.postValue(Status(PasscodeAction.REMOVE, PasscodeType.ERROR))
 
         with(R.id.header) {
             isDisplayed(true)
@@ -355,6 +299,10 @@ class PassCodeActivityTest {
             isDisplayed(true)
             withText(R.string.pass_code_wrong)
         }
+
+        R.id.explanation.isDisplayed(false)
+
+        R.id.lock_time.isDisplayed(false)
     }
 
     @Test
@@ -362,12 +310,9 @@ class PassCodeActivityTest {
         every { biometricViewModel.isBiometricLockAvailable() } returns true
 
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        // First typing
-        typePasscode(defaultPassCode)
-        // Second typing
-        typePasscode(defaultPassCode)
+        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
 
         onView(withText(R.string.biometric_dialog_title)).check(matches(isDisplayed()))
         onView(withText(R.string.common_yes)).check(matches(isDisplayed()))
@@ -379,12 +324,9 @@ class PassCodeActivityTest {
         every { biometricViewModel.isBiometricLockAvailable() } returns true
 
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        // First typing
-        typePasscode(defaultPassCode)
-        // Second typing
-        typePasscode(defaultPassCode)
+        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
 
         onView(withText(R.string.common_yes)).perform(click())
 
@@ -397,12 +339,9 @@ class PassCodeActivityTest {
         every { biometricViewModel.isBiometricLockAvailable() } returns true
 
         // Open Activity in passcode creation mode
-        openPasscodeActivity(PassCodeActivity.ACTION_REQUEST_WITH_RESULT)
+        openPasscodeActivity(PassCodeActivity.ACTION_CREATE)
 
-        // First typing
-        typePasscode(defaultPassCode)
-        // Second typing
-        typePasscode(defaultPassCode)
+        statusLiveData.postValue(Status(PasscodeAction.CREATE, PasscodeType.CONFIRM))
 
         onView(withText(R.string.common_no)).perform(click())
 
@@ -415,18 +354,5 @@ class PassCodeActivityTest {
             action = mode
         }
         activityScenario = ActivityScenario.launch(intent)
-    }
-
-    private fun typePasscode(digits: Array<Char>) {
-        for (i in 0 until passCodeViewModel.getNumberOfPassCodeDigits())
-            onView(nthChildOf(withId(R.id.passCodeTxtLayout), i)).perform(replaceText(digits[i].toString()))
-    }
-
-    private fun storePasscode(passcode: String = OC_PASSCODE_6_DIGITS) {
-        val appPrefs = PreferenceManager.getDefaultSharedPreferences(context).edit()
-
-        appPrefs.putString(PassCodeActivity.PREFERENCE_PASSCODE, passcode.substring(0, passCodeViewModel.getNumberOfPassCodeDigits()))
-        appPrefs.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
-        appPrefs.apply()
     }
 }
