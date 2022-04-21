@@ -49,7 +49,9 @@ abstract class HttpBaseMethod constructor(url: URL) {
     var connectionTimeoutVal: Long? = null
     var connectionTimeoutUnit: TimeUnit? = null
     var readTimeoutVal: Long? = null
+        private set
     var readTimeoutUnit: TimeUnit? = null
+        private set
 
     init {
         request = Request.Builder()
