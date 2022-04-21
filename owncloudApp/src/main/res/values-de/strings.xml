@@ -33,6 +33,7 @@
   <string name="prefs_subsection_logging">Protokollierung</string>
   <string name="prefs_subsection_more">Mehr</string>
   <string name="prefs_subsection_security">Sicherheit</string>
+  <string name="prefs_subsection_whatsnew">Was hat sich seit der letzten Version geändert?</string>
   <string name="prefs_subsection_security_summary">Legen Sie Sperren fest, um auf die App zuzugreifen, und lassen Sie Berührungen mit anderen sichtbaren Fenstern zu</string>
   <string name="prefs_subsection_logging_summary">Protokolle verfolgen, die durch die Ausführung der App erstellt wurden </string>
   <string name="prefs_subsection_more_summary">App Info, Feedback und mehr</string>
@@ -597,5 +598,8 @@
   <string name="security_enforced_first_option">PIN gesperrt</string>
   <string name="security_enforced_second_option">Sperre mit Muster</string>
   <!--Release Notes-->
+  <string name="release_notes_header">Neu in %1$s</string>
+  <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
+  <string name="release_notes_icon">Veröffentlichungsnotiz Icon</string>
 </resources>
