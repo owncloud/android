@@ -117,4 +117,7 @@
     <!-- Apm settings -->
     <bool name="clear_cookies_on_validation">false</bool>
 
+    <!-- Screenshots -->
+    <bool name="allow_screenshots">true</bool>
+
 </resources>

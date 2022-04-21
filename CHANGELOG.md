@@ -13,9 +13,10 @@ Summary
 * Bugfix - Lock displays shown again: [#3591](https://github.com/owncloud/android/issues/3591)
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
-* Enhancement - Improvements for the UI in the file details screen: [#3557](https://github.com/owncloud/android/issues/3557)
+* Enhancement - Improvements for the UI in the passcode screen: [#3516](https://github.com/owncloud/android/issues/3516)
 * Enhancement - Improvements for the UI in the pattern screen: [#3580](https://github.com/owncloud/android/issues/3580)
 * Enhancement - Release Notes: [#3442](https://github.com/owncloud/android/issues/3442)
+* Enhancement - Prevent taking screenshots: [#3596](https://github.com/owncloud/android/issues/3596)
 * Enhancement - What´s new option: [#3352](https://github.com/owncloud/android/issues/3352)
 * Enhancement - New option to show or not hidden files: [#2578](https://github.com/owncloud/android/issues/2578)
 
@@ -64,13 +65,13 @@ Details
    https://github.com/owncloud/android/issues/3543
    https://github.com/owncloud/android/pull/3544
 
-* Enhancement - Improvements for the UI in the file details screen: [#3557](https://github.com/owncloud/android/issues/3557)
+* Enhancement - Improvements for the UI in the passcode screen: [#3516](https://github.com/owncloud/android/issues/3516)
 
-   Redesign of the file details screen to align the labels with the details. Linear and Relatives
-   layouts were deleted, now only ConstraintLayout is used.
+   Redesign of the passcode screen to have the numeric keyboard in the screen instead of using the
+   Android one.
 
-   https://github.com/owncloud/android/issues/3557
-   https://github.com/owncloud/android/pull/3569
+   https://github.com/owncloud/android/issues/3516
+   https://github.com/owncloud/android/pull/3582
 
 * Enhancement - Improvements for the UI in the pattern screen: [#3580](https://github.com/owncloud/android/issues/3580)
 
@@ -85,6 +86,13 @@ Details
 
    https://github.com/owncloud/android/issues/3442
    https://github.com/owncloud/android/pull/3594
+
+* Enhancement - Prevent taking screenshots: [#3596](https://github.com/owncloud/android/issues/3596)
+
+   New option to prevent taking screenshots.
+
+   https://github.com/owncloud/android/issues/3596
+   https://github.com/owncloud/android/pull/3615
 
 * Enhancement - What´s new option: [#3352](https://github.com/owncloud/android/issues/3352)
 
