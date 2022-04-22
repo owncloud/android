@@ -27,7 +27,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -107,7 +106,6 @@ public class CreateFolderDialogFragment extends DialogFragment implements Dialog
                 .setTitle(R.string.uploader_info_dirname);
         Dialog d = builder.create();
         d.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        d.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         return d;
     }
 
