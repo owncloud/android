@@ -498,12 +498,13 @@ class MainFileListFragment : Fragment(),
                 R.id.action_rename_file -> {
                     val dialog = RenameFileDialogFragment.newInstance(singleFile)
                     dialog.show(requireActivity().supportFragmentManager, FileDetailFragment.FTAG_RENAME_FILE)
+                    fileListAdapter.clearSelection()
+                    updateActionModeAfterTogglingSelected()
                     return true
                 }
                 R.id.action_see_details -> {
-                    if (actionMode != null) {
-                        actionMode!!.finish()
-                    }
+                    fileListAdapter.clearSelection()
+                    updateActionModeAfterTogglingSelected()
                     containerActivity?.showDetails(singleFile)
                     return true
                 }
@@ -535,6 +536,8 @@ class MainFileListFragment : Fragment(),
             R.id.action_remove_file -> {
                 val dialog = RemoveFilesDialogFragment.newInstance(checkedFiles)
                 dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+                fileListAdapter.clearSelection()
+                updateActionModeAfterTogglingSelected()
                 return true
             }
             R.id.action_download_file,
