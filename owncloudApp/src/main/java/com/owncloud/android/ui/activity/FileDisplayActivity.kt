@@ -65,6 +65,7 @@ import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
+import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -1682,7 +1683,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             manageItem(file)
         } else {
             viewModel.getPrivateLink(uri.toString())
-            // Call success -> ok else show toast  showMessageInSnackbar(message = getString(R.string.no_file_found))
         }
     }
 
@@ -1706,10 +1706,19 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         viewModel.privateLink.observe(this) {
             when (val uiResult = it.peekContent()) {
                 is UIResult.Loading -> {}
-                is UIResult.Success -> {}
-                is UIResult.Error -> {}
+                is UIResult.Success -> {
+                    manageUndiscoveredFileUrl(uiResult.data.orEmpty())
+                }
+                is UIResult.Error -> {
+                    showMessageInSnackbar(message = getString(R.string.no_file_found))
+                }
             }
         }
+    }
+
+    private fun manageUndiscoveredFileUrl(url: String) {
+        val ocAccount = OwnCloudAccount(account, this)
+        viewModel.syncFolderOperation(url, account, ocAccount, storageManager)
     }
 
     companion object {

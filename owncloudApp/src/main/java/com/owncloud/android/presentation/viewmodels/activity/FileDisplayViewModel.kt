@@ -25,19 +25,28 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
+import com.owncloud.android.lib.common.OwnCloudAccount
+import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.operations.SynchronizeFolderOperation
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.GetPrivateLinkDiscoveredUseCase
+import kotlinx.coroutines.launch
 
 class FileDisplayViewModel(
     private val contextProvider: ContextProvider,
     private val getPrivateLinkDiscoveredUseCase: GetPrivateLinkDiscoveredUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
+
+    private val _privateLink = MediatorLiveData<Event<UIResult<String>>>()
+    val privateLink: LiveData<Event<UIResult<String>>> = _privateLink
 
     fun getPotentialAccountsToOpenDeepLink(uri: Uri): List<Account> {
         val accounts = AccountUtils.getAccounts(contextProvider.getContext())
@@ -47,14 +56,23 @@ class FileDisplayViewModel(
         }
     }
 
-    /*fun getPrivateLink(url: String) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getPrivateLinkDiscoveredUseCase.execute(GetPrivateLinkDiscoveredUseCase.Params(url))
-        }
-    }*/
+    fun syncFolderOperation(url: String, account: Account, ownCloudAccount: OwnCloudAccount, storageManager: FileDataStorageManager) {
+        val accountName = getAccountName()
+        val urlCleaned = url.substringAfter(accountName).substringBeforeLast('/')
 
-    private val _privateLink = MediatorLiveData<Event<UIResult<String>>>()
-    val privateLink: LiveData<Event<UIResult<String>>> = _privateLink
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val client = SingleSessionManager.getDefaultSingleton().getClientFor(ownCloudAccount, contextProvider.getContext())
+            val result = SynchronizeFolderOperation(
+                contextProvider.getContext(),
+                urlCleaned,
+                account,
+                System.currentTimeMillis(),
+                false,
+                false,
+                false
+            ).execute(client, storageManager)
+        }
+    }
 
     fun getPrivateLink(url: String) =
         runUseCaseWithResult(
@@ -64,4 +82,9 @@ class FileDisplayViewModel(
             useCase = getPrivateLinkDiscoveredUseCase,
             useCaseParams = GetPrivateLinkDiscoveredUseCase.Params(url)
         )
+
+    private fun getAccountName(): String {
+        val account = AccountUtils.getCurrentOwnCloudAccount(contextProvider.getContext())
+        return account.name.substringBefore('@')
+    }
 }
