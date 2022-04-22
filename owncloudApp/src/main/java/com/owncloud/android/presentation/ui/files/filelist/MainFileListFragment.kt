@@ -568,12 +568,16 @@ class MainFileListFragment : Fragment(),
                 val action = Intent(activity, FolderPickerActivity::class.java)
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES)
+                fileListAdapter.clearSelection()
+                updateActionModeAfterTogglingSelected()
                 return true
             }
             R.id.action_copy -> {
                 val action = Intent(activity, FolderPickerActivity::class.java)
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES)
+                fileListAdapter.clearSelection()
+                updateActionModeAfterTogglingSelected()
                 return true
             }
         }
