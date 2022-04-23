@@ -225,6 +225,9 @@
   <string name="pass_code_remove_your_pass_code">Remove your passcode</string>
   <string name="pass_code_mismatch">The passcodes are not the same</string>
   <string name="pass_code_wrong">Incorrect passcode</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="biometric_not_enrolled">Register at least one biometric to use this feature</string>
   <string name="biometric_prompt_title">Biometric log in</string>
   <string name="biometric_prompt_subtitle">Log in using your biometric credential</string>

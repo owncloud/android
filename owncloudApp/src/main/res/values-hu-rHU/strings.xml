@@ -234,6 +234,9 @@
   <string name="pass_code_wrong">Hibás jelszó</string>
   <string name="pass_code_error_set">Hiba történt a jelkódos zárolás beállítása során</string>
   <string name="pass_code_error_remove">Hiba történt a jelkódos zárolás visszavonása során</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="biometric_not_enrolled">Regisztráljon legalább egy biometrikus azonosítót, hogy ezt a módot használja.</string>
   <string name="biometric_prompt_title">Biometrikus bejelentkezés</string>
   <string name="biometric_prompt_subtitle">Jelentkezzen be biometrikus azonosítással</string>

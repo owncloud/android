@@ -190,6 +190,8 @@
   <string name="pass_code_remove_your_pass_code">Poista suojakoodi käytöstä</string>
   <string name="pass_code_mismatch">Suojakoodit eivät täsmää</string>
   <string name="pass_code_wrong">Virheellinen suojakoodi</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
   <string name="media_notif_ticker">%1$s-musiikkisoitin</string>
   <string name="media_state_playing">%1$s (toistetaan)</string>
   <string name="media_state_loading">%1$s (ladataan)</string>

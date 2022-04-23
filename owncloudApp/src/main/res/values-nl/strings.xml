@@ -227,6 +227,13 @@ Download hier: %2$s</string>
   <string name="pass_code_remove_your_pass_code">Verwijderen pincode</string>
   <string name="pass_code_mismatch">De pincodes komen niet overeen</string>
   <string name="pass_code_wrong">Onjuiste pincode</string>
+  <string name="numberkeyboard_zero">0</string>
+  <string name="numberkeyboard_one">1</string>
+  <string name="numberkeyboard_two">2</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
+  <string name="numberkeyboard_six">6</string>
   <string name="biometric_not_enrolled">Registreer ten minste één biometrie om deze functie te gebruiken</string>
   <string name="biometric_prompt_title">Biometrisch aanmelden</string>
   <string name="biometric_prompt_subtitle">Aanmelden met uw biometrische gegevens</string>

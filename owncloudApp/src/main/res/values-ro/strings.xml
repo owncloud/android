@@ -200,6 +200,8 @@
   <string name="pass_code_remove_your_pass_code">Șterge parola</string>
   <string name="pass_code_mismatch">Parolele nu se potrivesc</string>
   <string name="pass_code_wrong">Parolă incorectă</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
   <string name="biometric_prompt_title">Autentificare biometrică</string>
   <string name="biometric_prompt_subtitle">Autentificare folosind datele biometrice</string>
   <string name="media_notif_ticker">%1$s  player de muzică</string>

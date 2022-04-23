@@ -221,6 +221,9 @@ Téléchargez-le ici : %2$s</string>
   <string name="pass_code_remove_your_pass_code">Supprimer votre code de sécurité</string>
   <string name="pass_code_mismatch">Les codes de sécurité ne sont pas identiques</string>
   <string name="pass_code_wrong">Code de sécurité incorrect</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="biometric_prompt_title">Connexion Biométrique</string>
   <string name="biometric_prompt_subtitle">Connectez-vous en utilisant vos données biométriques</string>
   <string name="media_notif_ticker">%1$s lecteur de musique</string>

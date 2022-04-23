@@ -260,6 +260,9 @@
   <string name="pass_code_wrong">PIN nicht korrekt</string>
   <string name="pass_code_error_set">Beim Festlegen Ihrer PIN ist ein Fehler aufgetreten</string>
   <string name="pass_code_error_remove">Beim Entfernen Ihrer PIN ist ein Fehler aufgetreten</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="lock_time_try_again">Bitte versuchen Sie es in%1$serneut</string>
   <string name="biometric_not_enrolled">Registriere mindestens ein biometrisches Merkmal, um diese Funktion zu nutzen</string>
   <string name="biometric_prompt_title">Biometrisches Einloggen</string>

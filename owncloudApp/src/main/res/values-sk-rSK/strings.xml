@@ -161,6 +161,9 @@
   <string name="pass_code_remove_your_pass_code">Zmazať svoje heslo</string>
   <string name="pass_code_mismatch">Heslá sa nezhodujú</string>
   <string name="pass_code_wrong">Nesprávne heslo</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="media_notif_ticker">Prehrávač hudby %1$s</string>
   <string name="media_state_playing">%1$s (prehráva)</string>
   <string name="media_state_loading">%1$s (načítava)</string>

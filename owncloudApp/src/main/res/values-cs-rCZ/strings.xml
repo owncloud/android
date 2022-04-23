@@ -243,6 +243,13 @@
   <string name="pass_code_wrong">Nesprávný bezpečnostní kód</string>
   <string name="pass_code_error_set">Nastala chyba při nastavování bezpečnostního kódu</string>
   <string name="pass_code_error_remove">Nastala chyba při odstraňování bezpečnostního kódu</string>
+  <string name="numberkeyboard_zero">0</string>
+  <string name="numberkeyboard_one">1</string>
+  <string name="numberkeyboard_two">2</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
+  <string name="numberkeyboard_six">6</string>
   <string name="biometric_not_enrolled">Povolte alespoň jeden biometrický způsob ověření k používání této specialitky</string>
   <string name="biometric_prompt_title">Biometrické přihlášení</string>
   <string name="biometric_prompt_subtitle">Přihlásit se s použitím biometrických přihlašovacích údajů</string>

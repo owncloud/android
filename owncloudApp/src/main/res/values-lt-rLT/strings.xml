@@ -197,6 +197,7 @@
   <string name="pass_code_remove_your_pass_code">Užrakto pašalinimas</string>
   <string name="pass_code_mismatch">Nesutampa užraktas</string>
   <string name="pass_code_wrong">Neteisingas užraktas</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="media_notif_ticker">%1$s muzikos grotuvas</string>
   <string name="media_state_playing">%1$s (grojama)</string>
   <string name="media_state_loading">%1$s (įkeliama)</string>

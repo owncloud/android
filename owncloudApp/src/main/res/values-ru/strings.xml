@@ -246,6 +246,9 @@
   <string name="pass_code_wrong">Некоррентный код</string>
   <string name="pass_code_error_set">При установке кода блокировки произошла ошибка</string>
   <string name="pass_code_error_remove">При снятии кода блокировки произошла ошибка</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="biometric_not_enrolled">Чтобы пользоваться этой возможностью, зарегистрируйте хотя-бы одну биометрию</string>
   <string name="biometric_prompt_title">Биометрический вход</string>
   <string name="biometric_prompt_subtitle">Вход с использованием ваших индивидуальных биометрических данных</string>

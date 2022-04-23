@@ -225,6 +225,8 @@
   <string name="pass_code_remove_your_pass_code">Eliminar tu contraseña</string>
   <string name="pass_code_mismatch">Las contraseñas no son iguales</string>
   <string name="pass_code_wrong">Contraseña incorrecta</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
   <string name="biometric_not_enrolled">Registra al menos un dato biométrico para usar esta funcionalidad.</string>
   <string name="biometric_prompt_title">Inicio de sesión biométrico</string>
   <string name="biometric_prompt_subtitle">Iniciá sesión usando tu credencial biométrica</string>

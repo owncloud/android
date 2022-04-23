@@ -245,6 +245,13 @@
   <string name="pass_code_wrong">Código de acceso incorrecto</string>
   <string name="pass_code_error_set">Ocurrió un error al configurar la contraseña de bloqueo</string>
   <string name="pass_code_error_remove">Ocurrió un error al eliminar la contraseña de bloqueo</string>
+  <string name="numberkeyboard_zero">0</string>
+  <string name="numberkeyboard_one">1</string>
+  <string name="numberkeyboard_two">2</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
+  <string name="numberkeyboard_six">6</string>
   <string name="biometric_not_enrolled">Registra al menos una característica biométrica para usarla</string>
   <string name="biometric_prompt_title">Inicio de sesión biométrico</string>
   <string name="biometric_prompt_subtitle">Inicia sesión usando tú credencial biométrica</string>

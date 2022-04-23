@@ -203,6 +203,7 @@
   <string name="pass_code_remove_your_pass_code">Fjarlægja lykilkóðann þinn</string>
   <string name="pass_code_mismatch">Lykilkóðarnir eru ekki eins</string>
   <string name="pass_code_wrong">Rangur lykilkóði</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="media_notif_ticker">%1$s tónlistarspilari</string>
   <string name="media_state_playing">%1$s (afspilun)</string>
   <string name="media_state_loading">%1$s (hleð)</string>

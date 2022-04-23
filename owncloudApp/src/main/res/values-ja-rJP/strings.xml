@@ -193,6 +193,9 @@
   <string name="pass_code_remove_your_pass_code">パスコードを削除</string>
   <string name="pass_code_mismatch">パスコードが一致しません</string>
   <string name="pass_code_wrong">パスコードが正しくありません</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="media_notif_ticker">%1$s ミュージックプレーヤー</string>
   <string name="media_state_playing">%1$s (プレイ中)</string>
   <string name="media_state_loading">%1$s (読込中)</string>

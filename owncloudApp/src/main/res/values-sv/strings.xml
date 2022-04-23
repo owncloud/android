@@ -231,6 +231,9 @@
   <string name="pass_code_remove_your_pass_code">Ta bort lösenordet</string>
   <string name="pass_code_mismatch">Lösenorden matchar inte</string>
   <string name="pass_code_wrong">Ogiltigt lösenord</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="lock_time_try_again">Försök igen om %1$s</string>
   <string name="biometric_not_enrolled">Registrera minst en biometrisk uppgift för att använda denna funktionen</string>
   <string name="biometric_prompt_title">Biometrisk inloggning</string>

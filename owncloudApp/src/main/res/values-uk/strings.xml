@@ -205,6 +205,8 @@
   <string name="pass_code_remove_your_pass_code">Видалити пароль</string>
   <string name="pass_code_mismatch">Паролі не співпадають</string>
   <string name="pass_code_wrong">Невірний пароль</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
   <string name="media_notif_ticker">%1$s музичний програвач</string>
   <string name="media_state_playing">%1$s (відтворюється)</string>
   <string name="media_state_loading">%1$s (завантажується)</string>
