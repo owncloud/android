@@ -14,7 +14,7 @@ dependencies {
     // Dependencies for app building
     implementation "androidx.legacy:legacy-support-v4:$androidX"
     implementation "androidx.annotation:annotation:1.3.0"
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.google.android.material:material:1.5.0'
     implementation 'com.jakewharton:disklrucache:2.0.2'
     implementation 'com.google.android.exoplayer:exoplayer:2.16.1'
     implementation 'com.github.aritraroy.PatternLockView:patternlockview:a90b0d4bf0'
