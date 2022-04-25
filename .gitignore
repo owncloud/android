@@ -4,7 +4,6 @@
 
 .idea/*
 !.idea/codeStyles/
-sample_client/.idea/*
 
 # files for the dex VM
 *.dex

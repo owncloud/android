@@ -103,7 +103,7 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public int executeHttpMethod(HttpBaseMethod method) throws Exception {
-        if(mSynchronizeRequests) {
+        if (mSynchronizeRequests) {
             synchronized (mRequestMutex) {
                 return saveExecuteHttpMethod(method);
             }
@@ -116,7 +116,7 @@ public class OwnCloudClient extends HttpClient {
         int repeatCounter = 0;
         int status;
 
-        if(mFollowRedirects) {
+        if (mFollowRedirects) {
             method.setFollowRedirects(true);
         }
 
@@ -139,7 +139,7 @@ public class OwnCloudClient extends HttpClient {
 
             if (shouldConnectionValidatorBeCalled(method, status)) {
                 retry = mConnectionValidator.validate(this, mSingleSessionManager, getContext()); // retry on success fail on no success
-            } else if(method.getFollowPermanentRedirects() && status == HTTP_MOVED_PERMANENTLY) {
+            } else if (method.getFollowPermanentRedirects() && status == HTTP_MOVED_PERMANENTLY) {
                 retry = true;
                 method.setFollowRedirects(true);
             }

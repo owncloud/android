@@ -31,7 +31,6 @@ import com.owncloud.android.lib.common.network.NetworkUtils;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.TlsVersion;
@@ -61,7 +60,7 @@ public class HttpClient {
     private OkHttpClient mOkHttpClient = null;
 
     protected HttpClient(Context context) {
-        if(context == null) {
+        if (context == null) {
             Timber.e("Context may not be NULL!");
             throw new NullPointerException("Context may not be NULL!");
         }
