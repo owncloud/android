@@ -22,8 +22,6 @@ package com.owncloud.android.presentation.viewmodels.settings
 
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.datamodel.OCFile
@@ -37,7 +35,10 @@ import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.activity.UploadPathActivity
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
@@ -51,8 +52,8 @@ class SettingsPictureUploadsViewModel(
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
-    private val _pictureUploads: MutableLiveData<FolderBackUpConfiguration?> = MutableLiveData()
-    val pictureUploads: LiveData<FolderBackUpConfiguration?> = _pictureUploads
+    private val _pictureUploads: MutableStateFlow<FolderBackUpConfiguration?> = MutableStateFlow(null)
+    val pictureUploads: StateFlow<FolderBackUpConfiguration?> = _pictureUploads
 
     init {
         initPictureUploads()
@@ -61,7 +62,7 @@ class SettingsPictureUploadsViewModel(
     private fun initPictureUploads() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             getPictureUploadsConfigurationStreamUseCase.execute(Unit).collect() { pictureUploadsConfiguration ->
-                _pictureUploads.postValue(pictureUploadsConfiguration)
+                _pictureUploads.update { pictureUploadsConfiguration }
             }
         }
     }
