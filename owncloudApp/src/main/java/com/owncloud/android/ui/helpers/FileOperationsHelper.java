@@ -45,7 +45,9 @@ import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import timber.log.Timber;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static com.owncloud.android.services.OperationsService.EXTRA_SYNC_REGULAR_FILES;
 
@@ -183,9 +185,51 @@ public class FileOperationsHelper {
         return sendIntent;
     }
 
+    private Intent makeActionSendIntent(List<OCFile> oCfiles) {
+        Intent sendIntent = new Intent();
+
+        ArrayList<Uri> fileUris = new ArrayList<>();
+        for (int i = 0; i < oCfiles.size(); i++) {
+            fileUris.add(oCfiles.get(i).getExposedFileUri(mFileActivity));
+        }
+
+        // set Type (All)
+        sendIntent.setType("*/*");
+        sendIntent.putParcelableArrayListExtra(
+                Intent.EXTRA_STREAM,
+                fileUris
+        );
+        sendIntent.setAction(Intent.ACTION_SEND_MULTIPLE);// Send Action
+        return sendIntent;
+    }
+
     public void sendDownloadedFile(OCFile ocFile) {
         if (ocFile != null) {
             Intent sendIntent = makeActionSendIntent(ocFile);
+            // Show dialog, without the own app
+            String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Intent shareSheetIntent = new ShareSheetHelper().getShareSheetIntent(
+                        sendIntent,
+                        mFileActivity.getApplicationContext(),
+                        R.string.activity_chooser_send_file_title,
+                        packagesToExclude
+                );
+
+                mFileActivity.startActivity(shareSheetIntent);
+            } else {
+                DialogFragment chooserDialog = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude);
+                chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+            }
+        } else {
+            Timber.e("Trying to send a NULL OCFile");
+        }
+    }
+
+    public void sendDownloadedFile(List<OCFile> ocFiles) {
+        if (!ocFiles.isEmpty()) {
+            Intent sendIntent = makeActionSendIntent(ocFiles);
             // Show dialog, without the own app
             String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
 

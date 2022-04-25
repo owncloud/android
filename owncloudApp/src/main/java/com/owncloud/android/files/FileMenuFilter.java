@@ -248,7 +248,7 @@ public class FileMenuFilter {
         // SEND
         boolean sendAllowed = (mContext != null &&
                 mContext.getString(R.string.send_files_to_other_apps).equalsIgnoreCase("on"));
-        if (!isSingleFile() || !sendAllowed || synchronizing || videoStreaming || onlyAvailableOffline) {
+        if (isAnyFolder() || !areDownloaded() || !sendAllowed || synchronizing || videoStreaming || onlyAvailableOffline) {
             toHide.add(R.id.action_send_file);
         } else {
             toShow.add(R.id.action_send_file);
@@ -335,6 +335,24 @@ public class FileMenuFilter {
 
     private boolean isSingleFile() {
         return isSingleSelection() && !mFiles.get(0).isFolder();
+    }
+
+    private boolean isAnyFolder() {
+        for (int i = 0; i < mFiles.size(); i++) {
+            if (mFiles.get(i).isFolder()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean areDownloaded() {
+        for (int i = 0; i < mFiles.size(); i++) {
+            if (!mFiles.get(i).isDown()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean containsFolder() {
