@@ -8,8 +8,9 @@
  * @author David González Verdugo
  * @author Shashvat Kedia
  * @author Abel García de Prada
+ * @author David Crespo Rios
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
