@@ -42,7 +42,7 @@ class OCRemoteServerInfoDataSource(
         val owncloudClient = clientManager.getClientForAnonymousCredentials(path, false)
 
         // Step 1: Check whether the root folder exists.
-        var checkPathExistenceResult =
+        val checkPathExistenceResult =
             serverInfoService.checkPathExistence(path = path, isUserLoggedIn = false, client = owncloudClient)
 
         // Step 2: Check if server is available (If server is in maintenance for example, throw exception with specific message)
