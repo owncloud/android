@@ -75,21 +75,21 @@ class PassCodeActivityTest {
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
-        passCodeViewModel = mockk(relaxUnitFun = true)
-        biometricViewModel = mockk(relaxUnitFun = true)
+        passCodeViewModel = mockk(relaxed = true)
+        biometricViewModel = mockk(relaxed = true)
 
         timeToUnlockLiveData = MutableLiveData()
         finishTimeToUnlockLiveData = MutableLiveData()
         statusLiveData = MutableLiveData()
         passcodeLiveData = MutableLiveData()
 
-
         stopKoin()
 
         startKoin {
+            allowOverride(override = true)
             context
             modules(
-                module(override = true) {
+                module {
                     viewModel {
                         passCodeViewModel
                     }
@@ -107,7 +107,6 @@ class PassCodeActivityTest {
         every { passCodeViewModel.getFinishedTimeToUnlockLiveData } returns finishTimeToUnlockLiveData
         every { passCodeViewModel.status } returns statusLiveData
         every { passCodeViewModel.passcode } returns passcodeLiveData
-
     }
 
     @After

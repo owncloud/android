@@ -19,7 +19,7 @@ buildscript {
         coroutinesVersion = "1.6.1"
 
         // Koin
-        koinVersion = '3.1.5'
+        koinVersion = '3.1.6'
 
         // Testing
         mockkVersion = '1.12.3'
