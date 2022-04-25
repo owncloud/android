@@ -41,12 +41,11 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
@@ -67,7 +66,7 @@ import timber.log.Timber;
  * produce an {@link IllegalStateException}.
  */
 public class PreviewVideoFragment extends FileFragment implements View.OnClickListener,
-        ExoPlayer.EventListener, PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
+        Player.Listener, PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
 
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
@@ -88,7 +87,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     private PlayerView exoPlayerView;
 
-    private SimpleExoPlayer player;
+    private ExoPlayer player;
     private DefaultTrackSelector trackSelector;
 
     private ImageButton fullScreenButton;
@@ -96,8 +95,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     private boolean mExoPlayerBooted = false;
     private boolean mAutoplay;
     private long mPlaybackPosition;
-
-    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
     /**
      * Public factory method to create new PreviewVideoFragment instances.
@@ -401,7 +398,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         // Video streaming is only supported at Jelly Bean or higher Android versions (>= API 16)
 
         // Create the player
-        player = new SimpleExoPlayer.Builder(requireContext()).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
+        player = new ExoPlayer.Builder(requireContext()).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
 
         player.addListener(this);
 
