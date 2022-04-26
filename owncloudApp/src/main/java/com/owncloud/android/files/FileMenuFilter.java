@@ -249,7 +249,7 @@ public class FileMenuFilter {
         // SEND
         boolean sendAllowed = (mContext != null &&
                 mContext.getString(R.string.send_files_to_other_apps).equalsIgnoreCase("on"));
-        if (isAnyFolder() || !areDownloaded() || !sendAllowed || synchronizing || videoStreaming || onlyAvailableOffline) {
+        if (isAnyFolder() || (!areDownloaded() && !isSingleFile()) || !sendAllowed || synchronizing || videoStreaming || onlyAvailableOffline) {
             toHide.add(R.id.action_send_file);
         } else {
             toShow.add(R.id.action_send_file);
