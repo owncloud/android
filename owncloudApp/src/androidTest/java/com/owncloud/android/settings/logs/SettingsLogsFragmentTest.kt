@@ -68,15 +68,16 @@ class SettingsLogsFragmentTest {
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        logsViewModel = mockk(relaxUnitFun = true)
+        logsViewModel = mockk(relaxed = true)
         logListViewModel = mockk(relaxed = true)
 
         stopKoin()
 
         startKoin {
             context
+            allowOverride(override = true)
             modules(
-                module(override = true) {
+                module {
                     viewModel {
                         logsViewModel
                     }

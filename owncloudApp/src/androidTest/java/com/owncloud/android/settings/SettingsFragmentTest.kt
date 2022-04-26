@@ -87,8 +87,9 @@ class SettingsFragmentTest {
 
         startKoin {
             context
+            allowOverride(true)
             modules(
-                module(override = true) {
+                module{
                     viewModel {
                         settingsViewModel
                     }
