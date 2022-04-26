@@ -92,7 +92,7 @@ class SettingsSecurityFragmentTest {
 
         startKoin {
             context
-            allowOverride(true)
+            allowOverride(override = true)
             modules(
                 module {
                     viewModel {

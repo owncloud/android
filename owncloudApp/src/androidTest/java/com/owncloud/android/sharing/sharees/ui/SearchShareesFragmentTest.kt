@@ -61,8 +61,9 @@ class SearchShareesFragmentTest {
 
         startKoin {
             androidContext(ApplicationProvider.getApplicationContext())
+            allowOverride(override = true)
             modules(
-                module(override = true) {
+                module {
                     viewModel {
                         ocShareViewModel
                     }

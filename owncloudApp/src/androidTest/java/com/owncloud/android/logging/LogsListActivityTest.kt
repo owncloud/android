@@ -59,8 +59,9 @@ class LogsListActivityTest {
         stopKoin()
 
         startKoin {
+            allowOverride(override = true)
             modules(
-                module(override = true) {
+                module {
                     viewModel {
                         logListViewModel
                     }
