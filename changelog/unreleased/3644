@@ -1,0 +1,9 @@
+Bugfix: Corrupt picture error controlled
+
+Previously, If a file is not correct or is damaged,
+it is downloaded but not previewed.
+An infinite spinner on a black window is shown instead.
+Now, an error appears warning to the user.
+
+https://github.com/owncloud/android/issues/3441
+https://github.com/owncloud/android/pull/3644
