@@ -9,7 +9,7 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -73,7 +73,10 @@ import com.owncloud.android.presentation.ui.settings.SettingsActivity
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
 import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
+import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
+import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
@@ -86,6 +89,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private val authenticationViewModel by viewModel<OCAuthenticationViewModel>()
     private val oauthViewModel by viewModel<OAuthViewModel>()
     private val contextProvider by inject<ContextProvider>()
+    private val mdmProvider by inject<MdmProvider>()
 
     private var loginAction: Byte = ACTION_CREATE
     private var authTokenType: String? = null
@@ -657,13 +661,16 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     private fun initBrandableOptionsUI() {
-        if (!contextProvider.getBoolean(R.bool.show_server_url_input)) {
-            binding.hostUrlFrame.isVisible = false
+        val showInput = mdmProvider.getBrandingBoolean(mdmKey = CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, booleanKey = R.bool.show_server_url_input)
+        binding.hostUrlFrame.isVisible = showInput
+        binding.centeredRefreshButton.isVisible = !showInput
+        if (!showInput) {
             binding.centeredRefreshButton.setOnClickListener { checkOcServer() }
         }
 
-        if (contextProvider.getString(R.string.server_url).isNotEmpty()) {
-            binding.hostUrlInput.setText(contextProvider.getString(R.string.server_url))
+        val url = mdmProvider.getBrandingString(mdmKey = CONFIGURATION_SERVER_URL, stringKey = R.string.server_url)
+        if (url.isNotEmpty()) {
+            binding.hostUrlInput.setText(url)
             checkOcServer()
         }
 

@@ -6,7 +6,8 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author David Crespo Ríos
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,9 +31,9 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.core.content.pm.PackageInfoCompat
 import com.owncloud.android.authentication.AccountUtils
-import android.view.WindowManager
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
@@ -47,20 +48,20 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
 import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity
+import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.BiometricManager
-import com.owncloud.android.presentation.ui.security.LockTimeout
-import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeManager
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.security.PatternManager
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeManager
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
 import com.owncloud.android.providers.LogsProvider
+import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.SplashActivity
-import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
+import com.owncloud.android.utils.CONFIGURATION_ALLOW_SCREENSHOTS
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.DebugInjector
 import com.owncloud.android.utils.FILE_SYNC_CONFLICT_CHANNEL_ID
@@ -106,8 +107,8 @@ class MainApp : Application() {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 Timber.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
 
-                // To prevent taking screenshots in the whole app
-                if (!BuildConfig.DEBUG && !baseContext.resources.getBoolean(R.bool.allow_screenshots)) {
+                // To prevent taking screenshots in MDM
+                if (!areScreenshotsAllowed()) {
                     activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
                 }
 
@@ -170,7 +171,6 @@ class MainApp : Application() {
             }
         })
 
-        checkLockDelayEnforced(appContext)
     }
 
     private fun startLogsIfEnabled() {
@@ -188,6 +188,17 @@ class MainApp : Application() {
         if (enabledLogging) {
             LogsProvider(applicationContext).startLogging()
         }
+    }
+
+    /**
+     * Screenshots allowed in debug mode. Devs and tests <3
+     * Otherwise, depends on branding.
+     */
+    private fun areScreenshotsAllowed(): Boolean {
+        if (BuildConfig.DEBUG) return true
+
+        val mdmProvider = MdmProvider(applicationContext)
+        return mdmProvider.getBrandingBoolean(CONFIGURATION_ALLOW_SCREENSHOTS, R.bool.allow_screenshots)
     }
 
     private fun createNotificationChannels() {
@@ -239,6 +250,8 @@ class MainApp : Application() {
     }
 
     companion object {
+        const val MDM_FLAVOR = "mdm"
+
         lateinit var appContext: Context
             private set
         var enabledLogging: Boolean = false
@@ -315,17 +328,6 @@ class MainApp : Application() {
         fun getLastSeenVersionCode(): Int {
             val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
             return pref.getInt(PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, 0)
-        }
-
-        private fun checkLockDelayEnforced(context: Context) {
-            val preferences = SharedPreferencesProviderImpl(context)
-
-            val lockDelayEnforced = context.resources.getInteger(R.integer.lock_delay_enforced)
-            val lockTimeout = LockTimeout.parseFromInteger(lockDelayEnforced)
-
-            if (lockTimeout != LockTimeout.DISABLED) {
-                preferences.putString(PREFERENCE_LOCK_TIMEOUT, lockTimeout.name)
-            }
         }
     }
 }

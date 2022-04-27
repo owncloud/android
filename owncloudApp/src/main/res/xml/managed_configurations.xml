@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<restrictions xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <restriction
+        android:key="lock_delay_time_configuration"
+        android:restrictionType="integer"
+        android:title="@string/lock_delay_configuration_title"
+        android:description="@string/lock_delay_configuration_description"
+        android:defaultValue="0" />
+    <restriction
+        android:key="server_url_configuration"
+        android:restrictionType="string"
+        android:title="@string/server_url_configuration_title"
+        android:description="@string/server_url_configuration_description"
+        android:defaultValue="" />
+    <restriction
+        android:key="server_url_input_visibility_configuration"
+        android:restrictionType="bool"
+        android:title="@string/server_url_input_visibility_configuration_title"
+        android:description="@string/server_url_input_visibility_configuration_description"
+        android:defaultValue="true" />
+    <restriction
+        android:key="allow_screenshots_configuration"
+        android:restrictionType="bool"
+        android:title="@string/allow_screenshots_configuration_title"
+        android:description="@string/allow_screenshots_configuration_description"
+        android:defaultValue="true" />
+
+</restrictions>

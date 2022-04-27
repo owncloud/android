@@ -1,0 +1,8 @@
+Enhancement: Provide app feedback to MDM admins
+
+Now, when a MDM configuration is applied for the first time
+or changed by an IT administrator, the app sends feedback that
+will be shown in the EMM console.
+
+https://github.com/owncloud/android/issues/3420
+https://github.com/owncloud/android/pull/3480

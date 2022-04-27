@@ -59,12 +59,14 @@ import com.owncloud.android.presentation.ui.settings.SettingsActivity
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_BASIC_PASSWORD
 import com.owncloud.android.testutil.OC_BASIC_USERNAME
 import com.owncloud.android.testutil.OC_SERVER_INFO
-import com.owncloud.android.utils.scrollAndClick
+import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
+import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 import com.owncloud.android.utils.matchers.assertVisibility
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.isEnabled
@@ -72,6 +74,7 @@ import com.owncloud.android.utils.matchers.isFocusable
 import com.owncloud.android.utils.matchers.withText
 import com.owncloud.android.utils.mockIntentToComponent
 import com.owncloud.android.utils.replaceText
+import com.owncloud.android.utils.scrollAndClick
 import com.owncloud.android.utils.typeText
 import io.mockk.every
 import io.mockk.mockk
@@ -94,6 +97,7 @@ class LoginActivityTest {
     private lateinit var ocAuthenticationViewModel: OCAuthenticationViewModel
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var ocContextProvider: ContextProvider
+    private lateinit var mdmProvider: MdmProvider
     private lateinit var context: Context
 
     private lateinit var loginResultLiveData: MutableLiveData<Event<UIResult<String>>>
@@ -108,6 +112,7 @@ class LoginActivityTest {
         ocAuthenticationViewModel = mockk(relaxed = true)
         settingsViewModel = mockk(relaxUnitFun = true)
         ocContextProvider = mockk(relaxed = true)
+        mdmProvider = mockk(relaxed = true)
 
         loginResultLiveData = MutableLiveData()
         serverInfoLiveData = MutableLiveData()
@@ -135,7 +140,9 @@ class LoginActivityTest {
                     factory {
                         ocContextProvider
                     }
-
+                    factory {
+                        mdmProvider
+                    }
                 }
             )
         }
@@ -155,8 +162,8 @@ class LoginActivityTest {
         loginWelcomeText: String = "",
         intent: Intent? = null
     ) {
-        every { ocContextProvider.getBoolean(R.bool.show_server_url_input) } returns showServerUrlInput
-        every { ocContextProvider.getString(R.string.server_url) } returns serverUrl
+        every { mdmProvider.getBrandingBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, R.bool.show_server_url_input) } returns showServerUrlInput
+        every { mdmProvider.getBrandingString(CONFIGURATION_SERVER_URL, R.string.server_url) } returns serverUrl
         every { ocContextProvider.getBoolean(R.bool.use_login_background_image) } returns showLoginBackGroundImage
         every { ocContextProvider.getBoolean(R.bool.show_welcome_link) } returns showWelcomeLink
         every { ocContextProvider.getString(R.string.account_type) } returns accountType
@@ -184,7 +191,7 @@ class LoginActivityTest {
         assertViewsDisplayed(
             showHostUrlFrame = false,
             showHostUrlInput = false,
-            showCenteredRefreshButton = false,
+            showCenteredRefreshButton = true,
             showEmbeddedCheckServerButton = false
         )
 
