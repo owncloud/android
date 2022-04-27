@@ -11,6 +11,7 @@ Summary
 * Bugfix - Security flags for recording screen: [#3468](https://github.com/owncloud/android/issues/3468)
 * Bugfix - Crash when changing orientation in Details view: [#3571](https://github.com/owncloud/android/issues/3571)
 * Bugfix - Lock displays shown again: [#3591](https://github.com/owncloud/android/issues/3591)
+* Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 * Enhancement - Provide app feedback to MDM admins: [#3420](https://github.com/owncloud/android/issues/3420)
 * Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
@@ -20,6 +21,7 @@ Summary
 * Enhancement - Prevent taking screenshots: [#3596](https://github.com/owncloud/android/issues/3596)
 * Enhancement - What´s new option: [#3352](https://github.com/owncloud/android/issues/3352)
 * Enhancement - New option to show or not hidden files: [#2578](https://github.com/owncloud/android/issues/2578)
+* Enhancement - Option to allow screenshots or not in Android Enterprise: [#3625](https://github.com/owncloud/android/issues/3625)
 * Enhancement - Full name is shown in shares: [#1106](https://github.com/owncloud/android/issues/1106)
 
 Details
@@ -50,6 +52,15 @@ Details
 
    https://github.com/owncloud/android/issues/3591
    https://github.com/owncloud/android/pull/3592
+
+* Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
+
+   Two parameters (server url and server url input visibility) can be now managed via MDM. These
+   were the first parameters used to test integration with Android Enterprise and Android
+   Management API.
+
+   https://github.com/owncloud/android/issues/3415
+   https://github.com/owncloud/android/pull/3419
 
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 
@@ -117,6 +128,13 @@ Details
 
    https://github.com/owncloud/android/issues/2578
    https://github.com/owncloud/android/pull/3624
+
+* Enhancement - Option to allow screenshots or not in Android Enterprise: [#3625](https://github.com/owncloud/android/issues/3625)
+
+   New parameter to manage screenshots can be configured via MDM.
+
+   https://github.com/owncloud/android/issues/3625
+   https://github.com/owncloud/android/pull/3627
 
 * Enhancement - Full name is shown in shares: [#1106](https://github.com/owncloud/android/issues/1106)
 
