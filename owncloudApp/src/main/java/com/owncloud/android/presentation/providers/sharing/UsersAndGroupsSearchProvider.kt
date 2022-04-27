@@ -46,7 +46,6 @@ import com.owncloud.android.extensions.parseError
 import org.json.JSONException
 import org.koin.android.ext.android.inject
 import timber.log.Timber
-import java.util.HashMap
 import java.util.Locale
 
 /**
@@ -180,6 +179,9 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             try {
                 while (namesIt.hasNext()) {
                     item = namesIt.next()
+                    if (item.label == AccountUtils.getUsernameOfAccount(account.name) && item.shareType == ShareType.USER) {
+                        item = namesIt.next()
+                    }
                     var userName = item.label
                     val type = item.shareType
                     val shareWith = item.shareWith
