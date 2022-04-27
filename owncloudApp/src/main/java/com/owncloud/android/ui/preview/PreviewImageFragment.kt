@@ -27,6 +27,7 @@ package com.owncloud.android.ui.preview
 
 import android.accounts.Account
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -119,6 +120,8 @@ class PreviewImageFragment : FileFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.top.setBackgroundColor(getBackgroundColor(file))
 
         binding.photoView.isVisible = false
         binding.photoView.setOnClickListener {
@@ -325,16 +328,24 @@ class PreviewImageFragment : FileFragment() {
                     return false
                 }
 
-                override fun onResourceReady(
-                    resource: Drawable?, model: Any, target: Target<Drawable?>,
-                    dataSource: DataSource, isFirstResource: Boolean
-                ): Boolean {
-                    Timber.d("Loading image %s", file.fileName)
-                    return false
-                }
-            })
-            .into(binding.photoView)
+                    override fun onResourceReady(
+                        resource: Drawable?, model: Any, target: Target<Drawable?>,
+                        dataSource: DataSource, isFirstResource: Boolean
+                    ): Boolean {
+                        Timber.d("Loading image %s", file.fileName)
+                        binding.progressWheel.isVisible = false
+                        return false
+                    }
+                })
+                .into(binding.photoView)
+
         binding.photoView.isVisible = true
+    }
+
+    private fun isSVGFile(file: OCFile): Boolean = file.mimetype == SVG_MIMETYPE
+
+    private fun getBackgroundColor(file: OCFile): Int {
+        return if (isSVGFile(file)) Color.WHITE else Color.BLACK
     }
 
     /**
@@ -348,6 +359,7 @@ class PreviewImageFragment : FileFragment() {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
         private const val ARG_IGNORE_FIRST = "IGNORE_FIRST"
+        private const val SVG_MIMETYPE = "image/svg+xml"
 
         /**
          * Public factory method to create a new fragment that previews an image.
