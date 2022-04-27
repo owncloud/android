@@ -115,7 +115,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     private static final String GRID_IS_PREFERED_PREFERENCE = "gridIsPrefered";
 
-    private static final String IS_ACTION_COPY = "IS_ACTION_COPY";
+    private static final String ACTION_BUTTON = "ACTION_BUTTON";
 
     private static String DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER";
 
@@ -1002,13 +1002,14 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
             case R.id.action_move: {
                 Intent action = new Intent(getActivity(), FolderPickerActivity.class);
+                action.putExtra(ACTION_BUTTON, FolderPickerActivity.ACTION_BUTTON.MOVE);
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles);
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES);
                 return true;
             }
             case R.id.action_copy:
                 Intent action = new Intent(getActivity(), FolderPickerActivity.class);
-                action.putExtra(IS_ACTION_COPY, true);
+                action.putExtra(ACTION_BUTTON, FolderPickerActivity.ACTION_BUTTON.COPY);
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles);
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES);
                 return true;

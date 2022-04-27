@@ -16,7 +16,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/filesFolderPickerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -58,8 +57,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:theme="@style/Button.Primary"
-            tools:text="@string/upload_copy_files" />
+            android:text="@string/folder_picker_choose_button_text"
+            android:theme="@style/Button.Primary" />
 
     </LinearLayout>
 

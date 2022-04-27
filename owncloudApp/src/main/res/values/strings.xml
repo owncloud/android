@@ -478,6 +478,8 @@
     <string name="actionbar_move">Move</string>
     <string name="file_list_empty_moving">Nothing in here. You can add a folder!</string>
     <string name="folder_picker_choose_button_text">Choose</string>
+    <string name="folder_picker_move_here_button_text">Move Here</string>
+    <string name="folder_picker_copy_here_button_text">Copy Here</string>
 
     <string name="move_file_not_found">Unable to move. Please check whether the file exists</string>
     <string name="move_file_invalid_into_descendent">It is not possible to move a folder into a descendant</string>

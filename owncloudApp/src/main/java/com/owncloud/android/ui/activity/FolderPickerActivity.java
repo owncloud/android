@@ -69,7 +69,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
     private static final String TAG_LIST_OF_FOLDERS = "LIST_OF_FOLDERS";
 
-    private static final String IS_ACTION_COPY = "IS_ACTION_COPY";
+    private static final String ACTION_BUTTON = "ACTION_BUTTON";
 
     private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
@@ -174,13 +174,18 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     private void setActionButtonText() {
-        boolean isActionCopy = getIntent().getBooleanExtra(IS_ACTION_COPY, false);
+        FolderPickerActivity.ACTION_BUTTON actionButton = (FolderPickerActivity.ACTION_BUTTON) getIntent().getSerializableExtra(ACTION_BUTTON);
         Button chooseButton = findViewById(R.id.folder_picker_btn_choose);
 
-        if (isActionCopy) {
-            chooseButton.setText(getString(android.R.string.copy));
-        } else {
-            chooseButton.setText(getString(R.string.actionbar_move));
+        if (actionButton != null) {
+            switch (actionButton) {
+                case MOVE:
+                    chooseButton.setText(getString(R.string.folder_picker_move_here_button_text));
+                    break;
+                case COPY:
+                    chooseButton.setText(getString(R.string.folder_picker_copy_here_button_text));
+                    break;
+            }
         }
     }
 
@@ -524,5 +529,9 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                 startSyncFolderOperation(folder, ignoreETag);
             }
         }
+    }
+
+    public enum ACTION_BUTTON {
+        MOVE, COPY
     }
 }
