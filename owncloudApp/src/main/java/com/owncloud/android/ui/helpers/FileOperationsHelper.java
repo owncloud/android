@@ -228,7 +228,7 @@ public class FileOperationsHelper {
         }
     }
 
-    public void sendDownloadedFile(List<OCFile> ocFiles) {
+    public void sendDownloadedFiles(List<OCFile> ocFiles) {
         if (!ocFiles.isEmpty()) {
             Intent sendIntent = makeActionSendIntent(ocFiles);
             // Show dialog, without the own app

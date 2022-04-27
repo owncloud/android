@@ -962,7 +962,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 if (!filesAreDown(checkedFiles)) {  // Download the file
                     ((FileDisplayActivity) mContainerActivity).startDownloadForSending(checkedFiles.get(0));
                 } else {
-                    mContainerActivity.getFileOperationsHelper().sendDownloadedFile(checkedFiles);
+                    mContainerActivity.getFileOperationsHelper().sendDownloadedFiles(checkedFiles);
                 }
                 return true;
             }

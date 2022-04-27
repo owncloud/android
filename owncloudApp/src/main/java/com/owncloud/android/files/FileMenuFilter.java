@@ -249,7 +249,7 @@ public class FileMenuFilter {
         // SEND
         boolean sendAllowed = (mContext != null &&
                 mContext.getString(R.string.send_files_to_other_apps).equalsIgnoreCase("on"));
-        if (isAnyFolder() || (!areDownloaded() && !isSingleFile()) || !sendAllowed || synchronizing || videoStreaming || onlyAvailableOffline) {
+        if (containsFolder() || (!areDownloaded() && !isSingleFile()) || !sendAllowed || synchronizing || videoStreaming || onlyAvailableOffline) {
             toHide.add(R.id.action_send_file);
         } else {
             toShow.add(R.id.action_send_file);
@@ -338,18 +338,9 @@ public class FileMenuFilter {
         return isSingleSelection() && !mFiles.get(0).isFolder();
     }
 
-    private boolean isAnyFolder() {
-        for (int i = 0; i < mFiles.size(); i++) {
-            if (mFiles.get(i).isFolder()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private boolean areDownloaded() {
-        for (int i = 0; i < mFiles.size(); i++) {
-            if (!mFiles.get(i).isDown()) {
+        for (OCFile file : mFiles) {
+            if (!file.isDown()) {
                 return false;
             }
         }
