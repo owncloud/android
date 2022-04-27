@@ -25,6 +25,7 @@
 
 package com.owncloud.android.lib.common;
 
+import android.content.Context;
 import android.net.Uri;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils;
@@ -76,7 +77,10 @@ public class OwnCloudClient extends HttpClient {
     public OwnCloudClient(Uri baseUri,
                           ConnectionValidator connectionValidator,
                           boolean synchronizeRequests,
-                          SingleSessionManager singleSessionManager) {
+                          SingleSessionManager singleSessionManager,
+                          Context context) {
+        super(context);
+
         if (baseUri == null) {
             throw new IllegalArgumentException("Parameter 'baseUri' cannot be NULL");
         }
@@ -99,7 +103,7 @@ public class OwnCloudClient extends HttpClient {
     }
 
     public int executeHttpMethod(HttpBaseMethod method) throws Exception {
-        if(mSynchronizeRequests) {
+        if (mSynchronizeRequests) {
             synchronized (mRequestMutex) {
                 return saveExecuteHttpMethod(method);
             }
@@ -112,7 +116,7 @@ public class OwnCloudClient extends HttpClient {
         int repeatCounter = 0;
         int status;
 
-        if(mFollowRedirects) {
+        if (mFollowRedirects) {
             method.setFollowRedirects(true);
         }
 
@@ -131,11 +135,11 @@ public class OwnCloudClient extends HttpClient {
                 method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
             }
 
-            status = method.execute();
+            status = method.execute(this);
 
             if (shouldConnectionValidatorBeCalled(method, status)) {
-                retry = mConnectionValidator.validate(this, mSingleSessionManager); // retry on success fail on no success
-            } else if(method.getFollowPermanentRedirects() && status == HTTP_MOVED_PERMANENTLY) {
+                retry = mConnectionValidator.validate(this, mSingleSessionManager, getContext()); // retry on success fail on no success
+            } else if (method.getFollowPermanentRedirects() && status == HTTP_MOVED_PERMANENTLY) {
                 retry = true;
                 method.setFollowRedirects(true);
             }
@@ -146,12 +150,15 @@ public class OwnCloudClient extends HttpClient {
     }
 
     private boolean shouldConnectionValidatorBeCalled(HttpBaseMethod method, int status) {
-        return !mFollowRedirects &&
-                !method.getFollowRedirects() &&
-                mConnectionValidator != null &&
-                (status == HttpConstants.HTTP_MOVED_TEMPORARILY ||
-                        (!(mCredentials instanceof OwnCloudAnonymousCredentials) &&
-                                status == HttpConstants.HTTP_UNAUTHORIZED));
+
+        return mConnectionValidator != null && (
+                (!(mCredentials instanceof OwnCloudAnonymousCredentials) &&
+                        status == HttpConstants.HTTP_UNAUTHORIZED
+                ) || (!mFollowRedirects &&
+                        !method.getFollowRedirects() &&
+                        status == HttpConstants.HTTP_MOVED_TEMPORARILY
+                )
+        );
     }
 
     /**

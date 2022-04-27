@@ -26,6 +26,7 @@
 
 package com.owncloud.android.lib.resources.status.services.implementation
 
+
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
@@ -37,7 +38,7 @@ class OCServerInfoService : ServerInfoService {
 
     override fun checkPathExistence(
         path: String,
-        isUserLogged: Boolean,
+        isUserLoggedIn: Boolean,
         client: OwnCloudClient
     ): RemoteOperationResult<Boolean> =
         CheckPathExistenceRemoteOperation(

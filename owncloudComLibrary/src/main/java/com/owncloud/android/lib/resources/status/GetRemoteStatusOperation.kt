@@ -53,6 +53,7 @@ class GetRemoteStatusOperation : RemoteOperation<RemoteServerInfo>() {
         client.baseUri = Uri.parse(newBaseUrl)
     }
 
+
     private fun tryToConnect(client: OwnCloudClient): RemoteOperationResult<RemoteServerInfo> {
         val baseUrl = client.baseUri.toString()
         return try {

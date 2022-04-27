@@ -138,7 +138,6 @@ class CreateRemoteShareOperation(
     }
 
     private fun createFormBody(): FormBody {
-
         val formBodyBuilder = FormBody.Builder()
             .add(PARAM_PATH, remoteFilePath)
             .add(PARAM_SHARE_TYPE, shareType.value.toString())

@@ -31,7 +31,6 @@ import com.owncloud.android.lib.common.network.NetworkUtils;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
 import okhttp3.TlsVersion;
@@ -41,7 +40,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -55,33 +53,46 @@ import java.util.concurrent.TimeUnit;
  */
 
 public class HttpClient {
-    private static OkHttpClient sOkHttpClient;
-    private static Context sContext;
-    private static HashMap<String, List<Cookie>> sCookieStore = new HashMap<>();
-    private static LogInterceptor sLogInterceptor;
-    private static Interceptor sDebugInterceptor;
+    private Context mContext;
+    private HashMap<String, List<Cookie>> mCookieStore = new HashMap<>();
+    private LogInterceptor mLogInterceptor = new LogInterceptor();
 
-    public static OkHttpClient getOkHttpClient() {
-        if (sOkHttpClient == null) {
-            try {
-                final X509TrustManager trustManager = new AdvancedX509TrustManager(
-                        NetworkUtils.getKnownServersStore(sContext));
-                final SSLSocketFactory sslSocketFactory = getNewSslSocketFactory(trustManager);
-                // Automatic cookie handling, NOT PERSISTENT
-                final CookieJar cookieJar = new CookieJarImpl(sCookieStore);
+    private OkHttpClient mOkHttpClient = null;
 
-                // TODO: Not verifying the hostname against certificate. ask owncloud security human if this is ok.
-                //.hostnameVerifier(new BrowserCompatHostnameVerifier());
-                sOkHttpClient = buildNewOkHttpClient(sslSocketFactory, trustManager, cookieJar);
-
-            } catch (Exception e) {
-                Timber.e(e, "Could not setup SSL system.");
-            }
+    protected HttpClient(Context context) {
+        if (context == null) {
+            Timber.e("Context may not be NULL!");
+            throw new NullPointerException("Context may not be NULL!");
         }
-        return sOkHttpClient;
+        mContext = context;
     }
 
-    private static SSLContext getSslContext() throws NoSuchAlgorithmException {
+    public OkHttpClient getOkHttpClient() {
+        if (mOkHttpClient == null) {
+            try {
+                final X509TrustManager trustManager = new AdvancedX509TrustManager(
+                        NetworkUtils.getKnownServersStore(mContext));
+
+                final SSLContext sslContext = buildSSLContext();
+                sslContext.init(null, new TrustManager[]{trustManager}, null);
+                final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+                // Automatic cookie handling, NOT PERSISTENT
+                final CookieJar cookieJar = new CookieJarImpl(mCookieStore);
+                mOkHttpClient = buildNewOkHttpClient(sslSocketFactory, trustManager, cookieJar);
+
+            } catch (NoSuchAlgorithmException nsae) {
+                Timber.e(nsae, "Could not setup SSL system.");
+                throw new RuntimeException("Could not setup okHttp client.", nsae);
+            } catch (Exception e) {
+                Timber.e(e, "Could not setup okHttp client.");
+                throw new RuntimeException("Could not setup okHttp client.", e);
+            }
+        }
+        return mOkHttpClient;
+    }
+
+    private SSLContext buildSSLContext() throws NoSuchAlgorithmException {
         try {
             return SSLContext.getInstance(TlsVersion.TLS_1_3.javaName());
         } catch (NoSuchAlgorithmException tlsv13Exception) {
@@ -102,15 +113,8 @@ public class HttpClient {
         }
     }
 
-    private static SSLSocketFactory getNewSslSocketFactory(X509TrustManager trustManager)
-            throws NoSuchAlgorithmException, KeyManagementException {
-        final SSLContext sslContext = getSslContext();
-        sslContext.init(null, new TrustManager[]{trustManager}, null);
-        return sslContext.getSocketFactory();
-    }
-
-    private static OkHttpClient buildNewOkHttpClient(SSLSocketFactory sslSocketFactory, X509TrustManager trustManager,
-                                                     CookieJar cookieJar) {
+    private OkHttpClient buildNewOkHttpClient(SSLSocketFactory sslSocketFactory, X509TrustManager trustManager,
+                                              CookieJar cookieJar) {
         return new OkHttpClient.Builder()
                 .addNetworkInterceptor(getLogInterceptor())
                 .addNetworkInterceptor(DebugInterceptorFactory.INSTANCE.getInterceptor())
@@ -125,22 +129,19 @@ public class HttpClient {
                 .build();
     }
 
-    public static LogInterceptor getLogInterceptor() {
-        if (sLogInterceptor == null) {
-            sLogInterceptor = new LogInterceptor();
-        }
-        return sLogInterceptor;
-    }
-
     public Context getContext() {
-        return sContext;
+        return mContext;
     }
 
-    public static void setContext(Context context) {
-        sContext = context;
+    public LogInterceptor getLogInterceptor() {
+        return mLogInterceptor;
+    }
+
+    public List<Cookie> getCookiesFromUrl(HttpUrl httpUrl) {
+        return mCookieStore.get(httpUrl.host());
     }
 
     public void clearCookies() {
-        sCookieStore.clear();
+        mCookieStore.clear();
     }
 }
