@@ -69,6 +69,8 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
     private static final String TAG_LIST_OF_FOLDERS = "LIST_OF_FOLDERS";
 
+    private static final String IS_ACTION_COPY = "IS_ACTION_COPY";
+
     private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
     private boolean mSyncInProgress = false;
@@ -102,6 +104,9 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
         // sets message for empty list of folders
         setBackgroundText();
+
+        // Set action button text
+        setActionButtonText();
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
@@ -165,6 +170,17 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             listFragment.setMessageForEmptyList(getString(message));
         } else {
             Timber.e("OCFileListFragment is null");
+        }
+    }
+
+    private void setActionButtonText() {
+        boolean isActionCopy = getIntent().getBooleanExtra(IS_ACTION_COPY, false);
+        Button chooseButton = findViewById(R.id.folder_picker_btn_choose);
+
+        if (isActionCopy) {
+            chooseButton.setText(getString(android.R.string.copy));
+        } else {
+            chooseButton.setText(getString(R.string.actionbar_move));
         }
     }
 

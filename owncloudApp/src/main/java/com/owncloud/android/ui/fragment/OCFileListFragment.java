@@ -115,6 +115,8 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     private static final String GRID_IS_PREFERED_PREFERENCE = "gridIsPrefered";
 
+    private static final String IS_ACTION_COPY = "IS_ACTION_COPY";
+
     private static String DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER";
 
     private final String ALL_FILES_SAF_REGEX = "*/*";
@@ -1006,6 +1008,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
             case R.id.action_copy:
                 Intent action = new Intent(getActivity(), FolderPickerActivity.class);
+                action.putExtra(IS_ACTION_COPY, true);
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles);
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES);
                 return true;
@@ -1269,7 +1272,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         snackbar.show();
     }
 
-    public void setSearchListener(SearchView searchView){
+    public void setSearchListener(SearchView searchView) {
         searchView.setOnQueryTextFocusChangeListener(this);
         searchView.setOnQueryTextListener(this);
     }
