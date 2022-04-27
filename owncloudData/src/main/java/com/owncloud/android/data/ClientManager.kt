@@ -63,7 +63,8 @@ class ClientManager(
             OwnCloudClient(Uri.parse(path),
                 connectionValidator,
                 true,
-                SingleSessionManager.getDefaultSingleton()).apply {
+                SingleSessionManager.getDefaultSingleton(),
+                context).apply {
                 credentials = ownCloudCredentials
             }.also {
                 ownCloudClient = it

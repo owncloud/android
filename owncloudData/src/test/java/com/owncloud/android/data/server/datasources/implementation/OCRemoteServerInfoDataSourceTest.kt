@@ -65,7 +65,6 @@ class OCRemoteServerInfoDataSourceTest {
     @Before
     fun init() {
         ocRemoteServerInfoDatasource = OCRemoteServerInfoDataSource(ocServerInfoService, clientManager)
-
         every { clientManager.getClientForAnonymousCredentials(any(), any()) } returns ocClientMocked
     }
 
