@@ -168,6 +168,8 @@
     <string name="filedetails_created">Created:</string>
     <string name="filedetails_modified">Modified:</string>
     <string name="filedetails_download">Download</string>
+    <string name="filedetails_open_with">Open with</string>
+    <string name="filedetails_send">Send</string>
     <string name="filedetails_file_image_content_description">File Image</string>
     <string name="filedetails_cancel_btn_content_description">Cancel download button</string>
     <string name="filedetails_sync_file">Synchronize</string>
