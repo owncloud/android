@@ -177,10 +177,11 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             val federatedShareAllowed = capabilities?.filesSharingFederationOutgoing?.isTrue ?: false
 
             try {
+                val userName = AccountUtils.getUsernameOfAccount(account.name)
                 while (namesIt.hasNext()) {
                     item = namesIt.next()
-                    if (item.label == AccountUtils.getUsernameOfAccount(account.name) && item.shareType == ShareType.USER) {
-                        item = namesIt.next()
+                    if (item.label == userName  && item.shareType == ShareType.USER) {
+                        continue
                     }
                     var userName = item.label
                     val type = item.shareType
