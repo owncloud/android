@@ -48,6 +48,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.PreviewImageFragmentBinding
 import com.owncloud.android.databinding.TopProgressBarBinding
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.MIME_SVG
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
@@ -328,21 +329,21 @@ class PreviewImageFragment : FileFragment() {
                     return false
                 }
 
-                    override fun onResourceReady(
-                        resource: Drawable?, model: Any, target: Target<Drawable?>,
-                        dataSource: DataSource, isFirstResource: Boolean
-                    ): Boolean {
-                        Timber.d("Loading image %s", file.fileName)
-                        binding.progressWheel.isVisible = false
-                        return false
-                    }
-                })
-                .into(binding.photoView)
+                override fun onResourceReady(
+                    resource: Drawable?, model: Any, target: Target<Drawable?>,
+                    dataSource: DataSource, isFirstResource: Boolean
+                ): Boolean {
+                    Timber.d("Loading image %s", file.fileName)
+                    binding.progressWheel.isVisible = false
+                    return false
+                }
+            })
+            .into(binding.photoView)
 
         binding.photoView.isVisible = true
     }
 
-    private fun isSVGFile(file: OCFile): Boolean = file.mimetype == SVG_MIMETYPE
+    private fun isSVGFile(file: OCFile): Boolean = file.mimetype == MIME_SVG
 
     private fun getBackgroundColor(file: OCFile): Int {
         return if (isSVGFile(file)) Color.WHITE else Color.BLACK
@@ -359,7 +360,6 @@ class PreviewImageFragment : FileFragment() {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
         private const val ARG_IGNORE_FIRST = "IGNORE_FIRST"
-        private const val SVG_MIMETYPE = "image/svg+xml"
 
         /**
          * Public factory method to create a new fragment that previews an image.
