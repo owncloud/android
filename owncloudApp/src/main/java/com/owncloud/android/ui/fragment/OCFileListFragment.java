@@ -925,7 +925,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     return true;
                 }
                 case R.id.action_open_file_with: {
-                    mContainerActivity.getFileOperationsHelper().openFile(singleFile);
+                    if (!singleFile.isDown()) {  // Download the file
+                        ((FileDisplayActivity) mContainerActivity).startDownloadForOpening(singleFile);
+                    } else {
+                        mContainerActivity.getFileOperationsHelper().openFile(singleFile);
+                    }
                     return true;
                 }
                 case R.id.action_rename_file: {

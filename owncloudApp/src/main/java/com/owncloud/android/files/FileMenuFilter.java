@@ -198,9 +198,8 @@ public class FileMenuFilter {
         }
 
         // OPEN WITH (different to preview!)
-        if (!isSingleFile() || !anyFileDown() || synchronizing) {
+        if (!isSingleFile() || synchronizing) {
             toHide.add(R.id.action_open_file_with);
-
         } else {
             toShow.add(R.id.action_open_file_with);
         }
