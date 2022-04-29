@@ -27,6 +27,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
+import com.owncloud.android.extensions.DialogExtKt;
 
 public class ConfirmationDialogFragment extends DialogFragment {
 
@@ -45,13 +46,13 @@ public class ConfirmationDialogFragment extends DialogFragment {
     /**
      * Public factory method to create new ConfirmationDialogFragment instances.
      *
-     * @param messageResId      DataResult id for a message to show in the dialog.
-     * @param messageArguments  Arguments to complete the message, if it's a format string. May be null.
-     * @param titleResId        DataResult id for a text to show in the title.
-     *                          0 for default alert title, -1 for no title.
-     * @param posBtn            DataResult id for the text of the positive button. -1 for no positive button.
-     * @param neuBtn            DataResult id for the text of the neutral button. -1 for no neutral button.
-     * @param negBtn            DataResult id for the text of the negative button. -1 for no negative button.
+     * @param messageResId     DataResult id for a message to show in the dialog.
+     * @param messageArguments Arguments to complete the message, if it's a format string. May be null.
+     * @param titleResId       DataResult id for a text to show in the title.
+     *                         0 for default alert title, -1 for no title.
+     * @param posBtn           DataResult id for the text of the positive button. -1 for no positive button.
+     * @param neuBtn           DataResult id for the text of the neutral button. -1 for no neutral button.
+     * @param negBtn           DataResult id for the text of the negative button. -1 for no negative button.
      * @return Dialog ready to show.
      */
     public static ConfirmationDialogFragment newInstance(
@@ -134,7 +135,9 @@ public class ConfirmationDialogFragment extends DialogFragment {
                         dialog.dismiss();
                     });
         }
-        return builder.create();
+        Dialog d = builder.create();
+        DialogExtKt.avoidScreenshotsIfNeeded(d);
+        return d;
     }
 
     public interface ConfirmationDialogFragmentListener {

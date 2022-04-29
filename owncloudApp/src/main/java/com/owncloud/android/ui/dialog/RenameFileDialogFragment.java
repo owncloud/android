@@ -41,14 +41,15 @@ import androidx.fragment.app.DialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.extensions.DialogExtKt;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.utils.PreferenceUtils;
 
 /**
- *  Dialog to input a new name for a file or folder to rename.  
- *
- *  Triggers the rename operation when name is confirmed.
+ * Dialog to input a new name for a file or folder to rename.
+ * <p>
+ * Triggers the rename operation when name is confirmed.
  */
 public class RenameFileDialogFragment
         extends DialogFragment implements DialogInterface.OnClickListener {
@@ -58,7 +59,7 @@ public class RenameFileDialogFragment
     /**
      * Public factory method to create new RenameFileDialogFragment instances.
      *
-     * @param file            File to rename.
+     * @param file File to rename.
      * @return Dialog ready to show.
      */
     public static RenameFileDialogFragment newInstance(OCFile file) {
@@ -107,6 +108,7 @@ public class RenameFileDialogFragment
                 .setTitle(R.string.rename_dialog_title);
         Dialog d = builder.create();
         d.getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        DialogExtKt.avoidScreenshotsIfNeeded(d);
         return d;
     }
 
@@ -135,7 +137,7 @@ public class RenameFileDialogFragment
     /**
      * Show a temporary message in a Snackbar bound to the content view of the parent Activity
      *
-     * @param messageResource       Message to show.
+     * @param messageResource Message to show.
      */
     private void showSnackMessage(int messageResource) {
         Snackbar snackbar = Snackbar.make(

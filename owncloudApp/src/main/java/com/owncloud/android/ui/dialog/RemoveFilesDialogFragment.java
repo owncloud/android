@@ -20,9 +20,9 @@
 package com.owncloud.android.ui.dialog;
 
 /**
- *  Dialog requiring confirmation before removing a collection of given OCFiles.
- *
- *  Triggers the removal according to the user response.
+ * Dialog requiring confirmation before removing a collection of given OCFiles.
+ * <p>
+ * Triggers the removal according to the user response.
  */
 
 import android.app.Dialog;
@@ -30,6 +30,7 @@ import android.os.Bundle;
 
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.extensions.DialogExtKt;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener;
 
@@ -119,6 +120,8 @@ public class RemoveFilesDialogFragment extends ConfirmationDialogFragment
         mTargetFiles = getArguments().getParcelableArrayList(ARG_TARGET_FILES);
 
         setOnConfirmationListener(this);
+
+        DialogExtKt.avoidScreenshotsIfNeeded(dialog);
 
         return dialog;
     }
