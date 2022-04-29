@@ -30,7 +30,6 @@
         android:id="@+id/progressWheel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:indeterminate="true"
         android:indeterminateOnly="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,24 +37,16 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal_guideline_50_percent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
     <ImageView
         android:id="@+id/error_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:contentDescription="@string/downloader_download_failed_ticker"
+        android:contentDescription="@string/downloader_preview_failed_ticker"
         android:src="@drawable/image_fail"
-        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline_50_percent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@id/horizontal_guideline_50_percent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/errorText"
@@ -63,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="40dp"
         android:gravity="center"
-        android:text="@string/downloader_download_failed_ticker"
+        android:text="@string/downloader_preview_failed_ticker"
         android:textColor="@color/dark_background_text_color"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -94,6 +85,7 @@
     <include layout="@layout/top_progress_bar" />
 
     <androidx.constraintlayout.widget.Group
+        tools:visibility="visible"
         android:id="@+id/error_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
