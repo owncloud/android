@@ -205,7 +205,7 @@ class PublicShareDialogFragment : DialogFragment() {
         binding.saveButton.setOnClickListener { onSaveShareSetting() }
         binding.cancelButton.setOnClickListener { dismiss() }
 
-        dialog.let { it?.avoidScreenshotsIfNeeded() }
+        dialog?.avoidScreenshotsIfNeeded()
     }
 
     private fun initTitleAndLabels() {
