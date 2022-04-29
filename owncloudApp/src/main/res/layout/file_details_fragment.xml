@@ -170,10 +170,10 @@
             style="@style/Button.FileDetail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_cloud_download"
-            android:text="@string/filedetails_download"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_file_detail_separator" />
+            app:layout_constraintTop_toBottomOf="@id/view_file_detail_separator"
+            tools:drawableStart="@drawable/ic_cloud_download"
+            tools:text="@string/filedetails_download" />
 
         <Button
             android:id="@+id/button_file_detail_open_with"
@@ -186,15 +186,15 @@
             app:layout_constraintTop_toBottomOf="@id/button_file_detail_download" />
 
         <Button
-            android:id="@+id/button_file_detail_open_send"
+            android:id="@+id/button_file_detail_send"
             style="@style/Button.FileDetail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_send"
             android:text="@string/filedetails_send"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_file_detail_open_with"
-            app:layout_constraintRight_toLeftOf="@id/barrier"/>
+            app:layout_constraintRight_toLeftOf="@id/barrier"
+            app:layout_constraintTop_toBottomOf="@id/button_file_detail_open_with" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier"

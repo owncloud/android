@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -153,6 +154,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         }
 
         updateFileDetails(false, false);
+        setButtonsClickListener();
         return mView;
     }
 
@@ -281,7 +283,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 return true;
             }
             case R.id.action_open_file_with: {
-                mContainerActivity.getFileOperationsHelper().openFile(getFile());
+                openWith();
                 return true;
             }
             case R.id.action_remove_file: {
@@ -300,17 +302,11 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             }
             case R.id.action_download_file:
             case R.id.action_sync_file: {
-                mContainerActivity.getFileOperationsHelper().syncFile(getFile());
+                downloadFile();
                 return true;
             }
             case R.id.action_send_file: {
-                // Obtain the file
-                if (!getFile().isDown()) {  // Download the file                    
-                    Timber.d("%s : File must be downloaded", getFile().getRemotePath());
-                    ((FileDisplayActivity) mContainerActivity).startDownloadForSending(getFile());
-                } else {
-                    mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
-                }
+                sendFile();
                 return true;
             }
             case R.id.action_set_available_offline: {
@@ -326,6 +322,24 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         }
     }
 
+    private void openWith() {
+        mContainerActivity.getFileOperationsHelper().openFile(getFile());
+    }
+
+    private void downloadFile() {
+        mContainerActivity.getFileOperationsHelper().syncFile(getFile());
+    }
+
+    private void sendFile() {
+        // Obtain the file
+        if (!getFile().isDown()) {  // Download the file
+            Timber.d("%s : File must be downloaded", getFile().getRemotePath());
+            ((FileDisplayActivity) mContainerActivity).startDownloadForSending(getFile());
+        } else {
+            mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -335,6 +349,25 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             }
             case R.id.fdIcon: {
                 displayFile(getFile());
+
+                break;
+            }
+            case R.id.button_file_detail_download: {
+                OCFile file = getFile();
+                if (file.isDown()) {
+
+                } else {
+                    downloadFile();
+                }
+                break;
+            }
+            case R.id.button_file_detail_open_with: {
+                openWith();
+                break;
+            }
+            case R.id.button_file_detail_send: {
+                sendFile();
+                break;
             }
             default:
                 Timber.e("Incorrect view clicked!");
@@ -426,6 +459,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 setButtonsForRemote();
             }
         }
+        setOpenOrDownloadButtonAction();
         getView().invalidate();
     }
 
@@ -572,6 +606,31 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             getView().findViewById(R.id.fdProgressText).setVisibility(View.GONE);
             getView().findViewById(R.id.fdProgressBar).setVisibility(View.GONE);
             getView().findViewById(R.id.fdCancelBtn).setVisibility(View.GONE);
+        }
+    }
+
+    private void setButtonsClickListener() {
+        Button buttonDownload = getView().findViewById(R.id.button_file_detail_download);
+        Button buttonOpenWith = getView().findViewById(R.id.button_file_detail_open_with);
+        Button buttonSend = getView().findViewById(R.id.button_file_detail_send);
+
+        buttonDownload.setOnClickListener(this);
+        buttonOpenWith.setOnClickListener(this);
+        buttonSend.setOnClickListener(this);
+
+        setOpenOrDownloadButtonAction();
+    }
+
+    private void setOpenOrDownloadButtonAction() {
+        OCFile file = getFile();
+        Button button = getView().findViewById(R.id.button_file_detail_download);
+
+        if (file.isDown()) {
+            button.setText(getString(R.string.filedetails_open));
+            button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_open_in_new, 0, 0, 0);
+        } else {
+            button.setText(getString(R.string.filedetails_download));
+            button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_cloud_download, 0, 0, 0);
         }
     }
 
