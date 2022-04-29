@@ -33,6 +33,7 @@
   <string name="prefs_subsection_logging">Regjistrim</string>
   <string name="prefs_subsection_more">Më tepër</string>
   <string name="prefs_subsection_security">Siguri</string>
+  <string name="prefs_subsection_whatsnew">Ç’ka të re në versionin më të ri?</string>
   <string name="prefs_subsection_security_summary">Caktoni kyçje për hyrje në aplikacion dhe lejim prekjeje me dritare të tjera të dukshme</string>
   <string name="prefs_subsection_logging_summary">Ndiq regjistra të prodhuar nga ekzekutimi i aplikacionit</string>
   <string name="prefs_subsection_more_summary">Hollësi aplikacioni, përshtypje dhe të tjera</string>
@@ -259,7 +260,18 @@
   <string name="pass_code_wrong">Kodkalim i pasaktë</string>
   <string name="pass_code_error_set">Ndodhi një gabim teksa ujdisej kyçje frazëkalimi</string>
   <string name="pass_code_error_remove">Ndodhi një gabim teksa hiqej kyçje frazëkalimi</string>
+  <string name="numberkeyboard_backspace_button_content_description">Buton Backspace</string>
+  <string name="numberkeyboard_biometric_button_content_description">Buton biometrik</string>
+  <string name="numberkeyboard_zero">0</string>
+  <string name="numberkeyboard_one">1</string>
+  <string name="numberkeyboard_two">2</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
   <string name="numberkeyboard_five">5</string>
+  <string name="numberkeyboard_six">6</string>
+  <string name="numberkeyboard_seven">7</string>
+  <string name="numberkeyboard_eight">8</string>
+  <string name="numberkeyboard_nine">9</string>
   <string name="lock_time_try_again">Ju lutemi, riprovoni për %1$s</string>
   <string name="biometric_not_enrolled">Që të përdorni këtë veçori, regjistroni të paktën një palë kredenciale biometrike</string>
   <string name="biometric_prompt_title">Hyrje biometrike</string>
@@ -596,5 +608,8 @@
   <string name="security_enforced_first_option">Kyçje me kodkalim</string>
   <string name="security_enforced_second_option">Kyçje me rregullsi</string>
   <!--Release Notes-->
+  <string name="release_notes_header">E re në %1$s</string>
+  <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
+  <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
 </resources>
