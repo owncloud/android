@@ -8,8 +8,13 @@ on:
     - improvement/*
     - release/*
 
+permissions:
+  contents: read
+
 jobs:
   build:
+    permissions:
+      contents: write  # for stefanzweifel/git-auto-commit-action to push code in repo
     runs-on: ubuntu-18.04
     name: Generate Calens Changelog
     steps:
