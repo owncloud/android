@@ -1,0 +1,6 @@
+Enhancement: Thumbnail click action in file detail
+
+When a user clicks on a file's detail view thumbnail,
+the file is automatically downloaded and previewed.
+
+https://github.com/owncloud/android/pull/3653
