@@ -938,6 +938,15 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     mContainerActivity.showDetails(singleFile);
                     return true;
                 }
+                case R.id.action_send_file: {
+                    // Obtain the file
+                    if (!singleFile.isDown()) {  // Download the file
+                        ((FileDisplayActivity) mContainerActivity).startDownloadForSending(singleFile);
+                    } else {
+                        mContainerActivity.getFileOperationsHelper().sendDownloadedFile(singleFile);
+                    }
+                    return true;
+                }
             }
         }
 
@@ -958,10 +967,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 return true;
             }
             case R.id.action_send_file: {
-                // Obtain the file
-                if (!filesAreDown(checkedFiles)) {  // Download the file
-                    ((FileDisplayActivity) mContainerActivity).startDownloadForSending(checkedFiles.get(0));
-                } else {
+                if (checkedFiles.size() > 1 && filesAreDown(checkedFiles)) {
                     mContainerActivity.getFileOperationsHelper().sendDownloadedFiles(checkedFiles);
                 }
                 return true;
