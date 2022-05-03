@@ -176,19 +176,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     private void setActionButtonText() {
         PickerMode actionButton = (PickerMode) getIntent().getSerializableExtra(EXTRA_PICKER_OPTION);
         Button chooseButton = findViewById(R.id.folder_picker_btn_choose);
-
-        if (actionButton != null) {
-            switch (actionButton) {
-                case MOVE:
-                    chooseButton.setText(getString(actionButton.getButtonString(PickerMode.MOVE)));
-                    break;
-                case COPY:
-                    chooseButton.setText(getString(actionButton.getButtonString(PickerMode.COPY)));
-                    break;
-                default:
-                    chooseButton.setText(getString(actionButton.getButtonString(PickerMode.CAMERA_FOLDER)));
-            }
-        }
+        chooseButton.setText(getString(actionButton.getButtonString()));
     }
 
     protected OCFileListFragment getListOfFilesFragment() {
@@ -536,8 +524,8 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     public enum PickerMode {
         MOVE, COPY, CAMERA_FOLDER;
 
-        public Integer getButtonString(PickerMode pickerMode) {
-            switch (pickerMode) {
+        public Integer getButtonString() {
+            switch (this) {
                 case MOVE:
                     return R.string.folder_picker_move_here_button_text;
                 case COPY:
