@@ -1673,7 +1673,13 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
     }
 
-    private fun getFileDiscovered(uri: Uri?): OCFile? = storageManager.getFileByPrivateLink(uri.toString())
+    private fun getFileDiscovered(uri: Uri?): OCFile? {
+        return if (storageManager != null) {
+            storageManager.getFileByPrivateLink(uri.toString())
+        } else {
+            null
+        }
+    }
 
     private fun manageItem(file: OCFile) {
         onBrowsedDownTo(file)
