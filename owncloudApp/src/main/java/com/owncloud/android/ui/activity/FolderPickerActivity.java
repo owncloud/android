@@ -69,7 +69,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
     private static final String TAG_LIST_OF_FOLDERS = "LIST_OF_FOLDERS";
 
-    private static final String ACTION_BUTTON = "ACTION_BUTTON";
+    public static final String EXTRA_PICKER_OPTION = "EXTRA_PICKER_OPTION";
 
     private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
@@ -174,17 +174,19 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     private void setActionButtonText() {
-        FolderPickerActivity.ACTION_BUTTON actionButton = (FolderPickerActivity.ACTION_BUTTON) getIntent().getSerializableExtra(ACTION_BUTTON);
+        PickerMode actionButton = (PickerMode) getIntent().getSerializableExtra(EXTRA_PICKER_OPTION);
         Button chooseButton = findViewById(R.id.folder_picker_btn_choose);
 
         if (actionButton != null) {
             switch (actionButton) {
                 case MOVE:
-                    chooseButton.setText(getString(R.string.folder_picker_move_here_button_text));
+                    chooseButton.setText(getString(actionButton.getButtonString(PickerMode.MOVE)));
                     break;
                 case COPY:
-                    chooseButton.setText(getString(R.string.folder_picker_copy_here_button_text));
+                    chooseButton.setText(getString(actionButton.getButtonString(PickerMode.COPY)));
                     break;
+                default:
+                    chooseButton.setText(getString(actionButton.getButtonString(PickerMode.CAMERA_FOLDER)));
             }
         }
     }
@@ -531,7 +533,18 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         }
     }
 
-    public enum ACTION_BUTTON {
-        MOVE, COPY
+    public enum PickerMode {
+        MOVE, COPY, CAMERA_FOLDER;
+
+        public Integer getButtonString(PickerMode pickerMode) {
+            switch (pickerMode) {
+                case MOVE:
+                    return R.string.folder_picker_move_here_button_text;
+                case COPY:
+                    return R.string.folder_picker_copy_here_button_text;
+                default:
+                    return R.string.folder_picker_choose_button_text;
+            }
+        }
     }
 }
