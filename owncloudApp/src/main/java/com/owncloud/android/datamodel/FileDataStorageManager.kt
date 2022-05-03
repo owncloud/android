@@ -114,8 +114,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.util.ArrayList
-import java.util.HashSet
 import java.util.Vector
 
 class FileDataStorageManager {
@@ -308,6 +306,15 @@ class FileDataStorageManager {
             createFileInstance(c)
         } else null
         c.close()
+        return file
+    }
+
+    fun getFileByPrivateLink(privateLink: String): OCFile? {
+        val cursor = getFileCursorForValue(FILE_PRIVATE_LINK, privateLink) ?: return null
+        val file: OCFile? = if (cursor.moveToFirst()) {
+            createFileInstance(cursor)
+        } else null
+        cursor.close()
         return file
     }
 
@@ -1106,6 +1113,7 @@ class FileDataStorageManager {
             isDownloading = it.getIntFromColumnOrThrow(FILE_IS_DOWNLOADING) == 1
             etagInConflict = it.getStringFromColumnOrThrow(FILE_ETAG_IN_CONFLICT)
             privateLink = it.getStringFromColumnOrThrow(FILE_PRIVATE_LINK)
+            owner = it.getStringFromColumnOrThrow(FILE_ACCOUNT_OWNER)
         }
     }
 

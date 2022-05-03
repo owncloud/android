@@ -1,4 +1,4 @@
-/*
+/**
  * ownCloud Android client application
  *
  * @author masensio
@@ -7,6 +7,7 @@
  * @author Christian Schabesberger
  * @author David Crespo Ríos
  * @author Juan Carlos Garrote Gascón
+ * @author Fernando Sanz Velasco
  * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify

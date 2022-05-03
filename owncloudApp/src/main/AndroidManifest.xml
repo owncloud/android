@@ -80,8 +80,8 @@
         <activity android:name=".presentation.ui.migration.StorageMigrationActivity" />
         <activity
             android:name=".ui.activity.SplashActivity"
-            android:theme="@style/Theme.ownCloud.Splash"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.ownCloud.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -89,15 +89,33 @@
         </activity>
         <activity
             android:name=".ui.activity.FileDisplayActivity"
+            android:exported="true"
             android:theme="@style/Theme.ownCloud.Toolbar.Drawer"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="@string/deep_link_host"
+                    android:pathPrefix="@string/deep_link_path_prefix"
+                    android:scheme="https" />
+
+                <data
+                    android:host="@string/deep_link_host"
+                    android:pathPrefix="@string/deep_link_path_prefix"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.activity.ManageAccountsActivity" />
         <activity
             android:name=".ui.activity.ReceiveExternalFilesActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
-            android:taskAffinity=""
-            android:exported="true">
+            android:exported="true"
+            android:taskAffinity="">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -216,11 +234,11 @@
         <activity android:name=".ui.activity.UploadPathActivity" />
         <activity
             android:name=".presentation.ui.sharing.ShareActivity"
+            android:exported="true"
             android:label="@string/share_dialog_title"
             android:launchMode="singleTop"
             android:theme="@style/Theme.ownCloud"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="true">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>

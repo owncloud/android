@@ -7,8 +7,9 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Abel García de Prada
+ * @author Fernando Sanz Velasco
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -51,6 +52,7 @@ import com.owncloud.android.AppRater
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
+import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.OCFile
@@ -223,6 +225,11 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
         if (savedInstanceState == null) {
             createMinFragments()
+        }
+
+        val dataIntent: Uri? = intent.data
+        dataIntent?.let {
+            handleDeepLink(dataIntent)
         }
 
         setBackgroundText()
@@ -415,7 +422,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     fun refreshListOfFilesFragment(reloadData: Boolean) {
         val fileListFragment = listOfFilesFragment
-        fileListFragment?.listDirectory(reloadData)
+        if (intent.data == null || isAlreadyHandledDeepLink) {
+            fileListFragment?.listDirectory(reloadData)
+        } else {
+            fileListFragment?.listDirectory(getFileDiscovered(intent.data))
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -1645,6 +1657,47 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     override fun optionLockSelected(type: LockType) {
         manageOptionLockSelected(type)
+    }
+
+    private fun handleDeepLink(uri: Uri?) {
+        if (uri != null && AccountUtils.getAccounts(applicationContext).isEmpty()) {
+            showMessageInSnackbar(message = getString(R.string.no_account_configured))
+        } else if (uri != null && AccountUtils.getAccounts(applicationContext).size == 1) {
+            getFileDiscovered(uri).let { oCFile ->
+                if (oCFile != null) {
+                    manageItem(oCFile)
+                } else {
+                    showMessageInSnackbar(message = getString(R.string.no_file_found))
+                }
+            }
+        }
+    }
+
+    private fun getFileDiscovered(uri: Uri?): OCFile? {
+        return if (storageManager != null) {
+            storageManager.getFileByPrivateLink(uri.toString())
+        } else {
+            null
+        }
+    }
+
+    private fun manageItem(file: OCFile) {
+        onBrowsedDownTo(file)
+        setFile(file)
+        account = AccountUtils.getOwnCloudAccountByName(this, file.owner)
+
+        if (file.isFolder) {
+            refreshListOfFilesFragment(true)
+            return
+        }
+
+        if (PreviewImageFragment.canBePreviewed(file)) {
+            showDetails(file)
+        } else {
+            initFragmentsWithFile()
+        }
+
+        isAlreadyHandledDeepLink = true
     }
 
     companion object {

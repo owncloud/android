@@ -73,6 +73,8 @@ public class FileActivity extends DrawerActivity
     public static final String EXTRA_ACCOUNT = "com.owncloud.android.ui.activity.ACCOUNT";
     public static final String EXTRA_FROM_NOTIFICATION =
             "com.owncloud.android.ui.activity.FROM_NOTIFICATION";
+    public static final String EXTRA_ALREADY_HANDLED_DEEP_LINK =
+            "com.owncloud.android.ui.activity.ALREADY_HANDLED_DEEP_LINK";
     public static final String EXTRA_FILE_LIST_OPTION = "EXTRA_FILE_LIST_OPTION";
 
     private static final String KEY_WAITING_FOR_OP_ID = "WAITING_FOR_OP_ID";
@@ -97,6 +99,8 @@ public class FileActivity extends DrawerActivity
      * Flag to signal if the activity is launched by a notification
      */
     private boolean mFromNotification;
+
+    private boolean mAlreadyHandledDeepLink = false;
 
     /**
      * Messages handler associated to the main thread and the life cycle of the activity
@@ -131,6 +135,7 @@ public class FileActivity extends DrawerActivity
         if (savedInstanceState != null) {
             mFile = savedInstanceState.getParcelable(FileActivity.EXTRA_FILE);
             mFromNotification = savedInstanceState.getBoolean(FileActivity.EXTRA_FROM_NOTIFICATION);
+            mAlreadyHandledDeepLink = savedInstanceState.getBoolean(FileActivity.EXTRA_ALREADY_HANDLED_DEEP_LINK);
             mFileOperationsHelper.setOpIdWaitingFor(
                     savedInstanceState.getLong(KEY_WAITING_FOR_OP_ID, Long.MAX_VALUE)
             );
@@ -214,6 +219,7 @@ public class FileActivity extends DrawerActivity
         super.onSaveInstanceState(outState);
         outState.putParcelable(FileActivity.EXTRA_FILE, mFile);
         outState.putBoolean(FileActivity.EXTRA_FROM_NOTIFICATION, mFromNotification);
+        outState.putBoolean(FileActivity.EXTRA_ALREADY_HANDLED_DEEP_LINK, mAlreadyHandledDeepLink);
         outState.putLong(KEY_WAITING_FOR_OP_ID, mFileOperationsHelper.getOpIdWaitingFor());
         if (getSupportActionBar() != null && getSupportActionBar().getTitle() != null) {
             // Null check in case the actionbar is used in ActionBar.NAVIGATION_MODE_LIST
@@ -245,6 +251,14 @@ public class FileActivity extends DrawerActivity
      */
     public boolean fromNotification() {
         return mFromNotification;
+    }
+
+    public void setAlreadyHandledDeepLink(boolean alreadyHandledDeepLink) {
+        mAlreadyHandledDeepLink = alreadyHandledDeepLink;
+    }
+
+    public boolean isAlreadyHandledDeepLink() {
+        return mAlreadyHandledDeepLink;
     }
 
     public OperationsServiceBinder getOperationsServiceBinder() {
