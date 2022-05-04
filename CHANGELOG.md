@@ -23,6 +23,7 @@ Summary
 * Enhancement - New option to show or not hidden files: [#2578](https://github.com/owncloud/android/issues/2578)
 * Enhancement - Option to allow screenshots or not in Android Enterprise: [#3625](https://github.com/owncloud/android/issues/3625)
 * Enhancement - Full name is shown in shares: [#1106](https://github.com/owncloud/android/issues/1106)
+* Enhancement - Improved copy/move dialog: [#1414](https://github.com/owncloud/android/issues/1414)
 * Enhancement - Thumbnail click action in file detail: [#3653](https://github.com/owncloud/android/pull/3653)
 
 Details
@@ -143,6 +144,14 @@ Details
 
    https://github.com/owncloud/android/issues/1106
    https://github.com/owncloud/android/pull/3636
+
+* Enhancement - Improved copy/move dialog: [#1414](https://github.com/owncloud/android/issues/1414)
+
+   Previously,they appeared exactly the same and there was no way of knowing which was which. Now
+   they are differentiated by the text on the action button.
+
+   https://github.com/owncloud/android/issues/1414
+   https://github.com/owncloud/android/pull/3640
 
 * Enhancement - Thumbnail click action in file detail: [#3653](https://github.com/owncloud/android/pull/3653)
 

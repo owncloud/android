@@ -1000,12 +1000,14 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
             case R.id.action_move: {
                 Intent action = new Intent(getActivity(), FolderPickerActivity.class);
+                action.putExtra(FolderPickerActivity.EXTRA_PICKER_OPTION, FolderPickerActivity.PickerMode.MOVE);
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles);
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES);
                 return true;
             }
             case R.id.action_copy:
                 Intent action = new Intent(getActivity(), FolderPickerActivity.class);
+                action.putExtra(FolderPickerActivity.EXTRA_PICKER_OPTION, FolderPickerActivity.PickerMode.COPY);
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles);
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES);
                 return true;
@@ -1269,7 +1271,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         snackbar.show();
     }
 
-    public void setSearchListener(SearchView searchView){
+    public void setSearchListener(SearchView searchView) {
         searchView.setOnQueryTextFocusChangeListener(this);
         searchView.setOnQueryTextListener(this);
     }
