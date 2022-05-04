@@ -636,7 +636,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     getActivity()
             );
             mf.filter(menu, mEnableSelectAll, true, mFileListOption.isAvailableOffline(),
-                    mFileListOption.isSharedByLink());
+                    mFileListOption.isSharedByLink(),false);
             return true;
         }
 

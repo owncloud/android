@@ -93,7 +93,7 @@ public class FileMenuFilter {
      * @param menu Options or context menu to filter.
      */
     public void filter(Menu menu, boolean displaySelectAll, boolean displaySelectInverse,
-                       boolean onlyAvailableOffline, boolean sharedByLinkFiles) {
+                       boolean onlyAvailableOffline, boolean sharedByLinkFiles, boolean isFileDetailFragment) {
         if (mFiles == null || mFiles.size() <= 0) {
             hideAll(menu);
 
@@ -101,7 +101,7 @@ public class FileMenuFilter {
             List<Integer> toShow = new ArrayList<>();
             List<Integer> toHide = new ArrayList<>();
 
-            filter(toShow, toHide, displaySelectAll, displaySelectInverse, onlyAvailableOffline, sharedByLinkFiles);
+            filter(toShow, toHide, displaySelectAll, displaySelectInverse, onlyAvailableOffline, sharedByLinkFiles, isFileDetailFragment);
 
             MenuItem item;
             for (int i : toShow) {
@@ -140,8 +140,8 @@ public class FileMenuFilter {
      * @param toHide List to save the options that must be shown in the menu.
      */
 
-    private void filter(List<Integer> toShow, List<Integer> toHide, boolean displaySelectAll,
-                        boolean displaySelectInverse, boolean onlyAvailableOffline, boolean sharedByLinkFiles) {
+    private void filter(List<Integer> toShow, List<Integer> toHide, boolean displaySelectAll, boolean displaySelectInverse,
+                        boolean onlyAvailableOffline, boolean sharedByLinkFiles, boolean isFileDetailFragment) {
 
         boolean synchronizing = anyFileSynchronizing();
 
@@ -164,7 +164,7 @@ public class FileMenuFilter {
 
         // DOWNLOAD
         if (mFiles.isEmpty() || containsFolder() || anyFileDown() || synchronizing || videoPreviewing ||
-                onlyAvailableOffline || sharedByLinkFiles) {
+                onlyAvailableOffline || sharedByLinkFiles || isFileDetailFragment) {
             toHide.add(R.id.action_download_file);
 
         } else {
@@ -198,7 +198,7 @@ public class FileMenuFilter {
         }
 
         // OPEN WITH (different to preview!)
-        if (!isSingleFile() || !anyFileDown() || synchronizing) {
+        if (!isSingleFile() || !anyFileDown() || synchronizing || isFileDetailFragment) {
             toHide.add(R.id.action_open_file_with);
 
         } else {
@@ -249,7 +249,8 @@ public class FileMenuFilter {
         // SEND
         boolean sendAllowed = (mContext != null &&
                 mContext.getString(R.string.send_files_to_other_apps).equalsIgnoreCase("on"));
-        if (containsFolder() || (!areDownloaded() && !isSingleFile()) || !sendAllowed || synchronizing || videoStreaming || onlyAvailableOffline) {
+
+        if (containsFolder() || (!areDownloaded() && !isSingleFile()) || !sendAllowed || synchronizing || videoStreaming || onlyAvailableOffline || isFileDetailFragment) {
             toHide.add(R.id.action_send_file);
         } else {
             toShow.add(R.id.action_send_file);
