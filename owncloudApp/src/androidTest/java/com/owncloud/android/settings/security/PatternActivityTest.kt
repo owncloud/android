@@ -58,8 +58,9 @@ class PatternActivityTest {
 
         startKoin {
             context
+            allowOverride(override = true)
             modules(
-                module(override = true) {
+                module {
                     viewModel {
                         patternViewModel
                     }

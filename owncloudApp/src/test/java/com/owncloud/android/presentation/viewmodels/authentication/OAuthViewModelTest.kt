@@ -69,8 +69,9 @@ class OAuthViewModelTest : ViewModelTest() {
 
         Dispatchers.setMain(testCoroutineDispatcher)
         startKoin {
+            allowOverride(override = true)
             modules(
-                module(override = true) {
+                module {
                     factory {
                         contextProvider
                     }

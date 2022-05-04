@@ -26,12 +26,12 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
-import com.owncloud.android.utils.releaseNotesList
 import com.owncloud.android.presentation.viewmodels.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.utils.click
 import com.owncloud.android.utils.matchers.assertChildCount
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withText
+import com.owncloud.android.utils.releaseNotesList
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
@@ -51,14 +51,15 @@ class ReleaseNotesActivityTest {
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
-        releaseNotesViewModel = mockk(relaxUnitFun = true)
+        releaseNotesViewModel = mockk(relaxed = true)
 
         stopKoin()
 
         startKoin {
             context
+            allowOverride(override = true)
             modules(
-                module(override = true) {
+                module {
                     viewModel {
                         releaseNotesViewModel
                     }

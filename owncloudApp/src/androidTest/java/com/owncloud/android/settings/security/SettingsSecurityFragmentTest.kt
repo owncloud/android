@@ -42,8 +42,8 @@ import com.owncloud.android.R
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
@@ -84,16 +84,17 @@ class SettingsSecurityFragmentTest {
     @Before
     fun setUp() {
         context = InstrumentationRegistry.getInstrumentation().targetContext
-        securityViewModel = mockk(relaxUnitFun = true)
-        biometricViewModel = mockk(relaxUnitFun = true)
+        securityViewModel = mockk(relaxed = true)
+        biometricViewModel = mockk(relaxed = true)
         mockkObject(BiometricManager)
 
         stopKoin()
 
         startKoin {
             context
+            allowOverride(override = true)
             modules(
-                module(override = true) {
+                module {
                     viewModel {
                         securityViewModel
                     }
