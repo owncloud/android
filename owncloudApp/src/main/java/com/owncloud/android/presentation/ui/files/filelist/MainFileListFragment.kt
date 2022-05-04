@@ -107,8 +107,6 @@ class MainFileListFragment : Fragment(),
 
     var actionMode: ActionMode? = null
 
-    var enableSelectAll = true
-
     private var statusBarColorActionMode: Int? = null
     private var statusBarColor: Int? = null
 
@@ -493,7 +491,6 @@ class MainFileListFragment : Fragment(),
             when (menuId) {
                 R.id.action_share_file -> {
                     containerActivity?.fileOperationsHelper?.showShareFile(singleFile)
-                    enableSelectAll = false
                     return true
                 }
                 R.id.action_open_file_with -> {
@@ -678,7 +675,7 @@ class MainFileListFragment : Fragment(),
 
             fileMenuFilter.filter(
                 menu,
-                enableSelectAll,
+                checkedCount != fileListAdapter.itemCount - 1, // -1 because one of them is the footer :S
                 true,
                 fileListOption.isAvailableOffline(),
                 fileListOption.isSharedByLink()
