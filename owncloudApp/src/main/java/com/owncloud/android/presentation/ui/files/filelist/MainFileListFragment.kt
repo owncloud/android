@@ -139,6 +139,11 @@ class MainFileListFragment : Fragment(),
             queryHint = resources.getString(R.string.actionbar_search)
             setOnQueryTextListener(this@MainFileListFragment)
         }
+        (menu.findItem(R.id.action_select_all)).setOnMenuItemClickListener {
+            fileListAdapter.selectAll()
+            updateActionModeAfterTogglingSelected()
+            true
+        }
     }
 
     /**
@@ -593,6 +598,9 @@ class MainFileListFragment : Fragment(),
         if (selectedItems == 0) {
             actionMode?.finish()
         } else {
+            if (actionMode == null) {
+                actionMode = (requireActivity() as AppCompatActivity).startSupportActionMode(actionModeCallback)
+            }
             actionMode?.apply {
                 title = selectedItems.toString()
                 invalidate()
