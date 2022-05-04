@@ -241,7 +241,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, false, false, false, false,true);
+            mf.filter(menu, false, false, false, false, true);
         }
 
         // additional restriction for this fragment 
@@ -349,13 +349,12 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             }
             case R.id.fdIcon: {
                 displayFile(getFile());
-
                 break;
             }
             case R.id.button_file_detail_download: {
                 OCFile file = getFile();
                 if (file.isDown()) {
-
+                    displayFile(getFile());
                 } else {
                     downloadFile();
                 }
