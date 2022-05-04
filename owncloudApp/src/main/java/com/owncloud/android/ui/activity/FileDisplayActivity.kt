@@ -46,6 +46,7 @@ import android.os.IBinder
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -63,6 +64,7 @@ import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedExcept
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -88,7 +90,6 @@ import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
 import com.owncloud.android.ui.fragment.FileFragment
-import com.owncloud.android.ui.fragment.OCFileListFragment
 import com.owncloud.android.ui.fragment.TaskRetainerFragment
 import com.owncloud.android.ui.helpers.FilesUploadHelper
 import com.owncloud.android.ui.helpers.UriUploader
@@ -111,7 +112,6 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
-import java.util.ArrayList
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -119,7 +119,7 @@ import kotlin.coroutines.CoroutineContext
  */
 
 class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEnforceableRefreshListener,
-    CoroutineScope, MainFileListFragment.BrowseUpListener {
+    CoroutineScope, MainFileListFragment.FileActions, MainFileListFragment.UploadActions {
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -128,8 +128,24 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     private var uploadBroadcastReceiver: UploadBroadcastReceiver? = null
     private var lastSslUntrustedServerResult: RemoteOperationResult<*>? = null
 
-    private var leftFragmentContainer: View? = null
-    private var rightFragmentContainer: View? = null
+    /**
+     * FileDisplayActivity is based on those two containers.
+     * Left one is used for showing a list of files - [listMainFileFragment]
+     * Right one is used for showing previews, details... - [secondFragment]
+     *
+     * We should rename them to a more accurate names.
+     *
+     * When one is shown, the other is hidden. The main logic for this is inside [updateFragmentsVisibility]
+     */
+    private var leftFragmentContainer: FrameLayout? = null
+    private var rightFragmentContainer: FrameLayout? = null
+
+    private val listMainFileFragment: MainFileListFragment?
+        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES) as MainFileListFragment?
+
+    private val secondFragment: FileFragment?
+        get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
+
     private var selectAllMenuItem: MenuItem? = null
     private var mainMenu: Menu? = null
 
@@ -146,18 +162,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     var filesUploadHelper: FilesUploadHelper? = null
         internal set
-
-    private val listMainFileFragment: MainFileListFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES_BIS) as MainFileListFragment?
-
-    private val listOfFilesFragment: OCFileListFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES) as OCFileListFragment?
-
-    private val secondFragment: FileFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
-
-    private val isFabOpen: Boolean
-        get() = listMainFileFragment?.getFabMain()?.isExpanded ?: false
 
     private lateinit var binding: ActivityMainBinding
 
@@ -261,10 +265,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
 
         if (savedInstanceState == null) {
-            createMinFragments()
+            initAndShowListOfFiles()
         }
-
-        setBackgroundText()
 
         startListeningToOperations()
     }
@@ -342,18 +344,15 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         }
     }
 
-    // TODO Change to start using new MainListFragment
-    private fun createMinFragments() {
-        // TODO Remove commented code
-        /*val listOfFiles = OCFileListFragment.newInstance(false, fileListOption, false, false, true)
-        listOfFiles.setSearchListener(findViewById(R.id.root_toolbar_search_view))*/
-
-        val mainListOfFiles = MainFileListFragment.newInstance()
+    private fun initAndShowListOfFiles() {
+        val mainListOfFiles = MainFileListFragment.newInstance().apply {
+            fileActions = this@FileDisplayActivity
+            uploadActions = this@FileDisplayActivity
+            setSearchListener(findViewById(R.id.root_toolbar_search_view))
+        }
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.left_fragment_container, mainListOfFiles, TAG_LIST_OF_FILES_BIS)
+        transaction.add(R.id.left_fragment_container, mainListOfFiles, TAG_LIST_OF_FILES)
         transaction.commit()
-
-        mainListOfFiles.setSearchListener(findViewById(R.id.root_toolbar_search_view))
     }
 
     private fun initFragmentsWithFile() {
@@ -379,53 +378,52 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     /**
      * Choose the second fragment that is going to be shown
      *
-     * @param file used to decide which fragment should be chosen
+     * @param file used to decide which fragment should be chosen.
+     *
      * @return a new second fragment instance if it has not been chosen before, or the fragment
-     * previously chosen otherwhise
+     * previously chosen otherwise
      */
-    private fun chooseInitialSecondFragment(file: OCFile?): Fragment? {
+    private fun chooseInitialSecondFragment(file: OCFile): Fragment? {
+        val secondFragment = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
 
-        var secondFragment = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
+        // Return second fragment if it has been already chosen
+        if (secondFragment != null) return secondFragment
 
-        if (secondFragment == null) { // If second fragment has not been chosen yet, choose it
-            if (file != null && !file.isFolder) {
-                if ((PreviewAudioFragment.canBePreviewed(file) || PreviewVideoFragment.canBePreviewed(file)) && file.lastSyncDateForProperties ?: 0 > 0  // temporal fix
-                ) {
-                    val startPlaybackPosition = intent.getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0)
-                    val autoplay = intent.getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true)
+        // Return null if we receive a folder. This way, second fragment will be cleared. We should move this logic out of here.
+        if (file.isFolder) return null
 
-                    if (PreviewAudioFragment.canBePreviewed(file)) {
-
-                        secondFragment = PreviewAudioFragment.newInstance(
-                            file,
-                            account,
-                            startPlaybackPosition,
-                            autoplay
-                        )
-
-                    } else {
-
-                        secondFragment = PreviewVideoFragment.newInstance(
-                            file,
-                            account,
-                            startPlaybackPosition,
-                            autoplay
-                        )
-                    }
-
-                } else if (PreviewTextFragment.canBePreviewed(file)) {
-                    secondFragment = PreviewTextFragment.newInstance(
-                        file,
-                        account
-                    )
-
-                } else {
-                    secondFragment = FileDetailFragment.newInstance(file, account)
-                }
+        // Otherwise, decide which fragment should be shown.
+        return when {
+            PreviewAudioFragment.canBePreviewed(file) -> {
+                val startPlaybackPosition = intent.getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0)
+                val autoplay = intent.getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true)
+                PreviewAudioFragment.newInstance(
+                    file,
+                    account,
+                    startPlaybackPosition,
+                    autoplay
+                )
+            }
+            PreviewVideoFragment.canBePreviewed(file) -> {
+                val startPlaybackPosition = intent.getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0)
+                val autoplay = intent.getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true)
+                PreviewVideoFragment.newInstance(
+                    file,
+                    account,
+                    startPlaybackPosition,
+                    autoplay
+                )
+            }
+            PreviewTextFragment.canBePreviewed(file) -> {
+                PreviewTextFragment.newInstance(
+                    file,
+                    account
+                )
+            }
+            else -> {
+                FileDetailFragment.newInstance(file, account)
             }
         }
-
-        return secondFragment
     }
 
     /**
@@ -447,24 +445,19 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         binding.navCoordinatorLayout.bottomNavView.isVisible = show
     }
 
+    /**
+     * Handle the visibility of the two main containers in the activity.
+     *
+     * Showing list of files should hide right container
+     * Showing preview or details should hide left container
+     *
+     * @param existsSecondFragment - true if showing details or preview of a file
+     */
     private fun updateFragmentsVisibility(existsSecondFragment: Boolean) {
-        if (existsSecondFragment) {
-            if (leftFragmentContainer?.visibility != View.GONE) {
-                leftFragmentContainer?.visibility = View.GONE
-            }
-            if (rightFragmentContainer?.visibility != View.VISIBLE) {
-                rightFragmentContainer?.visibility = View.VISIBLE
-            }
-            showBottomNavBar(show = false)
-        } else {
-            if (leftFragmentContainer?.visibility != View.VISIBLE) {
-                leftFragmentContainer?.visibility = View.VISIBLE
-                showBottomNavBar(show = true)
-            }
-            if (rightFragmentContainer?.visibility != View.GONE) {
-                rightFragmentContainer?.visibility = View.GONE
-            }
-        }
+        leftFragmentContainer?.isVisible = !existsSecondFragment
+        rightFragmentContainer?.isVisible = existsSecondFragment
+
+        showBottomNavBar(show = !existsSecondFragment)
     }
 
     private fun cleanSecondFragment() {
@@ -484,6 +477,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         fileListFragment?.listDirectory(reloadData)*/
         if (file != null) {
             val fileListFragment = listMainFileFragment
+            listMainFileFragment?.fileActions = this
             fileListFragment?.listDirectory(file)
         }
     }
@@ -512,12 +506,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
-            R.id.action_select_all -> {
-                listOfFilesFragment?.selectAll()
-            }
             android.R.id.home -> {
                 val second = secondFragment
-                val currentDir = currentDir
+                val currentDir = listMainFileFragment?.getCurrentFile()
 
                 val inRootFolder = currentDir != null && currentDir.parentId == 0L
                 val fileFragmentVisible = second != null && second.file != null
@@ -667,7 +658,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     override fun onBackPressed() {
-        val isFabOpen = isFabOpen
+        val isFabOpen = listMainFileFragment?.isFabExpanded() ?: false
 
         /*
          * BackPressed priority/hierarchy:
@@ -683,23 +674,23 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             super.onBackPressed()
         } else if (!isDrawerOpen() && isFabOpen) {
             // close fab
-            listMainFileFragment?.getFabMain()?.collapse()
+            listMainFileFragment?.collapseFab()
         } else {
-            // all closed
-            val listOfFiles = listMainFileFragment
-            if (secondFragment == null) {
-                val currentDir = listOfFiles?.getCurrentFile()
-                if (currentDir == null || currentDir.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
+            // Every single menu is collapsed. We can navigate up.
+            if (secondFragment != null) {
+                // If secondFragment was shown, we need to navigate to the parent of the displayed file
+                // Need a cleanup
+                listMainFileFragment?.navigateToFolderId(secondFragment!!.file!!.parentId!!)
+                cleanSecondFragment()
+            } else {
+                val currentDirDisplayed = listMainFileFragment?.getCurrentFile()
+                if (currentDirDisplayed == null || currentDirDisplayed.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
                     finish()
                     return
+                } else {
+                    listMainFileFragment?.onBrowseUp()
                 }
-                listOfFiles?.onBrowseUp()
             }
-            /*if (listOfFiles != null) {  // should never be null, indeed
-                file = listOfFiles.getCurrentFile()
-                listOfFiles.listDirectory(file)
-            }
-            cleanSecondFragment()*/
         }
     }
 
@@ -817,8 +808,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                         }
 
                         if (synchFolderRemotePath != null && currentDir.remotePath == synchFolderRemotePath) {
-                            val fileListFragment = listOfFilesFragment
-                            fileListFragment?.listDirectory(true)
+                            listMainFileFragment?.listDirectory(currentDir)
                         }
                         file = currentFile
                     }
@@ -862,11 +852,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     }
                 }
 
-                val fileListFragment = listOfFilesFragment
-                fileListFragment?.setProgressBarAsIndeterminate(syncInProgress)
+                listMainFileFragment?.setProgressBarAsIndeterminate(syncInProgress)
                 Timber.d("Setting progress visibility to $syncInProgress")
-
-                setBackgroundText()
             }
 
             if (synchResult?.code == ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) {
@@ -882,37 +869,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                     showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
                 }
             }
-        }
-    }
-
-    /**
-     * Show a text message on screen view for notifying user if content is
-     * loading or folder is empty
-     */
-    fun setBackgroundText() {
-        val ocFileListFragment = listOfFilesFragment
-        if (ocFileListFragment != null) {
-            if (selectAllMenuItem != null) {
-                selectAllMenuItem!!.isVisible = true
-                if (ocFileListFragment.noOfItems == 0) {
-                    selectAllMenuItem!!.isVisible = false
-                }
-            }
-            var message = R.string.file_list_loading
-            if (!syncInProgress) {
-                // In case file list is empty
-                message =
-                    when (fileListOption) {
-                        FileListOption.AV_OFFLINE -> R.string.file_list_empty_available_offline
-                        FileListOption.SHARED_BY_LINK -> R.string.file_list_empty_shared_by_links
-                        else -> R.string.file_list_empty
-                    }
-                ocFileListFragment.progressBar.visibility = View.GONE
-                ocFileListFragment.shadowView.visibility = View.VISIBLE
-            }
-            ocFileListFragment.setMessageForEmptyList(getString(message))
-        } else {
-            Timber.e("OCFileListFragment is null")
         }
     }
 
@@ -1103,11 +1059,11 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     fun browseToRoot() {
-        val listOfFiles = listOfFilesFragment
+        val listOfFiles = listMainFileFragment
         if (listOfFiles != null) {  // should never be null, indeed
             val root = storageManager.getFileByPath(OCFile.ROOT_PATH)
-            listOfFiles.listDirectory(root)
-            file = listOfFiles.currentFile
+            listOfFiles.listDirectory(root!!)
+            file = root
             startSyncFolderOperation(root, false)
         }
         cleanSecondFragment()
@@ -1171,8 +1127,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             } else {
                 return
             }
-            val listOfFiles = listOfFilesFragment
-            listOfFiles?.listDirectory(false)
             val secondFragment = secondFragment
             secondFragment?.onTransferServiceConnected()
         }
@@ -1417,10 +1371,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                         MainApp.appContext, null, null
                     )// unneeded, handling via SyncBroadcastReceiver
 
-                    val fileListFragment = listOfFilesFragment
-                    fileListFragment?.setProgressBarAsIndeterminate(true)
+                    listMainFileFragment?.setProgressBarAsIndeterminate(true)
 
-                    setBackgroundText()
                 }   // else: NOTHING ; lets' not refresh when the user rotates the device but there is
                 // another window floating over
             },
@@ -1613,10 +1565,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     }
 
     private fun refreshList(ignoreETag: Boolean) {
-        listOfFilesFragment?.let {
-            it.currentFile?.let { folder ->
-                startSyncFolderOperation(folder, ignoreETag)
-            }
+        listMainFileFragment?.getCurrentFile()?.let { folder ->
+            startSyncFolderOperation(folder, ignoreETag)
         }
     }
 
@@ -1625,7 +1575,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
             if (listMainFileFragment != null) {
                 fileListOption = newFileListOption
                 file = storageManager.getFileByPath(OCFile.ROOT_PATH)
-                listMainFileFragment?.updateFileListOption(newFileListOption)
+                listMainFileFragment?.updateFileListOption(newFileListOption, file)
                 updateToolbar(null)
             } else {
                 super.navigateToOption(FileListOption.ALL_FILES)
@@ -1660,8 +1610,78 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         })
     }
 
+    override fun onCurrentFolderUpdated(newCurrentFolder: OCFile) {
+        updateToolbar(newCurrentFolder)
+        file = newCurrentFolder
+    }
+
+    override fun onFileClicked(file: OCFile) {
+        when {
+            PreviewImageFragment.canBePreviewed(file) -> {
+                // preview image - it handles the sync, if needed
+                startImagePreview(file)
+            }
+            PreviewTextFragment.canBePreviewed(file) -> {
+                startTextPreview(file)
+                fileOperationsHelper.syncFile(file)
+            }
+            PreviewAudioFragment.canBePreviewed(file) -> {
+                // media preview
+                startAudioPreview(file, 0)
+                fileOperationsHelper.syncFile(file)
+            }
+            PreviewVideoFragment.canBePreviewed(file) && !WorkManager.getInstance(this).isDownloadPending(account, file) -> {
+                // FIXME: 13/10/2020 : New_arch: Av.Offline
+                // Available offline exception, don't initialize streaming
+                // if (!file.isAvailableLocally() && file.isAvailableOffline()) {
+                if (file.isAvailableLocally) {
+                    // sync file content, then open with external apps
+                    startSyncThenOpen(file)
+                } else {
+                    // media preview
+                    startVideoPreview(file, 0)
+                }
+
+                // If the file is already downloaded sync it, just to update it if there is a
+                // new available file version
+                if (file.isAvailableLocally) {
+                    fileOperationsHelper.syncFile(file)
+                }
+            }
+            else -> {
+                startSyncThenOpen(file)
+            }
+        }
+    }
+
+    override fun initDownloadForSending(file: OCFile) {
+        startDownloadForSending(file)
+    }
+
+    override fun cancelFileTransference(files: ArrayList<OCFile>) {
+        cancelTransference(files)
+    }
+
+    override fun setBottomBarVisibility(isVisible: Boolean) {
+        showBottomNavBar(isVisible)
+    }
+
+    override fun uploadFromCamera() {
+        filesUploadHelper?.uploadFromCamera(REQUEST_CODE__UPLOAD_FROM_CAMERA)
+    }
+
+    override fun uploadFromFileSystem() {
+        val action = Intent(Intent.ACTION_GET_CONTENT).apply {
+            setType(ALL_FILES_SAF_REGEX).addCategory(Intent.CATEGORY_OPENABLE)
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
+        startActivityForResult(
+            Intent.createChooser(action, getString(R.string.upload_chooser_title)),
+            REQUEST_CODE__SELECT_CONTENT_FROM_APPS
+        )
+    }
+
     companion object {
-        private const val TAG_LIST_OF_FILES_BIS = "TAG_LIST_OF_FILES_BIS"
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
         private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 
@@ -1671,6 +1691,8 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
 
+        private const val ALL_FILES_SAF_REGEX = "*/*"
+
         const val ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS"
 
         const val REQUEST_CODE__SELECT_CONTENT_FROM_APPS = REQUEST_CODE__LAST_SHARED + 1
@@ -1678,13 +1700,5 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         const val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
         const val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
         const val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
-    }
-
-    override fun onBrowseUpListener() {
-        if (listMainFileFragment != null) {  // should never be null, indeed
-            file = listMainFileFragment?.getCurrentFile()
-            listMainFileFragment?.listDirectory(file)
-        }
-        cleanSecondFragment()
     }
 }

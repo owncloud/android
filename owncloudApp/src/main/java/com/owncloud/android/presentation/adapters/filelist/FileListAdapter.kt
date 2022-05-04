@@ -24,7 +24,6 @@ import android.accounts.Account
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -49,10 +48,10 @@ import com.owncloud.android.utils.PreferenceUtils
 
 class FileListAdapter(
     private val context: Context,
-    private val isShowingJustFolders: Boolean,
+    private val isPickerMode: Boolean,
     private val layoutManager: StaggeredGridLayoutManager,
     private val listener: FileListAdapterListener,
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : SelectableAdapter<RecyclerView.ViewHolder>() {
 
     var files = mutableListOf<Any>()
     private var account: Account? = AccountUtils.getCurrentOwnCloudAccount(context)
@@ -65,14 +64,18 @@ class FileListAdapter(
     }
 
     fun updateFileList(filesToAdd: List<OCFile>) {
-        val diffUtilCallback = FileListDiffCallback(oldList = files, newList = filesToAdd)
-        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
-        files.clear()
-        files.addAll(filesToAdd)
+        val listWithFooter = mutableListOf<Any>()
+        listWithFooter.addAll(filesToAdd)
 
-        if (filesToAdd.isNotEmpty()) {
-            files.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
+        if (listWithFooter.isNotEmpty()) {
+            listWithFooter.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
         }
+
+        val diffUtilCallback = FileListDiffCallback(oldList = files, newList = listWithFooter)
+        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
+
+        files.clear()
+        files.addAll(listWithFooter)
 
         diffResult.dispatchUpdatesTo(this)
     }
@@ -139,10 +142,32 @@ class FileListAdapter(
         }
     }
 
+    fun getCheckedItems(): List<OCFile> {
+        val checkedItems = mutableListOf<OCFile>()
+        val checkedPositions = getSelectedItems()
+
+        for (i in checkedPositions) {
+            if (files[i] is OCFile) {
+                checkedItems.add(files[i] as OCFile)
+            }
+        }
+
+        return checkedItems
+    }
+
+    fun selectAll() {
+        // Last item on list is the footer, so that element must be excluded from selection
+        selectAll(totalItems = files.size - 1)
+    }
+
+    fun selectInverse() {
+        // Last item on list is the footer, so that element must be excluded from selection
+        toggleSelectionInBulk(totalItems = files.size - 1)
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         val viewType = getItemViewType(position)
-
 
         if (viewType != ViewType.FOOTER.ordinal) { // Is Item
 
@@ -203,15 +228,35 @@ class FileListAdapter(
             // TODO Delete it when manage state sync.
             holder.itemView.findViewById<ImageView>(R.id.localFileIndicator).isVisible = false
 
-            holder.itemView.findViewById<ImageView>(R.id.sharedIcon).isVisible = false
+            holder.itemView.findViewById<ImageView>(R.id.sharedIcon).isVisible = file.sharedByLink
 
+            holder.itemView.setOnClickListener {
+                listener.onItemClick(
+                    ocFile = file,
+                    position = position
+                )
+            }
 
-            holder.itemView.setOnClickListener { listener.clickItem(file) }
+            holder.itemView.setOnLongClickListener {
+                listener.onLongItemClick(
+                    ocFile = file,
+                    position = position
+                )
+            }
 
             val checkBoxV = holder.itemView.findViewById<ImageView>(R.id.custom_checkbox).apply {
                 isVisible = false
             }
             holder.itemView.setBackgroundColor(Color.WHITE)
+
+            if (isSelected(position)) {
+                holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.selected_item_background))
+                checkBoxV.setImageResource(R.drawable.ic_checkbox_marked)
+            } else {
+                holder.itemView.setBackgroundColor(Color.WHITE)
+                checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline)
+            }
+            checkBoxV.isVisible = getCheckedItems().isNotEmpty()
 
             if (file.isFolder) {
                 // Folder
@@ -250,7 +295,7 @@ class FileListAdapter(
             }
 
         } else { // Is Footer
-            if (!isShowingJustFolders) {
+            if (viewType == ViewType.FOOTER.ordinal && !isPickerMode) {
                 val view = holder as FooterViewHolder
                 val file = files[position] as OCFooterFile
                 (view.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams).apply {
@@ -262,14 +307,14 @@ class FileListAdapter(
     }
 
     private fun manageListOfFilesAndGenerateText(list: List<OCFile>): String {
-        val filesCount = 0
-        val foldersCount = 0
+        var filesCount = 0
+        var foldersCount = 0
         for (file in list) {
             if (file.isFolder) {
-                foldersCount.plus(1)
+                foldersCount++
             } else {
                 if (!file.isHidden) {
-                    filesCount.plus(1)
+                    filesCount++
                 }
             }
         }
@@ -324,7 +369,8 @@ class FileListAdapter(
     }
 
     interface FileListAdapterListener {
-        fun clickItem(ocFile: OCFile)
+        fun onItemClick(ocFile: OCFile, position: Int)
+        fun onLongItemClick(ocFile: OCFile, position: Int): Boolean = true
     }
 
     inner class GridViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root)
