@@ -12,6 +12,7 @@ Summary
 * Bugfix - Crash when changing orientation in Details view: [#3571](https://github.com/owncloud/android/issues/3571)
 * Bugfix - Lock displays shown again: [#3591](https://github.com/owncloud/android/issues/3591)
 * Bugfix - Prevented signed in user in the list of users to be shared: [#1419](https://github.com/owncloud/android/issues/1419)
+* Bugfix - Corrupt picture error controlled: [#3441](https://github.com/owncloud/android/issues/3441)
 * Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 * Enhancement - Provide app feedback to MDM admins: [#3420](https://github.com/owncloud/android/issues/3420)
@@ -63,6 +64,14 @@ Details
 
    https://github.com/owncloud/android/issues/1419
    https://github.com/owncloud/android/pull/3643
+
+* Bugfix - Corrupt picture error controlled: [#3441](https://github.com/owncloud/android/issues/3441)
+
+   Previously, If a file is not correct or is damaged, it is downloaded but not previewed. An
+   infinite spinner on a black window is shown instead. Now, an error appears warning to the user.
+
+   https://github.com/owncloud/android/issues/3441
+   https://github.com/owncloud/android/pull/3644
 
 * Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
 
