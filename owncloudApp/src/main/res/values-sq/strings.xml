@@ -85,8 +85,8 @@
   <string name="prefs_recommend">Këshillojani një shoku</string>
   <string name="prefs_feedback">Përshtypje</string>
   <string name="prefs_imprint">Imprint</string>
-  <string name="prefs_remember_last_share_location">Mba mend vend ndarjeje me të tjerët</string>
-  <string name="prefs_remember_last_upload_location_summary">Mba mend vendin e fundit të ngarkimit për ndarje me të tjerët</string>
+  <string name="prefs_remember_last_share_location">Mbaj mend vend pjese</string>
+  <string name="prefs_remember_last_upload_location_summary">Mbaj mend vendin e fundit të ngarkimit të pjesës</string>
   <string name="prefs_pattern">Kyçje rregullsie</string>
   <string name="prefs_enable_logging">Aktivizo regjistrimet</string>
   <string name="prefs_enable_logging_summary">Kur aktivizohen, regjistrat mund të kenë ndikim në funksionim dhe përfshijnë të dhëna rezervat. Sidoqoftë, regjistrat nuk janë subjekt parashtrimi të automatizuar te shërbyesit ownCloud. Ndarja e regjistrave me të tjerë është përgjegjësi vetëm e përdoruesit.</string>
@@ -334,7 +334,7 @@
   <string name="confirmation_remove_account_alert">Doni vërtet të hiqet llogaria %1$s?</string>
   <string name="confirmation_remove_account_alert_camera_uploads">Kjo llogari ka të bashkëngjitura ngarkime nga kamera, heqja e llogarisë do të çaktivizojë ngarkimet nga kamera. Doni vërtet të hiqet llogaria %1$s?</string>
   <string name="confirmation_remove_public_share_title">Hiqe lidhjen</string>
-  <string name="confirmation_remove_private_share_title">Hiqe ndarjen private</string>
+  <string name="confirmation_remove_private_share_title">Hiqe pjesën private</string>
   <string name="confirmation_remove_share_message">Doni vërtet të hiqet ndarja %1$s?</string>
   <string name="remove_success_msg">Heqja doli me sukses</string>
   <string name="remove_fail_msg">Heqja dështoi</string>
@@ -403,7 +403,7 @@
   <string name="preview_image_description">Paraparje figure</string>
   <string name="preview_image_error_unknown_format">Kjo figurë nuk mund të shfaqet</string>
   <string name="error__upload__local_file_not_copied">%1$s s\’u kopjua dot te dosja vendore %2$s</string>
-  <string name="get_shares_error">S\’qe e mundur të merreshin ndarje nga shërbyesi</string>
+  <string name="get_shares_error">S\’qe e mundur të merreshin pjesët nga shërbyesi</string>
   <string name="get_sharees_error">S\’qe e mundur të merreshin përdorues dhe grupe nga shërbyesi</string>
   <string name="get_capabilities_error">S\’qe e mundur të merreshin aftësi nga shërbyesi</string>
   <string name="share_link_no_support_share_api">Na ndjeni, ndarja me të tjerët s\’është e aktivizuar te shërbyesi juaj. Ju lutemi, lidhuni me përgjegjësin tuaj.</string>
@@ -428,7 +428,7 @@
   <string name="forbidden_permissions_delete">për fshirje të kësaj kartele</string>
   <string name="share_link_forbidden_permissions">për ndarje me të tjerët të kësaj kartele</string>
   <string name="unshare_link_forbidden_permissions">për zhbërje të ndarjes me të tjerët të kësaj kartele</string>
-  <string name="update_link_forbidden_permissions">për përditësim të kësaj ndarjeje</string>
+  <string name="update_link_forbidden_permissions">për përditësim të kësaj pjese</string>
   <string name="forbidden_permissions_create">për krijim kartele</string>
   <string name="uploader_upload_forbidden_permissions">për ngarkim në këtë dosje</string>
   <string name="uploader_upload_forbidden">Ngarkimi s\’u lejua</string>
@@ -545,7 +545,7 @@
   <string name="streaming_position_not_available">“Pozicion jo i mundshëm”</string>
   <string name="error_no_network_connection">Pajisja s\’është e lidhur në ndonjë rrjet</string>
   <string name="share_no_public_links">Ende s\’janë krijuar lidhje publike</string>
-  <string name="share_no_link_in_this_share">Kjo ndarje nuk ka lidhje</string>
+  <string name="share_no_link_in_this_share">Kjo pjesë s’ka lidhje</string>
   <string name="share_warning_about_forwarding_public_links">Cilido që zotëron lidhjen, ka hyrje te kartela/dosja</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Fjalëkalim *</string>
@@ -553,7 +553,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Lidhja publike do të skadojë jo më vonë se %1$d ditë pas krijimit</string>
   <string name="share_via_link_default_name_template">Lidhje %1$s</string>
   <string name="share_via_link_empty_password">Fjalëkalimi është i zbrazët</string>
-  <string name="private_link_info">Lidhje private: Mund ta përdorin vetëm personat të cilëve u është lejuar hyrja te kartela/dosja. Përdoreni si një lidhje të përhershme për veten ose për të drejtuar të tjerët drejt kartelash brenda ndarjesh</string>
+  <string name="private_link_info">Lidhje private: Mund ta përdorin vetëm personat të cilëve u është lejuar hyrja te kartela/dosja. Përdoreni si një lidhje të përhershme për veten ose për të drejtuar të tjerët drejt kartelash brenda pjesësh</string>
   <string name="file_private_link_error">S\’ka lidhje private për këtë kartelë</string>
   <string name="download_notification_channel_name">Shkarkime</string>
   <string name="download_notification_channel_description">Shihni emrin e kartelës që shkarkohet dhe ecurinë e shkarkimit</string>
