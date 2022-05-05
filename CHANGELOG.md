@@ -11,6 +11,7 @@ Summary
 * Bugfix - Security flags for recording screen: [#3468](https://github.com/owncloud/android/issues/3468)
 * Bugfix - Crash when changing orientation in Details view: [#3571](https://github.com/owncloud/android/issues/3571)
 * Bugfix - Lock displays shown again: [#3591](https://github.com/owncloud/android/issues/3591)
+* Bugfix - Prevented signed in user in the list of users to be shared: [#1419](https://github.com/owncloud/android/issues/1419)
 * Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 * Enhancement - Provide app feedback to MDM admins: [#3420](https://github.com/owncloud/android/issues/3420)
@@ -54,6 +55,14 @@ Details
 
    https://github.com/owncloud/android/issues/3591
    https://github.com/owncloud/android/pull/3592
+
+* Bugfix - Prevented signed in user in the list of users to be shared: [#1419](https://github.com/owncloud/android/issues/1419)
+
+   Previously, user list for sharing contains signed in user, now this user is omitted to avoid
+   errors.
+
+   https://github.com/owncloud/android/issues/1419
+   https://github.com/owncloud/android/pull/3643
 
 * Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
 
