@@ -27,6 +27,7 @@ package com.owncloud.android.ui.preview
 
 import android.accounts.Account
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -47,6 +48,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.PreviewImageFragmentBinding
 import com.owncloud.android.databinding.TopProgressBarBinding
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.MIME_SVG
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
@@ -119,6 +121,8 @@ class PreviewImageFragment : FileFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.top.setBackgroundColor(getBackgroundColor(file))
 
         binding.photoView.isVisible = false
         binding.photoView.setOnClickListener {
@@ -330,11 +334,19 @@ class PreviewImageFragment : FileFragment() {
                     dataSource: DataSource, isFirstResource: Boolean
                 ): Boolean {
                     Timber.d("Loading image %s", file.fileName)
+                    binding.progressWheel.isVisible = false
                     return false
                 }
             })
             .into(binding.photoView)
+
         binding.photoView.isVisible = true
+    }
+
+    private fun isSVGFile(file: OCFile): Boolean = file.mimetype == MIME_SVG
+
+    private fun getBackgroundColor(file: OCFile): Int {
+        return if (isSVGFile(file)) Color.WHITE else Color.BLACK
     }
 
     /**

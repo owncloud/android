@@ -1,0 +1,6 @@
+Enhancement: Support for SVG files added
+
+SVG files are supported and can be downloaded and viewed.
+
+https://github.com/owncloud/android/issues/1033
+https://github.com/owncloud/android/pull/3639
