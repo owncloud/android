@@ -29,6 +29,7 @@ Summary
 * Enhancement - Support for SVG files added: [#1033](https://github.com/owncloud/android/issues/1033)
 * Enhancement - Improved copy/move dialog: [#1414](https://github.com/owncloud/android/issues/1414)
 * Enhancement - Thumbnail click action in file detail: [#3653](https://github.com/owncloud/android/pull/3653)
+* Enhancement - Share a folder from within the folder: [#1441](https://github.com/owncloud/android/issues/1441)
 
 Details
 -------
@@ -193,6 +194,13 @@ Details
    previewed.
 
    https://github.com/owncloud/android/pull/3653
+
+* Enhancement - Share a folder from within the folder: [#1441](https://github.com/owncloud/android/issues/1441)
+
+   You can share a folder clicking in the share icon inside the folder.
+
+   https://github.com/owncloud/android/issues/1441
+   https://github.com/owncloud/android/pull/3659
 
 Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
 =======================================
