@@ -241,6 +241,7 @@
     <string name="downloader_download_succeeded_ticker">Download succeeded</string>
     <string name="downloader_download_succeeded_content">%1$s downloaded</string>
     <string name="downloader_download_failed_ticker">Download failed</string>
+    <string name="downloader_preview_failed_ticker">Unable to display the file</string>
     <string name="downloader_download_failed_content">Download of %1$s could not be completed</string>
     <string name="downloader_not_downloaded_yet">Not downloaded yet</string>
     <string name="downloader_download_failed_credentials_error">Download failed, you need to log in again</string>
