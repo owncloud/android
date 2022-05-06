@@ -260,6 +260,8 @@
   <string name="pass_code_wrong">Código de acesso incorreto</string>
   <string name="pass_code_error_set">Ocorreu um erro ao configurar o bloqueio da senha</string>
   <string name="pass_code_error_remove">Ocorreu um erro ao remover o bloqueio da senha</string>
+  <string name="numberkeyboard_backspace_button_content_description">Botão de retrocesso</string>
+  <string name="numberkeyboard_biometric_button_content_description">Botão biométrico</string>
   <string name="numberkeyboard_zero">0</string>
   <string name="numberkeyboard_one">1</string>
   <string name="numberkeyboard_two">2</string>
@@ -267,6 +269,9 @@
   <string name="numberkeyboard_four">4</string>
   <string name="numberkeyboard_five">5</string>
   <string name="numberkeyboard_six">6</string>
+  <string name="numberkeyboard_seven">7</string>
+  <string name="numberkeyboard_eight">8</string>
+  <string name="numberkeyboard_nine">9</string>
   <string name="lock_time_try_again">Por favor, tente novamente em %1$s</string>
   <string name="biometric_not_enrolled">Registre pelo menos uma biométria para usar esse recurso</string>
   <string name="biometric_prompt_title">Conexão biométrica</string>
@@ -444,6 +449,8 @@
   <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Nada aqui. Você pode adicionar uma pasta!</string>
   <string name="folder_picker_choose_button_text">Escolher</string>
+  <string name="folder_picker_move_here_button_text">Mover para aqui</string>
+  <string name="folder_picker_copy_here_button_text">Copie aqui</string>
   <string name="move_file_not_found">Não é possível mover. Por favor verifique se o arquivo existe</string>
   <string name="move_file_invalid_into_descendent">Não é possível mover a pasta para uma descendente</string>
   <string name="move_file_invalid_overwrite">O arquivo já existe na pasta de destino</string>

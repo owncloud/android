@@ -447,6 +447,8 @@
   <string name="actionbar_move">Zhvendose</string>
   <string name="file_list_empty_moving">S\’ka gjë këtu. Mund të shtoni një dosje!</string>
   <string name="folder_picker_choose_button_text">Zgjidhni</string>
+  <string name="folder_picker_move_here_button_text">Kaloje Këtu </string>
+  <string name="folder_picker_copy_here_button_text">Kopjoje Këtu</string>
   <string name="move_file_not_found">S\’arrihet të zhvendoset. Ju lutemi, kontrolloni nëse ekziston apo jo kartela</string>
   <string name="move_file_invalid_into_descendent">S\’është e mundur të zhvendoset një dosje në një tjetër brenda saj</string>
   <string name="move_file_invalid_overwrite">Kartela gjendet tashmë te dosja vendmbërritje</string>

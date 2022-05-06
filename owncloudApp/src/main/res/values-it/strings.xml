@@ -33,6 +33,7 @@
   <string name="prefs_subsection_logging">Logging</string>
   <string name="prefs_subsection_more">Altro</string>
   <string name="prefs_subsection_security">Protezione</string>
+  <string name="prefs_subsection_whatsnew">Cosa c\'è di nuovo nell\'ultima versione?</string>
   <string name="prefs_subsection_security_summary">Imposta i blocchi per accedere all\'app e consentire tocchi con altre finestre visibili</string>
   <string name="prefs_subsection_logging_summary">Tieni traccia dei log prodotti dall\'esecuzione dell\'app</string>
   <string name="prefs_subsection_more_summary">Informazioni sull\'app, feedback e altro</string>
@@ -46,6 +47,8 @@
   <string name="prefs_lock_application_entries_1minute">Dopo 1 minuto</string>
   <string name="prefs_lock_application_entries_5minutes">Dopo 5 minuti</string>
   <string name="prefs_lock_application_entries_30minutes">Dopo 30 minuti</string>
+  <string name="prefs_lock_access_from_document_provider">Blocca l\'accesso dal fornitore di documenti</string>
+  <string name="prefs_lock_access_from_document_provider_summary">Blocca l\'accesso da altre app ai file degli account nell\'app tramite il file explorer nativo di Android.</string>
   <string name="prefs_touches_with_other_visible_windows">Tocca con altre finestre visibili</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Consenti tocchi quando la vista è oscurata da un\'altra finestra visibile. Abilitalo per utilizzare app di filtraggio della luce.</string>
   <string name="confirmation_touches_with_other_windows_title">Sei sicuro di voler abilitare queste funzione?</string>
@@ -66,8 +69,11 @@
   <string name="prefs_camera_video_upload_summary">Carica automaticamente video registrati dalla videocamera</string>
   <string name="prefs_camera_video_upload_path_title">Percorso caricamento video</string>
   <string name="prefs_camera_video_upload_on_wifi">Carica i video solo tramite wifi</string>
+  <string name="prefs_camera_video_upload_on_charging">Carica video solo durante la ricarica</string>
   <string name="prefs_subsection_advanced">Avanzate</string>
   <string name="prefs_show_hidden_files">Mostra i file nascosti</string>
+  <string name="prefs_log_open_logs_list_view">Files di log</string>
+  <string name="prefs_log_no_logs_list_view">Cartella dei log vuota!</string>
   <string name="prefs_log_title">Abilita la registrazione</string>
   <string name="prefs_log_summary">Usato per registrare i problemi nei log</string>
   <string name="prefs_log_title_history">Cronologia di registrazione</string>
@@ -83,17 +89,23 @@
   <string name="prefs_remember_last_upload_location_summary">Ricorda l\'ultima posizione di caricamento della condivisione</string>
   <string name="prefs_pattern">Blocco con sequenza</string>
   <string name="prefs_enable_logging">Abilita la registrazione</string>
+  <string name="prefs_enable_logging_summary">Se attivati, i log possono influire sulle prestazioni e includere informazioni riservate. Tuttavia i log non sono soggetti all\'invio automatico ai server di ownCloud. La condivisione dei registri con altri è responsabilità esclusiva dell\'utente.</string>
   <string name="prefs_send_feedback">Invia segnalazione</string>
+  <string name="prefs_app_version">Versione dell\'app</string>
+  <string name="prefs_app_version_summary">%1$s %2$s versione %3$s (%4$s)</string>
   <string name="pattern_enter_pattern">Per favore inserisci la tua sequenza</string>
   <string name="pattern_configure_pattern">Inserisci la tua sequenza</string>
   <string name="pattern_remove_pattern">Rimuovere la sequenza</string>
   <string name="pattern_incorrect_pattern">Sequenza non corretta</string>
   <string name="pattern_reenter_pattern">Reinserire la sequenza</string>
   <string name="pattern_not_same_pattern">Le sequenze non sono le stesse</string>
+  <string name="pattern_error_set">Si è verificato un errore durante l\'impostazione del blocco del modello</string>
+  <string name="pattern_error_remove">Si è verificato un errore durante la rimozione del blocco del modello</string>
   <string name="pattern_already_set">I blocchi con sequenza e password non possono essere abilitati allo stesso tempo, disabilita la sequenza prima</string>
   <string name="passcode_already_set">I blocchi con sequenza e password non possono essere abilitati allo stesso tempo, disabilita la password prima</string>
   <string name="pattern_no_longer_required">La sequenza non sarà più richiesta</string>
   <string name="pattern_configure_your_pattern_explanation">La sequenza sarà richiesta ogni volta che la app sarà avviata</string>
+  <string name="document_provider_locked">Bloccato</string>
   <string name="illegal_argument_exception_message">Una AZIONE valida è necessaria per l\'intenzione di passare a</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">File</string>
@@ -134,6 +146,7 @@
   <string name="file_list_empty_shared_by_links">Nessun file è stato condiviso tramite link.</string>
   <string name="file_list_loading">Caricamento in corso...</string>
   <string name="file_list_no_app_for_file_type">Nessuna applicazione trovata per questo tipo di file</string>
+  <string name="file_list_no_app_for_perform_action">Nessuna app trovata per questa azione</string>
   <string name="local_file_list_empty">Non ci sono file in questa cartella.</string>
   <string name="local_file_list_empty_just_folders">Non ci sono cartelle in questa cartella.</string>
   <string name="local_file_list_search_with_no_matches">Nessun risultato per questa ricerca</string>
@@ -150,6 +163,8 @@
   <string name="filedetails_created">Creato:</string>
   <string name="filedetails_modified">Modificato:</string>
   <string name="filedetails_download">Scarica</string>
+  <string name="filedetails_file_image_content_description">File immagine</string>
+  <string name="filedetails_cancel_btn_content_description">Pulsante Annulla download</string>
   <string name="filedetails_sync_file">Sincronizza</string>
   <string name="filedetails_renamed_in_upload_msg">Il file è stato rinominato in %1$s durante il caricamento</string>
   <string name="list_layout">Disposizione elenco</string>
