@@ -51,6 +51,7 @@ import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUs
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
+import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -105,6 +106,7 @@ val useCaseModule = module {
     factory { GetFilesSharedByLinkUseCase(get()) }
     factory { GetFilesAvailableOfflineUseCase(get()) }
     factory { GetSearchFolderContentUseCase(get()) }
+    factory { SortFilesUseCase() }
 
     // Sharing
     factory { CreatePrivateShareAsyncUseCase(get()) }
