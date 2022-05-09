@@ -166,6 +166,11 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
         return true
     }
 
+    override fun onBackPressed() {
+        PassCodeManager.onActivityStopped(this)
+        super.onBackPressed()
+    }
+
     private fun inflatePasscodeTxtLine() {
         val layout_code = findViewById<LinearLayout>(R.id.layout_code)
         val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
