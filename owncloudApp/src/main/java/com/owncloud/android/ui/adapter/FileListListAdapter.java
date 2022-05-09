@@ -64,6 +64,7 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
+import com.owncloud.android.utils.SortFilesUtils;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -416,7 +417,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             mFiles = null;
         }
 
-        mFiles = FileStorageUtils.sortFolder(mFiles, FileStorageUtils.mSortOrderFileDisp,
+        mFiles = new SortFilesUtils().sortFiles(mFiles, FileStorageUtils.mSortOrderFileDisp,
                 FileStorageUtils.mSortAscendingFileDisp);
 
         SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProviderImpl(mContext);
@@ -455,7 +456,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         FileStorageUtils.mSortOrderFileDisp = order;
         FileStorageUtils.mSortAscendingFileDisp = ascending;
 
-        mFiles = FileStorageUtils.sortFolder(mFiles, FileStorageUtils.mSortOrderFileDisp,
+        mFiles = new SortFilesUtils().sortFiles(mFiles, FileStorageUtils.mSortOrderFileDisp,
                 FileStorageUtils.mSortAscendingFileDisp);
         notifyDataSetChanged();
     }

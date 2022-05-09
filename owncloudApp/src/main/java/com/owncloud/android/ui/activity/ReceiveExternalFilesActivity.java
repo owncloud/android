@@ -98,6 +98,7 @@ import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.SortFilesUtils;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
@@ -503,7 +504,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         FileStorageUtils.mSortAscendingFileDisp = PreferenceManager.getSortAscending(this,
                 FileStorageUtils.FILE_DISPLAY_SORT);
 
-        files = FileStorageUtils.sortFolder(files, FileStorageUtils.mSortOrderFileDisp,
+        files = new SortFilesUtils().sortFiles(files, FileStorageUtils.mSortOrderFileDisp,
                 FileStorageUtils.mSortAscendingFileDisp);
         return files;
     }
