@@ -37,8 +37,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
-import android.content.res.Resources.NotFoundException
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
@@ -50,22 +48,19 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.work.WorkManager
-import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.AppRater
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
-import com.owncloud.android.extensions.checkPasscodeEnforced
-import com.owncloud.android.extensions.manageOptionLockSelected
-import com.owncloud.android.db.PreferenceManager
-import com.owncloud.android.db.PreferenceManager.getSortOrder
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.isDownloadPending
+import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -74,6 +69,7 @@ import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
+import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -82,14 +78,13 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.UploadFileOperation
-import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.manager.DOWNLOAD_ADDED_MESSAGE
 import com.owncloud.android.presentation.manager.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
-import com.owncloud.android.presentation.ui.security.PassCodeManager
+import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
@@ -104,7 +99,6 @@ import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.usecases.transfers.DownloadFileUseCase
-import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.coroutines.CoroutineScope
@@ -120,8 +114,14 @@ import kotlin.coroutines.CoroutineContext
 /**
  * Displays, what files the user has available in his ownCloud. This is the main view.
  */
-class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEnforceableRefreshListener,
-    CoroutineScope, MainFileListFragment.FileActions, MainFileListFragment.UploadActions, ISecurityEnforced {
+class FileDisplayActivity : FileActivity(),
+    CoroutineScope,
+    FileFragment.ContainerActivity,
+    ISecurityEnforced,
+    MainFileListFragment.FileActions,
+    MainFileListFragment.UploadActions,
+    OnEnforceableRefreshListener {
+
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -500,12 +500,12 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         bayPassUnlockOnce()
 
         // Handle calls form internal activities.
-        if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS && (resultCode == Activity.RESULT_OK || resultCode == RESULT_OK_AND_MOVE)) {
+        if (requestCode == REQUEST_CODE__SELECT_CONTENT_FROM_APPS && (resultCode == RESULT_OK || resultCode == RESULT_OK_AND_MOVE)) {
 
             requestUploadOfContentFromApps(data, resultCode)
 
         } else if (requestCode == REQUEST_CODE__UPLOAD_FROM_CAMERA) {
-            if (resultCode == Activity.RESULT_OK || resultCode == RESULT_OK_AND_MOVE) {
+            if (resultCode == RESULT_OK || resultCode == RESULT_OK_AND_MOVE) {
                 filesUploadHelper?.onActivityResult(object : FilesUploadHelper.OnCheckAvailableSpaceListener {
                     override fun onCheckAvailableSpaceStart() {
 
@@ -520,15 +520,15 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                         }
                     }
                 })
-            } else if (requestCode == Activity.RESULT_CANCELED) {
+            } else if (requestCode == RESULT_CANCELED) {
                 filesUploadHelper?.deleteImageFile()
             }
 
             // requestUploadOfFilesFromFileSystem(data,resultCode);
-        } else if (requestCode == REQUEST_CODE__MOVE_FILES && resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == REQUEST_CODE__MOVE_FILES && resultCode == RESULT_OK) {
             requestMoveOperation(data!!)
 
-        } else if (requestCode == REQUEST_CODE__COPY_FILES && resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == REQUEST_CODE__COPY_FILES && resultCode == RESULT_OK) {
             handler.postDelayed(
                 { requestCopyOperation(data!!) },
                 DELAY_TO_REQUEST_OPERATIONS_LATER
@@ -787,7 +787,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                             ) {
                                 launch(Dispatchers.IO) {
                                     val credentials =
-                                        com.owncloud.android.lib.common.accounts.AccountUtils.getCredentialsForAccount(
+                                        AccountUtils.getCredentialsForAccount(
                                             MainApp.appContext,
                                             account
                                         )
@@ -1691,6 +1691,6 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         const val REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 2
         const val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
         const val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
-        const val RESULT_OK_AND_MOVE = Activity.RESULT_FIRST_USER
+        const val RESULT_OK_AND_MOVE = RESULT_FIRST_USER
     }
 }

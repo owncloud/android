@@ -68,7 +68,7 @@ fun Throwable.parseError(
             is UnauthorizedException -> resources.getString(R.string.auth_unauthorized)
             is FileNameException -> {
                 val stringId = when (this.type) {
-                    FileNameException.FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS -> R.string.filename_forbidden_charaters_from_server
+                    FileNameException.FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS -> R.string.filename_forbidden_characters_from_server
                     FileNameException.FileNameExceptionType.FILE_NAME_EMPTY -> R.string.filename_empty
                 }
                 resources.getString(stringId)
