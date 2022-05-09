@@ -39,6 +39,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
+import com.owncloud.android.extensions.DialogExtKt;
 import com.owncloud.android.ui.activity.CopyToClipboardActivity;
 import timber.log.Timber;
 
@@ -48,7 +49,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Dialog showing a list activities able to resolve a given Intent, 
+ * Dialog showing a list activities able to resolve a given Intent,
  * filtering out the activities matching give package names.
  */
 public class ShareLinkToDialog extends DialogFragment {
@@ -108,8 +109,10 @@ public class ShareLinkToDialog extends DialogFragment {
         Collections.sort(activities, new ResolveInfo.DisplayNameComparator(pm));
         mAdapter = new ActivityAdapter(getActivity(), pm, activities);
 
-        return createSelector(sendAction);
+        Dialog d = createSelector(sendAction);
+        DialogExtKt.avoidScreenshotsIfNeeded(d);
 
+        return d;
     }
 
     private AlertDialog createSelector(final boolean sendAction) {

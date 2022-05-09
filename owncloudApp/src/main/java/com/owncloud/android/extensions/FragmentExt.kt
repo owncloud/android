@@ -54,6 +54,7 @@ fun Fragment.showAlertDialog(
         .setPositiveButton(positiveButtonText, positiveButtonListener)
         .setNegativeButton(negativeButtonText, negativeButtonListener)
         .show()
+        .avoidScreenshotsIfNeeded()
 }
 
 fun Fragment.hideSoftKeyboard() {

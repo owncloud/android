@@ -62,6 +62,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.extensions.DialogExtKt;
 import com.owncloud.android.extensions.FragmentExtKt;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -382,6 +383,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
             dialog.setOnShowListener(dialog1 ->
                     uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.getMeasuredHeight()));
             dialog.show();
+            DialogExtKt.avoidScreenshotsIfNeeded(dialog);
             getFabMain().collapse();
             recordMiniFabClick();
         });

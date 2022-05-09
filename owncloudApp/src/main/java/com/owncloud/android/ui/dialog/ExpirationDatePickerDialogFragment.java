@@ -31,6 +31,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.extensions.DialogExtKt;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -69,11 +70,11 @@ public class ExpirationDatePickerDialogFragment
     /**
      * Factory method to create new instances
      *
-     * @param chosenDateInMillis    Date chosen when the dialog appears, in milliseconds elapsed
-     *                              since Jan 1, 1970. Needs to be after tomorrow, or tomorrow will be used
-     *                              instead.
-     * @param maxDateInMillis       Maximum date selectable, in milliseconds elapsed since Jan 1, 1970.
-     *                              Only will be set if greater or equals than chosenDateInMillis and tomorrow.
+     * @param chosenDateInMillis Date chosen when the dialog appears, in milliseconds elapsed
+     *                           since Jan 1, 1970. Needs to be after tomorrow, or tomorrow will be used
+     *                           instead.
+     * @param maxDateInMillis    Maximum date selectable, in milliseconds elapsed since Jan 1, 1970.
+     *                           Only will be set if greater or equals than chosenDateInMillis and tomorrow.
      * @return New dialog instance
      */
     public static ExpirationDatePickerDialogFragment newInstance(long chosenDateInMillis,
@@ -146,16 +147,18 @@ public class ExpirationDatePickerDialogFragment
         // shown by default)
         picker.setCalendarViewShown(false);
 
+        DialogExtKt.avoidScreenshotsIfNeeded(dialog);
+
         return dialog;
     }
 
     /**
      * Called when the user choses an expiration date.
      *
-     * @param view              View instance where the date was chosen
-     * @param year              Year of the date chosen.
-     * @param monthOfYear       Month of the date chosen [0, 11]
-     * @param dayOfMonth        Day of the date chosen
+     * @param view        View instance where the date was chosen
+     * @param year        Year of the date chosen.
+     * @param monthOfYear Month of the date chosen [0, 11]
+     * @param dayOfMonth  Day of the date chosen
      */
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {

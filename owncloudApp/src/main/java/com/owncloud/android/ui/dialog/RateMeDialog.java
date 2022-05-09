@@ -36,6 +36,7 @@ import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.AppRater;
 import com.owncloud.android.R;
 import com.owncloud.android.extensions.ActivityExtKt;
+import com.owncloud.android.extensions.DialogExtKt;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
 
@@ -146,6 +147,7 @@ public class RateMeDialog extends DialogFragment {
             DialogInterface.OnKeyListener keyListener = (dialog, keyCode, event) -> keyCode == KeyEvent.KEYCODE_BACK;
             dialog.setOnKeyListener(keyListener);
         }
+        DialogExtKt.avoidScreenshotsIfNeeded(dialog);
         return dialog;
     }
 
