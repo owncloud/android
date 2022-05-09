@@ -32,6 +32,7 @@ import androidx.work.WorkManager
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
@@ -39,6 +40,8 @@ import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
+import com.owncloud.android.domain.files.usecases.SortFilesUseCase
+import com.owncloud.android.domain.files.usecases.SortType
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.providers.ContextProvider
@@ -53,6 +56,7 @@ class MainFileListViewModel(
     private val getSearchFolderContentUseCase: GetSearchFolderContentUseCase,
     private val getFileByIdUseCase: GetFileByIdUseCase,
     private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
+    private val sortFilesUseCase: SortFilesUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
     private val contextProvider: ContextProvider,
@@ -119,10 +123,7 @@ class MainFileListViewModel(
         val sortOrderSaved = PreferenceManager.getSortOrder(contextProvider.getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
         val ascendingModeSaved = PreferenceManager.getSortAscending(contextProvider.getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
 
-        return FileStorageUtils.sortFolder(
-            files, sortOrderSaved,
-            ascendingModeSaved
-        )
+        return sortFilesUseCase.execute(SortFilesUseCase.Params(files, SortType.fromPreferences(sortOrderSaved), ascendingModeSaved))
     }
 
     fun manageBrowseUp(fileListOption: FileListOption?) {
