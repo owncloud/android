@@ -25,6 +25,7 @@ Summary
 * Enhancement - New option to show or not hidden files: [#2578](https://github.com/owncloud/android/issues/2578)
 * Enhancement - Option to allow screenshots or not in Android Enterprise: [#3625](https://github.com/owncloud/android/issues/3625)
 * Enhancement - Full name is shown in shares: [#1106](https://github.com/owncloud/android/issues/1106)
+* Enhancement - Send for file multiselect: [#3491](https://github.com/owncloud/android/issues/3491)
 * Enhancement - Support for SVG files added: [#1033](https://github.com/owncloud/android/issues/1033)
 * Enhancement - Improved copy/move dialog: [#1414](https://github.com/owncloud/android/issues/1414)
 * Enhancement - Thumbnail click action in file detail: [#3653](https://github.com/owncloud/android/pull/3653)
@@ -163,6 +164,13 @@ Details
 
    https://github.com/owncloud/android/issues/1106
    https://github.com/owncloud/android/pull/3636
+
+* Enhancement - Send for file multiselect: [#3491](https://github.com/owncloud/android/issues/3491)
+
+   Send multiple files at once if they are downloaded.
+
+   https://github.com/owncloud/android/issues/3491
+   https://github.com/owncloud/android/pull/3638
 
 * Enhancement - Support for SVG files added: [#1033](https://github.com/owncloud/android/issues/1033)
 
