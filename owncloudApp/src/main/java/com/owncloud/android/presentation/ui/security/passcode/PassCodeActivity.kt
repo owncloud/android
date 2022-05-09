@@ -266,6 +266,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBio
         // pass code accepted in request, user is allowed to access the app
         binding.error.visibility = View.INVISIBLE
 
+        PassCodeManager.onActivityStopped(this)
         finish()
     }
 
