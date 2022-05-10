@@ -32,10 +32,10 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
-import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.viewmodels.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
+import com.owncloud.android.utils.CustomTabHelper
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -71,8 +71,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         if (moreViewModel.isPrivacyPolicyEnabled()) {
             prefPrivacyPolicy?.setOnPreferenceClickListener {
-                val intent = Intent(context, PrivacyPolicyActivity::class.java)
-                startActivity(intent)
+                CustomTabHelper.launchCustomTab(requireContext())
                 true
             }
         } else {

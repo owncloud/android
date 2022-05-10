@@ -30,6 +30,7 @@ import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
+import com.owncloud.android.presentation.viewmodels.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
@@ -41,7 +42,6 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityVie
 import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.presentation.viewmodels.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module

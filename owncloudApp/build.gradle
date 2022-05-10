@@ -60,6 +60,9 @@ dependencies {
     // Preferences
     implementation 'androidx.preference:preference-ktx:1.2.0'
 
+    // Chrome Custom Tabs
+    implementation "androidx.browser:browser:1.4.0"
+
     // MDM feedback
     implementation 'androidx.enterprise:enterprise-feedback:1.1.0'
 

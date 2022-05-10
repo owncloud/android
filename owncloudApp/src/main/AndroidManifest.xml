@@ -68,7 +68,8 @@
         android:theme="@style/Theme.ownCloud.Toolbar"
         tools:targetApi="n">
 
-        <meta-data android:name="android.content.APP_RESTRICTIONS"
+        <meta-data
+            android:name="android.content.APP_RESTRICTIONS"
             android:resource="@xml/managed_configurations" />
 
         <activity
@@ -79,8 +80,8 @@
         <activity android:name=".presentation.ui.migration.StorageMigrationActivity" />
         <activity
             android:name=".ui.activity.SplashActivity"
-            android:theme="@style/Theme.ownCloud.Splash"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.ownCloud.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -95,8 +96,8 @@
             android:name=".ui.activity.ReceiveExternalFilesActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
-            android:taskAffinity=""
-            android:exported="true">
+            android:exported="true"
+            android:taskAffinity="">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -192,8 +193,8 @@
 
         <activity
             android:name=".presentation.ui.security.passcode.PassCodeActivity"
-            android:theme="@style/Theme.ownCloud"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ownCloud" />
         <activity
             android:name=".ui.activity.ConflictsResolveActivity"
             android:theme="@style/Theme.ownCloud" />
@@ -215,11 +216,11 @@
         <activity android:name=".ui.activity.UploadPathActivity" />
         <activity
             android:name=".presentation.ui.sharing.ShareActivity"
+            android:exported="true"
             android:label="@string/share_dialog_title"
             android:launchMode="singleTop"
             android:theme="@style/Theme.ownCloud"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="true">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -258,4 +259,9 @@
             </intent-filter>
         </activity>
     </application>
+    <queries>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
 </manifest>
