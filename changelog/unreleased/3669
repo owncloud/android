@@ -1,0 +1,7 @@
+Enhancement: Chrome Custom Tabs added
+
+Previously, the privacy policy opened in a web view.
+Now the privacy policy opens in Chrome Custom Tabs, with support for pdf files.
+
+https://github.com/owncloud/android/issues/3558
+https://github.com/owncloud/android/pull/3669
