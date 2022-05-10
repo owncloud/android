@@ -199,7 +199,7 @@ class PreviewImageFragment : FileFragment() {
                 mContainerActivity,
                 activity
             )
-            fileMenuFilter.filter(menu, false, false, false, false,false)
+            fileMenuFilter.filter(menu, false, false, false, false, false)
         }
 
         // additional restriction for this fragment
