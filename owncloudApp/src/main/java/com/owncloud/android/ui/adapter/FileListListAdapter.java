@@ -30,7 +30,6 @@ package com.owncloud.android.ui.adapter;
 
 import android.accounts.Account;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.SparseBooleanArray;
@@ -408,6 +407,9 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 mImmutableFilesList = mStorageManager.getFolderContent(folder);
             }
 
+            mImmutableFilesList = new SortFilesUtils().sortFiles(mImmutableFilesList, FileStorageUtils.mSortOrderFileDisp,
+                    FileStorageUtils.mSortAscendingFileDisp);
+
             mFiles = mImmutableFilesList;
 
             if (mJustFolders) {
@@ -416,9 +418,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         } else {
             mFiles = null;
         }
-
-        mFiles = new SortFilesUtils().sortFiles(mFiles, FileStorageUtils.mSortOrderFileDisp,
-                FileStorageUtils.mSortAscendingFileDisp);
 
         SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProviderImpl(mContext);
         boolean showHiddenFiles = sharedPreferencesProvider.getBoolean(SettingsAdvancedFragment.PREF_SHOW_HIDDEN_FILES, false);
