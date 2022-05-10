@@ -45,6 +45,7 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
+import com.owncloud.android.utils.SortFilesUtils;
 
 import java.util.Vector;
 
@@ -169,7 +170,7 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         FileStorageUtils.mSortOrderFileDisp = order;
         FileStorageUtils.mSortAscendingFileDisp = isAscending;
         if (mFiles != null && mFiles.size() > 0) {
-            FileStorageUtils.sortFolder((Vector<OCFile>) mFiles,
+            new SortFilesUtils().sortFiles((Vector<OCFile>) mFiles,
                     FileStorageUtils.mSortOrderFileDisp, FileStorageUtils.mSortAscendingFileDisp);
         }
         notifyDataSetChanged();

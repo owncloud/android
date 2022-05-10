@@ -30,7 +30,6 @@ package com.owncloud.android.ui.adapter;
 
 import android.accounts.Account;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.SparseBooleanArray;
@@ -64,6 +63,7 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
+import com.owncloud.android.utils.SortFilesUtils;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -407,6 +407,9 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
                 mImmutableFilesList = mStorageManager.getFolderContent(folder);
             }
 
+            mImmutableFilesList = new SortFilesUtils().sortFiles(mImmutableFilesList, FileStorageUtils.mSortOrderFileDisp,
+                    FileStorageUtils.mSortAscendingFileDisp);
+
             mFiles = mImmutableFilesList;
 
             if (mJustFolders) {
@@ -415,9 +418,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         } else {
             mFiles = null;
         }
-
-        mFiles = FileStorageUtils.sortFolder(mFiles, FileStorageUtils.mSortOrderFileDisp,
-                FileStorageUtils.mSortAscendingFileDisp);
 
         SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProviderImpl(mContext);
         boolean showHiddenFiles = sharedPreferencesProvider.getBoolean(SettingsAdvancedFragment.PREF_SHOW_HIDDEN_FILES, false);
@@ -455,7 +455,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         FileStorageUtils.mSortOrderFileDisp = order;
         FileStorageUtils.mSortAscendingFileDisp = ascending;
 
-        mFiles = FileStorageUtils.sortFolder(mFiles, FileStorageUtils.mSortOrderFileDisp,
+        mFiles = new SortFilesUtils().sortFiles(mFiles, FileStorageUtils.mSortOrderFileDisp,
                 FileStorageUtils.mSortAscendingFileDisp);
         notifyDataSetChanged();
     }
