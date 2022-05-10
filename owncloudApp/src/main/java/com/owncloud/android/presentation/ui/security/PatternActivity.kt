@@ -147,6 +147,11 @@ class PatternActivity : AppCompatActivity(), IEnableBiometrics {
         return true
     }
 
+    override fun onBackPressed() {
+        PatternManager.onActivityStopped(this)
+        super.onBackPressed()
+    }
+
     /**
      * Binds the appropriate listener to the pattern view.
      */

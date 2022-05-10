@@ -45,7 +45,6 @@ import com.owncloud.android.dependecyinjection.useCaseModule
 import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.SingleSessionManager
-import com.owncloud.android.presentation.ui.authentication.LoginActivity
 import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity
 import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
 import com.owncloud.android.presentation.ui.security.BiometricActivity
@@ -57,8 +56,6 @@ import com.owncloud.android.presentation.ui.security.passcode.PassCodeManager
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.providers.MdmProvider
-import com.owncloud.android.ui.activity.FileDisplayActivity
-import com.owncloud.android.ui.activity.SplashActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.CONFIGURATION_ALLOW_SCREENSHOTS
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
@@ -130,13 +127,8 @@ class MainApp : Application() {
 
             override fun onActivityStarted(activity: Activity) {
                 Timber.v("${activity.javaClass.simpleName} onStart() starting")
-                if (activity is SplashActivity ||
-                    activity is FileDisplayActivity ||
-                    activity is LoginActivity
-                ) {
-                    PassCodeManager.onActivityStarted(activity)
-                    PatternManager.onActivityStarted(activity)
-                }
+                PassCodeManager.onActivityStarted(activity)
+                PatternManager.onActivityStarted(activity)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     BiometricManager.onActivityStarted(activity)
                 }
