@@ -39,7 +39,6 @@ object CustomTabHelper {
 
         val intentBuilder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
         val params: CustomTabColorSchemeParams = CustomTabColorSchemeParams.Builder()
-
             .setToolbarColor(ContextCompat.getColor(context, R.color.owncloud_blue))
             .build()
 
