@@ -29,7 +29,7 @@ import timber.log.Timber
 import java.io.File
 
 /**
- * General usecase to upload a file.
+ * General use case to upload a file from the Storage Access Framework.
  *
  * It stores the upload in the database and then enqueue a new worker to upload the single file
  */
@@ -43,7 +43,7 @@ class UploadFileFromSAFUseCase(
 
             if (documentFile == null) {
                 Timber.w("Upload of $contentUri won't be enqueued. We were not able to find it in the local storage")
-                return
+                return@forEach
             }
 
             val uploadId = storeInUploadsDatabase(
