@@ -236,6 +236,7 @@
   <string name="downloader_download_succeeded_ticker">Download bem sucedido</string>
   <string name="downloader_download_succeeded_content">%1$s baixado</string>
   <string name="downloader_download_failed_ticker">Download falhou</string>
+  <string name="downloader_preview_failed_ticker">Não foi possível exibir o arquivo</string>
   <string name="downloader_download_failed_content">Download de %1$s não pôde ser concluído</string>
   <string name="downloader_not_downloaded_yet">Não baixado ainda</string>
   <string name="downloader_download_failed_credentials_error">Falha em baixar o arquivo, você precisa se conectar novamente</string>
