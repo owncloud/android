@@ -242,7 +242,7 @@ class UploadFileFromFileSystemWorker(
             is UnauthorizedException -> UploadResult.CREDENTIAL_ERROR
             is FileNotFoundException -> UploadResult.FILE_NOT_FOUND
             is ConflictException -> UploadResult.CONFLICT_ERROR
-            is ForbiddenException -> UploadResult.PRIVILEDGES_ERROR
+            is ForbiddenException -> UploadResult.PRIVILEGES_ERROR
             is ServiceUnavailableException -> UploadResult.SERVICE_UNAVAILABLE
             is QuotaExceededException -> UploadResult.QUOTA_EXCEEDED
             is SpecificUnsupportedMediaTypeException -> UploadResult.SPECIFIC_UNSUPPORTED_MEDIA_TYPE
