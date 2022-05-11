@@ -674,22 +674,22 @@
     <string name="release_notes_icon">Release note icon</string>
 
     <!-- Release Notes 2.21-beta.1 -->
-    <string name="release_notes_title_1">Connection Validator</string>
-    <string name="release_notes_subtitle_1">Improved network connections, eliminated the return to non-secure connections when the secure connection has failed.</string>
+    <string name="release_notes_title_1">Release Notes</string>
+    <string name="release_notes_subtitle_1">News in the app will be listed after every update to inform about latest improvements and new features. Available also in settings to recheck.</string>
 
-    <string name="release_notes_title_2">Passcode and Pattern redesign</string>
-    <string name="release_notes_subtitle_2">Integrated the numeric keypad on the screen, improved navigation and graphical interface.</string>
+    <string name="release_notes_title_2">Secure connections by default</string>
+    <string name="release_notes_subtitle_2">Https connections by default to establish server connections. Otherwise, it will be explicitly required in URL</string>
 
-    <string name="release_notes_title_3">Release Notes</string>
-    <string name="release_notes_subtitle_3">Added a new screen that will be visible after each update (and from the settings screen) where you will be informed of the latest improvements and new features that each update brings.</string>
+    <string name="release_notes_title_3">Passcode and Pattern redesign</string>
+    <string name="release_notes_subtitle_3">Integrated the numeric keypad on the screen, improved navigation and graphical interface.</string>
 
     <string name="release_notes_title_4">Support for SVG files</string>
-    <string name="release_notes_subtitle_4">Support has been added for .svg files.</string>
+    <string name="release_notes_subtitle_4">Added support for svg files.</string>
 
-    <string name="release_notes_title_5">Thumbnail actions</string>
-    <string name="release_notes_subtitle_5">Added the possibility to download or view a file from its own detail view.</string>
+    <string name="release_notes_title_5">Details view redesign</string>
+    <string name="release_notes_subtitle_5">Information reordered and added the possibility to download and open the file by clicking the thumbnail.</string>
 
-    <string name="release_notes_title_6">Decide to show or not hidden files</string>
-    <string name="release_notes_subtitle_6">A new option in settings will allow the user to show or not these files.</string>
+    <string name="release_notes_title_6">Hidden files</string>
+    <string name="release_notes_subtitle_6">Added a new option in settings to decide to show or not hidden files.</string>
 
 </resources>
