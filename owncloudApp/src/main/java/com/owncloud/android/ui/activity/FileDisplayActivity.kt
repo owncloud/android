@@ -30,7 +30,6 @@ package com.owncloud.android.ui.activity
 
 import android.accounts.Account
 import android.accounts.AuthenticatorException
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
@@ -52,8 +51,6 @@ import com.owncloud.android.AppRater
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.authentication.BiometricManager
-import com.owncloud.android.authentication.PatternManager
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
@@ -68,7 +65,6 @@ import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
-import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.accounts.AccountUtils
@@ -86,7 +82,6 @@ import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
-import com.owncloud.android.presentation.ui.security.PassCodeManager
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
