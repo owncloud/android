@@ -18,7 +18,6 @@
  */
 package com.owncloud.android.usecases
 
-import android.net.Uri
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
@@ -28,13 +27,12 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
-import com.owncloud.android.workers.UploadFileFromContentUriWorker
 import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 import timber.log.Timber
 import java.io.File
 
 /**
- * General usecase to upload a file.
+ * General use case to upload a file.
  *
  * It stores the upload in the database and then enqueue a new worker to upload the single file
  */
@@ -48,7 +46,7 @@ class UploadFileFromSystemUseCase(
 
             if (!localFile.exists()) {
                 Timber.w("Upload of $localPath won't be enqueued. We were not able to find it in the local storage")
-                return
+                return@forEach
             }
 
             val uploadId = storeInUploadsDatabase(
