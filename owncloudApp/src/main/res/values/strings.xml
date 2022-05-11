@@ -281,7 +281,6 @@
     <string name="numberkeyboard_eight">8</string>
     <string name="numberkeyboard_nine">9</string>
 
-
     <string name="lock_time_try_again">Please, try again in %1$s</string>
 
     <string name="biometric_not_enrolled">Register at least one biometric to use this feature</string>
@@ -673,5 +672,24 @@
     <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
+
+    <!-- Release Notes 2.21-beta.1 -->
+    <string name="release_notes_title_1">Connection Validator</string>
+    <string name="release_notes_subtitle_1">Improved network connections, eliminated the return to non-secure connections when the secure connection has failed.</string>
+
+    <string name="release_notes_title_2">Passcode and Pattern redesign</string>
+    <string name="release_notes_subtitle_2">Integrated the numeric keypad on the screen, improved navigation and graphical interface.</string>
+
+    <string name="release_notes_title_3">Release Notes</string>
+    <string name="release_notes_subtitle_3">Added a new screen that will be visible after each update (and from the settings screen) where you will be informed of the latest improvements and new features that each update brings.</string>
+
+    <string name="release_notes_title_4">Support for SVG files</string>
+    <string name="release_notes_subtitle_4">Support has been added for .svg files.</string>
+
+    <string name="release_notes_title_5">Thumbnail actions</string>
+    <string name="release_notes_subtitle_5">Added the possibility to download or view a file from its own detail view.</string>
+
+    <string name="release_notes_title_6">Decide to show or not hidden files</string>
+    <string name="release_notes_subtitle_6">A new option in settings will allow the user to show or not these files.</string>
 
 </resources>
