@@ -34,8 +34,8 @@
   <string name="prefs_subsection_more">Mehr</string>
   <string name="prefs_subsection_security">Sicherheit</string>
   <string name="prefs_subsection_whatsnew">Was hat sich seit der letzten Version geändert?</string>
-  <string name="prefs_subsection_security_summary">Legen Sie Sperren fest, um auf die App zuzugreifen, und lassen Sie Berührungen mit anderen sichtbaren Fenstern zu</string>
-  <string name="prefs_subsection_logging_summary">Protokolle verfolgen, die durch die Ausführung der App erstellt wurden </string>
+  <string name="prefs_subsection_security_summary">Legen Sie Sperren fest um auf die App zuzugreifen und lassen Sie Berührungen mit anderen sichtbaren Fenstern zu</string>
+  <string name="prefs_subsection_logging_summary">Protokolle verfolgen die durch die Ausführung der App erstellt wurden </string>
   <string name="prefs_subsection_more_summary">App Info, Feedback und mehr</string>
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_manage_accounts">Konten verwalten</string>
@@ -48,7 +48,7 @@
   <string name="prefs_lock_application_entries_5minutes">Nach 5 Minuten</string>
   <string name="prefs_lock_application_entries_30minutes">Nach 30 Minuten</string>
   <string name="prefs_lock_access_from_document_provider">Zugriff vom Dokumentanbieter sperren</string>
-  <string name="prefs_lock_access_from_document_provider_summary">Sperren Sie den Zugriff von anderen Apps auf die Dateien der Konten in der App über den eingebauten Dateimanager von Android.</string>
+  <string name="prefs_lock_access_from_document_provider_summary">Sperren Sie den Zugriff von anderen Apps auf die Dateien der Konten in dieser App über den eingebauten Dateimanager von Android.</string>
   <string name="prefs_touches_with_other_visible_windows">Berührungen mit anderen sichtbaren Fenstern</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Berührungen auch zulassen, wenn die Ansicht von einer anderen App überladen wird. Aktiviere diese Option, um zum Beispiel Lichtfilter-Apps verwenden zu können.</string>
   <string name="confirmation_touches_with_other_windows_title">Willst Du diese Funktion wirklich einschalten?</string>
@@ -61,10 +61,10 @@
   <string name="prefs_camera_picture_upload_summary">Automatischer Upload von Fotos</string>
   <string name="prefs_camera_picture_upload_path_title">Speicherpfad für hochgeladene Bilder</string>
   <string name="prefs_camera_picture_upload_conditions_title">Bedingungen zum Ausführen von Uploads </string>
-  <string name="prefs_camera_picture_upload_conditions_summary">Hochladen wird ausgeführt, wenn alle ausgewählten Optionen erfüllt sind</string>
+  <string name="prefs_camera_picture_upload_conditions_summary">Das Hochladen wird ausgeführt wenn alle ausgewählten Optionen erfüllt sind</string>
   <string name="prefs_camera_picture_upload_on_wifi">Bilder nur über Wifi hochladen</string>
   <string name="prefs_camera_picture_upload_on_charging">Bilder nur beim Aufladen hochladen</string>
-  <string name="prefs_camera_upload_on_charging_summary">Nur WLAN-Uploads aktivieren, um diese Option zu aktivieren</string>
+  <string name="prefs_camera_upload_on_charging_summary">Aktiviere nur-WLAN-Uploads, um diese Option zu aktivieren</string>
   <string name="prefs_camera_video_upload">Video-Uploads</string>
   <string name="prefs_camera_video_upload_summary">Automatischer Upload von Videos</string>
   <string name="prefs_camera_video_upload_path_title">Pfad für Video-Upload</string>
@@ -146,7 +146,7 @@
   <string name="file_list_empty_shared_by_links">Es wurden keine Dateien per Link geteilt.</string>
   <string name="file_list_loading">Lade…</string>
   <string name="file_list_no_app_for_file_type">Keine App für diesen Dateityp gefunden</string>
-  <string name="file_list_no_app_for_perform_action">Keine Anwendung für diese Aktion gefunden</string>
+  <string name="file_list_no_app_for_perform_action">Keine App für diese Aktion gefunden</string>
   <string name="local_file_list_empty">Es befinden sich keine Dateien in diesem Ordner.</string>
   <string name="local_file_list_empty_just_folders">Es befinden sich keine Ordner in diesem Ordner.</string>
   <string name="local_file_list_search_with_no_matches">Keine Treffer für diese Suche</string>
@@ -164,7 +164,7 @@
   <string name="filedetails_modified">Geändert:</string>
   <string name="filedetails_download">Herunterladen</string>
   <string name="filedetails_file_image_content_description">Bilddatei</string>
-  <string name="filedetails_cancel_btn_content_description">Herunterladen abbrechen-Knopf</string>
+  <string name="filedetails_cancel_btn_content_description">Button zum Abbruch für Herunterladen</string>
   <string name="filedetails_sync_file">Synchronisation</string>
   <string name="filedetails_renamed_in_upload_msg">Datei wurde wärend des Uploads zu %1$s umbenannt</string>
   <string name="list_layout">Layout der Liste</string>
@@ -236,6 +236,7 @@
   <string name="downloader_download_succeeded_ticker">Herunterladen erfolgreich</string>
   <string name="downloader_download_succeeded_content">%1$s heruntergeladen</string>
   <string name="downloader_download_failed_ticker">Herunterladen fehlgeschlagen</string>
+  <string name="downloader_preview_failed_ticker">Datei kann nicht dargestellt werden</string>
   <string name="downloader_download_failed_content">Herunterladen von %1$s konnte nicht abgeschlossen werden</string>
   <string name="downloader_not_downloaded_yet">Noch nicht Heruntergeladen</string>
   <string name="downloader_download_failed_credentials_error">Herunterladen fehlegeschlagen, du musst dich erneut anmelden</string>
@@ -260,9 +261,18 @@
   <string name="pass_code_wrong">PIN nicht korrekt</string>
   <string name="pass_code_error_set">Beim Festlegen Ihrer PIN ist ein Fehler aufgetreten</string>
   <string name="pass_code_error_remove">Beim Entfernen Ihrer PIN ist ein Fehler aufgetreten</string>
+  <string name="numberkeyboard_backspace_button_content_description">Zurück-Taste</string>
+  <string name="numberkeyboard_biometric_button_content_description">Biometrische Taste</string>
+  <string name="numberkeyboard_zero">0</string>
+  <string name="numberkeyboard_one">1</string>
+  <string name="numberkeyboard_two">2</string>
   <string name="numberkeyboard_three">3</string>
   <string name="numberkeyboard_four">4</string>
   <string name="numberkeyboard_five">5</string>
+  <string name="numberkeyboard_six">6</string>
+  <string name="numberkeyboard_seven">7</string>
+  <string name="numberkeyboard_eight">8</string>
+  <string name="numberkeyboard_nine">9</string>
   <string name="lock_time_try_again">Bitte versuchen Sie es in%1$serneut</string>
   <string name="biometric_not_enrolled">Registriere mindestens ein biometrisches Merkmal, um diese Funktion zu nutzen</string>
   <string name="biometric_prompt_title">Biometrisches Einloggen</string>
@@ -440,6 +450,8 @@
   <string name="actionbar_move">Verschieben</string>
   <string name="file_list_empty_moving">Nichts vorhanden. Du kannst einen Ordner hinzufügen!</string>
   <string name="folder_picker_choose_button_text">Auswählen</string>
+  <string name="folder_picker_move_here_button_text">Hierher bewegen</string>
+  <string name="folder_picker_copy_here_button_text">Hierher kopieren</string>
   <string name="move_file_not_found">Verschieben nicht möglich. Prüfe, dass die Datei existiert</string>
   <string name="move_file_invalid_into_descendent">Es ist nicht möglich, einen Ordner in einen seiner Unterordner zu verschieben</string>
   <string name="move_file_invalid_overwrite">Die Datei ist bereits im Zielordner vorhanden</string>
@@ -598,11 +610,11 @@
   <string name="scoped_storage_wizard_title">Mehr Sicherheit für Ihre Dateien</string>
   <!--Security Enforced-->
   <string name="security_enforced_title">Bitte wählen Sie eine Option, um diese App zu sperren:</string>
-  <string name="security_enforced_first_option">PIN gesperrt</string>
+  <string name="security_enforced_first_option">PIN Sperre</string>
   <string name="security_enforced_second_option">Sperre mit Muster</string>
   <!--Release Notes-->
   <string name="release_notes_header">Neu in %1$s</string>
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
-  <string name="release_notes_icon">Veröffentlichungsnotiz Icon</string>
+  <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
 </resources>
