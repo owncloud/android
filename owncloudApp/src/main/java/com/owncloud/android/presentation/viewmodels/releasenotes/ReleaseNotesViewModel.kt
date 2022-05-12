@@ -25,6 +25,7 @@ import com.owncloud.android.MainApp.Companion.versionCode
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.releasenotes.ReleaseNote
+import com.owncloud.android.presentation.ui.releasenotes.ReleaseNoteType
 import com.owncloud.android.providers.ContextProvider
 
 class ReleaseNotesViewModel(
@@ -45,6 +46,13 @@ class ReleaseNotesViewModel(
     }
 
     companion object {
-        val releaseNotesList = emptyList<ReleaseNote>()
+        val releaseNotesList = listOf(
+            ReleaseNote(title = R.string.release_notes_title_1, subtitle = R.string.release_notes_subtitle_1, type = ReleaseNoteType.CHANGE),
+            ReleaseNote(title = R.string.release_notes_title_2, subtitle = R.string.release_notes_subtitle_2, type = ReleaseNoteType.SECURITY),
+            ReleaseNote(title = R.string.release_notes_title_3, subtitle = R.string.release_notes_subtitle_3, type = ReleaseNoteType.ENHANCEMENT),
+            ReleaseNote(title = R.string.release_notes_title_4, subtitle = R.string.release_notes_subtitle_4, type = ReleaseNoteType.ENHANCEMENT),
+            ReleaseNote(title = R.string.release_notes_title_5, subtitle = R.string.release_notes_subtitle_5, type = ReleaseNoteType.ENHANCEMENT),
+            ReleaseNote(title = R.string.release_notes_title_6, subtitle = R.string.release_notes_subtitle_6, type = ReleaseNoteType.ENHANCEMENT),
+        )
     }
 }

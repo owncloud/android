@@ -281,7 +281,6 @@
     <string name="numberkeyboard_eight">8</string>
     <string name="numberkeyboard_nine">9</string>
 
-
     <string name="lock_time_try_again">Please, try again in %1$s</string>
 
     <string name="biometric_not_enrolled">Register at least one biometric to use this feature</string>
@@ -673,5 +672,24 @@
     <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
+
+    <!-- Release Notes 2.21-beta.1 -->
+    <string name="release_notes_title_1">Release Notes</string>
+    <string name="release_notes_subtitle_1">News in the app will be listed after every update to inform about latest improvements and new features. Available also in settings to recheck.</string>
+
+    <string name="release_notes_title_2">Secure connections by default</string>
+    <string name="release_notes_subtitle_2">Https connections by default to establish server connections. Otherwise, it will be explicitly required in URL</string>
+
+    <string name="release_notes_title_3">Passcode and Pattern redesign</string>
+    <string name="release_notes_subtitle_3">Integrated the numeric keypad on the screen, improved navigation and graphical interface.</string>
+
+    <string name="release_notes_title_4">Support for SVG files</string>
+    <string name="release_notes_subtitle_4">Added support for svg files.</string>
+
+    <string name="release_notes_title_5">Details view redesign</string>
+    <string name="release_notes_subtitle_5">Information reordered and added the possibility to download and open the file by clicking the thumbnail.</string>
+
+    <string name="release_notes_title_6">Hidden files</string>
+    <string name="release_notes_subtitle_6">Added a new option in settings to decide to show or not hidden files.</string>
 
 </resources>
