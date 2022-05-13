@@ -485,4 +485,5 @@
   <string name="security_enforced_first_option">Захистити паролем</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Продовжити</string>
+  <!--Release Notes 2.21-beta.1-->
 </resources>

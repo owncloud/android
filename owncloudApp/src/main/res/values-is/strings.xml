@@ -492,4 +492,5 @@
   <string name="security_enforced_first_option">Læsing með lykilkóða</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Halda áfram</string>
+  <!--Release Notes 2.21-beta.1-->
 </resources>

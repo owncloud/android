@@ -550,4 +550,5 @@
   <string name="security_enforced_first_option">قفل رمز المرور</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">متابعة</string>
+  <!--Release Notes 2.21-beta.1-->
 </resources>

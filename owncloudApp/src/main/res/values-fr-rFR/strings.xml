@@ -592,4 +592,5 @@ Téléchargez-le ici : %2$s</string>
   <string name="security_enforced_first_option">Code de sécurité</string>
   <string name="security_enforced_second_option">Verrouillage par motif</string>
   <!--Release Notes-->
+  <!--Release Notes 2.21-beta.1-->
 </resources>
