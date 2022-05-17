@@ -27,18 +27,26 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 import timber.log.Timber
 import java.io.File
 
 /**
- * General use case to upload a file.
+ * General use case to upload a file from the File System.
+ *
+ * We use this to upload files from:
+ * - (FAB) Picture from camera
+ * - Share with oC - Plain Text
+ * - Share with oC - Files
+ * - TODO: Conflicts - Keep local
+ * - Conflicts - Keep both
  *
  * It stores the upload in the database and then enqueue a new worker to upload the single file
  */
-class UploadFileFromSystemUseCase(
+class UploadFilesFromSystemUseCase(
     private val workManager: WorkManager,
-) : BaseUseCase<Unit, UploadFileFromSystemUseCase.Params>() {
+) : BaseUseCase<Unit, UploadFilesFromSystemUseCase.Params>() {
 
     override fun run(params: Params) {
         params.listOfLocalPaths.forEach { localPath ->
