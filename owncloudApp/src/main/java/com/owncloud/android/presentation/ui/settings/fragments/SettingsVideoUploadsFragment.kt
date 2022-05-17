@@ -46,7 +46,7 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_ENAB
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_PATH
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_SOURCE
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_WIFI_ONLY
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
 import com.owncloud.android.ui.activity.FolderPickerActivity
@@ -98,7 +98,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsLastSync = findPreference(PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_LAST_SYNC)
         prefVideoUploadsBehaviour = findPreference<ListPreference>(PREF__CAMERA_VIDEO_UPLOADS_BEHAVIOUR)?.apply {
             entries = listOf(getString(R.string.pref_behaviour_entries_keep_file), getString(R.string.pref_behaviour_entries_move)).toTypedArray()
-            entryValues = listOf(FolderBackUpConfiguration.Behavior.COPY.name, FolderBackUpConfiguration.Behavior.MOVE.name).toTypedArray()
+            entryValues = listOf(UploadBehavior.COPY.name, UploadBehavior.MOVE.name).toTypedArray()
         }
         prefVideoUploadsAccount = findPreference<ListPreference>(PREF__CAMERA_VIDEO_UPLOADS_ACCOUNT_NAME)?.apply {
             entries = videosViewModel.getLoggedAccountNames()
@@ -241,7 +241,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
         prefVideoUploadsSourcePath?.summary = null
         prefVideoUploadsOnWifi?.isChecked = false
         prefVideoUploadsOnCharging?.isChecked = false
-        prefVideoUploadsBehaviour?.value = FolderBackUpConfiguration.Behavior.COPY.name
+        prefVideoUploadsBehaviour?.value = UploadBehavior.COPY.name
         prefVideoUploadsLastSync?.summary = null
     }
 }

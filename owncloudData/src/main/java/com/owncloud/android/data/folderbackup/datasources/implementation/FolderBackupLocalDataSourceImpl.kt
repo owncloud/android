@@ -25,6 +25,7 @@ import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguratio
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.pictureUploadsName
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.videoUploadsName
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -61,7 +62,7 @@ class FolderBackupLocalDataSourceImpl(
     private fun FolderBackUpEntity.toModel() =
         FolderBackUpConfiguration(
             accountName = accountName,
-            behavior = FolderBackUpConfiguration.Behavior.fromString(behavior),
+            behavior = UploadBehavior.fromString(behavior),
             sourcePath = sourcePath,
             uploadPath = uploadPath,
             wifiOnly = wifiOnly,

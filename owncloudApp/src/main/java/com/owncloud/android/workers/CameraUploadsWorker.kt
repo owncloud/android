@@ -31,6 +31,7 @@ import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
@@ -283,7 +284,7 @@ class CameraUploadsWorker(
         documentFile: DocumentFile,
         uploadPath: String,
         accountName: String,
-        behavior: FolderBackUpConfiguration.Behavior,
+        behavior: UploadBehavior,
         createdByWorker: Int
     ): Long {
         val uploadStorageManager = UploadsStorageManager(appContext.contentResolver)
@@ -292,7 +293,7 @@ class CameraUploadsWorker(
             fileSize = documentFile.length()
             isForceOverwrite = false
             createdBy = createdByWorker
-            localAction = if (behavior == FolderBackUpConfiguration.Behavior.MOVE)
+            localAction = if (behavior == UploadBehavior.MOVE)
                 FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE
             else
                 FileUploader.LEGACY_LOCAL_BEHAVIOUR_COPY

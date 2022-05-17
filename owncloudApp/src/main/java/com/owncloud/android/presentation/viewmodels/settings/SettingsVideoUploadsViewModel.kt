@@ -27,6 +27,7 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.videoUploadsName
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.camerauploads.usecases.GetVideoUploadsConfigurationStreamUseCase
 import com.owncloud.android.domain.camerauploads.usecases.ResetVideoUploadsUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
@@ -129,7 +130,7 @@ class SettingsVideoUploadsViewModel(
     }
 
     fun handleSelectBehaviour(behaviorString: String) {
-        val behavior = FolderBackUpConfiguration.Behavior.fromString(behaviorString)
+        val behavior = UploadBehavior.fromString(behaviorString)
 
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             saveVideoUploadsConfigurationUseCase.execute(
@@ -164,12 +165,12 @@ class SettingsVideoUploadsViewModel(
         wifiOnly: Boolean? = _videoUploads.value?.wifiOnly,
         chargingOnly: Boolean? = _videoUploads.value?.chargingOnly,
         sourcePath: String? = _videoUploads.value?.sourcePath,
-        behavior: FolderBackUpConfiguration.Behavior? = _videoUploads.value?.behavior,
+        behavior: UploadBehavior? = _videoUploads.value?.behavior,
         timestamp: Long? = _videoUploads.value?.lastSyncTimestamp
     ): FolderBackUpConfiguration =
         FolderBackUpConfiguration(
             accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
-            behavior = behavior ?: FolderBackUpConfiguration.Behavior.COPY,
+            behavior = behavior ?: UploadBehavior.COPY,
             sourcePath = sourcePath.orEmpty(),
             uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
             wifiOnly = wifiOnly ?: false,
