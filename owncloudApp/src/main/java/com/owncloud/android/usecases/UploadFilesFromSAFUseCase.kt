@@ -25,17 +25,20 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import timber.log.Timber
 import java.io.File
 
 /**
  * General use case to upload a file from the Storage Access Framework.
  *
+ * We use this use case to upload new files when clicking the FAB -> Upload from files
+ *
  * It stores the upload in the database and then enqueue a new worker to upload the single file
  */
-class UploadFileFromSAFUseCase(
+class UploadFilesFromSAFUseCase(
     private val workManager: WorkManager,
-) : BaseUseCase<Unit, UploadFileFromSAFUseCase.Params>() {
+) : BaseUseCase<Unit, UploadFilesFromSAFUseCase.Params>() {
 
     override fun run(params: Params) {
         params.listOfContentUris.forEach { contentUri ->

@@ -21,10 +21,11 @@
 package com.owncloud.android.testutil
 
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 
 val OC_BACKUP = FolderBackUpConfiguration(
     accountName = "",
-    behavior = FolderBackUpConfiguration.Behavior.COPY,
+    behavior = UploadBehavior.COPY,
     sourcePath = "/Photos",
     uploadPath = "/Photos",
     wifiOnly = true,
