@@ -31,7 +31,7 @@ import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.UploadResult
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.ForbiddenException
@@ -69,7 +69,7 @@ class UploadFileFromContentUriWorker(
     private lateinit var account: Account
     private lateinit var contentUri: Uri
     private lateinit var lastModified: String
-    private lateinit var behavior: FolderBackUpConfiguration.Behavior
+    private lateinit var behavior: UploadBehavior
     private lateinit var uploadPath: String
     private var uploadIdInStorageManager: Long = -1
 
@@ -104,7 +104,7 @@ class UploadFileFromContentUriWorker(
         account = AccountUtils.getOwnCloudAccountByName(appContext, paramAccountName) ?: return false
         contentUri = paramContentUri?.toUri() ?: return false
         uploadPath = paramUploadPath ?: return false
-        behavior = paramBehavior?.let { FolderBackUpConfiguration.Behavior.fromString(it) } ?: return false
+        behavior = paramBehavior?.let { UploadBehavior.fromString(it) } ?: return false
         lastModified = paramLastModified ?: return false
         uploadIdInStorageManager = paramUploadId
 
@@ -156,7 +156,7 @@ class UploadFileFromContentUriWorker(
 
         val result = executeRemoteOperation { uploadFileFromContentUriOperation.execute(client) }
 
-        if (result == Unit && behavior == FolderBackUpConfiguration.Behavior.MOVE) {
+        if (result == Unit && behavior == UploadBehavior.MOVE) {
             removeLocalFile()
         }
     }

@@ -28,6 +28,7 @@ import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.UploadResult
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.ForbiddenException
@@ -46,7 +47,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
 import com.owncloud.android.lib.resources.files.UploadFileFromFileSystemOperation
-import com.owncloud.android.usecases.UploadBehavior
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
