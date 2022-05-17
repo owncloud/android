@@ -23,8 +23,8 @@ import androidx.work.WorkManager
 import com.owncloud.android.MainApp
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Behavior.COPY
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Behavior.MOVE
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior.MOVE
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior.COPY
 import com.owncloud.android.files.services.FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE
 
 class RetryUploadFromContentUriUseCase(
