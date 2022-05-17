@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,7 +20,7 @@ package com.owncloud.android.domain.camerauploads.model
 
 data class FolderBackUpConfiguration(
     val accountName: String,
-    val behavior: Behavior,
+    val behavior: UploadBehavior,
     val sourcePath: String,
     val uploadPath: String,
     val wifiOnly: Boolean,
@@ -36,17 +36,43 @@ data class FolderBackUpConfiguration(
         const val pictureUploadsName = "Picture uploads"
         const val videoUploadsName = "Video uploads"
     }
+}
 
-    enum class Behavior {
-        MOVE, COPY;
+/**
+ * Behaviour to after uploading a file.
+ *
+ * Move - Remove the source file after a successful upload
+ * Copy - Keep the source file after a successful upload
+ */
+enum class UploadBehavior {
+    MOVE, COPY;
 
-        companion object {
-            fun fromString(string: String): Behavior {
-                return if (string.equals("MOVE", ignoreCase = true)) {
-                    MOVE
-                } else {
-                    COPY
-                }
+    companion object {
+        private const val LEGACY_LOCAL_BEHAVIOUR_COPY = 0
+        private const val LEGACY_LOCAL_BEHAVIOUR_MOVE = 1
+        private const val LEGACY_LOCAL_BEHAVIOUR_FORGET = 2
+
+        fun fromString(string: String): UploadBehavior {
+            return if (string.equals("MOVE", ignoreCase = true)) {
+                MOVE
+            } else {
+                COPY
+            }
+        }
+
+        fun fromLegacyLocalBehavior(oldLocalBehavior: Int): UploadBehavior {
+            return when (oldLocalBehavior) {
+                LEGACY_LOCAL_BEHAVIOUR_MOVE -> MOVE
+                LEGACY_LOCAL_BEHAVIOUR_COPY -> COPY
+                LEGACY_LOCAL_BEHAVIOUR_FORGET -> MOVE
+                else -> COPY
+            }
+        }
+
+        fun toLegacyLocalBehavior(localBehavior: UploadBehavior): Int {
+            return when (localBehavior) {
+                MOVE -> LEGACY_LOCAL_BEHAVIOUR_MOVE
+                COPY -> LEGACY_LOCAL_BEHAVIOUR_COPY
             }
         }
     }

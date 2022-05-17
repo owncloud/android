@@ -94,8 +94,8 @@ import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
-import com.owncloud.android.usecases.UploadFileFromSAFUseCase
-import com.owncloud.android.usecases.UploadFileFromSystemUseCase
+import com.owncloud.android.usecases.UploadFilesFromSAFUseCase
+import com.owncloud.android.usecases.UploadFilesFromSystemUseCase
 import com.owncloud.android.usecases.transfers.DownloadFileUseCase
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PreferenceUtils
@@ -544,9 +544,9 @@ class FileDisplayActivity : FileActivity(),
                 remotePaths[j] = remotePathBase + File(filePaths[j]).name
             }
 
-            val uploadFileFromSystemUseCase: UploadFileFromSystemUseCase by inject()
-            uploadFileFromSystemUseCase.execute(
-                UploadFileFromSystemUseCase.Params(
+            val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase by inject()
+            uploadFilesFromSystemUseCase.execute(
+                UploadFilesFromSystemUseCase.Params(
                     accountName = account.name, listOfLocalPaths = filePaths.toList(), uploadFolderPath = remotePathBase!!)
             )
 
@@ -557,7 +557,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun requestUploadOfContentFromApps(contentIntent: Intent?, resultCode: Int) {
-        val uploadFileUseCase by inject<UploadFileFromSAFUseCase>()
+        val uploadFileUseCase by inject<UploadFilesFromSAFUseCase>()
 
         val streamsToUpload = ArrayList<Uri>()
 
@@ -577,7 +577,7 @@ class FileDisplayActivity : FileActivity(),
         val currentDir = currentDir
         val remotePath = currentDir?.remotePath ?: OCFile.ROOT_PATH
 
-        val uploadFileUseCaseParams = UploadFileFromSAFUseCase.Params(
+        val uploadFileUseCaseParams = UploadFilesFromSAFUseCase.Params(
             accountName = account.name,
             listOfContentUris = streamsToUpload,
             uploadFolderPath = remotePath,
