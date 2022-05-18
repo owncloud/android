@@ -23,7 +23,8 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.presentation.manager.TRANSFER_TAG_DOWNLOAD
+import com.owncloud.android.usecases.transfers.TRANSFER_TAG_DOWNLOAD
+import com.owncloud.android.workers.UploadFileFromContentUriWorker.Companion.TRANSFER_TAG_MANUAL_UPLOAD
 
 val PENDING_WORK_STATUS = listOf(WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING, WorkInfo.State.BLOCKED)
 val FINISHED_WORK_STATUS = listOf(WorkInfo.State.SUCCEEDED, WorkInfo.State.FAILED, WorkInfo.State.CANCELLED)
@@ -45,8 +46,21 @@ fun WorkManager.isDownloadPending(account: Account, file: OCFile): Boolean = fal
 // TODO: https://github.com/owncloud/android/issues/2872#issuecomment-817572474
 //  this.getWorkInfoByTags(getTagsForDownload(file, account)).any { !it.state.isFinished }
 
+/**
+ * Check if an upload is pending. It could be enqueued, uploading or blocked.
+ * @param account - Owner of the file
+ * @param file - File to check whether it is pending.
+ *
+ * @return true if the download is pending.
+ */
+fun WorkManager.isUploadPending(account: Account, file: OCFile): Boolean = false
+// TODO: Uploads work different from downloads. So that, this one will be different.
+
 fun getTagsForDownload(file: OCFile, account: Account) =
     listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name)
+
+fun getTagsForUpload(file: OCFile, account: Account) =
+    listOf(TRANSFER_TAG_MANUAL_UPLOAD, file.id.toString(), account.name)
 
 /**
  * Take care with WorkQueries. It will return workers that match at least ONE of the tags.

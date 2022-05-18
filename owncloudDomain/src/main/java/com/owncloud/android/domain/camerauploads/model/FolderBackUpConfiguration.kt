@@ -47,6 +47,14 @@ data class FolderBackUpConfiguration(
 enum class UploadBehavior {
     MOVE, COPY;
 
+    @Deprecated("Legacy Local Behavior. Remove asap")
+    fun toLegacyLocalBehavior(): Int {
+        return when (this) {
+            MOVE -> LEGACY_LOCAL_BEHAVIOUR_MOVE
+            COPY -> LEGACY_LOCAL_BEHAVIOUR_COPY
+        }
+    }
+
     companion object {
         private const val LEGACY_LOCAL_BEHAVIOUR_COPY = 0
         private const val LEGACY_LOCAL_BEHAVIOUR_MOVE = 1
@@ -60,19 +68,13 @@ enum class UploadBehavior {
             }
         }
 
+        @Deprecated("Legacy Local Behavior. Remove asap")
         fun fromLegacyLocalBehavior(oldLocalBehavior: Int): UploadBehavior {
             return when (oldLocalBehavior) {
                 LEGACY_LOCAL_BEHAVIOUR_MOVE -> MOVE
                 LEGACY_LOCAL_BEHAVIOUR_COPY -> COPY
                 LEGACY_LOCAL_BEHAVIOUR_FORGET -> MOVE
                 else -> COPY
-            }
-        }
-
-        fun toLegacyLocalBehavior(localBehavior: UploadBehavior): Int {
-            return when (localBehavior) {
-                MOVE -> LEGACY_LOCAL_BEHAVIOUR_MOVE
-                COPY -> LEGACY_LOCAL_BEHAVIOUR_COPY
             }
         }
     }

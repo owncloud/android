@@ -27,8 +27,6 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.PENDING_WORK_STATUS
 import com.owncloud.android.extensions.buildWorkQuery
 import com.owncloud.android.extensions.getTagsForDownload
-import com.owncloud.android.presentation.manager.MAXIMUM_NUMBER_OF_RETRIES
-import com.owncloud.android.presentation.manager.TRANSFER_TAG_DOWNLOAD
 import com.owncloud.android.workers.DownloadFileWorker
 import timber.log.Timber
 import java.util.UUID

@@ -411,11 +411,10 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
         }
 
         // configure UI for depending upon local state of the file
-        val uploaderBinder = mContainerActivity.fileUploaderBinder
         val safeAccount = account
         val transferring = forcedTransferring ||
-                safeAccount != null && fileDetailsViewModel.isDownloadPending(safeAccount, file) ||
-                uploaderBinder != null && uploaderBinder.isUploading(account, file)
+                safeAccount != null && (fileDetailsViewModel.isDownloadPending(safeAccount, file) ||
+                fileDetailsViewModel.isUploadPending(safeAccount, file))
 
         when {
             transferring -> {
@@ -508,9 +507,8 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
         requireView().findViewById<View>(R.id.fdProgressBlock).isVisible = true
         val progressText = requireView().findViewById<TextView>(R.id.fdProgressText)
         progressText.isVisible = true
-        val uploaderBinder = mContainerActivity.fileUploaderBinder
         val safeAccount = account
-        if (safeAccount != null && uploaderBinder != null && uploaderBinder.isUploading(safeAccount, file)) {
+        if (safeAccount != null && fileDetailsViewModel.isUploadPending(safeAccount, file)) {
             progressText.setText(R.string.uploader_upload_in_progress_ticker)
         }
     }
