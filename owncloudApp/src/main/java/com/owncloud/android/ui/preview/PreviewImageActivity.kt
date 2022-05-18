@@ -49,8 +49,8 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.operations.SynchronizeFileOperation
-import com.owncloud.android.presentation.manager.DOWNLOAD_ADDED_MESSAGE
-import com.owncloud.android.presentation.manager.DOWNLOAD_FINISH_MESSAGE
+import com.owncloud.android.usecases.transfers.DOWNLOAD_ADDED_MESSAGE
+import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity

@@ -75,8 +75,7 @@ import static org.koin.java.KoinJavaComponent.inject;
 public class ManageAccountsActivity extends FileActivity
         implements
         AccountListAdapter.AccountListAdapterListener,
-        AccountManagerCallback<Boolean>,
-        ComponentsGetter {
+        AccountManagerCallback<Boolean>{
 
     public static final String KEY_ACCOUNT_LIST_CHANGED = "ACCOUNT_LIST_CHANGED";
     public static final String KEY_CURRENT_ACCOUNT_CHANGED = "CURRENT_ACCOUNT_CHANGED";
@@ -397,11 +396,6 @@ public class ManageAccountsActivity extends FileActivity
     }
 
     // Methods for ComponentsGetter
-    @Override
-    public FileUploader.FileUploaderBinder getFileUploaderBinder() {
-        return mUploaderBinder;
-    }
-
     @Override
     public OperationsService.OperationsServiceBinder getOperationsServiceBinder() {
         return null;
