@@ -28,6 +28,7 @@ import androidx.work.WorkManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.extensions.isDownloadPending
+import com.owncloud.android.extensions.isUploadPending
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.preview.PreviewAudioFragment
@@ -98,4 +99,7 @@ class FileDetailsViewModel(
             }
         }
     }
+
+    fun isUploadPending(account: Account, file: OCFile): Boolean =
+        workManager.isUploadPending(account, file)
 }

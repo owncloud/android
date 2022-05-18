@@ -22,7 +22,6 @@ import android.accounts.Account
 import androidx.work.WorkManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.extensions.getWorkInfoByTags
-import com.owncloud.android.presentation.manager.TRANSFER_TAG_DOWNLOAD
 
 /**
  * Cancel every pending download for an account. Note that cancellation is a best-effort
