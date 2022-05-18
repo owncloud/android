@@ -88,7 +88,7 @@ public class FileOperationsHelper {
     }
 
     public void openFile(OCFile ocFile) {
-        if (ocFile != null) {
+        if (ocFile != null && ocFile.isDown()) {
             Intent intentForSavedMimeType = getIntentForSavedMimeType(ocFile.getExposedFileUri(mFileActivity), ocFile.getMimetype());
 
             Intent intentForGuessedMimeType = getIntentForGuessedMimeType(ocFile.getStoragePath(), ocFile.getMimetype(),
@@ -97,7 +97,7 @@ public class FileOperationsHelper {
             openFileWithIntent(intentForSavedMimeType, intentForGuessedMimeType);
 
         } else {
-            Timber.e("Trying to open a NULL OCFile");
+            Timber.e("Trying to open a NULL or not down OCFile");
         }
     }
 

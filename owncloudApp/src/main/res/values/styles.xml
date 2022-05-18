@@ -16,7 +16,7 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Animations" />
 
@@ -297,5 +297,15 @@
 
     <style name="Theme.ownCloud.SortBottomSheetFragment.Item">
         <item name="android:textAppearance">@style/TextAppearance.OwnCloud.SortBottomSheetFragment.Item</item>
+    </style>
+
+    <style name="Button.FileDetail" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="textAllCaps">true</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/owncloud_blue</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:drawableTint" tools:targetApi="m">@color/owncloud_blue</item>
+        <item name="android:layout_marginTop">@dimen/standard_half_margin</item>
+        <item name="android:drawablePadding">@dimen/standard_margin</item>
     </style>
 </resources>

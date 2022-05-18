@@ -1,0 +1,7 @@
+Enhancement: Adding action buttons to the detail view of file
+
+Three new buttons have been added to the file details view
+and removed from the toolbar menu.
+
+https://github.com/owncloud/android/issues/3641
+https://github.com/owncloud/android/pull/3655

@@ -29,6 +29,7 @@ Summary
 * Enhancement - Support for SVG files added: [#1033](https://github.com/owncloud/android/issues/1033)
 * Enhancement - Improved copy/move dialog: [#1414](https://github.com/owncloud/android/issues/1414)
 * Enhancement - Thumbnail click action in file detail: [#3653](https://github.com/owncloud/android/pull/3653)
+* Enhancement - Adding action buttons to the detail view of file: [#3641](https://github.com/owncloud/android/issues/3641)
 
 Details
 -------
@@ -193,6 +194,13 @@ Details
    previewed.
 
    https://github.com/owncloud/android/pull/3653
+
+* Enhancement - Adding action buttons to the detail view of file: [#3641](https://github.com/owncloud/android/issues/3641)
+
+   Three new buttons have been added to the file details view and removed from the toolbar menu.
+
+   https://github.com/owncloud/android/issues/3641
+   https://github.com/owncloud/android/pull/3655
 
 Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
 =======================================
