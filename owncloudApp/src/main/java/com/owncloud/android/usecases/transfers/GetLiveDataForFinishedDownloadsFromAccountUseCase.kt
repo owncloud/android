@@ -26,7 +26,6 @@ import androidx.work.WorkManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.extensions.FINISHED_WORK_STATUS
 import com.owncloud.android.extensions.buildWorkQuery
-import com.owncloud.android.presentation.manager.TRANSFER_TAG_DOWNLOAD
 
 /**
  * Get a LiveData with the lasts downloads from an account

@@ -36,12 +36,12 @@ import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.OCShare;
-import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
+import com.owncloud.android.usecases.CancelUploadForFileUseCase;
 import com.owncloud.android.usecases.transfers.CancelDownloadForFileUseCase;
 import com.owncloud.android.utils.UriUtilsKt;
 import kotlin.Lazy;
@@ -348,10 +348,11 @@ public class FileOperationsHelper {
         CancelDownloadForFileUseCase.Params cancelDownloadParams = new CancelDownloadForFileUseCase.Params(file);
         cancelDownloadForFileUseCaseLazy.getValue().execute(cancelDownloadParams);
 
-        FileUploaderBinder uploaderBinder = mFileActivity.getFileUploaderBinder();
-        if (uploaderBinder != null && uploaderBinder.isUploading(account, file)) {
-            uploaderBinder.cancel(account, file);
-        }
+        // for both files and folders
+        @NotNull Lazy<CancelUploadForFileUseCase> cancelUploadForFileUseCaseLazy =
+                inject(CancelUploadForFileUseCase.class);
+        CancelUploadForFileUseCase.Params cancelUploadForFileUseCaseParams = new CancelUploadForFileUseCase.Params(file);
+        cancelUploadForFileUseCaseLazy.getValue().execute(cancelUploadForFileUseCaseParams);
     }
 
     public long getOpIdWaitingFor() {

@@ -30,8 +30,8 @@ import android.os.Parcelable;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.UploadResult;
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import timber.log.Timber;
@@ -147,7 +147,7 @@ public class OCUpload implements Parcelable {
         mAccountName = "";
         mFileSize = -1;
         mId = -1;
-        mLocalAction = FileUploader.LEGACY_LOCAL_BEHAVIOUR_COPY;
+        mLocalAction = UploadBehavior.COPY.toLegacyLocalBehavior();
         mForceOverwrite = false;
         mCreatesRemoteFolder = false;
         mUploadStatus = UploadStatus.UPLOAD_IN_PROGRESS;

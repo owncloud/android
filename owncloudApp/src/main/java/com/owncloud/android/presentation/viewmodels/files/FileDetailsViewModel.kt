@@ -35,6 +35,7 @@ import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.extensions.isDownloadPending
+import com.owncloud.android.extensions.isUploadPending
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
@@ -138,4 +139,7 @@ class FileDetailsViewModel(
             }
         }
     }
+
+    fun isUploadPending(account: Account, file: OCFile): Boolean =
+        workManager.isUploadPending(account, file)
 }
