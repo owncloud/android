@@ -34,7 +34,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.WorkManagerExtKt;
-import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
@@ -275,11 +274,10 @@ public class FileMenuFilter {
         boolean synchronizing = false;
         if (mComponentsGetter != null && !mFiles.isEmpty() && mAccount != null) {
             OperationsServiceBinder opsBinder = mComponentsGetter.getOperationsServiceBinder();
-            FileUploaderBinder uploaderBinder = mComponentsGetter.getFileUploaderBinder();
             synchronizing = (
                     anyFileSynchronizing(opsBinder) ||      // comparing local and remote
                             anyFileDownloading() ||
-                            anyFileUploading(uploaderBinder)
+                            anyFileUploading()
             );
         }
         return synchronizing;
@@ -304,12 +302,11 @@ public class FileMenuFilter {
         return downloading;
     }
 
-    private boolean anyFileUploading(FileUploaderBinder uploaderBinder) {
+    private boolean anyFileUploading() {
+        WorkManager workManager = WorkManager.getInstance(mContext);
         boolean uploading = false;
-        if (uploaderBinder != null) {
-            for (int i = 0; !uploading && i < mFiles.size(); i++) {
-                uploading = uploaderBinder.isUploading(mAccount, mFiles.get(i));
-            }
+        for (int i = 0; !uploading && i < mFiles.size(); i++) {
+            uploading = WorkManagerExtKt.isUploadPending(workManager, mAccount, mFiles.get(i));
         }
         return uploading;
     }
