@@ -16,26 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.usecases.transfers
+package com.owncloud.android.usecases
 
 import androidx.work.WorkManager
+import com.owncloud.android.MainApp
+import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.getWorkInfoByTags
+import com.owncloud.android.workers.UploadFileFromContentUriWorker.Companion.TRANSFER_TAG_MANUAL_UPLOAD
+import timber.log.Timber
 
 /**
- * Cancel every pending download for file. Note that cancellation is a best-effort
+ * Cancel every pending upload for file. Note that cancellation is a best-effort
  * policy and work that is already executing may continue to run.
  */
-class CancelDownloadForFileUseCase(
+class CancelUploadForFileUseCase(
     private val workManager: WorkManager
-) : BaseUseCase<Unit, CancelDownloadForFileUseCase.Params>() {
+) : BaseUseCase<Unit, CancelUploadForFileUseCase.Params>() {
 
     override fun run(params: Params) {
         val file = params.file
+        val uploadsStorageManager = UploadsStorageManager(MainApp.appContext.contentResolver)
+
+        // Check if there are pending uploads for this file.
+        // FirstOrNull because it should not be 2 uploads with same owner and remote path at the same time
+        val uploadForFile = uploadsStorageManager.currentAndPendingUploads.firstOrNull {
+            file.owner == it.accountName && file.remotePath == it.remotePath
+        }
+
+        if (uploadForFile == null) {
+            Timber.w("Didn't found any pending upload to cancel for file ${file.remotePath} and owner ${file.owner}")
+            return
+        }
 
         val workersToCancel =
-            workManager.getWorkInfoByTags(listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), file.owner))
+            workManager.getWorkInfoByTags(listOf(TRANSFER_TAG_MANUAL_UPLOAD, uploadForFile.uploadId.toString(), file.owner))
 
         workersToCancel.forEach {
             workManager.cancelWorkById(it.id)

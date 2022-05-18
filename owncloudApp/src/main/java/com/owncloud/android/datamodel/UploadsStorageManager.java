@@ -28,7 +28,7 @@ import android.net.Uri;
 
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.db.UploadResult;
-import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.UploadFileOperation;
 import timber.log.Timber;
@@ -460,7 +460,7 @@ public class UploadsStorageManager extends Observable {
                     uploadFileOperation.getRemotePath()
             );
         } else {
-            String localPath = (FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE == uploadFileOperation.getLocalBehaviour())
+            String localPath = (UploadBehavior.MOVE.toLegacyLocalBehavior() == uploadFileOperation.getLocalBehaviour())
                     ? uploadFileOperation.getStoragePath() : null;
 
             if (uploadResult.isSuccess()) {
@@ -487,7 +487,7 @@ public class UploadsStorageManager extends Observable {
      * Updates the persistent upload database with an upload now in progress.
      */
     public void updateDatabaseUploadStart(UploadFileOperation uploadFileOperation) {
-        String localPath = (FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE == uploadFileOperation.getLocalBehaviour())
+        String localPath = (UploadBehavior.MOVE.toLegacyLocalBehavior() == uploadFileOperation.getLocalBehaviour())
                 ? uploadFileOperation.getStoragePath() : null;
 
         updateUploadStatus(

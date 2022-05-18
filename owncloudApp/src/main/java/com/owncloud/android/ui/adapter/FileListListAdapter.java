@@ -55,7 +55,6 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.WorkManagerExtKt;
-import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
@@ -330,8 +329,6 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
         // local state
         localStateView.bringToFront();
         final WorkManager workManager = WorkManager.getInstance(mContext);
-        final FileUploaderBinder uploaderBinder =
-                mTransferServiceGetter.getFileUploaderBinder();
         final OperationsServiceBinder opsBinder =
                 mTransferServiceGetter.getOperationsServiceBinder();
 
@@ -345,7 +342,7 @@ public class FileListListAdapter extends BaseAdapter implements ListAdapter {
             // downloading
             localStateView.setImageResource(R.drawable.sync_pin);
             localStateView.setVisibility(View.VISIBLE);
-        } else if (uploaderBinder != null && uploaderBinder.isUploading(mAccount, file)) {
+        } else if (WorkManagerExtKt.isUploadPending(workManager, mAccount, file)) {
             // uploading
             localStateView.setImageResource(R.drawable.sync_pin);
             localStateView.setVisibility(View.VISIBLE);

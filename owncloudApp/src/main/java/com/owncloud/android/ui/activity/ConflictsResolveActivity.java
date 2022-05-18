@@ -23,8 +23,8 @@ package com.owncloud.android.ui.activity;
 
 import android.os.Bundle;
 
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.Decision;
@@ -62,7 +62,7 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
                 forceOverwrite = true;
                 break;
             case KEEP_BOTH:
-                behaviour = FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE;
+                behaviour = UploadBehavior.MOVE.toLegacyLocalBehavior();
                 break;
             case SERVER:
                 // use server version -> delete local, request download

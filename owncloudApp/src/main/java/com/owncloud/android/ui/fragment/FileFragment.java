@@ -25,11 +25,12 @@ import android.content.Context;
 
 import androidx.fragment.app.Fragment;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 
-import static com.owncloud.android.presentation.manager.TransferConstantsKt.DOWNLOAD_ADDED_MESSAGE;
-import static com.owncloud.android.presentation.manager.TransferConstantsKt.DOWNLOAD_FINISH_MESSAGE;
+import static com.owncloud.android.usecases.transfers.TransferConstantsKt.DOWNLOAD_ADDED_MESSAGE;
+import static com.owncloud.android.usecases.transfers.TransferConstantsKt.DOWNLOAD_FINISH_MESSAGE;
+import static com.owncloud.android.usecases.transfers.TransferConstantsKt.UPLOAD_FINISH_MESSAGE;
+import static com.owncloud.android.usecases.transfers.TransferConstantsKt.UPLOAD_START_MESSAGE;
 
 /**
  * Common methods for {@link Fragment}s containing {@link OCFile}s
@@ -88,10 +89,9 @@ public abstract class FileFragment extends Fragment {
     }
 
     public void onSyncEvent(String syncEvent, boolean success, OCFile updatedFile) {
-        if (syncEvent.equals(FileUploader.getUploadStartMessage())) {
+        if (syncEvent.equals(UPLOAD_START_MESSAGE)) {
             updateViewForSyncInProgress();
-
-        } else if (syncEvent.equals(FileUploader.getUploadFinishMessage())) {
+        } else if (syncEvent.equals(UPLOAD_FINISH_MESSAGE)) {
             if (success) {
                 if (updatedFile != null) {
                     onFileMetadataChanged(updatedFile);

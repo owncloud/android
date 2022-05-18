@@ -53,6 +53,7 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
@@ -63,8 +64,6 @@ import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.files.services.FileUploader
-import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.accounts.AccountUtils
@@ -76,8 +75,8 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.manager.DOWNLOAD_ADDED_MESSAGE
-import com.owncloud.android.presentation.manager.DOWNLOAD_FINISH_MESSAGE
+import com.owncloud.android.usecases.transfers.DOWNLOAD_ADDED_MESSAGE
+import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
@@ -514,7 +513,7 @@ class FileDisplayActivity : FileActivity(),
                         capturedFilePaths: Array<String>
                     ) {
                         if (hasEnoughSpace) {
-                            requestUploadOfFilesFromFileSystem(capturedFilePaths, FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE)
+                            requestUploadOfFilesFromFileSystem(capturedFilePaths, UploadBehavior.MOVE.toLegacyLocalBehavior())
                         }
                     }
                 })
@@ -569,11 +568,6 @@ class FileDisplayActivity : FileActivity(),
             streamsToUpload.add(contentIntent.data!!)
         }
 
-        val behaviour = if (resultCode == RESULT_OK_AND_MOVE)
-            FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE
-        else
-            FileUploader.LEGACY_LOCAL_BEHAVIOUR_COPY
-
         val currentDir = currentDir
         val remotePath = currentDir?.remotePath ?: OCFile.ROOT_PATH
 
@@ -583,17 +577,6 @@ class FileDisplayActivity : FileActivity(),
             uploadFolderPath = remotePath,
         )
         uploadFileUseCase.execute(uploadFileUseCaseParams)
-
-//        val uploader = UriUploader(
-//            this,
-//            streamsToUpload,
-//            remotePath,
-//            account,
-//            behaviour,
-//            false, null// Not needed copy temp task listener
-//        )// Not show waiting dialog while file is being copied from private storage
-//
-//        uploader.uploadUris()
     }
 
     /**
@@ -690,12 +673,6 @@ class FileDisplayActivity : FileActivity(),
         syncIntentFilter.addAction(RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED)
         syncBroadcastReceiver = SyncBroadcastReceiver()
         localBroadcastManager!!.registerReceiver(syncBroadcastReceiver!!, syncIntentFilter)
-
-        // Listen for upload messages
-        val uploadIntentFilter = IntentFilter(FileUploader.getUploadFinishMessage())
-        uploadIntentFilter.addAction(FileUploader.getUploadStartMessage())
-        uploadBroadcastReceiver = UploadBroadcastReceiver()
-        localBroadcastManager!!.registerReceiver(uploadBroadcastReceiver!!, uploadIntentFilter)
 
         Timber.v("onResume() end")
     }
@@ -1078,34 +1055,6 @@ class FileDisplayActivity : FileActivity(),
             listMainFileFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
         } else {
             updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
-        }
-    }
-
-    override fun newTransferenceServiceConnection(): ServiceConnection? {
-        return ListServiceConnection()
-    }
-
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private inner class ListServiceConnection : ServiceConnection {
-
-        override fun onServiceConnected(component: ComponentName, service: IBinder) {
-            if (component == ComponentName(this@FileDisplayActivity, FileUploader::class.java)) {
-                Timber.d("Upload service connected")
-                mUploaderBinder = service as FileUploaderBinder
-            } else {
-                return
-            }
-            val secondFragment = secondFragment
-            secondFragment?.onTransferServiceConnected()
-        }
-
-        override fun onServiceDisconnected(component: ComponentName) {
-            if (component == ComponentName(this@FileDisplayActivity, FileUploader::class.java)) {
-                Timber.d("Upload service disconnected")
-                mUploaderBinder = null
-            }
         }
     }
 
