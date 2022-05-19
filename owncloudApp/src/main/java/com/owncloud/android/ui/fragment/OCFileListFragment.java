@@ -276,6 +276,10 @@ public class OCFileListFragment extends ExtendedListFragment implements
         mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
         mSearchView.setOnQueryTextFocusChangeListener(this);
         mSearchView.setOnQueryTextListener(this);
+
+        if (isPickingAFolder()) {
+            menu.removeItem(menu.findItem(R.id.action_share_file).getItemId());
+        }
     }
 
     @Override
