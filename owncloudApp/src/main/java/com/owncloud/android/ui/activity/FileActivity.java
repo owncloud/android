@@ -43,7 +43,6 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.domain.files.model.FileListOption;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileUploader;
-import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -109,7 +108,6 @@ public class FileActivity extends DrawerActivity
 
     private boolean mResumed = false;
 
-    protected FileUploaderBinder mUploaderBinder = null;
     private ServiceConnection mUploadServiceConnection = null;
 
     /**
@@ -449,11 +447,6 @@ public class FileActivity extends DrawerActivity
                 // TODO whatever could be waiting for the service is unbound
             }
         }
-    }
-
-    @Override
-    public FileUploaderBinder getFileUploaderBinder() {
-        return mUploaderBinder;
     }
 
     @Override
