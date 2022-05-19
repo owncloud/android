@@ -52,7 +52,6 @@ import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
-import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FileDetailsViewModel
@@ -392,7 +391,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
      * Updates the view with all relevant details about that file.
      *
      * @param forcedTransferring Flag signaling if the file should be considered as downloading or uploading,
-     * although [FileDetailsViewModel.isDownloadPending] and [FileUploaderBinder.isUploading] return false.
+     * although [FileDetailsViewModel.isDownloadPending] return false.
      * @param refresh            If 'true', try to refresh the whole file from the database
      */
     private fun updateFileDetails(forcedTransferring: Boolean, refresh: Boolean) {

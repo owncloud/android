@@ -25,7 +25,6 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.OperationCanceledException;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +33,6 @@ import android.content.SyncRequest;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -75,7 +73,7 @@ import static org.koin.java.KoinJavaComponent.inject;
 public class ManageAccountsActivity extends FileActivity
         implements
         AccountListAdapter.AccountListAdapterListener,
-        AccountManagerCallback<Boolean>{
+        AccountManagerCallback<Boolean> {
 
     public static final String KEY_ACCOUNT_LIST_CHANGED = "ACCOUNT_LIST_CHANGED";
     public static final String KEY_CURRENT_ACCOUNT_CHANGED = "CURRENT_ACCOUNT_CHANGED";
@@ -84,7 +82,6 @@ public class ManageAccountsActivity extends FileActivity
     private final Handler mHandler = new Handler();
     private String mAccountBeingRemoved;
     private AccountListAdapter mAccountListAdapter;
-    protected FileUploader.FileUploaderBinder mUploaderBinder = null;
     private ServiceConnection mDownloadServiceConnection, mUploadServiceConnection = null;
     Set<String> mOriginalAccounts;
     String mOriginalCurrentAccount;
@@ -315,9 +312,6 @@ public class ManageAccountsActivity extends FileActivity
             Account account = new Account(mAccountBeingRemoved, MainApp.Companion.getAccountType());
             if (!AccountUtils.exists(account.name, MainApp.Companion.getAppContext())) {
                 // Cancel transfers of the removed account
-                if (mUploaderBinder != null) {
-                    mUploaderBinder.cancel(account);
-                }
                 CancelUploadFromAccountUseCase cancelUploadFromAccountUseCase =
                         new CancelUploadFromAccountUseCase(WorkManager.getInstance(getBaseContext()));
                 cancelUploadFromAccountUseCase.execute(new CancelUploadFromAccountUseCase.Params(account.name));
@@ -409,31 +403,5 @@ public class ManageAccountsActivity extends FileActivity
     @Override
     public FileOperationsHelper getFileOperationsHelper() {
         return null;
-    }
-
-    protected ServiceConnection newTransferenceServiceConnection() {
-        return new ManageAccountsServiceConnection();
-    }
-
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private class ManageAccountsServiceConnection implements ServiceConnection {
-
-        @Override
-        public void onServiceConnected(ComponentName component, IBinder service) {
-            if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
-                Timber.d("Upload service connected");
-                mUploaderBinder = (FileUploader.FileUploaderBinder) service;
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName component) {
-            if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
-                Timber.d("Upload service suddenly disconnected");
-                mUploaderBinder = null;
-            }
-        }
     }
 }
