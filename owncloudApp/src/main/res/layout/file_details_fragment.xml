@@ -31,29 +31,40 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin">
 
-        <ImageView
-            android:id="@+id/fdIcon"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lytName"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/filedetails_file_image_content_description"
-            android:src="@drawable/file"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/fdFilename"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:paddingStart="@dimen/standard_margin"
-            android:text=""
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            app:layout_constraintBottom_toBottomOf="@id/fdIcon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/fdIcon"
-            app:layout_constraintTop_toTopOf="@id/fdIcon"
-            tools:text="@tools:sample/lorem[40]" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/fdIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/filedetails_file_image_content_description"
+                android:src="@drawable/file"
+                app:layout_constraintBottom_toBottomOf="@id/fdFilename"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@id/fdFilename" />
+
+            <TextView
+                android:id="@+id/fdFilename"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/standard_margin"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/fdIcon"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@tools:sample/lorem[40]" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/fdTypeLabel"
@@ -75,7 +86,7 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fdTypeLabel"
-            app:layout_constraintTop_toBottomOf="@id/fdFilename"
+            app:layout_constraintTop_toBottomOf="@id/lytName"
             tools:text="@tools:sample/lorem[8]" />
 
         <TextView
