@@ -44,7 +44,6 @@ import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.files.services.FileUploader
-import com.owncloud.android.files.services.FileUploader.FileUploaderBinder
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -240,7 +239,6 @@ class PreviewImageActivity : FileActivity(),
         override fun onServiceConnected(component: ComponentName, service: IBinder) {
             if (component == ComponentName(this@PreviewImageActivity, FileUploader::class.java)) {
                 Timber.d("onServiceConnected, FileUploader")
-                mUploaderBinder = service as FileUploaderBinder
             }
             previewImagePagerAdapter.onTransferServiceConnected()
         }
@@ -248,7 +246,6 @@ class PreviewImageActivity : FileActivity(),
         override fun onServiceDisconnected(component: ComponentName) {
             if (component == ComponentName(this@PreviewImageActivity, FileUploader::class.java)) {
                 Timber.d("Upload service suddenly disconnected")
-                mUploaderBinder = null
             }
         }
     }

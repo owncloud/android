@@ -117,15 +117,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                     if (!upload2.getUploadStatus().equals(UploadStatus.UPLOAD_IN_PROGRESS)) {
                         return -1;
                     }
-                    // both are in progress
-                    FileUploader.FileUploaderBinder binder = mParentActivity.getFileUploaderBinder();
-                    if (binder != null) {
-                        if (binder.isUploadingNow(upload1)) {
-                            return -1;
-                        } else if (binder.isUploadingNow(upload2)) {
-                            return 1;
-                        }
-                    }
+                    // Previously there was a check here to check if the uploads are in progress
                 } else if (upload2.getUploadStatus().equals(UploadStatus.UPLOAD_IN_PROGRESS)) {
                     return 1;
                 }
@@ -297,40 +289,6 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                 case UPLOAD_IN_PROGRESS:
                     progressBar.setProgress(0);
                     progressBar.setVisibility(View.VISIBLE);
-
-                    FileUploader.FileUploaderBinder binder = mParentActivity.getFileUploaderBinder();
-                    if (binder != null) {
-                        if (binder.isUploadingNow(upload)) {
-                            /// really uploading, so...
-                            /// ... unbind the old progress bar, if any; ...
-                            if (mProgressListener != null) {
-                                binder.removeDatatransferProgressListener(
-                                        mProgressListener,
-                                        mProgressListener.getUpload()   // the one that was added
-                                );
-                            }
-                            /// ... then, bind the current progress bar to listen for updates
-                            mProgressListener = new ProgressListener(upload, progressBar);
-                            binder.addDatatransferProgressListener(
-                                    mProgressListener,
-                                    upload
-                            );
-
-                        } else {
-                            /// not really uploading; stop listening progress if view is reused!
-                            if (convertView != null &&
-                                    mProgressListener != null &&
-                                    mProgressListener.isWrapping(progressBar)) {
-                                binder.removeDatatransferProgressListener(
-                                        mProgressListener,
-                                        mProgressListener.getUpload()   // the one that was added
-                                );
-                                mProgressListener = null;
-                            }
-                        }
-                    } else {
-                        Timber.w("FileUploaderBinder not ready yet for upload %s", upload.getRemotePath());
-                    }
                     uploadDateTextView.setVisibility(View.GONE);
                     pathTextView.setVisibility(View.GONE);
                     progressBar.invalidate();
@@ -354,17 +312,8 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                 rightButton.setVisibility(View.VISIBLE);
                 rightButton.setOnClickListener(v -> {
                     String localPath = upload.getLocalPath();
-                    boolean isDocumentUri = DocumentFile.isDocumentUri(parent.getContext(), Uri.parse(localPath));
-                    if (isDocumentUri) {
-                        CancelUploadWithIdUseCase cancelUploadWithIdUseCase = new CancelUploadWithIdUseCase(WorkManager.getInstance(parent.getContext()));
-                        cancelUploadWithIdUseCase.execute(new CancelUploadWithIdUseCase.Params(upload));
-                    } else {
-                        FileUploader.FileUploaderBinder uploaderBinder = mParentActivity.getFileUploaderBinder();
-
-                        if (uploaderBinder != null) {
-                            uploaderBinder.cancel(upload);
-                        }
-                    }
+                    CancelUploadWithIdUseCase cancelUploadWithIdUseCase = new CancelUploadWithIdUseCase(WorkManager.getInstance(parent.getContext()));
+                    cancelUploadWithIdUseCase.execute(new CancelUploadWithIdUseCase.Params(upload));
                     refreshView();
                 });
 
@@ -526,12 +475,8 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
         switch (upload.getUploadStatus()) {
 
             case UPLOAD_IN_PROGRESS:
-                status = mParentActivity.getString(R.string.uploads_view_later_waiting_to_upload);
-                FileUploader.FileUploaderBinder binder = mParentActivity.getFileUploaderBinder();
-                if (binder != null && binder.isUploadingNow(upload)) {
-                    /// really uploading, bind the progress bar to listen for progress updates
-                    status = mParentActivity.getString(R.string.uploader_upload_in_progress_ticker);
-                }
+                // really uploading, bind the progress bar to listen for progress updates
+                status = mParentActivity.getString(R.string.uploader_upload_in_progress_ticker);
                 break;
 
             case UPLOAD_SUCCEEDED:

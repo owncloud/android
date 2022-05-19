@@ -27,7 +27,6 @@ import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.ui.activity.ComponentsGetter;
-import timber.log.Timber;
 
 /**
  * Controller updating a progress bar with the progress of a file transfer
@@ -84,16 +83,7 @@ public class TransferProgressController implements OnDatatransferProgressListene
      */
     @UiThread
     public void startListeningProgressFor(OCFile file, Account account) {
-        FileUploader.FileUploaderBinder uploaderBinder = mComponentsGetter.getFileUploaderBinder();
 
-        if (uploaderBinder != null) {
-            uploaderBinder.addDatatransferProgressListener(this, account, file);
-            if (mProgressBar != null && uploaderBinder.isUploading(account, file)) {
-                mProgressBar.setIndeterminate(true);
-            }
-        } else {
-            Timber.i("Upload service not ready to notify progress");
-        }
     }
 
     /**
@@ -104,13 +94,7 @@ public class TransferProgressController implements OnDatatransferProgressListene
      */
     @UiThread
     public void stopListeningProgressFor(OCFile file, Account account) {
-        if (mComponentsGetter.getFileUploaderBinder() != null) {
-            mComponentsGetter.getFileUploaderBinder().
-                    removeDatatransferProgressListener(this, account, file);
-        }
-        if (mProgressBar != null) {
-            mProgressBar.setIndeterminate(false);
-        }
+
     }
 
     /**
