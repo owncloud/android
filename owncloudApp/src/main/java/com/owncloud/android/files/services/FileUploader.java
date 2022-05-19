@@ -44,6 +44,7 @@ import android.os.Parcelable;
 import android.os.Process;
 import android.util.Pair;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
@@ -141,9 +142,6 @@ public class FileUploader extends Service
     public static final int LEGACY_LOCAL_BEHAVIOUR_MOVE = 1;
     public static final int LEGACY_LOCAL_BEHAVIOUR_FORGET = 2;
 
-    private Looper mServiceLooper;
-    private ServiceHandler mServiceHandler;
-    private IBinder mBinder;
     private OwnCloudClient mUploadClient = null;
     private Account mCurrentAccount = null;
     private FileDataStorageManager mStorageManager;
@@ -194,9 +192,6 @@ public class FileUploader extends Service
         HandlerThread thread = new HandlerThread("FileUploaderThread",
                 Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
-        mServiceLooper = thread.getLooper();
-        mServiceHandler = new ServiceHandler(mServiceLooper, this);
-        mBinder = new FileUploaderBinder();
 
         mUploadsStorageManager = new UploadsStorageManager(getContentResolver());
 
@@ -229,10 +224,6 @@ public class FileUploader extends Service
     @Override
     public void onDestroy() {
         Timber.v("Destroying service");
-        mBinder = null;
-        mServiceHandler = null;
-        mServiceLooper.quit();
-        mServiceLooper = null;
         mNotificationManager = null;
 
         // remove AccountsUpdatedListener
@@ -240,6 +231,12 @@ public class FileUploader extends Service
         am.removeOnAccountsUpdatedListener(this);
 
         super.onDestroy();
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     /**
@@ -401,7 +398,6 @@ public class FileUploader extends Service
 
                     newUploadFileOperation.setCreatedBy(createdBy);
                     newUploadFileOperation.addDatatransferProgressListener(this);
-                    newUploadFileOperation.addDatatransferProgressListener((FileUploaderBinder) mBinder);
 
                     newUploadFileOperation.addRenameUploadListener(this);
 
@@ -466,7 +462,6 @@ public class FileUploader extends Service
             }
 
             newUploadFileOperation.addDatatransferProgressListener(this);
-            newUploadFileOperation.addDatatransferProgressListener((FileUploaderBinder) mBinder);
 
             newUploadFileOperation.addRenameUploadListener(this);
 
@@ -487,34 +482,9 @@ public class FileUploader extends Service
         // *** TODO REWRITE END ***/
 
         if (requestedUploads.size() > 0) {
-            Message msg = mServiceHandler.obtainMessage();
-            msg.arg1 = startId;
-            msg.obj = requestedUploads;
-            mServiceHandler.sendMessage(msg);
             sendBroadcastUploadsAdded();
         }
         return Service.START_NOT_STICKY;
-    }
-
-    /**
-     * Provides a binder object that clients can use to perform operations on
-     * the queue of uploads, excepting the addition of new files.
-     * <p>
-     * Implemented to perform cancellation, pause and resume of existing
-     * uploads.
-     */
-    @Override
-    public IBinder onBind(Intent arg0) {
-        return mBinder;
-    }
-
-    /**
-     * Called when ALL the bound clients were onbound.
-     */
-    @Override
-    public boolean onUnbind(Intent intent) {
-        ((FileUploaderBinder) mBinder).clearListeners();
-        return false;   // not accepting rebinding (default behaviour)
     }
 
     @Override
@@ -525,257 +495,6 @@ public class FileUploader extends Service
             mCurrentUpload.cancel();
         }
         // The rest of uploads are cancelled when they try to start
-    }
-
-    /**
-     * Binder to let client components to perform operations on the queue of
-     * uploads.
-     * <p/>
-     * It provides by itself the available operations.
-     */
-    public class FileUploaderBinder extends Binder implements OnDatatransferProgressListener {
-
-        /**
-         * Map of listeners that will be reported about progress of uploads from a
-         * {@link FileUploaderBinder} instance
-         */
-        private Map<String, WeakReference<OnDatatransferProgressListener>> mBoundListeners =
-                new HashMap<>();
-
-        /**
-         * Cancels a pending or current upload of a remote file.
-         *
-         * @param account ownCloud account where the remote file will be stored.
-         * @param file    A file in the queue of pending uploads
-         */
-        public void cancel(Account account, OCFile file) {
-            cancel(account.name, file.getRemotePath());
-        }
-
-        /**
-         * Cancels a pending or current upload that was persisted.
-         *
-         * @param storedUpload Upload operation persisted
-         */
-        public void cancel(OCUpload storedUpload) {
-            cancel(storedUpload.getAccountName(), storedUpload.getRemotePath());
-        }
-
-        /**
-         * Cancels a pending or current upload of a remote file.
-         *
-         * @param accountName Local name of an ownCloud account where the remote file will be stored.
-         * @param remotePath  Remote target of the upload
-         */
-        private void cancel(String accountName, String remotePath) {
-            Pair<UploadFileOperation, String> removeResult =
-                    mPendingUploads.remove(accountName, remotePath);
-            UploadFileOperation upload = removeResult.first;
-            if (upload == null &&
-                    mCurrentUpload != null && mCurrentAccount != null &&
-                    mCurrentUpload.getRemotePath().startsWith(remotePath) &&
-                    accountName.equals(mCurrentAccount.name)) {
-
-                upload = mCurrentUpload;
-            }
-            if (upload != null) {
-                upload.cancel();
-                // need to update now table in mUploadsStorageManager,
-                // since the operation will not get to be run by FileUploader#uploadFile
-                mUploadsStorageManager.removeUpload(
-                        accountName,
-                        remotePath
-                );
-            }
-        }
-
-        /**
-         * Cancels all the uploads for an account
-         *
-         * @param account ownCloud account.
-         */
-        public void cancel(Account account) {
-            Timber.d("Account= %s", account.name);
-
-            if (mCurrentUpload != null) {
-                Timber.d("Current Upload Account= %s", mCurrentUpload.getAccount().name);
-                if (mCurrentUpload.getAccount().name.equals(account.name)) {
-                    mCurrentUpload.cancel();
-                }
-            }
-            // Cancel pending uploads
-            cancelUploadsForAccount(account);
-        }
-
-        public void clearListeners() {
-            mBoundListeners.clear();
-        }
-
-        /**
-         * Returns True when the file described by 'file' is being uploaded to
-         * the ownCloud account 'account' or waiting for it
-         * <p>
-         * If 'file' is a directory, returns 'true' if some of its descendant files
-         * is uploading or waiting to upload.
-         * <p>
-         * Warning: If remote file exists and !forceOverwrite the original file
-         * is being returned here. That is, it seems as if the original file is
-         * being updated when actually a new file is being uploaded.
-         *
-         * @param account Owncloud account where the remote file will be stored.
-         * @param file    A file that could be in the queue of pending uploads
-         */
-        public boolean isUploading(Account account, OCFile file) {
-            if (account == null || file == null) {
-                return false;
-            }
-            return (mPendingUploads.contains(account.name, file.getRemotePath()));
-        }
-
-        public boolean isUploadingNow(OCUpload upload) {
-            return (
-                    upload != null &&
-                            mCurrentAccount != null &&
-                            mCurrentUpload != null &&
-                            upload.getAccountName().equals(mCurrentAccount.name) &&
-                            upload.getRemotePath().equals(mCurrentUpload.getRemotePath())
-            );
-        }
-
-        /**
-         * Adds a listener interested in the progress of the upload for a concrete file.
-         *
-         * @param listener Object to notify about progress of transfer.
-         * @param account  ownCloud account holding the file of interest.
-         * @param file     {@link OCFile} of interest for listener.
-         */
-        public void addDatatransferProgressListener(
-                OnDatatransferProgressListener listener,
-                Account account,
-                OCFile file
-        ) {
-            if (account == null || file == null || listener == null) {
-                return;
-            }
-            String targetKey = buildRemoteName(account.name, file.getRemotePath());
-            mBoundListeners.put(targetKey, new WeakReference<>(listener));
-        }
-
-        /**
-         * Adds a listener interested in the progress of the upload for a concrete file.
-         *
-         * @param listener Object to notify about progress of transfer.
-         * @param ocUpload {@link OCUpload} of interest for listener.
-         */
-        public void addDatatransferProgressListener(
-                OnDatatransferProgressListener listener,
-                OCUpload ocUpload
-        ) {
-            if (ocUpload == null || listener == null) {
-                return;
-            }
-            String targetKey = buildRemoteName(ocUpload.getAccountName(), ocUpload.getRemotePath());
-            mBoundListeners.put(targetKey, new WeakReference<>(listener));
-        }
-
-        /**
-         * Removes a listener interested in the progress of the upload for a concrete file.
-         *
-         * @param listener Object to notify about progress of transfer.
-         * @param account  ownCloud account holding the file of interest.
-         * @param file     {@link OCFile} of interest for listener.
-         */
-        public void removeDatatransferProgressListener(
-                OnDatatransferProgressListener listener,
-                Account account,
-                OCFile file
-        ) {
-            if (account == null || file == null || listener == null) {
-                return;
-            }
-            String targetKey = buildRemoteName(account.name, file.getRemotePath());
-            if (mBoundListeners.get(targetKey) == listener) {
-                mBoundListeners.remove(targetKey);
-            }
-        }
-
-        /**
-         * Removes a listener interested in the progress of the upload for a concrete file.
-         *
-         * @param listener Object to notify about progress of transfer.
-         * @param ocUpload Stored upload of interest
-         */
-        public void removeDatatransferProgressListener(
-                OnDatatransferProgressListener listener,
-                OCUpload ocUpload
-        ) {
-            if (ocUpload == null || listener == null) {
-                return;
-            }
-            String targetKey = buildRemoteName(ocUpload.getAccountName(), ocUpload.getRemotePath());
-            if (mBoundListeners.get(targetKey) == listener) {
-                mBoundListeners.remove(targetKey);
-            }
-        }
-
-        /**
-         * Builds a key for the map of listeners.
-         * <p/>
-         * TODO use method in IndexedForest, or refactor both to a common place
-         * add to local database) to better policy (add to local database, then upload)
-         *
-         * @param accountName Local name of the ownCloud account where the file to upload belongs.
-         * @param remotePath  Remote path to upload the file to.
-         * @return Key
-         */
-        private String buildRemoteName(String accountName, String remotePath) {
-            return accountName + remotePath;
-        }
-
-        @Override
-        public void onTransferProgress(long read, long transferred, long total, String absolutePath) {
-            String key = buildRemoteName(mCurrentUpload.getAccount().name, mCurrentUpload.getFile().getRemotePath());
-            WeakReference<OnDatatransferProgressListener> boundListenerRef = mBoundListeners.get(key);
-            if (boundListenerRef != null && boundListenerRef.get() != null) {
-                boundListenerRef.get().onTransferProgress(read, transferred, total, absolutePath);
-            }
-        }
-    }
-
-    /**
-     * Upload worker. Performs the pending uploads in the order they were
-     * requested.
-     * <p>
-     * Created with the Looper of a new thread, started in
-     * {@link FileUploader#onCreate()}.
-     */
-    private static class ServiceHandler extends Handler {
-        // don't make it a final class, and don't remove the static ; lint will
-        // warn about a possible memory leak
-        FileUploader mService;
-
-        public ServiceHandler(Looper looper, FileUploader service) {
-            super(looper);
-            if (service == null) {
-                throw new IllegalArgumentException("Received invalid NULL in parameter 'service'");
-            }
-            mService = service;
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            @SuppressWarnings("unchecked")
-            AbstractList<String> requestedUploads = (AbstractList<String>) msg.obj;
-            if (msg.obj != null) {
-                Iterator<String> it = requestedUploads.iterator();
-                while (it.hasNext()) {
-                    mService.uploadFile(it.next());
-                }
-            }
-            Timber.d("Stopping command after id %s", msg.arg1);
-            mService.stopForeground(true);
-            mService.stopSelf(msg.arg1);
-        }
     }
 
     /**

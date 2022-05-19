@@ -43,7 +43,6 @@ import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.files.services.FileUploader;
-import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -214,46 +213,6 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
 
         } else {
             super.onRemoteOperationFinish(operation, result);
-        }
-    }
-
-    @Override
-    protected ServiceConnection newTransferenceServiceConnection() {
-        return new UploadListServiceConnection();
-    }
-
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private class UploadListServiceConnection implements ServiceConnection {
-
-        @Override
-        public void onServiceConnected(ComponentName component, IBinder service) {
-            if (service instanceof FileUploaderBinder) {
-                if (mUploaderBinder == null) {
-                    mUploaderBinder = (FileUploaderBinder) service;
-                    Timber.d("UploadListActivity connected to Upload service. component: " + component + " service: " + service);
-                    // Say to UploadListFragment that the Binder is READY in the Activity
-                    UploadListFragment uploadListFragment =
-                            (UploadListFragment) getSupportFragmentManager().findFragmentByTag(TAG_UPLOAD_LIST_FRAGMENT);
-                    if (uploadListFragment != null) {
-                        uploadListFragment.binderReady();
-                    }
-                } else {
-                    Timber.d("mUploaderBinder already set. mUploaderBinder: " +
-                            mUploaderBinder + " service:" + service);
-                }
-            } else {
-                Timber.d("UploadListActivity not connected to Upload service. component: " + component + " service: " + service);
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName component) {
-            if (component.equals(new ComponentName(UploadListActivity.this, FileUploader.class))) {
-                Timber.d("UploadListActivity suddenly disconnected from Upload service");
-                mUploaderBinder = null;
-            }
         }
     }
 
