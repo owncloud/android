@@ -617,4 +617,16 @@
   <string name="release_notes_proceed">Proceder</string>
   <string name="release_notes_icon">Icono de nota de lanzamiento</string>
   <!--Release Notes 2.21-beta.1-->
+  <string name="release_notes_title_1">Notas de lanzamiento</string>
+  <string name="release_notes_subtitle_1">Las noticias en la aplicación se enumerarán después de cada actualización para informar acerca de las últimas mejoras y nuevas características. Disponible en configuración para volver a comprobar.</string>
+  <string name="release_notes_title_2">Conexiones seguras por defecto</string>
+  <string name="release_notes_subtitle_2">Https por defecto para establecer conexiones con el servidor. De lo contrario, será requerido explícitamente en la URL</string>
+  <string name="release_notes_title_3">Código de acceso y patrón rediseñado</string>
+  <string name="release_notes_subtitle_3">Integrado el teclado numérico en la pantalla, navegación mejorada e interfaz gráfica.</string>
+  <string name="release_notes_title_4">Soporte para archivos SVG</string>
+  <string name="release_notes_subtitle_4">Soporte para archivos svg añadido</string>
+  <string name="release_notes_title_5">Rediseño de la vista de detalles</string>
+  <string name="release_notes_subtitle_5">Se reordenó la información y sé añadió la posibilidad de descargar y abrir el archivo haciendo clic en la miniatura.</string>
+  <string name="release_notes_title_6">Archivos ocultos</string>
+  <string name="release_notes_subtitle_6">Añadida una nueva opción en la configuración para mostrar o no archivos ocultos.</string>
 </resources>
