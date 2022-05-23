@@ -23,12 +23,9 @@
  */
 package com.owncloud.android.ui.preview
 
-import android.content.ComponentName
 import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.Handler
-import android.os.IBinder
 import android.os.Message
 import android.view.MenuItem
 import android.view.View
@@ -42,19 +39,18 @@ import androidx.work.WorkInfo
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
+import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.files.services.FileUploader
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.operations.SynchronizeFileOperation
-import com.owncloud.android.usecases.transfers.DOWNLOAD_ADDED_MESSAGE
-import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
-import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.ui.fragment.FileFragment
+import com.owncloud.android.usecases.transfers.DOWNLOAD_ADDED_MESSAGE
+import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -225,28 +221,6 @@ class PreviewImageActivity : FileActivity(),
     private fun onSynchronizeFileOperationFinish(result: RemoteOperationResult<*>) {
         if (result.isSuccess) {
             invalidateOptionsMenu()
-        }
-    }
-
-    override fun newTransferenceServiceConnection(): ServiceConnection {
-        return PreviewImageServiceConnection()
-    }
-
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private inner class PreviewImageServiceConnection : ServiceConnection {
-        override fun onServiceConnected(component: ComponentName, service: IBinder) {
-            if (component == ComponentName(this@PreviewImageActivity, FileUploader::class.java)) {
-                Timber.d("onServiceConnected, FileUploader")
-            }
-            previewImagePagerAdapter.onTransferServiceConnected()
-        }
-
-        override fun onServiceDisconnected(component: ComponentName) {
-            if (component == ComponentName(this@PreviewImageActivity, FileUploader::class.java)) {
-                Timber.d("Upload service suddenly disconnected")
-            }
         }
     }
 
