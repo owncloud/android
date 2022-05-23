@@ -42,7 +42,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.domain.files.model.FileListOption;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -108,8 +107,6 @@ public class FileActivity extends DrawerActivity
 
     private boolean mResumed = false;
 
-    private ServiceConnection mUploadServiceConnection = null;
-
     /**
      * Loads the ownCloud {@link Account} and main {@link OCFile} to be handled by the instance of
      * the {@link FileActivity}.
@@ -147,12 +144,6 @@ public class FileActivity extends DrawerActivity
         mOperationsServiceConnection = new OperationsServiceConnection();
         bindService(new Intent(this, OperationsService.class), mOperationsServiceConnection,
                 Context.BIND_AUTO_CREATE);
-
-        mUploadServiceConnection = newTransferenceServiceConnection();
-        if (mUploadServiceConnection != null) {
-            bindService(new Intent(this, FileUploader.class), mUploadServiceConnection,
-                    Context.BIND_AUTO_CREATE);
-        }
     }
 
     @Override
@@ -184,12 +175,6 @@ public class FileActivity extends DrawerActivity
             unbindService(mOperationsServiceConnection);
             mOperationsServiceBinder = null;
         }
-
-        if (mUploadServiceConnection != null) {
-            unbindService(mUploadServiceConnection);
-            mUploadServiceConnection = null;
-        }
-
         super.onDestroy();
     }
 
@@ -236,10 +221,6 @@ public class FileActivity extends DrawerActivity
 
     public OperationsServiceBinder getOperationsServiceBinder() {
         return mOperationsServiceBinder;
-    }
-
-    protected ServiceConnection newTransferenceServiceConnection() {
-        return null;
     }
 
     public OnRemoteOperationListener getRemoteOperationListener() {

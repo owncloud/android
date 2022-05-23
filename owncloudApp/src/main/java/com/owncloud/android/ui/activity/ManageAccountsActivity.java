@@ -28,7 +28,6 @@ import android.accounts.OperationCanceledException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SyncRequest;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -82,7 +81,6 @@ public class ManageAccountsActivity extends FileActivity
     private final Handler mHandler = new Handler();
     private String mAccountBeingRemoved;
     private AccountListAdapter mAccountListAdapter;
-    private ServiceConnection mDownloadServiceConnection, mUploadServiceConnection = null;
     Set<String> mOriginalAccounts;
     String mOriginalCurrentAccount;
     private Drawable mTintedCheck;
@@ -115,8 +113,6 @@ public class ManageAccountsActivity extends FileActivity
 
         setAccount(AccountUtils.getCurrentOwnCloudAccount(this));
         onAccountSet(false);
-
-        initializeComponentGetters();
 
         // added click listener to switch account
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -178,17 +174,6 @@ public class ManageAccountsActivity extends FileActivity
     private boolean hasCurrentAccountChanged() {
         Account currentAccount = AccountUtils.getCurrentOwnCloudAccount(this);
         return (currentAccount != null && !mOriginalCurrentAccount.equals(currentAccount.name));
-    }
-
-    /**
-     * Initialize ComponentsGetters.
-     */
-    private void initializeComponentGetters() {
-        mUploadServiceConnection = newTransferenceServiceConnection();
-        if (mUploadServiceConnection != null) {
-            bindService(new Intent(this, FileUploader.class), mUploadServiceConnection,
-                    Context.BIND_AUTO_CREATE);
-        }
     }
 
     /**
@@ -373,20 +358,6 @@ public class ManageAccountsActivity extends FileActivity
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (mDownloadServiceConnection != null) {
-            unbindService(mDownloadServiceConnection);
-            mDownloadServiceConnection = null;
-        }
-        if (mUploadServiceConnection != null) {
-            unbindService(mUploadServiceConnection);
-            mUploadServiceConnection = null;
-        }
-
-        super.onDestroy();
     }
 
     // Methods for ComponentsGetter

@@ -167,15 +167,8 @@ class PreviewImageFragment : FileFragment() {
     override fun onStart() {
         super.onStart()
         file?.let {
-            progressController?.startListeningProgressFor(it, account)
             loadAndShowImage()
         }
-    }
-
-    override fun onStop() {
-        Timber.v("onStop starts")
-        progressController?.stopListeningProgressFor(file, account)
-        super.onStop()
     }
 
     /**
@@ -290,10 +283,6 @@ class PreviewImageFragment : FileFragment() {
     private fun openFile() {
         mContainerActivity.fileOperationsHelper.openFile(file)
         finish()
-    }
-
-    override fun onTransferServiceConnected() {
-        progressController?.startListeningProgressFor(file, account)
     }
 
     override fun onFileMetadataChanged(updatedFile: OCFile) {
