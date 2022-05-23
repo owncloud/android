@@ -103,13 +103,7 @@ class FileDetailFragment : FileFragment() {
 
     override fun onStart() {
         super.onStart()
-        progressController?.startListeningProgressFor(file, account)
         startObservingProgressForDownload()
-    }
-
-    override fun onStop() {
-        progressController?.stopListeningProgressFor(file, account)
-        super.onStop()
     }
 
     private fun startObservingProgressForDownload() {
@@ -157,11 +151,6 @@ class FileDetailFragment : FileFragment() {
 
         val fileDisplayActivity = activity as FileDisplayActivity
         fileDetailsViewModel.navigateToPreviewOrOpenFile(fileDisplayActivity, file)
-    }
-
-    override fun onTransferServiceConnected() {
-        progressController?.startListeningProgressFor(file, account)
-        updateFileDetails(forcedTransferring = false, refresh = false) // TODO - really?
     }
 
     override fun onFileMetadataChanged(updatedFile: OCFile?) {
