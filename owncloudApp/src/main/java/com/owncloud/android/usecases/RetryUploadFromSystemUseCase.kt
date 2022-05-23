@@ -22,6 +22,7 @@ import android.content.Context
 import androidx.work.WorkManager
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 
 class RetryUploadFromSystemUseCase(
