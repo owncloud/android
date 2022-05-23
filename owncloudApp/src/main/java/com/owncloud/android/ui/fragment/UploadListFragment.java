@@ -32,6 +32,8 @@ import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.ExpandableUploadListAdapter;
+import com.owncloud.android.usecases.RetryFailedUploadsUseCase;
+import kotlin.Unit;
 import timber.log.Timber;
 
 /**
@@ -116,8 +118,8 @@ public class UploadListFragment extends ExpandableListFragment implements Option
 
         switch (option) {
             case RETRY_FAILED:
-                TransferRequester requester = new TransferRequester();
-                requester.retryFailedUploads(requireContext(), null, null, false);
+                RetryFailedUploadsUseCase retryFailedUploadsUseCase = new RetryFailedUploadsUseCase(requireContext());
+                retryFailedUploadsUseCase.execute(Unit.INSTANCE);
                 break;
             case CLEAR_FAILED:
                 storageManager = new UploadsStorageManager(requireActivity().getContentResolver());

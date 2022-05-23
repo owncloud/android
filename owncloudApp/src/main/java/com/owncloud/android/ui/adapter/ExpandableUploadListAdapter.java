@@ -42,7 +42,6 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.work.WorkManager;
 import com.google.android.material.snackbar.Snackbar;
-import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCUpload;
@@ -51,8 +50,6 @@ import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.FileUploader;
-import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -60,6 +57,7 @@ import com.owncloud.android.ui.fragment.OptionsInUploadListClickListener;
 import com.owncloud.android.ui.fragment.UploadListFragment;
 import com.owncloud.android.usecases.CancelUploadWithIdUseCase;
 import com.owncloud.android.usecases.RetryUploadFromContentUriUseCase;
+import com.owncloud.android.usecases.RetryUploadFromSystemUseCase;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -342,12 +340,13 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                         public void onClick(View v) {
                             File file = new File(upload.getLocalPath());
                             if (file.exists()) {
-                                TransferRequester requester = new TransferRequester();
-                                requester.retry(mParentActivity, upload, false);
+                                RetryUploadFromSystemUseCase retryUploadFromContentUriUseCase = new RetryUploadFromSystemUseCase(v.getContext());
+                                RetryUploadFromSystemUseCase.Params useCaseParams = new RetryUploadFromSystemUseCase.Params(upload.getUploadId());
+                                retryUploadFromContentUriUseCase.execute(useCaseParams);
                                 refreshView();
                             } else if (DocumentFile.isDocumentUri(v.getContext(), Uri.parse(upload.getLocalPath()))) {
-                                WorkManager workManager = WorkManager.getInstance(MainApp.Companion.getAppContext());
-                                RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = new RetryUploadFromContentUriUseCase(workManager);
+                                RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase =
+                                        new RetryUploadFromContentUriUseCase(v.getContext());
                                 RetryUploadFromContentUriUseCase.Params useCaseParams = new RetryUploadFromContentUriUseCase.Params(
                                         upload.getUploadId()
                                 );

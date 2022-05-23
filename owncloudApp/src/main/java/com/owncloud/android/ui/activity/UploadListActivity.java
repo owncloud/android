@@ -40,6 +40,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.ui.fragment.UploadListFragment;
+import com.owncloud.android.usecases.RetryFailedUploadsForAccountUseCase;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import timber.log.Timber;
 
@@ -139,13 +140,12 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
                     this,
                     data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME)
             );
-            TransferRequester requester = new TransferRequester();
-            requester.retryFailedUploads(
-                    this,
-                    account,
-                    UploadResult.CREDENTIAL_ERROR,
-                    false
-            );
+            if (account == null) {
+                return;
+            }
+
+            RetryFailedUploadsForAccountUseCase retryFailedUploadsForAccountUseCase = new RetryFailedUploadsForAccountUseCase(this);
+            retryFailedUploadsForAccountUseCase.execute(new RetryFailedUploadsForAccountUseCase.Params(account.name));
         }
     }
 
@@ -166,8 +166,8 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
 
             } else {
                 // already updated -> just retry!
-                TransferRequester requester = new TransferRequester();
-                requester.retryFailedUploads(this, account, UploadResult.CREDENTIAL_ERROR, false);
+                RetryFailedUploadsForAccountUseCase retryFailedUploadsForAccountUseCase = new RetryFailedUploadsForAccountUseCase(this);
+                retryFailedUploadsForAccountUseCase.execute(new RetryFailedUploadsForAccountUseCase.Params(account.name));
             }
 
         } else {
