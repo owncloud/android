@@ -24,7 +24,6 @@ import android.os.Parcelable;
 
 import androidx.fragment.app.FragmentManager;
 import com.owncloud.android.R;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
