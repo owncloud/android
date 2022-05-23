@@ -566,40 +566,7 @@ public class FileUploader extends Service
                 }
 
                 if (uploadResult != null && !uploadResult.isSuccess()) {
-                    TransferRequester requester = new TransferRequester();
-                    int jobId = mPendingUploads.buildKey(
-                            mCurrentAccount.name,
-                            mCurrentUpload.getRemotePath()
-                    ).hashCode();
 
-                    if (uploadResult.getException() != null) {
-                        // if failed due to lack of connectivity, schedule an automatic retry
-                        if (requester.shouldScheduleRetry(this, uploadResult.getException())) {
-                            requester.scheduleUpload(
-                                    this,
-                                    jobId,
-                                    mCurrentAccount.name,
-                                    mCurrentUpload.getRemotePath()
-                            );
-                            uploadResult = new RemoteOperationResult(
-                                    ResultCode.NO_NETWORK_CONNECTION);
-                        } else {
-                            String stringToLog = String.format(
-                                    "Exception in upload, network is OK, no retry scheduled for %1s in %2s",
-                                    mCurrentUpload.getRemotePath(),
-                                    mCurrentAccount.name
-                            );
-                            Timber.v("%s", stringToLog);
-                        }
-                    } else if (uploadResult.getCode() == ResultCode.DELAYED_FOR_WIFI) {
-                        // if failed due to the upload is delayed for wifi, schedule automatic retry as well
-                        requester.scheduleUpload(
-                                this,
-                                jobId,
-                                mCurrentAccount.name,
-                                mCurrentUpload.getRemotePath()
-                        );
-                    }
                 } else {
                     String stringToLog = String.format(
                             "Success OR fail without exception for %1s in %2s",
