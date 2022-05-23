@@ -209,18 +209,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Timber.v("onStart");
-
-        OCFile file = getFile();
-
-        if (file != null) {
-            mProgressController.startListeningProgressFor(file, mAccount);
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         Timber.v("onResume");
@@ -278,14 +266,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         i.putExtra(FileActivity.EXTRA_FILE, getFile());
 
         startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
-    }
-
-    // Progress bar
-    @Override
-    public void onTransferServiceConnected() {
-        if (mProgressController != null) {
-            mProgressController.startListeningProgressFor(getFile(), mAccount);
-        }
     }
 
     @Override

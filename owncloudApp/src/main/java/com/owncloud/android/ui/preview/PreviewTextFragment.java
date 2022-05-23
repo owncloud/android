@@ -166,7 +166,6 @@ public class PreviewTextFragment extends FileFragment {
         super.onStart();
         Timber.v("onStart");
 
-        mProgressController.startListeningProgressFor(getFile(), mAccount);
         loadAndShowTextPreview();
     }
 
@@ -399,14 +398,6 @@ public class PreviewTextFragment extends FileFragment {
         if (mTextLoadTask != null) {
             mTextLoadTask.cancel(Boolean.TRUE);
             mTextLoadTask.dismissLoadingDialog();
-        }
-        mProgressController.stopListeningProgressFor(getFile(), mAccount);
-    }
-
-    @Override
-    public void onTransferServiceConnected() {
-        if (mProgressController != null) {
-            mProgressController.startListeningProgressFor(getFile(), mAccount);
         }
     }
 

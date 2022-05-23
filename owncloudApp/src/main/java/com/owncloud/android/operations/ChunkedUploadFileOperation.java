@@ -63,10 +63,12 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
             mUploadOperation = new ChunkedUploadFromFileSystemOperation(mTransferId, mFile.getStoragePath(),
                     mFile.getRemotePath(), mFile.getMimeType(), timeStamp, mFile.getEtagInConflict());
 
-            Iterator<OnDatatransferProgressListener> listener = mDataTransferListeners.iterator();
-            while (listener.hasNext()) {
-                mUploadOperation.addDataTransferProgressListener(listener.next());
-            }
+            // TODO: Chunks should be moved to a worker and in that case, we need to add the transfer
+            //  progress listener in some way.
+//            Iterator<OnDatatransferProgressListener> listener = mDataTransferListeners.iterator();
+//            while (listener.hasNext()) {
+//                mUploadOperation.addDataTransferProgressListener(listener.next());
+//            }
 
             if (mCancellationRequested.get()) {
                 throw new OperationCancelledException();
