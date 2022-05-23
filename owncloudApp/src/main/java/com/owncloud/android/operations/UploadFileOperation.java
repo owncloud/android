@@ -29,7 +29,6 @@ import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -93,7 +92,6 @@ public class UploadFileOperation extends SyncOperation {
      * Local path to file which is to be uploaded (before any possible renaming or moving).
      */
     private String mOriginalStoragePath;
-    protected Set<OnDatatransferProgressListener> mDataTransferListeners = new HashSet<>();
     private OnRenameListener mRenameUploadListener;
     private Context mContext;
     protected UploadFileFromFileSystemOperation mUploadOperation;
@@ -242,28 +240,6 @@ public class UploadFileOperation extends SyncOperation {
         mOCUploadId = id;
     }
 
-    public Set<OnDatatransferProgressListener> getDataTransferListeners() {
-        return mDataTransferListeners;
-    }
-
-    public void addDatatransferProgressListener(OnDatatransferProgressListener listener) {
-        synchronized (mDataTransferListeners) {
-            mDataTransferListeners.add(listener);
-        }
-        if (mUploadOperation != null) {
-            mUploadOperation.addDataTransferProgressListener(listener);
-        }
-    }
-
-    public void removeDatatransferProgressListener(OnDatatransferProgressListener listener) {
-        synchronized (mDataTransferListeners) {
-            mDataTransferListeners.remove(listener);
-        }
-        if (mUploadOperation != null) {
-            mUploadOperation.removeDataTransferProgressListener(listener);
-        }
-    }
-
     public void addRenameUploadListener(OnRenameListener listener) {
         mRenameUploadListener = listener;
     }
@@ -399,10 +375,6 @@ public class UploadFileOperation extends SyncOperation {
         try {
             mUploadOperation = new UploadFileFromFileSystemOperation(mFile.getStoragePath(), mFile.getRemotePath(),
                     mFile.getMimeType(), timeStamp, mFile.getEtagInConflict());
-
-            for (OnDatatransferProgressListener dataTransferListener : mDataTransferListeners) {
-                mUploadOperation.addDataTransferProgressListener(dataTransferListener);
-            }
 
             if (mCancellationRequested.get()) {
                 throw new OperationCancelledException();

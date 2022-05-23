@@ -121,8 +121,6 @@ public abstract class FileFragment extends Fragment {
 
     public abstract void updateViewForSyncOff();
 
-    public abstract void onTransferServiceConnected();
-
     public abstract void onFileMetadataChanged(OCFile updatedFile);
 
     public abstract void onFileMetadataChanged();

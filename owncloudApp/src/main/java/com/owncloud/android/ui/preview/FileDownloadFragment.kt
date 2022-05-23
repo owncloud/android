@@ -181,10 +181,6 @@ class FileDownloadFragment : FileFragment() {
         }
     }
 
-    override fun onTransferServiceConnected() {
-        listenForTransferProgress()
-    }
-
     // view does not need any update
     override fun onFileMetadataChanged(updatedFile: OCFile?) {
         updatedFile?.let { file = it }

@@ -24,25 +24,17 @@ package com.owncloud.android.ui.activity;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.View;
 
 import androidx.fragment.app.FragmentTransaction;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.db.UploadResult;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -61,10 +53,6 @@ import java.io.File;
 public class UploadListActivity extends FileActivity implements UploadListFragment.ContainerActivity {
 
     private static final String TAG_UPLOAD_LIST_FRAGMENT = "UPLOAD_LIST_FRAGMENT";
-
-    private UploadMessagesReceiver mUploadMessagesReceiver;
-
-    private LocalBroadcastManager mLocalBroadcastManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +81,6 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         if (savedInstanceState == null) {
             createUploadListFragment();
         } // else, the Fragment Manager makes the job on configuration changes
-
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
     private void createUploadListFragment() {
@@ -102,33 +88,6 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.left_fragment_container, uploadList, TAG_UPLOAD_LIST_FRAGMENT);
         transaction.commit();
-    }
-
-    @Override
-    protected void onResume() {
-        Timber.v("onResume() start");
-        super.onResume();
-
-        // Listen for upload messages
-        mUploadMessagesReceiver = new UploadMessagesReceiver();
-        IntentFilter uploadIntentFilter = new IntentFilter();
-        uploadIntentFilter.addAction(FileUploader.getUploadsAddedMessage());
-        uploadIntentFilter.addAction(FileUploader.getUploadStartMessage());
-        uploadIntentFilter.addAction(FileUploader.getUploadFinishMessage());
-        mLocalBroadcastManager.registerReceiver(mUploadMessagesReceiver, uploadIntentFilter);
-
-        Timber.v("onResume() end");
-    }
-
-    @Override
-    protected void onPause() {
-        Timber.v("onPause() start");
-        if (mUploadMessagesReceiver != null) {
-            mLocalBroadcastManager.unregisterReceiver(mUploadMessagesReceiver);
-            mUploadMessagesReceiver = null;
-        }
-        super.onPause();
-        Timber.v("onPause() end");
     }
 
     // ////////////////////////////////////////
@@ -213,22 +172,6 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
 
         } else {
             super.onRemoteOperationFinish(operation, result);
-        }
-    }
-
-    /**
-     * Once the file upload has changed its status -> update uploads list view
-     */
-    private class UploadMessagesReceiver extends BroadcastReceiver {
-        /**
-         * {@link BroadcastReceiver} to enable syncing feedback in UI
-         */
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            UploadListFragment uploadListFragment =
-                    (UploadListFragment) getSupportFragmentManager().findFragmentByTag(TAG_UPLOAD_LIST_FRAGMENT);
-
-            uploadListFragment.updateUploads();
         }
     }
 

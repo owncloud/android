@@ -105,12 +105,6 @@ class PreviewImagePagerAdapter(
         mDownloadErrors.add(position)
     }
 
-    fun onTransferServiceConnected() {
-        for (fragmentToUpdate in mCachedFragments.values) {
-            fragmentToUpdate.onTransferServiceConnected()
-        }
-    }
-
     fun clearErrorAt(position: Int) {
         val fragmentToUpdate = mCachedFragments[position]
         if (fragmentToUpdate != null) {

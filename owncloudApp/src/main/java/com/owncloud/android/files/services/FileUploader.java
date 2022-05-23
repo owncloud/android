@@ -397,7 +397,6 @@ public class FileUploader extends Service
                     }
 
                     newUploadFileOperation.setCreatedBy(createdBy);
-                    newUploadFileOperation.addDatatransferProgressListener(this);
 
                     newUploadFileOperation.addRenameUploadListener(this);
 
@@ -460,8 +459,6 @@ public class FileUploader extends Service
                         this
                 );
             }
-
-            newUploadFileOperation.addDatatransferProgressListener(this);
 
             newUploadFileOperation.addRenameUploadListener(this);
 
