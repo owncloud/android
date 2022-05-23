@@ -32,16 +32,17 @@ import android.os.Build;
 import android.os.PersistableBundle;
 
 import androidx.documentfile.provider.DocumentFile;
-import androidx.work.WorkManager;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.db.UploadResult;
+import com.owncloud.android.usecases.RetryFailedUploadsUseCase;
 import com.owncloud.android.usecases.RetryUploadFromContentUriUseCase;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.utils.ConnectivityUtils;
 import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.PowerUtils;
+import kotlin.Unit;
 import timber.log.Timber;
 
 import java.net.SocketTimeoutException;
@@ -164,36 +165,6 @@ public class TransferRequester {
     }
 
     /**
-     * Retry a subset of all the stored failed uploads.
-     *
-     * @param context                    Caller {@link Context}
-     * @param account                    If not null, only failed uploads to this OC account will be retried; otherwise,
-     *                                   uploads of all accounts will be retried.
-     * @param uploadResult               If not null, only failed uploads with the result specified will be retried;
-     *                                   otherwise, failed uploads due to any result will be retried.
-     * @param requestedFromWifiBackEvent true if the retry was requested because wifi connection was back,
-     *                                   false otherwise
-     */
-    public void retryFailedUploads(Context context, Account account, UploadResult uploadResult,
-                                   boolean requestedFromWifiBackEvent) {
-        UploadsStorageManager uploadsStorageManager = new UploadsStorageManager(context.getContentResolver());
-        OCUpload[] failedUploads = uploadsStorageManager.getFailedUploads();
-        Account currentAccount = null;
-        boolean resultMatch, accountMatch;
-        for (OCUpload failedUpload : failedUploads) {
-            accountMatch = (account == null || account.name.equals(failedUpload.getAccountName()));
-            resultMatch = (uploadResult == null || uploadResult.equals(failedUpload.getLastResult()));
-            if (accountMatch && resultMatch) {
-                if (currentAccount == null ||
-                        !currentAccount.name.equals(failedUpload.getAccountName())) {
-                    currentAccount = failedUpload.getAccount(context);
-                }
-                retry(context, currentAccount, failedUpload, requestedFromWifiBackEvent);
-            }
-        }
-    }
-
-    /**
      * Private implementation of retry.
      *
      * @param context                    Caller {@link Context}
@@ -206,44 +177,8 @@ public class TransferRequester {
         if (upload == null) {
             return;
         }
-
-        if (isContentUri(context, upload)) {
-            enqueueRetryFromContentUri(upload, context);
-        } else {
-            Intent intent = new Intent(context, FileUploader.class);
-            intent.putExtra(FileUploader.KEY_RETRY, true);
-            intent.putExtra(FileUploader.KEY_ACCOUNT, account);
-            intent.putExtra(FileUploader.KEY_RETRY_UPLOAD, upload);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && (upload.getCreatedBy() ==
-                    CREATED_AS_CAMERA_UPLOAD_PICTURE || upload.getCreatedBy() == CREATED_AS_CAMERA_UPLOAD_VIDEO ||
-                    requestedFromWifiBackEvent)) {
-                // Since in Android O the apps in background are not allowed to start background
-                // services and camera uploads feature may try to do it, this is the way to proceed
-                if (requestedFromWifiBackEvent) {
-                    intent.putExtra(FileUploader.KEY_REQUESTED_FROM_WIFI_BACK_EVENT, true);
-                } else {
-                    intent.putExtra(FileUploader.KEY_CREATED_BY, upload.getCreatedBy());
-                }
-                Timber.d("Retry some uploads from foreground/background, startForeground() will be called soon");
-                context.startForegroundService(intent);
-            } else {
-                Timber.d("Retry some uploads from foreground");
-                context.startService(intent);
-            }
-        }
-    }
-
-    private Boolean isContentUri(Context context, OCUpload upload) {
-        return DocumentFile.isDocumentUri(context, Uri.parse(upload.getLocalPath()));
-    }
-
-    private void enqueueRetryFromContentUri(OCUpload upload, Context context) {
-        new RetryUploadFromContentUriUseCase(WorkManager.getInstance(context)).execute(
-                new RetryUploadFromContentUriUseCase.Params(
-                        upload.getUploadId()
-                )
-        );
+        RetryFailedUploadsUseCase retryFailedUploadsUseCase = new RetryFailedUploadsUseCase(context);
+        retryFailedUploadsUseCase.execute(Unit.INSTANCE);
     }
 
     /**

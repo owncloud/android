@@ -19,15 +19,14 @@
 package com.owncloud.android.usecases
 
 import android.content.Context
-import androidx.core.net.toUri
 import androidx.work.WorkManager
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 
-class RetryUploadFromContentUriUseCase(
+class RetryUploadFromSystemUseCase(
     private val context: Context,
-) : BaseUseCase<Unit, RetryUploadFromContentUriUseCase.Params>() {
+) : BaseUseCase<Unit, RetryUploadFromSystemUseCase.Params>() {
 
     override fun run(params: Params) {
 
@@ -39,16 +38,11 @@ class RetryUploadFromContentUriUseCase(
         uploadToRetry ?: return
 
         val workManager = WorkManager.getInstance(context)
-        UploadFileFromContentUriUseCase(workManager).execute(
-            UploadFileFromContentUriUseCase.Params(
+        UploadFilesFromSystemUseCase(workManager).execute(
+            UploadFilesFromSystemUseCase.Params(
                 accountName = uploadToRetry.accountName,
-                contentUri = uploadToRetry.localPath.toUri(),
-                lastModifiedInSeconds = (uploadToRetry.uploadEndTimestamp / 1000).toString(),
-                behavior = UploadBehavior.fromLegacyLocalBehavior(uploadToRetry.localAction).name,
-                uploadPath = uploadToRetry.remotePath,
-                uploadIdInStorageManager = uploadToRetry.uploadId,
-                wifiOnly = false,
-                chargingOnly = false
+                listOfLocalPaths = listOf(uploadToRetry.localPath),
+                uploadFolderPath = uploadToRetry.remotePath.trimEnd(PATH_SEPARATOR),
             )
         )
         uploadsStorageManager.updateUpload(uploadToRetry.apply { uploadStatus = UploadsStorageManager.UploadStatus.UPLOAD_IN_PROGRESS })
