@@ -187,13 +187,6 @@ class PreviewAudioFragment : FileFragment() {
         if (file != null && file.isAvailableLocally) {
             bindMediaService()
         }
-        progressController!!.startListeningProgressFor(getFile(), account)
-    }
-
-    override fun onTransferServiceConnected() {
-        if (progressController != null) {
-            progressController!!.startListeningProgressFor(file, account)
-        }
     }
 
     override fun onFileMetadataChanged(updatedFile: OCFile?) {
@@ -325,7 +318,6 @@ class PreviewAudioFragment : FileFragment() {
     }
 
     override fun onStop() {
-        progressController?.stopListeningProgressFor(file, account)
         mediaServiceConnection?.let { mediaConnection ->
             Timber.d("Unbinding from MediaService ...")
             if (mediaServiceBinder != null && mediaController != null) {

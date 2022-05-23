@@ -73,31 +73,6 @@ public class TransferProgressController implements OnDatatransferProgressListene
     }
 
     /**
-     * Subscribes the controller to monitor transfers of the received file in {@link FileUploader} services, if
-     * available.
-     * <p>
-     * This method may be called several times for the same file, resulting in a single subscription.
-     *
-     * @param file    File to monitor in transfer services.
-     * @param account ownCloud account containing file.
-     */
-    @UiThread
-    public void startListeningProgressFor(OCFile file, Account account) {
-
-    }
-
-    /**
-     * Unsubscribes the controller from {@link FileUploader} service.
-     *
-     * @param file    File to stop monitoring in transfer services.
-     * @param account ownCloud account containing file.
-     */
-    @UiThread
-    public void stopListeningProgressFor(OCFile file, Account account) {
-
-    }
-
-    /**
      * Implementation of {@link OnDatatransferProgressListener}, called from {@link FileUploader} to report the
      * transfer progress of a monitored file.
      *
