@@ -554,6 +554,7 @@ Il Download del file inizierà automaticamente</string>
   <string name="button_rate_now_name">VOTO ADESSO</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selezionato</item>
+    <item quantity="many">%d selezionati</item>
     <item quantity="other">%d selezionati</item>
   </plurals>
   <!--Welcome to oC intro features-->

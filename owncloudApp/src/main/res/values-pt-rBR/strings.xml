@@ -576,6 +576,7 @@
   <string name="button_rate_now_name">AVALIAR AGORA</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
+    <item quantity="many">%d selecionados</item>
     <item quantity="other">%d selecionados</item>
   </plurals>
   <!--Welcome to oC intro features-->

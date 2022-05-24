@@ -555,6 +555,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="button_rate_now_name">EVALUER MAINTENANT</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d sélectionné</item>
+    <item quantity="many">%d sélectionnés</item>
     <item quantity="other">%d sélectionnés</item>
   </plurals>
   <!--Welcome to oC intro features-->
