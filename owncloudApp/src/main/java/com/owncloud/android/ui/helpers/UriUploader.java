@@ -20,38 +20,35 @@ package com.owncloud.android.ui.helpers;
 import android.accounts.Account;
 import android.content.ContentResolver;
 import android.net.Uri;
-import android.os.Parcelable;
 
 import androidx.fragment.app.FragmentManager;
 import com.owncloud.android.R;
-import com.owncloud.android.files.services.TransferRequester;
-import com.owncloud.android.operations.UploadFileOperation;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
-import com.owncloud.android.utils.UriUtils;
 import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class examines URIs pointing to files to upload and then requests {@link FileUploader} to upload them.
+ * This class examines URIs pointing to files to upload.
  * <p>
- * URIs with scheme file:// do not require any previous processing, their path is sent to {@link FileUploader}
- * to find the source file.
+ * Legacy class. Needs a refactor, but not today..
+ *
+ * <p>
+ * URIs with scheme file:// will be ignored since it's not recommended anymore. Apps should use FileProviders
+ * to share their files.
  * <p>
  * URIs with scheme content:// are handling assuming that file is in private storage owned by a different app,
  * and that persistency permission is not granted. Due to this, contents of the file are temporary copied by
- * the OC app, and then passed {@link FileUploader}.
+ * the OC app, and then an upload is enqueued.
  */
 public class UriUploader {
 
     private FileActivity mActivity;
     private ArrayList<Uri> mUrisToUpload;
     private CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener mCopyTmpTaskListener;
-
-    private int mBehaviour;
 
     private String mUploadPath;
     private Account mAccount;
@@ -72,7 +69,6 @@ public class UriUploader {
             ArrayList<Uri> uris,
             String uploadPath,
             Account account,
-            int behaviour,
             boolean showWaitingDialog,
             CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener copyTmpTaskListener
     ) {
@@ -80,7 +76,6 @@ public class UriUploader {
         mUrisToUpload = uris;
         mUploadPath = uploadPath;
         mAccount = account;
-        mBehaviour = behaviour;
         mShowWaitingDialog = showWaitingDialog;
         mCopyTmpTaskListener = copyTmpTaskListener;
     }
@@ -88,33 +83,26 @@ public class UriUploader {
     public UriUploaderResultCode uploadUris() {
 
         try {
-
             List<Uri> contentUris = new ArrayList<>();
-            List<String> contentRemotePaths = new ArrayList<>();
 
             int schemeFileCounter = 0;
 
-            for (Parcelable sourceStream : mUrisToUpload) {
-                Uri sourceUri = (Uri) sourceStream;
+            for (Uri sourceUri : mUrisToUpload) {
                 if (sourceUri != null) {
-                    String displayName = UriUtils.getDisplayNameForUri(sourceUri, mActivity);
-                    String remotePath = mUploadPath + displayName;
 
                     if (ContentResolver.SCHEME_CONTENT.equals(sourceUri.getScheme())) {
                         contentUris.add(sourceUri);
-                        contentRemotePaths.add(remotePath);
 
                     } else if (ContentResolver.SCHEME_FILE.equals(sourceUri.getScheme())) {
-                        /// file: uris should point to a local file, should be safe let FileUploader handle them
-                        requestUpload(sourceUri.getPath(), remotePath);
                         schemeFileCounter++;
+                        Timber.w("File with scheme file has been received. We don't support this scheme anymore.");
                     }
                 }
             }
 
             if (!contentUris.isEmpty()) {
                 /// content: uris will be copied to temporary files before calling {@link FileUploader}
-                copyThenUpload(contentUris.toArray(new Uri[0]), contentRemotePaths.toArray(new String[0]));
+                copyThenUpload(contentUris.toArray(new Uri[0]), mUploadPath);
 
                 // Listen to CopyAndUploadContentUrisTask before killing the app or a SecurityException may appear.
                 // At least when receiving files to upload.
@@ -137,34 +125,10 @@ public class UriUploader {
     }
 
     /**
-     * Requests the upload of a file in the local file system to {@link FileUploader} service.
-     * <p>
-     * The original file will be left in its original location, and will not be duplicated.
-     * As a side effect, the user will see the file as not uploaded when accesses to the OC app.
-     * This is considered as acceptable, since when a file is shared from another app to OC,
-     * the usual workflow will go back to the original app.
-     *
-     * @param localPath  Absolute path in the local file system to the file to upload.
-     * @param remotePath Absolute path in the current OC account to set to the uploaded file.
+     * @param sourceUris Array of content:// URIs to the files to upload
+     * @param uploadPath Absolute paths where we want to upload the selected files
      */
-    private void requestUpload(String localPath, String remotePath) {
-        TransferRequester requester = new TransferRequester();
-        requester.uploadNewFile(
-                mActivity,
-                mAccount,
-                localPath,
-                remotePath,
-                mBehaviour,
-                null,       // MIME type will be detected from file name
-                UploadFileOperation.CREATED_BY_USER
-        );
-    }
-
-    /**
-     * @param sourceUris  Array of content:// URIs to the files to upload
-     * @param remotePaths Array of absolute paths to set to the uploaded files
-     */
-    private void copyThenUpload(Uri[] sourceUris, String[] remotePaths) {
+    private void copyThenUpload(Uri[] sourceUris, String uploadPath) {
         if (mShowWaitingDialog) {
             mActivity.showLoadingDialog(R.string.wait_for_tmp_copy_from_private_storage);
         }
@@ -186,8 +150,7 @@ public class UriUploader {
                 CopyAndUploadContentUrisTask.makeParamsToExecute(
                         mAccount,
                         sourceUris,
-                        remotePaths,
-                        mBehaviour,
+                        uploadPath,
                         mActivity.getContentResolver()
                 )
         );
