@@ -70,7 +70,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ThrowableExtKt;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -130,7 +129,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
-    private UploadBroadcastReceiver mUploadBroadcastReceiver;
     // this is inited lazily, when an account is selected. If no account is selected but an instance of this would
     // be crated it would result in an null pointer exception.
     private ReceiveExternalFilesAdapter mAdapter = null;
@@ -196,12 +194,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
         mSyncBroadcastReceiver = new SyncBroadcastReceiver();
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
         mLocalBroadcastManager.registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
-
-        // Listen for upload messages
-        IntentFilter uploadIntentFilter = new IntentFilter(FileUploader.getUploadFinishMessage());
-        uploadIntentFilter.addAction(FileUploader.getUploadStartMessage());
-        mUploadBroadcastReceiver = new UploadBroadcastReceiver();
-        mLocalBroadcastManager.registerReceiver(mUploadBroadcastReceiver, uploadIntentFilter);
 
         // Init Fragment without UI to retain AsyncTask across configuration changes
         FragmentManager fm = getSupportFragmentManager();
@@ -994,20 +986,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
             Window window = alertDialog.getWindow();
             if (window != null) {
                 window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-            }
-        }
-    }
-
-    private class UploadBroadcastReceiver extends BroadcastReceiver {
-        /**
-         * If the upload is text shared from other apps and was successfully uploaded -> delete cache
-         */
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            boolean success = intent.getBooleanExtra(Extras.EXTRA_UPLOAD_RESULT, false);
-            String localPath = intent.getStringExtra(Extras.EXTRA_OLD_FILE_PATH);
-            if (success && localPath.contains(getCacheDir().getPath())) {
-                FileStorageUtils.deleteDir(getCacheDir());
             }
         }
     }

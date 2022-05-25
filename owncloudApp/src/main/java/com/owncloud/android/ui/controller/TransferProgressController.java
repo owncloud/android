@@ -18,13 +18,10 @@
  */
 package com.owncloud.android.ui.controller;
 
-import android.accounts.Account;
 import android.view.View;
 import android.widget.ProgressBar;
 
 import androidx.annotation.UiThread;
-import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 
@@ -73,7 +70,7 @@ public class TransferProgressController implements OnDatatransferProgressListene
     }
 
     /**
-     * Implementation of {@link OnDatatransferProgressListener}, called from {@link FileUploader} to report the
+     * Implementation of {@link OnDatatransferProgressListener} to report the
      * transfer progress of a monitored file.
      *
      * @param progressRate          Bytes transferred from the previous call.
