@@ -35,6 +35,7 @@ import android.os.ParcelFileDescriptor
 import android.preference.PreferenceManager
 import android.provider.DocumentsContract
 import android.provider.DocumentsProvider
+import androidx.work.WorkManager
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
@@ -43,20 +44,19 @@ import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.validation.FileNameException
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
-import com.owncloud.android.files.services.FileUploader
-import com.owncloud.android.files.services.TransferRequester
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
-import com.owncloud.android.operations.UploadFileOperation
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER
+import com.owncloud.android.usecases.UploadFilesFromSystemUseCase
 import com.owncloud.android.usecases.transfers.DownloadFileUseCase
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NotificationUtils
@@ -65,7 +65,6 @@ import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.util.HashMap
 import java.util.Vector
 
 class DocumentsStorageProvider : DocumentsProvider() {
@@ -132,17 +131,14 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 // If only needs to upload that file
                 if (uploadOnly) {
                     ocFile.length = fileToOpen.length()
-                    TransferRequester().run {
-                        uploadNewFile(
-                            context,
-                            currentStorageManager?.account,
-                            ocFile.storagePath,
-                            ocFile.remotePath,
-                            FileUploader.LEGACY_LOCAL_BEHAVIOUR_COPY,
-                            ocFile.mimeType,
-                            UploadFileOperation.CREATED_BY_USER
-                        )
-                    }
+                    val workManager = WorkManager.getInstance(MainApp.appContext)
+                    val uploadFilesUseCase = UploadFilesFromSystemUseCase(workManager)
+                    val uploadFilesUseCaseParams = UploadFilesFromSystemUseCase.Params(
+                        accountName = ocFile.owner,
+                        listOfLocalPaths = listOf(fileToOpen.path),
+                        uploadFolderPath = ocFile.remotePath.substringBeforeLast(PATH_SEPARATOR)
+                    )
+                    uploadFilesUseCase.execute(uploadFilesUseCaseParams)
                 } else {
                     Thread {
                         SynchronizeFileOperation(
