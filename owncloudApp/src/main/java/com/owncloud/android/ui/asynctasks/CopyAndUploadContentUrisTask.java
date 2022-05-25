@@ -30,10 +30,7 @@ import android.widget.Toast;
 
 import androidx.work.WorkManager;
 import com.owncloud.android.R;
-import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.operations.UploadFileOperation;
-import com.owncloud.android.usecases.UploadFileFromContentUriUseCase;
 import com.owncloud.android.usecases.UploadFilesFromSystemUseCase;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.UriUtils;
