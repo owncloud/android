@@ -29,7 +29,6 @@ import android.widget.ListView;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
-import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.ExpandableUploadListAdapter;
 import com.owncloud.android.usecases.RetryFailedUploadsUseCase;

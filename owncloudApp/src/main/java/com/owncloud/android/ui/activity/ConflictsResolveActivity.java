@@ -23,16 +23,19 @@ package com.owncloud.android.ui.activity;
 
 import android.os.Bundle;
 
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior;
+import androidx.work.WorkManager;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.Decision;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.OnConflictDecisionMadeListener;
+import com.owncloud.android.usecases.UploadFileInConflictUseCase;
+import com.owncloud.android.usecases.UploadFilesFromSystemUseCase;
 import com.owncloud.android.usecases.transfers.DownloadFileUseCase;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
+
+import java.util.ArrayList;
 
 import static org.koin.java.KoinJavaComponent.inject;
 
@@ -50,8 +53,7 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
     @Override
     public void conflictDecisionMade(Decision decision) {
 
-        Integer behaviour = null;
-        Boolean forceOverwrite = null;
+        boolean forceOverwrite = false;
 
         switch (decision) {
             case CANCEL:
@@ -62,7 +64,6 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
                 forceOverwrite = true;
                 break;
             case KEEP_BOTH:
-                behaviour = UploadBehavior.MOVE.toLegacyLocalBehavior();
                 break;
             case SERVER:
                 // use server version -> delete local, request download
@@ -76,8 +77,26 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
                 return;
         }
 
-        TransferRequester requester = new TransferRequester();
-        requester.uploadUpdate(this, getAccount(), getFile(), behaviour, forceOverwrite, false);
+        WorkManager workManager = WorkManager.getInstance(getApplicationContext());
+        if (forceOverwrite) {
+            UploadFileInConflictUseCase uploadFileInConflictUseCase = new UploadFileInConflictUseCase(workManager);
+            UploadFileInConflictUseCase.Params params = new UploadFileInConflictUseCase.Params(
+                    getFile().getOwner(),
+                    getFile().getStoragePath(),
+                    getFile().getParentRemotePath()
+            );
+            uploadFileInConflictUseCase.execute(params);
+        } else {
+            UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager);
+            ArrayList<String> listOfPaths = new ArrayList<>();
+            listOfPaths.add(getFile().getStoragePath());
+            UploadFilesFromSystemUseCase.Params params = new UploadFilesFromSystemUseCase.Params(
+                    getFile().getOwner(),
+                    listOfPaths,
+                    getFile().getParentRemotePath()
+            );
+            uploadFilesFromSystemUseCase.execute(params);
+        }
         finish();
     }
 
