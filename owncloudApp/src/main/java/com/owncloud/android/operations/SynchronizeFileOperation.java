@@ -27,16 +27,15 @@ package com.owncloud.android.operations;
 import android.accounts.Account;
 import android.content.Context;
 
-import com.owncloud.android.MainApp;
+import androidx.work.WorkManager;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.files.services.FileUploader;
-import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.usecases.UploadFileInConflictUseCase;
 import com.owncloud.android.usecases.transfers.DownloadFileUseCase;
 import com.owncloud.android.utils.FileStorageUtils;
 import kotlin.Lazy;
@@ -230,9 +229,13 @@ public class SynchronizeFileOperation extends SyncOperation {
      * @param file OCFile object representing the file to upload
      */
     private void requestForUpload(OCFile file) {
-        TransferRequester requester = new TransferRequester();
-        requester.uploadUpdate(mContext, mAccount, file, FileUploader.LEGACY_LOCAL_BEHAVIOUR_MOVE, true,
-                mRequestedFromAvOfflineJobService);
+        WorkManager workManager = WorkManager.getInstance(mContext);
+        UploadFileInConflictUseCase uploadFileInConflictUseCase = new UploadFileInConflictUseCase(workManager);
+        UploadFileInConflictUseCase.Params params = new UploadFileInConflictUseCase.Params(
+                file.getOwner(),
+                file.getStoragePath(),
+                file.getParentRemotePath()
+        );
 
         mTransferWasRequested = true;
     }

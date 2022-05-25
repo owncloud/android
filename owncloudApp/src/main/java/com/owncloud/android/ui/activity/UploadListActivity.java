@@ -34,8 +34,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
-import com.owncloud.android.db.UploadResult;
-import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
