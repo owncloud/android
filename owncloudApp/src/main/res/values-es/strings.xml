@@ -575,7 +575,7 @@
   <string name="button_rate_now_name">Valorar ahora</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionado</item>
-    <item quantity="many"></item>
+    <item quantity="many">%d seleccionado</item>
     <item quantity="other">%d seleccionado</item>
   </plurals>
   <!--Welcome to oC intro features-->

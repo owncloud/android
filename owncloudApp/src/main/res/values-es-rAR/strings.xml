@@ -519,7 +519,7 @@
   <string name="button_rate_now_name">CALIFICAR AHORA</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionado</item>
-    <item quantity="many"></item>
+    <item quantity="many">%d seleccionados</item>
     <item quantity="other">%d seleccionados</item>
   </plurals>
   <!--Welcome to oC intro features-->
