@@ -62,56 +62,6 @@ import static com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAM
  */
 
 public class TransferRequester {
-    /**
-     * Call to upload several new files
-     */
-    public void uploadNewFiles(
-            Context context,
-            Account account,
-            String[] localPaths,
-            String[] remotePaths,
-            String[] mimeTypes,
-            Integer behaviour,
-            int createdBy
-    ) {
-        Intent intent = new Intent(context, FileUploader.class);
-
-        intent.putExtra(FileUploader.KEY_ACCOUNT, account);
-        intent.putExtra(FileUploader.KEY_LOCAL_FILE, localPaths);
-        intent.putExtra(FileUploader.KEY_REMOTE_FILE, remotePaths);
-        intent.putExtra(FileUploader.KEY_MIME_TYPE, mimeTypes);
-        intent.putExtra(FileUploader.KEY_LOCAL_BEHAVIOUR, behaviour);
-        intent.putExtra(FileUploader.KEY_CREATED_BY, createdBy);
-
-        if ((createdBy == CREATED_AS_CAMERA_UPLOAD_PICTURE || createdBy == CREATED_AS_CAMERA_UPLOAD_VIDEO) &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Since in Android O the apps running in background are not allowed to start background services. The
-            // camera uploads feature may try to do this. A way to solve this is to run the camera upload feature in
-            // the foreground.
-            Timber.d("Start to upload some files from foreground/background, startForeground() will be called soon");
-            context.startForegroundService(intent);
-        } else {
-            Timber.d("Start to upload some files from foreground");
-            context.startService(intent);
-        }
-    }
-
-    /**
-     * Call to upload a new single file
-     */
-    public void uploadNewFile(Context context, Account account, String localPath, String remotePath, int
-            behaviour, String mimeType, int createdBy) {
-
-        uploadNewFiles(
-                context,
-                account,
-                new String[]{localPath},
-                new String[]{remotePath},
-                new String[]{mimeType},
-                behaviour,
-                createdBy
-        );
-    }
 
     /**
      * Call to update multiple files already uploaded
