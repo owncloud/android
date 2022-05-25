@@ -39,6 +39,7 @@ import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedExcept
 import com.owncloud.android.domain.exceptions.ServiceUnavailableException
 import com.owncloud.android.domain.exceptions.SpecificUnsupportedMediaTypeException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
+import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -51,6 +52,7 @@ import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
 import org.koin.core.KoinComponent
+import org.koin.core.inject
 import timber.log.Timber
 import java.io.File
 
@@ -70,6 +72,9 @@ class UploadFileFromFileSystemWorker(
     private lateinit var mimetype: String
     private var uploadIdInStorageManager: Long = -1
     private lateinit var ocUpload: OCUpload
+
+    // Etag in conflict required to overwrite files in server. Otherwise, the upload will be rejected.
+    private var eTagInConflict: String = ""
 
     override suspend fun doWork(): Result {
 
@@ -149,8 +154,13 @@ class UploadFileFromFileSystemWorker(
     private fun checkNameCollisionOrGetAnAvailableOneInCase() {
         if (ocUpload.isForceOverwrite) {
             Timber.d("Upload will override current server file")
-            // FIXME: Retrieve somehow the EtagInConflict from the OCFile.
-            //   We need it to override the file in server.
+
+            val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
+            val useCaseResult = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(ocUpload.accountName, ocUpload.remotePath))
+
+            eTagInConflict = useCaseResult.getDataOrNull()?.etagInConflict.orEmpty()
+
+            Timber.d("File with the following etag in conflict: $eTagInConflict")
             return
         }
 
@@ -165,14 +175,12 @@ class UploadFileFromFileSystemWorker(
     private fun uploadDocument() {
         val client = getClientForThisUpload()
 
-        // FIXME: Retrieve somehow the EtagInConflict from the OCFile.
-        //   We need it to override the file in server.
         val uploadFileFromFileSystemOperation = UploadFileFromFileSystemOperation(
             localPath = fileSystemPath,
             remotePath = uploadPath,
             mimeType = mimetype,
             lastModifiedTimestamp = lastModified,
-            requiredEtag = ""
+            requiredEtag = eTagInConflict
         )
 
         val result = executeRemoteOperation { uploadFileFromFileSystemOperation.execute(client) }
