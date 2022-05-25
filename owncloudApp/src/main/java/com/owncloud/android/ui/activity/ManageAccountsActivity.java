@@ -44,7 +44,6 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.services.OperationsService;
