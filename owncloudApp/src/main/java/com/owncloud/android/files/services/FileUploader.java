@@ -271,7 +271,7 @@ public class FileUploader extends Service
             }
 
             /*
-             * After calling startForegroundService method from {@link TransferRequester} for camera uploads or
+             * After calling startForegroundService method for camera uploads or
              * available offline, we have to call this within five seconds after the service is created to avoid
              * an error
              */
