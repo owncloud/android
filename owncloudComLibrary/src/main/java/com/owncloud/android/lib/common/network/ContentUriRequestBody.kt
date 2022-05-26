@@ -31,13 +31,23 @@ import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okio.BufferedSink
+import okio.Source
 import okio.source
+import timber.log.Timber
 import java.io.IOException
 
 class ContentUriRequestBody(
     private val contentResolver: ContentResolver,
     private val contentUri: Uri
-) : RequestBody() {
+) : RequestBody(), ProgressiveDataTransferer {
+
+    private val dataTransferListeners: MutableSet<OnDatatransferProgressListener> = HashSet()
+
+    val fileSize: Long = contentResolver.query(contentUri, null, null, null, null)?.use { cursor ->
+        val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+        cursor.moveToFirst()
+        cursor.getLong(sizeIndex)
+    } ?: -1
 
     override fun contentType(): MediaType? {
         val contentType = contentResolver.getType(contentUri) ?: return null
@@ -45,19 +55,63 @@ class ContentUriRequestBody(
     }
 
     override fun contentLength(): Long {
-        contentResolver.query(contentUri, null, null, null, null)?.use { cursor ->
-            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
-            cursor.moveToFirst()
-            return cursor.getLong(sizeIndex)
-        } ?: return -1
+        return fileSize
     }
 
     override fun writeTo(sink: BufferedSink) {
         val inputStream = contentResolver.openInputStream(contentUri)
             ?: throw IOException("Couldn't open content URI for reading: $contentUri")
 
-        inputStream.source().use { source ->
-            sink.writeAll(source)
+        val previousTime = System.currentTimeMillis()
+
+        sink.writeAndUpdateProgress(inputStream.source())
+        inputStream.source().close()
+
+        val laterTime = System.currentTimeMillis()
+
+        Timber.d("Difference - ${laterTime - previousTime} milliseconds")
+    }
+
+    private fun BufferedSink.writeAndUpdateProgress(source: Source) {
+        var iterator: Iterator<OnDatatransferProgressListener>
+
+        try {
+            var totalBytesRead = 0L
+            var read: Long
+            while (source.read(this.buffer, BYTES_TO_READ).also { read = it } != -1L) {
+                totalBytesRead += read
+                this.flush()
+                synchronized(dataTransferListeners) {
+                    iterator = dataTransferListeners.iterator()
+                    while (iterator.hasNext()) {
+                        iterator.next().onTransferProgress(read, totalBytesRead, fileSize, contentUri.toString())
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Timber.e(e)
         }
+    }
+
+    override fun addDatatransferProgressListener(listener: OnDatatransferProgressListener) {
+        synchronized(dataTransferListeners) {
+            dataTransferListeners.add(listener)
+        }
+    }
+
+    override fun addDatatransferProgressListeners(listeners: MutableCollection<OnDatatransferProgressListener>) {
+        synchronized(dataTransferListeners) {
+            dataTransferListeners.addAll(listeners)
+        }
+    }
+
+    override fun removeDatatransferProgressListener(listener: OnDatatransferProgressListener) {
+        synchronized(dataTransferListeners) {
+            dataTransferListeners.remove(listener)
+        }
+    }
+
+    companion object {
+        private const val BYTES_TO_READ = 4_096L
     }
 }
