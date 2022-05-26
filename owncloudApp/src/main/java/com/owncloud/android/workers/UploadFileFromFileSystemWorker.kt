@@ -22,6 +22,7 @@ import android.accounts.Account
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
@@ -44,6 +45,7 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
@@ -51,6 +53,9 @@ import com.owncloud.android.lib.resources.files.UploadFileFromFileSystemOperatio
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
@@ -62,7 +67,7 @@ class UploadFileFromFileSystemWorker(
 ) : CoroutineWorker(
     appContext,
     workerParameters
-), KoinComponent {
+), KoinComponent, OnDatatransferProgressListener {
 
     private lateinit var account: Account
     private lateinit var fileSystemPath: String
@@ -75,6 +80,8 @@ class UploadFileFromFileSystemWorker(
 
     // Etag in conflict required to overwrite files in server. Otherwise, the upload will be rejected.
     private var eTagInConflict: String = ""
+
+    private var lastPercent = 0
 
     override suspend fun doWork(): Result {
 
@@ -181,7 +188,9 @@ class UploadFileFromFileSystemWorker(
             mimeType = mimetype,
             lastModifiedTimestamp = lastModified,
             requiredEtag = eTagInConflict
-        )
+        ).also {
+            it.addDataTransferProgressListener(this)
+        }
 
         val result = executeRemoteOperation { uploadFileFromFileSystemOperation.execute(client) }
 
@@ -261,6 +270,24 @@ class UploadFileFromFileSystemWorker(
 
     private fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
         .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext)
+
+    override fun onTransferProgress(
+        progressRate: Long,
+        totalTransferredSoFar: Long,
+        totalToTransfer: Long,
+        filePath: String
+    ) {
+        val percent: Int = (100.0 * totalTransferredSoFar.toDouble() / totalToTransfer.toDouble()).toInt()
+        if (percent == lastPercent) return
+
+        // Set current progress. Observers will listen.
+        CoroutineScope(Dispatchers.IO).launch {
+            val progress = workDataOf(DownloadFileWorker.WORKER_KEY_PROGRESS to percent)
+            setProgress(progress)
+        }
+
+        lastPercent = percent
+    }
 
     companion object {
         const val KEY_PARAM_ACCOUNT_NAME = "KEY_PARAM_ACCOUNT_NAME"
