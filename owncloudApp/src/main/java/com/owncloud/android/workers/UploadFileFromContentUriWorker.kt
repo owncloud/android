@@ -25,6 +25,7 @@ import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
@@ -47,6 +48,7 @@ import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.network.ContentUriRequestBody
+import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
@@ -54,6 +56,9 @@ import com.owncloud.android.lib.resources.files.UploadFileFromContentUriOperatio
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.KoinComponent
 import timber.log.Timber
 import java.io.File
@@ -64,7 +69,7 @@ class UploadFileFromContentUriWorker(
 ) : CoroutineWorker(
     appContext,
     workerParameters
-), KoinComponent {
+), KoinComponent, OnDatatransferProgressListener {
 
     private lateinit var account: Account
     private lateinit var contentUri: Uri
@@ -72,6 +77,8 @@ class UploadFileFromContentUriWorker(
     private lateinit var behavior: UploadBehavior
     private lateinit var uploadPath: String
     private var uploadIdInStorageManager: Long = -1
+
+    private var lastPercent = 0
 
     override suspend fun doWork(): Result {
 
@@ -150,7 +157,9 @@ class UploadFileFromContentUriWorker(
 
     private fun uploadDocument() {
         val client = getClientForThisUpload()
-        val requestBody = ContentUriRequestBody(appContext.contentResolver, contentUri)
+        val requestBody = ContentUriRequestBody(appContext.contentResolver, contentUri).also {
+            it.addDatatransferProgressListener(this)
+        }
 
         val uploadFileFromContentUriOperation = UploadFileFromContentUriOperation(uploadPath, lastModified, requestBody)
 
@@ -232,6 +241,24 @@ class UploadFileFromContentUriWorker(
 
     private fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
         .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext)
+
+    override fun onTransferProgress(
+        progressRate: Long,
+        totalTransferredSoFar: Long,
+        totalToTransfer: Long,
+        filePath: String
+    ) {
+        val percent: Int = (100.0 * totalTransferredSoFar.toDouble() / totalToTransfer.toDouble()).toInt()
+        if (percent == lastPercent) return
+
+        // Set current progress. Observers will listen.
+        CoroutineScope(Dispatchers.IO).launch {
+            val progress = workDataOf(DownloadFileWorker.WORKER_KEY_PROGRESS to percent)
+            setProgress(progress)
+        }
+
+        lastPercent = percent
+    }
 
     companion object {
         const val TRANSFER_TAG_CAMERA_UPLOAD = "TRANSFER_TAG_CAMERA_UPLOAD"
