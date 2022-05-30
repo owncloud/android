@@ -45,7 +45,7 @@ abstract class HttpBaseMethod constructor(url: URL) {
     var call: Call? = null
 
     var followRedirects: Boolean = true
-    var retryOnConnectionFailure: Boolean = false
+    var retryOnConnectionFailure: Boolean = true
     var connectionTimeoutVal: Long? = null
     var connectionTimeoutUnit: TimeUnit? = null
     var readTimeoutVal: Long? = null
@@ -62,8 +62,8 @@ abstract class HttpBaseMethod constructor(url: URL) {
     @Throws(Exception::class)
     open fun execute(httpClient: HttpClient): Int {
         val okHttpClient = httpClient.okHttpClient.newBuilder().apply {
-            retryOnConnectionFailure.let { retryOnConnectionFailure(it) }
-            followRedirects.let { followRedirects(it) }
+            retryOnConnectionFailure(retryOnConnectionFailure)
+            followRedirects(followRedirects)
             readTimeoutUnit?.let { unit ->
                 readTimeoutVal?.let { readTimeout(it, unit) }
             }
