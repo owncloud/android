@@ -26,19 +26,11 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 31
-
-        versionCode = 10001401
-        versionName = "1.0.15-beta.1"
     }
 
     lint {
         abortOnError false
         ignoreWarnings true
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     testOptions {
