@@ -1,0 +1,7 @@
+Bugfix: Empty message for a glimpse when browsing
+
+Previously, when browsing into a new folder it displays an incorrect text message,
+before it shows the actual content. Now, the wrong message is not displayed.
+
+https://github.com/owncloud/android/issues/1273
+https://github.com/owncloud/android/pull/3657
