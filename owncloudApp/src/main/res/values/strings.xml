@@ -673,9 +673,9 @@
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
 
-    <!-- Release Notes 2.21-beta.1 -->
+    <!-- Release Notes 2.21 -->
     <string name="release_notes_title_1">Release Notes</string>
-    <string name="release_notes_subtitle_1">News in the app will be listed after every update to inform about latest improvements and new features. Available also in settings to recheck.</string>
+    <string name="release_notes_subtitle_1">News in the app will be listed after every update to inform about latest improvements and new features. Available also in Settings view to recheck.</string>
 
     <string name="release_notes_title_2">Secure connections by default</string>
     <string name="release_notes_subtitle_2">Https connections by default to establish server connections. Otherwise, it will be explicitly required in URL</string>
@@ -691,5 +691,11 @@
 
     <string name="release_notes_title_6">Hidden files</string>
     <string name="release_notes_subtitle_6">Added a new option in settings to decide to show or not hidden files.</string>
+
+    <string name="release_notes_title_7">Sharing from inside</string>
+    <string name="release_notes_subtitle_7">Added the sharing option to folders from the list of its contents</string>
+
+    <string name="release_notes_title_8">Bugfixing</string>
+    <string name="release_notes_subtitle_8">Some existing bugs were fixed</string>
 
 </resources>
