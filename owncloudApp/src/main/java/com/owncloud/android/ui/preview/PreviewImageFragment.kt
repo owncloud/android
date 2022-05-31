@@ -36,6 +36,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -334,7 +335,8 @@ class PreviewImageFragment : FileFragment() {
                     dataSource: DataSource, isFirstResource: Boolean
                 ): Boolean {
                     Timber.d("Loading image %s", file.fileName)
-                    binding.progressWheel.isVisible = false
+
+                    view?.findViewById<ProgressBar>(R.id.progressWheel)?.isVisible = false
                     return false
                 }
             })
