@@ -11,7 +11,6 @@ assignees: ''
 
  - [ ] [GIT] Create branch release/Y.Y.Y in owncloud/android-library from master
  - [ ] [GIT] Create branch release/X.X.X in owncloud/android from master
- - [ ] [DEV] Update version number and name in build.gradle in owncloudComLibrary module
  - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
  - [ ] [DIS] Create a folder for the new version like $majorVersion.$minorVersion.$patchVersion_YYYY-MM-DD
  - [ ] [DIS] Move all changelog files from the unreleased folder to the new version folder
