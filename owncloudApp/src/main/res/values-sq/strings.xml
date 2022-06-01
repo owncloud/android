@@ -615,9 +615,8 @@
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
-  <!--Release Notes 2.21-beta.1-->
+  <!--Release Notes 2.21-->
   <string name="release_notes_title_1">Shënime Hedhjeje Në Qarkullim</string>
-  <string name="release_notes_subtitle_1">Lajmet te aplikacioni do të paraqiten pas çdo përditësimi, për të informuar përdoruesin rreth përmirësimeve dhe veçorive më të reja. Kjo mund të bëhet edhe që nga rregullimet, si rikontrollim.</string>
   <string name="release_notes_title_2">Lidhje të siguruara, si parazgjedhje.</string>
   <string name="release_notes_subtitle_2">Lidhje https, si parazgjedhje, për të vendosur lidhje me shërbyesin. Përndryshe, do të kërkohet shprehimisht te URL-ja</string>
   <string name="release_notes_title_3">Ripunim Kodkalimesh dhe Rregullsish</string>

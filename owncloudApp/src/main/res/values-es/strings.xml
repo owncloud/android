@@ -617,9 +617,8 @@
   <string name="release_notes_footer">Gracias por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Proceder</string>
   <string name="release_notes_icon">Icono de nota de lanzamiento</string>
-  <!--Release Notes 2.21-beta.1-->
+  <!--Release Notes 2.21-->
   <string name="release_notes_title_1">Notas de lanzamiento</string>
-  <string name="release_notes_subtitle_1">Las noticias en la aplicación se enumerarán después de cada actualización para informar acerca de las últimas mejoras y nuevas características. Disponible en configuración para volver a comprobar.</string>
   <string name="release_notes_title_2">Conexiones seguras por defecto</string>
   <string name="release_notes_subtitle_2">Https por defecto para establecer conexiones con el servidor. De lo contrario, será requerido explícitamente en la URL</string>
   <string name="release_notes_title_3">Código de acceso y patrón rediseñado</string>
