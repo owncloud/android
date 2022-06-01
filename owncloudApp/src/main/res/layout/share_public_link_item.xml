@@ -41,34 +41,35 @@
             android:textColor="@color/textColor"
             android:textSize="@dimen/two_line_primary_text_size" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/getPublicLinkButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="center_vertical"
-            android:padding="@dimen/standard_half_padding"
-            android:src="@drawable/copy_link" />
+            android:padding="14dp"
+            android:src="@drawable/copy_link"
+            android:scaleType="centerCrop"
+            android:background="@color/transparent"/>
 
-        <ImageView
+        <ImageButton
             android:id="@+id/deletePublicLinkButton"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="center_vertical"
-            android:padding="@dimen/standard_half_padding"
-            android:src="@drawable/ic_action_delete_grey" />
+            android:padding="14dp"
+            android:src="@drawable/ic_action_delete_grey"
+            android:scaleType="centerCrop"
+            android:background="@color/transparent"/>
 
-        <ImageView
+        <ImageButton
             android:id="@+id/editPublicLinkButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="center_vertical"
-            android:padding="@dimen/standard_half_padding"
-            android:src="@drawable/ic_lead_pencil_grey" />
+            android:padding="14dp"
+            android:src="@drawable/ic_lead_pencil_grey"
+            android:background="@color/transparent"/>
 
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/list_divider_background" />
 </LinearLayout>
