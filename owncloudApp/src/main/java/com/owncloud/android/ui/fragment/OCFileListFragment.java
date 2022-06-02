@@ -278,13 +278,13 @@ public class OCFileListFragment extends ExtendedListFragment implements
         mSearchView.setOnQueryTextListener(this);
 
         if (isPickingAFolder()) {
-            menu.removeItem(menu.findItem(R.id.action_share_file).getItemId());
+            menu.removeItem(menu.findItem(R.id.action_share_current_folder).getItemId());
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_share_file) {
+        if (item.getItemId() == R.id.action_share_current_folder) {
             mContainerActivity.getFileOperationsHelper().showShareFile(mFile);
         }
         return super.onOptionsItemSelected(item);
