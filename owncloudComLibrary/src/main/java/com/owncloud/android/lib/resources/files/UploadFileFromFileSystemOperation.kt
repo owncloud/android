@@ -107,7 +107,7 @@ open class UploadFileFromFileSystemOperation(
 
         val status = client.executeHttpMethod(putMethod)
         return if (isSuccess(status)) {
-            RemoteOperationResult<Unit>(ResultCode.OK)
+            RemoteOperationResult<Unit>(ResultCode.OK).apply { data = Unit }
         } else { // synchronization failed
             RemoteOperationResult<Unit>(putMethod)
         }
