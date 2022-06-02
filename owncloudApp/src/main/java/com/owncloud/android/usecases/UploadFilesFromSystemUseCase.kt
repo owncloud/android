@@ -84,7 +84,7 @@ class UploadFilesFromSystemUseCase(
             fileSize = localFile.length()
             isForceOverwrite = false
             createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER.ordinal
-            localAction = UploadBehavior.COPY.ordinal
+            localAction = UploadBehavior.MOVE.ordinal
             uploadStatus = UploadsStorageManager.UploadStatus.UPLOAD_IN_PROGRESS
         }
 
@@ -102,7 +102,7 @@ class UploadFilesFromSystemUseCase(
     ) {
         val inputData = workDataOf(
             UploadFileFromFileSystemWorker.KEY_PARAM_ACCOUNT_NAME to accountName,
-            UploadFileFromFileSystemWorker.KEY_PARAM_BEHAVIOR to UploadBehavior.COPY.name,
+            UploadFileFromFileSystemWorker.KEY_PARAM_BEHAVIOR to UploadBehavior.MOVE.name,
             UploadFileFromFileSystemWorker.KEY_PARAM_CONTENT_URI to localPath,
             UploadFileFromFileSystemWorker.KEY_PARAM_LAST_MODIFIED to lastModifiedInSeconds,
             UploadFileFromFileSystemWorker.KEY_PARAM_UPLOAD_PATH to uploadPath,
