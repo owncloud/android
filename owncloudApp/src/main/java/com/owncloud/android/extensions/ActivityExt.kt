@@ -92,9 +92,9 @@ fun Activity.goToUrl(
         val intent = Intent(Intent.ACTION_VIEW, uriUrl)
         if (flags != null) intent.addFlags(flags)
 
-        if (intent.resolveActivity(packageManager) != null) {
+        try {
             startActivity(intent)
-        } else {
+        } catch (e: ActivityNotFoundException) {
             showMessageInSnackbar(message = this.getString(R.string.file_list_no_app_for_perform_action))
             Timber.e("No Activity found to handle Intent")
         }
@@ -113,9 +113,9 @@ fun Activity.sendEmail(
         if (text != null) putExtra(Intent.EXTRA_TEXT, text)
     }
 
-    if (intent.resolveActivity(packageManager) != null) {
+    try {
         startActivity(intent)
-    } else {
+    } catch (e: ActivityNotFoundException) {
         showMessageInSnackbar(message = this.getString(R.string.file_list_no_app_for_perform_action))
         Timber.e("No Activity found to handle Intent")
     }
