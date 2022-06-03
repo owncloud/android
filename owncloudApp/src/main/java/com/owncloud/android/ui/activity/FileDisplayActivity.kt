@@ -31,14 +31,11 @@ package com.owncloud.android.ui.activity
 import android.accounts.Account
 import android.accounts.AuthenticatorException
 import android.content.BroadcastReceiver
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.ServiceConnection
 import android.net.Uri
 import android.os.Bundle
-import android.os.IBinder
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -75,8 +72,6 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.usecases.transfers.DOWNLOAD_ADDED_MESSAGE
-import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
@@ -95,6 +90,8 @@ import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.usecases.UploadFilesFromSAFUseCase
 import com.owncloud.android.usecases.UploadFilesFromSystemUseCase
+import com.owncloud.android.usecases.transfers.DOWNLOAD_ADDED_MESSAGE
+import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.usecases.transfers.DownloadFileUseCase
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PreferenceUtils
