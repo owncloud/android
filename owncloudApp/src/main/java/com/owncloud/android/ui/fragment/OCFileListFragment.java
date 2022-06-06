@@ -1128,18 +1128,16 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
 
             if (count == 0) {
-                Integer emptyMessage = null;
+                int emptyMessage;
                 if (mFileListOption == FileListOption.AV_OFFLINE) {
                     emptyMessage = R.string.file_list_empty_available_offline;
                 } else if (mFileListOption == FileListOption.SHARED_BY_LINK) {
                     emptyMessage = R.string.file_list_empty_shared_by_links;
+                } else {
+                    emptyMessage = R.string.file_list_empty;
                 }
 
-                if (emptyMessage != null) {
-                    setMessageForEmptyList(getString(emptyMessage));
-                } else {
-                    setMessageForEmptyList("");
-                }
+                setMessageForEmptyList(getString(emptyMessage));
             }
 
             // decide grid vs list view
