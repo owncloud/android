@@ -434,6 +434,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         selectAllMenuItem = menu.findItem(R.id.action_select_all)
         if (secondFragment == null) {
             selectAllMenuItem?.isVisible = true
+        } else {
+            val shareFileMenuItem = menu.findItem(R.id.action_share_current_folder)
+            menu.removeItem(shareFileMenuItem.itemId)
         }
         mainMenu = menu
 

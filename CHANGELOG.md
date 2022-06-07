@@ -1,9 +1,9 @@
-Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+Changelog for ownCloud Android Client [2.21.0] (2022-06-07)
 =======================================
-The following sections list the changes in ownCloud Android Client unreleased relevant to
+The following sections list the changes in ownCloud Android Client 2.21.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/android/compare/v2.20.0...master
+[2.21.0]: https://github.com/owncloud/android/compare/v2.20.0...v2.21.0
 
 Summary
 -------
@@ -13,7 +13,6 @@ Summary
 * Bugfix - Lock displays shown again: [#3591](https://github.com/owncloud/android/issues/3591)
 * Bugfix - Prevented signed in user in the list of users to be shared: [#1419](https://github.com/owncloud/android/issues/1419)
 * Bugfix - Corrupt picture error controlled: [#3441](https://github.com/owncloud/android/issues/3441)
-* Bugfix - Empty message for a glimpse when browsing: [#1273](https://github.com/owncloud/android/issues/1273)
 * Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
 * Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
 * Enhancement - Provide app feedback to MDM admins: [#3420](https://github.com/owncloud/android/issues/3420)
@@ -76,14 +75,6 @@ Details
 
    https://github.com/owncloud/android/issues/3441
    https://github.com/owncloud/android/pull/3644
-
-* Bugfix - Empty message for a glimpse when browsing: [#1273](https://github.com/owncloud/android/issues/1273)
-
-   Previously, when browsing into a new folder it displays an incorrect text message, before it
-   shows the actual content. Now, the wrong message is not displayed.
-
-   https://github.com/owncloud/android/issues/1273
-   https://github.com/owncloud/android/pull/3657
 
 * Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
 

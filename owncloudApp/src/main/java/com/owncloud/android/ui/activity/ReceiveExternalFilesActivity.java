@@ -669,7 +669,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         mSearchView.setOnQueryTextFocusChangeListener(this);
         mSearchView.setOnQueryTextListener(this);
 
-        menu.removeItem(menu.findItem(R.id.action_share_file).getItemId());
+        menu.removeItem(menu.findItem(R.id.action_share_current_folder).getItemId());
 
         return true;
     }
