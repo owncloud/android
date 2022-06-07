@@ -1,4 +1,4 @@
-Enhancement: Lock delay enforced
+Enterprise: Lock delay enforced
 
 A new local setup's option has been added for the
 application to lock after the selected interval
