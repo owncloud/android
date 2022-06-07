@@ -45,6 +45,7 @@ import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
+import com.owncloud.android.utils.SortFilesUtils;
 
 import java.util.Vector;
 
@@ -142,8 +143,7 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
                 // generate new Thumbnail
                 if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
                     final ThumbnailsCacheManager.ThumbnailGenerationTask task =
-                            new ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, mStorageManager,
-                                    mAccount);
+                            new ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, mAccount);
                     if (thumbnail == null) {
                         thumbnail = ThumbnailsCacheManager.mDefaultImg;
                     }
@@ -170,7 +170,7 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         FileStorageUtils.mSortOrderFileDisp = order;
         FileStorageUtils.mSortAscendingFileDisp = isAscending;
         if (mFiles != null && mFiles.size() > 0) {
-            FileStorageUtils.sortFolder((Vector<OCFile>) mFiles,
+            new SortFilesUtils().sortFiles((Vector<OCFile>) mFiles,
                     FileStorageUtils.mSortOrderFileDisp, FileStorageUtils.mSortAscendingFileDisp);
         }
         notifyDataSetChanged();
@@ -183,8 +183,7 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         if (mFiles.isEmpty()) {
             mOnSearchQueryUpdateListener.updateEmptyListMessage(
                     mContext.getString(R.string.local_file_list_search_with_no_matches));
-        }
-        else {
+        } else {
             mOnSearchQueryUpdateListener.updateEmptyListMessage(mContext.getString(R.string.empty));
         }
 

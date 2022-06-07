@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author David Crespo Ríos
  *
  * Copyright (C) 2021 ownCloud GmbH.
  * <p>
@@ -28,6 +29,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.owncloud.android.R
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment
@@ -65,6 +67,7 @@ class SettingsActivity : AppCompatActivity() {
             is SettingsLogsFragment -> R.string.prefs_subsection_logging
             is SettingsPictureUploadsFragment -> R.string.prefs_subsection_picture_uploads
             is SettingsVideoUploadsFragment -> R.string.prefs_subsection_video_uploads
+            is SettingsAdvancedFragment -> R.string.prefs_subsection_advanced
             is SettingsMoreFragment -> R.string.prefs_subsection_more
             else -> R.string.actionbar_settings
         }

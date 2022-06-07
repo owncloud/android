@@ -67,6 +67,8 @@
   <string name="prefs_camera_video_upload_path_title">Path สำหรับอัปโหลดวิดีโอ</string>
   <string name="prefs_camera_video_upload_on_wifi">อัปโหลดวิดีโอผ่านทาง WiFi เท่านั้น</string>
   <string name="prefs_camera_video_upload_on_charging">อัปโหลดวิดีโอเมื่อชาร์จเท่านั้น</string>
+  <string name="prefs_subsection_advanced">ขั้นสูง</string>
+  <string name="prefs_show_hidden_files">แสดงไฟล์ที่ซ่อนอยู่</string>
   <string name="prefs_log_open_logs_list_view">ไฟล์ log</string>
   <string name="prefs_log_no_logs_list_view">โฟลเดอร์ log ว่างเปล่า</string>
   <string name="prefs_log_title">เปิดใช้ระบบบันทึกข้อมูล</string>
@@ -251,6 +253,7 @@
   <string name="pass_code_wrong">รหัสปลดล็อคไม่ถูกต้อง</string>
   <string name="pass_code_error_set">เกิดข้อผิดพลาดขณะตั้งค่ารหัสปลดล็อค</string>
   <string name="pass_code_error_remove">เกิดข้อผิดพลาดขณะนำรหัสปลดล็อคออก</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="lock_time_try_again">โปรดลองอีกครั้งใน %1$s</string>
   <string name="biometric_not_enrolled">จำเป็นต้องเพิ่มอย่างน้อยหนึ่งไบโอเมตริกซ์เพื่อใช้เปิดการใช้งานฟีดเจอร์นี้</string>
   <string name="biometric_prompt_title">เข้าสู่ระบบด้วยไบโอเมตริกซ์</string>
@@ -581,4 +584,7 @@
   <string name="security_enforced_title">โปรดเลือกตัวเลือกเพื่อล็อคแอป:</string>
   <string name="security_enforced_first_option">ล็อครหัสปลดล็อค</string>
   <string name="security_enforced_second_option">รูปแบบการล็อค</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">ดำเนินการ</string>
+  <!--Release Notes 2.21-->
 </resources>

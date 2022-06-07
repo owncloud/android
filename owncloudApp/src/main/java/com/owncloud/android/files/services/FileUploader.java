@@ -954,7 +954,7 @@ public class FileUploader extends Service
         showUploadListIntent.putExtra(FileActivity.EXTRA_ACCOUNT, upload.getAccount());
         showUploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         mNotificationBuilder.setContentIntent(PendingIntent.getActivity(this, (int) System.currentTimeMillis(),
-                showUploadListIntent, 0));
+                showUploadListIntent, NotificationUtils.INSTANCE.getPendingIntentFlags()));
 
         if (!upload.isCameraUploadsPicture() && !upload.isCameraUploadsVideo()) {
             getNotificationManager().notify(R.string.uploader_upload_in_progress_ticker,
@@ -1039,7 +1039,7 @@ public class FileUploader extends Service
                 showUploadListIntent.putExtra(FileActivity.EXTRA_ACCOUNT, upload.getAccount());
                 showUploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 mNotificationBuilder.setContentIntent(PendingIntent.getActivity(this, (int) System.currentTimeMillis(),
-                        showUploadListIntent, 0));
+                        showUploadListIntent, NotificationUtils.INSTANCE.getPendingIntentFlags()));
             }
 
             mNotificationBuilder.setContentText(content);

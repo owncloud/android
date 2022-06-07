@@ -1,0 +1,6 @@
+Enhancement: Full name is shown in shares
+
+Full name is shown when using public share instead of username.
+
+https://github.com/owncloud/android/issues/1106
+https://github.com/owncloud/android/pull/3636

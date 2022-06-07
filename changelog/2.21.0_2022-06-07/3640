@@ -1,0 +1,7 @@
+Enhancement: Improved copy/move dialog
+
+Previously,they appeared exactly the same and there was no way of knowing which was which.
+Now they are differentiated by the text on the action button.
+
+https://github.com/owncloud/android/issues/1414
+https://github.com/owncloud/android/pull/3640

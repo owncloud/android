@@ -55,6 +55,8 @@
   <string name="prefs_camera_video_upload_path_title">Път за качване на видео</string>
   <string name="prefs_camera_video_upload_on_wifi">Качване на видео само през WiFi</string>
   <string name="prefs_camera_video_upload_on_charging">Качване на видеа, само докато се зарежда</string>
+  <string name="prefs_subsection_advanced">Разширени</string>
+  <string name="prefs_show_hidden_files">Показване на скрити файлове</string>
   <string name="prefs_log_title">Разреши влизане</string>
   <string name="prefs_log_summary">Използва се за докладване на проблеми</string>
   <string name="prefs_log_title_history">История на влизанията</string>
@@ -224,6 +226,8 @@
   <string name="pass_code_remove_your_pass_code">Премахване на паролата</string>
   <string name="pass_code_mismatch">Паролите не съвпадат</string>
   <string name="pass_code_wrong">Грешна парола</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
   <string name="biometric_not_enrolled">Регистрирайте поне един брой биометрични данни за да използвате тази  функция</string>
   <string name="biometric_prompt_title">Биометричен вход</string>
   <string name="biometric_prompt_subtitle">Вход чрез биометрични данни</string>
@@ -542,4 +546,7 @@
   <!--Security Enforced-->
   <string name="security_enforced_title">Моля, изберете начин за заключване на приложението</string>
   <string name="security_enforced_first_option">Заключваща парола</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Продължи</string>
+  <!--Release Notes 2.21-->
 </resources>

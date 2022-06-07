@@ -33,6 +33,10 @@
   <string name="prefs_subsection_logging">Protokollierung</string>
   <string name="prefs_subsection_more">Mehr</string>
   <string name="prefs_subsection_security">Sicherheit</string>
+  <string name="prefs_subsection_whatsnew">Was hat sich seit der letzten Version geändert?</string>
+  <string name="prefs_subsection_security_summary">Legen Sie Sperren fest um auf die App zuzugreifen und lassen Sie Berührungen mit anderen sichtbaren Fenstern zu</string>
+  <string name="prefs_subsection_logging_summary">Protokolle verfolgen die durch die Ausführung der App erstellt wurden </string>
+  <string name="prefs_subsection_more_summary">App Info, Feedback und mehr</string>
   <string name="prefs_accounts">Konten</string>
   <string name="prefs_manage_accounts">Konten verwalten</string>
   <string name="prefs_passcode">PIN gesperrt</string>
@@ -43,22 +47,33 @@
   <string name="prefs_lock_application_entries_1minute">Nach 1 Minute</string>
   <string name="prefs_lock_application_entries_5minutes">Nach 5 Minuten</string>
   <string name="prefs_lock_application_entries_30minutes">Nach 30 Minuten</string>
+  <string name="prefs_lock_access_from_document_provider">Zugriff vom Dokumentanbieter sperren</string>
+  <string name="prefs_lock_access_from_document_provider_summary">Sperren Sie den Zugriff von anderen Apps auf die Dateien der Konten in dieser App über den eingebauten Dateimanager von Android.</string>
   <string name="prefs_touches_with_other_visible_windows">Berührungen mit anderen sichtbaren Fenstern</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Berührungen auch zulassen, wenn die Ansicht von einer anderen App überladen wird. Aktiviere diese Option, um zum Beispiel Lichtfilter-Apps verwenden zu können.</string>
   <string name="confirmation_touches_with_other_windows_title">Willst Du diese Funktion wirklich einschalten?</string>
   <string name="confirmation_touches_with_other_windows_message">Verwende diese Funktion auf eigene Verantwortung. Eine bösartige Anwendung könnte versuchen deine Touchgesten zu missbrauchen und so Aktionen zu provozieren, die du nicht beabsichtigt hast. ownCloud verbietet solchen Apps normalerweise den Zugriff auf die App.</string>
   <string name="prefs_subsection_picture_uploads">Bilder automatisch hochladen</string>
+  <string name="prefs_subsection_picture_uploads_summary">Verwalten des Speicherortes und dem Verhalten der automatisch hochgeladenen Fotos</string>
   <string name="prefs_subsection_video_uploads">Videos automatisch hochladen</string>
+  <string name="prefs_subsection_video_uploads_summary">Verwalten des Speicherortes und dem Verhalten der automatisch hochgeladenen Videos</string>
   <string name="prefs_camera_picture_upload">Bilder</string>
   <string name="prefs_camera_picture_upload_summary">Automatischer Upload von Fotos</string>
   <string name="prefs_camera_picture_upload_path_title">Speicherpfad für hochgeladene Bilder</string>
+  <string name="prefs_camera_picture_upload_conditions_title">Bedingungen zum Ausführen von Uploads </string>
+  <string name="prefs_camera_picture_upload_conditions_summary">Das Hochladen wird ausgeführt wenn alle ausgewählten Optionen erfüllt sind</string>
   <string name="prefs_camera_picture_upload_on_wifi">Bilder nur über Wifi hochladen</string>
   <string name="prefs_camera_picture_upload_on_charging">Bilder nur beim Aufladen hochladen</string>
+  <string name="prefs_camera_upload_on_charging_summary">Aktiviere nur-WLAN-Uploads, um diese Option zu aktivieren</string>
   <string name="prefs_camera_video_upload">Video-Uploads</string>
   <string name="prefs_camera_video_upload_summary">Automatischer Upload von Videos</string>
   <string name="prefs_camera_video_upload_path_title">Pfad für Video-Upload</string>
   <string name="prefs_camera_video_upload_on_wifi">Videos nur über Wifi hochladen</string>
+  <string name="prefs_camera_video_upload_on_charging">Videos nur hochladen, wenn Ihr Gerät geladen wird</string>
+  <string name="prefs_subsection_advanced">Fortgeschritten</string>
+  <string name="prefs_show_hidden_files">Versteckte Dateien anzeigen</string>
   <string name="prefs_log_open_logs_list_view">Protokolle</string>
+  <string name="prefs_log_no_logs_list_view">Leerer Log Ordner!</string>
   <string name="prefs_log_title">Protokollierung aktivieren</string>
   <string name="prefs_log_summary">Dies wird zur Protokollierung von Problemen genutzt</string>
   <string name="prefs_log_title_history">Log Historie</string>
@@ -85,6 +100,7 @@
   <string name="pattern_reenter_pattern">Muster bitte erneut eingeben</string>
   <string name="pattern_not_same_pattern">Die Muster stimmen nicht überein</string>
   <string name="pattern_error_set">Beim Erstellen der Muster-Sperre ist ein Fehler aufgetreten</string>
+  <string name="pattern_error_remove">Beim Entfernen des Sperrmusters ist ein Fehler aufgetreten</string>
   <string name="pattern_already_set">Muster und PIN können nicht zeitgleich aktiv sein, bitte Muster deaktivieren</string>
   <string name="passcode_already_set">Muster und PIN können nicht zeitgleich aktiv sein, bitte PIN deaktivieren</string>
   <string name="pattern_no_longer_required">Muster wird nicht mehr verlangt</string>
@@ -130,6 +146,7 @@
   <string name="file_list_empty_shared_by_links">Es wurden keine Dateien per Link geteilt.</string>
   <string name="file_list_loading">Lade…</string>
   <string name="file_list_no_app_for_file_type">Keine App für diesen Dateityp gefunden</string>
+  <string name="file_list_no_app_for_perform_action">Keine App für diese Aktion gefunden</string>
   <string name="local_file_list_empty">Es befinden sich keine Dateien in diesem Ordner.</string>
   <string name="local_file_list_empty_just_folders">Es befinden sich keine Ordner in diesem Ordner.</string>
   <string name="local_file_list_search_with_no_matches">Keine Treffer für diese Suche</string>
@@ -146,6 +163,8 @@
   <string name="filedetails_created">Erstellt:</string>
   <string name="filedetails_modified">Geändert:</string>
   <string name="filedetails_download">Herunterladen</string>
+  <string name="filedetails_file_image_content_description">Bilddatei</string>
+  <string name="filedetails_cancel_btn_content_description">Button zum Abbruch für Herunterladen</string>
   <string name="filedetails_sync_file">Synchronisation</string>
   <string name="filedetails_renamed_in_upload_msg">Datei wurde wärend des Uploads zu %1$s umbenannt</string>
   <string name="list_layout">Layout der Liste</string>
@@ -185,6 +204,7 @@
   <string name="uploader_upload_video_upload_files">%d neue Videos werden hochgeladen</string>
   <string name="uploader_upload_camera_upload_source_path_error">Kamera-Upload fehlgeschlagen</string>
   <string name="uploader_upload_picture_upload_error">Pfad für Bilder-Uploads ist nicht mehr gültig</string>
+  <string name="uploader_upload_video_upload_error">Der Quellpfad des Video-Uploads ist nicht mehr gültig</string>
   <string name="uploader_upload_available_offline_files">Hochladen von verfügbaren Offline-Dateien</string>
   <string name="uploader_upload_requested_from_wifi_files">Hochladen von angeforderten WLAN-Dateien</string>
   <string name="ssl_certificate_not_trusted">Zertifikat des Servers ist nicht vertrauenswürdig</string>
@@ -216,6 +236,7 @@
   <string name="downloader_download_succeeded_ticker">Herunterladen erfolgreich</string>
   <string name="downloader_download_succeeded_content">%1$s heruntergeladen</string>
   <string name="downloader_download_failed_ticker">Herunterladen fehlgeschlagen</string>
+  <string name="downloader_preview_failed_ticker">Datei kann nicht dargestellt werden</string>
   <string name="downloader_download_failed_content">Herunterladen von %1$s konnte nicht abgeschlossen werden</string>
   <string name="downloader_not_downloaded_yet">Noch nicht Heruntergeladen</string>
   <string name="downloader_download_failed_credentials_error">Herunterladen fehlegeschlagen, du musst dich erneut anmelden</string>
@@ -232,14 +253,31 @@
   <string name="sync_current_folder_was_removed">Das Verzeichnis %1$s existiert nicht mehr</string>
   <string name="pass_code_enter_pass_code">Bitte gib deine PIN ein</string>
   <string name="pass_code_configure_your_pass_code">Bitte PIN eingeben</string>
+  <string name="pass_code_configure_your_pass_code_migration">Bitte gebe einen neuen %1$d-Stelligen PIN ein</string>
   <string name="pass_code_configure_your_pass_code_explanation">Die PIN wird jedes mal beim Start der App abgefragt</string>
   <string name="pass_code_reenter_your_pass_code">Bitte den PIN nochmals eingeben</string>
   <string name="pass_code_remove_your_pass_code">PIN entfernen</string>
   <string name="pass_code_mismatch">Die PINs stimmen nicht überein</string>
   <string name="pass_code_wrong">PIN nicht korrekt</string>
+  <string name="pass_code_error_set">Beim Festlegen Ihrer PIN ist ein Fehler aufgetreten</string>
+  <string name="pass_code_error_remove">Beim Entfernen Ihrer PIN ist ein Fehler aufgetreten</string>
+  <string name="numberkeyboard_backspace_button_content_description">Zurück-Taste</string>
+  <string name="numberkeyboard_biometric_button_content_description">Biometrische Taste</string>
+  <string name="numberkeyboard_zero">0</string>
+  <string name="numberkeyboard_one">1</string>
+  <string name="numberkeyboard_two">2</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
+  <string name="numberkeyboard_six">6</string>
+  <string name="numberkeyboard_seven">7</string>
+  <string name="numberkeyboard_eight">8</string>
+  <string name="numberkeyboard_nine">9</string>
+  <string name="lock_time_try_again">Bitte versuchen Sie es in%1$serneut</string>
   <string name="biometric_not_enrolled">Registriere mindestens ein biometrisches Merkmal, um diese Funktion zu nutzen</string>
   <string name="biometric_prompt_title">Biometrisches Einloggen</string>
   <string name="biometric_prompt_subtitle">Melde dich mit deinem biometrischem Merkmal an</string>
+  <string name="biometric_dialog_title">Möchten Sie die biometrische Sicherheit zusätzlich aktivieren?</string>
   <string name="media_notif_ticker">%1$s Musik Player</string>
   <string name="media_state_playing">%1$s (playing)</string>
   <string name="media_state_loading">%1$s (loading)</string>
@@ -296,6 +334,7 @@
   <string name="confirmation_remove_folder_alert">Möchtest Du wirklich %1$s und dessen Inhalte entfernen?</string>
   <string name="confirmation_remove_local">Nur lokal</string>
   <string name="confirmation_remove_account_alert">Möchtest du das Konto von %1$s wirklich löschen?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">An dieses Konto sind Kamera-Uploads angehängt. Wenn Sie das Konto entfernen, werden die Kamera-Uploads deaktiviert. Möchten Sie das Konto %1$s wirklich entfernen? </string>
   <string name="confirmation_remove_public_share_title">Link entfernen</string>
   <string name="confirmation_remove_private_share_title">Private Freigabe entfernen</string>
   <string name="confirmation_remove_share_message">Willst Du die Freigabe %1$s wirklich entfernen?</string>
@@ -411,6 +450,8 @@
   <string name="actionbar_move">Verschieben</string>
   <string name="file_list_empty_moving">Nichts vorhanden. Du kannst einen Ordner hinzufügen!</string>
   <string name="folder_picker_choose_button_text">Auswählen</string>
+  <string name="folder_picker_move_here_button_text">Hierher bewegen</string>
+  <string name="folder_picker_copy_here_button_text">Hierher kopieren</string>
   <string name="move_file_not_found">Verschieben nicht möglich. Prüfe, dass die Datei existiert</string>
   <string name="move_file_invalid_into_descendent">Es ist nicht möglich, einen Ordner in einen seiner Unterordner zu verschieben</string>
   <string name="move_file_invalid_overwrite">Die Datei ist bereits im Zielordner vorhanden</string>
@@ -439,6 +480,8 @@
   <string name="file_list__footer__files">%1$d Dateien</string>
   <string name="file_list__footer__files_and_folder">%1$d Dateien, 1 Ordner</string>
   <string name="file_list__footer__files_and_folders">%1$d Dateien, %2$d Ordner</string>
+  <string name="prefs_picture_upload_account">Konto zum Hochladen von Bildern</string>
+  <string name="prefs_video_upload_account">Konto zum Hochladen von Videos</string>
   <string name="prefs_camera_upload_source_path_title">Kamera-Ordner (%1$s)</string>
   <string name="prefs_camera_upload_source_path_title_required">Benötigt</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Originale Datei wird</string>
@@ -555,6 +598,24 @@
   <string name="prefs_logs_summary">Protokolle können sensible Informationen enthalten. Die gemeinsame Nutzung von Protokollen mit anderen liegt in der alleinigen Verantwortung des Benutzers</string>
   <string name="synchronizing_account">Konto wird synchronisiert</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_explanation">Es wurde(n) %1$s der Daten auf externem Speicher gefunden. Diese werden auf den sicheren Speicher auf dem Gerät verschoben. Verbleibende Dateien auf externem Speicher werden nach der Migration aufgeräumt, um Duplikate und Sicherheitslücken vorzubeugen.</string>
+  <string name="scoped_storage_wizard_intro">Ihre App wurde aktualisiert. Dieses Anwendungs-Update migriert Ihre Dateien an einen sichereren Ort auf Ihrem Gerät. Diese einmalige Datenmigration ist erforderlich und kann bis zu einer Minute oder länger dauern.</string>
+  <string name="scoped_storage_wizard_intro_button">Lass uns loslegen</string>
+  <string name="scoped_storage_wizard_not_enough_space_warning">⚠️ Ihr freier Speicherplatz auf Ihrem Gerät ist zurzeit begrenzt. Einige Dateien werden möglicherweise nicht migriert. Bitte überprüfen Sie, ob alle heruntergeladenen Dateien nach Abschluss des Vorgangs heruntergeladen bleiben.</string>
+  <string name="scoped_storage_wizard_migrate_and_clean_button">Jetzt migrieren</string>
+  <string name="scoped_storage_wizard_migration_completed">Die Migration war erfolgreich. Ihre Daten sind jetzt sicherer als jemals zuvor.</string>
+  <string name="scoped_storage_wizard_migration_completed_access_files_button">Auf Ihre Dateien zugreifen</string>
+  <string name="scoped_storage_wizard_migration_in_progress">Ihre Dateien werden gerade migriert. Bitte schalten Sie Ihr Gerät nicht aus.</string>
+  <string name="scoped_storage_wizard_migration_in_progress_button">Wird verarbeitet... Bitte warten</string>
+  <string name="scoped_storage_wizard_title">Mehr Sicherheit für Ihre Dateien</string>
   <!--Security Enforced-->
-  <string name="security_enforced_first_option">PIN gesperrt</string>
+  <string name="security_enforced_title">Bitte wählen Sie eine Option, um diese App zu sperren:</string>
+  <string name="security_enforced_first_option">PIN Sperre</string>
+  <string name="security_enforced_second_option">Sperre mit Muster</string>
+  <!--Release Notes-->
+  <string name="release_notes_header">Neu in %1$s</string>
+  <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
+  <string name="release_notes_proceed">Fortfahren</string>
+  <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
+  <!--Release Notes 2.21-->
 </resources>

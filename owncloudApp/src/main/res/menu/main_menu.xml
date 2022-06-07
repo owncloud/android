@@ -30,5 +30,11 @@
         android:orderInCategory="1"
         android:title="@string/actionbar_select_all"
         android:visible="false" />
+    <item
+        android:id="@+id/action_share_current_folder"
+        android:title="@string/action_share"
+        android:icon="@drawable/ic_action_share"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="1" />
 
 </menu>

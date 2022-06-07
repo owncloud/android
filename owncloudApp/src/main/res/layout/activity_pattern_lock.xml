@@ -1,57 +1,84 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!--
+  ownCloud Android client application
+  Copyright (C) 2012  Bartek Przybylski
+  Copyright (C) 2020 ownCloud GmbH.
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2,
+  as published by the Free Software Foundation.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activityPatternLockLayout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_centerVertical="true"
-    android:gravity="center"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:padding="@dimen/standard_padding">
 
     <TextView
         android:id="@+id/header_pattern"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/pattern_enter_pattern"
+        android:layout_marginTop="@dimen/standard_margin"
+        android:text="@string/pass_code_enter_pass_code"
         android:textColor="@android:color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/explanation_pattern"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:layout_margin="@dimen/standard_margin"
+        android:gravity="center"
         android:text="@string/pattern_configure_your_pattern_explanation"
         android:textAppearance="@android:style/TextAppearance.Small"
-        android:textSize="14sp" />
-
-    <com.andrognito.patternlockview.PatternLockView
-        android:id="@+id/pattern_lock_view"
-        android:layout_width="280dp"
-        android:layout_height="280dp"
-        android:focusable="true"
-        app:correctStateColor="@color/primary"
-        app:dotCount="3"
-        app:normalStateColor="@color/primary"
-        app:wrongStateColor="@color/primary">
-
-        <requestFocus />
-    </com.andrognito.patternlockview.PatternLockView>
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_pattern" />
 
     <TextView
         android:id="@+id/error_pattern"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/standard_margin"
         android:textColor="@color/warning"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/patternContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/cancel_pattern"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@android:string/cancel"
-        android:theme="@style/Button.Primary" />
+    <com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout
+        android:id="@+id/patternContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="@dimen/standard_margin"
+        android:layout_marginVertical="@dimen/standard_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent">
 
-</LinearLayout>
+        <com.andrognito.patternlockview.PatternLockView
+            android:id="@+id/pattern_lock_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            app:correctStateColor="@color/primary"
+            app:dotCount="3"
+            app:normalStateColor="@color/primary"
+            app:wrongStateColor="@color/primary">
+
+            <requestFocus />
+
+        </com.andrognito.patternlockview.PatternLockView>
+    </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,6 +29,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.DocumentsContract
 import com.owncloud.android.R
+import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
 import org.koin.java.KoinJavaComponent.inject
 
@@ -60,6 +61,7 @@ class RemoveAccountDialogFragment : ConfirmationDialogFragment(), ConfirmationDi
         val dialog = super.onCreateDialog(savedInstanceState)
         targetAccount = requireArguments().getParcelable(ARG_TARGET_ACCOUNT)
         setOnConfirmationListener(this)
+        dialog.avoidScreenshotsIfNeeded()
         return dialog
     }
 

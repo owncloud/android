@@ -19,7 +19,7 @@ Open a terminal and type 'android' to start the Android SDK Manager. To build th
 
 * Android SDK Tools and Android SDK Platform-tools (already installed); upgrade to their last versions is usually a good idea.
 * No longer need to specify a version for the build tools, Gradle plugin uses the minimum required version by default.
-* Android 8.0 (API 26), SDK Platform; needed to build the owncloud app.
+* Android 12.0 (API 31), SDK Platform; needed to build the owncloud app.
 
 Install any other package you consider interesting, such as emulators.
 
@@ -45,7 +45,7 @@ At this point you can continue using different tools to build the project. Secti
 
 ### 2. Working with Android Studio.
 
-[Android Studio][5] is currently the official Android IDE. Due to this, we recommend it as the IDE to use in your development environment. Follow the installation instructions [here][6].
+[Android Studio][5] is currently the official Android IDE. Due to this, we recommend it as the IDE to use in your development environment.
 
 We recommend to use the last version available in the stable channel of Android Studio updates. See what update channel is your Android Studio checking for updates in the menu path 'Help'/'Check for Update...'/link 'Updates' in the dialog.
 
@@ -58,7 +58,7 @@ To set up the project in Android Studio follow the next steps:
 
 ### 3. Working in a terminal with Gradle:
 
-[Gradle][7] is the build system used by Android Studio to manage the building operations on Android apps. You do not need to install Gradle in your system, and Google recommends not to do it, but instead trusting on the [Gradle wrapper][8] included in the project.
+[Gradle][6] is the build system used by Android Studio to manage the building operations on Android apps. You do not need to install Gradle in your system, and Google recommends not to do it, but instead trusting on the [Gradle wrapper][7] included in the project.
 
 * Open a terminal and go to the 'android' directory that contains the repository.
 * Make sure you have called ```git submodule update``` whenever you switched branches
@@ -76,9 +76,6 @@ The generated APK file is saved in android/build/outputs/apk as android-debug.ap
 [2]: https://git-scm.com/downloads
 [3]: https://developer.android.com/sdk/index.html
 [4]: https://developer.android.com/sdk/installing/index.html
-[5]: https://developer.android.com/tools/studio/index.html
-[6]: https://developer.android.com/sdk/installing/index.html?pkg=studio
-[7]: https://gradle.org/
-[8]: https://docs.gradle.org/current/userguide/gradle_wrapper.html
-[9]: https://eclipse.org/
-[10]: http://developer.android.com/sdk/installing/installing-adt.html
+[5]: https://developer.android.com/studio
+[6]: https://gradle.org/
+[7]: https://docs.gradle.org/current/userguide/gradle_wrapper.html

@@ -5,7 +5,9 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author David Crespo Ríos
+ * @author Juan Carlos Garrote Gascón
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,6 +32,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.core.content.pm.PackageInfoCompat
+import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
@@ -40,19 +44,22 @@ import com.owncloud.android.dependecyinjection.repositoryModule
 import com.owncloud.android.dependecyinjection.useCaseModule
 import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.extensions.createNotificationChannel
-import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity
+import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.BiometricManager
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
-import com.owncloud.android.presentation.ui.security.PassCodeManager
 import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.security.PatternManager
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeManager
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
 import com.owncloud.android.providers.LogsProvider
+import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.WhatsNewActivity
+import com.owncloud.android.utils.CONFIGURATION_ALLOW_SCREENSHOTS
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
+import com.owncloud.android.utils.DebugInjector
 import com.owncloud.android.utils.FILE_SYNC_CONFLICT_CHANNEL_ID
 import com.owncloud.android.utils.FILE_SYNC_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID
@@ -70,6 +77,7 @@ import timber.log.Timber
  * classes
  */
 class MainApp : Application() {
+
     override fun onCreate() {
         super.onCreate()
 
@@ -77,7 +85,7 @@ class MainApp : Application() {
 
         startLogsIfEnabled()
 
-        OwnCloudClient.setContext(appContext)
+        DebugInjector.injectDebugTools(appContext)
 
         createNotificationChannels()
 
@@ -86,21 +94,17 @@ class MainApp : Application() {
         // initialise thumbnails cache on background thread
         ThumbnailsCacheManager.InitDiskCacheTask().execute()
 
+        initDependencyInjection()
+
         // register global protection with pass code, pattern lock and biometric lock
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
                 Timber.d("${activity.javaClass.simpleName} onCreate(Bundle) starting")
-                val preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-                val passCodeEnabled = preferences.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
-                val patternCodeEnabled = preferences.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
-                if (!enabledLogging) {
-                    // To enable biometric you need to enable passCode or pattern, so no need to add check to if
-                    if (passCodeEnabled || patternCodeEnabled) {
-                        activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-                    } else {
-                        activity.window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
-                    }
-                } // else, let it go, or taking screenshots & testing will not be possible
+
+                // To prevent taking screenshots in MDM
+                if (!areScreenshotsAllowed()) {
+                    activity.window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                }
 
                 // If there's any lock protection, don't show wizard at this point, show it when lock activities
                 // have finished
@@ -109,7 +113,12 @@ class MainApp : Application() {
                     activity !is BiometricActivity
                 ) {
                     StorageMigrationActivity.runIfNeeded(activity)
-                    WhatsNewActivity.runIfNeeded(activity)
+                    if (isFirstRun()) {
+                        WhatsNewActivity.runIfNeeded(activity)
+
+                    } else {
+                        ReleaseNotesActivity.runIfNeeded(activity)
+                    }
                 }
 
                 PreferenceManager.migrateFingerprintToBiometricKey(applicationContext)
@@ -140,12 +149,6 @@ class MainApp : Application() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     BiometricManager.onActivityStopped(activity)
                 }
-                if (activity is PassCodeActivity ||
-                    activity is PatternActivity ||
-                    activity is BiometricActivity
-                ) {
-                    WhatsNewActivity.runIfNeeded(activity)
-                }
             }
 
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
@@ -157,7 +160,6 @@ class MainApp : Application() {
             }
         })
 
-        initDependencyInjection()
     }
 
     private fun startLogsIfEnabled() {
@@ -175,6 +177,17 @@ class MainApp : Application() {
         if (enabledLogging) {
             LogsProvider(applicationContext).startLogging()
         }
+    }
+
+    /**
+     * Screenshots allowed in debug mode. Devs and tests <3
+     * Otherwise, depends on branding.
+     */
+    private fun areScreenshotsAllowed(): Boolean {
+        if (BuildConfig.DEBUG) return true
+
+        val mdmProvider = MdmProvider(applicationContext)
+        return mdmProvider.getBrandingBoolean(CONFIGURATION_ALLOW_SCREENSHOTS, R.bool.allow_screenshots)
     }
 
     private fun createNotificationChannels() {
@@ -218,13 +231,22 @@ class MainApp : Application() {
         )
     }
 
+    private fun isFirstRun(): Boolean {
+        if (getLastSeenVersionCode() != 0) {
+            return false
+        }
+        return AccountUtils.getCurrentOwnCloudAccount(appContext) == null
+    }
+
     companion object {
-        private const val BETA_VERSION = "beta"
+        const val MDM_FLAVOR = "mdm"
 
         lateinit var appContext: Context
             private set
         var enabledLogging: Boolean = false
             private set
+
+        const val PREFERENCE_KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode"
 
         /**
          * Next methods give access in code to some constants that need to be defined in string resources to be referred
@@ -237,12 +259,12 @@ class MainApp : Application() {
         val versionCode: Int
             get() {
                 return try {
-                    val thisPackageName = appContext.packageName
-                    appContext.packageManager.getPackageInfo(thisPackageName, 0).versionCode
+                    val pInfo: PackageInfo = appContext.packageManager.getPackageInfo(appContext.packageName, 0)
+                    val longVersionCode: Long = PackageInfoCompat.getLongVersionCode(pInfo)
+                    longVersionCode.toInt()
                 } catch (e: PackageManager.NameNotFoundException) {
                     0
                 }
-
             }
 
         val authority: String
@@ -275,23 +297,6 @@ class MainApp : Application() {
                 return String.format(appString, version)
             }
 
-        val isBeta: Boolean
-            get() {
-                var isBeta = false
-                try {
-                    val packageName = appContext.packageName
-                    val packageInfo = appContext.packageManager.getPackageInfo(packageName, 0)
-                    val versionName = packageInfo.versionName
-                    if (versionName.contains(BETA_VERSION)) {
-                        isBeta = true
-                    }
-                } catch (e: PackageManager.NameNotFoundException) {
-                    Timber.e(e)
-                }
-
-                return isBeta
-            }
-
         fun initDependencyInjection() {
             stopKoin()
             startKoin {
@@ -307,6 +312,11 @@ class MainApp : Application() {
                     )
                 )
             }
+        }
+
+        fun getLastSeenVersionCode(): Int {
+            val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
+            return pref.getInt(PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, 0)
         }
     }
 }

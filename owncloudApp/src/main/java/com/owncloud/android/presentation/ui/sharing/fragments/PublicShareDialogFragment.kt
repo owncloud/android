@@ -44,6 +44,7 @@ import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.utils.Event.EventObserver
+import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
@@ -203,6 +204,8 @@ class PublicShareDialogFragment : DialogFragment() {
 
         binding.saveButton.setOnClickListener { onSaveShareSetting() }
         binding.cancelButton.setOnClickListener { dismiss() }
+
+        dialog?.avoidScreenshotsIfNeeded()
     }
 
     private fun initTitleAndLabels() {
@@ -442,17 +445,18 @@ class PublicShareDialogFragment : DialogFragment() {
     }
 
     private fun observeCapabilities() {
-        ocCapabilityViewModel.capabilities.observe(
-            this,
-            { event ->
-                when (val uiResult = event.peekContent()) {
-                    is UIResult.Success -> {
-                        updateCapabilities(uiResult.data)
-                        listener?.dismissLoading()
-                    }
+        ocCapabilityViewModel.capabilities.observe(this) { event ->
+            when (val uiResult = event.peekContent()) {
+                is UIResult.Success -> {
+                    updateCapabilities(uiResult.data)
+                    listener?.dismissLoading()
+                }
+                is UIResult.Error -> {
+                }
+                is UIResult.Loading -> {
                 }
             }
-        )
+        }
     }
 
     private fun observePublicShareCreation() {

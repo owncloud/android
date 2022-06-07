@@ -1,0 +1,6 @@
+Enhancement: Send for file multiselect
+
+Send multiple files at once if they are downloaded.
+
+https://github.com/owncloud/android/issues/3491
+https://github.com/owncloud/android/pull/3638

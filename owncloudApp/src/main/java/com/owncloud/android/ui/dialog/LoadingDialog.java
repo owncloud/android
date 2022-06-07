@@ -34,6 +34,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
+import com.owncloud.android.extensions.DialogExtKt;
 import com.owncloud.android.utils.PreferenceUtils;
 
 public class LoadingDialog extends DialogFragment {
@@ -51,8 +52,8 @@ public class LoadingDialog extends DialogFragment {
     /**
      * Public factory method to get dialog instances.
      *
-     * @param messageId     DataResult id for a message to show in the dialog.
-     * @param cancelable    If 'true', the dialog can be cancelled by the user input (BACK button, touch outside...)
+     * @param messageId  DataResult id for a message to show in the dialog.
+     * @param cancelable If 'true', the dialog can be cancelled by the user input (BACK button, touch outside...)
      * @return New dialog instance, ready to show.
      */
     public static LoadingDialog newInstance(int messageId, boolean cancelable) {
@@ -109,6 +110,7 @@ public class LoadingDialog extends DialogFragment {
             };
             dialog.setOnKeyListener(keyListener);
         }
+        DialogExtKt.avoidScreenshotsIfNeeded(dialog);
         return dialog;
     }
 

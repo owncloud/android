@@ -31,6 +31,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.files.services.FileDownloader;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.SortFilesUtils;
 import timber.log.Timber;
 
 import java.util.HashMap;
@@ -81,7 +82,7 @@ public class PreviewImagePagerAdapter extends FragmentStatePagerAdapter {
         mStorageManager = storageManager;
         mImageFiles = mStorageManager.getFolderImages(parentFolder);
 
-        mImageFiles = FileStorageUtils.sortFolder(mImageFiles, FileStorageUtils.mSortOrderFileDisp,
+        mImageFiles = new SortFilesUtils().sortFiles(mImageFiles, FileStorageUtils.mSortOrderFileDisp,
                 FileStorageUtils.mSortAscendingFileDisp);
 
         mObsoleteFragments = new HashSet<>();

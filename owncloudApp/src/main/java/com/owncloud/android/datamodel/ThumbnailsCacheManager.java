@@ -149,14 +149,9 @@ public class ThumbnailsCacheManager {
         private Object mFile;
         private FileDataStorageManager mStorageManager;
 
-        public ThumbnailGenerationTask(ImageView imageView, FileDataStorageManager storageManager,
-                                       Account account) {
+        public ThumbnailGenerationTask(ImageView imageView, Account account) {
             // Use a WeakReference to ensure the ImageView can be garbage collected
             mImageViewReference = new WeakReference<>(imageView);
-            if (storageManager == null) {
-                throw new IllegalArgumentException("storageManager must not be NULL");
-            }
-            mStorageManager = storageManager;
             mAccount = account;
         }
 
@@ -274,36 +269,36 @@ public class ThumbnailsCacheManager {
 
                 int px = getThumbnailDimension();
 
-                    // Download thumbnail from server
-                    if (mClient != null) {
-                        GetMethod get;
-                        try {
-                            String uri = getPreviewUrl(file, mAccount);
-                            Timber.d("URI: %s", uri);
-                            get = new GetMethod(new URL(uri));
-                            int status = mClient.executeHttpMethod(get);
-                            if (status == HttpConstants.HTTP_OK) {
-                                InputStream inputStream = get.getResponseBodyAsStream();
-                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                thumbnail = ThumbnailUtils.extractThumbnail(bitmap, px, px);
+                // Download thumbnail from server
+                if (mClient != null) {
+                    GetMethod get;
+                    try {
+                        String uri = getPreviewUrl(file, mAccount);
+                        Timber.d("URI: %s", uri);
+                        get = new GetMethod(new URL(uri));
+                        int status = mClient.executeHttpMethod(get);
+                        if (status == HttpConstants.HTTP_OK) {
+                            InputStream inputStream = get.getResponseBodyAsStream();
+                            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                            thumbnail = ThumbnailUtils.extractThumbnail(bitmap, px, px);
 
-                                // Handle PNG
-                                if (file.getMimetype().equalsIgnoreCase("image/png")) {
-                                    thumbnail = handlePNG(thumbnail, px);
-                                }
-
-                                // Add thumbnail to cache
-                                if (thumbnail != null) {
-                                    addBitmapToCache(imageKey, thumbnail);
-                                }
-                            } else {
-                                mClient.exhaustResponse(get.getResponseBodyAsStream());
+                            // Handle PNG
+                            if (file.getMimetype().equalsIgnoreCase("image/png")) {
+                                thumbnail = handlePNG(thumbnail, px);
                             }
-                        } catch (Exception e) {
-                            Timber.e(e);
+
+                            // Add thumbnail to cache
+                            if (thumbnail != null) {
+                                addBitmapToCache(imageKey, thumbnail);
+                            }
+                        } else {
+                            mClient.exhaustResponse(get.getResponseBodyAsStream());
                         }
+                    } catch (Exception e) {
+                        Timber.e(e);
                     }
                 }
+            }
 
             return thumbnail;
 

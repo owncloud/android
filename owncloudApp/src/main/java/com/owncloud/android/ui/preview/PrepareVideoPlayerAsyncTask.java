@@ -1,3 +1,22 @@
+/**
+ * ownCloud Android client application
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
 package com.owncloud.android.ui.preview;
 
 import android.accounts.Account;
@@ -6,7 +25,6 @@ import android.accounts.OperationCanceledException;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.util.Base64;
 
 import com.google.android.exoplayer2.MediaItem;
@@ -16,7 +34,7 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.OCFile;
@@ -36,15 +54,14 @@ import java.util.Map;
  */
 public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSource> {
 
-    private Context mContext;
+    private final Context mContext;
     private final WeakReference<OnPrepareVideoPlayerTaskListener> mListener;
-    private OCFile mFile;
-    private Account mAccount;
+    private final OCFile mFile;
+    private final Account mAccount;
 
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
 
-    public PrepareVideoPlayerAsyncTask(Context context, OnPrepareVideoPlayerTaskListener listener,
-                                       OCFile file, Account account) {
+    public PrepareVideoPlayerAsyncTask(Context context, OnPrepareVideoPlayerTaskListener listener, OCFile file, Account account) {
         mContext = context;
         mListener = new WeakReference<>(listener);
         mFile = file;
@@ -110,18 +127,17 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
 
         if (file.isDown()) {
 
-            return new DefaultHttpDataSourceFactory(MainApp.Companion.getUserAgent(), bandwidthMeter);
+            return new DefaultHttpDataSource.Factory();
 
         } else {
 
             try {
-                OwnCloudCredentials credentials = AccountUtils.
-                        getCredentialsForAccount(MainApp.Companion.getAppContext(), account);
+                OwnCloudCredentials credentials = AccountUtils.getCredentialsForAccount(MainApp.Companion.getAppContext(), account);
 
                 String login = credentials.getUsername();
                 String password = credentials.getAuthToken();
 
-                Map<String, String> params = new HashMap<String, String>(1);
+                Map<String, String> params = new HashMap<>(1);
 
                 if (credentials instanceof OwnCloudBasicCredentials) { // Basic auth
                     String cred = login + ":" + password;

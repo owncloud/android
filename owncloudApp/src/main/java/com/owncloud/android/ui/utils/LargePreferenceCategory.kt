@@ -31,9 +31,9 @@ class LargePreferenceCategory @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : PreferenceCategory(context, attrs) {
 
-    override fun onBindViewHolder(holder: PreferenceViewHolder?) {
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
-        val summary = holder?.findViewById(android.R.id.summary) as? TextView
+        val summary = holder.findViewById(android.R.id.summary) as? TextView
         summary?.apply {
             isSingleLine = false  // Enable multiple line support
             maxLines = 3

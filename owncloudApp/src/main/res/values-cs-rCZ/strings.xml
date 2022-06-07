@@ -61,6 +61,8 @@
   <string name="prefs_camera_video_upload_summary">Automaticky nahrát video snímané kamerou</string>
   <string name="prefs_camera_video_upload_path_title">Cesta k nahrání videa</string>
   <string name="prefs_camera_video_upload_on_wifi">Odesílat videa pouze přes wifi</string>
+  <string name="prefs_subsection_advanced">Pokročilé</string>
+  <string name="prefs_show_hidden_files">Zobrazit skryté soubory</string>
   <string name="prefs_log_title">Povolit logování</string>
   <string name="prefs_log_summary">Použito k zaznamenávání problémů</string>
   <string name="prefs_log_title_history">Historie logování</string>
@@ -241,6 +243,13 @@
   <string name="pass_code_wrong">Nesprávný bezpečnostní kód</string>
   <string name="pass_code_error_set">Nastala chyba při nastavování bezpečnostního kódu</string>
   <string name="pass_code_error_remove">Nastala chyba při odstraňování bezpečnostního kódu</string>
+  <string name="numberkeyboard_zero">0</string>
+  <string name="numberkeyboard_one">1</string>
+  <string name="numberkeyboard_two">2</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
+  <string name="numberkeyboard_six">6</string>
   <string name="biometric_not_enrolled">Povolte alespoň jeden biometrický způsob ověření k používání této specialitky</string>
   <string name="biometric_prompt_title">Biometrické přihlášení</string>
   <string name="biometric_prompt_subtitle">Přihlásit se s použitím biometrických přihlašovacích údajů</string>
@@ -564,4 +573,7 @@ správce systému.</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Zámek bezpečnostního kódu</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Pokračovat</string>
+  <!--Release Notes 2.21-->
 </resources>

@@ -31,6 +31,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
+import com.owncloud.android.extensions.DialogExtKt;
 
 /**
  * Dialog which will be displayed to user upon keep-in-sync file conflict.
@@ -57,7 +58,7 @@ public class ConflictsResolveDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new AlertDialog.Builder(getActivity())
+        AlertDialog d = new AlertDialog.Builder(getActivity())
                 .setIcon(R.drawable.ic_warning)
                 .setTitle(R.string.conflict_title)
                 .setMessage(getString(R.string.conflict_message))
@@ -80,6 +81,10 @@ public class ConflictsResolveDialog extends DialogFragment {
                             }
                         })
                 .create();
+
+        DialogExtKt.avoidScreenshotsIfNeeded(d);
+
+        return d;
     }
 
     public void showDialog(AppCompatActivity activity) {
@@ -91,15 +96,6 @@ public class ConflictsResolveDialog extends DialogFragment {
         ft.addToBackStack(null);
 
         this.show(ft, "dialog");
-    }
-
-    public void dismissDialog(AppCompatActivity activity) {
-        Fragment prev = activity.getSupportFragmentManager().findFragmentByTag(getTag());
-        if (prev != null) {
-            FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
-            ft.remove(prev);
-            ft.commit();
-        }
     }
 
     @Override

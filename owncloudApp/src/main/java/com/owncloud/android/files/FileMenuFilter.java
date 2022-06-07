@@ -5,7 +5,8 @@
  * @author Christian Schabesberger
  * @author Abel García de Prada
  * @author Shashvat Kedia
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author David Crespo Rios
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -197,9 +198,8 @@ public class FileMenuFilter {
         }
 
         // OPEN WITH (different to preview!)
-        if (!isSingleFile() || !anyFileDown() || synchronizing) {
+        if (!isSingleFile() || synchronizing) {
             toHide.add(R.id.action_open_file_with);
-
         } else {
             toShow.add(R.id.action_open_file_with);
         }
@@ -248,7 +248,7 @@ public class FileMenuFilter {
         // SEND
         boolean sendAllowed = (mContext != null &&
                 mContext.getString(R.string.send_files_to_other_apps).equalsIgnoreCase("on"));
-        if (!isSingleFile() || !sendAllowed || synchronizing || videoStreaming || onlyAvailableOffline) {
+        if (containsFolder() || (!areDownloaded() && !isSingleFile()) || !sendAllowed || synchronizing || videoStreaming || onlyAvailableOffline) {
             toHide.add(R.id.action_send_file);
         } else {
             toShow.add(R.id.action_send_file);
@@ -335,6 +335,15 @@ public class FileMenuFilter {
 
     private boolean isSingleFile() {
         return isSingleSelection() && !mFiles.get(0).isFolder();
+    }
+
+    private boolean areDownloaded() {
+        for (OCFile file : mFiles) {
+            if (!file.isDown()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean containsFolder() {

@@ -41,6 +41,8 @@
   <string name="prefs_camera_video_upload_summary">카메라로 찍은 동영상 자동으로 업로드</string>
   <string name="prefs_camera_video_upload_path_title">동영상 업로드 경로</string>
   <string name="prefs_camera_video_upload_on_wifi">Wi-Fi에서만 동영상 업로드</string>
+  <string name="prefs_subsection_advanced">고급</string>
+  <string name="prefs_show_hidden_files">숨김 파일 보이기</string>
   <string name="prefs_log_title">로그 활성화</string>
   <string name="prefs_log_summary">문제점을 기록하는 데 사용됩니다</string>
   <string name="prefs_log_title_history">과거 기록</string>
@@ -187,6 +189,9 @@
   <string name="pass_code_remove_your_pass_code">내 암호 삭제</string>
   <string name="pass_code_mismatch">암호가 일치하지 않습니다</string>
   <string name="pass_code_wrong">암호가 잘못됨</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="media_notif_ticker">%1$s 음악 재생기</string>
   <string name="media_state_playing">%1$s (재생 중)</string>
   <string name="media_state_loading">%1$s (불러오는 중)</string>
@@ -466,4 +471,6 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">암호 잠금</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">진행</string>
 </resources>

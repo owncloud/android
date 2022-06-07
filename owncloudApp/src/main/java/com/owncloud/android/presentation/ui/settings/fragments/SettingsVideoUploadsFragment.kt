@@ -29,6 +29,9 @@ import android.provider.DocumentsContract
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.CheckBoxPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -46,8 +49,10 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_WIFI
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
+import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
 import com.owncloud.android.utils.DisplayUtils
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
@@ -113,18 +118,22 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
     }
 
     private fun initLiveDataObservers() {
-        videosViewModel.videoUploads.observe(viewLifecycleOwner, { videoUploadsConfiguration ->
-            enableVideoUploads(videoUploadsConfiguration != null)
-            videoUploadsConfiguration?.let {
-                prefVideoUploadsAccount?.value = it.accountName
-                prefVideoUploadsPath?.summary = DisplayUtils.getPathWithoutLastSlash(it.uploadPath)
-                prefVideoUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
-                prefVideoUploadsOnWifi?.isChecked = it.wifiOnly
-                prefVideoUploadsOnCharging?.isChecked = it.chargingOnly
-                prefVideoUploadsBehaviour?.value = it.behavior.name
-                prefVideoUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
-            } ?: resetFields()
-        })
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                videosViewModel.videoUploads.collect { videoUploadsConfiguration ->
+                    enableVideoUploads(videoUploadsConfiguration != null)
+                    videoUploadsConfiguration?.let {
+                        prefVideoUploadsAccount?.value = it.accountName
+                        prefVideoUploadsPath?.summary = DisplayUtils.getPathWithoutLastSlash(it.uploadPath)
+                        prefVideoUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
+                        prefVideoUploadsOnWifi?.isChecked = it.wifiOnly
+                        prefVideoUploadsOnCharging?.isChecked = it.chargingOnly
+                        prefVideoUploadsBehaviour?.value = it.behavior.name
+                        prefVideoUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
+                    } ?: resetFields()
+                }
+            }
+        }
     }
 
     private fun initPreferenceListeners() {
@@ -159,6 +168,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
             }
             val intent = Intent(activity, UploadPathActivity::class.java).apply {
                 putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, uploadPath)
+                putExtra(FolderPickerActivity.EXTRA_PICKER_OPTION, FolderPickerActivity.PickerMode.CAMERA_FOLDER)
                 putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_ACCOUNT, videosViewModel.getVideoUploadsAccount())
             }
             selectVideoUploadsPathLauncher.launch(intent)

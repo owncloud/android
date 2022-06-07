@@ -67,6 +67,7 @@
     <bool name="feedback_enabled">true</bool>
     <bool name="privacy_policy_enabled">true</bool>
     <bool name="wizard_enabled">true</bool>
+    <bool name="release_notes_enabled">true</bool>
     <string name="url_privacy_policy" formatted="false">https://owncloud.com/android-app-privacy-policy/</string>
     <string name="url_help" formatted="false">https://doc.owncloud.com/android</string>
     <string name="url_imprint" formatted="false"></string>
@@ -110,6 +111,13 @@
     <integer name="passcode_digits">4</integer>
 
     <!--Security enforced -->
-    <bool name="lock_enforced">false</bool>
+    <integer name="lock_enforced">0</integer>
+    <integer name="lock_delay_enforced">0</integer>
+
+    <!-- Apm settings -->
+    <bool name="clear_cookies_on_validation">false</bool>
+
+    <!-- Screenshots -->
+    <bool name="allow_screenshots">true</bool>
 
 </resources>

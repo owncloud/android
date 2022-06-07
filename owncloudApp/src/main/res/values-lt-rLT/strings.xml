@@ -44,6 +44,8 @@
   <string name="prefs_camera_video_upload_summary">Automatiškai įkelti video iš kameros</string>
   <string name="prefs_camera_video_upload_path_title">Video įkėlimo kelias</string>
   <string name="prefs_camera_video_upload_on_wifi">Įkelti video tik veikiant WiFi</string>
+  <string name="prefs_subsection_advanced">Išplėstiniai</string>
+  <string name="prefs_show_hidden_files">Rodyti paslėptus failus</string>
   <string name="prefs_log_title">Įjungti žurnalą</string>
   <string name="prefs_log_summary">Tai naudojama problemų žurnalo vedimui</string>
   <string name="prefs_log_title_history">Žurnalo istorija</string>
@@ -195,6 +197,7 @@
   <string name="pass_code_remove_your_pass_code">Užrakto pašalinimas</string>
   <string name="pass_code_mismatch">Nesutampa užraktas</string>
   <string name="pass_code_wrong">Neteisingas užraktas</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="media_notif_ticker">%1$s muzikos grotuvas</string>
   <string name="media_state_playing">%1$s (grojama)</string>
   <string name="media_state_loading">%1$s (įkeliama)</string>
@@ -471,4 +474,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Užrakto kodas</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Vykdyti</string>
+  <!--Release Notes 2.21-->
 </resources>

@@ -80,8 +80,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     public static final String EXTRA_SERVER_VERSION = FileSyncAdapter.class.getName() + ".EXTRA_SERVER_VERSION";
     public static final String EXTRA_RESULT = FileSyncAdapter.class.getName() + ".EXTRA_RESULT";
 
-    private static final int MAX_REPEAT_COUNTER = 1;
-
     /**
      * Time stamp for the current synchronization process, used to distinguish fresh data
      */
@@ -379,8 +377,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      * @param result        Result of an individual folder synchronization,
      *                      if completed; may be null.
      */
-    private void sendLocalBroadcast(String event, String dirRemotePath,
-                                    RemoteOperationResult result) {
+    private void sendLocalBroadcast(String event, String dirRemotePath, RemoteOperationResult result) {
         Timber.d("Send broadcast %s", event);
         Intent intent = new Intent(event);
         intent.putExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME, getAccount().name);
@@ -436,7 +433,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             // TODO put something smart in the contentIntent below
             notificationBuilder
                     .setContentIntent(PendingIntent.getActivity(
-                            getContext(), (int) System.currentTimeMillis(), new Intent(), 0
+                            getContext(), (int) System.currentTimeMillis(), new Intent(), NotificationUtils.INSTANCE.getPendingIntentFlags()
                     ))
                     .setContentTitle(i18n(R.string.sync_fail_in_favourites_ticker))
                     .setContentText(i18n(R.string.sync_fail_in_favourites_content,
@@ -450,7 +447,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             // TODO put something smart in the contentIntent below
             notificationBuilder
                     .setContentIntent(PendingIntent.getActivity(
-                            getContext(), (int) System.currentTimeMillis(), new Intent(), 0
+                            getContext(), (int) System.currentTimeMillis(), new Intent(), NotificationUtils.INSTANCE.getPendingIntentFlags()
                     ))
                     .setContentTitle(i18n(R.string.sync_conflicts_in_favourites_ticker))
                     .setContentText(i18n(R.string.sync_conflicts_in_favourites_ticker, mConflictsFound));
@@ -490,7 +487,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      *
      * @param key  String key.
      * @param args Arguments to replace in a formatted string.
-     * @return
      */
     private String i18n(int key, Object... args) {
         return getContext().getString(key, args);

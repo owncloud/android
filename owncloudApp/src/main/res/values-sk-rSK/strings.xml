@@ -47,6 +47,8 @@
   <string name="prefs_camera_video_upload_summary">Automatické nahratie videií z fotoaparátu/kamery</string>
   <string name="prefs_camera_video_upload_path_title">Cesta pre nahratie videa</string>
   <string name="prefs_camera_video_upload_on_wifi">Nahrávanie videí je povolené len cez WIFI</string>
+  <string name="prefs_subsection_advanced">Rozšírené</string>
+  <string name="prefs_show_hidden_files">Zobraziť skryté súbory</string>
   <string name="prefs_log_title">Povoliť logovanie</string>
   <string name="prefs_log_summary">Toto je použité pre logovanie problémov</string>
   <string name="prefs_log_title_history">História logov</string>
@@ -159,6 +161,9 @@
   <string name="pass_code_remove_your_pass_code">Zmazať svoje heslo</string>
   <string name="pass_code_mismatch">Heslá sa nezhodujú</string>
   <string name="pass_code_wrong">Nesprávne heslo</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="media_notif_ticker">Prehrávač hudby %1$s</string>
   <string name="media_state_playing">%1$s (prehráva)</string>
   <string name="media_state_loading">%1$s (načítava)</string>
@@ -457,4 +462,6 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Heslo</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Vykonať</string>
 </resources>

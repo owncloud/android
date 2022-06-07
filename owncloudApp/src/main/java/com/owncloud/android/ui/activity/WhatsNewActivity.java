@@ -3,8 +3,9 @@
  *
  * @author Brtosz Przybylski
  * @author Christian Schabesberger
+ * @author David Crespo Ríos
  * Copyright (C) 2020 Bartosz Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -43,19 +44,15 @@ import androidx.viewpager.widget.ViewPager;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.features.FeatureList;
 import com.owncloud.android.features.FeatureList.FeatureItem;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
-import com.owncloud.android.presentation.ui.security.PassCodeActivity;
 import com.owncloud.android.ui.whatsnew.ProgressIndicator;
 
 /**
  * @author Bartosz Przybylski
  */
 public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPageChangeListener {
-
-    private static final String KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode";
 
     private ImageButton mForwardFinishButton;
     private ProgressIndicator mProgress;
@@ -69,10 +66,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mProgress = findViewById(R.id.progressIndicator);
         mPager = findViewById(R.id.contentPanel);
 
-        boolean isBeta = MainApp.Companion.isBeta();
-
         FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
-                FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(), isBeta));
+                FeatureList.get());
 
         mProgress.setNumberOfSteps(adapter.getCount());
         mPager.setAdapter(adapter);
@@ -96,7 +91,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         // Wizard already shown
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(KEY_LAST_SEEN_VERSION_CODE, MainApp.Companion.getVersionCode());
+        editor.putInt(MainApp.PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, MainApp.Companion.getVersionCode());
         editor.apply();
     }
 
@@ -115,18 +110,6 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         }
     }
 
-    static private int getLastSeenVersionCode() {
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(MainApp.Companion.getAppContext());
-        return pref.getInt(KEY_LAST_SEEN_VERSION_CODE, 0);
-    }
-
-    static private boolean isFirstRun() {
-        if (getLastSeenVersionCode() != 0) {
-            return false;
-        }
-        return AccountUtils.getCurrentOwnCloudAccount(MainApp.Companion.getAppContext()) == null;
-    }
-
     static public void runIfNeeded(Context context) {
         if (context instanceof WhatsNewActivity) {
             return;
@@ -138,17 +121,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     }
 
     static private boolean shouldShow(Context context) {
-        boolean isBeta = MainApp.Companion.isBeta();
-        boolean showWizard = context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG;
-        return showWizard &&
-                ((isFirstRun() && context instanceof LoginActivity) ||
-                        (
-                                !(isFirstRun() && (context instanceof FileDisplayActivity)) &&
-                                        !(context instanceof PassCodeActivity) &&
-                                        (FeatureList.getFiltered(getLastSeenVersionCode(), isFirstRun(),
-                                                isBeta).length > 0)
-
-                        ));
+        return context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG
+                && context instanceof LoginActivity; // When it is LoginActivity to start it only once
     }
 
     @Override

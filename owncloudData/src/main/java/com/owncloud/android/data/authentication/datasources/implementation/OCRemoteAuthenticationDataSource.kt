@@ -27,7 +27,7 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.OwnCloudClient.WEBDAV_FILES_PATH_4_0
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
-import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
+import com.owncloud.android.lib.resources.files.GetBaseUrlRemoteOperation
 import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation
 
 class OCRemoteAuthenticationDataSource(
@@ -42,16 +42,15 @@ class OCRemoteAuthenticationDataSource(
     private fun login(ownCloudCredentials: OwnCloudCredentials, serverPath: String): Pair<UserInfo, String?> {
 
         val client: OwnCloudClient =
-            clientManager.getClientForUnExistingAccount(
+            clientManager.getClientForAnonymousCredentials(
                 path = serverPath,
                 requiresNewClient = false
             ).apply { credentials = ownCloudCredentials }
 
-        val checkPathExistenceRemoteOperation = CheckPathExistenceRemoteOperation("/", true)
-        executeRemoteOperation { checkPathExistenceRemoteOperation.execute(client) }
+        val getBaseUrlRemoteOperation = GetBaseUrlRemoteOperation()
+        val rawBaseUrl = executeRemoteOperation { getBaseUrlRemoteOperation.execute(client) }
 
-        val userBaseUri =
-            checkPathExistenceRemoteOperation.redirectionPath?.lastPermanentLocation?.trimEnd(*WEBDAV_FILES_PATH_4_0.toCharArray())
+        val userBaseUri = rawBaseUrl?.replace(WEBDAV_FILES_PATH_4_0, "")
                 ?: client.baseUri.toString()
 
         // Get user info. It is needed to save the account into the account manager

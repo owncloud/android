@@ -88,7 +88,7 @@ public class FileDownloader extends Service
     private Account mCurrentAccount = null;
     private FileDataStorageManager mStorageManager;
 
-    private IndexedForest<DownloadFileOperation> mPendingDownloads = new IndexedForest<>();
+    private final IndexedForest<DownloadFileOperation> mPendingDownloads = new IndexedForest<>();
 
     private DownloadFileOperation mCurrentDownload = null;
 
@@ -250,8 +250,7 @@ public class FileDownloader extends Service
          * {@link FileDownloaderBinder}
          * instance.
          */
-        private Map<Long, WeakReference<OnDatatransferProgressListener>> mBoundListeners =
-                new HashMap<>();
+        private final Map<Long, WeakReference<OnDatatransferProgressListener>> mBoundListeners = new HashMap<>();
 
         /**
          * Cancels a pending or current download of a remote file.
@@ -544,7 +543,7 @@ public class FileDownloader extends Service
                                 new File(download.getSavePath()).getName()))
                 .setWhen(System.currentTimeMillis())
                 .setContentIntent(PendingIntent.getActivity(this, (int) System.currentTimeMillis(), showDetailsIntent
-                        , 0));
+                        , NotificationUtils.INSTANCE.getPendingIntentFlags()));
 
         getNotificationManager().notify(
                 R.string.downloader_download_in_progress_ticker,
@@ -579,8 +578,7 @@ public class FileDownloader extends Service
      * @param downloadResult Result of the download operation.
      * @param download       Finished download operation
      */
-    private void notifyDownloadResult(DownloadFileOperation download,
-                                      RemoteOperationResult downloadResult) {
+    private void notifyDownloadResult(DownloadFileOperation download, RemoteOperationResult downloadResult) {
         getNotificationManager().cancel(R.string.downloader_download_in_progress_ticker);
         if (!downloadResult.isCancelled()) {
             int tickerId = (downloadResult.isSuccess()) ? R.string.downloader_download_succeeded_ticker :
@@ -609,7 +607,7 @@ public class FileDownloader extends Service
                 Intent showDetailsIntent = new Intent();
                 getNotificationBuilder()
                         .setContentIntent(PendingIntent.getActivity(
-                                this, (int) System.currentTimeMillis(), showDetailsIntent, 0));
+                                this, (int) System.currentTimeMillis(), showDetailsIntent, NotificationUtils.INSTANCE.getPendingIntentFlags()));
             }
 
             getNotificationBuilder().setContentText(

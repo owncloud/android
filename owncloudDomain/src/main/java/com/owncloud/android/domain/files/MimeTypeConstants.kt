@@ -21,4 +21,5 @@ package com.owncloud.android.domain.files
 
 const val MIME_DIR = "DIR"
 const val MIME_DIR_UNIX = "httpd/unix-directory"
+const val MIME_SVG = "image/svg+xml"
 val LIST_MIME_DIR = listOf(MIME_DIR, MIME_DIR_UNIX)

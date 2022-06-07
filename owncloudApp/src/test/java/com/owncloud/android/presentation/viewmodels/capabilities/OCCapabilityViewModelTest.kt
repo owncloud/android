@@ -88,8 +88,9 @@ class OCCapabilityViewModelTest {
 
         Dispatchers.setMain(testCoroutineDispatcher)
         startKoin {
+            allowOverride(override = true)
             modules(
-                module(override = true) {
+                module {
                     factory {
                         ocContextProvider
                     }

@@ -1,0 +1,7 @@
+Enhancement: Lock delay enforced
+
+A new local setup's option has been added for the
+application to lock after the selected interval
+
+https://github.com/owncloud/android/issues/3440
+https://github.com/owncloud/android/pull/3547

@@ -31,7 +31,9 @@ import androidx.preference.PreferenceScreen
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
+import com.owncloud.android.presentation.viewmodels.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -41,12 +43,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
     // ViewModel
     private val settingsViewModel by viewModel<SettingsViewModel>()
     private val moreViewModel by viewModel<SettingsMoreViewModel>()
+    private val releaseNotesViewModel by viewModel<ReleaseNotesViewModel>()
 
     private var settingsScreen: PreferenceScreen? = null
     private var subsectionPictureUploads: Preference? = null
     private var subsectionVideoUploads: Preference? = null
     private var subsectionMore: Preference? = null
     private var prefPrivacyPolicy: Preference? = null
+    private var subsectionWhatsNew: Preference? = null
     private var prefAboutApp: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -57,11 +61,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
         subsectionVideoUploads = findPreference(SUBSECTION_VIDEO_UPLOADS)
         subsectionMore = findPreference(SUBSECTION_MORE)
         prefPrivacyPolicy = findPreference(PREFERENCE_PRIVACY_POLICY)
+        subsectionWhatsNew = findPreference(SUBSECTION_WHATSNEW)
         prefAboutApp = findPreference(PREFERENCE_ABOUT_APP)
 
         subsectionPictureUploads?.isVisible = settingsViewModel.isThereAttachedAccount()
         subsectionVideoUploads?.isVisible = settingsViewModel.isThereAttachedAccount()
         subsectionMore?.isVisible = moreViewModel.shouldMoreSectionBeVisible()
+        subsectionWhatsNew?.isVisible = releaseNotesViewModel.shouldWhatsNewSectionBeVisible()
 
         if (moreViewModel.isPrivacyPolicyEnabled()) {
             prefPrivacyPolicy?.setOnPreferenceClickListener {
@@ -70,7 +76,19 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 true
             }
         } else {
-            settingsScreen?.removePreference(prefPrivacyPolicy)
+            settingsScreen?.removePreferenceFromScreen(prefPrivacyPolicy)
+        }
+
+        subsectionWhatsNew?.setOnPreferenceClickListener {
+            val intent = Intent(context, ReleaseNotesActivity::class.java)
+            startActivity(intent)
+            true
+        }
+
+        subsectionWhatsNew?.setOnPreferenceClickListener {
+            val intent = Intent(context, ReleaseNotesActivity::class.java)
+            startActivity(intent)
+            true
         }
 
         prefAboutApp?.apply {
@@ -98,5 +116,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
         private const val SUBSECTION_PICTURE_UPLOADS = "picture_uploads_subsection"
         private const val SUBSECTION_VIDEO_UPLOADS = "video_uploads_subsection"
         private const val SUBSECTION_MORE = "more_subsection"
+
+        // Remove preference with nullability check
+        fun PreferenceScreen?.removePreferenceFromScreen(preference: Preference?) {
+            preference?.let { this?.removePreference(it) }
+        }
+
+        private const val SUBSECTION_WHATSNEW = "whatsNew"
     }
 }

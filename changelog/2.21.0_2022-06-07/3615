@@ -1,0 +1,6 @@
+Enhancement: Prevent taking screenshots
+
+New option to prevent taking screenshots.
+
+https://github.com/owncloud/android/issues/3596
+https://github.com/owncloud/android/pull/3615

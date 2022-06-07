@@ -62,6 +62,8 @@
   <string name="prefs_camera_video_upload_summary">Автоматически загружать видео, записанные камерой</string>
   <string name="prefs_camera_video_upload_path_title">Путь загрузки видео</string>
   <string name="prefs_camera_video_upload_on_wifi">Загрузка видео только через wifi</string>
+  <string name="prefs_subsection_advanced">Дополнительно</string>
+  <string name="prefs_show_hidden_files">Показать скрытые файлы</string>
   <string name="prefs_log_title">Включить журналирование</string>
   <string name="prefs_log_summary">Используется для регистрации ошибок</string>
   <string name="prefs_log_title_history">История журналов</string>
@@ -244,6 +246,9 @@
   <string name="pass_code_wrong">Некоррентный код</string>
   <string name="pass_code_error_set">При установке кода блокировки произошла ошибка</string>
   <string name="pass_code_error_remove">При снятии кода блокировки произошла ошибка</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="biometric_not_enrolled">Чтобы пользоваться этой возможностью, зарегистрируйте хотя-бы одну биометрию</string>
   <string name="biometric_prompt_title">Биометрический вход</string>
   <string name="biometric_prompt_subtitle">Вход с использованием ваших индивидуальных биометрических данных</string>
@@ -566,6 +571,10 @@
   <string name="prefs_logs_summary">В логах может содержаться чувствительная информация. Отправка логов третьим лицам находится под вашей ответственностью</string>
   <string name="synchronizing_account">Синхронизация аккаунта</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_intro_button">Давайте начнём</string>
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Блокировка кодом</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Продолжить</string>
+  <!--Release Notes 2.21-->
 </resources>

@@ -100,7 +100,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
-import java.util.ArrayList
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -128,6 +127,7 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
 
     private var fileListOption = FileListOption.ALL_FILES
     private var waitingToSend: OCFile? = null
+    private var waitingToOpen: OCFile? = null
 
     private var localBroadcastManager: LocalBroadcastManager? = null
 
@@ -434,6 +434,9 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         selectAllMenuItem = menu.findItem(R.id.action_select_all)
         if (secondFragment == null) {
             selectAllMenuItem?.isVisible = true
+        } else {
+            val shareFileMenuItem = menu.findItem(R.id.action_share_current_folder)
+            menu.removeItem(shareFileMenuItem.itemId)
         }
         mainMenu = menu
 
@@ -966,11 +969,18 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
                 invalidateOptionsMenu()
             }
 
-            if (waitingToSend != null) {
-                waitingToSend = storageManager.getFileByPath(waitingToSend!!.remotePath)
-                if (waitingToSend!!.isDown) {
-                    sendDownloadedFile()
-                }
+            waitingToSend = waitingToSend?.let { file ->
+                storageManager.getFileByPath(file.remotePath)
+            }
+            if (waitingToSend?.isDown == true) {
+                sendDownloadedFile()
+            }
+
+            waitingToOpen = waitingToOpen?.let { file ->
+                storageManager.getFileByPath(file.remotePath)
+            }
+            if (waitingToOpen?.isDown == true) {
+                openDownloadedFile()
             }
         }
 
@@ -1460,6 +1470,11 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
         waitingToSend = null
     }
 
+    private fun openDownloadedFile() {
+        fileOperationsHelper.openFile(waitingToOpen)
+        waitingToOpen = null
+    }
+
     /**
      * Requests the download of the received [OCFile] , updates the UI
      * to monitor the download progress and prepares the activity to send the file
@@ -1470,6 +1485,20 @@ class FileDisplayActivity : FileActivity(), FileFragment.ContainerActivity, OnEn
     fun startDownloadForSending(file: OCFile) {
         waitingToSend = file
         requestForDownload(waitingToSend)
+        val hasSecondFragment = secondFragment != null
+        updateFragmentsVisibility(hasSecondFragment)
+    }
+
+    /**
+     * Requests the download of the received [OCFile] , updates the UI
+     * to monitor the download progress and prepares the activity to open the file
+     * when the download finishes.
+     *
+     * @param file [OCFile] to download and preview.
+     */
+    fun startDownloadForOpening(file: OCFile) {
+        waitingToOpen = file
+        requestForDownload(waitingToOpen)
         val hasSecondFragment = secondFragment != null
         updateFragmentsVisibility(hasSecondFragment)
     }

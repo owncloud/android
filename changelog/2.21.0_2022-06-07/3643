@@ -1,0 +1,7 @@
+Bugfix: Prevented signed in user in the list of users to be shared
+
+Previously, user list for sharing contains signed in user,
+now this user is omitted to avoid errors.
+
+https://github.com/owncloud/android/issues/1419
+https://github.com/owncloud/android/pull/3643

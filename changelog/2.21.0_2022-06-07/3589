@@ -1,0 +1,7 @@
+Bugfix: Crash when changing orientation in Details view
+
+Previously, the app crashes when changing orientation in Details view after installing
+Now, app shows correctly the details after installing.
+
+https://github.com/owncloud/android/issues/3571
+https://github.com/owncloud/android/pull/3589

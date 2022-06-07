@@ -54,13 +54,13 @@ import com.owncloud.android.lib.resources.files.UploadFileFromContentUriOperatio
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
-import org.koin.core.KoinComponent
+import org.koin.core.component.KoinComponent
 import timber.log.Timber
 import java.io.File
 
 class UploadFileFromContentUriWorker(
     private val appContext: Context,
-    private val workerParameters: WorkerParameters
+    private val workerParameters: WorkerParameters,
 ) : CoroutineWorker(
     appContext,
     workerParameters
@@ -231,7 +231,8 @@ class UploadFileFromContentUriWorker(
     }
 
     private fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
-        .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext)
+        .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext,
+        SingleSessionManager.getConnectionValidator())
 
     companion object {
         const val TRANSFER_TAG_CAMERA_UPLOAD = "TRANSFER_TAG_CAMERA_UPLOAD"

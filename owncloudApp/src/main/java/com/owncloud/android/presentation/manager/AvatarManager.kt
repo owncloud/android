@@ -33,9 +33,9 @@ import com.owncloud.android.domain.user.model.UserAvatar
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.ui.DefaultAvatarTextDrawable
 import com.owncloud.android.utils.BitmapUtils
-import org.koin.core.KoinComponent
+import org.koin.core.component.KoinComponent
 import org.koin.core.error.InstanceCreationException
-import org.koin.core.inject
+import org.koin.core.component.inject
 import timber.log.Timber
 import kotlin.math.roundToInt
 

@@ -56,6 +56,8 @@
   <string name="prefs_camera_video_upload_summary">Αυτόματη μεταφόρτωση βίντεο που ελήφθησαν από την κάμερα</string>
   <string name="prefs_camera_video_upload_path_title">Διαδρομή μεταφορτώσεων βίντεο</string>
   <string name="prefs_camera_video_upload_on_wifi">Μεταφόρτωση βίντεο μόνο μέσω wifi</string>
+  <string name="prefs_subsection_advanced">Για προχωρημένους</string>
+  <string name="prefs_show_hidden_files">Προβολή κρυφών αρχείων</string>
   <string name="prefs_log_title">Σύνδεση εφικτή</string>
   <string name="prefs_log_summary">Χρησιμοποιείται για την καταγραφή προβλημάτων</string>
   <string name="prefs_log_title_history">Αρχείο καταγραφής</string>
@@ -227,6 +229,9 @@
   <string name="pass_code_remove_your_pass_code">Αφαίρεση του κωδικού σας</string>
   <string name="pass_code_mismatch">Οι κωδικοί δεν ταιριάζουν</string>
   <string name="pass_code_wrong">Εσφαλμένος κωδικός</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="biometric_prompt_title">Βιομετρική είσοδος</string>
   <string name="media_notif_ticker">%1$s αναπαραγωγή μουσικής</string>
   <string name="media_state_playing">%1$s (αναπαραγωγή)</string>
@@ -540,4 +545,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Κλείδωμα με κωδικό</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Συνέχιση</string>
+  <!--Release Notes 2.21-->
 </resources>

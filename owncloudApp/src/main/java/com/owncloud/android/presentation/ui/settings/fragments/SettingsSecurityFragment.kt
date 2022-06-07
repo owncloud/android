@@ -33,13 +33,15 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
 import com.owncloud.android.R
+import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.ui.security.BiometricActivity
 import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.presentation.ui.security.LockTimeout
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
-import com.owncloud.android.presentation.ui.security.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsFragment.Companion.removePreferenceFromScreen
 import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -125,6 +127,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                 LockTimeout.FIVE_MINUTES.name,
                 LockTimeout.THIRTY_MINUTES.name
             ).toTypedArray()
+            isEnabled = !securityViewModel.isLockDelayEnforcedEnabled()
         }
         prefLockAccessDocumentProvider = findPreference(PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER)
         prefTouchesWithOtherVisibleWindows = findPreference(PREFERENCE_TOUCHES_WITH_OTHER_VISIBLE_WINDOWS)
@@ -139,10 +142,10 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             } else {
                 val intent = Intent(activity, PassCodeActivity::class.java)
                 if (newValue as Boolean) {
-                    intent.action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+                    intent.action = PassCodeActivity.ACTION_CREATE
                     enablePasscodeLauncher.launch(intent)
                 } else {
-                    intent.action = PassCodeActivity.ACTION_CHECK_WITH_RESULT
+                    intent.action = PassCodeActivity.ACTION_REMOVE
                     disablePasscodeLauncher.launch(intent)
                 }
             }
@@ -168,10 +171,10 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
 
         // Biometric lock
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            screenSecurity?.removePreference(prefBiometric)
+            screenSecurity?.removePreferenceFromScreen(prefBiometric)
         } else if (prefBiometric != null) {
             if (!BiometricManager.isHardwareDetected()) { // Biometric not supported
-                screenSecurity?.removePreference(prefBiometric)
+                screenSecurity?.removePreferenceFromScreen(prefBiometric)
             } else {
                 if (prefPasscode?.isChecked == false && prefPattern?.isChecked == false) { // Disable biometric lock if Passcode or Pattern locks are disabled
                     disableBiometric()
@@ -217,6 +220,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
                             prefTouchesWithOtherVisibleWindows?.isChecked = true
                         }
                         .show()
+                        .avoidScreenshotsIfNeeded()
                 }
                 return@setOnPreferenceChangeListener false
             }
@@ -229,7 +233,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
             isEnabled = true
             summary = null
         }
-        prefLockApplication?.isEnabled = true
+        prefLockApplication?.isEnabled = !securityViewModel.isLockDelayEnforcedEnabled()
     }
 
     private fun disableBiometric() {
@@ -247,5 +251,4 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         const val EXTRAS_LOCK_ENFORCED = "EXTRAS_LOCK_ENFORCED"
         const val PREFERENCE_LOCK_ATTEMPTS = "PrefLockAttempts"
     }
-
 }

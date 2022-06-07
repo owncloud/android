@@ -35,6 +35,7 @@
     <string name="prefs_subsection_logging">Logging</string>
     <string name="prefs_subsection_more">More</string>
     <string name="prefs_subsection_security">Security</string>
+    <string name="prefs_subsection_whatsnew">What´s new in the latest version?</string>
     <string name="prefs_subsection_security_summary">Set locks to access the app and allow touches with other visible windows</string>
     <string name="prefs_subsection_logging_summary">Keep track of logs produced by the execution of the app</string>
     <string name="prefs_subsection_more_summary">App info, feedback and others</string>
@@ -71,6 +72,8 @@
     <string name="prefs_camera_video_upload_path_title">Video upload path</string>
     <string name="prefs_camera_video_upload_on_wifi">Upload videos via wifi only</string>
     <string name="prefs_camera_video_upload_on_charging">Upload videos only when charging</string>
+    <string name="prefs_subsection_advanced">Advanced</string>
+    <string name="prefs_show_hidden_files">Show hidden files</string>
     <string name="prefs_log_open_logs_list_view">Log files</string>
     <string name="prefs_log_no_logs_list_view">Empty log folder!</string>
     <string name="prefs_log_title">Enable logging</string>
@@ -148,6 +151,7 @@
     <string name="file_list_empty_shared_by_links">No files have been shared by link.</string>
     <string name="file_list_loading">Loading&#8230;</string>
     <string name="file_list_no_app_for_file_type">No app found for file type</string>
+    <string name="file_list_no_app_for_perform_action">No app found for this action</string>
     <string name="local_file_list_empty">There are no files in this folder.</string>
     <string name="local_file_list_empty_just_folders">There are no folders in this folder.</string>
     <string name="local_file_list_search_with_no_matches">No matches for this search</string>
@@ -164,6 +168,8 @@
     <string name="filedetails_created">Created:</string>
     <string name="filedetails_modified">Modified:</string>
     <string name="filedetails_download">Download</string>
+    <string name="filedetails_file_image_content_description">File Image</string>
+    <string name="filedetails_cancel_btn_content_description">Cancel download button</string>
     <string name="filedetails_sync_file">Synchronize</string>
     <string name="filedetails_renamed_in_upload_msg">File was renamed to %1$s during upload</string>
     <string name="list_layout">List layout</string>
@@ -235,6 +241,7 @@
     <string name="downloader_download_succeeded_ticker">Download succeeded</string>
     <string name="downloader_download_succeeded_content">%1$s downloaded</string>
     <string name="downloader_download_failed_ticker">Download failed</string>
+    <string name="downloader_preview_failed_ticker">Unable to display the file</string>
     <string name="downloader_download_failed_content">Download of %1$s could not be completed</string>
     <string name="downloader_not_downloaded_yet">Not downloaded yet</string>
     <string name="downloader_download_failed_credentials_error">Download failed, you need to log in again</string>
@@ -260,6 +267,19 @@
     <string name="pass_code_wrong">Incorrect passcode</string>
     <string name="pass_code_error_set">An error occurred while setting the passcode lock</string>
     <string name="pass_code_error_remove">An error occurred while removing the passcode lock</string>
+    <string name="numberkeyboard_backspace_button_content_description">Backspace button</string>
+    <string name="numberkeyboard_biometric_button_content_description">Biometric button</string>
+
+    <string name="numberkeyboard_zero">0</string>
+    <string name="numberkeyboard_one">1</string>
+    <string name="numberkeyboard_two">2</string>
+    <string name="numberkeyboard_three">3</string>
+    <string name="numberkeyboard_four">4</string>
+    <string name="numberkeyboard_five">5</string>
+    <string name="numberkeyboard_six">6</string>
+    <string name="numberkeyboard_seven">7</string>
+    <string name="numberkeyboard_eight">8</string>
+    <string name="numberkeyboard_nine">9</string>
 
     <string name="lock_time_try_again">Please, try again in %1$s</string>
 
@@ -458,6 +478,8 @@
     <string name="actionbar_move">Move</string>
     <string name="file_list_empty_moving">Nothing in here. You can add a folder!</string>
     <string name="folder_picker_choose_button_text">Choose</string>
+    <string name="folder_picker_move_here_button_text">Move Here</string>
+    <string name="folder_picker_copy_here_button_text">Copy Here</string>
 
     <string name="move_file_not_found">Unable to move. Please check whether the file exists</string>
     <string name="move_file_invalid_into_descendent">It is not possible to move a folder into a descendant</string>
@@ -644,5 +666,36 @@
     <string name="security_enforced_title">Please, select an option to lock the app:</string>
     <string name="security_enforced_first_option">Passcode lock</string>
     <string name="security_enforced_second_option">Pattern lock</string>
+
+    <!-- Release Notes -->
+    <string name="release_notes_header">New in %1$s</string>
+    <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
+    <string name="release_notes_proceed">Proceed</string>
+    <string name="release_notes_icon">Release note icon</string>
+
+    <!-- Release Notes 2.21 -->
+    <string name="release_notes_title_1">Release Notes</string>
+    <string name="release_notes_subtitle_1">News in the app will be listed after every update to inform about latest improvements and new features. Available also in Settings view to recheck.</string>
+
+    <string name="release_notes_title_2">Secure connections by default</string>
+    <string name="release_notes_subtitle_2">Https connections by default to establish server connections. Otherwise, it will be explicitly required in URL</string>
+
+    <string name="release_notes_title_3">Passcode and Pattern redesign</string>
+    <string name="release_notes_subtitle_3">Integrated the numeric keypad on the screen, improved navigation and graphical interface.</string>
+
+    <string name="release_notes_title_4">Support for SVG files</string>
+    <string name="release_notes_subtitle_4">Added support for svg files.</string>
+
+    <string name="release_notes_title_5">Details view redesign</string>
+    <string name="release_notes_subtitle_5">Information reordered and added the possibility to download and open the file by clicking the thumbnail.</string>
+
+    <string name="release_notes_title_6">Hidden files</string>
+    <string name="release_notes_subtitle_6">Added a new option in settings to decide to show or not hidden files.</string>
+
+    <string name="release_notes_title_7">Sharing from inside</string>
+    <string name="release_notes_subtitle_7">Added the sharing option to folders from the list of its contents</string>
+
+    <string name="release_notes_title_8">Bugfixing</string>
+    <string name="release_notes_subtitle_8">Some existing bugs were fixed</string>
 
 </resources>

@@ -31,6 +31,8 @@ import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricPrompt
 import androidx.biometric.BiometricPrompt.PromptInfo
 import com.owncloud.android.R
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeManager
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -90,7 +92,7 @@ class BiometricActivity : AppCompatActivity() {
                     if (biometricViewModel.shouldAskForNewPassCode()) {
                         biometricViewModel.removePassCode()
                         val intent = Intent(baseContext, PassCodeActivity::class.java)
-                        intent.action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+                        intent.action = PassCodeActivity.ACTION_CREATE
                         intent.putExtra(PassCodeActivity.EXTRAS_MIGRATION, true)
                         startActivity(intent)
                     }

@@ -65,13 +65,15 @@
                 android:text="@string/placeholder_filesize"
                 android:textSize="12sp" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/getPrivateLinkButton"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_alignParentEnd="true"
                 android:padding="@dimen/standard_half_padding"
-                android:src="@drawable/copy_link" />
+                android:src="@drawable/copy_link"
+                android:scaleType="centerCrop"
+                android:background="@color/transparent"/>
 
         </RelativeLayout>
 
@@ -90,9 +92,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/actionbar_start_color"
-                android:paddingBottom="@dimen/standard_quarter_padding"
-                android:paddingTop="@dimen/standard_quarter_padding">
+                android:background="@color/actionbar_start_color">
 
                 <TextView
                     android:id="@+id/shareWithUsersSectionTitle"
@@ -107,10 +107,9 @@
 
                 <ImageButton
                     android:id="@+id/addUserButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/standard_half_margin"
                     android:background="@color/transparent"
                     android:src="@drawable/ic_add" />
 
@@ -121,7 +120,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dip"
                 android:layout_weight="1"
-                android:paddingStart="@dimen/standard_half_padding"
                 android:scrollbars="vertical"
                 android:visibility="gone" />
 
@@ -147,9 +145,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/actionbar_start_color"
-                android:paddingBottom="@dimen/standard_quarter_padding"
-                android:paddingTop="@dimen/standard_quarter_padding">
+                android:background="@color/actionbar_start_color">
 
                 <TextView
                     android:id="@+id/shareWithPublicLinkTitle"
@@ -164,10 +160,9 @@
 
                 <ImageButton
                     android:id="@+id/addPublicLinkButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="@dimen/standard_half_margin"
                     android:background="@color/transparent"
                     android:src="@drawable/ic_add" />
 
@@ -190,7 +185,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dip"
                 android:layout_weight="1"
-                android:paddingStart="@dimen/standard_half_padding"
                 android:scrollbars="vertical"
                 android:visibility="gone" />
 

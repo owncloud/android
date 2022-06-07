@@ -6,7 +6,8 @@
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
  * @author Shashvat Kedia
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author David Crespo Rios
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,6 +25,7 @@
 package com.owncloud.android.ui.helpers;
 
 import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -37,13 +39,16 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare;
 import com.owncloud.android.files.services.AvailableOfflineHandler;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import timber.log.Timber;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static com.owncloud.android.services.OperationsService.EXTRA_SYNC_REGULAR_FILES;
 
@@ -181,9 +186,51 @@ public class FileOperationsHelper {
         return sendIntent;
     }
 
+    private Intent makeActionSendIntent(List<OCFile> oCfiles) {
+        Intent sendIntent = new Intent();
+
+        ArrayList<Uri> fileUris = new ArrayList<>();
+        for (int i = 0; i < oCfiles.size(); i++) {
+            fileUris.add(oCfiles.get(i).getExposedFileUri(mFileActivity));
+        }
+
+        // set Type (All)
+        sendIntent.setType("*/*");
+        sendIntent.putParcelableArrayListExtra(
+                Intent.EXTRA_STREAM,
+                fileUris
+        );
+        sendIntent.setAction(Intent.ACTION_SEND_MULTIPLE);// Send Action
+        return sendIntent;
+    }
+
     public void sendDownloadedFile(OCFile ocFile) {
         if (ocFile != null) {
             Intent sendIntent = makeActionSendIntent(ocFile);
+            // Show dialog, without the own app
+            String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Intent shareSheetIntent = new ShareSheetHelper().getShareSheetIntent(
+                        sendIntent,
+                        mFileActivity.getApplicationContext(),
+                        R.string.activity_chooser_send_file_title,
+                        packagesToExclude
+                );
+
+                mFileActivity.startActivity(shareSheetIntent);
+            } else {
+                DialogFragment chooserDialog = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude);
+                chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
+            }
+        } else {
+            Timber.e("Trying to send a NULL OCFile");
+        }
+    }
+
+    public void sendDownloadedFiles(List<OCFile> ocFiles) {
+        if (!ocFiles.isEmpty()) {
+            Intent sendIntent = makeActionSendIntent(ocFiles);
             // Show dialog, without the own app
             String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
 
@@ -420,15 +467,17 @@ public class FileOperationsHelper {
         Intent intentToShareLink = new Intent(Intent.ACTION_SEND);
         intentToShareLink.putExtra(Intent.EXTRA_TEXT, link);
         intentToShareLink.setType("text/plain");
-        String username = com.owncloud.android.lib.common.accounts.AccountUtils.getUsernameForAccount(
-                mFileActivity.getAccount()
+        String displayName = AccountManager.get(mFileActivity.getApplicationContext()).getUserData(
+                mFileActivity.getAccount(),
+                AccountUtils.Constants.KEY_DISPLAY_NAME
         );
-        if (username != null) {
+
+        if (displayName != null) {
             intentToShareLink.putExtra(
                     Intent.EXTRA_SUBJECT,
                     mFileActivity.getString(
                             R.string.subject_user_shared_with_you,
-                            username,
+                            displayName,
                             mFileActivity.getFile().getFileName()
                     )
             );

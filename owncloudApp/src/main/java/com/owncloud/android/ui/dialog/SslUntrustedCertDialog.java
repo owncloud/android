@@ -34,6 +34,7 @@ import android.widget.Button;
 
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
+import com.owncloud.android.extensions.DialogExtKt;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import com.owncloud.android.ui.adapter.CertificateCombinedExceptionViewAdapter;
@@ -49,7 +50,7 @@ import java.security.cert.X509Certificate;
 /**
  * Dialog to show information about an untrusted certificate and allow the user
  * to decide trust on it or not.
- *
+ * <p>
  * Abstract implementation of common functionality for different dialogs that
  * get the information about the error and the certificate from different classes.
  */
@@ -140,7 +141,7 @@ public class SslUntrustedCertDialog extends DialogFragment {
         Button ok = mView.findViewById(R.id.ok);
         ok.setOnClickListener(new OnCertificateTrusted());
 
-        Button cancel = mView.findViewById(R.id.cancel);
+        Button cancel = mView.findViewById(R.id.btnCancel);
         cancel.setOnClickListener(new OnCertificateNotTrusted());
 
         Button details = mView.findViewById(R.id.details_btn);
@@ -170,6 +171,7 @@ public class SslUntrustedCertDialog extends DialogFragment {
         Timber.d("onCreateDialog, savedInstanceState is %s", savedInstanceState);
         final Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        DialogExtKt.avoidScreenshotsIfNeeded(dialog);
         return dialog;
     }
 

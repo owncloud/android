@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.ui.security
+package com.owncloud.android.presentation.ui.security.passcode
 
 import android.app.Activity
 import android.content.Context
@@ -28,6 +28,11 @@ import android.os.PowerManager
 import android.os.SystemClock
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.presentation.ui.security.BiometricManager
+import com.owncloud.android.presentation.ui.security.LockTimeout
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
+import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
+import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
 import kotlin.math.abs
 
 object PassCodeManager {
@@ -40,7 +45,8 @@ object PassCodeManager {
         if (!exemptOfPasscodeActivities.contains(activity.javaClass) && passCodeShouldBeRequested()) {
 
             // Do not ask for passcode if biometric is enabled
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.isBiometricEnabled() && !visibleActivities.contains(PassCodeActivity::class.java)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.isBiometricEnabled() && !visibleActivities.contains(
+                    PassCodeActivity::class.java)) {
                 visibleActivities.add(activity.javaClass)
                 return
             }
@@ -48,7 +54,7 @@ object PassCodeManager {
             askUserForPasscode(activity)
         } else if (preferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_MIGRATION_REQUIRED, false)) {
             val intent = Intent(appContext, PassCodeActivity::class.java).apply {
-                action = PassCodeActivity.ACTION_REQUEST_WITH_RESULT
+                action = PassCodeActivity.ACTION_CREATE
                 flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 putExtra(PassCodeActivity.EXTRAS_MIGRATION, true)
             }

@@ -1,0 +1,6 @@
+Enhancement: Share a folder from within the folder
+
+You can share a folder clicking in the share icon inside the folder.
+
+https://github.com/owncloud/android/issues/1441
+https://github.com/owncloud/android/pull/3659

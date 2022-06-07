@@ -24,6 +24,7 @@
 
 package com.owncloud.android.presentation.providers.sharing
 
+import android.accounts.AccountManager
 import android.app.SearchManager
 import android.content.ContentProvider
 import android.content.ContentValues
@@ -43,10 +44,10 @@ import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.model.OCSharee
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.extensions.parseError
+import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_DISPLAY_NAME
 import org.json.JSONException
 import org.koin.android.ext.android.inject
 import timber.log.Timber
-import java.util.HashMap
 import java.util.Locale
 
 /**
@@ -178,8 +179,13 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
             val federatedShareAllowed = capabilities?.filesSharingFederationOutgoing?.isTrue ?: false
 
             try {
+                val userName = AccountUtils.getUsernameOfAccount(account.name)
+                val fullName = AccountManager.get(context).getUserData(account, KEY_DISPLAY_NAME)
                 while (namesIt.hasNext()) {
                     item = namesIt.next()
+                    if (item.label == userName || item.label == fullName && item.shareType == ShareType.USER) {
+                        continue
+                    }
                     var userName = item.label
                     val type = item.shareType
                     val shareWith = item.shareWith

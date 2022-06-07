@@ -49,6 +49,8 @@
   <string name="prefs_camera_video_upload_summary">Unggah video yang direkam secara otomatis oleh kamera</string>
   <string name="prefs_camera_video_upload_path_title">Jalur unggah video</string>
   <string name="prefs_camera_video_upload_on_wifi">Unggah video hanya melalui WiFi</string>
+  <string name="prefs_subsection_advanced">Lanjutan</string>
+  <string name="prefs_show_hidden_files">Tampilkan berkas tersembunyi</string>
   <string name="prefs_log_title">Aktifkan pencatatan</string>
   <string name="prefs_log_summary">Ini digunakan untuk mencatat masalah</string>
   <string name="prefs_log_title_history">History pencatatan</string>
@@ -217,6 +219,9 @@
   <string name="pass_code_remove_your_pass_code">Hapus kode sandi Anda</string>
   <string name="pass_code_mismatch">Kode sandi tidak sama</string>
   <string name="pass_code_wrong">Kode sandi salah</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="biometric_not_enrolled">Daftar dengan setidaknya satu biometrik untuk menggunakan fitur ini</string>
   <string name="biometric_prompt_title">Masuk dengan biometrik</string>
   <string name="media_notif_ticker">Pemutar musik %1$s</string>
@@ -518,4 +523,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Kunci kode sandi</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Melanjutkan</string>
+  <!--Release Notes 2.21-->
 </resources>

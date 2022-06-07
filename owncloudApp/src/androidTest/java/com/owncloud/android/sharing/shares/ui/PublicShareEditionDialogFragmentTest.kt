@@ -68,6 +68,23 @@ class PublicShareEditionDialogFragmentTest {
     fun setUp() {
         every { ocCapabilityViewModel.capabilities } returns capabilitiesLiveData
 
+        stopKoin()
+
+        startKoin {
+            androidContext(ApplicationProvider.getApplicationContext())
+            allowOverride(override = true)
+            modules(
+                module {
+                    viewModel {
+                        ocCapabilityViewModel
+                    }
+                    viewModel {
+                        ocShareViewModel
+                    }
+                }
+            )
+        }
+
         val publicShareDialogFragment = PublicShareDialogFragment.newInstanceToUpdate(
             OC_FILE,
             OC_ACCOUNT,
@@ -80,22 +97,6 @@ class PublicShareEditionDialogFragmentTest {
                 isFolder = true
             )
         )
-
-        stopKoin()
-
-        startKoin {
-            androidContext(ApplicationProvider.getApplicationContext())
-            modules(
-                module(override = true) {
-                    viewModel {
-                        ocCapabilityViewModel
-                    }
-                    viewModel {
-                        ocShareViewModel
-                    }
-                }
-            )
-        }
 
         ActivityScenario.launch(TestShareFileActivity::class.java).onActivity {
             it.startFragment(publicShareDialogFragment)

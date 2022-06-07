@@ -1,37 +1,36 @@
 ## Submitting issues
 
-If you have questions about how to use ownCloud, please direct these to the [mailing list][mailinglist] or our [forum][forum]. We are also available on [IRC][irc].
+If you have questions about how to use ownCloud, please join our [rocket chat channel][rocketchat] or our [forum][forum].
 
 ### Guidelines
-* [Report the issue](https://github.com/owncloud/android/issues/new) using our [template][template], it includes all the informations we need to track down the issue.
+* [Report the issue](https://github.com/owncloud/android/issues/new) using on of our [templates][template], they include all the information we need to track down the issue.
 * This repository is *only* for issues within the ownCloud Android app code. Issues in other components should be reported in their own repositories: 
   - [ownCloud core](https://github.com/owncloud/core/issues)
-  - [iOS client](https://github.com/owncloud/ios-issues/issues)
-  - [Desktop client](https://github.com/owncloud/mirall/issues)
-  - [ownCloud apps](https://github.com/owncloud/apps/issues) (e.g. Calendar, Contacts...)
+  - [oCIS](https://github.com/owncloud/ocis/issues)
+  - [iOS client](https://github.com/owncloud/ios-app/issues)
+  - [Desktop client](https://github.com/owncloud/client/issues)
 * Search the [existing issues](https://github.com/owncloud/android/issues) first, it's likely that your issue was already reported.
 
 If your issue appears to be a bug, and hasn't been reported, open a new issue.
 
 Help us to maximize the effort we can spend fixing issues and adding new features, by not reporting duplicate issues.
 
-[template]: https://github.com/owncloud/android/blob/master/.github/issue_template.md
-[mailinglist]: https://mailman.owncloud.org/mailman/listinfo/user
+[template]: https://github.com/owncloud/android/tree/master/.github/ISSUE_TEMPLATE
+[rocketchat]: https://talk.owncloud.com/channel/mobile
 [forum]: https://central.owncloud.org/
-[irc]: http://webchat.freenode.net/?channels=owncloud&uio=d4
 
 ## Contributing to Source Code
 
 Thanks for wanting to contribute source code to ownCloud. That's great!
 
-Before we're able to merge your code into the ownCloud app for Android, you need to sign our [Contributor Agreement][agreement].
+Before we're able to merge your code into the ownCloud app for Android, please, check the [contribution guidelines][contribution].
 
 ### Guidelines
 * Contribute your code in a feature, fix or cleanup branch by using  ```feature/feature_name```, ```fix/fix_name``` or ```cleanup/cleanup_name``` branch names. Be sure your feature, fix or cleanup branches are updated with latest changes in official android/master, it will give us a better chance to test your code before merging it with stable code.
-* Once you are done with your code, start a pull request to merge your contribution into official android/master and send us the signed [Contributor Agreement][agreement].
+* Once you are done with your code, start a pull request to merge your contribution into official android/master.
 * Keep on using pull requests for your next contributions although you own write permissions.
 
-[agreement]: http://owncloud.org/about/contributor-agreement/
+[contribution]: https://owncloud.com/contribute/
 
 ### 1. Fork and download android/master repository:
 
@@ -39,7 +38,7 @@ Before we're able to merge your code into the ownCloud app for Android, you need
 
 ### 2. Create pull request:
 
-NOTE: You must sign the [Contributor Agreement][agreement] before your changes can be accepted!
+NOTE: You must sign the [CLA](https://cla-assistant.io/owncloud/android) before your changes can be accepted!
 
 * Create new feature, fix or cleanup branch from your master branch: ```git checkout -b feature/feature_name```
 * Register your changes: git add filename

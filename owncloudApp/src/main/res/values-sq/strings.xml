@@ -33,6 +33,7 @@
   <string name="prefs_subsection_logging">Regjistrim</string>
   <string name="prefs_subsection_more">Më tepër</string>
   <string name="prefs_subsection_security">Siguri</string>
+  <string name="prefs_subsection_whatsnew">Ç’ka të re në versionin më të ri?</string>
   <string name="prefs_subsection_security_summary">Caktoni kyçje për hyrje në aplikacion dhe lejim prekjeje me dritare të tjera të dukshme</string>
   <string name="prefs_subsection_logging_summary">Ndiq regjistra të prodhuar nga ekzekutimi i aplikacionit</string>
   <string name="prefs_subsection_more_summary">Hollësi aplikacioni, përshtypje dhe të tjera</string>
@@ -46,6 +47,8 @@
   <string name="prefs_lock_application_entries_1minute">Pas 1 minute</string>
   <string name="prefs_lock_application_entries_5minutes">Pas 5 minutash</string>
   <string name="prefs_lock_application_entries_30minutes">Pas 30 minutash</string>
+  <string name="prefs_lock_access_from_document_provider">Kyç hyrje nga furnizues dokumentesh</string>
+  <string name="prefs_lock_access_from_document_provider_summary">Kyçni hyrje nga aplikacione të tjerë te kartelat e llogarive te aplikacioni përmes eksploruesit të brendshëm Android të kartelave.</string>
   <string name="prefs_touches_with_other_visible_windows">Prekje me dritare të tjera të dukshme</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Lejo prekje, kur pamja është zënë nga një tjetër dritare e dukshme. Aktivizojeni, që të përdorni aplikacione filtrimi drite.</string>
   <string name="confirmation_touches_with_other_windows_title">Jeni i sigurt se doni të aktivizohet kjo veçori?</string>
@@ -67,6 +70,8 @@
   <string name="prefs_camera_video_upload_path_title">Shteg ngarkimesh videosh</string>
   <string name="prefs_camera_video_upload_on_wifi">Videot ngarkoji vetëm përmes wifi-it</string>
   <string name="prefs_camera_video_upload_on_charging">Ngarko video vetëm kur ngarkohet bateria</string>
+  <string name="prefs_subsection_advanced">Të mëtejshme</string>
+  <string name="prefs_show_hidden_files">Shfaq kartela të fshehura</string>
   <string name="prefs_log_open_logs_list_view">Kartela regjistër</string>
   <string name="prefs_log_no_logs_list_view">Zbraz dosje regjistrash!</string>
   <string name="prefs_log_title">Aktivizo regjistrimet</string>
@@ -80,8 +85,8 @@
   <string name="prefs_recommend">Këshillojani një shoku</string>
   <string name="prefs_feedback">Përshtypje</string>
   <string name="prefs_imprint">Imprint</string>
-  <string name="prefs_remember_last_share_location">Mba mend vend ndarjeje me të tjerët</string>
-  <string name="prefs_remember_last_upload_location_summary">Mba mend vendin e fundit të ngarkimit për ndarje me të tjerët</string>
+  <string name="prefs_remember_last_share_location">Mbaj mend vend pjese</string>
+  <string name="prefs_remember_last_upload_location_summary">Mbaj mend vendin e fundit të ngarkimit të pjesës</string>
   <string name="prefs_pattern">Kyçje rregullsie</string>
   <string name="prefs_enable_logging">Aktivizo regjistrimet</string>
   <string name="prefs_enable_logging_summary">Kur aktivizohen, regjistrat mund të kenë ndikim në funksionim dhe përfshijnë të dhëna rezervat. Sidoqoftë, regjistrat nuk janë subjekt parashtrimi të automatizuar te shërbyesit ownCloud. Ndarja e regjistrave me të tjerë është përgjegjësi vetëm e përdoruesit.</string>
@@ -100,6 +105,7 @@
   <string name="passcode_already_set">Kyçjet e rregullsive dhe kodkalimeve s\’mund të aktivizohen në të njëjtën kohë, ju lutemi, së pari çaktivizoni kodkalimin</string>
   <string name="pattern_no_longer_required">S\’do të pyetet më për rregullsinë</string>
   <string name="pattern_configure_your_pattern_explanation">Rregullsia do të kërkohet sa herë që niset aplikacioni</string>
+  <string name="document_provider_locked">Kyçur</string>
   <string name="illegal_argument_exception_message">Lypset një VEPRIM i vlefshëm te Synimi që u dha</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Kartela</string>
@@ -140,6 +146,7 @@
   <string name="file_list_empty_shared_by_links">S\’janë ndarë kartela me të tjerë përmes lidhjeje.</string>
   <string name="file_list_loading">Po ngarkohet…</string>
   <string name="file_list_no_app_for_file_type">S\’u gjet aplikacion për llojin e kartelës</string>
+  <string name="file_list_no_app_for_perform_action">S’u gjet aplikacion për këtë veprim</string>
   <string name="local_file_list_empty">Në këtë dosje s\’ka kartela.</string>
   <string name="local_file_list_empty_just_folders">S\’ka dosje brenda kësaj dosjeje.</string>
   <string name="local_file_list_search_with_no_matches">S\’ka përputhje për këtë kërkim</string>
@@ -156,6 +163,8 @@
   <string name="filedetails_created">Krijuar më:</string>
   <string name="filedetails_modified">Ndryshuar më:</string>
   <string name="filedetails_download">Shkarkoje</string>
+  <string name="filedetails_file_image_content_description">Pamje Kartele</string>
+  <string name="filedetails_cancel_btn_content_description">Buton anulimi shkarkimi</string>
   <string name="filedetails_sync_file">Njëkohëso</string>
   <string name="filedetails_renamed_in_upload_msg">Kartela u riemërtua si %1$s gjatë ngarkimit</string>
   <string name="list_layout">Skemë liste</string>
@@ -227,6 +236,7 @@
   <string name="downloader_download_succeeded_ticker">Shkarkimi doli me sukses</string>
   <string name="downloader_download_succeeded_content">%1$s u shkarkua</string>
   <string name="downloader_download_failed_ticker">Shkarkimi dështoi</string>
+  <string name="downloader_preview_failed_ticker">S’arrihet të shfaqet kartela</string>
   <string name="downloader_download_failed_content">Shkarkimi i %1$s s\’u plotësua dot</string>
   <string name="downloader_not_downloaded_yet">Ende e pashkarkuar</string>
   <string name="downloader_download_failed_credentials_error">Shkarkimi dështoi, lypset të bëni hyrjen sërish</string>
@@ -251,6 +261,18 @@
   <string name="pass_code_wrong">Kodkalim i pasaktë</string>
   <string name="pass_code_error_set">Ndodhi një gabim teksa ujdisej kyçje frazëkalimi</string>
   <string name="pass_code_error_remove">Ndodhi një gabim teksa hiqej kyçje frazëkalimi</string>
+  <string name="numberkeyboard_backspace_button_content_description">Buton Backspace</string>
+  <string name="numberkeyboard_biometric_button_content_description">Buton biometrik</string>
+  <string name="numberkeyboard_zero">0</string>
+  <string name="numberkeyboard_one">1</string>
+  <string name="numberkeyboard_two">2</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
+  <string name="numberkeyboard_six">6</string>
+  <string name="numberkeyboard_seven">7</string>
+  <string name="numberkeyboard_eight">8</string>
+  <string name="numberkeyboard_nine">9</string>
   <string name="lock_time_try_again">Ju lutemi, riprovoni për %1$s</string>
   <string name="biometric_not_enrolled">Që të përdorni këtë veçori, regjistroni të paktën një palë kredenciale biometrike</string>
   <string name="biometric_prompt_title">Hyrje biometrike</string>
@@ -313,7 +335,7 @@
   <string name="confirmation_remove_account_alert">Doni vërtet të hiqet llogaria %1$s?</string>
   <string name="confirmation_remove_account_alert_camera_uploads">Kjo llogari ka të bashkëngjitura ngarkime nga kamera, heqja e llogarisë do të çaktivizojë ngarkimet nga kamera. Doni vërtet të hiqet llogaria %1$s?</string>
   <string name="confirmation_remove_public_share_title">Hiqe lidhjen</string>
-  <string name="confirmation_remove_private_share_title">Hiqe ndarjen private</string>
+  <string name="confirmation_remove_private_share_title">Hiqe pjesën private</string>
   <string name="confirmation_remove_share_message">Doni vërtet të hiqet ndarja %1$s?</string>
   <string name="remove_success_msg">Heqja doli me sukses</string>
   <string name="remove_fail_msg">Heqja dështoi</string>
@@ -382,7 +404,7 @@
   <string name="preview_image_description">Paraparje figure</string>
   <string name="preview_image_error_unknown_format">Kjo figurë nuk mund të shfaqet</string>
   <string name="error__upload__local_file_not_copied">%1$s s\’u kopjua dot te dosja vendore %2$s</string>
-  <string name="get_shares_error">S\’qe e mundur të merreshin ndarje nga shërbyesi</string>
+  <string name="get_shares_error">S\’qe e mundur të merreshin pjesët nga shërbyesi</string>
   <string name="get_sharees_error">S\’qe e mundur të merreshin përdorues dhe grupe nga shërbyesi</string>
   <string name="get_capabilities_error">S\’qe e mundur të merreshin aftësi nga shërbyesi</string>
   <string name="share_link_no_support_share_api">Na ndjeni, ndarja me të tjerët s\’është e aktivizuar te shërbyesi juaj. Ju lutemi, lidhuni me përgjegjësin tuaj.</string>
@@ -407,7 +429,7 @@
   <string name="forbidden_permissions_delete">për fshirje të kësaj kartele</string>
   <string name="share_link_forbidden_permissions">për ndarje me të tjerët të kësaj kartele</string>
   <string name="unshare_link_forbidden_permissions">për zhbërje të ndarjes me të tjerët të kësaj kartele</string>
-  <string name="update_link_forbidden_permissions">për përditësim të kësaj ndarjeje</string>
+  <string name="update_link_forbidden_permissions">për përditësim të kësaj pjese</string>
   <string name="forbidden_permissions_create">për krijim kartele</string>
   <string name="uploader_upload_forbidden_permissions">për ngarkim në këtë dosje</string>
   <string name="uploader_upload_forbidden">Ngarkimi s\’u lejua</string>
@@ -426,6 +448,8 @@
   <string name="actionbar_move">Zhvendose</string>
   <string name="file_list_empty_moving">S\’ka gjë këtu. Mund të shtoni një dosje!</string>
   <string name="folder_picker_choose_button_text">Zgjidhni</string>
+  <string name="folder_picker_move_here_button_text">Kaloje Këtu </string>
+  <string name="folder_picker_copy_here_button_text">Kopjoje Këtu</string>
   <string name="move_file_not_found">S\’arrihet të zhvendoset. Ju lutemi, kontrolloni nëse ekziston apo jo kartela</string>
   <string name="move_file_invalid_into_descendent">S\’është e mundur të zhvendoset një dosje në një tjetër brenda saj</string>
   <string name="move_file_invalid_overwrite">Kartela gjendet tashmë te dosja vendmbërritje</string>
@@ -524,7 +548,7 @@
   <string name="streaming_position_not_available">“Pozicion jo i mundshëm”</string>
   <string name="error_no_network_connection">Pajisja s\’është e lidhur në ndonjë rrjet</string>
   <string name="share_no_public_links">Ende s\’janë krijuar lidhje publike</string>
-  <string name="share_no_link_in_this_share">Kjo ndarje nuk ka lidhje</string>
+  <string name="share_no_link_in_this_share">Kjo pjesë s’ka lidhje</string>
   <string name="share_warning_about_forwarding_public_links">Cilido që zotëron lidhjen, ka hyrje te kartela/dosja</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Fjalëkalim *</string>
@@ -532,7 +556,7 @@
   <string name="share_via_link_expiration_date_explanation_label">Lidhja publike do të skadojë jo më vonë se %1$d ditë pas krijimit</string>
   <string name="share_via_link_default_name_template">Lidhje %1$s</string>
   <string name="share_via_link_empty_password">Fjalëkalimi është i zbrazët</string>
-  <string name="private_link_info">Lidhje private: Mund ta përdorin vetëm personat të cilëve u është lejuar hyrja te kartela/dosja. Përdoreni si një lidhje të përhershme për veten ose për të drejtuar të tjerët drejt kartelash brenda ndarjesh</string>
+  <string name="private_link_info">Lidhje private: Mund ta përdorin vetëm personat të cilëve u është lejuar hyrja te kartela/dosja. Përdoreni si një lidhje të përhershme për veten ose për të drejtuar të tjerët drejt kartelash brenda pjesësh</string>
   <string name="file_private_link_error">S\’ka lidhje private për këtë kartelë</string>
   <string name="download_notification_channel_name">Shkarkime</string>
   <string name="download_notification_channel_description">Shihni emrin e kartelës që shkarkohet dhe ecurinë e shkarkimit</string>
@@ -586,4 +610,21 @@
   <string name="security_enforced_title">Ju lutemi, përzgjidhni një mundësi për kyçje aplikacioni:</string>
   <string name="security_enforced_first_option">Kyçje me kodkalim</string>
   <string name="security_enforced_second_option">Kyçje me rregullsi</string>
+  <!--Release Notes-->
+  <string name="release_notes_header">E re në %1$s</string>
+  <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
+  <string name="release_notes_proceed">Bëje</string>
+  <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
+  <!--Release Notes 2.21-->
+  <string name="release_notes_title_1">Shënime Hedhjeje Në Qarkullim</string>
+  <string name="release_notes_title_2">Lidhje të siguruara, si parazgjedhje.</string>
+  <string name="release_notes_subtitle_2">Lidhje https, si parazgjedhje, për të vendosur lidhje me shërbyesin. Përndryshe, do të kërkohet shprehimisht te URL-ja</string>
+  <string name="release_notes_title_3">Ripunim Kodkalimesh dhe Rregullsish</string>
+  <string name="release_notes_subtitle_3">U integrua në ekran pjesa numerike e tastierës, u përmirësua lëvizja dhe ndërfaqja grafike.</string>
+  <string name="release_notes_title_4">Mbulim për kartela SVG</string>
+  <string name="release_notes_subtitle_4">U shtua mbulim për kartela svg.</string>
+  <string name="release_notes_title_5">Rihartim i pamjes së hollësive</string>
+  <string name="release_notes_subtitle_5">Rirenditje e informacioneve dhe u shtua mundësia për të shkarkuar dhe hapur kartelën duke klikuar mbi miniaturën për të.</string>
+  <string name="release_notes_title_6">Kartela të fshehura</string>
+  <string name="release_notes_subtitle_6">U shtua mundësi e re te rregullimet për të vendosur shfaqjen apo jo të kartelave të fshehura.</string>
 </resources>

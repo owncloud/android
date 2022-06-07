@@ -36,9 +36,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -53,10 +53,13 @@ import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment;
+import com.owncloud.android.ui.preview.PreviewAudioFragment;
+import com.owncloud.android.ui.preview.PreviewImageFragment;
+import com.owncloud.android.ui.preview.PreviewTextFragment;
+import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
-
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
@@ -116,7 +119,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
         // Allow or disallow touches with other visible windows
         if (mLayout == R.layout.file_details_fragment) {
-            RelativeLayout fileDetailsLayout = getActivity().findViewById(R.id.fileDetailsLayout);
+            ConstraintLayout fileDetailsLayout = getActivity().findViewById(R.id.fileDetailsLayout);
             fileDetailsLayout.setFilterTouchesWhenObscured(
                     PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
             );
@@ -330,8 +333,45 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 ((FileDisplayActivity) mContainerActivity).cancelTransference(getFile());
                 break;
             }
+            case R.id.fdIcon: {
+                displayFile(getFile());
+            }
             default:
                 Timber.e("Incorrect view clicked!");
+        }
+    }
+
+    private void displayFile(OCFile file) {
+        if (PreviewImageFragment.canBePreviewed(file)) {
+            // preview image - it handles the sync, if needed
+            ((FileDisplayActivity) mContainerActivity).startImagePreview(file);
+        } else if (PreviewTextFragment.canBePreviewed(file)) {
+            ((FileDisplayActivity) mContainerActivity).startTextPreview(file);
+            mContainerActivity.getFileOperationsHelper().syncFile(file);
+
+        } else if (PreviewAudioFragment.canBePreviewed(file)) {
+            // media preview
+            ((FileDisplayActivity) mContainerActivity).startAudioPreview(file, 0);
+            mContainerActivity.getFileOperationsHelper().syncFile(file);
+
+        } else if (PreviewVideoFragment.canBePreviewed(file) && !file.isDownloading()) {
+            // Available offline exception, don't initialize streaming
+            if (!file.isDown() && file.isAvailableOffline()) {
+                // sync file content, then open with external apps
+                ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
+            } else {
+                // media preview
+                ((FileDisplayActivity) mContainerActivity).startVideoPreview(file, 0);
+            }
+
+            // If the file is already downloaded sync it, just to update it if there is a
+            // new available file version
+            if (file.isDown()) {
+                mContainerActivity.getFileOperationsHelper().syncFile(file);
+            }
+        } else {
+            // sync file content, then open with external apps
+            ((FileDisplayActivity) mContainerActivity).startSyncThenOpen(file);
         }
     }
 
@@ -365,7 +405,6 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             setFilename(file.getFileName());
             setFiletype(file);
             setFilesize(file.getFileLength());
-
             setTimeModified(file.getModificationTimestamp());
 
             // configure UI for depending upon local state of the file
@@ -426,6 +465,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         }
 
         ImageView iv = getView().findViewById(R.id.fdIcon);
+        iv.setOnClickListener(this);
 
         if (iv != null) {
             Bitmap thumbnail;
@@ -441,9 +481,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                     // generate new Thumbnail
                     if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, iv)) {
                         final ThumbnailsCacheManager.ThumbnailGenerationTask task =
-                                new ThumbnailsCacheManager.ThumbnailGenerationTask(
-                                        iv, mContainerActivity.getStorageManager(), mAccount
-                                );
+                                new ThumbnailsCacheManager.ThumbnailGenerationTask(iv, mAccount);
                         if (thumbnail == null) {
                             thumbnail = ThumbnailsCacheManager.mDefaultImg;
                         }
@@ -495,9 +533,11 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private void setButtonsForTransferring() {
         if (!isEmpty()) {
             // show the progress bar for the transfer
-            getView().findViewById(R.id.fdProgressBlock).setVisibility(View.VISIBLE);
+            getView().findViewById(R.id.fdProgressBar).setVisibility(View.VISIBLE);
+            getView().findViewById(R.id.fdCancelBtn).setVisibility(View.VISIBLE);
             TextView progressText = getView().findViewById(R.id.fdProgressText);
             progressText.setVisibility(View.VISIBLE);
+
             FileDownloaderBinder downloaderBinder = mContainerActivity.getFileDownloaderBinder();
             FileUploaderBinder uploaderBinder = mContainerActivity.getFileUploaderBinder();
             //if (getFile().isDownloading()) {
@@ -517,9 +557,9 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private void setButtonsForDown() {
         if (!isEmpty()) {
             // hides the progress bar
-            getView().findViewById(R.id.fdProgressBlock).setVisibility(View.GONE);
-            TextView progressText = getView().findViewById(R.id.fdProgressText);
-            progressText.setVisibility(View.GONE);
+            getView().findViewById(R.id.fdProgressText).setVisibility(View.GONE);
+            getView().findViewById(R.id.fdProgressBar).setVisibility(View.GONE);
+            getView().findViewById(R.id.fdCancelBtn).setVisibility(View.GONE);
         }
     }
 
@@ -529,9 +569,9 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
     private void setButtonsForRemote() {
         if (!isEmpty()) {
             // hides the progress bar
-            getView().findViewById(R.id.fdProgressBlock).setVisibility(View.GONE);
-            TextView progressText = getView().findViewById(R.id.fdProgressText);
-            progressText.setVisibility(View.GONE);
+            getView().findViewById(R.id.fdProgressText).setVisibility(View.GONE);
+            getView().findViewById(R.id.fdProgressBar).setVisibility(View.GONE);
+            getView().findViewById(R.id.fdCancelBtn).setVisibility(View.GONE);
         }
     }
 

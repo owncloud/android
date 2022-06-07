@@ -29,6 +29,9 @@ import android.provider.DocumentsContract
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.CheckBoxPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -46,8 +49,10 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WI
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
+import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.ui.activity.UploadPathActivity
 import com.owncloud.android.utils.DisplayUtils
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
@@ -109,22 +114,26 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initLiveDataObservers()
+        initStateObservers()
     }
 
-    private fun initLiveDataObservers() {
-        picturesViewModel.pictureUploads.observe(viewLifecycleOwner, { pictureUploadsConfiguration ->
-            enablePictureUploads(pictureUploadsConfiguration != null)
-            pictureUploadsConfiguration?.let {
-                prefPictureUploadsAccount?.value = it.accountName
-                prefPictureUploadsPath?.summary = DisplayUtils.getPathWithoutLastSlash(it.uploadPath)
-                prefPictureUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
-                prefPictureUploadsOnWifi?.isChecked = it.wifiOnly
-                prefPictureUploadsOnCharging?.isChecked = it.chargingOnly
-                prefPictureUploadsBehaviour?.value = it.behavior.name
-                prefPictureUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
-            } ?: resetFields()
-        })
+    private fun initStateObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                picturesViewModel.pictureUploads.collect { pictureUploadsConfiguration ->
+                    enablePictureUploads(pictureUploadsConfiguration != null)
+                    pictureUploadsConfiguration?.let {
+                        prefPictureUploadsAccount?.value = it.accountName
+                        prefPictureUploadsPath?.summary = DisplayUtils.getPathWithoutLastSlash(it.uploadPath)
+                        prefPictureUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
+                        prefPictureUploadsOnWifi?.isChecked = it.wifiOnly
+                        prefPictureUploadsOnCharging?.isChecked = it.chargingOnly
+                        prefPictureUploadsBehaviour?.value = it.behavior.name
+                        prefPictureUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
+                    } ?: resetFields()
+                }
+            }
+        }
     }
 
     private fun initPreferenceListeners() {
@@ -159,6 +168,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             }
             val intent = Intent(activity, UploadPathActivity::class.java).apply {
                 putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, uploadPath)
+                putExtra(FolderPickerActivity.EXTRA_PICKER_OPTION, FolderPickerActivity.PickerMode.CAMERA_FOLDER)
                 putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_ACCOUNT, picturesViewModel.getPictureUploadsAccount())
             }
             selectPictureUploadsPathLauncher.launch(intent)

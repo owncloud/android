@@ -54,6 +54,8 @@
   <string name="prefs_camera_video_upload_summary">Automatically upload videos recorded by camera</string>
   <string name="prefs_camera_video_upload_path_title">Video upload path</string>
   <string name="prefs_camera_video_upload_on_wifi">Upload videos via wifi only</string>
+  <string name="prefs_subsection_advanced">Advanced</string>
+  <string name="prefs_show_hidden_files">Show hidden files</string>
   <string name="prefs_log_title">Enable logging</string>
   <string name="prefs_log_summary">This is used to log problems</string>
   <string name="prefs_log_title_history">Logging history</string>
@@ -223,6 +225,9 @@
   <string name="pass_code_remove_your_pass_code">Remove your passcode</string>
   <string name="pass_code_mismatch">The passcodes are not the same</string>
   <string name="pass_code_wrong">Incorrect passcode</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="biometric_not_enrolled">Register at least one biometric to use this feature</string>
   <string name="biometric_prompt_title">Biometric log in</string>
   <string name="biometric_prompt_subtitle">Log in using your biometric credential</string>
@@ -541,4 +546,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Passcode lock</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Proceed</string>
+  <!--Release Notes 2.21-->
 </resources>

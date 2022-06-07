@@ -1,0 +1,6 @@
+Enhancement: Option to allow screenshots or not in Android Enterprise
+
+New parameter to manage screenshots can be configured via MDM.
+
+https://github.com/owncloud/android/issues/3625
+https://github.com/owncloud/android/pull/3627

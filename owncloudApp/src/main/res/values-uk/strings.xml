@@ -51,6 +51,7 @@
   <string name="prefs_camera_video_upload_summary">Автоматично завантажувати відео з камери</string>
   <string name="prefs_camera_video_upload_path_title">Шлях для завантаження відео</string>
   <string name="prefs_camera_video_upload_on_wifi">Завантажувати відео лише за наявності WiFi</string>
+  <string name="prefs_subsection_advanced">Додатково</string>
   <string name="prefs_log_title">Увімкнути ведення журналу</string>
   <string name="prefs_log_summary">Використовується для реєстрації помилок</string>
   <string name="prefs_log_title_history">Історія журналювання</string>
@@ -204,6 +205,8 @@
   <string name="pass_code_remove_your_pass_code">Видалити пароль</string>
   <string name="pass_code_mismatch">Паролі не співпадають</string>
   <string name="pass_code_wrong">Невірний пароль</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
   <string name="media_notif_ticker">%1$s музичний програвач</string>
   <string name="media_state_playing">%1$s (відтворюється)</string>
   <string name="media_state_loading">%1$s (завантажується)</string>
@@ -480,4 +483,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Захистити паролем</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Продовжити</string>
+  <!--Release Notes 2.21-->
 </resources>

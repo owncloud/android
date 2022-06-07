@@ -44,6 +44,8 @@
   <string name="prefs_camera_video_upload_summary">Hipno pošiljanje posnetkov, zajetih s kamero, na strežnik</string>
   <string name="prefs_camera_video_upload_path_title">Mapa v oblaku za odlaganje posnetkov</string>
   <string name="prefs_camera_video_upload_on_wifi">Pošiljaj posnetke le prek Wifi</string>
+  <string name="prefs_subsection_advanced">Napredne možnosti</string>
+  <string name="prefs_show_hidden_files">Pokaži skrite datoteke</string>
   <string name="prefs_log_title">Omogoči beleženje</string>
   <string name="prefs_log_summary">Uporablja se za beleženje težav in napak</string>
   <string name="prefs_log_title_history">Zgodovina beleženja</string>
@@ -202,6 +204,9 @@
   <string name="pass_code_remove_your_pass_code">Odstrani kodo PIN programa</string>
   <string name="pass_code_mismatch">Vpisani kodi PIN nista enaki</string>
   <string name="pass_code_wrong">Napačna koda PIN</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="media_notif_ticker">Predvajalnik glasbe %1$s</string>
   <string name="media_state_playing">%1$s (se predvaja)</string>
   <string name="media_state_loading">%1$s (se nalaga)</string>
@@ -486,4 +491,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Zakleni dostop s kodo PIN</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Nadaljuj</string>
+  <!--Release Notes 2.21-->
 </resources>

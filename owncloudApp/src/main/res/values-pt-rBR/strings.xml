@@ -33,6 +33,7 @@
   <string name="prefs_subsection_logging">Gravando no Log</string>
   <string name="prefs_subsection_more">Mais</string>
   <string name="prefs_subsection_security">Segurança</string>
+  <string name="prefs_subsection_whatsnew">O que há de novo na versão mais recente?</string>
   <string name="prefs_subsection_security_summary">Defina segurança para acesso ao aplicativo e permitir toques com outras janelas visíveis</string>
   <string name="prefs_subsection_logging_summary">Acompanhe os logs produzidos pela execução do aplicativo</string>
   <string name="prefs_subsection_more_summary">Informações do aplicativo, retorno de informações e outros</string>
@@ -69,6 +70,8 @@
   <string name="prefs_camera_video_upload_path_title">Caminho para vídeos enviados</string>
   <string name="prefs_camera_video_upload_on_wifi">Envio de vídeos apenas por wifi</string>
   <string name="prefs_camera_video_upload_on_charging">Envie vídeos apenas durante o carregamento</string>
+  <string name="prefs_subsection_advanced">Avançado</string>
+  <string name="prefs_show_hidden_files">Mostrar arquivos escondidos</string>
   <string name="prefs_log_open_logs_list_view">Arquivos log</string>
   <string name="prefs_log_no_logs_list_view">Pasta de log vazia! </string>
   <string name="prefs_log_title">Habilitar login</string>
@@ -143,6 +146,7 @@
   <string name="file_list_empty_shared_by_links">Nenhum arquivo foi compartilhado por linque.</string>
   <string name="file_list_loading">Carregando...</string>
   <string name="file_list_no_app_for_file_type">Nenhum aplicativo encontrado para esse tipo de arquivo</string>
+  <string name="file_list_no_app_for_perform_action">Nenhum aplicativo encontrado para esta ação</string>
   <string name="local_file_list_empty">Não existe nenhum arquivo nesta pasta.</string>
   <string name="local_file_list_empty_just_folders">Não existem pastas nessa pasta.</string>
   <string name="local_file_list_search_with_no_matches">Nenhum resultado para esta pesquisa</string>
@@ -159,6 +163,8 @@
   <string name="filedetails_created">Criado:</string>
   <string name="filedetails_modified">Modificado:</string>
   <string name="filedetails_download">Baixar</string>
+  <string name="filedetails_file_image_content_description">Imagem do Arquivo</string>
+  <string name="filedetails_cancel_btn_content_description">Botão Cancelar Baixar Arquivo</string>
   <string name="filedetails_sync_file">Sincronizar</string>
   <string name="filedetails_renamed_in_upload_msg">Arquivo foi renomeado para %1$s durante o envio</string>
   <string name="list_layout">Layout da lista</string>
@@ -230,6 +236,7 @@
   <string name="downloader_download_succeeded_ticker">Download bem sucedido</string>
   <string name="downloader_download_succeeded_content">%1$s baixado</string>
   <string name="downloader_download_failed_ticker">Download falhou</string>
+  <string name="downloader_preview_failed_ticker">Não foi possível exibir o arquivo</string>
   <string name="downloader_download_failed_content">Download de %1$s não pôde ser concluído</string>
   <string name="downloader_not_downloaded_yet">Não baixado ainda</string>
   <string name="downloader_download_failed_credentials_error">Falha em baixar o arquivo, você precisa se conectar novamente</string>
@@ -254,6 +261,18 @@
   <string name="pass_code_wrong">Código de acesso incorreto</string>
   <string name="pass_code_error_set">Ocorreu um erro ao configurar o bloqueio da senha</string>
   <string name="pass_code_error_remove">Ocorreu um erro ao remover o bloqueio da senha</string>
+  <string name="numberkeyboard_backspace_button_content_description">Botão de retrocesso</string>
+  <string name="numberkeyboard_biometric_button_content_description">Botão biométrico</string>
+  <string name="numberkeyboard_zero">0</string>
+  <string name="numberkeyboard_one">1</string>
+  <string name="numberkeyboard_two">2</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
+  <string name="numberkeyboard_six">6</string>
+  <string name="numberkeyboard_seven">7</string>
+  <string name="numberkeyboard_eight">8</string>
+  <string name="numberkeyboard_nine">9</string>
   <string name="lock_time_try_again">Por favor, tente novamente em %1$s</string>
   <string name="biometric_not_enrolled">Registre pelo menos uma biométria para usar esse recurso</string>
   <string name="biometric_prompt_title">Conexão biométrica</string>
@@ -431,6 +450,8 @@
   <string name="actionbar_move">Mover</string>
   <string name="file_list_empty_moving">Nada aqui. Você pode adicionar uma pasta!</string>
   <string name="folder_picker_choose_button_text">Escolher</string>
+  <string name="folder_picker_move_here_button_text">Mover para aqui</string>
+  <string name="folder_picker_copy_here_button_text">Copie aqui</string>
   <string name="move_file_not_found">Não é possível mover. Por favor verifique se o arquivo existe</string>
   <string name="move_file_invalid_into_descendent">Não é possível mover a pasta para uma descendente</string>
   <string name="move_file_invalid_overwrite">O arquivo já existe na pasta de destino</string>
@@ -555,6 +576,7 @@
   <string name="button_rate_now_name">AVALIAR AGORA</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d selecionado</item>
+    <item quantity="many">%d selecionados</item>
     <item quantity="other">%d selecionados</item>
   </plurals>
   <!--Welcome to oC intro features-->
@@ -591,4 +613,26 @@
   <string name="security_enforced_title">Por favor, selecione uma opção para bloquear o aplicativo:</string>
   <string name="security_enforced_first_option">Bloqueio de senha</string>
   <string name="security_enforced_second_option">Bloqueio Padrão</string>
+  <!--Release Notes-->
+  <string name="release_notes_header">Novo em %1$s</string>
+  <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>
+  <string name="release_notes_proceed">Prosseguir</string>
+  <string name="release_notes_icon">Ícone de nota de lançamento</string>
+  <!--Release Notes 2.21-->
+  <string name="release_notes_title_1">Notas de Lançamento</string>
+  <string name="release_notes_subtitle_1">As notícias no aplicativo serão listadas após cada atualização para informar sobre as últimas melhorias e novos recursos. Disponível também na visualização Configurações para verificar novamente.</string>
+  <string name="release_notes_title_2">Conexões seguras por padrão</string>
+  <string name="release_notes_subtitle_2">Conexões HTTP por padrão para estabelecer conexões de servidor. Caso contrário, será explicitamente exigido no URL</string>
+  <string name="release_notes_title_3">Redefinição de Senha e Padrão</string>
+  <string name="release_notes_subtitle_3">Integrado o teclado numérico na tela, navegação aprimorada e interface gráfica.</string>
+  <string name="release_notes_title_4">Suporte para arquivos SVG</string>
+  <string name="release_notes_subtitle_4">Adicionado suporte para arquivos svg.</string>
+  <string name="release_notes_title_5">Redesenho da visualização de detalhes</string>
+  <string name="release_notes_subtitle_5">Informações reordenadas e adicionadas a possibilidade de baixar e abrir o arquivo clicando na miniatura.</string>
+  <string name="release_notes_title_6">Arquivos ocultos</string>
+  <string name="release_notes_subtitle_6">Adicionada uma nova opção nas configurações para decidir mostrar ou não arquivos ocultos.</string>
+  <string name="release_notes_title_7">Compartilhando de dentro</string>
+  <string name="release_notes_subtitle_7">Adicionada a opção de compartilhamento para pastas da lista de seu conteúdo</string>
+  <string name="release_notes_title_8">Corrigindo erro</string>
+  <string name="release_notes_subtitle_8">Alguns bugs existentes foram corrigidos</string>
 </resources>

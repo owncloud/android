@@ -42,6 +42,8 @@
   <string name="prefs_camera_video_upload_summary">カメラで撮影した動画を自動アップロード</string>
   <string name="prefs_camera_video_upload_path_title">動画アップロードパス</string>
   <string name="prefs_camera_video_upload_on_wifi">WiFi経由でのみ動画をアップロード</string>
+  <string name="prefs_subsection_advanced">詳細設定</string>
+  <string name="prefs_show_hidden_files">隠しファイルを表示</string>
   <string name="prefs_log_title">ログの有効化</string>
   <string name="prefs_log_summary">これは問題をログに記録するのに使用します。</string>
   <string name="prefs_log_title_history">ログの履歴</string>
@@ -191,6 +193,9 @@
   <string name="pass_code_remove_your_pass_code">パスコードを削除</string>
   <string name="pass_code_mismatch">パスコードが一致しません</string>
   <string name="pass_code_wrong">パスコードが正しくありません</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="media_notif_ticker">%1$s ミュージックプレーヤー</string>
   <string name="media_state_playing">%1$s (プレイ中)</string>
   <string name="media_state_loading">%1$s (読込中)</string>
@@ -465,4 +470,6 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">パスコードロック</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">続行</string>
 </resources>

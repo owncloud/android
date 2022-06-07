@@ -1,3 +1,207 @@
+Changelog for ownCloud Android Client [2.21.0] (2022-06-07)
+=======================================
+The following sections list the changes in ownCloud Android Client 2.21.0 relevant to
+ownCloud admins and users.
+
+[2.21.0]: https://github.com/owncloud/android/compare/v2.20.0...v2.21.0
+
+Summary
+-------
+
+* Bugfix - Security flags for recording screen: [#3468](https://github.com/owncloud/android/issues/3468)
+* Bugfix - Crash when changing orientation in Details view: [#3571](https://github.com/owncloud/android/issues/3571)
+* Bugfix - Lock displays shown again: [#3591](https://github.com/owncloud/android/issues/3591)
+* Bugfix - Prevented signed in user in the list of users to be shared: [#1419](https://github.com/owncloud/android/issues/1419)
+* Bugfix - Corrupt picture error controlled: [#3441](https://github.com/owncloud/android/issues/3441)
+* Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
+* Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
+* Enhancement - Provide app feedback to MDM admins: [#3420](https://github.com/owncloud/android/issues/3420)
+* Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
+* Enhancement - Improvements for the UI in the passcode screen: [#3516](https://github.com/owncloud/android/issues/3516)
+* Enhancement - Improvements for the UI in the pattern screen: [#3580](https://github.com/owncloud/android/issues/3580)
+* Enhancement - Release Notes: [#3442](https://github.com/owncloud/android/issues/3442)
+* Enhancement - Prevent taking screenshots: [#3596](https://github.com/owncloud/android/issues/3596)
+* Enhancement - What´s new option: [#3352](https://github.com/owncloud/android/issues/3352)
+* Enhancement - New option to show or not hidden files: [#2578](https://github.com/owncloud/android/issues/2578)
+* Enhancement - Option to allow screenshots or not in Android Enterprise: [#3625](https://github.com/owncloud/android/issues/3625)
+* Enhancement - Full name is shown in shares: [#1106](https://github.com/owncloud/android/issues/1106)
+* Enhancement - Send for file multiselect: [#3491](https://github.com/owncloud/android/issues/3491)
+* Enhancement - Support for SVG files added: [#1033](https://github.com/owncloud/android/issues/1033)
+* Enhancement - Improved copy/move dialog: [#1414](https://github.com/owncloud/android/issues/1414)
+* Enhancement - Thumbnail click action in file detail: [#3653](https://github.com/owncloud/android/pull/3653)
+* Enhancement - Share a folder from within the folder: [#1441](https://github.com/owncloud/android/issues/1441)
+
+Details
+-------
+
+* Bugfix - Security flags for recording screen: [#3468](https://github.com/owncloud/android/issues/3468)
+
+   Previously, if passcode or pattern were enabled, no screen from the app could be viewed from a
+   recording screen app. Now, only the login, passcode and pattern screens are protected against
+   recording.
+
+   https://github.com/owncloud/android/issues/3468
+   https://github.com/owncloud/android/pull/3560
+
+* Bugfix - Crash when changing orientation in Details view: [#3571](https://github.com/owncloud/android/issues/3571)
+
+   Previously, the app crashes when changing orientation in Details view after installing Now,
+   app shows correctly the details after installing.
+
+   https://github.com/owncloud/android/issues/3571
+   https://github.com/owncloud/android/pull/3589
+
+* Bugfix - Lock displays shown again: [#3591](https://github.com/owncloud/android/issues/3591)
+
+   Previously, if you clicked on passcode or pattern lock to remove it, and then you clicked on
+   cancel, the lock display was shown again to put the passcode or pattern. Now, if you cancel it,
+   you come back to settings screen.
+
+   https://github.com/owncloud/android/issues/3591
+   https://github.com/owncloud/android/pull/3592
+
+* Bugfix - Prevented signed in user in the list of users to be shared: [#1419](https://github.com/owncloud/android/issues/1419)
+
+   Previously, user list for sharing contains signed in user, now this user is omitted to avoid
+   errors.
+
+   https://github.com/owncloud/android/issues/1419
+   https://github.com/owncloud/android/pull/3643
+
+* Bugfix - Corrupt picture error controlled: [#3441](https://github.com/owncloud/android/issues/3441)
+
+   Previously, If a file is not correct or is damaged, it is downloaded but not previewed. An
+   infinite spinner on a black window is shown instead. Now, an error appears warning to the user.
+
+   https://github.com/owncloud/android/issues/3441
+   https://github.com/owncloud/android/pull/3644
+
+* Enhancement - First steps in Android Enterprise integration: [#3415](https://github.com/owncloud/android/issues/3415)
+
+   Two parameters (server url and server url input visibility) can be now managed via MDM. These
+   were the first parameters used to test integration with Android Enterprise and Android
+   Management API.
+
+   https://github.com/owncloud/android/issues/3415
+   https://github.com/owncloud/android/pull/3419
+
+* Enhancement - Lock delay enforced: [#3440](https://github.com/owncloud/android/issues/3440)
+
+   A new local setup's option has been added for the application to lock after the selected
+   interval
+
+   https://github.com/owncloud/android/issues/3440
+   https://github.com/owncloud/android/pull/3547
+
+* Enhancement - Provide app feedback to MDM admins: [#3420](https://github.com/owncloud/android/issues/3420)
+
+   Now, when a MDM configuration is applied for the first time or changed by an IT administrator,
+   the app sends feedback that will be shown in the EMM console.
+
+   https://github.com/owncloud/android/issues/3420
+   https://github.com/owncloud/android/pull/3480
+
+* Enhancement - Extended security enforced: [#3543](https://github.com/owncloud/android/issues/3543)
+
+   New extended branding options have been added to make app lock via passcode or pattern
+   compulsory.
+
+   https://github.com/owncloud/android/issues/3543
+   https://github.com/owncloud/android/pull/3544
+
+* Enhancement - Improvements for the UI in the passcode screen: [#3516](https://github.com/owncloud/android/issues/3516)
+
+   Redesign of the passcode screen to have the numeric keyboard in the screen instead of using the
+   Android one.
+
+   https://github.com/owncloud/android/issues/3516
+   https://github.com/owncloud/android/pull/3582
+
+* Enhancement - Improvements for the UI in the pattern screen: [#3580](https://github.com/owncloud/android/issues/3580)
+
+   Redesign of the pattern screen. Cancel button deleted and new back arrow in the toolbar.
+
+   https://github.com/owncloud/android/issues/3580
+   https://github.com/owncloud/android/pull/3587
+
+* Enhancement - Release Notes: [#3442](https://github.com/owncloud/android/issues/3442)
+
+   New release notes to show news in updates.
+
+   https://github.com/owncloud/android/issues/3442
+   https://github.com/owncloud/android/pull/3594
+
+* Enhancement - Prevent taking screenshots: [#3596](https://github.com/owncloud/android/issues/3596)
+
+   New option to prevent taking screenshots.
+
+   https://github.com/owncloud/android/issues/3596
+   https://github.com/owncloud/android/pull/3615
+
+* Enhancement - What´s new option: [#3352](https://github.com/owncloud/android/issues/3352)
+
+   New option to check what was included in the latest version.
+
+   https://github.com/owncloud/android/issues/3352
+   https://github.com/owncloud/android/pull/3616
+
+* Enhancement - New option to show or not hidden files: [#2578](https://github.com/owncloud/android/issues/2578)
+
+   Enable it to show hidden files and folders
+
+   https://github.com/owncloud/android/issues/2578
+   https://github.com/owncloud/android/pull/3624
+
+* Enhancement - Option to allow screenshots or not in Android Enterprise: [#3625](https://github.com/owncloud/android/issues/3625)
+
+   New parameter to manage screenshots can be configured via MDM.
+
+   https://github.com/owncloud/android/issues/3625
+   https://github.com/owncloud/android/pull/3627
+
+* Enhancement - Full name is shown in shares: [#1106](https://github.com/owncloud/android/issues/1106)
+
+   Full name is shown when using public share instead of username.
+
+   https://github.com/owncloud/android/issues/1106
+   https://github.com/owncloud/android/pull/3636
+
+* Enhancement - Send for file multiselect: [#3491](https://github.com/owncloud/android/issues/3491)
+
+   Send multiple files at once if they are downloaded.
+
+   https://github.com/owncloud/android/issues/3491
+   https://github.com/owncloud/android/pull/3638
+
+* Enhancement - Support for SVG files added: [#1033](https://github.com/owncloud/android/issues/1033)
+
+   SVG files are supported and can be downloaded and viewed.
+
+   https://github.com/owncloud/android/issues/1033
+   https://github.com/owncloud/android/pull/3639
+
+* Enhancement - Improved copy/move dialog: [#1414](https://github.com/owncloud/android/issues/1414)
+
+   Previously,they appeared exactly the same and there was no way of knowing which was which. Now
+   they are differentiated by the text on the action button.
+
+   https://github.com/owncloud/android/issues/1414
+   https://github.com/owncloud/android/pull/3640
+
+* Enhancement - Thumbnail click action in file detail: [#3653](https://github.com/owncloud/android/pull/3653)
+
+   When a user clicks on a file's detail view thumbnail, the file is automatically downloaded and
+   previewed.
+
+   https://github.com/owncloud/android/pull/3653
+
+* Enhancement - Share a folder from within the folder: [#1441](https://github.com/owncloud/android/issues/1441)
+
+   You can share a folder clicking in the share icon inside the folder.
+
+   https://github.com/owncloud/android/issues/1441
+   https://github.com/owncloud/android/pull/3659
+
 Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.20.0 relevant to

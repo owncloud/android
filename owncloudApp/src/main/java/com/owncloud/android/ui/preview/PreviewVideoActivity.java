@@ -34,6 +34,7 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -46,9 +47,9 @@ import com.owncloud.android.ui.activity.FileActivity;
 import timber.log.Timber;
 
 /**
- * An activity that plays media using {@link SimpleExoPlayer}.
+ * An activity that plays media using {@link ExoPlayer}.
  */
-public class PreviewVideoActivity extends FileActivity implements ExoPlayer.EventListener,
+public class PreviewVideoActivity extends FileActivity implements Player.Listener,
         PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
 
     /**
@@ -64,7 +65,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
     private PlayerView exoPlayerView;
 
     private boolean mExoPlayerBooted = false;
-    private SimpleExoPlayer player;
+    private ExoPlayer player;
     private DefaultTrackSelector trackSelector;
 
     private boolean mAutoplay; // when 'true', the playback starts immediately with the activity
@@ -151,7 +152,7 @@ public class PreviewVideoActivity extends FileActivity implements ExoPlayer.Even
         // Create a default TrackSelector
         AdaptiveTrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-        player = new SimpleExoPlayer.Builder(this).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
+        player = new ExoPlayer.Builder(this).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
         player.addListener(this);
         exoPlayerView.setPlayer(player);
         // Prepare video player asynchronously

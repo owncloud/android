@@ -55,6 +55,8 @@
   <string name="prefs_camera_video_upload_summary">حمِّل مقاطع الفيديو التي سجلتها الكاميرا تلقائيًا</string>
   <string name="prefs_camera_video_upload_path_title">مسار تحميل الفيديو</string>
   <string name="prefs_camera_video_upload_on_wifi">تحميل مقاطع الفيديو عبر wifi فقط</string>
+  <string name="prefs_subsection_advanced">الإعدادات المتقدمة</string>
+  <string name="prefs_show_hidden_files">عرض الملفات المخفية</string>
   <string name="prefs_log_title">تمكين التسجيل</string>
   <string name="prefs_log_summary">يُستخدم هذا لتسجيل المشكلات</string>
   <string name="prefs_log_title_history">محفوظات التسجيل</string>
@@ -224,6 +226,9 @@
   <string name="pass_code_remove_your_pass_code">أزِل رمز مرورك</string>
   <string name="pass_code_mismatch">رموز المرور غير متطابقة</string>
   <string name="pass_code_wrong">رمز مرور غير صحيح</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="biometric_not_enrolled">سجِّل بيانات اعتماد بيولوجية واحدة على الأقل لاستخدام هذه الميزة</string>
   <string name="biometric_prompt_title">تسجيل دخول بيولوجي</string>
   <string name="biometric_prompt_subtitle">سجِّل الدخول باستخدام بيانات اعتماد بيولوجية</string>
@@ -543,4 +548,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">قفل رمز المرور</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">متابعة</string>
+  <!--Release Notes 2.21-->
 </resources>

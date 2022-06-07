@@ -58,8 +58,9 @@ class PatternActivityTest {
 
         startKoin {
             context
+            allowOverride(override = true)
             modules(
-                module(override = true) {
+                module {
                     viewModel {
                         patternViewModel
                     }
@@ -88,7 +89,6 @@ class PatternActivityTest {
             withText(R.string.pattern_configure_your_pattern_explanation)
         }
         R.id.pattern_lock_view.isDisplayed(true)
-        R.id.cancel_pattern.isDisplayed(true)
     }
 
     @Test

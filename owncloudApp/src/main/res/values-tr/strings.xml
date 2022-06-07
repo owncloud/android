@@ -55,6 +55,8 @@
   <string name="prefs_camera_video_upload_summary">Kamera ile kaydedilen vidyoları otomatik olarak karşıya yükle</string>
   <string name="prefs_camera_video_upload_path_title">Video yükleme yolu</string>
   <string name="prefs_camera_video_upload_on_wifi">Videoları sadece kablosuz bağlantıda (WiFi) yükle</string>
+  <string name="prefs_subsection_advanced">Gelişmiş</string>
+  <string name="prefs_show_hidden_files">Gizli dosyaları göster</string>
   <string name="prefs_log_title">Günlüğü etkinleştir</string>
   <string name="prefs_log_summary">Bu, sorunları günlük dosyasına kaydetmek için kullanılır</string>
   <string name="prefs_log_title_history">Günlük geçmişi</string>
@@ -227,6 +229,9 @@
   <string name="pass_code_remove_your_pass_code">Parola kodunuzu kaldırın</string>
   <string name="pass_code_mismatch">Parola kodları aynı değil</string>
   <string name="pass_code_wrong">Hatalı parola kodu</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="biometric_not_enrolled">Bu özelliği kullanmak için en az bir biyometrik giriş kaydedilmeli</string>
   <string name="biometric_prompt_title">Biyometrik giriş yap</string>
   <string name="biometric_prompt_subtitle">Biyometrik kimlik bilgilerinizi kullanarak giriş yapın</string>
@@ -544,4 +549,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Parola kod kilidi</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Devam et</string>
+  <!--Release Notes 2.21-->
 </resources>

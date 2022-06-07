@@ -69,6 +69,8 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
     private static final String TAG_LIST_OF_FOLDERS = "LIST_OF_FOLDERS";
 
+    public static final String EXTRA_PICKER_OPTION = "EXTRA_PICKER_OPTION";
+
     private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
     private boolean mSyncInProgress = false;
@@ -102,6 +104,9 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
         // sets message for empty list of folders
         setBackgroundText();
+
+        // Set action button text
+        setActionButtonText();
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
 
@@ -166,6 +171,12 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         } else {
             Timber.e("OCFileListFragment is null");
         }
+    }
+
+    private void setActionButtonText() {
+        PickerMode actionButton = (PickerMode) getIntent().getSerializableExtra(EXTRA_PICKER_OPTION);
+        Button chooseButton = findViewById(R.id.folder_picker_btn_choose);
+        chooseButton.setText(getString(actionButton.getButtonString()));
     }
 
     protected OCFileListFragment getListOfFilesFragment() {
@@ -506,6 +517,21 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             OCFile folder = listOfFiles.getCurrentFile();
             if (folder != null) {
                 startSyncFolderOperation(folder, ignoreETag);
+            }
+        }
+    }
+
+    public enum PickerMode {
+        MOVE, COPY, CAMERA_FOLDER;
+
+        public Integer getButtonString() {
+            switch (this) {
+                case MOVE:
+                    return R.string.folder_picker_move_here_button_text;
+                case COPY:
+                    return R.string.folder_picker_copy_here_button_text;
+                default:
+                    return R.string.folder_picker_choose_button_text;
             }
         }
     }

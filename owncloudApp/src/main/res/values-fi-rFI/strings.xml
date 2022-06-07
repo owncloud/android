@@ -41,6 +41,8 @@
   <string name="prefs_camera_video_upload_summary">Lähetä automaattisesti kameralla kuvatut videot</string>
   <string name="prefs_camera_video_upload_path_title">Kansio lähetetyille videoille</string>
   <string name="prefs_camera_video_upload_on_wifi">Lähetä videot vain wifi-yhteyden kautta</string>
+  <string name="prefs_subsection_advanced">Lisäasetukset</string>
+  <string name="prefs_show_hidden_files">Näytä piilotetut tiedostot</string>
   <string name="prefs_log_title">Käytä lokitusta</string>
   <string name="prefs_log_summary">Tätä käytetään ongelmien lokitukseen</string>
   <string name="prefs_log_title_history">Lokihistoria</string>
@@ -188,6 +190,8 @@
   <string name="pass_code_remove_your_pass_code">Poista suojakoodi käytöstä</string>
   <string name="pass_code_mismatch">Suojakoodit eivät täsmää</string>
   <string name="pass_code_wrong">Virheellinen suojakoodi</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
   <string name="media_notif_ticker">%1$s-musiikkisoitin</string>
   <string name="media_state_playing">%1$s (toistetaan)</string>
   <string name="media_state_loading">%1$s (ladataan)</string>
@@ -462,4 +466,6 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Suojakoodilukitus</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Jatka</string>
 </resources>

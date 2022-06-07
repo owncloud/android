@@ -27,6 +27,7 @@ package com.owncloud.android.ui.preview
 
 import android.accounts.Account
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,6 +36,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -47,6 +49,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.PreviewImageFragmentBinding
 import com.owncloud.android.databinding.TopProgressBarBinding
 import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.MIME_SVG
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
@@ -119,6 +122,8 @@ class PreviewImageFragment : FileFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.top.setBackgroundColor(getBackgroundColor(file))
 
         binding.photoView.isVisible = false
         binding.photoView.setOnClickListener {
@@ -320,6 +325,7 @@ class PreviewImageFragment : FileFragment() {
                 override fun onLoadFailed(
                     e: GlideException?, model: Any, target: Target<Drawable?>, isFirstResource: Boolean
                 ): Boolean {
+                    binding.errorGroup.isVisible = true
                     Timber.e(e, "Error loading image")
                     return false
                 }
@@ -329,11 +335,20 @@ class PreviewImageFragment : FileFragment() {
                     dataSource: DataSource, isFirstResource: Boolean
                 ): Boolean {
                     Timber.d("Loading image %s", file.fileName)
+
+                    view?.findViewById<ProgressBar>(R.id.progressWheel)?.isVisible = false
                     return false
                 }
             })
             .into(binding.photoView)
+
         binding.photoView.isVisible = true
+    }
+
+    private fun isSVGFile(file: OCFile): Boolean = file.mimetype == MIME_SVG
+
+    private fun getBackgroundColor(file: OCFile): Int {
+        return if (isSVGFile(file)) Color.WHITE else Color.BLACK
     }
 
     /**

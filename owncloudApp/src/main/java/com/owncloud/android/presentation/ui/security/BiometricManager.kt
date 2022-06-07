@@ -29,8 +29,10 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
-import com.owncloud.android.presentation.ui.security.PassCodeManager.isPassCodeEnabled
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeManager.isPassCodeEnabled
 import com.owncloud.android.presentation.ui.security.PatternManager.isPatternEnabled
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeManager
 import kotlin.math.abs
 
 object BiometricManager {

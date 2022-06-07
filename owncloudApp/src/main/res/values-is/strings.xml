@@ -47,6 +47,8 @@
   <string name="prefs_camera_video_upload_summary">Hlaða sjálfvirkt inn myndskeiðum teknum á myndavél</string>
   <string name="prefs_camera_video_upload_path_title">Innsendingarslóð fyrir myndskeið</string>
   <string name="prefs_camera_video_upload_on_wifi">Senda inn myndskeið einungis um þráðlaus net</string>
+  <string name="prefs_subsection_advanced">Ítarlegt</string>
+  <string name="prefs_show_hidden_files">Sýna faldar skrár</string>
   <string name="prefs_log_title">Virkja skráningu í annál</string>
   <string name="prefs_log_summary">Þetta er notað til að skrá vandamál</string>
   <string name="prefs_log_title_history">Ferill annálsskráningar</string>
@@ -201,6 +203,7 @@
   <string name="pass_code_remove_your_pass_code">Fjarlægja lykilkóðann þinn</string>
   <string name="pass_code_mismatch">Lykilkóðarnir eru ekki eins</string>
   <string name="pass_code_wrong">Rangur lykilkóði</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="media_notif_ticker">%1$s tónlistarspilari</string>
   <string name="media_state_playing">%1$s (afspilun)</string>
   <string name="media_state_loading">%1$s (hleð)</string>
@@ -487,4 +490,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Læsing með lykilkóða</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Halda áfram</string>
+  <!--Release Notes 2.21-->
 </resources>

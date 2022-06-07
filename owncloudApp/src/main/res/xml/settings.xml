@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2021 ownCloud GmbH.
+  Copyright (C) 2022 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -18,55 +18,69 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     app:key="settings_screen">
 
-        <Preference
-            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment"
-            app:icon="@drawable/ic_lock_colored"
-            app:key="security_subsection"
-            app:summary="@string/prefs_subsection_security_summary"
-            app:title="@string/prefs_subsection_security" />
+    <Preference
+        app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment"
+        app:icon="@drawable/ic_lock_colored"
+        app:key="security_subsection"
+        app:summary="@string/prefs_subsection_security_summary"
+        app:title="@string/prefs_subsection_security" />
 
-        <Preference
-            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment"
-            app:allowDividerAbove="true"
-            app:icon="@drawable/ic_logs"
-            app:key="logging_subsection"
-            app:summary="@string/prefs_subsection_logging_summary"
-            app:title="@string/prefs_subsection_logging" />
+    <Preference
+        app:allowDividerAbove="true"
+        app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment"
+        app:icon="@drawable/ic_logs"
+        app:key="logging_subsection"
+        app:summary="@string/prefs_subsection_logging_summary"
+        app:title="@string/prefs_subsection_logging" />
 
-        <Preference
-            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsPictureUploadsFragment"
-            app:allowDividerAbove="true"
-            app:icon="@drawable/ic_picture_uploads"
-            app:key="picture_uploads_subsection"
-            app:summary="@string/prefs_subsection_picture_uploads_summary"
-            app:title="@string/prefs_subsection_picture_uploads" />
+    <Preference
+        app:allowDividerAbove="true"
+        app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsPictureUploadsFragment"
+        app:icon="@drawable/ic_picture_uploads"
+        app:key="picture_uploads_subsection"
+        app:summary="@string/prefs_subsection_picture_uploads_summary"
+        app:title="@string/prefs_subsection_picture_uploads" />
 
-        <Preference
-            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsVideoUploadsFragment"
-            app:icon="@drawable/ic_video_uploads"
-            app:key="video_uploads_subsection"
-            app:summary="@string/prefs_subsection_video_uploads_summary"
-            app:title="@string/prefs_subsection_video_uploads" />
+    <Preference
+        app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsVideoUploadsFragment"
+        app:icon="@drawable/ic_video_uploads"
+        app:key="video_uploads_subsection"
+        app:summary="@string/prefs_subsection_video_uploads_summary"
+        app:title="@string/prefs_subsection_video_uploads" />
 
-        <Preference
-            app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment"
-            app:allowDividerAbove="true"
-            app:icon="@drawable/ic_more"
-            app:key="more_subsection"
-            app:summary="@string/prefs_subsection_more_summary"
-            app:title="@string/prefs_subsection_more" />
+    <Preference
+        app:allowDividerAbove="true"
+        app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment"
+        app:icon="@drawable/ic_settings"
+        app:key="advanced_subsection"
+        app:title="@string/prefs_subsection_advanced" />
 
-        <Preference
-            app:allowDividerAbove="true"
-            app:iconSpaceReserved="false"
-            app:icon="@drawable/ic_privacy_policy"
-            app:key="privacyPolicy"
-            app:title="@string/prefs_privacy_policy" />
+    <Preference
+        app:allowDividerAbove="true"
+        app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment"
+        app:icon="@drawable/ic_more"
+        app:key="more_subsection"
+        app:summary="@string/prefs_subsection_more_summary"
+        app:title="@string/prefs_subsection_more" />
 
-        <Preference
-            app:allowDividerAbove="true"
-            app:iconSpaceReserved="false"
-            app:key="about_app"
-            app:title="@string/prefs_app_version" />
+    <Preference
+        app:allowDividerAbove="true"
+        app:icon="@drawable/ic_privacy_policy"
+        app:iconSpaceReserved="false"
+        app:key="privacyPolicy"
+        app:title="@string/prefs_privacy_policy" />
+
+    <Preference
+        app:allowDividerAbove="true"
+        app:icon="@drawable/ic_settings_whats_new"
+        app:iconSpaceReserved="false"
+        app:key="whatsNew"
+        app:title="@string/prefs_subsection_whatsnew" />
+
+    <Preference
+        app:allowDividerAbove="true"
+        app:iconSpaceReserved="false"
+        app:key="about_app"
+        app:title="@string/prefs_app_version" />
 
 </PreferenceScreen>

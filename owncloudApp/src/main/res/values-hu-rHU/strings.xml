@@ -52,6 +52,8 @@
   <string name="prefs_camera_video_upload_summary">A fényképezőgép által készített videók automatikus feltöltése</string>
   <string name="prefs_camera_video_upload_path_title">Videó feltöltési útvonal</string>
   <string name="prefs_camera_video_upload_on_wifi">Videókat csak wifin tölthet fel</string>
+  <string name="prefs_subsection_advanced">Haladó</string>
+  <string name="prefs_show_hidden_files">Rejtett fájlok megjelenítése</string>
   <string name="prefs_log_title">Naplózás engedélyezése</string>
   <string name="prefs_log_summary">Ez használható a problémák naplózásához</string>
   <string name="prefs_log_title_history">Naplózás előzménye</string>
@@ -232,6 +234,9 @@
   <string name="pass_code_wrong">Hibás jelszó</string>
   <string name="pass_code_error_set">Hiba történt a jelkódos zárolás beállítása során</string>
   <string name="pass_code_error_remove">Hiba történt a jelkódos zárolás visszavonása során</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="biometric_not_enrolled">Regisztráljon legalább egy biometrikus azonosítót, hogy ezt a módot használja.</string>
   <string name="biometric_prompt_title">Biometrikus bejelentkezés</string>
   <string name="biometric_prompt_subtitle">Jelentkezzen be biometrikus azonosítással</string>
@@ -553,4 +558,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Jelszavas zár</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Végrehajtás</string>
+  <!--Release Notes 2.21-->
 </resources>

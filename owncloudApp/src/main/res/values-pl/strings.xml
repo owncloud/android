@@ -46,6 +46,8 @@
   <string name="prefs_camera_video_upload_summary">Automatycznie wrzuć filmy zrobione przez kamerę</string>
   <string name="prefs_camera_video_upload_path_title">Ścieżka wrzucania filmu</string>
   <string name="prefs_camera_video_upload_on_wifi">Wysyłaj filmy tylko przez WiFi</string>
+  <string name="prefs_subsection_advanced">Zaawansowane</string>
+  <string name="prefs_show_hidden_files">Pokaż ukryte pliki</string>
   <string name="prefs_log_title">Włącz historię logowania</string>
   <string name="prefs_log_summary">To jest używane do logowania problemów</string>
   <string name="prefs_log_title_history">Historia logowania</string>
@@ -212,6 +214,9 @@
   <string name="pass_code_remove_your_pass_code">Usuń swój kod PIN</string>
   <string name="pass_code_mismatch">Podane hasła nie są takie same</string>
   <string name="pass_code_wrong">Kod PIN nieprawidłowy</string>
+  <string name="numberkeyboard_three">3</string>
+  <string name="numberkeyboard_four">4</string>
+  <string name="numberkeyboard_five">5</string>
   <string name="biometric_not_enrolled">Zarejestruj co najmniej jedno uwierzytelnienie biometryczne</string>
   <string name="biometric_prompt_title">Zalogowano biometrycznie</string>
   <string name="media_notif_ticker">%1$s odtwarzacz muzyki</string>
@@ -527,4 +532,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Blokada hasłem</string>
+  <!--Release Notes-->
+  <string name="release_notes_proceed">Wykonaj</string>
+  <!--Release Notes 2.21-->
 </resources>

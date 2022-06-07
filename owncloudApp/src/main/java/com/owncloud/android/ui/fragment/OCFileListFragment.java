@@ -8,8 +8,9 @@
  * @author David González Verdugo
  * @author Shashvat Kedia
  * @author Abel García de Prada
+ * @author David Crespo Rios
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -61,6 +62,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.extensions.DialogExtKt;
 import com.owncloud.android.extensions.FragmentExtKt;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
@@ -274,6 +276,18 @@ public class OCFileListFragment extends ExtendedListFragment implements
         mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
         mSearchView.setOnQueryTextFocusChangeListener(this);
         mSearchView.setOnQueryTextListener(this);
+
+        if (isPickingAFolder()) {
+            menu.removeItem(menu.findItem(R.id.action_share_current_folder).getItemId());
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_share_current_folder) {
+            mContainerActivity.getFileOperationsHelper().showShareFile(mFile);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void updateFileListOption(FileListOption newFileListOption) {
@@ -350,42 +364,40 @@ public class OCFileListFragment extends ExtendedListFragment implements
      * on the Upload mini FAB for the linked action an {@link Snackbar} showing the underlying action.
      */
     private void registerFabUploadListeners() {
-        getFabUpload().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment, null);
-                final BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
-                dialog.setContentView(uploadBottomSheet);
-                final BottomSheetFragmentItemView uploadFromFilesItemView = uploadBottomSheet.findViewById(R.id.upload_from_files_item_view);
-                BottomSheetFragmentItemView uploadFromCameraItemView =
-                        uploadBottomSheet.findViewById(R.id.upload_from_camera_item_view);
-                TextView uploadToTextView = uploadBottomSheet.findViewById(R.id.upload_to_text_view);
-                uploadFromFilesItemView.setOnTouchListener((v13, event) -> {
-                    Intent action = new Intent(Intent.ACTION_GET_CONTENT);
-                    action = action.setType(ALL_FILES_SAF_REGEX).addCategory(Intent.CATEGORY_OPENABLE);
-                    action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                    getActivity().startActivityForResult(
-                            Intent.createChooser(action, getString(R.string.upload_chooser_title)),
-                            FileDisplayActivity.REQUEST_CODE__SELECT_CONTENT_FROM_APPS
-                    );
-                    dialog.hide();
-                    return false;
-                });
-                uploadFromCameraItemView.setOnTouchListener((v12, event) -> {
-                    ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
-                    dialog.hide();
-                    return false;
-                });
-                uploadToTextView.setText(String.format(getResources().getString(R.string.upload_to),
-                        getResources().getString(R.string.app_name)));
-                final BottomSheetBehavior uploadBottomSheetBehavior =
-                        BottomSheetBehavior.from((View) uploadBottomSheet.getParent());
-                dialog.setOnShowListener(dialog1 ->
-                        uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.getMeasuredHeight()));
-                dialog.show();
-                getFabMain().collapse();
-                recordMiniFabClick();
-            }
+        getFabUpload().setOnClickListener(v -> {
+            final View uploadBottomSheet = getLayoutInflater().inflate(R.layout.upload_bottom_sheet_fragment, null);
+            final BottomSheetDialog dialog = new BottomSheetDialog(requireContext());
+            dialog.setContentView(uploadBottomSheet);
+            final BottomSheetFragmentItemView uploadFromFilesItemView = uploadBottomSheet.findViewById(R.id.upload_from_files_item_view);
+            BottomSheetFragmentItemView uploadFromCameraItemView =
+                    uploadBottomSheet.findViewById(R.id.upload_from_camera_item_view);
+            TextView uploadToTextView = uploadBottomSheet.findViewById(R.id.upload_to_text_view);
+            uploadFromFilesItemView.setOnTouchListener((v13, event) -> {
+                Intent action = new Intent(Intent.ACTION_GET_CONTENT);
+                action = action.setType(ALL_FILES_SAF_REGEX).addCategory(Intent.CATEGORY_OPENABLE);
+                action.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                getActivity().startActivityForResult(
+                        Intent.createChooser(action, getString(R.string.upload_chooser_title)),
+                        FileDisplayActivity.REQUEST_CODE__SELECT_CONTENT_FROM_APPS
+                );
+                dialog.hide();
+                return false;
+            });
+            uploadFromCameraItemView.setOnTouchListener((v12, event) -> {
+                ((FileDisplayActivity) getActivity()).getFilesUploadHelper().uploadFromCamera(FileDisplayActivity.REQUEST_CODE__UPLOAD_FROM_CAMERA);
+                dialog.hide();
+                return false;
+            });
+            uploadToTextView.setText(String.format(getResources().getString(R.string.upload_to),
+                    getResources().getString(R.string.app_name)));
+            final BottomSheetBehavior uploadBottomSheetBehavior =
+                    BottomSheetBehavior.from((View) uploadBottomSheet.getParent());
+            dialog.setOnShowListener(dialog1 ->
+                    uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.getMeasuredHeight()));
+            dialog.show();
+            DialogExtKt.avoidScreenshotsIfNeeded(dialog);
+            getFabMain().collapse();
+            recordMiniFabClick();
         });
 
         getFabUpload().setOnLongClickListener(v -> {
@@ -925,7 +937,11 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     return true;
                 }
                 case R.id.action_open_file_with: {
-                    mContainerActivity.getFileOperationsHelper().openFile(singleFile);
+                    if (!singleFile.isDown()) {  // Download the file
+                        ((FileDisplayActivity) mContainerActivity).startDownloadForOpening(singleFile);
+                    } else {
+                        mContainerActivity.getFileOperationsHelper().openFile(singleFile);
+                    }
                     return true;
                 }
                 case R.id.action_rename_file: {
@@ -943,9 +959,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 case R.id.action_send_file: {
                     // Obtain the file
                     if (!singleFile.isDown()) {  // Download the file
-                        Timber.d("%s : File must be downloaded", singleFile.getRemotePath());
                         ((FileDisplayActivity) mContainerActivity).startDownloadForSending(singleFile);
-
                     } else {
                         mContainerActivity.getFileOperationsHelper().sendDownloadedFile(singleFile);
                     }
@@ -967,6 +981,12 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     } else {
                         getListView().setItemChecked(i, true);
                     }
+                }
+                return true;
+            }
+            case R.id.action_send_file: {
+                if (checkedFiles.size() > 1 && filesAreDown(checkedFiles)) {
+                    mContainerActivity.getFileOperationsHelper().sendDownloadedFiles(checkedFiles);
                 }
                 return true;
             }
@@ -1000,12 +1020,14 @@ public class OCFileListFragment extends ExtendedListFragment implements
             }
             case R.id.action_move: {
                 Intent action = new Intent(getActivity(), FolderPickerActivity.class);
+                action.putExtra(FolderPickerActivity.EXTRA_PICKER_OPTION, FolderPickerActivity.PickerMode.MOVE);
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles);
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES);
                 return true;
             }
             case R.id.action_copy:
                 Intent action = new Intent(getActivity(), FolderPickerActivity.class);
+                action.putExtra(FolderPickerActivity.EXTRA_PICKER_OPTION, FolderPickerActivity.PickerMode.COPY);
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles);
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES);
                 return true;
@@ -1079,6 +1101,16 @@ public class OCFileListFragment extends ExtendedListFragment implements
         }
     }
 
+    private boolean filesAreDown(ArrayList<OCFile> checkedFiles) {
+        for (int i = 0; i < checkedFiles.size(); i++) {
+            if (!checkedFiles.get(i).isDown()) {
+                Timber.d("%s : File must be downloaded", checkedFiles.get(i).getRemotePath());
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void updateLayout() {
         if (!isShowingJustFolders()) {
             int filesCount = 0, foldersCount = 0;
@@ -1104,6 +1136,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                 } else {
                     emptyMessage = R.string.file_list_empty;
                 }
+
                 setMessageForEmptyList(getString(emptyMessage));
             }
 
@@ -1269,7 +1302,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
         snackbar.show();
     }
 
-    public void setSearchListener(SearchView searchView){
+    public void setSearchListener(SearchView searchView) {
         searchView.setOnQueryTextFocusChangeListener(this);
         searchView.setOnQueryTextListener(this);
     }
