@@ -69,28 +69,27 @@ class ChunkedUploadFromFileSystemOperation(
 
         val fileToUpload = File(localPath)
         val mediaType: MediaType? = mimeType.toMediaTypeOrNull()
-        val raf: RandomAccessFile = RandomAccessFile(fileToUpload, MODE_READ_ONLY)
+        val raf = RandomAccessFile(fileToUpload, MODE_READ_ONLY)
         val channel: FileChannel = raf.channel
 
-        fileRequestBody = ChunkFromFileRequestBody(fileToUpload, mediaType, channel, CHUNK_SIZE).also {
+        val fileRequestBody = ChunkFromFileRequestBody(fileToUpload, mediaType, channel).also {
             synchronized(dataTransferListener) { it.addDatatransferProgressListeners(dataTransferListener) }
         }
 
         val uriPrefix = client.uploadsWebDavUri.toString() + File.separator + transferId
         val totalLength = fileToUpload.length()
         val chunkCount = ceil(totalLength.toDouble() / CHUNK_SIZE).toLong()
-        var chunkIndex = 0
         var offset: Long = 0
 
-        while (chunkIndex < chunkCount) {
-            (fileRequestBody as ChunkFromFileRequestBody).setOffset(offset)
+        for (chunkIndex in 0..chunkCount) {
+            fileRequestBody.setOffset(offset)
 
             if (cancellationRequested.get()) {
                 result = RemoteOperationResult<Unit>(OperationCancelledException())
                 break
             } else {
-                putMethod = PutMethod(URL(uriPrefix + File.separator + chunkIndex), fileRequestBody as ChunkFromFileRequestBody).apply {
-                    if (chunkIndex.toLong() == chunkCount - 1) {
+                putMethod = PutMethod(URL(uriPrefix + File.separator + chunkIndex), fileRequestBody).apply {
+                    if (chunkIndex == chunkCount - 1) {
                         // Added a high timeout to the last chunk due to when the last chunk
                         // arrives to the server with the last PUT, all chunks get assembled
                         // within that PHP request, so last one takes longer.
@@ -109,7 +108,6 @@ class ChunkedUploadFromFileSystemOperation(
                     break
                 }
             }
-            chunkIndex++
             offset += CHUNK_SIZE
         }
         channel.close()

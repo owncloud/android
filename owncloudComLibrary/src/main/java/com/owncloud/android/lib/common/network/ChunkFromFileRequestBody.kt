@@ -23,6 +23,7 @@
  */
 package com.owncloud.android.lib.common.network
 
+import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation.Companion.CHUNK_SIZE
 import okhttp3.MediaType
 import okio.BufferedSink
 import timber.log.Timber
@@ -39,7 +40,7 @@ class ChunkFromFileRequestBody(
     file: File,
     contentType: MediaType?,
     private val channel: FileChannel,
-    private val chunkSize: Long
+    private val chunkSize: Long = CHUNK_SIZE
 ) : FileRequestBody(file, contentType) {
 
     private var offset: Long = 0
