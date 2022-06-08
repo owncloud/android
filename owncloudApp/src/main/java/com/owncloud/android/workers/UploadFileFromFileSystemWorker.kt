@@ -30,6 +30,7 @@ import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.UploadResult
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.ForbiddenException
@@ -40,6 +41,7 @@ import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedExcept
 import com.owncloud.android.domain.exceptions.ServiceUnavailableException
 import com.owncloud.android.domain.exceptions.SpecificUnsupportedMediaTypeException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
+import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.OwnCloudAccount
@@ -49,7 +51,10 @@ import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
+import com.owncloud.android.lib.resources.files.FileUtils
 import com.owncloud.android.lib.resources.files.UploadFileFromFileSystemOperation
+import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation
+import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
@@ -77,6 +82,7 @@ class UploadFileFromFileSystemWorker(
     private lateinit var mimetype: String
     private var uploadIdInStorageManager: Long = -1
     private lateinit var ocUpload: OCUpload
+    private var fileSize: Long = 0
 
     // Etag in conflict required to overwrite files in server. Otherwise, the upload will be rejected.
     private var eTagInConflict: String = ""
@@ -144,6 +150,7 @@ class UploadFileFromFileSystemWorker(
             throw LocalFileNotFoundException()
         }
         mimetype = fileInFileSystem.extension
+        fileSize = fileInFileSystem.length()
     }
 
     private fun checkParentFolderExistence() {
@@ -182,18 +189,67 @@ class UploadFileFromFileSystemWorker(
     private fun uploadDocument() {
         val client = getClientForThisUpload()
 
-        val uploadFileFromFileSystemOperation = UploadFileFromFileSystemOperation(
+        val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
+        val capabilitiesForAccount = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(accountName = account.name))
+        val isChunkingAllowed = capabilitiesForAccount != null && capabilitiesForAccount.isChunkingAllowed()
+        Timber.d("Chunking is allowed: %s", isChunkingAllowed)
+
+        if (isChunkingAllowed) {
+            uploadChunkedFile(client)
+        } else {
+            uploadPlainFile(client)
+        }
+    }
+
+    private fun uploadPlainFile(client: OwnCloudClient) {
+        val uploadFileOperation = UploadFileFromFileSystemOperation(
             localPath = fileSystemPath,
             remotePath = uploadPath,
             mimeType = mimetype,
             lastModifiedTimestamp = lastModified,
-            requiredEtag = eTagInConflict
+            requiredEtag = eTagInConflict,
         ).also {
             it.addDataTransferProgressListener(this)
         }
 
-        val result = executeRemoteOperation { uploadFileFromFileSystemOperation.execute(client) }
+        val result = executeRemoteOperation { uploadFileOperation.execute(client) }
 
+        if (result == Unit && behavior == UploadBehavior.MOVE) {
+            removeLocalFile()
+        }
+    }
+
+    private fun uploadChunkedFile(client: OwnCloudClient) {
+        // Step 1: Create folder where the chunks will be uploaded.
+        val createChunksRemoteFolderOperation = CreateRemoteFolderOperation(
+            remotePath = uploadIdInStorageManager.toString(), createFullPath = false, isChunksFolder = true
+        )
+        executeRemoteOperation { createChunksRemoteFolderOperation.execute(client) }
+
+        // Step 2: Upload file by chunks
+        val chunkedUploadOperation = ChunkedUploadFromFileSystemOperation(
+            transferId = uploadIdInStorageManager.toString(),
+            localPath = fileSystemPath,
+            remotePath = uploadPath,
+            mimeType = mimetype,
+            lastModifiedTimestamp = lastModified,
+            requiredEtag = eTagInConflict,
+        ).also {
+            it.addDataTransferProgressListener(this)
+        }
+
+        val result = executeRemoteOperation { chunkedUploadOperation.execute(client) }
+
+        // Step 3: Move remote file to the final remote destination
+        val ocChunkService = OCChunkService(client)
+        ocChunkService.moveFile(
+            sourceRemotePath = "$uploadIdInStorageManager$PATH_SEPARATOR${FileUtils.FINAL_CHUNKS_FILE}",
+            targetRemotePath = uploadPath,
+            fileLastModificationTimestamp = lastModified,
+            fileLength = fileSize
+        )
+
+        // Step 4: Remove local file after uploading
         if (result == Unit && behavior == UploadBehavior.MOVE) {
             removeLocalFile()
         }
