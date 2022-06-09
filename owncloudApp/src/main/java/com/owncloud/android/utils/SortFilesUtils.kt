@@ -20,14 +20,13 @@ package com.owncloud.android.utils
 
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.ui.files.SortType
-import java.util.Vector
 
 class SortFilesUtils {
     fun sortFiles(
-        listOfFiles: Vector<OCFile>,
+        listOfFiles: List<OCFile>,
         sortTypeValue: Int,
         ascending: Boolean,
-    ): Vector<OCFile> {
+    ): List<OCFile> {
         return when (SortType.fromPreference(sortTypeValue)) {
             SortType.SORT_TYPE_BY_NAME -> sortByName(listOfFiles, ascending)
             SortType.SORT_TYPE_BY_SIZE -> sortBySize(listOfFiles, ascending)
@@ -35,26 +34,22 @@ class SortFilesUtils {
         }
     }
 
-    private fun sortByName(listOfFiles: Vector<OCFile>, ascending: Boolean): Vector<OCFile> {
+    private fun sortByName(listOfFiles: List<OCFile>, ascending: Boolean): List<OCFile> {
         val newListOfFiles =
             if (ascending) listOfFiles.sortedBy { it.fileName.lowercase() }
             else listOfFiles.sortedByDescending { it.fileName.lowercase() }
 
         // Show first the folders when sorting by name
-        return newListOfFiles.sortedByDescending { it.isFolder }.toVector()
+        return newListOfFiles.sortedByDescending { it.isFolder }
     }
 
-    private fun sortBySize(listOfFiles: Vector<OCFile>, ascending: Boolean): Vector<OCFile> {
-        return if (ascending) listOfFiles.sortedBy { it.length }.toVector()
-        else listOfFiles.sortedByDescending { it.length }.toVector()
+    private fun sortBySize(listOfFiles: List<OCFile>, ascending: Boolean): List<OCFile> {
+        return if (ascending) listOfFiles.sortedBy { it.length }
+        else listOfFiles.sortedByDescending { it.length }
     }
 
-    private fun sortByDate(listOfFiles: Vector<OCFile>, ascending: Boolean): Vector<OCFile> {
-        return if (ascending) listOfFiles.sortedBy { it.modificationTimestamp }.toVector()
-        else listOfFiles.sortedByDescending { it.modificationTimestamp }.toVector()
-    }
-
-    private fun List<OCFile>.toVector(): Vector<OCFile> {
-        return Vector(this)
+    private fun sortByDate(listOfFiles: List<OCFile>, ascending: Boolean): List<OCFile> {
+        return if (ascending) listOfFiles.sortedBy { it.modificationTimestamp }
+        else listOfFiles.sortedByDescending { it.modificationTimestamp }
     }
 }

@@ -970,7 +970,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
                     return true;
                 }
                 case R.id.action_open_file_with: {
-                    if (!singleFile.isDown()) {  // Download the file
+                    if (!singleFile.isAvailableLocally()) {  // Download the file
                         ((FileDisplayActivity) mContainerActivity).startDownloadForOpening(singleFile);
                     } else {
                         mContainerActivity.getFileOperationsHelper().openFile(singleFile);
@@ -1137,7 +1137,7 @@ public class OCFileListFragment extends ExtendedListFragment implements
 
     private boolean filesAreDown(ArrayList<OCFile> checkedFiles) {
         for (int i = 0; i < checkedFiles.size(); i++) {
-            if (!checkedFiles.get(i).isDown()) {
+            if (!checkedFiles.get(i).isAvailableLocally()) {
                 Timber.d("%s : File must be downloaded", checkedFiles.get(i).getRemotePath());
                 return false;
             }

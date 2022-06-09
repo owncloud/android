@@ -335,7 +335,7 @@ public class FileMenuFilter {
 
     private boolean areDownloaded() {
         for (OCFile file : mFiles) {
-            if (!file.isDown()) {
+            if (!file.isAvailableLocally()) {
                 return false;
             }
         }

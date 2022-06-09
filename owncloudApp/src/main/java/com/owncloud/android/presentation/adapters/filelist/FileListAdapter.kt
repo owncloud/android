@@ -37,7 +37,6 @@ import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.GridItemBinding
 import com.owncloud.android.databinding.ItemFileListBinding
 import com.owncloud.android.databinding.ListFooterBinding
-import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFooterFile
@@ -55,13 +54,6 @@ class FileListAdapter(
 
     var files = mutableListOf<Any>()
     private var account: Account? = AccountUtils.getCurrentOwnCloudAccount(context)
-    private lateinit var storageManager: FileDataStorageManager
-
-    init {
-        if (account != null) {
-            storageManager = FileDataStorageManager(context, account!!, context.contentResolver)
-        }
-    }
 
     fun updateFileList(filesToAdd: List<OCFile>) {
         val listWithFooter = mutableListOf<Any>()
@@ -277,7 +269,7 @@ class FileListAdapter(
                     if (file.needsToUpdateThumbnail) {
                         // generate new Thumbnail
                         if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
-                            val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, storageManager, account)
+                            val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
                             val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
 
                             // If drawable is not visible, do not update it.

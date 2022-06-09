@@ -75,8 +75,8 @@ import java.util.Vector;
 public class FileListListAdapter extends BaseAdapter implements ListAdapter {
 
     private final Context mContext;
-    private Vector<OCFile> mImmutableFilesList = null; // List containing the database files, doesn't change with search
-    private Vector<OCFile> mFiles = null; // List that can be changed when using search
+    private List<OCFile> mImmutableFilesList = null; // List containing the database files, doesn't change with search
+    private List<OCFile> mFiles = null; // List that can be changed when using search
     private final boolean mJustFolders;
     private final boolean mOnlyAvailableOffline;
     private final boolean mSharedByLinkFiles;
