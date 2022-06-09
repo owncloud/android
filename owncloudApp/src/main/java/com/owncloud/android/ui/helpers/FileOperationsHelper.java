@@ -194,7 +194,7 @@ public class FileOperationsHelper {
 
         ArrayList<Uri> fileUris = new ArrayList<>();
         for (int i = 0; i < oCfiles.size(); i++) {
-            fileUris.add(oCfiles.get(i).getExposedFileUri(mFileActivity));
+            fileUris.add(UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, (oCfiles.get(i))));
         }
 
         // set Type (All)
