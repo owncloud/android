@@ -53,8 +53,10 @@ import com.owncloud.android.usecases.transfers.DOWNLOAD_ADDED_MESSAGE
 import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PreferenceUtils
+import com.owncloud.android.utils.SortFilesUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import java.util.Vector
 
 /**
  * Holds a swiping galley where image files contained in an ownCloud directory are shown
@@ -143,15 +145,15 @@ class PreviewImageActivity : FileActivity(),
         }
 
         var imageFiles: List<OCFile> = storageManager.getFolderImages(parentFolder)
-        imageFiles = FileStorageUtils.sortFolder(
-            imageFiles,
+        imageFiles = SortFilesUtils().sortFiles(
+            Vector(imageFiles),
             FileStorageUtils.mSortOrderFileDisp,
             FileStorageUtils.mSortAscendingFileDisp
         )
         previewImagePagerAdapter = PreviewImagePagerAdapter(
             supportFragmentManager,
             account,
-            imageFiles
+            imageFiles.toMutableList()
         )
 
         viewPager = findViewById(R.id.fragmentPager)
