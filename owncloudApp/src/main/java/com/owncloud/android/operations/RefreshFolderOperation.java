@@ -26,14 +26,10 @@ import android.content.Intent;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.domain.sharing.shares.model.ShareType;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.files.RemoteFile;
-import com.owncloud.android.lib.resources.shares.GetRemoteSharesForFileOperation;
-import com.owncloud.android.lib.resources.shares.RemoteShare;
-import com.owncloud.android.lib.resources.shares.ShareResponse;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.lib.resources.status.RemoteCapability;
 import com.owncloud.android.operations.common.SyncOperation;
@@ -41,7 +37,6 @@ import com.owncloud.android.syncadapter.FileSyncAdapter;
 import timber.log.Timber;
 
 import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * Operation performing a REFRESH on a folder, conceived to be triggered by an action started
