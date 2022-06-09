@@ -143,6 +143,10 @@ class MainFileListFragment : Fragment(),
             updateActionModeAfterTogglingSelected()
             true
         }
+        (menu.findItem(R.id.action_share_current_folder)).setOnMenuItemClickListener {
+            containerActivity?.fileOperationsHelper?.showShareFile(mainFileListViewModel.getFile())
+            true
+        }
     }
 
     /**
