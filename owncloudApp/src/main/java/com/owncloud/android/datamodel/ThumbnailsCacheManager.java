@@ -266,7 +266,7 @@ public class ThumbnailsCacheManager {
             Bitmap thumbnail = getBitmapFromDiskCache(imageKey);
 
             // Not found in disk cache
-            if (thumbnail == null || file.getNeedsToUpdateThumbnail() == 1) {
+            if (thumbnail == null || file.getNeedsToUpdateThumbnail()) {
 
                 int px = getThumbnailDimension();
 
