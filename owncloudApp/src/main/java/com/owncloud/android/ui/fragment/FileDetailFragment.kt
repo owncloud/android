@@ -309,7 +309,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
 
         } else if (PreviewVideoFragment.canBePreviewed(file) && file.fileIsDownloading != true) {
             // Available offline exception, don't initialize streaming
-            if (!file.isAvailableLocally) {//&& file.isAvailableOffline()) {
+            if (!file.isAvailableLocally) { //&& file.isAvailableOffline()) {
                 // sync file content, then open with external apps
                 (activity as FileDisplayActivity).startSyncThenOpen(file)
             } else {
