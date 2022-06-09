@@ -33,6 +33,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -170,8 +171,6 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
     }
 
     private fun updateLayoutForEnqueuedDownload() {
-        requireView().findViewById<View>(R.id.fdProgressBlock).isVisible = true
-
         requireView().findViewById<TextView>(R.id.fdProgressText).apply {
             isVisible = true
             text = String.format(getString(R.string.downloader_download_enqueued_ticker), file.fileName)
@@ -179,8 +178,6 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
     }
 
     private fun updateLayoutForRunningDownload(progress: Int) {
-        requireView().findViewById<View>(R.id.fdProgressBlock).isVisible = true
-
         setButtonsForTransferring()
 
         requireView().findViewById<ProgressBar>(R.id.fdProgressBar).apply {
@@ -191,7 +188,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
     }
 
     private fun updateLayoutForSucceededDownload() {
-        updateFileDetails(forcedTransferring = false, refresh = false)
+        setButtonsForLocallyAvailable()
 
         val fileDisplayActivity = activity as FileDisplayActivity
         fileDetailsViewModel.navigateToPreviewOrOpenFile(fileDisplayActivity, file)
@@ -492,13 +489,14 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
      */
     private fun setButtonsForTransferring() {
         // show the progress bar for the transfer
-        requireView().findViewById<View>(R.id.fdProgressBlock).isVisible = true
+        requireView().findViewById<ProgressBar>(R.id.fdProgressBar).isVisible = true
         val progressText = requireView().findViewById<TextView>(R.id.fdProgressText)
         progressText.isVisible = true
         val safeAccount = account
         if (safeAccount != null && fileDetailsViewModel.isUploadPending(safeAccount, file)) {
             progressText.setText(R.string.uploader_upload_in_progress_ticker)
         }
+        requireView().findViewById<ImageButton>(R.id.fdCancelBtn).isVisible = true
     }
 
     /**
@@ -506,8 +504,9 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
      */
     private fun setButtonsForLocallyAvailable() {
         // hides the progress bar
-        requireView().findViewById<View>(R.id.fdProgressBlock)?.isVisible = false
-        requireView().findViewById<TextView>(R.id.fdProgressText)?.isVisible = false
+        requireView().findViewById<ProgressBar>(R.id.fdProgressBar).isVisible = false
+        requireView().findViewById<TextView>(R.id.fdProgressText).isVisible = false
+        requireView().findViewById<ImageButton>(R.id.fdCancelBtn).isVisible = false
     }
 
     /**
@@ -515,8 +514,9 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
      */
     private fun setButtonsForRemote() {
         // hides the progress bar
-        requireView().findViewById<View>(R.id.fdProgressBlock)?.isVisible = false
-        requireView().findViewById<TextView>(R.id.fdProgressText)?.isVisible = false
+        requireView().findViewById<ProgressBar>(R.id.fdProgressBar).isVisible = false
+        requireView().findViewById<TextView>(R.id.fdProgressText).isVisible = false
+        requireView().findViewById<ImageButton>(R.id.fdCancelBtn).isVisible = false
     }
 
     companion object {

@@ -59,7 +59,7 @@ import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.core.KoinComponent
+import org.koin.core.component.KoinComponent
 import timber.log.Timber
 import java.io.File
 
