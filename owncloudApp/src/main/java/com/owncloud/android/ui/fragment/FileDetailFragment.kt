@@ -332,44 +332,44 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
                 (mContainerActivity as FileDisplayActivity).cancelTransference(file)
             }
             R.id.fdIcon -> {
-                displayFile(file);
+                displayFile()
             }
             else ->
-                Timber.e("Incorrect view clicked!");
+                Timber.e("Incorrect view clicked!")
         }
     }
 
-    private fun displayFile(ocFile: OCFile) {
+    private fun displayFile() {
         if (PreviewImageFragment.canBePreviewed(file)) {
             // preview image - it handles the sync, if needed
-            (activity as FileDisplayActivity).startImagePreview(file);
+            (activity as FileDisplayActivity).startImagePreview(file)
         } else if (PreviewTextFragment.canBePreviewed(file)) {
-            (activity as FileDisplayActivity).startTextPreview(file);
-            mContainerActivity.fileOperationsHelper.syncFile(file);
+            (activity as FileDisplayActivity).startTextPreview(file)
+            mContainerActivity.fileOperationsHelper.syncFile(file)
 
         } else if (PreviewAudioFragment.canBePreviewed(file)) {
             // media preview
-            (activity as FileDisplayActivity).startAudioPreview(file, 0);
-            mContainerActivity.getFileOperationsHelper().syncFile(file);
+            (activity as FileDisplayActivity).startAudioPreview(file, 0)
+            mContainerActivity.fileOperationsHelper.syncFile(file)
 
         } else if (PreviewVideoFragment.canBePreviewed(file) && file.fileIsDownloading != true) {
             // Available offline exception, don't initialize streaming
             if (!file.isAvailableLocally) {//&& file.isAvailableOffline()) {
                 // sync file content, then open with external apps
-                (activity as FileDisplayActivity).startSyncThenOpen(file);
+                (activity as FileDisplayActivity).startSyncThenOpen(file)
             } else {
                 // media preview
-                (activity as FileDisplayActivity).startVideoPreview(file, 0);
+                (activity as FileDisplayActivity).startVideoPreview(file, 0)
             }
 
             // If the file is already downloaded sync it, just to update it if there is a
             // new available file version
             if (file.isAvailableLocally) {
-                mContainerActivity.fileOperationsHelper.syncFile(file);
+                mContainerActivity.fileOperationsHelper.syncFile(file)
             }
         } else {
             // sync file content, then open with external apps
-            (activity as FileDisplayActivity).startSyncThenOpen(file);
+            (activity as FileDisplayActivity).startSyncThenOpen(file)
         }
     }
 
