@@ -97,7 +97,7 @@ open class UploadFileFromFileSystemOperation(
         }
 
         putMethod = PutMethod(URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(remotePath)), fileRequestBody!!).apply {
-            setRetryOnConnectionFailure(false)
+            retryOnConnectionFailure = false
             if (!requiredEtag.isNullOrBlank()) {
                 addRequestHeader(HttpConstants.IF_MATCH_HEADER, requiredEtag)
             }
