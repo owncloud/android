@@ -30,12 +30,13 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 
+import androidx.core.content.res.ResourcesCompat;
 import com.owncloud.android.R;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
 
 /**
- *  Extending ExtendedListFragment. This allows dividing list in groups.
+ * Extending ExtendedListFragment. This allows dividing list in groups.
  */
 public class ExpandableListFragment extends ExtendedListFragment implements OnChildClickListener {
 
@@ -65,7 +66,7 @@ public class ExpandableListFragment extends ExtendedListFragment implements OnCh
         mList = v.findViewById(R.id.list_root);
         mList.setOnChildClickListener(this);
 
-        mList.setDivider(getResources().getDrawable(R.drawable.uploader_list_separator));
+        mList.setDivider(ResourcesCompat.getDrawable(getResources(), R.drawable.uploader_list_separator, null));
         mList.setDividerHeight(1);
 
         //        if (savedInstanceState != null) {
