@@ -35,9 +35,8 @@ import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
-import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE
-import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO
 import com.owncloud.android.presentation.ui.settings.SettingsActivity
+import com.owncloud.android.usecases.UploadEnqueuedBy
 import com.owncloud.android.usecases.UploadFileFromContentUriUseCase
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.NotificationUtils
@@ -143,8 +142,8 @@ class CameraUploadsWorker(
                 accountName = folderBackUpConfiguration.accountName,
                 behavior = folderBackUpConfiguration.behavior,
                 createdByWorker = when (syncType) {
-                    SyncType.PICTURE_UPLOADS -> CREATED_AS_CAMERA_UPLOAD_PICTURE
-                    SyncType.VIDEO_UPLOADS -> CREATED_AS_CAMERA_UPLOAD_VIDEO
+                    SyncType.PICTURE_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_PICTURE.ordinal
+                    SyncType.VIDEO_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_VIDEO.ordinal
                 }
             )
             enqueueSingleUpload(

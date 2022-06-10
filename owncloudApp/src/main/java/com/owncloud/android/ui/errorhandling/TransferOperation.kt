@@ -18,6 +18,7 @@
  */
 package com.owncloud.android.ui.errorhandling
 
-sealed class TransferOperation {
-    data class Download(val downloadPath: String) : TransferOperation()
+sealed interface TransferOperation {
+    data class Download(val downloadPath: String) : TransferOperation
+    data class Upload(val fileName: String) : TransferOperation
 }
