@@ -191,7 +191,6 @@ public class SynchronizeFileOperation extends SyncOperation {
                     if (mPushOnly) {
                         // prevent accidental override of unnoticed change in server;
                         // dirty trick, more refactoring is needed, but not today;
-                        // works due to {@link UploadFileOperation#L364,L367}
                         mLocalFile.setEtagInConflict(mLocalFile.getEtag());
                     }
                     requestForUpload(mLocalFile);
@@ -202,7 +201,7 @@ public class SynchronizeFileOperation extends SyncOperation {
                     requestForDownload(mLocalFile);
                     // mLocalFile, not mServerFile; we want to keep the value of
                     // available-offline property
-                    // the update of local data will be done later by the FileUploader
+                    // the update of local data will be done later by the usecase
                     // service when the upload finishes
                     result = new RemoteOperationResult<>(ResultCode.OK);
 
@@ -224,7 +223,7 @@ public class SynchronizeFileOperation extends SyncOperation {
     }
 
     /**
-     * Requests for an upload to the FileUploader service
+     * Requests for an upload
      *
      * @param file OCFile object representing the file to upload
      */
@@ -236,6 +235,7 @@ public class SynchronizeFileOperation extends SyncOperation {
                 file.getStoragePath(),
                 file.getParentRemotePath()
         );
+        uploadFileInConflictUseCase.execute(params);
 
         mTransferWasRequested = true;
     }

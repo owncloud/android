@@ -25,14 +25,18 @@ package com.owncloud.android.ui.errorhandling
 
 import android.content.res.Resources
 import com.owncloud.android.R
+import com.owncloud.android.domain.exceptions.FileNotFoundException
+import com.owncloud.android.domain.exceptions.ForbiddenException
+import com.owncloud.android.domain.exceptions.InvalidCharacterException
+import com.owncloud.android.domain.exceptions.LocalStorageFullException
+import com.owncloud.android.domain.exceptions.LocalStorageNotCopiedException
+import com.owncloud.android.domain.exceptions.QuotaExceededException
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.SynchronizeFolderOperation
-import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.ui.errorhandling.TransferOperation.Download
 import java.io.File
 import java.net.SocketTimeoutException
@@ -88,6 +92,10 @@ class ErrorMessageAdapter {
                             File(transferOperation.downloadPath).name
                         )
                     }
+                    is TransferOperation.Upload -> formatter.format(
+                        R.string.uploader_upload_succeeded_content_single,
+                        transferOperation.fileName
+                    )
                 }
             } else {
                 val genericMessage = when (transferOperation) {
@@ -95,8 +103,46 @@ class ErrorMessageAdapter {
                         R.string.downloader_download_failed_content,
                         File(transferOperation.downloadPath).name
                     )
+                    is TransferOperation.Upload -> {
+                        getMessageForFailedUpload(formatter, throwable, transferOperation)
+                    }
                 }
                 return throwable.parseError(genericMessage, resources, true).toString()
+            }
+        }
+
+        private fun getMessageForFailedUpload(
+            formatter: Formatter,
+            throwable: Throwable,
+            transferOperation: TransferOperation.Upload
+        ): String {
+            return when (throwable) {
+                is LocalStorageFullException -> formatter.format(
+                    R.string.error__upload__local_file_not_copied,
+                    transferOperation.fileName, R.string.app_name
+                )
+                is LocalStorageNotCopiedException -> formatter.format(
+                    R.string.error__upload__local_file_not_copied,
+                    transferOperation.fileName, R.string.app_name
+                )
+                is ForbiddenException -> {
+                    formatter.format(
+                        R.string.forbidden_permissions,
+                        R.string.uploader_upload_forbidden_permissions
+                    )
+                }
+                is InvalidCharacterException -> {
+                    formatter.format(
+                        R.string.filename_forbidden_characters_from_server
+                    )
+                }
+                is QuotaExceededException ->
+                    formatter.format(R.string.failed_upload_quota_exceeded_text)
+                is FileNotFoundException -> {
+                    formatter.format(R.string.uploads_view_upload_status_failed_folder_error)
+                }
+                else -> formatter.format(R.string.uploader_upload_failed_content_single, transferOperation.fileName)
+
             }
         }
 
@@ -115,35 +161,14 @@ class ErrorMessageAdapter {
             resources: Resources
         ): String {
             val formatter = Formatter(resources)
-            if (result.isSuccess) {
-                when (operation) {
-                    is UploadFileOperation -> return formatter.format(
-                        R.string.uploader_upload_succeeded_content_single,
-                        operation.fileName
-                    )
-                }
-            }
 
             if (operation is SynchronizeFileOperation && !operation.transferWasRequested()) {
                 return formatter.format(R.string.sync_file_nothing_to_do_msg)
             }
 
             return when (result.code) {
-                ResultCode.LOCAL_STORAGE_FULL -> formatter.format(
-                    R.string.error__upload__local_file_not_copied,
-                    (operation as UploadFileOperation).fileName, R.string.app_name
-                )
-                ResultCode.LOCAL_STORAGE_NOT_COPIED -> formatter.format(
-                    R.string.error__upload__local_file_not_copied,
-                    (operation as UploadFileOperation).fileName, R.string.app_name
-                )
                 ResultCode.FORBIDDEN -> {
-                    if (operation is UploadFileOperation) formatter.format(
-                        R.string.forbidden_permissions,
-                        R.string.uploader_upload_forbidden_permissions
-                    )
-                    if (operation is CreateFolderOperation) formatter.forbidden(R.string.forbidden_permissions_create)
-                    else formatter.format(
+                    formatter.format(
                         R.string.filename_forbidden_characters_from_server
                     )
                 }
@@ -152,8 +177,6 @@ class ErrorMessageAdapter {
                 ResultCode.QUOTA_EXCEEDED ->
                     formatter.format(R.string.failed_upload_quota_exceeded_text)
                 ResultCode.FILE_NOT_FOUND -> {
-                    if (operation is UploadFileOperation)
-                        formatter.format(R.string.uploads_view_upload_status_failed_folder_error)
                     if (operation is SynchronizeFolderOperation)
                         formatter.format(
                             R.string.sync_current_folder_was_removed,
@@ -232,8 +255,6 @@ class ErrorMessageAdapter {
             val formatter = Formatter(res)
 
             return when (operation) {
-                is UploadFileOperation -> formatter.format(R.string.uploader_upload_failed_content_single, operation.fileName)
-                is CreateFolderOperation -> formatter.format(R.string.create_dir_fail_msg)
                 is SynchronizeFolderOperation -> formatter.format(
                     R.string.sync_folder_failed_content,
                     File(operation.folderPath).name

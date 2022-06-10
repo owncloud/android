@@ -32,7 +32,7 @@ import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.operations.UploadFileOperation;
+import com.owncloud.android.usecases.UploadEnqueuedBy;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import timber.log.Timber;
 
@@ -91,7 +91,7 @@ public class OCUpload implements Parcelable {
     private UploadResult mLastResult;
 
     /**
-     * Defines the origin of the upload; see constants CREATED_ in {@link UploadFileOperation}
+     * Defines the origin of the upload; see constants in {@link UploadEnqueuedBy}
      */
     private int mCreatedBy;
 
@@ -152,7 +152,7 @@ public class OCUpload implements Parcelable {
         mCreatesRemoteFolder = false;
         mUploadStatus = UploadStatus.UPLOAD_IN_PROGRESS;
         mLastResult = UploadResult.UNKNOWN;
-        mCreatedBy = UploadFileOperation.CREATED_BY_USER;
+        mCreatedBy = UploadEnqueuedBy.ENQUEUED_BY_USER.ordinal();
         mTransferId = "";
     }
 
