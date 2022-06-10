@@ -93,10 +93,6 @@ public class ChunkedUploadFileOperation extends UploadFileOperation {
         }
     }
 
-    private RemoteOperationResult createChunksFolder(String remoteChunksFolder) {
-        SyncOperation syncOperation = new CreateChunksFolderOperation(remoteChunksFolder);
-        return syncOperation.execute(getClient(), getStorageManager());
-    }
 
     private void moveChunksFileToFinalDestination(String fileLastModifTimestamp, long fileLength) {
         OCChunkService ocChunkService = new OCChunkService(getClient());
