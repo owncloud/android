@@ -101,7 +101,7 @@ public class UriUploader {
             }
 
             if (!contentUris.isEmpty()) {
-                /// content: uris will be copied to temporary files before calling {@link FileUploader}
+                /// content: uris will be copied to temporary files before calling the upload usecase
                 copyThenUpload(contentUris.toArray(new Uri[0]), mUploadPath);
 
                 // Listen to CopyAndUploadContentUrisTask before killing the app or a SecurityException may appear.
