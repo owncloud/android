@@ -205,10 +205,6 @@ public class UploadFileOperation extends SyncOperation {
         return mLocalBehaviour;
     }
 
-    public void setRemoteFolderToBeCreated() {
-        mRemoteFolderToBeCreated = true;
-    }
-
     public boolean wasRenamed() {
         return mWasRenamed;
     }
@@ -443,10 +439,6 @@ public class UploadFileOperation extends SyncOperation {
     private RemoteOperationResult grantFolderExistence(String pathToGrant, OwnCloudClient client) {
         RemoteOperation checkPathExistenceOperation = new CheckPathExistenceRemoteOperation(pathToGrant, false);
         RemoteOperationResult result = checkPathExistenceOperation.execute(client);
-        if (!result.isSuccess() && result.getCode() == ResultCode.FILE_NOT_FOUND && mRemoteFolderToBeCreated) {
-            SyncOperation syncOp = new CreateFolderOperation(pathToGrant, true);
-            result = syncOp.execute(client, getStorageManager());
-        }
         if (result.isSuccess()) {
             OCFile parentDir = getStorageManager().getFileByPath(pathToGrant);
             if (parentDir == null) {

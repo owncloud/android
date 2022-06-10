@@ -29,7 +29,6 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.operations.CreateFolderOperation
 import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.SynchronizeFolderOperation
 import com.owncloud.android.operations.UploadFileOperation
@@ -142,7 +141,6 @@ class ErrorMessageAdapter {
                         R.string.forbidden_permissions,
                         R.string.uploader_upload_forbidden_permissions
                     )
-                    if (operation is CreateFolderOperation) formatter.forbidden(R.string.forbidden_permissions_create)
                     else formatter.format(
                         R.string.filename_forbidden_characters_from_server
                     )
@@ -233,7 +231,6 @@ class ErrorMessageAdapter {
 
             return when (operation) {
                 is UploadFileOperation -> formatter.format(R.string.uploader_upload_failed_content_single, operation.fileName)
-                is CreateFolderOperation -> formatter.format(R.string.create_dir_fail_msg)
                 is SynchronizeFolderOperation -> formatter.format(
                     R.string.sync_folder_failed_content,
                     File(operation.folderPath).name
