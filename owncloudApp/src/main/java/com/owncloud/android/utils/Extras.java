@@ -31,7 +31,6 @@ public class Extras {
     // from FileDownloader
     public static final String EXTRA_DOWNLOAD_RESULT = "RESULT";
 
-    // from FileUploader
     public static final String EXTRA_OLD_REMOTE_PATH = "OLD_REMOTE_PATH";
     public static final String EXTRA_OLD_FILE_PATH = "OLD_FILE_PATH";
     public static final String EXTRA_UPLOAD_RESULT = "RESULT";

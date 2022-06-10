@@ -178,7 +178,6 @@
         </provider>
 
         <service android:name=".services.OperationsService" />
-        <service android:name=".files.services.FileUploader" />
         <service android:name=".media.MediaService" />
 
         <activity
