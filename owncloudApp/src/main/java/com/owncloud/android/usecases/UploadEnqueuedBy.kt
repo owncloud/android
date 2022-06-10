@@ -18,7 +18,6 @@
  */
 package com.owncloud.android.usecases
 
-import com.owncloud.android.operations.UploadFileOperation
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
 
 
@@ -34,15 +33,6 @@ enum class UploadEnqueuedBy {
     ENQUEUED_BY_USER,
     ENQUEUED_AS_CAMERA_UPLOAD_PICTURE,
     ENQUEUED_AS_CAMERA_UPLOAD_VIDEO;
-
-    fun fromLegacyCreatedBy(oldCreatedBy: Int): UploadEnqueuedBy {
-        return when (oldCreatedBy) {
-            UploadFileOperation.CREATED_BY_USER -> ENQUEUED_BY_USER
-            UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE -> ENQUEUED_AS_CAMERA_UPLOAD_PICTURE
-            UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO -> ENQUEUED_AS_CAMERA_UPLOAD_VIDEO
-            else -> ENQUEUED_BY_USER
-        }
-    }
 
     fun toTransferTag(): String {
         return when (this) {

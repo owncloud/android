@@ -28,9 +28,6 @@ import android.net.Uri;
 
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta;
 import com.owncloud.android.db.UploadResult;
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.operations.UploadFileOperation;
 import timber.log.Timber;
 import com.owncloud.android.domain.files.model.OCFile;
 
@@ -444,59 +441,6 @@ public class UploadsStorageManager extends Observable {
             notifyObserversNow();
         }
         return result;
-    }
-
-    /**
-     * Updates the persistent upload database with upload result.
-     */
-    public void updateDatabaseUploadResult(RemoteOperationResult uploadResult,
-                                           UploadFileOperation uploadFileOperation) {
-        // result: success or fail notification
-        Timber.d("updateDatabaseUploadResult uploadResult: " + uploadResult + " upload: " + uploadFileOperation);
-
-        if (uploadResult.isCancelled()) {
-            removeUpload(
-                    uploadFileOperation.getAccount().name,
-                    uploadFileOperation.getRemotePath()
-            );
-        } else {
-            String localPath = (UploadBehavior.MOVE.toLegacyLocalBehavior() == uploadFileOperation.getLocalBehaviour())
-                    ? uploadFileOperation.getStoragePath() : null;
-
-            if (uploadResult.isSuccess()) {
-                updateUploadStatus(
-                        uploadFileOperation.getOCUploadId(),
-                        UploadStatus.UPLOAD_SUCCEEDED,
-                        UploadResult.UPLOADED,
-                        uploadFileOperation.getRemotePath(),
-                        localPath
-                );
-            } else {
-                updateUploadStatus(
-                        uploadFileOperation.getOCUploadId(),
-                        UploadStatus.UPLOAD_FAILED,
-                        UploadResult.fromOperationResult(uploadResult),
-                        uploadFileOperation.getRemotePath(),
-                        localPath
-                );
-            }
-        }
-    }
-
-    /**
-     * Updates the persistent upload database with an upload now in progress.
-     */
-    public void updateDatabaseUploadStart(UploadFileOperation uploadFileOperation) {
-        String localPath = (UploadBehavior.MOVE.toLegacyLocalBehavior() == uploadFileOperation.getLocalBehaviour())
-                ? uploadFileOperation.getStoragePath() : null;
-
-        updateUploadStatus(
-                uploadFileOperation.getOCUploadId(),
-                UploadStatus.UPLOAD_IN_PROGRESS,
-                UploadResult.UNKNOWN,
-                uploadFileOperation.getRemotePath(),
-                localPath
-        );
     }
 
     /**
