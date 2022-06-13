@@ -1,0 +1,5 @@
+Bugfix: Fix crash when opening from details screen
+
+Fixed a crash when opening a non downloaded file from the details view.
+
+https://github.com/owncloud/android/pull/3696
