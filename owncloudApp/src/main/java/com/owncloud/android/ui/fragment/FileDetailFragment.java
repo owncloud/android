@@ -281,7 +281,12 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                 return true;
             }
             case R.id.action_open_file_with: {
-                mContainerActivity.getFileOperationsHelper().openFile(getFile());
+                if (!getFile().isDown()) {  // Download the file
+                    Timber.d("%s : File must be downloaded before opening", getFile().getRemotePath());
+                    ((FileDisplayActivity) mContainerActivity).startDownloadForOpening(getFile());
+                } else {
+                    mContainerActivity.getFileOperationsHelper().openFile(getFile());
+                }
                 return true;
             }
             case R.id.action_remove_file: {
@@ -305,7 +310,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             }
             case R.id.action_send_file: {
                 // Obtain the file
-                if (!getFile().isDown()) {  // Download the file                    
+                if (!getFile().isDown()) {  // Download the file
                     Timber.d("%s : File must be downloaded", getFile().getRemotePath());
                     ((FileDisplayActivity) mContainerActivity).startDownloadForSending(getFile());
                 } else {
