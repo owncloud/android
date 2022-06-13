@@ -1,3 +1,24 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v2.21.0...master
+
+Summary
+-------
+
+* Bugfix - Fix crash when opening from details screen: [#3696](https://github.com/owncloud/android/pull/3696)
+
+Details
+-------
+
+* Bugfix - Fix crash when opening from details screen: [#3696](https://github.com/owncloud/android/pull/3696)
+
+   Fixed a crash when opening a non downloaded file from the details view.
+
+   https://github.com/owncloud/android/pull/3696
+
 Changelog for ownCloud Android Client [2.21.0] (2022-06-07)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.21.0 relevant to
