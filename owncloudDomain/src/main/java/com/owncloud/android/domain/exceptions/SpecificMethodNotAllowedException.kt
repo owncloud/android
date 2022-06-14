@@ -19,6 +19,7 @@
 
 package com.owncloud.android.domain.exceptions
 
-import java.lang.Exception
 
-class SpecificMethodNotAllowedException : Exception()
+class SpecificMethodNotAllowedException(
+    httpPhrase: String?,
+) : Throwable(message = httpPhrase)
