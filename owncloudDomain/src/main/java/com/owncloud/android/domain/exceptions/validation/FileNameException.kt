@@ -35,6 +35,6 @@ class FileNameException(
     override fun hashCode(): Int = type.hashCode()
 
     enum class FileNameExceptionType {
-        FILE_NAME_EMPTY, FILE_NAME_FORBIDDEN_CHARACTERS
+        FILE_NAME_EMPTY, FILE_NAME_FORBIDDEN_CHARACTERS, FILE_NAME_TOO_LONG
     }
 }
