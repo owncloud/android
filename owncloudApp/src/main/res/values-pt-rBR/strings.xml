@@ -619,20 +619,4 @@
   <string name="release_notes_proceed">Prosseguir</string>
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
   <!--Release Notes 2.21-->
-  <string name="release_notes_title_1">Notas de Lançamento</string>
-  <string name="release_notes_subtitle_1">As notícias no aplicativo serão listadas após cada atualização para informar sobre as últimas melhorias e novos recursos. Disponível também na visualização Configurações para verificar novamente.</string>
-  <string name="release_notes_title_2">Conexões seguras por padrão</string>
-  <string name="release_notes_subtitle_2">Conexões HTTP por padrão para estabelecer conexões de servidor. Caso contrário, será explicitamente exigido no URL</string>
-  <string name="release_notes_title_3">Redefinição de Senha e Padrão</string>
-  <string name="release_notes_subtitle_3">Integrado o teclado numérico na tela, navegação aprimorada e interface gráfica.</string>
-  <string name="release_notes_title_4">Suporte para arquivos SVG</string>
-  <string name="release_notes_subtitle_4">Adicionado suporte para arquivos svg.</string>
-  <string name="release_notes_title_5">Redesenho da visualização de detalhes</string>
-  <string name="release_notes_subtitle_5">Informações reordenadas e adicionadas a possibilidade de baixar e abrir o arquivo clicando na miniatura.</string>
-  <string name="release_notes_title_6">Arquivos ocultos</string>
-  <string name="release_notes_subtitle_6">Adicionada uma nova opção nas configurações para decidir mostrar ou não arquivos ocultos.</string>
-  <string name="release_notes_title_7">Compartilhando de dentro</string>
-  <string name="release_notes_subtitle_7">Adicionada a opção de compartilhamento para pastas da lista de seu conteúdo</string>
-  <string name="release_notes_title_8">Corrigindo erro</string>
-  <string name="release_notes_subtitle_8">Alguns bugs existentes foram corrigidos</string>
 </resources>
