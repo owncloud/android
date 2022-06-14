@@ -27,6 +27,8 @@ class FileNameValidator {
     fun validateOrThrowException(string: String) {
         if (string.trim().isBlank()) {
             throw FileNameException(type = FileNameException.FileNameExceptionType.FILE_NAME_EMPTY)
+        } else if (string.length >= FILE_NAME_MAX_LENGTH_ALLOWED) {
+            throw FileNameException(type = FileNameException.FileNameExceptionType.FILE_NAME_TOO_LONG)
         } else if (FILE_NAME_REGEX.containsMatchIn(string)) {
             throw FileNameException(type = FileNameException.FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS)
         }
@@ -35,5 +37,6 @@ class FileNameValidator {
     companion object {
         // Regex to check both slashes '/' and '\'
         private val FILE_NAME_REGEX = Pattern.compile(".*[/\\\\].*").toRegex()
+        private const val FILE_NAME_MAX_LENGTH_ALLOWED = 250
     }
 }
