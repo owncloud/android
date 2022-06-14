@@ -142,9 +142,13 @@ class MainFileListFragment : Fragment(),
             updateActionModeAfterTogglingSelected()
             true
         }
-        (menu.findItem(R.id.action_share_current_folder)).setOnMenuItemClickListener {
-            containerActivity?.fileOperationsHelper?.showShareFile(mainFileListViewModel.getFile())
-            true
+        if (isPickingAFolder()) {
+            menu.removeItem(menu.findItem(R.id.action_share_current_folder).itemId)
+        } else {
+            (menu.findItem(R.id.action_share_current_folder)).setOnMenuItemClickListener {
+                containerActivity?.fileOperationsHelper?.showShareFile(mainFileListViewModel.getFile())
+                true
+            }
         }
     }
 
