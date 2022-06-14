@@ -145,7 +145,7 @@ class MainFileListFragment : Fragment(),
         if (isPickingAFolder()) {
             menu.removeItem(menu.findItem(R.id.action_share_current_folder).itemId)
         } else {
-            (menu.findItem(R.id.action_share_current_folder)).setOnMenuItemClickListener {
+            menu.findItem(R.id.action_share_current_folder)?.setOnMenuItemClickListener {
                 containerActivity?.fileOperationsHelper?.showShareFile(mainFileListViewModel.getFile())
                 true
             }
