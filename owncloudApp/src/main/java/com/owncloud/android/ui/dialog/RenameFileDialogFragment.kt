@@ -92,14 +92,6 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
         if (which == AlertDialog.BUTTON_POSITIVE) {
             // These checks are done in the RenameFileUseCase too, we could remove them too.
             val newFileName = (getDialog()!!.findViewById<View>(R.id.user_input) as TextView).text.toString()
-            if (newFileName.isBlank()) {
-                showSnackMessage(R.string.filename_empty)
-                return
-            }
-            if (!FileUtils.isValidName(newFileName)) {
-                showSnackMessage(R.string.filename_forbidden_characters_from_server)
-                return
-            }
             filesViewModel.performOperation(FileOperation.RenameOperation(targetFile!!, newFileName))
         }
     }

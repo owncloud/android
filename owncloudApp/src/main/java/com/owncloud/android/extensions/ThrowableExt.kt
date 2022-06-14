@@ -25,6 +25,7 @@ import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.AccountNotTheSameException
 import com.owncloud.android.domain.exceptions.BadOcVersionException
 import com.owncloud.android.domain.exceptions.CopyIntoDescendantException
+import com.owncloud.android.domain.exceptions.FileAlreadyExistsException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.ForbiddenException
 import com.owncloud.android.domain.exceptions.IncorrectAddressException
@@ -66,10 +67,12 @@ fun Throwable.parseError(
             is IncorrectAddressException -> resources.getString(R.string.auth_incorrect_address_title)
             is SSLErrorException -> resources.getString(R.string.auth_ssl_general_error_title)
             is UnauthorizedException -> resources.getString(R.string.auth_unauthorized)
+            is FileAlreadyExistsException -> resources.getString(R.string.file_already_exists)
             is FileNameException -> {
                 val stringId = when (this.type) {
-                    FileNameException.FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS -> R.string.filename_forbidden_characters_from_server
                     FileNameException.FileNameExceptionType.FILE_NAME_EMPTY -> R.string.filename_empty
+                    FileNameException.FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS -> R.string.filename_forbidden_characters_from_server
+                    FileNameException.FileNameExceptionType.FILE_NAME_TOO_LONG -> R.string.filename_too_long
                 }
                 resources.getString(stringId)
             }
