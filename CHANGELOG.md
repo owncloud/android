@@ -1,3 +1,24 @@
+Changelog for ownCloud Android Client [2.21.1] (2022-06-15)
+=======================================
+The following sections list the changes in ownCloud Android Client 2.21.1 relevant to
+ownCloud admins and users.
+
+[2.21.1]: https://github.com/owncloud/android/compare/v2.21.0...v2.21.1
+
+Summary
+-------
+
+* Bugfix - Fix crash when opening from details screen: [#3696](https://github.com/owncloud/android/pull/3696)
+
+Details
+-------
+
+* Bugfix - Fix crash when opening from details screen: [#3696](https://github.com/owncloud/android/pull/3696)
+
+   Fixed a crash when opening a non downloaded file from the details view.
+
+   https://github.com/owncloud/android/pull/3696
+
 Changelog for ownCloud Android Client [2.21.0] (2022-06-07)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.21.0 relevant to

@@ -673,29 +673,9 @@
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
 
-    <!-- Release Notes 2.21 -->
-    <string name="release_notes_title_1">Release Notes</string>
-    <string name="release_notes_subtitle_1">News in the app will be listed after every update to inform about latest improvements and new features. Available also in Settings view to recheck.</string>
+    <!-- Release Notes 2.21.1 -->
 
-    <string name="release_notes_title_2">Secure connections by default</string>
-    <string name="release_notes_subtitle_2">Https connections by default to establish server connections. Otherwise, it will be explicitly required in URL</string>
-
-    <string name="release_notes_title_3">Passcode and Pattern redesign</string>
-    <string name="release_notes_subtitle_3">Integrated the numeric keypad on the screen, improved navigation and graphical interface.</string>
-
-    <string name="release_notes_title_4">Support for SVG files</string>
-    <string name="release_notes_subtitle_4">Added support for svg files.</string>
-
-    <string name="release_notes_title_5">Details view redesign</string>
-    <string name="release_notes_subtitle_5">Information reordered and added the possibility to download and open the file by clicking the thumbnail.</string>
-
-    <string name="release_notes_title_6">Hidden files</string>
-    <string name="release_notes_subtitle_6">Added a new option in settings to decide to show or not hidden files.</string>
-
-    <string name="release_notes_title_7">Sharing from inside</string>
-    <string name="release_notes_subtitle_7">Added the sharing option to folders from the list of its contents</string>
-
-    <string name="release_notes_title_8">Bugfixing</string>
-    <string name="release_notes_subtitle_8">Some existing bugs were fixed</string>
+    <string name="release_notes_title_2_21_1_1">Crash in \"Open with\" operation</string>
+    <string name="release_notes_subtitle_2_21_1_1">Crash fixed in details view when operation \"Open with\" is selected.</string>
 
 </resources>

@@ -615,16 +615,5 @@
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
-  <!--Release Notes 2.21-->
-  <string name="release_notes_title_1">Shënime Hedhjeje Në Qarkullim</string>
-  <string name="release_notes_title_2">Lidhje të siguruara, si parazgjedhje.</string>
-  <string name="release_notes_subtitle_2">Lidhje https, si parazgjedhje, për të vendosur lidhje me shërbyesin. Përndryshe, do të kërkohet shprehimisht te URL-ja</string>
-  <string name="release_notes_title_3">Ripunim Kodkalimesh dhe Rregullsish</string>
-  <string name="release_notes_subtitle_3">U integrua në ekran pjesa numerike e tastierës, u përmirësua lëvizja dhe ndërfaqja grafike.</string>
-  <string name="release_notes_title_4">Mbulim për kartela SVG</string>
-  <string name="release_notes_subtitle_4">U shtua mbulim për kartela svg.</string>
-  <string name="release_notes_title_5">Rihartim i pamjes së hollësive</string>
-  <string name="release_notes_subtitle_5">Rirenditje e informacioneve dhe u shtua mundësia për të shkarkuar dhe hapur kartelën duke klikuar mbi miniaturën për të.</string>
-  <string name="release_notes_title_6">Kartela të fshehura</string>
-  <string name="release_notes_subtitle_6">U shtua mundësi e re te rregullimet për të vendosur shfaqjen apo jo të kartelave të fshehura.</string>
+  <!--Release Notes 2.21.1-->
 </resources>
