@@ -31,7 +31,7 @@ import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.ExpandableUploadListAdapter;
-import com.owncloud.android.usecases.RetryFailedUploadsUseCase;
+import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase;
 import kotlin.Unit;
 import timber.log.Timber;
 

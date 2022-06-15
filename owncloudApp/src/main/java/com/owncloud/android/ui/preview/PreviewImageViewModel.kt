@@ -27,7 +27,7 @@ import androidx.work.WorkInfo
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import com.owncloud.android.usecases.transfers.GetLiveDataForFinishedDownloadsFromAccountUseCase
+import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
 import kotlinx.coroutines.launch
 
 class PreviewImageViewModel(

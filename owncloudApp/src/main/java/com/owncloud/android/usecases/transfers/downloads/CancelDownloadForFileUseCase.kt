@@ -16,12 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.usecases.transfers
+package com.owncloud.android.usecases.transfers.downloads
 
 import androidx.work.WorkManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.getWorkInfoByTags
+import com.owncloud.android.usecases.transfers.TRANSFER_TAG_DOWNLOAD
 
 /**
  * Cancel every pending download for file. Note that cancellation is a best-effort

@@ -31,7 +31,7 @@ import android.widget.Toast;
 import androidx.work.WorkManager;
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.usecases.UploadFilesFromSystemUseCase;
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.UriUtils;
 import timber.log.Timber;
@@ -41,9 +41,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * AsyncTask to copy a file from a uri in a temporal file

@@ -35,8 +35,8 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.usecases.UploadFileInConflictUseCase;
-import com.owncloud.android.usecases.transfers.DownloadFileUseCase;
+import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase;
+import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase;
 import com.owncloud.android.utils.FileStorageUtils;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
