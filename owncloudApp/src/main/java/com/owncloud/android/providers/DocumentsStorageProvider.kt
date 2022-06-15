@@ -56,8 +56,8 @@ import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
-import com.owncloud.android.usecases.UploadFilesFromSystemUseCase
-import com.owncloud.android.usecases.transfers.DownloadFileUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
+import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NotificationUtils
 import org.koin.android.ext.android.inject

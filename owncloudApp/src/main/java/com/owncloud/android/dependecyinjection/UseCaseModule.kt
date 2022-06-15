@@ -67,14 +67,14 @@ import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
-import com.owncloud.android.usecases.CancelUploadForFileUseCase
-import com.owncloud.android.usecases.UploadFilesFromSAFUseCase
-import com.owncloud.android.usecases.UploadFilesFromSystemUseCase
-import com.owncloud.android.usecases.transfers.CancelDownloadForFileUseCase
-import com.owncloud.android.usecases.transfers.CancelDownloadsForAccountUseCase
-import com.owncloud.android.usecases.transfers.DownloadFileUseCase
-import com.owncloud.android.usecases.transfers.GetLiveDataForDownloadingFileUseCase
-import com.owncloud.android.usecases.transfers.GetLiveDataForFinishedDownloadsFromAccountUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
+import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
+import com.owncloud.android.usecases.transfers.downloads.CancelDownloadsForAccountUseCase
+import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
+import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
+import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
