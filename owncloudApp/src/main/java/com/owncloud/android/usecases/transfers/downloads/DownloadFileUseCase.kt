@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.usecases.transfers
+package com.owncloud.android.usecases.transfers.downloads
 
 import android.accounts.Account
 import androidx.work.OneTimeWorkRequestBuilder
@@ -27,6 +27,8 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.PENDING_WORK_STATUS
 import com.owncloud.android.extensions.buildWorkQuery
 import com.owncloud.android.extensions.getTagsForDownload
+import com.owncloud.android.usecases.transfers.MAXIMUM_NUMBER_OF_RETRIES
+import com.owncloud.android.usecases.transfers.TRANSFER_TAG_DOWNLOAD
 import com.owncloud.android.workers.DownloadFileWorker
 import timber.log.Timber
 import java.util.UUID

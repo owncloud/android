@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.usecases.transfers
+package com.owncloud.android.usecases.transfers.downloads
 
 import android.accounts.Account
 import androidx.lifecycle.LiveData
@@ -26,6 +26,7 @@ import androidx.work.WorkManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.extensions.FINISHED_WORK_STATUS
 import com.owncloud.android.extensions.buildWorkQuery
+import com.owncloud.android.usecases.transfers.TRANSFER_TAG_DOWNLOAD
 
 /**
  * Get a LiveData with the lasts downloads from an account

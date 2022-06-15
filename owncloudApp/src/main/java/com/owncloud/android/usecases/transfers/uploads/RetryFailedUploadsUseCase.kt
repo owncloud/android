@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.usecases
+package com.owncloud.android.usecases.transfers.uploads
 
 import android.content.Context
 import android.net.Uri
@@ -26,22 +26,20 @@ import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
 import timber.log.Timber
 
-class RetryFailedUploadsForAccountUseCase(
+class RetryFailedUploadsUseCase(
     private val context: Context,
-) : BaseUseCase<Unit, RetryFailedUploadsForAccountUseCase.Params>() {
+) : BaseUseCase<Unit, Unit>() {
 
-    override fun run(params: Params) {
+    override fun run(params: Unit) {
 
         val uploadsStorageManager = UploadsStorageManager(context.contentResolver)
         val failedUploads = uploadsStorageManager.failedUploads
-        val failedUploadsForAccount = failedUploads.filter { it.accountName == params.accountName }
 
-        if (failedUploadsForAccount.isEmpty()) {
-            Timber.d("There are no failed uploads for the account ${params.accountName}")
+        if (failedUploads.isEmpty()) {
+            Timber.d("There are no failed uploads to retry.")
             return
         }
-
-        failedUploadsForAccount.forEach { upload ->
+        failedUploads.forEach { upload ->
             if (isContentUri(context = context, upload = upload)) {
                 RetryUploadFromContentUriUseCase(context).execute(RetryUploadFromContentUriUseCase.Params(upload.uploadId))
             } else {
@@ -54,7 +52,4 @@ class RetryFailedUploadsForAccountUseCase(
         return DocumentFile.isDocumentUri(context, Uri.parse(upload.localPath))
     }
 
-    data class Params(
-        val accountName: String
-    )
 }

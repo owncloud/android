@@ -38,7 +38,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.ui.fragment.UploadListFragment;
-import com.owncloud.android.usecases.RetryFailedUploadsForAccountUseCase;
+import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsForAccountUseCase;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import timber.log.Timber;
 

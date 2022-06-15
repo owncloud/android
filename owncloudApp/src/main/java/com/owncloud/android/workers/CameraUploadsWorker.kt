@@ -36,8 +36,8 @@ import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfig
 import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
 import com.owncloud.android.presentation.ui.settings.SettingsActivity
-import com.owncloud.android.usecases.UploadEnqueuedBy
-import com.owncloud.android.usecases.UploadFileFromContentUriUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadEnqueuedBy
+import com.owncloud.android.usecases.transfers.uploads.UploadFileFromContentUriUseCase
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
