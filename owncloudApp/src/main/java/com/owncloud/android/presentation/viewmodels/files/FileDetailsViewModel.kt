@@ -43,8 +43,8 @@ import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.preview.PreviewAudioFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoFragment
-import com.owncloud.android.usecases.transfers.CancelDownloadForFileUseCase
-import com.owncloud.android.usecases.transfers.GetLiveDataForDownloadingFileUseCase
+import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
+import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
 import kotlinx.coroutines.launch
 import java.util.UUID
 

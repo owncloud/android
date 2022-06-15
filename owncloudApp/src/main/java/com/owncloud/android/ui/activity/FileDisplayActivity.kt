@@ -88,11 +88,11 @@ import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
-import com.owncloud.android.usecases.UploadFilesFromSAFUseCase
-import com.owncloud.android.usecases.UploadFilesFromSystemUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import com.owncloud.android.usecases.transfers.DOWNLOAD_ADDED_MESSAGE
 import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
-import com.owncloud.android.usecases.transfers.DownloadFileUseCase
+import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.coroutines.CoroutineScope
