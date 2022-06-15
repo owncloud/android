@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.usecases
+package com.owncloud.android.usecases.transfers.uploads
 
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
 
