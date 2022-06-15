@@ -97,6 +97,7 @@ public class AvailableOfflineSyncJobService extends JobService {
 
             // Cancel periodic job if there's no available offline files to watch for local changes
             if (availableOfflineFilesFromEveryAccount.isEmpty()) {
+                Timber.w("No available files for any account.");
                 cancelPeriodicJob(jobParams[0].getJobId());
                 return jobParams[0];
             } else {
