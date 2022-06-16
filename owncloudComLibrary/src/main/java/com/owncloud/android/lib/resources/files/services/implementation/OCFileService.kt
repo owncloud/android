@@ -31,6 +31,7 @@ import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation
 import com.owncloud.android.lib.resources.files.GetUrlToOpenInWebRemoteOperation
 import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation
+import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation
 import com.owncloud.android.lib.resources.files.RemoteFile
 import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation
@@ -87,6 +88,13 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
         MoveRemoteFileOperation(
             sourceRemotePath = sourceRemotePath,
             targetRemotePath = targetRemotePath,
+        ).execute(client)
+
+    override fun readFile(
+        remotePath: String
+    ): RemoteOperationResult<RemoteFile> =
+        ReadRemoteFileOperation(
+            remotePath = remotePath
         ).execute(client)
 
     override fun refreshFolder(
