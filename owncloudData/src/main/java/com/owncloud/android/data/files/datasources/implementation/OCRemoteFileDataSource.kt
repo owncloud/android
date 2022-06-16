@@ -112,6 +112,14 @@ class OCRemoteFileDataSource(
         )
     }
 
+    override fun readFile(
+        remotePath: String
+    ): OCFile = executeRemoteOperation {
+        clientManager.getFileService().readFile(
+            remotePath = remotePath
+        )
+    }.let { remoteFileMapper.toModel(it)!! }
+
     override fun refreshFolder(
         remotePath: String
     ): List<OCFile> =
