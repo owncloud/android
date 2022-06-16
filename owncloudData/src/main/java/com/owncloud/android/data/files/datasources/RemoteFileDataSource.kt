@@ -39,6 +39,8 @@ interface RemoteFileDataSource {
 
     fun moveFile(sourceRemotePath: String, targetRemotePath: String)
 
+    fun readFile(remotePath: String): OCFile
+
     fun refreshFolder(
         remotePath: String
     ): List<OCFile>

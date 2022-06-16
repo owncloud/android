@@ -180,6 +180,10 @@ class OCFileRepository(
         }
     }
 
+    override fun readFile(remotePath: String): OCFile {
+        return remoteFileDataSource.readFile(remotePath)
+    }
+
     override fun refreshFolder(remotePath: String) {
         remoteFileDataSource.refreshFolder(remotePath).also {
             localFileDataSource.saveFilesInFolder(

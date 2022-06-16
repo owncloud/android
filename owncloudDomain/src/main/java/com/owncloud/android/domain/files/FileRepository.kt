@@ -36,6 +36,7 @@ interface FileRepository {
     fun getFilesSharedByLink(owner: String): List<OCFile>
     fun getFilesAvailableOffline(owner: String): List<OCFile>
     fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile)
+    fun readFile(remotePath: String): OCFile
     fun refreshFolder(remotePath: String)
     fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean)
     fun renameFile(ocFile: OCFile, newName: String)
