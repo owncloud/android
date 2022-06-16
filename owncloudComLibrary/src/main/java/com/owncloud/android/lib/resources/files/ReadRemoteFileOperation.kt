@@ -23,21 +23,20 @@
  */
 package com.owncloud.android.lib.resources.files;
 
-import com.owncloud.android.lib.common.OwnCloudClient;
-import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.lib.common.http.HttpConstants;
-import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
-import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod;
-import com.owncloud.android.lib.common.network.WebdavUtils;
-import com.owncloud.android.lib.common.operations.RemoteOperation;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import timber.log.Timber;
-
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
-
-import static com.owncloud.android.lib.common.http.methods.webdav.DavConstants.DEPTH_0;
-import static com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode.OK;
+import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.lib.common.http.HttpConstants.HTTP_MULTI_STATUS
+import com.owncloud.android.lib.common.http.HttpConstants.HTTP_OK
+import com.owncloud.android.lib.common.http.methods.webdav.DavConstants.DEPTH_0
+import com.owncloud.android.lib.common.http.methods.webdav.DavUtils
+import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod
+import com.owncloud.android.lib.common.network.WebdavUtils
+import com.owncloud.android.lib.common.operations.RemoteOperation
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.common.utils.isOneOf
+import timber.log.Timber
+import java.net.URL
+import java.util.concurrent.TimeUnit
 
 /**
  * Remote operation performing the read a file from the ownCloud server.
@@ -47,21 +46,7 @@ import static com.owncloud.android.lib.common.operations.RemoteOperationResult.R
  * @author David González Verdugo
  */
 
-public class ReadRemoteFileOperation extends RemoteOperation<RemoteFile> {
-
-    private static final int SYNC_READ_TIMEOUT = 40000;
-    private static final int SYNC_CONNECTION_TIMEOUT = 5000;
-
-    private String mRemotePath;
-
-    /**
-     * Constructor
-     *
-     * @param remotePath Remote path of the file.
-     */
-    public ReadRemoteFileOperation(String remotePath) {
-        mRemotePath = remotePath;
-    }
+class ReadRemoteFileOperation(val remotePath: String) : RemoteOperation<RemoteFile>() {
 
     /**
      * Performs the read operation.
@@ -69,41 +54,44 @@ public class ReadRemoteFileOperation extends RemoteOperation<RemoteFile> {
      * @param client Client object to communicate with the remote ownCloud server.
      */
     @Override
-    protected RemoteOperationResult<RemoteFile> run(OwnCloudClient client) {
-        PropfindMethod propfind;
-        RemoteOperationResult<RemoteFile> result;
-
-        /// take the duty of check the server for the current state of the file there
+    override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteFile> {
         try {
-            // remote request
-            propfind = new PropfindMethod(
-                    new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
-                    DEPTH_0,
-                    DavUtils.getAllPropset());
-
-            propfind.setReadTimeout(SYNC_READ_TIMEOUT, TimeUnit.SECONDS);
-            propfind.setConnectionTimeout(SYNC_CONNECTION_TIMEOUT, TimeUnit.SECONDS);
-            final int status = client.executeHttpMethod(propfind);
-
-            if (status == HttpConstants.HTTP_MULTI_STATUS
-                    || status == HttpConstants.HTTP_OK) {
-
-                final RemoteFile file = RemoteFile.Companion.getRemoteFileFromDav(propfind.getRoot(),
-                        AccountUtils.getUserId(mAccount, mContext), mAccount.name);
-
-                result = new RemoteOperationResult<>(OK);
-                result.setData(file);
-
-            } else {
-                result = new RemoteOperationResult<>(propfind);
-                client.exhaustResponse(propfind.getResponseBodyAsStream());
+            val propFind = PropfindMethod(
+                url = URL("${client.userFilesWebDavUri}${WebdavUtils.encodePath(remotePath)}"),
+                depth = DEPTH_0,
+                propertiesToRequest = DavUtils.allPropset
+            ).apply {
+                setReadTimeout(SYNC_READ_TIMEOUT, TimeUnit.SECONDS)
+                setConnectionTimeout(SYNC_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
             }
 
-        } catch (Exception e) {
-            result = new RemoteOperationResult<>(e);
-            Timber.e(e, "Synchronizing  file %s", mRemotePath);
-        }
+            val status = client.executeHttpMethod(propFind)
+            Timber.i("Read remote file $remotePath with status ${propFind.statusCode}")
 
-        return result;
+            return if (isSuccess(status)) {
+                // TODO: Remove that !!
+                val remoteFile = RemoteFile.getRemoteFileFromDav(
+                    propFind.root!!,
+                    AccountUtils.getUserId(mAccount, mContext), mAccount.name
+                )
+
+                RemoteOperationResult<RemoteFile>(RemoteOperationResult.ResultCode.OK).apply {
+                    data = remoteFile
+                }
+            } else {
+                RemoteOperationResult<RemoteFile>(propFind).also {
+                    client.exhaustResponse(propFind.getResponseBodyAsStream())
+                }
+            }
+        } catch (exception: Exception) {
+            return RemoteOperationResult(exception)
+        }
+    }
+
+    private fun isSuccess(status: Int) = status.isOneOf(HTTP_MULTI_STATUS, HTTP_OK)
+
+    companion object {
+        private const val SYNC_READ_TIMEOUT = 40_000L
+        private const val SYNC_CONNECTION_TIMEOUT = 5_000L
     }
 }
