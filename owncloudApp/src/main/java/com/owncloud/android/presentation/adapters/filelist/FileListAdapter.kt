@@ -24,6 +24,7 @@ import android.accounts.Account
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -184,7 +185,6 @@ class FileListAdapter(
                         it.Filename.text = file.fileName
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
-
                     }
                 }
                 ViewType.GRID_ITEM.ordinal -> {
@@ -217,8 +217,7 @@ class FileListAdapter(
 
             }
 
-            // TODO Delete it when manage state sync.
-            holder.itemView.findViewById<ImageView>(R.id.localFileIndicator).isVisible = false
+            setIconPinAccordingToFilesLocalState(holder.itemView.findViewById(R.id.localFileIndicator), file)
 
             holder.itemView.findViewById<ImageView>(R.id.sharedIcon).isVisible = file.sharedByLink
 
@@ -312,6 +311,20 @@ class FileListAdapter(
         }
 
         return generateFooterText(filesCount, foldersCount)
+    }
+
+    private fun setIconPinAccordingToFilesLocalState(localStateView: ImageView, file: OCFile) {
+        // local state
+        localStateView.bringToFront()
+        localStateView.isVisible = false
+        if (file.etagInConflict != null) {
+            // conflict
+            localStateView.setImageResource(R.drawable.error_pin)
+            localStateView.visibility = View.VISIBLE
+        } else if (file.isAvailableLocally) {
+            localStateView.visibility = View.VISIBLE
+            localStateView.setImageResource(R.drawable.downloaded_pin)
+        }
     }
 
     private fun generateFooterText(filesCount: Int, foldersCount: Int): String {
