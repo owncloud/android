@@ -99,10 +99,15 @@ abstract class FileDao {
         if (localFile == null) {
             return insert(ocFileEntity)
         } else {
-            // TODO: Handle conflicts, we will replace for the moment
-            return insert(ocFileEntity.apply {
+            return insert(ocFileEntity.copy(
+                parentId = localFile.parentId,
+                lastSyncDateForData = localFile.lastSyncDateForData,
+                modifiedAtLastSyncForData = localFile.modifiedAtLastSyncForData,
+                storagePath = localFile.storagePath,
+                treeEtag = localFile.treeEtag,
+                etagInConflict = localFile.etagInConflict,
+            ).apply {
                 id = localFile.id
-                parentId = localFile.parentId
             })
         }
     }
