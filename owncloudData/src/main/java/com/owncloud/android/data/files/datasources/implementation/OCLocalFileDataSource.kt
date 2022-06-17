@@ -125,7 +125,7 @@ class OCLocalFileDataSource(
     }
 
     override fun saveFile(file: OCFile) {
-        fileDao.mergeRemoteAndLocalFile(file.toEntity())
+        fileDao.insert(file.toEntity())
     }
 
     override fun removeFile(fileId: Long) {
