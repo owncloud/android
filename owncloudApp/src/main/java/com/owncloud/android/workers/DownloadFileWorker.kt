@@ -183,12 +183,16 @@ class DownloadFileWorker(
      * We will update info about local storage (where it was stored and its size)
      */
     private fun updateDatabaseWithLatestInfoForThisFile() {
+        val currentTime = System.currentTimeMillis()
         ocFile.apply {
             needsToUpdateThumbnail = true
             modificationTimestamp = downloadRemoteFileOperation.modificationTimestamp
             etag = downloadRemoteFileOperation.etag
             storagePath = finalLocationForFile
             length = (File(finalLocationForFile).length())
+            lastSyncDateForProperties = currentTime
+            lastSyncDateForData = currentTime
+            modifiedAtLastSyncForData = downloadRemoteFileOperation.modificationTimestamp
         }
         saveFileOrFolderUseCase.execute(SaveFileOrFolderUseCase.Params(ocFile))
 
