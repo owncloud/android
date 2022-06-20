@@ -34,6 +34,7 @@ import android.webkit.MimeTypeMap;
 
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
+import com.owncloud.android.data.storage.LocalStorageProvider;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.OCShare;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
@@ -41,6 +42,7 @@ import com.owncloud.android.presentation.ui.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
+import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase;
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase;
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase;
 import com.owncloud.android.utils.UriUtilsKt;
@@ -268,12 +270,10 @@ public class FileOperationsHelper {
      */
     public void syncFile(OCFile file) {
         if (!file.isFolder()) {
-            Intent intent = new Intent(mFileActivity, OperationsService.class);
-            intent.setAction(OperationsService.ACTION_SYNC_FILE);
-            intent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-            intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-            mWaitingForOpId = mFileActivity.getOperationsServiceBinder().queueNewOperation(intent);
-
+            @NotNull Lazy<SynchronizeFileUseCase> synchronizeFileUseCaseLazy = inject(SynchronizeFileUseCase.class);
+            synchronizeFileUseCaseLazy.getValue().execute(
+                    new SynchronizeFileUseCase.Params(file, mFileActivity.getAccount())
+            );
         } else {
             Intent intent = new Intent(mFileActivity, OperationsService.class);
             intent.setAction(OperationsService.ACTION_SYNC_FOLDER);
