@@ -517,6 +517,9 @@ class MainFileListFragment : Fragment(),
                     containerActivity?.showDetails(singleFile)
                     return true
                 }
+                R.id.action_sync_file -> {
+                    containerActivity?.fileOperationsHelper?.syncFile(singleFile)
+                }
                 R.id.action_send_file -> {
                     //Obtain the file
                     if (!singleFile.isAvailableLocally) { // Download the file
