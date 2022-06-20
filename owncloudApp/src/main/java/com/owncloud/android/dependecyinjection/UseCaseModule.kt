@@ -67,6 +67,7 @@ import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
+import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
@@ -75,6 +76,7 @@ import com.owncloud.android.usecases.transfers.downloads.CancelDownloadsForAccou
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -110,6 +112,7 @@ val useCaseModule = module {
     factory { GetFilesSharedByLinkUseCase(get()) }
     factory { GetFilesAvailableOfflineUseCase(get()) }
     factory { GetSearchFolderContentUseCase(get()) }
+    factory { SynchronizeFileUseCase(get(), get(), get()) }
     factory { SortFilesUseCase() }
 
     // Sharing
@@ -131,6 +134,7 @@ val useCaseModule = module {
     factory { GetLiveDataForFinishedDownloadsFromAccountUseCase(get()) }
     factory { UploadFilesFromSAFUseCase(get()) }
     factory { UploadFilesFromSystemUseCase(get()) }
+    factory { UploadFileInConflictUseCase(get()) }
     factory { CancelUploadForFileUseCase(get()) }
 
     // User

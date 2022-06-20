@@ -31,6 +31,7 @@ import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 
 /**
  * Use case to upload an update for a file in server.
@@ -41,14 +42,14 @@ import java.io.File
  */
 class UploadFileInConflictUseCase(
     private val workManager: WorkManager,
-) : BaseUseCase<Unit, UploadFileInConflictUseCase.Params>() {
+) : BaseUseCase<UUID?, UploadFileInConflictUseCase.Params>() {
 
-    override fun run(params: Params) {
+    override fun run(params: Params): UUID? {
         val localFile = File(params.localPath)
 
         if (!localFile.exists()) {
             Timber.w("Upload of ${params.localPath} won't be enqueued. We were not able to find it in the local storage")
-            return
+            return null
         }
 
         val uploadId = storeInUploadsDatabase(
@@ -57,7 +58,7 @@ class UploadFileInConflictUseCase(
             accountName = params.accountName,
         )
 
-        enqueueSingleUpload(
+        return enqueueSingleUpload(
             localPath = localFile.absolutePath,
             uploadPath = params.uploadFolderPath.plus(File.separator).plus(localFile.name),
             lastModifiedInSeconds = localFile.lastModified().div(1_000).toString(),
@@ -92,7 +93,7 @@ class UploadFileInConflictUseCase(
         lastModifiedInSeconds: String,
         uploadIdInStorageManager: Long,
         uploadPath: String,
-    ) {
+    ): UUID {
         val inputData = workDataOf(
             UploadFileFromFileSystemWorker.KEY_PARAM_ACCOUNT_NAME to accountName,
             UploadFileFromFileSystemWorker.KEY_PARAM_BEHAVIOR to UploadBehavior.COPY.name,
@@ -114,6 +115,8 @@ class UploadFileInConflictUseCase(
 
         workManager.enqueue(uploadFileFromContentUriWorker)
         Timber.i("Plain upload of $localPath has been enqueued.")
+
+        return uploadFileFromContentUriWorker.id
     }
 
     data class Params(
