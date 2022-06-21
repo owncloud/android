@@ -1038,6 +1038,18 @@ class FileDisplayActivity : FileActivity(),
         setFile(file)
     }
 
+    override fun syncFile(file: OCFile) {
+        fileOperationsHelper.syncFile(file)
+    }
+
+    override fun openFile(file: OCFile) {
+        fileOperationsHelper.syncFile(file)
+    }
+
+    override fun sendDownloadedFile(file: OCFile) {
+        fileOperationsHelper.sendDownloadedFile(file)
+    }
+
     private fun updateToolbar(chosenFileFromParam: OCFile?) {
         val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
 
@@ -1591,6 +1603,10 @@ class FileDisplayActivity : FileActivity(),
                 startSyncThenOpen(file)
             }
         }
+    }
+
+    override fun onShareFileClicked(file: OCFile) {
+        fileOperationsHelper.showShareFile(file)
     }
 
     override fun initDownloadForSending(file: OCFile) {
