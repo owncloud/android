@@ -24,6 +24,7 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.AccountNotTheSameException
 import com.owncloud.android.domain.exceptions.BadOcVersionException
+import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.CopyIntoDescendantException
 import com.owncloud.android.domain.exceptions.FileAlreadyExistsException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
@@ -62,6 +63,7 @@ fun Throwable.parseError(
             is ServerConnectionTimeoutException -> resources.getString(R.string.network_error_connect_timeout_exception)
             is ServerNotReachableException -> resources.getString(R.string.network_host_not_available)
             is ServiceUnavailableException -> resources.getString(R.string.service_unavailable)
+            is ConflictException -> resources.getString(R.string.conflict_title)
             is SSLRecoverablePeerUnverifiedException -> resources.getString(R.string.ssl_certificate_not_trusted)
             is BadOcVersionException -> resources.getString(R.string.auth_bad_oc_version_title)
             is IncorrectAddressException -> resources.getString(R.string.auth_incorrect_address_title)
