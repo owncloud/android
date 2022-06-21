@@ -367,6 +367,26 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         // Nothing to do. Clicking on files is not allowed.
     }
 
+    @Override
+    public void onShareFileClicked(@NonNull OCFile file) {
+        // Nothing to do. Clicking on files is not allowed.
+    }
+
+    @Override
+    public void syncFile(@NonNull OCFile file) {
+        // Nothing to do. Clicking on files is not allowed.
+    }
+
+    @Override
+    public void openFile(@NonNull OCFile file) {
+        // Nothing to do. Clicking on files is not allowed.
+    }
+
+    @Override
+    public void sendDownloadedFile(@NonNull OCFile file) {
+        // Nothing to do. Clicking on files is not allowed.
+    }
+
     private class SyncBroadcastReceiver extends BroadcastReceiver {
 
         /**

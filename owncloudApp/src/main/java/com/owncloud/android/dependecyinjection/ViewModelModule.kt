@@ -24,9 +24,9 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.MainApp
-import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListViewModel
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
+import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
@@ -84,9 +84,10 @@ val viewModelModule = module {
     viewModel { BiometricViewModel(get(), get()) }
     viewModel { ReleaseNotesViewModel(get(), get()) }
     viewModel { FileDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { FilesViewModel(get(), get(), get()) }
+    viewModel { FilesViewModel(get(), get()) }
 
     viewModel { PreviewImageViewModel(get(), get(), get()) }
-    viewModel { FileOperationViewModel(get(), get(), get(), get(), get(), get()) }
+
+    viewModel { FileOperationViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 }
