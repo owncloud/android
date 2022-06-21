@@ -31,7 +31,6 @@ import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticat
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.presentation.viewmodels.files.FileDetailsViewModel
-import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
 import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
@@ -84,10 +83,9 @@ val viewModelModule = module {
     viewModel { BiometricViewModel(get(), get()) }
     viewModel { ReleaseNotesViewModel(get(), get()) }
     viewModel { FileDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { FilesViewModel(get(), get()) }
 
     viewModel { PreviewImageViewModel(get(), get(), get()) }
 
     viewModel { FileOperationViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 }
