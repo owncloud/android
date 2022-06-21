@@ -23,6 +23,7 @@ package com.owncloud.android.presentation.ui.files.filelist
 
 import android.accounts.Account
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
@@ -40,10 +41,13 @@ import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
+import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortType
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.extensions.isDownloadPending
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.utils.FileStorageUtils
@@ -59,6 +63,7 @@ class MainFileListViewModel(
     private val sortFilesUseCase: SortFilesUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
+    private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
     private val contextProvider: ContextProvider,
     private val workManager: WorkManager,
 ) : ViewModel() {
@@ -90,6 +95,9 @@ class MainFileListViewModel(
         }
     val folderContentLiveData: LiveData<Event<List<OCFile>>>
         get() = _folderContentLiveData
+
+    private val _refreshFolder = MediatorLiveData<Event<UIResult<Unit>>>()
+    val refreshFolder: LiveData<Event<UIResult<Unit>>> = _refreshFolder
 
     fun navigateTo(fileId: Long) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
@@ -194,6 +202,18 @@ class MainFileListViewModel(
             composeFileListUiState(fileListOption = newFileListOption)
         )
     }
+
+    fun refreshFolder(
+        remotePath: String
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
+        liveData = _refreshFolder,
+        useCase = refreshFolderFromServerAsyncUseCase,
+        showLoading = true,
+        useCaseParams = RefreshFolderFromServerAsyncUseCase.Params(
+            remotePath = remotePath
+        )
+    )
 
     private fun composeFileListUiState(
         account: Account? = _fileListUiStateLiveData.value?.account,
