@@ -24,17 +24,17 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.MainApp
-import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListViewModel
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
+import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.presentation.viewmodels.files.FileDetailsViewModel
-import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
 import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
+import com.owncloud.android.presentation.viewmodels.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
 import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
@@ -46,7 +46,6 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityVie
 import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.presentation.viewmodels.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel
 import com.owncloud.android.ui.preview.PreviewImageViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -83,10 +82,9 @@ val viewModelModule = module {
     viewModel { PatternViewModel(get()) }
     viewModel { BiometricViewModel(get(), get()) }
     viewModel { ReleaseNotesViewModel(get(), get()) }
-    viewModel { FilesViewModel(get(), get()) }
 
     viewModel { PreviewImageViewModel(get(), get(), get()) }
     viewModel { FileDetailsViewModel(get(), get(), get(), get(), get()) }
     viewModel { FileOperationViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 }
