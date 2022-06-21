@@ -22,7 +22,6 @@
 package com.owncloud.android.presentation.ui.files.filelist
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -65,6 +64,8 @@ import com.owncloud.android.presentation.ui.files.SortOrder
 import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
+import com.owncloud.android.presentation.ui.files.operations.FileOperation
+import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
 import com.owncloud.android.ui.activity.FileActivity
@@ -73,7 +74,6 @@ import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment
 import com.owncloud.android.ui.fragment.FileDetailFragment
-import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -88,12 +88,12 @@ class MainFileListFragment : Fragment(),
     SortOptionsView.SortOptionsListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
+    private val fileOperationsViewModel by viewModel<FileOperationViewModel>()
     private val filesViewModel by viewModel<FilesViewModel>()
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private var containerActivity: FileFragment.ContainerActivity? = null
     private var files: List<OCFile> = emptyList()
 
     private lateinit var layoutManager: StaggeredGridLayoutManager
@@ -146,31 +146,10 @@ class MainFileListFragment : Fragment(),
             menu.removeItem(menu.findItem(R.id.action_share_current_folder).itemId)
         } else {
             menu.findItem(R.id.action_share_current_folder)?.setOnMenuItemClickListener {
-                containerActivity?.fileOperationsHelper?.showShareFile(mainFileListViewModel.getFile())
+                fileActions?.onShareFileClicked(mainFileListViewModel.getFile())
                 true
             }
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Timber.v("onAttach")
-        containerActivity = try {
-            context as FileFragment.ContainerActivity
-        } catch (e: ClassCastException) {
-            throw ClassCastException(
-                context.toString() + " must implement " +
-                        FileFragment.ContainerActivity::class.java.simpleName
-            )
-        }
-    }
-
-    override fun onDetach() {
-        containerActivity = null
-        super.onDetach()
     }
 
     private fun initViews() {
@@ -425,8 +404,8 @@ class MainFileListFragment : Fragment(),
     }
 
     override fun onFolderNameSet(newFolderName: String, parentFolder: OCFile) {
-        filesViewModel.createFolder(parentFolder, newFolderName)
-        filesViewModel.createFolder.observe(viewLifecycleOwner, Event.EventObserver { uiResult: UIResult<Unit> ->
+        fileOperationsViewModel.performOperation(FileOperation.CreateFolder(newFolderName, parentFolder))
+        fileOperationsViewModel.createFolder.observe(viewLifecycleOwner, Event.EventObserver { uiResult: UIResult<Unit> ->
             if (uiResult is UIResult.Error) {
                 val errorMessage =
                     uiResult.error?.parseError(resources.getString(R.string.create_dir_fail_msg), resources, false)
@@ -497,11 +476,11 @@ class MainFileListFragment : Fragment(),
             val singleFile = checkedFiles.first()
             when (menuId) {
                 R.id.action_share_file -> {
-                    containerActivity?.fileOperationsHelper?.showShareFile(singleFile)
+                    fileActions?.onShareFileClicked(singleFile)
                     return true
                 }
                 R.id.action_open_file_with -> {
-                    containerActivity?.fileOperationsHelper?.openFile(singleFile)
+                    fileActions?.openFile(singleFile)
                     return true
                 }
                 R.id.action_rename_file -> {
@@ -514,11 +493,11 @@ class MainFileListFragment : Fragment(),
                 R.id.action_see_details -> {
                     fileListAdapter.clearSelection()
                     updateActionModeAfterTogglingSelected()
-                    containerActivity?.showDetails(singleFile)
+                    fileActions?.showDetails(singleFile)
                     return true
                 }
                 R.id.action_sync_file -> {
-                    containerActivity?.fileOperationsHelper?.syncFile(singleFile)
+                    fileActions?.syncFile(singleFile)
                 }
                 R.id.action_send_file -> {
                     //Obtain the file
@@ -526,7 +505,7 @@ class MainFileListFragment : Fragment(),
                         Timber.d("%s : File must be downloaded", singleFile.remotePath)
                         fileActions?.initDownloadForSending(singleFile)
                     } else {
-                        containerActivity?.fileOperationsHelper?.sendDownloadedFile(singleFile)
+                        fileActions?.sendDownloadedFile(singleFile)
                     }
                     return true
                 }
@@ -681,7 +660,7 @@ class MainFileListFragment : Fragment(),
             val fileMenuFilter = FileMenuFilter(
                 checkedFiles,
                 AccountUtils.getCurrentOwnCloudAccount(requireContext()),
-                containerActivity,
+                requireActivity() as FileActivity,
                 activity
             )
 
@@ -719,17 +698,18 @@ class MainFileListFragment : Fragment(),
         }
     }
 
-    fun syncFiles(files: Collection<OCFile?>) {
+    private fun syncFiles(files: List<OCFile>) {
         for (file in files) {
-            file?.let { syncFile(file) }
-        }
-    }
-
-    fun syncFile(file: OCFile) {
-        if (!file.isFolder) {
-            // TODO Sync file
-        } else {
-            filesViewModel.refreshFolder(file.remotePath)
+            if (file.isFolder) {
+                filesViewModel.refreshFolder(file.remotePath)
+            } else {
+                fileOperationsViewModel.performOperation(
+                    FileOperation.SynchronizeFileOperation(
+                        fileToSync = file,
+                        account = mainFileListViewModel.fileListUiStateLiveData.value!!.account
+                    )
+                )
+            }
         }
     }
 
@@ -746,7 +726,12 @@ class MainFileListFragment : Fragment(),
     interface FileActions {
         fun onCurrentFolderUpdated(newCurrentFolder: OCFile)
         fun onFileClicked(file: OCFile)
+        fun onShareFileClicked(file: OCFile)
         fun initDownloadForSending(file: OCFile)
+        fun showDetails(file: OCFile)
+        fun syncFile(file: OCFile)
+        fun openFile(file: OCFile)
+        fun sendDownloadedFile(file: OCFile)
         fun cancelFileTransference(file: ArrayList<OCFile>)
         fun setBottomBarVisibility(isVisible: Boolean)
     }
