@@ -86,6 +86,8 @@ import com.owncloud.android.presentation.ui.files.SortType;
 import com.owncloud.android.presentation.ui.files.ViewType;
 import com.owncloud.android.presentation.UIResult;
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
+import com.owncloud.android.presentation.ui.files.operations.FileOperation;
+import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel;
 import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
@@ -757,10 +759,10 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     @Override
     public void onFolderNameSet(@NotNull String newFolderName, @NotNull OCFile parentFolder) {
-        FilesViewModel filesViewModel = get(FilesViewModel.class);
+        FileOperationViewModel fileOperationViewModel = get(FileOperationViewModel.class);
 
-        filesViewModel.createFolder(parentFolder, newFolderName);
-        filesViewModel.getCreateFolder().observe(this, uiResultEvent -> {
+        fileOperationViewModel.performOperation(new FileOperation.CreateFolder(newFolderName, parentFolder));
+        fileOperationViewModel.getCreateFolder().observe(this, uiResultEvent -> {
             UIResult<Unit> uiResult = uiResultEvent.peekContent();
             if (uiResult.isSuccess()) {
                 updateDirectoryList();

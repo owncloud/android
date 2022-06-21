@@ -28,6 +28,7 @@ import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
+import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
@@ -35,17 +36,23 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class FileOperationViewModel(
+    private val createFolderAsyncUseCase: CreateFolderAsyncUseCase,
     private val copyFileUseCase: CopyFileUseCase,
     private val moveFileUseCase: MoveFileUseCase,
     private val removeFileUseCase: RemoveFileUseCase,
     private val renameFileUseCase: RenameFileUseCase,
+    private val synchronizeFileUseCase: SynchronizeFileUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
+
+    private val _createFolder = MediatorLiveData<Event<UIResult<Unit>>>()
+    val createFolder: LiveData<Event<UIResult<Unit>>> = _createFolder
 
     private val _copyFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
     val copyFileLiveData: LiveData<Event<UIResult<OCFile>>> = _copyFileLiveData
@@ -59,13 +66,27 @@ class FileOperationViewModel(
     private val _renameFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
     val renameFileLiveData: LiveData<Event<UIResult<OCFile>>> = _renameFileLiveData
 
+    private val _syncFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
+    val syncFileLiveData: LiveData<Event<UIResult<OCFile>>> = _syncFileLiveData
+
     fun performOperation(fileOperation: FileOperation) {
         when (fileOperation) {
             is FileOperation.MoveOperation -> moveOperation(fileOperation)
             is FileOperation.RemoveOperation -> removeOperation(fileOperation)
             is FileOperation.RenameOperation -> renameOperation(fileOperation)
             is FileOperation.CopyOperation -> copyOperation(fileOperation)
+            is FileOperation.SynchronizeFileOperation -> syncFileOperation(fileOperation)
+            is FileOperation.CreateFolder -> createFolderOperation(fileOperation)
         }
+    }
+
+    private fun createFolderOperation(fileOperation: FileOperation.CreateFolder) {
+        runOperation(
+            liveData = _createFolder,
+            useCase = createFolderAsyncUseCase,
+            useCaseParams = CreateFolderAsyncUseCase.Params(fileOperation.folderName, fileOperation.parentFile),
+            postValue = Unit
+        )
     }
 
     private fun copyOperation(fileOperation: FileOperation.CopyOperation) {
@@ -101,6 +122,15 @@ class FileOperationViewModel(
             useCase = renameFileUseCase,
             useCaseParams = RenameFileUseCase.Params(fileOperation.ocFileToRename, fileOperation.newName),
             postValue = fileOperation.ocFileToRename
+        )
+    }
+
+    private fun syncFileOperation(fileOperation: FileOperation.SynchronizeFileOperation) {
+        runOperation(
+            liveData = _syncFileLiveData,
+            useCase = synchronizeFileUseCase,
+            useCaseParams = SynchronizeFileUseCase.Params(fileOperation.fileToSync, fileOperation.account),
+            postValue = fileOperation.fileToSync
         )
     }
 
