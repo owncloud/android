@@ -21,6 +21,7 @@ package com.owncloud.android.usecases.synchronization
 
 import android.accounts.Account
 import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
@@ -34,7 +35,7 @@ class SynchronizeFileUseCase(
     private val downloadFileUseCase: DownloadFileUseCase,
     private val uploadFileInConflictUseCase: UploadFileInConflictUseCase,
     private val fileRepository: FileRepository,
-) : BaseUseCase<SynchronizeFileUseCase.SyncType, SynchronizeFileUseCase.Params>() {
+) : BaseUseCaseWithResult<SynchronizeFileUseCase.SyncType, SynchronizeFileUseCase.Params>() {
 
     override fun run(params: Params): SyncType {
         val fileToSynchronize = params.fileToSynchronize
