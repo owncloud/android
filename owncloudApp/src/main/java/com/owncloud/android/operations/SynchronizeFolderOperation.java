@@ -40,9 +40,9 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.presentation.ui.files.filelist.MainFileListViewModel;
 import com.owncloud.android.presentation.ui.files.operations.FileOperation;
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel;
-import com.owncloud.android.presentation.viewmodels.files.FilesViewModel;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.utils.FileStorageUtils;
 import timber.log.Timber;
@@ -200,8 +200,8 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     protected RemoteOperationResult<ArrayList<RemoteFile>> run(OwnCloudClient client) {
         final RemoteOperationResult<ArrayList<RemoteFile>> fetchFolderResult;
 
-        FilesViewModel filesViewModel = get(FilesViewModel.class);
-        filesViewModel.refreshFolder(mRemotePath);
+        MainFileListViewModel mainFileListViewModel = get(MainFileListViewModel.class);
+        mainFileListViewModel.refreshFolder(mRemotePath);
 
         mFailsInFileSyncsFound = 0;
         mConflictsFound = 0;

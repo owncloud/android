@@ -67,7 +67,6 @@ import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialo
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
-import com.owncloud.android.presentation.viewmodels.files.FilesViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
@@ -89,7 +88,6 @@ class MainFileListFragment : Fragment(),
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
     private val fileOperationsViewModel by viewModel<FileOperationViewModel>()
-    private val filesViewModel by viewModel<FilesViewModel>()
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
@@ -182,7 +180,7 @@ class MainFileListFragment : Fragment(),
 
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener {
-            filesViewModel.refreshFolder(mainFileListViewModel.getFile().remotePath)
+            mainFileListViewModel.refreshFolder(mainFileListViewModel.getFile().remotePath)
         }
 
         // Set SortOptions and its listeners
@@ -228,7 +226,7 @@ class MainFileListFragment : Fragment(),
             updateFileListData(fileListPostFilters)
         }
 
-        filesViewModel.refreshFolder.observe(viewLifecycleOwner, Event.EventObserver {
+        mainFileListViewModel.refreshFolder.observe(viewLifecycleOwner, Event.EventObserver {
             it.fold(
                 onLoading = { binding.swipeRefreshMainFileList.isRefreshing = true },
                 onSuccess = { binding.swipeRefreshMainFileList.isRefreshing = false },
@@ -605,7 +603,7 @@ class MainFileListFragment : Fragment(),
 
         if (ocFile.isFolder) {
             mainFileListViewModel.updateFolderToDisplay(ocFile)
-            filesViewModel.refreshFolder(ocFile.remotePath)
+            mainFileListViewModel.refreshFolder(ocFile.remotePath)
         } else { // Click on a file
             fileActions?.onFileClicked(ocFile)
         }
@@ -701,7 +699,7 @@ class MainFileListFragment : Fragment(),
     private fun syncFiles(files: List<OCFile>) {
         for (file in files) {
             if (file.isFolder) {
-                filesViewModel.refreshFolder(file.remotePath)
+                mainFileListViewModel.refreshFolder(file.remotePath)
             } else {
                 fileOperationsViewModel.performOperation(
                     FileOperation.SynchronizeFileOperation(
