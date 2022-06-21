@@ -323,7 +323,6 @@ class FileDisplayActivity : FileActivity(),
             val secondFragment = chooseInitialSecondFragment(file)
             secondFragment?.let {
                 setSecondFragment(it)
-                updateFragmentsVisibility(true)
                 updateToolbar(file)
             } ?: cleanSecondFragment()
 
@@ -396,6 +395,7 @@ class FileDisplayActivity : FileActivity(),
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.right_fragment_container, fragment, TAG_SECOND_FRAGMENT)
         transaction.commit()
+        updateFragmentsVisibility(true)
     }
 
     fun showBottomNavBar(show: Boolean) {
@@ -1033,7 +1033,6 @@ class FileDisplayActivity : FileActivity(),
     override fun showDetails(file: OCFile) {
         val detailFragment = FileDetailFragment.newInstance(file, account)
         setSecondFragment(detailFragment)
-        updateFragmentsVisibility(true)
         updateToolbar(file)
         setFile(file)
     }
@@ -1402,7 +1401,6 @@ class FileDisplayActivity : FileActivity(),
             true
         )
         setSecondFragment(mediaFragment)
-        updateFragmentsVisibility(true)
         updateToolbar(file)
         setFile(file)
     }
@@ -1422,7 +1420,6 @@ class FileDisplayActivity : FileActivity(),
             true
         )
         setSecondFragment(mediaFragment)
-        updateFragmentsVisibility(true)
         updateToolbar(file)
         setFile(file)
     }
@@ -1438,7 +1435,6 @@ class FileDisplayActivity : FileActivity(),
             account
         )
         setSecondFragment(textPreviewFragment)
-        updateFragmentsVisibility(true)
         updateToolbar(file)
         setFile(file)
     }
@@ -1455,7 +1451,6 @@ class FileDisplayActivity : FileActivity(),
         setSecondFragment(detailFragment)
         fileWaitingToPreview = file
         fileOperationsHelper.syncFile(file)
-        updateFragmentsVisibility(true)
         updateToolbar(file)
         setFile(file)
     }
