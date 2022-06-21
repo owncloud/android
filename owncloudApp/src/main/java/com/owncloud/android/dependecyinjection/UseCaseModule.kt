@@ -115,7 +115,7 @@ val useCaseModule = module {
     factory { GetFilesSharedByLinkUseCase(get()) }
     factory { GetFilesAvailableOfflineUseCase(get()) }
     factory { GetSearchFolderContentUseCase(get()) }
-    factory { SynchronizeFileUseCase(get(), get(), get()) }
+    factory { SynchronizeFileUseCase(get(), get(), get(), get()) }
     factory { SortFilesUseCase() }
 
     // Sharing
