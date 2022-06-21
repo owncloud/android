@@ -20,12 +20,12 @@
 package com.owncloud.android.usecases.synchronization
 
 import android.accounts.Account
-import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
+import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase
 import timber.log.Timber
@@ -34,6 +34,7 @@ import java.util.UUID
 class SynchronizeFileUseCase(
     private val downloadFileUseCase: DownloadFileUseCase,
     private val uploadFileInConflictUseCase: UploadFileInConflictUseCase,
+    private val saveFileUseCase: SaveFileOrFolderUseCase,
     private val fileRepository: FileRepository,
 ) : BaseUseCaseWithResult<SynchronizeFileUseCase.SyncType, SynchronizeFileUseCase.Params>() {
 
@@ -94,6 +95,8 @@ class SynchronizeFileUseCase(
     }
 
     private fun requestForUpload(account: Account, ocFile: OCFile, etagInConflict: String): UUID? {
+        Timber.d("Trigger an upload with etag in conflict: $etagInConflict")
+        saveFileUseCase.execute(SaveFileOrFolderUseCase.Params(ocFile.copy(etagInConflict = etagInConflict)))
         return uploadFileInConflictUseCase.execute(
             UploadFileInConflictUseCase.Params(
                 accountName = account.name,
