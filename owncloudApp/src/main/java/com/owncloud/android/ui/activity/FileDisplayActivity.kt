@@ -1581,12 +1581,12 @@ class FileDisplayActivity : FileActivity(),
             }
             PreviewTextFragment.canBePreviewed(file) -> {
                 startTextPreview(file)
-                fileOperationsHelper.syncFile(file)
+                fileOperationViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
             }
             PreviewAudioFragment.canBePreviewed(file) -> {
                 // media preview
                 startAudioPreview(file, 0)
-                fileOperationsHelper.syncFile(file)
+                fileOperationViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
             }
             PreviewVideoFragment.canBePreviewed(file) && !WorkManager.getInstance(this).isDownloadPending(account, file) -> {
                 // FIXME: 13/10/2020 : New_arch: Av.Offline
@@ -1603,7 +1603,7 @@ class FileDisplayActivity : FileActivity(),
                 // If the file is already downloaded sync it, just to update it if there is a
                 // new available file version
                 if (file.isAvailableLocally) {
-                    fileOperationsHelper.syncFile(file)
+                    fileOperationViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
                 }
             }
             else -> {
