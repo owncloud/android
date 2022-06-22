@@ -28,6 +28,8 @@ import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import timber.log.Timber
 import java.util.UUID
 
@@ -42,46 +44,48 @@ class SynchronizeFileUseCase(
         val fileToSynchronize = params.fileToSynchronize
         val account = params.account
 
-        // 1. Perform a propfind to check if the file still exists in remote
-        val serverFile = try {
-            fileRepository.readFile(fileToSynchronize.remotePath)
-        } catch (exception: FileNotFoundException) {
-            // 1.1 File not exists anymore -> remove file locally (DB and Storage)
-            fileRepository.removeFile(listOf(fileToSynchronize), false)
-            return SyncType.FileNotFound
-        }
+        CoroutineScope(Dispatchers.IO).run {
+            // 1. Perform a propfind to check if the file still exists in remote
+            val serverFile = try {
+                fileRepository.readFile(fileToSynchronize.remotePath)
+            } catch (exception: FileNotFoundException) {
+                // 1.1 File not exists anymore -> remove file locally (DB and Storage)
+                fileRepository.removeFile(listOf(fileToSynchronize), false)
+                return SyncType.FileNotFound
+            }
 
-        // 2. File not downloaded -> Download it
-        if (!fileToSynchronize.isAvailableLocally) {
-            Timber.i("File ${fileToSynchronize.fileName} is not downloaded. Let's download it")
-            val uuid = requestForDownload(account = account, ocFile = fileToSynchronize)
-            return SyncType.DownloadEnqueued(uuid)
-        }
+            // 2. File not downloaded -> Download it
+            if (!fileToSynchronize.isAvailableLocally) {
+                Timber.i("File ${fileToSynchronize.fileName} is not downloaded. Let's download it")
+                val uuid = requestForDownload(account = account, ocFile = fileToSynchronize)
+                return SyncType.DownloadEnqueued(uuid)
+            }
 
-        // 3. Check if file has changed locally
-        val changedLocally = fileToSynchronize.localModificationTimestamp > fileToSynchronize.lastSyncDateForData!!
+            // 3. Check if file has changed locally
+            val changedLocally = fileToSynchronize.localModificationTimestamp > fileToSynchronize.lastSyncDateForData!!
 
-        // 4. Check if file has changed remotely
-        val changedRemotely = serverFile.etag != fileToSynchronize.etag
+            // 4. Check if file has changed remotely
+            val changedRemotely = serverFile.etag != fileToSynchronize.etag
 
-        if (changedLocally && changedRemotely) {
-            // 5.1 File has changed locally and remotely. We got a conflict, save the conflict
-            Timber.i("File ${fileToSynchronize.fileName} has changed locally and remotely. We got a conflict")
-            TODO()
-        } else if (changedRemotely) {
-            // 5.2 File has changed ONLY remotely -> download new version
-            Timber.i("File ${fileToSynchronize.fileName} has changed remotely. Let's download the new version")
-            val uuid = requestForDownload(account, fileToSynchronize)
-            return SyncType.DownloadEnqueued(uuid)
-        } else if (changedLocally) {
-            // 5.3 File has change ONLY locally -> upload new version
-            Timber.i("File ${fileToSynchronize.fileName} has changed locally. Let's upload the new version")
-            val uuid = requestForUpload(account, fileToSynchronize, fileToSynchronize.etag!!)
-            return SyncType.UploadEnqueued(uuid)
-        } else {
-            // 5.4 File has not change locally not remotely -> do nothing
-            Timber.i("File ${fileToSynchronize.fileName} is already synchronized. Nothing to do here")
-            return SyncType.AlreadySynchronized
+            if (changedLocally && changedRemotely) {
+                // 5.1 File has changed locally and remotely. We got a conflict, save the conflict
+                Timber.i("File ${fileToSynchronize.fileName} has changed locally and remotely. We got a conflict")
+                TODO()
+            } else if (changedRemotely) {
+                // 5.2 File has changed ONLY remotely -> download new version
+                Timber.i("File ${fileToSynchronize.fileName} has changed remotely. Let's download the new version")
+                val uuid = requestForDownload(account, fileToSynchronize)
+                return SyncType.DownloadEnqueued(uuid)
+            } else if (changedLocally) {
+                // 5.3 File has change ONLY locally -> upload new version
+                Timber.i("File ${fileToSynchronize.fileName} has changed locally. Let's upload the new version")
+                val uuid = requestForUpload(account, fileToSynchronize, fileToSynchronize.etag!!)
+                return SyncType.UploadEnqueued(uuid)
+            } else {
+                // 5.4 File has not change locally not remotely -> do nothing
+                Timber.i("File ${fileToSynchronize.fileName} is already synchronized. Nothing to do here")
+                return SyncType.AlreadySynchronized
+            }
         }
     }
 
