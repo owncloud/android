@@ -88,11 +88,11 @@ import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import com.owncloud.android.usecases.transfers.DOWNLOAD_ADDED_MESSAGE
 import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.coroutines.CoroutineScope
@@ -543,7 +543,8 @@ class FileDisplayActivity : FileActivity(),
             val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase by inject()
             uploadFilesFromSystemUseCase.execute(
                 UploadFilesFromSystemUseCase.Params(
-                    accountName = account.name, listOfLocalPaths = filePaths.toList(), uploadFolderPath = remotePathBase!!)
+                    accountName = account.name, listOfLocalPaths = filePaths.toList(), uploadFolderPath = remotePathBase!!
+                )
             )
 
         } else {
@@ -1038,11 +1039,15 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun syncFile(file: OCFile) {
-        fileOperationsHelper.syncFile(file)
+        fileOperationViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
     }
 
     override fun openFile(file: OCFile) {
-        fileOperationsHelper.syncFile(file)
+        if (file.isAvailableLocally) {
+            fileOperationsHelper.openFile(file)
+        } else {
+            startDownloadForOpening(file)
+        }
     }
 
     override fun sendDownloadedFile(file: OCFile) {
@@ -1307,8 +1312,7 @@ class FileDisplayActivity : FileActivity(),
         )
     }
 
-    private fun requestForDownload(file: OCFile?) {
-        if (file == null) return
+    private fun requestForDownload(file: OCFile) {
         val downloadFileUseCase: DownloadFileUseCase by inject()
 
         val id = downloadFileUseCase.execute(DownloadFileUseCase.Params(account, file)) ?: return
@@ -1323,14 +1327,22 @@ class FileDisplayActivity : FileActivity(),
             onWorkRunning = { progress -> Timber.d("Downloading - Progress $progress") },
             onWorkSucceeded = {
                 CoroutineScope(Dispatchers.IO).launch {
-                    waitingToSend = storageManager.getFileByPath(file.remotePath)
-                    sendDownloadedFile()
+                    waitingToSend?.let {
+                        waitingToSend = storageManager.getFileByPath(file.remotePath)
+                        sendDownloadedFile()
+                    }
+                    waitingToOpen?.let {
+                        waitingToOpen = storageManager.getFileByPath(file.remotePath)
+                        openDownloadedFile()
+                    }
                 }
             },
             onWorkFailed = {
                 showMessageInSnackbar(
                     message = String.format(getString(R.string.downloader_download_failed_ticker), file.fileName)
                 )
+                waitingToSend = null
+                waitingToOpen = null
             },
         )
     }
@@ -1354,7 +1366,7 @@ class FileDisplayActivity : FileActivity(),
      */
     fun startDownloadForSending(file: OCFile) {
         waitingToSend = file
-        requestForDownload(waitingToSend)
+        requestForDownload(file)
         val hasSecondFragment = secondFragment != null
         updateFragmentsVisibility(hasSecondFragment)
     }
@@ -1366,9 +1378,9 @@ class FileDisplayActivity : FileActivity(),
      *
      * @param file [OCFile] to download and preview.
      */
-    fun startDownloadForOpening(file: OCFile) {
+    private fun startDownloadForOpening(file: OCFile) {
         waitingToOpen = file
-        requestForDownload(waitingToOpen)
+        requestForDownload(file)
         val hasSecondFragment = secondFragment != null
         updateFragmentsVisibility(hasSecondFragment)
     }
@@ -1450,7 +1462,7 @@ class FileDisplayActivity : FileActivity(),
         val detailFragment = FileDetailFragment.newInstance(file, account)
         setSecondFragment(detailFragment)
         fileWaitingToPreview = file
-        fileOperationsHelper.syncFile(file)
+        fileOperationViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
         updateToolbar(file)
         setFile(file)
     }
