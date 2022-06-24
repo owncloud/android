@@ -28,6 +28,7 @@ import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.lib.resources.files.UploadFileFromFileSystemOperation
 import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 import timber.log.Timber
 import java.io.File
@@ -52,15 +53,16 @@ class UploadFileInConflictUseCase(
             return null
         }
 
+        Timber.d("Upload file in conflict params: ${params.accountName} | ${params.localPath} | ${params.uploadFolderPath} ")
         val uploadId = storeInUploadsDatabase(
             localFile = localFile,
-            uploadPath = params.uploadFolderPath.plus(File.separator).plus(localFile.name),
+            uploadPath = params.uploadFolderPath.plus(localFile.name),
             accountName = params.accountName,
         )
 
         return enqueueSingleUpload(
             localPath = localFile.absolutePath,
-            uploadPath = params.uploadFolderPath.plus(File.separator).plus(localFile.name),
+            uploadPath = params.uploadFolderPath.plus(localFile.name),
             lastModifiedInSeconds = localFile.lastModified().div(1_000).toString(),
             accountName = params.accountName,
             uploadIdInStorageManager = uploadId,
@@ -100,7 +102,7 @@ class UploadFileInConflictUseCase(
             UploadFileFromFileSystemWorker.KEY_PARAM_CONTENT_URI to localPath,
             UploadFileFromFileSystemWorker.KEY_PARAM_LAST_MODIFIED to lastModifiedInSeconds,
             UploadFileFromFileSystemWorker.KEY_PARAM_UPLOAD_PATH to uploadPath,
-            UploadFileFromFileSystemWorker.KEY_PARAM_UPLOAD_ID to uploadIdInStorageManager
+            UploadFileFromFileSystemWorker.KEY_PARAM_UPLOAD_ID to uploadIdInStorageManager,
         )
 
         val constraints = Constraints.Builder()
@@ -111,6 +113,7 @@ class UploadFileInConflictUseCase(
             .setInputData(inputData)
             .setConstraints(constraints)
             .addTag(accountName)
+            .addTag(uploadIdInStorageManager.toString())
             .build()
 
         workManager.enqueue(uploadFileFromContentUriWorker)
