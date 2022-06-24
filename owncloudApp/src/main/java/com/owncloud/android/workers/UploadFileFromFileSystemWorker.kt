@@ -43,6 +43,7 @@ import com.owncloud.android.domain.exceptions.SpecificUnsupportedMediaTypeExcept
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
+import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -84,6 +85,9 @@ class UploadFileFromFileSystemWorker(
     private lateinit var ocUpload: OCUpload
     private var fileSize: Long = 0
 
+    private lateinit var uploadFileOperation: UploadFileFromFileSystemOperation
+    private val saveFileOrFolderUseCase: SaveFileOrFolderUseCase by inject()
+
     // Etag in conflict required to overwrite files in server. Otherwise, the upload will be rejected.
     private var eTagInConflict: String = ""
 
@@ -99,12 +103,39 @@ class UploadFileFromFileSystemWorker(
             checkNameCollisionOrGetAnAvailableOneInCase()
             uploadDocument()
             updateUploadsDatabaseWithResult(null)
+            updateFilesDatabaseWithNewEtag()
             Result.success()
         } catch (throwable: Throwable) {
             Timber.e(throwable)
             showNotification(throwable)
             updateUploadsDatabaseWithResult(throwable)
             Result.failure()
+        }
+    }
+
+    /**
+     * Update the database with latest details about this file.
+     *
+     * We will ask for thumbnails after the upload
+     * We will update info about the file (modification timestamp and etag)
+     */
+    private fun updateFilesDatabaseWithNewEtag() {
+        val currentTime = System.currentTimeMillis()
+        if (ocUpload.isForceOverwrite) {
+            val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
+            val file = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(account.name, ocUpload.remotePath))
+            file.getDataOrNull()?.let {
+                it.copy(
+                    needsToUpdateThumbnail = true,
+                    etag = uploadFileOperation.etag,
+                    length = (File(ocUpload.localPath).length()),
+                    lastSyncDateForData = currentTime,
+                    modifiedAtLastSyncForData = currentTime,
+                    etagInConflict = null
+                ).let {
+                    saveFileOrFolderUseCase.execute(SaveFileOrFolderUseCase.Params(it))
+                }
+            }
         }
     }
 
@@ -167,14 +198,14 @@ class UploadFileFromFileSystemWorker(
 
     private fun checkNameCollisionOrGetAnAvailableOneInCase() {
         if (ocUpload.isForceOverwrite) {
-            Timber.d("Upload will override current server file")
 
             val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
             val useCaseResult = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(ocUpload.accountName, ocUpload.remotePath))
 
             eTagInConflict = useCaseResult.getDataOrNull()?.etagInConflict.orEmpty()
 
-            Timber.d("File with the following etag in conflict: $eTagInConflict")
+            Timber.d("Upload will overwrite current server file with the following etag in conflict: $eTagInConflict")
+
             return
         }
 
@@ -202,7 +233,7 @@ class UploadFileFromFileSystemWorker(
     }
 
     private fun uploadPlainFile(client: OwnCloudClient) {
-        val uploadFileOperation = UploadFileFromFileSystemOperation(
+        uploadFileOperation = UploadFileFromFileSystemOperation(
             localPath = fileSystemPath,
             remotePath = uploadPath,
             mimeType = mimetype,
@@ -227,7 +258,7 @@ class UploadFileFromFileSystemWorker(
         executeRemoteOperation { createChunksRemoteFolderOperation.execute(client) }
 
         // Step 2: Upload file by chunks
-        val chunkedUploadOperation = ChunkedUploadFromFileSystemOperation(
+        uploadFileOperation = ChunkedUploadFromFileSystemOperation(
             transferId = uploadIdInStorageManager.toString(),
             localPath = fileSystemPath,
             remotePath = uploadPath,
@@ -238,7 +269,7 @@ class UploadFileFromFileSystemWorker(
             it.addDataTransferProgressListener(this)
         }
 
-        val result = executeRemoteOperation { chunkedUploadOperation.execute(client) }
+        val result = executeRemoteOperation { uploadFileOperation.execute(client) }
 
         // Step 3: Move remote file to the final remote destination
         val ocChunkService = OCChunkService(client)
