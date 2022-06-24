@@ -24,7 +24,6 @@ import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase
@@ -63,14 +62,20 @@ class SynchronizeFileUseCase(
 
             // 3. Check if file has changed locally
             val changedLocally = fileToSynchronize.localModificationTimestamp > fileToSynchronize.lastSyncDateForData!!
+            Timber.i("Local file modification timestamp :${fileToSynchronize.localModificationTimestamp} and last sync date for data :${fileToSynchronize.lastSyncDateForData}")
+            Timber.i("So it has changed locally: $changedLocally")
 
             // 4. Check if file has changed remotely
             val changedRemotely = serverFile.etag != fileToSynchronize.etag
+            Timber.i("Local etag :${fileToSynchronize.etag} and remote etag :${serverFile.etag}")
+            Timber.i("So it has changed remotely: $changedRemotely")
 
             if (changedLocally && changedRemotely) {
-                // 5.1 File has changed locally and remotely. We got a conflict, save the conflict
+                // 5.1 File has changed locally and remotely. We got a conflict, save the conflict.
                 Timber.i("File ${fileToSynchronize.fileName} has changed locally and remotely. We got a conflict")
-                TODO()
+                saveFileUseCase.execute(SaveFileOrFolderUseCase.Params(fileToSynchronize.copy(etagInConflict = serverFile.etag)))
+                return SyncType.ConflictDetected(serverFile.etag!!)
+                // FIXME Conflicts
             } else if (changedRemotely) {
                 // 5.2 File has changed ONLY remotely -> download new version
                 Timber.i("File ${fileToSynchronize.fileName} has changed remotely. Let's download the new version")
@@ -99,13 +104,11 @@ class SynchronizeFileUseCase(
     }
 
     private fun requestForUpload(account: Account, ocFile: OCFile, etagInConflict: String): UUID? {
-        Timber.d("Trigger an upload with etag in conflict: $etagInConflict")
-        saveFileUseCase.execute(SaveFileOrFolderUseCase.Params(ocFile.copy(etagInConflict = etagInConflict)))
         return uploadFileInConflictUseCase.execute(
             UploadFileInConflictUseCase.Params(
                 accountName = account.name,
                 localPath = ocFile.storagePath!!,
-                uploadFolderPath = ocFile.remotePath.trimEnd(PATH_SEPARATOR),
+                uploadFolderPath = ocFile.getParentRemotePath(),
             )
         )
     }
@@ -117,6 +120,7 @@ class SynchronizeFileUseCase(
 
     sealed interface SyncType {
         object FileNotFound : SyncType
+        data class ConflictDetected(val etagInConflict: String) : SyncType
         data class DownloadEnqueued(val workerId: UUID?) : SyncType
         data class UploadEnqueued(val workerId: UUID?) : SyncType
         object AlreadySynchronized : SyncType
