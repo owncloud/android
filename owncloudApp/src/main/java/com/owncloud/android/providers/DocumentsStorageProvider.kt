@@ -52,12 +52,12 @@ import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.operations.RefreshFolderOperation
-import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
+import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NotificationUtils
 import org.koin.android.ext.android.inject
@@ -141,23 +141,20 @@ class DocumentsStorageProvider : DocumentsProvider() {
                     uploadFilesUseCase.execute(uploadFilesUseCaseParams)
                 } else {
                     Thread {
-                        SynchronizeFileOperation(
-                            ocFile,
-                            null,
-                            getAccountFromFileId(ocFile.id!!),
-                            false,
-                            context,
-                            false
-                        ).apply {
-                            val result = execute(currentStorageManager, context)
-                            if (result.code == RemoteOperationResult.ResultCode.SYNC_CONFLICT) {
-                                context?.let {
-                                    NotificationUtils.notifyConflict(
-                                        ocFile,
-                                        getAccountFromFileId(ocFile.id!!),
-                                        it
-                                    )
-                                }
+                        val synchronizeFileUseCase: SynchronizeFileUseCase by inject()
+                        val result = synchronizeFileUseCase.execute(
+                            SynchronizeFileUseCase.Params(
+                                fileToSynchronize = ocFile,
+                                account = getAccountFromFileId(ocFile.id!!)!!
+                            )
+                        )
+                        if (result.getDataOrNull() is SynchronizeFileUseCase.SyncType.ConflictDetected) {
+                            context?.let {
+                                NotificationUtils.notifyConflict(
+                                    ocFile,
+                                    getAccountFromFileId(ocFile.id!!),
+                                    it
+                                )
                             }
                         }
                     }.start()
