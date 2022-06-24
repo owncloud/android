@@ -39,7 +39,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import timber.log.Timber
 import java.io.File
 import java.net.URL
-import java.util.HashSet
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -62,6 +61,8 @@ open class UploadFileFromFileSystemOperation(
     protected var putMethod: PutMethod? = null
     protected val dataTransferListener: MutableSet<OnDatatransferProgressListener> = HashSet()
     protected var fileRequestBody: FileRequestBody? = null
+
+    var etag: String = ""
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
         var result: RemoteOperationResult<Unit>
@@ -107,6 +108,14 @@ open class UploadFileFromFileSystemOperation(
 
         val status = client.executeHttpMethod(putMethod)
         return if (isSuccess(status)) {
+            etag = WebdavUtils.getEtagFromResponse(putMethod)
+            // Get rid of extra quotas
+            etag = etag.replace("\"", "")
+            if (etag.isEmpty()) {
+                Timber.e("Could not read eTag from response uploading %s", localPath)
+            } else {
+                Timber.d("File uploaded successfully. New etag for file ${fileToUpload.name} is $etag")
+            }
             RemoteOperationResult<Unit>(ResultCode.OK).apply { data = Unit }
         } else { // synchronization failed
             RemoteOperationResult<Unit>(putMethod)
