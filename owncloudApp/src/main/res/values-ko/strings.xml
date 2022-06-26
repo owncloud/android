@@ -26,6 +26,7 @@
   <string name="drawer_feedback">피드백</string>
   <string name="drawer_help">도움말</string>
   <string name="prefs_category_general">일반</string>
+  <string name="prefs_subsection_logging">로깅</string>
   <string name="prefs_subsection_more">더 보기</string>
   <string name="prefs_subsection_security">보안</string>
   <string name="prefs_accounts">계정</string>
@@ -33,6 +34,10 @@
   <string name="prefs_passcode">암호 잠금</string>
   <string name="prefs_biometric_summary">이 옵션을 활성화하려면 비밀번호나 패턴 잠금을 활성화하십시오</string>
   <string name="prefs_lock_application">애플리케이션 잠그기</string>
+  <string name="prefs_lock_application_entries_immediately">즉시</string>
+  <string name="prefs_lock_application_entries_1minute">1분 후</string>
+  <string name="prefs_lock_application_entries_5minutes">5분 후</string>
+  <string name="prefs_lock_application_entries_30minutes">30분 후</string>
   <string name="prefs_camera_picture_upload">사진 업로드</string>
   <string name="prefs_camera_picture_upload_summary">카메라로 찍은 사진 자동으로 업로드</string>
   <string name="prefs_camera_picture_upload_path_title">사진 업로드 경로</string>
@@ -56,6 +61,7 @@
   <string name="prefs_remember_last_upload_location_summary">마지막 공유 업로드 위치 기억하기</string>
   <string name="prefs_pattern">패턴 잠금</string>
   <string name="prefs_enable_logging">로그 활성화</string>
+  <string name="prefs_send_feedback">피드백 보내기</string>
   <string name="pattern_enter_pattern">패턴을 입력해 주세요</string>
   <string name="pattern_configure_pattern">패턴 입력</string>
   <string name="pattern_remove_pattern">패턴 제거</string>
@@ -67,6 +73,7 @@
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">파일</string>
   <string name="bottom_nav_uploads">업로드</string>
+  <string name="bottom_nav_offline">오프라인</string>
   <string name="bottom_nav_links">링크</string>
   <string name="recommend_subject">%1$s을(를) 스마트폰에서 사용해 보세요!</string>
   <string name="recommend_text">%1$s을(를) 스마트폰에서 사용해 보는 것을 추천합니다!\n다운로드 링크: %2$s</string>
@@ -398,6 +405,7 @@
   <string name="share_via_link_password_label">암호</string>
   <string name="share_via_link_password_title">보호됨</string>
   <string name="share_via_link_edit_permission_read_only_label">다운로드 / 보기</string>
+  <string name="share_via_link_edit_permission_read_and_write_label">다운로드 / 조회 / 업로드</string>
   <string name="share_get_public_link_button">링크 얻기</string>
   <string name="share_with_title">다음으로 공유</string>
   <string name="share_with_edit_title">%1$s 님과 공유</string>
@@ -468,6 +476,7 @@
   <string name="welcome_feature_skip_button">건너뛰기</string>
   <string name="welcome_feature_4_title">카메라 업로드</string>
   <string name="welcome_feature_5_title">비디오 스트리밍</string>
+  <string name="prefs_http_logs">HTTP 요청 및 응답 로그</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">암호 잠금</string>
