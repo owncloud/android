@@ -30,10 +30,9 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
-import com.owncloud.android.extensions.goToUrl
+import com.owncloud.android.extensions.openPrivacyPolicy
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
-import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.viewmodels.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
@@ -72,15 +71,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         if (moreViewModel.isPrivacyPolicyEnabled()) {
             prefPrivacyPolicy?.setOnPreferenceClickListener {
-                val urlPrivacyPolicy = requireContext().resources.getString(R.string.url_privacy_policy)
-
-                val cantBeOpenedWithWebView = urlPrivacyPolicy.endsWith("pdf")
-                if (cantBeOpenedWithWebView) {
-                    requireActivity().goToUrl(urlPrivacyPolicy)
-                } else {
-                    val intent = Intent(context, PrivacyPolicyActivity::class.java)
-                    startActivity(intent)
-                }
+                requireActivity().openPrivacyPolicy()
                 true
             }
         } else {
