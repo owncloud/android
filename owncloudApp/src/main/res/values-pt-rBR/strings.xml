@@ -618,7 +618,4 @@
   <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Prosseguir</string>
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
-  <!--Release Notes 2.21.1-->
-  <string name="release_notes_title_2_21_1_1">Falha na operação \"Abrir Com\"</string>
-  <string name="release_notes_subtitle_2_21_1_1">Falha corrigida na visualização de detalhes quando a operação \"Abrir com\" é selecionada.</string>
 </resources>
