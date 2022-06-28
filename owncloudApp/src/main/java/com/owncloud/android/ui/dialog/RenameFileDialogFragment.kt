@@ -33,7 +33,6 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.lib.resources.files.FileUtils
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.utils.PreferenceUtils
