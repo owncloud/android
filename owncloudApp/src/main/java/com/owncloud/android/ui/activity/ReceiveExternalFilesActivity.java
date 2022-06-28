@@ -539,8 +539,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             String streamToUpload = stream.toString();
             if (streamToUpload.contains("/data") &&
                     streamToUpload.contains(getPackageName()) &&
-                    !streamToUpload.contains(getCacheDir().getPath()) &&
-                    !streamToUpload.contains(Environment.getExternalStorageDirectory().toString())
+                    !streamToUpload.contains(getCacheDir().getPath())
             ) {
                 finish();
             }
