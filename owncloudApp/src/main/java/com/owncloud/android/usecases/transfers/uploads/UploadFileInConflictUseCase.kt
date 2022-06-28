@@ -28,7 +28,6 @@ import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
-import com.owncloud.android.lib.resources.files.UploadFileFromFileSystemOperation
 import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 import timber.log.Timber
 import java.io.File
