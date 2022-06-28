@@ -495,7 +495,7 @@ class MainFileListFragment : Fragment(),
                     return true
                 }
                 R.id.action_sync_file -> {
-                    fileActions?.syncFile(singleFile)
+                    syncFiles(listOf(singleFile))
                 }
                 R.id.action_send_file -> {
                     //Obtain the file
@@ -701,12 +701,7 @@ class MainFileListFragment : Fragment(),
             if (file.isFolder) {
                 mainFileListViewModel.refreshFolder(file.remotePath)
             } else {
-                fileOperationsViewModel.performOperation(
-                    FileOperation.SynchronizeFileOperation(
-                        fileToSync = file,
-                        account = mainFileListViewModel.fileListUiStateLiveData.value!!.account
-                    )
-                )
+                fileActions?.syncFile(file)
             }
         }
     }
