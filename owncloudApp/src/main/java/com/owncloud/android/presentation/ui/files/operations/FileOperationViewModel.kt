@@ -33,6 +33,7 @@ import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
@@ -66,8 +67,8 @@ class FileOperationViewModel(
     private val _renameFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
     val renameFileLiveData: LiveData<Event<UIResult<OCFile>>> = _renameFileLiveData
 
-    private val _syncFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
-    val syncFileLiveData: LiveData<Event<UIResult<OCFile>>> = _syncFileLiveData
+    private val _syncFileLiveData = MediatorLiveData<Event<UIResult<SynchronizeFileUseCase.SyncType>>>()
+    val syncFileLiveData: LiveData<Event<UIResult<SynchronizeFileUseCase.SyncType>>> = _syncFileLiveData
 
     fun performOperation(fileOperation: FileOperation) {
         when (fileOperation) {
@@ -126,11 +127,12 @@ class FileOperationViewModel(
     }
 
     private fun syncFileOperation(fileOperation: FileOperation.SynchronizeFileOperation) {
-        runOperation(
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            requiresConnection = true,
             liveData = _syncFileLiveData,
             useCase = synchronizeFileUseCase,
-            useCaseParams = SynchronizeFileUseCase.Params(fileOperation.fileToSync, fileOperation.account),
-            postValue = fileOperation.fileToSync
+            useCaseParams = SynchronizeFileUseCase.Params(fileOperation.fileToSync, fileOperation.account)
         )
     }
 

@@ -65,12 +65,10 @@ import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
-import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.RefreshFolderOperation
-import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
@@ -88,7 +86,7 @@ import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
-import com.owncloud.android.usecases.transfers.DOWNLOAD_ADDED_MESSAGE
+import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
@@ -1072,21 +1070,6 @@ class FileDisplayActivity : FileActivity(),
     }
 
     /**
-     * Updates the view associated to the activity after the finish of some operation over files
-     * in the current account.
-     *
-     * @param operation Removal operation performed.
-     * @param result    Result of the removal.
-     */
-    override fun onRemoteOperationFinish(operation: RemoteOperation<*>, result: RemoteOperationResult<*>) {
-        super.onRemoteOperationFinish(operation, result)
-
-        when (operation) {
-            is SynchronizeFileOperation -> onSynchronizeFileOperationFinish(operation, result)
-        }
-    }
-
-    /**
      * Updates the view associated to the activity after the finish of an operation trying to
      * remove a file.
      */
@@ -1232,34 +1215,29 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun onSynchronizeFileOperationFinish(
-        operation: SynchronizeFileOperation,
-        result: RemoteOperationResult<*>
+        uiResult: UIResult<SynchronizeFileUseCase.SyncType>
     ) {
-        if (result.isSuccess) {
-            if (operation.transferWasRequested()) {
-                // this block is probably useless duy
-                val syncedFile = operation.localFile
-                refreshListOfFilesFragment(false)
-                val secondFragment = secondFragment
-                if (secondFragment != null && syncedFile == secondFragment.file) {
-                    secondFragment.onSyncEvent(DOWNLOAD_ADDED_MESSAGE, false, null)
-                    invalidateOptionsMenu()
+        when (uiResult) {
+            is UIResult.Success -> {
+                when (uiResult.data) {
+                    SynchronizeFileUseCase.SyncType.AlreadySynchronized -> showSnackMessage(getString(R.string.sync_file_nothing_to_do_msg))
+                    is SynchronizeFileUseCase.SyncType.ConflictDetected -> showSnackMessage(getString(R.string.sync_conflicts_in_favourites_ticker))
+                    is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> showSnackMessage("Download enqueued")
+                    SynchronizeFileUseCase.SyncType.FileNotFound -> {/** Nothing to do atm. If we are in details view, go back to file list */ }
+                    is SynchronizeFileUseCase.SyncType.UploadEnqueued -> showSnackMessage("Upload enqueued")
+                    null -> TODO()
                 }
-
-            } else if (secondFragment == null) {
-                showMessageInSnackbar(
-                    R.id.list_layout,
-                    ErrorMessageAdapter.getResultMessage(result, operation, resources)
-                )
             }
+            is UIResult.Error -> showSnackMessage(getString(R.string.sync_fail_ticker))
+            is UIResult.Loading -> { /** Not needed at the moment, we may need it later */ }
         }
-
-        /// no matter if sync was right or not - if there was no transfer and the file is down, OPEN it
-        val waitedForPreview = fileWaitingToPreview?.let { it == operation.localFile && it.isAvailableLocally } ?: false
-        if (!operation.transferWasRequested() and waitedForPreview) {
-            fileOperationsHelper.openFile(fileWaitingToPreview)
-            fileWaitingToPreview = null
-        }
+//        TODO:
+//        /// no matter if sync was right or not - if there was no transfer and the file is down, OPEN it
+//        val waitedForPreview = fileWaitingToPreview?.let { it == operation.localFile && it.isAvailableLocally } ?: false
+//        if (!operation.transferWasRequested() and waitedForPreview) {
+//            fileOperationsHelper.openFile(fileWaitingToPreview)
+//            fileWaitingToPreview = null
+//        }
 
     }
 
@@ -1565,6 +1543,9 @@ class FileDisplayActivity : FileActivity(),
         })
         fileOperationViewModel.renameFileLiveData.observe(this, Event.EventObserver {
             onRenameFileOperationFinish(it)
+        })
+        fileOperationViewModel.syncFileLiveData.observe(this, Event.EventObserver {
+            onSynchronizeFileOperationFinish(it)
         })
     }
 
