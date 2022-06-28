@@ -32,6 +32,7 @@ import androidx.core.util.Pair;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
+import com.owncloud.android.domain.UseCaseResult;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
@@ -44,7 +45,10 @@ import com.owncloud.android.presentation.ui.files.filelist.MainFileListViewModel
 import com.owncloud.android.presentation.ui.files.operations.FileOperation;
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel;
 import com.owncloud.android.services.OperationsService;
+import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase;
 import com.owncloud.android.utils.FileStorageUtils;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
@@ -56,6 +60,7 @@ import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.koin.java.KoinJavaComponent.get;
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * Operation performing the synchronization of the list of files contained
@@ -108,7 +113,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      */
     private int mFailsInFileSyncsFound;
 
-    private List<SynchronizeFileOperation> mFilesToSyncContents;
+    private List<Pair<OCFile, Account>> mFilesToSyncContents;
 
     private List<Intent> mFoldersToSyncContents;
 
@@ -443,15 +448,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
             if (shouldSyncContents && !isBlockedForAutomatedSync(localFile)) {
                 /// synchronization for files
-                SynchronizeFileOperation operation = new SynchronizeFileOperation(
-                        localFile,
-                        remoteFile,
-                        mAccount,
-                        serverUnchanged,
-                        mContext,
-                        false
-                );
-                mFilesToSyncContents.add(operation);
+                mFilesToSyncContents.add(new Pair<>(localFile, mAccount));
             }
         }
 
@@ -466,24 +463,25 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * on.
      */
     private void syncContents() throws OperationCancelledException {
+        @NotNull Lazy<SynchronizeFileUseCase> synchronizeFileUseCase = inject(SynchronizeFileUseCase.class);
 
         Timber.v("Starting content synchronization... ");
-        RemoteOperationResult contentsResult;
-        for (SyncOperation op : mFilesToSyncContents) {
+        for (Pair<OCFile, Account> fileAndAccountPair : mFilesToSyncContents) {
             if (mCancellationRequested.get()) {
                 throw new OperationCancelledException();
             }
-            contentsResult = op.execute(getStorageManager(), mContext);
-            if (!contentsResult.isSuccess()) {
-                if (contentsResult.getCode() == ResultCode.SYNC_CONFLICT) {
+            SynchronizeFileUseCase.Params synchronizeFileUseCaseParams = new SynchronizeFileUseCase.Params(fileAndAccountPair.first,
+                    fileAndAccountPair.second);
+            UseCaseResult<SynchronizeFileUseCase.SyncType> result = synchronizeFileUseCase.getValue().execute(synchronizeFileUseCaseParams);
+            if (!result.isSuccess()) {
+                if (result.getDataOrNull() instanceof SynchronizeFileUseCase.SyncType.ConflictDetected) {
                     mConflictsFound++;
                 } else {
                     mFailsInFileSyncsFound++;
-                    if (contentsResult.getException() != null) {
-                        Timber.e(contentsResult.getException(), "Error while synchronizing file : %s",
-                                contentsResult.getLogMessage());
+                    if (result.getThrowableOrNull() != null) {
+                        Timber.e(result.getThrowableOrNull(), "Error while synchronizing file : %s", fileAndAccountPair.first);
                     } else {
-                        Timber.e("Error while synchronizing file : %s", contentsResult.getLogMessage());
+                        Timber.e("Error while synchronizing file : %s", fileAndAccountPair.first);
                     }
                 }
             }   // won't let these fails break the synchronization process

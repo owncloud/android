@@ -38,7 +38,6 @@ import android.os.Message;
 import android.os.Process;
 import android.util.Pair;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
@@ -50,7 +49,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
-import com.owncloud.android.operations.SynchronizeFileOperation;
 import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import timber.log.Timber;
@@ -71,7 +69,6 @@ public class OperationsService extends Service {
 
     public static final String EXTRA_COOKIE = "COOKIE";
 
-    public static final String ACTION_SYNC_FILE = "SYNC_FILE";
     public static final String ACTION_SYNC_FOLDER = "SYNC_FOLDER";
     public static final String ACTION_CHECK_CURRENT_CREDENTIALS = "CHECK_CURRENT_CREDENTIALS";
 
@@ -95,8 +92,6 @@ public class OperationsService extends Service {
 
     private SyncFolderHandler mSyncFolderHandler;
 
-    private LocalBroadcastManager mLocalBroadcastManager;
-
     /**
      * Service initialization
      */
@@ -115,9 +110,6 @@ public class OperationsService extends Service {
         thread = new HandlerThread("Syncfolder thread", Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
         mSyncFolderHandler = new SyncFolderHandler(thread.getLooper(), this);
-
-        // create manager for local broadcasts
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
     }
 
     /**
@@ -442,13 +434,6 @@ public class OperationsService extends Service {
                 String action = operationIntent.getAction();
                 if (action != null) {
                     switch (action) {
-                        case ACTION_SYNC_FILE: {
-                            // Sync file
-                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                            operation = new SynchronizeFileOperation(remotePath, account, getApplicationContext());
-
-                            break;
-                        }
                         case ACTION_SYNC_FOLDER: {
                             // Sync folder (all its descendant files are synced)
                             String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
