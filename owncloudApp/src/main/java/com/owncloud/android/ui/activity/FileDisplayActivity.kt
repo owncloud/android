@@ -75,7 +75,6 @@ import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
 import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
 import com.owncloud.android.syncadapter.FileSyncAdapter
-import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.fragment.TaskRetainerFragment
@@ -1223,7 +1222,7 @@ class FileDisplayActivity : FileActivity(),
                     SynchronizeFileUseCase.SyncType.AlreadySynchronized -> showSnackMessage(getString(R.string.sync_file_nothing_to_do_msg))
                     is SynchronizeFileUseCase.SyncType.ConflictDetected -> showSnackMessage(getString(R.string.sync_conflicts_in_favourites_ticker))
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> showSnackMessage("Download enqueued")
-                    SynchronizeFileUseCase.SyncType.FileNotFound -> {/** Nothing to do atm. If we are in details view, go back to file list */ }
+                    SynchronizeFileUseCase.SyncType.FileNotFound -> { /** Nothing to do atm. If we are in details view, go back to file list */ }
                     is SynchronizeFileUseCase.SyncType.UploadEnqueued -> showSnackMessage("Upload enqueued")
                     null -> TODO()
                 }
