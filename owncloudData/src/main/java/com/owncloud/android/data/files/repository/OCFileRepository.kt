@@ -188,10 +188,72 @@ class OCFileRepository(
     }
 
     override fun refreshFolder(remotePath: String) {
-        remoteFileDataSource.refreshFolder(remotePath).also {
+        val currentSyncTime = System.currentTimeMillis()
+
+        // Retrieve remote folder data
+        val fetchFolderResult = remoteFileDataSource.refreshFolder(remotePath)
+        val remoteFolder = fetchFolderResult.first()
+        val remoteFolderContent = fetchFolderResult.drop(1)
+
+        // Check if file already exists in database.
+        val localFolderByRemotePath: OCFile? =
+            localFileDataSource.getFileByRemotePath(remotePath = remoteFolder.remotePath, owner = remoteFolder.owner)
+
+        // If folder doesn't exists in database, insert everything. Easy path
+        if (localFolderByRemotePath == null) {
             localFileDataSource.saveFilesInFolder(
-                folder = it.first(),
-                listOfFiles = it.drop(1)
+                folder = remoteFolder,
+                listOfFiles = remoteFolderContent.map { it.apply { needsToUpdateThumbnail = true } }
+            )
+        } else {
+            // Keep the current local properties or we will miss relevant things.
+            remoteFolder.copyLocalPropertiesFrom(localFolderByRemotePath)
+
+            // Folder already exists in database, we need to update data
+            val localFolderContent = localFileDataSource.getFolderContent(folderId = localFolderByRemotePath.id!!)
+
+            val localFilesMap = localFolderContent.associateBy { localFile -> localFile.remoteId ?: localFile.remotePath }.toMutableMap()
+
+            // Final content for this folder, we will update the folder content all together
+            val folderContentUpdated = mutableListOf<OCFile>()
+
+            // Loop to sync every child
+            remoteFolderContent.forEach { remoteChild ->
+                remoteChild.lastSyncDateForProperties = currentSyncTime
+
+                // Let's try with remote path if the file does not have remote id yet
+                val localChildToSync = localFilesMap.remove(remoteChild.remoteId) ?: localFilesMap.remove(remoteChild.remotePath)
+
+                // If local child does not exists, just insert the new one.
+                if (localChildToSync == null) {
+                    folderContentUpdated.add(
+                        remoteChild.apply {
+                            parentId = localFolderByRemotePath.id
+                            needsToUpdateThumbnail = !remoteChild.isFolder
+                            // remote eTag will not be set unless file CONTENTS are synchronized
+                            etag = ""
+                        })
+                } else {
+                    // File exists in the database, we need to check several stuff.
+                    folderContentUpdated.add(
+                        remoteChild.apply {
+                            copyLocalPropertiesFrom(localChildToSync)
+                            // DO NOT update etag till contents are synced.
+                            etag = localChildToSync.etag
+                            needsToUpdateThumbnail =
+                                !remoteChild.isFolder && remoteChild.modificationTimestamp != localChildToSync.modificationTimestamp
+                            // FIXME: What about renames? Need to fix storage path
+                        })
+                }
+            }
+            localFileDataSource.saveFilesInFolder(
+                folder = remoteFolder,
+                listOfFiles = folderContentUpdated
+            )
+            // Last items should be removed from the database. They do not exists in remote anymore.
+            removeFile(
+                listOfFilesToRemove = localFilesMap.map { it.value },
+                removeOnlyLocalCopy = false
             )
         }
     }
