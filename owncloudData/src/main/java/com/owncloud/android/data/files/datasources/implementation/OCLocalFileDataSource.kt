@@ -64,6 +64,9 @@ class OCLocalFileDataSource(
         return null
     }
 
+    override fun getFileByRemoteId(remoteId: String): OCFile? =
+        fileDao.getFileByRemoteId(remoteId)?.toModel()
+
     override fun getFolderContent(folderId: Long): List<OCFile> =
         fileDao.getFolderContent(folderId = folderId).map {
             it.toModel()
@@ -113,15 +116,11 @@ class OCLocalFileDataSource(
         )
 
     override fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile) {
-        // Insert first folder container
         // TODO: If it is root, add 0 as parent Id
-        val folderId = fileDao.mergeRemoteAndLocalFile(folder.toEntity())
-
-        // Then, insert files inside
-        listOfFiles.forEach {
-            // Add parent id to each file
-            fileDao.mergeRemoteAndLocalFile(it.toEntity().apply { parentId = folderId })
-        }
+        fileDao.insertFilesInFolder(
+            folder = folder.toEntity(),
+            folderContent = listOfFiles.map { it.toEntity() }
+        )
     }
 
     override fun saveFile(file: OCFile) {
