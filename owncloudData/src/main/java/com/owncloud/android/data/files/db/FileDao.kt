@@ -41,6 +41,11 @@ abstract class FileDao {
         remotePath: String
     ): OCFileEntity?
 
+    @Query(SELECT_FILE_WITH_REMOTE_ID)
+    abstract fun getFileByRemoteId(
+        remoteId: String
+    ): OCFileEntity?
+
     @Query(SELECT_FILTERED_FOLDER_CONTENT)
     abstract fun getSearchFolderContent(
         folderId: Long,
@@ -87,6 +92,21 @@ abstract class FileDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocFileEntity: OCFileEntity): Long
+
+    /**
+     * Make sure that the ids are set properly. We don't take care of conflicts and that stuff here.
+     */
+    @Transaction
+    open fun insertFilesInFolder(
+        folder: OCFileEntity,
+        folderContent: List<OCFileEntity>,
+    ) {
+        val folderId = insert(folder)
+
+        folderContent.forEach { fileToInsert ->
+            insert(fileToInsert.apply { parentId = folderId })
+        }
+    }
 
     @Transaction
     open fun mergeRemoteAndLocalFile(
@@ -247,6 +267,11 @@ abstract class FileDao {
             "SELECT * " +
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE id = :id"
+
+        private const val SELECT_FILE_WITH_REMOTE_ID =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE remoteId = :remoteId"
 
         private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH =
             "SELECT * " +
