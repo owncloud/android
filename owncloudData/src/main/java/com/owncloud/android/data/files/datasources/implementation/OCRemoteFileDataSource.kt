@@ -22,12 +22,11 @@ package com.owncloud.android.data.files.datasources.implementation
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
-import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.lib.resources.files.RemoteFile
 
 class OCRemoteFileDataSource(
     private val clientManager: ClientManager,
-    private val remoteFileMapper: RemoteFileMapper
 ) : RemoteFileDataSource {
 
     override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String =
@@ -118,7 +117,7 @@ class OCRemoteFileDataSource(
         clientManager.getFileService().readFile(
             remotePath = remotePath
         )
-    }.let { remoteFileMapper.toModel(it)!! }
+    }.toModel()
 
     override fun refreshFolder(
         remotePath: String
@@ -129,7 +128,7 @@ class OCRemoteFileDataSource(
                 remotePath = remotePath
             )
         }.let { listOfRemote ->
-            listOfRemote.map { remoteFile -> remoteFileMapper.toModel(remoteFile)!! }
+            listOfRemote.map { remoteFile -> remoteFile.toModel() }
         }
 
     override fun removeFile(
@@ -153,4 +152,22 @@ class OCRemoteFileDataSource(
             isFolder = isFolder
         )
     }
+
+    private fun RemoteFile.toModel(): OCFile =
+        OCFile(
+            owner = owner,
+            remoteId = remoteId,
+            remotePath = remotePath,
+            length = if (isFolder) {
+                size
+            } else {
+                length
+            },
+            creationTimestamp = creationTimestamp,
+            modificationTimestamp = modifiedTimestamp,
+            mimeType = mimeType,
+            etag = etag,
+            permissions = permissions,
+            privateLink = privateLink
+        )
 }
