@@ -22,6 +22,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.mappers.RemoteMapper
 import com.owncloud.android.lib.resources.files.RemoteFile
 
+@Deprecated("Used by legacy code. Remove as soon as the synchronize operations are done")
 class RemoteFileMapper : RemoteMapper<OCFile, RemoteFile> {
     override fun toModel(remote: RemoteFile?): OCFile? =
         remote?.let {
