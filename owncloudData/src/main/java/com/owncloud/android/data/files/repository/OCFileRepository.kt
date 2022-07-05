@@ -195,7 +195,7 @@ class OCFileRepository(
         val remoteFolder = fetchFolderResult.first()
         val remoteFolderContent = fetchFolderResult.drop(1)
 
-        // Check if file already exists in database.
+        // Check if the folder already exists in database.
         val localFolderByRemotePath: OCFile? =
             localFileDataSource.getFileByRemotePath(remotePath = remoteFolder.remotePath, owner = remoteFolder.owner)
 
@@ -203,7 +203,7 @@ class OCFileRepository(
         if (localFolderByRemotePath == null) {
             localFileDataSource.saveFilesInFolder(
                 folder = remoteFolder,
-                listOfFiles = remoteFolderContent.map { it.apply { needsToUpdateThumbnail = true } }
+                listOfFiles = remoteFolderContent.map { it.apply { needsToUpdateThumbnail = !it.isFolder } }
             )
         } else {
             // Keep the current local properties or we will miss relevant things.
@@ -250,7 +250,7 @@ class OCFileRepository(
                 folder = remoteFolder,
                 listOfFiles = folderContentUpdated
             )
-            // Last items should be removed from the database. They do not exists in remote anymore.
+            // Remaining items should be removed from the database and local storage. They do not exists in remote anymore.
             removeFile(
                 listOfFilesToRemove = localFilesMap.map { it.value },
                 removeOnlyLocalCopy = false
