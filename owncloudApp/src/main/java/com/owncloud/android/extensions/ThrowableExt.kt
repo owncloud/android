@@ -30,6 +30,7 @@ import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.ForbiddenException
 import com.owncloud.android.domain.exceptions.IncorrectAddressException
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
+import com.owncloud.android.domain.exceptions.InvalidOverwriteException
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
 import com.owncloud.android.domain.exceptions.MoveIntoDescendantException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
@@ -76,6 +77,7 @@ fun Throwable.parseError(
                 }
                 resources.getString(stringId)
             }
+            is InvalidOverwriteException -> resources.getString(R.string.file_already_exists)
             is MoveIntoDescendantException -> resources.getString(R.string.move_file_invalid_into_descendent)
             is CopyIntoDescendantException -> resources.getString(R.string.copy_file_invalid_into_descendent)
             is ForbiddenException -> resources.getString(R.string.forbidden_permissions)
