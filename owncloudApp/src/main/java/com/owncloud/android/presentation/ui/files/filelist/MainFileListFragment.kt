@@ -634,6 +634,8 @@ class MainFileListFragment : Fragment(),
 
         if (actionMode == null) {
             actionMode = (requireActivity() as AppCompatActivity).startSupportActionMode(actionModeCallback)
+            // Notify all when enabling multiselection for the first time to show checkboxes on every single item.
+            fileListAdapter.notifyDataSetChanged()
         }
         toggleSelection(position)
         return true
