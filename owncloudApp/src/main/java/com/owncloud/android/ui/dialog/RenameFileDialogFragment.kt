@@ -34,7 +34,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
-import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -46,7 +46,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
 
     private var targetFile: OCFile? = null
-    private val filesViewModel: FileOperationViewModel by sharedViewModel()
+    private val filesViewModel: FileOperationsViewModel by sharedViewModel()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         targetFile = requireArguments().getParcelable(ARG_TARGET_FILE)
