@@ -87,7 +87,7 @@ import com.owncloud.android.presentation.ui.files.ViewType;
 import com.owncloud.android.presentation.UIResult;
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
 import com.owncloud.android.presentation.ui.files.operations.FileOperation;
-import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel;
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
 import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
@@ -95,7 +95,6 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
 import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.utils.DisplayUtils;
-import com.owncloud.android.utils.Extras;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.SortFilesUtils;
 import kotlin.Unit;
@@ -759,10 +758,10 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     @Override
     public void onFolderNameSet(@NotNull String newFolderName, @NotNull OCFile parentFolder) {
-        FileOperationViewModel fileOperationViewModel = get(FileOperationViewModel.class);
+        FileOperationsViewModel fileOperationsViewModel = get(FileOperationsViewModel.class);
 
-        fileOperationViewModel.performOperation(new FileOperation.CreateFolder(newFolderName, parentFolder));
-        fileOperationViewModel.getCreateFolder().observe(this, uiResultEvent -> {
+        fileOperationsViewModel.performOperation(new FileOperation.CreateFolder(newFolderName, parentFolder));
+        fileOperationsViewModel.getCreateFolder().observe(this, uiResultEvent -> {
             UIResult<Unit> uiResult = uiResultEvent.peekContent();
             if (uiResult.isSuccess()) {
                 updateDirectoryList();

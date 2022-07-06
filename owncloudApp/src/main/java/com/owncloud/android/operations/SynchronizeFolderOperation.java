@@ -43,7 +43,7 @@ import com.owncloud.android.lib.resources.files.services.implementation.OCFileSe
 import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListViewModel;
 import com.owncloud.android.presentation.ui.files.operations.FileOperation;
-import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel;
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase;
 import com.owncloud.android.utils.FileStorageUtils;
@@ -282,11 +282,11 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     }
 
     private void removeLocalFolder() {
-        FileOperationViewModel fileOperationViewModel = get(FileOperationViewModel.class);
+        FileOperationsViewModel fileOperationsViewModel = get(FileOperationsViewModel.class);
         ArrayList<OCFile> list = new ArrayList<>();
         list.add(mLocalFolder);
         FileOperation.RemoveOperation removeOperation = new FileOperation.RemoveOperation(list, false);
-        fileOperationViewModel.performOperation(removeOperation);
+        fileOperationsViewModel.performOperation(removeOperation);
     }
 
     /**
