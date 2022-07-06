@@ -72,7 +72,7 @@ import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
-import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
@@ -152,7 +152,7 @@ class FileDisplayActivity : FileActivity(),
 
     private var localBroadcastManager: LocalBroadcastManager? = null
 
-    private val fileOperationViewModel: FileOperationViewModel by viewModel()
+    private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
 
     var filesUploadHelper: FilesUploadHelper? = null
         internal set
@@ -583,7 +583,7 @@ class FileDisplayActivity : FileActivity(),
         val folderToMoveAt = data.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER) ?: return
         val files = data.getParcelableArrayListExtra<OCFile>(FolderPickerActivity.EXTRA_FILES) ?: return
         val moveOperation = FileOperation.MoveOperation(listOfFilesToMove = files.toList(), targetFolder = folderToMoveAt)
-        fileOperationViewModel.performOperation(moveOperation)
+        fileOperationsViewModel.performOperation(moveOperation)
     }
 
     /**
@@ -595,7 +595,7 @@ class FileDisplayActivity : FileActivity(),
         val folderToCopyAt = data.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER) ?: return
         val files = data.getParcelableArrayListExtra<OCFile>(FolderPickerActivity.EXTRA_FILES) ?: return
         val copyOperation = FileOperation.CopyOperation(listOfFilesToCopy = files.toList(), targetFolder = folderToCopyAt)
-        fileOperationViewModel.performOperation(copyOperation)
+        fileOperationsViewModel.performOperation(copyOperation)
     }
 
     override fun onBackPressed() {
@@ -1036,7 +1036,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun syncFile(file: OCFile) {
-        fileOperationViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
+        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
     }
 
     override fun openFile(file: OCFile) {
@@ -1439,7 +1439,7 @@ class FileDisplayActivity : FileActivity(),
         val detailFragment = FileDetailFragment.newInstance(file, account)
         setSecondFragment(detailFragment)
         fileWaitingToPreview = file
-        fileOperationViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
+        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
         updateToolbar(file)
         setFile(file)
     }
@@ -1531,19 +1531,19 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun startListeningToOperations() {
-        fileOperationViewModel.copyFileLiveData.observe(this, Event.EventObserver {
+        fileOperationsViewModel.copyFileLiveData.observe(this, Event.EventObserver {
             onCopyFileOperationFinish(it)
         })
-        fileOperationViewModel.moveFileLiveData.observe(this, Event.EventObserver {
+        fileOperationsViewModel.moveFileLiveData.observe(this, Event.EventObserver {
             onMoveFileOperationFinish(it)
         })
-        fileOperationViewModel.removeFileLiveData.observe(this, Event.EventObserver {
+        fileOperationsViewModel.removeFileLiveData.observe(this, Event.EventObserver {
             onRemoveFileOperationResult(it)
         })
-        fileOperationViewModel.renameFileLiveData.observe(this, Event.EventObserver {
+        fileOperationsViewModel.renameFileLiveData.observe(this, Event.EventObserver {
             onRenameFileOperationFinish(it)
         })
-        fileOperationViewModel.syncFileLiveData.observe(this, Event.EventObserver {
+        fileOperationsViewModel.syncFileLiveData.observe(this, Event.EventObserver {
             onSynchronizeFileOperationFinish(it)
         })
     }
@@ -1561,12 +1561,12 @@ class FileDisplayActivity : FileActivity(),
             }
             PreviewTextFragment.canBePreviewed(file) -> {
                 startTextPreview(file)
-                fileOperationViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
+                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
             }
             PreviewAudioFragment.canBePreviewed(file) -> {
                 // media preview
                 startAudioPreview(file, 0)
-                fileOperationViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
+                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
             }
             PreviewVideoFragment.canBePreviewed(file) && !WorkManager.getInstance(this).isDownloadPending(account, file) -> {
                 // FIXME: 13/10/2020 : New_arch: Av.Offline
@@ -1583,7 +1583,7 @@ class FileDisplayActivity : FileActivity(),
                 // If the file is already downloaded sync it, just to update it if there is a
                 // new available file version
                 if (file.isAvailableLocally) {
-                    fileOperationViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
+                    fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
                 }
             }
             else -> {

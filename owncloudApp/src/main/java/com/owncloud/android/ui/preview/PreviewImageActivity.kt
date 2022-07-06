@@ -45,7 +45,7 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.operations.SynchronizeFileOperation
-import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.fragment.FileFragment
@@ -67,7 +67,7 @@ class PreviewImageActivity : FileActivity(),
     OnRemoteOperationListener {
 
     private val previewImageViewModel: PreviewImageViewModel by viewModel()
-    private val fileOperationViewModel: FileOperationViewModel by viewModel()
+    private val fileOperationViewModel: FileOperationsViewModel by viewModel()
 
     private lateinit var viewPager: ViewPager
     private lateinit var previewImagePagerAdapter: PreviewImagePagerAdapter

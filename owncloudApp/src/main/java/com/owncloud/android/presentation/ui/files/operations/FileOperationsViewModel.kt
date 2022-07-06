@@ -41,7 +41,7 @@ import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class FileOperationViewModel(
+class FileOperationsViewModel(
     private val createFolderAsyncUseCase: CreateFolderAsyncUseCase,
     private val copyFileUseCase: CopyFileUseCase,
     private val moveFileUseCase: MoveFileUseCase,
