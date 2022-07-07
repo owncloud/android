@@ -180,6 +180,7 @@ class MainFileListViewModel(
             }
 
             updateFolderToDisplay(parentDir!!)
+            refreshFolder(parentDir.remotePath)
         }
     }
 
