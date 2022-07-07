@@ -25,7 +25,6 @@ import com.owncloud.android.MainApp.Companion.versionCode
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.ui.releasenotes.ReleaseNote
-import com.owncloud.android.presentation.ui.releasenotes.ReleaseNoteType
 import com.owncloud.android.providers.ContextProvider
 
 class ReleaseNotesViewModel(
