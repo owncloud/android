@@ -119,6 +119,8 @@ public class FileStorageUtils {
         file.setPermissions(remote.getPermissions());
         file.setRemoteId(remote.getRemoteId());
         file.setPrivateLink(remote.getPrivateLink());
+        file.setSharedViaLink(remote.isSharedByLink());
+        file.setSharedWithSharee(remote.isSharedWithSharee());
         return file;
     }
 

@@ -745,8 +745,6 @@ public class OCFile implements Parcelable, Comparable<OCFile> {
                 sourceFile.getModificationTimestampAtLastSyncForData()
         );
         setStoragePath(sourceFile.getStoragePath());
-        setSharedViaLink(sourceFile.isSharedViaLink());
-        setSharedWithSharee(sourceFile.isSharedWithSharee());
         setTreeEtag(sourceFile.getTreeEtag());
         setEtagInConflict(sourceFile.getEtagInConflict());
     }

@@ -152,10 +152,6 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
 
         sendLocalBroadcast(EVENT_SINGLE_FOLDER_CONTENTS_SYNCED, mLocalFolder.getRemotePath(), serverVersion, result);
 
-        if (result.isSuccess()) {
-            updateShareIconsInFiles(client); // share result is ignored
-        }
-
         sendLocalBroadcast(EVENT_SINGLE_FOLDER_SHARES_SYNCED, mLocalFolder.getRemotePath(), serverVersion, result);
 
         return result;
@@ -188,42 +184,6 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
             serverVersion = AccountUtils.getServerVersion(mAccount);
         }
         return serverVersion;
-    }
-
-    private void updateShareIconsInFiles(OwnCloudClient client) {
-        RemoteOperationResult<ShareResponse> result;
-
-        // remote request
-        GetRemoteSharesForFileOperation operation =
-                new GetRemoteSharesForFileOperation(mLocalFolder.getRemotePath(), true, true);
-        result = operation.execute(client);
-
-        if (result.isSuccess()) {
-            resetShareFlagsInFolderChilds();
-            for (RemoteShare remoteShare : result.getData().getShares()) {
-                OCFile file = getStorageManager().getFileByPath(remoteShare.getPath());
-                if (file != null) {
-                    ShareType shareType = ShareType.Companion.fromValue(remoteShare.getShareType().getValue());
-                    if (shareType.equals(ShareType.PUBLIC_LINK)) {
-                        file.setSharedViaLink(true);
-                    } else if (shareType.equals(ShareType.USER) ||
-                            shareType.equals(ShareType.FEDERATED) ||
-                            shareType.equals(ShareType.GROUP)) {
-                        file.setSharedWithSharee(true);
-                    }
-                    getStorageManager().saveFile(file);
-                }
-            }
-        }
-    }
-
-    private void resetShareFlagsInFolderChilds() {
-        Vector<OCFile> files = getStorageManager().getFolderContent(mLocalFolder);
-        for (OCFile file : files) {
-            file.setSharedViaLink(false);
-            file.setSharedWithSharee(false);
-            getStorageManager().saveFile(file);
-        }
     }
 
     /**
