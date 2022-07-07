@@ -25,12 +25,11 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.TRANSFERS_TABLE_NAME
-import com.owncloud.android.data.files.db.OCFileEntity
 
 @Dao
 abstract class TransferDao {
     @Query(SELECT_TRANSFER_WITH_ID)
-    abstract fun getFileById(id: Long): OCFileEntity?
+    abstract fun getTransferById(id: Long): OCTransferEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocTransferEntity: OCTransferEntity): Long
