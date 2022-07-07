@@ -47,7 +47,14 @@ class ReleaseNotesViewModel(
 
     companion object {
         val releaseNotesList = listOf(
-            ReleaseNote(title = R.string.release_notes_title_2_21_1_1, subtitle = R.string.release_notes_subtitle_2_21_1_1, type = ReleaseNoteType.BUGFIX),
+            ReleaseNote(title = R.string.release_notes_title_2_21_1_oem_1, subtitle = R.string.release_notes_subtitle_2_21_1_oem_1, type = ReleaseNoteType.CHANGE),
+            ReleaseNote(title = R.string.release_notes_title_2_21_1_oem_2, subtitle = R.string.release_notes_subtitle_2_21_1_oem_2, type = ReleaseNoteType.SECURITY),
+            ReleaseNote(title = R.string.release_notes_title_2_21_1_oem_3, subtitle = R.string.release_notes_subtitle_2_21_1_oem_3, type = ReleaseNoteType.ENHANCEMENT),
+            ReleaseNote(title = R.string.release_notes_title_2_21_1_oem_4, subtitle = R.string.release_notes_subtitle_2_21_1_oem_4, type = ReleaseNoteType.ENHANCEMENT),
+            ReleaseNote(title = R.string.release_notes_title_2_21_1_oem_5, subtitle = R.string.release_notes_subtitle_2_21_1_oem_5, type = ReleaseNoteType.ENHANCEMENT),
+            ReleaseNote(title = R.string.release_notes_title_2_21_1_oem_6, subtitle = R.string.release_notes_subtitle_2_21_1_oem_6, type = ReleaseNoteType.ENHANCEMENT),
+            ReleaseNote(title = R.string.release_notes_title_2_21_1_oem_7, subtitle = R.string.release_notes_subtitle_2_21_1_oem_7, type = ReleaseNoteType.ENHANCEMENT),
+            ReleaseNote(title = R.string.release_notes_title_2_21_1_oem_8, subtitle = R.string.release_notes_subtitle_2_21_1_oem_8, type = ReleaseNoteType.BUGFIX)
         )
     }
 }

@@ -54,10 +54,10 @@ import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.extensions.goToUrl
+import com.owncloud.android.extensions.openPrivacyPolicy
 import com.owncloud.android.extensions.sendEmail
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.ui.settings.SettingsActivity
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.utils.AvatarUtils
@@ -239,11 +239,6 @@ abstract class DrawerActivity : ToolbarActivity() {
         val feedbackMail = getString(R.string.mail_feedback)
         val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.drawer_feedback)
         sendEmail(email = feedbackMail, subject = feedback)
-    }
-
-    private fun openPrivacyPolicy() {
-        val intent = Intent(this, PrivacyPolicyActivity::class.java)
-        startActivity(intent)
     }
 
     /**

@@ -46,8 +46,9 @@ import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.presentation.ui.security.BiometricActivity
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.security.PatternActivity
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
 import com.owncloud.android.ui.helpers.ShareSheetHelper
@@ -98,6 +99,18 @@ fun Activity.goToUrl(
             showMessageInSnackbar(message = this.getString(R.string.file_list_no_app_for_perform_action))
             Timber.e("No Activity found to handle Intent")
         }
+    }
+}
+
+fun Activity.openPrivacyPolicy() {
+    val urlPrivacyPolicy = getString(R.string.url_privacy_policy)
+
+    val cantBeOpenedWithWebView = urlPrivacyPolicy.endsWith("pdf")
+    if (cantBeOpenedWithWebView) {
+        goToUrl(urlPrivacyPolicy)
+    } else {
+        val intent = Intent(this, PrivacyPolicyActivity::class.java)
+        startActivity(intent)
     }
 }
 
