@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   Copyright (C) 2022 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -21,17 +21,26 @@
  *   THE SOFTWARE.
  *
  */
-package com.owncloud.android.lib.common.http.methods.webdav
+package com.owncloud.android.lib.common.http.methods.webdav.properties
 
 import at.bitfire.dav4jvm.Property
-import at.bitfire.dav4jvm.PropertyUtils.getAllPropSet
-import at.bitfire.dav4jvm.PropertyUtils.getQuotaPropset
-import com.owncloud.android.lib.common.http.methods.webdav.properties.OCShareTypes
+import at.bitfire.dav4jvm.PropertyFactory
+import at.bitfire.dav4jvm.XmlUtils
+import org.xmlpull.v1.XmlPullParser
+import java.util.LinkedList
 
-object DavUtils {
-    @JvmStatic val allPropset: Array<Property.Name>
-        get() = getAllPropSet().plus(OCShareTypes.NAME)
+abstract class ShareTypeListProperty : Property {
 
-    val quotaPropSet: Array<Property.Name>
-        get() = getQuotaPropset()
+    val shareTypes = LinkedList<String>()
+
+    override fun toString() = "share types =[" + shareTypes.joinToString(", ") + "]"
+
+    abstract class Factory : PropertyFactory {
+
+        fun create(parser: XmlPullParser, list: ShareTypeListProperty): ShareTypeListProperty {
+            XmlUtils.readTextPropertyList(parser, Property.Name(XmlUtils.NS_OWNCLOUD, "share-type"), list.shareTypes)
+            return list
+        }
+
+    }
 }

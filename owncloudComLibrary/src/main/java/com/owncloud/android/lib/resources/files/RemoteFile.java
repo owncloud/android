@@ -40,10 +40,14 @@ import at.bitfire.dav4jvm.property.OCPrivatelink;
 import at.bitfire.dav4jvm.property.OCSize;
 import at.bitfire.dav4jvm.property.QuotaAvailableBytes;
 import at.bitfire.dav4jvm.property.QuotaUsedBytes;
+import com.owncloud.android.lib.common.http.methods.webdav.properties.OCShareTypes;
+import com.owncloud.android.lib.resources.shares.ShareType;
+import timber.log.Timber;
 
 import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -85,6 +89,8 @@ public class RemoteFile implements Parcelable, Serializable {
     private BigDecimal mQuotaUsedBytes;
     private BigDecimal mQuotaAvailableBytes;
     private String mPrivateLink;
+    private boolean mSharedByLink;
+    private boolean mSharedWithSharee;
 
     public RemoteFile() {
         resetData();
@@ -152,6 +158,23 @@ public class RemoteFile implements Parcelable, Serializable {
             }
             if (property instanceof OCPrivatelink) {
                 this.setPrivateLink(((OCPrivatelink) property).getLink());
+            }
+            if (property instanceof OCShareTypes) {
+                LinkedList<String> list = ((OCShareTypes) property).getShareTypes();
+                for (int i = 0; i < list.size(); i++) {
+                    ShareType shareType = ShareType.Companion.fromValue(Integer.parseInt(list.get(i)));
+                    if (shareType == null) {
+                        Timber.d("Illegal share type value: " + list.get(i));
+                        continue;
+                    }
+                    if (shareType.equals(ShareType.PUBLIC_LINK)) {
+                        this.setSharedViaLink(true);
+                    } else if (shareType.equals(ShareType.USER) ||
+                            shareType.equals(ShareType.FEDERATED) ||
+                            shareType.equals(ShareType.GROUP)) {
+                        this.setSharedWithSharee(true);
+                    }
+                }
             }
         }
     }
@@ -266,6 +289,22 @@ public class RemoteFile implements Parcelable, Serializable {
         mPrivateLink = privateLink;
     }
 
+    public void setSharedWithSharee(boolean shareWithSharee) {
+        mSharedWithSharee = shareWithSharee;
+    }
+
+    public boolean isSharedWithSharee() {
+        return mSharedWithSharee;
+    }
+
+    public void setSharedViaLink(boolean sharedViaLink) {
+        mSharedByLink = sharedViaLink;
+    }
+
+    public boolean isSharedByLink() {
+        return mSharedByLink;
+    }
+
     /**
      * Used internally. Reset all file properties
      */
@@ -282,6 +321,8 @@ public class RemoteFile implements Parcelable, Serializable {
         mQuotaUsedBytes = null;
         mQuotaAvailableBytes = null;
         mPrivateLink = null;
+        mSharedWithSharee = false;
+        mSharedByLink = false;
     }
 
     public void readFromParcel(Parcel source) {
