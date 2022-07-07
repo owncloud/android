@@ -46,6 +46,8 @@ import com.owncloud.android.data.migrations.MIGRATION_35_36
 import com.owncloud.android.data.migrations.MIGRATION_37_38
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.data.transfers.db.OCTransferEntity
+import com.owncloud.android.data.transfers.db.TransferDao
 import com.owncloud.android.data.user.db.UserDao
 import com.owncloud.android.data.user.db.UserQuotaEntity
 
@@ -56,6 +58,7 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
         OCFileEntity::class,
         OCShareEntity::class,
         UserQuotaEntity::class,
+        OCTransferEntity::class,
     ],
     autoMigrations = [
         AutoMigration(from = 36, to = 37),
@@ -69,6 +72,7 @@ abstract class OwncloudDatabase : RoomDatabase() {
     abstract fun folderBackUpDao(): FolderBackupDao
     abstract fun shareDao(): OCShareDao
     abstract fun userDao(): UserDao
+    abstract fun transferDao(): TransferDao
 
     companion object {
         @Volatile
