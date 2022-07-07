@@ -615,7 +615,4 @@
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
-  <!--Release Notes 2.21.1-->
-  <string name="release_notes_title_2_21_1_1">Vithisje në veprimin “Hape me”</string>
-  <string name="release_notes_subtitle_2_21_1_1">U ndreq vithisje te pamje e hollësishme, kur përzgjidhej vepimi “Hape me”.</string>
 </resources>
