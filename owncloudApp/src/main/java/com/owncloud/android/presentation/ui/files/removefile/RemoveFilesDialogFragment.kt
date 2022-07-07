@@ -25,7 +25,7 @@ import android.os.Bundle
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
-import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -39,7 +39,7 @@ import java.util.ArrayList
 class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
 
     private lateinit var targetFiles: ArrayList<OCFile>
-    private val fileOperationViewModel: FileOperationViewModel by sharedViewModel()
+    private val fileOperationViewModel: FileOperationsViewModel by sharedViewModel()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)

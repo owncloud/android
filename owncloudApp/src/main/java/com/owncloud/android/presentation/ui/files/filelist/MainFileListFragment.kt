@@ -54,7 +54,6 @@ import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
-import com.owncloud.android.presentation.fold
 import com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment.Companion.newInstance
@@ -65,7 +64,7 @@ import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.ViewType
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
-import com.owncloud.android.presentation.ui.files.operations.FileOperationViewModel
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
@@ -87,7 +86,7 @@ class MainFileListFragment : Fragment(),
     SortOptionsView.SortOptionsListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel>()
-    private val fileOperationsViewModel by viewModel<FileOperationViewModel>()
+    private val fileOperationsViewModel by viewModel<FileOperationsViewModel>()
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
@@ -227,11 +226,8 @@ class MainFileListFragment : Fragment(),
         }
 
         mainFileListViewModel.refreshFolder.observe(viewLifecycleOwner, Event.EventObserver {
-            it.fold(
-                onLoading = { binding.swipeRefreshMainFileList.isRefreshing = true },
-                onSuccess = { binding.swipeRefreshMainFileList.isRefreshing = false },
-                onFailure = { binding.swipeRefreshMainFileList.isRefreshing = false }
-            )
+            binding.syncProgressBar.isIndeterminate = it.isLoading
+            binding.swipeRefreshMainFileList.isRefreshing = it.isLoading
         })
     }
 

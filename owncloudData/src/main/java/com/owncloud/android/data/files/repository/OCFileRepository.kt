@@ -81,16 +81,16 @@ class OCFileRepository(
                 )
             } catch (targetNodeDoesNotExist: ConflictException) {
                 // Target node does not exist anymore. Remove target folder from database and local storage and return
-                removeFolderRecursively(ocFile = targetFolder, removeOnlyLocalCopy = false)
+                removeLocalFolderRecursively(ocFile = targetFolder, onlyFromLocalStorage = false)
                 return@copyFile
             } catch (sourceFileDoesNotExist: FileNotFoundException) {
                 // Source file does not exist anymore. Remove file from database and local storage and continue
                 if (ocFile.isFolder) {
-                    removeFolderRecursively(ocFile = ocFile, removeOnlyLocalCopy = false)
+                    removeLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
                 } else {
-                    removeFile(
+                    removeLocalFile(
                         ocFile = ocFile,
-                        onlyLocalCopy = false
+                        onlyFromLocalStorage = false
                     )
                 }
                 return@forEach
@@ -152,16 +152,16 @@ class OCFileRepository(
                 )
             } catch (targetNodeDoesNotExist: ConflictException) {
                 // Target node does not exist anymore. Remove target folder from database and local storage and return
-                removeFolderRecursively(ocFile = targetFile, removeOnlyLocalCopy = false)
+                removeLocalFolderRecursively(ocFile = targetFile, onlyFromLocalStorage = false)
                 return@moveFile
             } catch (sourceFileDoesNotExist: FileNotFoundException) {
                 // Source file does not exist anymore. Remove file from database and local storage and continue
                 if (ocFile.isFolder) {
-                    removeFolderRecursively(ocFile = ocFile, removeOnlyLocalCopy = false)
+                    removeLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
                 } else {
-                    removeFile(
+                    removeLocalFile(
                         ocFile = ocFile,
-                        onlyLocalCopy = false
+                        onlyFromLocalStorage = false
                     )
                 }
                 return@forEach
@@ -185,11 +185,76 @@ class OCFileRepository(
     }
 
     override fun refreshFolder(remotePath: String) {
-        remoteFileDataSource.refreshFolder(remotePath).also {
+        val currentSyncTime = System.currentTimeMillis()
+
+        // Retrieve remote folder data
+        val fetchFolderResult = remoteFileDataSource.refreshFolder(remotePath)
+        val remoteFolder = fetchFolderResult.first()
+        val remoteFolderContent = fetchFolderResult.drop(1)
+
+        // Check if the folder already exists in database.
+        val localFolderByRemotePath: OCFile? =
+            localFileDataSource.getFileByRemotePath(remotePath = remoteFolder.remotePath, owner = remoteFolder.owner)
+
+        // If folder doesn't exists in database, insert everything. Easy path
+        if (localFolderByRemotePath == null) {
             localFileDataSource.saveFilesInFolder(
-                folder = it.first(),
-                listOfFiles = it.drop(1)
+                folder = remoteFolder,
+                listOfFiles = remoteFolderContent.map { it.apply { needsToUpdateThumbnail = !it.isFolder } }
             )
+        } else {
+            // Keep the current local properties or we will miss relevant things.
+            remoteFolder.copyLocalPropertiesFrom(localFolderByRemotePath)
+
+            // Folder already exists in database, we need to update data
+            val localFolderContent = localFileDataSource.getFolderContent(folderId = localFolderByRemotePath.id!!)
+
+            val localFilesMap = localFolderContent.associateBy { localFile -> localFile.remoteId ?: localFile.remotePath }.toMutableMap()
+
+            // Final content for this folder, we will update the folder content all together
+            val folderContentUpdated = mutableListOf<OCFile>()
+
+            // Loop to sync every child
+            remoteFolderContent.forEach { remoteChild ->
+                remoteChild.lastSyncDateForProperties = currentSyncTime
+
+                // Let's try with remote path if the file does not have remote id yet
+                val localChildToSync = localFilesMap.remove(remoteChild.remoteId) ?: localFilesMap.remove(remoteChild.remotePath)
+
+                // If local child does not exists, just insert the new one.
+                if (localChildToSync == null) {
+                    folderContentUpdated.add(
+                        remoteChild.apply {
+                            parentId = localFolderByRemotePath.id
+                            needsToUpdateThumbnail = !remoteChild.isFolder
+                            // remote eTag will not be set unless file CONTENTS are synchronized
+                            etag = ""
+                        })
+                } else {
+                    // File exists in the database, we need to check several stuff.
+                    folderContentUpdated.add(
+                        remoteChild.apply {
+                            copyLocalPropertiesFrom(localChildToSync)
+                            // DO NOT update etag till contents are synced.
+                            etag = localChildToSync.etag
+                            needsToUpdateThumbnail =
+                                !remoteChild.isFolder && remoteChild.modificationTimestamp != localChildToSync.modificationTimestamp
+                            // FIXME: What about renames? Need to fix storage path
+                        })
+                }
+            }
+            localFileDataSource.saveFilesInFolder(
+                folder = remoteFolder,
+                listOfFiles = folderContentUpdated
+            )
+            // Remaining items should be removed from the database and local storage. They do not exists in remote anymore.
+            localFilesMap.map { it.value }.forEach { ocFile ->
+                if (ocFile.isFolder) {
+                    removeLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
+                } else {
+                    removeLocalFile(ocFile = ocFile, onlyFromLocalStorage = false)
+                }
+            }
         }
     }
 
@@ -203,9 +268,9 @@ class OCFileRepository(
                 }
             }
             if (ocFile.isFolder) {
-                removeFolderRecursively(ocFile, removeOnlyLocalCopy)
+                removeLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy)
             } else {
-                removeFile(ocFile, removeOnlyLocalCopy)
+                removeLocalFile(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy)
             }
         }
     }
@@ -249,25 +314,25 @@ class OCFileRepository(
         localFileDataSource.saveFile(file)
     }
 
-    private fun removeFolderRecursively(ocFile: OCFile, removeOnlyLocalCopy: Boolean) {
+    private fun removeLocalFolderRecursively(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         val folderContent = localFileDataSource.getFolderContent(ocFile.id!!)
 
         // 1. Remove folder content recursively
         folderContent.forEach { file ->
             if (file.isFolder) {
-                removeFolderRecursively(file, removeOnlyLocalCopy)
+                removeLocalFolderRecursively(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
             } else {
-                removeFile(file, removeOnlyLocalCopy)
+                removeLocalFile(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
             }
         }
 
         // 2. Remove the folder itself
-        removeFile(ocFile, removeOnlyLocalCopy)
+        removeLocalFile(ocFile = ocFile, onlyFromLocalStorage = onlyFromLocalStorage)
     }
 
-    private fun removeFile(ocFile: OCFile, onlyLocalCopy: Boolean) {
+    private fun removeLocalFile(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         localStorageProvider.deleteLocalFile(ocFile)
-        if (onlyLocalCopy) {
+        if (onlyFromLocalStorage) {
             localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null))
         } else {
             localFileDataSource.removeFile(ocFile.id!!)
