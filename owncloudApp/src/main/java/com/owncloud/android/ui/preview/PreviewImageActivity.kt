@@ -41,10 +41,8 @@ import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.lib.common.operations.OnRemoteOperationListener
-import com.owncloud.android.lib.common.operations.RemoteOperation
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.operations.SynchronizeFileOperation
+import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
@@ -63,11 +61,10 @@ import java.util.Vector
  */
 class PreviewImageActivity : FileActivity(),
     FileFragment.ContainerActivity,
-    OnPageChangeListener,
-    OnRemoteOperationListener {
+    OnPageChangeListener {
 
     private val previewImageViewModel: PreviewImageViewModel by viewModel()
-    private val fileOperationViewModel: FileOperationsViewModel by viewModel()
+    private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
 
     private lateinit var viewPager: ViewPager
     private lateinit var previewImagePagerAdapter: PreviewImagePagerAdapter
@@ -125,8 +122,8 @@ class PreviewImageActivity : FileActivity(),
     }
 
     private fun startObservingFileOperations() {
-        fileOperationViewModel.removeFileLiveData.observe(this, {
-            if (it.getContentIfNotHandled()?.isSuccess == true) {
+        fileOperationsViewModel.removeFileLiveData.observe(this, Event.EventObserver {
+            if (it.isSuccess) {
                 finish()
             }
         })
@@ -213,19 +210,6 @@ class PreviewImageActivity : FileActivity(),
         }
     }
 
-    override fun onRemoteOperationFinish(operation: RemoteOperation<*>?, result: RemoteOperationResult<*>) {
-        super.onRemoteOperationFinish(operation, result)
-        if (operation is SynchronizeFileOperation) {
-            onSynchronizeFileOperationFinish(result)
-        }
-    }
-
-    private fun onSynchronizeFileOperationFinish(result: RemoteOperationResult<*>) {
-        if (result.isSuccess) {
-            invalidateOptionsMenu()
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
@@ -277,7 +261,7 @@ class PreviewImageActivity : FileActivity(),
             val currentFile = previewImagePagerAdapter.getFileAt(position)
             updateActionBarTitle(currentFile.fileName)
             if (!previewImagePagerAdapter.pendingErrorAt(position)) {
-                fileOperationsHelper.syncFile(currentFile)
+                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(currentFile, account))
             }
 
             // Call to reset image zoom to initial state
