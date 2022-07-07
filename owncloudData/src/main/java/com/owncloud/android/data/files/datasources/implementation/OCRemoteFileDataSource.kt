@@ -30,7 +30,7 @@ class OCRemoteFileDataSource(
 ) : RemoteFileDataSource {
 
     override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String =
-        executeRemoteOperation { fileService.getUrlToOpenInWeb(openWebEndpoint = openWebEndpoint, fileId = fileId) }
+        executeRemoteOperation { clientManager.getFileService().getUrlToOpenInWeb(openWebEndpoint = openWebEndpoint, fileId = fileId) }
 
     override fun checkPathExistence(
         path: String,
