@@ -24,6 +24,7 @@
 
 package com.owncloud.android.lib.resources.files;
 
+import at.bitfire.dav4jvm.PropertyRegistry;
 import at.bitfire.dav4jvm.Response;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
@@ -31,6 +32,7 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.DavConstants;
 import com.owncloud.android.lib.common.http.methods.webdav.DavUtils;
 import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod;
+import com.owncloud.android.lib.common.http.methods.webdav.properties.OCShareTypes;
 import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -72,6 +74,7 @@ public class ReadRemoteFolderOperation extends RemoteOperation<ArrayList<RemoteF
         RemoteOperationResult<ArrayList<RemoteFile>> result = null;
 
         try {
+            PropertyRegistry.INSTANCE.register(OCShareTypes.Factory.class.newInstance());
             PropfindMethod propfindMethod = new PropfindMethod(
                     new URL(client.getUserFilesWebDavUri() + WebdavUtils.encodePath(mRemotePath)),
                     DavConstants.DEPTH_1,
