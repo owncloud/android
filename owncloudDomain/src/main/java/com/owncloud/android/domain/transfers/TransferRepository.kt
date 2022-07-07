@@ -20,7 +20,6 @@
 
 package com.owncloud.android.domain.transfers
 
-import android.database.Cursor
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.transfers.model.OCTransfer
 
@@ -29,10 +28,8 @@ interface TransferRepository {
     fun updateTransfer(transfer: OCTransfer)
     fun removeTransfer(transfer: OCTransfer)
     fun removeAllTransfersFromAccount(accountName: String)
-    fun getTransfers(selection: String, selectionArgs: Array<String>, sortOrder: String): Array<OCTransfer>
     fun getAllTransfers(): Array<OCTransfer>
     fun getLastTransferFor(file: OCFile, accountName: String): OCTransfer
-    fun createTransferFromCursor(cursor: Cursor): OCTransfer
     fun getCurrentAndPendingTransfers(): Array<OCTransfer>
     fun getFailedTransfers(): Array<OCTransfer>
     fun getFinishedTransfers(): Array<OCTransfer>
