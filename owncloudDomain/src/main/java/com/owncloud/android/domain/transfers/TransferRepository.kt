@@ -20,20 +20,19 @@
 
 package com.owncloud.android.domain.transfers
 
-import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.transfers.model.OCTransfer
 
 interface TransferRepository {
     fun storeTransfer(transfer: OCTransfer): Long
     fun updateTransfer(transfer: OCTransfer)
-    fun removeTransfer(transfer: OCTransfer)
+    fun removeTransferById(id: Long)
     fun removeAllTransfersFromAccount(accountName: String)
-    fun getAllTransfers(): Array<OCTransfer>
-    fun getLastTransferFor(file: OCFile, accountName: String): OCTransfer
-    fun getCurrentAndPendingTransfers(): Array<OCTransfer>
-    fun getFailedTransfers(): Array<OCTransfer>
-    fun getFinishedTransfers(): Array<OCTransfer>
-    fun getFailedButNotDelayedByWifiTransfers(): Array<OCTransfer>
+    fun getAllTransfers(): List<OCTransfer>
+    fun getLastTransferFor(remotePath: String, accountName: String): OCTransfer
+    fun getCurrentAndPendingTransfers(): List<OCTransfer>
+    fun getFailedTransfers(): List<OCTransfer>
+    fun getFinishedTransfers(): List<OCTransfer>
+    fun getFailedButNotDelayedByWifiTransfers(): List<OCTransfer>
     fun clearFailedButNotDelayedByWifiTransfers()
     fun clearSuccessfulTransfers()
 }
