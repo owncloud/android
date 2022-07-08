@@ -26,14 +26,13 @@ import com.owncloud.android.domain.transfers.model.OCTransfer
 interface LocalTransferDataSource {
     fun storeTransfer(transfer: OCTransfer): Long
     fun updateTransfer(transfer: OCTransfer)
-    fun removeTransfer(transfer: OCTransfer)
+    fun removeTransferById(id: Long)
     fun removeAllTransfersFromAccount(accountName: String)
-    fun getAllTransfers(): Array<OCTransfer>
-    fun getLastTransferFor(file: OCFile, accountName: String): OCTransfer
-    fun getCurrentAndPendingTransfers(): Array<OCTransfer>
-    fun getFailedTransfers(): Array<OCTransfer>
-    fun getFinishedTransfers(): Array<OCTransfer>
-    fun getFailedButNotDelayedByWifiTransfers(): Array<OCTransfer>
-    fun clearFailedButNotDelayedByWifiTransfers()
+    fun getAllTransfers(): List<OCTransfer>
+    fun getLastTransferFor(remotePath: String, accountName: String): OCTransfer?
+    fun getCurrentAndPendingTransfers(): List<OCTransfer>
+    fun getFailedTransfers(): List<OCTransfer>
+    fun getFinishedTransfers(): List<OCTransfer>
+    fun clearFailedTransfers()
     fun clearSuccessfulTransfers()
 }
