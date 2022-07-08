@@ -165,6 +165,8 @@ class OCRemoteFileDataSource(
             mimeType = mimeType,
             etag = etag,
             permissions = permissions,
-            privateLink = privateLink
+            privateLink = privateLink,
+            sharedWithSharee = sharedWithSharee,
+            sharedByLink = sharedByLink,
         )
 }
