@@ -160,9 +160,6 @@ data class OCFile(
         etagInConflict = sourceFile.etagInConflict
         // FIXME: 19/10/2020 : New_arch: Av.Offline
 //        setAvailableOfflineStatus(sourceFile.getAvailableOfflineStatus())
-        // FIXME: 19/10/2020 : New_arch: Shared by link
-//        setSharedViaLink(sourceFile.isSharedViaLink())
-//        setSharedWithSharee(sourceFile.isSharedWithSharee())
     }
 
     /**
