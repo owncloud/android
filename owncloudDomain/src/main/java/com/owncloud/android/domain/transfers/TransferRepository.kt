@@ -28,11 +28,10 @@ interface TransferRepository {
     fun removeTransferById(id: Long)
     fun removeAllTransfersFromAccount(accountName: String)
     fun getAllTransfers(): List<OCTransfer>
-    fun getLastTransferFor(remotePath: String, accountName: String): OCTransfer
+    fun getLastTransferFor(remotePath: String, accountName: String): OCTransfer?
     fun getCurrentAndPendingTransfers(): List<OCTransfer>
     fun getFailedTransfers(): List<OCTransfer>
     fun getFinishedTransfers(): List<OCTransfer>
-    fun getFailedButNotDelayedByWifiTransfers(): List<OCTransfer>
-    fun clearFailedButNotDelayedByWifiTransfers()
+    fun clearFailedTransfers()
     fun clearSuccessfulTransfers()
 }

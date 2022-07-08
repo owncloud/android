@@ -20,7 +20,6 @@
 
 package com.owncloud.android.data.transfers.datasources
 
-import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.transfers.model.OCTransfer
 
 interface LocalTransferDataSource {
