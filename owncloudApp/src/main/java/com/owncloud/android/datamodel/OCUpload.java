@@ -38,6 +38,7 @@ import timber.log.Timber;
 
 import java.io.File;
 
+@Deprecated
 /**
  * Stores all information in order to start upload operations. PersistentUploadObject can
  * be stored persistently by {@link UploadsStorageManager}.
