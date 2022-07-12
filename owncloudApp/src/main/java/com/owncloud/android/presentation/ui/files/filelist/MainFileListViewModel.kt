@@ -96,8 +96,8 @@ class MainFileListViewModel(
     val folderContentLiveData: LiveData<Event<List<OCFile>>>
         get() = _folderContentLiveData
 
-    private val _refreshFolder = MediatorLiveData<Event<UIResult<Unit>>>()
-    val refreshFolder: LiveData<Event<UIResult<Unit>>> = _refreshFolder
+    private val _syncFolder = MediatorLiveData<Event<UIResult<Unit>>>()
+    val syncFolder: LiveData<Event<UIResult<Unit>>> = _syncFolder
 
     fun navigateTo(fileId: Long) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
@@ -214,7 +214,7 @@ class MainFileListViewModel(
         syncFoldersRecursively: Boolean = false,
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutinesDispatcherProvider.io,
-        liveData = _refreshFolder,
+        liveData = _syncFolder,
         useCase = synchronizeFolderUseCase,
         showLoading = true,
         useCaseParams = SynchronizeFolderUseCase.Params(
