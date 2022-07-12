@@ -20,24 +20,13 @@
 package com.owncloud.android.usecases.synchronization
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.ext.isOneOf
 import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER_RECURSIVELY
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY
 
-/**
- * Synchronize a folder.
- *
- * Params:
- * - syncJustAlreadyDownloadedFiles: When true, just the already downloaded files will be synced.
- *                                   It is useful to check if there were local changes that needs to sync with server,
- *                                   but we don't want to download every single file that it is not downloaded yet.
- * - syncFoldersRecursively:         When true, folders will be synced recursively.
- *                                   Use carefully..
- *
- *
- * Normal refresh: syncJustAlreadyDownloadedFiles = true, syncFoldersRecursively = false
- * Discover full account: syncJustAlreadyDownloadedFiles = true, syncFoldersRecursively = true
- * Full sync recursive: syncJustAlreadyDownloadedFiles = false, syncFoldersRecursively = true
- * Sync files in folder: syncJustAlreadyDownloadedFiles = false, syncFoldersRecursively = false
- */
 class SynchronizeFolderUseCase(
     private val synchronizeFileUseCase: SynchronizeFileUseCase,
     private val fileRepository: FileRepository,
@@ -51,32 +40,42 @@ class SynchronizeFolderUseCase(
 
         folderContent.forEach { ocFile ->
             if (ocFile.isFolder) {
-                if (params.syncFoldersRecursively) {
+                if (params.syncMode.isOneOf(REFRESH_FOLDER_RECURSIVELY, SYNC_FOLDER_RECURSIVELY)) {
                     SynchronizeFolderUseCase(synchronizeFileUseCase, fileRepository).execute(
                         Params(
                             remotePath = ocFile.remotePath,
                             accountName = accountName,
-                            syncJustAlreadyDownloadedFiles = params.syncJustAlreadyDownloadedFiles,
-                            syncFoldersRecursively = params.syncFoldersRecursively
+                            syncMode = params.syncMode,
                         )
                     )
                 }
-            } else {
-                if (ocFile.isAvailableLocally || !params.syncJustAlreadyDownloadedFiles) {
-                    synchronizeFileUseCase.execute(
-                        SynchronizeFileUseCase.Params(
-                            fileToSynchronize = ocFile,
-                        )
+            } else if (shouldSyncFile(params.syncMode, ocFile)) {
+                synchronizeFileUseCase.execute(
+                    SynchronizeFileUseCase.Params(
+                        fileToSynchronize = ocFile,
                     )
-                }
+                )
             }
         }
     }
 
+    private fun shouldSyncFile(syncMode: SyncFolderMode, ocFile: OCFile) =
+        syncMode == SYNC_FOLDER_RECURSIVELY || (syncMode == SYNC_CONTENTS && ocFile.isAvailableLocally)
+
     data class Params(
         val remotePath: String,
         val accountName: String,
-        val syncJustAlreadyDownloadedFiles: Boolean = true,
-        val syncFoldersRecursively: Boolean = false,
+        val syncMode: SyncFolderMode,
     )
+
+    /**
+     * Potential use cases for each SyncFolderMode:
+     * - REFRESH_FOLDER: To get the content when picking a folder.
+     * - REFRESH_FOLDER_RECURSIVELY: To discover the full account content. Probably worthy to do when adding a new account.
+     * - SYNC_CONTENTS: To refresh and also sync the already downloaded content to check if there were changes locally or remotely
+     * - SYNC_FOLDER_RECURSIVELY: Full folder synchronization. Probably also triggered in av. offline worker.
+     */
+    enum class SyncFolderMode {
+        REFRESH_FOLDER, REFRESH_FOLDER_RECURSIVELY, SYNC_CONTENTS, SYNC_FOLDER_RECURSIVELY;
+    }
 }
