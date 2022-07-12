@@ -179,10 +179,9 @@ class MainFileListFragment : Fragment(),
 
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener {
-            mainFileListViewModel.syncFolder(
+            mainFileListViewModel.refreshFolder(
                 ocFolder = mainFileListViewModel.getFile(),
-                syncJustAlreadyDownloadedFiles = true,
-                syncFoldersRecursively = false,
+                isPickingAFolder = isPickingAFolder(),
             )
         }
 
@@ -603,10 +602,9 @@ class MainFileListFragment : Fragment(),
 
         if (ocFile.isFolder) {
             mainFileListViewModel.updateFolderToDisplay(ocFile)
-            mainFileListViewModel.syncFolder(
+            mainFileListViewModel.refreshFolder(
                 ocFolder = ocFile,
-                syncJustAlreadyDownloadedFiles = true,
-                syncFoldersRecursively = false
+                isPickingAFolder = isPickingAFolder(),
             )
         } else { // Click on a file
             fileActions?.onFileClicked(ocFile)
@@ -707,8 +705,6 @@ class MainFileListFragment : Fragment(),
             if (file.isFolder) {
                 mainFileListViewModel.syncFolder(
                     ocFolder = file,
-                    syncFoldersRecursively = true,
-                    syncJustAlreadyDownloadedFiles = false
                 )
             } else {
                 fileActions?.syncFile(file)
