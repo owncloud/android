@@ -190,26 +190,6 @@ class OCLocalFileDataSourceTest {
         verify { dao.deleteFileWithId(DUMMY_FILE_ENTITY.id) }
     }
 
-    @Test
-    fun `save file - ok`() {
-        every { dao.mergeRemoteAndLocalFile(any()) } returns 1
-
-        val result = localDataSource.saveFile(OC_FILE)
-
-        assertEquals(Unit, result)
-
-        verify(exactly = 1) { dao.mergeRemoteAndLocalFile(DUMMY_FILE_ENTITY) }
-    }
-
-    @Test(expected = Exception::class)
-    fun `save file - ko`() {
-        every { dao.mergeRemoteAndLocalFile(any()) } throws Exception()
-
-        localDataSource.saveFile(OC_FILE)
-
-        verify { dao.mergeRemoteAndLocalFile(DUMMY_FILE_ENTITY) }
-    }
-
     companion object {
         private val DUMMY_FILE_ENTITY: OCFileEntity = OC_FILE.toEntity()
     }
