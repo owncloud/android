@@ -67,7 +67,6 @@ class SynchronizeFolderUseCase(
                     synchronizeFileUseCase.execute(
                         SynchronizeFileUseCase.Params(
                             fileToSynchronize = ocFile,
-                            accountName = accountName,
                         )
                     )
                 }

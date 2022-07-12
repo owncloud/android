@@ -181,7 +181,7 @@ class MainFileListViewModel(
 
             updateFolderToDisplay(parentDir!!)
             syncFolder(
-                remotePath = parentDir.remotePath,
+                ocFolder = parentDir,
                 syncJustAlreadyDownloadedFiles = true,
                 syncFoldersRecursively = false
             )
@@ -209,7 +209,7 @@ class MainFileListViewModel(
     }
 
     fun syncFolder(
-        remotePath: String,
+        ocFolder: OCFile,
         syncJustAlreadyDownloadedFiles: Boolean = true,
         syncFoldersRecursively: Boolean = false,
     ) = runUseCaseWithResult(
@@ -218,8 +218,8 @@ class MainFileListViewModel(
         useCase = synchronizeFolderUseCase,
         showLoading = true,
         useCaseParams = SynchronizeFolderUseCase.Params(
-            remotePath = remotePath,
-            accountName = _fileListUiStateLiveData.value?.account?.name!!,
+            remotePath = ocFolder.remotePath,
+            accountName = ocFolder.owner,
             syncJustAlreadyDownloadedFiles = syncJustAlreadyDownloadedFiles,
             syncFoldersRecursively = syncFoldersRecursively
         )
