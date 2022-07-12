@@ -50,6 +50,9 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY
 import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -180,10 +183,9 @@ class MainFileListViewModel(
             }
 
             updateFolderToDisplay(parentDir!!)
-            syncFolder(
+            refreshFolder(
                 ocFolder = parentDir,
-                syncJustAlreadyDownloadedFiles = true,
-                syncFoldersRecursively = false
+                isPickingAFolder = false
             )
         }
     }
@@ -208,10 +210,9 @@ class MainFileListViewModel(
         )
     }
 
-    fun syncFolder(
+    fun refreshFolder(
         ocFolder: OCFile,
-        syncJustAlreadyDownloadedFiles: Boolean = true,
-        syncFoldersRecursively: Boolean = false,
+        isPickingAFolder: Boolean,
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutinesDispatcherProvider.io,
         liveData = _syncFolder,
@@ -220,8 +221,21 @@ class MainFileListViewModel(
         useCaseParams = SynchronizeFolderUseCase.Params(
             remotePath = ocFolder.remotePath,
             accountName = ocFolder.owner,
-            syncJustAlreadyDownloadedFiles = syncJustAlreadyDownloadedFiles,
-            syncFoldersRecursively = syncFoldersRecursively
+            syncMode = if (isPickingAFolder) REFRESH_FOLDER else SYNC_CONTENTS
+        )
+    )
+
+    fun syncFolder(
+        ocFolder: OCFile,
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
+        liveData = _syncFolder,
+        useCase = synchronizeFolderUseCase,
+        showLoading = true,
+        useCaseParams = SynchronizeFolderUseCase.Params(
+            remotePath = ocFolder.remotePath,
+            accountName = ocFolder.owner,
+            syncMode = SYNC_FOLDER_RECURSIVELY
         )
     )
 
