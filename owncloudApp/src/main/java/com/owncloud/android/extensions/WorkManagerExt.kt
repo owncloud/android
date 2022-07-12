@@ -56,8 +56,8 @@ fun WorkManager.isDownloadPending(account: Account, file: OCFile): Boolean = fal
 fun WorkManager.isUploadPending(account: Account, file: OCFile): Boolean = false
 // TODO: Uploads work different from downloads. So that, this one will be different.
 
-fun getTagsForDownload(file: OCFile, account: Account) =
-    listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), account.name)
+fun getTagsForDownload(file: OCFile, accountName: String) =
+    listOf(TRANSFER_TAG_DOWNLOAD, file.id.toString(), accountName)
 
 fun getTagsForUpload(file: OCFile, account: Account) =
     listOf(TRANSFER_TAG_MANUAL_UPLOAD, file.id.toString(), account.name)

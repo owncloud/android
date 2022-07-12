@@ -219,7 +219,7 @@ class MainFileListViewModel(
         showLoading = true,
         useCaseParams = SynchronizeFolderUseCase.Params(
             remotePath = remotePath,
-            account = _fileListUiStateLiveData.value?.account!!,
+            accountName = _fileListUiStateLiveData.value?.account?.name!!,
             syncJustAlreadyDownloadedFiles = syncJustAlreadyDownloadedFiles,
             syncFoldersRecursively = syncFoldersRecursively
         )

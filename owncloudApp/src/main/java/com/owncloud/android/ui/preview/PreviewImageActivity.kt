@@ -261,7 +261,7 @@ class PreviewImageActivity : FileActivity(),
             val currentFile = previewImagePagerAdapter.getFileAt(position)
             updateActionBarTitle(currentFile.fileName)
             if (!previewImagePagerAdapter.pendingErrorAt(position)) {
-                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(currentFile, account))
+                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(currentFile, account.name))
             }
 
             // Call to reset image zoom to initial state
