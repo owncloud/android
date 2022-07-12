@@ -247,7 +247,7 @@ public class SynchronizeFileOperation extends SyncOperation {
      */
     private void requestForDownload(OCFile file) {
         @NotNull Lazy<DownloadFileUseCase> downloadFileUseCase = inject(DownloadFileUseCase.class);
-        DownloadFileUseCase.Params downloadFileParams = new DownloadFileUseCase.Params(mAccount, file);
+        DownloadFileUseCase.Params downloadFileParams = new DownloadFileUseCase.Params(mAccount.name, file);
         downloadFileUseCase.getValue().execute(downloadFileParams);
 
 //        Intent intent = new Intent(mContext, FileDownloader.class);

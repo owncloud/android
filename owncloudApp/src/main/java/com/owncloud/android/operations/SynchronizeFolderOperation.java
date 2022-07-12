@@ -33,6 +33,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.domain.UseCaseResult;
+import com.owncloud.android.domain.files.FileRepository;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
@@ -46,6 +47,7 @@ import com.owncloud.android.presentation.ui.files.operations.FileOperation;
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase;
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase;
 import com.owncloud.android.utils.FileStorageUtils;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
@@ -205,8 +207,8 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     protected RemoteOperationResult<ArrayList<RemoteFile>> run(OwnCloudClient client) {
         final RemoteOperationResult<ArrayList<RemoteFile>> fetchFolderResult;
 
-        MainFileListViewModel mainFileListViewModel = get(MainFileListViewModel.class);
-        mainFileListViewModel.refreshFolder(mRemotePath);
+        SynchronizeFolderUseCase synchronizeFolderUseCase = get(SynchronizeFolderUseCase.class);
+        synchronizeFolderUseCase.execute(new SynchronizeFolderUseCase.Params(mRemotePath, mAccount.name, true, true));
 
         mFailsInFileSyncsFound = 0;
         mConflictsFound = 0;
@@ -471,7 +473,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 throw new OperationCancelledException();
             }
             SynchronizeFileUseCase.Params synchronizeFileUseCaseParams = new SynchronizeFileUseCase.Params(fileAndAccountPair.first,
-                    fileAndAccountPair.second);
+                    fileAndAccountPair.second.name);
             UseCaseResult<SynchronizeFileUseCase.SyncType> result = synchronizeFileUseCase.getValue().execute(synchronizeFileUseCaseParams);
             if (!result.isSuccess()) {
                 if (result.getDataOrNull() instanceof SynchronizeFileUseCase.SyncType.ConflictDetected) {
