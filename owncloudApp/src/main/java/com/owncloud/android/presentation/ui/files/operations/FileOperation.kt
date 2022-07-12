@@ -19,7 +19,6 @@
  */
 package com.owncloud.android.presentation.ui.files.operations
 
-import android.accounts.Account
 import com.owncloud.android.domain.files.model.OCFile
 
 sealed class FileOperation {

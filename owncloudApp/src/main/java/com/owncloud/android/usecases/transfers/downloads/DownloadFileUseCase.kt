@@ -18,7 +18,6 @@
  */
 package com.owncloud.android.usecases.transfers.downloads
 
-import android.accounts.Account
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf

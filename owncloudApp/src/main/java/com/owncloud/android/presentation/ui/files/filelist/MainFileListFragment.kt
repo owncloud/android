@@ -229,7 +229,7 @@ class MainFileListFragment : Fragment(),
             updateFileListData(fileListPostFilters)
         }
 
-        mainFileListViewModel.refreshFolder.observe(viewLifecycleOwner, Event.EventObserver {
+        mainFileListViewModel.syncFolder.observe(viewLifecycleOwner, Event.EventObserver {
             binding.syncProgressBar.isIndeterminate = it.isLoading
             binding.swipeRefreshMainFileList.isRefreshing = it.isLoading
         })
