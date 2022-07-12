@@ -68,7 +68,7 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
             case SERVER:
                 // use server version -> delete local, request download
                 @NotNull Lazy<DownloadFileUseCase> downloadFileUseCase = inject(DownloadFileUseCase.class);
-                DownloadFileUseCase.Params downloadFileParams = new DownloadFileUseCase.Params(getAccount(), getFile());
+                DownloadFileUseCase.Params downloadFileParams = new DownloadFileUseCase.Params(getAccount().name, getFile());
                 downloadFileUseCase.getValue().execute(downloadFileParams);
                 finish();
                 return;

@@ -18,7 +18,6 @@
  */
 package com.owncloud.android.usecases.transfers.downloads
 
-import android.accounts.Account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.work.WorkInfo
@@ -37,7 +36,7 @@ class GetLiveDataForDownloadingFileUseCase(
 ) : BaseUseCase<LiveData<WorkInfo?>, GetLiveDataForDownloadingFileUseCase.Params>() {
 
     override fun run(params: Params): LiveData<WorkInfo?> {
-        val tagsToFilter = getTagsForDownload(params.file, params.account)
+        val tagsToFilter = getTagsForDownload(params.file, params.accountName)
         val workQuery = buildWorkQuery(
             tags = tagsToFilter,
             states = PENDING_WORK_STATUS
@@ -49,7 +48,7 @@ class GetLiveDataForDownloadingFileUseCase(
     }
 
     data class Params(
-        val account: Account,
+        val accountName: String,
         val file: OCFile
     )
 }

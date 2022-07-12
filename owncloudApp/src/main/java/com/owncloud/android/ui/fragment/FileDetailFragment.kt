@@ -154,7 +154,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
     private fun startObservingProgressForDownload() {
         val safeAccount = account ?: return
 
-        fileDetailsViewModel.startListeningToDownloadsFromAccountAndFile(file = file, account = safeAccount)
+        fileDetailsViewModel.startListeningToDownloadsFromAccountAndFile(file = file, accountName = safeAccount.name)
         fileDetailsViewModel.pendingDownloads.observe(viewLifecycleOwner) { }
         fileDetailsViewModel.ongoingDownload.observeWorkerTillItFinishes(
             owner = viewLifecycleOwner,

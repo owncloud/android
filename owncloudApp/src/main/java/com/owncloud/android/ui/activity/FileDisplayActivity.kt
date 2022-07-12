@@ -1036,7 +1036,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun syncFile(file: OCFile) {
-        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
+        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
     }
 
     override fun openFile(file: OCFile) {
@@ -1292,7 +1292,7 @@ class FileDisplayActivity : FileActivity(),
     private fun requestForDownload(file: OCFile) {
         val downloadFileUseCase: DownloadFileUseCase by inject()
 
-        val id = downloadFileUseCase.execute(DownloadFileUseCase.Params(account, file)) ?: return
+        val id = downloadFileUseCase.execute(DownloadFileUseCase.Params(account.name, file)) ?: return
 
         WorkManager.getInstance(applicationContext).getWorkInfoByIdLiveData(id).observeWorkerTillItFinishes(
             owner = this,
@@ -1439,7 +1439,7 @@ class FileDisplayActivity : FileActivity(),
         val detailFragment = FileDetailFragment.newInstance(file, account)
         setSecondFragment(detailFragment)
         fileWaitingToPreview = file
-        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
+        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
         updateToolbar(file)
         setFile(file)
     }
@@ -1561,12 +1561,12 @@ class FileDisplayActivity : FileActivity(),
             }
             PreviewTextFragment.canBePreviewed(file) -> {
                 startTextPreview(file)
-                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
+                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
             }
             PreviewAudioFragment.canBePreviewed(file) -> {
                 // media preview
                 startAudioPreview(file, 0)
-                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
+                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
             }
             PreviewVideoFragment.canBePreviewed(file) && !WorkManager.getInstance(this).isDownloadPending(account, file) -> {
                 // FIXME: 13/10/2020 : New_arch: Av.Offline
@@ -1583,7 +1583,7 @@ class FileDisplayActivity : FileActivity(),
                 // If the file is already downloaded sync it, just to update it if there is a
                 // new available file version
                 if (file.isAvailableLocally) {
-                    fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account))
+                    fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
                 }
             }
             else -> {
