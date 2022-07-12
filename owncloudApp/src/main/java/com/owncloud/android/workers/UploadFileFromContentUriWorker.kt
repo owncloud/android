@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.workers
 
 import android.accounts.Account
@@ -29,9 +32,6 @@ import androidx.work.workDataOf
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.datamodel.OCUpload
-import com.owncloud.android.datamodel.UploadsStorageManager
-import com.owncloud.android.db.UploadResult
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
@@ -43,6 +43,9 @@ import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedExcept
 import com.owncloud.android.domain.exceptions.ServiceUnavailableException
 import com.owncloud.android.domain.exceptions.SpecificUnsupportedMediaTypeException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
+import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.domain.transfers.model.TransferResult
+import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -60,6 +63,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import timber.log.Timber
 import java.io.File
 
@@ -80,9 +84,13 @@ class UploadFileFromContentUriWorker(
 
     private var lastPercent = 0
 
+    private val transferRepository: TransferRepository by inject()
+
     override suspend fun doWork(): Result {
 
         if (!areParametersValid()) return Result.failure()
+
+        transferRepository.updateTransferStatusToInProgressById(uploadIdInStorageManager)
 
         return try {
             checkDocumentFileExists()
@@ -176,23 +184,19 @@ class UploadFileFromContentUriWorker(
     }
 
     private fun updateUploadsDatabaseWithResult(throwable: Throwable?) {
-        val uploadStorageManager = UploadsStorageManager(appContext.contentResolver)
-
-        val ocUpload = OCUpload(contentUri.toString(), uploadPath, account.name).apply {
-            uploadStatus = getUploadStatusForThrowable(throwable)
-            uploadEndTimestamp = System.currentTimeMillis()
+        transferRepository.updateTransferWhenFinished(
+            id = uploadIdInStorageManager,
+            status = getUploadStatusForThrowable(throwable),
+            transferEndTimestamp = System.currentTimeMillis(),
             lastResult = getUploadResultFromThrowable(throwable)
-            uploadId = uploadIdInStorageManager
-        }
-
-        uploadStorageManager.updateUpload(ocUpload)
+        )
     }
 
-    private fun getUploadStatusForThrowable(throwable: Throwable?): UploadsStorageManager.UploadStatus {
+    private fun getUploadStatusForThrowable(throwable: Throwable?): TransferStatus {
         return if (throwable == null) {
-            UploadsStorageManager.UploadStatus.UPLOAD_SUCCEEDED
+            TransferStatus.TRANSFER_SUCCEEDED
         } else {
-            UploadsStorageManager.UploadStatus.UPLOAD_FAILED
+            TransferStatus.TRANSFER_FAILED
         }
     }
 
@@ -221,21 +225,21 @@ class UploadFileFromContentUriWorker(
         )
     }
 
-    private fun getUploadResultFromThrowable(throwable: Throwable?): UploadResult {
-        if (throwable == null) return UploadResult.UPLOADED
+    private fun getUploadResultFromThrowable(throwable: Throwable?): TransferResult {
+        if (throwable == null) return TransferResult.UPLOADED
 
         return when (throwable) {
-            is LocalFileNotFoundException -> UploadResult.FOLDER_ERROR
-            is NoConnectionWithServerException -> UploadResult.NETWORK_CONNECTION
-            is UnauthorizedException -> UploadResult.CREDENTIAL_ERROR
-            is FileNotFoundException -> UploadResult.FILE_NOT_FOUND
-            is ConflictException -> UploadResult.CONFLICT_ERROR
-            is ForbiddenException -> UploadResult.PRIVILEGES_ERROR
-            is ServiceUnavailableException -> UploadResult.SERVICE_UNAVAILABLE
-            is QuotaExceededException -> UploadResult.QUOTA_EXCEEDED
-            is SpecificUnsupportedMediaTypeException -> UploadResult.SPECIFIC_UNSUPPORTED_MEDIA_TYPE
-            is SSLRecoverablePeerUnverifiedException -> UploadResult.SSL_RECOVERABLE_PEER_UNVERIFIED
-            else -> UploadResult.UNKNOWN
+            is LocalFileNotFoundException -> TransferResult.FOLDER_ERROR
+            is NoConnectionWithServerException -> TransferResult.NETWORK_CONNECTION
+            is UnauthorizedException -> TransferResult.CREDENTIAL_ERROR
+            is FileNotFoundException -> TransferResult.FILE_NOT_FOUND
+            is ConflictException -> TransferResult.CONFLICT_ERROR
+            is ForbiddenException -> TransferResult.PRIVILEGES_ERROR
+            is ServiceUnavailableException -> TransferResult.SERVICE_UNAVAILABLE
+            is QuotaExceededException -> TransferResult.QUOTA_EXCEEDED
+            is SpecificUnsupportedMediaTypeException -> TransferResult.SPECIFIC_UNSUPPORTED_MEDIA_TYPE
+            is SSLRecoverablePeerUnverifiedException -> TransferResult.SSL_RECOVERABLE_PEER_UNVERIFIED
+            else -> TransferResult.UNKNOWN
         }
     }
 
