@@ -40,6 +40,11 @@ abstract class TransferDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocTransferEntity: OCTransferEntity): Long
 
+    @Query(UPDATE_TRANSFER_STATUS_WITH_ID)
+    abstract fun updateTransferStatusWithId(id: Long, newStatus: Int)
+
+    abstract fun updateTransferWhenFinished(id: Long, status: Int, transferEndTimestamp: Long, lastResult: Int)
+
     @Query(DELETE_TRANSFER_WITH_ID)
     abstract fun deleteTransferWithId(id: Long)
 
@@ -65,6 +70,18 @@ abstract class TransferDao {
         private const val SELECT_ALL_TRANSFERS =
             "SELECT * " +
                     "FROM $TRANSFERS_TABLE_NAME "
+
+        private const val UPDATE_TRANSFER_STATUS_WITH_ID =
+            "UPDATE $TRANSFERS_TABLE_NAME " +
+                    "SET status = :newStatus " +
+                    "WHERE id = :id"
+
+        private const val UPDATE_TRANSFER_WHEN_FINISHED =
+            "UPDATE $TRANSFERS_TABLE_NAME " +
+                    "SET status = :status, " +
+                    "transferEndTimestamp = :transferEndTimestamp," +
+                    "lastResult = :lastResult " +
+                    "WHERE id = :id"
 
         private const val DELETE_TRANSFER_WITH_ID =
             "DELETE FROM $TRANSFERS_TABLE_NAME " +

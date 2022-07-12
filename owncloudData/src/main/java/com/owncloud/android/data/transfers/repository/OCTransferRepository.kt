@@ -23,6 +23,8 @@ package com.owncloud.android.data.transfers.repository
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.domain.transfers.model.TransferResult
+import com.owncloud.android.domain.transfers.model.TransferStatus
 
 class OCTransferRepository(
     private val localTransferDataSource: LocalTransferDataSource
@@ -32,6 +34,24 @@ class OCTransferRepository(
 
     override fun updateTransfer(transfer: OCTransfer) =
         localTransferDataSource.updateTransfer(transfer = transfer)
+
+    override fun updateTransferStatusToInProgressById(id: Long) {
+        localTransferDataSource.updateTransferStatusToInProgressById(id = id)
+    }
+
+    override fun updateTransferWhenFinished(
+        id: Long,
+        status: TransferStatus,
+        transferEndTimestamp: Long,
+        lastResult: TransferResult
+    ) {
+        localTransferDataSource.updateTransferWhenFinished(
+            id = id,
+            status = status,
+            transferEndTimestamp = transferEndTimestamp,
+            lastResult = lastResult
+        )
+    }
 
     override fun removeTransferById(id: Long) =
         localTransferDataSource.removeTransferById(id = id)

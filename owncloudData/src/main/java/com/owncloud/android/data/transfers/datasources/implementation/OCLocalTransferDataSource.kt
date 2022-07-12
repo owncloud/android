@@ -39,6 +39,15 @@ class OCLocalTransferDataSource(
         transferDao.insert(transfer.toEntity())
     }
 
+    override fun updateTransferStatusToInProgressById(id: Long) {
+        transferDao.updateTransferStatusWithId(id, TransferStatus.TRANSFER_IN_PROGRESS.value)
+    }
+
+    override fun updateTransferWhenFinished(id: Long, status: TransferStatus,
+        transferEndTimestamp: Long, lastResult: TransferResult) {
+        transferDao.updateTransferWhenFinished(id, status.value, transferEndTimestamp, lastResult.value)
+    }
+
     override fun removeTransferById(id: Long) {
         transferDao.deleteTransferWithId(id)
     }
