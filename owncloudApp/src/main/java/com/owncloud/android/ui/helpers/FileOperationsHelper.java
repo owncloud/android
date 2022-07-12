@@ -272,7 +272,7 @@ public class FileOperationsHelper {
         if (!file.isFolder()) {
             @NotNull Lazy<SynchronizeFileUseCase> synchronizeFileUseCaseLazy = inject(SynchronizeFileUseCase.class);
             synchronizeFileUseCaseLazy.getValue().execute(
-                    new SynchronizeFileUseCase.Params(file, mFileActivity.getAccount().name)
+                    new SynchronizeFileUseCase.Params(file)
             );
         } else {
             Intent intent = new Intent(mFileActivity, OperationsService.class);
