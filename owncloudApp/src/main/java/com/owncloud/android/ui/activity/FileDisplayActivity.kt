@@ -7,8 +7,10 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -74,6 +76,7 @@ import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
+import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.fragment.FileDetailFragment
 import com.owncloud.android.ui.fragment.FileFragment
@@ -153,6 +156,7 @@ class FileDisplayActivity : FileActivity(),
     private var localBroadcastManager: LocalBroadcastManager? = null
 
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
+    private val transfersViewModel: TransfersViewModel by viewModel()
 
     var filesUploadHelper: FilesUploadHelper? = null
         internal set
@@ -566,12 +570,11 @@ class FileDisplayActivity : FileActivity(),
         val currentDir = currentDir
         val remotePath = currentDir?.remotePath ?: OCFile.ROOT_PATH
 
-        val uploadFileUseCaseParams = UploadFilesFromSAFUseCase.Params(
+        transfersViewModel.uploadFilesFromSAF(
             accountName = account.name,
             listOfContentUris = streamsToUpload,
             uploadFolderPath = remotePath,
         )
-        uploadFileUseCase.execute(uploadFileUseCaseParams)
     }
 
     /**
