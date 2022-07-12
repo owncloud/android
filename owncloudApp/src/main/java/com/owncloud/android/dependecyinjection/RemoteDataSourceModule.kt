@@ -30,7 +30,6 @@ import com.owncloud.android.data.capabilities.datasources.implementation.OCRemot
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
-import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper
 import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.datasource.impl.RemoteOAuthDataSourceImpl
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
@@ -91,7 +90,6 @@ val remoteDataSourceModule = module {
     }
 
     factory { RemoteCapabilityMapper() }
-    factory { RemoteFileMapper() }
     factory { RemoteShareMapper() }
     factory { RemoteShareeMapper() }
 }
