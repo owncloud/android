@@ -187,7 +187,7 @@ class OCFileRepository(
         return remoteFileDataSource.readFile(remotePath)
     }
 
-    override fun refreshFolder(remotePath: String) {
+    override fun refreshFolder(remotePath: String): List<OCFile> {
         val currentSyncTime = System.currentTimeMillis()
 
         // Retrieve remote folder data
@@ -195,27 +195,24 @@ class OCFileRepository(
         val remoteFolder = fetchFolderResult.first()
         val remoteFolderContent = fetchFolderResult.drop(1)
 
+        // Final content for this folder, we will update the folder content all together
+        val folderContentUpdated = mutableListOf<OCFile>()
+
         // Check if the folder already exists in database.
         val localFolderByRemotePath: OCFile? =
             localFileDataSource.getFileByRemotePath(remotePath = remoteFolder.remotePath, owner = remoteFolder.owner)
 
         // If folder doesn't exists in database, insert everything. Easy path
         if (localFolderByRemotePath == null) {
-            localFileDataSource.saveFilesInFolder(
-                folder = remoteFolder,
-                listOfFiles = remoteFolderContent.map { it.apply { needsToUpdateThumbnail = !it.isFolder } }
-            )
+            folderContentUpdated.addAll(remoteFolderContent.map { it.apply { needsToUpdateThumbnail = !it.isFolder } })
         } else {
             // Keep the current local properties or we will miss relevant things.
             remoteFolder.copyLocalPropertiesFrom(localFolderByRemotePath)
 
-            // Folder already exists in database, we need to update data
+            // Folder already exists in database, get database content to update files accordingly
             val localFolderContent = localFileDataSource.getFolderContent(folderId = localFolderByRemotePath.id!!)
 
             val localFilesMap = localFolderContent.associateBy { localFile -> localFile.remoteId ?: localFile.remotePath }.toMutableMap()
-
-            // Final content for this folder, we will update the folder content all together
-            val folderContentUpdated = mutableListOf<OCFile>()
 
             // Loop to sync every child
             remoteFolderContent.forEach { remoteChild ->
@@ -246,10 +243,7 @@ class OCFileRepository(
                         })
                 }
             }
-            localFileDataSource.saveFilesInFolder(
-                folder = remoteFolder,
-                listOfFiles = folderContentUpdated
-            )
+
             // Remaining items should be removed from the database and local storage. They do not exists in remote anymore.
             localFilesMap.map { it.value }.forEach { ocFile ->
                 if (ocFile.isFolder) {
@@ -259,6 +253,12 @@ class OCFileRepository(
                 }
             }
         }
+
+        localFileDataSource.saveFilesInFolder(
+            folder = remoteFolder,
+            listOfFiles = folderContentUpdated
+        )
+        return folderContentUpdated
     }
 
     override fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean) {

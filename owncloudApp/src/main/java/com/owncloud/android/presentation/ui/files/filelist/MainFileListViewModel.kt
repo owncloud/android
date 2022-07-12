@@ -41,7 +41,6 @@ import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
-import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortType
 import com.owncloud.android.domain.utils.Event
@@ -50,6 +49,7 @@ import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -63,7 +63,7 @@ class MainFileListViewModel(
     private val sortFilesUseCase: SortFilesUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
-    private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
+    private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
     private val contextProvider: ContextProvider,
     private val workManager: WorkManager,
 ) : ViewModel() {
@@ -180,7 +180,11 @@ class MainFileListViewModel(
             }
 
             updateFolderToDisplay(parentDir!!)
-            refreshFolder(parentDir.remotePath)
+            syncFolder(
+                remotePath = parentDir.remotePath,
+                syncJustAlreadyDownloadedFiles = true,
+                syncFoldersRecursively = false
+            )
         }
     }
 
@@ -204,15 +208,20 @@ class MainFileListViewModel(
         )
     }
 
-    fun refreshFolder(
-        remotePath: String
+    fun syncFolder(
+        remotePath: String,
+        syncJustAlreadyDownloadedFiles: Boolean = true,
+        syncFoldersRecursively: Boolean = false,
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutinesDispatcherProvider.io,
         liveData = _refreshFolder,
-        useCase = refreshFolderFromServerAsyncUseCase,
+        useCase = synchronizeFolderUseCase,
         showLoading = true,
-        useCaseParams = RefreshFolderFromServerAsyncUseCase.Params(
-            remotePath = remotePath
+        useCaseParams = SynchronizeFolderUseCase.Params(
+            remotePath = remotePath,
+            account = _fileListUiStateLiveData.value?.account!!,
+            syncJustAlreadyDownloadedFiles = syncJustAlreadyDownloadedFiles,
+            syncFoldersRecursively = syncFoldersRecursively
         )
     )
 
