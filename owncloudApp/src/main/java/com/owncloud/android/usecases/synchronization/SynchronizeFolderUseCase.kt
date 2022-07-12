@@ -46,7 +46,7 @@ class SynchronizeFolderUseCase(
 
     override fun run(params: Params) {
         val remotePath = params.remotePath
-        val account = params.account
+        val accountName = params.accountName
 
         val folderContent = fileRepository.refreshFolder(remotePath)
 
@@ -56,7 +56,7 @@ class SynchronizeFolderUseCase(
                     SynchronizeFolderUseCase(synchronizeFileUseCase, fileRepository).execute(
                         Params(
                             remotePath = ocFile.remotePath,
-                            account = account,
+                            accountName = accountName,
                             syncJustAlreadyDownloadedFiles = params.syncJustAlreadyDownloadedFiles,
                             syncFoldersRecursively = params.syncFoldersRecursively
                         )
@@ -67,7 +67,7 @@ class SynchronizeFolderUseCase(
                     synchronizeFileUseCase.execute(
                         SynchronizeFileUseCase.Params(
                             fileToSynchronize = ocFile,
-                            account = account
+                            accountName = accountName,
                         )
                     )
                 }
@@ -77,7 +77,7 @@ class SynchronizeFolderUseCase(
 
     data class Params(
         val remotePath: String,
-        val account: Account,
+        val accountName: String,
         val syncJustAlreadyDownloadedFiles: Boolean = true,
         val syncFoldersRecursively: Boolean = false,
     )

@@ -28,5 +28,5 @@ sealed class FileOperation {
     data class MoveOperation(val listOfFilesToMove: List<OCFile>, val targetFolder: OCFile) : FileOperation()
     data class RemoveOperation(val listOfFilesToRemove: List<OCFile>, val removeOnlyLocalCopy: Boolean) : FileOperation()
     data class RenameOperation(val ocFileToRename: OCFile, val newName: String) : FileOperation()
-    data class SynchronizeFileOperation(val fileToSync: OCFile, val account: Account) : FileOperation()
+    data class SynchronizeFileOperation(val fileToSync: OCFile, val accountName: String) : FileOperation()
 }

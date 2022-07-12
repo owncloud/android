@@ -102,7 +102,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 val downloadFileUseCase: DownloadFileUseCase by inject()
 
                 getAccountFromFileId(docId)?.let { account ->
-                    downloadFileUseCase.execute(DownloadFileUseCase.Params(account, ocFile))
+                    downloadFileUseCase.execute(DownloadFileUseCase.Params(account.name, ocFile))
                 }
 
                 do {
@@ -145,7 +145,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                         val result = synchronizeFileUseCase.execute(
                             SynchronizeFileUseCase.Params(
                                 fileToSynchronize = ocFile,
-                                account = getAccountFromFileId(ocFile.id!!)!!
+                                accountName = getAccountFromFileId(ocFile.id!!)!!.name
                             )
                         )
                         if (result.getDataOrNull() is SynchronizeFileUseCase.SyncType.ConflictDetected) {
