@@ -19,7 +19,6 @@
  */
 package com.owncloud.android.usecases.synchronization
 
-import android.accounts.Account
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
 
