@@ -21,10 +21,19 @@
 package com.owncloud.android.data.transfers.datasources
 
 import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.domain.transfers.model.TransferResult
+import com.owncloud.android.domain.transfers.model.TransferStatus
 
 interface LocalTransferDataSource {
     fun storeTransfer(transfer: OCTransfer): Long
     fun updateTransfer(transfer: OCTransfer)
+    fun updateTransferStatusToInProgressById(id: Long)
+    fun updateTransferWhenFinished(
+        id: Long,
+        status: TransferStatus,
+        transferEndTimestamp: Long,
+        lastResult: TransferResult
+    )
     fun removeTransferById(id: Long)
     fun removeAllTransfersFromAccount(accountName: String)
     fun getAllTransfers(): List<OCTransfer>
