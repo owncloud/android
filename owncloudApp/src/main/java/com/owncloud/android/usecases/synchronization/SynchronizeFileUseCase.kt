@@ -40,7 +40,7 @@ class SynchronizeFileUseCase(
 
     override fun run(params: Params): SyncType {
         val fileToSynchronize = params.fileToSynchronize
-        val accountName: String = params.accountName
+        val accountName: String = fileToSynchronize.owner
 
         CoroutineScope(Dispatchers.IO).run {
             // 1. Perform a propfind to check if the file still exists in remote
@@ -114,7 +114,6 @@ class SynchronizeFileUseCase(
 
     data class Params(
         val fileToSynchronize: OCFile,
-        val accountName: String,
     )
 
     sealed interface SyncType {

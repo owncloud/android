@@ -180,7 +180,7 @@ class MainFileListFragment : Fragment(),
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener {
             mainFileListViewModel.syncFolder(
-                remotePath = mainFileListViewModel.getFile().remotePath,
+                ocFolder = mainFileListViewModel.getFile(),
                 syncJustAlreadyDownloadedFiles = true,
                 syncFoldersRecursively = false,
             )
@@ -604,7 +604,7 @@ class MainFileListFragment : Fragment(),
         if (ocFile.isFolder) {
             mainFileListViewModel.updateFolderToDisplay(ocFile)
             mainFileListViewModel.syncFolder(
-                remotePath = ocFile.remotePath,
+                ocFolder = ocFile,
                 syncJustAlreadyDownloadedFiles = true,
                 syncFoldersRecursively = false
             )
@@ -706,7 +706,7 @@ class MainFileListFragment : Fragment(),
         for (file in files) {
             if (file.isFolder) {
                 mainFileListViewModel.syncFolder(
-                    remotePath = file.remotePath,
+                    ocFolder = file,
                     syncFoldersRecursively = true,
                     syncJustAlreadyDownloadedFiles = false
                 )
