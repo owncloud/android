@@ -132,7 +132,7 @@ class FileOperationsViewModel(
             requiresConnection = true,
             liveData = _syncFileLiveData,
             useCase = synchronizeFileUseCase,
-            useCaseParams = SynchronizeFileUseCase.Params(fileOperation.fileToSync, fileOperation.accountName)
+            useCaseParams = SynchronizeFileUseCase.Params(fileOperation.fileToSync)
         )
     }
 

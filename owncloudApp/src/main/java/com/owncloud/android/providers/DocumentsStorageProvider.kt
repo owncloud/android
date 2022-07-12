@@ -145,7 +145,6 @@ class DocumentsStorageProvider : DocumentsProvider() {
                         val result = synchronizeFileUseCase.execute(
                             SynchronizeFileUseCase.Params(
                                 fileToSynchronize = ocFile,
-                                accountName = getAccountFromFileId(ocFile.id!!)!!.name
                             )
                         )
                         if (result.getDataOrNull() is SynchronizeFileUseCase.SyncType.ConflictDetected) {
