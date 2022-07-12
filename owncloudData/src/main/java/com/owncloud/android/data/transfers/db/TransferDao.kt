@@ -43,6 +43,7 @@ abstract class TransferDao {
     @Query(UPDATE_TRANSFER_STATUS_WITH_ID)
     abstract fun updateTransferStatusWithId(id: Long, newStatus: Int)
 
+    @Query(UPDATE_TRANSFER_WHEN_FINISHED)
     abstract fun updateTransferWhenFinished(id: Long, status: Int, transferEndTimestamp: Long, lastResult: Int)
 
     @Query(DELETE_TRANSFER_WITH_ID)
