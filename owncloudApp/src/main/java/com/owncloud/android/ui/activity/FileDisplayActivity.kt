@@ -541,11 +541,10 @@ class FileDisplayActivity : FileActivity(),
                 remotePaths[j] = remotePathBase + File(filePaths[j]).name
             }
 
-            val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase by inject()
-            uploadFilesFromSystemUseCase.execute(
-                UploadFilesFromSystemUseCase.Params(
-                    accountName = account.name, listOfLocalPaths = filePaths.toList(), uploadFolderPath = remotePathBase!!
-                )
+            transfersViewModel.uploadFilesFromSystem(
+                accountName = account.name,
+                listOfLocalPaths = filePaths.toList(),
+                uploadFolderPath = remotePathBase!!
             )
 
         } else {
