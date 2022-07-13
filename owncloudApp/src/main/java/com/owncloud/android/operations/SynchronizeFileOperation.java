@@ -28,6 +28,9 @@ import android.accounts.Account;
 import android.content.Context;
 
 import androidx.work.WorkManager;
+import com.owncloud.android.data.OwncloudDatabase;
+import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource;
+import com.owncloud.android.data.transfers.repository.OCTransferRepository;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
@@ -229,7 +232,9 @@ public class SynchronizeFileOperation extends SyncOperation {
      */
     private void requestForUpload(OCFile file) {
         WorkManager workManager = WorkManager.getInstance(mContext);
-        UploadFileInConflictUseCase uploadFileInConflictUseCase = new UploadFileInConflictUseCase(workManager);
+        // Workaround... should be removed as soon as possible
+        OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(mContext).transferDao()));
+        UploadFileInConflictUseCase uploadFileInConflictUseCase = new UploadFileInConflictUseCase(workManager, transferRepository);
         UploadFileInConflictUseCase.Params params = new UploadFileInConflictUseCase.Params(
                 file.getOwner(),
                 file.getStoragePath(),
