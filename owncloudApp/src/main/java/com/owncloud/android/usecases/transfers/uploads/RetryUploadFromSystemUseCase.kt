@@ -21,21 +21,20 @@
 
 package com.owncloud.android.usecases.transfers.uploads
 
-import android.content.Context
-import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
+import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.domain.transfers.model.TransferStatus
 
 class RetryUploadFromSystemUseCase(
-    private val context: Context,
     private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,
+    private val transferRepository: TransferRepository,
 ) : BaseUseCase<Unit, RetryUploadFromSystemUseCase.Params>() {
 
     override fun run(params: Params) {
 
-        val uploadsStorageManager = UploadsStorageManager(context.contentResolver)
-        val failedUploads = uploadsStorageManager.failedUploads
-        val filteredUploads = failedUploads.filter { it.uploadId == params.uploadIdInStorageManager }
+        val failedUploads = transferRepository.getFailedTransfers()
+        val filteredUploads = failedUploads.filter { it.id == params.uploadIdInStorageManager }
         val uploadToRetry = filteredUploads.firstOrNull()
 
         uploadToRetry ?: return
@@ -47,7 +46,8 @@ class RetryUploadFromSystemUseCase(
                 uploadFolderPath = uploadToRetry.remotePath.trimEnd(PATH_SEPARATOR),
             )
         )
-        uploadsStorageManager.updateUpload(uploadToRetry.apply { uploadStatus = UploadsStorageManager.UploadStatus.UPLOAD_IN_PROGRESS })
+
+        transferRepository.updateTransfer(uploadToRetry.apply { status = TransferStatus.TRANSFER_IN_PROGRESS })
     }
 
     data class Params(

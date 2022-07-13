@@ -129,7 +129,7 @@ public class UploadListFragment extends ExpandableListFragment implements Option
                 RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = new RetryUploadFromContentUriUseCase(requireContext());
                 WorkManager workManager = WorkManager.getInstance(requireContext());
                 UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
-                RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(requireContext(), uploadFilesFromSystemUseCase);
+                RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(uploadFilesFromSystemUseCase, transferRepository);
                 RetryFailedUploadsUseCase retryFailedUploadsUseCase = new RetryFailedUploadsUseCase(requireContext(), retryUploadFromContentUriUseCase, retryUploadFromSystemUseCase);
                 retryFailedUploadsUseCase.execute(Unit.INSTANCE);
                 break;
