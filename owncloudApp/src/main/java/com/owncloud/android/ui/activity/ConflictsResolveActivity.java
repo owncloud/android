@@ -82,7 +82,9 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
 
         WorkManager workManager = WorkManager.getInstance(getApplicationContext());
         if (forceOverwrite) {
-            UploadFileInConflictUseCase uploadFileInConflictUseCase = new UploadFileInConflictUseCase(workManager);
+            // Workaround... should be removed as soon as possible
+            OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(this).transferDao()));
+            UploadFileInConflictUseCase uploadFileInConflictUseCase = new UploadFileInConflictUseCase(workManager, transferRepository);
             UploadFileInConflictUseCase.Params params = new UploadFileInConflictUseCase.Params(
                     getFile().getOwner(),
                     getFile().getStoragePath(),
