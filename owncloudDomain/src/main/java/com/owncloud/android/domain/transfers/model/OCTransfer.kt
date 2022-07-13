@@ -31,7 +31,7 @@ data class OCTransfer(
     val remotePath: String,
     val accountName: String,
     val fileSize: Long,
-    val status: TransferStatus,
+    var status: TransferStatus,
     val localBehaviour: Int,
     val forceOverwrite: Boolean,
     val transferEndTimestamp: Long? = null,

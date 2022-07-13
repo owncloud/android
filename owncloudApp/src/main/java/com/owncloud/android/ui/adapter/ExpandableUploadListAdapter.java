@@ -347,7 +347,7 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                                 OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(v.getContext()).transferDao()));
                                 WorkManager workManager = WorkManager.getInstance(v.getContext());
                                 UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
-                                RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(v.getContext(), uploadFilesFromSystemUseCase);
+                                RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(uploadFilesFromSystemUseCase, transferRepository);
                                 RetryUploadFromSystemUseCase.Params useCaseParams = new RetryUploadFromSystemUseCase.Params(upload.getUploadId());
                                 retryUploadFromSystemUseCase.execute(useCaseParams);
                                 refreshView();
