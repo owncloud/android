@@ -126,7 +126,7 @@ public class UploadListFragment extends ExpandableListFragment implements Option
             case RETRY_FAILED:
                 // Workaround... should be removed as soon as possible
                 OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(requireContext()).transferDao()));
-                RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = new RetryUploadFromContentUriUseCase(requireContext());
+                RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = new RetryUploadFromContentUriUseCase(requireContext(), transferRepository);
                 WorkManager workManager = WorkManager.getInstance(requireContext());
                 UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
                 RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(uploadFilesFromSystemUseCase, transferRepository);

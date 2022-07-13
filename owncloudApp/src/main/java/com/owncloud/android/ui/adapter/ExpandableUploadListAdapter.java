@@ -352,8 +352,10 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                                 retryUploadFromSystemUseCase.execute(useCaseParams);
                                 refreshView();
                             } else if (DocumentFile.isDocumentUri(v.getContext(), Uri.parse(upload.getLocalPath()))) {
+                                // Workaround... should be removed as soon as possible
+                                OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(v.getContext()).transferDao()));
                                 RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase =
-                                        new RetryUploadFromContentUriUseCase(v.getContext());
+                                        new RetryUploadFromContentUriUseCase(v.getContext(), transferRepository);
                                 RetryUploadFromContentUriUseCase.Params useCaseParams = new RetryUploadFromContentUriUseCase.Params(
                                         upload.getUploadId()
                                 );
