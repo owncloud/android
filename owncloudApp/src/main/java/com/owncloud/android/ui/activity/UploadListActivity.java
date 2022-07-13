@@ -150,7 +150,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
             }
             // Workaround... should be removed as soon as possible
             OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(this).transferDao()));
-            RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = new RetryUploadFromContentUriUseCase(this);
+            RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = new RetryUploadFromContentUriUseCase(this, transferRepository);
             WorkManager workManager = WorkManager.getInstance(this);
             UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
             RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(uploadFilesFromSystemUseCase, transferRepository);
@@ -178,7 +178,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
                 // already updated -> just retry!
                 // Workaround... should be removed as soon as possible
                 OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(this).transferDao()));
-                RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = new RetryUploadFromContentUriUseCase(this);
+                RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = new RetryUploadFromContentUriUseCase(this, transferRepository);
                 WorkManager workManager = WorkManager.getInstance(this);
                 UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
                 RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(uploadFilesFromSystemUseCase, transferRepository);
