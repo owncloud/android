@@ -25,10 +25,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import kotlinx.coroutines.launch
 
 class TransfersViewModel(
     private val uploadFilesFromSAFUseCase: UploadFilesFromSAFUseCase,
+    private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ): ViewModel() {
     fun uploadFilesFromSAF(
@@ -41,6 +43,22 @@ class TransfersViewModel(
                 UploadFilesFromSAFUseCase.Params(
                     accountName = accountName,
                     listOfContentUris = listOfContentUris,
+                    uploadFolderPath = uploadFolderPath
+                )
+            )
+        }
+    }
+
+    fun uploadFilesFromSystem(
+        accountName: String,
+        listOfLocalPaths: List<String>,
+        uploadFolderPath: String
+    ) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            uploadFilesFromSystemUseCase.execute(
+                UploadFilesFromSystemUseCase.Params(
+                    accountName = accountName,
+                    listOfLocalPaths = listOfLocalPaths,
                     uploadFolderPath = uploadFolderPath
                 )
             )
