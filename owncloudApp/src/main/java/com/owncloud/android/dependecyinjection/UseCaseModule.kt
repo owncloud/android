@@ -76,6 +76,7 @@ import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
@@ -135,9 +136,10 @@ val useCaseModule = module {
     factory { GetLiveDataForDownloadingFileUseCase(get()) }
     factory { GetLiveDataForFinishedDownloadsFromAccountUseCase(get()) }
     factory { UploadFilesFromSAFUseCase(get(), get()) }
-    factory { UploadFilesFromSystemUseCase(get()) }
+    factory { UploadFilesFromSystemUseCase(get(), get()) }
     factory { UploadFileInConflictUseCase(get()) }
     factory { CancelUploadForFileUseCase(get()) }
+    factory { RetryUploadFromSystemUseCase(get(), get()) }
 
     // User
     factory { GetStoredQuotaUseCase(get()) }

@@ -35,7 +35,6 @@ import android.os.ParcelFileDescriptor
 import android.preference.PreferenceManager
 import android.provider.DocumentsContract
 import android.provider.DocumentsProvider
-import androidx.work.WorkManager
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
@@ -131,8 +130,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 // If only needs to upload that file
                 if (uploadOnly) {
                     ocFile.length = fileToOpen.length()
-                    val workManager = WorkManager.getInstance(MainApp.appContext)
-                    val uploadFilesUseCase = UploadFilesFromSystemUseCase(workManager)
+                    val uploadFilesUseCase: UploadFilesFromSystemUseCase by inject()
                     val uploadFilesUseCaseParams = UploadFilesFromSystemUseCase.Params(
                         accountName = ocFile.owner,
                         listOfLocalPaths = listOf(fileToOpen.path),

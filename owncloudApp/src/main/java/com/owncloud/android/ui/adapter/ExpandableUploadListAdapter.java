@@ -44,6 +44,9 @@ import androidx.work.WorkManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.data.OwncloudDatabase;
+import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource;
+import com.owncloud.android.data.transfers.repository.OCTransferRepository;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.UploadsStorageManager;
@@ -58,6 +61,7 @@ import com.owncloud.android.ui.fragment.UploadListFragment;
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase;
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase;
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase;
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -340,9 +344,12 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                         public void onClick(View v) {
                             File file = new File(upload.getLocalPath());
                             if (file.exists()) {
-                                RetryUploadFromSystemUseCase retryUploadFromContentUriUseCase = new RetryUploadFromSystemUseCase(v.getContext());
+                                OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(v.getContext()).transferDao()));
+                                WorkManager workManager = WorkManager.getInstance(v.getContext());
+                                UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
+                                RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(v.getContext(), uploadFilesFromSystemUseCase);
                                 RetryUploadFromSystemUseCase.Params useCaseParams = new RetryUploadFromSystemUseCase.Params(upload.getUploadId());
-                                retryUploadFromContentUriUseCase.execute(useCaseParams);
+                                retryUploadFromSystemUseCase.execute(useCaseParams);
                                 refreshView();
                             } else if (DocumentFile.isDocumentUri(v.getContext(), Uri.parse(upload.getLocalPath()))) {
                                 RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase =
