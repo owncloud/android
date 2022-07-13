@@ -2,6 +2,8 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.usecases.transfers.uploads
 
 import androidx.work.Constraints
@@ -23,11 +26,11 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.owncloud.android.MainApp
-import com.owncloud.android.datamodel.OCUpload
-import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 import timber.log.Timber
 import java.io.File
@@ -42,6 +45,7 @@ import java.util.UUID
  */
 class UploadFileInConflictUseCase(
     private val workManager: WorkManager,
+    private val transferRepository: TransferRepository,
 ) : BaseUseCase<UUID?, UploadFileInConflictUseCase.Params>() {
 
     override fun run(params: Params): UUID? {
@@ -73,17 +77,18 @@ class UploadFileInConflictUseCase(
         uploadPath: String,
         accountName: String,
     ): Long {
-        val uploadStorageManager = UploadsStorageManager(MainApp.appContext.contentResolver)
-
-        val ocUpload = OCUpload(localFile.absolutePath, uploadPath, accountName).apply {
-            fileSize = localFile.length()
-            isForceOverwrite = true
+        val ocTransfer = OCTransfer(
+            localPath = localFile.absolutePath,
+            remotePath = uploadPath,
+            accountName = accountName,
+            fileSize = localFile.length(),
+            status = TransferStatus.TRANSFER_QUEUED,
+            localBehaviour = UploadBehavior.COPY.ordinal,
+            forceOverwrite = true,
             createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER.ordinal
-            localAction = UploadBehavior.COPY.ordinal
-            uploadStatus = UploadsStorageManager.UploadStatus.UPLOAD_IN_PROGRESS
-        }
+        )
 
-        return uploadStorageManager.storeUpload(ocUpload).also {
+        return transferRepository.storeTransfer(ocTransfer).also {
             Timber.i("Upload of $uploadPath has been stored in the uploads database with id: $it")
         }
     }

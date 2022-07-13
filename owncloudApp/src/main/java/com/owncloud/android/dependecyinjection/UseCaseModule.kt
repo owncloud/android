@@ -138,7 +138,7 @@ val useCaseModule = module {
     factory { GetLiveDataForFinishedDownloadsFromAccountUseCase(get()) }
     factory { UploadFilesFromSAFUseCase(get(), get()) }
     factory { UploadFilesFromSystemUseCase(get(), get()) }
-    factory { UploadFileInConflictUseCase(get()) }
+    factory { UploadFileInConflictUseCase(get(), get()) }
     factory { CancelUploadForFileUseCase(get()) }
     factory { RetryUploadFromSystemUseCase(get(), get()) }
 
