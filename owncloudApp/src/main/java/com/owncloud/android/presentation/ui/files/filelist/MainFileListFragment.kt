@@ -231,6 +231,12 @@ class MainFileListFragment : Fragment(),
         mainFileListViewModel.syncFolder.observe(viewLifecycleOwner, Event.EventObserver {
             binding.syncProgressBar.isIndeterminate = it.isLoading
             binding.swipeRefreshMainFileList.isRefreshing = it.isLoading
+
+            it.getThrowableOrNull()?.parseError(
+                genericErrorMessage = getString(R.string.sync_folder_failed_content, mainFileListViewModel.getFile().fileName),
+                resources = resources,
+                showJustReason = false
+            )
         })
     }
 
