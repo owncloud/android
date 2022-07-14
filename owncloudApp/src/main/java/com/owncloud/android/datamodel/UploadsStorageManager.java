@@ -95,42 +95,6 @@ public class UploadsStorageManager extends Observable {
     }
 
     /**
-     * Stores an upload object in DB.
-     *
-     * @param ocUpload Upload object to store
-     * @return upload id, -1 if the insert process fails.
-     */
-    public long storeUpload(OCUpload ocUpload) {
-        Timber.v("Inserting " + ocUpload.getLocalPath() + " with status=" + ocUpload.getUploadStatus());
-
-        ContentValues cv = new ContentValues();
-        cv.put(ProviderTableMeta.UPLOADS_LOCAL_PATH, ocUpload.getLocalPath());
-        cv.put(ProviderTableMeta.UPLOADS_REMOTE_PATH, ocUpload.getRemotePath());
-        cv.put(ProviderTableMeta.UPLOADS_ACCOUNT_NAME, ocUpload.getAccountName());
-        cv.put(ProviderTableMeta.UPLOADS_FILE_SIZE, ocUpload.getFileSize());
-        cv.put(ProviderTableMeta.UPLOADS_STATUS, ocUpload.getUploadStatus().value);
-        cv.put(ProviderTableMeta.UPLOADS_LOCAL_BEHAVIOUR, ocUpload.getLocalAction());
-        cv.put(ProviderTableMeta.UPLOADS_FORCE_OVERWRITE, ocUpload.isForceOverwrite() ? 1 : 0);
-        cv.put(ProviderTableMeta.UPLOADS_IS_CREATE_REMOTE_FOLDER, ocUpload.createsRemoteFolder() ? 1 : 0);
-        cv.put(ProviderTableMeta.UPLOADS_LAST_RESULT, ocUpload.getLastResult().getValue());
-        cv.put(ProviderTableMeta.UPLOADS_CREATED_BY, ocUpload.getCreatedBy());
-        cv.put(ProviderTableMeta.UPLOADS_TRANSFER_ID, ocUpload.getTransferId());
-
-        Uri result = getDB().insert(ProviderTableMeta.CONTENT_URI_UPLOADS, cv);
-
-        Timber.d("storeUpload returns with: " + result + " for file: " + ocUpload.getLocalPath());
-        if (result == null) {
-            Timber.e("Failed to insert item " + ocUpload.getLocalPath() + " into upload db.");
-            return -1;
-        } else {
-            long new_id = Long.parseLong(result.getPathSegments().get(1));
-            ocUpload.setUploadId(new_id);
-            notifyObserversNow();
-            return new_id;
-        }
-    }
-
-    /**
      * Update an upload object in DB.
      *
      * @param ocUpload Upload object with state to update
@@ -164,63 +128,6 @@ public class UploadsStorageManager extends Observable {
         return result;
     }
 
-    private int updateUploadInternal(Cursor c, UploadStatus status, UploadResult result, String remotePath,
-                                     String localPath) {
-        int r = 0;
-        while (c.moveToNext()) {
-            // read upload object and update
-            OCUpload upload = createOCUploadFromCursor(c);
-
-            String path = getStringFromColumnOrThrow(c, ProviderTableMeta.UPLOADS_LOCAL_PATH);
-            Timber.v("Updating " + path + " with status:" + status + " and result:" + (result == null ? "null" :
-                    result.toString()) + " (old:" + upload.toFormattedString() + ")");
-
-            upload.setUploadStatus(status);
-            upload.setLastResult(result);
-            upload.setRemotePath(remotePath);
-            if (localPath != null) {
-                upload.setLocalPath(localPath);
-            }
-            upload.setUploadEndTimestamp(Calendar.getInstance().getTimeInMillis());
-
-            // store update upload object to db
-            r = updateUpload(upload);
-        }
-
-        return r;
-    }
-
-    /**
-     * Update upload status of file uniquely referenced by id.
-     *
-     * @param id         upload id.
-     * @param status     new status.
-     * @param result     new result of upload operation
-     * @param remotePath path of the file to upload in the ownCloud storage
-     * @param localPath  path of the file to upload in the device storage
-     * @return 1 if file status was updated, else 0.
-     */
-    public int updateUploadStatus(long id, UploadStatus status, UploadResult result, String remotePath,
-                                  String localPath) {
-        int returnValue = 0;
-        Cursor c = getDB().query(
-                ProviderTableMeta.CONTENT_URI_UPLOADS,
-                null,
-                ProviderTableMeta._ID + "=?",
-                new String[]{String.valueOf(id)},
-                null
-        );
-
-        if (c.getCount() != 1) {
-            Timber.e(c.getCount() + " items for id=" + id
-                    + " available in UploadDb. Expected 1. Failed to update upload db.");
-        } else {
-            returnValue = updateUploadInternal(c, status, result, remotePath, localPath);
-        }
-        c.close();
-        return returnValue;
-    }
-
     /**
      * Should be called when some value of this DB was changed. All observers
      * are informed.
@@ -229,64 +136,6 @@ public class UploadsStorageManager extends Observable {
         Timber.d("notifyObserversNow");
         setChanged();
         notifyObservers();
-    }
-
-    /**
-     * Remove an upload from the uploads list, known its target account and remote path.
-     *
-     * @param upload Upload instance to remove from persisted storage.
-     * @return true when the upload was stored and could be removed.
-     */
-    public int removeUpload(OCUpload upload) {
-        int result = getDB().delete(
-                ProviderTableMeta.CONTENT_URI_UPLOADS,
-                ProviderTableMeta._ID + "=?",
-                new String[]{Long.toString(upload.getUploadId())}
-        );
-        Timber.d("delete returns " + result + " for upload " + upload);
-        if (result > 0) {
-            notifyObserversNow();
-        }
-        return result;
-    }
-
-    /**
-     * Remove an upload from the uploads list, known its target account and remote path.
-     *
-     * @param accountName Name of the OC account target of the upload to remove.
-     * @param remotePath  Absolute path in the OC account target of the upload to remove.
-     * @return true when one or more upload entries were removed
-     */
-    public int removeUpload(String accountName, String remotePath) {
-        int result = getDB().delete(
-                ProviderTableMeta.CONTENT_URI_UPLOADS,
-                ProviderTableMeta.UPLOADS_ACCOUNT_NAME + "=? AND " + ProviderTableMeta.UPLOADS_REMOTE_PATH + "=?",
-                new String[]{accountName, remotePath}
-        );
-        Timber.d("delete returns " + result + " for file " + remotePath + " in " + accountName);
-        if (result > 0) {
-            notifyObserversNow();
-        }
-        return result;
-    }
-
-    /**
-     * Remove all the uploads of a given account from the uploads list.
-     *
-     * @param accountName Name of the OC account target of the uploads to remove.
-     * @return true when one or more upload entries were removed
-     */
-    public int removeUploads(String accountName) {
-        int result = getDB().delete(
-                ProviderTableMeta.CONTENT_URI_UPLOADS,
-                ProviderTableMeta.UPLOADS_ACCOUNT_NAME + "=?",
-                new String[]{accountName}
-        );
-        Timber.d("delete returns " + result + " for uploads in " + accountName);
-        if (result > 0) {
-            notifyObserversNow();
-        }
-        return result;
     }
 
     public OCUpload[] getAllStoredUploads() {
@@ -369,19 +218,6 @@ public class UploadsStorageManager extends Observable {
     }
 
     /**
-     * Get all failed uploads.
-     */
-    public OCUpload[] getFailedUploads() {
-        return getUploads(
-                ProviderTableMeta.UPLOADS_STATUS + "== ?",
-                new String[]{
-                        String.valueOf(UploadStatus.UPLOAD_FAILED.value)
-                },
-                null
-        );
-    }
-
-    /**
      * Get all uploads which where successfully completed.
      */
     public OCUpload[] getFinishedUploads() {
@@ -438,39 +274,6 @@ public class UploadsStorageManager extends Observable {
         );
         Timber.d("delete all successful uploads");
         if (result > 0) {
-            notifyObserversNow();
-        }
-        return result;
-    }
-
-    /**
-     * Changes the status of any in progress upload from UploadStatus.UPLOAD_IN_PROGRESS
-     * to UploadStatus.UPLOAD_FAILED
-     *
-     * @return Number of uploads which status was changed.
-     */
-    public int failInProgressUploads(UploadResult uploadResult) {
-        Timber.v("Updating state of any killed upload");
-
-        ContentValues cv = new ContentValues();
-        cv.put(ProviderTableMeta.UPLOADS_STATUS, UploadStatus.UPLOAD_FAILED.getValue());
-        cv.put(
-                ProviderTableMeta.UPLOADS_LAST_RESULT,
-                uploadResult != null ? uploadResult.getValue() : UploadResult.UNKNOWN.getValue()
-        );
-        cv.put(ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP, Calendar.getInstance().getTimeInMillis());
-
-        int result = getDB().update(
-                ProviderTableMeta.CONTENT_URI_UPLOADS,
-                cv,
-                ProviderTableMeta.UPLOADS_STATUS + "=?",
-                new String[]{String.valueOf(UploadStatus.UPLOAD_IN_PROGRESS.getValue())}
-        );
-
-        if (result == 0) {
-            Timber.v("No upload was killed");
-        } else {
-            Timber.w("%s uploads where abruptly interrupted", result);
             notifyObserversNow();
         }
         return result;

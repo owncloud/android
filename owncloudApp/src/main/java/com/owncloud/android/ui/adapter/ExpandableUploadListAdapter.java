@@ -323,7 +323,8 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                 rightButton.setImageResource(R.drawable.ic_action_delete_grey);
                 rightButton.setVisibility(View.VISIBLE);
                 rightButton.setOnClickListener(v -> {
-                    mUploadsStorageManager.removeUpload(upload);
+                    OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(v.getContext()).transferDao()));
+                    transferRepository.removeTransferById(upload.getUploadId());
                     refreshView();
                 });
 
