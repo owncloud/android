@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,29 +18,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.usecases.transfers.uploads
 
 import androidx.work.WorkManager
-import com.owncloud.android.MainApp
-import com.owncloud.android.datamodel.OCUpload
-import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.transfers.TransferRepository
 import timber.log.Timber
 
 class CancelUploadWithIdUseCase(
-    private val workManager: WorkManager
+    private val workManager: WorkManager,
+    private val transferRepository: TransferRepository,
 ) : BaseUseCase<Unit, CancelUploadWithIdUseCase.Params>() {
 
     override fun run(params: Params) {
-        workManager.cancelAllWorkByTag(params.upload.uploadId.toString())
+        workManager.cancelAllWorkByTag(params.uploadId.toString())
 
-        val uploadsStorageManager = UploadsStorageManager(MainApp.appContext.contentResolver)
-        uploadsStorageManager.removeUpload(params.upload)
+        transferRepository.removeTransferById(params.uploadId)
 
-        Timber.i("Upload with id ${params.upload.uploadId} has been cancelled.")
+        Timber.i("Upload with id ${params.uploadId} has been cancelled.")
     }
 
     data class Params(
-        val upload: OCUpload,
+        val uploadId: Long,
     )
 }

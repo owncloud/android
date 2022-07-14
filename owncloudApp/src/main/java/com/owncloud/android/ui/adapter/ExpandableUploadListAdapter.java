@@ -312,8 +312,9 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                 rightButton.setImageResource(R.drawable.ic_action_cancel_grey);
                 rightButton.setVisibility(View.VISIBLE);
                 rightButton.setOnClickListener(v -> {
-                    CancelUploadWithIdUseCase cancelUploadWithIdUseCase = new CancelUploadWithIdUseCase(WorkManager.getInstance(parent.getContext()));
-                    cancelUploadWithIdUseCase.execute(new CancelUploadWithIdUseCase.Params(upload));
+                    OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(v.getContext()).transferDao()));
+                    CancelUploadWithIdUseCase cancelUploadWithIdUseCase = new CancelUploadWithIdUseCase(WorkManager.getInstance(parent.getContext()), transferRepository);
+                    cancelUploadWithIdUseCase.execute(new CancelUploadWithIdUseCase.Params(upload.getUploadId()));
                     refreshView();
                 });
 
