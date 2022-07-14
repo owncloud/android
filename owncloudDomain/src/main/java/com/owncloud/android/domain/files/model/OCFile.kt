@@ -23,11 +23,12 @@ package com.owncloud.android.domain.files.model
 import android.os.Parcelable
 import android.webkit.MimeTypeMap
 import com.owncloud.android.domain.ext.isOneOf
+import com.owncloud.android.domain.files.model.AvailableOfflineStatus.AVAILABLE_OFFLINE
+import com.owncloud.android.domain.files.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
 import kotlinx.parcelize.Parcelize
 import java.io.File
 import java.util.Locale
 
-//TODO: Add new attributes on demand. Let's try to perform a clean up :)
 @Parcelize
 data class OCFile(
     var id: Long? = null,
@@ -45,8 +46,7 @@ data class OCFile(
     var storagePath: String? = null,
     var treeEtag: String? = "",
 
-    //TODO: May not needed
-    val keepInSync: Int? = null,
+    val availableOfflineStatus: AvailableOfflineStatus? = null,
     var lastSyncDateForData: Long? = 0,
     var lastSyncDateForProperties: Long? = 0,
     var needsToUpdateThumbnail: Boolean = false,
@@ -141,6 +141,9 @@ data class OCFile(
 
     val isSharedWithMe
         get() = permissions != null && permissions.contains(PERMISSION_SHARED_WITH_ME)
+
+    val isAvailableOffline
+        get() = availableOfflineStatus?.isOneOf(AVAILABLE_OFFLINE, AVAILABLE_OFFLINE_PARENT) ?: false
 
     val localModificationTimestamp: Long
         get() =

@@ -24,6 +24,7 @@ import androidx.lifecycle.Transformations
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileEntity
+import com.owncloud.android.domain.files.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
 import com.owncloud.android.domain.files.model.OCFile
@@ -159,7 +160,7 @@ class OCLocalFileDataSource(
                 sharedByLink = sharedByLink,
                 sharedWithSharee = sharedWithSharee,
                 storagePath = storagePath,
-                keepInSync = keepInSync,
+                availableOfflineStatus = AvailableOfflineStatus.fromValue(availableOfflineStatus),
                 needsToUpdateThumbnail = needsToUpdateThumbnail,
                 fileIsDownloading = fileIsDownloading,
                 lastSyncDateForData = lastSyncDateForData,
@@ -186,7 +187,7 @@ class OCLocalFileDataSource(
                 sharedByLink = sharedByLink,
                 sharedWithSharee = sharedWithSharee,
                 storagePath = storagePath,
-                keepInSync = keepInSync,
+                availableOfflineStatus = availableOfflineStatus?.ordinal ?: AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE.ordinal,
                 needsToUpdateThumbnail = needsToUpdateThumbnail,
                 fileIsDownloading = fileIsDownloading,
                 lastSyncDateForData = lastSyncDateForData,
