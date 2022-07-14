@@ -42,12 +42,11 @@ import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFilesAvailableOfflineUseCase
 import com.owncloud.android.domain.files.usecases.GetFilesSharedByLinkUseCase
-import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
+import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
-import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
@@ -67,15 +66,16 @@ import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
-import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadsForAccountUseCase
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -104,7 +104,6 @@ val useCaseModule = module {
     factory { GetFolderContentAsLiveDataUseCase(get()) }
     factory { GetFolderImagesUseCase(get()) }
     factory { MoveFileUseCase(get()) }
-    factory { RefreshFolderFromServerAsyncUseCase(get()) }
     factory { RemoveFileUseCase(get()) }
     factory { RenameFileUseCase(get()) }
     factory { SaveFileOrFolderUseCase(get()) }
@@ -112,6 +111,7 @@ val useCaseModule = module {
     factory { GetFilesAvailableOfflineUseCase(get()) }
     factory { GetSearchFolderContentUseCase(get()) }
     factory { SynchronizeFileUseCase(get(), get(), get(), get()) }
+    factory { SynchronizeFolderUseCase(get(), get()) }
     factory { SortFilesUseCase() }
 
     // Sharing

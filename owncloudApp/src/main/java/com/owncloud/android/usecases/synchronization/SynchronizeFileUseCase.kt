@@ -19,7 +19,6 @@
  */
 package com.owncloud.android.usecases.synchronization
 
-import android.accounts.Account
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.files.FileRepository
@@ -41,7 +40,7 @@ class SynchronizeFileUseCase(
 
     override fun run(params: Params): SyncType {
         val fileToSynchronize = params.fileToSynchronize
-        val account = params.account
+        val accountName: String = fileToSynchronize.owner
 
         CoroutineScope(Dispatchers.IO).run {
             // 1. Perform a propfind to check if the file still exists in remote
@@ -56,7 +55,7 @@ class SynchronizeFileUseCase(
             // 2. File not downloaded -> Download it
             if (!fileToSynchronize.isAvailableLocally) {
                 Timber.i("File ${fileToSynchronize.fileName} is not downloaded. Let's download it")
-                val uuid = requestForDownload(account = account, ocFile = fileToSynchronize)
+                val uuid = requestForDownload(accountName = accountName, ocFile = fileToSynchronize)
                 return SyncType.DownloadEnqueued(uuid)
             }
 
@@ -79,12 +78,12 @@ class SynchronizeFileUseCase(
             } else if (changedRemotely) {
                 // 5.2 File has changed ONLY remotely -> download new version
                 Timber.i("File ${fileToSynchronize.fileName} has changed remotely. Let's download the new version")
-                val uuid = requestForDownload(account, fileToSynchronize)
+                val uuid = requestForDownload(accountName, fileToSynchronize)
                 return SyncType.DownloadEnqueued(uuid)
             } else if (changedLocally) {
                 // 5.3 File has change ONLY locally -> upload new version
                 Timber.i("File ${fileToSynchronize.fileName} has changed locally. Let's upload the new version")
-                val uuid = requestForUpload(account, fileToSynchronize, fileToSynchronize.etag!!)
+                val uuid = requestForUpload(accountName, fileToSynchronize, fileToSynchronize.etag!!)
                 return SyncType.UploadEnqueued(uuid)
             } else {
                 // 5.4 File has not change locally not remotely -> do nothing
@@ -94,19 +93,19 @@ class SynchronizeFileUseCase(
         }
     }
 
-    private fun requestForDownload(account: Account, ocFile: OCFile): UUID? {
+    private fun requestForDownload(accountName: String, ocFile: OCFile): UUID? {
         return downloadFileUseCase.execute(
             DownloadFileUseCase.Params(
-                account = account,
+                accountName = accountName,
                 file = ocFile
             )
         )
     }
 
-    private fun requestForUpload(account: Account, ocFile: OCFile, etagInConflict: String): UUID? {
+    private fun requestForUpload(accountName: String, ocFile: OCFile, etagInConflict: String): UUID? {
         return uploadFileInConflictUseCase.execute(
             UploadFileInConflictUseCase.Params(
-                accountName = account.name,
+                accountName = accountName,
                 localPath = ocFile.storagePath!!,
                 uploadFolderPath = ocFile.getParentRemotePath(),
             )
@@ -115,7 +114,6 @@ class SynchronizeFileUseCase(
 
     data class Params(
         val fileToSynchronize: OCFile,
-        val account: Account
     )
 
     sealed interface SyncType {

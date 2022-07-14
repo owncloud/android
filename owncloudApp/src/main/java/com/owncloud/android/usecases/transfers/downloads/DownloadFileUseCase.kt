@@ -18,7 +18,6 @@
  */
 package com.owncloud.android.usecases.transfers.downloads
 
-import android.accounts.Account
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
@@ -49,19 +48,19 @@ class DownloadFileUseCase(
 
     override fun run(params: Params): UUID? {
         val ocFile = params.file
-        val account = params.account
+        val accountName = params.accountName
 
         if (ocFile.id == null) return null
 
-        if (isDownloadAlreadyEnqueued(account, ocFile)) {
+        if (isDownloadAlreadyEnqueued(accountName, ocFile)) {
             return null
         }
 
-        return enqueueNewDownload(ocFile, account.name)
+        return enqueueNewDownload(ocFile, accountName)
     }
 
-    private fun isDownloadAlreadyEnqueued(account: Account, file: OCFile): Boolean {
-        val tagsToFilter = getTagsForDownload(file, account)
+    private fun isDownloadAlreadyEnqueued(accountName: String, file: OCFile): Boolean {
+        val tagsToFilter = getTagsForDownload(file, accountName)
         val workQuery = buildWorkQuery(
             tags = tagsToFilter,
             states = PENDING_WORK_STATUS,
@@ -107,7 +106,7 @@ class DownloadFileUseCase(
     }
 
     data class Params(
-        val account: Account,
+        val accountName: String,
         val file: OCFile
     )
 }

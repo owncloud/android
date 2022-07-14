@@ -179,7 +179,10 @@ class MainFileListFragment : Fragment(),
 
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener {
-            mainFileListViewModel.refreshFolder(mainFileListViewModel.getFile().remotePath)
+            mainFileListViewModel.refreshFolder(
+                ocFolder = mainFileListViewModel.getFile(),
+                isPickingAFolder = isPickingAFolder(),
+            )
         }
 
         // Set SortOptions and its listeners
@@ -225,9 +228,15 @@ class MainFileListFragment : Fragment(),
             updateFileListData(fileListPostFilters)
         }
 
-        mainFileListViewModel.refreshFolder.observe(viewLifecycleOwner, Event.EventObserver {
+        mainFileListViewModel.syncFolder.observe(viewLifecycleOwner, Event.EventObserver {
             binding.syncProgressBar.isIndeterminate = it.isLoading
             binding.swipeRefreshMainFileList.isRefreshing = it.isLoading
+
+            it.getThrowableOrNull()?.parseError(
+                genericErrorMessage = getString(R.string.sync_folder_failed_content, mainFileListViewModel.getFile().fileName),
+                resources = resources,
+                showJustReason = false
+            )
         })
     }
 
@@ -599,7 +608,10 @@ class MainFileListFragment : Fragment(),
 
         if (ocFile.isFolder) {
             mainFileListViewModel.updateFolderToDisplay(ocFile)
-            mainFileListViewModel.refreshFolder(ocFile.remotePath)
+            mainFileListViewModel.refreshFolder(
+                ocFolder = ocFile,
+                isPickingAFolder = isPickingAFolder(),
+            )
         } else { // Click on a file
             fileActions?.onFileClicked(ocFile)
         }
@@ -697,7 +709,9 @@ class MainFileListFragment : Fragment(),
     private fun syncFiles(files: List<OCFile>) {
         for (file in files) {
             if (file.isFolder) {
-                mainFileListViewModel.refreshFolder(file.remotePath)
+                mainFileListViewModel.syncFolder(
+                    ocFolder = file,
+                )
             } else {
                 fileActions?.syncFile(file)
             }

@@ -41,7 +41,6 @@ import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
-import com.owncloud.android.domain.files.usecases.RefreshFolderFromServerAsyncUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortType
 import com.owncloud.android.domain.utils.Event
@@ -50,6 +49,10 @@ import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY
 import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -63,7 +66,7 @@ class MainFileListViewModel(
     private val sortFilesUseCase: SortFilesUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
-    private val refreshFolderFromServerAsyncUseCase: RefreshFolderFromServerAsyncUseCase,
+    private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
     private val contextProvider: ContextProvider,
     private val workManager: WorkManager,
 ) : ViewModel() {
@@ -96,8 +99,8 @@ class MainFileListViewModel(
     val folderContentLiveData: LiveData<Event<List<OCFile>>>
         get() = _folderContentLiveData
 
-    private val _refreshFolder = MediatorLiveData<Event<UIResult<Unit>>>()
-    val refreshFolder: LiveData<Event<UIResult<Unit>>> = _refreshFolder
+    private val _syncFolder = MediatorLiveData<Event<UIResult<Unit>>>()
+    val syncFolder: LiveData<Event<UIResult<Unit>>> = _syncFolder
 
     fun navigateTo(fileId: Long) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
@@ -180,7 +183,10 @@ class MainFileListViewModel(
             }
 
             updateFolderToDisplay(parentDir!!)
-            refreshFolder(parentDir.remotePath)
+            refreshFolder(
+                ocFolder = parentDir,
+                isPickingAFolder = false
+            )
         }
     }
 
@@ -205,14 +211,31 @@ class MainFileListViewModel(
     }
 
     fun refreshFolder(
-        remotePath: String
+        ocFolder: OCFile,
+        isPickingAFolder: Boolean,
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutinesDispatcherProvider.io,
-        liveData = _refreshFolder,
-        useCase = refreshFolderFromServerAsyncUseCase,
+        liveData = _syncFolder,
+        useCase = synchronizeFolderUseCase,
         showLoading = true,
-        useCaseParams = RefreshFolderFromServerAsyncUseCase.Params(
-            remotePath = remotePath
+        useCaseParams = SynchronizeFolderUseCase.Params(
+            remotePath = ocFolder.remotePath,
+            accountName = ocFolder.owner,
+            syncMode = if (isPickingAFolder) REFRESH_FOLDER else SYNC_CONTENTS
+        )
+    )
+
+    fun syncFolder(
+        ocFolder: OCFile,
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
+        liveData = _syncFolder,
+        useCase = synchronizeFolderUseCase,
+        showLoading = true,
+        useCaseParams = SynchronizeFolderUseCase.Params(
+            remotePath = ocFolder.remotePath,
+            accountName = ocFolder.owner,
+            syncMode = SYNC_FOLDER_RECURSIVELY
         )
     )
 

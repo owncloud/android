@@ -41,11 +41,11 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.files.RemoteFile;
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService;
 import com.owncloud.android.operations.common.SyncOperation;
-import com.owncloud.android.presentation.ui.files.filelist.MainFileListViewModel;
 import com.owncloud.android.presentation.ui.files.operations.FileOperation;
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase;
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase;
 import com.owncloud.android.utils.FileStorageUtils;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
@@ -59,6 +59,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY;
 import static org.koin.java.KoinJavaComponent.get;
 import static org.koin.java.KoinJavaComponent.inject;
 
@@ -113,7 +114,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      */
     private int mFailsInFileSyncsFound;
 
-    private List<Pair<OCFile, Account>> mFilesToSyncContents;
+    private List<OCFile> mFilesToSyncContents;
 
     private List<Intent> mFoldersToSyncContents;
 
@@ -205,8 +206,8 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     protected RemoteOperationResult<ArrayList<RemoteFile>> run(OwnCloudClient client) {
         final RemoteOperationResult<ArrayList<RemoteFile>> fetchFolderResult;
 
-        MainFileListViewModel mainFileListViewModel = get(MainFileListViewModel.class);
-        mainFileListViewModel.refreshFolder(mRemotePath);
+        SynchronizeFolderUseCase synchronizeFolderUseCase = get(SynchronizeFolderUseCase.class);
+        synchronizeFolderUseCase.execute(new SynchronizeFolderUseCase.Params(mRemotePath, mAccount.name, SYNC_FOLDER_RECURSIVELY));
 
         mFailsInFileSyncsFound = 0;
         mConflictsFound = 0;
@@ -351,7 +352,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
             if (localFile != null) {
                 updatedLocalFile.copyLocalPropertiesFrom(localFile);
-//                updatedLocalFile.setFileName(remoteFile.getFileName());
+                //                updatedLocalFile.setFileName(remoteFile.getFileName());
                 // remote eTag will not be set unless file CONTENTS are synchronized
                 updatedLocalFile.setEtag(localFile.getEtag());
                 if (!updatedLocalFile.isFolder() &&
@@ -364,11 +365,11 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 updatedLocalFile.setEtag("");
                 // new files need to check av-off status of parent folder!
                 // FIXME: 19/10/2020 : New_arch: Av.Offline
-//                if (updatedFolder.isAvailableOffline()) {
-//                    updatedLocalFile.setAvailableOfflineStatus(
-//                            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
-//                    );
-//                }
+                //                if (updatedFolder.isAvailableOffline()) {
+                //                    updatedLocalFile.setAvailableOfflineStatus(
+                //                            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+                //                    );
+                //                }
                 // new files need to update thumbnails
                 updatedLocalFile.setNeedsToUpdateThumbnail(true);
             }
@@ -448,7 +449,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
             if (shouldSyncContents && !isBlockedForAutomatedSync(localFile)) {
                 /// synchronization for files
-                mFilesToSyncContents.add(new Pair<>(localFile, mAccount));
+                mFilesToSyncContents.add(localFile);
             }
         }
 
@@ -466,12 +467,11 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         @NotNull Lazy<SynchronizeFileUseCase> synchronizeFileUseCase = inject(SynchronizeFileUseCase.class);
 
         Timber.v("Starting content synchronization... ");
-        for (Pair<OCFile, Account> fileAndAccountPair : mFilesToSyncContents) {
+        for (OCFile ocFile : mFilesToSyncContents) {
             if (mCancellationRequested.get()) {
                 throw new OperationCancelledException();
             }
-            SynchronizeFileUseCase.Params synchronizeFileUseCaseParams = new SynchronizeFileUseCase.Params(fileAndAccountPair.first,
-                    fileAndAccountPair.second);
+            SynchronizeFileUseCase.Params synchronizeFileUseCaseParams = new SynchronizeFileUseCase.Params(ocFile);
             UseCaseResult<SynchronizeFileUseCase.SyncType> result = synchronizeFileUseCase.getValue().execute(synchronizeFileUseCaseParams);
             if (!result.isSuccess()) {
                 if (result.getDataOrNull() instanceof SynchronizeFileUseCase.SyncType.ConflictDetected) {
@@ -479,9 +479,9 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 } else {
                     mFailsInFileSyncsFound++;
                     if (result.getThrowableOrNull() != null) {
-                        Timber.e(result.getThrowableOrNull(), "Error while synchronizing file : %s", fileAndAccountPair.first);
+                        Timber.e(result.getThrowableOrNull(), "Error while synchronizing file : %s", ocFile.getFileName());
                     } else {
-                        Timber.e("Error while synchronizing file : %s", fileAndAccountPair.first);
+                        Timber.e("Error while synchronizing file : %s", ocFile.getFileName());
                     }
                 }
             }   // won't let these fails break the synchronization process

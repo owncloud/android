@@ -52,9 +52,9 @@ class FileDetailsViewModel(
     private val _ongoingDownload = MediatorLiveData<WorkInfo?>()
     val ongoingDownload: LiveData<WorkInfo?> = _ongoingDownload
 
-    fun startListeningToDownloadsFromAccountAndFile(account: Account, file: OCFile) {
+    fun startListeningToDownloadsFromAccountAndFile(accountName: String, file: OCFile) {
         pendingDownloads.addSource(
-            getLiveDataForDownloadingFileUseCase.execute(GetLiveDataForDownloadingFileUseCase.Params(account, file))
+            getLiveDataForDownloadingFileUseCase.execute(GetLiveDataForDownloadingFileUseCase.Params(accountName, file))
         ) { workInfo ->
             if (workInfo != null) {
                 startListeningToWorkInfo(uuid = workInfo.id)
