@@ -154,7 +154,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
             WorkManager workManager = WorkManager.getInstance(this);
             UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
             RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(uploadFilesFromSystemUseCase, transferRepository);
-            RetryFailedUploadsForAccountUseCase retryFailedUploadsForAccountUseCase = new RetryFailedUploadsForAccountUseCase(this, retryUploadFromContentUriUseCase, retryUploadFromSystemUseCase);
+            RetryFailedUploadsForAccountUseCase retryFailedUploadsForAccountUseCase = new RetryFailedUploadsForAccountUseCase(this, retryUploadFromContentUriUseCase, retryUploadFromSystemUseCase, transferRepository);
             retryFailedUploadsForAccountUseCase.execute(new RetryFailedUploadsForAccountUseCase.Params(account.name));
         }
     }
@@ -182,7 +182,7 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
                 WorkManager workManager = WorkManager.getInstance(this);
                 UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
                 RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(uploadFilesFromSystemUseCase, transferRepository);
-                RetryFailedUploadsForAccountUseCase retryFailedUploadsForAccountUseCase = new RetryFailedUploadsForAccountUseCase(this, retryUploadFromContentUriUseCase, retryUploadFromSystemUseCase);
+                RetryFailedUploadsForAccountUseCase retryFailedUploadsForAccountUseCase = new RetryFailedUploadsForAccountUseCase(this, retryUploadFromContentUriUseCase, retryUploadFromSystemUseCase, transferRepository);
                 retryFailedUploadsForAccountUseCase.execute(new RetryFailedUploadsForAccountUseCase.Params(account.name));
             }
 
