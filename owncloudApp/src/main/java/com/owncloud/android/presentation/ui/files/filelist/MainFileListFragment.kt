@@ -219,7 +219,7 @@ class MainFileListFragment : Fragment(),
                 }
                 .filter {
                     when (fileListOption) {
-                        FileListOption.AV_OFFLINE -> it.keepInSync == 1
+                        FileListOption.AV_OFFLINE -> it.isAvailableOffline
                         FileListOption.SHARED_BY_LINK -> it.sharedByLink || it.sharedWithSharee == true
                         else -> true
                     }
