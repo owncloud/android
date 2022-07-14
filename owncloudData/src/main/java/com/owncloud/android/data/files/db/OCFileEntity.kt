@@ -19,6 +19,7 @@
 package com.owncloud.android.data.files.db
 
 import android.database.Cursor
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME
@@ -47,6 +48,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_TREE_ETAG
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_UPDATE_THUMBNAIL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta._ID
 import com.owncloud.android.domain.ext.isOneOf
+import com.owncloud.android.domain.files.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_DIR_UNIX
 
@@ -69,8 +71,8 @@ data class OCFileEntity(
     var name: String? = null,
     val treeEtag: String? = null,
 
-    //TODO: May not needed
-    val keepInSync: Int? = null,
+    @ColumnInfo(name = "keepInSync")
+    val availableOfflineStatus: Int? = null,
     val lastSyncDateForData: Long? = null,
     val fileShareViaLink: Int? = null,
     var lastSyncDateForProperties: Long? = null,
@@ -111,7 +113,7 @@ data class OCFileEntity(
                 treeEtag = cursor.getString(cursor.getColumnIndexOrThrow(FILE_TREE_ETAG)),
                 lastSyncDateForProperties = cursor.getLong(cursor.getColumnIndexOrThrow(FILE_LAST_SYNC_DATE)),
                 lastSyncDateForData = cursor.getLong(cursor.getColumnIndexOrThrow(FILE_LAST_SYNC_DATE_FOR_DATA)),
-                keepInSync = cursor.getInt(cursor.getColumnIndexOrThrow(FILE_KEEP_IN_SYNC)),
+                availableOfflineStatus = cursor.getInt(cursor.getColumnIndexOrThrow(FILE_KEEP_IN_SYNC)),
                 fileShareViaLink = cursor.getInt(cursor.getColumnIndexOrThrow(FILE_SHARED_VIA_LINK)),
                 needsToUpdateThumbnail = cursor.getInt(cursor.getColumnIndexOrThrow(FILE_UPDATE_THUMBNAIL)) == 1,
                 modifiedAtLastSyncForData = cursor.getLong(cursor.getColumnIndexOrThrow(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA)),

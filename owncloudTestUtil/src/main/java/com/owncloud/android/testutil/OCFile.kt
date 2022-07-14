@@ -18,6 +18,7 @@
  */
 package com.owncloud.android.testutil
 
+import com.owncloud.android.domain.files.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.OCFile
 
 val OC_FOLDER = OCFile(
@@ -62,7 +63,7 @@ val OC_AVAILABLE_OFFLINE_FILE = OCFile(
     modificationTimestamp = 1593510589000,
     etag = "5efb0c13c688f",
     mimeType = "image/jpeg",
-    keepInSync = 1,
+    availableOfflineStatus = AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT,
     length = 3000000
 )
 
