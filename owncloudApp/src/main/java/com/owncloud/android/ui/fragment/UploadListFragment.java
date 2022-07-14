@@ -130,7 +130,7 @@ public class UploadListFragment extends ExpandableListFragment implements Option
                 WorkManager workManager = WorkManager.getInstance(requireContext());
                 UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
                 RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(uploadFilesFromSystemUseCase, transferRepository);
-                RetryFailedUploadsUseCase retryFailedUploadsUseCase = new RetryFailedUploadsUseCase(requireContext(), retryUploadFromContentUriUseCase, retryUploadFromSystemUseCase);
+                RetryFailedUploadsUseCase retryFailedUploadsUseCase = new RetryFailedUploadsUseCase(requireContext(), retryUploadFromContentUriUseCase, retryUploadFromSystemUseCase, transferRepository);
                 retryFailedUploadsUseCase.execute(Unit.INSTANCE);
                 break;
             case CLEAR_FAILED:

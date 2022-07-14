@@ -27,18 +27,19 @@ import androidx.documentfile.provider.DocumentFile
 import com.owncloud.android.datamodel.OCUpload
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.domain.transfers.model.OCTransfer
 import timber.log.Timber
 
 class RetryFailedUploadsUseCase(
     private val context: Context,
     private val retryUploadFromContentUriUseCase: RetryUploadFromContentUriUseCase,
     private val retryUploadFromSystemUseCase: RetryUploadFromSystemUseCase,
+    private val transferRepository: TransferRepository,
 ) : BaseUseCase<Unit, Unit>() {
 
     override fun run(params: Unit) {
-
-        val uploadsStorageManager = UploadsStorageManager(context.contentResolver)
-        val failedUploads = uploadsStorageManager.failedUploads
+        val failedUploads = transferRepository.getFailedTransfers()
 
         if (failedUploads.isEmpty()) {
             Timber.d("There are no failed uploads to retry.")
@@ -46,14 +47,14 @@ class RetryFailedUploadsUseCase(
         }
         failedUploads.forEach { upload ->
             if (isContentUri(context = context, upload = upload)) {
-                retryUploadFromContentUriUseCase.execute(RetryUploadFromContentUriUseCase.Params(upload.uploadId))
+                retryUploadFromContentUriUseCase.execute(RetryUploadFromContentUriUseCase.Params(upload.id!!))
             } else {
-                retryUploadFromSystemUseCase.execute(RetryUploadFromSystemUseCase.Params(upload.uploadId))
+                retryUploadFromSystemUseCase.execute(RetryUploadFromSystemUseCase.Params(upload.id!!))
             }
         }
     }
 
-    private fun isContentUri(context: Context, upload: OCUpload): Boolean {
+    private fun isContentUri(context: Context, upload: OCTransfer): Boolean {
         return DocumentFile.isDocumentUri(context, Uri.parse(upload.localPath))
     }
 
