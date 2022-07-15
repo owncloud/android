@@ -92,7 +92,6 @@ import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.coroutines.CoroutineScope

@@ -32,7 +32,7 @@ class TransfersViewModel(
     private val uploadFilesFromSAFUseCase: UploadFilesFromSAFUseCase,
     private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
-): ViewModel() {
+) : ViewModel() {
     fun uploadFilesFromSAF(
         accountName: String,
         listOfContentUris: List<Uri>,
