@@ -40,7 +40,7 @@ class SynchronizeFolderUseCase(
 
         folderContent.forEach { ocFile ->
             if (ocFile.isFolder) {
-                if (params.syncMode.isOneOf(REFRESH_FOLDER_RECURSIVELY, SYNC_FOLDER_RECURSIVELY)) {
+                if (shouldSyncFolder(params.syncMode, ocFile)) {
                     SynchronizeFolderUseCase(synchronizeFileUseCase, fileRepository).execute(
                         Params(
                             remotePath = ocFile.remotePath,
@@ -59,8 +59,11 @@ class SynchronizeFolderUseCase(
         }
     }
 
+    private fun shouldSyncFolder(syncMode: SyncFolderMode, ocFolder: OCFile) =
+        syncMode.isOneOf(REFRESH_FOLDER_RECURSIVELY, SYNC_FOLDER_RECURSIVELY) || syncMode == SYNC_CONTENTS && ocFolder.isAvailableOffline
+
     private fun shouldSyncFile(syncMode: SyncFolderMode, ocFile: OCFile) =
-        syncMode == SYNC_FOLDER_RECURSIVELY || (syncMode == SYNC_CONTENTS && ocFile.isAvailableLocally)
+        syncMode == SYNC_FOLDER_RECURSIVELY || (syncMode == SYNC_CONTENTS && (ocFile.isAvailableLocally || ocFile.isAvailableOffline))
 
     data class Params(
         val remotePath: String,
