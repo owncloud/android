@@ -71,6 +71,7 @@
   <string name="prefs_pattern">Verrouillage par motif</string>
   <string name="prefs_enable_logging">Activer la journalisation</string>
   <string name="prefs_send_feedback">Envoyez des commentaires</string>
+  <string name="prefs_app_version">Version de l\'application</string>
   <string name="pattern_enter_pattern">Veuillez saisir votre schéma</string>
   <string name="pattern_configure_pattern">Saisissez votre schéma</string>
   <string name="pattern_remove_pattern">Supprimer votre schéma</string>
@@ -247,7 +248,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="media_forward_description">Bouton d\'avance rapide</string>
   <string name="upload_from_camera_title">Image de la caméra</string>
   <string name="auth_getting_authorization">Demande d\'autorisation…</string>
-  <string name="auth_trying_to_login">Tentative de connexion ...</string>
+  <string name="auth_trying_to_login">Tentative d\'identification ...</string>
   <string name="auth_no_net_conn_title">Pas de connexion réseau</string>
   <string name="auth_nossl_plain_ok_title">Connexion sécurisée non disponible</string>
   <string name="auth_connection_established">Connexion établie</string>

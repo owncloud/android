@@ -231,6 +231,7 @@
   <string name="downloader_download_succeeded_ticker">Scaricamento effettuato</string>
   <string name="downloader_download_succeeded_content">%1$s scaricato</string>
   <string name="downloader_download_failed_ticker">Scaricamento non riuscito</string>
+  <string name="downloader_preview_failed_ticker">Impossibile visualizzare il file</string>
   <string name="downloader_download_failed_content">Scaricamento di %1$s non è stato completato</string>
   <string name="downloader_not_downloaded_yet">Non ancora scaricato</string>
   <string name="downloader_download_failed_credentials_error">Scaricamento non riuscito, devi effettuare nuovamente l\'accesso</string>
@@ -252,6 +253,7 @@
   <string name="pass_code_remove_your_pass_code">Rimuovi il tuo codice segreto</string>
   <string name="pass_code_mismatch">I codici segreti non corrispondono</string>
   <string name="pass_code_wrong">Codice segreto non corretto</string>
+  <string name="numberkeyboard_biometric_button_content_description">Pulsante biometrico</string>
   <string name="numberkeyboard_zero">0</string>
   <string name="numberkeyboard_one">1</string>
   <string name="numberkeyboard_two">2</string>
@@ -259,9 +261,13 @@
   <string name="numberkeyboard_four">4</string>
   <string name="numberkeyboard_five">5</string>
   <string name="numberkeyboard_six">6</string>
+  <string name="numberkeyboard_seven">7</string>
+  <string name="numberkeyboard_eight">8</string>
+  <string name="numberkeyboard_nine">9</string>
   <string name="biometric_not_enrolled">Registrare almeno un impronta per utilizzare questa funzione</string>
   <string name="biometric_prompt_title">Accesso biometrico</string>
   <string name="biometric_prompt_subtitle">Accedi utilizzando le tue credenziali biometriche</string>
+  <string name="biometric_dialog_title">Vuoi in più attivare la sicurezza biometrica?</string>
   <string name="media_notif_ticker">Lettore musicale %1$s</string>
   <string name="media_state_playing">%1$s (in riproduzione)</string>
   <string name="media_state_loading">%1$s (in caricamento)</string>
@@ -433,6 +439,8 @@
   <string name="actionbar_move">Sposta</string>
   <string name="file_list_empty_moving">Qui non c\'è niente. Puoi aggiungere una cartella.</string>
   <string name="folder_picker_choose_button_text">Scegli</string>
+  <string name="folder_picker_move_here_button_text">Sposta qui</string>
+  <string name="folder_picker_copy_here_button_text">Copia qui</string>
   <string name="move_file_not_found">Impossibile spostare. Assicurati che il file esista</string>
   <string name="move_file_invalid_into_descendent">Impossibile spostare una cartella in una cartella inferiore</string>
   <string name="move_file_invalid_overwrite">Il file esiste già nella cartella di destinazione</string>
@@ -537,6 +545,7 @@ Il Download del file inizierà automaticamente</string>
   <string name="share_via_link_expiration_date_explanation_label">Il collegamento pubblico scadrà non più tardi di %1$d giorni dopo la sua creazione</string>
   <string name="share_via_link_default_name_template">collegamento %1$s</string>
   <string name="share_via_link_empty_password">La password è vuota</string>
+  <string name="private_link_info">Link privato: Solo le persone che hanno accesso al file/cartella possono accedervi. Usalo come link permanente per te stesso o per indirizzare gli altri a files all\'interno delle condivisioni.</string>
   <string name="file_private_link_error">Il link privato non è disponibile per questo file</string>
   <string name="download_notification_channel_name">Download</string>
   <string name="download_notification_channel_description">Visualizza il nome dei file scaricati e i progressi</string>
@@ -578,5 +587,6 @@ Il Download del file inizierà automaticamente</string>
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Blocco con codice di sicurezza</string>
   <!--Release Notes-->
+  <string name="release_notes_footer">Grazie di usare %1$s.\n❤</string>
   <string name="release_notes_proceed">Procedi</string>
 </resources>
