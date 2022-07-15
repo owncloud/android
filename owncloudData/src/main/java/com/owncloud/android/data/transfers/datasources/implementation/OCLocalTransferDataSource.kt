@@ -43,8 +43,12 @@ class OCLocalTransferDataSource(
         transferDao.updateTransferStatusWithId(id, TransferStatus.TRANSFER_IN_PROGRESS.value)
     }
 
-    override fun updateTransferWhenFinished(id: Long, status: TransferStatus,
-        transferEndTimestamp: Long, lastResult: TransferResult) {
+    override fun updateTransferWhenFinished(
+        id: Long,
+        status: TransferStatus,
+        transferEndTimestamp: Long,
+        lastResult: TransferResult
+    ) {
         transferDao.updateTransferWhenFinished(id, status.value, transferEndTimestamp, lastResult.value)
     }
 
@@ -54,6 +58,10 @@ class OCLocalTransferDataSource(
 
     override fun removeAllTransfersFromAccount(accountName: String) {
         transferDao.deleteTransfersWithAccountName(accountName)
+    }
+
+    override fun getTransferById(id: Long): OCTransfer? {
+        return transferDao.getTransferWithId(id)?.toModel()
     }
 
     override fun getAllTransfers(): List<OCTransfer> {
@@ -90,34 +98,33 @@ class OCLocalTransferDataSource(
         transferDao.deleteTransfersWithStatus(TransferStatus.TRANSFER_SUCCEEDED.value)
     }
 
-    companion object {
-        private fun OCTransferEntity.toModel() = OCTransfer(
-            id = id,
-            localPath = localPath,
-            remotePath = remotePath,
-            accountName = accountName,
-            fileSize = fileSize,
-            status = TransferStatus.fromValue(status),
-            localBehaviour = localBehaviour,
-            forceOverwrite = forceOverwrite,
-            transferEndTimestamp = transferEndTimestamp,
-            lastResult = lastResult?.let { TransferResult.fromValue(it) },
-            createdBy = createdBy,
-            transferId = transferId
-        )
+    private fun OCTransferEntity.toModel() = OCTransfer(
+        id = id,
+        localPath = localPath,
+        remotePath = remotePath,
+        accountName = accountName,
+        fileSize = fileSize,
+        status = TransferStatus.fromValue(status),
+        localBehaviour = localBehaviour,
+        forceOverwrite = forceOverwrite,
+        transferEndTimestamp = transferEndTimestamp,
+        lastResult = lastResult?.let { TransferResult.fromValue(it) },
+        createdBy = createdBy,
+        transferId = transferId
+    )
 
-        private fun OCTransfer.toEntity() = OCTransferEntity(
-            localPath = localPath,
-            remotePath = remotePath,
-            accountName = accountName,
-            fileSize = fileSize,
-            status = status.value,
-            localBehaviour = localBehaviour,
-            forceOverwrite = forceOverwrite,
-            transferEndTimestamp = transferEndTimestamp,
-            lastResult = lastResult?.value,
-            createdBy = createdBy,
-            transferId = transferId
-        ).apply { this@toEntity.id?.let { this.id = it } }
-    }
+    private fun OCTransfer.toEntity() = OCTransferEntity(
+        localPath = localPath,
+        remotePath = remotePath,
+        accountName = accountName,
+        fileSize = fileSize,
+        status = status.value,
+        localBehaviour = localBehaviour,
+        forceOverwrite = forceOverwrite,
+        transferEndTimestamp = transferEndTimestamp,
+        lastResult = lastResult?.value,
+        createdBy = createdBy,
+        transferId = transferId
+    ).apply { this@toEntity.id?.let { this.id = it } }
+
 }

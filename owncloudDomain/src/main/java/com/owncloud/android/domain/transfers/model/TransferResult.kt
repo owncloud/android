@@ -20,6 +20,17 @@
 
 package com.owncloud.android.domain.transfers.model
 
+import com.owncloud.android.domain.exceptions.ConflictException
+import com.owncloud.android.domain.exceptions.FileNotFoundException
+import com.owncloud.android.domain.exceptions.ForbiddenException
+import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
+import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
+import com.owncloud.android.domain.exceptions.QuotaExceededException
+import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
+import com.owncloud.android.domain.exceptions.ServiceUnavailableException
+import com.owncloud.android.domain.exceptions.SpecificUnsupportedMediaTypeException
+import com.owncloud.android.domain.exceptions.UnauthorizedException
+
 enum class TransferResult constructor(val value: Int) {
     UNKNOWN(value = -1),
     UPLOADED(value = 0),
@@ -62,5 +73,24 @@ enum class TransferResult constructor(val value: Int) {
                 16 -> SPECIFIC_UNSUPPORTED_MEDIA_TYPE
                 else -> UNKNOWN
             }
+
+        fun fromThrowable(throwable: Throwable?): TransferResult {
+            if (throwable == null) return UPLOADED
+
+            return when (throwable) {
+                is LocalFileNotFoundException -> FOLDER_ERROR
+                is NoConnectionWithServerException -> NETWORK_CONNECTION
+                is UnauthorizedException -> CREDENTIAL_ERROR
+                is FileNotFoundException -> FILE_NOT_FOUND
+                is ConflictException -> CONFLICT_ERROR
+                is ForbiddenException -> PRIVILEGES_ERROR
+                is ServiceUnavailableException -> SERVICE_UNAVAILABLE
+                is QuotaExceededException -> QUOTA_EXCEEDED
+                is SpecificUnsupportedMediaTypeException -> SPECIFIC_UNSUPPORTED_MEDIA_TYPE
+                is SSLRecoverablePeerUnverifiedException -> SSL_RECOVERABLE_PEER_UNVERIFIED
+                else -> UNKNOWN
+            }
+        }
+
     }
 }

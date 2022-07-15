@@ -36,6 +36,7 @@ interface TransferRepository {
     )
     fun removeTransferById(id: Long)
     fun removeAllTransfersFromAccount(accountName: String)
+    fun getTransferById(id: Long): OCTransfer?
     fun getAllTransfers(): List<OCTransfer>
     fun getLastTransferFor(remotePath: String, accountName: String): OCTransfer?
     fun getCurrentAndPendingTransfers(): List<OCTransfer>

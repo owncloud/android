@@ -59,6 +59,9 @@ class OCTransferRepository(
     override fun removeAllTransfersFromAccount(accountName: String) =
         localTransferDataSource.removeAllTransfersFromAccount(accountName = accountName)
 
+    override fun getTransferById(id: Long): OCTransfer? =
+        localTransferDataSource.getTransferById(id = id)
+
     override fun getAllTransfers(): List<OCTransfer> =
         localTransferDataSource.getAllTransfers()
 
