@@ -23,14 +23,13 @@ package com.owncloud.android.data.transfers.datasources.implementation
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.data.transfers.db.TransferDao
-import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
 
 class OCLocalTransferDataSource(
     private val transferDao: TransferDao
-): LocalTransferDataSource {
+) : LocalTransferDataSource {
     override fun storeTransfer(transfer: OCTransfer): Long {
         return transferDao.insert(transfer.toEntity())
     }

@@ -28,7 +28,7 @@ import com.owncloud.android.domain.transfers.model.TransferStatus
 
 class OCTransferRepository(
     private val localTransferDataSource: LocalTransferDataSource
-): TransferRepository {
+) : TransferRepository {
     override fun storeTransfer(transfer: OCTransfer) =
         localTransferDataSource.storeTransfer(transfer = transfer)
 
