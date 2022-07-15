@@ -28,6 +28,9 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.TRANSFERS_TABLE_
 
 @Dao
 abstract class TransferDao {
+    @Query(SELECT_TRANSFER_WITH_ID)
+    abstract fun getTransferWithId(id: Long): OCTransferEntity?
+
     @Query(SELECT_LAST_TRANSFER_WITH_REMOTE_PATH_AND_ACCOUNT_NAME)
     abstract fun getLastTransferWithRemotePathAndAccountName(remotePath: String, accountName: String): OCTransferEntity?
 
@@ -56,6 +59,11 @@ abstract class TransferDao {
     abstract fun deleteTransfersWithStatus(status: Int)
 
     companion object {
+        private const val SELECT_TRANSFER_WITH_ID =
+            "SELECT * " +
+                    "FROM $TRANSFERS_TABLE_NAME " +
+                    "WHERE id = :id"
+
         private const val SELECT_LAST_TRANSFER_WITH_REMOTE_PATH_AND_ACCOUNT_NAME =
             "SELECT * " +
                     "FROM $TRANSFERS_TABLE_NAME " +
