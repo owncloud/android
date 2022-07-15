@@ -48,7 +48,6 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_TREE_ETAG
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_UPDATE_THUMBNAIL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta._ID
 import com.owncloud.android.domain.ext.isOneOf
-import com.owncloud.android.domain.files.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_DIR_UNIX
 
