@@ -46,7 +46,7 @@ data class OCFile(
     var storagePath: String? = null,
     var treeEtag: String? = "",
 
-    val availableOfflineStatus: AvailableOfflineStatus? = null,
+    var availableOfflineStatus: AvailableOfflineStatus? = null,
     var lastSyncDateForData: Long? = 0,
     var lastSyncDateForProperties: Long? = 0,
     var needsToUpdateThumbnail: Boolean = false,
@@ -161,8 +161,7 @@ data class OCFile(
         storagePath = sourceFile.storagePath
         treeEtag = sourceFile.treeEtag
         etagInConflict = sourceFile.etagInConflict
-        // FIXME: 19/10/2020 : New_arch: Av.Offline
-//        setAvailableOfflineStatus(sourceFile.getAvailableOfflineStatus())
+        availableOfflineStatus = sourceFile.availableOfflineStatus
     }
 
     /**
