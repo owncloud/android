@@ -188,7 +188,7 @@ class UploadFileFromContentUriWorker(
             id = uploadIdInStorageManager,
             status = getUploadStatusForThrowable(throwable),
             transferEndTimestamp = System.currentTimeMillis(),
-            lastResult = getUploadResultFromThrowable(throwable)
+            lastResult = TransferResult.fromThrowable(throwable)
         )
     }
 
@@ -223,24 +223,6 @@ class UploadFileFromContentUriWorker(
             onGoing = false,
             timeOut = null
         )
-    }
-
-    private fun getUploadResultFromThrowable(throwable: Throwable?): TransferResult {
-        if (throwable == null) return TransferResult.UPLOADED
-
-        return when (throwable) {
-            is LocalFileNotFoundException -> TransferResult.FOLDER_ERROR
-            is NoConnectionWithServerException -> TransferResult.NETWORK_CONNECTION
-            is UnauthorizedException -> TransferResult.CREDENTIAL_ERROR
-            is FileNotFoundException -> TransferResult.FILE_NOT_FOUND
-            is ConflictException -> TransferResult.CONFLICT_ERROR
-            is ForbiddenException -> TransferResult.PRIVILEGES_ERROR
-            is ServiceUnavailableException -> TransferResult.SERVICE_UNAVAILABLE
-            is QuotaExceededException -> TransferResult.QUOTA_EXCEEDED
-            is SpecificUnsupportedMediaTypeException -> TransferResult.SPECIFIC_UNSUPPORTED_MEDIA_TYPE
-            is SSLRecoverablePeerUnverifiedException -> TransferResult.SSL_RECOVERABLE_PEER_UNVERIFIED
-            else -> TransferResult.UNKNOWN
-        }
     }
 
     private fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()

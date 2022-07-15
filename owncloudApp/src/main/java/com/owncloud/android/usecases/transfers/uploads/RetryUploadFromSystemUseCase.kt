@@ -32,10 +32,7 @@ class RetryUploadFromSystemUseCase(
 ) : BaseUseCase<Unit, RetryUploadFromSystemUseCase.Params>() {
 
     override fun run(params: Params) {
-
-        val failedUploads = transferRepository.getFailedTransfers()
-        val filteredUploads = failedUploads.filter { it.id == params.uploadIdInStorageManager }
-        val uploadToRetry = filteredUploads.firstOrNull()
+        val uploadToRetry = transferRepository.getTransferById(params.uploadIdInStorageManager)
 
         uploadToRetry ?: return
 
@@ -46,8 +43,6 @@ class RetryUploadFromSystemUseCase(
                 uploadFolderPath = uploadToRetry.remotePath.trimEnd(PATH_SEPARATOR),
             )
         )
-
-        transferRepository.updateTransfer(uploadToRetry.apply { status = TransferStatus.TRANSFER_IN_PROGRESS })
     }
 
     data class Params(
