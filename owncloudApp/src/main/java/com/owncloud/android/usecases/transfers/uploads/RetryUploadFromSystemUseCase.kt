@@ -24,7 +24,6 @@ package com.owncloud.android.usecases.transfers.uploads
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 import com.owncloud.android.domain.transfers.TransferRepository
-import com.owncloud.android.domain.transfers.model.TransferStatus
 
 class RetryUploadFromSystemUseCase(
     private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,

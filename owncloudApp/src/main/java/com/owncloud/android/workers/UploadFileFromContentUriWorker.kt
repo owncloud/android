@@ -33,15 +33,7 @@ import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
-import com.owncloud.android.domain.exceptions.ConflictException
-import com.owncloud.android.domain.exceptions.FileNotFoundException
-import com.owncloud.android.domain.exceptions.ForbiddenException
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
-import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
-import com.owncloud.android.domain.exceptions.QuotaExceededException
-import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
-import com.owncloud.android.domain.exceptions.ServiceUnavailableException
-import com.owncloud.android.domain.exceptions.SpecificUnsupportedMediaTypeException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.TransferResult
