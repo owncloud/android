@@ -496,69 +496,6 @@ class FileDataStorageManager : KoinComponent {
         Timber.d("Updated path for ${filesWithPathUpdated.size} downloaded files")
     }
 
-    /**
-     * Updates available-offline status of OCFile received as a parameter, with its current value.
-     *
-     *
-     * Saves the new value property for the given file in persistent storage.
-     *
-     *
-     * If the file is a folder, updates the value of all its known descendants accordingly.
-     *
-     * @param file File which available-offline status will be updated.
-     * @return 'true' if value was updated, 'false' otherwise.
-     */
-    fun saveLocalAvailableOfflineStatus(file: OCFile): Boolean {
-        return false
-        // FIXME: 13/10/2020 : New_arch: Av.Offline
-//        if (!fileExists(file.fileId)) {
-//            return false
-//        }
-//
-//        val newStatus = file.availableOfflineStatus
-//        require(AVAILABLE_OFFLINE_PARENT != newStatus) {
-//            "Forbidden value, AVAILABLE_OFFLINE_PARENT is calculated, cannot be set"
-//        }
-//
-//        val cv = ContentValues()
-//        cv.put(FILE_KEEP_IN_SYNC, file.availableOfflineStatus.value)
-//
-//        var updatedCount: Int
-//        try {
-//            updatedCount = performUpdate(
-//                uri = CONTENT_URI,
-//                contentValues = cv,
-//                where = "$_ID=?",
-//                selectionArgs = arrayOf(file.fileId.toString())
-//            )
-//
-//            // Update descendants
-//            if (file.isFolder && updatedCount > 0) {
-//                val descendantsCv = ContentValues()
-//                if (newStatus == AVAILABLE_OFFLINE) {
-//                    // all descendant files MUST be av-off due to inheritance, not due to previous value
-//                    descendantsCv.put(FILE_KEEP_IN_SYNC, AVAILABLE_OFFLINE_PARENT.value)
-//                } else {
-//                    // all descendant files MUST be not-available offline
-//                    descendantsCv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
-//                }
-//                val selectDescendants = selectionForAllDescendantsOf(file)
-//                updatedCount += performUpdate(
-//                    uri = CONTENT_URI,
-//                    contentValues = descendantsCv,
-//                    where = selectDescendants.first,
-//                    selectionArgs = selectDescendants.second
-//                )
-//            }
-//
-//        } catch (e: RemoteException) {
-//            Timber.e(e, "Fail updating available offline status")
-//            return false
-//        }
-//
-//        return updatedCount > 0
-    }
-
     // TODO: New_arch: Remove this and call usecase inside FilesViewModel
     fun getFolderContent(parentId: Long): List<OCFile> = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFolderContentUseCase: GetFolderContentUseCase by inject()
