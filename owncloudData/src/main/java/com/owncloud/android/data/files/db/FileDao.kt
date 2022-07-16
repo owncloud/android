@@ -208,21 +208,26 @@ abstract class FileDao {
     @Transaction
     open fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: Int) {
         if (ocFile.isFolder) {
-            updateFolderAsAvailableOffline(ocFile.id!!, newAvailableOfflineStatus)
+            updateFolderWithNewAvailableOfflineStatus(ocFile.id!!, newAvailableOfflineStatus)
         } else {
             updateFileWithAvailableOfflineStatus(ocFile.id!!, newAvailableOfflineStatus)
         }
     }
 
-    private fun updateFolderAsAvailableOffline(ocFolderId: Long, newAvailableOfflineStatus: Int) {
+    private fun updateFolderWithNewAvailableOfflineStatus(ocFolderId: Long, newAvailableOfflineStatus: Int) {
         updateFileWithAvailableOfflineStatus(ocFolderId, newAvailableOfflineStatus)
 
+        val newStatusForChildren = if (newAvailableOfflineStatus == AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE.ordinal) {
+            AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE.ordinal
+        } else {
+            AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.ordinal
+        }
         val folderContent = getFolderContent(ocFolderId)
-        folderContent.forEach {
-            if (it.isFolder) {
-                updateFolderAsAvailableOffline(it.id, AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.ordinal)
+        folderContent.forEach { folderChild ->
+            if (folderChild.isFolder) {
+                updateFolderWithNewAvailableOfflineStatus(folderChild.id, newStatusForChildren)
             } else {
-                updateFileWithAvailableOfflineStatus(it.id, AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.ordinal)
+                updateFileWithAvailableOfflineStatus(folderChild.id, newStatusForChildren)
             }
         }
     }
