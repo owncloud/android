@@ -22,14 +22,20 @@ import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.availableoffline.AvailableOfflineRepository
 import com.owncloud.android.domain.files.model.OCFile
 
-class SetFileAsAvailableOfflineUseCase(
+class UnsetFilesAsAvailableOfflineUseCase(
     private val availableOfflineRepository: AvailableOfflineRepository,
-) : BaseUseCaseWithResult<Unit, SetFileAsAvailableOfflineUseCase.Params>() {
+) : BaseUseCaseWithResult<Unit, UnsetFilesAsAvailableOfflineUseCase.Params>() {
 
-    override fun run(params: Params) =
-        availableOfflineRepository.setFileAsAvailableOffline(params.fileToSetAsAvailableOffline)
+    override fun run(params: Params) {
+        params.filesToUnsetAsAvailableOffline.forEach { fileToUnsetAsAvailableOffline ->
+            // Its possible to multiselect several files including not available offline files.
+            if (fileToUnsetAsAvailableOffline.isAvailableOffline) {
+                availableOfflineRepository.unsetFileAsAvailableOffline(fileToUnsetAsAvailableOffline)
+            }
+        }
+    }
 
     data class Params(
-        val fileToSetAsAvailableOffline: OCFile
+        val filesToUnsetAsAvailableOffline: List<OCFile>
     )
 }
