@@ -34,10 +34,10 @@ import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 class OCLocalFileDataSource(
     private val fileDao: FileDao,
 ) : LocalFileDataSource {
-    override fun copyFile(sourceFile: OCFile, targetFile: OCFile, finalRemotePath: String, remoteId: String) {
+    override fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String) {
         fileDao.copy(
             sourceFile = sourceFile.toEntity(),
-            targetFile = targetFile.toEntity(),
+            targetFolder = targetFolder.toEntity(),
             finalRemotePath = finalRemotePath,
             remoteId = remoteId
         )
@@ -108,10 +108,10 @@ class OCLocalFileDataSource(
         it.toModel()
     }
 
-    override fun moveFile(sourceFile: OCFile, targetFile: OCFile, finalRemotePath: String, finalStoragePath: String) =
+    override fun moveFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, finalStoragePath: String) =
         fileDao.moveFile(
             sourceFile = sourceFile.toEntity(),
-            targetFile = targetFile.toEntity(),
+            targetFolder = targetFolder.toEntity(),
             finalRemotePath = finalRemotePath,
             finalStoragePath = sourceFile.storagePath?.let { finalStoragePath }
         )
@@ -135,7 +135,7 @@ class OCLocalFileDataSource(
     override fun renameFile(fileToRename: OCFile, finalRemotePath: String, finalStoragePath: String) {
         fileDao.moveFile(
             sourceFile = fileToRename.toEntity(),
-            targetFile = fileDao.getFileById(fileToRename.parentId!!)!!,
+            targetFolder = fileDao.getFileById(fileToRename.parentId!!)!!,
             finalRemotePath = finalRemotePath,
             finalStoragePath = fileToRename.storagePath?.let { finalStoragePath }
         )

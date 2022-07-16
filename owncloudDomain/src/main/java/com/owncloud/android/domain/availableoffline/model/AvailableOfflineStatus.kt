@@ -18,6 +18,7 @@
  */
 package com.owncloud.android.domain.availableoffline.model
 
+import com.owncloud.android.domain.ext.isOneOf
 
 enum class AvailableOfflineStatus {
     /**
