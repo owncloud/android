@@ -51,11 +51,15 @@ import com.owncloud.android.databinding.TopProgressBarBinding
 import com.owncloud.android.domain.files.model.MIME_SVG
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.files.FileMenuFilter
+import com.owncloud.android.presentation.ui.files.operations.FileOperation
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
+import org.koin.android.ext.android.inject
+import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 import java.io.File
 
@@ -85,6 +89,8 @@ class PreviewImageFragment : FileFragment() {
     private val binding get() = _binding!!
     private var _bindingTopProgress: TopProgressBarBinding? = null
     private val bindingTopProgress get() = _bindingTopProgress!!
+
+    private val fileOperationsViewModel: FileOperationsViewModel by inject()
 
     /**
      * {@inheritDoc}
@@ -254,11 +260,11 @@ class PreviewImageFragment : FileFragment() {
                 true
             }
             R.id.action_set_available_offline -> {
-                mContainerActivity.fileOperationsHelper.toggleAvailableOffline(file, true)
+                fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
                 true
             }
             R.id.action_unset_available_offline -> {
-                mContainerActivity.fileOperationsHelper.toggleAvailableOffline(file, false)
+                fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
                 true
             }
             else -> super.onOptionsItemSelected(item)
