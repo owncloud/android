@@ -33,6 +33,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.domain.UseCaseResult;
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
@@ -364,12 +365,11 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 // remote eTag will not be set unless file CONTENTS are synchronized
                 updatedLocalFile.setEtag("");
                 // new files need to check av-off status of parent folder!
-                // FIXME: 19/10/2020 : New_arch: Av.Offline
-                //                if (updatedFolder.isAvailableOffline()) {
-                //                    updatedLocalFile.setAvailableOfflineStatus(
-                //                            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
-                //                    );
-                //                }
+                if (updatedFolder.isAvailableOffline()) {
+                    updatedLocalFile.setAvailableOfflineStatus(
+                            AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+                    );
+                }
                 // new files need to update thumbnails
                 updatedLocalFile.setNeedsToUpdateThumbnail(true);
             }
@@ -417,8 +417,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      */
     private boolean addToSyncContents(OCFile localFile, OCFile remoteFile) {
 
-        // FIXME: 13/10/2020 : New_arch: Av.Offline
-        boolean shouldSyncContents = (mSyncContentOfRegularFiles || localFile.isAvailableLocally()); //|| localFile.isAvailableOffline());
+        boolean shouldSyncContents = (mSyncContentOfRegularFiles || localFile.isAvailableLocally() || localFile.isAvailableOffline());
         boolean serverUnchanged;
 
         if (localFile.isFolder()) {
