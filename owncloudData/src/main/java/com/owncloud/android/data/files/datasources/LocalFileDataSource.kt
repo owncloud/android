@@ -21,6 +21,7 @@
 package com.owncloud.android.data.files.datasources
 
 import androidx.lifecycle.LiveData
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.OCFile
 
 interface LocalFileDataSource {
@@ -41,4 +42,5 @@ interface LocalFileDataSource {
     fun saveFile(file: OCFile)
     fun removeFile(fileId: Long)
     fun renameFile(fileToRename: OCFile, finalRemotePath: String, finalStoragePath: String)
+    fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
 }

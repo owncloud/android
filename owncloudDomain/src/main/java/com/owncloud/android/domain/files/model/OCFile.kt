@@ -22,9 +22,10 @@ package com.owncloud.android.domain.files.model
 
 import android.os.Parcelable
 import android.webkit.MimeTypeMap
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.ext.isOneOf
-import com.owncloud.android.domain.files.model.AvailableOfflineStatus.AVAILABLE_OFFLINE
-import com.owncloud.android.domain.files.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
 import kotlinx.parcelize.Parcelize
 import java.io.File
 import java.util.Locale
