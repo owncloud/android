@@ -513,10 +513,10 @@ class MainFileListFragment : Fragment(),
                     return true
                 }
                 R.id.action_set_available_offline -> {
-                    fileOperationsViewModel.performOperation(FileOperation.SetFileAsAvailableOffline(singleFile))
+                    fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(singleFile)))
                 }
                 R.id.action_unset_available_offline -> {
-                    fileOperationsViewModel.performOperation(FileOperation.UnsetFileAsAvailableOffline(singleFile))
+                    fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(singleFile)))
                 }
             }
         }
@@ -550,19 +550,11 @@ class MainFileListFragment : Fragment(),
                 return true
             }
             R.id.action_set_available_offline -> {
-                // TODO Waiting to be implemented
-                //containerActivity?.fileOperationsHelper?.toggleAvailableOffline(checkedFiles, true)
-                //getListView().invalidateViews()
+                fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(checkedFiles))
                 return true
             }
             R.id.action_unset_available_offline -> {
-                // TODO Waiting to be implemented
-                //containerActivity?.fileOperationsHelper?.toggleAvailableOffline(checkedFiles, false)
-                //getListView().invalidateViews()
-                //invalidateActionMode()
-                /*if (fileListOption?.isAvailableOffline() == true) {
-                    onRefresh()
-                }*/
+                fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(checkedFiles))
                 return true
             }
             R.id.action_move -> {
