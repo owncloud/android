@@ -512,6 +512,12 @@ class MainFileListFragment : Fragment(),
                     }
                     return true
                 }
+                R.id.action_set_available_offline -> {
+                    fileOperationsViewModel.performOperation(FileOperation.SetFileAsAvailableOffline(singleFile))
+                }
+                R.id.action_unset_available_offline -> {
+                    fileOperationsViewModel.performOperation(FileOperation.UnsetFileAsAvailableOffline(singleFile))
+                }
             }
         }
 
