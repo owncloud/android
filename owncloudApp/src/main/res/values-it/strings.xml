@@ -187,7 +187,7 @@
   <string name="create_account">Crea account</string>
   <string name="upload_chooser_title">Invia da</string>
   <string name="uploader_info_dirname">Nome della cartella</string>
-  <string name="uploader_upload_in_progress_ticker">Invio in corso...</string>
+  <string name="uploader_upload_in_progress_ticker">Caricamento in corso...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% Caricamento di %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Caricamento effettuato</string>
   <string name="uploader_upload_succeeded_content_single">%1$s caricato</string>
