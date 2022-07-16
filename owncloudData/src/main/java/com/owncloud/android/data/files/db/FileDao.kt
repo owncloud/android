@@ -90,10 +90,13 @@ abstract class FileDao {
         accountOwner: String
     ): List<OCFileEntity>
 
-    @Query(SELECT_FILES_AVAILABLE_OFFLINE)
-    abstract fun getFilesAvailableOffline(
+    @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT)
+    abstract fun getFilesAvailableOfflineFromAccount(
         accountOwner: String
     ): List<OCFileEntity>
+
+    @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_EVERY_ACCOUNT)
+    abstract fun getFilesAvailableOfflineFromEveryAccount(): List<OCFileEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocFileEntity: OCFileEntity): Long
@@ -381,11 +384,16 @@ abstract class FileDao {
                     "AND sharedByLink NOT LIKE '%0%' " +
                     "OR sharedWithSharee NOT LIKE '%0%'"
 
-        private const val SELECT_FILES_AVAILABLE_OFFLINE =
+        private const val SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT =
             "SELECT * " +
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE owner = :accountOwner " +
                     "AND keepInSync = '1'"
+
+        private const val SELECT_FILES_AVAILABLE_OFFLINE_FROM_EVERY_ACCOUNT =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE keepInSync = '1'"
 
         private const val UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS =
             "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
