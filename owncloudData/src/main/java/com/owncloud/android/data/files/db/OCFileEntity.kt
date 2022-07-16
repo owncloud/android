@@ -71,7 +71,7 @@ data class OCFileEntity(
     val treeEtag: String? = null,
 
     @ColumnInfo(name = "keepInSync")
-    val availableOfflineStatus: Int? = null,
+    var availableOfflineStatus: Int? = null,
     val lastSyncDateForData: Long? = null,
     val fileShareViaLink: Int? = null,
     var lastSyncDateForProperties: Long? = null,
