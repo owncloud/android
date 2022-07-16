@@ -321,6 +321,9 @@ class FileListAdapter(
             // conflict
             localStateView.setImageResource(R.drawable.error_pin)
             localStateView.visibility = View.VISIBLE
+        } else if (file.isAvailableOffline) {
+            localStateView.visibility = View.VISIBLE
+            localStateView.setImageResource(R.drawable.offline_available_pin)
         } else if (file.isAvailableLocally) {
             localStateView.visibility = View.VISIBLE
             localStateView.setImageResource(R.drawable.downloaded_pin)
