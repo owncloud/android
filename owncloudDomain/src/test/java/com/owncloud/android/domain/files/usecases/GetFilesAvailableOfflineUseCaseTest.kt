@@ -17,6 +17,7 @@
  */
 package com.owncloud.android.domain.files.usecases
 
+import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineUseCase
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.testutil.OC_EMPTY_FILES
@@ -35,37 +36,37 @@ class GetFilesAvailableOfflineUseCaseTest {
 
     @Test
     fun `get files available offline - ok`() {
-        every { repository.getFilesAvailableOffline(useCaseParams.owner) } returns OC_AVAILABLE_OFFLINE_FILES
+        every { repository.getFilesAvailableOfflineFromAccount(useCaseParams.owner) } returns OC_AVAILABLE_OFFLINE_FILES
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertEquals(OC_AVAILABLE_OFFLINE_FILES, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { repository.getFilesAvailableOffline(useCaseParams.owner) }
+        verify(exactly = 1) { repository.getFilesAvailableOfflineFromAccount(useCaseParams.owner) }
     }
 
     @Test
     fun `get files available offline - ok - empty list`() {
-        every { repository.getFilesAvailableOffline(useCaseParams.owner) } returns OC_EMPTY_FILES
+        every { repository.getFilesAvailableOfflineFromAccount(useCaseParams.owner) } returns OC_EMPTY_FILES
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertEquals(OC_EMPTY_FILES, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { repository.getFilesAvailableOffline(useCaseParams.owner) }
+        verify(exactly = 1) { repository.getFilesAvailableOfflineFromAccount(useCaseParams.owner) }
     }
 
     @Test
     fun `get files savailable offline - ko`() {
-        every { repository.getFilesAvailableOffline(useCaseParams.owner) } throws UnauthorizedException()
+        every { repository.getFilesAvailableOfflineFromAccount(useCaseParams.owner) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isError)
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { repository.getFilesAvailableOffline(useCaseParams.owner) }
+        verify(exactly = 1) { repository.getFilesAvailableOfflineFromAccount(useCaseParams.owner) }
     }
 }

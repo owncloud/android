@@ -104,9 +104,15 @@ class OCLocalFileDataSource(
         it.toModel()
     }
 
-    override fun getFilesAvailableOffline(owner: String): List<OCFile> = fileDao.getFilesAvailableOffline(accountOwner = owner).map {
-        it.toModel()
-    }
+    override fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile> =
+        fileDao.getFilesAvailableOfflineFromAccount(accountOwner = owner).map {
+            it.toModel()
+        }
+
+    override fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile> =
+        fileDao.getFilesAvailableOfflineFromEveryAccount().map {
+            it.toModel()
+        }
 
     override fun moveFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, finalStoragePath: String) =
         fileDao.moveFile(
