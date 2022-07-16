@@ -105,7 +105,7 @@ class OCFileRepository(
             // 3. Update database with latest changes
             localFileDataSource.copyFile(
                 sourceFile = ocFile,
-                targetFile = targetFolder,
+                targetFolder = targetFolder,
                 finalRemotePath = finalRemotePath,
                 remoteId = remoteId
             )
@@ -176,7 +176,7 @@ class OCFileRepository(
             // 3. Update database with latest changes
             localFileDataSource.moveFile(
                 sourceFile = ocFile,
-                targetFile = targetFile,
+                targetFolder = targetFile,
                 finalRemotePath = finalRemotePath,
                 finalStoragePath = finalStoragePath
             )
