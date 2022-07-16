@@ -51,13 +51,19 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
+import com.owncloud.android.presentation.ui.files.operations.FileOperation;
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
+import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
-import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import timber.log.Timber;
+
+import java.util.ArrayList;
+
+import static org.koin.java.KoinJavaComponent.get;
 
 /**
  * This fragment shows a preview of a downloaded video file, or starts streaming if file is not
@@ -96,6 +102,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     private boolean mExoPlayerBooted = false;
     private boolean mAutoplay;
     private long mPlaybackPosition;
+
+    FileOperationsViewModel fileOperationsViewModel = get(FileOperationsViewModel.class);
 
     /**
      * Public factory method to create new PreviewVideoFragment instances.
@@ -347,11 +355,16 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 return true;
             }
             case R.id.action_set_available_offline: {
-                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), true);
+                ArrayList<OCFile> fileToSetAsAvailableOffline = new ArrayList<>();
+                fileToSetAsAvailableOffline.add(getFile());
+                fileOperationsViewModel.performOperation(new FileOperation.SetFilesAsAvailableOffline(fileToSetAsAvailableOffline));
                 return true;
             }
             case R.id.action_unset_available_offline: {
-                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
+
+                ArrayList<OCFile> fileToUnsetAsAvailableOffline = new ArrayList<>();
+                fileToUnsetAsAvailableOffline.add(getFile());
+                fileOperationsViewModel.performOperation(new FileOperation.UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline));
                 return true;
             }
             case R.id.action_download_file: {

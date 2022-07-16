@@ -46,6 +46,8 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
+import com.owncloud.android.presentation.ui.files.operations.FileOperation
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.presentation.viewmodels.files.FileDetailsViewModel
 import com.owncloud.android.ui.activity.ComponentsGetter
@@ -71,6 +73,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
     private var progressController: TransferProgressController? = null
 
     private val fileDetailsViewModel: FileDetailsViewModel by inject()
+    private val fileOperationsViewModel: FileOperationsViewModel by inject()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setHasOptionsMenu(true)
@@ -270,11 +273,11 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
                 true
             }
             R.id.action_set_available_offline -> {
-                mContainerActivity.fileOperationsHelper.toggleAvailableOffline(file, true)
+                fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
                 true
             }
             R.id.action_unset_available_offline -> {
-                mContainerActivity.fileOperationsHelper.toggleAvailableOffline(file, false)
+                fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
                 true
             }
             else -> super.onOptionsItemSelected(item)

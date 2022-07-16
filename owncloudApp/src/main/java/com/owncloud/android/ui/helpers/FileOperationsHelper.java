@@ -284,49 +284,6 @@ public class FileOperationsHelper {
         }
     }
 
-    public void toggleAvailableOffline(Collection<OCFile> files, boolean isAvailableOffline) {
-        for (OCFile file : files) {
-            toggleAvailableOffline(file, isAvailableOffline);
-        }
-    }
-
-    public void toggleAvailableOffline(OCFile file, boolean isAvailableOffline) {
-        // FIXME: 13/10/2020 : New_arch: Av.Offline
-
-        //        if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT == file.getAvailableOfflineStatus()) {
-        //            /// files descending of an av-offline folder can't be toggled
-        //            mFileActivity.showSnackMessage(
-        //                    mFileActivity.getString(R.string.available_offline_inherited_msg)
-        //            );
-        //
-        //        } else {
-        //            /// update local property, for file and all its descendents (if folder)
-        //            OCFile.AvailableOfflineStatus targetAvailableOfflineStatus = isAvailableOffline ?
-        //                    OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE :
-        //                    OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE;
-        //            file.setAvailableOfflineStatus(targetAvailableOfflineStatus);
-        //            boolean success = mFileActivity.getStorageManager().saveLocalAvailableOfflineStatus(file);
-        //
-        //            if (success) {
-        //                // Schedule job to check to watch for local changes in available offline files and sync them
-        //                AvailableOfflineHandler availableOfflineHandler = new AvailableOfflineHandler(mFileActivity);
-        //                availableOfflineHandler.scheduleAvailableOfflineJob(mFileActivity);
-        //
-        //                /// immediate content synchronization
-        //                if (OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE == file.getAvailableOfflineStatus()) {
-        //                    syncFile(file);
-        //                } else {
-        //                    cancelTransference(file);
-        //                }
-        //            } else {
-        //                /// unexpected error
-        //                mFileActivity.showSnackMessage(
-        //                        mFileActivity.getString(R.string.common_error_unknown)
-        //                );
-        //            }
-        //        }
-    }
-
     /**
      * Cancel the transference in downloads (files/folders) and file uploads
      *

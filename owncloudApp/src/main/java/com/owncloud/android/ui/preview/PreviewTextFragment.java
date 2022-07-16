@@ -39,10 +39,12 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.files.FileMenuFilter;
+import com.owncloud.android.presentation.ui.files.operations.FileOperation;
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
+import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
-import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
@@ -52,9 +54,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+
+import static org.koin.java.KoinJavaComponent.get;
 
 public class PreviewTextFragment extends FileFragment {
     private static final String EXTRA_FILE = "FILE";
@@ -65,6 +70,8 @@ public class PreviewTextFragment extends FileFragment {
     private TransferProgressController mProgressController;
     private TextView mTextPreview;
     private TextLoadAsyncTask mTextLoadTask;
+
+    FileOperationsViewModel fileOperationsViewModel = get(FileOperationsViewModel.class);
 
     /**
      * Public factory method to create new PreviewTextFragment instances.
@@ -371,15 +378,19 @@ public class PreviewTextFragment extends FileFragment {
                 return true;
             }
             case R.id.action_sync_file: {
-                mContainerActivity.getFileOperationsHelper().syncFile(getFile());
+                fileOperationsViewModel.performOperation(new FileOperation.SynchronizeFileOperation(getFile(), mAccount.name));
                 return true;
             }
             case R.id.action_set_available_offline: {
-                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), true);
+                ArrayList<OCFile> fileToSetAsAvailableOffline = new ArrayList<>();
+                fileToSetAsAvailableOffline.add(getFile());
+                fileOperationsViewModel.performOperation(new FileOperation.SetFilesAsAvailableOffline(fileToSetAsAvailableOffline));
                 return true;
             }
             case R.id.action_unset_available_offline: {
-                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
+                ArrayList<OCFile> fileToUnsetAsAvailableOffline = new ArrayList<>();
+                fileToUnsetAsAvailableOffline.add(getFile());
+                fileOperationsViewModel.performOperation(new FileOperation.UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline));
                 return true;
             }
             default:
