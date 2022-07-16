@@ -33,6 +33,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.work.WorkManager;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.WorkManagerExtKt;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
@@ -360,32 +361,30 @@ public class FileMenuFilter {
         return false;
     }
 
-    // FIXME: 13/10/2020 : New_arch: Av.Offline
     private boolean anyFavorite() {
-//        for (OCFile file : mFiles) {
-//            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
-//                return true;
-//            }
-//        }
+        for (OCFile file : mFiles) {
+            if (file.getAvailableOfflineStatus() == AvailableOfflineStatus.AVAILABLE_OFFLINE) {
+                return true;
+            }
+        }
         return false;
     }
 
-    // FIXME: 13/10/2020 : New_arch: Av.Offline
     private boolean anyUnfavorite() {
-//        for (OCFile file : mFiles) {
-//            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
-//                return true;
-//            }
-//        }
+        for (OCFile file : mFiles) {
+            if (file.getAvailableOfflineStatus() == AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
+                return true;
+            }
+        }
         return false;
-   }
-    // FIXME: 13/10/2020 : New_arch: Shared by Link
+    }
+
     private boolean anyFileSharedWithMe() {
-//        for (OCFile file : mFiles) {
-//            if (file.isSharedWithMe()) {
-//                return true;
-//            }
-//        }
+        for (OCFile file : mFiles) {
+            if (file.isSharedWithMe()) {
+                return true;
+            }
+        }
         return false;
     }
 }

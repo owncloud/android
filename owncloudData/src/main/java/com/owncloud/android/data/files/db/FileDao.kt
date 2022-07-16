@@ -25,6 +25,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.owncloud.android.data.ProviderMeta
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
+import com.owncloud.android.domain.files.model.OCFile
 import java.io.File.separatorChar
 
 @Dao
@@ -203,6 +205,31 @@ abstract class FileDao {
     @Query(DELETE_FILE_WITH_ID)
     abstract fun deleteFileWithId(id: Long)
 
+    @Transaction
+    open fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: Int) {
+        if (ocFile.isFolder) {
+            updateFolderAsAvailableOffline(ocFile.id!!, newAvailableOfflineStatus)
+        } else {
+            updateFileWithAvailableOfflineStatus(ocFile.id!!, newAvailableOfflineStatus)
+        }
+    }
+
+    private fun updateFolderAsAvailableOffline(ocFolderId: Long, newAvailableOfflineStatus: Int) {
+        updateFileWithAvailableOfflineStatus(ocFolderId, newAvailableOfflineStatus)
+
+        val folderContent = getFolderContent(ocFolderId)
+        folderContent.forEach {
+            if (it.isFolder) {
+                updateFolderAsAvailableOffline(it.id, AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.ordinal)
+            } else {
+                updateFileWithAvailableOfflineStatus(it.id, AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.ordinal)
+            }
+        }
+    }
+
+    @Query(UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS)
+    abstract fun updateFileWithAvailableOfflineStatus(id: Long, availableOfflineStatus: Int)
+
     private fun moveSingleFile(
         sourceFile: OCFileEntity,
         targetFile: OCFileEntity,
@@ -327,5 +354,10 @@ abstract class FileDao {
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE owner = :accountOwner " +
                     "AND keepInSync = '1'"
+
+        private const val UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS =
+            "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "SET keepInSync = :availableOfflineStatus " +
+                    "WHERE id = :id"
     }
 }

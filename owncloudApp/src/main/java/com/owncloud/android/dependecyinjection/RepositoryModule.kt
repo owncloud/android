@@ -23,6 +23,7 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.data.authentication.repository.OCAuthenticationRepository
+import com.owncloud.android.data.availableoffline.AvailableOfflineRepositoryImpl
 import com.owncloud.android.data.capabilities.repository.OCCapabilityRepository
 import com.owncloud.android.data.files.repository.OCFileRepository
 import com.owncloud.android.data.folderbackup.FolderBackupRepositoryImpl
@@ -34,6 +35,7 @@ import com.owncloud.android.data.transfers.repository.OCTransferRepository
 import com.owncloud.android.data.user.repository.OCUserRepository
 import com.owncloud.android.domain.authentication.AuthenticationRepository
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
+import com.owncloud.android.domain.availableoffline.AvailableOfflineRepository
 import com.owncloud.android.domain.camerauploads.FolderBackupRepository
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.files.FileRepository
@@ -55,4 +57,5 @@ val repositoryModule = module {
     factory<OAuthRepository> { OAuthRepositoryImpl(get()) }
     factory<FolderBackupRepository> { FolderBackupRepositoryImpl(get()) }
     factory<TransferRepository> { OCTransferRepository(get()) }
+    factory<AvailableOfflineRepository> { AvailableOfflineRepositoryImpl(get()) }
 }

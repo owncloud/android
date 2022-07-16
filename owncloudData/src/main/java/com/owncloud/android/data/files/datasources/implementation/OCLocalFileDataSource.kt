@@ -24,7 +24,7 @@ import androidx.lifecycle.Transformations
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileEntity
-import com.owncloud.android.domain.files.model.AvailableOfflineStatus
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
 import com.owncloud.android.domain.files.model.OCFile
@@ -139,6 +139,10 @@ class OCLocalFileDataSource(
             finalRemotePath = finalRemotePath,
             finalStoragePath = fileToRename.storagePath?.let { finalStoragePath }
         )
+    }
+
+    override fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus) {
+        fileDao.updateAvailableOfflineStatusForFile(ocFile, newAvailableOfflineStatus.ordinal)
     }
 
     companion object {

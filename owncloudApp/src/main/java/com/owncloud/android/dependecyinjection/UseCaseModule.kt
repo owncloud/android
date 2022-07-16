@@ -29,6 +29,8 @@ import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
+import com.owncloud.android.domain.availableoffline.usecases.SetFileAsAvailableOfflineUseCase
+import com.owncloud.android.domain.availableoffline.usecases.UnsetFileAsAvailableOfflineUseCase
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.GetPictureUploadsConfigurationStreamUseCase
 import com.owncloud.android.domain.camerauploads.usecases.GetVideoUploadsConfigurationStreamUseCase
@@ -117,6 +119,10 @@ val useCaseModule = module {
     factory { SynchronizeFileUseCase(get(), get(), get(), get()) }
     factory { SynchronizeFolderUseCase(get(), get()) }
     factory { SortFilesUseCase() }
+
+    // Av Offline
+    factory { SetFileAsAvailableOfflineUseCase(get()) }
+    factory { UnsetFileAsAvailableOfflineUseCase(get()) }
 
     // Sharing
     factory { CreatePrivateShareAsyncUseCase(get()) }

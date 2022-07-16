@@ -21,6 +21,7 @@
 package com.owncloud.android.domain.files
 
 import androidx.lifecycle.LiveData
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 
@@ -41,4 +42,6 @@ interface FileRepository {
     fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean)
     fun renameFile(ocFile: OCFile, newName: String)
     fun saveFile(file: OCFile)
+
+    fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
 }
