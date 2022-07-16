@@ -36,6 +36,7 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragm
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsPictureUploadsFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsVideoUploadsFragment
+import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 
 class SettingsActivity : AppCompatActivity() {
@@ -59,6 +60,12 @@ class SettingsActivity : AppCompatActivity() {
         if (savedInstanceState != null) return
 
         redirectToSubsection(intent)
+    }
+
+    override fun onDestroy() {
+        val workerProvider = WorkManagerProvider(context = this)
+        workerProvider.enqueueAvailableOfflinePeriodicWorker()
+        super.onDestroy()
     }
 
     private fun updateToolbarTitle() {

@@ -25,6 +25,8 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.owncloud.android.workers.AvailableOfflinePeriodicWorker
+import com.owncloud.android.workers.AvailableOfflinePeriodicWorker.Companion.AVAILABLE_OFFLINE_PERIODIC_WORKER
 import com.owncloud.android.workers.CameraUploadsWorker
 import com.owncloud.android.workers.OldLogsCollectorWorker
 
@@ -55,5 +57,23 @@ class WorkManagerProvider(
 
         WorkManager.getInstance(context)
             .enqueueUniquePeriodicWork(OldLogsCollectorWorker.OLD_LOGS_COLLECTOR_WORKER, ExistingPeriodicWorkPolicy.REPLACE, oldLogsCollectorWorker)
+    }
+
+    fun enqueueAvailableOfflinePeriodicWorker() {
+        val constraintsRequired = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
+
+        val availableOfflinePeriodicWorker = PeriodicWorkRequestBuilder<AvailableOfflinePeriodicWorker>(
+            repeatInterval = AvailableOfflinePeriodicWorker.repeatInterval,
+            repeatIntervalTimeUnit = AvailableOfflinePeriodicWorker.repeatIntervalTimeUnit
+        )
+            .addTag(AVAILABLE_OFFLINE_PERIODIC_WORKER)
+            .setConstraints(constraintsRequired)
+            .build()
+
+        WorkManager.getInstance(context)
+            .enqueueUniquePeriodicWork(AVAILABLE_OFFLINE_PERIODIC_WORKER, ExistingPeriodicWorkPolicy.KEEP, availableOfflinePeriodicWorker)
     }
 }
