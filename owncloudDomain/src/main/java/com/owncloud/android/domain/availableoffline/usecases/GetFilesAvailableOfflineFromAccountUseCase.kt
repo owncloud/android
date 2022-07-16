@@ -15,17 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.domain.files.usecases
+package com.owncloud.android.domain.availableoffline.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
-class GetFilesAvailableOfflineUseCase(
+class GetFilesAvailableOfflineFromAccountUseCase(
     private val fileRepository: FileRepository
-) : BaseUseCaseWithResult<List<OCFile>, GetFilesAvailableOfflineUseCase.Params>() {
+) : BaseUseCaseWithResult<List<OCFile>, GetFilesAvailableOfflineFromAccountUseCase.Params>() {
 
-    override fun run(params: Params): List<OCFile> = fileRepository.getFilesAvailableOffline(params.owner)
+    override fun run(params: Params): List<OCFile> = fileRepository.getFilesAvailableOfflineFromAccount(params.owner)
 
     data class Params(
         val owner: String

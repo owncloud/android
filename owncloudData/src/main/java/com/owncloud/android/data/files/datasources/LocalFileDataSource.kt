@@ -36,7 +36,8 @@ interface LocalFileDataSource {
     fun getFolderContentAsLiveData(folderId: Long): LiveData<List<OCFile>>
     fun getFolderImages(folderId: Long): List<OCFile>
     fun getFilesSharedByLink(owner: String): List<OCFile>
-    fun getFilesAvailableOffline(owner: String): List<OCFile>
+    fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
+    fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
     fun moveFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, finalStoragePath: String)
     fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile)
     fun saveFile(file: OCFile)

@@ -134,8 +134,11 @@ class OCFileRepository(
     override fun getFilesSharedByLink(owner: String): List<OCFile> =
         localFileDataSource.getFilesSharedByLink(owner)
 
-    override fun getFilesAvailableOffline(owner: String): List<OCFile> =
-        localFileDataSource.getFilesAvailableOffline(owner)
+    override fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile> =
+        localFileDataSource.getFilesAvailableOfflineFromAccount(owner)
+
+    override fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile> =
+        localFileDataSource.getFilesAvailableOfflineFromEveryAccount()
 
     override fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile) {
         listOfFilesToMove.forEach { ocFile ->
