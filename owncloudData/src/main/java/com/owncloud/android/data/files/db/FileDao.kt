@@ -25,7 +25,10 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.owncloud.android.data.ProviderMeta
-import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
+import com.owncloud.android.domain.ext.isOneOf
 import com.owncloud.android.domain.files.model.OCFile
 import java.io.File.separatorChar
 
@@ -106,7 +109,10 @@ abstract class FileDao {
         val folderId = insert(folder)
 
         folderContent.forEach { fileToInsert ->
-            insert(fileToInsert.apply { parentId = folderId })
+            insert(fileToInsert.apply {
+                parentId = folderId
+                availableOfflineStatus = getNewAvailableOfflineStatus(folder.availableOfflineStatus, fileToInsert.availableOfflineStatus)
+            })
         }
     }
 
@@ -128,6 +134,7 @@ abstract class FileDao {
                 storagePath = localFile.storagePath,
                 treeEtag = localFile.treeEtag,
                 etagInConflict = localFile.etagInConflict,
+                availableOfflineStatus = localFile.availableOfflineStatus,
             ).apply {
                 id = localFile.id
             })
@@ -137,22 +144,22 @@ abstract class FileDao {
     @Transaction
     open fun copy(
         sourceFile: OCFileEntity,
-        targetFile: OCFileEntity,
+        targetFolder: OCFileEntity,
         finalRemotePath: String,
         remoteId: String?
     ) {
         // 1. Update target size
         insert(
-            targetFile.copy(
-                length = targetFile.length + sourceFile.length
-            ).apply { id = targetFile.id }
+            targetFolder.copy(
+                length = targetFolder.length + sourceFile.length
+            ).apply { id = targetFolder.id }
         )
 
         // 2. Insert a new file with common attributes and retrieved remote id
         insert(
             OCFileEntity(
-                parentId = targetFile.id,
-                owner = targetFile.owner,
+                parentId = targetFolder.id,
+                owner = targetFolder.owner,
                 remotePath = finalRemotePath,
                 remoteId = remoteId,
                 length = sourceFile.length,
@@ -163,7 +170,8 @@ abstract class FileDao {
                 etag = "",
                 creationTimestamp = null,
                 permissions = null,
-                treeEtag = ""
+                treeEtag = "",
+                availableOfflineStatus = NOT_AVAILABLE_OFFLINE.ordinal,
             )
         )
     }
@@ -171,15 +179,15 @@ abstract class FileDao {
     @Transaction
     open fun moveFile(
         sourceFile: OCFileEntity,
-        targetFile: OCFileEntity,
+        targetFolder: OCFileEntity,
         finalRemotePath: String,
         finalStoragePath: String?
     ) {
         // 1. Update target size
         insert(
-            targetFile.copy(
-                length = targetFile.length + sourceFile.length
-            ).apply { id = targetFile.id }
+            targetFolder.copy(
+                length = targetFolder.length + sourceFile.length
+            ).apply { id = targetFolder.id }
         )
 
         // 2. Update source
@@ -187,7 +195,7 @@ abstract class FileDao {
             // Update remote path and storage path when moving a folder
             moveFolder(
                 sourceFolder = sourceFile,
-                targetFile = targetFile,
+                targetFolder = targetFolder,
                 targetRemotePath = finalRemotePath,
                 targetStoragePath = finalStoragePath
             )
@@ -195,7 +203,7 @@ abstract class FileDao {
             // Update remote path, storage path, parent file when moving a file
             moveSingleFile(
                 sourceFile = sourceFile,
-                targetFile = targetFile,
+                targetFolder = targetFolder,
                 finalRemotePath = finalRemotePath,
                 finalStoragePath = finalStoragePath
             )
@@ -217,10 +225,10 @@ abstract class FileDao {
     private fun updateFolderWithNewAvailableOfflineStatus(ocFolderId: Long, newAvailableOfflineStatus: Int) {
         updateFileWithAvailableOfflineStatus(ocFolderId, newAvailableOfflineStatus)
 
-        val newStatusForChildren = if (newAvailableOfflineStatus == AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE.ordinal) {
-            AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE.ordinal
+        val newStatusForChildren = if (newAvailableOfflineStatus == NOT_AVAILABLE_OFFLINE.ordinal) {
+            NOT_AVAILABLE_OFFLINE.ordinal
         } else {
-            AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT.ordinal
+            AVAILABLE_OFFLINE_PARENT.ordinal
         }
         val folderContent = getFolderContent(ocFolderId)
         folderContent.forEach { folderChild ->
@@ -237,22 +245,23 @@ abstract class FileDao {
 
     private fun moveSingleFile(
         sourceFile: OCFileEntity,
-        targetFile: OCFileEntity,
+        targetFolder: OCFileEntity,
         finalRemotePath: String,
         finalStoragePath: String?
     ) {
         insert(
             sourceFile.copy(
-                parentId = targetFile.id,
+                parentId = targetFolder.id,
                 remotePath = finalRemotePath,
-                storagePath = finalStoragePath
+                storagePath = finalStoragePath,
+                availableOfflineStatus = getNewAvailableOfflineStatus(targetFolder.availableOfflineStatus, sourceFile.availableOfflineStatus)
             ).apply { id = sourceFile.id }
         )
     }
 
     private fun moveFolder(
         sourceFolder: OCFileEntity,
-        targetFile: OCFileEntity,
+        targetFolder: OCFileEntity,
         targetRemotePath: String,
         targetStoragePath: String?
     ) {
@@ -264,7 +273,7 @@ abstract class FileDao {
 
         moveSingleFile(
             sourceFile = sourceFolder,
-            targetFile = targetFile,
+            targetFolder = targetFolder,
             finalRemotePath = folderRemotePath,
             finalStoragePath = folderStoragePath
         )
@@ -279,19 +288,37 @@ abstract class FileDao {
             if (file.isFolder) {
                 moveFolder(
                     sourceFolder = file,
-                    targetFile = sourceFolder,
+                    targetFolder = sourceFolder,
                     targetRemotePath = remotePathForChild,
                     targetStoragePath = storagePathForChild
                 )
             } else {
                 moveSingleFile(
                     sourceFile = file,
-                    targetFile = sourceFolder,
+                    targetFolder = sourceFolder,
                     finalRemotePath = remotePathForChild,
                     finalStoragePath = storagePathForChild
                 )
             }
         }
+    }
+
+    /**
+     * If folder is available offline, the child gets the AVAILABLE_OFFLINE_PARENT status
+     * If child was available offline because of the previous parent, it won't be av offline anymore
+     * Otherwise, keep the child available offline status
+     */
+    private fun getNewAvailableOfflineStatus(
+        parentFolderAvailableOfflineStatus: Int?,
+        currentFileAvailableOfflineStatus: Int?,
+    ): Int {
+        return if ((parentFolderAvailableOfflineStatus != null) &&
+            parentFolderAvailableOfflineStatus.isOneOf(AVAILABLE_OFFLINE.ordinal, AVAILABLE_OFFLINE_PARENT.ordinal)
+        ) {
+            AVAILABLE_OFFLINE_PARENT.ordinal
+        } else if (currentFileAvailableOfflineStatus == AVAILABLE_OFFLINE.ordinal) {
+            AVAILABLE_OFFLINE.ordinal
+        } else NOT_AVAILABLE_OFFLINE.ordinal
     }
 
     companion object {

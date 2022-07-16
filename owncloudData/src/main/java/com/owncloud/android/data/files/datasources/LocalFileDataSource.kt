@@ -25,7 +25,7 @@ import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.OCFile
 
 interface LocalFileDataSource {
-    fun copyFile(sourceFile: OCFile, targetFile: OCFile, finalRemotePath: String, remoteId: String)
+    fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String)
     fun getFileById(fileId: Long): OCFile?
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
     fun getFileByRemoteId(remoteId: String): OCFile?
@@ -37,7 +37,7 @@ interface LocalFileDataSource {
     fun getFolderImages(folderId: Long): List<OCFile>
     fun getFilesSharedByLink(owner: String): List<OCFile>
     fun getFilesAvailableOffline(owner: String): List<OCFile>
-    fun moveFile(sourceFile: OCFile, targetFile: OCFile, finalRemotePath: String, finalStoragePath: String)
+    fun moveFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, finalStoragePath: String)
     fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile)
     fun saveFile(file: OCFile)
     fun removeFile(fileId: Long)
