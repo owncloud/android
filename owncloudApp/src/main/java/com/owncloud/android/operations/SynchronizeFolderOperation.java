@@ -60,6 +60,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER;
 import static com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY;
 import static org.koin.java.KoinJavaComponent.get;
 import static org.koin.java.KoinJavaComponent.inject;
@@ -208,7 +209,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         final RemoteOperationResult<ArrayList<RemoteFile>> fetchFolderResult;
 
         SynchronizeFolderUseCase synchronizeFolderUseCase = get(SynchronizeFolderUseCase.class);
-        synchronizeFolderUseCase.execute(new SynchronizeFolderUseCase.Params(mRemotePath, mAccount.name, SYNC_FOLDER_RECURSIVELY));
+        synchronizeFolderUseCase.execute(new SynchronizeFolderUseCase.Params(mRemotePath, mAccount.name, REFRESH_FOLDER));
 
         mFailsInFileSyncsFound = 0;
         mConflictsFound = 0;
