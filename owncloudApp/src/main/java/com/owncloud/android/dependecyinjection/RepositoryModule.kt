@@ -2,7 +2,10 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,6 +30,7 @@ import com.owncloud.android.data.oauth.OAuthRepositoryImpl
 import com.owncloud.android.data.server.repository.OCServerInfoRepository
 import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
 import com.owncloud.android.data.sharing.shares.repository.OCShareRepository
+import com.owncloud.android.data.transfers.repository.OCTransferRepository
 import com.owncloud.android.data.user.repository.OCUserRepository
 import com.owncloud.android.domain.authentication.AuthenticationRepository
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
@@ -36,6 +40,7 @@ import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.sharing.sharees.ShareeRepository
 import com.owncloud.android.domain.sharing.shares.ShareRepository
+import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.user.UserRepository
 import org.koin.dsl.module
 
@@ -49,4 +54,5 @@ val repositoryModule = module {
     factory<UserRepository> { OCUserRepository(get(), get()) }
     factory<OAuthRepository> { OAuthRepositoryImpl(get()) }
     factory<FolderBackupRepository> { FolderBackupRepositoryImpl(get()) }
+    factory<TransferRepository> { OCTransferRepository(get()) }
 }

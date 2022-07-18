@@ -30,6 +30,10 @@ import android.widget.Toast;
 
 import androidx.work.WorkManager;
 import com.owncloud.android.R;
+import com.owncloud.android.data.OwncloudDatabase;
+import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource;
+import com.owncloud.android.data.transfers.db.TransferDao;
+import com.owncloud.android.data.transfers.repository.OCTransferRepository;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase;
 import com.owncloud.android.utils.FileStorageUtils;
@@ -159,7 +163,9 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
 
                 filesToUpload.add(fullTempPath);
                 WorkManager workManager = WorkManager.getInstance(mAppContext);
-                UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager);
+                // Workaround... should be removed as soon as possible
+                OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(mAppContext).transferDao()));
+                UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
                 UploadFilesFromSystemUseCase.Params useCaseParams = new UploadFilesFromSystemUseCase.Params(
                         account.name,
                         filesToUpload,

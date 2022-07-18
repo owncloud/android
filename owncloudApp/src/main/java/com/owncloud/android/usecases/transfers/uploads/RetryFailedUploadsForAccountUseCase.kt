@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,24 +18,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.usecases.transfers.uploads
 
 import android.content.Context
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
-import com.owncloud.android.datamodel.OCUpload
-import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.domain.transfers.model.OCTransfer
 import timber.log.Timber
 
 class RetryFailedUploadsForAccountUseCase(
     private val context: Context,
+    private val retryUploadFromContentUriUseCase: RetryUploadFromContentUriUseCase,
+    private val retryUploadFromSystemUseCase: RetryUploadFromSystemUseCase,
+    private val transferRepository: TransferRepository,
 ) : BaseUseCase<Unit, RetryFailedUploadsForAccountUseCase.Params>() {
 
     override fun run(params: Params) {
-
-        val uploadsStorageManager = UploadsStorageManager(context.contentResolver)
-        val failedUploads = uploadsStorageManager.failedUploads
+        val failedUploads = transferRepository.getFailedTransfers()
         val failedUploadsForAccount = failedUploads.filter { it.accountName == params.accountName }
 
         if (failedUploadsForAccount.isEmpty()) {
@@ -43,14 +47,14 @@ class RetryFailedUploadsForAccountUseCase(
 
         failedUploadsForAccount.forEach { upload ->
             if (isContentUri(context = context, upload = upload)) {
-                RetryUploadFromContentUriUseCase(context).execute(RetryUploadFromContentUriUseCase.Params(upload.uploadId))
+                retryUploadFromContentUriUseCase.execute(RetryUploadFromContentUriUseCase.Params(upload.id!!))
             } else {
-                RetryUploadFromSystemUseCase(context).execute(RetryUploadFromSystemUseCase.Params(upload.uploadId))
+                retryUploadFromSystemUseCase.execute(RetryUploadFromSystemUseCase.Params(upload.id!!))
             }
         }
     }
 
-    private fun isContentUri(context: Context, upload: OCUpload): Boolean {
+    private fun isContentUri(context: Context, upload: OCTransfer): Boolean {
         return DocumentFile.isDocumentUri(context, Uri.parse(upload.localPath))
     }
 

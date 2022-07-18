@@ -2,7 +2,10 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -73,6 +76,7 @@ import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
@@ -131,10 +135,11 @@ val useCaseModule = module {
     factory { DownloadFileUseCase(get()) }
     factory { GetLiveDataForDownloadingFileUseCase(get()) }
     factory { GetLiveDataForFinishedDownloadsFromAccountUseCase(get()) }
-    factory { UploadFilesFromSAFUseCase(get()) }
-    factory { UploadFilesFromSystemUseCase(get()) }
-    factory { UploadFileInConflictUseCase(get()) }
-    factory { CancelUploadForFileUseCase(get()) }
+    factory { UploadFilesFromSAFUseCase(get(), get()) }
+    factory { UploadFilesFromSystemUseCase(get(), get()) }
+    factory { UploadFileInConflictUseCase(get(), get()) }
+    factory { CancelUploadForFileUseCase(get(), get()) }
+    factory { RetryUploadFromSystemUseCase(get(), get()) }
 
     // User
     factory { GetStoredQuotaUseCase(get()) }

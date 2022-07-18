@@ -44,6 +44,9 @@ import androidx.work.WorkManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.data.OwncloudDatabase;
+import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource;
+import com.owncloud.android.data.transfers.repository.OCTransferRepository;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.UploadsStorageManager;
@@ -58,6 +61,7 @@ import com.owncloud.android.ui.fragment.UploadListFragment;
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase;
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase;
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase;
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -308,8 +312,9 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                 rightButton.setImageResource(R.drawable.ic_action_cancel_grey);
                 rightButton.setVisibility(View.VISIBLE);
                 rightButton.setOnClickListener(v -> {
-                    CancelUploadWithIdUseCase cancelUploadWithIdUseCase = new CancelUploadWithIdUseCase(WorkManager.getInstance(parent.getContext()));
-                    cancelUploadWithIdUseCase.execute(new CancelUploadWithIdUseCase.Params(upload));
+                    OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(v.getContext()).transferDao()));
+                    CancelUploadWithIdUseCase cancelUploadWithIdUseCase = new CancelUploadWithIdUseCase(WorkManager.getInstance(parent.getContext()), transferRepository);
+                    cancelUploadWithIdUseCase.execute(new CancelUploadWithIdUseCase.Params(upload.getUploadId()));
                     refreshView();
                 });
 
@@ -318,7 +323,8 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                 rightButton.setImageResource(R.drawable.ic_action_delete_grey);
                 rightButton.setVisibility(View.VISIBLE);
                 rightButton.setOnClickListener(v -> {
-                    mUploadsStorageManager.removeUpload(upload);
+                    OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(v.getContext()).transferDao()));
+                    transferRepository.removeTransferById(upload.getUploadId());
                     refreshView();
                 });
 
@@ -340,13 +346,18 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                         public void onClick(View v) {
                             File file = new File(upload.getLocalPath());
                             if (file.exists()) {
-                                RetryUploadFromSystemUseCase retryUploadFromContentUriUseCase = new RetryUploadFromSystemUseCase(v.getContext());
+                                OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(v.getContext()).transferDao()));
+                                WorkManager workManager = WorkManager.getInstance(v.getContext());
+                                UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
+                                RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(uploadFilesFromSystemUseCase, transferRepository);
                                 RetryUploadFromSystemUseCase.Params useCaseParams = new RetryUploadFromSystemUseCase.Params(upload.getUploadId());
-                                retryUploadFromContentUriUseCase.execute(useCaseParams);
+                                retryUploadFromSystemUseCase.execute(useCaseParams);
                                 refreshView();
                             } else if (DocumentFile.isDocumentUri(v.getContext(), Uri.parse(upload.getLocalPath()))) {
+                                // Workaround... should be removed as soon as possible
+                                OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(v.getContext()).transferDao()));
                                 RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase =
-                                        new RetryUploadFromContentUriUseCase(v.getContext());
+                                        new RetryUploadFromContentUriUseCase(v.getContext(), transferRepository);
                                 RetryUploadFromContentUriUseCase.Params useCaseParams = new RetryUploadFromContentUriUseCase.Params(
                                         upload.getUploadId()
                                 );

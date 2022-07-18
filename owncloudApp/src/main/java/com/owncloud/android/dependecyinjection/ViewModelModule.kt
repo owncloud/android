@@ -46,6 +46,7 @@ import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityVie
 import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel
 import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel
 import com.owncloud.android.ui.preview.PreviewImageViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -87,4 +88,5 @@ val viewModelModule = module {
     viewModel { FileDetailsViewModel(get(), get(), get(), get(), get()) }
     viewModel { FileOperationsViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { TransfersViewModel(get(), get(), get()) }
 }

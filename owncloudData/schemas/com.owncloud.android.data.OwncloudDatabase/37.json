@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 37,
-    "identityHash": "421a3f1cccacb7dcb64727953f7d8616",
+    "identityHash": "38c32b00476bbb19c99051fd0c32d0ce",
     "entities": [
       {
         "tableName": "folder_backup",
@@ -571,12 +571,98 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "transfers",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`localPath` TEXT NOT NULL, `remotePath` TEXT NOT NULL, `accountName` TEXT NOT NULL, `fileSize` INTEGER NOT NULL, `status` INTEGER NOT NULL, `localBehaviour` INTEGER NOT NULL, `forceOverwrite` INTEGER NOT NULL, `transferEndTimestamp` INTEGER, `lastResult` INTEGER, `createdBy` INTEGER NOT NULL, `transferId` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "localPath",
+            "columnName": "localPath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "remotePath",
+            "columnName": "remotePath",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountName",
+            "columnName": "accountName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fileSize",
+            "columnName": "fileSize",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "localBehaviour",
+            "columnName": "localBehaviour",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "forceOverwrite",
+            "columnName": "forceOverwrite",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "transferEndTimestamp",
+            "columnName": "transferEndTimestamp",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastResult",
+            "columnName": "lastResult",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdBy",
+            "columnName": "createdBy",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "transferId",
+            "columnName": "transferId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '421a3f1cccacb7dcb64727953f7d8616')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '38c32b00476bbb19c99051fd0c32d0ce')"
     ]
   }
 }

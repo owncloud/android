@@ -2,30 +2,34 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
- * <p>
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.usecases.transfers.uploads
 
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import androidx.work.WorkManager
 import com.owncloud.android.MainApp
-import com.owncloud.android.datamodel.OCUpload
-import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.domain.transfers.model.TransferStatus
 import timber.log.Timber
 import java.io.File
 
@@ -38,6 +42,7 @@ import java.io.File
  */
 class UploadFilesFromSAFUseCase(
     private val workManager: WorkManager,
+    private val transferRepository: TransferRepository,
 ) : BaseUseCase<Unit, UploadFilesFromSAFUseCase.Params>() {
 
     override fun run(params: Params) {
@@ -70,17 +75,18 @@ class UploadFilesFromSAFUseCase(
         uploadPath: String,
         accountName: String,
     ): Long {
-        val uploadStorageManager = UploadsStorageManager(MainApp.appContext.contentResolver)
-
-        val ocUpload = OCUpload(documentFile.uri.toString(), uploadPath, accountName).apply {
-            fileSize = documentFile.length()
-            isForceOverwrite = false
+        val ocTransfer = OCTransfer(
+            localPath = documentFile.uri.toString(),
+            remotePath = uploadPath,
+            accountName = accountName,
+            fileSize = documentFile.length(),
+            status = TransferStatus.TRANSFER_QUEUED,
+            localBehaviour = UploadBehavior.COPY.ordinal,
+            forceOverwrite = false,
             createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER.ordinal
-            localAction = UploadBehavior.COPY.ordinal
-            uploadStatus = UploadsStorageManager.UploadStatus.UPLOAD_IN_PROGRESS
-        }
+        )
 
-        return uploadStorageManager.storeUpload(ocUpload).also {
+        return transferRepository.storeTransfer(ocTransfer).also {
             Timber.i("Upload of $uploadPath has been stored in the uploads database with id: $it")
         }
     }

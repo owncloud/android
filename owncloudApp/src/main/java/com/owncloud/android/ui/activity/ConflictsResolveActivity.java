@@ -24,6 +24,9 @@ package com.owncloud.android.ui.activity;
 import android.os.Bundle;
 
 import androidx.work.WorkManager;
+import com.owncloud.android.data.OwncloudDatabase;
+import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource;
+import com.owncloud.android.data.transfers.repository.OCTransferRepository;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.Decision;
@@ -79,7 +82,9 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
 
         WorkManager workManager = WorkManager.getInstance(getApplicationContext());
         if (forceOverwrite) {
-            UploadFileInConflictUseCase uploadFileInConflictUseCase = new UploadFileInConflictUseCase(workManager);
+            // Workaround... should be removed as soon as possible
+            OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(this).transferDao()));
+            UploadFileInConflictUseCase uploadFileInConflictUseCase = new UploadFileInConflictUseCase(workManager, transferRepository);
             UploadFileInConflictUseCase.Params params = new UploadFileInConflictUseCase.Params(
                     getFile().getOwner(),
                     getFile().getStoragePath(),
@@ -87,7 +92,9 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
             );
             uploadFileInConflictUseCase.execute(params);
         } else {
-            UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager);
+            // Workaround... should be removed as soon as possible
+            OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(this).transferDao()));
+            UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
             ArrayList<String> listOfPaths = new ArrayList<>();
             listOfPaths.add(getFile().getStoragePath());
             UploadFilesFromSystemUseCase.Params params = new UploadFilesFromSystemUseCase.Params(

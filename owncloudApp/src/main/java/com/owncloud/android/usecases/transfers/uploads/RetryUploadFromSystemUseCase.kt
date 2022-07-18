@@ -2,6 +2,8 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2021 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -16,36 +18,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.usecases.transfers.uploads
 
-import android.content.Context
-import androidx.work.WorkManager
-import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
+import com.owncloud.android.domain.transfers.TransferRepository
 
 class RetryUploadFromSystemUseCase(
-    private val context: Context,
+    private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,
+    private val transferRepository: TransferRepository,
 ) : BaseUseCase<Unit, RetryUploadFromSystemUseCase.Params>() {
 
     override fun run(params: Params) {
-
-        val uploadsStorageManager = UploadsStorageManager(context.contentResolver)
-        val failedUploads = uploadsStorageManager.failedUploads
-        val filteredUploads = failedUploads.filter { it.uploadId == params.uploadIdInStorageManager }
-        val uploadToRetry = filteredUploads.firstOrNull()
+        val uploadToRetry = transferRepository.getTransferById(params.uploadIdInStorageManager)
 
         uploadToRetry ?: return
 
-        val workManager = WorkManager.getInstance(context)
-        UploadFilesFromSystemUseCase(workManager).execute(
+        uploadFilesFromSystemUseCase.execute(
             UploadFilesFromSystemUseCase.Params(
                 accountName = uploadToRetry.accountName,
                 listOfLocalPaths = listOf(uploadToRetry.localPath),
                 uploadFolderPath = uploadToRetry.remotePath.trimEnd(PATH_SEPARATOR),
             )
         )
-        uploadsStorageManager.updateUpload(uploadToRetry.apply { uploadStatus = UploadsStorageManager.UploadStatus.UPLOAD_IN_PROGRESS })
     }
 
     data class Params(
