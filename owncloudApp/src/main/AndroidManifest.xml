@@ -138,9 +138,6 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter_files" />
         </service>
-        <service
-            android:name=".files.services.AvailableOfflineSyncJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <provider
             android:name=".providers.FileContentProvider"
