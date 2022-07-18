@@ -22,6 +22,7 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromEveryAccountUseCase
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import org.koin.core.component.KoinComponent
@@ -47,25 +48,29 @@ class AvailableOfflinePeriodicWorker(
             val availableOfflineFiles = getFilesAvailableOfflineFromEveryAccountUseCase.execute(Unit)
             Timber.i("Available offline files that needs to be synced: ${availableOfflineFiles.size}")
 
-            availableOfflineFiles.forEach {
-                if (it.isFolder) {
-                    synchronizeFolderUseCase.execute(
-                        SynchronizeFolderUseCase.Params(
-                            remotePath = it.remotePath,
-                            accountName = it.owner,
-                            syncMode = SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY
-                        )
-                    )
-                } else {
-                    synchronizeFileUseCase.execute(SynchronizeFileUseCase.Params(it))
-                }
-            }
+            syncAvailableOfflineFiles(availableOfflineFiles)
+
             Result.success()
         } catch (exception: Exception) {
             Result.failure()
         }
     }
 
+    private fun syncAvailableOfflineFiles(availableOfflineFiles: List<OCFile>) {
+        availableOfflineFiles.forEach {
+            if (it.isFolder) {
+                synchronizeFolderUseCase.execute(
+                    SynchronizeFolderUseCase.Params(
+                        remotePath = it.remotePath,
+                        accountName = it.owner,
+                        syncMode = SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY
+                    )
+                )
+            } else {
+                synchronizeFileUseCase.execute(SynchronizeFileUseCase.Params(it))
+            }
+        }
+    }
     companion object {
         const val AVAILABLE_OFFLINE_PERIODIC_WORKER = "AVAILABLE_OFFLINE_PERIODIC_WORKER"
         const val repeatInterval: Long = 15L
