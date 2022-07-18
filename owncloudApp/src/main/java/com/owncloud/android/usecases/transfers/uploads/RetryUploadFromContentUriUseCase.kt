@@ -27,7 +27,6 @@ import androidx.work.WorkManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.transfers.TransferRepository
-import com.owncloud.android.domain.transfers.model.TransferStatus
 
 class RetryUploadFromContentUriUseCase(
     private val context: Context,
@@ -35,10 +34,7 @@ class RetryUploadFromContentUriUseCase(
 ) : BaseUseCase<Unit, RetryUploadFromContentUriUseCase.Params>() {
 
     override fun run(params: Params) {
-
-        val failedUploads = transferRepository.getFailedTransfers()
-        val filteredUploads = failedUploads.filter { it.id == params.uploadIdInStorageManager }
-        val uploadToRetry = filteredUploads.firstOrNull()
+        val uploadToRetry = transferRepository.getTransferById(params.uploadIdInStorageManager)
 
         uploadToRetry ?: return
 
@@ -55,8 +51,6 @@ class RetryUploadFromContentUriUseCase(
                 chargingOnly = false
             )
         )
-
-        transferRepository.updateTransfer(uploadToRetry.apply { status = TransferStatus.TRANSFER_IN_PROGRESS })
     }
 
     data class Params(
