@@ -20,6 +20,7 @@
 
 package com.owncloud.android.data.transfers.repository
 
+import androidx.lifecycle.LiveData
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.OCTransfer
@@ -62,7 +63,7 @@ class OCTransferRepository(
     override fun getTransferById(id: Long): OCTransfer? =
         localTransferDataSource.getTransferById(id = id)
 
-    override fun getAllTransfers(): List<OCTransfer> =
+    override fun getAllTransfers(): LiveData<List<OCTransfer>> =
         localTransferDataSource.getAllTransfers()
 
     override fun getLastTransferFor(remotePath: String, accountName: String) =
