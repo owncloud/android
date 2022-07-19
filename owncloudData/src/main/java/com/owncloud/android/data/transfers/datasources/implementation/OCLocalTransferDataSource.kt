@@ -20,6 +20,9 @@
 
 package com.owncloud.android.data.transfers.datasources.implementation
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toModel
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.data.transfers.db.TransferDao
@@ -63,8 +66,12 @@ class OCLocalTransferDataSource(
         return transferDao.getTransferWithId(id)?.toModel()
     }
 
-    override fun getAllTransfers(): List<OCTransfer> {
-        return transferDao.getAllTransfers().map { it.toModel() }
+    override fun getAllTransfers(): LiveData<List<OCTransfer>> {
+        return Transformations.map(transferDao.getAllTransfers()) { transferEntitiesList ->
+            transferEntitiesList.map { transferEntity ->
+                transferEntity.toModel()
+            }
+        }
     }
 
     override fun getLastTransferFor(remotePath: String, accountName: String): OCTransfer? {

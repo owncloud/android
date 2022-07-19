@@ -20,6 +20,7 @@
 
 package com.owncloud.android.domain.transfers
 
+import androidx.lifecycle.LiveData
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
@@ -37,7 +38,7 @@ interface TransferRepository {
     fun removeTransferById(id: Long)
     fun removeAllTransfersFromAccount(accountName: String)
     fun getTransferById(id: Long): OCTransfer?
-    fun getAllTransfers(): List<OCTransfer>
+    fun getAllTransfers(): LiveData<List<OCTransfer>>
     fun getLastTransferFor(remotePath: String, accountName: String): OCTransfer?
     fun getCurrentAndPendingTransfers(): List<OCTransfer>
     fun getFailedTransfers(): List<OCTransfer>
