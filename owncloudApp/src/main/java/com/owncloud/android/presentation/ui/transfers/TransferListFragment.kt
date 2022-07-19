@@ -20,8 +20,52 @@
 
 package com.owncloud.android.presentation.ui.transfers
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.owncloud.android.R
+import com.owncloud.android.databinding.FragmentTransferListBinding
+import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.presentation.adapters.transfers.TransfersAdapter
 
-class TransferListFragment : Fragment() {
+class TransferListFragment : Fragment(R.layout.fragment_transfer_list) {
 
+    private var _binding: FragmentTransferListBinding? = null
+    val binding get() = _binding!!
+
+    private val transfersAdapter = TransfersAdapter()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentTransferListBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.transfersRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            itemAnimator = DefaultItemAnimator()
+            adapter = transfersAdapter
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        }
+        setData(mutableListOf())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    private fun setData(items: List<OCTransfer>) {
+        binding.transfersRecyclerView.isVisible = items.isNotEmpty()
+        binding.emptyListText.isVisible = items.isEmpty()
+
+        transfersAdapter.setData(items)
+    }
 }
