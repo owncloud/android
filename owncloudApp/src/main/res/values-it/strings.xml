@@ -200,6 +200,8 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">Il nome del file non può contenere piu\' di %d caratteri</string>
   <string name="uploader_upload_text_filename_hint">Nome del file</string>
   <string name="uploader_upload_camera_upload_files">Caricamento dei file della fotocamera</string>
+  <string name="uploader_upload_picture_upload_files">%d nuove foto saranno caricate</string>
+  <string name="uploader_upload_video_upload_files">%d nuovi video saranno caricati</string>
   <string name="uploader_upload_available_offline_files">Caricamento di file offline disponibili</string>
   <string name="uploader_upload_requested_from_wifi_files">Caricamento richiesto da file wifi</string>
   <string name="ssl_certificate_not_trusted">Il certificato del server non è affidabile</string>
@@ -248,11 +250,14 @@
   <string name="sync_current_folder_was_removed">La cartella %1$s non esiste più</string>
   <string name="pass_code_enter_pass_code">Digita il tuo codice segreto</string>
   <string name="pass_code_configure_your_pass_code">Digita il tuo codice segreto</string>
+  <string name="pass_code_configure_your_pass_code_migration">Inserisci un nuovo codice di sicurezza a %1$d cifre</string>
   <string name="pass_code_configure_your_pass_code_explanation">Il codice segreto sarà richiesto ogni volta che l\'applicazione è avviata</string>
   <string name="pass_code_reenter_your_pass_code">Digita nuovamente il codice segreto</string>
   <string name="pass_code_remove_your_pass_code">Rimuovi il tuo codice segreto</string>
   <string name="pass_code_mismatch">I codici segreti non corrispondono</string>
   <string name="pass_code_wrong">Codice segreto non corretto</string>
+  <string name="pass_code_error_set">Errore nella creazione del blocco con codice di sicurezza</string>
+  <string name="pass_code_error_remove">Errore nella rimozione del blocco con codice di sicurezza</string>
   <string name="numberkeyboard_biometric_button_content_description">Pulsante biometrico</string>
   <string name="numberkeyboard_zero">0</string>
   <string name="numberkeyboard_one">1</string>
@@ -264,6 +269,7 @@
   <string name="numberkeyboard_seven">7</string>
   <string name="numberkeyboard_eight">8</string>
   <string name="numberkeyboard_nine">9</string>
+  <string name="lock_time_try_again">Riprovare in %1$s</string>
   <string name="biometric_not_enrolled">Registrare almeno un impronta per utilizzare questa funzione</string>
   <string name="biometric_prompt_title">Accesso biometrico</string>
   <string name="biometric_prompt_subtitle">Accedi utilizzando le tue credenziali biometriche</string>
@@ -473,6 +479,7 @@
   <string name="prefs_camera_upload_source_path_title_required">richiesto</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Il file originale verrà</string>
   <string name="prefs_camera_upload_behaviour_title">Il file originale verrà</string>
+  <string name="prefs_camera_upload_last_sync_title">Ultima sincronizzazione</string>
   <string name="upload_copy_files">Copia file</string>
   <string name="upload_move_files">Sposta file</string>
   <string name="pref_behaviour_entries_keep_file">lasciato nella cartella originale</string>
@@ -583,8 +590,15 @@ Il Download del file inizierà automaticamente</string>
   <string name="supports_oauth2_error">Non è stato possibile sapere se OAuth2 è supportato</string>
   <string name="get_base_url_error">Non è stato possibile conoscere l\'URL di base del server</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_intro">La tua applicazione è stata aggiornata. Questo aggiornamento migra i tuoi file in un luogo più sicuro sul tuo dispositivo. Questa unica migrazione è necessaria e può impiegare un minuto o più.</string>
+  <string name="scoped_storage_wizard_intro_button">Iniziamo</string>
+  <string name="scoped_storage_wizard_not_enough_space_warning">⚠️Il tuo spazio libero è al momento limitato sul tuo dispositivo. Alcuni file potrebbero non essere migrati, controlla che tutti i file scaricati rimangano scaricati dopo il completamento del processo.</string>
   <string name="scoped_storage_wizard_migrate_and_clean_button">Migra adesso</string>
+  <string name="scoped_storage_wizard_migration_completed_access_files_button">Accedi ai tuoi file</string>
+  <string name="scoped_storage_wizard_migration_in_progress">Migrazione dei file. Non spegnere il dispositivo.</string>
+  <string name="scoped_storage_wizard_title">Più sicurezza per i tuoi file</string>
   <!--Security Enforced-->
+  <string name="security_enforced_title">Selezionare un\'opzione per sbloccare l\'applicazione:</string>
   <string name="security_enforced_first_option">Blocco con codice di sicurezza</string>
   <!--Release Notes-->
   <string name="release_notes_footer">Grazie di usare %1$s.\n❤</string>
