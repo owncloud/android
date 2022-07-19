@@ -70,6 +70,8 @@ class TransfersAdapter : RecyclerView.Adapter<TransfersAdapter.TransferItemViewH
             }
 
             uploadAccount.text = transfer.accountName
+
+            uploadStatus.text = transfer.status.name
         }
     }
 

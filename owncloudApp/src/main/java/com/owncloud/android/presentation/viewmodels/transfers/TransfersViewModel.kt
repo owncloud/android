@@ -22,11 +22,14 @@ package com.owncloud.android.presentation.viewmodels.transfers
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
+import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
@@ -39,9 +42,17 @@ class TransfersViewModel(
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
-    private val _transfersListLiveData = MutableLiveData<List<OCTransfer>>()
+    private val _transfersListLiveData = MediatorLiveData<List<OCTransfer>>()
     val transfersListLiveData: LiveData<List<OCTransfer>>
         get() = _transfersListLiveData
+
+    private var transfersLiveData = getAllTransfersUseCase.execute(Unit)
+
+    init {
+        _transfersListLiveData.addSource(transfersLiveData) { transfers ->
+            _transfersListLiveData.postValue(transfers)
+        }
+    }
 
     fun uploadFilesFromSAF(
         accountName: String,
@@ -72,13 +83,6 @@ class TransfersViewModel(
                     uploadFolderPath = uploadFolderPath
                 )
             )
-        }
-    }
-
-    fun getAllTransfers() {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val transfersList = getAllTransfersUseCase.execute(Unit)
-            _transfersListLiveData.postValue(transfersList)
         }
     }
 }
