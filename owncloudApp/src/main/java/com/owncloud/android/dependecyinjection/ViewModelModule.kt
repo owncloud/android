@@ -88,5 +88,5 @@ val viewModelModule = module {
     viewModel { FileDetailsViewModel(get(), get(), get(), get(), get()) }
     viewModel { FileOperationsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { TransfersViewModel(get(), get(), get()) }
+    viewModel { TransfersViewModel(get(), get(), get(), get()) }
 }
