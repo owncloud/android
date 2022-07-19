@@ -61,7 +61,6 @@ class TransferListFragment : Fragment() {
         transfersViewModel.transfersListLiveData.observe(viewLifecycleOwner) { transfers ->
             setData(transfers)
         }
-        transfersViewModel.getAllTransfers()
     }
 
     override fun onDestroy() {
