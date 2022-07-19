@@ -29,12 +29,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.owncloud.android.R
 import com.owncloud.android.databinding.FragmentTransferListBinding
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.presentation.adapters.transfers.TransfersAdapter
+import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class TransferListFragment : Fragment(R.layout.fragment_transfer_list) {
+class TransferListFragment : Fragment() {
+
+    private val transfersViewModel by viewModel<TransfersViewModel>()
 
     private var _binding: FragmentTransferListBinding? = null
     val binding get() = _binding!!
@@ -54,7 +57,11 @@ class TransferListFragment : Fragment(R.layout.fragment_transfer_list) {
             adapter = transfersAdapter
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
-        setData(mutableListOf())
+
+        transfersViewModel.transfersListLiveData.observe(viewLifecycleOwner) { transfers ->
+            setData(transfers)
+        }
+        transfersViewModel.getAllTransfers()
     }
 
     override fun onDestroy() {
