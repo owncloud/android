@@ -24,6 +24,9 @@ import androidx.lifecycle.LiveData
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
 import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.FileAlreadyExistsException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
@@ -99,7 +102,7 @@ class OCFileRepository(
             // 3. Update database with latest changes
             localFileDataSource.copyFile(
                 sourceFile = ocFile,
-                targetFile = targetFolder,
+                targetFolder = targetFolder,
                 finalRemotePath = finalRemotePath,
                 remoteId = remoteId
             )
@@ -131,8 +134,11 @@ class OCFileRepository(
     override fun getFilesSharedByLink(owner: String): List<OCFile> =
         localFileDataSource.getFilesSharedByLink(owner)
 
-    override fun getFilesAvailableOffline(owner: String): List<OCFile> =
-        localFileDataSource.getFilesAvailableOffline(owner)
+    override fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile> =
+        localFileDataSource.getFilesAvailableOfflineFromAccount(owner)
+
+    override fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile> =
+        localFileDataSource.getFilesAvailableOfflineFromEveryAccount()
 
     override fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile) {
         listOfFilesToMove.forEach { ocFile ->
@@ -170,7 +176,7 @@ class OCFileRepository(
             // 3. Update database with latest changes
             localFileDataSource.moveFile(
                 sourceFile = ocFile,
-                targetFile = targetFile,
+                targetFolder = targetFile,
                 finalRemotePath = finalRemotePath,
                 finalStoragePath = finalStoragePath
             )
@@ -226,6 +232,9 @@ class OCFileRepository(
                             needsToUpdateThumbnail = !remoteChild.isFolder
                             // remote eTag will not be set unless file CONTENTS are synchronized
                             etag = ""
+                            availableOfflineStatus =
+                                if (remoteFolder.isAvailableOffline) AVAILABLE_OFFLINE_PARENT else NOT_AVAILABLE_OFFLINE
+
                         })
                 } else {
                     // File exists in the database, we need to check several stuff.
@@ -236,6 +245,10 @@ class OCFileRepository(
                             etag = localChildToSync.etag
                             needsToUpdateThumbnail =
                                 !remoteChild.isFolder && remoteChild.modificationTimestamp != localChildToSync.modificationTimestamp
+                            // Probably not needed, if the child was already in the database, the av offline status should be also there
+                            if (remoteFolder.isAvailableOffline) {
+                                availableOfflineStatus = AVAILABLE_OFFLINE_PARENT
+                            }
                             // FIXME: What about renames? Need to fix storage path
                         })
                 }
@@ -312,6 +325,10 @@ class OCFileRepository(
 
     override fun saveFile(file: OCFile) {
         localFileDataSource.saveFile(file)
+    }
+
+    override fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus) {
+        localFileDataSource.updateAvailableOfflineStatusForFile(ocFile, newAvailableOfflineStatus)
     }
 
     private fun removeLocalFolderRecursively(ocFile: OCFile, onlyFromLocalStorage: Boolean) {

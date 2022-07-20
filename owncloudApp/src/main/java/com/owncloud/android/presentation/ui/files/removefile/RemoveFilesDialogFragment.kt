@@ -29,7 +29,6 @@ import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewM
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.util.ArrayList
 
 /**
  * Dialog requiring confirmation before removing a collection of given OCFiles.
@@ -82,7 +81,7 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
             val messageStringId: Int
             var containsFolder = false
             var containsDown = false
-            val containsAvailableOffline = false
+            var containsAvailableOffline = false
             for (file in files) {
                 if (file.isFolder) {
                     containsFolder = true
@@ -90,10 +89,9 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
                 if (file.isAvailableLocally) {
                     containsDown = true
                 }
-                // FIXME: 13/10/2020 : New_arch: Av.Offline
-                //            if (file.getAvailableOfflineStatus() != OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
-                //                containsAvailableOffline = true;
-                //            }
+                if (file.isAvailableOffline) {
+                    containsAvailableOffline = true
+                }
             }
             messageStringId = if (files.size == 1) {
                 // choose message for a single file

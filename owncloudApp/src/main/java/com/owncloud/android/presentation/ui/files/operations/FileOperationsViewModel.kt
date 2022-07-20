@@ -25,6 +25,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.availableoffline.usecases.SetFilesAsAvailableOfflineUseCase
+import com.owncloud.android.domain.availableoffline.usecases.UnsetFilesAsAvailableOfflineUseCase
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
@@ -48,6 +50,8 @@ class FileOperationsViewModel(
     private val removeFileUseCase: RemoveFileUseCase,
     private val renameFileUseCase: RenameFileUseCase,
     private val synchronizeFileUseCase: SynchronizeFileUseCase,
+    private val setFilesAsAvailableOfflineUseCase: SetFilesAsAvailableOfflineUseCase,
+    private val unsetFilesAsAvailableOfflineUseCase: UnsetFilesAsAvailableOfflineUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
@@ -78,6 +82,8 @@ class FileOperationsViewModel(
             is FileOperation.CopyOperation -> copyOperation(fileOperation)
             is FileOperation.SynchronizeFileOperation -> syncFileOperation(fileOperation)
             is FileOperation.CreateFolder -> createFolderOperation(fileOperation)
+            is FileOperation.SetFilesAsAvailableOffline -> setFileAsAvailableOffline(fileOperation)
+            is FileOperation.UnsetFilesAsAvailableOffline -> unsetFileAsAvailableOffline(fileOperation)
         }
     }
 
@@ -134,6 +140,18 @@ class FileOperationsViewModel(
             useCase = synchronizeFileUseCase,
             useCaseParams = SynchronizeFileUseCase.Params(fileOperation.fileToSync)
         )
+    }
+
+    private fun setFileAsAvailableOffline(fileOperation: FileOperation.SetFilesAsAvailableOffline) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            setFilesAsAvailableOfflineUseCase.execute(SetFilesAsAvailableOfflineUseCase.Params(fileOperation.filesToUpdate))
+        }
+    }
+
+    private fun unsetFileAsAvailableOffline(fileOperation: FileOperation.UnsetFilesAsAvailableOffline) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            unsetFilesAsAvailableOfflineUseCase.execute(UnsetFilesAsAvailableOfflineUseCase.Params(fileOperation.filesToUpdate))
+        }
     }
 
     private fun <Type, Params, PostResult> runOperation(

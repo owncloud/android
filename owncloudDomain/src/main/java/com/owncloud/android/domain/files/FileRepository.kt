@@ -21,6 +21,7 @@
 package com.owncloud.android.domain.files
 
 import androidx.lifecycle.LiveData
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 
@@ -34,11 +35,14 @@ interface FileRepository {
     fun getFolderContentAsLiveData(folderId: Long): LiveData<List<OCFile>>
     fun getFolderImages(folderId: Long): List<OCFile>
     fun getFilesSharedByLink(owner: String): List<OCFile>
-    fun getFilesAvailableOffline(owner: String): List<OCFile>
+    fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
+    fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
     fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile)
     fun readFile(remotePath: String): OCFile
     fun refreshFolder(remotePath: String): List<OCFile>
     fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean)
     fun renameFile(ocFile: OCFile, newName: String)
     fun saveFile(file: OCFile)
+
+    fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
 }

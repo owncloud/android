@@ -29,6 +29,10 @@ import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
+import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountUseCase
+import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromEveryAccountUseCase
+import com.owncloud.android.domain.availableoffline.usecases.SetFilesAsAvailableOfflineUseCase
+import com.owncloud.android.domain.availableoffline.usecases.UnsetFilesAsAvailableOfflineUseCase
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.GetPictureUploadsConfigurationStreamUseCase
 import com.owncloud.android.domain.camerauploads.usecases.GetVideoUploadsConfigurationStreamUseCase
@@ -43,7 +47,6 @@ import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
-import com.owncloud.android.domain.files.usecases.GetFilesAvailableOfflineUseCase
 import com.owncloud.android.domain.files.usecases.GetFilesSharedByLinkUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
@@ -112,11 +115,16 @@ val useCaseModule = module {
     factory { RenameFileUseCase(get()) }
     factory { SaveFileOrFolderUseCase(get()) }
     factory { GetFilesSharedByLinkUseCase(get()) }
-    factory { GetFilesAvailableOfflineUseCase(get()) }
     factory { GetSearchFolderContentUseCase(get()) }
     factory { SynchronizeFileUseCase(get(), get(), get(), get()) }
     factory { SynchronizeFolderUseCase(get(), get()) }
     factory { SortFilesUseCase() }
+
+    // Av Offline
+    factory { GetFilesAvailableOfflineFromAccountUseCase(get()) }
+    factory { GetFilesAvailableOfflineFromEveryAccountUseCase(get()) }
+    factory { SetFilesAsAvailableOfflineUseCase(get()) }
+    factory { UnsetFilesAsAvailableOfflineUseCase(get()) }
 
     // Sharing
     factory { CreatePrivateShareAsyncUseCase(get()) }

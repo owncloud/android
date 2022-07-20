@@ -1570,10 +1570,8 @@ class FileDisplayActivity : FileActivity(),
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
             }
             PreviewVideoFragment.canBePreviewed(file) && !WorkManager.getInstance(this).isDownloadPending(account, file) -> {
-                // FIXME: 13/10/2020 : New_arch: Av.Offline
-                // Available offline exception, don't initialize streaming
-                // if (!file.isAvailableLocally() && file.isAvailableOffline()) {
-                if (file.isAvailableLocally) {
+                // Available offline but not downloaded yet, don't initialize streaming
+                if (!file.isAvailableLocally && file.isAvailableOffline) {
                     // sync file content, then open with external apps
                     startSyncThenOpen(file)
                 } else {

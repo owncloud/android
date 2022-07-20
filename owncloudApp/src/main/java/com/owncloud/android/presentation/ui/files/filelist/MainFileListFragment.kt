@@ -219,7 +219,7 @@ class MainFileListFragment : Fragment(),
                 }
                 .filter {
                     when (fileListOption) {
-                        FileListOption.AV_OFFLINE -> it.keepInSync == 1
+                        FileListOption.AV_OFFLINE -> it.isAvailableOffline
                         FileListOption.SHARED_BY_LINK -> it.sharedByLink || it.sharedWithSharee == true
                         else -> true
                     }
@@ -512,6 +512,12 @@ class MainFileListFragment : Fragment(),
                     }
                     return true
                 }
+                R.id.action_set_available_offline -> {
+                    fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(singleFile)))
+                }
+                R.id.action_unset_available_offline -> {
+                    fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(singleFile)))
+                }
             }
         }
 
@@ -544,19 +550,11 @@ class MainFileListFragment : Fragment(),
                 return true
             }
             R.id.action_set_available_offline -> {
-                // TODO Waiting to be implemented
-                //containerActivity?.fileOperationsHelper?.toggleAvailableOffline(checkedFiles, true)
-                //getListView().invalidateViews()
+                fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(checkedFiles))
                 return true
             }
             R.id.action_unset_available_offline -> {
-                // TODO Waiting to be implemented
-                //containerActivity?.fileOperationsHelper?.toggleAvailableOffline(checkedFiles, false)
-                //getListView().invalidateViews()
-                //invalidateActionMode()
-                /*if (fileListOption?.isAvailableOffline() == true) {
-                    onRefresh()
-                }*/
+                fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(checkedFiles))
                 return true
             }
             R.id.action_move -> {

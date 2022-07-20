@@ -24,6 +24,7 @@ import androidx.lifecycle.Transformations
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileEntity
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
 import com.owncloud.android.domain.files.model.OCFile
@@ -33,10 +34,10 @@ import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 class OCLocalFileDataSource(
     private val fileDao: FileDao,
 ) : LocalFileDataSource {
-    override fun copyFile(sourceFile: OCFile, targetFile: OCFile, finalRemotePath: String, remoteId: String) {
+    override fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String) {
         fileDao.copy(
             sourceFile = sourceFile.toEntity(),
-            targetFile = targetFile.toEntity(),
+            targetFolder = targetFolder.toEntity(),
             finalRemotePath = finalRemotePath,
             remoteId = remoteId
         )
@@ -103,14 +104,20 @@ class OCLocalFileDataSource(
         it.toModel()
     }
 
-    override fun getFilesAvailableOffline(owner: String): List<OCFile> = fileDao.getFilesAvailableOffline(accountOwner = owner).map {
-        it.toModel()
-    }
+    override fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile> =
+        fileDao.getFilesAvailableOfflineFromAccount(accountOwner = owner).map {
+            it.toModel()
+        }
 
-    override fun moveFile(sourceFile: OCFile, targetFile: OCFile, finalRemotePath: String, finalStoragePath: String) =
+    override fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile> =
+        fileDao.getFilesAvailableOfflineFromEveryAccount().map {
+            it.toModel()
+        }
+
+    override fun moveFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, finalStoragePath: String) =
         fileDao.moveFile(
             sourceFile = sourceFile.toEntity(),
-            targetFile = targetFile.toEntity(),
+            targetFolder = targetFolder.toEntity(),
             finalRemotePath = finalRemotePath,
             finalStoragePath = sourceFile.storagePath?.let { finalStoragePath }
         )
@@ -134,10 +141,14 @@ class OCLocalFileDataSource(
     override fun renameFile(fileToRename: OCFile, finalRemotePath: String, finalStoragePath: String) {
         fileDao.moveFile(
             sourceFile = fileToRename.toEntity(),
-            targetFile = fileDao.getFileById(fileToRename.parentId!!)!!,
+            targetFolder = fileDao.getFileById(fileToRename.parentId!!)!!,
             finalRemotePath = finalRemotePath,
             finalStoragePath = fileToRename.storagePath?.let { finalStoragePath }
         )
+    }
+
+    override fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus) {
+        fileDao.updateAvailableOfflineStatusForFile(ocFile, newAvailableOfflineStatus.ordinal)
     }
 
     companion object {
@@ -159,7 +170,7 @@ class OCLocalFileDataSource(
                 sharedByLink = sharedByLink,
                 sharedWithSharee = sharedWithSharee,
                 storagePath = storagePath,
-                keepInSync = keepInSync,
+                availableOfflineStatus = AvailableOfflineStatus.fromValue(availableOfflineStatus),
                 needsToUpdateThumbnail = needsToUpdateThumbnail,
                 fileIsDownloading = fileIsDownloading,
                 lastSyncDateForData = lastSyncDateForData,
@@ -186,7 +197,7 @@ class OCLocalFileDataSource(
                 sharedByLink = sharedByLink,
                 sharedWithSharee = sharedWithSharee,
                 storagePath = storagePath,
-                keepInSync = keepInSync,
+                availableOfflineStatus = availableOfflineStatus?.ordinal ?: AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE.ordinal,
                 needsToUpdateThumbnail = needsToUpdateThumbnail,
                 fileIsDownloading = fileIsDownloading,
                 lastSyncDateForData = lastSyncDateForData,

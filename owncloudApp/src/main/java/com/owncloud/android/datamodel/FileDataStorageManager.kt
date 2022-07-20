@@ -32,9 +32,6 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.RemoteException
-import androidx.core.util.Pair
-import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
-import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION
@@ -64,7 +61,6 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSI
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI_CAPABILITIES
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_ACCOUNT_OWNER
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_KEEP_IN_SYNC
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PATH
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
@@ -86,7 +82,6 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.util.Vector
 
 class FileDataStorageManager : KoinComponent {
 
@@ -108,102 +103,6 @@ class FileDataStorageManager : KoinComponent {
         this.account = account
         mContext = activity
     }
-
-    /**
-     * Get a collection with all the files set by the user as available offline, from all the accounts
-     * in the device, putting away the folders
-     *
-     *
-     * This is the only method working with a NULL account in [.mAccount]. Not something to do often.
-     *
-     * @return List with all the files set by the user as available offline.
-     */
-    fun getAvailableOfflineFilesFromEveryAccount(): List<Pair<OCFile, String>> {
-        return listOf()
-        // FIXME: 13/10/2020 : New_arch: Av.Offline
-//        val result = ArrayList<Pair<OCFile, String>>()
-//        var cursorOnKeptInSync: Cursor? = null
-//        try {
-//            cursorOnKeptInSync = performQuery(
-//                uri = CONTENT_URI,
-//                projection = null,
-//                selection = "$FILE_KEEP_IN_SYNC = ? OR $FILE_KEEP_IN_SYNC = ?",
-//                selectionArgs = arrayOf(AVAILABLE_OFFLINE.value.toString(), AVAILABLE_OFFLINE_PARENT.value.toString()),
-//                sortOrder = null,
-//                performWithContentProviderClient = false
-//            )
-//
-//            if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
-//                var file: OCFile?
-//                var accountName: String
-//                do {
-//                    file = createFileInstance(cursorOnKeptInSync)
-//                    accountName =
-//                        cursorOnKeptInSync.getStringFromColumnOrEmpty(FILE_ACCOUNT_OWNER)
-//                    if (!file!!.isFolder && AccountUtils.exists(accountName, mContext)) {
-//                        result.add(Pair(file, accountName))
-//                    }
-//                } while (cursorOnKeptInSync.moveToNext())
-//            } else {
-//                Timber.d("No available offline files found")
-//            }
-//
-//        } catch (e: Exception) {
-//            Timber.e(e, "Exception retrieving all the available offline files")
-//
-//        } finally {
-//            cursorOnKeptInSync?.close()
-//        }
-//
-//        return result
-    }
-
-    /**
-     * Get a collection with all the files set by the user as available offline, from current account
-     * putting away files whose parent is also available offline
-     *
-     * @return List with all the files set by current user as available offline.
-     */
-    val availableOfflineFilesFromCurrentAccount: Vector<OCFile>
-        get() {
-            return Vector()
-            // FIXME: 13/10/2020 : New_arch: Av.Offline
-//            val result = Vector<OCFile>()
-//
-//            var cursorOnKeptInSync: Cursor? = null
-//            try {
-//                cursorOnKeptInSync = performQuery(
-//                    uri = CONTENT_URI,
-//                    projection = null,
-//                    selection = "($FILE_KEEP_IN_SYNC = ? AND NOT $FILE_KEEP_IN_SYNC = ? ) AND $FILE_ACCOUNT_OWNER = ? ",
-//                    selectionArgs = arrayOf(
-//                        AVAILABLE_OFFLINE.value.toString(),
-//                        AVAILABLE_OFFLINE_PARENT.value.toString(),
-//                        account.name
-//                    ),
-//                    sortOrder = null,
-//                    performWithContentProviderClient = false
-//                )
-//
-//                if (cursorOnKeptInSync != null && cursorOnKeptInSync.moveToFirst()) {
-//                    var file: OCFile?
-//                    do {
-//                        file = createFileInstance(cursorOnKeptInSync)
-//                        result.add(file)
-//                    } while (cursorOnKeptInSync.moveToNext())
-//                } else {
-//                    Timber.d("No available offline files found")
-//                }
-//
-//            } catch (e: Exception) {
-//                Timber.e(e, "Exception retrieving all the available offline files")
-//
-//            } finally {
-//                cursorOnKeptInSync?.close()
-//            }
-//
-//            return result.apply { sort() }
-        }
 
     fun sharedByLinkFilesFromCurrentAccount(): List<OCFile>? = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFilesSharedByLinkUseCase: GetFilesSharedByLinkUseCase by inject()
@@ -498,23 +397,6 @@ class FileDataStorageManager : KoinComponent {
 //        }
     }
 
-    /**
-     * Adds the appropriate initial value for FILE_KEEP_IN_SYNC to
-     * passed [ContentValues] instance.
-     *
-     * @param file [OCFile] which av-offline property will be set.
-     * @param cv   [ContentValues] instance where the property is added.
-     */
-    private fun setInitialAvailableOfflineStatus(file: OCFile, cv: ContentValues) {
-        // set appropriate av-off folder depending on ancestor
-        val inFolderAvailableOffline = isAnyAncestorAvailableOfflineFolder(file)
-        if (inFolderAvailableOffline) {
-            cv.put(FILE_KEEP_IN_SYNC, AVAILABLE_OFFLINE_PARENT.value)
-        } else {
-            cv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
-        }
-    }
-
     fun migrateLegacyToScopedPath(
         legacyStorageDirectoryPath: String,
         rootStorageDirectoryPath: String,
@@ -560,69 +442,6 @@ class FileDataStorageManager : KoinComponent {
         Timber.d("Updated path for ${filesWithPathUpdated.size} downloaded files")
     }
 
-    /**
-     * Updates available-offline status of OCFile received as a parameter, with its current value.
-     *
-     *
-     * Saves the new value property for the given file in persistent storage.
-     *
-     *
-     * If the file is a folder, updates the value of all its known descendants accordingly.
-     *
-     * @param file File which available-offline status will be updated.
-     * @return 'true' if value was updated, 'false' otherwise.
-     */
-    fun saveLocalAvailableOfflineStatus(file: OCFile): Boolean {
-        return false
-        // FIXME: 13/10/2020 : New_arch: Av.Offline
-//        if (!fileExists(file.fileId)) {
-//            return false
-//        }
-//
-//        val newStatus = file.availableOfflineStatus
-//        require(AVAILABLE_OFFLINE_PARENT != newStatus) {
-//            "Forbidden value, AVAILABLE_OFFLINE_PARENT is calculated, cannot be set"
-//        }
-//
-//        val cv = ContentValues()
-//        cv.put(FILE_KEEP_IN_SYNC, file.availableOfflineStatus.value)
-//
-//        var updatedCount: Int
-//        try {
-//            updatedCount = performUpdate(
-//                uri = CONTENT_URI,
-//                contentValues = cv,
-//                where = "$_ID=?",
-//                selectionArgs = arrayOf(file.fileId.toString())
-//            )
-//
-//            // Update descendants
-//            if (file.isFolder && updatedCount > 0) {
-//                val descendantsCv = ContentValues()
-//                if (newStatus == AVAILABLE_OFFLINE) {
-//                    // all descendant files MUST be av-off due to inheritance, not due to previous value
-//                    descendantsCv.put(FILE_KEEP_IN_SYNC, AVAILABLE_OFFLINE_PARENT.value)
-//                } else {
-//                    // all descendant files MUST be not-available offline
-//                    descendantsCv.put(FILE_KEEP_IN_SYNC, NOT_AVAILABLE_OFFLINE.value)
-//                }
-//                val selectDescendants = selectionForAllDescendantsOf(file)
-//                updatedCount += performUpdate(
-//                    uri = CONTENT_URI,
-//                    contentValues = descendantsCv,
-//                    where = selectDescendants.first,
-//                    selectionArgs = selectDescendants.second
-//                )
-//            }
-//
-//        } catch (e: RemoteException) {
-//            Timber.e(e, "Fail updating available offline status")
-//            return false
-//        }
-//
-//        return updatedCount > 0
-    }
-
     // TODO: New_arch: Remove this and call usecase inside FilesViewModel
     fun getFolderContent(parentId: Long): List<OCFile> = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFolderContentUseCase: GetFolderContentUseCase by inject()
@@ -631,37 +450,6 @@ class FileDataStorageManager : KoinComponent {
             getFolderContentUseCase.execute(GetFolderContentUseCase.Params(parentId))
         }.getDataOrNull()
         result ?: listOf()
-    }
-
-    /**
-     * Checks if it is favorite or it is inside a favorite folder
-     *
-     * @param file [OCFile] which ancestors will be searched.
-     * @return true/false
-     */
-    // FIXME: 13/10/2020 : New_arch: Av.Offline
-    private fun isAnyAncestorAvailableOfflineFolder(file: OCFile) = false //getAvailableOfflineAncestorOf(file) != null
-
-    /**
-     * Returns ancestor folder with available offline status AVAILABLE_OFFLINE.
-     *
-     * @param file [OCFile] which ancestors will be searched.
-     * @return Ancestor folder with available offline status AVAILABLE_OFFLINE, or null if
-     * does not exist.
-     */
-    // FIXME: 13/10/2020 : New_arch: Av.Offline
-    private fun getAvailableOfflineAncestorOf(file: OCFile): OCFile? {
-        return null
-//        var avOffAncestor: OCFile? = null
-//        val parent = getFileById(file.parentId)
-//        if (parent != null && parent.isFolder) {  // file is null for the parent of the root folder
-//            if (parent.availableOfflineStatus == AVAILABLE_OFFLINE) {
-//                avOffAncestor = parent
-//            } else if (parent.fileName != ROOT_PATH) {
-//                avOffAncestor = getAvailableOfflineAncestorOf(parent)
-//            }
-//        }
-//        return avOffAncestor
     }
 
     // FIXME: 13/10/2020 : New_arch: Migration
@@ -965,13 +753,6 @@ class FileDataStorageManager : KoinComponent {
             filesUndelete = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_UNDELETE)),
             filesVersioning = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_VERSIONING))
         )
-    }
-
-    // FIXME: 13/10/2020 : New_arch: Av.Offline
-    private fun selectionForAllDescendantsOf(file: OCFile): Pair<String, Array<String>> {
-        val selection = "$FILE_ACCOUNT_OWNER=? AND $FILE_PATH LIKE ? "
-        val selectionArgs = arrayOf(account.name, "${file.remotePath}_%") // one or more characters after remote path
-        return Pair(selection, selectionArgs)
     }
 
     private fun performQuery(

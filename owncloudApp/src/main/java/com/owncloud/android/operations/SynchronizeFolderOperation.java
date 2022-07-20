@@ -33,6 +33,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.domain.UseCaseResult;
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.operations.OperationCancelledException;
@@ -59,6 +60,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER;
 import static com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY;
 import static org.koin.java.KoinJavaComponent.get;
 import static org.koin.java.KoinJavaComponent.inject;
@@ -207,7 +209,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         final RemoteOperationResult<ArrayList<RemoteFile>> fetchFolderResult;
 
         SynchronizeFolderUseCase synchronizeFolderUseCase = get(SynchronizeFolderUseCase.class);
-        synchronizeFolderUseCase.execute(new SynchronizeFolderUseCase.Params(mRemotePath, mAccount.name, SYNC_FOLDER_RECURSIVELY));
+        synchronizeFolderUseCase.execute(new SynchronizeFolderUseCase.Params(mRemotePath, mAccount.name, REFRESH_FOLDER));
 
         mFailsInFileSyncsFound = 0;
         mConflictsFound = 0;
@@ -364,12 +366,11 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
                 // remote eTag will not be set unless file CONTENTS are synchronized
                 updatedLocalFile.setEtag("");
                 // new files need to check av-off status of parent folder!
-                // FIXME: 19/10/2020 : New_arch: Av.Offline
-                //                if (updatedFolder.isAvailableOffline()) {
-                //                    updatedLocalFile.setAvailableOfflineStatus(
-                //                            OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
-                //                    );
-                //                }
+                if (updatedFolder.isAvailableOffline()) {
+                    updatedLocalFile.setAvailableOfflineStatus(
+                            AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+                    );
+                }
                 // new files need to update thumbnails
                 updatedLocalFile.setNeedsToUpdateThumbnail(true);
             }
@@ -417,8 +418,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      */
     private boolean addToSyncContents(OCFile localFile, OCFile remoteFile) {
 
-        // FIXME: 13/10/2020 : New_arch: Av.Offline
-        boolean shouldSyncContents = (mSyncContentOfRegularFiles || localFile.isAvailableLocally()); //|| localFile.isAvailableOffline());
+        boolean shouldSyncContents = (mSyncContentOfRegularFiles || localFile.isAvailableLocally() || localFile.isAvailableOffline());
         boolean serverUnchanged;
 
         if (localFile.isFolder()) {
