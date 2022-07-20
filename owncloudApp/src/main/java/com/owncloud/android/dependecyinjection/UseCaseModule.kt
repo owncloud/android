@@ -115,14 +115,14 @@ val useCaseModule = module {
     factory { RenameFileUseCase(get()) }
     factory { SaveFileOrFolderUseCase(get()) }
     factory { GetFilesSharedByLinkUseCase(get()) }
-    factory { GetFilesAvailableOfflineFromAccountUseCase(get()) }
-    factory { GetFilesAvailableOfflineFromEveryAccountUseCase(get()) }
     factory { GetSearchFolderContentUseCase(get()) }
     factory { SynchronizeFileUseCase(get(), get(), get(), get()) }
     factory { SynchronizeFolderUseCase(get(), get()) }
     factory { SortFilesUseCase() }
 
     // Av Offline
+    factory { GetFilesAvailableOfflineFromAccountUseCase(get()) }
+    factory { GetFilesAvailableOfflineFromEveryAccountUseCase(get()) }
     factory { SetFilesAsAvailableOfflineUseCase(get()) }
     factory { UnsetFilesAsAvailableOfflineUseCase(get()) }
 
