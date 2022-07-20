@@ -24,13 +24,23 @@ import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
+import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.UploadListItemBinding
-import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.datamodel.ThumbnailsCacheManager.AsyncThumbnailDrawable
+import com.owncloud.android.datamodel.ThumbnailsCacheManager.ThumbnailGenerationTask
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.domain.transfers.model.TransferStatus
+import com.owncloud.android.extensions.statusToStringRes
+import com.owncloud.android.lib.common.OwnCloudAccount
+import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.DisplayUtils
+import com.owncloud.android.utils.MimetypeIconUtil
+import timber.log.Timber
 import java.io.File
 
 class TransfersAdapter : RecyclerView.Adapter<TransfersAdapter.TransferItemViewHolder>() {
@@ -56,8 +66,9 @@ class TransfersAdapter : RecyclerView.Adapter<TransfersAdapter.TransferItemViewH
 
             uploadRemotePath.text = holder.itemView.context.getString(R.string.app_name) + remoteFile.parent
 
-            uploadFileSize.text = DisplayUtils.bytesToHumanReadable(transfer.fileSize, holder.itemView.context) + ", "
+            uploadFileSize.text = DisplayUtils.bytesToHumanReadable(transfer.fileSize, holder.itemView.context)
 
+            uploadDate.isVisible = transfer.transferEndTimestamp != null && transfer.status != TransferStatus.TRANSFER_FAILED
             transfer.transferEndTimestamp?.let {
                 val dateString = DisplayUtils.getRelativeDateTimeString(
                     holder.itemView.context,
@@ -66,12 +77,95 @@ class TransfersAdapter : RecyclerView.Adapter<TransfersAdapter.TransferItemViewH
                     DateUtils.WEEK_IN_MILLIS,
                     0
                 )
-                uploadDate.text = dateString
+                uploadDate.text = ", $dateString"
             }
 
-            uploadAccount.text = transfer.accountName
+            try {
+                val account = AccountUtils.getOwnCloudAccountByName(holder.itemView.context, transfer.accountName)
+                val oca = OwnCloudAccount(account, holder.itemView.context)
+                val accountName = oca.displayName + " @ " +
+                        DisplayUtils.convertIdn(account.name.substring(account.name.lastIndexOf("@") + 1), false)
+                uploadAccount.text  = accountName
+            } catch (e: Exception) {
+                Timber.w("Couldn't get display name for account, using old style")
+                uploadAccount.text = transfer.accountName
+            }
 
-            uploadStatus.text = transfer.status.name
+            uploadStatus.isVisible = transfer.status != TransferStatus.TRANSFER_SUCCEEDED
+            uploadStatus.text = " — " + holder.itemView.context.getString(transfer.statusToStringRes())
+
+            val fakeFileToCheatThumbnailsCacheManagerInterface = OCFile(
+                owner = transfer.accountName,
+                length = transfer.fileSize,
+                modificationTimestamp = 0,
+                remotePath = transfer.remotePath,
+                mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(transfer.localPath),
+                storagePath = transfer.localPath,
+            )
+            val allowedToCreateNewThumbnail = ThumbnailsCacheManager.cancelPotentialThumbnailWork(
+                fakeFileToCheatThumbnailsCacheManagerInterface,
+                thumbnail
+            )
+            val parentActivity = holder.itemView.context as FileActivity
+            if (fakeFileToCheatThumbnailsCacheManagerInterface.isImage
+                && fakeFileToCheatThumbnailsCacheManagerInterface.remoteId != null
+                && transfer.status == TransferStatus.TRANSFER_SUCCEEDED
+            ) {
+                // Thumbnail in cache?
+                var thumbnailImage = ThumbnailsCacheManager
+                    .getBitmapFromDiskCache(fakeFileToCheatThumbnailsCacheManagerInterface.remoteId.toString())
+                if (thumbnailImage != null && !fakeFileToCheatThumbnailsCacheManagerInterface.needsToUpdateThumbnail) {
+                    thumbnail.setImageBitmap(thumbnailImage)
+                } else {
+                    // Generate new thumbnail
+                    if (allowedToCreateNewThumbnail) {
+                        val task = ThumbnailGenerationTask(thumbnail, parentActivity.account)
+                        if (thumbnailImage == null) {
+                            thumbnailImage = ThumbnailsCacheManager.mDefaultImg
+                        }
+                        val asyncDrawable = AsyncThumbnailDrawable(
+                            parentActivity.resources,
+                            thumbnailImage,
+                            task
+                        )
+                        thumbnail.setImageDrawable(asyncDrawable)
+                        task.execute(fakeFileToCheatThumbnailsCacheManagerInterface)
+                        Timber.v("Executing task to generate a new thumbnail")
+                    }
+                }
+                if (MimetypeIconUtil.getBestMimeTypeByFilename(transfer.localPath) == "image/png") {
+                    thumbnail.setBackgroundColor(holder.itemView.context.getColor(R.color.background_color))
+                }
+            } else if (fakeFileToCheatThumbnailsCacheManagerInterface.isImage) {
+                val file = File(transfer.localPath)
+                // Thumbnail in cache?
+                var thumbnailImage = ThumbnailsCacheManager.getBitmapFromDiskCache(file.hashCode().toString())
+                if (thumbnailImage != null) {
+                    thumbnail.setImageBitmap(thumbnailImage)
+                } else {
+                    // Generate new thumbnail
+                    if (allowedToCreateNewThumbnail) {
+                        val task = ThumbnailGenerationTask(thumbnail)
+                        thumbnailImage = ThumbnailsCacheManager.mDefaultImg
+                        val asyncDrawable = AsyncThumbnailDrawable(
+                            parentActivity.resources,
+                            thumbnailImage,
+                            task
+                        )
+                        thumbnail.setImageDrawable(asyncDrawable)
+                        task.execute(file)
+                        Timber.v("Executing task to generate a new thumbnail")
+                    }
+                }
+                if (MimetypeIconUtil.getBestMimeTypeByFilename(transfer.localPath).equals("image/png", ignoreCase = true)) {
+                    thumbnail.setBackgroundColor(holder.itemView.context.getColor(R.color.background_color))
+                }
+            } else {
+                thumbnail.setImageResource(
+                    MimetypeIconUtil.getFileTypeIconId(MimetypeIconUtil.getBestMimeTypeByFilename(transfer.localPath), fileName)
+                )
+            }
+            // TODO: progress bar, upload right button
         }
     }
 
