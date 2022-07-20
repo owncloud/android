@@ -48,7 +48,8 @@ val OC_FILE = OCFile(
     modificationTimestamp = 1593510589000,
     etag = "5efb0c13c688f",
     mimeType = "image/jpeg",
-    length = 3000000
+    length = 3000000,
+    availableOfflineStatus = AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE,
 )
 
 val OC_AVAILABLE_OFFLINE_FILE = OCFile(

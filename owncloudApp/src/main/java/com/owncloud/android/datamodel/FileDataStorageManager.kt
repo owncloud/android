@@ -32,7 +32,6 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.RemoteException
-import androidx.core.util.Pair
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION
@@ -83,7 +82,6 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.util.Vector
 
 class FileDataStorageManager : KoinComponent {
 

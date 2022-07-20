@@ -90,7 +90,7 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
                     containsDown = true
                 }
                 if (file.isAvailableOffline) {
-                    containsAvailableOffline = true;
+                    containsAvailableOffline = true
                 }
             }
             messageStringId = if (files.size == 1) {

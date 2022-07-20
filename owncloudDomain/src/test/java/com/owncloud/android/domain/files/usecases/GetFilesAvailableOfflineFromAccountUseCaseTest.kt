@@ -17,22 +17,22 @@
  */
 package com.owncloud.android.domain.files.usecases
 
-import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineUseCase
+import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountUseCase
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.FileRepository
-import com.owncloud.android.testutil.OC_EMPTY_FILES
 import com.owncloud.android.testutil.OC_AVAILABLE_OFFLINE_FILES
+import com.owncloud.android.testutil.OC_EMPTY_FILES
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert
 import org.junit.Test
 
-class GetFilesAvailableOfflineUseCaseTest {
+class GetFilesAvailableOfflineFromAccountUseCaseTest {
 
     private val repository: FileRepository = spyk()
-    private val useCase = GetFilesAvailableOfflineUseCase(repository)
-    private val useCaseParams = GetFilesAvailableOfflineUseCase.Params(owner = "owner")
+    private val useCase = GetFilesAvailableOfflineFromAccountUseCase(repository)
+    private val useCaseParams = GetFilesAvailableOfflineFromAccountUseCase.Params(owner = "owner")
 
     @Test
     fun `get files available offline - ok`() {

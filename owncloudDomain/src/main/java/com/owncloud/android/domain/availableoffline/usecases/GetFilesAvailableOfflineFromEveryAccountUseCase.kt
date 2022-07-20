@@ -18,7 +18,6 @@
 package com.owncloud.android.domain.availableoffline.usecases
 
 import com.owncloud.android.domain.BaseUseCase
-import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
