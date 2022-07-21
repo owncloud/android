@@ -68,7 +68,6 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
-import com.owncloud.android.domain.files.usecases.GetFilesSharedByLinkUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
@@ -103,15 +102,6 @@ class FileDataStorageManager : KoinComponent {
         contentResolver = null
         this.account = account
         mContext = activity
-    }
-
-    fun sharedByLinkFilesFromCurrentAccount(): List<OCFile>? = runBlocking(CoroutinesDispatcherProvider().io) {
-        val getFilesSharedByLinkUseCase: GetFilesSharedByLinkUseCase by inject()
-
-        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getFilesSharedByLinkUseCase.execute(GetFilesSharedByLinkUseCase.Params(account.name))
-        }.getDataOrNull() ?: emptyList()
-        result
     }
 
     // TODO: New_arch: Remove this and call usecase inside FilesViewModel
