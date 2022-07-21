@@ -111,9 +111,9 @@ class TransfersAdapter(
                 thumbnail
             )
             val parentActivity = holder.itemView.context as FileActivity
-            if (fakeFileToCheatThumbnailsCacheManagerInterface.isImage
-                && fakeFileToCheatThumbnailsCacheManagerInterface.remoteId != null
-                && transfer.status == TransferStatus.TRANSFER_SUCCEEDED
+            if (fakeFileToCheatThumbnailsCacheManagerInterface.isImage &&
+                fakeFileToCheatThumbnailsCacheManagerInterface.remoteId != null &&
+                transfer.status == TransferStatus.TRANSFER_SUCCEEDED
             ) {
                 // Thumbnail in cache?
                 var thumbnailImage = ThumbnailsCacheManager
@@ -182,7 +182,7 @@ class TransfersAdapter(
             } else if (transfer.status == TransferStatus.TRANSFER_FAILED) {
                 uploadRightButton.apply {
                     setImageResource(R.drawable.ic_action_delete_grey)
-                    setOnClickListener{
+                    setOnClickListener {
                         delete(transfer.id!!)
                     }
                 }
