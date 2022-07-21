@@ -43,7 +43,11 @@ import com.owncloud.android.utils.MimetypeIconUtil
 import timber.log.Timber
 import java.io.File
 
-class TransfersAdapter : RecyclerView.Adapter<TransfersAdapter.TransferItemViewHolder>() {
+class TransfersAdapter(
+    val cancel: (Long) -> Unit,
+    val delete: (Long) -> Unit,
+    val retry: (OCTransfer) -> Unit,
+) : RecyclerView.Adapter<TransfersAdapter.TransferItemViewHolder>() {
 
     private val transfersList = mutableListOf<OCTransfer>()
 
@@ -165,7 +169,30 @@ class TransfersAdapter : RecyclerView.Adapter<TransfersAdapter.TransferItemViewH
                     MimetypeIconUtil.getFileTypeIconId(MimetypeIconUtil.getBestMimeTypeByFilename(transfer.localPath), fileName)
                 )
             }
-            // TODO: progress bar, upload right button
+
+            uploadRightButton.isVisible = transfer.status != TransferStatus.TRANSFER_SUCCEEDED
+            holder.itemView.setOnClickListener(null)
+            if (transfer.status == TransferStatus.TRANSFER_IN_PROGRESS) {
+                uploadRightButton.apply {
+                    setImageResource(R.drawable.ic_action_cancel_grey)
+                    setOnClickListener {
+                        cancel(transfer.id!!)
+                    }
+                }
+            } else if (transfer.status == TransferStatus.TRANSFER_FAILED) {
+                uploadRightButton.apply {
+                    setImageResource(R.drawable.ic_action_delete_grey)
+                    setOnClickListener{
+                        delete(transfer.id!!)
+                    }
+                }
+                holder.itemView.setOnClickListener {
+                    retry(transfer)
+                }
+                holder.binding.ListItemLayout.isClickable = true
+                holder.binding.ListItemLayout.isFocusable = true
+            }
+            // TODO: progress bar
         }
     }
 
@@ -182,12 +209,6 @@ class TransfersAdapter : RecyclerView.Adapter<TransfersAdapter.TransferItemViewH
 
     class TransferItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = UploadListItemBinding.bind(itemView)
-    }
-
-    interface Listener {
-        fun delete(transfer: OCTransfer)
-        fun retry(transfer: OCTransfer)
-        fun cancel(transfer: OCTransfer)
     }
 }
 

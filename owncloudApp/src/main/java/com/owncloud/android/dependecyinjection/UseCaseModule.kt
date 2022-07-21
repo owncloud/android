@@ -67,6 +67,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncU
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
+import com.owncloud.android.domain.transfers.usecases.DeleteTransferWithIdUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
@@ -80,6 +81,8 @@ import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
@@ -149,7 +152,10 @@ val useCaseModule = module {
     factory { UploadFileInConflictUseCase(get(), get()) }
     factory { CancelUploadForFileUseCase(get(), get()) }
     factory { RetryUploadFromSystemUseCase(get(), get()) }
+    factory { RetryUploadFromContentUriUseCase(get(), get()) }
     factory { GetAllTransfersUseCase(get()) }
+    factory { CancelUploadWithIdUseCase(get(), get()) }
+    factory { DeleteTransferWithIdUseCase(get()) }
 
     // User
     factory { GetStoredQuotaUseCase(get()) }
