@@ -23,14 +23,15 @@ package com.owncloud.android.presentation.viewmodels.transfers
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.domain.transfers.usecases.DeleteTransferWithIdUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
-import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import kotlinx.coroutines.launch
@@ -38,7 +39,11 @@ import kotlinx.coroutines.launch
 class TransfersViewModel(
     private val uploadFilesFromSAFUseCase: UploadFilesFromSAFUseCase,
     private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,
-    private val getAllTransfersUseCase: GetAllTransfersUseCase,
+    private val cancelUploadWithIdUseCase: CancelUploadWithIdUseCase,
+    private val deleteTransferWithIdUseCase: DeleteTransferWithIdUseCase,
+    private val retryUploadFromSystemUseCase: RetryUploadFromSystemUseCase,
+    private val retryUploadFromContentUriUseCase: RetryUploadFromContentUriUseCase,
+    getAllTransfersUseCase: GetAllTransfersUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
@@ -82,6 +87,38 @@ class TransfersViewModel(
                     listOfLocalPaths = listOfLocalPaths,
                     uploadFolderPath = uploadFolderPath
                 )
+            )
+        }
+    }
+
+    fun cancelTransferWithId(id: Long) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            cancelUploadWithIdUseCase.execute(
+                CancelUploadWithIdUseCase.Params(uploadId = id)
+            )
+        }
+    }
+
+    fun deleteTransferWithId(id: Long) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            deleteTransferWithIdUseCase.execute(
+                DeleteTransferWithIdUseCase.Params(id = id)
+            )
+        }
+    }
+
+    fun retryUploadFromSystem(id: Long) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            retryUploadFromSystemUseCase.execute(
+                RetryUploadFromSystemUseCase.Params(uploadIdInStorageManager = id)
+            )
+        }
+    }
+
+    fun retryUploadFromContentUri(id: Long) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            retryUploadFromContentUriUseCase.execute(
+                RetryUploadFromContentUriUseCase.Params(uploadIdInStorageManager = id)
             )
         }
     }
