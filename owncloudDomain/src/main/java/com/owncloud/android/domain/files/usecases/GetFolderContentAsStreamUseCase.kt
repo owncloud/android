@@ -1,8 +1,8 @@
-/*
+/**
  * ownCloud Android client application
  *
- * @author Fernando Sanz Velasco
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Abel García de Prada
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -18,17 +18,17 @@
  */
 package com.owncloud.android.domain.files.usecases
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
+import kotlinx.coroutines.flow.Flow
 
-class GetFilesSharedByLinkUseCase(
-    private val fileRepository: FileRepository
-) : BaseUseCaseWithResult<List<OCFile>, GetFilesSharedByLinkUseCase.Params>() {
+class GetFolderContentAsStreamUseCase(
+    private val repository: FileRepository
+) : BaseUseCase<Flow<List<OCFile>>, GetFolderContentAsStreamUseCase.Params>() {
 
-    override fun run(params: Params): List<OCFile> = fileRepository.getFilesSharedByLink(params.owner)
+    override fun run(params: Params) = repository.getFolderContentAsStream(params.folderId)
 
-    data class Params(
-        val owner: String
-    )
+    data class Params(val folderId: Long)
+
 }

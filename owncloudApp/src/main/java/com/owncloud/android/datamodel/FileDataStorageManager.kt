@@ -64,16 +64,15 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_ACCOUNT_OWNER
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PATH
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.extensions.getIntFromColumnOrThrow
-import com.owncloud.android.extensions.getStringFromColumnOrEmpty
-import com.owncloud.android.extensions.getStringFromColumnOrThrow
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
-import com.owncloud.android.domain.files.usecases.GetFilesSharedByLinkUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
+import com.owncloud.android.extensions.getIntFromColumnOrThrow
+import com.owncloud.android.extensions.getStringFromColumnOrEmpty
+import com.owncloud.android.extensions.getStringFromColumnOrThrow
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.CoroutineScope
@@ -102,15 +101,6 @@ class FileDataStorageManager : KoinComponent {
         contentResolver = null
         this.account = account
         mContext = activity
-    }
-
-    fun sharedByLinkFilesFromCurrentAccount(): List<OCFile>? = runBlocking(CoroutinesDispatcherProvider().io) {
-        val getFilesSharedByLinkUseCase: GetFilesSharedByLinkUseCase by inject()
-
-        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getFilesSharedByLinkUseCase.execute(GetFilesSharedByLinkUseCase.Params(account.name))
-        }.getDataOrNull() ?: emptyList()
-        result
     }
 
     // TODO: New_arch: Remove this and call usecase inside FilesViewModel

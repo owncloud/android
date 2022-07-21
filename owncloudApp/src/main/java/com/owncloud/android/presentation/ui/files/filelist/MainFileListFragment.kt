@@ -49,6 +49,7 @@ import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
@@ -202,27 +203,21 @@ class MainFileListFragment : Fragment(),
 
     private fun subscribeToViewModels() {
         // Observe the current folder displayed and notify the listener
-        mainFileListViewModel.currentFileLiveData.observe(viewLifecycleOwner) {
+        collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) {
             fileActions?.onCurrentFolderUpdated(it)
         }
-        mainFileListViewModel.folderContentLiveData.observe(viewLifecycleOwner) {}
 
         // Observe the file list ui state.
-        mainFileListViewModel.fileListUiStateLiveData.observe(viewLifecycleOwner) { fileListUiState ->
+        collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
+            if (fileListUiState !is MainFileListViewModel.FileListUiState.Success) return@collectLatestLifecycleFlow
+
             val fileListPreFilters = fileListUiState.folderContent
             val searchFilter = fileListUiState.searchFilter
-            val fileListOption = fileListUiState.fileListOption
 
+            // TODO: Apply filters on viewModel or retrieve data filtered from database (second option better)
             val fileListPostFilters = fileListPreFilters
                 .filter { fileToFilter ->
-                    fileToFilter.fileName.contains(searchFilter, ignoreCase = true)
-                }
-                .filter {
-                    when (fileListOption) {
-                        FileListOption.AV_OFFLINE -> it.isAvailableOffline
-                        FileListOption.SHARED_BY_LINK -> it.sharedByLink || it.sharedWithSharee == true
-                        else -> true
-                    }
+                    fileToFilter.fileName.contains(searchFilter ?: "", ignoreCase = true)
                 }
 
             updateFileListData(fileListPostFilters)
@@ -445,7 +440,7 @@ class MainFileListFragment : Fragment(),
      *
      */
     fun onBrowseUp() {
-        mainFileListViewModel.manageBrowseUp(fileListOption)
+        mainFileListViewModel.manageBrowseUp()
     }
 
     /**

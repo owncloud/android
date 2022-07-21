@@ -24,23 +24,24 @@ package com.owncloud.android.presentation.ui.files.filelist
 import android.accounts.Account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkManager
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.datamodel.FileDataStorageManager
+import com.owncloud.android.datamodel.FileDataStorageManager.Companion.ROOT_PARENT_ID
+import com.owncloud.android.datamodel.OCFile.ROOT_PATH
 import com.owncloud.android.db.PreferenceManager
+import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
 import com.owncloud.android.domain.files.model.FileListOption
+import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
-import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
+import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
+import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortType
 import com.owncloud.android.domain.utils.Event
@@ -54,13 +55,22 @@ import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.Sy
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY
 import com.owncloud.android.utils.FileStorageUtils
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.io.File
 
 class MainFileListViewModel(
-    private val getFolderContentAsLiveDataUseCase: GetFolderContentAsLiveDataUseCase,
+    private val getFolderContentAsStreamUseCase: GetFolderContentAsStreamUseCase,
     private val getSearchFolderContentUseCase: GetSearchFolderContentUseCase,
+    private val getSharedByLinkForAccountAsStreamUseCase: GetSharedByLinkForAccountAsStreamUseCase,
+    private val getFilesAvailableOfflineFromAccountAsStreamUseCase: GetFilesAvailableOfflineFromAccountAsStreamUseCase,
     private val getFileByIdUseCase: GetFileByIdUseCase,
     private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
     private val sortFilesUseCase: SortFilesUseCase,
@@ -71,33 +81,39 @@ class MainFileListViewModel(
     private val workManager: WorkManager,
 ) : ViewModel() {
 
-    /** LiveData to maintain the current file displayed */
-    private val _currentFileLiveData = MutableLiveData<OCFile>()
-    val currentFileLiveData: LiveData<OCFile>
-        get() = _currentFileLiveData
+    private var accountName: MutableStateFlow<String> = MutableStateFlow(
+        value = AccountUtils.getCurrentOwnCloudAccount(contextProvider.getContext()).name
+    )
 
-    /** LiveData to maintain the current file list state */
-    private val _fileListUiStateLiveData = MutableLiveData<FileListUiState>()
-    val fileListUiStateLiveData: LiveData<FileListUiState>
-        get() = _fileListUiStateLiveData
+    val currentFolderDisplayed = MutableStateFlow(
+        // TODO: Get not nullable root folder for account or create and retrieve it. This MUST be fixed.
+        OCFile(ROOT_PATH, MIME_DIR, 1, accountName.value)
+    )
 
-    /** LiveData to maintain the folder content for the current file displayed.
-     * It is automatically updated after updating the _currentFileLiveData
-     */
-    private val _folderContentLiveData: LiveData<Event<List<OCFile>>> =
-        Transformations.switchMap(currentFileLiveData) { folder ->
-            getFolderContentAsLiveDataUseCase.execute(GetFolderContentAsLiveDataUseCase.Params(folderId = folder.id!!)).map { folderContent ->
-                val newFileListUiState = composeFileListUiState(
-                    folderToDisplay = folder,
-                    folderContent = folderContent,
-                    searchFilter = if (fileListUiStateLiveData.value?.folderToDisplay != folder) "" else null
-                )
-                _fileListUiStateLiveData.postValue(newFileListUiState)
-                Event(folderContent)
-            }
+    private var fileListOption: MutableStateFlow<FileListOption> = MutableStateFlow(FileListOption.ALL_FILES)
+    private var searchFilter: MutableStateFlow<String> = MutableStateFlow("")
+
+    /** File list ui state combines the other fields and generate a new state whenever any of them changes */
+    val fileListUiState: StateFlow<FileListUiState> =
+        combine(
+            currentFolderDisplayed,
+            accountName,
+            fileListOption,
+            searchFilter,
+        ) { currentFolderDisplayed, accountName, fileListOption, searchFilter ->
+            generateFileListUiStateForThisParams(
+                currentFolderDisplayed = currentFolderDisplayed,
+                accountName = accountName,
+                fileListOption = fileListOption,
+                searchFilter = searchFilter
+            )
         }
-    val folderContentLiveData: LiveData<Event<List<OCFile>>>
-        get() = _folderContentLiveData
+            .flatMapLatest { it }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = FileListUiState.Loading
+            )
 
     private val _syncFolder = MediatorLiveData<Event<UIResult<Unit>>>()
     val syncFolder: LiveData<Event<UIResult<Unit>>> = _syncFolder
@@ -106,14 +122,14 @@ class MainFileListViewModel(
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val result = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId = fileId))
             result.getDataOrNull()?.let {
-                _currentFileLiveData.postValue(it)
+                currentFolderDisplayed.update { it }
             }
         }
     }
 
     fun getFile(): OCFile {
         // FIXME: Remove those ugly !!
-        return currentFileLiveData.value!!
+        return currentFolderDisplayed.value
     }
 
     fun setGridModeAsPreferred() {
@@ -137,56 +153,53 @@ class MainFileListViewModel(
         return sortFilesUseCase.execute(SortFilesUseCase.Params(files, SortType.fromPreferences(sortOrderSaved), ascendingModeSaved))
     }
 
-    fun manageBrowseUp(fileListOption: FileListOption?) {
+    fun manageBrowseUp() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val currentFolder = currentFileLiveData.value!!
-            var parentDir: OCFile?
-            var parentPath: String? = null
-            if (currentFolder.parentId != FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
-                parentPath = File(currentFolder.remotePath).parent
-                parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
+            val currentFolder = currentFolderDisplayed.value
+            val parentId = currentFolder.parentId
+            val parentDir: OCFile?
 
-                val fileByIdResult = getFileByRemotePathUseCase.execute(
+            // browsing back to not shared by link or av offline should update to root
+            if (parentId != null && parentId != ROOT_PARENT_ID.toLong()) {
+                // Browsing to parent folder. Not root
+                val fileByIdResult = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(parentId))
+                when (fileListOption.value) {
+                    FileListOption.ALL_FILES -> {
+                        parentDir = fileByIdResult.getDataOrNull()
+                    }
+                    FileListOption.SHARED_BY_LINK -> {
+                        val fileById = fileByIdResult.getDataOrNull()!!
+                        parentDir = if (!fileById.sharedByLink || fileById.sharedWithSharee != true) {
+                            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
+                        } else fileById
+                    }
+                    FileListOption.AV_OFFLINE -> {
+                        val fileById = fileByIdResult.getDataOrNull()!!
+                        parentDir = if (!fileById.isAvailableOffline) {
+                            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
+                        } else fileById
+                    }
+                }
+            } else if (parentId == ROOT_PARENT_ID.toLong()) {
+                // Browsing to parent folder. Root
+                val rootFolderForAccountResult = getFileByRemotePathUseCase.execute(
                     GetFileByRemotePathUseCase.Params(
-                        owner = currentFolder.owner,
-                        remotePath = parentPath!!
+                        remotePath = ROOT_PATH, owner = currentFolder.owner
                     )
                 )
-                parentDir = if (fileByIdResult.isSuccess) fileByIdResult.getDataOrNull() else null
+                parentDir = rootFolderForAccountResult.getDataOrNull()
             } else {
-                val fileByIdResult = getFileByIdUseCase.execute(
-                    GetFileByIdUseCase.Params(
-                        fileId = OCFile.ROOT_PARENT_ID
-                    )
-                )
-                parentDir = if (fileByIdResult.isSuccess) fileByIdResult.getDataOrNull() else null
-            }
-            while (parentDir == null) {
-                parentPath = if (parentPath != null && parentPath != File.separator) File(parentPath).parent else File.separator
-                parentPath = if (parentPath.endsWith(File.separator)) parentPath else parentPath + File.separator
-                val fileByIdResult = getFileByRemotePathUseCase.execute(
-                    GetFileByRemotePathUseCase.Params(
-                        owner = currentFolder.owner,
-                        remotePath = parentPath!!
-                    )
-                )
-                parentDir = if (fileByIdResult.isSuccess) fileByIdResult.getDataOrNull() else null
-            }
-
-            if (fileListOption?.isSharedByLink() == true && !parentDir.sharedByLink) {
-                val fileByIdResult = getFileByIdUseCase.execute(
-                    GetFileByIdUseCase.Params(
-                        fileId = OCFile.ROOT_PARENT_ID
-                    )
-                )
-                parentDir = if (fileByIdResult.isSuccess) fileByIdResult.getDataOrNull() else null
+                // Browsing to non existing parent folder.
+                TODO()
             }
 
             updateFolderToDisplay(parentDir!!)
-            refreshFolder(
-                ocFolder = parentDir,
-                isPickingAFolder = false
-            )
+            if (fileListOption.value.isAllFiles()) {
+                refreshFolder(
+                    ocFolder = parentDir,
+                    isPickingAFolder = false
+                )
+            }
         }
     }
 
@@ -195,19 +208,15 @@ class MainFileListViewModel(
     }
 
     fun updateFolderToDisplay(newFolderToDisplay: OCFile) {
-        _currentFileLiveData.postValue(newFolderToDisplay)
+        currentFolderDisplayed.update { newFolderToDisplay }
     }
 
     fun updateSearchFilter(newSearchFilter: String) {
-        _fileListUiStateLiveData.postValue(
-            composeFileListUiState(searchFilter = newSearchFilter)
-        )
+        searchFilter.update { newSearchFilter }
     }
 
     fun updateFileListOption(newFileListOption: FileListOption) {
-        _fileListUiStateLiveData.postValue(
-            composeFileListUiState(fileListOption = newFileListOption)
-        )
+        fileListOption.update { newFileListOption }
     }
 
     fun refreshFolder(
@@ -239,40 +248,10 @@ class MainFileListViewModel(
         )
     )
 
-    private fun composeFileListUiState(
-        account: Account? = _fileListUiStateLiveData.value?.account,
-        folderToDisplay: OCFile? = _fileListUiStateLiveData.value?.folderToDisplay,
-        folderContent: List<OCFile>? = _fileListUiStateLiveData.value?.folderContent,
-        fileListOption: FileListOption? = _fileListUiStateLiveData.value?.fileListOption,
-        searchFilter: String? = _fileListUiStateLiveData.value?.searchFilter,
-    ): FileListUiState {
-        Timber.i("================ Composing a new file list Ui state ==============")
-        Timber.i("Account received from parameter: $account")
-        Timber.i("FolderToDisplay received from parameter: $folderToDisplay")
-        Timber.i("FolderContent received from parameter: $folderContent")
-        Timber.i("FileListOption received from parameter: $fileListOption")
-        Timber.i("SearchFilter received from parameter: $searchFilter")
-
-        return FileListUiState(
-            account = account ?: AccountUtils.getCurrentOwnCloudAccount(contextProvider.getContext()),
-            folderToDisplay = folderToDisplay!!,
-            folderContent = folderContent ?: emptyList(),
-            fileListOption = fileListOption ?: FileListOption.ALL_FILES,
-            searchFilter = searchFilter ?: ""
-        ).also {
-            Timber.i("================ Already composed a new file list Ui state ==============")
-            Timber.i("Account: ${it.account.name}")
-            Timber.i("File list option: ${it.fileListOption}")
-            Timber.i("Search filter text: ${it.searchFilter}")
-            Timber.i("Folder to display: id[${it.folderToDisplay.id}], fileName[${it.folderToDisplay.fileName}]")
-            Timber.i("Folder content: size[${it.folderContent.size}]")
-        }
-    }
-
     fun getMessageForEmptyList(pickingAFolder: Boolean = false): String {
         if (pickingAFolder) return contextProvider.getString(R.string.file_list_empty_moving)
 
-        val stringId = when (fileListUiStateLiveData.value?.fileListOption) {
+        val stringId = when (fileListOption.value) {
             FileListOption.AV_OFFLINE -> R.string.file_list_empty_available_offline
             FileListOption.SHARED_BY_LINK -> R.string.file_list_empty_shared_by_links
             else -> R.string.file_list_empty
@@ -280,13 +259,85 @@ class MainFileListViewModel(
         return contextProvider.getString(stringId)
     }
 
-    data class FileListUiState(
-        val account: Account,
-        val folderToDisplay: OCFile,
-        val folderContent: List<OCFile>,
-        val fileListOption: FileListOption,
-        val searchFilter: String,
-    )
+    private fun generateFileListUiStateForThisParams(
+        currentFolderDisplayed: OCFile,
+        accountName: String,
+        fileListOption: FileListOption,
+        searchFilter: String?
+    ): Flow<FileListUiState> =
+        when (fileListOption) {
+            FileListOption.ALL_FILES -> retrieveFlowForAllFiles(currentFolderDisplayed, accountName, fileListOption, searchFilter)
+            FileListOption.SHARED_BY_LINK -> retrieveFlowForShareByLink(currentFolderDisplayed, accountName, fileListOption, searchFilter)
+            FileListOption.AV_OFFLINE -> retrieveFlowForAvailableOffline(currentFolderDisplayed, accountName, fileListOption, searchFilter)
+        }
+
+    private fun retrieveFlowForAllFiles(
+        currentFolderDisplayed: OCFile,
+        accountName: String,
+        fileListOption: FileListOption,
+        searchFilter: String?
+    ): Flow<FileListUiState> =
+        getFolderContentAsStreamUseCase.execute(
+            GetFolderContentAsStreamUseCase.Params(
+                // TODO: Fix the issue with the initial value for currentFolderDisplayed. Fallback MUST be the root folder for the current account.
+                //   NOT 1
+                currentFolderDisplayed.id ?: 1
+            )
+        ).map {
+            FileListUiState.Success(
+                accountName, currentFolderDisplayed, it, fileListOption, searchFilter
+            )
+        }
+
+    /**
+     * In root folder, all the shared by link files should be shown. Otherwise, the folder content should be shown.
+     * Logic to handle the browse back in [manageBrowseUp]
+     */
+    private fun retrieveFlowForShareByLink(
+        currentFolderDisplayed: OCFile,
+        accountName: String,
+        fileListOption: FileListOption,
+        searchFilter: String?
+    ): Flow<FileListUiState> = if (currentFolderDisplayed.remotePath == ROOT_PATH) {
+        getSharedByLinkForAccountAsStreamUseCase.execute(GetSharedByLinkForAccountAsStreamUseCase.Params(accountName)).map {
+            FileListUiState.Success(
+                accountName, currentFolderDisplayed, it, fileListOption, searchFilter
+            )
+        }
+    } else {
+        retrieveFlowForAllFiles(currentFolderDisplayed, accountName, fileListOption, searchFilter)
+    }
+
+    /**
+     * In root folder, all the available offline files should be shown. Otherwise, the folder content should be shown.
+     * Logic to handle the browse back in [manageBrowseUp]
+     */
+    private fun retrieveFlowForAvailableOffline(
+        currentFolderDisplayed: OCFile,
+        accountName: String,
+        fileListOption: FileListOption,
+        searchFilter: String?
+    ): Flow<FileListUiState> = if (currentFolderDisplayed.remotePath == ROOT_PATH) {
+        getFilesAvailableOfflineFromAccountAsStreamUseCase.execute(GetFilesAvailableOfflineFromAccountAsStreamUseCase.Params(accountName))
+            .map {
+                FileListUiState.Success(
+                    accountName, currentFolderDisplayed, it, fileListOption, searchFilter
+                )
+            }
+    } else {
+        retrieveFlowForAllFiles(currentFolderDisplayed, accountName, fileListOption, searchFilter)
+    }
+
+    sealed interface FileListUiState {
+        object Loading : FileListUiState
+        data class Success(
+            val accountName: String,
+            val folderToDisplay: OCFile?,
+            val folderContent: List<OCFile>,
+            val fileListOption: FileListOption,
+            val searchFilter: String?,
+        ) : FileListUiState
+    }
 
     companion object {
         private const val RECYCLER_VIEW_PREFERRED = "RECYCLER_VIEW_PREFERRED"

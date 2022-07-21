@@ -29,6 +29,7 @@ import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
+import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountUseCase
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromEveryAccountUseCase
 import com.owncloud.android.domain.availableoffline.usecases.SetFilesAsAvailableOfflineUseCase
@@ -47,11 +48,11 @@ import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
-import com.owncloud.android.domain.files.usecases.GetFilesSharedByLinkUseCase
-import com.owncloud.android.domain.files.usecases.GetFolderContentAsLiveDataUseCase
+import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
+import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
@@ -118,13 +119,13 @@ val useCaseModule = module {
     factory { GetFileByIdUseCase(get()) }
     factory { GetFileByRemotePathUseCase(get()) }
     factory { GetFolderContentUseCase(get()) }
-    factory { GetFolderContentAsLiveDataUseCase(get()) }
+    factory { GetFolderContentAsStreamUseCase(get()) }
     factory { GetFolderImagesUseCase(get()) }
     factory { MoveFileUseCase(get()) }
     factory { RemoveFileUseCase(get()) }
     factory { RenameFileUseCase(get()) }
     factory { SaveFileOrFolderUseCase(get()) }
-    factory { GetFilesSharedByLinkUseCase(get()) }
+    factory { GetSharedByLinkForAccountAsStreamUseCase(get()) }
     factory { GetSearchFolderContentUseCase(get()) }
     factory { SynchronizeFileUseCase(get(), get(), get(), get()) }
     factory { SynchronizeFolderUseCase(get(), get()) }
@@ -132,6 +133,7 @@ val useCaseModule = module {
 
     // Av Offline
     factory { GetFilesAvailableOfflineFromAccountUseCase(get()) }
+    factory { GetFilesAvailableOfflineFromAccountAsStreamUseCase(get()) }
     factory { GetFilesAvailableOfflineFromEveryAccountUseCase(get()) }
     factory { SetFilesAsAvailableOfflineUseCase(get()) }
     factory { UnsetFilesAsAvailableOfflineUseCase(get()) }

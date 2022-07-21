@@ -1,8 +1,8 @@
-/**
+/*
  * ownCloud Android client application
  *
- * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Fernando Sanz Velasco
+ * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -18,17 +18,18 @@
  */
 package com.owncloud.android.domain.files.usecases
 
-import androidx.lifecycle.LiveData
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
+import kotlinx.coroutines.flow.Flow
 
-class GetFolderContentAsLiveDataUseCase(
-    private val repository: FileRepository
-) : BaseUseCase<LiveData<List<OCFile>>, GetFolderContentAsLiveDataUseCase.Params>() {
+class GetSharedByLinkForAccountAsStreamUseCase(
+    private val fileRepository: FileRepository
+) : BaseUseCase<Flow<List<OCFile>>, GetSharedByLinkForAccountAsStreamUseCase.Params>() {
 
-    override fun run(params: Params) = repository.getFolderContentAsLiveData(params.folderId)
+    override fun run(params: Params): Flow<List<OCFile>> = fileRepository.getSharedByLinkForAccountAsStream(params.owner)
 
-    data class Params(val folderId: Long)
-
+    data class Params(
+        val owner: String
+    )
 }

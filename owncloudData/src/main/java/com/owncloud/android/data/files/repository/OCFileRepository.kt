@@ -20,7 +20,6 @@
 
 package com.owncloud.android.data.files.repository
 
-import androidx.lifecycle.LiveData
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.storage.LocalStorageProvider
@@ -34,6 +33,7 @@ import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
+import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import java.io.File
 
@@ -125,14 +125,17 @@ class OCFileRepository(
     override fun getFolderContent(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderContent(folderId)
 
-    override fun getFolderContentAsLiveData(folderId: Long): LiveData<List<OCFile>> =
-        localFileDataSource.getFolderContentAsLiveData(folderId)
+    override fun getFolderContentAsStream(folderId: Long): Flow<List<OCFile>> =
+        localFileDataSource.getFolderContentAsStream(folderId)
 
     override fun getFolderImages(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderImages(folderId)
 
-    override fun getFilesSharedByLink(owner: String): List<OCFile> =
-        localFileDataSource.getFilesSharedByLink(owner)
+    override fun getSharedByLinkForAccountAsStream(owner: String): Flow<List<OCFile>> =
+        localFileDataSource.getSharedByLinkForAccountAsStream(owner)
+
+    override fun getFilesAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFile>> =
+        localFileDataSource.getFilesAvailableOfflineFromAccountAsStream(owner)
 
     override fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile> =
         localFileDataSource.getFilesAvailableOfflineFromAccount(owner)

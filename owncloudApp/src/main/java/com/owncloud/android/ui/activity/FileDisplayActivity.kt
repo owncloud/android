@@ -621,6 +621,7 @@ class FileDisplayActivity : FileActivity(),
                 // Need a cleanup
                 listMainFileFragment?.navigateToFolderId(secondFragment!!.file!!.parentId!!)
                 cleanSecondFragment()
+                updateToolbar(listMainFileFragment?.getCurrentFile())
             } else {
                 val currentDirDisplayed = listMainFileFragment?.getCurrentFile()
                 if (currentDirDisplayed == null || currentDirDisplayed.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
@@ -1220,13 +1221,17 @@ class FileDisplayActivity : FileActivity(),
                     SynchronizeFileUseCase.SyncType.AlreadySynchronized -> showSnackMessage(getString(R.string.sync_file_nothing_to_do_msg))
                     is SynchronizeFileUseCase.SyncType.ConflictDetected -> showSnackMessage(getString(R.string.sync_conflicts_in_favourites_ticker))
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> showSnackMessage("Download enqueued")
-                    SynchronizeFileUseCase.SyncType.FileNotFound -> { /** Nothing to do atm. If we are in details view, go back to file list */ }
+                    SynchronizeFileUseCase.SyncType.FileNotFound -> {
+                        /** Nothing to do atm. If we are in details view, go back to file list */
+                    }
                     is SynchronizeFileUseCase.SyncType.UploadEnqueued -> showSnackMessage("Upload enqueued")
                     null -> TODO()
                 }
             }
             is UIResult.Error -> showSnackMessage(getString(R.string.sync_fail_ticker))
-            is UIResult.Loading -> { /** Not needed at the moment, we may need it later */ }
+            is UIResult.Loading -> {
+                /** Not needed at the moment, we may need it later */
+            }
         }
 //        TODO:
 //        /// no matter if sync was right or not - if there was no transfer and the file is down, OPEN it
