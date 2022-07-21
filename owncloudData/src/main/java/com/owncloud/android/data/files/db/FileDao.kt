@@ -18,7 +18,6 @@
  */
 package com.owncloud.android.data.files.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -30,6 +29,7 @@ import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
 import com.owncloud.android.domain.ext.isOneOf
 import com.owncloud.android.domain.files.model.OCFile
+import kotlinx.coroutines.flow.Flow
 import java.io.File.separatorChar
 
 @Dao
@@ -75,9 +75,9 @@ abstract class FileDao {
     ): List<OCFileEntity>
 
     @Query(SELECT_FOLDER_CONTENT)
-    abstract fun getFolderContentAsLiveData(
+    abstract fun getFolderContentAsStream(
         folderId: Long
-    ): LiveData<List<OCFileEntity>>
+    ): Flow<List<OCFileEntity>>
 
     @Query(SELECT_FOLDER_BY_MIMETYPE)
     abstract fun getFolderByMimeType(
@@ -88,7 +88,12 @@ abstract class FileDao {
     @Query(SELECT_FILES_SHARED_BY_LINK)
     abstract fun getFilesSharedByLink(
         accountOwner: String
-    ): List<OCFileEntity>
+    ): Flow<List<OCFileEntity>>
+
+    @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT)
+    abstract fun getFilesAvailableOfflineFromAccountAsStream(
+        accountOwner: String
+    ): Flow<List<OCFileEntity>>
 
     @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT)
     abstract fun getFilesAvailableOfflineFromAccount(
@@ -381,8 +386,8 @@ abstract class FileDao {
             "SELECT * " +
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE owner = :accountOwner " +
-                    "AND sharedByLink NOT LIKE '%0%' " +
-                    "OR sharedWithSharee NOT LIKE '%0%'"
+                    "AND (sharedByLink NOT LIKE '%0%' " +
+                    "OR sharedWithSharee NOT LIKE '%0%')"
 
         private const val SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT =
             "SELECT * " +
