@@ -229,9 +229,16 @@
   <string name="pass_code_remove_your_pass_code">Parola kodunuzu kaldırın</string>
   <string name="pass_code_mismatch">Parola kodları aynı değil</string>
   <string name="pass_code_wrong">Hatalı parola kodu</string>
+  <string name="numberkeyboard_zero">0</string>
+  <string name="numberkeyboard_one">1</string>
+  <string name="numberkeyboard_two">2</string>
   <string name="numberkeyboard_three">3</string>
   <string name="numberkeyboard_four">4</string>
   <string name="numberkeyboard_five">5</string>
+  <string name="numberkeyboard_six">6</string>
+  <string name="numberkeyboard_seven">7</string>
+  <string name="numberkeyboard_eight">8</string>
+  <string name="numberkeyboard_nine">9</string>
   <string name="biometric_not_enrolled">Bu özelliği kullanmak için en az bir biyometrik giriş kaydedilmeli</string>
   <string name="biometric_prompt_title">Biyometrik giriş yap</string>
   <string name="biometric_prompt_subtitle">Biyometrik kimlik bilgilerinizi kullanarak giriş yapın</string>
@@ -406,6 +413,8 @@
   <string name="actionbar_move">Taşı</string>
   <string name="file_list_empty_moving">Burada bir şey yok. Bir klasör ekleyebilirsiniz!</string>
   <string name="folder_picker_choose_button_text">Seç</string>
+  <string name="folder_picker_move_here_button_text">Buraya Taşı</string>
+  <string name="folder_picker_copy_here_button_text">Buraya Kopyala</string>
   <string name="move_file_not_found">Taşıma başarısız. Lütfen dosyanın mevcut olup olmadığını denetleyin</string>
   <string name="move_file_invalid_into_descendent">Klasörü, kendi alt klasörüne taşımak mümkün değil</string>
   <string name="move_file_invalid_overwrite">Dosya zaten hedef klasörde mevcut</string>
