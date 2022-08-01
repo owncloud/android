@@ -217,6 +217,7 @@
     <string name="uploads_view_group_current_uploads">Current</string>
     <string name="uploads_view_group_failed_uploads">Failed (tap to retry)</string>
     <string name="uploads_view_group_finished_uploads">Uploaded</string>
+    <string name="uploads_view_group_queued_uploads">Enqueued</string>
     <string name="uploads_view_group_file_count">%d files</string>
     <string name="uploads_view_group_file_count_single">%d file</string>
     <string name="uploads_view_upload_status_succeeded">Completed</string>
