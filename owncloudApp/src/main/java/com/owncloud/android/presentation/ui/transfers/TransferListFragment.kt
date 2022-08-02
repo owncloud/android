@@ -85,6 +85,15 @@ class TransferListFragment : Fragment() {
                         ).show()
                     }
                 }
+            },
+            clearFailed = {
+                transfersViewModel.clearFailedTransfers()
+            },
+            retryFailed = {
+                transfersViewModel.retryFailedTransfers()
+            },
+            clearSuccessful = {
+                transfersViewModel.clearSuccessfulTransfers()
             }
         )
         binding.transfersRecyclerView.apply {

@@ -26,10 +26,13 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.domain.transfers.usecases.ClearFailedTransfersUseCase
+import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.DeleteTransferWithIdUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
@@ -43,6 +46,9 @@ class TransfersViewModel(
     private val deleteTransferWithIdUseCase: DeleteTransferWithIdUseCase,
     private val retryUploadFromSystemUseCase: RetryUploadFromSystemUseCase,
     private val retryUploadFromContentUriUseCase: RetryUploadFromContentUriUseCase,
+    private val clearFailedTransfersUseCase: ClearFailedTransfersUseCase,
+    private val retryFailedUploadsUseCase: RetryFailedUploadsUseCase,
+    private val clearSuccessfulTransfersUseCase: ClearSuccessfulTransfersUseCase,
     getAllTransfersUseCase: GetAllTransfersUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
@@ -120,6 +126,24 @@ class TransfersViewModel(
             retryUploadFromContentUriUseCase.execute(
                 RetryUploadFromContentUriUseCase.Params(uploadIdInStorageManager = id)
             )
+        }
+    }
+
+    fun clearFailedTransfers() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            clearFailedTransfersUseCase.execute(Unit)
+        }
+    }
+
+    fun retryFailedTransfers() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            retryFailedUploadsUseCase.execute(Unit)
+        }
+    }
+
+    fun clearSuccessfulTransfers() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            clearSuccessfulTransfersUseCase.execute(Unit)
         }
     }
 }

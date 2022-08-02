@@ -50,6 +50,9 @@ class TransfersAdapter(
     val cancel: (Long) -> Unit,
     val delete: (Long) -> Unit,
     val retry: (OCTransfer) -> Unit,
+    val clearFailed: () -> Unit,
+    val retryFailed: () -> Unit,
+    val clearSuccessful: () -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val transfersList = mutableListOf<TransferRecyclerItem>()
@@ -229,17 +232,23 @@ class TransfersAdapter(
                         TransferStatus.TRANSFER_FAILED -> {
                             uploadListGroupButtonClear.apply {
                                 isVisible = true
-                                setOnClickListener { }
+                                setOnClickListener {
+                                    clearFailed()
+                                }
                             }
                             uploadListGroupButtonRetry.apply {
                                 isVisible = true
-                                setOnClickListener { }
+                                setOnClickListener {
+                                    retryFailed()
+                                }
                             }
                         }
                         TransferStatus.TRANSFER_SUCCEEDED -> {
                             uploadListGroupButtonClear.apply {
                                 isVisible = true
-                                setOnClickListener { }
+                                setOnClickListener {
+                                    clearSuccessful()
+                                }
                             }
                             uploadListGroupButtonRetry.isVisible = false
                         }
