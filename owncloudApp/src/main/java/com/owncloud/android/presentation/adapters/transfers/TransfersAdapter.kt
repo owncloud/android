@@ -85,7 +85,8 @@ class TransfersAdapter(
 
                     uploadFileSize.text = DisplayUtils.bytesToHumanReadable(transferItem.transfer.fileSize, holder.itemView.context)
 
-                    uploadDate.isVisible = transferItem.transfer.transferEndTimestamp != null && transferItem.transfer.status != TransferStatus.TRANSFER_FAILED
+                    uploadDate.isVisible =
+                        transferItem.transfer.transferEndTimestamp != null && transferItem.transfer.status != TransferStatus.TRANSFER_FAILED
                     transferItem.transfer.transferEndTimestamp?.let {
                         val dateString = DisplayUtils.getRelativeDateTimeString(
                             holder.itemView.context,
@@ -102,7 +103,7 @@ class TransfersAdapter(
                         val oca = OwnCloudAccount(account, holder.itemView.context)
                         val accountName = oca.displayName + " @ " +
                                 DisplayUtils.convertIdn(account.name.substring(account.name.lastIndexOf("@") + 1), false)
-                        uploadAccount.text  = accountName
+                        uploadAccount.text = accountName
                     } catch (e: Exception) {
                         Timber.w("Couldn't get display name for account, using old style")
                         uploadAccount.text = transferItem.transfer.accountName
@@ -219,7 +220,8 @@ class TransfersAdapter(
                 holder.binding.apply {
                     uploadListGroupName.text = holder.itemView.context.getString(headerItem.status.toStringRes())
 
-                    val stringResFileCount = if (headerItem.numberTransfers == 1) R.string.uploads_view_group_file_count_single else R.string.uploads_view_group_file_count
+                    val stringResFileCount =
+                        if (headerItem.numberTransfers == 1) R.string.uploads_view_group_file_count_single else R.string.uploads_view_group_file_count
                     val fileCountText: String = String.format(holder.itemView.context.getString(stringResFileCount), headerItem.numberTransfers)
                     textViewFileCount.text = fileCountText
 
@@ -227,17 +229,17 @@ class TransfersAdapter(
                         TransferStatus.TRANSFER_FAILED -> {
                             uploadListGroupButtonClear.apply {
                                 isVisible = true
-                                setOnClickListener {  }
+                                setOnClickListener { }
                             }
                             uploadListGroupButtonRetry.apply {
                                 isVisible = true
-                                setOnClickListener {  }
+                                setOnClickListener { }
                             }
                         }
                         TransferStatus.TRANSFER_SUCCEEDED -> {
                             uploadListGroupButtonClear.apply {
                                 isVisible = true
-                                setOnClickListener {  }
+                                setOnClickListener { }
                             }
                             uploadListGroupButtonRetry.isVisible = false
                         }
@@ -294,8 +296,8 @@ class TransfersAdapter(
                 TransferStatus.TRANSFER_FAILED -> 2
                 TransferStatus.TRANSFER_SUCCEEDED -> 3
             }
-            transfersGroupedByStatusOrdered[order*2] = listOf(headerItem)
-            transfersGroupedByStatusOrdered[(order*2)+1] = transferItems
+            transfersGroupedByStatusOrdered[order * 2] = listOf(headerItem)
+            transfersGroupedByStatusOrdered[(order * 2) + 1] = transferItems
         }
         transfersList.clear()
         for (items in transfersGroupedByStatusOrdered) {
@@ -317,11 +319,11 @@ class TransfersAdapter(
     fun getItem(position: Int) = transfersList[position]
 
     sealed class TransferRecyclerItem {
-        data class TransferItem(val transfer: OCTransfer): TransferRecyclerItem()
+        data class TransferItem(val transfer: OCTransfer) : TransferRecyclerItem()
         data class HeaderItem(
             val status: TransferStatus,
             val numberTransfers: Int,
-        ): TransferRecyclerItem()
+        ) : TransferRecyclerItem()
     }
 
     class TransferItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
