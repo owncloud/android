@@ -281,18 +281,26 @@ class TransfersAdapter(
             }
         }
 
-        val transfersAndHeaders = mutableListOf<TransferRecyclerItem>()
         val transfersGroupedByStatus = transfers.groupBy { it.status }
+        val transfersGroupedByStatusOrdered = Array<List<TransferRecyclerItem>>(8) { emptyList() }
         transfersGroupedByStatus.forEach { transferMap ->
             val headerItem = TransferRecyclerItem.HeaderItem(transferMap.key, transferMap.value.size)
             val transferItems = transferMap.value.sortedWith(comparator).map { transfer ->
                 TransferRecyclerItem.TransferItem(transfer)
             }
-            transfersAndHeaders.add(headerItem)
-            transfersAndHeaders.addAll(transferItems)
+            val order = when (transferMap.key) {
+                TransferStatus.TRANSFER_IN_PROGRESS -> 0
+                TransferStatus.TRANSFER_QUEUED -> 1
+                TransferStatus.TRANSFER_FAILED -> 2
+                TransferStatus.TRANSFER_SUCCEEDED -> 3
+            }
+            transfersGroupedByStatusOrdered[order*2] = listOf(headerItem)
+            transfersGroupedByStatusOrdered[(order*2)+1] = transferItems
         }
         transfersList.clear()
-        transfersList.addAll(transfersAndHeaders)
+        for (items in transfersGroupedByStatusOrdered) {
+            transfersList.addAll(items)
+        }
         notifyDataSetChanged()
         //diffResult.dispatchUpdatesTo(this)
     }
