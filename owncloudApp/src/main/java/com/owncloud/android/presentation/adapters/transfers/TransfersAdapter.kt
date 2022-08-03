@@ -25,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
@@ -39,6 +40,7 @@ import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.extensions.statusToStringRes
 import com.owncloud.android.extensions.toStringRes
 import com.owncloud.android.lib.common.OwnCloudAccount
+import com.owncloud.android.presentation.diffutils.TransfersDiffUtil
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -264,8 +266,6 @@ class TransfersAdapter(
     }
 
     fun setData(transfers: List<OCTransfer>) {
-        //val diffCallback = LoggingDiffUtil(logsList, logs)
-        //val diffResult = DiffUtil.calculateDiff(diffCallback)
         val comparator: Comparator<OCTransfer> = object : Comparator<OCTransfer> {
             override fun compare(transfer1: OCTransfer, transfer2: OCTransfer): Int {
                 if (transfer1.status == TransferStatus.TRANSFER_IN_PROGRESS) {
@@ -294,6 +294,7 @@ class TransfersAdapter(
 
         val transfersGroupedByStatus = transfers.groupBy { it.status }
         val transfersGroupedByStatusOrdered = Array<List<TransferRecyclerItem>>(8) { emptyList() }
+        val newTransfersList = mutableListOf<TransferRecyclerItem>()
         transfersGroupedByStatus.forEach { transferMap ->
             val headerItem = TransferRecyclerItem.HeaderItem(transferMap.key, transferMap.value.size)
             val transferItems = transferMap.value.sortedWith(comparator).map { transfer ->
@@ -308,12 +309,14 @@ class TransfersAdapter(
             transfersGroupedByStatusOrdered[order * 2] = listOf(headerItem)
             transfersGroupedByStatusOrdered[(order * 2) + 1] = transferItems
         }
-        transfersList.clear()
         for (items in transfersGroupedByStatusOrdered) {
-            transfersList.addAll(items)
+            newTransfersList.addAll(items)
         }
-        notifyDataSetChanged()
-        //diffResult.dispatchUpdatesTo(this)
+        val diffCallback = TransfersDiffUtil(transfersList, newTransfersList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        transfersList.clear()
+        transfersList.addAll(newTransfersList)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun getItemCount(): Int = transfersList.size
