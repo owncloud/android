@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.viewmodels.transfers
 
+import android.accounts.Account
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -38,6 +39,8 @@ import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromContentUriUseCase
+import com.owncloud.android.usecases.transfers.downloads.CancelDownloadsForAccountUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadsFromAccountUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import kotlinx.coroutines.launch
 
@@ -52,6 +55,8 @@ class TransfersViewModel(
     private val retryFailedUploadsUseCase: RetryFailedUploadsUseCase,
     private val clearSuccessfulTransfersUseCase: ClearSuccessfulTransfersUseCase,
     getAllTransfersAsLiveDataUseCase: GetAllTransfersAsLiveDataUseCase,
+    private val cancelUploadsFromAccountUseCase: CancelUploadsFromAccountUseCase,
+    private val cancelDownloadsForAccountUseCase: CancelDownloadsForAccountUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
@@ -117,6 +122,14 @@ class TransfersViewModel(
         }
     }
 
+    fun cancelUploadsFromAccount(accountName: String) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            cancelUploadsFromAccountUseCase.execute(
+                CancelUploadsFromAccountUseCase.Params(accountName = accountName)
+            )
+        }
+    }
+
     fun deleteTransferWithId(id: Long) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             deleteTransferWithIdUseCase.execute(
@@ -156,6 +169,14 @@ class TransfersViewModel(
     fun clearSuccessfulTransfers() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             clearSuccessfulTransfersUseCase.execute(Unit)
+        }
+    }
+
+    fun cancelDownloadsForAccount(account: Account) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            cancelDownloadsForAccountUseCase.execute(
+                CancelDownloadsForAccountUseCase.Params(account = account)
+            )
         }
     }
 }
