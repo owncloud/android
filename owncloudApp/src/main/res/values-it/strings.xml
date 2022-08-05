@@ -590,10 +590,12 @@ Il Download del file inizierà automaticamente</string>
   <string name="supports_oauth2_error">Non è stato possibile sapere se OAuth2 è supportato</string>
   <string name="get_base_url_error">Non è stato possibile conoscere l\'URL di base del server</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_explanation">%1$s di dati trovati sulla tua archiviazione esterna. Sarano spostati nell\'archiviazione sicura sul tuo dispositivo. I file rimanenti saranno puliti dalla tua archiviazione esterna dopo la migrazione per prevenire duplicati e vulnerabilità.</string>
   <string name="scoped_storage_wizard_intro">La tua applicazione è stata aggiornata. Questo aggiornamento migra i tuoi file in un luogo più sicuro sul tuo dispositivo. Questa unica migrazione è necessaria e può impiegare un minuto o più.</string>
   <string name="scoped_storage_wizard_intro_button">Iniziamo</string>
   <string name="scoped_storage_wizard_not_enough_space_warning">⚠️Il tuo spazio libero è al momento limitato sul tuo dispositivo. Alcuni file potrebbero non essere migrati, controlla che tutti i file scaricati rimangano scaricati dopo il completamento del processo.</string>
   <string name="scoped_storage_wizard_migrate_and_clean_button">Migra adesso</string>
+  <string name="scoped_storage_wizard_migration_completed">Migrazione completata con successo. I tuoi file ora sono più sicuri che mai.</string>
   <string name="scoped_storage_wizard_migration_completed_access_files_button">Accedi ai tuoi file</string>
   <string name="scoped_storage_wizard_migration_in_progress">Migrazione dei file. Non spegnere il dispositivo.</string>
   <string name="scoped_storage_wizard_title">Più sicurezza per i tuoi file</string>
