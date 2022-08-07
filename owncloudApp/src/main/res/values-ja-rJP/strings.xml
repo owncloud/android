@@ -127,6 +127,7 @@
   <string name="common_error">エラー</string>
   <string name="common_loading">読込中...</string>
   <string name="common_unknown">不明</string>
+  <string name="common_error_unknown">不明なエラー</string>
   <string name="common_pending">中断</string>
   <string name="common_important">重要</string>
   <string name="change_password">パスワードを変更</string>
@@ -319,6 +320,9 @@
   <string name="error__upload__local_file_not_copied">%1$s は、ローカルフォルダー %2$s  にコピーできませんでした。</string>
   <string name="share_link_no_support_share_api">すみませんが、サーバーで共有が有効になっていません。
 		管理者に問い合わせてください。</string>
+  <string name="share_link_file_error">このファイルまたはフォルダーを共有することができませんでした</string>
+  <string name="unshare_link_file_error">このファイルまたはフォルダーの共有を解除することができませんでした</string>
+  <string name="update_link_file_error">このファイルまたはフォルダーをアップデートすることができませんでした</string>
   <string name="share_link_password_title">パスワードを入力</string>
   <string name="share_link_empty_password">パスワードを入力しなければなりません</string>
   <string name="activity_chooser_send_file_title">送信</string>
