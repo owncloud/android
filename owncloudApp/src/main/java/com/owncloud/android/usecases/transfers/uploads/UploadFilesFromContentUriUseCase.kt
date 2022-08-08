@@ -23,7 +23,6 @@ package com.owncloud.android.usecases.transfers.uploads
 
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
-import androidx.work.WorkManager
 import com.owncloud.android.MainApp
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
@@ -40,10 +39,10 @@ import java.io.File
  *
  * It stores the upload in the database and then enqueue a new worker to upload the single file
  */
-class UploadFilesFromSAFUseCase(
-    private val workManager: WorkManager,
+class UploadFilesFromContentUriUseCase(
+    private val uploadFileFromContentUriUseCase: UploadFileFromContentUriUseCase,
     private val transferRepository: TransferRepository,
-) : BaseUseCase<Unit, UploadFilesFromSAFUseCase.Params>() {
+) : BaseUseCase<Unit, UploadFilesFromContentUriUseCase.Params>() {
 
     override fun run(params: Params) {
         params.listOfContentUris.forEach { contentUri ->
@@ -98,7 +97,6 @@ class UploadFilesFromSAFUseCase(
         uploadIdInStorageManager: Long,
         uploadPath: String,
     ) {
-        val uploadFileFromContentUriUseCase = UploadFileFromContentUriUseCase(workManager)
         val uploadFileParams = UploadFileFromContentUriUseCase.Params(
             contentUri = contentUri,
             uploadPath = uploadPath,

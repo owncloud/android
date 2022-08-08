@@ -21,15 +21,13 @@
 
 package com.owncloud.android.usecases.transfers.uploads
 
-import android.content.Context
 import androidx.core.net.toUri
-import androidx.work.WorkManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.transfers.TransferRepository
 
 class RetryUploadFromContentUriUseCase(
-    private val context: Context,
+    private val uploadFileFromContentUriUseCase: UploadFileFromContentUriUseCase,
     private val transferRepository: TransferRepository,
 ) : BaseUseCase<Unit, RetryUploadFromContentUriUseCase.Params>() {
 
@@ -38,15 +36,16 @@ class RetryUploadFromContentUriUseCase(
 
         uploadToRetry ?: return
 
-        val workManager = WorkManager.getInstance(context)
-        UploadFileFromContentUriUseCase(workManager).execute(
+        transferRepository.updateTransferStatusToEnqueuedById(params.uploadIdInStorageManager)
+
+        uploadFileFromContentUriUseCase.execute(
             UploadFileFromContentUriUseCase.Params(
                 accountName = uploadToRetry.accountName,
                 contentUri = uploadToRetry.localPath.toUri(),
                 lastModifiedInSeconds = (uploadToRetry.transferEndTimestamp?.div(1000)).toString(),
                 behavior = UploadBehavior.fromLegacyLocalBehavior(uploadToRetry.localBehaviour).name,
                 uploadPath = uploadToRetry.remotePath,
-                uploadIdInStorageManager = uploadToRetry.id!!,
+                uploadIdInStorageManager = params.uploadIdInStorageManager,
                 wifiOnly = false,
                 chargingOnly = false
             )

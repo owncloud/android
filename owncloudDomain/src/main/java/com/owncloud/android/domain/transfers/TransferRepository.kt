@@ -29,6 +29,7 @@ interface TransferRepository {
     fun storeTransfer(transfer: OCTransfer): Long
     fun updateTransfer(transfer: OCTransfer)
     fun updateTransferStatusToInProgressById(id: Long)
+    fun updateTransferStatusToEnqueuedById(id: Long)
     fun updateTransferWhenFinished(
         id: Long,
         status: TransferStatus,

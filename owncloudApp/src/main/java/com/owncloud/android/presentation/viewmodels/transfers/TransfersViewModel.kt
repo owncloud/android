@@ -35,12 +35,12 @@ import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import kotlinx.coroutines.launch
 
 class TransfersViewModel(
-    private val uploadFilesFromSAFUseCase: UploadFilesFromSAFUseCase,
+    private val uploadFilesFromContentUriUseCase: UploadFilesFromContentUriUseCase,
     private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,
     private val cancelUploadWithIdUseCase: CancelUploadWithIdUseCase,
     private val deleteTransferWithIdUseCase: DeleteTransferWithIdUseCase,
@@ -71,8 +71,8 @@ class TransfersViewModel(
         uploadFolderPath: String
     ) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            uploadFilesFromSAFUseCase.execute(
-                UploadFilesFromSAFUseCase.Params(
+            uploadFilesFromContentUriUseCase.execute(
+                UploadFilesFromContentUriUseCase.Params(
                     accountName = accountName,
                     listOfContentUris = listOfContentUris,
                     uploadFolderPath = uploadFolderPath

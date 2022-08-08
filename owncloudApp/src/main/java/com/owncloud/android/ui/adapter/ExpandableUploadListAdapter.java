@@ -40,19 +40,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.documentfile.provider.DocumentFile;
-import androidx.work.WorkManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.data.OwncloudDatabase;
-import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource;
-import com.owncloud.android.data.transfers.repository.OCTransferRepository;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.domain.transfers.TransferRepository;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener;
 import com.owncloud.android.ui.activity.FileActivity;
@@ -61,10 +58,11 @@ import com.owncloud.android.ui.fragment.UploadListFragment;
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase;
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase;
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase;
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
@@ -75,6 +73,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import static com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH;
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * This Adapter populates a ListView with following types of uploads: pending,
@@ -312,8 +311,8 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                 rightButton.setImageResource(R.drawable.ic_action_cancel_grey);
                 rightButton.setVisibility(View.VISIBLE);
                 rightButton.setOnClickListener(v -> {
-                    OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(v.getContext()).transferDao()));
-                    CancelUploadWithIdUseCase cancelUploadWithIdUseCase = new CancelUploadWithIdUseCase(WorkManager.getInstance(parent.getContext()), transferRepository);
+                    @NotNull Lazy<CancelUploadWithIdUseCase> cancelUploadWithIdUseCaseLazy = inject(CancelUploadWithIdUseCase.class);
+                    CancelUploadWithIdUseCase cancelUploadWithIdUseCase = cancelUploadWithIdUseCaseLazy.getValue();
                     cancelUploadWithIdUseCase.execute(new CancelUploadWithIdUseCase.Params(upload.getUploadId()));
                     refreshView();
                 });
@@ -323,7 +322,8 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                 rightButton.setImageResource(R.drawable.ic_action_delete_grey);
                 rightButton.setVisibility(View.VISIBLE);
                 rightButton.setOnClickListener(v -> {
-                    OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(v.getContext()).transferDao()));
+                    @NotNull Lazy<TransferRepository> transferRepositoryLazy = inject(TransferRepository.class);
+                    TransferRepository transferRepository = transferRepositoryLazy.getValue();
                     transferRepository.removeTransferById(upload.getUploadId());
                     refreshView();
                 });
@@ -346,18 +346,14 @@ public class ExpandableUploadListAdapter extends BaseExpandableListAdapter imple
                         public void onClick(View v) {
                             File file = new File(upload.getLocalPath());
                             if (file.exists()) {
-                                OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(v.getContext()).transferDao()));
-                                WorkManager workManager = WorkManager.getInstance(v.getContext());
-                                UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
-                                RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(uploadFilesFromSystemUseCase, transferRepository);
+                                @NotNull Lazy<RetryUploadFromSystemUseCase> retryUploadFromSystemUseCaseLazy = inject(RetryUploadFromSystemUseCase.class);
+                                RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = retryUploadFromSystemUseCaseLazy.getValue();
                                 RetryUploadFromSystemUseCase.Params useCaseParams = new RetryUploadFromSystemUseCase.Params(upload.getUploadId());
                                 retryUploadFromSystemUseCase.execute(useCaseParams);
                                 refreshView();
                             } else if (DocumentFile.isDocumentUri(v.getContext(), Uri.parse(upload.getLocalPath()))) {
-                                // Workaround... should be removed as soon as possible
-                                OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(v.getContext()).transferDao()));
-                                RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase =
-                                        new RetryUploadFromContentUriUseCase(v.getContext(), transferRepository);
+                                @NotNull Lazy<RetryUploadFromContentUriUseCase> retryUploadFromContentUriUseCaseLazy = inject(RetryUploadFromContentUriUseCase.class);
+                                RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = retryUploadFromContentUriUseCaseLazy.getValue();
                                 RetryUploadFromContentUriUseCase.Params useCaseParams = new RetryUploadFromContentUriUseCase.Params(
                                         upload.getUploadId()
                                 );

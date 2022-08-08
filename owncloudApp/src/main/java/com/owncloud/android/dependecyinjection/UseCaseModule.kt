@@ -87,8 +87,10 @@ import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFileFromContentUriUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFileFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import org.koin.dsl.module
 
@@ -150,7 +152,9 @@ val useCaseModule = module {
     factory { DownloadFileUseCase(get()) }
     factory { GetLiveDataForDownloadingFileUseCase(get()) }
     factory { GetLiveDataForFinishedDownloadsFromAccountUseCase(get()) }
-    factory { UploadFilesFromSAFUseCase(get(), get()) }
+    factory { UploadFileFromSystemUseCase(get()) }
+    factory { UploadFileFromContentUriUseCase(get()) }
+    factory { UploadFilesFromContentUriUseCase(get(), get()) }
     factory { UploadFilesFromSystemUseCase(get(), get()) }
     factory { UploadFileInConflictUseCase(get(), get()) }
     factory { CancelUploadForFileUseCase(get(), get()) }
