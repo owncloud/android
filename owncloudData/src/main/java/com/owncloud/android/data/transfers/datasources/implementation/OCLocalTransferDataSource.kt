@@ -45,6 +45,10 @@ class OCLocalTransferDataSource(
         transferDao.updateTransferStatusWithId(id, TransferStatus.TRANSFER_IN_PROGRESS.value)
     }
 
+    override fun updateTransferStatusToEnqueuedById(id: Long) {
+        transferDao.updateTransferStatusWithId(id, TransferStatus.TRANSFER_QUEUED.value)
+    }
+
     override fun updateTransferWhenFinished(
         id: Long,
         status: TransferStatus,

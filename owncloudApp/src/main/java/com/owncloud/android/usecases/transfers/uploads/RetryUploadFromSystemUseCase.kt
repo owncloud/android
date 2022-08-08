@@ -22,11 +22,12 @@
 package com.owncloud.android.usecases.transfers.uploads
 
 import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 import com.owncloud.android.domain.transfers.TransferRepository
 
 class RetryUploadFromSystemUseCase(
-    private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,
+    private val uploadFileFromSystemUseCase: UploadFileFromSystemUseCase,
     private val transferRepository: TransferRepository,
 ) : BaseUseCase<Unit, RetryUploadFromSystemUseCase.Params>() {
 
@@ -35,11 +36,16 @@ class RetryUploadFromSystemUseCase(
 
         uploadToRetry ?: return
 
-        uploadFilesFromSystemUseCase.execute(
-            UploadFilesFromSystemUseCase.Params(
+        transferRepository.updateTransferStatusToEnqueuedById(params.uploadIdInStorageManager)
+
+        uploadFileFromSystemUseCase.execute(
+            UploadFileFromSystemUseCase.Params(
                 accountName = uploadToRetry.accountName,
-                listOfLocalPaths = listOf(uploadToRetry.localPath),
-                uploadFolderPath = uploadToRetry.remotePath.trimEnd(PATH_SEPARATOR),
+                localPath = uploadToRetry.localPath,
+                lastModifiedInSeconds = (uploadToRetry.transferEndTimestamp?.div(1000)).toString(),
+                behavior = UploadBehavior.fromLegacyLocalBehavior(uploadToRetry.localBehaviour).name,
+                uploadPath = uploadToRetry.remotePath,
+                uploadIdInStorageManager = params.uploadIdInStorageManager
             )
         )
     }
