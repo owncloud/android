@@ -144,7 +144,7 @@ class UploadFileFromFileSystemWorker(
         val paramUploadPath = workerParameters.inputData.getString(KEY_PARAM_UPLOAD_PATH)
         val paramLastModified = workerParameters.inputData.getString(KEY_PARAM_LAST_MODIFIED)
         val paramBehavior = workerParameters.inputData.getString(KEY_PARAM_BEHAVIOR)
-        val paramFileSystemUri = workerParameters.inputData.getString(KEY_PARAM_CONTENT_URI)
+        val paramFileSystemUri = workerParameters.inputData.getString(KEY_PARAM_LOCAL_PATH)
         val paramUploadId = workerParameters.inputData.getLong(KEY_PARAM_UPLOAD_ID, -1)
 
         account = AccountUtils.getOwnCloudAccountByName(appContext, paramAccountName) ?: return false
@@ -353,7 +353,7 @@ class UploadFileFromFileSystemWorker(
     companion object {
         const val KEY_PARAM_ACCOUNT_NAME = "KEY_PARAM_ACCOUNT_NAME"
         const val KEY_PARAM_BEHAVIOR = "KEY_PARAM_BEHAVIOR"
-        const val KEY_PARAM_CONTENT_URI = "KEY_PARAM_CONTENT_URI"
+        const val KEY_PARAM_LOCAL_PATH = "KEY_PARAM_LOCAL_PATH"
         const val KEY_PARAM_LAST_MODIFIED = "KEY_PARAM_LAST_MODIFIED"
         const val KEY_PARAM_UPLOAD_PATH = "KEY_PARAM_UPLOAD_PATH"
         const val KEY_PARAM_UPLOAD_ID = "KEY_PARAM_UPLOAD_ID"
