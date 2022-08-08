@@ -33,12 +33,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.fragment.app.FragmentTransaction;
-import androidx.work.WorkManager;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.data.OwncloudDatabase;
-import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource;
-import com.owncloud.android.data.transfers.repository.OCTransferRepository;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
@@ -47,13 +43,14 @@ import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.presentation.ui.transfers.TransferListFragment;
 import com.owncloud.android.ui.fragment.UploadListFragment;
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsForAccountUseCase;
-import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase;
-import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase;
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase;
 import com.owncloud.android.utils.MimetypeIconUtil;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * Activity listing pending, active, and completed uploads. User can delete
@@ -153,13 +150,8 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
             if (account == null) {
                 return;
             }
-            // Workaround... should be removed as soon as possible
-            OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(this).transferDao()));
-            RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = new RetryUploadFromContentUriUseCase(this, transferRepository);
-            WorkManager workManager = WorkManager.getInstance(this);
-            UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
-            RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(uploadFilesFromSystemUseCase, transferRepository);
-            RetryFailedUploadsForAccountUseCase retryFailedUploadsForAccountUseCase = new RetryFailedUploadsForAccountUseCase(this, retryUploadFromContentUriUseCase, retryUploadFromSystemUseCase, transferRepository);
+            @NotNull Lazy<RetryFailedUploadsForAccountUseCase> retryFailedUploadsForAccountUseCaseLazy = inject(RetryFailedUploadsForAccountUseCase.class);
+            RetryFailedUploadsForAccountUseCase retryFailedUploadsForAccountUseCase = retryFailedUploadsForAccountUseCaseLazy.getValue();
             retryFailedUploadsForAccountUseCase.execute(new RetryFailedUploadsForAccountUseCase.Params(account.name));
         }
     }
@@ -181,13 +173,8 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
 
             } else {
                 // already updated -> just retry!
-                // Workaround... should be removed as soon as possible
-                OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(this).transferDao()));
-                RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = new RetryUploadFromContentUriUseCase(this, transferRepository);
-                WorkManager workManager = WorkManager.getInstance(this);
-                UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
-                RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(uploadFilesFromSystemUseCase, transferRepository);
-                RetryFailedUploadsForAccountUseCase retryFailedUploadsForAccountUseCase = new RetryFailedUploadsForAccountUseCase(this, retryUploadFromContentUriUseCase, retryUploadFromSystemUseCase, transferRepository);
+                @NotNull Lazy<RetryFailedUploadsForAccountUseCase> retryFailedUploadsForAccountUseCaseLazy = inject(RetryFailedUploadsForAccountUseCase.class);
+                RetryFailedUploadsForAccountUseCase retryFailedUploadsForAccountUseCase = retryFailedUploadsForAccountUseCaseLazy.getValue();
                 retryFailedUploadsForAccountUseCase.execute(new RetryFailedUploadsForAccountUseCase.Params(account.name));
             }
 

@@ -103,7 +103,7 @@ class UploadFileInConflictUseCase(
         val inputData = workDataOf(
             UploadFileFromFileSystemWorker.KEY_PARAM_ACCOUNT_NAME to accountName,
             UploadFileFromFileSystemWorker.KEY_PARAM_BEHAVIOR to UploadBehavior.COPY.name,
-            UploadFileFromFileSystemWorker.KEY_PARAM_CONTENT_URI to localPath,
+            UploadFileFromFileSystemWorker.KEY_PARAM_LOCAL_PATH to localPath,
             UploadFileFromFileSystemWorker.KEY_PARAM_LAST_MODIFIED to lastModifiedInSeconds,
             UploadFileFromFileSystemWorker.KEY_PARAM_UPLOAD_PATH to uploadPath,
             UploadFileFromFileSystemWorker.KEY_PARAM_UPLOAD_ID to uploadIdInStorageManager,
