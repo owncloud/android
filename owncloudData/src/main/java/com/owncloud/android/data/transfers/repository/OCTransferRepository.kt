@@ -40,6 +40,10 @@ class OCTransferRepository(
         localTransferDataSource.updateTransferStatusToInProgressById(id = id)
     }
 
+    override fun updateTransferStatusToEnqueuedById(id: Long) {
+        localTransferDataSource.updateTransferStatusToEnqueuedById(id = id)
+    }
+
     override fun updateTransferWhenFinished(
         id: Long,
         status: TransferStatus,

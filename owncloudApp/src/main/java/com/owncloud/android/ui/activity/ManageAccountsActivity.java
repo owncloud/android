@@ -38,13 +38,9 @@ import android.widget.ListView;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.work.WorkManager;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.data.OwncloudDatabase;
-import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource;
-import com.owncloud.android.data.transfers.repository.OCTransferRepository;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
@@ -297,15 +293,12 @@ public class ManageAccountsActivity extends FileActivity
         if (future != null && future.isDone()) {
             Account account = new Account(mAccountBeingRemoved, MainApp.Companion.getAccountType());
             if (!AccountUtils.exists(account.name, MainApp.Companion.getAppContext())) {
-                // Workaround... should be removed as soon as possible
-                OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(this).transferDao()));
                 // Cancel transfers of the removed account
-                CancelUploadsFromAccountUseCase cancelUploadsFromAccountUseCase =
-                        new CancelUploadsFromAccountUseCase(WorkManager.getInstance(getBaseContext()), transferRepository);
+                @NotNull Lazy<CancelUploadsFromAccountUseCase> cancelUploadsFromAccountUseCaseLazy = inject(CancelUploadsFromAccountUseCase.class);
+                @NotNull Lazy<CancelDownloadsForAccountUseCase> cancelDownloadsForAccountUseCaseLazy = inject(CancelDownloadsForAccountUseCase.class);
+                CancelUploadsFromAccountUseCase cancelUploadsFromAccountUseCase = cancelUploadsFromAccountUseCaseLazy.getValue();
                 cancelUploadsFromAccountUseCase.execute(new CancelUploadsFromAccountUseCase.Params(account.name));
-
-                CancelDownloadsForAccountUseCase cancelDownloadsForAccountUseCase =
-                        new CancelDownloadsForAccountUseCase(WorkManager.getInstance(getBaseContext()));
+                CancelDownloadsForAccountUseCase cancelDownloadsForAccountUseCase = cancelDownloadsForAccountUseCaseLazy.getValue();
                 cancelDownloadsForAccountUseCase.execute(new CancelDownloadsForAccountUseCase.Params(account));
             }
 
