@@ -373,8 +373,7 @@ abstract class FileDao {
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE parentId = :folderId " +
                     "AND remotePath LIKE '%' || :search || '%'" +
-                    "AND sharedByLink NOT LIKE '%0%' " +
-                    "OR sharedWithSharee NOT LIKE '%0%' "
+                    "AND sharedByLink LIKE '%1%' "
 
         private const val SELECT_FOLDER_BY_MIMETYPE =
             "SELECT * " +
@@ -386,8 +385,7 @@ abstract class FileDao {
             "SELECT * " +
                     "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "WHERE owner = :accountOwner " +
-                    "AND (sharedByLink NOT LIKE '%0%' " +
-                    "OR sharedWithSharee NOT LIKE '%0%')"
+                    "AND sharedByLink LIKE '%1%' "
 
         private const val SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT =
             "SELECT * " +
