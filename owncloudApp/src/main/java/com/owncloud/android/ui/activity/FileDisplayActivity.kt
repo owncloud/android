@@ -238,7 +238,7 @@ class FileDisplayActivity : FileActivity(),
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null && mAccountWasSet) {
             initAndShowListOfFiles()
         }
 
@@ -301,7 +301,10 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun initAndShowListOfFiles() {
-        val mainListOfFiles = MainFileListFragment.newInstance().apply {
+        val mainListOfFiles = MainFileListFragment.newInstance(
+            accountName = account.name,
+            initialFolderToDisplay = file,
+        ).apply {
             fileActions = this@FileDisplayActivity
             uploadActions = this@FileDisplayActivity
             setSearchListener(findViewById(R.id.root_toolbar_search_view))
