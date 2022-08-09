@@ -27,21 +27,18 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.UploadListGroupBinding
 import com.owncloud.android.databinding.UploadListItemBinding
-import com.owncloud.android.datamodel.ThumbnailsCacheManager
-import com.owncloud.android.datamodel.ThumbnailsCacheManager.AsyncThumbnailDrawable
-import com.owncloud.android.datamodel.ThumbnailsCacheManager.ThumbnailGenerationTask
-import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.extensions.statusToStringRes
 import com.owncloud.android.extensions.toStringRes
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.diffutils.TransfersDiffUtil
-import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
@@ -117,77 +114,11 @@ class TransfersAdapter(
                     uploadStatus.isVisible = transferItem.transfer.status != TransferStatus.TRANSFER_SUCCEEDED
                     uploadStatus.text = " — " + holder.itemView.context.getString(transferItem.transfer.statusToStringRes())
 
-                    val fakeFileToCheatThumbnailsCacheManagerInterface = OCFile(
-                        owner = transferItem.transfer.accountName,
-                        length = transferItem.transfer.fileSize,
-                        modificationTimestamp = 0,
-                        remotePath = transferItem.transfer.remotePath,
-                        mimeType = MimetypeIconUtil.getBestMimeTypeByFilename(transferItem.transfer.localPath),
-                        storagePath = transferItem.transfer.localPath,
-                    )
-                    val allowedToCreateNewThumbnail = ThumbnailsCacheManager.cancelPotentialThumbnailWork(
-                        fakeFileToCheatThumbnailsCacheManagerInterface,
-                        thumbnail
-                    )
-                    val parentActivity = holder.itemView.context as FileActivity
-                    if (fakeFileToCheatThumbnailsCacheManagerInterface.isImage &&
-                        fakeFileToCheatThumbnailsCacheManagerInterface.remoteId != null &&
-                        transferItem.transfer.status == TransferStatus.TRANSFER_SUCCEEDED
-                    ) {
-                        // Thumbnail in cache?
-                        var thumbnailImage = ThumbnailsCacheManager
-                            .getBitmapFromDiskCache(fakeFileToCheatThumbnailsCacheManagerInterface.remoteId.toString())
-                        if (thumbnailImage != null && !fakeFileToCheatThumbnailsCacheManagerInterface.needsToUpdateThumbnail) {
-                            thumbnail.setImageBitmap(thumbnailImage)
-                        } else {
-                            // Generate new thumbnail
-                            if (allowedToCreateNewThumbnail) {
-                                val task = ThumbnailGenerationTask(thumbnail, parentActivity.account)
-                                if (thumbnailImage == null) {
-                                    thumbnailImage = ThumbnailsCacheManager.mDefaultImg
-                                }
-                                val asyncDrawable = AsyncThumbnailDrawable(
-                                    parentActivity.resources,
-                                    thumbnailImage,
-                                    task
-                                )
-                                thumbnail.setImageDrawable(asyncDrawable)
-                                task.execute(fakeFileToCheatThumbnailsCacheManagerInterface)
-                                Timber.v("Executing task to generate a new thumbnail")
-                            }
-                        }
-                        if (MimetypeIconUtil.getBestMimeTypeByFilename(transferItem.transfer.localPath) == "image/png") {
-                            thumbnail.setBackgroundColor(holder.itemView.context.getColor(R.color.background_color))
-                        }
-                    } else if (fakeFileToCheatThumbnailsCacheManagerInterface.isImage) {
-                        val file = File(transferItem.transfer.localPath)
-                        // Thumbnail in cache?
-                        var thumbnailImage = ThumbnailsCacheManager.getBitmapFromDiskCache(file.hashCode().toString())
-                        if (thumbnailImage != null) {
-                            thumbnail.setImageBitmap(thumbnailImage)
-                        } else {
-                            // Generate new thumbnail
-                            if (allowedToCreateNewThumbnail) {
-                                val task = ThumbnailGenerationTask(thumbnail)
-                                thumbnailImage = ThumbnailsCacheManager.mDefaultImg
-                                val asyncDrawable = AsyncThumbnailDrawable(
-                                    parentActivity.resources,
-                                    thumbnailImage,
-                                    task
-                                )
-                                thumbnail.setImageDrawable(asyncDrawable)
-                                task.execute(file)
-                                Timber.v("Executing task to generate a new thumbnail")
-                            }
-                        }
-                        if (MimetypeIconUtil.getBestMimeTypeByFilename(transferItem.transfer.localPath).equals("image/png", ignoreCase = true)) {
-                            thumbnail.setBackgroundColor(holder.itemView.context.getColor(R.color.background_color))
-                        }
-                    } else {
-                        thumbnail.setImageResource(
-                            MimetypeIconUtil.getFileTypeIconId(MimetypeIconUtil.getBestMimeTypeByFilename(transferItem.transfer.localPath), fileName)
-                        )
-                    }
+                    Glide.with(holder.itemView)
+                        .load(transferItem.transfer.localPath)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .placeholder(MimetypeIconUtil.getFileTypeIconId(MimetypeIconUtil.getBestMimeTypeByFilename(transferItem.transfer.localPath), fileName))
+                        .into(thumbnail)
 
                     uploadRightButton.isVisible = transferItem.transfer.status != TransferStatus.TRANSFER_SUCCEEDED
                     holder.itemView.setOnClickListener(null)
