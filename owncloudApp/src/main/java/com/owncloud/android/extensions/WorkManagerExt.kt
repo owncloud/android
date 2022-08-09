@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,9 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.extensions
 
 import android.accounts.Account
+import androidx.lifecycle.LiveData
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkQuery
@@ -34,6 +38,13 @@ val FINISHED_WORK_STATUS = listOf(WorkInfo.State.SUCCEEDED, WorkInfo.State.FAILE
  */
 fun WorkManager.getWorkInfoByTags(tags: List<String>): List<WorkInfo> =
     this.getWorkInfos(buildWorkQuery(tags = tags)).get().filter { it.tags.containsAll(tags) }
+
+/**
+ * Get a list of WorkInfo as LiveData that matches EVERY tag.
+ */
+fun WorkManager.getWorkInfoByTagsLiveData(tags: List<String>): LiveData<List<WorkInfo>> {
+    return getWorkInfosLiveData(buildWorkQuery(tags = tags, states = listOf(WorkInfo.State.RUNNING)))
+}
 
 /**
  * Check if a download is pending. It could be enqueued, downloading or blocked.
