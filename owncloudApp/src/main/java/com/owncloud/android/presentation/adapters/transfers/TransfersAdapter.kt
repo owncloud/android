@@ -20,13 +20,16 @@
 
 package com.owncloud.android.presentation.adapters.transfers
 
+import android.net.Uri
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.owncloud.android.R
@@ -35,6 +38,7 @@ import com.owncloud.android.databinding.UploadListGroupBinding
 import com.owncloud.android.databinding.UploadListItemBinding
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
+import com.owncloud.android.extensions.getWorkInfoByTagsLiveData
 import com.owncloud.android.extensions.statusToStringRes
 import com.owncloud.android.extensions.toStringRes
 import com.owncloud.android.lib.common.OwnCloudAccount
@@ -42,6 +46,9 @@ import com.owncloud.android.presentation.diffutils.TransfersDiffUtil
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
+import com.owncloud.android.workers.DownloadFileWorker
+import com.owncloud.android.workers.UploadFileFromContentUriWorker
+import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 import timber.log.Timber
 import java.io.File
 
@@ -121,8 +128,29 @@ class TransfersAdapter(
                         .into(thumbnail)
 
                     uploadRightButton.isVisible = transferItem.transfer.status != TransferStatus.TRANSFER_SUCCEEDED
+
+                    uploadProgressBar.isVisible = transferItem.transfer.status == TransferStatus.TRANSFER_IN_PROGRESS
+
                     holder.itemView.setOnClickListener(null)
                     when (transferItem.transfer.status) {
+                        TransferStatus.TRANSFER_IN_PROGRESS -> {
+                            val workManager = WorkManager.getInstance(holder.itemView.context)
+                            workManager.getWorkInfoByTagsLiveData(
+                                listOf(
+                                    transferItem.transfer.accountName,
+                                    if (DocumentFile.isDocumentUri(holder.itemView.context, Uri.parse(transferItem.transfer.localPath))) {
+                                        UploadFileFromContentUriWorker::class.java.name
+                                    } else {
+                                        UploadFileFromFileSystemWorker::class.java.name
+                                    }
+                                )
+                            ).observeForever {
+                                val workInfo = it.find { workInfo ->
+                                    workInfo.tags.contains(transferItem.transfer.id.toString())
+                                }
+                                uploadProgressBar.progress = workInfo?.progress?.getInt(DownloadFileWorker.WORKER_KEY_PROGRESS, -1) ?: -1
+                            }
+                        }
                         TransferStatus.TRANSFER_IN_PROGRESS, TransferStatus.TRANSFER_QUEUED -> {
                             uploadRightButton.apply {
                                 setImageResource(R.drawable.ic_action_cancel_grey)
@@ -148,7 +176,6 @@ class TransfersAdapter(
                             uploadRightButton.isVisible = false
                         }
                     }
-                    // TODO: progress bar
                 }
             }
             is HeaderItemViewHolder -> {
