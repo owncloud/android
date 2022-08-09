@@ -76,6 +76,7 @@ import com.owncloud.android.ui.fragment.FileDetailFragment
 import com.owncloud.android.utils.ColumnQuantity
 import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 class MainFileListFragment : Fragment(),
@@ -86,7 +87,12 @@ class MainFileListFragment : Fragment(),
     SortOptionsView.CreateFolderListener,
     SortOptionsView.SortOptionsListener {
 
-    private val mainFileListViewModel by viewModel<MainFileListViewModel>()
+    private val mainFileListViewModel by viewModel<MainFileListViewModel>() {
+        parametersOf(
+            requireArguments().getString(ARG_ACCOUNT_NAME),
+            requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY),
+        )
+    }
     private val fileOperationsViewModel by viewModel<FileOperationsViewModel>()
 
     private var _binding: MainFileListFragmentBinding? = null
@@ -742,14 +748,20 @@ class MainFileListFragment : Fragment(),
     companion object {
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
         val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
+        val ARG_ACCOUNT_NAME = "${MainFileListFragment::class.java.canonicalName}.ARG_ACCOUNT_NAME}"
+        val ARG_INITIAL_FOLDER_TO_DISPLAY = "${MainFileListFragment::class.java.canonicalName}.ARG_INITIAL_FOLDER_TO_DISPLAY}"
 
         private const val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
 
         @JvmStatic
         fun newInstance(
+            accountName: String,
+            initialFolderToDisplay: OCFile,
             pickingAFolder: Boolean = false
         ): MainFileListFragment {
             val args = Bundle()
+            args.putString(ARG_ACCOUNT_NAME, accountName)
+            args.putParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY, initialFolderToDisplay)
             args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
             return MainFileListFragment().apply { arguments = args }
         }
