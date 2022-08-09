@@ -158,8 +158,8 @@ val useCaseModule = module {
     factory { UploadFilesFromSystemUseCase(get(), get()) }
     factory { UploadFileInConflictUseCase(get(), get()) }
     factory { CancelUploadForFileUseCase(get(), get()) }
-    factory { RetryUploadFromSystemUseCase(get(), get()) }
-    factory { RetryUploadFromContentUriUseCase(get(), get()) }
+    factory { RetryUploadFromSystemUseCase(get(), get(), get()) }
+    factory { RetryUploadFromContentUriUseCase(get(), get(), get()) }
     factory { GetAllTransfersUseCase(get()) }
     factory { CancelUploadWithIdUseCase(get(), get()) }
     factory { DeleteTransferWithIdUseCase(get()) }

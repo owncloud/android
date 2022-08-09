@@ -22,11 +22,16 @@
 package com.owncloud.android.usecases.transfers.uploads
 
 import androidx.core.net.toUri
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.extensions.getWorkInfoByTags
+import com.owncloud.android.workers.UploadFileFromContentUriWorker
 
 class RetryUploadFromContentUriUseCase(
+    private val workManager: WorkManager,
     private val uploadFileFromContentUriUseCase: UploadFileFromContentUriUseCase,
     private val transferRepository: TransferRepository,
 ) : BaseUseCase<Unit, RetryUploadFromContentUriUseCase.Params>() {
@@ -38,18 +43,28 @@ class RetryUploadFromContentUriUseCase(
 
         transferRepository.updateTransferStatusToEnqueuedById(params.uploadIdInStorageManager)
 
-        uploadFileFromContentUriUseCase.execute(
-            UploadFileFromContentUriUseCase.Params(
-                accountName = uploadToRetry.accountName,
-                contentUri = uploadToRetry.localPath.toUri(),
-                lastModifiedInSeconds = (uploadToRetry.transferEndTimestamp?.div(1000)).toString(),
-                behavior = UploadBehavior.fromLegacyLocalBehavior(uploadToRetry.localBehaviour).name,
-                uploadPath = uploadToRetry.remotePath,
-                uploadIdInStorageManager = params.uploadIdInStorageManager,
-                wifiOnly = false,
-                chargingOnly = false
+        val workInfo = workManager.getWorkInfoByTags(
+            listOf(
+                params.uploadIdInStorageManager.toString(),
+                uploadToRetry.accountName,
+                UploadFileFromContentUriWorker::class.java.name
             )
         )
+
+        if (workInfo.firstOrNull()?.state == WorkInfo.State.FAILED) {
+            uploadFileFromContentUriUseCase.execute(
+                UploadFileFromContentUriUseCase.Params(
+                    accountName = uploadToRetry.accountName,
+                    contentUri = uploadToRetry.localPath.toUri(),
+                    lastModifiedInSeconds = (uploadToRetry.transferEndTimestamp?.div(1000)).toString(),
+                    behavior = UploadBehavior.fromLegacyLocalBehavior(uploadToRetry.localBehaviour).name,
+                    uploadPath = uploadToRetry.remotePath,
+                    uploadIdInStorageManager = params.uploadIdInStorageManager,
+                    wifiOnly = false,
+                    chargingOnly = false
+                )
+            )
+        }
     }
 
     data class Params(
