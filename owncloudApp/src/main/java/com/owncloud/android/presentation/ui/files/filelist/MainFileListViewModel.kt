@@ -28,14 +28,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkManager
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.FileDataStorageManager.Companion.ROOT_PARENT_ID
 import com.owncloud.android.datamodel.OCFile.ROOT_PATH
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
 import com.owncloud.android.domain.files.model.FileListOption
-import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
@@ -79,19 +77,14 @@ class MainFileListViewModel(
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
     private val contextProvider: ContextProvider,
     private val workManager: WorkManager,
+    accountNameParam: String,
+    initialFolderToDisplay: OCFile,
 ) : ViewModel() {
 
-    private var accountName: MutableStateFlow<String> = MutableStateFlow(
-        value = AccountUtils.getCurrentOwnCloudAccount(contextProvider.getContext()).name
-    )
-
-    val currentFolderDisplayed = MutableStateFlow(
-        // TODO: Get not nullable root folder for account or create and retrieve it. This MUST be fixed.
-        OCFile(ROOT_PATH, MIME_DIR, 1, accountName.value)
-    )
-
-    private var fileListOption: MutableStateFlow<FileListOption> = MutableStateFlow(FileListOption.ALL_FILES)
-    private var searchFilter: MutableStateFlow<String> = MutableStateFlow("")
+    private val accountName: MutableStateFlow<String> = MutableStateFlow(accountNameParam)
+    val currentFolderDisplayed: MutableStateFlow<OCFile> = MutableStateFlow(initialFolderToDisplay)
+    private val fileListOption: MutableStateFlow<FileListOption> = MutableStateFlow(FileListOption.ALL_FILES)
+    private val searchFilter: MutableStateFlow<String> = MutableStateFlow("")
 
     /** File list ui state combines the other fields and generate a new state whenever any of them changes */
     val fileListUiState: StateFlow<FileListUiState> =
