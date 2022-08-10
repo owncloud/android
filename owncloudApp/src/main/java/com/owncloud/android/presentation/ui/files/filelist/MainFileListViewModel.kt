@@ -31,7 +31,6 @@ import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.FileDataStorageManager.Companion.ROOT_PARENT_ID
 import com.owncloud.android.datamodel.OCFile.ROOT_PATH
-import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
@@ -41,11 +40,14 @@ import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCas
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
-import com.owncloud.android.domain.files.usecases.SortType
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.ui.files.SortOrder
+import com.owncloud.android.presentation.ui.files.SortOrder.Companion.PREF_FILE_LIST_SORT_ORDER
+import com.owncloud.android.presentation.ui.files.SortType
+import com.owncloud.android.presentation.ui.files.SortType.Companion.PREF_FILE_LIST_SORT_TYPE
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
@@ -53,7 +55,6 @@ import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY
-import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -64,6 +65,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.owncloud.android.domain.files.usecases.SortType.Companion as SortTypeDomain
 
 class MainFileListViewModel(
     private val getFolderContentAsStreamUseCase: GetFolderContentAsStreamUseCase,
@@ -88,6 +90,7 @@ class MainFileListViewModel(
     val currentFolderDisplayed: MutableStateFlow<OCFile> = MutableStateFlow(initialFolderToDisplay)
     private val fileListOption: MutableStateFlow<FileListOption> = MutableStateFlow(FileListOption.ALL_FILES)
     private val searchFilter: MutableStateFlow<String> = MutableStateFlow("")
+    private val sortTypeAndOrder = MutableStateFlow(Pair(SortType.SORT_TYPE_BY_NAME, SortOrder.SORT_ORDER_ASCENDING))
 
     /** File list ui state combines the other fields and generate a new state whenever any of them changes */
     val fileListUiState: StateFlow<FileListUiState> =
@@ -96,12 +99,14 @@ class MainFileListViewModel(
             accountName,
             fileListOption,
             searchFilter,
-        ) { currentFolderDisplayed, accountName, fileListOption, searchFilter ->
+            sortTypeAndOrder,
+        ) { currentFolderDisplayed, accountName, fileListOption, searchFilter, sortTypeAndOrder ->
             composeFileListUiStateForThisParams(
                 currentFolderDisplayed = currentFolderDisplayed,
                 accountName = accountName,
                 fileListOption = fileListOption,
-                searchFilter = searchFilter
+                searchFilter = searchFilter,
+                sortTypeAndOrder = sortTypeAndOrder,
             )
         }
             .flatMapLatest { it }
@@ -114,9 +119,15 @@ class MainFileListViewModel(
     private val _syncFolder = MediatorLiveData<Event<UIResult<Unit>>>()
     val syncFolder: LiveData<Event<UIResult<Unit>>> = _syncFolder
 
-    fun navigateTo(fileId: Long) {
+    init {
+        val sortTypeSelected = SortType.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_TYPE, SortType.SORT_TYPE_BY_NAME.ordinal)]
+        val sortOrderSelected = SortOrder.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_ORDER, SortOrder.SORT_ORDER_ASCENDING.ordinal)]
+        sortTypeAndOrder.update { Pair(sortTypeSelected, sortOrderSelected) }
+    }
+
+    fun navigateToFolderId(folderId: Long) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val result = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId = fileId))
+            val result = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId = folderId))
             result.getDataOrNull()?.let {
                 updateFolderToDisplay(it)
             }
@@ -141,11 +152,20 @@ class MainFileListViewModel(
 
     fun isGridModeSetAsPreferred() = sharedPreferencesProvider.getBoolean(RECYCLER_VIEW_PREFERRED, false)
 
-    fun sortList(files: List<OCFile>): List<OCFile> {
-        val sortOrderSaved = PreferenceManager.getSortOrder(contextProvider.getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
-        val ascendingModeSaved = PreferenceManager.getSortAscending(contextProvider.getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
+    fun setNewSortType(sortType: SortType, sortOrder: SortOrder) {
+        sharedPreferencesProvider.putInt(PREF_FILE_LIST_SORT_TYPE, sortType.ordinal)
+        sharedPreferencesProvider.putInt(PREF_FILE_LIST_SORT_ORDER, sortOrder.ordinal)
+        sortTypeAndOrder.update { Pair(sortType, sortOrder) }
+    }
 
-        return sortFilesUseCase.execute(SortFilesUseCase.Params(files, SortType.fromPreferences(sortOrderSaved), ascendingModeSaved))
+    private fun sortList(files: List<OCFile>, sortTypeAndOrder: Pair<SortType, SortOrder>): List<OCFile> {
+        return sortFilesUseCase.execute(
+            SortFilesUseCase.Params(
+                listOfFiles = files,
+                sortType = SortTypeDomain.fromPreferences(sortTypeAndOrder.first.ordinal),
+                ascending = sortTypeAndOrder.second == SortOrder.SORT_ORDER_ASCENDING
+            )
+        )
     }
 
     fun manageBrowseUp() {
@@ -259,7 +279,8 @@ class MainFileListViewModel(
         currentFolderDisplayed: OCFile,
         accountName: String,
         fileListOption: FileListOption,
-        searchFilter: String?
+        searchFilter: String?,
+        sortTypeAndOrder: Pair<SortType, SortOrder>
     ): Flow<FileListUiState> =
         when (fileListOption) {
             FileListOption.ALL_FILES -> retrieveFlowForAllFiles(currentFolderDisplayed, accountName)
@@ -269,7 +290,8 @@ class MainFileListViewModel(
             currentFolderDisplayed,
             accountName,
             fileListOption,
-            searchFilter
+            searchFilter,
+            sortTypeAndOrder,
         )
 
     private fun retrieveFlowForAllFiles(
@@ -314,14 +336,15 @@ class MainFileListViewModel(
         currentFolderDisplayed: OCFile,
         accountName: String,
         fileListOption: FileListOption,
-        searchFilter: String?
+        searchFilter: String?,
+        sortTypeAndOrder: Pair<SortType, SortOrder>,
     ) = this.map { folderContent ->
         FileListUiState.Success(
             accountName = accountName,
             folderToDisplay = currentFolderDisplayed,
             folderContent = folderContent.filter { file ->
                 file.fileName.contains(searchFilter ?: "", ignoreCase = true) && (showHiddenFiles || !file.fileName.startsWith("."))
-            },
+            }.let { sortList(it, sortTypeAndOrder) },
             fileListOption = fileListOption,
             searchFilter = searchFilter,
         )
