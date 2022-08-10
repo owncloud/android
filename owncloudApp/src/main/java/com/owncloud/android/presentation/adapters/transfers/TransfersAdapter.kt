@@ -20,16 +20,14 @@
 
 package com.owncloud.android.presentation.adapters.transfers
 
-import android.net.Uri
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.WorkManager
+import androidx.work.WorkInfo
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.owncloud.android.R
@@ -38,7 +36,6 @@ import com.owncloud.android.databinding.UploadListGroupBinding
 import com.owncloud.android.databinding.UploadListItemBinding
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
-import com.owncloud.android.extensions.getWorkInfoByTagsLiveData
 import com.owncloud.android.extensions.statusToStringRes
 import com.owncloud.android.extensions.toStringRes
 import com.owncloud.android.lib.common.OwnCloudAccount
@@ -47,8 +44,6 @@ import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
 import com.owncloud.android.workers.DownloadFileWorker
-import com.owncloud.android.workers.UploadFileFromContentUriWorker
-import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 import timber.log.Timber
 import java.io.File
 
@@ -132,25 +127,8 @@ class TransfersAdapter(
                     uploadProgressBar.isVisible = transferItem.transfer.status == TransferStatus.TRANSFER_IN_PROGRESS
 
                     holder.itemView.setOnClickListener(null)
+
                     when (transferItem.transfer.status) {
-                        TransferStatus.TRANSFER_IN_PROGRESS -> {
-                            val workManager = WorkManager.getInstance(holder.itemView.context)
-                            workManager.getWorkInfoByTagsLiveData(
-                                listOf(
-                                    transferItem.transfer.accountName,
-                                    if (DocumentFile.isDocumentUri(holder.itemView.context, Uri.parse(transferItem.transfer.localPath))) {
-                                        UploadFileFromContentUriWorker::class.java.name
-                                    } else {
-                                        UploadFileFromFileSystemWorker::class.java.name
-                                    }
-                                )
-                            ).observeForever {
-                                val workInfo = it.find { workInfo ->
-                                    workInfo.tags.contains(transferItem.transfer.id.toString())
-                                }
-                                uploadProgressBar.progress = workInfo?.progress?.getInt(DownloadFileWorker.WORKER_KEY_PROGRESS, -1) ?: -1
-                            }
-                        }
                         TransferStatus.TRANSFER_IN_PROGRESS, TransferStatus.TRANSFER_QUEUED -> {
                             uploadRightButton.apply {
                                 setImageResource(R.drawable.ic_action_cancel_grey)
@@ -223,17 +201,22 @@ class TransfersAdapter(
 
     }
 
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            (holder as TransferItemViewHolder).binding.apply {
+                if (payloads[0] is Int) {
+                    uploadProgressBar.progress = payloads[0] as Int
+                }
+            }
+        }
+
+    }
+
     fun setData(transfers: List<OCTransfer>) {
         val comparator: Comparator<OCTransfer> = object : Comparator<OCTransfer> {
             override fun compare(transfer1: OCTransfer, transfer2: OCTransfer): Int {
-                if (transfer1.status == TransferStatus.TRANSFER_IN_PROGRESS) {
-                    if (transfer2.status != TransferStatus.TRANSFER_IN_PROGRESS) {
-                        return -1
-                    }
-                    // Previously there was a check here to check if the uploads are in progress
-                } else if (transfer2.status == TransferStatus.TRANSFER_IN_PROGRESS) {
-                    return 1
-                }
                 return if (transfer1.transferEndTimestamp == null || transfer2.transferEndTimestamp == null) {
                     compareUploadId(transfer1, transfer2)
                 } else {
@@ -251,30 +234,33 @@ class TransfersAdapter(
         }
 
         val transfersGroupedByStatus = transfers.groupBy { it.status }
-        val transfersGroupedByStatusOrdered = Array<List<TransferRecyclerItem>>(8) { emptyList() }
         val newTransfersList = mutableListOf<TransferRecyclerItem>()
         transfersGroupedByStatus.forEach { transferMap ->
             val headerItem = TransferRecyclerItem.HeaderItem(transferMap.key, transferMap.value.size)
+            newTransfersList.add(headerItem)
             val transferItems = transferMap.value.sortedWith(comparator).map { transfer ->
                 TransferRecyclerItem.TransferItem(transfer)
             }
-            val order = when (transferMap.key) {
-                TransferStatus.TRANSFER_IN_PROGRESS -> 0
-                TransferStatus.TRANSFER_QUEUED -> 1
-                TransferStatus.TRANSFER_FAILED -> 2
-                TransferStatus.TRANSFER_SUCCEEDED -> 3
-            }
-            transfersGroupedByStatusOrdered[order * 2] = listOf(headerItem)
-            transfersGroupedByStatusOrdered[(order * 2) + 1] = transferItems
-        }
-        for (items in transfersGroupedByStatusOrdered) {
-            newTransfersList.addAll(items)
+            newTransfersList.addAll(transferItems)
         }
         val diffCallback = TransfersDiffUtil(transfersList, newTransfersList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         transfersList.clear()
         transfersList.addAll(newTransfersList)
         diffResult.dispatchUpdatesTo(this)
+    }
+
+    fun updateTransferProgress(workInfo: WorkInfo) {
+        var updated = false
+        var index = 0
+        while (!updated && index < transfersList.size) {
+            val item = transfersList[index]
+            if (item is TransferRecyclerItem.TransferItem && workInfo.tags.contains(item.transfer.id.toString())) {
+                notifyItemChanged(index, workInfo.progress.getInt(DownloadFileWorker.WORKER_KEY_PROGRESS, -1))
+                updated = true
+            }
+            index += 1
+        }
     }
 
     override fun getItemCount(): Int = transfersList.size

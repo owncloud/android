@@ -40,7 +40,7 @@ fun WorkManager.getWorkInfoByTags(tags: List<String>): List<WorkInfo> =
     this.getWorkInfos(buildWorkQuery(tags = tags)).get().filter { it.tags.containsAll(tags) }
 
 /**
- * Get a list of WorkInfo as LiveData that matches EVERY tag.
+ * Get a list of WorkInfo of running workers as LiveData that matches at least one of the tags.
  */
 fun WorkManager.getWorkInfoByTagsLiveData(tags: List<String>): LiveData<List<WorkInfo>> {
     return getWorkInfosLiveData(buildWorkQuery(tags = tags, states = listOf(WorkInfo.State.RUNNING)))

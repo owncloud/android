@@ -22,7 +22,6 @@ package com.owncloud.android.data.transfers.datasources.implementation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toModel
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.data.transfers.db.TransferDao
@@ -72,9 +71,25 @@ class OCLocalTransferDataSource(
 
     override fun getAllTransfers(): LiveData<List<OCTransfer>> {
         return Transformations.map(transferDao.getAllTransfers()) { transferEntitiesList ->
-            transferEntitiesList.map { transferEntity ->
+            val transfers = transferEntitiesList.map { transferEntity ->
                 transferEntity.toModel()
             }
+            val transfersGroupedByStatus = transfers.groupBy { it.status }
+            val transfersGroupedByStatusOrdered = Array<List<OCTransfer>>(4) { emptyList() }
+            val newTransfersList = mutableListOf<OCTransfer>()
+            transfersGroupedByStatus.forEach { transferMap ->
+                val order = when (transferMap.key) {
+                    TransferStatus.TRANSFER_IN_PROGRESS -> 0
+                    TransferStatus.TRANSFER_QUEUED -> 1
+                    TransferStatus.TRANSFER_FAILED -> 2
+                    TransferStatus.TRANSFER_SUCCEEDED -> 3
+                }
+                transfersGroupedByStatusOrdered[order] = transferMap.value
+            }
+            for (items in transfersGroupedByStatusOrdered) {
+                newTransfersList.addAll(items)
+            }
+            newTransfersList
         }
     }
 

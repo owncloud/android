@@ -20,15 +20,20 @@
 package com.owncloud.android.providers
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.owncloud.android.extensions.getWorkInfoByTagsLiveData
 import com.owncloud.android.workers.AvailableOfflinePeriodicWorker
 import com.owncloud.android.workers.AvailableOfflinePeriodicWorker.Companion.AVAILABLE_OFFLINE_PERIODIC_WORKER
 import com.owncloud.android.workers.CameraUploadsWorker
 import com.owncloud.android.workers.OldLogsCollectorWorker
+import com.owncloud.android.workers.UploadFileFromContentUriWorker
+import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 
 class WorkManagerProvider(
     val context: Context
@@ -75,5 +80,14 @@ class WorkManagerProvider(
 
         WorkManager.getInstance(context)
             .enqueueUniquePeriodicWork(AVAILABLE_OFFLINE_PERIODIC_WORKER, ExistingPeriodicWorkPolicy.KEEP, availableOfflinePeriodicWorker)
+    }
+
+    fun getWorkInfoByTagsLiveData(): LiveData<List<WorkInfo>> {
+        return WorkManager.getInstance(context).getWorkInfoByTagsLiveData(
+            listOf(
+                UploadFileFromContentUriWorker::class.java.name,
+                UploadFileFromFileSystemWorker::class.java.name
+            )
+        )
     }
 }

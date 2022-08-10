@@ -106,6 +106,12 @@ class TransferListFragment : Fragment() {
         transfersViewModel.transfersListLiveData.observe(viewLifecycleOwner) { transfers ->
             setData(transfers)
         }
+
+        transfersViewModel.workInfosListLiveData.observe(viewLifecycleOwner) { workInfos ->
+            workInfos.forEach { workInfo ->
+                transfersAdapter.updateTransferProgress(workInfo)
+            }
+        }
     }
 
     override fun onDestroy() {
