@@ -217,16 +217,7 @@ class MainFileListFragment : Fragment(),
         collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
             if (fileListUiState !is MainFileListViewModel.FileListUiState.Success) return@collectLatestLifecycleFlow
 
-            val fileListPreFilters = fileListUiState.folderContent
-            val searchFilter = fileListUiState.searchFilter
-
-            // TODO: Apply filters on viewModel or retrieve data filtered from database (second option better)
-            val fileListPostFilters = fileListPreFilters
-                .filter { fileToFilter ->
-                    fileToFilter.fileName.contains(searchFilter ?: "", ignoreCase = true)
-                }
-
-            updateFileListData(fileListPostFilters)
+            updateFileListData(fileListUiState.folderContent)
         }
 
         mainFileListViewModel.syncFolder.observe(viewLifecycleOwner, Event.EventObserver {

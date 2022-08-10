@@ -46,6 +46,7 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
@@ -81,6 +82,8 @@ class MainFileListViewModel(
     initialFolderToDisplay: OCFile,
 ) : ViewModel() {
 
+    private val showHiddenFiles: Boolean = sharedPreferencesProvider.getBoolean(PREF_SHOW_HIDDEN_FILES, true)
+
     private val accountName: MutableStateFlow<String> = MutableStateFlow(accountNameParam)
     val currentFolderDisplayed: MutableStateFlow<OCFile> = MutableStateFlow(initialFolderToDisplay)
     private val fileListOption: MutableStateFlow<FileListOption> = MutableStateFlow(FileListOption.ALL_FILES)
@@ -115,7 +118,7 @@ class MainFileListViewModel(
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val result = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId = fileId))
             result.getDataOrNull()?.let {
-                currentFolderDisplayed.update { it }
+                updateFolderToDisplay(it)
             }
         }
     }
@@ -201,6 +204,7 @@ class MainFileListViewModel(
 
     fun updateFolderToDisplay(newFolderToDisplay: OCFile) {
         currentFolderDisplayed.update { newFolderToDisplay }
+        searchFilter.update { "" }
     }
 
     fun updateSearchFilter(newSearchFilter: String) {
@@ -311,9 +315,15 @@ class MainFileListViewModel(
         accountName: String,
         fileListOption: FileListOption,
         searchFilter: String?
-    ) = this.map {
+    ) = this.map { folderContent ->
         FileListUiState.Success(
-            accountName, currentFolderDisplayed, it, fileListOption, searchFilter
+            accountName = accountName,
+            folderToDisplay = currentFolderDisplayed,
+            folderContent = folderContent.filter { file ->
+                file.fileName.contains(searchFilter ?: "", ignoreCase = true) && (showHiddenFiles || !file.fileName.startsWith("."))
+            },
+            fileListOption = fileListOption,
+            searchFilter = searchFilter,
         )
     }
 
