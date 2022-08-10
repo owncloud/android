@@ -94,7 +94,7 @@ class MainFileListViewModel(
             fileListOption,
             searchFilter,
         ) { currentFolderDisplayed, accountName, fileListOption, searchFilter ->
-            generateFileListUiStateForThisParams(
+            composeFileListUiStateForThisParams(
                 currentFolderDisplayed = currentFolderDisplayed,
                 accountName = accountName,
                 fileListOption = fileListOption,
@@ -121,7 +121,6 @@ class MainFileListViewModel(
     }
 
     fun getFile(): OCFile {
-        // FIXME: Remove those ugly !!
         return currentFolderDisplayed.value
     }
 
@@ -252,35 +251,33 @@ class MainFileListViewModel(
         return contextProvider.getString(stringId)
     }
 
-    private fun generateFileListUiStateForThisParams(
+    private fun composeFileListUiStateForThisParams(
         currentFolderDisplayed: OCFile,
         accountName: String,
         fileListOption: FileListOption,
         searchFilter: String?
     ): Flow<FileListUiState> =
         when (fileListOption) {
-            FileListOption.ALL_FILES -> retrieveFlowForAllFiles(currentFolderDisplayed, accountName, fileListOption, searchFilter)
-            FileListOption.SHARED_BY_LINK -> retrieveFlowForShareByLink(currentFolderDisplayed, accountName, fileListOption, searchFilter)
-            FileListOption.AV_OFFLINE -> retrieveFlowForAvailableOffline(currentFolderDisplayed, accountName, fileListOption, searchFilter)
-        }
+            FileListOption.ALL_FILES -> retrieveFlowForAllFiles(currentFolderDisplayed, accountName)
+            FileListOption.SHARED_BY_LINK -> retrieveFlowForShareByLink(currentFolderDisplayed, accountName)
+            FileListOption.AV_OFFLINE -> retrieveFlowForAvailableOffline(currentFolderDisplayed, accountName)
+        }.toFileListUiState(
+            currentFolderDisplayed,
+            accountName,
+            fileListOption,
+            searchFilter
+        )
 
     private fun retrieveFlowForAllFiles(
         currentFolderDisplayed: OCFile,
         accountName: String,
-        fileListOption: FileListOption,
-        searchFilter: String?
-    ): Flow<FileListUiState> =
+    ): Flow<List<OCFile>> =
         getFolderContentAsStreamUseCase.execute(
             GetFolderContentAsStreamUseCase.Params(
-                // TODO: Fix the issue with the initial value for currentFolderDisplayed. Fallback MUST be the root folder for the current account.
-                //   NOT 1
-                currentFolderDisplayed.id ?: 1
+                folderId = currentFolderDisplayed.id
+                    ?: getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, ROOT_PATH)).getDataOrNull()!!.id!!
             )
-        ).map {
-            FileListUiState.Success(
-                accountName, currentFolderDisplayed, it, fileListOption, searchFilter
-            )
-        }
+        )
 
     /**
      * In root folder, all the shared by link files should be shown. Otherwise, the folder content should be shown.
@@ -289,17 +286,12 @@ class MainFileListViewModel(
     private fun retrieveFlowForShareByLink(
         currentFolderDisplayed: OCFile,
         accountName: String,
-        fileListOption: FileListOption,
-        searchFilter: String?
-    ): Flow<FileListUiState> = if (currentFolderDisplayed.remotePath == ROOT_PATH) {
-        getSharedByLinkForAccountAsStreamUseCase.execute(GetSharedByLinkForAccountAsStreamUseCase.Params(accountName)).map {
-            FileListUiState.Success(
-                accountName, currentFolderDisplayed, it, fileListOption, searchFilter
-            )
+    ): Flow<List<OCFile>> =
+        if (currentFolderDisplayed.remotePath == ROOT_PATH) {
+            getSharedByLinkForAccountAsStreamUseCase.execute(GetSharedByLinkForAccountAsStreamUseCase.Params(accountName))
+        } else {
+            retrieveFlowForAllFiles(currentFolderDisplayed, accountName)
         }
-    } else {
-        retrieveFlowForAllFiles(currentFolderDisplayed, accountName, fileListOption, searchFilter)
-    }
 
     /**
      * In root folder, all the available offline files should be shown. Otherwise, the folder content should be shown.
@@ -308,17 +300,21 @@ class MainFileListViewModel(
     private fun retrieveFlowForAvailableOffline(
         currentFolderDisplayed: OCFile,
         accountName: String,
+    ): Flow<List<OCFile>> = if (currentFolderDisplayed.remotePath == ROOT_PATH) {
+        getFilesAvailableOfflineFromAccountAsStreamUseCase.execute(GetFilesAvailableOfflineFromAccountAsStreamUseCase.Params(accountName))
+    } else {
+        retrieveFlowForAllFiles(currentFolderDisplayed, accountName)
+    }
+
+    private fun Flow<List<OCFile>>.toFileListUiState(
+        currentFolderDisplayed: OCFile,
+        accountName: String,
         fileListOption: FileListOption,
         searchFilter: String?
-    ): Flow<FileListUiState> = if (currentFolderDisplayed.remotePath == ROOT_PATH) {
-        getFilesAvailableOfflineFromAccountAsStreamUseCase.execute(GetFilesAvailableOfflineFromAccountAsStreamUseCase.Params(accountName))
-            .map {
-                FileListUiState.Success(
-                    accountName, currentFolderDisplayed, it, fileListOption, searchFilter
-                )
-            }
-    } else {
-        retrieveFlowForAllFiles(currentFolderDisplayed, accountName, fileListOption, searchFilter)
+    ) = this.map {
+        FileListUiState.Success(
+            accountName, currentFolderDisplayed, it, fileListOption, searchFilter
+        )
     }
 
     sealed interface FileListUiState {
