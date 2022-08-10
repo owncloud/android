@@ -278,7 +278,7 @@ class MainFileListFragment : Fragment(),
     override fun onSortSelected(sortType: SortType) {
         binding.optionsLayout.sortTypeSelected = sortType
 
-        mainFileListViewModel.setNewSortType(sortType, binding.optionsLayout.sortOrderSelected)
+        mainFileListViewModel.updateSortTypeAndOrder(sortType, binding.optionsLayout.sortOrderSelected)
     }
 
     private fun isPickingAFolder(): Boolean {
