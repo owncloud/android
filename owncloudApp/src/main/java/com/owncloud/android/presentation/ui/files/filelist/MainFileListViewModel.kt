@@ -152,12 +152,6 @@ class MainFileListViewModel(
 
     fun isGridModeSetAsPreferred() = sharedPreferencesProvider.getBoolean(RECYCLER_VIEW_PREFERRED, false)
 
-    fun setNewSortType(sortType: SortType, sortOrder: SortOrder) {
-        sharedPreferencesProvider.putInt(PREF_FILE_LIST_SORT_TYPE, sortType.ordinal)
-        sharedPreferencesProvider.putInt(PREF_FILE_LIST_SORT_ORDER, sortOrder.ordinal)
-        sortTypeAndOrder.update { Pair(sortType, sortOrder) }
-    }
-
     private fun sortList(files: List<OCFile>, sortTypeAndOrder: Pair<SortType, SortOrder>): List<OCFile> {
         return sortFilesUseCase.execute(
             SortFilesUseCase.Params(
@@ -233,6 +227,12 @@ class MainFileListViewModel(
 
     fun updateFileListOption(newFileListOption: FileListOption) {
         fileListOption.update { newFileListOption }
+    }
+
+    fun updateSortTypeAndOrder(sortType: SortType, sortOrder: SortOrder) {
+        sharedPreferencesProvider.putInt(PREF_FILE_LIST_SORT_TYPE, sortType.ordinal)
+        sharedPreferencesProvider.putInt(PREF_FILE_LIST_SORT_ORDER, sortOrder.ordinal)
+        sortTypeAndOrder.update { Pair(sortType, sortOrder) }
     }
 
     fun refreshFolder(
