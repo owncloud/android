@@ -126,7 +126,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
 
             if (!stateWasRecovered) {
                 MainFileListFragment listOfFolders = getListOfFilesFragment();
-                listOfFolders.listDirectory(folder);
+                listOfFolders.navigateToFolder(folder);
 
                 startSyncFolderOperation(folder, false);
             }
@@ -280,7 +280,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         MainFileListFragment listOfFiles = getListOfFilesFragment();
         if (listOfFiles != null) {  // should never be null, indeed
             OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH);
-            listOfFiles.listDirectory(root);
+            listOfFiles.navigateToFolder(root);
             setFile(listOfFiles.getCurrentFile());
             updateNavigationElementsInActionBar();
             startSyncFolderOperation(root, false);
@@ -442,7 +442,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
                         if (currentDir.getRemotePath().equals(synchFolderRemotePath)) {
                             MainFileListFragment fileListFragment = getListOfFilesFragment();
                             if (fileListFragment != null) {
-                                fileListFragment.listDirectory(currentDir);
+                                fileListFragment.navigateToFolder(currentDir);
                             }
                         }
                         setFile(currentFile);

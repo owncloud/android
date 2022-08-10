@@ -38,6 +38,8 @@ enum class SortType : Parcelable {
         }
 
     companion object {
+        const val PREF_FILE_LIST_SORT_TYPE = "PREF_FILE_LIST_SORT_TYPE"
+
         fun fromPreference(value: Int): SortType =
             when (value) {
                 FileStorageUtils.SORT_NAME -> SORT_TYPE_BY_NAME
@@ -66,6 +68,8 @@ enum class SortOrder : Parcelable {
         }
 
     companion object {
+        const val PREF_FILE_LIST_SORT_ORDER = "PREF_FILE_LIST_SORT_ORDER"
+
         fun fromPreference(isAscending: Boolean) =
             if (isAscending) {
                 SORT_ORDER_ASCENDING

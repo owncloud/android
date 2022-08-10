@@ -317,7 +317,7 @@ class FileDisplayActivity : FileActivity(),
     private fun initFragmentsWithFile() {
         if (account != null && file != null) {
             /// First fragment
-            listMainFileFragment?.listDirectory(currentDir)
+            listMainFileFragment?.navigateToFolder(currentDir)
                 ?: Timber.e("Still have a chance to lose the initialization of list fragment >(")
 
             /// Second fragment
@@ -437,7 +437,7 @@ class FileDisplayActivity : FileActivity(),
         if (file != null) {
             val fileListFragment = listMainFileFragment
             listMainFileFragment?.fileActions = this
-            fileListFragment?.listDirectory(file)
+            fileListFragment?.navigateToFolder(file)
         }
     }
 
@@ -745,7 +745,7 @@ class FileDisplayActivity : FileActivity(),
                         }
 
                         if (synchFolderRemotePath != null && currentDir.remotePath == synchFolderRemotePath) {
-                            listMainFileFragment?.listDirectory(currentDir)
+                            listMainFileFragment?.navigateToFolder(currentDir)
                         }
                         file = currentFile
                     }
@@ -1006,7 +1006,7 @@ class FileDisplayActivity : FileActivity(),
         val listOfFiles = listMainFileFragment
         if (listOfFiles != null) {  // should never be null, indeed
             val root = storageManager.getFileByPath(OCFile.ROOT_PATH)
-            listOfFiles.listDirectory(root!!)
+            listOfFiles.navigateToFolder(root!!)
             file = root
             startSyncFolderOperation(root, false)
         }

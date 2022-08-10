@@ -45,7 +45,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.MainFileListFragmentBinding
-import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
@@ -74,7 +73,6 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment
 import com.owncloud.android.ui.fragment.FileDetailFragment
 import com.owncloud.android.utils.ColumnQuantity
-import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -233,18 +231,16 @@ class MainFileListFragment : Fragment(),
     }
 
     private fun updateFileListData(filesList: List<OCFile>) {
-        files = filesList
-        val sortedFiles = mainFileListViewModel.sortList(files)
-        fileListAdapter.updateFileList(filesToAdd = sortedFiles)
-        showOrHideEmptyView(sortedFiles)
+        fileListAdapter.updateFileList(filesToAdd = filesList)
+        showOrHideEmptyView(filesList)
     }
 
     fun navigateToFolderId(folderId: Long) {
-        mainFileListViewModel.navigateTo(folderId)
+        mainFileListViewModel.navigateToFolderId(folderId)
     }
 
-    fun listDirectory(directory: OCFile) {
-        mainFileListViewModel.updateFolderToDisplay(newFolderToDisplay = directory)
+    fun navigateToFolder(folder: OCFile) {
+        mainFileListViewModel.updateFolderToDisplay(newFolderToDisplay = folder)
     }
 
     private fun showOrHideEmptyView(filesList: List<OCFile>) {
@@ -282,21 +278,7 @@ class MainFileListFragment : Fragment(),
     override fun onSortSelected(sortType: SortType) {
         binding.optionsLayout.sortTypeSelected = sortType
 
-        val isAscending = binding.optionsLayout.sortOrderSelected == SortOrder.SORT_ORDER_ASCENDING
-
-        when (sortType) {
-            SortType.SORT_TYPE_BY_NAME -> sortAdapterBy(FileStorageUtils.SORT_NAME, isAscending)
-            SortType.SORT_TYPE_BY_DATE -> sortAdapterBy(FileStorageUtils.SORT_DATE, isAscending)
-            SortType.SORT_TYPE_BY_SIZE -> sortAdapterBy(FileStorageUtils.SORT_SIZE, isAscending)
-        }
-    }
-
-    private fun sortAdapterBy(sortType: Int, isDescending: Boolean) {
-        PreferenceManager.setSortOrder(sortType, requireContext(), FileStorageUtils.FILE_DISPLAY_SORT)
-        PreferenceManager.setSortAscending(isDescending, requireContext(), FileStorageUtils.FILE_DISPLAY_SORT)
-
-        val sortedFiles = mainFileListViewModel.sortList(files)
-        fileListAdapter.updateFileList(filesToAdd = sortedFiles)
+        mainFileListViewModel.setNewSortType(sortType, binding.optionsLayout.sortOrderSelected)
     }
 
     private fun isPickingAFolder(): Boolean {
@@ -699,9 +681,7 @@ class MainFileListFragment : Fragment(),
     private fun syncFiles(files: List<OCFile>) {
         for (file in files) {
             if (file.isFolder) {
-                mainFileListViewModel.syncFolder(
-                    ocFolder = file,
-                )
+                mainFileListViewModel.syncFolder(ocFolder = file,)
             } else {
                 fileActions?.syncFile(file)
             }
