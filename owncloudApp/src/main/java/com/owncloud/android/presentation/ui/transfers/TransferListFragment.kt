@@ -104,7 +104,9 @@ class TransferListFragment : Fragment() {
         }
 
         transfersViewModel.transfersListLiveData.observe(viewLifecycleOwner) { transfers ->
+            val recyclerViewState = binding.transfersRecyclerView.layoutManager?.onSaveInstanceState()
             setData(transfers)
+            binding.transfersRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
         }
 
         transfersViewModel.workInfosListLiveData.observe(viewLifecycleOwner) { workInfos ->
