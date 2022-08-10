@@ -25,12 +25,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkInfo
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.usecases.ClearFailedTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.DeleteTransferWithIdUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
@@ -51,17 +53,27 @@ class TransfersViewModel(
     private val clearSuccessfulTransfersUseCase: ClearSuccessfulTransfersUseCase,
     getAllTransfersUseCase: GetAllTransfersUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
 
     private val _transfersListLiveData = MediatorLiveData<List<OCTransfer>>()
     val transfersListLiveData: LiveData<List<OCTransfer>>
         get() = _transfersListLiveData
 
+    private val _workInfosListLiveData = MediatorLiveData<List<WorkInfo>>()
+    val workInfosListLiveData: LiveData<List<WorkInfo>>
+        get() = _workInfosListLiveData
+
     private var transfersLiveData = getAllTransfersUseCase.execute(Unit)
+
+    private var workInfosLiveData = workManagerProvider.getWorkInfoByTagsLiveData()
 
     init {
         _transfersListLiveData.addSource(transfersLiveData) { transfers ->
             _transfersListLiveData.postValue(transfers)
+        }
+        _workInfosListLiveData.addSource(workInfosLiveData) { workInfos ->
+            _workInfosListLiveData.postValue(workInfos)
         }
     }
 
