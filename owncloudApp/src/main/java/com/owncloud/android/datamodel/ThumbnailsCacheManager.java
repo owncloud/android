@@ -37,6 +37,8 @@ import android.widget.ImageView;
 import androidx.core.content.ContextCompat;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.domain.files.usecases.DisableThumbnailsForFileUseCase;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
@@ -44,14 +46,17 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.ui.adapter.DiskLruImageCache;
 import com.owncloud.android.utils.BitmapUtils;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
-import com.owncloud.android.domain.files.model.OCFile;
 
 import java.io.File;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.Locale;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * Manager for concurrent access to thumbnails cache.
@@ -294,6 +299,10 @@ public class ThumbnailsCacheManager {
                             }
                         } else {
                             mClient.exhaustResponse(get.getResponseBodyAsStream());
+                        }
+                        if (status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_NOT_FOUND) {
+                            @NotNull Lazy<DisableThumbnailsForFileUseCase> disableThumbnailsForFileUseCaseLazy = inject(DisableThumbnailsForFileUseCase.class);
+                            disableThumbnailsForFileUseCaseLazy.getValue().execute(new DisableThumbnailsForFileUseCase.Params(file.getId()));
                         }
                     } catch (Exception e) {
                         Timber.e(e);

@@ -46,5 +46,6 @@ interface FileRepository {
     fun renameFile(ocFile: OCFile, newName: String)
     fun saveFile(file: OCFile)
 
+    fun disableThumbnailsForFile(fileId: Long)
     fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
 }
