@@ -47,6 +47,7 @@ import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFrom
 import com.owncloud.android.domain.files.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
+import com.owncloud.android.domain.files.usecases.DisableThumbnailsForFileUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCase
@@ -133,6 +134,7 @@ val useCaseModule = module {
     factory { GetSearchFolderContentUseCase(get()) }
     factory { SynchronizeFileUseCase(get(), get(), get(), get()) }
     factory { SynchronizeFolderUseCase(get(), get()) }
+    factory { DisableThumbnailsForFileUseCase(get()) }
     factory { SortFilesUseCase() }
 
     // Av Offline
