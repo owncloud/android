@@ -96,15 +96,9 @@ class MainFileListFragment : Fragment(),
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private var files: List<OCFile> = emptyList()
-
     private lateinit var layoutManager: StaggeredGridLayoutManager
     private lateinit var fileListAdapter: FileListAdapter
     private lateinit var viewType: ViewType
-
-    private var fileListOption: FileListOption = FileListOption.ALL_FILES
-
-    private var file: OCFile? = null
 
     var actionMode: ActionMode? = null
 
@@ -127,9 +121,7 @@ class MainFileListFragment : Fragment(),
         initViews()
         subscribeToViewModels()
 
-        fileListOption = requireArguments().getParcelable(ARG_LIST_FILE_OPTION) ?: FileListOption.ALL_FILES
-
-        showOrHideFab(fileListOption)
+        mainFileListViewModel.updateFileListOption(requireArguments().getParcelable(ARG_LIST_FILE_OPTION) ?: FileListOption.ALL_FILES)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -292,7 +284,6 @@ class MainFileListFragment : Fragment(),
     }
 
     fun updateFileListOption(newFileListOption: FileListOption, file: OCFile) {
-        fileListOption = newFileListOption
         mainFileListViewModel.updateFolderToDisplay(file)
         mainFileListViewModel.updateFileListOption(newFileListOption)
         showOrHideFab(newFileListOption)
@@ -648,8 +639,8 @@ class MainFileListFragment : Fragment(),
                 menu,
                 checkedCount != fileListAdapter.itemCount - 1, // -1 because one of them is the footer :S
                 true,
-                fileListOption.isAvailableOffline(),
-                fileListOption.isSharedByLink()
+                mainFileListViewModel.fileListOption.value.isAvailableOffline(),
+                mainFileListViewModel.fileListOption.value.isSharedByLink(),
             )
 
             return true
@@ -681,7 +672,7 @@ class MainFileListFragment : Fragment(),
     private fun syncFiles(files: List<OCFile>) {
         for (file in files) {
             if (file.isFolder) {
-                mainFileListViewModel.syncFolder(ocFolder = file,)
+                mainFileListViewModel.syncFolder(ocFolder = file)
             } else {
                 fileActions?.syncFile(file)
             }

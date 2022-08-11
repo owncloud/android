@@ -658,6 +658,7 @@ class FileDisplayActivity : FileActivity(),
         super.onResume()
 
         setCheckedItemAtBottomBar(getMenuItemForFileListOption(fileListOption))
+        listMainFileFragment?.updateFileListOption(fileListOption, file)
 
         // refresh list of files
         refreshListOfFilesFragment(true)
