@@ -20,7 +20,6 @@ package com.owncloud.android.data.files.datasources.implementation
 
 import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
-import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource.Companion.toModel
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileEntity
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
@@ -152,6 +151,9 @@ class OCLocalFileDataSource(
         )
     }
 
+    override fun disableThumbnailsForFile(fileId: Long) {
+        fileDao.disableThumbnailsForFile(fileId)
+    }
     override fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus) {
         fileDao.updateAvailableOfflineStatusForFile(ocFile, newAvailableOfflineStatus.ordinal)
     }

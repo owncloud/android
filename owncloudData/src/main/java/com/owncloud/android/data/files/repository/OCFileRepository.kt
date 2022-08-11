@@ -247,7 +247,7 @@ class OCFileRepository(
                             // DO NOT update etag till contents are synced.
                             etag = localChildToSync.etag
                             needsToUpdateThumbnail =
-                                !remoteChild.isFolder && remoteChild.modificationTimestamp != localChildToSync.modificationTimestamp
+                                (!remoteChild.isFolder && remoteChild.modificationTimestamp != localChildToSync.modificationTimestamp) || localChildToSync.needsToUpdateThumbnail
                             // Probably not needed, if the child was already in the database, the av offline status should be also there
                             if (remoteFolder.isAvailableOffline) {
                                 availableOfflineStatus = AVAILABLE_OFFLINE_PARENT
@@ -328,6 +328,10 @@ class OCFileRepository(
 
     override fun saveFile(file: OCFile) {
         localFileDataSource.saveFile(file)
+    }
+
+    override fun disableThumbnailsForFile(fileId: Long) {
+        localFileDataSource.disableThumbnailsForFile(fileId)
     }
 
     override fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus) {

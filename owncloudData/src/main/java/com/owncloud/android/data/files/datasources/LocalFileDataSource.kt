@@ -44,5 +44,7 @@ interface LocalFileDataSource {
     fun saveFile(file: OCFile)
     fun removeFile(fileId: Long)
     fun renameFile(fileToRename: OCFile, finalRemotePath: String, finalStoragePath: String)
+
+    fun disableThumbnailsForFile(fileId: Long)
     fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
 }

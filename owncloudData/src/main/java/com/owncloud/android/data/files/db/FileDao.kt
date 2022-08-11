@@ -251,6 +251,9 @@ abstract class FileDao {
     @Query(UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS)
     abstract fun updateFileWithAvailableOfflineStatus(id: Long, availableOfflineStatus: Int)
 
+    @Query(DISABLE_THUMBNAILS_FOR_FILE)
+    abstract fun disableThumbnailsForFile(fileId: Long)
+
     private fun moveSingleFile(
         sourceFile: OCFileEntity,
         targetFolder: OCFileEntity,
@@ -402,5 +405,10 @@ abstract class FileDao {
             "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "SET keepInSync = :availableOfflineStatus " +
                     "WHERE id = :id"
+
+        private const val DISABLE_THUMBNAILS_FOR_FILE =
+            "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "SET needsToUpdateThumbnail = false " +
+                    "WHERE id = :fileId"
     }
 }
