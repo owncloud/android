@@ -18,16 +18,21 @@
  */
 package com.owncloud.android.domain.files.usecases
 
-import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.testutil.OC_EMPTY_FILES
 import com.owncloud.android.testutil.OC_FILES
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class GetSharedByLinkForAccountAsStreamUseCaseTest {
 
     private val repository: FileRepository = spyk()
@@ -35,37 +40,25 @@ class GetSharedByLinkForAccountAsStreamUseCaseTest {
     private val useCaseParams = GetSharedByLinkForAccountAsStreamUseCase.Params(owner = "owner")
 
     @Test
-    fun `get files shared by link - ok`() {
-        every { repository.getSharedByLinkForAccountAsStream(useCaseParams.owner) } returns OC_FILES
+    fun `get files shared by link - ok`() = runTest {
+        every { repository.getSharedByLinkForAccountAsStream(useCaseParams.owner) } returns flowOf(OC_FILES)
 
         val useCaseResult = useCase.execute(useCaseParams)
+        val listEmittedByFlow: List<OCFile> = useCaseResult.first()
 
-        Assert.assertTrue(useCaseResult.isSuccess)
-        Assert.assertEquals(OC_FILES, useCaseResult.getDataOrNull())
+        Assert.assertTrue(listEmittedByFlow.containsAll(OC_FILES))
 
         verify(exactly = 1) { repository.getSharedByLinkForAccountAsStream(useCaseParams.owner) }
     }
 
     @Test
-    fun `get files shared by link - ok - empty list`() {
-        every { repository.getSharedByLinkForAccountAsStream(useCaseParams.owner) } returns OC_EMPTY_FILES
+    fun `get files shared by link - ok - empty list`() = runTest {
+        every { repository.getSharedByLinkForAccountAsStream(useCaseParams.owner) } returns flowOf(OC_EMPTY_FILES)
 
         val useCaseResult = useCase.execute(useCaseParams)
+        val listEmittedByFlow: List<OCFile> = useCaseResult.first()
 
-        Assert.assertTrue(useCaseResult.isSuccess)
-        Assert.assertEquals(OC_EMPTY_FILES, useCaseResult.getDataOrNull())
-
-        verify(exactly = 1) { repository.getSharedByLinkForAccountAsStream(useCaseParams.owner) }
-    }
-
-    @Test
-    fun `get files shared by link - ko`() {
-        every { repository.getSharedByLinkForAccountAsStream(useCaseParams.owner) } throws UnauthorizedException()
-
-        val useCaseResult = useCase.execute(useCaseParams)
-
-        Assert.assertTrue(useCaseResult.isError)
-        Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
+        Assert.assertTrue(listEmittedByFlow.isEmpty())
 
         verify(exactly = 1) { repository.getSharedByLinkForAccountAsStream(useCaseParams.owner) }
     }
