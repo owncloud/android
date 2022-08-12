@@ -268,9 +268,9 @@ class MainFileListViewModel(
         if (pickingAFolder) return contextProvider.getString(R.string.file_list_empty_moving)
 
         val stringId = when (fileListOption.value) {
+            FileListOption.ALL_FILES -> R.string.file_list_empty
             FileListOption.AV_OFFLINE -> R.string.file_list_empty_available_offline
             FileListOption.SHARED_BY_LINK -> R.string.file_list_empty_shared_by_links
-            else -> R.string.file_list_empty
         }
         return contextProvider.getString(stringId)
     }
