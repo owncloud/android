@@ -91,7 +91,6 @@ import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromContentUriUseCase
 import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.coroutines.CoroutineScope
@@ -553,8 +552,6 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun requestUploadOfContentFromApps(contentIntent: Intent?, resultCode: Int) {
-        val uploadFileUseCase by inject<UploadFilesFromContentUriUseCase>()
-
         val streamsToUpload = ArrayList<Uri>()
 
         if (contentIntent!!.clipData != null && contentIntent.clipData!!.itemCount > 0) {
@@ -568,7 +565,7 @@ class FileDisplayActivity : FileActivity(),
         val currentDir = currentDir
         val remotePath = currentDir?.remotePath ?: OCFile.ROOT_PATH
 
-        transfersViewModel.uploadFilesFromSAF(
+        transfersViewModel.uploadFilesFromContentUri(
             accountName = account.name,
             listOfContentUris = streamsToUpload,
             uploadFolderPath = remotePath,

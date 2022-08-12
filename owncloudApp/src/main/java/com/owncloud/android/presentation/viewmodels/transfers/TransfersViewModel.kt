@@ -77,7 +77,7 @@ class TransfersViewModel(
         }
     }
 
-    fun uploadFilesFromSAF(
+    fun uploadFilesFromContentUri(
         accountName: String,
         listOfContentUris: List<Uri>,
         uploadFolderPath: String

@@ -30,7 +30,6 @@ import android.widget.Toast;
 
 import com.owncloud.android.R;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.usecases.transfers.uploads.UploadFileFromSystemUseCase;
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.UriUtils;
@@ -162,7 +161,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                 }
 
                 filesToUpload.add(fullTempPath);
-                @NotNull Lazy<UploadFilesFromSystemUseCase> uploadFilesFromSystemUseCaseLazy = inject(UploadFileFromSystemUseCase.class);
+                @NotNull Lazy<UploadFilesFromSystemUseCase> uploadFilesFromSystemUseCaseLazy = inject(UploadFilesFromSystemUseCase.class);
                 UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = uploadFilesFromSystemUseCaseLazy.getValue();
                 UploadFilesFromSystemUseCase.Params useCaseParams = new UploadFilesFromSystemUseCase.Params(
                         account.name,
