@@ -84,7 +84,7 @@ class MainFileListViewModel(
     initialFolderToDisplay: OCFile,
 ) : ViewModel() {
 
-    private val showHiddenFiles: Boolean = sharedPreferencesProvider.getBoolean(PREF_SHOW_HIDDEN_FILES, true)
+    private val showHiddenFiles: Boolean = sharedPreferencesProvider.getBoolean(PREF_SHOW_HIDDEN_FILES, false)
 
     private val accountName: MutableStateFlow<String> = MutableStateFlow(accountNameParam)
     val currentFolderDisplayed: MutableStateFlow<OCFile> = MutableStateFlow(initialFolderToDisplay)
