@@ -184,21 +184,6 @@ android {
         }
     }
 
-    flavorDimensions "management"
-    productFlavors {
-        original {
-            dimension "management"
-        }
-        mdm {
-            dimension "management"
-        }
-    }
-
-    applicationVariants.all { variant ->
-        def appName = System.env.OC_APP_NAME
-        setOutputFileName(variant, appName, project)
-    }
-
     testOptions {
         packagingOptions {
             jniLibs {
@@ -219,54 +204,6 @@ android {
 
     namespace "com.owncloud.android"
     testNamespace "com.owncloud.android.test"
-}
-
-// Updates output file names of a given variant to format
-// [appName].[variant.versionName].[OC_BUILD_NUMBER]-[variant.name].apk.
-//
-// OC_BUILD_NUMBER is an environment variable read directly in this method. If undefined, it's not added.
-//
-// @param variant           Build variant instance which output file name will be updated.
-// @param appName           String to use as first part of the new file name. May be undefined, the original
-//                          project.archivesBaseName property will be used instead.
-// @param callerProject     Caller project.
-
-def setOutputFileName(variant, appName, callerProject) {
-    logger.info("Setting new name for output of variant $variant.name")
-
-    def originalFile = variant.outputs[0].outputFile
-    def originalName = originalFile.name
-    println "originalName is $originalName"
-
-    def newName = ""
-
-    if (appName) {
-        newName += appName
-    } else {
-        newName += "owncloud"
-    }
-
-    def versionName = "$variant.mergedFlavor.versionName"
-    if (variant.mergedFlavor.manifestPlaceholders.versionName != null) {
-        versionName = "$variant.mergedFlavor.manifestPlaceholders.versionName"
-    }
-    if (variant.buildType.manifestPlaceholders.versionName != null) {
-        versionName = "$variant.buildType.manifestPlaceholders.versionName"
-    }
-    newName += "_$versionName"
-
-    def buildNumber = System.env.OC_BUILD_NUMBER
-    if (buildNumber) {
-        newName += "_$buildNumber"
-    }
-
-    newName += originalName.substring(callerProject.archivesBaseName.length())
-
-    println "$variant.name: newName is $newName"
-
-    variant.outputs.all {
-        outputFileName = new File(".", newName)
-    }
 }
 
 static def getGitCommitCount() {
