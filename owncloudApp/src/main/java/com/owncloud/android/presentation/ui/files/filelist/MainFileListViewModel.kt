@@ -121,7 +121,8 @@ class MainFileListViewModel(
 
     init {
         val sortTypeSelected = SortType.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_TYPE, SortType.SORT_TYPE_BY_NAME.ordinal)]
-        val sortOrderSelected = SortOrder.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_ORDER, SortOrder.SORT_ORDER_ASCENDING.ordinal)]
+        val sortOrderSelected =
+            SortOrder.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_ORDER, SortOrder.SORT_ORDER_ASCENDING.ordinal)]
         sortTypeAndOrder.update { Pair(sortTypeSelected, sortOrderSelected) }
     }
 
@@ -193,7 +194,8 @@ class MainFileListViewModel(
                 // Browsing to parent folder. Root
                 val rootFolderForAccountResult = getFileByRemotePathUseCase.execute(
                     GetFileByRemotePathUseCase.Params(
-                        remotePath = ROOT_PATH, owner = currentFolder.owner
+                        remotePath = ROOT_PATH,
+                        owner = currentFolder.owner,
                     )
                 )
                 parentDir = rootFolderForAccountResult.getDataOrNull()
@@ -206,7 +208,7 @@ class MainFileListViewModel(
             if (fileListOption.value.isAllFiles()) {
                 refreshFolder(
                     ocFolder = parentDir,
-                    isPickingAFolder = false
+                    isPickingAFolder = false,
                 )
             }
         }
