@@ -30,7 +30,7 @@ import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.usecases.ClearFailedTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.DeleteTransferWithIdUseCase
-import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
+import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
@@ -51,7 +51,7 @@ class TransfersViewModel(
     private val clearFailedTransfersUseCase: ClearFailedTransfersUseCase,
     private val retryFailedUploadsUseCase: RetryFailedUploadsUseCase,
     private val clearSuccessfulTransfersUseCase: ClearSuccessfulTransfersUseCase,
-    getAllTransfersUseCase: GetAllTransfersUseCase,
+    getAllTransfersAsLiveDataUseCase: GetAllTransfersAsLiveDataUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
@@ -64,9 +64,9 @@ class TransfersViewModel(
     val workInfosListLiveData: LiveData<List<WorkInfo>>
         get() = _workInfosListLiveData
 
-    private var transfersLiveData = getAllTransfersUseCase.execute(Unit)
+    private var transfersLiveData = getAllTransfersAsLiveDataUseCase.execute(Unit)
 
-    private var workInfosLiveData = workManagerProvider.getRunningWorkInfosByTagsLiveData()
+    private var workInfosLiveData = workManagerProvider.getRunningUploadsWorkInfosLiveData()
 
     init {
         _transfersListLiveData.addSource(transfersLiveData) { transfers ->
