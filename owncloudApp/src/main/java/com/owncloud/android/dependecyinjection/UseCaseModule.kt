@@ -67,6 +67,10 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncU
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
+import com.owncloud.android.domain.transfers.usecases.ClearFailedTransfersUseCase
+import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
+import com.owncloud.android.domain.transfers.usecases.DeleteTransferWithIdUseCase
+import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
@@ -79,9 +83,14 @@ import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFileFromContentUriUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFileFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import org.koin.dsl.module
 
@@ -143,11 +152,20 @@ val useCaseModule = module {
     factory { DownloadFileUseCase(get()) }
     factory { GetLiveDataForDownloadingFileUseCase(get()) }
     factory { GetLiveDataForFinishedDownloadsFromAccountUseCase(get()) }
-    factory { UploadFilesFromSAFUseCase(get(), get()) }
+    factory { UploadFileFromSystemUseCase(get()) }
+    factory { UploadFileFromContentUriUseCase(get()) }
+    factory { UploadFilesFromContentUriUseCase(get(), get()) }
     factory { UploadFilesFromSystemUseCase(get(), get()) }
     factory { UploadFileInConflictUseCase(get(), get()) }
     factory { CancelUploadForFileUseCase(get(), get()) }
-    factory { RetryUploadFromSystemUseCase(get(), get()) }
+    factory { RetryUploadFromSystemUseCase(get(), get(), get()) }
+    factory { RetryUploadFromContentUriUseCase(get(), get(), get()) }
+    factory { GetAllTransfersAsLiveDataUseCase(get()) }
+    factory { CancelUploadWithIdUseCase(get(), get()) }
+    factory { DeleteTransferWithIdUseCase(get()) }
+    factory { ClearFailedTransfersUseCase(get()) }
+    factory { RetryFailedUploadsUseCase(get(), get(), get(), get()) }
+    factory { ClearSuccessfulTransfersUseCase(get()) }
 
     // User
     factory { GetStoredQuotaUseCase(get()) }

@@ -21,17 +21,11 @@
 
 package com.owncloud.android.usecases.transfers.uploads
 
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.workDataOf
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
-import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 import timber.log.Timber
 import java.io.File
 
@@ -48,7 +42,7 @@ import java.io.File
  * It stores the upload in the database and then enqueue a new worker to upload the single file
  */
 class UploadFilesFromSystemUseCase(
-    private val workManager: WorkManager,
+    private val uploadFileFromSystemUseCase: UploadFileFromSystemUseCase,
     private val transferRepository: TransferRepository,
 ) : BaseUseCase<Unit, UploadFilesFromSystemUseCase.Params>() {
 
@@ -105,27 +99,15 @@ class UploadFilesFromSystemUseCase(
         uploadIdInStorageManager: Long,
         uploadPath: String,
     ) {
-        val inputData = workDataOf(
-            UploadFileFromFileSystemWorker.KEY_PARAM_ACCOUNT_NAME to accountName,
-            UploadFileFromFileSystemWorker.KEY_PARAM_BEHAVIOR to UploadBehavior.MOVE.name,
-            UploadFileFromFileSystemWorker.KEY_PARAM_CONTENT_URI to localPath,
-            UploadFileFromFileSystemWorker.KEY_PARAM_LAST_MODIFIED to lastModifiedInSeconds,
-            UploadFileFromFileSystemWorker.KEY_PARAM_UPLOAD_PATH to uploadPath,
-            UploadFileFromFileSystemWorker.KEY_PARAM_UPLOAD_ID to uploadIdInStorageManager
+        val uploadFileParams = UploadFileFromSystemUseCase.Params(
+            accountName = accountName,
+            localPath = localPath,
+            lastModifiedInSeconds = lastModifiedInSeconds,
+            behavior = UploadBehavior.MOVE.toString(),
+            uploadPath = uploadPath,
+            uploadIdInStorageManager = uploadIdInStorageManager
         )
-
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        val uploadFileFromContentUriWorker = OneTimeWorkRequestBuilder<UploadFileFromFileSystemWorker>()
-            .setInputData(inputData)
-            .setConstraints(constraints)
-            .addTag(accountName)
-            .build()
-
-        workManager.enqueue(uploadFileFromContentUriWorker)
-        Timber.i("Plain upload of $localPath has been enqueued.")
+        uploadFileFromSystemUseCase.execute(uploadFileParams)
     }
 
     data class Params(

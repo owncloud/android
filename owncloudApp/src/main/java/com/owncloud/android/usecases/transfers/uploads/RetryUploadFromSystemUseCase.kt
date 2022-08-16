@@ -21,12 +21,17 @@
 
 package com.owncloud.android.usecases.transfers.uploads
 
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.owncloud.android.domain.BaseUseCase
-import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.extensions.getWorkInfoByTags
+import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 
 class RetryUploadFromSystemUseCase(
-    private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,
+    private val workManager: WorkManager,
+    private val uploadFileFromSystemUseCase: UploadFileFromSystemUseCase,
     private val transferRepository: TransferRepository,
 ) : BaseUseCase<Unit, RetryUploadFromSystemUseCase.Params>() {
 
@@ -35,13 +40,28 @@ class RetryUploadFromSystemUseCase(
 
         uploadToRetry ?: return
 
-        uploadFilesFromSystemUseCase.execute(
-            UploadFilesFromSystemUseCase.Params(
-                accountName = uploadToRetry.accountName,
-                listOfLocalPaths = listOf(uploadToRetry.localPath),
-                uploadFolderPath = uploadToRetry.remotePath.trimEnd(PATH_SEPARATOR),
+        transferRepository.updateTransferStatusToEnqueuedById(params.uploadIdInStorageManager)
+
+        val workInfo = workManager.getWorkInfoByTags(
+            listOf(
+                params.uploadIdInStorageManager.toString(),
+                uploadToRetry.accountName,
+                UploadFileFromFileSystemWorker::class.java.name
             )
         )
+
+        if (workInfo.firstOrNull()?.state == WorkInfo.State.FAILED) {
+            uploadFileFromSystemUseCase.execute(
+                UploadFileFromSystemUseCase.Params(
+                    accountName = uploadToRetry.accountName,
+                    localPath = uploadToRetry.localPath,
+                    lastModifiedInSeconds = (uploadToRetry.transferEndTimestamp?.div(1000)).toString(),
+                    behavior = UploadBehavior.fromLegacyLocalBehavior(uploadToRetry.localBehaviour).name,
+                    uploadPath = uploadToRetry.remotePath,
+                    uploadIdInStorageManager = params.uploadIdInStorageManager
+                )
+            )
+        }
     }
 
     data class Params(

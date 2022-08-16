@@ -20,6 +20,8 @@
 
 package com.owncloud.android.data.transfers.datasources.implementation
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.data.transfers.db.TransferDao
@@ -40,6 +42,10 @@ class OCLocalTransferDataSource(
 
     override fun updateTransferStatusToInProgressById(id: Long) {
         transferDao.updateTransferStatusWithId(id, TransferStatus.TRANSFER_IN_PROGRESS.value)
+    }
+
+    override fun updateTransferStatusToEnqueuedById(id: Long) {
+        transferDao.updateTransferStatusWithId(id, TransferStatus.TRANSFER_QUEUED.value)
     }
 
     override fun updateTransferWhenFinished(
@@ -63,8 +69,28 @@ class OCLocalTransferDataSource(
         return transferDao.getTransferWithId(id)?.toModel()
     }
 
-    override fun getAllTransfers(): List<OCTransfer> {
-        return transferDao.getAllTransfers().map { it.toModel() }
+    override fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>> {
+        return Transformations.map(transferDao.getAllTransfersAsLiveData()) { transferEntitiesList ->
+            val transfers = transferEntitiesList.map { transferEntity ->
+                transferEntity.toModel()
+            }
+            val transfersGroupedByStatus = transfers.groupBy { it.status }
+            val transfersGroupedByStatusOrdered = Array<List<OCTransfer>>(4) { emptyList() }
+            val newTransfersList = mutableListOf<OCTransfer>()
+            transfersGroupedByStatus.forEach { transferMap ->
+                val order = when (transferMap.key) {
+                    TransferStatus.TRANSFER_IN_PROGRESS -> 0
+                    TransferStatus.TRANSFER_QUEUED -> 1
+                    TransferStatus.TRANSFER_FAILED -> 2
+                    TransferStatus.TRANSFER_SUCCEEDED -> 3
+                }
+                transfersGroupedByStatusOrdered[order] = transferMap.value
+            }
+            for (items in transfersGroupedByStatusOrdered) {
+                newTransfersList.addAll(items)
+            }
+            newTransfersList
+        }
     }
 
     override fun getLastTransferFor(remotePath: String, accountName: String): OCTransfer? {

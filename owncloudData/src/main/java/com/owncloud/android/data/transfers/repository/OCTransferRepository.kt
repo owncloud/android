@@ -20,6 +20,7 @@
 
 package com.owncloud.android.data.transfers.repository
 
+import androidx.lifecycle.LiveData
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.OCTransfer
@@ -37,6 +38,10 @@ class OCTransferRepository(
 
     override fun updateTransferStatusToInProgressById(id: Long) {
         localTransferDataSource.updateTransferStatusToInProgressById(id = id)
+    }
+
+    override fun updateTransferStatusToEnqueuedById(id: Long) {
+        localTransferDataSource.updateTransferStatusToEnqueuedById(id = id)
     }
 
     override fun updateTransferWhenFinished(
@@ -62,8 +67,8 @@ class OCTransferRepository(
     override fun getTransferById(id: Long): OCTransfer? =
         localTransferDataSource.getTransferById(id = id)
 
-    override fun getAllTransfers(): List<OCTransfer> =
-        localTransferDataSource.getAllTransfers()
+    override fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>> =
+        localTransferDataSource.getAllTransfersAsLiveData()
 
     override fun getLastTransferFor(remotePath: String, accountName: String) =
         localTransferDataSource.getLastTransferFor(remotePath = remotePath, accountName = accountName)

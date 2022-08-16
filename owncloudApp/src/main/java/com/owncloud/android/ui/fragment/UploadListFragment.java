@@ -26,21 +26,18 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 
-import androidx.work.WorkManager;
 import com.owncloud.android.R;
-import com.owncloud.android.data.OwncloudDatabase;
-import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource;
-import com.owncloud.android.data.transfers.repository.OCTransferRepository;
 import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.adapter.ExpandableUploadListAdapter;
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase;
-import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase;
-import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase;
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase;
+import kotlin.Lazy;
 import kotlin.Unit;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * A Fragment that lists all files and folders in a given LOCAL path.
@@ -124,13 +121,8 @@ public class UploadListFragment extends ExpandableListFragment implements Option
 
         switch (option) {
             case RETRY_FAILED:
-                // Workaround... should be removed as soon as possible
-                OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(requireContext()).transferDao()));
-                RetryUploadFromContentUriUseCase retryUploadFromContentUriUseCase = new RetryUploadFromContentUriUseCase(requireContext(), transferRepository);
-                WorkManager workManager = WorkManager.getInstance(requireContext());
-                UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
-                RetryUploadFromSystemUseCase retryUploadFromSystemUseCase = new RetryUploadFromSystemUseCase(uploadFilesFromSystemUseCase, transferRepository);
-                RetryFailedUploadsUseCase retryFailedUploadsUseCase = new RetryFailedUploadsUseCase(requireContext(), retryUploadFromContentUriUseCase, retryUploadFromSystemUseCase, transferRepository);
+                @NotNull Lazy<RetryFailedUploadsUseCase> retryFailedUploadsUseCaseLazy = inject(RetryFailedUploadsUseCase.class);
+                RetryFailedUploadsUseCase retryFailedUploadsUseCase = retryFailedUploadsUseCaseLazy.getValue();
                 retryFailedUploadsUseCase.execute(Unit.INSTANCE);
                 break;
             case CLEAR_FAILED:

@@ -28,16 +28,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import androidx.work.WorkManager;
 import com.owncloud.android.R;
-import com.owncloud.android.data.OwncloudDatabase;
-import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource;
-import com.owncloud.android.data.transfers.db.TransferDao;
-import com.owncloud.android.data.transfers.repository.OCTransferRepository;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.UriUtils;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
@@ -46,6 +43,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * AsyncTask to copy a file from a uri in a temporal file
@@ -162,10 +161,8 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                 }
 
                 filesToUpload.add(fullTempPath);
-                WorkManager workManager = WorkManager.getInstance(mAppContext);
-                // Workaround... should be removed as soon as possible
-                OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(mAppContext).transferDao()));
-                UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
+                @NotNull Lazy<UploadFilesFromSystemUseCase> uploadFilesFromSystemUseCaseLazy = inject(UploadFilesFromSystemUseCase.class);
+                UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = uploadFilesFromSystemUseCaseLazy.getValue();
                 UploadFilesFromSystemUseCase.Params useCaseParams = new UploadFilesFromSystemUseCase.Params(
                         account.name,
                         filesToUpload,

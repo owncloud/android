@@ -24,9 +24,6 @@ package com.owncloud.android.ui.activity;
 import android.os.Bundle;
 
 import androidx.work.WorkManager;
-import com.owncloud.android.data.OwncloudDatabase;
-import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource;
-import com.owncloud.android.data.transfers.repository.OCTransferRepository;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog;
 import com.owncloud.android.ui.dialog.ConflictsResolveDialog.Decision;
@@ -46,7 +43,7 @@ import static org.koin.java.KoinJavaComponent.inject;
  * Wrapper activity which will be launched if keep-in-sync file will be modified by external
  * application.
  */
-public class ConflictsResolveActivity extends FileActivity implements OnConflictDecisionMadeListener {
+ public class ConflictsResolveActivity extends FileActivity implements OnConflictDecisionMadeListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +79,8 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
 
         WorkManager workManager = WorkManager.getInstance(getApplicationContext());
         if (forceOverwrite) {
-            // Workaround... should be removed as soon as possible
-            OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(this).transferDao()));
-            UploadFileInConflictUseCase uploadFileInConflictUseCase = new UploadFileInConflictUseCase(workManager, transferRepository);
+            @NotNull Lazy<UploadFileInConflictUseCase> uploadFileInConflictUseCaseLazy = inject(UploadFileInConflictUseCase.class);
+            UploadFileInConflictUseCase uploadFileInConflictUseCase = uploadFileInConflictUseCaseLazy.getValue();
             UploadFileInConflictUseCase.Params params = new UploadFileInConflictUseCase.Params(
                     getFile().getOwner(),
                     getFile().getStoragePath(),
@@ -92,9 +88,8 @@ public class ConflictsResolveActivity extends FileActivity implements OnConflict
             );
             uploadFileInConflictUseCase.execute(params);
         } else {
-            // Workaround... should be removed as soon as possible
-            OCTransferRepository transferRepository = new OCTransferRepository(new OCLocalTransferDataSource(OwncloudDatabase.Companion.getDatabase(this).transferDao()));
-            UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = new UploadFilesFromSystemUseCase(workManager, transferRepository);
+            @NotNull Lazy<UploadFilesFromSystemUseCase> uploadFilesFromSystemUseCaseLazy = inject(UploadFilesFromSystemUseCase.class);
+            UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = uploadFilesFromSystemUseCaseLazy.getValue();
             ArrayList<String> listOfPaths = new ArrayList<>();
             listOfPaths.add(getFile().getStoragePath());
             UploadFilesFromSystemUseCase.Params params = new UploadFilesFromSystemUseCase.Params(

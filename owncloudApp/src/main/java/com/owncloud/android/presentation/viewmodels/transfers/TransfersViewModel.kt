@@ -21,26 +21,70 @@
 package com.owncloud.android.presentation.viewmodels.transfers
 
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.WorkInfo
+import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.domain.transfers.usecases.ClearFailedTransfersUseCase
+import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
+import com.owncloud.android.domain.transfers.usecases.DeleteTransferWithIdUseCase
+import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSAFUseCase
+import com.owncloud.android.providers.WorkManagerProvider
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import kotlinx.coroutines.launch
 
 class TransfersViewModel(
-    private val uploadFilesFromSAFUseCase: UploadFilesFromSAFUseCase,
+    private val uploadFilesFromContentUriUseCase: UploadFilesFromContentUriUseCase,
     private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,
+    private val cancelUploadWithIdUseCase: CancelUploadWithIdUseCase,
+    private val deleteTransferWithIdUseCase: DeleteTransferWithIdUseCase,
+    private val retryUploadFromSystemUseCase: RetryUploadFromSystemUseCase,
+    private val retryUploadFromContentUriUseCase: RetryUploadFromContentUriUseCase,
+    private val clearFailedTransfersUseCase: ClearFailedTransfersUseCase,
+    private val retryFailedUploadsUseCase: RetryFailedUploadsUseCase,
+    private val clearSuccessfulTransfersUseCase: ClearSuccessfulTransfersUseCase,
+    getAllTransfersAsLiveDataUseCase: GetAllTransfersAsLiveDataUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
-    fun uploadFilesFromSAF(
+
+    private val _transfersListLiveData = MediatorLiveData<List<OCTransfer>>()
+    val transfersListLiveData: LiveData<List<OCTransfer>>
+        get() = _transfersListLiveData
+
+    private val _workInfosListLiveData = MediatorLiveData<List<WorkInfo>>()
+    val workInfosListLiveData: LiveData<List<WorkInfo>>
+        get() = _workInfosListLiveData
+
+    private var transfersLiveData = getAllTransfersAsLiveDataUseCase.execute(Unit)
+
+    private var workInfosLiveData = workManagerProvider.getRunningUploadsWorkInfosLiveData()
+
+    init {
+        _transfersListLiveData.addSource(transfersLiveData) { transfers ->
+            _transfersListLiveData.postValue(transfers)
+        }
+        _workInfosListLiveData.addSource(workInfosLiveData) { workInfos ->
+            _workInfosListLiveData.postValue(workInfos)
+        }
+    }
+
+    fun uploadFilesFromContentUri(
         accountName: String,
         listOfContentUris: List<Uri>,
         uploadFolderPath: String
     ) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            uploadFilesFromSAFUseCase.execute(
-                UploadFilesFromSAFUseCase.Params(
+            uploadFilesFromContentUriUseCase.execute(
+                UploadFilesFromContentUriUseCase.Params(
                     accountName = accountName,
                     listOfContentUris = listOfContentUris,
                     uploadFolderPath = uploadFolderPath
@@ -62,6 +106,56 @@ class TransfersViewModel(
                     uploadFolderPath = uploadFolderPath
                 )
             )
+        }
+    }
+
+    fun cancelTransferWithId(id: Long) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            cancelUploadWithIdUseCase.execute(
+                CancelUploadWithIdUseCase.Params(uploadId = id)
+            )
+        }
+    }
+
+    fun deleteTransferWithId(id: Long) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            deleteTransferWithIdUseCase.execute(
+                DeleteTransferWithIdUseCase.Params(id = id)
+            )
+        }
+    }
+
+    fun retryUploadFromSystem(id: Long) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            retryUploadFromSystemUseCase.execute(
+                RetryUploadFromSystemUseCase.Params(uploadIdInStorageManager = id)
+            )
+        }
+    }
+
+    fun retryUploadFromContentUri(id: Long) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            retryUploadFromContentUriUseCase.execute(
+                RetryUploadFromContentUriUseCase.Params(uploadIdInStorageManager = id)
+            )
+        }
+    }
+
+    fun clearFailedTransfers() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            clearFailedTransfersUseCase.execute(Unit)
+        }
+    }
+
+    fun retryFailedTransfers() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            retryFailedUploadsUseCase.execute(Unit)
+        }
+    }
+
+    fun clearSuccessfulTransfers() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            clearSuccessfulTransfersUseCase.execute(Unit)
         }
     }
 }

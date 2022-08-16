@@ -20,6 +20,7 @@
 
 package com.owncloud.android.data.transfers.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -38,7 +39,7 @@ abstract class TransferDao {
     abstract fun getTransfersWithStatus(status: List<Int>): List<OCTransferEntity>
 
     @Query(SELECT_ALL_TRANSFERS)
-    abstract fun getAllTransfers(): List<OCTransferEntity>
+    abstract fun getAllTransfersAsLiveData(): LiveData<List<OCTransferEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(ocTransferEntity: OCTransferEntity): Long
