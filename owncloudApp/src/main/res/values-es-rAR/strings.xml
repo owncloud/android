@@ -117,9 +117,6 @@
   <string name="uploader_error_message_source_file_not_found">El archivo a cargar no fue encontrado en esa ubicación. Por favor revisa que el archivo exista.</string>
   <string name="uploader_error_message_source_file_not_copied">Un error ha ocurrido al copiar el archivo en una carpeta temporal. Por favor intente enviarlo nuevamente.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
-  <string name="file_list_empty">No hay nada. ¡Subí contenido!</string>
-  <string name="file_list_empty_available_offline">No hay archivos disponibles sin conexión.</string>
-  <string name="file_list_empty_shared_by_links">Ningún archivo ha sido compartido por vínculo.</string>
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">No se ha encontrado una aplicación para este tipo de archivo</string>
   <string name="local_file_list_empty">No existen archivos en esta carpeta.</string>

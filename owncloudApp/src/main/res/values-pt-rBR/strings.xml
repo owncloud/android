@@ -141,9 +141,6 @@
   <string name="uploader_error_message_source_file_not_found">Arquivo para envio não foi encontrado em sua localização. Por favor verifique se o arquivo existe.</string>
   <string name="uploader_error_message_source_file_not_copied">Ocorreu um erro ao copiar o arquivo para uma pasta temporária. Por favor, tente enviar novamente.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
-  <string name="file_list_empty">Nada aqui. Envie alguma coisa!</string>
-  <string name="file_list_empty_available_offline">Não há arquivos externos disponíveis.</string>
-  <string name="file_list_empty_shared_by_links">Nenhum arquivo foi compartilhado por linque.</string>
   <string name="file_list_loading">Carregando...</string>
   <string name="file_list_no_app_for_file_type">Nenhum aplicativo encontrado para esse tipo de arquivo</string>
   <string name="file_list_no_app_for_perform_action">Nenhum aplicativo encontrado para esta ação</string>

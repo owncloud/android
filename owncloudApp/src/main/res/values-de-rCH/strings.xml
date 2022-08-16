@@ -118,9 +118,6 @@
   <string name="uploader_error_message_source_file_not_found">Hochzuladende Datei wurde nicht am erwarteten Speicherort. Überprüfe bitte ob sie existiert.</string>
   <string name="uploader_error_message_source_file_not_copied">Es ist ein Fehler beim Kopieren dieser Datei in einen temporären Ordner aufgetreten. Bitte nochmals versuchen, die Datei zu senden.</string>
   <string name="file_list_seconds_ago">Gerade eben</string>
-  <string name="file_list_empty">Alles leer. Lade etwas hoch!</string>
-  <string name="file_list_empty_available_offline">Es sind keine Offline-Dateien verfügbar.</string>
-  <string name="file_list_empty_shared_by_links">Es wurden keine Dateien per Link geteilt.</string>
   <string name="file_list_loading">Lade…</string>
   <string name="file_list_no_app_for_file_type">Keine App für diesen Dateityp gefunden</string>
   <string name="local_file_list_empty">Es befinden sich keine Dateien in diesem Ordner.</string>

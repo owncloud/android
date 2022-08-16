@@ -146,9 +146,12 @@
     <string name="uploader_error_message_source_file_not_found">File to upload was not found in its location. Please check whether the file exists.</string>
     <string name="uploader_error_message_source_file_not_copied">An error occurred while copying the file to a temporary folder. Please try to send again.</string>
     <string name="file_list_seconds_ago">seconds ago</string>
-    <string name="file_list_empty">Nothing in here. Upload something!</string>
-    <string name="file_list_empty_available_offline">There are no available offline files.</string>
-    <string name="file_list_empty_shared_by_links">No files have been shared by link.</string>
+    <string name="file_list_empty_title_all_files">No files in here</string>
+    <string name="file_list_empty_title_available_offline">No available offline files</string>
+    <string name="file_list_empty_title_shared_by_links">No shared links</string>
+    <string name="file_list_empty_subtitle_all_files">Upload some content or sync with your devices!</string>
+    <string name="file_list_empty_subtitle_available_offline">Files and folders you mark as available offline will show up here</string>
+    <string name="file_list_empty_subtitle_shared_by_links">Files and folders you share by link will show up here</string>
     <string name="file_list_loading">Loading&#8230;</string>
     <string name="file_list_no_app_for_file_type">No app found for file type</string>
     <string name="file_list_no_app_for_perform_action">No app found for this action</string>
