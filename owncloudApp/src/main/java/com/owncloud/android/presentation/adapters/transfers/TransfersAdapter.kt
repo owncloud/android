@@ -207,7 +207,7 @@ class TransfersAdapter(
 
     }
 
-    private fun headerTitleStringRes(status: TransferStatus) : Int {
+    private fun headerTitleStringRes(status: TransferStatus): Int {
         return when (status) {
             TransferStatus.TRANSFER_IN_PROGRESS -> R.string.uploads_view_group_current_uploads
             TransferStatus.TRANSFER_FAILED -> R.string.uploads_view_group_failed_uploads
