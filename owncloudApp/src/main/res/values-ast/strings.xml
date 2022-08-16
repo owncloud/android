@@ -57,7 +57,6 @@
   <string name="uploader_error_message_source_file_not_found">Ficheru pa xubir nun s\'atopó nel so allugamientu . Por favor, compruebe si esiste\'l ficheru.</string>
   <string name="uploader_error_message_source_file_not_copied">Hebo un fallu mientres s\'intentaba copiar un ficheru a una carpeta temporal. Por favor, intente unviala de nuevu.</string>
   <string name="file_list_seconds_ago">hai segundos</string>
-  <string name="file_list_empty">Nun hai nada equí. ¡Xubi daqué!</string>
   <string name="file_list_loading">Cargando…</string>
   <string name="local_file_list_empty">Nun hai ficheros nesta carpeta.</string>
   <string name="upload_list_empty">Nenguna xuba disponible.</string>

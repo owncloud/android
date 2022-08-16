@@ -105,9 +105,6 @@
   <string name="uploader_error_message_source_file_not_found">Fil til upload blev ikke fundet på sin placering. Tjek venligst om filen eksisterer.</string>
   <string name="uploader_error_message_source_file_not_copied">En fejl opstod ved kopiering af filen til en midlertidig folder. Prøv venligst igen.</string>
   <string name="file_list_seconds_ago">sekunder siden</string>
-  <string name="file_list_empty">Her er tomt. Upload noget!</string>
-  <string name="file_list_empty_available_offline">Der er ingen filer tilgængelig offline.</string>
-  <string name="file_list_empty_shared_by_links">Ingen filer er blevet delt med et link.</string>
   <string name="file_list_loading">Indlæser...</string>
   <string name="file_list_no_app_for_file_type">Ingen app fundet for filtype</string>
   <string name="local_file_list_empty">Der er ingen filer i denne mappe.</string>

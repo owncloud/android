@@ -35,7 +35,6 @@
   <string name="uploader_wrn_no_account_setup_btn_text">Iestatīt</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Iziet</string>
   <string name="file_list_seconds_ago">sekundes atpakaļ</string>
-  <string name="file_list_empty">Te vēl nekas nav. Rīkojies, sāc augšupielādēt!</string>
   <string name="file_list_loading">Ielādē…</string>
   <string name="local_file_list_empty">Šajā mapē nav failu</string>
   <string name="file_list_folder">mape</string>

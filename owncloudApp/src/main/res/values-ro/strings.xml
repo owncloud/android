@@ -98,7 +98,6 @@
   <string name="uploader_error_message_source_file_not_found">Fișierul de încărcat nu a fost găsit în locația sa. Vă rugăm verificați dacă fișierul există.</string>
   <string name="uploader_error_message_source_file_not_copied">A apărut o eroare în timpul copierii fișierului in dosarul temporar. Te rog încearcă să îl retrimiți.</string>
   <string name="file_list_seconds_ago">secunde în urmă</string>
-  <string name="file_list_empty">Nimic aici. Încarcă ceva!</string>
   <string name="file_list_loading">Se încarcă...</string>
   <string name="file_list_no_app_for_file_type">Nu s-a găsit nici o aplicație pentru acest tip de fișier/</string>
   <string name="local_file_list_empty">În acest folder nu sunt fișiere.</string>

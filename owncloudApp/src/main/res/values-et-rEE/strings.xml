@@ -77,7 +77,6 @@
   <string name="uploader_wrn_no_account_quit_btn_text">Lõpeta</string>
   <string name="uploader_error_title_no_file_to_upload">Ühtegi faili ei laaditud</string>
   <string name="file_list_seconds_ago">sekundit tagasi</string>
-  <string name="file_list_empty">Siin pole midagi. Lae midagi üles!</string>
   <string name="file_list_loading">Laadimine...</string>
   <string name="file_list_no_app_for_file_type">Selle failitüübi jaoks pole ühtegi rakendust</string>
   <string name="local_file_list_empty">Kaustas pole faile.</string>

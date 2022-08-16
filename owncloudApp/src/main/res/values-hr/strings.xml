@@ -58,7 +58,6 @@
   <string name="uploader_error_message_source_file_not_found">Datoteka za slanje nije nađena na njezinoj lokaciji. Molimo provjeri da li datoteka postoji.</string>
   <string name="uploader_error_message_source_file_not_copied">Za vrijeme kopiranja datoteke u priveremenu mapu desila se greška. Molimo probaj poslati ponovo.</string>
   <string name="file_list_seconds_ago">prije par sekundi</string>
-  <string name="file_list_empty">Nema ničega u ovoj mapi. Pošalji nešto!</string>
   <string name="file_list_loading">Učitavanje…</string>
   <string name="file_list_no_app_for_file_type">Nije nađena aplikacija za ovaj tip datoteke</string>
   <string name="local_file_list_empty">Nema datoteka u ovoj mapi</string>

@@ -128,9 +128,6 @@
   <string name="uploader_error_message_source_file_not_found">Soubor k nahrání nebyl v tomto umístění nalezen. Zkontrolujte prosím zda soubor existuje.</string>
   <string name="uploader_error_message_source_file_not_copied">Došlo k chybě při kopírování souboru do dočasného adresáře. Zkuste prosím zopakovat odeslání.</string>
   <string name="file_list_seconds_ago">před pár sekundami</string>
-  <string name="file_list_empty">Žádný obsah. Nahrajte něco!</string>
-  <string name="file_list_empty_available_offline">Nejsou dostupné žádné offline soubory.</string>
-  <string name="file_list_empty_shared_by_links">Žádné soubory nejsou v odkazu sdíleny.</string>
   <string name="file_list_loading">Načítání...</string>
   <string name="file_list_no_app_for_file_type">Pro typ souboru nebyla nalezena aplikace</string>
   <string name="local_file_list_empty">V tomto adresáři nejsou žádné soubory.</string>

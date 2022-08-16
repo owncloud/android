@@ -107,9 +107,6 @@
   <string name="uploader_error_message_source_file_not_found">Plik do wysłania nie został znaleziony w wybranej lokalizacji. Proszę sprawdzić, czy w ogóle istnieje.</string>
   <string name="uploader_error_message_source_file_not_copied">Wystąpił błąd podczas kopiowania pliku do folderu tymczasowego. Proszę spróbować go przesłać ponownie.</string>
   <string name="file_list_seconds_ago">sekund temu</string>
-  <string name="file_list_empty">Pusto. Wyślij coś!</string>
-  <string name="file_list_empty_available_offline">Nie ma plików dostępnych offline.</string>
-  <string name="file_list_empty_shared_by_links">Żadne pliki nie są współdzielone przez link.</string>
   <string name="file_list_loading">Wczytywanie...</string>
   <string name="file_list_no_app_for_file_type">Nie znaleziono aplikacji dla tego rodzaju pliku</string>
   <string name="local_file_list_empty">Nie ma plików w tym folderze.</string>

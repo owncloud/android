@@ -101,7 +101,6 @@
   <string name="uploader_error_message_source_file_not_found">Fann ekki skrána sem átti að senda inn á sínum stað. Athugaðu hvort skráin sé til.</string>
   <string name="uploader_error_message_source_file_not_copied">Villa kom upp við að afrita þessa skrá í bráðabirgðamöppu. Prófaðu að senda aftur.</string>
   <string name="file_list_seconds_ago">sekúndum síðan</string>
-  <string name="file_list_empty">Ekkert hér. Settu eitthvað inn!</string>
   <string name="file_list_loading">Hleð inn…</string>
   <string name="file_list_no_app_for_file_type">Engin forrit fundust fyrir skráategundina</string>
   <string name="local_file_list_empty">Það eru engar skrár í þessari möppu.</string>

@@ -141,9 +141,6 @@
   <string name="uploader_error_message_source_file_not_found">没有在指定位置找到要上传的文件。请检查文件是否存在。</string>
   <string name="uploader_error_message_source_file_not_copied">将文件复制到临时目录时出现错误。请尝试重新发送。</string>
   <string name="file_list_seconds_ago">几秒前</string>
-  <string name="file_list_empty">这里还什么都没有。上传些东西吧！</string>
-  <string name="file_list_empty_available_offline">无可用的离线文件</string>
-  <string name="file_list_empty_shared_by_links">没有文件通过链接共享。</string>
   <string name="file_list_loading">加载中...</string>
   <string name="file_list_no_app_for_file_type">没有支持此文件的应用</string>
   <string name="file_list_no_app_for_perform_action">未找到此操作的应用</string>

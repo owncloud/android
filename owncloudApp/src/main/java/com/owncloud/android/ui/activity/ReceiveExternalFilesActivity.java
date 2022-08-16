@@ -742,7 +742,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         if (hasFocus && mAdapter.getFiles().isEmpty()) {
             updateEmptyListMessage(getString(R.string.local_file_list_search_with_no_matches));
         } else if (!hasFocus && mAdapter.getFiles().isEmpty()) {
-            updateEmptyListMessage(getString(R.string.file_list_empty));
+            updateEmptyListMessage(getString(R.string.file_list_empty_subtitle_all_files));
         } else {
             updateEmptyListMessage(getString(R.string.empty));
         }

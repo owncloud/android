@@ -30,7 +30,6 @@
   <string name="uploader_wrn_no_account_title">Nalog nije nađen</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Napusti</string>
   <string name="file_list_seconds_ago">Pre par sekundi</string>
-  <string name="file_list_empty">Ovde nema ničeg. Pošaljite nešto!</string>
   <string name="file_list_loading">Učitavanje…</string>
   <string name="file_list_folder">fascikla</string>
   <string name="file_list_folders">fascikle</string>

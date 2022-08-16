@@ -95,7 +95,6 @@
   <string name="uploader_error_message_source_file_not_found">アップロードするファイルが指定の場所にありません。ファイルがあるかどうか確認してください。</string>
   <string name="uploader_error_message_source_file_not_copied">ファイルを一時フォルダーにコピーする際にエラーが発生しました。再送してください。</string>
   <string name="file_list_seconds_ago">数秒前</string>
-  <string name="file_list_empty">ここには何もありません。何かアップロードしてください。</string>
   <string name="file_list_loading">読込中...</string>
   <string name="file_list_no_app_for_file_type">ファイルタイプに対応するアプリがありません</string>
   <string name="local_file_list_empty">このフォルダーにはファイルがありません。</string>

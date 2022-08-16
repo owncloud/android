@@ -118,9 +118,6 @@
   <string name="uploader_error_message_source_file_not_found">لم يتم العثور على الملف المطلوب تحميله في مكانه. يُرجى التحقق مما إذا كان الملف موجودًا أم لا.</string>
   <string name="uploader_error_message_source_file_not_copied">حدث خطأ أثناء نسخ الملف إلى مجلد مؤقت. يُرجى إعادة محاولة الإرسال.</string>
   <string name="file_list_seconds_ago">منذ ثوانٍ</string>
-  <string name="file_list_empty">لا يوجد شيء هنا. تحميل شيء ما!</string>
-  <string name="file_list_empty_available_offline">لا توجد ملفات متوفرة دون اتصال بالإنترنت.</string>
-  <string name="file_list_empty_shared_by_links">لم تتم مشاركة أي ملفات عن طريق الرابط.</string>
   <string name="file_list_loading">جارٍ التحميل...</string>
   <string name="file_list_no_app_for_file_type">لم يتم العثور على أي تطبيق مناسب لنوع الملف</string>
   <string name="local_file_list_empty">لا توجد ملفات في هذا المجلد.</string>

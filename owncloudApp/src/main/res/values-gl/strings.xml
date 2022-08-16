@@ -120,9 +120,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="uploader_error_message_source_file_not_found">Non se atopou o ficheiro para enviar na súa localización. Comprobe que existe o ficheiro.</string>
   <string name="uploader_error_message_source_file_not_copied">Produciuse un erro ao copiar o ficheiro a un cartafol temporal. Proba a envialo de novo.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
-  <string name="file_list_empty">Aquí non hai nada. Envíe algo!</string>
-  <string name="file_list_empty_available_offline">Non hai ficheiros dispoñíbeis sen conexión.</string>
-  <string name="file_list_empty_shared_by_links">Aínda non hai ficheiros compartidos por ligazón.</string>
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">Non se atopou unha aplicación para este tipo de ficheiro</string>
   <string name="local_file_list_empty">Non hai ficheiros neste cartafol.</string>

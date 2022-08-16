@@ -130,9 +130,6 @@
   <string name="uploader_error_message_source_file_not_found">在該位置無法找到要上傳的檔案. 請檢查該檔案是否存在.</string>
   <string name="uploader_error_message_source_file_not_copied">在複製檔案到暫存資料夾時發生錯誤. 請再試一次.</string>
   <string name="file_list_seconds_ago">幾秒前</string>
-  <string name="file_list_empty">這裡還沒有東西，上傳一些吧！</string>
-  <string name="file_list_empty_available_offline">沒有可用的脫機文件。</string>
-  <string name="file_list_empty_shared_by_links">連結未已分享的任何文件。</string>
   <string name="file_list_loading">載入中…</string>
   <string name="file_list_no_app_for_file_type">找不到檔案類型的軟體</string>
   <string name="local_file_list_empty">沒有檔案在這個目錄。</string>

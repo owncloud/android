@@ -71,7 +71,6 @@
   <string name="uploader_error_message_source_file_not_found">Kargatzeko fitxategia ez da aurkitu bere lekuan. Mesedez egiaztatu fitxategia existitzen dela.</string>
   <string name="uploader_error_message_source_file_not_copied">Errore bat gertatu da fitxategia aldi baterako karpetan kopiatzerakoan. Mesedez, saia zaitez berriz bidaltzen.</string>
   <string name="file_list_seconds_ago">segundu</string>
-  <string name="file_list_empty">Ez dago ezer. Igo zerbait!</string>
   <string name="file_list_loading">Kargatzen…</string>
   <string name="file_list_no_app_for_file_type">Ez da fitxategi motarentzat app-ik aurkitu</string>
   <string name="local_file_list_empty">Ez dago fitxategirik karpeta honetan.</string>
