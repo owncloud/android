@@ -29,7 +29,6 @@ import com.owncloud.android.domain.transfers.model.TransferStatus
 @StringRes
 fun OCTransfer.statusToStringRes(): Int {
      return when (status) {
-         // Really uploading, bind the progress bar to listen for progress updates
          TransferStatus.TRANSFER_IN_PROGRESS -> R.string.uploader_upload_in_progress_ticker
          TransferStatus.TRANSFER_SUCCEEDED -> R.string.uploads_view_upload_status_succeeded
          TransferStatus.TRANSFER_QUEUED -> R.string.uploads_view_upload_status_queued

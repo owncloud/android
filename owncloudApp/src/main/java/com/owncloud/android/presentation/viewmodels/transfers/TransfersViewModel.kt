@@ -66,7 +66,7 @@ class TransfersViewModel(
 
     private var transfersLiveData = getAllTransfersUseCase.execute(Unit)
 
-    private var workInfosLiveData = workManagerProvider.getWorkInfoByTagsLiveData()
+    private var workInfosLiveData = workManagerProvider.getRunningWorkInfosByTagsLiveData()
 
     init {
         _transfersListLiveData.addSource(transfersLiveData) { transfers ->
