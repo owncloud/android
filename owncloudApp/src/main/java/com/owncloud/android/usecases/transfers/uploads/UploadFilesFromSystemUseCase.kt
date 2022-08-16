@@ -103,7 +103,7 @@ class UploadFilesFromSystemUseCase(
             accountName = accountName,
             localPath = localPath,
             lastModifiedInSeconds = lastModifiedInSeconds,
-            behavior = UploadBehavior.COPY.toString(),
+            behavior = UploadBehavior.MOVE.toString(),
             uploadPath = uploadPath,
             uploadIdInStorageManager = uploadIdInStorageManager
         )

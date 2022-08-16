@@ -39,7 +39,7 @@ interface LocalTransferDataSource {
     fun removeTransferById(id: Long)
     fun removeAllTransfersFromAccount(accountName: String)
     fun getTransferById(id: Long): OCTransfer?
-    fun getAllTransfers(): LiveData<List<OCTransfer>>
+    fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>>
     fun getLastTransferFor(remotePath: String, accountName: String): OCTransfer?
     fun getCurrentAndPendingTransfers(): List<OCTransfer>
     fun getFailedTransfers(): List<OCTransfer>

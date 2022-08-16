@@ -27,7 +27,7 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import com.owncloud.android.extensions.getWorkInfoByTagsLiveData
+import com.owncloud.android.extensions.getRunningWorkInfosByTagsLiveData
 import com.owncloud.android.workers.AvailableOfflinePeriodicWorker
 import com.owncloud.android.workers.AvailableOfflinePeriodicWorker.Companion.AVAILABLE_OFFLINE_PERIODIC_WORKER
 import com.owncloud.android.workers.CameraUploadsWorker
@@ -82,8 +82,8 @@ class WorkManagerProvider(
             .enqueueUniquePeriodicWork(AVAILABLE_OFFLINE_PERIODIC_WORKER, ExistingPeriodicWorkPolicy.KEEP, availableOfflinePeriodicWorker)
     }
 
-    fun getWorkInfoByTagsLiveData(): LiveData<List<WorkInfo>> {
-        return WorkManager.getInstance(context).getWorkInfoByTagsLiveData(
+    fun getRunningWorkInfosByTagsLiveData(): LiveData<List<WorkInfo>> {
+        return WorkManager.getInstance(context).getRunningWorkInfosByTagsLiveData(
             listOf(
                 UploadFileFromContentUriWorker::class.java.name,
                 UploadFileFromFileSystemWorker::class.java.name
