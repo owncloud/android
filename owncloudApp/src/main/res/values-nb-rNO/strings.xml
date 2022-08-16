@@ -111,9 +111,6 @@
   <string name="uploader_error_message_source_file_not_found">Filen som skulle lastes opp fantes ikke på plassen sin. Sjekk om filen finnes.</string>
   <string name="uploader_error_message_source_file_not_copied">Det skjedde en feil under kopiering av filen til en foreløpig mappe. Prøv å sende igjen.</string>
   <string name="file_list_seconds_ago">for få sekunder siden</string>
-  <string name="file_list_empty">Ingenting her. Last opp noe!</string>
-  <string name="file_list_empty_available_offline">Det er ingen filer som er tilgengelige frakoblet.</string>
-  <string name="file_list_empty_shared_by_links">Ingen filer har blitt delt med link.</string>
   <string name="file_list_loading">Laster...</string>
   <string name="file_list_no_app_for_file_type">Ingen apper funnet for filtypen</string>
   <string name="local_file_list_empty">Det er ingen filer i denne mappen.</string>

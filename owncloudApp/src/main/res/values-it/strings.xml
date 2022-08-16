@@ -141,9 +141,6 @@
   <string name="uploader_error_message_source_file_not_found">Il file da caricare non è stato trovato nella sua posizione. Controlla che il file esista.</string>
   <string name="uploader_error_message_source_file_not_copied">Si è verificato un errore durante il tentativo di copiare il file in una cartella temporanea. Prova a inviarlo ancora.</string>
   <string name="file_list_seconds_ago">secondi fa</string>
-  <string name="file_list_empty">Non c\'è niente qui. Carica qualcosa!</string>
-  <string name="file_list_empty_available_offline">Non ci sono file offline disponibili.</string>
-  <string name="file_list_empty_shared_by_links">Nessun file è stato condiviso tramite link.</string>
   <string name="file_list_loading">Caricamento in corso...</string>
   <string name="file_list_no_app_for_file_type">Nessuna applicazione trovata per questo tipo di file</string>
   <string name="file_list_no_app_for_perform_action">Nessuna app trovata per questa azione</string>

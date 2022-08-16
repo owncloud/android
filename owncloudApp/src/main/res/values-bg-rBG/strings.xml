@@ -141,9 +141,6 @@
   <string name="uploader_error_message_source_file_not_found">Файлът за качване не е намерен в указаното местоположение. Моля, проверете дали файлът съществува.</string>
   <string name="uploader_error_message_source_file_not_copied">Възникна грешка при копиране на файла във временната папка. Моля, опитайте отново да го изпратите.</string>
   <string name="file_list_seconds_ago">преди секунди</string>
-  <string name="file_list_empty">Тук няма нищо. Качете нещо!</string>
-  <string name="file_list_empty_available_offline">Няма файлове налични офлайн.</string>
-  <string name="file_list_empty_shared_by_links">Няма файлове споделени с връзка.</string>
   <string name="file_list_loading">Зареждане…</string>
   <string name="file_list_no_app_for_file_type">Не е намерено приложение за този тип файл</string>
   <string name="file_list_no_app_for_perform_action">Не е намерено приложение за това действие</string>
