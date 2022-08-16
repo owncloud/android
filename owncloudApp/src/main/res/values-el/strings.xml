@@ -119,9 +119,6 @@
   <string name="uploader_error_message_source_file_not_found">Το αρχείο που επρόκειτο να μεταφορτώσετε δεν βρέθηκε στην τοποθεσία του. Παρακαλούμε ελέγξτε κατά πόσο το αρχείο υπάρχει.</string>
   <string name="uploader_error_message_source_file_not_copied">Προέκυψε σφάλμα κατά τη διάρκεια αντιγραφής του αρχείου στον προσωρινό φάκελο. Παρακαλούμε προσπαθήστε να το στείλετε ξανά.</string>
   <string name="file_list_seconds_ago">δευτερόλεπτα πριν</string>
-  <string name="file_list_empty">Δεν υπάρχει τίποτα εδώ. Μεταφορτώστε κάτι!</string>
-  <string name="file_list_empty_available_offline">Δεν υπάρχουν διαθέσιμα αρχεία εκτός σύνδεση.</string>
-  <string name="file_list_empty_shared_by_links">Δεν έχουν κοινοποιηθεί αρχεία μέσω συνδέσμου.</string>
   <string name="file_list_loading">Γίνεται φόρτωση...</string>
   <string name="file_list_no_app_for_file_type">Δεν βρέθηκε καμία εφαρμογή για τύπο αρχείου</string>
   <string name="local_file_list_empty">Δεν υπάρχουν αρχεία σε αυτό τον φάκελο.</string>

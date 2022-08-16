@@ -141,9 +141,6 @@
   <string name="uploader_error_message_source_file_not_found">Üleslaetavat faili ei leitud tema askohast. Palun kontrolli, kas fail on olemas.</string>
   <string name="uploader_error_message_source_file_not_copied">Faili kopeerimisel ajutisse kausta tekkis viga. Palun proovi uuesti saata.</string>
   <string name="file_list_seconds_ago">sekundit tagasi</string>
-  <string name="file_list_empty">Siin pole midagi. Lae midagi üles!</string>
-  <string name="file_list_empty_available_offline">Võrguühenduseta saadaval olevaid faile ei ole.</string>
-  <string name="file_list_empty_shared_by_links">Lingiga ei ole jagatud ühtegi faili.</string>
   <string name="file_list_loading">Laadimine...</string>
   <string name="file_list_no_app_for_file_type">Selle failitüübi jaoks ei leitud rakendust</string>
   <string name="file_list_no_app_for_perform_action">Selleks tegevuseks ei leitud rakendust</string>

@@ -25,7 +25,6 @@
   <string name="uploader_wrn_no_account_setup_btn_text">დაყენება</string>
   <string name="uploader_wrn_no_account_quit_btn_text">გამოსვლა</string>
   <string name="file_list_seconds_ago">წამის წინ</string>
-  <string name="file_list_empty">აქ არაფერი არ არის. ატვირთე რამე!</string>
   <string name="filedetails_select_file">დააჭირეთ ფაილს დამატებითი ინფორმაციის გამოსაჩენად.</string>
   <string name="filedetails_size">ზომა:</string>
   <string name="filedetails_type">ტიპი:</string>
