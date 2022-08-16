@@ -119,7 +119,8 @@ class FileOperationsViewModel(
             liveData = _removeFileLiveData,
             useCase = removeFileUseCase,
             useCaseParams = RemoveFileUseCase.Params(fileOperation.listOfFilesToRemove, fileOperation.removeOnlyLocalCopy),
-            postValue = fileOperation.listOfFilesToRemove
+            postValue = fileOperation.listOfFilesToRemove,
+            requiresConnection = !fileOperation.removeOnlyLocalCopy,
         )
     }
 
@@ -158,12 +159,13 @@ class FileOperationsViewModel(
         liveData: MediatorLiveData<Event<UIResult<PostResult>>>,
         useCase: BaseUseCaseWithResult<Type, Params>,
         useCaseParams: Params,
-        postValue: PostResult? = null
+        postValue: PostResult? = null,
+        requiresConnection: Boolean = true,
     ) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             liveData.postValue(Event(UIResult.Loading()))
 
-            if (!contextProvider.isConnected()) {
+            if (!contextProvider.isConnected() && requiresConnection) {
                 liveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException())))
                 Timber.w("${useCase.javaClass.simpleName} will not be executed due to lack of network connection")
                 return@launch
