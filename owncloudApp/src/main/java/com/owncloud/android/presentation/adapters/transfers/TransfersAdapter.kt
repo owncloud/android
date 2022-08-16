@@ -37,8 +37,8 @@ import com.owncloud.android.databinding.UploadListItemBinding
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.extensions.statusToStringRes
-import com.owncloud.android.extensions.toStringRes
 import com.owncloud.android.lib.common.OwnCloudAccount
+import com.owncloud.android.presentation.adapters.transfers.TransfersAdapter.TransferRecyclerItem.*
 import com.owncloud.android.presentation.diffutils.TransfersDiffUtil
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -56,7 +56,7 @@ class TransfersAdapter(
     val clearSuccessful: () -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val transfersList = mutableListOf<TransferRecyclerItem>()
+    private val transferItemsList = mutableListOf<TransferRecyclerItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -75,7 +75,7 @@ class TransfersAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is TransferItemViewHolder -> {
-                val transferItem = getItem(position) as TransferRecyclerItem.TransferItem
+                val transferItem = getItem(position) as TransferItem
                 holder.binding.apply {
                     val remoteFile = File(transferItem.transfer.remotePath)
 
@@ -150,49 +150,42 @@ class TransfersAdapter(
                             holder.binding.ListItemLayout.isClickable = true
                             holder.binding.ListItemLayout.isFocusable = true
                         }
-                        else -> {
-                            uploadRightButton.isVisible = false
+                        TransferStatus.TRANSFER_SUCCEEDED -> {
+                            // Nothing to do
                         }
                     }
                 }
             }
             is HeaderItemViewHolder -> {
-                val headerItem = getItem(position) as TransferRecyclerItem.HeaderItem
+                val headerItem = getItem(position) as HeaderItem
                 holder.binding.apply {
-                    uploadListGroupName.text = holder.itemView.context.getString(headerItem.status.toStringRes())
+                    uploadListGroupName.text = holder.itemView.context.getString(headerTitleStringRes(headerItem.status))
 
                     val stringResFileCount =
                         if (headerItem.numberTransfers == 1) R.string.uploads_view_group_file_count_single else R.string.uploads_view_group_file_count
                     val fileCountText: String = String.format(holder.itemView.context.getString(stringResFileCount), headerItem.numberTransfers)
                     textViewFileCount.text = fileCountText
 
+                    uploadListGroupButtonClear.isVisible = headerItem.status == TransferStatus.TRANSFER_FAILED ||
+                            headerItem.status == TransferStatus.TRANSFER_SUCCEEDED
+                    uploadListGroupButtonRetry.isVisible = headerItem.status == TransferStatus.TRANSFER_FAILED
+
                     when (headerItem.status) {
                         TransferStatus.TRANSFER_FAILED -> {
-                            uploadListGroupButtonClear.apply {
-                                isVisible = true
-                                setOnClickListener {
-                                    clearFailed()
-                                }
+                            uploadListGroupButtonClear.setOnClickListener {
+                                clearFailed()
                             }
-                            uploadListGroupButtonRetry.apply {
-                                isVisible = true
-                                setOnClickListener {
-                                    retryFailed()
-                                }
+                            uploadListGroupButtonRetry.setOnClickListener {
+                                retryFailed()
                             }
                         }
                         TransferStatus.TRANSFER_SUCCEEDED -> {
-                            uploadListGroupButtonClear.apply {
-                                isVisible = true
-                                setOnClickListener {
-                                    clearSuccessful()
-                                }
+                            uploadListGroupButtonClear.setOnClickListener {
+                                clearSuccessful()
                             }
-                            uploadListGroupButtonRetry.isVisible = false
                         }
-                        else -> {
-                            uploadListGroupButtonRetry.isVisible = false
-                            uploadListGroupButtonClear.isVisible = false
+                        TransferStatus.TRANSFER_QUEUED, TransferStatus.TRANSFER_IN_PROGRESS -> {
+                            // Nothing to do
                         }
                     }
                 }
@@ -214,48 +207,37 @@ class TransfersAdapter(
 
     }
 
+    private fun headerTitleStringRes(status: TransferStatus) : Int {
+        return when (status) {
+            TransferStatus.TRANSFER_IN_PROGRESS -> R.string.uploads_view_group_current_uploads
+            TransferStatus.TRANSFER_FAILED -> R.string.uploads_view_group_failed_uploads
+            TransferStatus.TRANSFER_SUCCEEDED -> R.string.uploads_view_group_finished_uploads
+            TransferStatus.TRANSFER_QUEUED -> R.string.uploads_view_group_queued_uploads
+        }
+    }
+
     fun setData(transfers: List<OCTransfer>) {
-        val comparator: Comparator<OCTransfer> = object : Comparator<OCTransfer> {
-            override fun compare(transfer1: OCTransfer, transfer2: OCTransfer): Int {
-                return if (transfer1.transferEndTimestamp == null || transfer2.transferEndTimestamp == null) {
-                    compareUploadId(transfer1, transfer2)
-                } else {
-                    compareUpdateTime(transfer1, transfer2)
-                }
-            }
-
-            private fun compareUploadId(transfer1: OCTransfer, transfer2: OCTransfer): Int {
-                return (transfer1.id!!).compareTo(transfer2.id!!)
-            }
-
-            private fun compareUpdateTime(transfer1: OCTransfer, transfer2: OCTransfer): Int {
-                return (transfer2.transferEndTimestamp!!).compareTo(transfer1.transferEndTimestamp!!)
-            }
-        }
-
         val transfersGroupedByStatus = transfers.groupBy { it.status }
-        val newTransfersList = mutableListOf<TransferRecyclerItem>()
+        val newTransferItemsList = mutableListOf<TransferRecyclerItem>()
         transfersGroupedByStatus.forEach { transferMap ->
-            val headerItem = TransferRecyclerItem.HeaderItem(transferMap.key, transferMap.value.size)
-            newTransfersList.add(headerItem)
-            val transferItems = transferMap.value.sortedWith(comparator).map { transfer ->
-                TransferRecyclerItem.TransferItem(transfer)
-            }
-            newTransfersList.addAll(transferItems)
+            val headerItem = HeaderItem(transferMap.key, transferMap.value.size)
+            newTransferItemsList.add(headerItem)
+            val transferItems = transferMap.value.sortedByDescending { it.transferEndTimestamp ?: it.id }.map(::TransferItem)
+            newTransferItemsList.addAll(transferItems)
         }
-        val diffCallback = TransfersDiffUtil(transfersList, newTransfersList)
+        val diffCallback = TransfersDiffUtil(transferItemsList, newTransferItemsList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-        transfersList.clear()
-        transfersList.addAll(newTransfersList)
+        transferItemsList.clear()
+        transferItemsList.addAll(newTransferItemsList)
         diffResult.dispatchUpdatesTo(this)
     }
 
     fun updateTransferProgress(workInfo: WorkInfo) {
         var updated = false
         var index = 0
-        while (!updated && index < transfersList.size) {
-            val item = transfersList[index]
-            if (item is TransferRecyclerItem.TransferItem && workInfo.tags.contains(item.transfer.id.toString())) {
+        while (!updated && index < transferItemsList.size) {
+            val item = transferItemsList[index]
+            if (item is TransferItem && workInfo.tags.contains(item.transfer.id.toString())) {
                 notifyItemChanged(index, workInfo.progress.getInt(DownloadFileWorker.WORKER_KEY_PROGRESS, -1))
                 updated = true
             }
@@ -263,16 +245,16 @@ class TransfersAdapter(
         }
     }
 
-    override fun getItemCount(): Int = transfersList.size
+    override fun getItemCount(): Int = transferItemsList.size
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is TransferRecyclerItem.TransferItem -> TransferRecyclerItemViewType.ITEM_VIEW_TRANSFER.ordinal
-            is TransferRecyclerItem.HeaderItem -> TransferRecyclerItemViewType.ITEM_VIEW_HEADER.ordinal
+            is TransferItem -> TransferRecyclerItemViewType.ITEM_VIEW_TRANSFER.ordinal
+            is HeaderItem -> TransferRecyclerItemViewType.ITEM_VIEW_HEADER.ordinal
         }
     }
 
-    fun getItem(position: Int) = transfersList[position]
+    fun getItem(position: Int) = transferItemsList[position]
 
     sealed class TransferRecyclerItem {
         data class TransferItem(val transfer: OCTransfer) : TransferRecyclerItem()

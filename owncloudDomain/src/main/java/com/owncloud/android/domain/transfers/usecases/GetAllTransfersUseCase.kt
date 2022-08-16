@@ -29,6 +29,6 @@ class GetAllTransfersUseCase(
     private val transferRepository: TransferRepository,
 ) : BaseUseCase<LiveData<List<OCTransfer>>, Unit>() {
     override fun run(params: Unit): LiveData<List<OCTransfer>> =
-        transferRepository.getAllTransfers()
+        transferRepository.getAllTransfersAsLiveData()
 
 }

@@ -67,8 +67,8 @@ class OCTransferRepository(
     override fun getTransferById(id: Long): OCTransfer? =
         localTransferDataSource.getTransferById(id = id)
 
-    override fun getAllTransfers(): LiveData<List<OCTransfer>> =
-        localTransferDataSource.getAllTransfers()
+    override fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>> =
+        localTransferDataSource.getAllTransfersAsLiveData()
 
     override fun getLastTransferFor(remotePath: String, accountName: String) =
         localTransferDataSource.getLastTransferFor(remotePath = remotePath, accountName = accountName)
