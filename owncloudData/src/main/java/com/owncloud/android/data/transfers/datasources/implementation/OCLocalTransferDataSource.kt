@@ -69,8 +69,8 @@ class OCLocalTransferDataSource(
         return transferDao.getTransferWithId(id)?.toModel()
     }
 
-    override fun getAllTransfers(): LiveData<List<OCTransfer>> {
-        return Transformations.map(transferDao.getAllTransfers()) { transferEntitiesList ->
+    override fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>> {
+        return Transformations.map(transferDao.getAllTransfersAsLiveData()) { transferEntitiesList ->
             val transfers = transferEntitiesList.map { transferEntity ->
                 transferEntity.toModel()
             }
