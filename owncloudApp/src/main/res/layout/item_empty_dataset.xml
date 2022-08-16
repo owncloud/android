@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="vertical"
     android:paddingTop="@dimen/standard_half_padding"
     android:paddingBottom="@dimen/standard_half_padding">
 
     <ImageView
         android:id="@+id/list_empty_dataset_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_folder"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        app:layout_constraintBottom_toTopOf="@id/list_empty_dataset_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:tint="@color/primary_dark"
+        tools:src="@drawable/ic_folder" />
 
     <TextView
         android:id="@+id/list_empty_dataset_title"
@@ -28,11 +28,13 @@
         android:layout_marginEnd="@dimen/standard_margin"
         android:gravity="center"
         android:padding="@dimen/standard_half_padding"
-        android:text="@string/local_file_list_empty"
+        android:textColor="@color/primary_dark"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/list_empty_dataset_sub_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/list_empty_dataset_icon" />
+        app:layout_constraintTop_toBottomOf="@+id/list_empty_dataset_icon"
+        tools:text="@string/file_list_empty_title_all_files" />
 
     <TextView
         android:id="@+id/list_empty_dataset_sub_title"
@@ -42,8 +44,10 @@
         android:layout_marginStart="@dimen/standard_margin"
         android:layout_marginEnd="@dimen/standard_margin"
         android:gravity="center"
-        android:text="@string/folder_upload_some_content_or_sync_devices"
+        android:textColor="@color/primary"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/list_empty_dataset_title" />
+        app:layout_constraintTop_toBottomOf="@id/list_empty_dataset_title"
+        tools:text="@string/file_list_empty_subtitle_all_files" />
 </androidx.constraintlayout.widget.ConstraintLayout>
