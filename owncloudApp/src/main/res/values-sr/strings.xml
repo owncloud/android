@@ -49,7 +49,6 @@
   <string name="uploader_wrn_no_account_setup_btn_text">Подеси</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Напусти</string>
   <string name="file_list_seconds_ago">пре пар секунди</string>
-  <string name="file_list_empty">Овде нема ничег. Отпремите нешто!</string>
   <string name="file_list_loading">Учитавам…</string>
   <string name="local_file_list_empty">Нема фајлова у овој фасцикли.</string>
   <string name="file_list_folder">фасцикла</string>

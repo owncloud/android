@@ -34,7 +34,6 @@
   <string name="uploader_btn_upload_text">Բեռնել</string>
   <string name="uploader_wrn_no_account_title">Հաշիվ չգտնվեց</string>
   <string name="file_list_seconds_ago">վրկ. առաջ</string>
-  <string name="file_list_empty">Ոչինչ չկա։ Բեռնի՛ր որևէ բան։</string>
   <string name="local_file_list_empty">Այս պանակում ֆայլեր չկան:</string>
   <string name="local_file_list_empty_just_folders">Այս պանակում պանակներ չկան:</string>
   <string name="file_list_folder">պանակ</string>

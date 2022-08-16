@@ -45,7 +45,6 @@
   <string name="uploader_error_title_no_file_to_upload">ਅੱਪਲੋਡ ਕਰਨ ਲਈ ਕੋਈ ਫਾਇਲ ਨਹੀਂ</string>
   <string name="uploader_error_title_file_cannot_be_uploaded">ਫਾਈਲ ਅੱਪਲੋਡ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕਦੀ</string>
   <string name="file_list_seconds_ago">ਸਕਿੰਟ ਪਹਿਲਾਂ</string>
-  <string name="file_list_empty">ਇੱਥੇ ਕੁਝ ਵੀ ਨਹੀਂ ਹੈ। ਕਿਸੇ ਚੀਜ਼ ਨੂੰ ਅੱਪਲੋਡ ਕਰੋ।</string>
   <string name="file_list_loading">ਲੋਡਿੰਗ…</string>
   <string name="upload_list_empty">ਕੋਈ ਅੱਪਲੋਡ ਉਪਲਬਧ ਨਹੀਂ। </string>
   <string name="file_list_folder">ਫੋਲਡਰ</string>

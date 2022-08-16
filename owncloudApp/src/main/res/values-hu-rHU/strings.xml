@@ -119,9 +119,6 @@
   <string name="uploader_error_message_source_file_not_found">A feltöltendő fájl nem található a helyén. Ellenőrizze, hogy létezik-e a fájl.</string>
   <string name="uploader_error_message_source_file_not_copied">Hiba történt a fájl ideiglenes mappába másolása közben. Próbálja meg újra elküldeni.</string>
   <string name="file_list_seconds_ago">másodperce</string>
-  <string name="file_list_empty">Itt nincs semmi. Töltsön fel valamit!</string>
-  <string name="file_list_empty_available_offline">Nincsen elérhető offline fájl.</string>
-  <string name="file_list_empty_shared_by_links">Nem lettek fájlok linkkel megosztva.</string>
   <string name="file_list_loading">Betöltés…</string>
   <string name="file_list_no_app_for_file_type">Nem található alkalmazás a fájltípushoz</string>
   <string name="local_file_list_empty">Nincs fájl ebben a mappában.</string>

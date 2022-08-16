@@ -99,9 +99,6 @@
   <string name="uploader_error_message_source_file_not_found">Datoteke za pošiljanje ni mogoče najti na določenem mestu. Preverite, ali datoteka obstaja.</string>
   <string name="uploader_error_message_source_file_not_copied">Prišlo je do napake med kopiranjem datoteke v začasno mapo. Poskusite znova poslati kasneje.</string>
   <string name="file_list_seconds_ago">pred nekaj sekundami</string>
-  <string name="file_list_empty">Tukaj še ni ničesar. Najprej je treba datoteke poslati v oblak!</string>
-  <string name="file_list_empty_available_offline">Ni na voljo nobenih datotek na voljo brez povezave</string>
-  <string name="file_list_empty_shared_by_links">Nobene datoteke niso bile deljene s povezavo</string>
   <string name="file_list_loading">Poteka nalaganje ...</string>
   <string name="file_list_no_app_for_file_type">Ni nameščenega programa za to vrsto datoteke</string>
   <string name="local_file_list_empty">V tej mapi ni datotek.</string>
