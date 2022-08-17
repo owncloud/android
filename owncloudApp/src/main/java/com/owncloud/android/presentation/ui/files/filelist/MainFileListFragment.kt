@@ -207,7 +207,7 @@ class MainFileListFragment : Fragment(),
         collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
             if (fileListUiState !is MainFileListViewModel.FileListUiState.Success) return@collectLatestLifecycleFlow
 
-            updateFileListData(fileListUiState.folderContent)
+            updateFileListData(fileListUiState.folderContent, fileListUiState.fileListOption)
         }
 
         mainFileListViewModel.syncFolder.observe(viewLifecycleOwner, Event.EventObserver {
@@ -222,8 +222,8 @@ class MainFileListFragment : Fragment(),
         })
     }
 
-    private fun updateFileListData(filesList: List<OCFile>) {
-        fileListAdapter.updateFileList(filesToAdd = filesList)
+    private fun updateFileListData(filesList: List<OCFile>, fileListOption: FileListOption) {
+        fileListAdapter.updateFileList(filesToAdd = filesList, fileListOption = fileListOption)
         showOrHideEmptyView(filesList)
     }
 
