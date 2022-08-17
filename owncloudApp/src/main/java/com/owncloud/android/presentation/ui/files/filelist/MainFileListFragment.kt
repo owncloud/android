@@ -445,10 +445,14 @@ class MainFileListFragment : Fragment(),
             when (menuId) {
                 R.id.action_share_file -> {
                     fileActions?.onShareFileClicked(singleFile)
+                    fileListAdapter.clearSelection()
+                    updateActionModeAfterTogglingSelected()
                     return true
                 }
                 R.id.action_open_file_with -> {
                     fileActions?.openFile(singleFile)
+                    fileListAdapter.clearSelection()
+                    updateActionModeAfterTogglingSelected()
                     return true
                 }
                 R.id.action_rename_file -> {
