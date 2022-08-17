@@ -20,9 +20,23 @@
 
 package com.owncloud.android.data.transfers.db
 
+import android.database.Cursor
+import android.provider.BaseColumns._ID
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.TRANSFERS_TABLE_NAME
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.UPLOAD_ACCOUNT_NAME
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.UPLOAD_CREATED_BY
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.UPLOAD_FILE_SIZE
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.UPLOAD_FORCE_OVERWRITE
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.UPLOAD_LAST_RESULT
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.UPLOAD_LOCAL_BEHAVIOUR
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.UPLOAD_LOCAL_PATH
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.UPLOAD_REMOTE_PATH
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.UPLOAD_STATUS
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.UPLOAD_TRANSFER_ID
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.UPLOAD_UPLOAD_END_TIMESTAMP
+import com.owncloud.android.domain.transfers.model.TransferStatus
 
 @Entity(
     tableName = TRANSFERS_TABLE_NAME
@@ -42,4 +56,32 @@ data class OCTransferEntity(
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    companion object {
+        private const val LEGACY_UPLOAD_IN_PROGRESS = 0
+        private const val LEGACY_UPLOAD_FAILED = 1
+
+        fun fromCursor(cursor: Cursor): OCTransferEntity {
+            val newStatus = when (cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_STATUS))) {
+                LEGACY_UPLOAD_IN_PROGRESS -> TransferStatus.TRANSFER_QUEUED.value
+                LEGACY_UPLOAD_FAILED -> TransferStatus.TRANSFER_FAILED.value
+                else -> TransferStatus.TRANSFER_SUCCEEDED.value
+            }
+            return OCTransferEntity(
+                localPath = cursor.getString(cursor.getColumnIndexOrThrow(UPLOAD_LOCAL_PATH)),
+                remotePath = cursor.getString(cursor.getColumnIndexOrThrow(UPLOAD_REMOTE_PATH)),
+                accountName = cursor.getString(cursor.getColumnIndexOrThrow(UPLOAD_ACCOUNT_NAME)),
+                fileSize = cursor.getLong(cursor.getColumnIndexOrThrow(UPLOAD_FILE_SIZE)),
+                status = newStatus,
+                localBehaviour = cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_LOCAL_BEHAVIOUR)),
+                forceOverwrite = cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_FORCE_OVERWRITE)) == 1,
+                transferEndTimestamp = cursor.getLong(cursor.getColumnIndexOrThrow(UPLOAD_UPLOAD_END_TIMESTAMP)),
+                lastResult = cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_LAST_RESULT)),
+                createdBy = cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_CREATED_BY)),
+                transferId = cursor.getString(cursor.getColumnIndexOrThrow(UPLOAD_TRANSFER_ID))
+            ).apply {
+                id = cursor.getLong(cursor.getColumnIndexOrThrow(_ID))
+            }
+        }
+    }
 }
