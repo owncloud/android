@@ -1,9 +1,11 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author Andy Scherzinger
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -32,8 +34,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.core.content.ContextCompat;
@@ -44,14 +44,13 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
+import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.adapter.AccountListAdapter;
 import com.owncloud.android.ui.adapter.AccountListItem;
 import com.owncloud.android.ui.dialog.RemoveAccountDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
-import com.owncloud.android.usecases.transfers.uploads.CancelUploadsFromAccountUseCase;
-import com.owncloud.android.usecases.transfers.downloads.CancelDownloadsForAccountUseCase;
 import com.owncloud.android.utils.PreferenceUtils;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
@@ -83,12 +82,15 @@ public class ManageAccountsActivity extends FileActivity
     private Drawable mTintedCheck;
 
     private RemoveAccountDialogViewModel mRemoveAccountDialogViewModel = null;
+    private TransfersViewModel transfersViewModel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         @NotNull Lazy<RemoveAccountDialogViewModel> removeAccountDialogViewModelLazy = inject(RemoveAccountDialogViewModel.class);
         mRemoveAccountDialogViewModel = removeAccountDialogViewModelLazy.getValue();
+        @NotNull Lazy<TransfersViewModel> transfersViewModelLazy = inject(TransfersViewModel.class);
+        transfersViewModel = transfersViewModelLazy.getValue();
 
         mTintedCheck = ContextCompat.getDrawable(this, R.drawable.ic_current_white);
         mTintedCheck = DrawableCompat.wrap(mTintedCheck);
@@ -112,12 +114,7 @@ public class ManageAccountsActivity extends FileActivity
         onAccountSet(false);
 
         // added click listener to switch account
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switchAccount(position);
-            }
-        });
+        mListView.setOnItemClickListener((parent, view, position, id) -> switchAccount(position));
     }
 
     @Override
@@ -134,7 +131,7 @@ public class ManageAccountsActivity extends FileActivity
      * @return set of account names
      */
     private Set<String> toAccountNameSet(Account[] accountList) {
-        Set<String> actualAccounts = new HashSet<String>(accountList.length);
+        Set<String> actualAccounts = new HashSet<>(accountList.length);
         for (Account account : accountList) {
             actualAccounts.add(account.name);
         }
@@ -253,31 +250,23 @@ public class ManageAccountsActivity extends FileActivity
                 null,
                 null,
                 this,
-                new AccountManagerCallback<Bundle>() {
-                    @Override
-                    public void run(AccountManagerFuture<Bundle> future) {
-                        if (future != null) {
-                            try {
-                                Bundle result = future.getResult();
-                                String name = result.getString(AccountManager.KEY_ACCOUNT_NAME);
-                                AccountUtils.setCurrentOwnCloudAccount(getApplicationContext(), name);
-                                mAccountListAdapter = new AccountListAdapter(
-                                        ManageAccountsActivity.this,
-                                        getAccountListItems(),
-                                        mTintedCheck
-                                );
-                                mListView.setAdapter(mAccountListAdapter);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mAccountListAdapter.notifyDataSetChanged();
-                                    }
-                                });
-                            } catch (OperationCanceledException e) {
-                                Timber.e(e, "Account creation canceled");
-                            } catch (Exception e) {
-                                Timber.e(e, "Account creation finished in exception");
-                            }
+                future -> {
+                    if (future != null) {
+                        try {
+                            Bundle result = future.getResult();
+                            String name = result.getString(AccountManager.KEY_ACCOUNT_NAME);
+                            AccountUtils.setCurrentOwnCloudAccount(getApplicationContext(), name);
+                            mAccountListAdapter = new AccountListAdapter(
+                                    ManageAccountsActivity.this,
+                                    getAccountListItems(),
+                                    mTintedCheck
+                            );
+                            mListView.setAdapter(mAccountListAdapter);
+                            runOnUiThread(() -> mAccountListAdapter.notifyDataSetChanged());
+                        } catch (OperationCanceledException e) {
+                            Timber.e(e, "Account creation canceled");
+                        } catch (Exception e) {
+                            Timber.e(e, "Account creation finished in exception");
                         }
                     }
                 }, mHandler);
@@ -294,12 +283,8 @@ public class ManageAccountsActivity extends FileActivity
             Account account = new Account(mAccountBeingRemoved, MainApp.Companion.getAccountType());
             if (!AccountUtils.exists(account.name, MainApp.Companion.getAppContext())) {
                 // Cancel transfers of the removed account
-                @NotNull Lazy<CancelUploadsFromAccountUseCase> cancelUploadsFromAccountUseCaseLazy = inject(CancelUploadsFromAccountUseCase.class);
-                @NotNull Lazy<CancelDownloadsForAccountUseCase> cancelDownloadsForAccountUseCaseLazy = inject(CancelDownloadsForAccountUseCase.class);
-                CancelUploadsFromAccountUseCase cancelUploadsFromAccountUseCase = cancelUploadsFromAccountUseCaseLazy.getValue();
-                cancelUploadsFromAccountUseCase.execute(new CancelUploadsFromAccountUseCase.Params(account.name));
-                CancelDownloadsForAccountUseCase cancelDownloadsForAccountUseCase = cancelDownloadsForAccountUseCaseLazy.getValue();
-                cancelDownloadsForAccountUseCase.execute(new CancelDownloadsForAccountUseCase.Params(account));
+                transfersViewModel.cancelUploadsFromAccount(account.name);
+                transfersViewModel.cancelDownloadsForAccount(account);
             }
 
             mAccountListAdapter = new AccountListAdapter(this, getAccountListItems(), mTintedCheck);
