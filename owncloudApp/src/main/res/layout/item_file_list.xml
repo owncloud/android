@@ -106,7 +106,8 @@
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/Filename"
             app:layout_constraintTop_toBottomOf="@+id/file_list_size"
-            tools:text="/path/to/file" />
+            tools:text="/path/to/file"
+            tools:visibility="visible"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
