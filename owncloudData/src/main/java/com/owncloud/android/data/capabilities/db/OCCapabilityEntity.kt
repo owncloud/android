@@ -22,6 +22,7 @@ package com.owncloud.android.data.capabilities.db
 
 import android.database.Cursor
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
@@ -53,6 +54,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VER
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_STRING
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType.Companion.capabilityBooleanTypeUnknownString
+import com.owncloud.android.domain.capabilities.model.OCCapability
 
 /**
  * Represents one record of the Capabilities table.
@@ -112,7 +114,9 @@ data class OCCapabilityEntity(
     @ColumnInfo(name = CAPABILITIES_FILES_UNDELETE, defaultValue = capabilityBooleanTypeUnknownString)
     val filesUndelete: Int,
     @ColumnInfo(name = CAPABILITIES_FILES_VERSIONING, defaultValue = capabilityBooleanTypeUnknownString)
-    val filesVersioning: Int
+    val filesVersioning: Int,
+    @Embedded
+    val ocisProvider: OCCapability.OcisProvider?
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
@@ -145,7 +149,8 @@ data class OCCapabilityEntity(
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_USER_PROFILE_PICTURE)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_FILES_BIGFILECHUNKING)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_FILES_UNDELETE)),
-                it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_FILES_VERSIONING))
+                it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_FILES_VERSIONING)),
+                null
             )
         }
     }

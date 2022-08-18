@@ -47,7 +47,8 @@ data class OCCapability(
     val filesSharingUserProfilePicture: CapabilityBooleanType,
     val filesBigFileChunking: CapabilityBooleanType,
     val filesUndelete: CapabilityBooleanType,
-    val filesVersioning: CapabilityBooleanType
+    val filesVersioning: CapabilityBooleanType,
+    val filesOcisProviders: OcisProvider?,
 ) {
     fun isChunkingAllowed(): Boolean {
         val doubleChunkingVersion = davChunkingVersion.toDoubleOrNull()
@@ -57,6 +58,17 @@ data class OCCapability(
     fun isFetchingAvatarAllowed(): Boolean {
         return filesSharingUserProfilePicture.isTrue || filesSharingUserProfilePicture.isUnknown
     }
+
+    fun isOpenInWebAllowed(): Boolean = filesOcisProviders?.openWebUrl?.isNotBlank() ?: false
+
+    data class OcisProvider(
+        val enabled: Boolean,
+        val version: String,
+        val appsUrl: String?,
+        val openUrl: String?,
+        val openWebUrl: String?,
+        val newUrl: String?,
+    )
 }
 
 /**
