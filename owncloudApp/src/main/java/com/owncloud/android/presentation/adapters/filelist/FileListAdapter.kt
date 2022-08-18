@@ -28,7 +28,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
@@ -194,6 +193,10 @@ class FileListAdapter(
                         it.Filename.text = file.fileName
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
+                        it.fileListPath.apply {
+                            text = file.remotePath
+                            isVisible = !fileListOption.isAllFiles()
+                        }
                     }
                 }
                 ViewType.GRID_ITEM.ordinal -> {
@@ -257,11 +260,6 @@ class FileListAdapter(
                 checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline)
             }
             checkBoxV.isVisible = getCheckedItems().isNotEmpty()
-
-            holder.itemView.findViewById<TextView>(R.id.file_list_path).apply {
-                text = file.remotePath
-                isVisible = !fileListOption.isAllFiles()
-            }
 
             if (file.isFolder) {
                 // Folder
