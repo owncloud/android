@@ -26,6 +26,7 @@ package com.owncloud.android.lib.resources.status.responses
 
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.lib.resources.status.RemoteCapability.CapabilityBooleanType
+import com.owncloud.android.lib.resources.status.RemoteCapability.RemoteOCISProvider
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -68,6 +69,7 @@ data class CapabilityResponse(
         filesBigFileChunking = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.bigfilechunking),
         filesUndelete = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.undelete),
         filesVersioning = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.versioning),
+        remoteOcisProviders = capabilities?.fileCapabilities?.appProviders?.map { it.toOCISProvider() },
         filesSharingFederationIncoming = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.incoming),
         filesSharingFederationOutgoing = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.outgoing),
         filesSharingUserProfilePicture = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingUser?.profilePicture),
@@ -160,8 +162,26 @@ data class FileSharingUser(
 data class FileCapabilities(
     val bigfilechunking: Boolean?,
     val undelete: Boolean?,
-    val versioning: Boolean?
+    val versioning: Boolean?,
+    @Json(name = "app_providers")
+    val appProviders: List<AppProvider>?
 )
+
+@JsonClass(generateAdapter = true)
+data class AppProvider(
+    val enabled: Boolean,
+    val version: String,
+    @Json(name = "apps_url")
+    val appsUrl: String?,
+    @Json(name = "open_url")
+    val openUrl: String?,
+    @Json(name = "open_web_url")
+    val openWebUrl: String?,
+    @Json(name = "new_url")
+    val newUrl: String?,
+) {
+    fun toOCISProvider() = RemoteOCISProvider(enabled, version, appsUrl, openUrl, openWebUrl, newUrl)
+}
 
 @JsonClass(generateAdapter = true)
 data class DavCapabilities(
