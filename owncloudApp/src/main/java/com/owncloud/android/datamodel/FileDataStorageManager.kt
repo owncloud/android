@@ -1368,7 +1368,8 @@ class FileDataStorageManager {
             filesSharingUserProfilePicture = CapabilityBooleanType.UNKNOWN,
             filesBigFileChunking = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_BIGFILECHUNKING)),
             filesUndelete = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_UNDELETE)),
-            filesVersioning = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_VERSIONING))
+            filesVersioning = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_VERSIONING)),
+            filesOcisProviders = null
         )
     }
 

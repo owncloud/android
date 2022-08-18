@@ -50,5 +50,6 @@ val OC_CAPABILITY =
         filesSharingUserProfilePicture = CapabilityBooleanType.FALSE,
         filesBigFileChunking = CapabilityBooleanType.FALSE,
         filesUndelete = CapabilityBooleanType.FALSE,
-        filesVersioning = CapabilityBooleanType.FALSE
+        filesVersioning = CapabilityBooleanType.FALSE,
+        filesOcisProviders = null,
     )
