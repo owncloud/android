@@ -20,7 +20,10 @@
 
 package com.owncloud.android.extensions
 
+import android.content.Context
+import android.net.Uri
 import androidx.annotation.StringRes
+import androidx.documentfile.provider.DocumentFile
 import com.owncloud.android.R
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
@@ -60,4 +63,8 @@ fun OCTransfer.statusToStringRes(): Int {
              null -> R.string.uploads_view_upload_status_unknown_fail
          }
     }
+}
+
+fun OCTransfer.isContentUri(context: Context): Boolean {
+    return DocumentFile.isDocumentUri(context, Uri.parse(localPath))
 }
