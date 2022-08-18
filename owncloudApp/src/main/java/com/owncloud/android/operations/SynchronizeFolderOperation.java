@@ -447,7 +447,9 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
             // files do not use treeEtag
             serverUnchanged = (remoteFile == null) || localFile.getEtag().equals(remoteFile.getEtag());
 
-            if (shouldSyncContents && !isBlockedForAutomatedSync(localFile)) {
+            // TODO: check if necessary
+            // if (shouldSyncContents && !isBlockedForAutomatedSync(localFile)) {
+            if (shouldSyncContents) {
                 /// synchronization for files
                 mFilesToSyncContents.add(localFile);
             }
