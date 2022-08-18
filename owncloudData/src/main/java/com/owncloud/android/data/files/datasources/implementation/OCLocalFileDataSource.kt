@@ -19,8 +19,6 @@
 package com.owncloud.android.data.files.datasources.implementation
 
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileEntity
@@ -30,6 +28,8 @@ import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class OCLocalFileDataSource(
     private val fileDao: FileDao,
@@ -88,11 +88,9 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
-    override fun getFolderContentAsLiveData(folderId: Long): LiveData<List<OCFile>> =
-        Transformations.map(fileDao.getFolderContentAsLiveData(folderId = folderId)) { list ->
-            list.map {
-                it.toModel()
-            }
+    override fun getFolderContentAsStream(folderId: Long): Flow<List<OCFile>> =
+        fileDao.getFolderContentAsStream(folderId = folderId).map { folderContent ->
+            folderContent.map { it.toModel() }
         }
 
     override fun getFolderImages(folderId: Long): List<OCFile> =
@@ -100,9 +98,15 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
-    override fun getFilesSharedByLink(owner: String): List<OCFile> = fileDao.getFilesSharedByLink(accountOwner = owner).map {
-        it.toModel()
-    }
+    override fun getSharedByLinkForAccountAsStream(owner: String): Flow<List<OCFile>> =
+        fileDao.getFilesSharedByLink(accountOwner = owner).map { fileList ->
+            fileList.map { it.toModel() }
+        }
+
+    override fun getFilesAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFile>> =
+        fileDao.getFilesAvailableOfflineFromAccountAsStream(owner).map { fileList ->
+            fileList.map { it.toModel() }
+        }
 
     override fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile> =
         fileDao.getFilesAvailableOfflineFromAccount(accountOwner = owner).map {
@@ -147,6 +151,9 @@ class OCLocalFileDataSource(
         )
     }
 
+    override fun disableThumbnailsForFile(fileId: Long) {
+        fileDao.disableThumbnailsForFile(fileId)
+    }
     override fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus) {
         fileDao.updateAvailableOfflineStatusForFile(ocFile, newAvailableOfflineStatus.ordinal)
     }

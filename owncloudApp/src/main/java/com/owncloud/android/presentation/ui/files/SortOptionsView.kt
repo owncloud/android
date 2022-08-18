@@ -24,11 +24,11 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.owncloud.android.R
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
 import com.owncloud.android.databinding.SortOptionsLayoutBinding
-import com.owncloud.android.db.PreferenceManager
-import com.owncloud.android.presentation.ui.files.SortOrder.Companion.fromPreference
-import com.owncloud.android.presentation.ui.files.SortType.Companion.fromPreference
-import com.owncloud.android.utils.FileStorageUtils
+import com.owncloud.android.presentation.ui.files.SortOrder.Companion.PREF_FILE_LIST_SORT_ORDER
+import com.owncloud.android.presentation.ui.files.SortType.Companion.PREF_FILE_LIST_SORT_TYPE
 
 class SortOptionsView @JvmOverloads constructor(
     context: Context,
@@ -70,12 +70,11 @@ class SortOptionsView @JvmOverloads constructor(
     init {
         _binding = SortOptionsLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
-        // Select sort type and order according to preference.
-        val sortBy = PreferenceManager.getSortOrder(getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
-        sortTypeSelected = fromPreference(sortBy)
+        val sharedPreferencesProvider: SharedPreferencesProvider = SharedPreferencesProviderImpl(context)
 
-        val isAscending = PreferenceManager.getSortAscending(getContext(), FileStorageUtils.FILE_DISPLAY_SORT)
-        sortOrderSelected = fromPreference(isAscending)
+        // Select sort type and order according to preferences.
+        sortTypeSelected = SortType.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_TYPE, SortType.SORT_TYPE_BY_NAME.ordinal)]
+        sortOrderSelected = SortOrder.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_ORDER, SortOrder.SORT_ORDER_ASCENDING.ordinal)]
 
         binding.sortTypeSelector.setOnClickListener {
             onSortOptionsListener?.onSortTypeListener(

@@ -39,6 +39,7 @@ import com.owncloud.android.databinding.GridItemBinding
 import com.owncloud.android.databinding.ItemFileListBinding
 import com.owncloud.android.databinding.ListFooterBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFooterFile
 import com.owncloud.android.presentation.diffutils.FileListDiffCallback
@@ -55,8 +56,9 @@ class FileListAdapter(
 
     var files = mutableListOf<Any>()
     private var account: Account? = AccountUtils.getCurrentOwnCloudAccount(context)
+    private var fileListOption: FileListOption = FileListOption.ALL_FILES
 
-    fun updateFileList(filesToAdd: List<OCFile>) {
+    fun updateFileList(filesToAdd: List<OCFile>, fileListOption: FileListOption) {
         val listWithFooter = mutableListOf<Any>()
         listWithFooter.addAll(filesToAdd)
 
@@ -64,11 +66,17 @@ class FileListAdapter(
             listWithFooter.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
         }
 
-        val diffUtilCallback = FileListDiffCallback(oldList = files, newList = listWithFooter)
+        val diffUtilCallback = FileListDiffCallback(
+            oldList = files,
+            newList = listWithFooter,
+            oldFileListOption = this.fileListOption,
+            newFileListOption = fileListOption,
+        )
         val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
 
         files.clear()
         files.addAll(listWithFooter)
+        this.fileListOption = fileListOption
 
         diffResult.dispatchUpdatesTo(this)
     }
@@ -185,6 +193,10 @@ class FileListAdapter(
                         it.Filename.text = file.fileName
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
+                        it.fileListPath.apply {
+                            text = file.remotePath
+                            isVisible = !fileListOption.isAllFiles()
+                        }
                     }
                 }
                 ViewType.GRID_ITEM.ordinal -> {

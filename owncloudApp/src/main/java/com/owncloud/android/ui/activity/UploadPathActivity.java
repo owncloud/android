@@ -73,7 +73,7 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
 
             if (!stateWasRecovered) {
                 MainFileListFragment listOfFolders = getListOfFilesFragment();
-                listOfFolders.listDirectory(folder);
+                listOfFolders.navigateToFolder(folder);
 
                 startSyncFolderOperation(folder, false);
             }

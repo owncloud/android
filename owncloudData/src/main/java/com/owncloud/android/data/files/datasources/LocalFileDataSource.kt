@@ -20,9 +20,9 @@
 
 package com.owncloud.android.data.files.datasources
 
-import androidx.lifecycle.LiveData
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.OCFile
+import kotlinx.coroutines.flow.Flow
 
 interface LocalFileDataSource {
     fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String)
@@ -33,9 +33,10 @@ interface LocalFileDataSource {
     fun getSearchFolderContent(folderId: Long, search: String): List<OCFile>
     fun getSearchAvailableOfflineFolderContent(folderId: Long, search: String): List<OCFile>
     fun getSearchSharedByLinkFolderContent(folderId: Long, search: String): List<OCFile>
-    fun getFolderContentAsLiveData(folderId: Long): LiveData<List<OCFile>>
+    fun getFolderContentAsStream(folderId: Long): Flow<List<OCFile>>
     fun getFolderImages(folderId: Long): List<OCFile>
-    fun getFilesSharedByLink(owner: String): List<OCFile>
+    fun getSharedByLinkForAccountAsStream(owner: String): Flow<List<OCFile>>
+    fun getFilesAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFile>>
     fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
     fun moveFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, finalStoragePath: String)
@@ -43,5 +44,7 @@ interface LocalFileDataSource {
     fun saveFile(file: OCFile)
     fun removeFile(fileId: Long)
     fun renameFile(fileToRename: OCFile, finalRemotePath: String, finalStoragePath: String)
+
+    fun disableThumbnailsForFile(fileId: Long)
     fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
 }

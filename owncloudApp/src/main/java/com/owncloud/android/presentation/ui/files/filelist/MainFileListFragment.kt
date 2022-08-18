@@ -45,10 +45,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.MainFileListFragmentBinding
-import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
@@ -73,8 +73,8 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment
 import com.owncloud.android.ui.fragment.FileDetailFragment
 import com.owncloud.android.utils.ColumnQuantity
-import com.owncloud.android.utils.FileStorageUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 class MainFileListFragment : Fragment(),
@@ -85,21 +85,20 @@ class MainFileListFragment : Fragment(),
     SortOptionsView.CreateFolderListener,
     SortOptionsView.SortOptionsListener {
 
-    private val mainFileListViewModel by viewModel<MainFileListViewModel>()
+    private val mainFileListViewModel by viewModel<MainFileListViewModel>() {
+        parametersOf(
+            requireArguments().getString(ARG_ACCOUNT_NAME),
+            requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY),
+        )
+    }
     private val fileOperationsViewModel by viewModel<FileOperationsViewModel>()
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private var files: List<OCFile> = emptyList()
-
     private lateinit var layoutManager: StaggeredGridLayoutManager
     private lateinit var fileListAdapter: FileListAdapter
     private lateinit var viewType: ViewType
-
-    private var fileListOption: FileListOption = FileListOption.ALL_FILES
-
-    private var file: OCFile? = null
 
     var actionMode: ActionMode? = null
 
@@ -122,9 +121,7 @@ class MainFileListFragment : Fragment(),
         initViews()
         subscribeToViewModels()
 
-        fileListOption = requireArguments().getParcelable(ARG_LIST_FILE_OPTION) ?: FileListOption.ALL_FILES
-
-        showOrHideFab(fileListOption)
+        mainFileListViewModel.updateFileListOption(requireArguments().getParcelable(ARG_LIST_FILE_OPTION) ?: FileListOption.ALL_FILES)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -202,30 +199,15 @@ class MainFileListFragment : Fragment(),
 
     private fun subscribeToViewModels() {
         // Observe the current folder displayed and notify the listener
-        mainFileListViewModel.currentFileLiveData.observe(viewLifecycleOwner) {
+        collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) {
             fileActions?.onCurrentFolderUpdated(it)
         }
-        mainFileListViewModel.folderContentLiveData.observe(viewLifecycleOwner) {}
 
         // Observe the file list ui state.
-        mainFileListViewModel.fileListUiStateLiveData.observe(viewLifecycleOwner) { fileListUiState ->
-            val fileListPreFilters = fileListUiState.folderContent
-            val searchFilter = fileListUiState.searchFilter
-            val fileListOption = fileListUiState.fileListOption
+        collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
+            if (fileListUiState !is MainFileListViewModel.FileListUiState.Success) return@collectLatestLifecycleFlow
 
-            val fileListPostFilters = fileListPreFilters
-                .filter { fileToFilter ->
-                    fileToFilter.fileName.contains(searchFilter, ignoreCase = true)
-                }
-                .filter {
-                    when (fileListOption) {
-                        FileListOption.AV_OFFLINE -> it.isAvailableOffline
-                        FileListOption.SHARED_BY_LINK -> it.sharedByLink || it.sharedWithSharee == true
-                        else -> true
-                    }
-                }
-
-            updateFileListData(fileListPostFilters)
+            updateFileListData(fileListUiState.folderContent, fileListUiState.fileListOption)
         }
 
         mainFileListViewModel.syncFolder.observe(viewLifecycleOwner, Event.EventObserver {
@@ -240,19 +222,17 @@ class MainFileListFragment : Fragment(),
         })
     }
 
-    private fun updateFileListData(filesList: List<OCFile>) {
-        files = filesList
-        val sortedFiles = mainFileListViewModel.sortList(files)
-        fileListAdapter.updateFileList(filesToAdd = sortedFiles)
-        showOrHideEmptyView(sortedFiles)
+    private fun updateFileListData(filesList: List<OCFile>, fileListOption: FileListOption) {
+        fileListAdapter.updateFileList(filesToAdd = filesList, fileListOption = fileListOption)
+        showOrHideEmptyView(filesList)
     }
 
     fun navigateToFolderId(folderId: Long) {
-        mainFileListViewModel.navigateTo(folderId)
+        mainFileListViewModel.navigateToFolderId(folderId)
     }
 
-    fun listDirectory(directory: OCFile) {
-        mainFileListViewModel.updateFolderToDisplay(newFolderToDisplay = directory)
+    fun navigateToFolder(folder: OCFile) {
+        mainFileListViewModel.updateFolderToDisplay(newFolderToDisplay = folder)
     }
 
     private fun showOrHideEmptyView(filesList: List<OCFile>) {
@@ -290,21 +270,7 @@ class MainFileListFragment : Fragment(),
     override fun onSortSelected(sortType: SortType) {
         binding.optionsLayout.sortTypeSelected = sortType
 
-        val isAscending = binding.optionsLayout.sortOrderSelected == SortOrder.SORT_ORDER_ASCENDING
-
-        when (sortType) {
-            SortType.SORT_TYPE_BY_NAME -> sortAdapterBy(FileStorageUtils.SORT_NAME, isAscending)
-            SortType.SORT_TYPE_BY_DATE -> sortAdapterBy(FileStorageUtils.SORT_DATE, isAscending)
-            SortType.SORT_TYPE_BY_SIZE -> sortAdapterBy(FileStorageUtils.SORT_SIZE, isAscending)
-        }
-    }
-
-    private fun sortAdapterBy(sortType: Int, isDescending: Boolean) {
-        PreferenceManager.setSortOrder(sortType, requireContext(), FileStorageUtils.FILE_DISPLAY_SORT)
-        PreferenceManager.setSortAscending(isDescending, requireContext(), FileStorageUtils.FILE_DISPLAY_SORT)
-
-        val sortedFiles = mainFileListViewModel.sortList(files)
-        fileListAdapter.updateFileList(filesToAdd = sortedFiles)
+        mainFileListViewModel.updateSortTypeAndOrder(sortType, binding.optionsLayout.sortOrderSelected)
     }
 
     private fun isPickingAFolder(): Boolean {
@@ -318,7 +284,6 @@ class MainFileListFragment : Fragment(),
     }
 
     fun updateFileListOption(newFileListOption: FileListOption, file: OCFile) {
-        fileListOption = newFileListOption
         mainFileListViewModel.updateFolderToDisplay(file)
         mainFileListViewModel.updateFileListOption(newFileListOption)
         showOrHideFab(newFileListOption)
@@ -445,7 +410,7 @@ class MainFileListFragment : Fragment(),
      *
      */
     fun onBrowseUp() {
-        mainFileListViewModel.manageBrowseUp(fileListOption)
+        mainFileListViewModel.manageBrowseUp()
     }
 
     /**
@@ -480,10 +445,14 @@ class MainFileListFragment : Fragment(),
             when (menuId) {
                 R.id.action_share_file -> {
                     fileActions?.onShareFileClicked(singleFile)
+                    fileListAdapter.clearSelection()
+                    updateActionModeAfterTogglingSelected()
                     return true
                 }
                 R.id.action_open_file_with -> {
                     fileActions?.openFile(singleFile)
+                    fileListAdapter.clearSelection()
+                    updateActionModeAfterTogglingSelected()
                     return true
                 }
                 R.id.action_rename_file -> {
@@ -674,8 +643,8 @@ class MainFileListFragment : Fragment(),
                 menu,
                 checkedCount != fileListAdapter.itemCount - 1, // -1 because one of them is the footer :S
                 true,
-                fileListOption.isAvailableOffline(),
-                fileListOption.isSharedByLink()
+                mainFileListViewModel.fileListOption.value.isAvailableOffline(),
+                mainFileListViewModel.fileListOption.value.isSharedByLink(),
             )
 
             return true
@@ -707,9 +676,7 @@ class MainFileListFragment : Fragment(),
     private fun syncFiles(files: List<OCFile>) {
         for (file in files) {
             if (file.isFolder) {
-                mainFileListViewModel.syncFolder(
-                    ocFolder = file,
-                )
+                mainFileListViewModel.syncFolder(ocFolder = file)
             } else {
                 fileActions?.syncFile(file)
             }
@@ -747,14 +714,20 @@ class MainFileListFragment : Fragment(),
     companion object {
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
         val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
+        val ARG_ACCOUNT_NAME = "${MainFileListFragment::class.java.canonicalName}.ARG_ACCOUNT_NAME}"
+        val ARG_INITIAL_FOLDER_TO_DISPLAY = "${MainFileListFragment::class.java.canonicalName}.ARG_INITIAL_FOLDER_TO_DISPLAY}"
 
         private const val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
 
         @JvmStatic
         fun newInstance(
+            accountName: String,
+            initialFolderToDisplay: OCFile,
             pickingAFolder: Boolean = false
         ): MainFileListFragment {
             val args = Bundle()
+            args.putString(ARG_ACCOUNT_NAME, accountName)
+            args.putParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY, initialFolderToDisplay)
             args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
             return MainFileListFragment().apply { arguments = args }
         }

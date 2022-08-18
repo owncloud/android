@@ -1,8 +1,8 @@
-/*
+/**
  * ownCloud Android client application
  *
- * @author Fernando Sanz Velasco
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Abel García de Prada
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,15 +20,14 @@ package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
-import com.owncloud.android.domain.files.model.OCFile
 
-class GetFilesSharedByLinkUseCase(
+class DisableThumbnailsForFileUseCase(
     private val fileRepository: FileRepository
-) : BaseUseCaseWithResult<List<OCFile>, GetFilesSharedByLinkUseCase.Params>() {
+) : BaseUseCaseWithResult<Unit, DisableThumbnailsForFileUseCase.Params>() {
 
-    override fun run(params: Params): List<OCFile> = fileRepository.getFilesSharedByLink(params.owner)
+    override fun run(params: Params): Unit =
+        fileRepository.disableThumbnailsForFile(params.fileId)
 
-    data class Params(
-        val owner: String
-    )
+    data class Params(val fileId: Long)
+
 }

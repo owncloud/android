@@ -24,6 +24,7 @@
 package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.MainApp
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListViewModel
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
@@ -87,7 +88,6 @@ val viewModelModule = module {
     viewModel { PreviewImageViewModel(get(), get(), get()) }
     viewModel { FileDetailsViewModel(get(), get(), get(), get(), get()) }
     viewModel { FileOperationsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { (accountName: String, initialFolderToDisplay: OCFile) -> MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), accountName, initialFolderToDisplay) }
     viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-
 }

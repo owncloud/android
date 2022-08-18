@@ -21,10 +21,16 @@
 package com.owncloud.android.presentation.diffutils
 
 import androidx.recyclerview.widget.DiffUtil
+import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFooterFile
 
-class FileListDiffCallback(private val oldList: List<Any>, private val newList: List<Any>) : DiffUtil.Callback() {
+class FileListDiffCallback(
+    private val oldList: List<Any>,
+    private val newList: List<Any>,
+    private val oldFileListOption: FileListOption,
+    private val newFileListOption: FileListOption,
+) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int = oldList.size
 
@@ -54,5 +60,5 @@ class FileListDiffCallback(private val oldList: List<Any>, private val newList: 
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-        oldList[oldItemPosition] == newList[newItemPosition]
+        oldList[oldItemPosition] == newList[newItemPosition] && oldFileListOption == newFileListOption
 }

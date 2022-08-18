@@ -18,16 +18,16 @@
  */
 package com.owncloud.android.domain.files.usecases
 
-import androidx.lifecycle.LiveData
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
+import kotlinx.coroutines.flow.Flow
 
-class GetFolderContentAsLiveDataUseCase(
+class GetFolderContentAsStreamUseCase(
     private val repository: FileRepository
-) : BaseUseCase<LiveData<List<OCFile>>, GetFolderContentAsLiveDataUseCase.Params>() {
+) : BaseUseCase<Flow<List<OCFile>>, GetFolderContentAsStreamUseCase.Params>() {
 
-    override fun run(params: Params) = repository.getFolderContentAsLiveData(params.folderId)
+    override fun run(params: Params) = repository.getFolderContentAsStream(params.folderId)
 
     data class Params(val folderId: Long)
 
