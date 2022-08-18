@@ -66,12 +66,17 @@ import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.data.transfers.db.TransferDao
 import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.extensions.getLongFromColumnOrThrow
 import com.owncloud.android.extensions.getStringFromColumnOrThrow
 import com.owncloud.android.domain.files.model.LIST_MIME_DIR
+import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.usecases.transfers.uploads.UploadEnqueuedBy
+import com.owncloud.android.usecases.transfers.uploads.UploadFileFromSystemUseCase
 import org.koin.android.ext.android.inject
 import timber.log.Timber
+import java.io.File
 import java.io.FileNotFoundException
 import java.util.ArrayList
 import java.util.HashMap
@@ -1096,7 +1101,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                         val uploads = mutableListOf<OCTransferEntity>()
 
                         do {
-                            uploads.add(OCTransferEntity.fromCursor(cursorUploads))
+                            val upload = OCTransferEntity.fromCursor(cursorUploads)
+                            uploads.add(upload)
                         } while (cursorUploads.moveToNext())
 
                         // Insert uploads list to the new transfers table in new database
@@ -1104,6 +1110,23 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                         executors.diskIO().execute {
                             for (upload in uploads) {
                                 ocTransferDao.insert(upload)
+                                if (upload.status == TransferStatus.TRANSFER_QUEUED.value
+                                    && upload.createdBy != UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_PICTURE.ordinal
+                                    && upload.createdBy != UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_VIDEO.ordinal
+                                ) {
+                                    val localFile = File(upload.localPath)
+                                    val uploadFileFromSystemUseCase: UploadFileFromSystemUseCase by inject()
+                                    uploadFileFromSystemUseCase.execute(
+                                        UploadFileFromSystemUseCase.Params(
+                                            accountName = upload.accountName,
+                                            localPath = upload.localPath,
+                                            lastModifiedInSeconds =  localFile.lastModified().div(1_000).toString(),
+                                            behavior = UploadBehavior.MOVE.toString(),
+                                            uploadPath = upload.remotePath,
+                                            uploadIdInStorageManager = upload.id
+                                        )
+                                    )
+                                }
                             }
                         }
                     }
