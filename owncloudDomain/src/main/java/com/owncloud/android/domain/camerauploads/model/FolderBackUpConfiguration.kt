@@ -68,13 +68,11 @@ enum class UploadBehavior {
             }
         }
 
-        @Deprecated("Legacy Local Behavior. Remove asap")
-        fun fromLegacyLocalBehavior(oldLocalBehavior: Int): UploadBehavior {
-            return when (oldLocalBehavior) {
-                LEGACY_LOCAL_BEHAVIOUR_MOVE -> MOVE
-                LEGACY_LOCAL_BEHAVIOUR_COPY -> COPY
-                LEGACY_LOCAL_BEHAVIOUR_FORGET -> MOVE
-                else -> COPY
+        fun fromInt(int: Int): UploadBehavior {
+            return if (int == MOVE.ordinal) {
+                MOVE
+            } else {
+                COPY
             }
         }
     }
