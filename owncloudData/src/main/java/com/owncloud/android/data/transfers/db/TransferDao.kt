@@ -39,6 +39,9 @@ abstract class TransferDao {
     abstract fun getTransfersWithStatus(status: List<Int>): List<OCTransferEntity>
 
     @Query(SELECT_ALL_TRANSFERS)
+    abstract fun getAllTransfers(): List<OCTransferEntity>
+
+    @Query(SELECT_ALL_TRANSFERS)
     abstract fun getAllTransfersAsLiveData(): LiveData<List<OCTransferEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -49,6 +52,9 @@ abstract class TransferDao {
 
     @Query(UPDATE_TRANSFER_WHEN_FINISHED)
     abstract fun updateTransferWhenFinished(id: Long, status: Int, transferEndTimestamp: Long, lastResult: Int)
+
+    @Query(UPDATE_TRANSFER_STORAGE_DIRECTORY)
+    abstract fun updateTransferStorageDirectoryInLocalPath(id: Long, oldDirectory: String, newDirectory: String)
 
     @Query(DELETE_TRANSFER_WITH_ID)
     abstract fun deleteTransferWithId(id: Long)
@@ -91,6 +97,11 @@ abstract class TransferDao {
                     "SET status = :status, " +
                     "transferEndTimestamp = :transferEndTimestamp," +
                     "lastResult = :lastResult " +
+                    "WHERE id = :id"
+
+        private const val UPDATE_TRANSFER_STORAGE_DIRECTORY =
+            "UPDATE $TRANSFERS_TABLE_NAME " +
+                    "SET localPath = `REPLACE`(localPath, :oldDirectory, :newDirectory) " +
                     "WHERE id = :id"
 
         private const val DELETE_TRANSFER_WITH_ID =

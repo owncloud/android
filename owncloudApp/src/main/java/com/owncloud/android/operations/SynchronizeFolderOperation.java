@@ -30,8 +30,6 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCUpload;
-import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.domain.UseCaseResult;
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus;
 import com.owncloud.android.domain.files.model.OCFile;
@@ -61,7 +59,6 @@ import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER;
-import static com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY;
 import static org.koin.java.KoinJavaComponent.get;
 import static org.koin.java.KoinJavaComponent.inject;
 
@@ -547,6 +544,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
      * @return 'True' if the received file should not be automatically synced due to a previous
      * upload error that requires an user action.
      */
+    /*
     private boolean isBlockedForAutomatedSync(OCFile file) {
         UploadsStorageManager uploadsStorageManager = new UploadsStorageManager(mContext.getContentResolver());
         OCUpload failedUpload = uploadsStorageManager.getLastUploadFor(file, mAccount.name);
@@ -563,6 +561,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
         }
         return false;
     }
+    */
 
     public String getRemotePath() {
         return mRemotePath;

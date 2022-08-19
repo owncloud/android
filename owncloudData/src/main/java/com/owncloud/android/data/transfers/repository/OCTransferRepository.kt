@@ -58,6 +58,18 @@ class OCTransferRepository(
         )
     }
 
+    override fun updateTransferStorageDirectoryInLocalPath(
+        id: Long,
+        oldDirectory: String,
+        newDirectory: String
+    ) {
+        localTransferDataSource.updateTransferStorageDirectoryInLocalPath(
+            id = id,
+            oldDirectory = oldDirectory,
+            newDirectory = newDirectory
+        )
+    }
+
     override fun removeTransferById(id: Long) =
         localTransferDataSource.removeTransferById(id = id)
 
@@ -66,6 +78,9 @@ class OCTransferRepository(
 
     override fun getTransferById(id: Long): OCTransfer? =
         localTransferDataSource.getTransferById(id = id)
+
+    override fun getAllTransfers(): List<OCTransfer> =
+        localTransferDataSource.getAllTransfers()
 
     override fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>> =
         localTransferDataSource.getAllTransfersAsLiveData()

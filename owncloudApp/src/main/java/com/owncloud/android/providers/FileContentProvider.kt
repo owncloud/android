@@ -64,7 +64,6 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.data.transfers.db.TransferDao
-import com.owncloud.android.datamodel.UploadsStorageManager
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.files.model.LIST_MIME_DIR
@@ -1432,12 +1431,12 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             c = db.rawQuery(
                 "delete from " + ProviderTableMeta.UPLOADS_TABLE_NAME +
                         " where " + ProviderTableMeta.UPLOADS_STATUS + " == " +
-                        UploadsStorageManager.UploadStatus.UPLOAD_SUCCEEDED.value +
+                        LEGACY_UPLOAD_STATUS_SUCCEEDED_VALUE +
                         " and " + ProviderTableMeta._ID +
                         " not in (select " + ProviderTableMeta._ID +
                         " from " + ProviderTableMeta.UPLOADS_TABLE_NAME +
                         " where " + ProviderTableMeta.UPLOADS_STATUS + " == " +
-                        UploadsStorageManager.UploadStatus.UPLOAD_SUCCEEDED.value +
+                        LEGACY_UPLOAD_STATUS_SUCCEEDED_VALUE +
                         " order by " + ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP +
                         " desc limit " + MAX_SUCCESSFUL_UPLOADS +
                         ")", null
@@ -1464,6 +1463,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         private const val QUOTAS = 8
 
         private const val MAX_SUCCESSFUL_UPLOADS = "30"
+
+        private const val LEGACY_UPLOAD_STATUS_SUCCEEDED_VALUE = 2
 
         private val fileProjectionMap = HashMap<String, String>()
 

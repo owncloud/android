@@ -73,6 +73,7 @@ import com.owncloud.android.domain.transfers.usecases.ClearFailedTransfersUseCas
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.DeleteTransferWithIdUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
+import com.owncloud.android.domain.transfers.usecases.UpdatePendingUploadsPathUseCase
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
@@ -172,6 +173,7 @@ val useCaseModule = module {
     factory { RetryFailedUploadsUseCase(get(), get(), get(), get()) }
     factory { ClearSuccessfulTransfersUseCase(get()) }
     factory { CancelUploadsFromAccountUseCase(get(), get()) }
+    factory { UpdatePendingUploadsPathUseCase(get()) }
 
     // User
     factory { GetStoredQuotaUseCase(get()) }
