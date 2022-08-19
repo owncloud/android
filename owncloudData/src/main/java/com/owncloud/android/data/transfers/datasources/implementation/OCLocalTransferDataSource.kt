@@ -57,6 +57,14 @@ class OCLocalTransferDataSource(
         transferDao.updateTransferWhenFinished(id, status.value, transferEndTimestamp, lastResult.value)
     }
 
+    override fun updateTransferStorageDirectoryInLocalPath(
+        id: Long,
+        oldDirectory: String,
+        newDirectory: String
+    ) {
+        transferDao.updateTransferStorageDirectoryInLocalPath(id, oldDirectory, newDirectory)
+    }
+
     override fun removeTransferById(id: Long) {
         transferDao.deleteTransferWithId(id)
     }
@@ -67,6 +75,12 @@ class OCLocalTransferDataSource(
 
     override fun getTransferById(id: Long): OCTransfer? {
         return transferDao.getTransferWithId(id)?.toModel()
+    }
+
+    override fun getAllTransfers(): List<OCTransfer> {
+        return transferDao.getAllTransfers().map { transferEntity ->
+            transferEntity.toModel()
+        }
     }
 
     override fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>> {
