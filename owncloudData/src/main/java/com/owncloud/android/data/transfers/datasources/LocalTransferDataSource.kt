@@ -36,9 +36,15 @@ interface LocalTransferDataSource {
         transferEndTimestamp: Long,
         lastResult: TransferResult
     )
+    fun updateTransferStorageDirectoryInLocalPath(
+        id: Long,
+        oldDirectory: String,
+        newDirectory: String
+    )
     fun removeTransferById(id: Long)
     fun removeAllTransfersFromAccount(accountName: String)
     fun getTransferById(id: Long): OCTransfer?
+    fun getAllTransfers(): List<OCTransfer>
     fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>>
     fun getLastTransferFor(remotePath: String, accountName: String): OCTransfer?
     fun getCurrentAndPendingTransfers(): List<OCTransfer>
