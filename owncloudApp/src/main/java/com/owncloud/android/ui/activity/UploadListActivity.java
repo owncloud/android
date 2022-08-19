@@ -36,7 +36,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.OCUpload;
-import com.owncloud.android.datamodel.UploadsStorageManager;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
@@ -53,9 +52,8 @@ import java.io.File;
 import static org.koin.java.KoinJavaComponent.inject;
 
 /**
- * Activity listing pending, active, and completed uploads. User can delete
- * completed uploads from view. Content of this list of coming from
- * {@link UploadsStorageManager}.
+ * Activity listing pending, active, failed and completed uploads. User can delete
+ * completed and failed uploads from view.
  */
 public class UploadListActivity extends FileActivity implements UploadListFragment.ContainerActivity {
 
