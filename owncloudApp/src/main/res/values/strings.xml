@@ -76,6 +76,7 @@
     <string name="prefs_show_hidden_files">Show hidden files</string>
     <string name="prefs_log_open_logs_list_view">Log files</string>
     <string name="prefs_log_no_logs_list_view">Empty log folder!</string>
+    <string name="prefs_log_empty_subtitle">If you enable logging, log files will show up here</string>
     <string name="prefs_log_title">Enable logging</string>
     <string name="prefs_log_summary">This is used to log problems</string>
     <string name="prefs_log_title_history">Logging history</string>
