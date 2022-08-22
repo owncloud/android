@@ -7,7 +7,7 @@
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
  * <p>
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -29,6 +29,7 @@ import android.net.Uri
 import com.owncloud.android.data.extension.moveRecursively
 import timber.log.Timber
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.transfers.model.OCTransfer
 import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
@@ -202,6 +203,28 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
             targetFolder.mkdirs()
         }
         fileToMove.renameTo(targetFile)
+    }
+
+    fun clearUnrelatedTemporalFiles(uploads: List<OCTransfer>, accountsNames: List<String>) {
+        accountsNames.forEach { accountName ->
+            val temporalFolderForAccount = File(getTemporalPath(accountName))
+            cleanTemporalRecursively(temporalFolderForAccount) { temporalFile ->
+                if (!uploads.map { it.localPath }.contains(temporalFile.absolutePath)) {
+                    temporalFile.delete()
+                }
+            }
+        }
+    }
+
+    private fun cleanTemporalRecursively(temporalFolder: File, deleteFileInCaseItIsNotNeeded: (file: File) -> Unit) {
+        temporalFolder.listFiles()?.forEach { temporalFile ->
+            if (temporalFile.isDirectory) {
+                cleanTemporalRecursively(temporalFile, deleteFileInCaseItIsNotNeeded)
+            } else {
+                deleteFileInCaseItIsNotNeeded(temporalFile)
+            }
+
+        }
     }
 
     companion object {
