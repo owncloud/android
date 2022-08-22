@@ -240,9 +240,6 @@ class UploadFileFromContentUriWorker(
     }
 
     companion object {
-        const val TRANSFER_TAG_CAMERA_UPLOAD = "TRANSFER_TAG_CAMERA_UPLOAD"
-        const val TRANSFER_TAG_MANUAL_UPLOAD = "TRANSFER_TAG_MANUAL_UPLOAD"
-
         const val KEY_PARAM_ACCOUNT_NAME = "KEY_PARAM_ACCOUNT_NAME"
         const val KEY_PARAM_BEHAVIOR = "KEY_PARAM_BEHAVIOR"
         const val KEY_PARAM_CONTENT_URI = "KEY_PARAM_CONTENT_URI"

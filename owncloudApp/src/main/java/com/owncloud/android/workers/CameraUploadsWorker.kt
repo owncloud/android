@@ -39,7 +39,7 @@ import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.presentation.ui.settings.SettingsActivity
-import com.owncloud.android.usecases.transfers.uploads.UploadEnqueuedBy
+import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
 import com.owncloud.android.usecases.transfers.uploads.UploadFileFromContentUriUseCase
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.NotificationUtils
@@ -147,8 +147,8 @@ class CameraUploadsWorker(
                 accountName = folderBackUpConfiguration.accountName,
                 behavior = folderBackUpConfiguration.behavior,
                 createdByWorker = when (syncType) {
-                    SyncType.PICTURE_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_PICTURE.ordinal
-                    SyncType.VIDEO_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_VIDEO.ordinal
+                    SyncType.PICTURE_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_PICTURE
+                    SyncType.VIDEO_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_VIDEO
                 }
             )
             enqueueSingleUpload(
@@ -288,7 +288,7 @@ class CameraUploadsWorker(
         uploadPath: String,
         accountName: String,
         behavior: UploadBehavior,
-        createdByWorker: Int
+        createdByWorker: UploadEnqueuedBy
     ): Long {
         val ocTransfer = OCTransfer(
             localPath = documentFile.uri.toString(),
@@ -296,7 +296,7 @@ class CameraUploadsWorker(
             accountName = accountName,
             fileSize = documentFile.length(),
             status = TransferStatus.TRANSFER_QUEUED,
-            localBehaviour = behavior.toLegacyLocalBehavior(),
+            localBehaviour = behavior,
             forceOverwrite = false,
             createdBy = createdByWorker
         )

@@ -16,10 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.usecases.transfers.uploads
 
-import com.owncloud.android.workers.UploadFileFromContentUriWorker
-
+package com.owncloud.android.domain.transfers.model
 
 /**
  * Select who enqueued the upload. It could be manually by the user or automatically by other workers within the app.
@@ -33,12 +31,4 @@ enum class UploadEnqueuedBy {
     ENQUEUED_BY_USER,
     ENQUEUED_AS_CAMERA_UPLOAD_PICTURE,
     ENQUEUED_AS_CAMERA_UPLOAD_VIDEO;
-
-    fun toTransferTag(): String {
-        return when (this) {
-            ENQUEUED_BY_USER -> UploadFileFromContentUriWorker.TRANSFER_TAG_MANUAL_UPLOAD
-            ENQUEUED_AS_CAMERA_UPLOAD_PICTURE -> UploadFileFromContentUriWorker.TRANSFER_TAG_CAMERA_UPLOAD
-            ENQUEUED_AS_CAMERA_UPLOAD_VIDEO -> UploadFileFromContentUriWorker.TRANSFER_TAG_CAMERA_UPLOAD
-        }
-    }
 }

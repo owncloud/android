@@ -31,6 +31,7 @@ import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
+import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
 import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 import timber.log.Timber
 import java.io.File
@@ -83,9 +84,9 @@ class UploadFileInConflictUseCase(
             accountName = accountName,
             fileSize = localFile.length(),
             status = TransferStatus.TRANSFER_QUEUED,
-            localBehaviour = UploadBehavior.COPY.ordinal,
+            localBehaviour = UploadBehavior.COPY,
             forceOverwrite = true,
-            createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER.ordinal
+            createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER
         )
 
         return transferRepository.storeTransfer(ocTransfer).also {

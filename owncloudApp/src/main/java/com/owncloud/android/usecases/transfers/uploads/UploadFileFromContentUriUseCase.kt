@@ -56,7 +56,6 @@ class UploadFileFromContentUriUseCase(
             .setConstraints(constraints)
             .addTag(params.accountName)
             .addTag(params.uploadIdInStorageManager.toString())
-            .addTag(params.transferTag)
             .build()
 
         workManager.enqueue(uploadFileFromContentUriWorker)
@@ -72,6 +71,5 @@ class UploadFileFromContentUriUseCase(
         val uploadIdInStorageManager: Long,
         val wifiOnly: Boolean,
         val chargingOnly: Boolean,
-        val transferTag: String = UploadFileFromContentUriWorker.TRANSFER_TAG_CAMERA_UPLOAD,
     )
 }

@@ -25,9 +25,11 @@ import androidx.lifecycle.Transformations
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.data.transfers.db.TransferDao
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
+import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
 
 class OCLocalTransferDataSource(
     private val transferDao: TransferDao
@@ -144,11 +146,11 @@ class OCLocalTransferDataSource(
         accountName = accountName,
         fileSize = fileSize,
         status = TransferStatus.fromValue(status),
-        localBehaviour = localBehaviour,
+        localBehaviour = UploadBehavior.values()[localBehaviour],
         forceOverwrite = forceOverwrite,
         transferEndTimestamp = transferEndTimestamp,
         lastResult = lastResult?.let { TransferResult.fromValue(it) },
-        createdBy = createdBy,
+        createdBy = UploadEnqueuedBy.values()[createdBy],
         transferId = transferId
     )
 
@@ -158,11 +160,11 @@ class OCLocalTransferDataSource(
         accountName = accountName,
         fileSize = fileSize,
         status = status.value,
-        localBehaviour = localBehaviour,
+        localBehaviour = localBehaviour.ordinal,
         forceOverwrite = forceOverwrite,
         transferEndTimestamp = transferEndTimestamp,
         lastResult = lastResult?.value,
-        createdBy = createdBy,
+        createdBy = createdBy.ordinal,
         transferId = transferId
     ).apply { this@toEntity.id?.let { this.id = it } }
 

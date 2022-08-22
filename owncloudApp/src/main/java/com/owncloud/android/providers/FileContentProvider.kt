@@ -71,7 +71,7 @@ import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.extensions.getLongFromColumnOrThrow
 import com.owncloud.android.extensions.getStringFromColumnOrThrow
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.usecases.transfers.uploads.UploadEnqueuedBy
+import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
 import com.owncloud.android.usecases.transfers.uploads.UploadFileFromSystemUseCase
 import org.koin.android.ext.android.inject
 import timber.log.Timber

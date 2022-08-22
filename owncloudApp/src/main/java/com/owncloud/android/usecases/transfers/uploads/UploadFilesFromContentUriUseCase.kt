@@ -29,6 +29,7 @@ import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
+import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
 import timber.log.Timber
 import java.io.File
 
@@ -80,9 +81,9 @@ class UploadFilesFromContentUriUseCase(
             accountName = accountName,
             fileSize = documentFile.length(),
             status = TransferStatus.TRANSFER_QUEUED,
-            localBehaviour = UploadBehavior.COPY.ordinal,
+            localBehaviour = UploadBehavior.COPY,
             forceOverwrite = false,
-            createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER.ordinal
+            createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER
         )
 
         return transferRepository.storeTransfer(ocTransfer).also {
@@ -105,8 +106,7 @@ class UploadFilesFromContentUriUseCase(
             accountName = accountName,
             uploadIdInStorageManager = uploadIdInStorageManager,
             wifiOnly = false,
-            chargingOnly = false,
-            transferTag = UploadEnqueuedBy.ENQUEUED_BY_USER.toTransferTag()
+            chargingOnly = false
         )
         uploadFileFromContentUriUseCase.execute(uploadFileParams)
     }
