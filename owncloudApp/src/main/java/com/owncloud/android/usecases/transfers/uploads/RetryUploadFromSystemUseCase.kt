@@ -56,7 +56,7 @@ class RetryUploadFromSystemUseCase(
                     accountName = uploadToRetry.accountName,
                     localPath = uploadToRetry.localPath,
                     lastModifiedInSeconds = (uploadToRetry.transferEndTimestamp?.div(1000)).toString(),
-                    behavior = UploadBehavior.fromInt(uploadToRetry.localBehaviour).name,
+                    behavior = uploadToRetry.localBehaviour.name,
                     uploadPath = uploadToRetry.remotePath,
                     uploadIdInStorageManager = params.uploadIdInStorageManager
                 )
