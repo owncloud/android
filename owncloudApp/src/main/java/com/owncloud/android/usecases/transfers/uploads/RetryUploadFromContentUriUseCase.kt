@@ -57,7 +57,7 @@ class RetryUploadFromContentUriUseCase(
                     accountName = uploadToRetry.accountName,
                     contentUri = uploadToRetry.localPath.toUri(),
                     lastModifiedInSeconds = (uploadToRetry.transferEndTimestamp?.div(1000)).toString(),
-                    behavior = UploadBehavior.fromInt(uploadToRetry.localBehaviour).name,
+                    behavior = uploadToRetry.localBehaviour.name,
                     uploadPath = uploadToRetry.remotePath,
                     uploadIdInStorageManager = params.uploadIdInStorageManager,
                     wifiOnly = false,

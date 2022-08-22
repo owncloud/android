@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.domain.camerauploads.model
 
 data class FolderBackUpConfiguration(
@@ -58,18 +59,9 @@ enum class UploadBehavior {
     companion object {
         private const val LEGACY_LOCAL_BEHAVIOUR_COPY = 0
         private const val LEGACY_LOCAL_BEHAVIOUR_MOVE = 1
-        private const val LEGACY_LOCAL_BEHAVIOUR_FORGET = 2
 
         fun fromString(string: String): UploadBehavior {
             return if (string.equals("MOVE", ignoreCase = true)) {
-                MOVE
-            } else {
-                COPY
-            }
-        }
-
-        fun fromInt(int: Int): UploadBehavior {
-            return if (int == MOVE.ordinal) {
                 MOVE
             } else {
                 COPY
