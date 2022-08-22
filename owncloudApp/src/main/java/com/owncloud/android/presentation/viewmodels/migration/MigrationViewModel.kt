@@ -32,6 +32,7 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.data.storage.LegacyStorageProvider
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.datamodel.FileDataStorageManager
+import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.UpdatePendingUploadsPathUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity.Companion.PREFERENCE_ALREADY_MIGRATED_TO_SCOPED_STORAGE
@@ -51,6 +52,7 @@ class MigrationViewModel(
     private val contextProvider: ContextProvider,
     private val accountProvider: AccountProvider,
     private val updatePendingUploadsPathUseCase: UpdatePendingUploadsPathUseCase,
+    private val getAllTransfersUseCase: GetAllTransfersUseCase,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
@@ -82,17 +84,18 @@ class MigrationViewModel(
     }
 
     private fun updatePendingUploadsPath() {
-        val temporalFoldersForAccounts = mutableListOf<File>()
-        accountProvider.getLoggedAccounts().forEach { account ->
-            temporalFoldersForAccounts.add(File(localStorageProvider.getTemporalPath(account.name)))
-        }
         updatePendingUploadsPathUseCase.execute(
             UpdatePendingUploadsPathUseCase.Params(
                 oldDirectory = legacyStorageDirectoryPath,
-                newDirectory = localStorageProvider.getRootFolderPath(),
-                temporalFoldersForAccounts = temporalFoldersForAccounts
+                newDirectory = localStorageProvider.getRootFolderPath()
             )
         )
+        val uploads = getAllTransfersUseCase.execute(Unit)
+        val accountsNames = mutableListOf<String>()
+        accountProvider.getLoggedAccounts().forEach { account ->
+            accountsNames.add(localStorageProvider.getTemporalPath(account.name))
+        }
+        localStorageProvider.clearUnrelatedTemporalFiles(uploads, accountsNames)
     }
 
     private fun updateAlreadyDownloadedFilesPath() {
