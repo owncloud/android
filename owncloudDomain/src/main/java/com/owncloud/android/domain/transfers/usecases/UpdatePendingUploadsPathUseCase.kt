@@ -22,8 +22,6 @@ package com.owncloud.android.domain.transfers.usecases
 
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.transfers.TransferRepository
-import com.owncloud.android.domain.transfers.model.OCTransfer
-import java.io.File
 
 class UpdatePendingUploadsPathUseCase(
     private val transferRepository: TransferRepository,
