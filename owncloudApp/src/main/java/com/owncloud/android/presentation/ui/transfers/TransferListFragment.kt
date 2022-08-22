@@ -120,8 +120,12 @@ class TransferListFragment : Fragment() {
 
     private fun setData(items: List<OCTransfer>) {
         binding.transfersRecyclerView.isVisible = items.isNotEmpty()
-        binding.emptyListText.isVisible = items.isEmpty()
-
+        binding.transfersListEmpty.apply {
+            root.isVisible = items.isEmpty()
+            listEmptyDatasetIcon.setImageResource(R.drawable.ic_uploads)
+            listEmptyDatasetTitle.setText(R.string.upload_list_empty)
+            listEmptyDatasetSubTitle.setText(R.string.upload_list_empty_subtitle)
+        }
         transfersAdapter.setData(items)
     }
 }
