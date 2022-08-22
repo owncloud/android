@@ -33,9 +33,6 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.LogsListActivityBinding
 import com.owncloud.android.extensions.openFile
 import com.owncloud.android.extensions.sendFile
-import com.owncloud.android.extensions.toDrawableRes
-import com.owncloud.android.extensions.toSubtitleStringRes
-import com.owncloud.android.extensions.toTitleStringRes
 import com.owncloud.android.presentation.adapters.logging.RecyclerViewLogsAdapter
 import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
