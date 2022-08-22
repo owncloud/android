@@ -20,7 +20,6 @@
 
 package com.owncloud.android.dependecyinjection
 
-import com.owncloud.android.datamodel.UploadsStorageManager
 import androidx.work.WorkManager
 import com.owncloud.android.presentation.manager.AvatarManager
 import com.owncloud.android.providers.AccountProvider
@@ -43,6 +42,5 @@ val commonModule = module {
     single { MdmProvider(androidContext()) }
     single { WorkManagerProvider(androidContext()) }
     single { AccountProvider(androidContext()) }
-    single { UploadsStorageManager(androidApplication().contentResolver) }
     single { WorkManager.getInstance(androidApplication()) }
 }

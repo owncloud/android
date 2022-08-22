@@ -35,12 +35,10 @@ import android.view.View;
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.OCUpload;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.presentation.ui.transfers.TransferListFragment;
-import com.owncloud.android.ui.fragment.UploadListFragment;
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsForAccountUseCase;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import kotlin.Lazy;
@@ -55,7 +53,7 @@ import static org.koin.java.KoinJavaComponent.inject;
  * Activity listing pending, active, failed and completed uploads. User can delete
  * completed and failed uploads from view.
  */
-public class UploadListActivity extends FileActivity implements UploadListFragment.ContainerActivity {
+public class UploadListActivity extends FileActivity {
 
     private static final String TAG_UPLOAD_LIST_FRAGMENT = "UPLOAD_LIST_FRAGMENT";
 
@@ -94,24 +92,6 @@ public class UploadListActivity extends FileActivity implements UploadListFragme
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.left_fragment_container, uploadList, TAG_UPLOAD_LIST_FRAGMENT);
         transaction.commit();
-    }
-
-    // ////////////////////////////////////////
-    // UploadListFragment.ContainerActivity
-    // ////////////////////////////////////////
-    @Override
-    public boolean onUploadItemClick(OCUpload file) {
-        /// TODO is this path still active?
-        File f = new File(file.getLocalPath());
-        if (!f.exists()) {
-            showSnackMessage(
-                    getString(R.string.local_file_not_found_toast)
-            );
-
-        } else {
-            openFileWithDefault(file.getLocalPath());
-        }
-        return true;
     }
 
     /**
