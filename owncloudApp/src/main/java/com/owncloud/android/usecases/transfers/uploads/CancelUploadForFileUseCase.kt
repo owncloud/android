@@ -26,7 +26,6 @@ import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.extensions.getWorkInfoByTags
-import com.owncloud.android.workers.UploadFileFromContentUriWorker.Companion.TRANSFER_TAG_MANUAL_UPLOAD
 import timber.log.Timber
 
 /**
@@ -53,7 +52,7 @@ class CancelUploadForFileUseCase(
         }
 
         val workersToCancel =
-            workManager.getWorkInfoByTags(listOf(TRANSFER_TAG_MANUAL_UPLOAD, uploadForFile.id.toString(), file.owner))
+            workManager.getWorkInfoByTags(listOf(uploadForFile.id.toString(), file.owner))
 
         workersToCancel.forEach {
             // TODO: We need to check if the work is cancelled before finishing.
