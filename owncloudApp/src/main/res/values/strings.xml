@@ -672,5 +672,7 @@
     <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
+    <string name="ic_action_open_in_web">Open in web</string>
+    <string name="open_in_web_error">Couldn\'t open in web</string>
 
 </resources>

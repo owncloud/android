@@ -21,4 +21,5 @@ package com.owncloud.android.domain.files
 
 interface FileRepository {
     fun checkPathExistence(path: String, userLogged: Boolean): Boolean
+    fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
 }

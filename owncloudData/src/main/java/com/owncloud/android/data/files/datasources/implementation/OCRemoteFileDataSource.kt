@@ -19,6 +19,7 @@
 
 package com.owncloud.android.data.files.datasources.implementation
 
+import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.lib.resources.files.services.FileService
 
@@ -28,4 +29,6 @@ class OCRemoteFileDataSource(
     override fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean =
         fileService.checkPathExistence(path = path, isUserLogged = checkUserCredentials).data
 
+    override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String =
+        executeRemoteOperation { fileService.getUrlToOpenInWeb(openWebEndpoint = openWebEndpoint, fileId = fileId) }
 }

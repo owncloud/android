@@ -21,4 +21,5 @@ package com.owncloud.android.data.files.datasources
 
 interface RemoteFileDataSource {
     fun checkPathExistence(path: String, checkUserCredentials: Boolean): Boolean
+    fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
 }
