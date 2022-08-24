@@ -88,6 +88,7 @@ import com.owncloud.android.presentation.UIResult;
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
 import com.owncloud.android.presentation.ui.files.operations.FileOperation;
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
+import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel;
 import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
 import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
@@ -97,6 +98,7 @@ import com.owncloud.android.ui.helpers.UriUploader;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.SortFilesUtils;
+import kotlin.Lazy;
 import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
@@ -111,6 +113,7 @@ import java.util.Stack;
 import java.util.Vector;
 
 import static org.koin.java.KoinJavaComponent.get;
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * This can be used to upload things to an ownCloud instance.
@@ -950,10 +953,13 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     error = getString(R.string.uploader_upload_text_dialog_filename_error_empty);
                 } else {
                     fileName += ".txt";
-                    Uri fileUri = savePlainTextToFile(fileName);
-                    mStreamsToUpload.clear();
-                    mStreamsToUpload.add(fileUri);
-                    uploadFiles();
+                    String filePath = savePlainTextToFile(fileName);
+                    ArrayList<String> fileToUpload = new ArrayList<>();
+                    fileToUpload.add(filePath);
+                    @NotNull Lazy<TransfersViewModel> transfersViewModelLazy = inject(TransfersViewModel.class);
+                    TransfersViewModel transfersViewModel = transfersViewModelLazy.getValue();
+                    transfersViewModel.uploadFilesFromSystem(getAccount().name, fileToUpload, mUploadPath);
+                    finish();
                 }
                 inputLayout.setErrorEnabled(error != null);
                 inputLayout.setError(error);
@@ -966,22 +972,21 @@ public class ReceiveExternalFilesActivity extends FileActivity
      * Store plain text from intent to a new file in cache dir.
      *
      * @param fileName The name of the file.
-     * @return Uri from created file.
+     * @return Path of the created file.
      */
-    private Uri savePlainTextToFile(String fileName) {
-        Uri uri = null;
+    private String savePlainTextToFile(String fileName) {
+        File tmpFile = null;
         String content = getIntent().getStringExtra(Intent.EXTRA_TEXT);
         try {
-            File tmpFile = new File(getCacheDir(), fileName);
+            tmpFile = new File(getCacheDir(), fileName);
             FileOutputStream outputStream = new FileOutputStream(tmpFile);
             outputStream.write(content.getBytes());
             outputStream.close();
-            uri = Uri.fromFile(tmpFile);
 
         } catch (IOException e) {
             Timber.w(e, "Failed to create temp file for uploading plain text: %s", e.getMessage());
         }
-        return uri;
+        return tmpFile.getAbsolutePath();
     }
 
     /**
