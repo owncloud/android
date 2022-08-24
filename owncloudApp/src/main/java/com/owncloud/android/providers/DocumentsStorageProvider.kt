@@ -59,6 +59,9 @@ import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.NotificationUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
@@ -136,7 +139,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
                         listOfLocalPaths = listOf(fileToOpen.path),
                         uploadFolderPath = ocFile.remotePath.substringBeforeLast(PATH_SEPARATOR)
                     )
-                    uploadFilesUseCase.execute(uploadFilesUseCaseParams)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        uploadFilesUseCase.execute(uploadFilesUseCaseParams)
+                    }
                 } else {
                     Thread {
                         val synchronizeFileUseCase: SynchronizeFileUseCase by inject()
