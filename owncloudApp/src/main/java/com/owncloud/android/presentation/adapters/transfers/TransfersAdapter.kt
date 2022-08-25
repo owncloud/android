@@ -49,7 +49,6 @@ import java.io.File
 
 class TransfersAdapter(
     val cancel: (Long) -> Unit,
-    val delete: (Long) -> Unit,
     val retry: (OCTransfer) -> Unit,
     val clearFailed: () -> Unit,
     val retryFailed: () -> Unit,
@@ -141,7 +140,7 @@ class TransfersAdapter(
                             uploadRightButton.apply {
                                 setImageResource(R.drawable.ic_action_delete_grey)
                                 setOnClickListener {
-                                    delete(transferItem.transfer.id!!)
+                                    cancel(transferItem.transfer.id!!)
                                 }
                             }
                             holder.itemView.setOnClickListener {
