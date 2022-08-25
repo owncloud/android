@@ -28,9 +28,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import com.owncloud.android.domain.transfers.model.OCTransfer
-import com.owncloud.android.domain.transfers.usecases.ClearFailedTransfersUseCase
+import com.owncloud.android.usecases.transfers.uploads.ClearFailedTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
-import com.owncloud.android.domain.transfers.usecases.DeleteTransferWithIdUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
@@ -48,7 +47,6 @@ class TransfersViewModel(
     private val uploadFilesFromContentUriUseCase: UploadFilesFromContentUriUseCase,
     private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,
     private val cancelUploadWithIdUseCase: CancelUploadWithIdUseCase,
-    private val deleteTransferWithIdUseCase: DeleteTransferWithIdUseCase,
     private val retryUploadFromSystemUseCase: RetryUploadFromSystemUseCase,
     private val retryUploadFromContentUriUseCase: RetryUploadFromContentUriUseCase,
     private val clearFailedTransfersUseCase: ClearFailedTransfersUseCase,
@@ -126,14 +124,6 @@ class TransfersViewModel(
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             cancelUploadsFromAccountUseCase.execute(
                 CancelUploadsFromAccountUseCase.Params(accountName = accountName)
-            )
-        }
-    }
-
-    fun deleteTransferWithId(id: Long) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            deleteTransferWithIdUseCase.execute(
-                DeleteTransferWithIdUseCase.Params(id = id)
             )
         }
     }

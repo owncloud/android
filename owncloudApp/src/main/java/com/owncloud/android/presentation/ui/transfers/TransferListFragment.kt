@@ -63,9 +63,6 @@ class TransferListFragment : Fragment() {
             cancel = { id ->
                 transfersViewModel.cancelTransferWithId(id)
             },
-            delete = { id ->
-                transfersViewModel.deleteTransferWithId(id)
-            },
             retry = { transfer: OCTransfer ->
                 if (transfer.lastResult == TransferResult.CREDENTIAL_ERROR) {
                     val parentActivity = requireActivity() as FileActivity
