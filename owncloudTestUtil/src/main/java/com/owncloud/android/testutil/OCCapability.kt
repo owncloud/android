@@ -51,5 +51,6 @@ val OC_CAPABILITY =
         filesBigFileChunking = CapabilityBooleanType.FALSE,
         filesUndelete = CapabilityBooleanType.FALSE,
         filesVersioning = CapabilityBooleanType.FALSE,
+        filesPrivateLinks = CapabilityBooleanType.TRUE,
         filesOcisProviders = null,
     )
