@@ -18,16 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.transfers.usecases
+package com.owncloud.android.usecases.transfers.uploads
 
+import androidx.work.WorkManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.transfers.TransferRepository
 
-class DeleteTransferWithIdUseCase(
+class ClearFailedTransfersUseCase(
+    private val workManager: WorkManager,
     private val transferRepository: TransferRepository,
-) : BaseUseCase<Unit, DeleteTransferWithIdUseCase.Params>() {
-    override fun run(params: Params) =
-        transferRepository.removeTransferById(params.id)
-
-    data class Params(val id: Long)
+) : BaseUseCase<Unit, Unit>() {
+    override fun run(params: Unit) {
+        val failedTransfers = transferRepository.getFailedTransfers()
+        failedTransfers.forEach { failedTransfer ->
+            workManager.cancelAllWorkByTag(failedTransfer.id.toString())
+        }
+        transferRepository.clearFailedTransfers()
+    }
 }
