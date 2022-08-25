@@ -93,5 +93,6 @@ public class ProviderMeta {
         public static final String CAPABILITIES_FILES_UNDELETE = "files_undelete";
         public static final String CAPABILITIES_FILES_VERSIONING = "files_versioning";
         public static final String CAPABILITIES_FILES_APP_PROVIDERS = "files_apps_providers";
+        public static final String CAPABILITIES_FILES_PRIVATE_LINKS = "files_private_links";
     }
 }

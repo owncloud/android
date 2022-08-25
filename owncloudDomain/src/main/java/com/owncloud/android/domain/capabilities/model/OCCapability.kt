@@ -48,6 +48,7 @@ data class OCCapability(
     val filesBigFileChunking: CapabilityBooleanType,
     val filesUndelete: CapabilityBooleanType,
     val filesVersioning: CapabilityBooleanType,
+    val filesPrivateLinks: CapabilityBooleanType,
     val filesOcisProviders: OcisProvider?,
 ) {
     fun isChunkingAllowed(): Boolean {

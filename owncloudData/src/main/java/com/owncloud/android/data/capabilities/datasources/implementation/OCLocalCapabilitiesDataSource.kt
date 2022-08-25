@@ -23,7 +23,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
-import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toModel
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
@@ -79,7 +78,8 @@ class OCLocalCapabilitiesDataSource(
                 filesBigFileChunking = CapabilityBooleanType.fromValue(filesBigFileChunking),
                 filesUndelete = CapabilityBooleanType.fromValue(filesUndelete),
                 filesVersioning = CapabilityBooleanType.fromValue(filesVersioning),
-                filesOcisProviders = ocisProvider
+                filesPrivateLinks = CapabilityBooleanType.fromValue(filesPrivateLinks),
+                filesOcisProviders = ocisProvider,
             )
 
         @VisibleForTesting
@@ -112,7 +112,8 @@ class OCLocalCapabilitiesDataSource(
                 filesBigFileChunking = filesBigFileChunking.value,
                 filesUndelete = filesUndelete.value,
                 filesVersioning = filesVersioning.value,
-                ocisProvider = filesOcisProviders
+                filesPrivateLinks = filesPrivateLinks.value,
+                ocisProvider = filesOcisProviders,
             )
     }
 }

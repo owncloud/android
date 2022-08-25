@@ -65,7 +65,8 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesBigFileChunking = CapabilityBooleanType.fromValue(remote.filesBigFileChunking.value),
                 filesUndelete = CapabilityBooleanType.fromValue(remote.filesUndelete.value),
                 filesVersioning = CapabilityBooleanType.fromValue(remote.filesVersioning.value),
-                filesOcisProviders = remote.remoteOcisProviders?.firstOrNull()?.toOCISProvider()
+                filesPrivateLinks = CapabilityBooleanType.fromValue(remote.filesPrivateLinks.value),
+                filesOcisProviders = remote.filesAppProviders?.firstOrNull()?.toOCISProvider()
             )
         }
 
@@ -108,7 +109,8 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesBigFileChunking = RemoteCapabilityBooleanType.fromValue(model.filesBigFileChunking.value)!!,
                 filesUndelete = RemoteCapabilityBooleanType.fromValue(model.filesUndelete.value)!!,
                 filesVersioning = RemoteCapabilityBooleanType.fromValue(model.filesVersioning.value)!!,
-                remoteOcisProviders = null
+                filesPrivateLinks = RemoteCapabilityBooleanType.fromValue(model.filesPrivateLinks.value)!!,
+                filesAppProviders = null
             )
         }
 

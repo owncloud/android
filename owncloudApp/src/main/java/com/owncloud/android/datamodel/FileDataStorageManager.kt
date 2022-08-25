@@ -39,6 +39,7 @@ import android.os.RemoteException
 import androidx.core.util.Pair
 import com.owncloud.android.MainApp
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE
 import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
 import com.owncloud.android.datamodel.OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
@@ -114,8 +115,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.util.ArrayList
-import java.util.HashSet
 import java.util.Vector
 
 class FileDataStorageManager {
@@ -1369,6 +1368,9 @@ class FileDataStorageManager {
             filesBigFileChunking = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_BIGFILECHUNKING)),
             filesUndelete = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_UNDELETE)),
             filesVersioning = CapabilityBooleanType.fromValue(c.getIntFromColumnOrThrow(CAPABILITIES_FILES_VERSIONING)),
+            filesPrivateLinks = c.getColumnIndex(ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_PRIVATE_LINKS).takeUnless { it < 0 }
+                ?.let { index -> CapabilityBooleanType.fromValue(c.getInt(index)) }
+                ?: CapabilityBooleanType.UNKNOWN,
             filesOcisProviders = null
         )
     }
