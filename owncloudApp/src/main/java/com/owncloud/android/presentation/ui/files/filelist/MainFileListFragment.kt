@@ -218,11 +218,14 @@ class MainFileListFragment : Fragment(),
             binding.syncProgressBar.isIndeterminate = it.isLoading
             binding.swipeRefreshMainFileList.isRefreshing = it.isLoading
 
-            it.getThrowableOrNull()?.parseError(
-                genericErrorMessage = getString(R.string.sync_folder_failed_content, mainFileListViewModel.getFile().fileName),
-                resources = resources,
-                showJustReason = false
-            )
+            it.getThrowableOrNull()?.let { throwable ->
+                val message = throwable.parseError(
+                    genericErrorMessage = getString(R.string.sync_folder_failed_content, mainFileListViewModel.getFile().fileName),
+                    resources = resources,
+                    showJustReason = false
+                )
+                showMessageInSnackbar(message)
+            }
         })
     }
 
