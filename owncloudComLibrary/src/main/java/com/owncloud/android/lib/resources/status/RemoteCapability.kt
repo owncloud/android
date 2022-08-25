@@ -67,7 +67,8 @@ data class RemoteCapability(
     var filesBigFileChunking: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesUndelete: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesVersioning: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
-    val remoteOcisProviders: List<RemoteOCISProvider>?,
+    val filesPrivateLinks: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    val filesAppProviders: List<RemoteOCISProvider>?,
 ) {
     /**
      * Enum for Boolean Type in capabilities, with values:

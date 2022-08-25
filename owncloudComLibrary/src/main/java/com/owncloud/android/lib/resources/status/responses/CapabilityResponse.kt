@@ -69,7 +69,8 @@ data class CapabilityResponse(
         filesBigFileChunking = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.bigfilechunking),
         filesUndelete = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.undelete),
         filesVersioning = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.versioning),
-        remoteOcisProviders = capabilities?.fileCapabilities?.appProviders?.map { it.toOCISProvider() },
+        filesPrivateLinks = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.privateLinks),
+        filesAppProviders = capabilities?.fileCapabilities?.appProviders?.map { it.toOCISProvider() },
         filesSharingFederationIncoming = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.incoming),
         filesSharingFederationOutgoing = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.outgoing),
         filesSharingUserProfilePicture = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingUser?.profilePicture),
@@ -163,6 +164,7 @@ data class FileCapabilities(
     val bigfilechunking: Boolean?,
     val undelete: Boolean?,
     val versioning: Boolean?,
+    val privateLinks: Boolean?,
     @Json(name = "app_providers")
     val appProviders: List<AppProvider>?
 )
