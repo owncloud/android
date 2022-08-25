@@ -473,6 +473,7 @@ class MainFileListFragment : Fragment(),
                 }
                 R.id.action_sync_file -> {
                     syncFiles(listOf(singleFile))
+                    return true
                 }
                 R.id.action_send_file -> {
                     //Obtain the file
