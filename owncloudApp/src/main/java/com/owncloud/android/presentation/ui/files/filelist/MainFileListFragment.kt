@@ -487,6 +487,12 @@ class MainFileListFragment : Fragment(),
                 }
                 R.id.action_set_available_offline -> {
                     fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(singleFile)))
+                    if (singleFile.isFolder) {
+                        mainFileListViewModel.syncFolder(singleFile)
+                    } else {
+                        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(singleFile, singleFile.owner))
+                    }
+                    return true
                 }
                 R.id.action_unset_available_offline -> {
                     fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(singleFile)))
@@ -524,6 +530,13 @@ class MainFileListFragment : Fragment(),
             }
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(checkedFiles))
+                checkedFiles.forEach { ocFile ->
+                    if (ocFile.isFolder) {
+                        mainFileListViewModel.syncFolder(ocFile)
+                    } else {
+                        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(ocFile, ocFile.owner))
+                    }
+                }
                 return true
             }
             R.id.action_unset_available_offline -> {
