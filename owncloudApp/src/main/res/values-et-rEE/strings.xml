@@ -24,6 +24,7 @@
   <string name="drawer_close">Sulge</string>
   <string name="drawer_open">Ava</string>
   <string name="drawer_loading_quota">Laadimise limiit</string>
+  <string name="drawer_quota"> %1$s kasutusel %2$s-st (%3$s %%)</string>
   <string name="drawer_unavailable_free_storage">%1$s kasutuses</string>
   <string name="drawer_unavailable_used_storage">Mahu kasutuse info pole saadaval</string>
   <string name="drawer_feedback">Tagasiside</string>
@@ -48,7 +49,10 @@
   <string name="prefs_lock_application_entries_30minutes">Pärast 30 minutit</string>
   <string name="prefs_lock_access_from_document_provider">Lukusta juurdepääs dokumendi pakkujalt</string>
   <string name="prefs_lock_access_from_document_provider_summary">Lukusta juurdepääs rakenduse kontodele teistest rakendustest üle Androidi failisirvija.</string>
+  <string name="prefs_touches_with_other_visible_windows">Puutub teiste nähtavate akendega</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">Luba puutumine kui vaade on häiritud mõne teise nähtava aknaga. Lülita sisse, et kasutada kergeid filtreerimisrakendusi.</string>
   <string name="confirmation_touches_with_other_windows_title">Oled sa kindel, et soovid seda võimalust aktiveerida?</string>
+  <string name="confirmation_touches_with_other_windows_message">Kastua seda funktsionaalsust omal vastutusel, pahatahtlik rakendus võib petta sind tegema soovimatut kasutades teisi vaateid.</string>
   <string name="prefs_subsection_picture_uploads">Laadi fotod automaatselt üles</string>
   <string name="prefs_subsection_picture_uploads_summary">Määra automaatselt üles laetavate piltide asukoht ja käitumine</string>
   <string name="prefs_subsection_video_uploads">Laadi videod automaatselt üles</string>
@@ -85,8 +89,10 @@
   <string name="prefs_remember_last_upload_location_summary">Jäta meelde viimase jagamise üleslaadimise asukoht</string>
   <string name="prefs_pattern">Mustri lukk</string>
   <string name="prefs_enable_logging">Luba logimine</string>
+  <string name="prefs_enable_logging_summary">Kui on aktiveeritud, siis logid võivad mõjutada jõudlust ja sisaldada tundlikku infot. Samas, logisid ei saadeta automaatselt ownCloudi serveritesse. Logide jagamine on ainult kasutaja vastutusel.</string>
   <string name="prefs_send_feedback">Saada tagasiside</string>
   <string name="prefs_app_version">Rakenduse versioon</string>
+  <string name="prefs_app_version_summary">%1$s %2$s versioon %3$s (%4$s)</string>
   <string name="pattern_enter_pattern">Palun sisesta oma muster</string>
   <string name="pattern_configure_pattern">Sisesta oma muster</string>
   <string name="pattern_remove_pattern">Eemalda oma muster</string>
@@ -100,6 +106,7 @@
   <string name="pattern_no_longer_required">Mustrit enam ei küsita</string>
   <string name="pattern_configure_your_pattern_explanation">Mustrit nõutakse iga kord kui rakendus käivitatakse</string>
   <string name="document_provider_locked">Lukustatud</string>
+  <string name="illegal_argument_exception_message">Kehtiv tegevus on vajalik edastatud kavatsuses</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Failid</string>
   <string name="bottom_nav_uploads">Üleslaadimised</string>
@@ -111,6 +118,7 @@
   <string name="auth_failure_snackbar">Autentimine ebaõnnestus</string>
   <string name="server_not_supported">Sinu serveri versioon on väiksem kui 10 ning pole seega toetatud, palun uuenda server uuemale versioonile</string>
   <string name="auth_failure_snackbar_action">Muuda kontot</string>
+  <string name="auth_oauth_failure">Ligipääsutõend on aegunud või kehtivuse kaotanud. Ligipääsemiseks logi uuesti sisse</string>
   <string name="auth_oauth_failure_snackbar_action">Logi sisse</string>
   <string name="auth_check_server">Kontrolli serverit</string>
   <string name="auth_host_url">Serveri aadress https://...</string>
@@ -126,7 +134,12 @@
   <string name="uploader_wrn_no_account_setup_btn_text">Seadista</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Lõpeta</string>
   <string name="uploader_error_title_no_file_to_upload">Ühtegi faili ei laaditud</string>
+  <string name="uploader_error_message_received_piece_of_text">%1$s ei saa üles laadida teksti failina.</string>
+  <string name="uploader_error_message_no_file_to_upload">Saadud andmetes ei olnud ühtegi kehtivat faili.</string>
   <string name="uploader_error_title_file_cannot_be_uploaded">Faili pole võimalik üles laadida</string>
+  <string name="uploader_error_message_read_permission_not_granted">%1$s-l ei ole lubatud saadud faili lugeda </string>
+  <string name="uploader_error_message_source_file_not_found">Üleslaetavat faili ei leitud tema askohast. Palun kontrolli, kas fail on olemas</string>
+  <string name="uploader_error_message_source_file_not_copied">Ajutisse kausta kopeerimisel tekkis viga. Palun proovi uuesti saata.</string>
   <string name="file_list_seconds_ago">sekundit tagasi</string>
   <string name="file_list_empty">Siin pole midagi. Lae midagi üles!</string>
   <string name="file_list_empty_available_offline">Võrguühenduseta saadaval olevaid faile ei ole.</string>
@@ -150,6 +163,7 @@
   <string name="filedetails_created">Loodud:</string>
   <string name="filedetails_modified">Muudetud:</string>
   <string name="filedetails_download">Lae alla</string>
+  <string name="filedetails_file_image_content_description">Faili tõmmis</string>
   <string name="filedetails_cancel_btn_content_description">Allalaadimise tühistamise nupp</string>
   <string name="filedetails_sync_file">Sünkrooni</string>
   <string name="filedetails_renamed_in_upload_msg">Fail nimetati üleslaadimise käigus ümber %1$ </string>
@@ -171,6 +185,7 @@
   <string name="change_password">Muuda parooli</string>
   <string name="delete_account">Eemalda konto</string>
   <string name="create_account">Loo konto</string>
+  <string name="upload_chooser_title">Lae üles kohast</string>
   <string name="uploader_info_dirname">Kausta nimi</string>
   <string name="uploader_upload_in_progress_ticker">Üleslaadimine...</string>
   <string name="uploader_upload_in_progress_content">%1$d%% üleslaadimine %2$s</string>
@@ -184,13 +199,18 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">Failinimi ei tohi olla tühi</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Failinimi ei tohi olla pikem kui %d märki</string>
   <string name="uploader_upload_text_filename_hint">Failinimi</string>
+  <string name="uploader_upload_camera_upload_files">Kaamera üleslaetavate falide üleslaadimine</string>
   <string name="uploader_upload_picture_upload_files">%d uus pilt laetakse üles </string>
   <string name="uploader_upload_video_upload_files">%d uus video laetakse üles</string>
   <string name="uploader_upload_camera_upload_source_path_error">Kaamera üleslaadimised ebaõnnestusid</string>
+  <string name="uploader_upload_picture_upload_error">Piltide üleslaadimise lähtetee ei ole enam kehtiv</string>
+  <string name="uploader_upload_video_upload_error">Videote üleslaadimise lähtetee ei ole enam kehtiv</string>
   <string name="uploader_upload_available_offline_files">Laen üles võrguühenduseta saadaval olevad failid</string>
+  <string name="uploader_upload_requested_from_wifi_files">Üleslaadimine on päritud wifi failide poolt</string>
   <string name="ssl_certificate_not_trusted">Serveri sertifikaat pole usaldusväärne</string>
   <string name="uploads_view_title">Üleslaadimised</string>
   <string name="uploads_view_group_current_uploads">Praegune</string>
+  <string name="uploads_view_group_failed_uploads">Ebaõnnestus (uuesti proovimiseks vajuta)</string>
   <string name="uploads_view_group_finished_uploads">Üles laetud</string>
   <string name="uploads_view_group_file_count">%d faili</string>
   <string name="uploads_view_group_file_count_single">%d fail</string>
@@ -314,6 +334,7 @@
   <string name="confirmation_remove_folder_alert">Kas sa tõesti soovid eemaldada %1$s ja selle sisu?</string>
   <string name="confirmation_remove_local">Ainult kohalik</string>
   <string name="confirmation_remove_account_alert">Kas soovid tõesti konto %1$s eemaldada?</string>
+  <string name="confirmation_remove_account_alert_camera_uploads">Sellel kontol on kaamera üleslaadimised lisatud, konto kustutamine keelab kaamera ülesaadimised. Kas soovid tõesti kustutada konto %1$s?</string>
   <string name="confirmation_remove_public_share_title">Eemalda link</string>
   <string name="confirmation_remove_private_share_title">Eemalda privaatne jagamine</string>
   <string name="confirmation_remove_share_message">Kas soovid tõesti eemaldada %1$s jagamist?</string>
@@ -359,6 +380,7 @@
   <string name="ssl_validator_label_validity_to">Saaja:</string>
   <string name="ssl_validator_label_signature">Allkiri:</string>
   <string name="ssl_validator_label_signature_algorithm">Algoritm:</string>
+  <string name="digest_algorithm_not_available">See digest-algoritm ei ole sinu telefonis saadaval.</string>
   <string name="ssl_validator_label_certificate_fingerprint">Sõrmejälg:</string>
   <string name="certificate_load_problem">Tekkis tõrge sertifikaadi laadimisel.</string>
   <string name="ssl_validator_null_cert">Ei suuda kuvada sertifikaati.</string>
@@ -372,7 +394,10 @@
   <string name="confirmation_disable_camera_uploads_title">Kinnita</string>
   <string name="confirmation_disable_pictures_upload_message">Kas oled kindel, et soovid selle võimaluse keelata? Ootel pilte ei laeta üles</string>
   <string name="confirmation_disable_videos_upload_message">Kas oled kindel, et soovid selle võimaluse keelata? Ootel videosid ei laeta üles</string>
+  <string name="proper_pics_folder_warning_camera_upload">Palun kontrolli, et valitud kaust oleks see, kuhu kaamera salvestab tehtud pildid. Vastasel juhul ei suuda funktsionaalsus su pilte tuvastada. Pea meeles, et fotod laetakse üles vähemalt 15 minutit peale nende tegemist.</string>
+  <string name="proper_videos_folder_warning_camera_upload">Palun kontrolli, et valitud kaust oleks see, kuhu kaamera salvestab tehtud videod. Vastasel juhul ei suuda funktsionaalsus su videosid tuvastada. Pea meeles, et videod laetakse üles vähemalt 15 minutit peale nende salvestamist.</string>
   <string name="conflict_title">Failikonflikt</string>
+  <string name="conflict_description">Failis %1$s on konflikt, vajuta lahendamiseks</string>
   <string name="conflict_message">Millist faili sa soovid säilitada? Kui valid mõlemad versioonid, siis lisatakse kohaliku faili nimele number.</string>
   <string name="conflict_keep_both">Säilita mõlemad</string>
   <string name="conflict_use_local_version">kohalik versioon</string>
@@ -382,6 +407,7 @@
   <string name="error__upload__local_file_not_copied">%1$s ei suudetud kopeerida kohalikku kataloogi %2$s</string>
   <string name="get_shares_error">Jagamiste saamine serverist ei olnud võimalik</string>
   <string name="get_sharees_error">Kasutajate ja gruppide saamine serverist ei olnud võimalik</string>
+  <string name="get_capabilities_error">Võimekuste päring serverist ei õnnestunud</string>
   <string name="share_link_no_support_share_api">Vabandust, server ei toeta jagamist. Palun kontakteeru 
 ⇥⇥administraatoriga.</string>
   <string name="share_link_file_error">Selle faili või kausta jagamine ei olnud võimalik</string>
@@ -392,6 +418,9 @@
   <string name="activity_chooser_send_file_title">Saada</string>
   <string name="copy_link">Kopeeri link</string>
   <string name="clipboard_text_copied">Kopeeritud lõikepuhvrisse</string>
+  <string name="clipboard_no_text_to_copy">Teksti lõikepuhvrisse kopeerimiseks ei olnud</string>
+  <string name="clipboard_uxexpected_error">Ootamatu viga lõikepuhvrisse kopeerimisel</string>
+  <string name="clipboard_label">Tekst kopeeriti %1$s-st</string>
   <string name="error_cant_bind_to_operations_service">Viga: ei suutnud operatsiooni lõpetada</string>
   <string name="network_error_socket_exception">Serveriga ühendumisel tekkis tõrge.</string>
   <string name="network_error_socket_timeout_exception">Serveri vastus võttis liiga kaua aega</string>
@@ -413,6 +442,7 @@
   <string name="auth_redirect_non_secure_connection_title">Turvalist ühendust suunatakse läbi turvamata ühenduse.</string>
   <string name="actionbar_logger">Logid</string>
   <string name="log_send_history_button">Saada ajalugu</string>
+  <string name="log_send_no_mail_app">Rakendust logide saatmiseks ei leitud. Palun paigalda mõni meilirakendus</string>
   <string name="log_send_mail_subject">%1$s Androidi rakenduse logid</string>
   <string name="log_progress_dialog_text">Andmete laadimine...</string>
   <string name="actionbar_select_all">Vali kõik</string>
@@ -485,6 +515,10 @@
   <string name="share_search">Otsi</string>
   <string name="search_users_and_groups_hint">Otsi kasutajaid ja gruppe</string>
   <string name="share_group_clarification">%1$s (grupp)</string>
+  <string name="share_remote_clarification">%1$s (eemal)</string>
+  <string name="share_known_remote_clarification">%1$s (kell %2$s)</string>
+  <string name="share_sharee_unavailable">Vabandust, sinu serveri versioon ei luba jagamist eri klientide vahel.
+        \nPalun võta ühendust oma süsteemihalduriga</string>
   <string name="share_privilege_can_share">saab jagada</string>
   <string name="share_privilege_can_edit">saab muuta</string>
   <string name="share_privilege_can_edit_create">loo</string>
@@ -495,24 +529,36 @@
   <string name="action_upload_retry">Proovi uuesti</string>
   <string name="action_upload_clear">Tühjenda</string>
   <string name="manage_space_title">Ruumi haldamine</string>
+  <string name="manage_space_description">Seaded, andmebaas ja serveri sertifikaadid %1$s andmetest kustutatakse jäädavalt.\n\nAllalaetud faile ei puudutata.\n\nSee protsess võib kesta mõnda aega.</string>
   <string name="manage_space_clear_data">Tühjenda andmed</string>
   <string name="manage_space_error">Mõningate failide kustutamine ebaõnnestus.</string>
   <string name="local_file_not_found_toast">Faili ei õnnestunud lokaalsest failisüsteemist leida</string>
   <string name="confirmation_remove_files_alert">Kas sa tõesti soovid valitud kirjeid eemaldada?</string>
+  <string name="confirmation_remove_folders_alert">Kas soovid tõesti eemaldada valitud üksused ja nende sisud?</string>
   <string name="failed_upload_quota_exceeded_text">Kontol pole piisavalt mahtu</string>
   <string name="auth_forbidden">Autentimine keelatud</string>
   <string name="actionbar_privacy_policy">Privaatsus</string>
   <string name="prefs_privacy_policy">Privaatsus</string>
   <string name="privacy_policy_error">Tekkis tõrge:</string>
   <string name="service_unavailable">Server pole saadaval</string>
+  <string name="streaming_certificate_error">Voogedastust ei õnnestunud alustada sest sinu serveri sertifikaat pole usaldusväärne. Faili allalaadimine algab automaatselt</string>
   <string name="streaming_unrecognized_input">Videoformaat ei ole toetatud</string>
+  <string name="streaming_file_not_found_error">See videofail ei ole enam serveris saadaval</string>
+  <string name="streaming_crossed_redirection">Voogedastus üle ristatud ümbersuunamiste ei ole lubatud</string>
+  <string name="previewing_video_common_error">Seda videot ei õnnestu taasluua</string>
+  <string name="previewing_video_not_supported">Video eelvaade ei ole sinu Androidi versiooni poolt toetatud. Faili allalaadimine algab automaatselt.</string>
+  <string name="streaming_position_not_available">\"Positsioon ei ole saadaval\"</string>
+  <string name="error_no_network_connection">Seade ei ole võrguga ühendatud</string>
   <string name="share_no_public_links">Avalikke linke pole veel loodud</string>
+  <string name="share_no_link_in_this_share">Sellel jagamisel ei ole linki</string>
   <string name="share_warning_about_forwarding_public_links">Igaüks, kellel on link, pääseb failile/kaustale ligi</string>
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Parool *</string>
   <string name="share_via_link_expiration_date_enforced_label">Aegumine *</string>
+  <string name="share_via_link_expiration_date_explanation_label">Avalik link ei aegu hiljem kui %1$d päeva peale loomist</string>
   <string name="share_via_link_default_name_template">%1$s link</string>
   <string name="share_via_link_empty_password">Parool on tühi</string>
+  <string name="private_link_info">Privaatne link: ainult inimesed, kellel on ligipääs failile/kaustale saavad seda kasutada. Kasuta seda ise püsilingina või suuna teisi failini jagamiste piires.</string>
   <string name="file_private_link_error">Privaatne link ei ole selle faili jaoks saadaval</string>
   <string name="download_notification_channel_name">Allalaadimised</string>
   <string name="download_notification_channel_description">Näita allalaetavat faili ja progressi</string>
@@ -522,6 +568,7 @@
   <string name="media_service_notification_channel_description">Vaata muusikapleierit</string>
   <string name="file_sync_notification_channel_name">Failide sünkroonimine</string>
   <string name="file_sync_notification_channel_description">Vaata failide sünkroonimise tulemust</string>
+  <string name="clicks_to_be_developer">Oled %1$d kliki kaugusel arendaja menüüde lubamisest</string>
   <string name="rate_dialog_title">Hinda %1$s rakendust!</string>
   <string name="rate_dialog_description">Kui sulle meeldib selle rakenduse kasutamine, siis kas leiad hetke hinnangu andmiseks? Sinu tagasiside on meile väga oluline.</string>
   <string name="button_no_thanks_name">TÄNAN, EI</string>
@@ -537,6 +584,8 @@
   <string name="welcome_feature_1_text">Sa saad kopeerida, liigutada, kustutada</string>
   <string name="welcome_feature_2_title">Jaga faile ja kaustasid</string>
   <string name="welcome_feature_2_text">Võid jagada privaatselt või avalikult</string>
+  <string name="welcome_feature_3_title">Mitmik-konto</string>
+  <string name="welcome_feature_3_text">Ühenda kõigi oma ownCloudi serveritega</string>
   <string name="welcome_feature_4_title">Kaamera üleslaadimised</string>
   <string name="welcome_feature_4_text">Sinu pildid/videod laeti automaatselt üles</string>
   <string name="welcome_feature_5_title">Video voogedastus</string>
@@ -544,13 +593,18 @@
   <string name="no_browser_installed_alert">Veebilehitsejat ei ole paigaldatud. Paigalda veebilehitseja, et lubada turvaline sisselogimine.</string>
   <string name="common_not_found">seda ei leitud</string>
   <string name="supports_oauth2_error">Ei olnud võimalik tuvastada, kas OAuth2 on toetatud</string>
+  <string name="get_base_url_error">Ei olnud võimalik tuvastada serveri põhiaadressi</string>
   <string name="prefs_http_logs">Logi HTTP-päringuid ja -vastuseid</string>
   <string name="prefs_logs_summary">Logid võivad sisaldada tundlikku infot. Logide jagamine teistega on ainult kasutaja vastutusel.</string>
   <string name="synchronizing_account">Sünkroniseerin kontot</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_explanation">Leiti %1$s andmeid sinu välisel andmekandjal. Need liigutatakse turvalisse salvestuskohta sinu seadmel. Allesjäänud failid eemaldatakse sinu väliselt andmekandjalt peale migratsiooni duplikaatide ja haavatavuse vältimiseks.</string>
+  <string name="scoped_storage_wizard_intro">Sinu rakendus on uuendatud. See rakenduse uuendus migreerib failid turvalisemasse kohta sinu seadmes. See ühekorde andmete migratsioon on nõutav ja võib võtta minuti või rohkem.</string>
   <string name="scoped_storage_wizard_intro_button">Alustame</string>
+  <string name="scoped_storage_wizard_not_enough_space_warning">⚠️ Vaba ruum sinu seadmes on hetkel piiratud. Mõned failid võisid jääda migreerimata, palun kontrolli, et kõik allalaetud failid on olemas kui protsess on lõpetatud.</string>
   <string name="scoped_storage_wizard_migrate_and_clean_button">Migreeri nüüd</string>
   <string name="scoped_storage_wizard_migration_completed">Migratsioon edukalt lõpule viidud. Su failid on turvalisemalt kui eales varem.</string>
+  <string name="scoped_storage_wizard_migration_completed_access_files_button">Ligipääs failidele</string>
   <string name="scoped_storage_wizard_migration_in_progress">Faile migreeritakse. Palun ära lülita seadet välja.</string>
   <string name="scoped_storage_wizard_migration_in_progress_button">Töötan... palun oota</string>
   <string name="scoped_storage_wizard_title">Rohkem turvalisust sinu failidele</string>
@@ -559,6 +613,7 @@
   <string name="security_enforced_first_option">Parooli lukk</string>
   <string name="security_enforced_second_option">Mustri lukk</string>
   <!--Release Notes-->
+  <string name="release_notes_header">Uut %1$s-s</string>
   <string name="release_notes_footer">Aitäh, et kasutad %1$s-i.\n❤</string>
   <string name="release_notes_proceed">Jätka</string>
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
