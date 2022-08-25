@@ -29,6 +29,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACC
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_PRIVATE_LINKS
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_UNDELETE
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_VERSIONING
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED
@@ -53,6 +54,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VER
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_STRING
+import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType.Companion.capabilityBooleanTypeUnknownString
 import com.owncloud.android.domain.capabilities.model.OCCapability
 
@@ -115,13 +117,15 @@ data class OCCapabilityEntity(
     val filesUndelete: Int,
     @ColumnInfo(name = CAPABILITIES_FILES_VERSIONING, defaultValue = capabilityBooleanTypeUnknownString)
     val filesVersioning: Int,
+    @ColumnInfo(name = CAPABILITIES_FILES_PRIVATE_LINKS, defaultValue = capabilityBooleanTypeUnknownString)
+    val filesPrivateLinks: Int,
     @Embedded
     val ocisProvider: OCCapability.OcisProvider?
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
     companion object {
-        fun fromCursor(cursor: Cursor): OCCapabilityEntity = cursor.use {
+        fun fromCursor(cursor: Cursor): OCCapabilityEntity = cursor.use { it ->
             OCCapabilityEntity(
                 it.getString(it.getColumnIndexOrThrow(CAPABILITIES_ACCOUNT_NAME)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_VERSION_MAYOR)),
@@ -150,6 +154,8 @@ data class OCCapabilityEntity(
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_FILES_BIGFILECHUNKING)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_FILES_UNDELETE)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_FILES_VERSIONING)),
+                it.getColumnIndex(CAPABILITIES_FILES_PRIVATE_LINKS).takeUnless { it < 0 }?.let { index -> it.getInt(index) }
+                    ?: CapabilityBooleanType.UNKNOWN.value,
                 null
             )
         }
