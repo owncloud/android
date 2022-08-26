@@ -21,6 +21,7 @@
 package com.owncloud.android.domain.transfers.model
 
 import android.os.Parcelable
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import kotlinx.parcelize.Parcelize
 import java.io.File
 
@@ -32,11 +33,11 @@ data class OCTransfer(
     val accountName: String,
     val fileSize: Long,
     var status: TransferStatus,
-    val localBehaviour: Int,
+    val localBehaviour: UploadBehavior,
     val forceOverwrite: Boolean,
     val transferEndTimestamp: Long? = null,
     val lastResult: TransferResult? = null,
-    val createdBy: Int,
+    val createdBy: UploadEnqueuedBy,
     val transferId: String? = null
 ) : Parcelable {
     init {

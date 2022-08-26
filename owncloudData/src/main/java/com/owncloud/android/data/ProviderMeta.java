@@ -119,5 +119,18 @@ public class ProviderMeta {
         public static final String FILE_IS_DOWNLOADING = "is_downloading";
         public static final String FILE_ETAG_IN_CONFLICT = "etag_in_conflict";
         public static final String FILE_PRIVATE_LINK = "private_link";
+
+        // Columns of list_of_uploads table
+        public static final String UPLOAD_LOCAL_PATH = "local_path";
+        public static final String UPLOAD_REMOTE_PATH = "remote_path";
+        public static final String UPLOAD_ACCOUNT_NAME = "account_name";
+        public static final String UPLOAD_FILE_SIZE = "file_size";
+        public static final String UPLOAD_STATUS = "status";
+        public static final String UPLOAD_LOCAL_BEHAVIOUR = "local_behaviour";
+        public static final String UPLOAD_FORCE_OVERWRITE = "force_overwrite";
+        public static final String UPLOAD_UPLOAD_END_TIMESTAMP = "upload_end_timestamp";
+        public static final String UPLOAD_LAST_RESULT = "last_result";
+        public static final String UPLOAD_CREATED_BY = "created_by";
+        public static final String UPLOAD_TRANSFER_ID = "transfer_id";
     }
 }

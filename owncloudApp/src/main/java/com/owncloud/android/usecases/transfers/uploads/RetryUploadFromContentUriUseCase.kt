@@ -25,7 +25,6 @@ import androidx.core.net.toUri
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.owncloud.android.domain.BaseUseCase
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.extensions.getWorkInfoByTags
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
@@ -57,7 +56,7 @@ class RetryUploadFromContentUriUseCase(
                     accountName = uploadToRetry.accountName,
                     contentUri = uploadToRetry.localPath.toUri(),
                     lastModifiedInSeconds = (uploadToRetry.transferEndTimestamp?.div(1000)).toString(),
-                    behavior = UploadBehavior.fromLegacyLocalBehavior(uploadToRetry.localBehaviour).name,
+                    behavior = uploadToRetry.localBehaviour.name,
                     uploadPath = uploadToRetry.remotePath,
                     uploadIdInStorageManager = params.uploadIdInStorageManager,
                     wifiOnly = false,

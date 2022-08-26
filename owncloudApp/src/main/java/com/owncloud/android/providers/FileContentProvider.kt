@@ -7,8 +7,10 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -60,17 +62,21 @@ import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataS
 import com.owncloud.android.data.migrations.CameraUploadsMigrationToRoom
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
-import com.owncloud.android.datamodel.UploadsStorageManager
+import com.owncloud.android.data.transfers.db.OCTransferEntity
+import com.owncloud.android.data.transfers.db.TransferDao
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.files.model.LIST_MIME_DIR
+import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.extensions.getLongFromColumnOrThrow
 import com.owncloud.android.extensions.getStringFromColumnOrThrow
-import com.owncloud.android.domain.files.model.LIST_MIME_DIR
 import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
+import com.owncloud.android.usecases.transfers.uploads.UploadFileFromSystemUseCase
 import org.koin.android.ext.android.inject
 import timber.log.Timber
+import java.io.File
 import java.io.FileNotFoundException
-import java.util.ArrayList
-import java.util.HashMap
 
 /**
  * The ContentProvider for the ownCloud App.
@@ -537,6 +543,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
             Timber.i("SQL : Entering in onUpgrade")
             var upgraded = false
+
             if (oldVersion == 1 && newVersion >= 2) {
                 Timber.i("SQL : Entering in the #1 ADD in onUpgrade")
                 db.execSQL(
@@ -546,6 +553,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 )
                 upgraded = true
             }
+
             if (oldVersion < 3 && newVersion >= 3) {
                 Timber.i("SQL : Entering in the #2 ADD in onUpgrade")
                 db.beginTransaction()
@@ -568,6 +576,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     db.endTransaction()
                 }
             }
+
             if (oldVersion < 4 && newVersion >= 4) {
                 Timber.i("SQL : Entering in the #3 ADD in onUpgrade")
                 db.beginTransaction()
@@ -774,6 +783,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     db.endTransaction()
                 }
             }
+
             if (oldVersion < 17 && newVersion >= 17) {
                 Timber.i("SQL : Entering in the #17 ADD in onUpgrade")
                 db.beginTransaction()
@@ -791,6 +801,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     db.endTransaction()
                 }
             }
+
             if (oldVersion < 18 && newVersion >= 18) {
                 Timber.i("SQL : Entering in the #18 ADD in onUpgrade")
                 db.beginTransaction()
@@ -806,6 +817,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     db.endTransaction()
                 }
             }
+
             if (oldVersion < 19 && newVersion >= 19) {
 
                 Timber.i("SQL : Entering in the #19 ADD in onUpgrade")
@@ -822,6 +834,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     db.endTransaction()
                 }
             }
+
             if (oldVersion < 20 && newVersion >= 20) {
 
                 Timber.i("SQL : Entering in the #20 ADD in onUpgrade")
@@ -1038,36 +1051,92 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
 
             if (oldVersion < 37 && newVersion >= 37) {
-                Timber.i("SQL : Entering in #37 to migrate ocfiles from SQLite to Room")
-                val cursor = db.query(
-                    ProviderTableMeta.FILE_TABLE_NAME,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null
-                )
+                Timber.i("SQL : Entering in #37 to migrate files and uploads from SQLite to Room")
+                db.beginTransaction()
 
-                if (cursor.moveToFirst()) {
-                    val files = mutableListOf<OCFileEntity>()
+                try {
+                    val cursorFiles = db.query(
+                        ProviderTableMeta.FILE_TABLE_NAME,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    )
 
-                    do {
-                        files.add(OCFileEntity.fromCursor(cursor))
-                    } while (cursor.moveToNext())
+                    if (cursorFiles.moveToFirst()) {
+                        val files = mutableListOf<OCFileEntity>()
 
-                    // Insert file list to the new files table in new database
-                    val ocFileDao: FileDao by inject()
-                    executors.diskIO().execute {
-                        for (file in files) {
-                            ocFileDao.mergeRemoteAndLocalFile(file)
+                        do {
+                            files.add(OCFileEntity.fromCursor(cursorFiles))
+                        } while (cursorFiles.moveToNext())
+
+                        // Insert file list to the new files table in new database
+                        val ocFileDao: FileDao by inject()
+                        executors.diskIO().execute {
+                            for (file in files) {
+                                ocFileDao.mergeRemoteAndLocalFile(file)
+                            }
                         }
                     }
 
                     // Drop old files table from old database
                     db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.FILE_TABLE_NAME + ";")
+
+                    val cursorUploads = db.query(
+                        ProviderTableMeta.UPLOADS_TABLE_NAME,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    )
+
+                    if (cursorUploads.moveToFirst()) {
+                        val uploads = mutableListOf<OCTransferEntity>()
+
+                        do {
+                            val upload = OCTransferEntity.fromCursor(cursorUploads)
+                            uploads.add(upload)
+                        } while (cursorUploads.moveToNext())
+
+                        // Insert uploads list to the new transfers table in new database
+                        val ocTransferDao: TransferDao by inject()
+                        executors.diskIO().execute {
+                            for (upload in uploads) {
+                                ocTransferDao.insert(upload)
+                                if (upload.status == TransferStatus.TRANSFER_QUEUED.value &&
+                                    upload.createdBy != UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_PICTURE.ordinal &&
+                                    upload.createdBy != UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_VIDEO.ordinal
+                                ) {
+                                    val localFile = File(upload.localPath)
+                                    val uploadFileFromSystemUseCase: UploadFileFromSystemUseCase by inject()
+                                    uploadFileFromSystemUseCase.execute(
+                                        UploadFileFromSystemUseCase.Params(
+                                            accountName = upload.accountName,
+                                            localPath = upload.localPath,
+                                            lastModifiedInSeconds = localFile.lastModified().div(1_000).toString(),
+                                            behavior = UploadBehavior.MOVE.toString(),
+                                            uploadPath = upload.remotePath,
+                                            uploadIdInStorageManager = upload.id
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    // Drop old uploads table from old database
+                    db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.UPLOADS_TABLE_NAME + ";")
+                    db.setTransactionSuccessful()
+                    upgraded = true
+                } finally {
+                    db.endTransaction()
                 }
             }
+
             if (!upgraded) {
                 Timber.i("SQL : OUT of the ADD in onUpgrade; oldVersion == $oldVersion, newVersion == $newVersion")
             }
@@ -1362,12 +1431,12 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             c = db.rawQuery(
                 "delete from " + ProviderTableMeta.UPLOADS_TABLE_NAME +
                         " where " + ProviderTableMeta.UPLOADS_STATUS + " == " +
-                        UploadsStorageManager.UploadStatus.UPLOAD_SUCCEEDED.value +
+                        LEGACY_UPLOAD_STATUS_SUCCEEDED_VALUE +
                         " and " + ProviderTableMeta._ID +
                         " not in (select " + ProviderTableMeta._ID +
                         " from " + ProviderTableMeta.UPLOADS_TABLE_NAME +
                         " where " + ProviderTableMeta.UPLOADS_STATUS + " == " +
-                        UploadsStorageManager.UploadStatus.UPLOAD_SUCCEEDED.value +
+                        LEGACY_UPLOAD_STATUS_SUCCEEDED_VALUE +
                         " order by " + ProviderTableMeta.UPLOADS_UPLOAD_END_TIMESTAMP +
                         " desc limit " + MAX_SUCCESSFUL_UPLOADS +
                         ")", null
@@ -1394,6 +1463,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         private const val QUOTAS = 8
 
         private const val MAX_SUCCESSFUL_UPLOADS = "30"
+
+        private const val LEGACY_UPLOAD_STATUS_SUCCEEDED_VALUE = 2
 
         private val fileProjectionMap = HashMap<String, String>()
 

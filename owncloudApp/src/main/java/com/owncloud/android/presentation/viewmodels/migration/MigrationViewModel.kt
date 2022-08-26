@@ -3,7 +3,9 @@
  *
  * @author David González Verdugo
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,15 +32,14 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.data.storage.LegacyStorageProvider
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.datamodel.FileDataStorageManager
-import com.owncloud.android.datamodel.OCUpload
-import com.owncloud.android.datamodel.UploadsStorageManager
+import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
+import com.owncloud.android.domain.transfers.usecases.UpdatePendingUploadsPathUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity.Companion.PREFERENCE_ALREADY_MIGRATED_TO_SCOPED_STORAGE
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.io.File
 
 /**
@@ -48,9 +49,10 @@ class MigrationViewModel(
     rootFolder: String,
     private val localStorageProvider: LocalStorageProvider,
     private val preferencesProvider: SharedPreferencesProvider,
-    private val uploadsStorageManager: UploadsStorageManager,
     private val contextProvider: ContextProvider,
     private val accountProvider: AccountProvider,
+    private val updatePendingUploadsPathUseCase: UpdatePendingUploadsPathUseCase,
+    private val getAllTransfersUseCase: GetAllTransfersUseCase,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
@@ -82,43 +84,18 @@ class MigrationViewModel(
     }
 
     private fun updatePendingUploadsPath() {
-        uploadsStorageManager.clearSuccessfulUploads()
-        val storedUploads: Array<OCUpload> = uploadsStorageManager.allStoredUploads
-        val uploadsWithUpdatedPath =
-            storedUploads.map {
-                it.apply { localPath = localPath.replace(legacyStorageDirectoryPath, localStorageProvider.getRootFolderPath()) }
-            }
-        uploadsWithUpdatedPath.forEach { uploadsStorageManager.updateUpload(it) }
-        clearUnrelatedTemporalFiles(uploadsWithUpdatedPath)
-    }
-
-    private fun clearUnrelatedTemporalFiles(pendingUploads: List<OCUpload>) {
-        val listOfAccounts = accountProvider.getLoggedAccounts()
-
-        listOfAccounts.forEach { account ->
-            val temporalFolderForAccount = File(localStorageProvider.getTemporalPath(account.name))
-
-            cleanTemporalRecursively(temporalFolderForAccount) { temporalFile ->
-                if (!pendingUploads.map { it.localPath }.contains(temporalFile.absolutePath)) {
-                    Timber.d("Found a temporary file that is not needed: $temporalFile, so let's delete it")
-                    temporalFile.delete()
-                }
-            }
+        updatePendingUploadsPathUseCase.execute(
+            UpdatePendingUploadsPathUseCase.Params(
+                oldDirectory = legacyStorageDirectoryPath,
+                newDirectory = localStorageProvider.getRootFolderPath()
+            )
+        )
+        val uploads = getAllTransfersUseCase.execute(Unit)
+        val accountsNames = mutableListOf<String>()
+        accountProvider.getLoggedAccounts().forEach { account ->
+            accountsNames.add(localStorageProvider.getTemporalPath(account.name))
         }
-    }
-
-    private fun cleanTemporalRecursively(
-        temporalFolder: File,
-        deleteFileInCaseItIsNotNeeded: (file: File) -> Unit
-    ) {
-        temporalFolder.listFiles()?.forEach { temporalFile ->
-            if (temporalFile.isDirectory) {
-                cleanTemporalRecursively(temporalFile, deleteFileInCaseItIsNotNeeded)
-            } else {
-                deleteFileInCaseItIsNotNeeded(temporalFile)
-            }
-
-        }
+        localStorageProvider.clearUnrelatedTemporalFiles(uploads, accountsNames)
     }
 
     private fun updateAlreadyDownloadedFilesPath() {

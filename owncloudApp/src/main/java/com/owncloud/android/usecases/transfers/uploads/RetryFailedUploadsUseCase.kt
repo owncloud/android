@@ -22,11 +22,9 @@
 package com.owncloud.android.usecases.transfers.uploads
 
 import android.content.Context
-import android.net.Uri
-import androidx.documentfile.provider.DocumentFile
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.transfers.TransferRepository
-import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.extensions.isContentUri
 import timber.log.Timber
 
 class RetryFailedUploadsUseCase(
@@ -44,16 +42,11 @@ class RetryFailedUploadsUseCase(
             return
         }
         failedUploads.forEach { upload ->
-            if (isContentUri(context = context, upload = upload)) {
+            if (upload.isContentUri(context)) {
                 retryUploadFromContentUriUseCase.execute(RetryUploadFromContentUriUseCase.Params(upload.id!!))
             } else {
                 retryUploadFromSystemUseCase.execute(RetryUploadFromSystemUseCase.Params(upload.id!!))
             }
         }
     }
-
-    private fun isContentUri(context: Context, upload: OCTransfer): Boolean {
-        return DocumentFile.isDocumentUri(context, Uri.parse(upload.localPath))
-    }
-
 }

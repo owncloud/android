@@ -32,7 +32,7 @@ import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus;
 import com.owncloud.android.db.UploadResult;
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.usecases.transfers.uploads.UploadEnqueuedBy;
+import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import timber.log.Timber;
 
