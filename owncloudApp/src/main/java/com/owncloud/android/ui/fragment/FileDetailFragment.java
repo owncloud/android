@@ -44,12 +44,14 @@ import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
+import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException;
 import com.owncloud.android.domain.utils.Event;
 import com.owncloud.android.extensions.FragmentExtKt;
 import com.owncloud.android.files.FileMenuFilter;
@@ -193,7 +195,14 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
                     builder.launchUrl(requireActivity(), Uri.parse(((UIResult.Success<String>) uiResult).getData()));
                 } else if (uiResult.isError()) {
-                    FragmentExtKt.showErrorInSnackbar(this, R.string.open_in_web_error, (((UIResult.Error<String>) uiResult).getError()));
+                    UIResult.Error<String> uiResultError = (((UIResult.Error<String>) uiResult));
+                    // Mimetypes not supported via open in web, send 500
+                    if (uiResultError.getError() instanceof InstanceNotConfiguredException) {
+                        String message = getString(R.string.open_in_web_error_generic) + " " + getString(R.string.error_reason) + " " + getString(R.string.open_in_web_error_not_supported);
+                        FragmentExtKt.showMessageInSnackbar(this, message, Snackbar.LENGTH_LONG);
+                    } else {
+                        FragmentExtKt.showErrorInSnackbar(this, R.string.open_in_web_error_generic, (((UIResult.Error<String>) uiResult).getError()));
+                    }
                 }
             }
         };
