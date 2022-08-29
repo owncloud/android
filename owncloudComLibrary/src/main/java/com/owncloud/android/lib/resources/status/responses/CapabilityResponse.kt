@@ -69,7 +69,7 @@ data class CapabilityResponse(
         filesBigFileChunking = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.bigfilechunking),
         filesUndelete = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.undelete),
         filesVersioning = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.versioning),
-        filesPrivateLinks = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.privateLinks),
+        filesPrivateLinks = capabilities?.fileCapabilities?.privateLinks?.let { CapabilityBooleanType.fromBooleanValue(it) } ?: CapabilityBooleanType.UNKNOWN,
         filesAppProviders = capabilities?.fileCapabilities?.appProviders?.map { it.toOCISProvider() },
         filesSharingFederationIncoming = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.incoming),
         filesSharingFederationOutgoing = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.outgoing),
