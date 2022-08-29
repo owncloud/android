@@ -28,6 +28,7 @@ import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.extensions.getWorkInfoByTags
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
+import timber.log.Timber
 
 class RetryUploadFromContentUriUseCase(
     private val workManager: WorkManager,
@@ -40,9 +41,7 @@ class RetryUploadFromContentUriUseCase(
 
         uploadToRetry ?: return
 
-        transferRepository.updateTransferStatusToEnqueuedById(params.uploadIdInStorageManager)
-
-        val workInfo = workManager.getWorkInfoByTags(
+        val workInfos = workManager.getWorkInfoByTags(
             listOf(
                 params.uploadIdInStorageManager.toString(),
                 uploadToRetry.accountName,
@@ -50,7 +49,9 @@ class RetryUploadFromContentUriUseCase(
             )
         )
 
-        if (workInfo.firstOrNull()?.state == WorkInfo.State.FAILED) {
+        if (workInfos.isEmpty() || workInfos.firstOrNull()?.state == WorkInfo.State.FAILED) {
+            transferRepository.updateTransferStatusToEnqueuedById(params.uploadIdInStorageManager)
+
             uploadFileFromContentUriUseCase.execute(
                 UploadFileFromContentUriUseCase.Params(
                     accountName = uploadToRetry.accountName,
@@ -63,6 +64,8 @@ class RetryUploadFromContentUriUseCase(
                     chargingOnly = false
                 )
             )
+        } else {
+            Timber.w("Upload $uploadToRetry is already in state ${workInfos.firstOrNull()?.state}. Won't be retried")
         }
     }
 
