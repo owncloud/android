@@ -45,6 +45,7 @@ import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_CAPABILITY
 import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.utils.AppTestUtil.OC_FILE
+import com.owncloud.android.utils.matchers.isDisplayed
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.CoreMatchers
@@ -101,6 +102,12 @@ class ShareFileFragmentTest {
     fun showPrivateLink() {
         loadShareFileFragment()
         onView(withId(R.id.getPrivateLinkButton)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun hidePrivateLink() {
+        loadShareFileFragment(capabilities = OC_CAPABILITY.copy(filesPrivateLinks = CapabilityBooleanType.FALSE))
+        R.id.getPrivateLinkButton.isDisplayed(false)
     }
 
     /******************************************************************************************************
