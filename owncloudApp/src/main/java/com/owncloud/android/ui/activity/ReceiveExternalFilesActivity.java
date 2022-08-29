@@ -39,7 +39,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -52,6 +51,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -126,7 +126,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
         SortBottomSheetFragment.SortDialogListener,
         SortOptionsView.CreateFolderListener,
         SearchView.OnQueryTextListener,
-        View.OnFocusChangeListener,
         ReceiveExternalFilesAdapter.OnSearchQueryUpdateListener,
         ISecurityEnforced,
         CreateFolderDialogFragment.CreateFolderListener {
@@ -140,7 +139,10 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private OCFile mFile;
     private SortOptionsView mSortOptionsView;
     private SearchView mSearchView;
-    private TextView mEmptyListMessage;
+
+    private ConstraintLayout mEmptyListView;
+    private ImageView mEmptyListImage;
+    private TextView mEmptyListTitle;
 
     private LocalBroadcastManager mLocalBroadcastManager;
     private SyncBroadcastReceiver mSyncBroadcastReceiver;
@@ -199,7 +201,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
             mSortOptionsView.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER);
         }
 
-        mEmptyListMessage = findViewById(R.id.empty_list_view);
+        mEmptyListView = findViewById(R.id.empty_list_view);
+        mEmptyListImage = findViewById(R.id.list_empty_dataset_icon);
+        mEmptyListImage.setImageResource(R.drawable.ic_folder);
+        mEmptyListTitle = findViewById(R.id.list_empty_dataset_title);
+        mEmptyListTitle.setText(R.string.file_list_empty_title_all_files);
 
         mListView = findViewById(android.R.id.list);
         mListView.setOnItemClickListener(this);
@@ -453,6 +459,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
             Button btnNewFolder = findViewById(R.id.uploader_cancel);
             btnNewFolder.setOnClickListener(this);
+
+            updateEmptyListMessage(getString(R.string.file_list_empty_title_all_files));
         }
     }
 
@@ -636,7 +644,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
         mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
         mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
-        mSearchView.setOnQueryTextFocusChangeListener(this);
         mSearchView.setOnQueryTextListener(this);
 
         menu.removeItem(menu.findItem(R.id.action_share_current_folder).getItemId());
@@ -738,19 +745,13 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     @Override
-    public void onFocusChange(View v, boolean hasFocus) {
-        if (hasFocus && mAdapter.getFiles().isEmpty()) {
-            updateEmptyListMessage(getString(R.string.local_file_list_search_with_no_matches));
-        } else if (!hasFocus && mAdapter.getFiles().isEmpty()) {
-            updateEmptyListMessage(getString(R.string.file_list_empty_subtitle_all_files));
-        } else {
-            updateEmptyListMessage(getString(R.string.empty));
-        }
-    }
-
-    @Override
     public void updateEmptyListMessage(String updateTxt) {
-        mEmptyListMessage.setText(updateTxt);
+        if (mAdapter.getFiles().isEmpty()) {
+            mEmptyListView.setVisibility(View.VISIBLE);
+        } else {
+            mEmptyListView.setVisibility(View.GONE);
+        }
+        mEmptyListTitle.setText(updateTxt);
     }
 
     @Override
