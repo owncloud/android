@@ -183,11 +183,11 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
         clearFilterBySearch();
         VectorExtKt.filterByQuery(mFiles, query);
 
-        if (mFiles.isEmpty()) {
+        if (mFiles.isEmpty() && !query.isEmpty()) {
             mOnSearchQueryUpdateListener.updateEmptyListMessage(
                     mContext.getString(R.string.local_file_list_search_with_no_matches));
         } else {
-            mOnSearchQueryUpdateListener.updateEmptyListMessage(mContext.getString(R.string.empty));
+            mOnSearchQueryUpdateListener.updateEmptyListMessage(mContext.getString(R.string.file_list_empty_title_all_files));
         }
 
         notifyDataSetChanged();

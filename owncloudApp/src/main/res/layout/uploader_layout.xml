@@ -55,13 +55,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/options_layout">
 
-                <TextView
+                <include
                     android:id="@+id/empty_list_view"
+                    layout="@layout/item_empty_dataset"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center_vertical|center_horizontal"
-                    android:text="@string/empty"
                     android:visibility="visible" />
 
                 <ListView
