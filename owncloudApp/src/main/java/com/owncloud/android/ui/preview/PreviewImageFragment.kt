@@ -50,6 +50,7 @@ import com.owncloud.android.databinding.PreviewImageFragmentBinding
 import com.owncloud.android.databinding.TopProgressBarBinding
 import com.owncloud.android.domain.files.model.MIME_SVG
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
@@ -59,7 +60,6 @@ import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFr
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
-import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 import java.io.File
 
@@ -252,7 +252,7 @@ class PreviewImageFragment : FileFragment() {
                 true
             }
             R.id.action_send_file -> {
-                mContainerActivity.fileOperationsHelper.sendDownloadedFile(file)
+                requireActivity().sendDownloadedFilesByShareSheet(listOf(file))
                 true
             }
             R.id.action_sync_file -> {

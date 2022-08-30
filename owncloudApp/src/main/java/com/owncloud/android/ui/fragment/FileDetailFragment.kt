@@ -44,6 +44,7 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager.AsyncThumbnailDrawa
 import com.owncloud.android.datamodel.ThumbnailsCacheManager.ThumbnailGenerationTask
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
+import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
@@ -268,7 +269,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
                     Timber.d("%s : File must be downloaded", file.remotePath)
                     (mContainerActivity as FileDisplayActivity).startDownloadForSending(file)
                 } else {
-                    mContainerActivity.fileOperationsHelper.sendDownloadedFile(file)
+                    requireActivity().sendDownloadedFilesByShareSheet(listOf(file))
                 }
                 true
             }

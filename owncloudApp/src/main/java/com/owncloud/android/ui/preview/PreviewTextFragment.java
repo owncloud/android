@@ -38,6 +38,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.extensions.ActivityExtKt;
+import com.owncloud.android.extensions.FragmentExtKt;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.presentation.ui.files.operations.FileOperation;
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
@@ -55,6 +57,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -374,7 +377,7 @@ public class PreviewTextFragment extends FileFragment {
                 return true;
             }
             case R.id.action_send_file: {
-                mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
+                ActivityExtKt.sendDownloadedFilesByShareSheet(requireActivity(), Collections.singletonList(getFile()));
                 return true;
             }
             case R.id.action_sync_file: {

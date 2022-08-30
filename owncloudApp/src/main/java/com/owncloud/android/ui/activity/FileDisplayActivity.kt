@@ -62,6 +62,7 @@ import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
+import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.interfaces.ISecurityEnforced
@@ -1061,7 +1062,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun sendDownloadedFile(file: OCFile) {
-        fileOperationsHelper.sendDownloadedFile(file)
+        sendDownloadedFilesByShareSheet(listOf(file))
     }
 
     private fun updateToolbar(chosenFileFromParam: OCFile?) {
@@ -1342,7 +1343,10 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun sendDownloadedFile() {
-        fileOperationsHelper.sendDownloadedFile(waitingToSend)
+        waitingToSend?.let {
+            sendDownloadedFilesByShareSheet(listOf(it))
+        }
+
         waitingToSend = null
     }
 
