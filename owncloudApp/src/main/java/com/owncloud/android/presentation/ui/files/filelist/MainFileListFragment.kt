@@ -50,6 +50,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.parseError
+import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
@@ -542,6 +543,9 @@ class MainFileListFragment : Fragment(),
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(checkedFiles))
                 return true
+            }
+            R.id.action_send_file -> {
+                requireActivity().sendDownloadedFilesByShareSheet(checkedFiles)
             }
             R.id.action_move -> {
                 val action = Intent(activity, FolderPickerActivity::class.java)

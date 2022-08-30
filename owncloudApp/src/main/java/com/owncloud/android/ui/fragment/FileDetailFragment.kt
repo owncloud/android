@@ -51,6 +51,7 @@ import com.owncloud.android.domain.exceptions.TooEarlyException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
+import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
@@ -312,7 +313,7 @@ class FileDetailFragment : FileFragment(), View.OnClickListener {
                     Timber.d("%s : File must be downloaded", file.remotePath)
                     (mContainerActivity as FileDisplayActivity).startDownloadForSending(file)
                 } else {
-                    mContainerActivity.fileOperationsHelper.sendDownloadedFile(file)
+                    requireActivity().sendDownloadedFilesByShareSheet(listOf(file))
                 }
                 true
             }
