@@ -69,9 +69,8 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncU
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
-import com.owncloud.android.domain.transfers.usecases.ClearFailedTransfersUseCase
+import com.owncloud.android.usecases.transfers.uploads.ClearFailedTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
-import com.owncloud.android.domain.transfers.usecases.DeleteTransferWithIdUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
 import com.owncloud.android.domain.transfers.usecases.UpdatePendingUploadsPathUseCase
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
@@ -168,8 +167,7 @@ val useCaseModule = module {
     factory { RetryUploadFromContentUriUseCase(get(), get(), get()) }
     factory { GetAllTransfersAsLiveDataUseCase(get()) }
     factory { CancelUploadWithIdUseCase(get(), get()) }
-    factory { DeleteTransferWithIdUseCase(get()) }
-    factory { ClearFailedTransfersUseCase(get()) }
+    factory { ClearFailedTransfersUseCase(get(), get()) }
     factory { RetryFailedUploadsUseCase(get(), get(), get(), get()) }
     factory { ClearSuccessfulTransfersUseCase(get()) }
     factory { CancelUploadsFromAccountUseCase(get(), get()) }
