@@ -25,13 +25,13 @@ package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.MainApp
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListViewModel
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
-import com.owncloud.android.presentation.viewmodels.files.FileDetailsViewModel
 import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
@@ -86,7 +86,7 @@ val viewModelModule = module {
     viewModel { ReleaseNotesViewModel(get(), get()) }
 
     viewModel { PreviewImageViewModel(get(), get(), get()) }
-    viewModel { FileDetailsViewModel(get(), get(), get(), get(), get()) }
+    viewModel { FileDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { FileOperationsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { (accountName: String, initialFolderToDisplay: OCFile) -> MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), accountName, initialFolderToDisplay) }
     viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }

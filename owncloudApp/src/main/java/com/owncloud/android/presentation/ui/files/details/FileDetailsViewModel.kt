@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,66 +16,77 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.presentation.viewmodels.files
+package com.owncloud.android.presentation.ui.files.details
 
 import android.accounts.Account
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
-import com.owncloud.android.extensions.isDownloadPending
-import com.owncloud.android.extensions.isUploadPending
+import com.owncloud.android.extensions.isDownload
+import com.owncloud.android.extensions.isUpload
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.preview.PreviewAudioFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
-import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.UUID
 
 class FileDetailsViewModel(
     private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
     private val getFileByIdUseCase: GetFileByIdUseCase,
-    private val getLiveDataForDownloadingFileUseCase: GetLiveDataForDownloadingFileUseCase,
+    getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
+    private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val workManager: WorkManager,
+    account: Account,
+    ocFile: OCFile,
 ) : ViewModel() {
 
-    val pendingDownloads = MediatorLiveData<WorkInfo?>()
+    private val account: StateFlow<Account> = MutableStateFlow(account)
+    val currentFile: StateFlow<OCFile> =
+        getFileByIdAsStreamUseCase.execute(GetFileByIdAsStreamUseCase.Params(ocFile.id!!))
+            .stateIn(
+                viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = ocFile
+            )
 
-    private val _ongoingDownload = MediatorLiveData<WorkInfo?>()
-    val ongoingDownload: LiveData<WorkInfo?> = _ongoingDownload
+    private val _ongoingTransferUUID = MutableLiveData<UUID>()
+    private val _ongoingTransfer = Transformations.switchMap(_ongoingTransferUUID) { transferUUID ->
+        workManager.getWorkInfoByIdLiveData(transferUUID)
+    }
+    val ongoingTransfer: LiveData<WorkInfo?> = _ongoingTransfer
 
-    fun startListeningToDownloadsFromAccountAndFile(accountName: String, file: OCFile) {
-        pendingDownloads.addSource(
-            getLiveDataForDownloadingFileUseCase.execute(GetLiveDataForDownloadingFileUseCase.Params(accountName, file))
-        ) { workInfo ->
-            if (workInfo != null) {
-                startListeningToWorkInfo(uuid = workInfo.id)
-                pendingDownloads.postValue(workInfo)
-            }
-        }
+    fun getCurrentFile() = currentFile.value
+    fun getAccount() = account.value
+
+    fun startListeningToWorkInfo(uuid: UUID?) {
+        uuid ?: return
+
+        _ongoingTransferUUID.postValue(uuid)
     }
 
-    private fun startListeningToWorkInfo(uuid: UUID) {
-        _ongoingDownload.addSource(
-            workManager.getWorkInfoByIdLiveData(uuid)
-        ) {
-            _ongoingDownload.postValue(it)
+    fun cancelCurrentTransfer() {
+        val currentTransfer = ongoingTransfer.value ?: return
+        if (currentTransfer.isUpload()) {
+            cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(currentFile.value))
+        } else if (currentTransfer.isDownload()) {
+            cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(currentFile.value))
         }
-    }
-
-    fun isDownloadPending(account: Account, file: OCFile): Boolean =
-        workManager.isDownloadPending(account, file)
-
-    fun cancelCurrentDownload(file: OCFile) {
-        cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(file))
     }
 
     // TODO: I don't like this at all. Move navigation to a common place.
@@ -99,7 +110,4 @@ class FileDetailsViewModel(
             }
         }
     }
-
-    fun isUploadPending(account: Account, file: OCFile): Boolean =
-        workManager.isUploadPending(account, file)
 }
