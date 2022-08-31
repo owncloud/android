@@ -46,6 +46,9 @@ class OCLocalFileDataSource(
     override fun getFileById(fileId: Long): OCFile? =
         fileDao.getFileById(fileId)?.toModel()
 
+    override fun getFileByIdAsStream(fileId: Long): Flow<OCFile> =
+        fileDao.getFileByIdAsStream(fileId).map { it.toModel() }
+
     override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? {
         fileDao.getFileByOwnerAndRemotePath(owner, remotePath)?.let { return it.toModel() }
 

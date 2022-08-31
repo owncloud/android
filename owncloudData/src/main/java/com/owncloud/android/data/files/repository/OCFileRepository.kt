@@ -115,6 +115,9 @@ class OCFileRepository(
     override fun getFileById(fileId: Long): OCFile? =
         localFileDataSource.getFileById(fileId)
 
+    override fun getFileByIdAsStream(fileId: Long): Flow<OCFile> =
+        localFileDataSource.getFileByIdAsStream(fileId)
+
     override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? =
         localFileDataSource.getFileByRemotePath(remotePath, owner)
 
