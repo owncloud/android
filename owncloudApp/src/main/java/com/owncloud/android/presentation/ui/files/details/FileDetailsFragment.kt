@@ -181,7 +181,7 @@ class FileDetailsFragment : FileFragment() {
                 true
             }
             R.id.action_cancel_sync -> {
-                (mContainerActivity as FileDisplayActivity).cancelTransference(fileDetailsViewModel.getCurrentFile())
+                fileDetailsViewModel.cancelCurrentTransfer()
                 true
             }
             R.id.action_download_file, R.id.action_sync_file -> {
@@ -252,7 +252,6 @@ class FileDetailsFragment : FileFragment() {
         }
     }
 
-
     private fun startListeningToOngoingTransfers() {
         fileDetailsViewModel.ongoingTransfer.observe(viewLifecycleOwner) { workInfo ->
             workInfo ?: return@observe
@@ -278,8 +277,6 @@ class FileDetailsFragment : FileFragment() {
     }
 
     private fun updateLayoutForRunningTransfer(workInfo: WorkInfo) {
-        showProgressView(isTransferGoingOn = true)
-
         binding.fdProgressText.text = if (workInfo.isDownload()) {
             getString(R.string.downloader_download_in_progress_ticker, fileDetailsViewModel.currentFile.value.fileName)
         } else { // Transfer is upload (?)
@@ -327,12 +324,15 @@ class FileDetailsFragment : FileFragment() {
     }
 
     /**
-     * Show or hide buttons for transfers.
+     * Show or hide progress for transfers.
      */
     private fun showProgressView(isTransferGoingOn: Boolean) {
         binding.fdProgressBar.isVisible = isTransferGoingOn
         binding.fdProgressText.isVisible = isTransferGoingOn
         binding.fdCancelBtn.isVisible = isTransferGoingOn
+
+        // Invalidate to reset the menu items -> Show/Hide Download/Sync/Cancel
+        requireActivity().invalidateOptionsMenu()
     }
 
     override fun updateViewForSyncInProgress() {
