@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:tint="@color/primary_dark"
+        app:tint="@color/actionbar_start_color"
         tools:src="@drawable/ic_folder" />
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_marginEnd="@dimen/standard_margin"
         android:gravity="center"
         android:padding="@dimen/standard_half_padding"
-        android:textColor="@color/primary_dark"
+        android:textColor="@color/actionbar_start_color"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/list_empty_dataset_sub_title"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,7 +44,7 @@
         android:layout_marginStart="@dimen/standard_margin"
         android:layout_marginEnd="@dimen/standard_margin"
         android:gravity="center"
-        android:textColor="@color/primary"
+        android:textColor="@color/actionbar_start_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
