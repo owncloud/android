@@ -79,12 +79,12 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.operations.RefreshFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
+import com.owncloud.android.presentation.UIResult;
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment;
 import com.owncloud.android.presentation.ui.files.SortOptionsView;
 import com.owncloud.android.presentation.ui.files.SortOrder;
 import com.owncloud.android.presentation.ui.files.SortType;
 import com.owncloud.android.presentation.ui.files.ViewType;
-import com.owncloud.android.presentation.UIResult;
 import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
 import com.owncloud.android.presentation.ui.files.operations.FileOperation;
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
@@ -768,7 +768,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             UIResult<Unit> uiResult = uiResultEvent.peekContent();
             if (uiResult.isSuccess()) {
                 updateDirectoryList();
-            } else {
+            } else if (uiResult.isError()) {
                 Throwable throwable = uiResult.getThrowableOrNull();
                 CharSequence errorMessage = ThrowableExtKt.parseError(throwable,
                         getResources().getString(R.string.create_dir_fail_msg),
