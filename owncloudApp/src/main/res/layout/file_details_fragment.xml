@@ -141,7 +141,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:text="@string/downloader_download_in_progress_ticker"
-            app:layout_constraintTop_toBottomOf="@id/fdModified" />
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/fdModified"
+            tools:visibility="visible" />
 
         <ProgressBar
             android:id="@+id/fdProgressBar"
@@ -149,10 +151,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/standard_margin"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/fdCancelBtn"
             app:layout_constraintEnd_toStartOf="@id/fdCancelBtn"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/fdCancelBtn" />
+            app:layout_constraintTop_toTopOf="@id/fdCancelBtn"
+            tools:visibility="visible" />
 
         <ImageButton
             android:id="@+id/fdCancelBtn"
@@ -161,9 +165,11 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/filedetails_cancel_btn_content_description"
             android:src="@drawable/ic_action_cancel_grey"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/fdProgressBar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fdProgressText" />
+            app:layout_constraintTop_toBottomOf="@id/fdProgressText"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

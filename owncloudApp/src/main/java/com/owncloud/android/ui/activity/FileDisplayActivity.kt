@@ -74,13 +74,13 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.ui.files.details.FileDetailsFragment
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
 import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel
 import com.owncloud.android.syncadapter.FileSyncAdapter
-import com.owncloud.android.ui.fragment.FileDetailFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.fragment.TaskRetainerFragment
 import com.owncloud.android.ui.helpers.FilesUploadHelper
@@ -381,7 +381,7 @@ class FileDisplayActivity : FileActivity(),
                 )
             }
             else -> {
-                FileDetailFragment.newInstance(file, account)
+                FileDetailsFragment.newInstance(file, account)
             }
         }
     }
@@ -879,7 +879,7 @@ class FileDisplayActivity : FileActivity(),
                 } else {
                     val file = file
                     var fragmentReplaced = false
-                    if (success && secondFragment is FileDetailFragment) {
+                    if (success && secondFragment is FileDetailsFragment) {
                         // start preview if previewable
                         fragmentReplaced = true
                         when {
@@ -972,9 +972,9 @@ class FileDisplayActivity : FileActivity(),
             val secondFragment = secondFragment
             if (secondFragment != null) {
                 var fragmentReplaced = false
-                if (secondFragment is FileDetailFragment) {
+                if (secondFragment is FileDetailsFragment) {
                     /// user was watching download progress
-                    val detailsFragment = secondFragment as FileDetailFragment?
+                    val detailsFragment = secondFragment as FileDetailsFragment?
                     val fileInFragment = detailsFragment?.file
                     if (fileInFragment != null && downloadedRemotePath != fileInFragment.remotePath) {
                         // the user browsed to other file ; forget the automatic preview
@@ -1043,8 +1043,7 @@ class FileDisplayActivity : FileActivity(),
      * @param file [OCFile] whose details will be shown
      */
     override fun showDetails(file: OCFile) {
-        val detailFragment = FileDetailFragment.newInstance(file, account)
-        setSecondFragment(detailFragment)
+        navigateToDetails(account = account, ocFile = file, syncFileAtOpen = false)
         updateToolbar(file)
         setFile(file)
     }
@@ -1457,12 +1456,20 @@ class FileDisplayActivity : FileActivity(),
      * @param file [OCFile] to sync and open.
      */
     fun startSyncThenOpen(file: OCFile) {
-        val detailFragment = FileDetailFragment.newInstance(file, account)
-        setSecondFragment(detailFragment)
-        fileWaitingToPreview = file
-        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
+        navigateToDetails(account = account, ocFile = file, syncFileAtOpen = true)
+//        fileWaitingToPreview = file
+//        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
         updateToolbar(file)
         setFile(file)
+    }
+
+    private fun navigateToDetails(account: Account, ocFile: OCFile, syncFileAtOpen: Boolean) {
+        val detailsFragment = FileDetailsFragment.newInstance(
+            fileToDetail = ocFile,
+            account = account,
+            syncFileAtOpen = syncFileAtOpen
+        )
+        setSecondFragment(detailsFragment)
     }
 
     /**
