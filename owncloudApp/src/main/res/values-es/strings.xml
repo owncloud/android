@@ -576,7 +576,7 @@
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionado</item>
     <item quantity="many">%d seleccionados</item>
-    <item quantity="other">%d seleccionado</item>
+    <item quantity="other">%d seleccionados</item>
   </plurals>
   <!--Welcome to oC intro features-->
   <string name="welcome_feature_skip_button">Omitir</string>
