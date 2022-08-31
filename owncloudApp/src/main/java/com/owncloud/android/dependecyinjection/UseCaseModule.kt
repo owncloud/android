@@ -48,6 +48,7 @@ import com.owncloud.android.domain.files.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.DisableThumbnailsForFileUseCase
+import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCase
@@ -71,7 +72,6 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncU
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
-import com.owncloud.android.usecases.transfers.uploads.ClearFailedTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
@@ -88,11 +88,12 @@ import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUs
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccountUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
+import com.owncloud.android.usecases.transfers.uploads.ClearFailedTransfersUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
-import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccountUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileFromSystemUseCase
@@ -122,6 +123,7 @@ val useCaseModule = module {
     factory { CreateFolderAsyncUseCase(get()) }
     factory { CopyFileUseCase(get()) }
     factory { GetFileByIdUseCase(get()) }
+    factory { GetFileByIdAsStreamUseCase(get()) }
     factory { GetFileByRemotePathUseCase(get()) }
     factory { GetFolderContentUseCase(get()) }
     factory { GetFolderContentAsStreamUseCase(get()) }

@@ -68,6 +68,8 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
     }
 
     companion object {
+        const val FRAGMENT_TAG_CONFIRMATION = "REMOVE_CONFIRMATION_FRAGMENT"
+
         private const val ARG_TARGET_FILES = "TARGET_FILES"
 
         /**
