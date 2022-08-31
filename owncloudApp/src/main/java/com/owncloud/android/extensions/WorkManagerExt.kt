@@ -52,9 +52,8 @@ fun WorkManager.getRunningUploadsWorkInfosLiveData(tags: List<String>): LiveData
  *
  * @return true if the download is pending.
  */
-fun WorkManager.isDownloadPending(account: Account, file: OCFile): Boolean = false
-// TODO: https://github.com/owncloud/android/issues/2872#issuecomment-817572474
-//  this.getWorkInfoByTags(getTagsForDownload(file, account)).any { !it.state.isFinished }
+fun WorkManager.isDownloadPending(account: Account, file: OCFile): Boolean =
+    this.getWorkInfoByTags(getTagsForDownload(file, account.name)).any { !it.state.isFinished }
 
 /**
  * Check if an upload is pending. It could be enqueued, uploading or blocked.
