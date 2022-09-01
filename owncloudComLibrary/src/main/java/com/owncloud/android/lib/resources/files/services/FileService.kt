@@ -28,4 +28,5 @@ import com.owncloud.android.lib.resources.Service
 
 interface FileService : Service {
     fun checkPathExistence(path: String, isUserLogged: Boolean): RemoteOperationResult<Boolean>
+    fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): RemoteOperationResult<String>
 }

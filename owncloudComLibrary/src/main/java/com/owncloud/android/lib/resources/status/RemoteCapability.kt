@@ -66,7 +66,9 @@ data class RemoteCapability(
     // Files
     var filesBigFileChunking: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesUndelete: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
-    var filesVersioning: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN
+    var filesVersioning: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    val filesPrivateLinks: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
+    val filesAppProviders: List<RemoteOCISProvider>?,
 ) {
     /**
      * Enum for Boolean Type in capabilities, with values:
@@ -98,4 +100,13 @@ data class RemoteCapability(
             }
         }
     }
+
+    data class RemoteOCISProvider(
+        val enabled: Boolean,
+        val version: String,
+        val appsUrl: String?,
+        val openUrl: String?,
+        val openWebUrl: String?,
+        val newUrl: String?,
+    )
 }

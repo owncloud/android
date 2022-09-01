@@ -26,6 +26,7 @@ package com.owncloud.android.lib.resources.files.services.implementation
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
+import com.owncloud.android.lib.resources.files.GetUrlToOpenInWebRemoteOperation
 import com.owncloud.android.lib.resources.files.services.FileService
 
 class OCFileService(override val client: OwnCloudClient) :
@@ -35,4 +36,8 @@ class OCFileService(override val client: OwnCloudClient) :
             remotePath = path,
             isUserLoggedIn = isUserLogged
         ).execute(client)
+
+    override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): RemoteOperationResult<String> =
+        GetUrlToOpenInWebRemoteOperation(openWithWebEndpoint = openWebEndpoint, fileId = fileId).execute(client)
+
 }
