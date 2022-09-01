@@ -25,6 +25,7 @@ package com.owncloud.android.ui.fragment;
 
 import android.accounts.Account;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,15 +39,25 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.Observer;
+import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
+import com.owncloud.android.domain.capabilities.model.OCCapability;
+import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException;
+import com.owncloud.android.domain.utils.Event;
+import com.owncloud.android.extensions.FragmentExtKt;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
 import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
+import com.owncloud.android.presentation.UIResult;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
@@ -60,8 +71,11 @@ import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import com.owncloud.android.utils.PreferenceUtils;
+import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * This Fragment is used to display the details about a file.
@@ -78,6 +92,8 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
     private static final String ARG_FILE = "FILE";
     private static final String ARG_ACCOUNT = "ACCOUNT";
+
+    private FileDetailViewModel mFileDetailViewModel;
 
     /**
      * Public factory method to create new FileDetailFragment instances.
@@ -154,6 +170,43 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
 
         updateFileDetails(false, false);
         return mView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        @NotNull Lazy<FileDetailViewModel> fileDetailViewModelLazy = inject(FileDetailViewModel.class);
+        mFileDetailViewModel = fileDetailViewModelLazy.getValue();
+
+        final Observer<OCCapability> ocCapabilityObserver = ocCapability -> {
+            if (ocCapability != null && ocCapability.isOpenInWebAllowed()) {
+                // Show or hide openInWeb option. Hidden by default.
+                requireActivity().invalidateOptionsMenu();
+            }
+        };
+        mFileDetailViewModel.getCapabilities().observe(getViewLifecycleOwner(), ocCapabilityObserver);
+
+        final Observer<Event<UIResult<String>>> openInWebObserver = event -> {
+            UIResult<String> uiResult = event.getContentIfNotHandled();
+            if (uiResult != null) {
+                if (uiResult.isSuccess()) {
+                    CustomTabsIntent builder = new CustomTabsIntent.Builder().build();
+
+                    builder.launchUrl(requireActivity(), Uri.parse(((UIResult.Success<String>) uiResult).getData()));
+                } else if (uiResult.isError()) {
+                    UIResult.Error<String> uiResultError = (((UIResult.Error<String>) uiResult));
+                    // Mimetypes not supported via open in web, send 500
+                    if (uiResultError.getError() instanceof InstanceNotConfiguredException) {
+                        String message = getString(R.string.open_in_web_error_generic) + " " + getString(R.string.error_reason) + " " + getString(R.string.open_in_web_error_not_supported);
+                        FragmentExtKt.showMessageInSnackbar(this, message, Snackbar.LENGTH_LONG);
+                    } else {
+                        FragmentExtKt.showErrorInSnackbar(this, R.string.open_in_web_error_generic, (((UIResult.Error<String>) uiResult).getError()));
+                    }
+                }
+            }
+        };
+        mFileDetailViewModel.getOpenInWebUriLiveData().observe(getViewLifecycleOwner(), openInWebObserver);
     }
 
     @Override
@@ -242,7 +295,7 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             mf.filter(menu, false, false, false, false);
         }
 
-        // additional restriction for this fragment 
+        // additional restriction for this fragment
         MenuItem item = menu.findItem(R.id.action_see_details);
         if (item != null) {
             item.setVisible(false);
@@ -267,6 +320,12 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
+        }
+
+        item = menu.findItem(R.id.action_open_in_web);
+        if (item != null) {
+            item.setVisible(mFileDetailViewModel.isOpenInWebAvailable());
+            item.setEnabled(mFileDetailViewModel.isOpenInWebAvailable());
         }
     }
 
@@ -325,6 +384,9 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
             case R.id.action_unset_available_offline: {
                 mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
                 return true;
+            }
+            case R.id.action_open_in_web: {
+                mFileDetailViewModel.openInWeb(getFile().getRemoteId());
             }
             default:
                 return super.onOptionsItemSelected(item);

@@ -27,7 +27,6 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.hasSibling
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -45,6 +44,9 @@ import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_CAPABILITY
 import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.utils.AppTestUtil.OC_FILE
+import com.owncloud.android.utils.matchers.assertVisibility
+import com.owncloud.android.utils.matchers.isDisplayed
+import com.owncloud.android.utils.matchers.withText
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.CoreMatchers
@@ -88,19 +90,25 @@ class ShareFileFragmentTest {
     @Test
     fun showHeader() {
         loadShareFileFragment()
-        onView(withId(R.id.shareFileName)).check(matches(withText("img.png")))
+        R.id.shareFileName.withText("img.png")
     }
 
     @Test
     fun fileSizeVisible() {
         loadShareFileFragment()
-        onView(withId(R.id.shareFileSize)).check(matches(isDisplayed()))
+        R.id.shareFileSize.isDisplayed(displayed = true)
     }
 
     @Test
     fun showPrivateLink() {
         loadShareFileFragment()
-        onView(withId(R.id.getPrivateLinkButton)).check(matches(isDisplayed()))
+        R.id.getPrivateLinkButton.isDisplayed(displayed = true)
+    }
+
+    @Test
+    fun hidePrivateLink() {
+        loadShareFileFragment(capabilities = OC_CAPABILITY.copy(filesPrivateLinks = CapabilityBooleanType.FALSE))
+        R.id.getPrivateLinkButton.isDisplayed(displayed = false)
     }
 
     /******************************************************************************************************
@@ -222,8 +230,7 @@ class ShareFileFragmentTest {
             shares = publicShareList
         )
 
-        onView(withId(R.id.shareViaLinkSection))
-            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        R.id.shareViaLinkSection.assertVisibility(ViewMatchers.Visibility.GONE)
     }
 
     @Test
@@ -236,8 +243,7 @@ class ShareFileFragmentTest {
             shares = listOf(publicShareList[0])
         )
 
-        onView(withId(R.id.addPublicLinkButton))
-            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        R.id.addPublicLinkButton.assertVisibility(ViewMatchers.Visibility.VISIBLE)
     }
 
     @Test
@@ -250,8 +256,7 @@ class ShareFileFragmentTest {
             shares = listOf(publicShareList[0])
         )
 
-        onView(withId(R.id.addPublicLinkButton))
-            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
+        R.id.addPublicLinkButton.assertVisibility(ViewMatchers.Visibility.INVISIBLE)
     }
 
     @Test
@@ -263,8 +268,7 @@ class ShareFileFragmentTest {
             shares = listOf(publicShareList[0])
         )
 
-        onView(withId(R.id.addPublicLinkButton))
-            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
+        R.id.addPublicLinkButton.assertVisibility(ViewMatchers.Visibility.INVISIBLE)
     }
 
     /******************************************************************************************************
@@ -278,11 +282,9 @@ class ShareFileFragmentTest {
                 filesSharingApiEnabled = CapabilityBooleanType.FALSE
             )
         )
-        onView(withId(R.id.shareWithUsersSection))
-            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        R.id.shareWithUsersSection.assertVisibility(ViewMatchers.Visibility.GONE)
 
-        onView(withId(R.id.shareViaLinkSection))
-            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        R.id.shareViaLinkSection.assertVisibility(ViewMatchers.Visibility.GONE)
     }
 
     @Test
@@ -292,7 +294,7 @@ class ShareFileFragmentTest {
                 error = Throwable("It was not possible to retrieve the shares from server")
             )
         )
-        onView(withId(com.google.android.material.R.id.snackbar_text)).check(matches(withText(R.string.get_shares_error)))
+        com.google.android.material.R.id.snackbar_text.withText(R.string.get_shares_error)
     }
 
     private fun loadShareFileFragment(

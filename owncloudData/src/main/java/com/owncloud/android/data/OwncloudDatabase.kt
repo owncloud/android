@@ -23,6 +23,7 @@ package com.owncloud.android.data
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -51,6 +52,9 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
         OCCapabilityEntity::class,
         UserQuotaEntity::class,
         FolderBackUpEntity::class,
+    ],
+    autoMigrations = [
+        AutoMigration(from = 36, to = 37),
     ],
     version = ProviderMeta.DB_VERSION,
     exportSchema = true
