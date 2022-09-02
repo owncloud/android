@@ -131,9 +131,6 @@
   <string name="uploader_error_message_source_file_not_found">Файл для загрузки не был найден в положенном месте. Пожалуйста проверьте, существует ли файл.</string>
   <string name="uploader_error_message_source_file_not_copied">Произошла ошибка во время копирования этого файла во временную папку. Пожалуйста попробуйте послать заново.</string>
   <string name="file_list_seconds_ago">несколько секунд назад</string>
-  <string name="file_list_empty">Здесь ничего нет. Загрузите что-нибудь!</string>
-  <string name="file_list_empty_available_offline">Нет доступных автономных файлов.</string>
-  <string name="file_list_empty_shared_by_links">Отсутствуют файлы общего доступа по ссылке</string>
   <string name="file_list_loading">Загрузка...</string>
   <string name="file_list_no_app_for_file_type">Не найдено приложение для этого типа файла</string>
   <string name="local_file_list_empty">В этом каталоге нет файлов.</string>

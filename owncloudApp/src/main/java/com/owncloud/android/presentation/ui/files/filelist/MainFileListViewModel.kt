@@ -27,7 +27,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkManager
-import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.FileDataStorageManager.Companion.ROOT_PARENT_ID
 import com.owncloud.android.datamodel.OCFile.ROOT_PATH
@@ -265,17 +264,6 @@ class MainFileListViewModel(
             syncMode = SYNC_FOLDER_RECURSIVELY
         )
     )
-
-    fun getMessageForEmptyList(pickingAFolder: Boolean = false): String {
-        if (pickingAFolder) return contextProvider.getString(R.string.file_list_empty_moving)
-
-        val stringId = when (fileListOption.value) {
-            FileListOption.ALL_FILES -> R.string.file_list_empty
-            FileListOption.AV_OFFLINE -> R.string.file_list_empty_available_offline
-            FileListOption.SHARED_BY_LINK -> R.string.file_list_empty_shared_by_links
-        }
-        return contextProvider.getString(stringId)
-    }
 
     private fun composeFileListUiStateForThisParams(
         currentFolderDisplayed: OCFile,

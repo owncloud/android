@@ -29,7 +29,6 @@
   <string name="uploader_wrn_no_account_title">Kein Benutzerkonto gefunden</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Schließen</string>
   <string name="file_list_seconds_ago">Sekunden zuvor</string>
-  <string name="file_list_empty">Es ist nichts hier. Lade etwas hoch!</string>
   <string name="local_file_list_empty">Es sind keine Dateien in diesem Ordner.</string>
   <string name="file_list_folder">Ordner</string>
   <string name="file_list_folders">Ordner</string>

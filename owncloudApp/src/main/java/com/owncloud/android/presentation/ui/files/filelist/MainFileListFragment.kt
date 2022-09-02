@@ -51,6 +51,9 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.extensions.toDrawableRes
+import com.owncloud.android.extensions.toSubtitleStringRes
+import com.owncloud.android.extensions.toTitleStringRes
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.adapters.filelist.FileListAdapter
@@ -207,7 +210,8 @@ class MainFileListFragment : Fragment(),
         collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
             if (fileListUiState !is MainFileListViewModel.FileListUiState.Success) return@collectLatestLifecycleFlow
 
-            updateFileListData(fileListUiState.folderContent, fileListUiState.fileListOption)
+            fileListAdapter.updateFileList(filesToAdd = fileListUiState.folderContent, fileListOption = fileListUiState.fileListOption)
+            showOrHideEmptyView(fileListUiState)
         }
 
         mainFileListViewModel.syncFolder.observe(viewLifecycleOwner, Event.EventObserver {
@@ -222,11 +226,6 @@ class MainFileListFragment : Fragment(),
         })
     }
 
-    private fun updateFileListData(filesList: List<OCFile>, fileListOption: FileListOption) {
-        fileListAdapter.updateFileList(filesToAdd = filesList, fileListOption = fileListOption)
-        showOrHideEmptyView(filesList)
-    }
-
     fun navigateToFolderId(folderId: Long) {
         mainFileListViewModel.navigateToFolderId(folderId)
     }
@@ -235,14 +234,15 @@ class MainFileListFragment : Fragment(),
         mainFileListViewModel.updateFolderToDisplay(newFolderToDisplay = folder)
     }
 
-    private fun showOrHideEmptyView(filesList: List<OCFile>) {
-        val isFileListEmpty = filesList.isEmpty()
-        binding.recyclerViewMainFileList.isVisible = !isFileListEmpty
+    private fun showOrHideEmptyView(fileListUiState: MainFileListViewModel.FileListUiState.Success) {
+        binding.recyclerViewMainFileList.isVisible = fileListUiState.folderContent.isNotEmpty()
 
         with(binding.emptyDataParent) {
-            root.isVisible = isFileListEmpty
-            listEmptyDatasetSubTitle.text = mainFileListViewModel.getMessageForEmptyList(isPickingAFolder())
-            // We should use a different icon and title for each [FileListOption]
+            root.isVisible = fileListUiState.folderContent.isEmpty()
+
+            listEmptyDatasetIcon.setImageResource(fileListUiState.fileListOption.toDrawableRes())
+            listEmptyDatasetTitle.setText(fileListUiState.fileListOption.toTitleStringRes())
+            listEmptyDatasetSubTitle.setText(fileListUiState.fileListOption.toSubtitleStringRes())
         }
     }
 
@@ -419,7 +419,7 @@ class MainFileListFragment : Fragment(),
      *
      * @return The currently viewed OCFile
      */
-    fun getCurrentFile(): OCFile? {
+    fun getCurrentFile(): OCFile {
         return mainFileListViewModel.getFile()
     }
 

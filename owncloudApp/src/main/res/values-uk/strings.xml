@@ -102,7 +102,6 @@
   <string name="uploader_error_message_source_file_not_found">Файл для надсилання не знайдено у вказаному місці. Будь ласка, перевірте, чи існує файл.</string>
   <string name="uploader_error_message_source_file_not_copied">Сталася помилка під час копіювання файлу до тимчасової теки. Спробуйте надіслати знову.</string>
   <string name="file_list_seconds_ago">секунд тому</string>
-  <string name="file_list_empty">Тут нічого немає. Відвантажте що-небудь!</string>
   <string name="file_list_loading">Завантаження…</string>
   <string name="file_list_no_app_for_file_type">Не знайдено додатка для типу файла</string>
   <string name="local_file_list_empty">В цій теці немає файлів.</string>

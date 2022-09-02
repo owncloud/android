@@ -36,7 +36,6 @@
   <string name="uploader_wrn_no_account_setup_btn_text">Agordi</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Forlasi</string>
   <string name="file_list_seconds_ago">sekundoj antaŭe</string>
-  <string name="file_list_empty">Nenio estas ĉi tie. Alŝutu ion!</string>
   <string name="file_list_loading">Ŝargante…</string>
   <string name="local_file_list_empty">Estas neniu dosiero en ĉi tiu dosierujo.</string>
   <string name="file_list_folder">dosierujo</string>

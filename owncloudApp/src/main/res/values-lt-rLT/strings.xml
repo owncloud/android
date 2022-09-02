@@ -100,7 +100,6 @@
   <string name="uploader_error_message_source_file_not_found">Įkeliamas failas nerastas nurodytoje vietoje. Prašome patikrinti, ar failas egzistuoja.</string>
   <string name="uploader_error_message_source_file_not_copied">Įvyko klaida kopijuojant failą į laikinąjį katalogą. Pabandykite siųsti iš naujo. </string>
   <string name="file_list_seconds_ago">prieš sekundę</string>
-  <string name="file_list_empty">Čia tuščia. Įkelkite ką nors!</string>
   <string name="file_list_loading">Įkeliama...</string>
   <string name="file_list_no_app_for_file_type">Nerasta programėlė šiam failo tipui</string>
   <string name="local_file_list_empty">Šiame aplanke nėra failų.</string>

@@ -76,6 +76,7 @@
     <string name="prefs_show_hidden_files">Show hidden files</string>
     <string name="prefs_log_open_logs_list_view">Log files</string>
     <string name="prefs_log_no_logs_list_view">Empty log folder!</string>
+    <string name="prefs_log_empty_subtitle">Enable logging and log files will show up here</string>
     <string name="prefs_log_title">Enable logging</string>
     <string name="prefs_log_summary">This is used to log problems</string>
     <string name="prefs_log_title_history">Logging history</string>
@@ -146,9 +147,12 @@
     <string name="uploader_error_message_source_file_not_found">File to upload was not found in its location. Please check whether the file exists.</string>
     <string name="uploader_error_message_source_file_not_copied">An error occurred while copying the file to a temporary folder. Please try to send again.</string>
     <string name="file_list_seconds_ago">seconds ago</string>
-    <string name="file_list_empty">Nothing in here. Upload something!</string>
-    <string name="file_list_empty_available_offline">There are no available offline files.</string>
-    <string name="file_list_empty_shared_by_links">No files have been shared by link.</string>
+    <string name="file_list_empty_title_all_files">No files in here</string>
+    <string name="file_list_empty_title_available_offline">No available offline files</string>
+    <string name="file_list_empty_title_shared_by_links">No shared links</string>
+    <string name="file_list_empty_subtitle_all_files">Upload some content or sync with your devices!</string>
+    <string name="file_list_empty_subtitle_available_offline">Files and folders you mark as available offline will show up here</string>
+    <string name="file_list_empty_subtitle_shared_by_links">Files and folders you share by link will show up here</string>
     <string name="file_list_loading">Loading&#8230;</string>
     <string name="file_list_no_app_for_file_type">No app found for file type</string>
     <string name="file_list_no_app_for_perform_action">No app found for this action</string>
@@ -156,6 +160,7 @@
     <string name="local_file_list_empty_just_folders">There are no folders in this folder.</string>
     <string name="local_file_list_search_with_no_matches">No matches for this search</string>
     <string name="upload_list_empty">No uploads available.</string>
+    <string name="upload_list_empty_subtitle">Upload something and it will show up here</string>
     <string name="file_list_folder">folder</string>
     <string name="file_list_folders">folders</string>
     <string name="file_list_file">file</string>

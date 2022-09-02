@@ -62,7 +62,6 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="uploader_error_message_source_file_not_found">Lo fiquièr que televersar es pas trobat dens aquesta plaça. Perfavor verificatz se lo fiquièr exista.</string>
   <string name="uploader_error_message_source_file_not_copied">Una error s\'es produita al moment de la còpia d\'aqueste fichièr dens un dorsièr temporari. Perfavor assajatz un aut cop.</string>
   <string name="file_list_seconds_ago">i a qualques segondas</string>
-  <string name="file_list_empty">I a pas res aicí ! Mandatz doncas quicòm :)</string>
   <string name="file_list_loading">Cargament…</string>
   <string name="local_file_list_empty">Cap de fichièr es pas present dins aqueste dorsièr.</string>
   <string name="local_file_list_empty_just_folders">I a pas de dorsièrs dins aqueste dorsièr.</string>

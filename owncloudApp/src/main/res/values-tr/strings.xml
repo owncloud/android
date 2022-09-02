@@ -119,9 +119,6 @@
   <string name="uploader_error_message_source_file_not_found">Yüklenecek dosya belirtilen konumda bulunamadı. Lütfen dosyanın mevcut olup olmadığını kontrol edin.</string>
   <string name="uploader_error_message_source_file_not_copied">Dosya geçici bir klasöre kopyalanırken hata oluştu. Lütfen tekrar göndermeyi deneyin.</string>
   <string name="file_list_seconds_ago">saniyeler önce</string>
-  <string name="file_list_empty">Burada hiçbir şey yok. Bir şeyler yükleyin!</string>
-  <string name="file_list_empty_available_offline">Erişilebilir hiçbir çevrimdışı dosya yok.</string>
-  <string name="file_list_empty_shared_by_links">Bağlantı ile paylaşılan hiçbir dosya yok.</string>
   <string name="file_list_loading">Yükleniyor...</string>
   <string name="file_list_no_app_for_file_type">Dosya türü için hiçbir uygulama bulunamadı</string>
   <string name="local_file_list_empty">Bu klasörde dosya yok.</string>

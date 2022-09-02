@@ -61,7 +61,6 @@
   <string name="uploader_error_message_source_file_not_found">Không tìm thấy file cần tải lên. Mời kiểm tra lại</string>
   <string name="uploader_error_message_source_file_not_copied">Có lỗi khi copy file sang thư mục tạm. Mời thử lại</string>
   <string name="file_list_seconds_ago">vài giây trước</string>
-  <string name="file_list_empty">Không có gì ở đây .Hãy tải lên một cái gì đó !</string>
   <string name="file_list_loading">Đang tải…</string>
   <string name="file_list_no_app_for_file_type">Không có ứng dụng để mở file</string>
   <string name="local_file_list_empty">Không có file nào trong thư mục này</string>
