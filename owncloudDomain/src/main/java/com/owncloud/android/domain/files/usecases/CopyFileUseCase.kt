@@ -20,26 +20,37 @@ package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.exceptions.CopyIntoDescendantException
+import com.owncloud.android.domain.exceptions.CopyIntoSameFolderException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
+/**
+ * Copy a list of files with the SAME hierarchy to a target folder.
+ *
+ * Copying files to a descendant or copying files to the same directory will throw an exception.
+ */
 class CopyFileUseCase(
     private val fileRepository: FileRepository
 ) : BaseUseCaseWithResult<Unit, CopyFileUseCase.Params>() {
 
     override fun run(params: Params) {
-
-        require(params.listOfFilesToCopy.isNotEmpty())
-
-        val listWithoutDescendantItems = params.listOfFilesToCopy.dropWhile {
-            params.targetFolder.remotePath.startsWith(it.remotePath)
-        }
-        if (listWithoutDescendantItems.isEmpty()) throw CopyIntoDescendantException()
+        validateOrThrowException(params.listOfFilesToCopy, params.targetFolder)
 
         return fileRepository.copyFile(
-            listOfFilesToCopy = listWithoutDescendantItems,
+            listOfFilesToCopy = params.listOfFilesToCopy,
             targetFolder = params.targetFolder
         )
+    }
+
+    @Throws(IllegalArgumentException::class, CopyIntoSameFolderException::class, CopyIntoDescendantException::class)
+    fun validateOrThrowException(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile) {
+        require(listOfFilesToCopy.isNotEmpty())
+
+        if (listOfFilesToCopy.any { targetFolder.remotePath.startsWith(it.remotePath) }) {
+            throw CopyIntoDescendantException()
+        } else if (listOfFilesToCopy.any { it.parentId == targetFolder.id }) {
+            throw CopyIntoSameFolderException()
+        }
     }
 
     data class Params(
