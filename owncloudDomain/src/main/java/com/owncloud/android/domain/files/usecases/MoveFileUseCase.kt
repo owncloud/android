@@ -20,30 +20,41 @@ package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.exceptions.MoveIntoDescendantException
+import com.owncloud.android.domain.exceptions.MoveIntoSameFolderException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
+/**
+ * Move a list of files with the SAME hierarchy to a target folder.
+ *
+ * Moving files to a descendant or moving files to the same directory will throw an exception.
+ */
 class MoveFileUseCase(
     private val fileRepository: FileRepository
 ) : BaseUseCaseWithResult<Unit, MoveFileUseCase.Params>() {
 
     override fun run(params: Params) {
-
-        require(params.listOfFilesToMove.isNotEmpty())
-
-        val listWithoutDescendantItems = params.listOfFilesToMove.dropWhile {
-            params.targetFile.remotePath.startsWith(it.remotePath)
-        }
-        if (listWithoutDescendantItems.isEmpty()) throw MoveIntoDescendantException()
+        validateOrThrowException(params.listOfFilesToMove, params.targetFolder)
 
         return fileRepository.moveFile(
-            listOfFilesToMove = listWithoutDescendantItems,
-            targetFile = params.targetFile
+            listOfFilesToMove = params.listOfFilesToMove,
+            targetFile = params.targetFolder
         )
+    }
+
+    @Throws(IllegalArgumentException::class, MoveIntoSameFolderException::class, MoveIntoDescendantException::class)
+    fun validateOrThrowException(listOfFilesToMove: List<OCFile>, targetFolder: OCFile) {
+        require(listOfFilesToMove.isNotEmpty())
+
+        if (listOfFilesToMove.any { targetFolder.remotePath.startsWith(it.remotePath) }) {
+            throw MoveIntoDescendantException()
+        } else if (listOfFilesToMove.any { it.parentId == targetFolder.id }) {
+            throw MoveIntoSameFolderException()
+        }
     }
 
     data class Params(
         val listOfFilesToMove: List<OCFile>,
-        val targetFile: OCFile
+        val targetFolder: OCFile
     )
 }
