@@ -19,6 +19,7 @@
 package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.exceptions.CopyIntoDescendantException
+import com.owncloud.android.domain.exceptions.CopyIntoSameFolderException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.testutil.OC_FILE
@@ -33,8 +34,8 @@ class CopyFileUseCaseTest {
     private val repository: FileRepository = spyk()
     private val useCase = CopyFileUseCase(repository)
     private val useCaseParams = CopyFileUseCase.Params(
-        listOfFilesToCopy = listOf(OC_FILE.copy(remotePath = "/video.mp4")),
-        targetFolder = OC_FOLDER
+        listOfFilesToCopy = listOf(OC_FILE.copy(remotePath = "/video.mp4", parentId = 101)),
+        targetFolder = OC_FOLDER.copy(id = 100)
     )
 
     @Test
@@ -80,9 +81,23 @@ class CopyFileUseCaseTest {
         )
         val useCaseResult = useCase.execute(useCaseParams)
 
-        assertTrue(useCaseResult.isSuccess)
+        assertTrue(useCaseResult.isError)
 
-        verify(exactly = 1) { repository.copyFile(any(), any()) }
+        verify(exactly = 0) { repository.copyFile(any(), any()) }
+    }
+
+    @Test
+    fun `copy file - ko - single copy into same folder`() {
+        val useCaseParams = CopyFileUseCase.Params(
+            listOfFilesToCopy = listOf(element = OC_FOLDER.copy(remotePath = "/Photos/", parentId = 100)),
+            targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/", id = 100)
+        )
+        val useCaseResult = useCase.execute(useCaseParams)
+
+        assertTrue(useCaseResult.isError)
+        assertTrue(useCaseResult.getThrowableOrNull() is CopyIntoSameFolderException)
+
+        verify(exactly = 0) { repository.moveFile(any(), any()) }
     }
 
     @Test
