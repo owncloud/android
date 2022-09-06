@@ -74,6 +74,7 @@
                 android:id="@+id/recyclerView_main_file_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scrollbars="vertical"
                 tools:listitem="@layout/item_file_list" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
