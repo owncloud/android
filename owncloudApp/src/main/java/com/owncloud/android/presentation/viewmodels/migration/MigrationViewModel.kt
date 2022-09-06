@@ -31,13 +31,12 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.data.storage.LegacyStorageProvider
 import com.owncloud.android.data.storage.LocalStorageProvider
-import com.owncloud.android.datamodel.FileDataStorageManager
+import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.UpdatePendingUploadsPathUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity.Companion.PREFERENCE_ALREADY_MIGRATED_TO_SCOPED_STORAGE
 import com.owncloud.android.providers.AccountProvider
-import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
 import java.io.File
@@ -49,9 +48,9 @@ class MigrationViewModel(
     rootFolder: String,
     private val localStorageProvider: LocalStorageProvider,
     private val preferencesProvider: SharedPreferencesProvider,
-    private val contextProvider: ContextProvider,
     private val accountProvider: AccountProvider,
     private val updatePendingUploadsPathUseCase: UpdatePendingUploadsPathUseCase,
+    private val updateAlreadyDownloadedFilesPathUseCase: UpdateAlreadyDownloadedFilesPathUseCase,
     private val getAllTransfersUseCase: GetAllTransfersUseCase,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
@@ -99,15 +98,12 @@ class MigrationViewModel(
     }
 
     private fun updateAlreadyDownloadedFilesPath() {
-        val listOfAccounts = accountProvider.getLoggedAccounts()
-
-        if (listOfAccounts.isEmpty()) return
-
-        listOfAccounts.forEach { account ->
-            val fileStorageManager = FileDataStorageManager(contextProvider.getContext(), account, contextProvider.getContext().contentResolver)
-
-            fileStorageManager.migrateLegacyToScopedPath(legacyStorageDirectoryPath, localStorageProvider.getRootFolderPath())
-        }
+        updateAlreadyDownloadedFilesPathUseCase.execute(
+            UpdateAlreadyDownloadedFilesPathUseCase.Params(
+                oldDirectory = legacyStorageDirectoryPath,
+                newDirectory = localStorageProvider.getRootFolderPath()
+            )
+        )
     }
 
     fun moveToNextState() {
