@@ -338,6 +338,10 @@ class OCFileRepository(
         localFileDataSource.updateAvailableOfflineStatusForFile(ocFile, newAvailableOfflineStatus)
     }
 
+    override fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String) {
+        localFileDataSource.updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory, newDirectory)
+    }
+
     private fun removeLocalFolderRecursively(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         val folderContent = localFileDataSource.getFolderContent(ocFile.id!!)
 
