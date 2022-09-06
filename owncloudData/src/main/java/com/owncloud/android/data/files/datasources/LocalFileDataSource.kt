@@ -47,4 +47,5 @@ interface LocalFileDataSource {
 
     fun disableThumbnailsForFile(fileId: Long)
     fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
+    fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
 }

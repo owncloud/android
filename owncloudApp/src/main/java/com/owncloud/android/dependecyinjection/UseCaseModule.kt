@@ -59,6 +59,7 @@ import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
+import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -72,6 +73,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServ
 import com.owncloud.android.usecases.transfers.uploads.ClearFailedTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
+import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.UpdatePendingUploadsPathUseCase
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
@@ -166,12 +168,14 @@ val useCaseModule = module {
     factory { RetryUploadFromSystemUseCase(get(), get(), get()) }
     factory { RetryUploadFromContentUriUseCase(get(), get(), get()) }
     factory { GetAllTransfersAsLiveDataUseCase(get()) }
+    factory { GetAllTransfersUseCase(get()) }
     factory { CancelUploadWithIdUseCase(get(), get()) }
     factory { ClearFailedTransfersUseCase(get(), get()) }
     factory { RetryFailedUploadsUseCase(get(), get(), get(), get()) }
     factory { ClearSuccessfulTransfersUseCase(get()) }
     factory { CancelUploadsFromAccountUseCase(get(), get()) }
     factory { UpdatePendingUploadsPathUseCase(get()) }
+    factory { UpdateAlreadyDownloadedFilesPathUseCase(get()) }
 
     // User
     factory { GetStoredQuotaUseCase(get()) }

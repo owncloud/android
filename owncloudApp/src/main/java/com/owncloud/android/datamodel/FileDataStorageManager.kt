@@ -58,10 +58,7 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSI
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_STRING
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.CONTENT_URI_CAPABILITIES
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_ACCOUNT_OWNER
-import com.owncloud.android.db.ProviderMeta.ProviderTableMeta.FILE_PATH
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.files.model.OCFile
@@ -385,51 +382,6 @@ class FileDataStorageManager : KoinComponent {
 //                }
 //            }
 //        }
-    }
-
-    fun migrateLegacyToScopedPath(
-        legacyStorageDirectoryPath: String,
-        rootStorageDirectoryPath: String,
-    ) {
-        val filesToUpdatePath: MutableList<OCFile> = mutableListOf()
-
-        val cursor: Cursor? =
-            try {
-                performQuery(
-                    uri = CONTENT_URI,
-                    projection = null,
-                    sortOrder = "$FILE_PATH ASC ",
-                    selection = "$FILE_ACCOUNT_OWNER = ? ",
-                    selectionArgs = arrayOf(account.name),
-                )
-            } catch (e: RemoteException) {
-                Timber.e(e)
-                null
-            }
-
-        cursor?.let { allFilesCursor ->
-            if (allFilesCursor.moveToFirst()) {
-                do {
-                    val ocFile = createFileInstance(allFilesCursor)
-                    ocFile?.let {
-                        if (it.storagePath != null) {
-                            filesToUpdatePath.add(it)
-                        }
-                    }
-                } while (allFilesCursor.moveToNext())
-            }
-            cursor.close()
-        }
-
-        val filesWithPathUpdated = filesToUpdatePath.map {
-            it.apply { storagePath = storagePath?.replace(legacyStorageDirectoryPath, rootStorageDirectoryPath) }
-        }
-
-        filesWithPathUpdated.forEach {
-            saveFile(it)
-        }
-
-        Timber.d("Updated path for ${filesWithPathUpdated.size} downloaded files")
     }
 
     // TODO: New_arch: Remove this and call usecase inside FilesViewModel

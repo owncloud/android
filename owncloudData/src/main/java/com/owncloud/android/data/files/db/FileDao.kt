@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.files.db
 
 import androidx.room.Dao
@@ -230,6 +233,9 @@ abstract class FileDao {
         }
     }
 
+    @Query(UPDATE_FILES_STORAGE_DIRECTORY)
+    abstract fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
+
     private fun updateFolderWithNewAvailableOfflineStatus(ocFolderId: Long, newAvailableOfflineStatus: Int) {
         updateFileWithAvailableOfflineStatus(ocFolderId, newAvailableOfflineStatus)
 
@@ -410,5 +416,10 @@ abstract class FileDao {
             "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "SET needsToUpdateThumbnail = false " +
                     "WHERE id = :fileId"
+
+        private const val UPDATE_FILES_STORAGE_DIRECTORY =
+            "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "SET storagePath = `REPLACE`(storagePath, :oldDirectory, :newDirectory) " +
+                    "WHERE storagePath IS NOT NULL"
     }
 }
