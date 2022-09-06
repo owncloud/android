@@ -1,0 +1,6 @@
+Enhancement: Open in web
+
+oCIS feature, to open files with mime types supported by the server in the web browser using collaborative or specific tools
+
+https://github.com/owncloud/android/issues/3672
+https://github.com/owncloud/android/pull/3737
