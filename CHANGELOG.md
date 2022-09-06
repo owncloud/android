@@ -1,3 +1,45 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v2.21.1...master
+
+Summary
+-------
+
+* Enhancement - Shares from propfind: [#3711](https://github.com/owncloud/android/issues/3711)
+* Enhancement - Open in web: [#3672](https://github.com/owncloud/android/issues/3672)
+* Enhancement - Private link capability: [#3732](https://github.com/owncloud/android/issues/3732)
+
+Details
+-------
+
+* Enhancement - Shares from propfind: [#3711](https://github.com/owncloud/android/issues/3711)
+
+   Added a new property to the propfind, so that, we can get if the files in a folder are shared
+   directly with just one request. Previously, a propfind and another additional request were
+   needed to the shares api to retrieve the shares of the folder.
+
+   https://github.com/owncloud/android/issues/3711
+   https://github.com/owncloud/android-library/pull/496
+
+* Enhancement - Open in web: [#3672](https://github.com/owncloud/android/issues/3672)
+
+   OCIS feature, to open files with mime types supported by the server in the web browser using
+   collaborative or specific tools
+
+   https://github.com/owncloud/android/issues/3672
+   https://github.com/owncloud/android/pull/3737
+
+* Enhancement - Private link capability: [#3732](https://github.com/owncloud/android/issues/3732)
+
+   Private link capability is now respected. Option is shown/hidden depending on its value
+
+   https://github.com/owncloud/android/issues/3732
+   https://github.com/owncloud/android/pull/3738
+   https://github.com/owncloud/android-library/pull/505
+
 Changelog for ownCloud Android Client [2.21.1] (2022-06-15)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.21.1 relevant to
