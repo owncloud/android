@@ -154,8 +154,13 @@ class OCLocalFileDataSource(
     override fun disableThumbnailsForFile(fileId: Long) {
         fileDao.disableThumbnailsForFile(fileId)
     }
+
     override fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus) {
         fileDao.updateAvailableOfflineStatusForFile(ocFile, newAvailableOfflineStatus.ordinal)
+    }
+
+    override fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String) {
+        fileDao.updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory, newDirectory)
     }
 
     companion object {
