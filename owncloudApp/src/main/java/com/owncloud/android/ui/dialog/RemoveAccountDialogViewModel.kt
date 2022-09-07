@@ -52,10 +52,10 @@ class RemoveAccountDialogViewModel(
                 accountName == cameraUploadsConfiguration?.videoUploadsConfiguration?.accountName
     }
 
-    fun removeAccount(account: Account) {
+    fun removeAccount(accountName: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             removeAccountUseCase.execute(
-                RemoveAccountUseCase.Params(account = account)
+                RemoveAccountUseCase.Params(accountName = accountName)
             )
         }
     }

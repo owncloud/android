@@ -279,7 +279,7 @@ public class ManageAccountsActivity extends FileActivity
     public void run(AccountManagerFuture<Boolean> future) {
         if (future != null && future.isDone()) {
             Account account = new Account(mAccountBeingRemoved, MainApp.Companion.getAccountType());
-            removeAccountDialogViewModel.removeAccount(account);
+            removeAccountDialogViewModel.removeAccount(account.name);
 
             // Notify removal to Document Provider
             String authority = getString(R.string.document_provider_authority);

@@ -195,5 +195,5 @@ val useCaseModule = module {
     factory { GetVideoUploadsConfigurationStreamUseCase(get()) }
 
     // Accounts
-    factory { RemoveAccountUseCase(get(), get(), get(), get(), get(), get(), get()) }
+    factory { RemoveAccountUseCase(get(), get(), get(), get(), get(), get(), get(), get()) }
 }
