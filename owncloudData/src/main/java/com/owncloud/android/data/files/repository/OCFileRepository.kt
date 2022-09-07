@@ -296,6 +296,7 @@ class OCFileRepository(
 
     override fun removeFilesForAccount(accountName: String) {
         localFileDataSource.removeFilesForAccount(accountName)
+        localStorageProvider.removeLocalStorageForAccount(accountName)
     }
 
     override fun renameFile(ocFile: OCFile, newName: String) {
