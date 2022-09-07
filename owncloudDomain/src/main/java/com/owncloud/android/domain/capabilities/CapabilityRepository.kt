@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,8 +26,7 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 
 interface CapabilityRepository {
     fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapability?>
-
     fun getStoredCapabilities(accountName: String): OCCapability?
-
     fun refreshCapabilitiesForAccount(accountName: String)
+    fun removeCapabilitiesForAccount(accountName: String)
 }

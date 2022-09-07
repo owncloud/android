@@ -202,5 +202,5 @@ val useCaseModule = module {
     factory { GetUrlToOpenInWebUseCase(get()) }
 
     // Accounts
-    factory { RemoveAccountUseCase(get(), get(), get(), get(), get()) }
+    factory { RemoveAccountUseCase(get(), get(), get(), get(), get(), get()) }
 }
