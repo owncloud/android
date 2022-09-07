@@ -142,6 +142,10 @@ class OCLocalFileDataSource(
         fileDao.deleteFileWithId(fileId)
     }
 
+    override fun removeFilesForAccount(accountName: String) {
+        fileDao.deleteFilesForAccount(accountName)
+    }
+
     override fun renameFile(fileToRename: OCFile, finalRemotePath: String, finalStoragePath: String) {
         fileDao.moveFile(
             sourceFile = fileToRename.toEntity(),
