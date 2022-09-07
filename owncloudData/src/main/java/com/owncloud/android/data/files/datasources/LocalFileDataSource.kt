@@ -43,6 +43,7 @@ interface LocalFileDataSource {
     fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile)
     fun saveFile(file: OCFile)
     fun removeFile(fileId: Long)
+    fun removeFilesForAccount(accountName: String)
     fun renameFile(fileToRename: OCFile, finalRemotePath: String, finalStoragePath: String)
 
     fun disableThumbnailsForFile(fileId: Long)
