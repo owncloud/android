@@ -216,6 +216,13 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         }
     }
 
+    fun removeLocalStorageForAccount(accountName: String) {
+        val mainFolderForAccount = File(getAccountDirectoryPath(accountName))
+        val temporalFolderForAccount = File(getTemporalPath(accountName))
+        mainFolderForAccount.deleteRecursively()
+        temporalFolderForAccount.deleteRecursively()
+    }
+
     private fun cleanTemporalRecursively(temporalFolder: File, deleteFileInCaseItIsNotNeeded: (file: File) -> Unit) {
         temporalFolder.listFiles()?.forEach { temporalFile ->
             if (temporalFile.isDirectory) {
