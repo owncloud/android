@@ -20,19 +20,18 @@
 
 package com.owncloud.android.ui.dialog
 
+import android.accounts.Account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
-import com.owncloud.android.domain.camerauploads.usecases.ResetPictureUploadsUseCase
-import com.owncloud.android.domain.camerauploads.usecases.ResetVideoUploadsUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import kotlinx.coroutines.launch
 
 class RemoveAccountDialogViewModel(
     private val getCameraUploadsConfigurationUseCase: GetCameraUploadsConfigurationUseCase,
-    private val resetPictureUploadsUseCase: ResetPictureUploadsUseCase,
-    private val resetVideoUploadsUseCase: ResetVideoUploadsUseCase,
+    private val removeAccountUseCase: RemoveAccountUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
@@ -53,16 +52,11 @@ class RemoveAccountDialogViewModel(
                 accountName == cameraUploadsConfiguration?.videoUploadsConfiguration?.accountName
     }
 
-    fun resetCameraUploadsForAccount(accountName: String) {
+    fun removeAccount(account: Account) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val cameraUploadsConfiguration = getCameraUploadsConfigurationUseCase.execute(Unit)
-
-            if (accountName == cameraUploadsConfiguration.getDataOrNull()?.pictureUploadsConfiguration?.accountName) {
-                resetPictureUploadsUseCase.execute(Unit)
-            }
-            if (accountName == cameraUploadsConfiguration.getDataOrNull()?.videoUploadsConfiguration?.accountName) {
-                resetVideoUploadsUseCase.execute(Unit)
-            }
+            removeAccountUseCase.execute(
+                RemoveAccountUseCase.Params(account = account)
+            )
         }
     }
 }

@@ -26,17 +26,21 @@ import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.transfers.TransferRepository
 import timber.log.Timber
 
-class CancelUploadsFromAccountUseCase(
+/**
+ * Cancel every pending transfer (uploads and downloads) for an account. Note that
+ * cancellation is a best-effort policy and work that is already executing may continue to run.
+ */
+class CancelTransfersFromAccountUseCase(
     private val workManager: WorkManager,
     private val transferRepository: TransferRepository,
-) : BaseUseCase<Unit, CancelUploadsFromAccountUseCase.Params>() {
+) : BaseUseCase<Unit, CancelTransfersFromAccountUseCase.Params>() {
 
     override fun run(params: Params) {
         workManager.cancelAllWorkByTag(params.accountName)
 
         transferRepository.removeAllTransfersFromAccount(params.accountName)
 
-        Timber.i("Uploads of ${params.accountName} have been cancelled.")
+        Timber.i("Uploads and downloads of ${params.accountName} have been cancelled.")
     }
 
     data class Params(
