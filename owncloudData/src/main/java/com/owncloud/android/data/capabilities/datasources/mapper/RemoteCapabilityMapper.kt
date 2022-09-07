@@ -64,7 +64,9 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesSharingUserProfilePicture = CapabilityBooleanType.fromValue(remote.filesSharingUserProfilePicture.value),
                 filesBigFileChunking = CapabilityBooleanType.fromValue(remote.filesBigFileChunking.value),
                 filesUndelete = CapabilityBooleanType.fromValue(remote.filesUndelete.value),
-                filesVersioning = CapabilityBooleanType.fromValue(remote.filesVersioning.value)
+                filesVersioning = CapabilityBooleanType.fromValue(remote.filesVersioning.value),
+                filesPrivateLinks = CapabilityBooleanType.fromValue(remote.filesPrivateLinks.value),
+                filesOcisProviders = remote.filesAppProviders?.firstOrNull()?.toOCISProvider()
             )
         }
 
@@ -106,7 +108,13 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesSharingUserProfilePicture = RemoteCapabilityBooleanType.fromValue(model.filesSharingUserProfilePicture.value)!!,
                 filesBigFileChunking = RemoteCapabilityBooleanType.fromValue(model.filesBigFileChunking.value)!!,
                 filesUndelete = RemoteCapabilityBooleanType.fromValue(model.filesUndelete.value)!!,
-                filesVersioning = RemoteCapabilityBooleanType.fromValue(model.filesVersioning.value)!!
+                filesVersioning = RemoteCapabilityBooleanType.fromValue(model.filesVersioning.value)!!,
+                filesPrivateLinks = RemoteCapabilityBooleanType.fromValue(model.filesPrivateLinks.value)!!,
+                filesAppProviders = null
             )
         }
+
+    private fun RemoteCapability.RemoteOCISProvider.toOCISProvider() =
+        OCCapability.OcisProvider(enabled, version, appsUrl, openUrl, openWebUrl, newUrl)
+
 }

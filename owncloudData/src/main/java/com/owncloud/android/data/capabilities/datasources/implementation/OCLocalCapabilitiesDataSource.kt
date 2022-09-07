@@ -77,7 +77,9 @@ class OCLocalCapabilitiesDataSource(
                 filesSharingUserProfilePicture = CapabilityBooleanType.fromValue(filesSharingUserProfilePicture),
                 filesBigFileChunking = CapabilityBooleanType.fromValue(filesBigFileChunking),
                 filesUndelete = CapabilityBooleanType.fromValue(filesUndelete),
-                filesVersioning = CapabilityBooleanType.fromValue(filesVersioning)
+                filesVersioning = CapabilityBooleanType.fromValue(filesVersioning),
+                filesPrivateLinks = CapabilityBooleanType.fromValue(filesPrivateLinks),
+                filesOcisProviders = ocisProvider,
             )
 
         @VisibleForTesting
@@ -109,7 +111,9 @@ class OCLocalCapabilitiesDataSource(
                 filesSharingUserProfilePicture = filesSharingUserProfilePicture.value,
                 filesBigFileChunking = filesBigFileChunking.value,
                 filesUndelete = filesUndelete.value,
-                filesVersioning = filesVersioning.value
+                filesVersioning = filesVersioning.value,
+                filesPrivateLinks = filesPrivateLinks.value,
+                ocisProvider = filesOcisProviders,
             )
     }
 }

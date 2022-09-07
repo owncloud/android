@@ -31,203 +31,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class OCCapabilityTest {
-    @Test
-    fun testConstructor() {
-        val item = OCCapability(
-            123,
-            "user@server",
-            2,
-            1,
-            0,
-            "1.0.0",
-            "1.0.0",
-            0,
-            "1.0",
-            TRUE,
-            TRUE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            0,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-        )
-
-        assertEquals(123, item.id)
-        assertEquals("user@server", item.accountName)
-        assertEquals(2, item.versionMayor)
-        assertEquals(1, item.versionMinor)
-        assertEquals(0, item.versionMicro)
-        assertEquals("1.0.0", item.versionString)
-        assertEquals("1.0.0", item.versionEdition)
-        assertEquals(0, item.corePollInterval)
-        assertEquals("1.0", item.davChunkingVersion)
-        assertEquals(TRUE, item.filesSharingApiEnabled)
-        assertEquals(TRUE, item.filesSharingPublicEnabled)
-        assertEquals(FALSE, item.filesSharingPublicPasswordEnforced)
-        assertEquals(FALSE, item.filesSharingPublicPasswordEnforcedReadOnly)
-        assertEquals(FALSE, item.filesSharingPublicPasswordEnforcedReadWrite)
-        assertEquals(FALSE, item.filesSharingPublicPasswordEnforcedUploadOnly)
-        assertEquals(FALSE, item.filesSharingPublicExpireDateEnabled)
-        assertEquals(0, item.filesSharingPublicExpireDateDays)
-        assertEquals(FALSE, item.filesSharingPublicExpireDateEnforced)
-        assertEquals(FALSE, item.filesSharingPublicUpload)
-        assertEquals(FALSE, item.filesSharingPublicMultiple)
-        assertEquals(FALSE, item.filesSharingPublicSupportsUploadOnly)
-        assertEquals(FALSE, item.filesSharingResharing)
-        assertEquals(FALSE, item.filesSharingFederationOutgoing)
-        assertEquals(FALSE, item.filesSharingFederationIncoming)
-        assertEquals(FALSE, item.filesBigFileChunking)
-        assertEquals(FALSE, item.filesUndelete)
-        assertEquals(FALSE, item.filesVersioning)
-    }
-
-    @Test
-    fun testEqualsOk() {
-        val item1 = OCCapability(
-            id = 123,
-            accountName = "user@server",
-            versionMayor = 2,
-            versionMinor = 1,
-            versionMicro = 0,
-            versionString = "1.0.0",
-            versionEdition = "1.0.0",
-            corePollInterval = 0,
-            davChunkingVersion = "1.0",
-            filesSharingApiEnabled = TRUE,
-            filesSharingPublicEnabled = TRUE,
-            filesSharingPublicPasswordEnforced = FALSE,
-            filesSharingPublicPasswordEnforcedReadOnly = FALSE,
-            filesSharingPublicPasswordEnforcedReadWrite = FALSE,
-            filesSharingPublicPasswordEnforcedUploadOnly = FALSE,
-            filesSharingPublicExpireDateEnabled = FALSE,
-            filesSharingPublicExpireDateDays = 0,
-            filesSharingPublicExpireDateEnforced = FALSE,
-            filesSharingPublicUpload = FALSE,
-            filesSharingPublicMultiple = FALSE,
-            filesSharingPublicSupportsUploadOnly = FALSE,
-            filesSharingResharing = FALSE,
-            filesSharingFederationOutgoing = FALSE,
-            filesSharingFederationIncoming = FALSE,
-            filesSharingUserProfilePicture = FALSE,
-            filesBigFileChunking = FALSE,
-            filesUndelete = FALSE,
-            filesVersioning = FALSE
-        )
-
-        val item2 = OCCapability(
-            123,
-            "user@server",
-            2,
-            1,
-            0,
-            "1.0.0",
-            "1.0.0",
-            0,
-            "1.0",
-            TRUE,
-            TRUE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            0,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-        )
-
-        assertTrue(item1 == item2)
-        assertFalse(item1 === item2)
-    }
-
-    @Test
-    fun testEqualsKo() {
-        val item1 = OCCapability(
-            id = 123,
-            accountName = "admin@server",
-            versionMayor = 2,
-            versionMinor = 1,
-            versionMicro = 0,
-            versionString = "1.0.0",
-            versionEdition = "1.0.0",
-            corePollInterval = 0,
-            davChunkingVersion = "1.0",
-            filesSharingApiEnabled = TRUE,
-            filesSharingPublicEnabled = TRUE,
-            filesSharingPublicPasswordEnforced = FALSE,
-            filesSharingPublicPasswordEnforcedReadOnly = FALSE,
-            filesSharingPublicPasswordEnforcedReadWrite = FALSE,
-            filesSharingPublicPasswordEnforcedUploadOnly = FALSE,
-            filesSharingPublicExpireDateEnabled = FALSE,
-            filesSharingPublicExpireDateDays = 0,
-            filesSharingPublicExpireDateEnforced = FALSE,
-            filesSharingPublicUpload = FALSE,
-            filesSharingPublicMultiple = FALSE,
-            filesSharingPublicSupportsUploadOnly = FALSE,
-            filesSharingResharing = FALSE,
-            filesSharingFederationOutgoing = FALSE,
-            filesSharingFederationIncoming = FALSE,
-            filesSharingUserProfilePicture = FALSE,
-            filesBigFileChunking = FALSE,
-            filesUndelete = FALSE,
-            filesVersioning = FALSE
-        )
-
-        val item2 = OCCapability(
-            123,
-            "user@server",
-            2,
-            1,
-            0,
-            "1.0.0",
-            "1.0.0",
-            0,
-            "1.0",
-            TRUE,
-            TRUE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            0,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-            FALSE,
-        )
-
-        assertFalse(item1 == item2)
-        assertFalse(item1 === item2)
-    }
 
     @Test
     fun testCapabilityBooleanType() {
@@ -269,5 +72,14 @@ class OCCapabilityTest {
 
         val item5 = OC_CAPABILITY.copy(davChunkingVersion = "1.0", filesBigFileChunking = FALSE)
         assertEquals(false, item5.isChunkingAllowed())
+    }
+
+    @Test
+    fun isOpenInWebAllowed() {
+        val item1 = OC_CAPABILITY.copy(filesOcisProviders = OCCapability.OcisProvider(true, "", null, null, "/open-with-web", null))
+        assertTrue(item1.isOpenInWebAllowed())
+
+        val item2 = OC_CAPABILITY.copy(filesOcisProviders = null)
+        assertFalse(item2.isOpenInWebAllowed())
     }
 }

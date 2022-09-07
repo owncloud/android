@@ -175,6 +175,9 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     private val isPublicShareEnabled
         get() = capabilities?.filesSharingPublicEnabled == CapabilityBooleanType.TRUE
 
+    private val isPrivateLinkDisabled
+        get() = capabilities?.filesPrivateLinks == CapabilityBooleanType.FALSE
+
     private val ocCapabilityViewModel: OCCapabilityViewModel by viewModel {
         parametersOf(
             account?.name
@@ -246,22 +249,10 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         }
 
         // Private link button
-        if (file?.privateLink.isNullOrEmpty()) {
-            binding.getPrivateLinkButton.visibility = View.INVISIBLE
-        } else {
-            binding.getPrivateLinkButton.visibility = View.VISIBLE
-        }
+        showOrHidePrivateLink()
 
         // Hide share features sections that are not enabled
         hideSectionsDisabledInBuildTime(view)
-
-        binding.getPrivateLinkButton.setOnClickListener { listener?.copyOrSendPrivateLink(file!!) }
-
-        binding.getPrivateLinkButton.setOnLongClickListener {
-            // Show a toast message explaining what a private link is
-            Toast.makeText(activity, R.string.private_link_info, Toast.LENGTH_LONG).show()
-            true
-        }
 
         binding.addUserButton.setOnClickListener {
             // Show Search Fragment
@@ -375,6 +366,23 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         }
     }
 
+    private fun showOrHidePrivateLink() {
+        if (file?.privateLink.isNullOrEmpty() || isPrivateLinkDisabled) {
+            binding.getPrivateLinkButton.visibility = View.INVISIBLE
+        } else {
+            with(binding.getPrivateLinkButton) {
+                visibility = View.VISIBLE
+                setOnClickListener { listener?.copyOrSendPrivateLink(file!!) }
+
+                setOnLongClickListener {
+                    // Show a toast message explaining what a private link is
+                    Toast.makeText(activity, R.string.private_link_info, Toast.LENGTH_LONG).show()
+                    true
+                }
+            }
+        }
+    }
+
     /**************************************************************************************************************
      ************************************************ CAPABILITIES ************************************************
      **************************************************************************************************************/
@@ -383,6 +391,8 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         this.capabilities = capabilities
 
         updatePublicLinkButton()
+
+        showOrHidePrivateLink()
 
         // Update view depending on updated capabilities
         binding.shareHeaderDivider.isVisible = isShareApiEnabled

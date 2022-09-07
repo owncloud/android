@@ -33,6 +33,7 @@
   <string name="prefs_subsection_logging">記錄中</string>
   <string name="prefs_subsection_more">更多</string>
   <string name="prefs_subsection_security">安全性</string>
+  <string name="prefs_subsection_whatsnew">最新版本有什麼新功能？</string>
   <string name="prefs_subsection_security_summary">設置鎖定以訪問軟體並與允許觸摸其他可見窗口</string>
   <string name="prefs_subsection_logging_summary">跟踪軟體執行產生的記錄</string>
   <string name="prefs_subsection_more_summary">軟體、反饋和其他</string>
@@ -571,6 +572,6 @@
   <!--Security Enforced-->
   <string name="security_enforced_first_option">密碼鎖</string>
   <!--Release Notes-->
+  <string name="release_notes_footer">感謝您使用 %1$s.\n❤</string>
   <string name="release_notes_proceed">已執行</string>
-  <!--Release Notes 2.21.1-->
 </resources>

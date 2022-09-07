@@ -31,7 +31,7 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 36;
+    public static final int DB_VERSION = 37;
 
     private ProviderMeta() {
     }
@@ -92,5 +92,7 @@ public class ProviderMeta {
         public static final String CAPABILITIES_FILES_BIGFILECHUNKING = "files_bigfilechunking";
         public static final String CAPABILITIES_FILES_UNDELETE = "files_undelete";
         public static final String CAPABILITIES_FILES_VERSIONING = "files_versioning";
+        public static final String CAPABILITIES_FILES_APP_PROVIDERS = "files_apps_providers";
+        public static final String CAPABILITIES_FILES_PRIVATE_LINKS = "files_private_links";
     }
 }

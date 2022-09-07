@@ -672,30 +672,11 @@
     <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
+    <string name="ic_action_open_in_web">Open in web</string>
+    <string name="open_in_web_error_generic">Couldn\'t open in web</string>
+    <string name="open_in_web_error_not_supported">there are no apps that support this file type</string>
 
-    <!-- Release Notes 2.21.1_oem -->
-    <string name="release_notes_title_2_21_1_oem_1">Release Notes</string>
-    <string name="release_notes_subtitle_2_21_1_oem_1">News in the app will be listed after every update to inform about latest improvements and new features. Available also in Settings view to recheck</string>
-
-    <string name="release_notes_title_2_21_1_oem_2">Secure connections by default</string>
-    <string name="release_notes_subtitle_2_21_1_oem_2">Https connections by default to establish server connections. Otherwise, it will be explicitly required in URL</string>
-
-    <string name="release_notes_title_2_21_1_oem_3">Passcode and Pattern redesign</string>
-    <string name="release_notes_subtitle_2_21_1_oem_3">Integrated the numeric keypad on the screen, improved navigation and graphical interface</string>
-
-    <string name="release_notes_title_2_21_1_oem_4">Support for SVG files</string>
-    <string name="release_notes_subtitle_2_21_1_oem_4">Added support for svg files</string>
-
-    <string name="release_notes_title_2_21_1_oem_5">Details view redesign</string>
-    <string name="release_notes_subtitle_2_21_1_oem_5">Information reordered and added the possibility to download and open the file by clicking the thumbnail</string>
-
-    <string name="release_notes_title_2_21_1_oem_6">Hidden files</string>
-    <string name="release_notes_subtitle_2_21_1_oem_6">Added a new option in settings to decide to show or not hidden files</string>
-
-    <string name="release_notes_title_2_21_1_oem_7">Sharing from inside</string>
-    <string name="release_notes_subtitle_2_21_1_oem_7">Added the sharing option to folders from the list of its contents</string>
-
-    <string name="release_notes_title_2_21_1_oem_8">Bugfixing</string>
-    <string name="release_notes_subtitle_2_21_1_oem_8">Some bugs were fixed</string>
+    <string name="release_notes_2.21.2_title1">Open in web</string>
+    <string name="release_notes_2.21.2_subtitle1">Open server supported file types in web browser (only oCIS)</string>
 
 </resources>
