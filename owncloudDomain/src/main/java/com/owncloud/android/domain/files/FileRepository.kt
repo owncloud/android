@@ -42,6 +42,7 @@ interface FileRepository {
     fun readFile(remotePath: String): OCFile
     fun refreshFolder(remotePath: String): List<OCFile>
     fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean)
+    fun removeFilesForAccount(accountName: String)
     fun renameFile(ocFile: OCFile, newName: String)
     fun saveFile(file: OCFile)
 

@@ -291,6 +291,10 @@ class OCFileRepository(
         }
     }
 
+    override fun removeFilesForAccount(accountName: String) {
+        localFileDataSource.removeFilesForAccount(accountName)
+    }
+
     override fun renameFile(ocFile: OCFile, newName: String) {
         // 1. Compose new remote path
         val newRemotePath = localStorageProvider.getExpectedRemotePath(
