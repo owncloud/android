@@ -33,4 +33,6 @@ interface LocalCapabilitiesDataSource {
     ): OCCapability?
 
     fun insert(ocCapabilities: List<OCCapability>)
+
+    fun removeCapabilitiesForAccount(accountName: String)
 }
