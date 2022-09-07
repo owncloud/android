@@ -20,7 +20,6 @@
 
 package com.owncloud.android.usecases.accounts
 
-import android.accounts.Account
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.ResetPictureUploadsUseCase
@@ -28,6 +27,7 @@ import com.owncloud.android.domain.camerauploads.usecases.ResetVideoUploadsUseCa
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.sharing.shares.ShareRepository
+import com.owncloud.android.domain.user.UserRepository
 import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccountUseCase
 
 class RemoveAccountUseCase(
@@ -37,35 +37,39 @@ class RemoveAccountUseCase(
     private val cancelTransfersFromAccountUseCase: CancelTransfersFromAccountUseCase,
     private val fileRepository: FileRepository,
     private val capabilityRepository: CapabilityRepository,
-    private val shareRepository: ShareRepository
+    private val shareRepository: ShareRepository,
+    private val userRepository: UserRepository
 ) : BaseUseCase<Unit, RemoveAccountUseCase.Params>() {
 
     override fun run(params: Params) {
         // Reset camera uploads if they were enabled for the removed account
         val cameraUploadsConfiguration = getCameraUploadsConfigurationUseCase.execute(Unit)
-        if (params.account.name == cameraUploadsConfiguration.getDataOrNull()?.pictureUploadsConfiguration?.accountName) {
+        if (params.accountName == cameraUploadsConfiguration.getDataOrNull()?.pictureUploadsConfiguration?.accountName) {
             resetPictureUploadsUseCase.execute(Unit)
         }
-        if (params.account.name == cameraUploadsConfiguration.getDataOrNull()?.videoUploadsConfiguration?.accountName) {
+        if (params.accountName == cameraUploadsConfiguration.getDataOrNull()?.videoUploadsConfiguration?.accountName) {
             resetVideoUploadsUseCase.execute(Unit)
         }
 
         // Cancel transfers of the removed account
         cancelTransfersFromAccountUseCase.execute(
-            CancelTransfersFromAccountUseCase.Params(accountName = params.account.name)
+            CancelTransfersFromAccountUseCase.Params(accountName = params.accountName)
         )
 
         // Delete files for the removed account in database
-        fileRepository.removeFilesForAccount(params.account.name)
+        fileRepository.removeFilesForAccount(params.accountName)
 
         // Delete capabilities for the removed account in database
-        capabilityRepository.removeCapabilitiesForAccount(params.account.name)
+        capabilityRepository.removeCapabilitiesForAccount(params.accountName)
 
         // Delete shares for the removed account in database
-        shareRepository.removeSharesForAccount(params.account.name)
+        shareRepository.removeSharesForAccount(params.accountName)
+
+        // Delete quota for the removed account in database
+        userRepository.removeUserQuota(params.accountName)
     }
 
     data class Params(
-        val account: Account
+        val accountName: String
     )
 }
