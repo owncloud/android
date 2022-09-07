@@ -73,6 +73,9 @@ class OCLocalShareDataSource(
     override fun deleteSharesForFile(filePath: String, accountName: String) =
         ocShareDao.deleteSharesForFile(filePath, accountName)
 
+    override fun deleteSharesForAccount(accountName: String) =
+        ocShareDao.deleteSharesForAccount(accountName)
+
     companion object {
         @VisibleForTesting
         fun OCShareEntity.toModel(): OCShare =

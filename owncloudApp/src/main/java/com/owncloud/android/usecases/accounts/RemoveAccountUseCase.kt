@@ -27,6 +27,7 @@ import com.owncloud.android.domain.camerauploads.usecases.ResetPictureUploadsUse
 import com.owncloud.android.domain.camerauploads.usecases.ResetVideoUploadsUseCase
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.domain.sharing.shares.ShareRepository
 import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccountUseCase
 
 class RemoveAccountUseCase(
@@ -35,7 +36,8 @@ class RemoveAccountUseCase(
     private val resetVideoUploadsUseCase: ResetVideoUploadsUseCase,
     private val cancelTransfersFromAccountUseCase: CancelTransfersFromAccountUseCase,
     private val fileRepository: FileRepository,
-    private val capabilityRepository: CapabilityRepository
+    private val capabilityRepository: CapabilityRepository,
+    private val shareRepository: ShareRepository
 ) : BaseUseCase<Unit, RemoveAccountUseCase.Params>() {
 
     override fun run(params: Params) {
@@ -58,6 +60,9 @@ class RemoveAccountUseCase(
 
         // Delete capabilities for the removed account in database
         capabilityRepository.removeCapabilitiesForAccount(params.account.name)
+
+        // Delete shares for the removed account in database
+        shareRepository.removeSharesForAccount(params.account.name)
     }
 
     data class Params(

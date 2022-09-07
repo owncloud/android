@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -105,11 +107,6 @@ class OCShareRepository(
         )
     }
 
-    override fun deleteShare(remoteId: String) {
-        remoteShareDataSource.deleteShare(remoteId)
-        localShareDataSource.deleteShare(remoteId)
-    }
-
     /******************************************************************************************************
      *********************************************** COMMON ***********************************************
      ******************************************************************************************************/
@@ -144,6 +141,15 @@ class OCShareRepository(
             // Save shares
             localShareDataSource.replaceShares(sharesFromNetwork)
         }
+    }
+
+    override fun deleteShare(remoteId: String) {
+        remoteShareDataSource.deleteShare(remoteId)
+        localShareDataSource.deleteShare(remoteId)
+    }
+
+    override fun removeSharesForAccount(accountName: String) {
+        localShareDataSource.deleteSharesForAccount(accountName)
     }
 
     private fun insertShare(

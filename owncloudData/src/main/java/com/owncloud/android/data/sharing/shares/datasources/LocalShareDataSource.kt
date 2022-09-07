@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -45,4 +47,6 @@ interface LocalShareDataSource {
     fun deleteShare(remoteId: String): Int
 
     fun deleteSharesForFile(filePath: String, accountName: String)
+
+    fun deleteSharesForAccount(accountName: String)
 }
