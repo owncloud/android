@@ -25,7 +25,7 @@ import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.ResetPictureUploadsUseCase
 import com.owncloud.android.domain.camerauploads.usecases.ResetVideoUploadsUseCase
-import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccountUseCase
 
 class RemoveAccountUseCase(
@@ -33,7 +33,7 @@ class RemoveAccountUseCase(
     private val resetPictureUploadsUseCase: ResetPictureUploadsUseCase,
     private val resetVideoUploadsUseCase: ResetVideoUploadsUseCase,
     private val cancelTransfersFromAccountUseCase: CancelTransfersFromAccountUseCase,
-    private val transferRepository: TransferRepository,
+    private val fileRepository: FileRepository
 ) : BaseUseCase<Unit, RemoveAccountUseCase.Params>() {
 
     override fun run(params: Params) {
@@ -50,6 +50,9 @@ class RemoveAccountUseCase(
         cancelTransfersFromAccountUseCase.execute(
             CancelTransfersFromAccountUseCase.Params(accountName = params.account.name)
         )
+
+        // Delete files for the removed account in database
+        fileRepository.removeFilesForAccount(params.account.name)
     }
 
     data class Params(
