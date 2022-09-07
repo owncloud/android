@@ -20,7 +20,6 @@
 
 package com.owncloud.android.ui.dialog
 
-import android.accounts.Account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
