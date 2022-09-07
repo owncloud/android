@@ -31,8 +31,10 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SyncRequest;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.DocumentsContract;
 import android.view.MenuItem;
 import android.widget.ListView;
 
@@ -44,7 +46,6 @@ import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
-import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.adapter.AccountListAdapter;
 import com.owncloud.android.ui.adapter.AccountListItem;
@@ -81,16 +82,13 @@ public class ManageAccountsActivity extends FileActivity
     String mOriginalCurrentAccount;
     private Drawable mTintedCheck;
 
-    private RemoveAccountDialogViewModel mRemoveAccountDialogViewModel = null;
-    private TransfersViewModel transfersViewModel = null;
+    private RemoveAccountDialogViewModel removeAccountDialogViewModel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         @NotNull Lazy<RemoveAccountDialogViewModel> removeAccountDialogViewModelLazy = inject(RemoveAccountDialogViewModel.class);
-        mRemoveAccountDialogViewModel = removeAccountDialogViewModelLazy.getValue();
-        @NotNull Lazy<TransfersViewModel> transfersViewModelLazy = inject(TransfersViewModel.class);
-        transfersViewModel = transfersViewModelLazy.getValue();
+        removeAccountDialogViewModel = removeAccountDialogViewModelLazy.getValue();
 
         mTintedCheck = ContextCompat.getDrawable(this, R.drawable.ic_current_white);
         mTintedCheck = DrawableCompat.wrap(mTintedCheck);
@@ -208,7 +206,7 @@ public class ManageAccountsActivity extends FileActivity
         mAccountBeingRemoved = account.name;
         RemoveAccountDialogFragment dialog = RemoveAccountDialogFragment.newInstance(
                 account,
-                mRemoveAccountDialogViewModel.hasCameraUploadsAttached(account.name)
+                removeAccountDialogViewModel.hasCameraUploadsAttached(account.name)
         );
         dialog.show(getSupportFragmentManager(), RemoveAccountDialogFragment.FTAG_CONFIRMATION);
     }
@@ -281,12 +279,14 @@ public class ManageAccountsActivity extends FileActivity
     public void run(AccountManagerFuture<Boolean> future) {
         if (future != null && future.isDone()) {
             Account account = new Account(mAccountBeingRemoved, MainApp.Companion.getAccountType());
-            if (!AccountUtils.exists(account.name, MainApp.Companion.getAppContext())) {
-                // Cancel transfers of the removed account
-                transfersViewModel.cancelUploadsFromAccount(account.name);
-                transfersViewModel.cancelDownloadsForAccount(account);
-            }
+            removeAccountDialogViewModel.removeAccount(account);
 
+            // Notify removal to Document Provider
+            String authority = getString(R.string.document_provider_authority);
+            Uri rootsUri = DocumentsContract.buildRootsUri(authority);
+            getContentResolver().notifyChange(rootsUri, null);
+
+            // Create new adapter with the remaining accounts
             mAccountListAdapter = new AccountListAdapter(this, getAccountListItems(), mTintedCheck);
             mListView.setAdapter(mAccountListAdapter);
 

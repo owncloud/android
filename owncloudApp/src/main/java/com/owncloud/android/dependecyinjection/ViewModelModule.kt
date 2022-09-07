@@ -78,7 +78,7 @@ val viewModelModule = module {
     viewModel { SettingsPictureUploadsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SettingsVideoUploadsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SettingsAdvancedViewModel(get()) }
-    viewModel { RemoveAccountDialogViewModel(get(), get(), get(), get()) }
+    viewModel { RemoveAccountDialogViewModel(get(), get(), get()) }
     viewModel { LogListViewModel(get()) }
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get(), get()) }
     viewModel { PatternViewModel(get()) }
@@ -89,5 +89,5 @@ val viewModelModule = module {
     viewModel { FileDetailsViewModel(get(), get(), get(), get(), get()) }
     viewModel { FileOperationsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { (accountName: String, initialFolderToDisplay: OCFile) -> MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), accountName, initialFolderToDisplay) }
-    viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 }
