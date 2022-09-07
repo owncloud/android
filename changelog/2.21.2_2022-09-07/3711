@@ -1,0 +1,7 @@
+Enhancement: Shares from propfind
+
+Added a new property to the propfind, so that, we can get if the files in a folder are shared directly with just one request.
+Previously, a propfind and another additional request were needed to the shares api to retrieve the shares of the folder.
+
+https://github.com/owncloud/android/issues/3711
+https://github.com/owncloud/android-library/pull/496

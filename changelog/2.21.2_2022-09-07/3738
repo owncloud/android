@@ -1,0 +1,7 @@
+Enhancement: Private link capability
+
+Private link capability is now respected. Option is shown/hidden depending on its value
+
+https://github.com/owncloud/android/issues/3732
+https://github.com/owncloud/android/pull/3738
+https://github.com/owncloud/android-library/pull/505

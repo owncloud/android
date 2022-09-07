@@ -676,4 +676,7 @@
     <string name="open_in_web_error_generic">Couldn\'t open in web</string>
     <string name="open_in_web_error_not_supported">there are no apps that support this file type</string>
 
+    <string name="release_notes_2.21.2_title1">Open in web</string>
+    <string name="release_notes_2.21.2_subtitle1">Open server supported file types in web browser (only oCIS)</string>
+
 </resources>
