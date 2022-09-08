@@ -35,7 +35,7 @@ buildscript {
         ktxVersion = "1.1.0"
 
         // KTX extensions
-        ktxCoreVersion = "1.7.0"
+        ktxCoreVersion = "1.9.0"
         ktxViewModelVersion = "2.4.0"
         ktxFragmentVersion = "1.4.1"
         ktxLiveData = "2.1.0"
