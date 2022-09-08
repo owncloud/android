@@ -617,4 +617,8 @@
   <string name="release_notes_footer">%1$s kullandığınız için teşekkürler.\n❤</string>
   <string name="release_notes_proceed">Devam et</string>
   <string name="release_notes_icon">Sürüm notu simgesi</string>
+  <string name="ic_action_open_in_web">Web\'te aç</string>
+  <string name="open_in_web_error_generic">Web\'te açılamadı</string>
+  <string name="open_in_web_error_not_supported">bu dosya türünü destekleyen hiçbir uygulama yok</string>
+  <string name="release_notes_2.21.2_title1">Web\'te aç</string>
 </resources>
