@@ -26,13 +26,16 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.transfers.model.OCTransfer
-import com.owncloud.android.usecases.transfers.uploads.ClearFailedTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
+import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
+import com.owncloud.android.usecases.transfers.uploads.ClearFailedTransfersUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
@@ -50,6 +53,8 @@ class TransfersViewModel(
     private val retryFailedUploadsUseCase: RetryFailedUploadsUseCase,
     private val clearSuccessfulTransfersUseCase: ClearSuccessfulTransfersUseCase,
     getAllTransfersAsLiveDataUseCase: GetAllTransfersAsLiveDataUseCase,
+    private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
+    private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
@@ -112,6 +117,13 @@ class TransfersViewModel(
             cancelUploadWithIdUseCase.execute(
                 CancelUploadWithIdUseCase.Params(uploadId = id)
             )
+        }
+    }
+
+    fun cancelTransfersForFile(ocFile: OCFile) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(ocFile))
+            cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(ocFile))
         }
     }
 
