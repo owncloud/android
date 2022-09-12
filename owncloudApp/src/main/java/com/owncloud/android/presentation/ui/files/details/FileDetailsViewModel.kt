@@ -29,6 +29,7 @@ import androidx.work.WorkManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
+import com.owncloud.android.extensions.getRunningWorkInfosByTags
 import com.owncloud.android.extensions.isDownload
 import com.owncloud.android.extensions.isUpload
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
@@ -38,6 +39,7 @@ import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
+import com.owncloud.android.workers.DownloadFileWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -78,6 +80,14 @@ class FileDetailsViewModel(
         uuid ?: return
 
         _ongoingTransferUUID.postValue(uuid)
+    }
+
+    fun checkOnGoingTransfersWhenOpening() {
+        val listOfWorkers =
+            workManager.getRunningWorkInfosByTags(listOf(getCurrentFile().id!!.toString(), getAccount().name, DownloadFileWorker::class.java.name))
+        listOfWorkers.firstOrNull()?.let { workInfo ->
+            _ongoingTransferUUID.postValue(workInfo.id)
+        }
     }
 
     fun cancelCurrentTransfer() {

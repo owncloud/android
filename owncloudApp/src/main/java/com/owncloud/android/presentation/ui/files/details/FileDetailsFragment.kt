@@ -116,6 +116,7 @@ class FileDetailsFragment : FileFragment() {
             )
         }
         startListeningToOngoingTransfers()
+        fileDetailsViewModel.checkOnGoingTransfersWhenOpening()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -274,9 +275,14 @@ class FileDetailsFragment : FileFragment() {
         } else { // Transfer is upload (?)
             getString(R.string.uploader_upload_enqueued_ticker, fileDetailsViewModel.currentFile.value.fileName)
         }
+        binding.fdProgressBar.apply {
+            progress = 0
+            isIndeterminate = false
+        }
     }
 
     private fun updateLayoutForRunningTransfer(workInfo: WorkInfo) {
+        showProgressView(isTransferGoingOn = true)
         binding.fdProgressText.text = if (workInfo.isDownload()) {
             getString(R.string.downloader_download_in_progress_ticker, fileDetailsViewModel.currentFile.value.fileName)
         } else { // Transfer is upload (?)
@@ -285,7 +291,6 @@ class FileDetailsFragment : FileFragment() {
         binding.fdProgressBar.apply {
             isIndeterminate = false
             progress = workInfo.progress.getInt(DownloadFileWorker.WORKER_KEY_PROGRESS, -1)
-            invalidate()
         }
         binding.fdCancelBtn.setOnClickListener { fileDetailsViewModel.cancelCurrentTransfer() }
     }
