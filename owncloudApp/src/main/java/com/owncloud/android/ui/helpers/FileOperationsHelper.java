@@ -34,7 +34,6 @@ import android.webkit.MimeTypeMap;
 
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
-import com.owncloud.android.data.storage.LocalStorageProvider;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.OCShare;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
@@ -43,16 +42,12 @@ import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase;
-import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase;
-import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase;
 import com.owncloud.android.utils.UriUtilsKt;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import static com.owncloud.android.services.OperationsService.EXTRA_SYNC_REGULAR_FILES;
 import static org.koin.java.KoinJavaComponent.inject;
@@ -176,12 +171,6 @@ public class FileOperationsHelper {
 
     }
 
-    public void syncFiles(Collection<OCFile> files) {
-        for (OCFile file : files) {
-            syncFile(file);
-        }
-    }
-
     /**
      * Request the synchronization of a file or folder with the OC server, including its contents.
      *
@@ -201,34 +190,6 @@ public class FileOperationsHelper {
             intent.putExtra(EXTRA_SYNC_REGULAR_FILES, true);
             mFileActivity.startService(intent);
         }
-    }
-
-    /**
-     * Cancel the transference in downloads (files/folders) and file uploads
-     *
-     * @param file OCFile
-     */
-    public void cancelTransference(OCFile file) {
-        Account account = mFileActivity.getAccount();
-        if (file.isFolder()) {
-            OperationsService.OperationsServiceBinder opsBinder =
-                    mFileActivity.getOperationsServiceBinder();
-            if (opsBinder != null) {
-                opsBinder.cancel(account, file);
-            }
-        }
-
-        // for both files and folders
-        @NotNull Lazy<CancelDownloadForFileUseCase> cancelDownloadForFileUseCaseLazy =
-                inject(CancelDownloadForFileUseCase.class);
-        CancelDownloadForFileUseCase.Params cancelDownloadParams = new CancelDownloadForFileUseCase.Params(file);
-        cancelDownloadForFileUseCaseLazy.getValue().execute(cancelDownloadParams);
-
-        // for both files and folders
-        @NotNull Lazy<CancelUploadForFileUseCase> cancelUploadForFileUseCaseLazy =
-                inject(CancelUploadForFileUseCase.class);
-        CancelUploadForFileUseCase.Params cancelUploadForFileUseCaseParams = new CancelUploadForFileUseCase.Params(file);
-        cancelUploadForFileUseCaseLazy.getValue().execute(cancelUploadForFileUseCaseParams);
     }
 
     public long getOpIdWaitingFor() {
