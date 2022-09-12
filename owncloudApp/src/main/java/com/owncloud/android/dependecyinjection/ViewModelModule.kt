@@ -106,5 +106,5 @@ val viewModelModule = module {
             initialFolderToDisplay
         )
     }
-    viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 }

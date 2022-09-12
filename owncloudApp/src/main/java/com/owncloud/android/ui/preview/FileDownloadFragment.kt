@@ -37,10 +37,12 @@ import androidx.work.WorkInfo
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
+import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * This Fragment is used to monitor the progress of a file downloading.
@@ -56,6 +58,8 @@ class FileDownloadFragment : FileFragment() {
     private var error = false
     private var progressBar: ProgressBar? = null
     private var liveData: LiveData<WorkInfo?>? = null
+
+    val transfersViewModel: TransfersViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,7 +98,7 @@ class FileDownloadFragment : FileFragment() {
         progressBar = view.findViewById(R.id.progressBar)
 
         view.findViewById<View>(R.id.cancelBtn).setOnClickListener {
-            mContainerActivity.fileOperationsHelper.cancelTransference(file)
+            transfersViewModel.cancelTransfersForFile(file)
             requireActivity().finish()
         }
 

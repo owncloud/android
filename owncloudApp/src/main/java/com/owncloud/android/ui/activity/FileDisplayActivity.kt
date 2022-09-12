@@ -1478,7 +1478,7 @@ class FileDisplayActivity : FileActivity(),
      * @param file [OCFile] file which operation are wanted to be cancel
      */
     fun cancelTransference(file: OCFile) {
-        fileOperationsHelper.cancelTransference(file)
+        transfersViewModel.cancelTransfersForFile(file)
         fileWaitingToPreview?.let {
             if (it.remotePath == file.remotePath) {
                 fileWaitingToPreview = null

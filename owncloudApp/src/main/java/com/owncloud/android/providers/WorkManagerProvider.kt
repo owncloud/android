@@ -27,7 +27,7 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import com.owncloud.android.extensions.getRunningUploadsWorkInfosLiveData
+import com.owncloud.android.extensions.getRunningWorkInfosLiveData
 import com.owncloud.android.workers.AvailableOfflinePeriodicWorker
 import com.owncloud.android.workers.AvailableOfflinePeriodicWorker.Companion.AVAILABLE_OFFLINE_PERIODIC_WORKER
 import com.owncloud.android.workers.CameraUploadsWorker
@@ -83,7 +83,7 @@ class WorkManagerProvider(
     }
 
     fun getRunningUploadsWorkInfosLiveData(): LiveData<List<WorkInfo>> {
-        return WorkManager.getInstance(context).getRunningUploadsWorkInfosLiveData(
+        return WorkManager.getInstance(context).getRunningWorkInfosLiveData(
             listOf(
                 UploadFileFromContentUriWorker::class.java.name,
                 UploadFileFromFileSystemWorker::class.java.name
