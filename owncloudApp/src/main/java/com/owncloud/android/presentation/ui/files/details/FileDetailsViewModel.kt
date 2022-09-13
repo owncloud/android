@@ -35,7 +35,6 @@ import com.owncloud.android.domain.ext.isOneOf
 import com.owncloud.android.domain.files.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
-import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.extensions.getRunningWorkInfosByTags
@@ -46,10 +45,6 @@ import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.A
 import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC_AND_OPEN
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import com.owncloud.android.ui.activity.FileDisplayActivity
-import com.owncloud.android.ui.preview.PreviewAudioFragment
-import com.owncloud.android.ui.preview.PreviewTextFragment
-import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
 import com.owncloud.android.workers.DownloadFileWorker
@@ -67,7 +62,6 @@ class FileDetailsViewModel(
     getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase,
     val contextProvider: ContextProvider,
     private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
-    private val getFileByIdUseCase: GetFileByIdUseCase,
     getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
     private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
@@ -129,11 +123,13 @@ class FileDetailsViewModel(
     }
 
     fun cancelCurrentTransfer() {
-        val currentTransfer = ongoingTransfer.value?.peekContent() ?: return
-        if (currentTransfer.isUpload()) {
-            cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(currentFile.value))
-        } else if (currentTransfer.isDownload()) {
-            cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(currentFile.value))
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val currentTransfer = ongoingTransfer.value?.peekContent() ?: return@launch
+            if (currentTransfer.isUpload()) {
+                cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(currentFile.value))
+            } else if (currentTransfer.isDownload()) {
+                cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(currentFile.value))
+            }
         }
     }
 
@@ -148,28 +144,6 @@ class FileDetailsViewModel(
             showLoading = false,
             requiresConnection = true,
         )
-    }
-
-    // TODO: I don't like this at all. Move navigation to a common place.
-    fun navigateToPreviewOrOpenFile(fileDisplayActivity: FileDisplayActivity, file: OCFile) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val useCaseResult = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId = file.id!!))
-            val fileWaitingToPreview = useCaseResult.getDataOrNull()
-            viewModelScope.launch(coroutinesDispatcherProvider.main) {
-                when {
-                    PreviewAudioFragment.canBePreviewed(fileWaitingToPreview) -> {
-                        fileDisplayActivity.startAudioPreview(fileWaitingToPreview!!, 0)
-                    }
-                    PreviewVideoFragment.canBePreviewed(fileWaitingToPreview) -> {
-                        fileDisplayActivity.startVideoPreview(fileWaitingToPreview!!, 0)
-                    }
-                    PreviewTextFragment.canBePreviewed(fileWaitingToPreview) -> {
-                        fileDisplayActivity.startTextPreview(fileWaitingToPreview)
-                    }
-                    else -> fileDisplayActivity.fileOperationsHelper.openFile(fileWaitingToPreview)
-                }
-            }
-        }
     }
 
     enum class ActionsInDetailsView {
