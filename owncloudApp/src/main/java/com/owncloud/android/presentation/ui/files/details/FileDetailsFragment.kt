@@ -42,6 +42,8 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.isDownload
+import com.owncloud.android.extensions.openFile
+import com.owncloud.android.extensions.openOCFile
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -217,7 +219,13 @@ class FileDetailsFragment : FileFragment() {
                 true
             }
             R.id.action_open_file_with -> {
-                mContainerActivity.fileOperationsHelper.openFile(fileDetailsViewModel.getCurrentFile())
+                val currentFile = fileDetailsViewModel.getCurrentFile()
+                if (!currentFile.isAvailableLocally) {  // Download the file
+                    Timber.d("%s : File must be downloaded before opening it", currentFile.remotePath)
+                    (mContainerActivity as FileDisplayActivity).startDownloadForOpening(currentFile)
+                } else { // Already downloaded -> Open it
+                    requireActivity().openOCFile(currentFile)
+                }
                 true
             }
             R.id.action_remove_file -> {
@@ -241,7 +249,7 @@ class FileDetailsFragment : FileFragment() {
             R.id.action_send_file -> {
                 val currentFile = fileDetailsViewModel.getCurrentFile()
                 if (!currentFile.isAvailableLocally) {  // Download the file
-                    Timber.d("%s : File must be downloaded", currentFile.remotePath)
+                    Timber.d("%s : File must be downloaded before sending it", currentFile.remotePath)
                     (mContainerActivity as FileDisplayActivity).startDownloadForSending(currentFile)
                 } else { // Already downloaded -> Send it
                     requireActivity().sendDownloadedFilesByShareSheet(listOf(currentFile))
