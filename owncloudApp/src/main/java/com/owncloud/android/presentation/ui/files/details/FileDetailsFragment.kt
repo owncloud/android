@@ -57,6 +57,10 @@ import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
 import com.owncloud.android.ui.fragment.FileFragment
+import com.owncloud.android.ui.preview.PreviewAudioFragment
+import com.owncloud.android.ui.preview.PreviewImageFragment
+import com.owncloud.android.ui.preview.PreviewTextFragment
+import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -240,7 +244,17 @@ class FileDetailsFragment : FileFragment() {
         binding.fdType.text = DisplayUtils.convertMIMEtoPrettyPrint(ocFile.mimeType)
 
         binding.fdIcon.let { imageView ->
-            imageView.tag = ocFile.id
+            imageView.apply {
+                tag = ocFile.id
+                setOnClickListener {
+                    if (!ocFile.isAvailableLocally) {  // Download the file
+                        Timber.d("%s : File must be downloaded before opening it", ocFile.remotePath)
+                        fileDetailsViewModel.updateActionInDetailsView(SYNC_AND_OPEN)
+                    } else { // Already downloaded -> Open it
+                        navigateToPreviewOrOpenFile(ocFile)
+                    }
+                }
+            }
             if (ocFile.isImage) {
                 val tagId = ocFile.remoteId.toString()
                 var thumbnail: Bitmap? = ThumbnailsCacheManager.getBitmapFromDiskCache(tagId)
@@ -317,8 +331,7 @@ class FileDetailsFragment : FileFragment() {
                     fileDetailsViewModel.updateActionInDetailsView(NONE)
                 }
                 SYNC_AND_OPEN -> {
-                    val fileDisplayActivity = activity as FileDisplayActivity
-                    fileDetailsViewModel.navigateToPreviewOrOpenFile(fileDisplayActivity, file)
+                    navigateToPreviewOrOpenFile(file)
                     fileDetailsViewModel.updateActionInDetailsView(NONE)
                 }
                 SYNC_AND_OPEN_WITH -> {
@@ -369,6 +382,26 @@ class FileDetailsFragment : FileFragment() {
 
         // Invalidate to reset the menu items -> Show/Hide Download/Sync/Cancel
         requireActivity().invalidateOptionsMenu()
+    }
+
+    // TODO: Move navigation to a common place.
+    private fun navigateToPreviewOrOpenFile(fileWaitingToPreview: OCFile) {
+        val fileDisplayActivity = requireActivity() as FileDisplayActivity
+        when {
+            PreviewImageFragment.canBePreviewed(fileWaitingToPreview) -> {
+                fileDisplayActivity.startImagePreview(fileWaitingToPreview)
+            }
+            PreviewAudioFragment.canBePreviewed(fileWaitingToPreview) -> {
+                fileDisplayActivity.startAudioPreview(fileWaitingToPreview, 0)
+            }
+            PreviewVideoFragment.canBePreviewed(fileWaitingToPreview) -> {
+                fileDisplayActivity.startVideoPreview(fileWaitingToPreview, 0)
+            }
+            PreviewTextFragment.canBePreviewed(fileWaitingToPreview) -> {
+                fileDisplayActivity.startTextPreview(fileWaitingToPreview)
+            }
+            else -> fileDisplayActivity.openOCFile(fileWaitingToPreview)
+        }
     }
 
     override fun updateViewForSyncInProgress() {
