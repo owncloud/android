@@ -29,7 +29,7 @@ val OC_USER_INFO = UserInfo(
 )
 
 val OC_USER_QUOTA = UserQuota(
-    accountName = "",
+    accountName = OC_ACCOUNT_NAME,
     used = 80_000,
     available = 200_000
 )
