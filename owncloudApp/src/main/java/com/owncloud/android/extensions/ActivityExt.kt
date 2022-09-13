@@ -52,10 +52,12 @@ import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
+import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.ALL_FILES_SAF_REGEX
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
 import com.owncloud.android.ui.helpers.ShareSheetHelper
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.UriUtilsKt
+import com.owncloud.android.utils.UriUtilsKt.getExposedFileUriForOCFile
 import timber.log.Timber
 import java.io.File
 
@@ -374,7 +376,7 @@ fun FragmentActivity.sendDownloadedFilesByShareSheet(ocFiles: List<OCFile>) {
     } else {
         val fileUris = ocFiles.map { UriUtilsKt.getExposedFileUriForOCFile(this@sendDownloadedFilesByShareSheet, it) }
         Intent(Intent.ACTION_SEND_MULTIPLE).apply {
-            type = "*/*"
+            type = ALL_FILES_SAF_REGEX
             putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(fileUris))
         }
     }
@@ -391,5 +393,18 @@ fun FragmentActivity.sendDownloadedFilesByShareSheet(ocFiles: List<OCFile>) {
     } else {
         val chooserDialog: DialogFragment = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude)
         chooserDialog.show(supportFragmentManager, FRAGMENT_TAG_CHOOSER_DIALOG)
+    }
+}
+
+fun Activity.openOCFile(ocFile: OCFile) {
+    val intentForSavedMimeType = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(getExposedFileUriForOCFile(this@openOCFile, ocFile), ocFile.mimeType)
+        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+    }
+
+    try {
+        startActivity(Intent.createChooser(intentForSavedMimeType, getString(R.string.actionbar_open_with)))
+    } catch (anfe: ActivityNotFoundException) {
+        showErrorInSnackbar(genericErrorMessageId = R.string.file_list_no_app_for_file_type, anfe)
     }
 }
