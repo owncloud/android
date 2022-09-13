@@ -30,7 +30,6 @@ import android.os.Handler
 import com.owncloud.android.R
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
-import org.koin.java.KoinJavaComponent.inject
 
 /**
  * Dialog requiring confirmation before removing an OC Account.
@@ -40,8 +39,6 @@ import org.koin.java.KoinJavaComponent.inject
  * Container Activity needs to implement AccountManagerCallback<Boolean>.
 </Boolean> */
 class RemoveAccountDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
-    val viewModel: RemoveAccountDialogViewModel by inject(RemoveAccountDialogViewModel::class.java)
-
     private var targetAccount: Account? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

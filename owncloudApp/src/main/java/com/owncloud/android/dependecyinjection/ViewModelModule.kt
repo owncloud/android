@@ -55,7 +55,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { DrawerViewModel(get(), get()) }
+    viewModel { DrawerViewModel(get(), get(), get(), get()) }
 
     viewModel { (accountName: String) ->
         OCCapabilityViewModel(accountName, get(), get(), get())
@@ -78,7 +78,7 @@ val viewModelModule = module {
     viewModel { SettingsPictureUploadsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SettingsVideoUploadsViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { SettingsAdvancedViewModel(get()) }
-    viewModel { RemoveAccountDialogViewModel(get(), get(), get()) }
+    viewModel { RemoveAccountDialogViewModel(get(), get()) }
     viewModel { LogListViewModel(get()) }
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get(), get()) }
     viewModel { PatternViewModel(get()) }
