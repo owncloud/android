@@ -254,8 +254,8 @@ class FileDetailsFragment : FileFragment() {
     }
 
     private fun startListeningToOngoingTransfers() {
-        fileDetailsViewModel.ongoingTransfer.observe(viewLifecycleOwner) { workInfo ->
-            workInfo ?: return@observe
+        fileDetailsViewModel.ongoingTransfer.observe(viewLifecycleOwner, Event.EventObserver { workInfo ->
+            workInfo ?: return@EventObserver
 
             when (workInfo.state) {
                 WorkInfo.State.ENQUEUED -> updateLayoutForEnqueuedTransfer(workInfo)
@@ -265,7 +265,7 @@ class FileDetailsFragment : FileFragment() {
                 WorkInfo.State.BLOCKED -> {}
                 WorkInfo.State.CANCELLED -> updateLayoutForCancelledTransfer(workInfo)
             }
-        }
+        })
     }
 
     private fun updateLayoutForEnqueuedTransfer(workInfo: WorkInfo) {

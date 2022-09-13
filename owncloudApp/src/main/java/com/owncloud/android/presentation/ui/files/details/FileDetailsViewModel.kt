@@ -23,12 +23,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.getRunningWorkInfosByTags
 import com.owncloud.android.extensions.isDownload
 import com.owncloud.android.extensions.isUpload
@@ -70,8 +72,8 @@ class FileDetailsViewModel(
     private val _ongoingTransferUUID = MutableLiveData<UUID>()
     private val _ongoingTransfer = Transformations.switchMap(_ongoingTransferUUID) { transferUUID ->
         workManager.getWorkInfoByIdLiveData(transferUUID)
-    }
-    val ongoingTransfer: LiveData<WorkInfo?> = _ongoingTransfer
+    }.map { Event(it) }
+    val ongoingTransfer: LiveData<Event<WorkInfo?>> = _ongoingTransfer
 
     fun getCurrentFile() = currentFile.value
     fun getAccount() = account.value
@@ -91,7 +93,7 @@ class FileDetailsViewModel(
     }
 
     fun cancelCurrentTransfer() {
-        val currentTransfer = ongoingTransfer.value ?: return
+        val currentTransfer = ongoingTransfer.value?.peekContent() ?: return
         if (currentTransfer.isUpload()) {
             cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(currentFile.value))
         } else if (currentTransfer.isDownload()) {
