@@ -54,6 +54,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -70,6 +71,7 @@ class FileDetailsViewModel(
     private val workManager: WorkManager,
     account: Account,
     ocFile: OCFile,
+    shouldSyncFile: Boolean,
 ) : ViewModel() {
 
     private val _openInWebUriLiveData: MediatorLiveData<Event<UIResult<String?>>> = MediatorLiveData()
@@ -99,8 +101,15 @@ class FileDetailsViewModel(
         }
     }
 
+    private val _shouldSyncFile: MutableStateFlow<Boolean> = MutableStateFlow(shouldSyncFile)
+    val shouldSyncFile: StateFlow<Boolean> = _shouldSyncFile
+
     fun getCurrentFile() = currentFile.value
     fun getAccount() = account.value
+
+    fun shouldSyncFile(shouldSyncFile: Boolean) {
+        _shouldSyncFile.update { shouldSyncFile }
+    }
 
     fun startListeningToWorkInfo(uuid: UUID?) {
         uuid ?: return
