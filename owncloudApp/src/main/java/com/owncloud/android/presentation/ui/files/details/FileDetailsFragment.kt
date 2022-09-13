@@ -66,6 +66,7 @@ class FileDetailsFragment : FileFragment() {
         parametersOf(
             requireArguments().getParcelable(ARG_ACCOUNT),
             requireArguments().getParcelable(ARG_FILE),
+            requireArguments().getBoolean(ARG_SYNC_FILE_AT_OPEN),
         )
     }
     private val fileOperationsViewModel by viewModel<FileOperationsViewModel>()
@@ -107,13 +108,17 @@ class FileDetailsFragment : FileFragment() {
                 }
             }
         })
-        if (requireArguments().getBoolean(ARG_SYNC_FILE_AT_OPEN)) {
-            fileOperationsViewModel.performOperation(
-                SynchronizeFileOperation(
-                    fileToSync = fileDetailsViewModel.getCurrentFile(),
-                    accountName = fileDetailsViewModel.getAccount().name
+
+        collectLatestLifecycleFlow(fileDetailsViewModel.shouldSyncFile) { shouldSyncFile ->
+            if (shouldSyncFile) {
+                fileOperationsViewModel.performOperation(
+                    SynchronizeFileOperation(
+                        fileToSync = fileDetailsViewModel.getCurrentFile(),
+                        accountName = fileDetailsViewModel.getAccount().name
+                    )
                 )
-            )
+                fileDetailsViewModel.shouldSyncFile(false)
+            }
         }
         startListeningToOngoingTransfers()
         fileDetailsViewModel.checkOnGoingTransfersWhenOpening()
@@ -186,12 +191,7 @@ class FileDetailsFragment : FileFragment() {
                 true
             }
             R.id.action_download_file, R.id.action_sync_file -> {
-                fileOperationsViewModel.performOperation(
-                    SynchronizeFileOperation(
-                        fileDetailsViewModel.getCurrentFile(),
-                        fileDetailsViewModel.getAccount().name
-                    )
-                )
+                fileDetailsViewModel.shouldSyncFile(true)
                 true
             }
             R.id.action_send_file -> {
