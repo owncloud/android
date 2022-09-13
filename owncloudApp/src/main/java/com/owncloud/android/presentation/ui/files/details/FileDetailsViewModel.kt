@@ -24,6 +24,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
@@ -89,8 +90,8 @@ class FileDetailsViewModel(
     private val _ongoingTransferUUID = MutableLiveData<UUID>()
     private val _ongoingTransfer = Transformations.switchMap(_ongoingTransferUUID) { transferUUID ->
         workManager.getWorkInfoByIdLiveData(transferUUID)
-    }
-    val ongoingTransfer: LiveData<WorkInfo?> = _ongoingTransfer
+    }.map { Event(it) }
+    val ongoingTransfer: LiveData<Event<WorkInfo?>> = _ongoingTransfer
 
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
@@ -116,7 +117,7 @@ class FileDetailsViewModel(
     }
 
     fun cancelCurrentTransfer() {
-        val currentTransfer = ongoingTransfer.value ?: return
+        val currentTransfer = ongoingTransfer.value?.peekContent() ?: return
         if (currentTransfer.isUpload()) {
             cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(currentFile.value))
         } else if (currentTransfer.isDownload()) {
