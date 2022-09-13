@@ -41,13 +41,17 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.isDownload
-import com.owncloud.android.extensions.openFile
 import com.owncloud.android.extensions.openOCFile
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.NONE
+import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC
+import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC_AND_OPEN
+import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC_AND_OPEN_WITH
+import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC_AND_SEND
 import com.owncloud.android.presentation.ui.files.operations.FileOperation.SetFilesAsAvailableOffline
 import com.owncloud.android.presentation.ui.files.operations.FileOperation.SynchronizeFileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperation.UnsetFilesAsAvailableOffline
@@ -147,16 +151,14 @@ class FileDetailsFragment : FileFragment() {
             }
         })
 
-        collectLatestLifecycleFlow(fileDetailsViewModel.shouldSyncFile) { shouldSyncFile ->
-            if (shouldSyncFile) {
+        collectLatestLifecycleFlow(fileDetailsViewModel.actionsInDetailsView) { actions ->
+            if (actions.requiresSync())
                 fileOperationsViewModel.performOperation(
                     SynchronizeFileOperation(
                         fileToSync = fileDetailsViewModel.getCurrentFile(),
                         accountName = fileDetailsViewModel.getAccount().name
                     )
                 )
-                fileDetailsViewModel.shouldSyncFile(false)
-            }
         }
         startListeningToOngoingTransfers()
         fileDetailsViewModel.checkOnGoingTransfersWhenOpening()
@@ -219,7 +221,7 @@ class FileDetailsFragment : FileFragment() {
                 val currentFile = fileDetailsViewModel.getCurrentFile()
                 if (!currentFile.isAvailableLocally) {  // Download the file
                     Timber.d("%s : File must be downloaded before opening it", currentFile.remotePath)
-                    (mContainerActivity as FileDisplayActivity).startDownloadForOpening(currentFile)
+                    fileDetailsViewModel.updateActionInDetailsView(SYNC_AND_OPEN_WITH)
                 } else { // Already downloaded -> Open it
                     requireActivity().openOCFile(currentFile)
                 }
@@ -240,14 +242,14 @@ class FileDetailsFragment : FileFragment() {
                 true
             }
             R.id.action_download_file, R.id.action_sync_file -> {
-                fileDetailsViewModel.shouldSyncFile(true)
+                fileDetailsViewModel.updateActionInDetailsView(SYNC)
                 true
             }
             R.id.action_send_file -> {
                 val currentFile = fileDetailsViewModel.getCurrentFile()
                 if (!currentFile.isAvailableLocally) {  // Download the file
                     Timber.d("%s : File must be downloaded before sending it", currentFile.remotePath)
-                    (mContainerActivity as FileDisplayActivity).startDownloadForSending(currentFile)
+                    fileDetailsViewModel.updateActionInDetailsView(SYNC_AND_SEND)
                 } else { // Already downloaded -> Send it
                     requireActivity().sendDownloadedFilesByShareSheet(listOf(currentFile))
                 }
@@ -352,8 +354,26 @@ class FileDetailsFragment : FileFragment() {
         showProgressView(isTransferGoingOn = false)
 
         if (workInfo.isDownload()) {
-            val fileDisplayActivity = activity as FileDisplayActivity
-            fileDetailsViewModel.navigateToPreviewOrOpenFile(fileDisplayActivity, file)
+            when (fileDetailsViewModel.actionsInDetailsView.value) {
+                NONE -> {}
+                SYNC -> {
+                    fileDetailsViewModel.updateActionInDetailsView(NONE)
+                }
+                SYNC_AND_OPEN -> {
+                    val fileDisplayActivity = activity as FileDisplayActivity
+                    fileDetailsViewModel.navigateToPreviewOrOpenFile(fileDisplayActivity, file)
+                    fileDetailsViewModel.updateActionInDetailsView(NONE)
+                }
+                SYNC_AND_OPEN_WITH -> {
+                    requireActivity().openOCFile(fileDetailsViewModel.getCurrentFile())
+                    fileDetailsViewModel.updateActionInDetailsView(NONE)
+                }
+                SYNC_AND_SEND -> {
+                    requireActivity().sendDownloadedFilesByShareSheet(listOf(fileDetailsViewModel.getCurrentFile()))
+                    fileDetailsViewModel.updateActionInDetailsView(NONE)
+                }
+            }
+
         } else { // Transfer is upload (?)
             // Nothing to do at the moment
         }
@@ -379,6 +399,7 @@ class FileDetailsFragment : FileFragment() {
             getString(R.string.uploader_upload_canceled_ticker)
         }
         showMessageInSnackbar(message)
+        fileDetailsViewModel.updateActionInDetailsView(NONE)
     }
 
     /**
