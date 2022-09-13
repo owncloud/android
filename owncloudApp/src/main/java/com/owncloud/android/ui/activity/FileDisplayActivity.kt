@@ -62,6 +62,7 @@ import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
+import com.owncloud.android.extensions.openOCFile
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -1350,7 +1351,10 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun openDownloadedFile() {
-        fileOperationsHelper.openFile(waitingToOpen)
+        waitingToOpen?.let {
+            openOCFile(it)
+        }
+
         waitingToOpen = null
     }
 
@@ -1375,7 +1379,7 @@ class FileDisplayActivity : FileActivity(),
      *
      * @param file [OCFile] to download and preview.
      */
-    private fun startDownloadForOpening(file: OCFile) {
+    fun startDownloadForOpening(file: OCFile) {
         waitingToOpen = file
         requestForDownload(file)
         val hasSecondFragment = secondFragment != null
@@ -1659,7 +1663,7 @@ class FileDisplayActivity : FileActivity(),
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
 
-        private const val ALL_FILES_SAF_REGEX = "*/*"
+        const val ALL_FILES_SAF_REGEX = "*/*"
 
         const val ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS"
 
