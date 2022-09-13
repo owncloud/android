@@ -80,14 +80,8 @@ class DrawerViewModel(
             FileStorageUtils.deleteUnusedUserDirs(loggedAccounts)
 
             val userQuotas = getUserQuotasUseCase.execute(Unit)
-            val loggedAccountsNames = mutableListOf<String>()
-            val totalAccountsNames = mutableListOf<String>()
-            loggedAccounts.forEach { loggedAccount ->
-                loggedAccountsNames.add(loggedAccount.name)
-            }
-            userQuotas.forEach { account ->
-                totalAccountsNames.add(account.accountName)
-            }
+            val loggedAccountsNames = loggedAccounts.map { it.name }
+            val totalAccountsNames = userQuotas.map { it.accountName }
             val removedAccountsNames = mutableListOf<String>()
             for (accountName in totalAccountsNames) {
                 if (!loggedAccountsNames.contains(accountName)) {
