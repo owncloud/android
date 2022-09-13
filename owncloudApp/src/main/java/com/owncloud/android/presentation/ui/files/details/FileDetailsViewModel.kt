@@ -31,6 +31,7 @@ import androidx.work.WorkManager
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.domain.ext.isOneOf
 import com.owncloud.android.domain.files.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
@@ -41,6 +42,8 @@ import com.owncloud.android.extensions.getRunningWorkInfosByTags
 import com.owncloud.android.extensions.isDownload
 import com.owncloud.android.extensions.isUpload
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.NONE
+import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC_AND_OPEN
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
@@ -101,14 +104,14 @@ class FileDetailsViewModel(
         }
     }
 
-    private val _shouldSyncFile: MutableStateFlow<Boolean> = MutableStateFlow(shouldSyncFile)
-    val shouldSyncFile: StateFlow<Boolean> = _shouldSyncFile
+    private val _actionsInDetailsView: MutableStateFlow<ActionsInDetailsView> = MutableStateFlow(if (shouldSyncFile) SYNC_AND_OPEN else NONE)
+    val actionsInDetailsView: StateFlow<ActionsInDetailsView> = _actionsInDetailsView
 
     fun getCurrentFile() = currentFile.value
     fun getAccount() = account.value
 
-    fun shouldSyncFile(shouldSyncFile: Boolean) {
-        _shouldSyncFile.update { shouldSyncFile }
+    fun updateActionInDetailsView(actionsInDetailsView: ActionsInDetailsView) {
+        _actionsInDetailsView.update { actionsInDetailsView }
     }
 
     fun startListeningToWorkInfo(uuid: UUID?) {
@@ -167,5 +170,11 @@ class FileDetailsViewModel(
                 }
             }
         }
+    }
+
+    enum class ActionsInDetailsView {
+        NONE, SYNC, SYNC_AND_OPEN, SYNC_AND_OPEN_WITH, SYNC_AND_SEND;
+
+        fun requiresSync(): Boolean = this.isOneOf(SYNC, SYNC_AND_OPEN, SYNC_AND_OPEN_WITH, SYNC_AND_SEND)
     }
 }
