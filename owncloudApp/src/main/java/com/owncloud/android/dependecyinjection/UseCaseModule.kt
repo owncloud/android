@@ -78,6 +78,7 @@ import com.owncloud.android.domain.transfers.usecases.UpdatePendingUploadsPathUs
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
+import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
@@ -178,6 +179,7 @@ val useCaseModule = module {
 
     // User
     factory { GetStoredQuotaUseCase(get()) }
+    factory { GetUserQuotasUseCase(get()) }
     factory { GetUserAvatarAsyncUseCase(get()) }
     factory { GetUserInfoAsyncUseCase(get()) }
     factory { RefreshUserQuotaFromServerAsyncUseCase(get()) }

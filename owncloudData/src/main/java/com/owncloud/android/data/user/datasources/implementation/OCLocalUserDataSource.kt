@@ -32,10 +32,16 @@ class OCLocalUserDataSource(
 ) : LocalUserDataSource {
 
     override fun saveQuotaForAccount(accountName: String, userQuota: UserQuota) =
-        userDao.insert(userQuota.toEntity(accountName))
+        userDao.insert(userQuota.toEntity())
 
     override fun getQuotaForAccount(accountName: String): UserQuota? =
         userDao.getQuotaForAccount(accountName = accountName)?.toModel()
+
+    override fun getAllUserQuotas(): List<UserQuota> {
+        return userDao.getAllUserQuotas().map { userQuotaEntity ->
+            userQuotaEntity.toModel()
+        }
+    }
 
     override fun removeQuotaForAccount(accountName: String) {
         userDao.deleteQuotaForAccount(accountName = accountName)
@@ -45,12 +51,13 @@ class OCLocalUserDataSource(
         @VisibleForTesting
         fun UserQuotaEntity.toModel(): UserQuota =
             UserQuota(
+                accountName = accountName,
                 available = available,
                 used = used
             )
 
         @VisibleForTesting
-        fun UserQuota.toEntity(accountName: String): UserQuotaEntity =
+        fun UserQuota.toEntity(): UserQuotaEntity =
             UserQuotaEntity(
                 accountName = accountName,
                 available = available,

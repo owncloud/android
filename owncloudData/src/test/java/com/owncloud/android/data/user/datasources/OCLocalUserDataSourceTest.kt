@@ -39,7 +39,7 @@ class OCLocalUserDataSourceTest {
     private lateinit var ocLocalUserDataSource: OCLocalUserDataSource
     private val ocUserQuotaDao = mockk<UserDao>(relaxed = true)
 
-    private val userQuotaEntity = OC_USER_QUOTA.toEntity(accountName = OC_ACCOUNT_NAME)
+    private val userQuotaEntity = OC_USER_QUOTA.toEntity()
 
     @Rule
     @JvmField

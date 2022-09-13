@@ -25,12 +25,10 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import kotlinx.coroutines.launch
 
 class RemoveAccountDialogViewModel(
     private val getCameraUploadsConfigurationUseCase: GetCameraUploadsConfigurationUseCase,
-    private val removeAccountUseCase: RemoveAccountUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
@@ -49,13 +47,5 @@ class RemoveAccountDialogViewModel(
     fun hasCameraUploadsAttached(accountName: String): Boolean {
         return accountName == cameraUploadsConfiguration?.pictureUploadsConfiguration?.accountName ||
                 accountName == cameraUploadsConfiguration?.videoUploadsConfiguration?.accountName
-    }
-
-    fun removeAccount(accountName: String) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            removeAccountUseCase.execute(
-                RemoveAccountUseCase.Params(accountName = accountName)
-            )
-        }
     }
 }

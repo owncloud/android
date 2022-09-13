@@ -32,6 +32,9 @@ abstract class UserDao {
             "SELECT * " +
                     "FROM ${ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME} " +
                     "WHERE accountName = :accountName"
+        private const val SELECT_ALL_QUOTAS =
+            "SELECT * " +
+                    "FROM ${ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME} "
         private const val DELETE_QUOTA =
             "DELETE FROM ${ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME} " +
                     "WHERE accountName = :accountName"
@@ -41,6 +44,9 @@ abstract class UserDao {
     abstract fun getQuotaForAccount(
         accountName: String
     ): UserQuotaEntity?
+
+    @Query(SELECT_ALL_QUOTAS)
+    abstract fun getAllUserQuotas(): List<UserQuotaEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insert(userQuotaEntity: UserQuotaEntity)

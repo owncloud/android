@@ -27,6 +27,7 @@ class UserQuotaTest {
     @Test
     fun testConstructor() {
         val item = UserQuota(
+            "",
             800,
             200
         )
@@ -38,11 +39,13 @@ class UserQuotaTest {
     @Test
     fun testEqualsOk() {
         val item1 = UserQuota(
+            accountName = "",
             available = 800,
             used = 200
         )
 
         val item2 = UserQuota(
+            "",
             800,
             200
         )
@@ -54,11 +57,13 @@ class UserQuotaTest {
     @Test
     fun testEqualsKo() {
         val item1 = UserQuota(
+            accountName = "",
             available = 800,
             used = 200
         )
 
         val item2 = UserQuota(
+            "",
             1000,
             200
         )
@@ -70,6 +75,7 @@ class UserQuotaTest {
     @Test
     fun testGetTotal() {
         val item = UserQuota(
+            accountName = "",
             available = 800_000_000,
             used = 20_000_000
         )
@@ -80,6 +86,7 @@ class UserQuotaTest {
     @Test
     fun testGetTotalFullQuota() {
         val item = UserQuota(
+            accountName = "",
             available = 0,
             used = 20_000_000
         )
@@ -90,6 +97,7 @@ class UserQuotaTest {
     @Test
     fun testGetTotalUnlimitedQuota() {
         val item1 = UserQuota(
+            accountName = "",
             available = -3,
             used = 20_000_000
         )
@@ -100,6 +108,7 @@ class UserQuotaTest {
     @Test
     fun testQuotaLimited() {
         val item = UserQuota(
+            accountName = "",
             available = 200_000,
             used = 20_000
         )
@@ -110,6 +119,7 @@ class UserQuotaTest {
     @Test
     fun testQuotaUnLimited() {
         val item = UserQuota(
+            accountName = "",
             available = -3,
             used = 20_000
         )
@@ -120,6 +130,7 @@ class UserQuotaTest {
     @Test
     fun testGetRelativeUnlimited() {
         val item = UserQuota(
+            accountName = "",
             available = -3,
             used = 20_000
         )
@@ -130,6 +141,7 @@ class UserQuotaTest {
     @Test
     fun testQuotaRelativeOk() {
         val item = UserQuota(
+            accountName = "",
             available = 80_000,
             used = 20_000
         )
@@ -140,6 +152,7 @@ class UserQuotaTest {
     @Test
     fun testQuotaRelativeTotalIs0() {
         val item = UserQuota(
+            accountName = "",
             available = 0,
             used = 0
         )
@@ -150,6 +163,7 @@ class UserQuotaTest {
     @Test
     fun testQuotaRelativeTwoDecimals() {
         val item = UserQuota(
+            accountName = "",
             available = 75_000,
             used = 20_000
         )

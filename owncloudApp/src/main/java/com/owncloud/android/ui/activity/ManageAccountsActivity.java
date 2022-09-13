@@ -31,10 +31,8 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SyncRequest;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.DocumentsContract;
 import android.view.MenuItem;
 import android.widget.ListView;
 
@@ -278,14 +276,6 @@ public class ManageAccountsActivity extends FileActivity
     @Override
     public void run(AccountManagerFuture<Boolean> future) {
         if (future != null && future.isDone()) {
-            Account account = new Account(mAccountBeingRemoved, MainApp.Companion.getAccountType());
-            removeAccountDialogViewModel.removeAccount(account.name);
-
-            // Notify removal to Document Provider
-            String authority = getString(R.string.document_provider_authority);
-            Uri rootsUri = DocumentsContract.buildRootsUri(authority);
-            getContentResolver().notifyChange(rootsUri, null);
-
             // Create new adapter with the remaining accounts
             mAccountListAdapter = new AccountListAdapter(this, getAccountListItems(), mTintedCheck);
             mListView.setAdapter(mAccountListAdapter);

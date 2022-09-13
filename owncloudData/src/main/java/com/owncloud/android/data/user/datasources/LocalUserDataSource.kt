@@ -31,6 +31,8 @@ interface LocalUserDataSource {
         accountName: String
     ): UserQuota?
 
+    fun getAllUserQuotas(): List<UserQuota>
+
     fun removeQuotaForAccount(
         accountName: String
     )

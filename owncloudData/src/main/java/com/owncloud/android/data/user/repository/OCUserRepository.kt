@@ -41,6 +41,9 @@ class OCUserRepository(
     override fun getStoredUserQuota(accountName: String): UserQuota? =
         localUserDataSource.getQuotaForAccount(accountName)
 
+    override fun getAllUserQuotas(): List<UserQuota> =
+        localUserDataSource.getAllUserQuotas()
+
     override fun getUserAvatar(accountName: String): UserAvatar =
         remoteUserDataSource.getUserAvatar(accountName)
 
