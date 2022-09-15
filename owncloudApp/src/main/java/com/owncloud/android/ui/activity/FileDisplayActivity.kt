@@ -38,6 +38,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
+import android.os.RemoteException
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -567,6 +568,15 @@ class FileDisplayActivity : FileActivity(),
 
         val currentDir = currentDir
         val remotePath = currentDir?.remotePath ?: OCFile.ROOT_PATH
+
+        // Try to retain access to that file for some time, so we have enough time to upload it
+        streamsToUpload.forEach { uri ->
+            try {
+                contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            } catch (remoteException: RemoteException) {
+                Timber.w(remoteException)
+            }
+        }
 
         transfersViewModel.uploadFilesFromContentUri(
             accountName = account.name,
@@ -1618,7 +1628,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun uploadFromFileSystem() {
-        val action = Intent(Intent.ACTION_GET_CONTENT).apply {
+        val action = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             setType(ALL_FILES_SAF_REGEX).addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
