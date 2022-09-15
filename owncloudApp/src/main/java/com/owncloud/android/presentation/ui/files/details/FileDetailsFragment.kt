@@ -1,6 +1,8 @@
 /**
  * ownCloud Android client application
  *
+ * @author Abel García de Prada
+ *
  * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -427,7 +429,7 @@ class FileDetailsFragment : FileFragment() {
     companion object {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
-        private const val ARG_SYNC_FILE_AT_OPEN = "ARG_SYNC_FILE_AT_OPEN"
+        private const val ARG_SYNC_FILE_AT_OPEN = "SYNC_FILE_AT_OPEN"
 
         /**
          * Public factory method to create new FileDetailsFragment instances.
