@@ -46,8 +46,4 @@ class OCUserRepository(
 
     override fun getUserAvatar(accountName: String): UserAvatar =
         remoteUserDataSource.getUserAvatar(accountName)
-
-    override fun removeUserQuota(accountName: String) {
-        localUserDataSource.removeQuotaForAccount(accountName)
-    }
 }
