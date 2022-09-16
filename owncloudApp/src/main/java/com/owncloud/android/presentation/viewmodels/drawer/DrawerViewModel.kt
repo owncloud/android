@@ -27,6 +27,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
@@ -37,11 +38,13 @@ import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class DrawerViewModel(
     private val getStoredQuotaUseCase: GetStoredQuotaUseCase,
     private val removeAccountUseCase: RemoveAccountUseCase,
     private val getUserQuotasUseCase: GetUserQuotasUseCase,
+    private val localStorageProvider: LocalStorageProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -89,9 +92,11 @@ class DrawerViewModel(
                 }
             }
             removedAccountsNames.forEach { removedAccountName ->
+                Timber.d("$removedAccountName is being removed")
                 removeAccountUseCase.execute(
                     RemoveAccountUseCase.Params(accountName = removedAccountName)
                 )
+                localStorageProvider.removeLocalStorageForAccount(removedAccountName)
             }
         }
     }
