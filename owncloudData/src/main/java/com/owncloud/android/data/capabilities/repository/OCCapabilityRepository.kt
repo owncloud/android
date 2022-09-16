@@ -47,8 +47,4 @@ class OCCapabilityRepository(
         val capabilitiesFromNetwork = remoteCapabilitiesDataSource.getCapabilities(accountName)
         localCapabilitiesDataSource.insert(listOf(capabilitiesFromNetwork))
     }
-
-    override fun removeCapabilitiesForAccount(accountName: String) {
-        localCapabilitiesDataSource.removeCapabilitiesForAccount(accountName)
-    }
 }

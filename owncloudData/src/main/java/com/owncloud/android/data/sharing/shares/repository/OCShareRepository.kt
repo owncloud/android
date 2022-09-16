@@ -148,10 +148,6 @@ class OCShareRepository(
         localShareDataSource.deleteShare(remoteId)
     }
 
-    override fun removeSharesForAccount(accountName: String) {
-        localShareDataSource.deleteSharesForAccount(accountName)
-    }
-
     private fun insertShare(
         filePath: String,
         shareType: ShareType,

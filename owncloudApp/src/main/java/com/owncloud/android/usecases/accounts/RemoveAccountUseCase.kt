@@ -20,25 +20,30 @@
 
 package com.owncloud.android.usecases.accounts
 
+import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
+import com.owncloud.android.data.files.datasources.LocalFileDataSource
+import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
+import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.ResetPictureUploadsUseCase
 import com.owncloud.android.domain.camerauploads.usecases.ResetVideoUploadsUseCase
-import com.owncloud.android.domain.capabilities.CapabilityRepository
-import com.owncloud.android.domain.files.FileRepository
-import com.owncloud.android.domain.sharing.shares.ShareRepository
-import com.owncloud.android.domain.user.UserRepository
 import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccountUseCase
 
+/*
+* Local data sources are injected instead of repositories to avoid crash in the app.
+* Injecting the repositories implies injecting the remote data sources too, which
+* need an OwncloudAccount that there is not at this point.
+*/
 class RemoveAccountUseCase(
     private val getCameraUploadsConfigurationUseCase: GetCameraUploadsConfigurationUseCase,
     private val resetPictureUploadsUseCase: ResetPictureUploadsUseCase,
     private val resetVideoUploadsUseCase: ResetVideoUploadsUseCase,
     private val cancelTransfersFromAccountUseCase: CancelTransfersFromAccountUseCase,
-    private val fileRepository: FileRepository,
-    private val capabilityRepository: CapabilityRepository,
-    private val shareRepository: ShareRepository,
-    private val userRepository: UserRepository
+    private val localFileDataSource: LocalFileDataSource,
+    private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
+    private val localShareDataSource: LocalShareDataSource,
+    private val localUserDataSource: LocalUserDataSource
 ) : BaseUseCase<Unit, RemoveAccountUseCase.Params>() {
 
     override fun run(params: Params) {
@@ -57,16 +62,16 @@ class RemoveAccountUseCase(
         )
 
         // Delete files for the removed account in database
-        fileRepository.removeFilesForAccount(params.accountName)
+        localFileDataSource.removeFilesForAccount(params.accountName)
 
         // Delete capabilities for the removed account in database
-        capabilityRepository.removeCapabilitiesForAccount(params.accountName)
+        localCapabilitiesDataSource.removeCapabilitiesForAccount(params.accountName)
 
         // Delete shares for the removed account in database
-        shareRepository.removeSharesForAccount(params.accountName)
+        localShareDataSource.deleteSharesForAccount(params.accountName)
 
         // Delete quota for the removed account in database
-        userRepository.removeUserQuota(params.accountName)
+        localUserDataSource.removeQuotaForAccount(params.accountName)
     }
 
     data class Params(
