@@ -49,6 +49,7 @@ import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.A
 import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC_AND_OPEN
 import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC_AND_OPEN_WITH
 import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC_AND_SEND
+import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperation.SetFilesAsAvailableOffline
 import com.owncloud.android.presentation.ui.files.operations.FileOperation.SynchronizeFileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperation.UnsetFilesAsAvailableOffline
@@ -108,7 +109,10 @@ class FileDetailsFragment : FileFragment() {
 
         fileOperationsViewModel.syncFileLiveData.observe(viewLifecycleOwner, Event.EventObserver { uiResult ->
             when (uiResult) {
-                is UIResult.Error -> showErrorInSnackbar(R.string.sync_fail_ticker, uiResult.error)
+                is UIResult.Error -> {
+                    showErrorInSnackbar(R.string.sync_fail_ticker, uiResult.error)
+                    fileDetailsViewModel.updateActionInDetailsView(NONE)
+                }
                 is UIResult.Loading -> {}
                 is UIResult.Success -> when (uiResult.data) {
                     SynchronizeFileUseCase.SyncType.AlreadySynchronized -> showMessageInSnackbar(getString(R.string.sync_file_nothing_to_do_msg))
@@ -179,13 +183,13 @@ class FileDetailsFragment : FileFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val currentFile = fileDetailsViewModel.getCurrentFile()
         return when (item.itemId) {
             R.id.action_share_file -> {
                 mContainerActivity.fileOperationsHelper.showShareFile(fileDetailsViewModel.getCurrentFile())
                 true
             }
             R.id.action_open_file_with -> {
-                val currentFile = fileDetailsViewModel.getCurrentFile()
                 if (!currentFile.isAvailableLocally) {  // Download the file
                     Timber.d("%s : File must be downloaded before opening it", currentFile.remotePath)
                     fileDetailsViewModel.updateActionInDetailsView(SYNC_AND_OPEN_WITH)
@@ -213,7 +217,6 @@ class FileDetailsFragment : FileFragment() {
                 true
             }
             R.id.action_send_file -> {
-                val currentFile = fileDetailsViewModel.getCurrentFile()
                 if (!currentFile.isAvailableLocally) {  // Download the file
                     Timber.d("%s : File must be downloaded before sending it", currentFile.remotePath)
                     fileDetailsViewModel.updateActionInDetailsView(SYNC_AND_SEND)
@@ -223,7 +226,8 @@ class FileDetailsFragment : FileFragment() {
                 true
             }
             R.id.action_set_available_offline -> {
-                fileOperationsViewModel.performOperation(SetFilesAsAvailableOffline(listOf(fileDetailsViewModel.getCurrentFile())))
+                fileOperationsViewModel.performOperation(SetFilesAsAvailableOffline(listOf(currentFile)))
+                fileOperationsViewModel.performOperation(SynchronizeFileOperation(currentFile, currentFile.owner))
                 true
             }
             R.id.action_unset_available_offline -> {
