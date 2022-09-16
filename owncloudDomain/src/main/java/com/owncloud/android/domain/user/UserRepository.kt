@@ -31,5 +31,4 @@ interface UserRepository {
     fun getStoredUserQuota(accountName: String): UserQuota?
     fun getAllUserQuotas(): List<UserQuota>
     fun getUserAvatar(accountName: String): UserAvatar
-    fun removeUserQuota(accountName: String)
 }

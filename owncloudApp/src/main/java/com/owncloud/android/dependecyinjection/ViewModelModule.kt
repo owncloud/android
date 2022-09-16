@@ -55,7 +55,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { DrawerViewModel(get(), get(), get(), get()) }
+    viewModel { DrawerViewModel(get(), get(), get(), get(), get()) }
 
     viewModel { (accountName: String) ->
         OCCapabilityViewModel(accountName, get(), get(), get())
