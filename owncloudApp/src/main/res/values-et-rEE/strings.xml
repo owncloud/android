@@ -613,8 +613,13 @@
   <string name="security_enforced_first_option">Parooli lukk</string>
   <string name="security_enforced_second_option">Mustri lukk</string>
   <!--Release Notes-->
-  <string name="release_notes_header">Uut %1$s-s</string>
-  <string name="release_notes_footer">Aitäh, et kasutad %1$s-i.\n❤</string>
+  <string name="release_notes_header">Uut %1$sis</string>
+  <string name="release_notes_footer">Aitäh, et kasutad %1$si.\n❤</string>
   <string name="release_notes_proceed">Jätka</string>
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
+  <string name="ic_action_open_in_web">Ava veebis</string>
+  <string name="open_in_web_error_generic">Ei saanud veebis avada</string>
+  <string name="open_in_web_error_not_supported">seda failitüüpi toetavaid rakendusi ei ole</string>
+  <string name="release_notes_2.21.2_title1">Ava veebis</string>
+  <string name="release_notes_2.21.2_subtitle1">Ava serveri poolt toetatud failitüüpe otse veebis (ainult ownCloud Infinity Scale korral)</string>
 </resources>
