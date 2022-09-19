@@ -18,6 +18,7 @@
  */
 package com.owncloud.android.presentation.viewmodels
 
+import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
@@ -47,6 +48,7 @@ class DrawerViewModelTest : ViewModelTest() {
     private lateinit var getStoredQuotaUseCase: GetStoredQuotaUseCase
     private lateinit var removeAccountUseCase: RemoveAccountUseCase
     private lateinit var getUserQuotasUseCase: GetUserQuotasUseCase
+    private lateinit var localStorageProvider: LocalStorageProvider
 
     private lateinit var contextProvider: ContextProvider
 
@@ -72,6 +74,7 @@ class DrawerViewModelTest : ViewModelTest() {
         getStoredQuotaUseCase = mockk()
         removeAccountUseCase = mockk()
         getUserQuotasUseCase = mockk()
+        localStorageProvider = mockk()
 
         testCoroutineDispatcher.pauseDispatcher()
 
@@ -79,6 +82,7 @@ class DrawerViewModelTest : ViewModelTest() {
             getStoredQuotaUseCase = getStoredQuotaUseCase,
             removeAccountUseCase = removeAccountUseCase,
             getUserQuotasUseCase = getUserQuotasUseCase,
+            localStorageProvider = localStorageProvider,
             coroutinesDispatcherProvider = coroutineDispatcherProvider
         )
     }
