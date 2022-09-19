@@ -182,7 +182,7 @@
             android:theme="@style/Theme.ownCloud"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.activity.ConflictsResolveActivity"
+            android:name=".presentation.ui.conflicts.ConflictsResolveActivity"
             android:theme="@style/Theme.ownCloud" />
         <activity
             android:name=".presentation.ui.logging.LogsListActivity"
