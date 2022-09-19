@@ -39,9 +39,10 @@ import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_EXPIRED
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
+import com.owncloud.android.presentation.ui.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.ui.settings.SettingsActivity
 import com.owncloud.android.presentation.ui.settings.SettingsActivity.Companion.KEY_NOTIFICATION_INTENT
-import com.owncloud.android.ui.activity.ConflictsResolveActivity
+import com.owncloud.android.ui.activity.FileActivity.EXTRA_FILE
 import com.owncloud.android.ui.activity.UploadListActivity
 import java.util.Random
 
@@ -182,8 +183,8 @@ object NotificationUtils {
         val showConflictActivityIntent = Intent(context, ConflictsResolveActivity::class.java)
         showConflictActivityIntent.flags = showConflictActivityIntent.flags or Intent.FLAG_ACTIVITY_NEW_TASK or
                 Intent.FLAG_FROM_BACKGROUND
-        showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, fileInConflict)
-        showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, account)
+        showConflictActivityIntent.putExtra(EXTRA_FILE, fileInConflict)
+        showConflictActivityIntent.putExtra(EXTRA_ACCOUNT, account)
         notificationBuilder.setContentIntent(
             PendingIntent.getActivity(
                 context, System.currentTimeMillis().toInt(),
