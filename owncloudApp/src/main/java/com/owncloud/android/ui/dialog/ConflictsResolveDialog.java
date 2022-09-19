@@ -41,7 +41,7 @@ public class ConflictsResolveDialog extends DialogFragment {
     public enum Decision {
         CANCEL,
         KEEP_BOTH,
-        OVERWRITE,
+        LOCAL,
         SERVER
     }
 
@@ -65,7 +65,7 @@ public class ConflictsResolveDialog extends DialogFragment {
                 .setPositiveButton(R.string.conflict_use_local_version,
                         (dialog, which) -> {
                             if (mListener != null) {
-                                mListener.conflictDecisionMade(Decision.OVERWRITE);
+                                mListener.conflictDecisionMade(Decision.LOCAL);
                             }
                         })
                 .setNeutralButton(R.string.conflict_keep_both,
