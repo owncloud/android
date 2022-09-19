@@ -59,7 +59,7 @@ import static org.koin.java.KoinJavaComponent.inject;
             case CANCEL:
                 finish();
                 return;
-            case OVERWRITE:
+            case LOCAL:
                 // use local version -> overwrite on server
                 forceOverwrite = true;
                 break;
