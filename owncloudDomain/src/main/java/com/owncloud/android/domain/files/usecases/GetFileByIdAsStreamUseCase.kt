@@ -25,9 +25,9 @@ import kotlinx.coroutines.flow.Flow
 
 class GetFileByIdAsStreamUseCase(
     private val fileRepository: FileRepository
-) : BaseUseCase<Flow<OCFile>, GetFileByIdAsStreamUseCase.Params>() {
+) : BaseUseCase<Flow<OCFile?>, GetFileByIdAsStreamUseCase.Params>() {
 
-    override fun run(params: Params): Flow<OCFile> =
+    override fun run(params: Params): Flow<OCFile?> =
         fileRepository.getFileByIdAsStream(params.fileId)
 
     data class Params(val fileId: Long)
