@@ -60,7 +60,7 @@ class FileDetailsViewModel(
 ) : ViewModel() {
 
     private val account: StateFlow<Account> = MutableStateFlow(account)
-    val currentFile: StateFlow<OCFile> =
+    val currentFile: StateFlow<OCFile?> =
         getFileByIdAsStreamUseCase.execute(GetFileByIdAsStreamUseCase.Params(ocFile.id!!))
             .stateIn(
                 viewModelScope,
@@ -77,7 +77,7 @@ class FileDetailsViewModel(
     private val _actionsInDetailsView: MutableStateFlow<ActionsInDetailsView> = MutableStateFlow(if (shouldSyncFile) SYNC_AND_OPEN else NONE)
     val actionsInDetailsView: StateFlow<ActionsInDetailsView> = _actionsInDetailsView
 
-    fun getCurrentFile() = currentFile.value
+    fun getCurrentFile(): OCFile? = currentFile.value
     fun getAccount() = account.value
 
     fun updateActionInDetailsView(actionsInDetailsView: ActionsInDetailsView) {
@@ -91,8 +91,9 @@ class FileDetailsViewModel(
     }
 
     fun checkOnGoingTransfersWhenOpening() {
+        val safeFile = currentFile.value ?: return
         val listOfWorkers =
-            workManager.getRunningWorkInfosByTags(listOf(getCurrentFile().id!!.toString(), getAccount().name, DownloadFileWorker::class.java.name))
+            workManager.getRunningWorkInfosByTags(listOf(safeFile.id!!.toString(), getAccount().name, DownloadFileWorker::class.java.name))
         listOfWorkers.firstOrNull()?.let { workInfo ->
             _ongoingTransferUUID.postValue(workInfo.id)
         }
@@ -101,10 +102,11 @@ class FileDetailsViewModel(
     fun cancelCurrentTransfer() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val currentTransfer = ongoingTransfer.value?.peekContent() ?: return@launch
+            val safeFile = currentFile.value ?: return@launch
             if (currentTransfer.isUpload()) {
-                cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(currentFile.value))
+                cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(safeFile))
             } else if (currentTransfer.isDownload()) {
-                cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(currentFile.value))
+                cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(safeFile))
             }
         }
     }
