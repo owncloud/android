@@ -23,28 +23,27 @@
 
 package com.owncloud.android.presentation.ui.conflicts
 
+import com.owncloud.android.presentation.ui.conflicts.fragments.ConflictsResolveDialogFragment
 import com.owncloud.android.presentation.viewmodels.conflicts.ConflictsResolveViewModel
 import com.owncloud.android.ui.activity.FileActivity
-import com.owncloud.android.ui.dialog.ConflictsResolveDialog
-import com.owncloud.android.ui.dialog.ConflictsResolveDialog.OnConflictDecisionMadeListener
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class ConflictsResolveActivity: FileActivity(), OnConflictDecisionMadeListener {
+class ConflictsResolveActivity : FileActivity(), ConflictsResolveDialogFragment.OnConflictDecisionMadeListener {
 
     private val conflictsResolveViewModel by viewModel<ConflictsResolveViewModel>()
 
-    override fun conflictDecisionMade(decision: ConflictsResolveDialog.Decision) {
+    override fun conflictDecisionMade(decision: ConflictsResolveDialogFragment.Decision) {
         var forceOverwrite = false
 
         when (decision) {
-            ConflictsResolveDialog.Decision.CANCEL -> {
+            ConflictsResolveDialogFragment.Decision.CANCEL -> {
                 finish()
                 return
             }
-            ConflictsResolveDialog.Decision.LOCAL -> forceOverwrite = true
-            ConflictsResolveDialog.Decision.KEEP_BOTH -> {}
-            ConflictsResolveDialog.Decision.SERVER -> {
+            ConflictsResolveDialogFragment.Decision.LOCAL -> forceOverwrite = true
+            ConflictsResolveDialogFragment.Decision.KEEP_BOTH -> {}
+            ConflictsResolveDialogFragment.Decision.SERVER -> {
                 conflictsResolveViewModel.downloadFile(account.name, file)
                 finish()
                 return
@@ -71,7 +70,7 @@ class ConflictsResolveActivity: FileActivity(), OnConflictDecisionMadeListener {
                 val fileInConflict = storageManager.getFileByPath(file.remotePath)
                 if (fileInConflict != null) {
                     file = fileInConflict
-                    ConflictsResolveDialog.newInstance(file.remotePath, this).showDialog(this)
+                    ConflictsResolveDialogFragment.newInstance(file.remotePath, this).showDialog(this)
                 } else {
                     // Account was changed to a different one - just finish
                     finish()
