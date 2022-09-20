@@ -135,10 +135,10 @@ abstract class FileDao {
             owner = ocFileEntity.owner,
             remotePath = ocFileEntity.remotePath
         )
-        if (localFile == null) {
-            return insert(ocFileEntity)
+        return if (localFile == null) {
+            insert(ocFileEntity)
         } else {
-            return insert(ocFileEntity.copy(
+            insert(ocFileEntity.copy(
                 parentId = localFile.parentId,
                 lastSyncDateForData = localFile.lastSyncDateForData,
                 modifiedAtLastSyncForData = localFile.modifiedAtLastSyncForData,
@@ -259,6 +259,9 @@ abstract class FileDao {
 
     @Query(DISABLE_THUMBNAILS_FOR_FILE)
     abstract fun disableThumbnailsForFile(fileId: Long)
+
+    @Query(DELETE_FILES_FOR_ACCOUNT)
+    abstract fun deleteFilesForAccount(accountName: String)
 
     private fun moveSingleFile(
         sourceFile: OCFileEntity,
@@ -421,5 +424,9 @@ abstract class FileDao {
             "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "SET storagePath = `REPLACE`(storagePath, :oldDirectory, :newDirectory) " +
                     "WHERE storagePath IS NOT NULL"
+
+        private const val DELETE_FILES_FOR_ACCOUNT =
+            "DELETE FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "WHERE owner = :accountName"
     }
 }

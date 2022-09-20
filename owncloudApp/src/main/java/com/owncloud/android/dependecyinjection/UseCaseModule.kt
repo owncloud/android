@@ -78,11 +78,12 @@ import com.owncloud.android.domain.transfers.usecases.UpdatePendingUploadsPathUs
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
+import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
+import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
-import com.owncloud.android.usecases.transfers.downloads.CancelDownloadsForAccountUseCase
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
@@ -90,7 +91,7 @@ import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCas
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
-import com.owncloud.android.usecases.transfers.uploads.CancelUploadsFromAccountUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccountUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileFromSystemUseCase
@@ -155,7 +156,6 @@ val useCaseModule = module {
 
     // Transfers
     factory { CancelDownloadForFileUseCase(get()) }
-    factory { CancelDownloadsForAccountUseCase(get()) }
     factory { DownloadFileUseCase(get()) }
     factory { GetLiveDataForDownloadingFileUseCase(get()) }
     factory { GetLiveDataForFinishedDownloadsFromAccountUseCase(get()) }
@@ -173,12 +173,13 @@ val useCaseModule = module {
     factory { ClearFailedTransfersUseCase(get(), get()) }
     factory { RetryFailedUploadsUseCase(get(), get(), get(), get()) }
     factory { ClearSuccessfulTransfersUseCase(get()) }
-    factory { CancelUploadsFromAccountUseCase(get(), get()) }
+    factory { CancelTransfersFromAccountUseCase(get(), get()) }
     factory { UpdatePendingUploadsPathUseCase(get()) }
     factory { UpdateAlreadyDownloadedFilesPathUseCase(get()) }
 
     // User
     factory { GetStoredQuotaUseCase(get()) }
+    factory { GetUserQuotasUseCase(get()) }
     factory { GetUserAvatarAsyncUseCase(get()) }
     factory { GetUserInfoAsyncUseCase(get()) }
     factory { RefreshUserQuotaFromServerAsyncUseCase(get()) }
@@ -194,4 +195,7 @@ val useCaseModule = module {
     factory { ResetVideoUploadsUseCase(get()) }
     factory { GetPictureUploadsConfigurationStreamUseCase(get()) }
     factory { GetVideoUploadsConfigurationStreamUseCase(get()) }
+
+    // Accounts
+    factory { RemoveAccountUseCase(get(), get(), get(), get(), get(), get(), get(), get()) }
 }

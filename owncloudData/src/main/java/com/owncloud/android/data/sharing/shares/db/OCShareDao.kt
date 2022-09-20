@@ -79,4 +79,10 @@ abstract class OCShareDao {
                 ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountOwner"
     )
     abstract fun deleteSharesForFile(filePath: String, accountOwner: String)
+
+    @Query(
+        "DELETE FROM " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
+                ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountName "
+    )
+    abstract fun deleteSharesForAccount(accountName: String)
 }

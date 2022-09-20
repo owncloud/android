@@ -27,13 +27,13 @@ package com.owncloud.android.ui.activity
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerFuture
-import android.accounts.OnAccountsUpdateListener
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.provider.DocumentsContract
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -52,7 +52,6 @@ import com.google.android.material.navigation.NavigationView
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.openPrivacyPolicy
@@ -370,7 +369,7 @@ abstract class DrawerActivity : ToolbarActivity() {
         }
 
         // re-add add-account and manage-accounts
-        if (getResources().getBoolean(R.bool.multiaccount_support)) {
+        if (resources.getBoolean(R.bool.multiaccount_support)) {
             navigationMenu.add(
                 R.id.drawer_menu_accounts, R.id.drawer_menu_account_add,
                 MENU_ORDER_ACCOUNT_FUNCTION,
@@ -457,7 +456,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                 getDrawerUserName()?.text = ocAccount.displayName
             } catch (e: Exception) {
                 Timber.w("Couldn't read display name of account; using account name instead")
-                getDrawerUserName()?.text = AccountUtils.getUsernameOfAccount(account.name)
+                getDrawerUserName()?.text = drawerViewModel.getUsernameOfAccount(account.name)
             }
 
             getDrawerCurrentAccount()?.let {
@@ -507,11 +506,16 @@ abstract class DrawerActivity : ToolbarActivity() {
         }
     }
 
-    private fun cleanupUnusedAccountDirectories() {
+    private fun setOnAccountsUpdatedListener() {
         val accountManager = AccountManager.get(this)
-        accountManager.addOnAccountsUpdatedListener(OnAccountsUpdateListener {
-            val accounts = AccountUtils.getAccounts(this)
-            drawerViewModel.deleteUnusedUserDirs(accounts)
+        accountManager.addOnAccountsUpdatedListener({
+            drawerViewModel.removeAccount(this)
+
+            // Notify removal to Document Provider
+            val authority = getString(R.string.document_provider_authority)
+            val rootsUri = DocumentsContract.buildRootsUri(authority)
+            contentResolver.notifyChange(rootsUri, null)
+
             updateAccountList()
         }, Handler(), false)
     }
@@ -560,7 +564,7 @@ abstract class DrawerActivity : ToolbarActivity() {
         }
         updateAccountList()
         updateQuota()
-        cleanupUnusedAccountDirectories()
+        setOnAccountsUpdatedListener()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -595,7 +599,7 @@ abstract class DrawerActivity : ToolbarActivity() {
 
             // current account has changed
             if (data.getBooleanExtra(ManageAccountsActivity.KEY_CURRENT_ACCOUNT_CHANGED, false)) {
-                account = AccountUtils.getCurrentOwnCloudAccount(this)
+                account = drawerViewModel.getCurrentAccount(this)
                 // Refresh dependencies to be used in selected account
                 initDependencyInjection()
                 restart()

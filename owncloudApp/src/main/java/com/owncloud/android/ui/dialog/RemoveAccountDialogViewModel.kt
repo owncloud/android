@@ -24,15 +24,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
-import com.owncloud.android.domain.camerauploads.usecases.ResetPictureUploadsUseCase
-import com.owncloud.android.domain.camerauploads.usecases.ResetVideoUploadsUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.launch
 
 class RemoveAccountDialogViewModel(
     private val getCameraUploadsConfigurationUseCase: GetCameraUploadsConfigurationUseCase,
-    private val resetPictureUploadsUseCase: ResetPictureUploadsUseCase,
-    private val resetVideoUploadsUseCase: ResetVideoUploadsUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
@@ -51,18 +47,5 @@ class RemoveAccountDialogViewModel(
     fun hasCameraUploadsAttached(accountName: String): Boolean {
         return accountName == cameraUploadsConfiguration?.pictureUploadsConfiguration?.accountName ||
                 accountName == cameraUploadsConfiguration?.videoUploadsConfiguration?.accountName
-    }
-
-    fun resetCameraUploadsForAccount(accountName: String) {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val cameraUploadsConfiguration = getCameraUploadsConfigurationUseCase.execute(Unit)
-
-            if (accountName == cameraUploadsConfiguration.getDataOrNull()?.pictureUploadsConfiguration?.accountName) {
-                resetPictureUploadsUseCase.execute(Unit)
-            }
-            if (accountName == cameraUploadsConfiguration.getDataOrNull()?.videoUploadsConfiguration?.accountName) {
-                resetVideoUploadsUseCase.execute(Unit)
-            }
-        }
     }
 }

@@ -46,6 +46,10 @@ class OCLocalCapabilitiesDataSource(
         )
     }
 
+    override fun removeCapabilitiesForAccount(accountName: String) {
+        ocCapabilityDao.delete(accountName)
+    }
+
     companion object {
         @VisibleForTesting
         fun OCCapabilityEntity.toModel(): OCCapability =

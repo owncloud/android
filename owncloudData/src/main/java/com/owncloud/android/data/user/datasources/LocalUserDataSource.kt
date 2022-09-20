@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.user.datasources
 
 import com.owncloud.android.domain.user.model.UserQuota
@@ -30,7 +31,9 @@ interface LocalUserDataSource {
         accountName: String
     ): UserQuota?
 
-    fun deleteQuotaForAccount(
+    fun getAllUserQuotas(): List<UserQuota>
+
+    fun removeQuotaForAccount(
         accountName: String
     )
 }

@@ -27,17 +27,24 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
+import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class DrawerViewModel(
     private val getStoredQuotaUseCase: GetStoredQuotaUseCase,
+    private val removeAccountUseCase: RemoveAccountUseCase,
+    private val getUserQuotasUseCase: GetUserQuotasUseCase,
+    private val localStorageProvider: LocalStorageProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -62,13 +69,35 @@ class DrawerViewModel(
         return AccountUtils.getCurrentOwnCloudAccount(context)
     }
 
+    fun getUsernameOfAccount(accountName: String): String {
+        return AccountUtils.getUsernameOfAccount(accountName)
+    }
+
     fun setCurrentAccount(context: Context, accountName: String): Boolean {
         return AccountUtils.setCurrentOwnCloudAccount(context, accountName)
     }
 
-    fun deleteUnusedUserDirs(accounts: Array<Account>) {
+    fun removeAccount(context: Context) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            FileStorageUtils.deleteUnusedUserDirs(accounts)
+            val loggedAccounts = AccountUtils.getAccounts(context)
+            FileStorageUtils.deleteUnusedUserDirs(loggedAccounts)
+
+            val userQuotas = getUserQuotasUseCase.execute(Unit)
+            val loggedAccountsNames = loggedAccounts.map { it.name }
+            val totalAccountsNames = userQuotas.map { it.accountName }
+            val removedAccountsNames = mutableListOf<String>()
+            for (accountName in totalAccountsNames) {
+                if (!loggedAccountsNames.contains(accountName)) {
+                    removedAccountsNames.add(accountName)
+                }
+            }
+            removedAccountsNames.forEach { removedAccountName ->
+                Timber.d("$removedAccountName is being removed")
+                removeAccountUseCase.execute(
+                    RemoveAccountUseCase.Params(accountName = removedAccountName)
+                )
+                localStorageProvider.removeLocalStorageForAccount(removedAccountName)
+            }
         }
     }
 }
