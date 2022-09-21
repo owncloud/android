@@ -66,16 +66,16 @@ jobs:
           prerelease: ${{ env.PRE_RELEASE }}
           name: ${{steps.tagger.outputs.tag}}
           files: |
-            ./owncloudApp/build/outputs/apk/original/release/owncloud_2.21.1.0-original-release.apk
+            ./owncloudApp/build/outputs/apk/release/owncloud*-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: |
-          assetsAPK=$(find . -name *.apk | while read -r asset ; do echo "-a $asset" ; done)
-          hub release create ${assetsAPK} -m "${{steps.tagger.outputs.tag}}" "${{steps.tagger.outputs.tag}}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ github.ref }}
+#      - run: |
+#          assetsAPK=$(find . -name *.apk | while read -r asset ; do echo "-a $asset" ; done)
+#          hub release create ${assetsAPK} -m "${{steps.tagger.outputs.tag}}" "${{steps.tagger.outputs.tag}}"
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          VERSION: ${{ github.ref }}
 
       - name: cleanup keystore
         run: ./signing/cleanup.sh
