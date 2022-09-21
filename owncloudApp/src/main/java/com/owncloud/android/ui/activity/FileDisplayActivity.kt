@@ -75,6 +75,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.ui.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.ui.files.details.FileDetailsFragment
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
@@ -1237,7 +1238,12 @@ class FileDisplayActivity : FileActivity(),
             is UIResult.Success -> {
                 when (uiResult.data) {
                     SynchronizeFileUseCase.SyncType.AlreadySynchronized -> showSnackMessage(getString(R.string.sync_file_nothing_to_do_msg))
-                    is SynchronizeFileUseCase.SyncType.ConflictDetected -> showSnackMessage(getString(R.string.sync_conflicts_in_favourites_ticker))
+                    is SynchronizeFileUseCase.SyncType.ConflictDetected -> {
+                        val showConflictActivityIntent = Intent(this, ConflictsResolveActivity::class.java)
+                        showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, file)
+                        showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, account)
+                        startActivity(showConflictActivityIntent)
+                    }
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> showSnackMessage("Download enqueued")
                     SynchronizeFileUseCase.SyncType.FileNotFound -> {
                         /** Nothing to do atm. If we are in details view, go back to file list */

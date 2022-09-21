@@ -20,6 +20,7 @@
 package com.owncloud.android.presentation.ui.files.details
 
 import android.accounts.Account
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -44,6 +45,7 @@ import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.ui.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.NONE
 import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC
 import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC_AND_OPEN
@@ -74,7 +76,7 @@ import timber.log.Timber
 
 class FileDetailsFragment : FileFragment() {
 
-    private val fileDetailsViewModel by viewModel<FileDetailsViewModel>() {
+    private val fileDetailsViewModel by viewModel<FileDetailsViewModel> {
         parametersOf(
             requireArguments().getParcelable(ARG_ACCOUNT),
             requireArguments().getParcelable(ARG_FILE),
@@ -120,7 +122,12 @@ class FileDetailsFragment : FileFragment() {
                 is UIResult.Loading -> {}
                 is UIResult.Success -> when (uiResult.data) {
                     SynchronizeFileUseCase.SyncType.AlreadySynchronized -> showMessageInSnackbar(getString(R.string.sync_file_nothing_to_do_msg))
-                    is SynchronizeFileUseCase.SyncType.ConflictDetected -> showMessageInSnackbar("CONFLICT")
+                    is SynchronizeFileUseCase.SyncType.ConflictDetected -> {
+                        val showConflictActivityIntent = Intent(requireActivity(), ConflictsResolveActivity::class.java)
+                        showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, file)
+                        showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, fileDetailsViewModel.getAccount())
+                        startActivity(showConflictActivityIntent)
+                    }
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
                         fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
                     }

@@ -23,15 +23,26 @@
 
 package com.owncloud.android.presentation.ui.conflicts
 
+import android.accounts.Account
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.ui.conflicts.fragments.ConflictsResolveDialogFragment
 import com.owncloud.android.presentation.viewmodels.conflicts.ConflictsResolveViewModel
-import com.owncloud.android.ui.activity.FileActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
-class ConflictsResolveActivity : FileActivity(), ConflictsResolveDialogFragment.OnConflictDecisionMadeListener {
+class ConflictsResolveActivity : AppCompatActivity(), ConflictsResolveDialogFragment.OnConflictDecisionMadeListener {
 
     private val conflictsResolveViewModel by viewModel<ConflictsResolveViewModel>()
+    private lateinit var account: Account
+    private lateinit var file: OCFile
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        account = intent.getParcelableExtra(EXTRA_ACCOUNT)!!
+        file = intent.getParcelableExtra(EXTRA_FILE)!!
+        ConflictsResolveDialogFragment.newInstance(file.remotePath, this).showDialog(this)
+    }
 
     override fun conflictDecisionMade(decision: ConflictsResolveDialogFragment.Decision) {
         var forceOverwrite = false
@@ -59,25 +70,8 @@ class ConflictsResolveActivity : FileActivity(), ConflictsResolveDialogFragment.
         finish()
     }
 
-    override fun onAccountSet(stateWasRecovered: Boolean) {
-        super.onAccountSet(stateWasRecovered)
-        if (account != null) {
-            if (file == null) {
-                Timber.e("No conflictive file received")
-                finish()
-            } else {
-                // Check if the file handled by the activity belongs to the current account
-                val fileInConflict = storageManager.getFileByPath(file.remotePath)
-                if (fileInConflict != null) {
-                    file = fileInConflict
-                    ConflictsResolveDialogFragment.newInstance(file.remotePath, this).showDialog(this)
-                } else {
-                    // Account was changed to a different one - just finish
-                    finish()
-                }
-            }
-        } else {
-            finish()
-        }
+    companion object {
+        const val EXTRA_ACCOUNT = "EXTRA_ACCOUNT"
+        const val EXTRA_FILE = "EXTRA_FILE"
     }
 }
