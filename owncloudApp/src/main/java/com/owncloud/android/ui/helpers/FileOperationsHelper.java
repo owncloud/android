@@ -34,7 +34,6 @@ import android.webkit.MimeTypeMap;
 
 import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
-import com.owncloud.android.data.storage.LocalStorageProvider;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.OCShare;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
@@ -43,16 +42,12 @@ import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase;
-import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase;
-import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase;
 import com.owncloud.android.utils.UriUtilsKt;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import static com.owncloud.android.services.OperationsService.EXTRA_SYNC_REGULAR_FILES;
 import static org.koin.java.KoinJavaComponent.inject;
@@ -176,93 +171,6 @@ public class FileOperationsHelper {
 
     }
 
-    private Intent makeActionSendIntent(OCFile oCfile) {
-        Intent sendIntent = new Intent(Intent.ACTION_SEND);
-
-        if (oCfile != null) {
-            // set MimeType
-            sendIntent.setType(oCfile.getMimeType());
-            sendIntent.putExtra(
-                    Intent.EXTRA_STREAM,
-                    UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, oCfile)
-            );
-        }
-        sendIntent.putExtra(Intent.ACTION_SEND, true);// Send Action
-        return sendIntent;
-    }
-
-    private Intent makeActionSendIntent(List<OCFile> oCfiles) {
-        Intent sendIntent = new Intent();
-
-        ArrayList<Uri> fileUris = new ArrayList<>();
-        for (int i = 0; i < oCfiles.size(); i++) {
-            fileUris.add(UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, (oCfiles.get(i))));
-        }
-
-        // set Type (All)
-        sendIntent.setType("*/*");
-        sendIntent.putParcelableArrayListExtra(
-                Intent.EXTRA_STREAM,
-                fileUris
-        );
-        sendIntent.setAction(Intent.ACTION_SEND_MULTIPLE);// Send Action
-        return sendIntent;
-    }
-
-    public void sendDownloadedFile(OCFile ocFile) {
-        if (ocFile != null) {
-            Intent sendIntent = makeActionSendIntent(ocFile);
-            // Show dialog, without the own app
-            String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Intent shareSheetIntent = new ShareSheetHelper().getShareSheetIntent(
-                        sendIntent,
-                        mFileActivity.getApplicationContext(),
-                        R.string.activity_chooser_send_file_title,
-                        packagesToExclude
-                );
-
-                mFileActivity.startActivity(shareSheetIntent);
-            } else {
-                DialogFragment chooserDialog = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude);
-                chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
-            }
-        } else {
-            Timber.e("Trying to send a NULL OCFile");
-        }
-    }
-
-    public void sendDownloadedFiles(List<OCFile> ocFiles) {
-        if (!ocFiles.isEmpty()) {
-            Intent sendIntent = makeActionSendIntent(ocFiles);
-            // Show dialog, without the own app
-            String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Intent shareSheetIntent = new ShareSheetHelper().getShareSheetIntent(
-                        sendIntent,
-                        mFileActivity.getApplicationContext(),
-                        R.string.activity_chooser_send_file_title,
-                        packagesToExclude
-                );
-
-                mFileActivity.startActivity(shareSheetIntent);
-            } else {
-                DialogFragment chooserDialog = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude);
-                chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
-            }
-        } else {
-            Timber.e("Trying to send a NULL OCFile");
-        }
-    }
-
-    public void syncFiles(Collection<OCFile> files) {
-        for (OCFile file : files) {
-            syncFile(file);
-        }
-    }
-
     /**
      * Request the synchronization of a file or folder with the OC server, including its contents.
      *
@@ -282,34 +190,6 @@ public class FileOperationsHelper {
             intent.putExtra(EXTRA_SYNC_REGULAR_FILES, true);
             mFileActivity.startService(intent);
         }
-    }
-
-    /**
-     * Cancel the transference in downloads (files/folders) and file uploads
-     *
-     * @param file OCFile
-     */
-    public void cancelTransference(OCFile file) {
-        Account account = mFileActivity.getAccount();
-        if (file.isFolder()) {
-            OperationsService.OperationsServiceBinder opsBinder =
-                    mFileActivity.getOperationsServiceBinder();
-            if (opsBinder != null) {
-                opsBinder.cancel(account, file);
-            }
-        }
-
-        // for both files and folders
-        @NotNull Lazy<CancelDownloadForFileUseCase> cancelDownloadForFileUseCaseLazy =
-                inject(CancelDownloadForFileUseCase.class);
-        CancelDownloadForFileUseCase.Params cancelDownloadParams = new CancelDownloadForFileUseCase.Params(file);
-        cancelDownloadForFileUseCaseLazy.getValue().execute(cancelDownloadParams);
-
-        // for both files and folders
-        @NotNull Lazy<CancelUploadForFileUseCase> cancelUploadForFileUseCaseLazy =
-                inject(CancelUploadForFileUseCase.class);
-        CancelUploadForFileUseCase.Params cancelUploadForFileUseCaseParams = new CancelUploadForFileUseCase.Params(file);
-        cancelUploadForFileUseCaseLazy.getValue().execute(cancelUploadForFileUseCaseParams);
     }
 
     public long getOpIdWaitingFor() {

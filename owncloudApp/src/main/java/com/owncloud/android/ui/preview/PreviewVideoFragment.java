@@ -50,6 +50,8 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
 import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.extensions.ActivityExtKt;
+import com.owncloud.android.extensions.FragmentExtKt;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.presentation.ui.files.operations.FileOperation;
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
@@ -62,6 +64,7 @@ import com.owncloud.android.ui.fragment.FileFragment;
 import timber.log.Timber;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.koin.java.KoinJavaComponent.get;
 
@@ -347,7 +350,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             }
             case R.id.action_send_file: {
                 releasePlayer();
-                mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
+                ActivityExtKt.sendDownloadedFilesByShareSheet(requireActivity(), Collections.singletonList(getFile()));
                 return true;
             }
             case R.id.action_sync_file: {

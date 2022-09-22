@@ -44,6 +44,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.media.MediaControlView
 import com.owncloud.android.media.MediaService
@@ -299,7 +300,7 @@ class PreviewAudioFragment : FileFragment() {
                 true
             }
             R.id.action_send_file -> {
-                mContainerActivity.fileOperationsHelper.sendDownloadedFile(file)
+                requireActivity().sendDownloadedFilesByShareSheet(listOf(file))
                 true
             }
             R.id.action_sync_file -> {

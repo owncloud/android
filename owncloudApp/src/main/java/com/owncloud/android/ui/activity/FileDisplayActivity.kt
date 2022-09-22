@@ -62,6 +62,8 @@ import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
+import com.owncloud.android.extensions.openOCFile
+import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.interfaces.ISecurityEnforced
@@ -73,13 +75,13 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.ui.files.details.FileDetailsFragment
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
 import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel
 import com.owncloud.android.syncadapter.FileSyncAdapter
-import com.owncloud.android.ui.fragment.FileDetailFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.fragment.TaskRetainerFragment
 import com.owncloud.android.ui.helpers.FilesUploadHelper
@@ -380,7 +382,7 @@ class FileDisplayActivity : FileActivity(),
                 )
             }
             else -> {
-                FileDetailFragment.newInstance(file, account)
+                FileDetailsFragment.newInstance(file, account)
             }
         }
     }
@@ -878,7 +880,7 @@ class FileDisplayActivity : FileActivity(),
                 } else {
                     val file = file
                     var fragmentReplaced = false
-                    if (success && secondFragment is FileDetailFragment) {
+                    if (success && secondFragment is FileDetailsFragment) {
                         // start preview if previewable
                         fragmentReplaced = true
                         when {
@@ -971,9 +973,9 @@ class FileDisplayActivity : FileActivity(),
             val secondFragment = secondFragment
             if (secondFragment != null) {
                 var fragmentReplaced = false
-                if (secondFragment is FileDetailFragment) {
+                if (secondFragment is FileDetailsFragment) {
                     /// user was watching download progress
-                    val detailsFragment = secondFragment as FileDetailFragment?
+                    val detailsFragment = secondFragment as FileDetailsFragment?
                     val fileInFragment = detailsFragment?.file
                     if (fileInFragment != null && downloadedRemotePath != fileInFragment.remotePath) {
                         // the user browsed to other file ; forget the automatic preview
@@ -1042,8 +1044,7 @@ class FileDisplayActivity : FileActivity(),
      * @param file [OCFile] whose details will be shown
      */
     override fun showDetails(file: OCFile) {
-        val detailFragment = FileDetailFragment.newInstance(file, account)
-        setSecondFragment(detailFragment)
+        navigateToDetails(account = account, ocFile = file, syncFileAtOpen = false)
         updateToolbar(file)
         setFile(file)
     }
@@ -1061,7 +1062,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun sendDownloadedFile(file: OCFile) {
-        fileOperationsHelper.sendDownloadedFile(file)
+        sendDownloadedFilesByShareSheet(listOf(file))
     }
 
     private fun updateToolbar(chosenFileFromParam: OCFile?) {
@@ -1342,12 +1343,18 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun sendDownloadedFile() {
-        fileOperationsHelper.sendDownloadedFile(waitingToSend)
+        waitingToSend?.let {
+            sendDownloadedFilesByShareSheet(listOf(it))
+        }
+
         waitingToSend = null
     }
 
     private fun openDownloadedFile() {
-        fileOperationsHelper.openFile(waitingToOpen)
+        waitingToOpen?.let {
+            openOCFile(it)
+        }
+
         waitingToOpen = null
     }
 
@@ -1372,7 +1379,7 @@ class FileDisplayActivity : FileActivity(),
      *
      * @param file [OCFile] to download and preview.
      */
-    private fun startDownloadForOpening(file: OCFile) {
+    fun startDownloadForOpening(file: OCFile) {
         waitingToOpen = file
         requestForDownload(file)
         val hasSecondFragment = secondFragment != null
@@ -1453,12 +1460,20 @@ class FileDisplayActivity : FileActivity(),
      * @param file [OCFile] to sync and open.
      */
     fun startSyncThenOpen(file: OCFile) {
-        val detailFragment = FileDetailFragment.newInstance(file, account)
-        setSecondFragment(detailFragment)
-        fileWaitingToPreview = file
-        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
+        navigateToDetails(account = account, ocFile = file, syncFileAtOpen = true)
+//        fileWaitingToPreview = file
+//        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
         updateToolbar(file)
         setFile(file)
+    }
+
+    private fun navigateToDetails(account: Account, ocFile: OCFile, syncFileAtOpen: Boolean) {
+        val detailsFragment = FileDetailsFragment.newInstance(
+            fileToDetail = ocFile,
+            account = account,
+            syncFileAtOpen = syncFileAtOpen
+        )
+        setSecondFragment(detailsFragment)
     }
 
     /**
@@ -1467,7 +1482,7 @@ class FileDisplayActivity : FileActivity(),
      * @param file [OCFile] file which operation are wanted to be cancel
      */
     fun cancelTransference(file: OCFile) {
-        fileOperationsHelper.cancelTransference(file)
+        transfersViewModel.cancelTransfersForFile(file)
         fileWaitingToPreview?.let {
             if (it.remotePath == file.remotePath) {
                 fileWaitingToPreview = null
@@ -1648,7 +1663,7 @@ class FileDisplayActivity : FileActivity(),
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
 
-        private const val ALL_FILES_SAF_REGEX = "*/*"
+        const val ALL_FILES_SAF_REGEX = "*/*"
 
         const val ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS"
 

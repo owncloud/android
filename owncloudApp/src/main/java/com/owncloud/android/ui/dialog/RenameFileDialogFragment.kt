@@ -107,6 +107,7 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
     }
 
     companion object {
+        const val FRAGMENT_TAG_RENAME_FILE = "RENAME_FILE_FRAGMENT"
         private const val ARG_TARGET_FILE = "TARGET_FILE"
 
         /**

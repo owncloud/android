@@ -43,6 +43,11 @@ abstract class FileDao {
         id: Long
     ): OCFileEntity?
 
+    @Query(SELECT_FILE_WITH_ID)
+    abstract fun getFileByIdAsStream(
+        id: Long
+    ): Flow<OCFileEntity?>
+
     @Query(SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH)
     abstract fun getFileByOwnerAndRemotePath(
         owner: String,

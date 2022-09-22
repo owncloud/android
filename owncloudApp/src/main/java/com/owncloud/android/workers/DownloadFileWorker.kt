@@ -301,6 +301,12 @@ class DownloadFileWorker(
         totalToTransfer: Long,
         filePath: String
     ) {
+        if (this.isStopped) {
+            Timber.w("Cancelling remote operation. The worker is stopped by user or system")
+            downloadRemoteFileOperation.cancel()
+            downloadRemoteFileOperation.removeDatatransferProgressListener(this)
+        }
+
         val percent: Int = (100.0 * totalTransferredSoFar.toDouble() / totalToTransfer.toDouble()).toInt()
         if (percent == lastPercent) return
 

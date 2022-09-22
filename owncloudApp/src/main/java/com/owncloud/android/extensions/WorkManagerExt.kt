@@ -39,9 +39,16 @@ fun WorkManager.getWorkInfoByTags(tags: List<String>): List<WorkInfo> =
     this.getWorkInfos(buildWorkQuery(tags = tags)).get().filter { it.tags.containsAll(tags) }
 
 /**
+ * Get a list of WorkInfo of running workers that matches at least one of the tags.
+ */
+fun WorkManager.getRunningWorkInfosByTags(tags: List<String>): List<WorkInfo> {
+    return getWorkInfos(buildWorkQuery(tags = tags, states = listOf(WorkInfo.State.RUNNING))).get().filter { it.tags.containsAll(tags) }
+}
+
+/**
  * Get a list of WorkInfo of running workers as LiveData that matches at least one of the tags.
  */
-fun WorkManager.getRunningUploadsWorkInfosLiveData(tags: List<String>): LiveData<List<WorkInfo>> {
+fun WorkManager.getRunningWorkInfosLiveData(tags: List<String>): LiveData<List<WorkInfo>> {
     return getWorkInfosLiveData(buildWorkQuery(tags = tags, states = listOf(WorkInfo.State.RUNNING)))
 }
 
@@ -52,9 +59,8 @@ fun WorkManager.getRunningUploadsWorkInfosLiveData(tags: List<String>): LiveData
  *
  * @return true if the download is pending.
  */
-fun WorkManager.isDownloadPending(account: Account, file: OCFile): Boolean = false
-// TODO: https://github.com/owncloud/android/issues/2872#issuecomment-817572474
-//  this.getWorkInfoByTags(getTagsForDownload(file, account)).any { !it.state.isFinished }
+fun WorkManager.isDownloadPending(account: Account, file: OCFile): Boolean =
+    this.getWorkInfoByTags(getTagsForDownload(file, account.name)).any { !it.state.isFinished }
 
 /**
  * Check if an upload is pending. It could be enqueued, uploading or blocked.
