@@ -33,39 +33,39 @@ class ConflictsResolveViewModel(
     private val downloadFileUseCase: DownloadFileUseCase,
     private val uploadFileInConflictUseCase: UploadFileInConflictUseCase,
     private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,
-    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
-    fun downloadFile(accountName: String, file: OCFile) {
+    fun downloadFile(file: OCFile) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             downloadFileUseCase.execute(
                 DownloadFileUseCase.Params(
-                    accountName = accountName,
+                    accountName = file.owner,
                     file = file
                 )
             )
         }
     }
 
-    fun uploadFileInConflict(accountName: String, localPath: String, uploadFolderPath: String) {
+    fun uploadFileInConflict(ocFile: OCFile) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             uploadFileInConflictUseCase.execute(
                 UploadFileInConflictUseCase.Params(
-                    accountName = accountName,
-                    localPath = localPath,
-                    uploadFolderPath = uploadFolderPath
+                    accountName = ocFile.owner,
+                    localPath = ocFile.storagePath!!,
+                    uploadFolderPath = ocFile.getParentRemotePath()
                 )
             )
         }
     }
 
-    fun uploadFilesFromSystem(accountName: String, listOfLocalPaths: List<String>, uploadFolderPath: String) {
+    fun uploadFileFromSystem(ocFile: OCFile) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             uploadFilesFromSystemUseCase.execute(
                 UploadFilesFromSystemUseCase.Params(
-                    accountName = accountName,
-                    listOfLocalPaths = listOfLocalPaths,
-                    uploadFolderPath = uploadFolderPath
+                    accountName = ocFile.owner,
+                    listOfLocalPaths = listOf(ocFile.storagePath!!),
+                    uploadFolderPath = ocFile.getParentRemotePath()
                 )
             )
         }
