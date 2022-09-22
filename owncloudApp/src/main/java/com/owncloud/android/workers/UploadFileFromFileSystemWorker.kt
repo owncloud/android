@@ -105,7 +105,7 @@ class UploadFileFromFileSystemWorker(
             checkNameCollisionOrGetAnAvailableOneInCase()
             uploadDocument()
             updateUploadsDatabaseWithResult(null)
-            updateFilesDatabaseWithNewEtag()
+            updateFilesDatabaseWithLatestDetails()
             Result.success()
         } catch (throwable: Throwable) {
             Timber.e(throwable)
@@ -121,23 +121,29 @@ class UploadFileFromFileSystemWorker(
      * We will ask for thumbnails after the upload
      * We will update info about the file (modification timestamp and etag)
      */
-    private fun updateFilesDatabaseWithNewEtag() {
+    private fun updateFilesDatabaseWithLatestDetails() {
         val currentTime = System.currentTimeMillis()
-        if (ocTransfer.forceOverwrite) {
-            val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
-            val file = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(account.name, ocTransfer.remotePath))
-            file.getDataOrNull()?.let { ocFile ->
-                ocFile.copy(
-                    needsToUpdateThumbnail = true,
-                    etag = uploadFileOperation.etag,
-                    length = (File(ocTransfer.localPath).length()),
-                    lastSyncDateForData = currentTime,
-                    modifiedAtLastSyncForData = currentTime,
-                    etagInConflict = null
-                ).let {
-                    saveFileOrFolderUseCase.execute(SaveFileOrFolderUseCase.Params(it))
+        val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
+        val file = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(account.name, ocTransfer.remotePath))
+        file.getDataOrNull()?.let { ocFile ->
+            val fileWithNewDetails =
+                if (ocTransfer.forceOverwrite) {
+                    ocFile.copy(
+                        needsToUpdateThumbnail = true,
+                        etag = uploadFileOperation.etag,
+                        length = (File(ocTransfer.localPath).length()),
+                        lastSyncDateForData = currentTime,
+                        modifiedAtLastSyncForData = currentTime,
+                        etagInConflict = null
+                    )
+                } else {
+                    // Uploading a file should remove any conflicts on the file.
+                    ocFile.copy(
+                        etagInConflict = null,
+                        storagePath = null,
+                    )
                 }
-            }
+            saveFileOrFolderUseCase.execute(SaveFileOrFolderUseCase.Params(fileWithNewDetails))
         }
     }
 

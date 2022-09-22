@@ -183,8 +183,7 @@ object NotificationUtils {
         val showConflictActivityIntent = Intent(context, ConflictsResolveActivity::class.java)
         showConflictActivityIntent.flags = showConflictActivityIntent.flags or Intent.FLAG_ACTIVITY_NEW_TASK or
                 Intent.FLAG_FROM_BACKGROUND
-        showConflictActivityIntent.putExtra(EXTRA_FILE, fileInConflict)
-        showConflictActivityIntent.putExtra(EXTRA_ACCOUNT, account)
+        showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, fileInConflict)
         notificationBuilder.setContentIntent(
             PendingIntent.getActivity(
                 context, System.currentTimeMillis().toInt(),
