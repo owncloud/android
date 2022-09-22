@@ -37,7 +37,7 @@ import java.io.File
  * - (FAB) Picture from camera
  * - Share with oC - Plain Text
  * - Share with oC - Files
- * - TODO: Conflicts - Keep local
+ * - Conflicts - Keep local
  * - Conflicts - Keep both
  *
  * It stores the upload in the database and then enqueue a new worker to upload the single file

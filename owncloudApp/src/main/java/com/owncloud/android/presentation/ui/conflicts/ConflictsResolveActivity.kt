@@ -23,7 +23,6 @@
 
 package com.owncloud.android.presentation.ui.conflicts
 
-import android.accounts.Account
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.owncloud.android.domain.files.model.OCFile
@@ -34,37 +33,26 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class ConflictsResolveActivity : AppCompatActivity(), ConflictsResolveDialogFragment.OnConflictDecisionMadeListener {
 
     private val conflictsResolveViewModel by viewModel<ConflictsResolveViewModel>()
-    private lateinit var account: Account
     private lateinit var file: OCFile
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        account = intent.getParcelableExtra(EXTRA_ACCOUNT)!!
         file = intent.getParcelableExtra(EXTRA_FILE)!!
         ConflictsResolveDialogFragment.newInstance(file.remotePath, this).showDialog(this)
     }
 
     override fun conflictDecisionMade(decision: ConflictsResolveDialogFragment.Decision) {
-        var forceOverwrite = false
-
         when (decision) {
-            ConflictsResolveDialogFragment.Decision.CANCEL -> {
-                finish()
-                return
+            ConflictsResolveDialogFragment.Decision.CANCEL -> {}
+            ConflictsResolveDialogFragment.Decision.LOCAL -> {
+                conflictsResolveViewModel.uploadFileInConflict(file)
             }
-            ConflictsResolveDialogFragment.Decision.LOCAL -> forceOverwrite = true
-            ConflictsResolveDialogFragment.Decision.KEEP_BOTH -> {}
+            ConflictsResolveDialogFragment.Decision.KEEP_BOTH -> {
+                conflictsResolveViewModel.uploadFileFromSystem(file)
+            }
             ConflictsResolveDialogFragment.Decision.SERVER -> {
-                conflictsResolveViewModel.downloadFile(account.name, file)
-                finish()
-                return
+                conflictsResolveViewModel.downloadFile(file)
             }
-        }
-
-        if (forceOverwrite) {
-            conflictsResolveViewModel.uploadFileInConflict(file.owner, file.storagePath!!, file.remotePath)
-        } else {
-            conflictsResolveViewModel.uploadFilesFromSystem(file.owner, listOf(file.storagePath!!), file.remotePath)
         }
 
         finish()

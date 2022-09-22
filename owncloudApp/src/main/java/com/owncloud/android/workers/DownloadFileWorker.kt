@@ -188,6 +188,7 @@ class DownloadFileWorker(
             needsToUpdateThumbnail = true
             modificationTimestamp = downloadRemoteFileOperation.modificationTimestamp
             etag = downloadRemoteFileOperation.etag
+            etagInConflict = null // If file has just downloaded, there cant be conflicts anymore.
             storagePath = finalLocationForFile
             length = (File(finalLocationForFile).length())
             lastSyncDateForProperties = currentTime
