@@ -42,7 +42,6 @@ import com.owncloud.android.presentation.ui.authentication.LoginActivity
 import com.owncloud.android.presentation.ui.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.ui.settings.SettingsActivity
 import com.owncloud.android.presentation.ui.settings.SettingsActivity.Companion.KEY_NOTIFICATION_INTENT
-import com.owncloud.android.ui.activity.FileActivity.EXTRA_FILE
 import com.owncloud.android.ui.activity.UploadListActivity
 import java.util.Random
 

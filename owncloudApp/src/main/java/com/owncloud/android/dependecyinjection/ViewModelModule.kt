@@ -91,5 +91,5 @@ val viewModelModule = module {
     viewModel { FileOperationsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { (accountName: String, initialFolderToDisplay: OCFile) -> MainFileListViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), accountName, initialFolderToDisplay) }
     viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { ConflictsResolveViewModel(get(), get(), get(), get()) }
+    viewModel { (ocFile: OCFile) -> ConflictsResolveViewModel(get(), get(), get(), get(), get(), ocFile) }
 }

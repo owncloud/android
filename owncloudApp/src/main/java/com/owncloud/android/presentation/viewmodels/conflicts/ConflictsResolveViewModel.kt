@@ -33,39 +33,52 @@ class ConflictsResolveViewModel(
     private val downloadFileUseCase: DownloadFileUseCase,
     private val uploadFileInConflictUseCase: UploadFileInConflictUseCase,
     private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,
+    getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    ocFile: OCFile,
 ) : ViewModel() {
 
-    fun downloadFile(file: OCFile) {
+    val currentFile: StateFlow<OCFile?> =
+        getFileByIdAsStreamUseCase.execute(GetFileByIdAsStreamUseCase.Params(ocFile.id!!))
+            .stateIn(
+                viewModelScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = ocFile
+            )
+
+    fun downloadFile() {
+        val fileToDownload = currentFile.value ?: return
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             downloadFileUseCase.execute(
                 DownloadFileUseCase.Params(
-                    accountName = file.owner,
-                    file = file
+                    accountName = fileToDownload.owner,
+                    file = fileToDownload
                 )
             )
         }
     }
 
-    fun uploadFileInConflict(ocFile: OCFile) {
+    fun uploadFileInConflict() {
+        val fileToUpload = currentFile.value ?: return
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             uploadFileInConflictUseCase.execute(
                 UploadFileInConflictUseCase.Params(
-                    accountName = ocFile.owner,
-                    localPath = ocFile.storagePath!!,
-                    uploadFolderPath = ocFile.getParentRemotePath()
+                    accountName = fileToUpload.owner,
+                    localPath = fileToUpload.storagePath!!,
+                    uploadFolderPath = fileToUpload.getParentRemotePath()
                 )
             )
         }
     }
 
-    fun uploadFileFromSystem(ocFile: OCFile) {
+    fun uploadFileFromSystem() {
+        val fileToUpload = currentFile.value ?: return
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             uploadFilesFromSystemUseCase.execute(
                 UploadFilesFromSystemUseCase.Params(
-                    accountName = ocFile.owner,
-                    listOfLocalPaths = listOf(ocFile.storagePath!!),
-                    uploadFolderPath = ocFile.getParentRemotePath()
+                    accountName = fileToUpload.owner,
+                    listOfLocalPaths = listOf(fileToUpload.storagePath!!),
+                    uploadFolderPath = fileToUpload.getParentRemotePath()
                 )
             )
         }

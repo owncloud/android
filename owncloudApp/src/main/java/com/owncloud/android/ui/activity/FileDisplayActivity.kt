@@ -1241,7 +1241,6 @@ class FileDisplayActivity : FileActivity(),
                     is SynchronizeFileUseCase.SyncType.ConflictDetected -> {
                         val showConflictActivityIntent = Intent(this, ConflictsResolveActivity::class.java)
                         showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, file)
-                        showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, account)
                         startActivity(showConflictActivityIntent)
                     }
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> showSnackMessage("Download enqueued")

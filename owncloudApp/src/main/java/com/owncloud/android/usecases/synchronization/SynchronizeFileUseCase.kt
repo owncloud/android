@@ -71,10 +71,9 @@ class SynchronizeFileUseCase(
 
             if (changedLocally && changedRemotely) {
                 // 5.1 File has changed locally and remotely. We got a conflict, save the conflict.
-                Timber.i("File ${fileToSynchronize.fileName} has changed locally and remotely. We got a conflict")
+                Timber.i("File ${fileToSynchronize.fileName} has changed locally and remotely. We got a conflict with etag: ${serverFile.etag}")
                 saveFileUseCase.execute(SaveFileOrFolderUseCase.Params(fileToSynchronize.copy(etagInConflict = serverFile.etag)))
                 return SyncType.ConflictDetected(serverFile.etag!!)
-                // FIXME Conflicts
             } else if (changedRemotely) {
                 // 5.2 File has changed ONLY remotely -> download new version
                 Timber.i("File ${fileToSynchronize.fileName} has changed remotely. Let's download the new version")
