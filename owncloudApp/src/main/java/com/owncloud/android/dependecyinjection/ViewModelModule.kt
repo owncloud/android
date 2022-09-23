@@ -108,5 +108,5 @@ val viewModelModule = module {
         )
     }
     viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { ConflictsResolveViewModel(get(), get(), get(), get()) }
+    viewModel { (ocFile: OCFile) -> ConflictsResolveViewModel(get(), get(), get(), get(), get(), ocFile) }
 }
