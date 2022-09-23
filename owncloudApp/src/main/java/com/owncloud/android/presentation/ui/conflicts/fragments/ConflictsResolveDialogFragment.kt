@@ -42,13 +42,13 @@ class ConflictsResolveDialogFragment : DialogFragment() {
             .setTitle(R.string.conflict_title)
             .setMessage(R.string.conflict_message)
             .setPositiveButton(R.string.conflict_use_local_version) { _, _ ->
-                listener.conflictDecisionMade(Decision.LOCAL)
+                listener.conflictDecisionMade(Decision.KEEP_LOCAL)
             }
             .setNeutralButton(R.string.conflict_keep_both) { _, _ ->
                 listener.conflictDecisionMade(Decision.KEEP_BOTH)
             }
             .setNegativeButton(R.string.conflict_use_server_version) { _, _ ->
-                listener.conflictDecisionMade(Decision.SERVER)
+                listener.conflictDecisionMade(Decision.KEEP_SERVER)
             }
             .create()
 
@@ -79,18 +79,15 @@ class ConflictsResolveDialogFragment : DialogFragment() {
     enum class Decision {
         CANCEL,
         KEEP_BOTH,
-        LOCAL,
-        SERVER
+        KEEP_LOCAL,
+        KEEP_SERVER
     }
 
     companion object {
-        fun newInstance(path: String, listener: OnConflictDecisionMadeListener): ConflictsResolveDialogFragment {
-            val conflictsResolveDialogFragment = ConflictsResolveDialogFragment()
-            val args = Bundle()
-            args.putString("remotepath", path)
-            conflictsResolveDialogFragment.arguments = args
-            conflictsResolveDialogFragment.listener = listener
-            return conflictsResolveDialogFragment
+        fun newInstance(onConflictDecisionMadeListener: OnConflictDecisionMadeListener): ConflictsResolveDialogFragment {
+            return ConflictsResolveDialogFragment().apply {
+                listener = onConflictDecisionMadeListener
+            }
         }
     }
 }

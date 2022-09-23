@@ -162,7 +162,6 @@ class FileDetailsFragment : FileFragment() {
                     is SynchronizeFileUseCase.SyncType.ConflictDetected -> {
                         val showConflictActivityIntent = Intent(requireActivity(), ConflictsResolveActivity::class.java)
                         showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, file)
-                        showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, fileDetailsViewModel.getAccount())
                         startActivity(showConflictActivityIntent)
                     }
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
