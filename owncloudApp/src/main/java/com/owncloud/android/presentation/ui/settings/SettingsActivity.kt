@@ -62,12 +62,6 @@ class SettingsActivity : AppCompatActivity() {
         redirectToSubsection(intent)
     }
 
-    override fun onDestroy() {
-        val workerProvider = WorkManagerProvider(context = this)
-        workerProvider.enqueueAvailableOfflinePeriodicWorker()
-        super.onDestroy()
-    }
-
     private fun updateToolbarTitle() {
         val titleId = when (supportFragmentManager.fragments.lastOrNull()) {
             is SettingsSecurityFragment -> R.string.prefs_subsection_security
