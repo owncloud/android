@@ -149,6 +149,7 @@ class FileDetailsFragment : FileFragment() {
                 is UIResult.Error -> {
                     showErrorInSnackbar(R.string.sync_fail_ticker, uiResult.error)
                     fileDetailsViewModel.updateActionInDetailsView(NONE)
+                    requireActivity().invalidateOptionsMenu()
                 }
                 is UIResult.Loading -> {}
                 is UIResult.Success -> when (uiResult.data) {
