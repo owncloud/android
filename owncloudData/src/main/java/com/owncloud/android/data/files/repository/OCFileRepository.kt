@@ -55,7 +55,7 @@ class OCFileRepository(
             createFullPath = false,
             isChunksFolder = false
         ).also {
-            localFileDataSource.saveFilesInFolder(
+            localFileDataSource.saveFilesInFolderAndReturnThem(
                 folder = parentFolder,
                 listOfFiles = listOf(
                     OCFile(
@@ -273,11 +273,10 @@ class OCFileRepository(
             }
         }
 
-        localFileDataSource.saveFilesInFolder(
+        return localFileDataSource.saveFilesInFolderAndReturnThem(
             folder = remoteFolder,
             listOfFiles = folderContentUpdated
         )
-        return folderContentUpdated
     }
 
     override fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean) {
