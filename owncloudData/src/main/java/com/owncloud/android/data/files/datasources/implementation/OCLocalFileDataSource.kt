@@ -129,12 +129,13 @@ class OCLocalFileDataSource(
             finalStoragePath = sourceFile.storagePath?.let { finalStoragePath }
         )
 
-    override fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile) {
+    override fun saveFilesInFolderAndReturnThem(listOfFiles: List<OCFile>, folder: OCFile): List<OCFile> {
         // TODO: If it is root, add 0 as parent Id
-        fileDao.insertFilesInFolder(
+        val folderContent = fileDao.insertFilesInFolderAndReturnThem(
             folder = folder.toEntity(),
             folderContent = listOfFiles.map { it.toEntity() }
         )
+        return folderContent.map { it.toModel() }
     }
 
     override fun saveFile(file: OCFile) {

@@ -81,6 +81,7 @@ import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
 import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel
+import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.fragment.TaskRetainerFragment
@@ -242,6 +243,8 @@ class FileDisplayActivity : FileActivity(),
         super.onPostCreate(savedInstanceState)
 
         if (savedInstanceState == null && mAccountWasSet) {
+            val workerProvider = WorkManagerProvider(context = this)
+            workerProvider.enqueueAvailableOfflinePeriodicWorker()
             initAndShowListOfFiles()
         }
 
