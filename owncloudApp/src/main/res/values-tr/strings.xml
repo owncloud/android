@@ -621,4 +621,5 @@
   <string name="open_in_web_error_generic">Web\'te açılamadı</string>
   <string name="open_in_web_error_not_supported">bu dosya türünü destekleyen hiçbir uygulama yok</string>
   <string name="release_notes_2.21.2_title1">Web\'te aç</string>
+  <string name="release_notes_2.21.2_subtitle1">Web tarayıcısında sunucu tarafından desteklenen dosya türlerini açın (yalnızca oCIS)</string>
 </resources>
