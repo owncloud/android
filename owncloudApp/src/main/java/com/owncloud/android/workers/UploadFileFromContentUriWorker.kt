@@ -148,8 +148,6 @@ class UploadFileFromContentUriWorker(
     }
 
     private fun copyFileToLocalStorage() {
-        val inputStream = appContext.contentResolver.openInputStream(contentUri)
-
         val localStorageProvider: LocalStorageProvider by inject()
         cachePath = localStorageProvider.getTemporalPath(account.name) + uploadPath + UriUtils.getDisplayNameForUri(contentUri, appContext)
         val cacheFile = File(cachePath)
@@ -161,15 +159,13 @@ class UploadFileFromContentUriWorker(
         }
         cacheFile.createNewFile()
 
+        val inputStream = appContext.contentResolver.openInputStream(contentUri)
         val outputStream = FileOutputStream(cachePath)
-        val buffer = ByteArray(4096)
-        if (inputStream != null) {
-            var count = inputStream.read(buffer)
-            while (count > 0) {
-                outputStream.write(buffer, 0, count)
-                count = inputStream.read(buffer)
-            }
+        outputStream.use { fileOut ->
+            inputStream?.copyTo(fileOut)
         }
+        inputStream?.close()
+        outputStream.close()
 
         mimeType = cacheFile.extension
         fileSize = cacheFile.length()
