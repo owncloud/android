@@ -116,12 +116,14 @@ abstract class FileDao {
 
     /**
      * Make sure that the ids are set properly. We don't take care of conflicts and that stuff here.
+     *
+     * return folder content
      */
     @Transaction
-    open fun insertFilesInFolder(
+    open fun insertFilesInFolderAndReturnThem(
         folder: OCFileEntity,
         folderContent: List<OCFileEntity>,
-    ) {
+    ): List<OCFileEntity> {
         val folderId = insert(folder)
 
         folderContent.forEach { fileToInsert ->
@@ -130,6 +132,7 @@ abstract class FileDao {
                 availableOfflineStatus = getNewAvailableOfflineStatus(folder.availableOfflineStatus, fileToInsert.availableOfflineStatus)
             })
         }
+        return getFolderContent(folderId)
     }
 
     @Transaction
