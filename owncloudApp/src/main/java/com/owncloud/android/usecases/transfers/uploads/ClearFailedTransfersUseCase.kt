@@ -21,19 +21,31 @@
 package com.owncloud.android.usecases.transfers.uploads
 
 import androidx.work.WorkManager
+import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.domain.transfers.model.OCTransfer
+import java.io.File
 
 class ClearFailedTransfersUseCase(
     private val workManager: WorkManager,
     private val transferRepository: TransferRepository,
+    private val localStorageProvider: LocalStorageProvider,
 ) : BaseUseCase<Unit, Unit>() {
     override fun run(params: Unit) {
         val failedTransfers = transferRepository.getFailedTransfers()
         failedTransfers.forEach { failedTransfer ->
             workManager.cancelAllWorkByTag(failedTransfer.id.toString())
-            // TODO: Delete cache files of those transfers which were cached (check if they are located in the temp directory)
+            deleteCacheIfNeeded(failedTransfer)
         }
         transferRepository.clearFailedTransfers()
+    }
+
+    private fun deleteCacheIfNeeded(transfer: OCTransfer) {
+        val cacheDir = localStorageProvider.getTemporalPath(transfer.accountName)
+        if (transfer.localPath.startsWith(cacheDir)) {
+            val cacheFile = File(transfer.localPath)
+            cacheFile.delete()
+        }
     }
 }
