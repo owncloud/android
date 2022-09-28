@@ -240,9 +240,10 @@ class UploadFileFromContentUriWorker(
     }
 
     private fun uploadChunkedFile(client: OwnCloudClient) {
+        val immutableHashForChunkedFile = SecurityUtils.stringToMD5Hash(uploadPath) + System.currentTimeMillis()
         // Step 1: Create folder where the chunks will be uploaded.
         val createChunksRemoteFolderOperation = CreateRemoteFolderOperation(
-            remotePath = SecurityUtils.stringToMD5Hash(uploadPath) + System.currentTimeMillis(),
+            remotePath = immutableHashForChunkedFile,
             createFullPath = false,
             isChunksFolder = true
         )
@@ -250,7 +251,7 @@ class UploadFileFromContentUriWorker(
 
         // Step 2: Upload file by chunks
         uploadFileOperation = ChunkedUploadFromFileSystemOperation(
-            transferId = SecurityUtils.stringToMD5Hash(uploadPath) + System.currentTimeMillis(),
+            transferId = immutableHashForChunkedFile,
             localPath = cachePath,
             remotePath = uploadPath,
             mimeType = mimeType,
@@ -265,7 +266,7 @@ class UploadFileFromContentUriWorker(
         // Step 3: Move remote file to the final remote destination
         val ocChunkService = OCChunkService(client)
         ocChunkService.moveFile(
-            sourceRemotePath = "${SecurityUtils.stringToMD5Hash(uploadPath)}${System.currentTimeMillis()}${OCFile.PATH_SEPARATOR}${FileUtils.FINAL_CHUNKS_FILE}",
+            sourceRemotePath = "${immutableHashForChunkedFile}${OCFile.PATH_SEPARATOR}${FileUtils.FINAL_CHUNKS_FILE}",
             targetRemotePath = uploadPath,
             fileLastModificationTimestamp = lastModified,
             fileLength = fileSize
