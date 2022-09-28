@@ -59,6 +59,10 @@ class OCLocalTransferDataSource(
         transferDao.updateTransferWhenFinished(id, status.value, transferEndTimestamp, lastResult.value)
     }
 
+    override fun updateTransferLocalPath(id: Long, localPath: String) {
+        transferDao.updateTransferLocalPath(id, localPath)
+    }
+
     override fun updateTransferStorageDirectoryInLocalPath(
         id: Long,
         oldDirectory: String,
