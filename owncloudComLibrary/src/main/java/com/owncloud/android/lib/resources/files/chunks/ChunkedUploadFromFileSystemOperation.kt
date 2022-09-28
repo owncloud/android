@@ -116,7 +116,7 @@ class ChunkedUploadFromFileSystemOperation(
     }
 
     companion object {
-        const val CHUNK_SIZE = 1_024_000L
+        const val CHUNK_SIZE = 10_240_000L // 10 MB
         private const val LAST_CHUNK_TIMEOUT = 900_000 // 15 mins.
     }
 }
