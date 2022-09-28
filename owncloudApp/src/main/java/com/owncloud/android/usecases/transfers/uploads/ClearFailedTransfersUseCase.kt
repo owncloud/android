@@ -32,6 +32,7 @@ class ClearFailedTransfersUseCase(
         val failedTransfers = transferRepository.getFailedTransfers()
         failedTransfers.forEach { failedTransfer ->
             workManager.cancelAllWorkByTag(failedTransfer.id.toString())
+            // TODO: Delete cache files of those transfers which were cached (check if they are located in the temp directory)
         }
         transferRepository.clearFailedTransfers()
     }
