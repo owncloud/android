@@ -25,9 +25,7 @@ import androidx.work.WorkManager
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.transfers.TransferRepository
-import com.owncloud.android.domain.transfers.model.OCTransfer
 import timber.log.Timber
-import java.io.File
 
 class CancelUploadWithIdUseCase(
     private val workManager: WorkManager,
@@ -39,19 +37,11 @@ class CancelUploadWithIdUseCase(
         workManager.cancelAllWorkByTag(params.uploadId.toString())
 
         val transfer = transferRepository.getTransferById(params.uploadId)
-        deleteCacheIfNeeded(transfer!!)
+        transfer?.let { localStorageProvider.deleteCacheIfNeeded(it) }
 
         transferRepository.removeTransferById(params.uploadId)
 
         Timber.i("Upload with id ${params.uploadId} has been cancelled.")
-    }
-
-    private fun deleteCacheIfNeeded(transfer: OCTransfer) {
-        val cacheDir = localStorageProvider.getTemporalPath(transfer.accountName)
-        if (transfer.localPath.startsWith(cacheDir)) {
-            val cacheFile = File(transfer.localPath)
-            cacheFile.delete()
-        }
     }
 
     data class Params(

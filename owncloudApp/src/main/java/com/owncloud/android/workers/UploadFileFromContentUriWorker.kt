@@ -174,6 +174,16 @@ class UploadFileFromContentUriWorker(
         outputStream.close()
 
         transferRepository.updateTransferLocalPath(uploadIdInStorageManager, cachePath)
+
+        // File is already in cache, so the original one can be removed if the behaviour is MOVE
+        if (behavior == UploadBehavior.MOVE) {
+            removeLocalFile()
+        }
+    }
+
+    private fun removeLocalFile() {
+        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
+        documentFile?.delete()
     }
 
     private fun checkParentFolderExistence() {
@@ -211,7 +221,7 @@ class UploadFileFromContentUriWorker(
             )
         )
         val isChunkingAllowed = capabilitiesForAccount != null && capabilitiesForAccount.isChunkingAllowed()
-        Timber.d("Chunking is allowed: %s", isChunkingAllowed)
+        Timber.d("Chunking is allowed: %s, and file size is greater than the minimum chunk size: %s", isChunkingAllowed, fileSize > CHUNK_SIZE)
 
         if (isChunkingAllowed && fileSize > CHUNK_SIZE) {
             uploadChunkedFile(client)
@@ -232,11 +242,7 @@ class UploadFileFromContentUriWorker(
             it.addDataTransferProgressListener(this)
         }
 
-        val result = executeRemoteOperation { uploadFileOperation.execute(client) }
-
-        if (result == Unit && behavior == UploadBehavior.MOVE) {
-            removeLocalFile()
-        }
+        executeRemoteOperation { uploadFileOperation.execute(client) }
     }
 
     private fun uploadChunkedFile(client: OwnCloudClient) {
@@ -261,7 +267,7 @@ class UploadFileFromContentUriWorker(
             it.addDataTransferProgressListener(this)
         }
 
-        val result = executeRemoteOperation { uploadFileOperation.execute(client) }
+        executeRemoteOperation { uploadFileOperation.execute(client) }
 
         // Step 3: Move remote file to the final remote destination
         val ocChunkService = OCChunkService(client)
@@ -271,16 +277,6 @@ class UploadFileFromContentUriWorker(
             fileLastModificationTimestamp = lastModified,
             fileLength = fileSize
         )
-
-        // Step 4: Remove local file after uploading
-        if (result == Unit && behavior == UploadBehavior.MOVE) {
-            removeLocalFile()
-        }
-    }
-
-    private fun removeLocalFile() {
-        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
-        documentFile?.delete()
     }
 
     private fun removeCacheFile() {
