@@ -31,7 +31,6 @@ import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
 import timber.log.Timber
-import java.io.File
 
 /**
  * General use case to upload a file from the Storage Access Framework.
@@ -56,13 +55,13 @@ class UploadFilesFromContentUriUseCase(
 
             val uploadId = storeInUploadsDatabase(
                 documentFile = documentFile,
-                uploadPath = params.uploadFolderPath.plus(File.separator).plus(documentFile.name),
+                uploadPath = params.uploadFolderPath.plus(documentFile.name),
                 accountName = params.accountName,
             )
 
             enqueueSingleUpload(
                 contentUri = documentFile.uri,
-                uploadPath = params.uploadFolderPath.plus(File.separator).plus(documentFile.name),
+                uploadPath = params.uploadFolderPath.plus(documentFile.name),
                 lastModifiedInSeconds = documentFile.lastModified().div(1_000).toString(),
                 accountName = params.accountName,
                 uploadIdInStorageManager = uploadId,

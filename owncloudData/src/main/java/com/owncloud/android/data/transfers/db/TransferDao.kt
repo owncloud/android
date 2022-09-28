@@ -53,6 +53,9 @@ abstract class TransferDao {
     @Query(UPDATE_TRANSFER_WHEN_FINISHED)
     abstract fun updateTransferWhenFinished(id: Long, status: Int, transferEndTimestamp: Long, lastResult: Int)
 
+    @Query(UPDATE_TRANSFER_LOCAL_PATH_WITH_ID)
+    abstract fun updateTransferLocalPath(id: Long, localPath: String)
+
     @Query(UPDATE_TRANSFER_STORAGE_DIRECTORY)
     abstract fun updateTransferStorageDirectoryInLocalPath(id: Long, oldDirectory: String, newDirectory: String)
 
@@ -97,6 +100,11 @@ abstract class TransferDao {
                     "SET status = :status, " +
                     "transferEndTimestamp = :transferEndTimestamp," +
                     "lastResult = :lastResult " +
+                    "WHERE id = :id"
+
+        private const val UPDATE_TRANSFER_LOCAL_PATH_WITH_ID =
+            "UPDATE $TRANSFERS_TABLE_NAME " +
+                    "SET localPath = :localPath " +
                     "WHERE id = :id"
 
         private const val UPDATE_TRANSFER_STORAGE_DIRECTORY =

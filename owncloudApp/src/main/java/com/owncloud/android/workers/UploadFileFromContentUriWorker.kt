@@ -41,6 +41,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
+import com.owncloud.android.extensions.isContentUri
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -52,11 +53,12 @@ import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
 import com.owncloud.android.lib.resources.files.FileUtils
 import com.owncloud.android.lib.resources.files.UploadFileFromFileSystemOperation
 import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation
+import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation.Companion.CHUNK_SIZE
 import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
+import com.owncloud.android.utils.SecurityUtils
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
-import com.owncloud.android.utils.UriUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -95,11 +97,17 @@ class UploadFileFromContentUriWorker(
         if (!areParametersValid()) return Result.failure()
 
         transferRepository.updateTransferStatusToInProgressById(uploadIdInStorageManager)
+        val ocTransfer = transferRepository.getTransferById(uploadIdInStorageManager)
+
+        val localStorageProvider: LocalStorageProvider by inject()
+        cachePath = localStorageProvider.getTemporalPath(account.name) + uploadPath
 
         return try {
-            checkDocumentFileExists()
-            checkPermissionsToReadDocumentAreGranted()
-            copyFileToLocalStorage()
+            if (ocTransfer!!.isContentUri(appContext)) {
+                checkDocumentFileExists()
+                checkPermissionsToReadDocumentAreGranted()
+                copyFileToLocalStorage()
+            }
             checkParentFolderExistence()
             checkNameCollisionAndGetAnAvailableOneInCase()
             uploadDocument()
@@ -148,8 +156,6 @@ class UploadFileFromContentUriWorker(
     }
 
     private fun copyFileToLocalStorage() {
-        val localStorageProvider: LocalStorageProvider by inject()
-        cachePath = localStorageProvider.getTemporalPath(account.name) + uploadPath + UriUtils.getDisplayNameForUri(contentUri, appContext)
         val cacheFile = File(cachePath)
         val cacheDir = cacheFile.parentFile
         if (cacheDir != null) {
@@ -167,8 +173,7 @@ class UploadFileFromContentUriWorker(
         inputStream?.close()
         outputStream.close()
 
-        mimeType = cacheFile.extension
-        fileSize = cacheFile.length()
+        transferRepository.updateTransferLocalPath(uploadIdInStorageManager, cachePath)
     }
 
     private fun checkParentFolderExistence() {
@@ -195,6 +200,10 @@ class UploadFileFromContentUriWorker(
     private fun uploadDocument() {
         val client = getClientForThisUpload()
 
+        val cacheFile = File(cachePath)
+        mimeType = cacheFile.extension
+        fileSize = cacheFile.length()
+
         val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
         val capabilitiesForAccount = getStoredCapabilitiesUseCase.execute(
             GetStoredCapabilitiesUseCase.Params(
@@ -204,11 +213,12 @@ class UploadFileFromContentUriWorker(
         val isChunkingAllowed = capabilitiesForAccount != null && capabilitiesForAccount.isChunkingAllowed()
         Timber.d("Chunking is allowed: %s", isChunkingAllowed)
 
-        if (isChunkingAllowed) {
+        if (isChunkingAllowed && fileSize > CHUNK_SIZE) {
             uploadChunkedFile(client)
         } else {
             uploadPlainFile(client)
         }
+        removeCacheFile()
     }
 
     private fun uploadPlainFile(client: OwnCloudClient) {
@@ -232,13 +242,15 @@ class UploadFileFromContentUriWorker(
     private fun uploadChunkedFile(client: OwnCloudClient) {
         // Step 1: Create folder where the chunks will be uploaded.
         val createChunksRemoteFolderOperation = CreateRemoteFolderOperation(
-            remotePath = uploadIdInStorageManager.toString(), createFullPath = false, isChunksFolder = true
+            remotePath = SecurityUtils.stringToMD5Hash(uploadPath) + System.currentTimeMillis(),
+            createFullPath = false,
+            isChunksFolder = true
         )
         executeRemoteOperation { createChunksRemoteFolderOperation.execute(client) }
 
         // Step 2: Upload file by chunks
         uploadFileOperation = ChunkedUploadFromFileSystemOperation(
-            transferId = uploadIdInStorageManager.toString(),
+            transferId = SecurityUtils.stringToMD5Hash(uploadPath) + System.currentTimeMillis(),
             localPath = cachePath,
             remotePath = uploadPath,
             mimeType = mimeType,
@@ -253,7 +265,7 @@ class UploadFileFromContentUriWorker(
         // Step 3: Move remote file to the final remote destination
         val ocChunkService = OCChunkService(client)
         ocChunkService.moveFile(
-            sourceRemotePath = "$uploadIdInStorageManager${OCFile.PATH_SEPARATOR}${FileUtils.FINAL_CHUNKS_FILE}",
+            sourceRemotePath = "${SecurityUtils.stringToMD5Hash(uploadPath)}${System.currentTimeMillis()}${OCFile.PATH_SEPARATOR}${FileUtils.FINAL_CHUNKS_FILE}",
             targetRemotePath = uploadPath,
             fileLastModificationTimestamp = lastModified,
             fileLength = fileSize
@@ -268,6 +280,11 @@ class UploadFileFromContentUriWorker(
     private fun removeLocalFile() {
         val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
         documentFile?.delete()
+    }
+
+    private fun removeCacheFile() {
+        val cacheFile = File(cachePath)
+        cacheFile.delete()
     }
 
     private fun updateUploadsDatabaseWithResult(throwable: Throwable?) {
