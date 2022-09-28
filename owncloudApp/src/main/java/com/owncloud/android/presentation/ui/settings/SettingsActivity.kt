@@ -36,7 +36,6 @@ import com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragm
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsPictureUploadsFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsVideoUploadsFragment
-import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
 
 class SettingsActivity : AppCompatActivity() {

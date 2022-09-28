@@ -21,13 +21,13 @@ package com.owncloud.android.presentation.ui.files.operations
 
 import com.owncloud.android.domain.files.model.OCFile
 
-sealed class FileOperation {
-    data class CopyOperation(val listOfFilesToCopy: List<OCFile>, val targetFolder: OCFile) : FileOperation()
-    data class CreateFolder(val folderName: String, val parentFile: OCFile) : FileOperation()
-    data class MoveOperation(val listOfFilesToMove: List<OCFile>, val targetFolder: OCFile) : FileOperation()
-    data class RemoveOperation(val listOfFilesToRemove: List<OCFile>, val removeOnlyLocalCopy: Boolean) : FileOperation()
-    data class RenameOperation(val ocFileToRename: OCFile, val newName: String) : FileOperation()
-    data class SynchronizeFileOperation(val fileToSync: OCFile, val accountName: String) : FileOperation()
-    data class SetFilesAsAvailableOffline(val filesToUpdate: List<OCFile>) : FileOperation()
-    data class UnsetFilesAsAvailableOffline(val filesToUpdate: List<OCFile>) : FileOperation()
+sealed interface FileOperation {
+    data class CopyOperation(val listOfFilesToCopy: List<OCFile>, val targetFolder: OCFile) : FileOperation
+    data class CreateFolder(val folderName: String, val parentFile: OCFile) : FileOperation
+    data class MoveOperation(val listOfFilesToMove: List<OCFile>, val targetFolder: OCFile) : FileOperation
+    data class RemoveOperation(val listOfFilesToRemove: List<OCFile>, val removeOnlyLocalCopy: Boolean) : FileOperation
+    data class RenameOperation(val ocFileToRename: OCFile, val newName: String) : FileOperation
+    data class SynchronizeFileOperation(val fileToSync: OCFile, val accountName: String) : FileOperation
+    data class SetFilesAsAvailableOffline(val filesToUpdate: List<OCFile>) : FileOperation
+    data class UnsetFilesAsAvailableOffline(val filesToUpdate: List<OCFile>) : FileOperation
 }
