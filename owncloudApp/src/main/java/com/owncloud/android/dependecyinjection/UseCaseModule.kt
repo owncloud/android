@@ -171,8 +171,8 @@ val useCaseModule = module {
     factory { RetryUploadFromContentUriUseCase(get(), get(), get()) }
     factory { GetAllTransfersAsLiveDataUseCase(get()) }
     factory { GetAllTransfersUseCase(get()) }
-    factory { CancelUploadWithIdUseCase(get(), get()) }
-    factory { ClearFailedTransfersUseCase(get(), get()) }
+    factory { CancelUploadWithIdUseCase(get(), get(), get()) }
+    factory { ClearFailedTransfersUseCase(get(), get(), get()) }
     factory { RetryFailedUploadsUseCase(get(), get(), get(), get()) }
     factory { ClearSuccessfulTransfersUseCase(get()) }
     factory { CancelTransfersFromAccountUseCase(get(), get()) }
