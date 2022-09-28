@@ -225,7 +225,7 @@ class UploadFileFromFileSystemWorker(
             )
         )
         val isChunkingAllowed = capabilitiesForAccount != null && capabilitiesForAccount.isChunkingAllowed()
-        Timber.d("Chunking is allowed: %s", isChunkingAllowed)
+        Timber.d("Chunking is allowed: %s, and file size is greater than the minimum chunk size: %s", isChunkingAllowed, fileSize > CHUNK_SIZE)
 
         if (isChunkingAllowed && fileSize > CHUNK_SIZE) {
             uploadChunkedFile(client)

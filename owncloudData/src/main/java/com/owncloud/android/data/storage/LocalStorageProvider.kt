@@ -6,21 +6,22 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
- * <p>
+ *
  * Copyright (C) 2022 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.storage
 
 import android.accounts.Account
@@ -216,13 +217,6 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         }
     }
 
-    fun removeLocalStorageForAccount(accountName: String) {
-        val mainFolderForAccount = File(getAccountDirectoryPath(accountName))
-        val temporalFolderForAccount = File(getTemporalPath(accountName))
-        mainFolderForAccount.deleteRecursively()
-        temporalFolderForAccount.deleteRecursively()
-    }
-
     private fun cleanTemporalRecursively(temporalFolder: File, deleteFileInCaseItIsNotNeeded: (file: File) -> Unit) {
         temporalFolder.listFiles()?.forEach { temporalFile ->
             if (temporalFile.isDirectory) {
@@ -231,6 +225,21 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
                 deleteFileInCaseItIsNotNeeded(temporalFile)
             }
 
+        }
+    }
+
+    fun removeLocalStorageForAccount(accountName: String) {
+        val mainFolderForAccount = File(getAccountDirectoryPath(accountName))
+        val temporalFolderForAccount = File(getTemporalPath(accountName))
+        mainFolderForAccount.deleteRecursively()
+        temporalFolderForAccount.deleteRecursively()
+    }
+
+    fun deleteCacheIfNeeded(transfer: OCTransfer) {
+        val cacheDir = getTemporalPath(transfer.accountName)
+        if (transfer.localPath.startsWith(cacheDir)) {
+            val cacheFile = File(transfer.localPath)
+            cacheFile.delete()
         }
     }
 
