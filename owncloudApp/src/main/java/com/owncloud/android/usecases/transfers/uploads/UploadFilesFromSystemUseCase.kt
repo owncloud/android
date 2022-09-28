@@ -58,13 +58,13 @@ class UploadFilesFromSystemUseCase(
 
             val uploadId = storeInUploadsDatabase(
                 localFile = localFile,
-                uploadPath = params.uploadFolderPath.plus(File.separator).plus(localFile.name),
+                uploadPath = params.uploadFolderPath.plus(localFile.name),
                 accountName = params.accountName,
             )
 
             enqueueSingleUpload(
                 localPath = localFile.absolutePath,
-                uploadPath = params.uploadFolderPath.plus(File.separator).plus(localFile.name),
+                uploadPath = params.uploadFolderPath.plus(localFile.name),
                 lastModifiedInSeconds = localFile.lastModified().div(1_000).toString(),
                 accountName = params.accountName,
                 uploadIdInStorageManager = uploadId,

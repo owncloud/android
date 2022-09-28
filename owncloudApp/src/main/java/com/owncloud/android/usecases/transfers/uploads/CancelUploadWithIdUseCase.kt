@@ -36,6 +36,8 @@ class CancelUploadWithIdUseCase(
 
         transferRepository.removeTransferById(params.uploadId)
 
+        // TODO: Delete cache files of those transfers which were cached (check if they are located in the temp directory)
+
         Timber.i("Upload with id ${params.uploadId} has been cancelled.")
     }
 
