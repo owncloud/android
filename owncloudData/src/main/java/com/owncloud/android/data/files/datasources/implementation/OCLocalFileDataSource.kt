@@ -146,6 +146,10 @@ class OCLocalFileDataSource(
         fileDao.updateConflictStatusForFile(fileId, eTagInConflict)
     }
 
+    override fun cleanConflict(fileId: Long) {
+        fileDao.updateConflictStatusForFile(fileId, null)
+    }
+
     override fun removeFile(fileId: Long) {
         fileDao.deleteFileWithId(fileId)
     }
