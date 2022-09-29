@@ -22,11 +22,7 @@
 package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
-import android.accounts.AuthenticatorException;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.Menu;
@@ -40,16 +36,10 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.operations.RefreshFolderOperation;
-import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment;
-import com.owncloud.android.syncadapter.FileSyncAdapter;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
@@ -57,7 +47,7 @@ import timber.log.Timber;
 import java.util.ArrayList;
 
 public class FolderPickerActivity extends FileActivity implements FileFragment.ContainerActivity,
-        OnClickListener, OnEnforceableRefreshListener, MainFileListFragment.FileActions {
+        OnClickListener, MainFileListFragment.FileActions {
 
     public static final String EXTRA_FOLDER = FolderPickerActivity.class.getCanonicalName()
             + ".EXTRA_FOLDER";
@@ -67,10 +57,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     private static final String TAG_LIST_OF_FOLDERS = "LIST_OF_FOLDERS";
 
     public static final String EXTRA_PICKER_OPTION = "EXTRA_PICKER_OPTION";
-
-    private LocalBroadcastManager mLocalBroadcastManager;
-    private SyncBroadcastReceiver mSyncBroadcastReceiver;
-    private boolean mSyncInProgress = false;
 
     protected Button mCancelBtn;
     protected Button mChooseBtn;
@@ -102,8 +88,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         // Set action button text
         setActionButtonText();
 
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
-
         Timber.d("onCreate() end");
     }
 
@@ -127,8 +111,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             if (!stateWasRecovered) {
                 MainFileListFragment listOfFolders = getListOfFilesFragment();
                 listOfFolders.navigateToFolder(folder);
-
-                startSyncFolderOperation(folder, false);
             }
 
             updateNavigationElementsInActionBar();
@@ -167,70 +149,17 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     /**
-     * {@inheritDoc}
-     * <p>
-     * Updates action bar and second fragment, if in dual pane mode.
+     * Browse down should be handled by {@link MainFileListFragment}
      */
+
     @Override
     public void onBrowsedDownTo(OCFile directory) {
-        setFile(directory);
-        updateNavigationElementsInActionBar();
-        // Sync Folder
-        startSyncFolderOperation(directory, false);
 
     }
 
     @Override
     public void onSavedCertificate() {
-        startSyncFolderOperation(getCurrentDir(), false);
-    }
 
-    public void startSyncFolderOperation(OCFile folder, boolean ignoreETag) {
-
-        mSyncInProgress = true;
-
-        // perform folder synchronization
-        SyncOperation synchFolderOp = new RefreshFolderOperation(
-                folder,
-                ignoreETag,
-                getAccount(),
-                getApplicationContext()
-        );
-        synchFolderOp.execute(getStorageManager(), this, null, null);
-
-        MainFileListFragment fileListFragment = getListOfFilesFragment();
-        if (fileListFragment != null) {
-            fileListFragment.setProgressBarAsIndeterminate(true);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Timber.d("onResume() start");
-
-        // Listen for sync messages
-        IntentFilter syncIntentFilter = new IntentFilter(FileSyncAdapter.EVENT_FULL_SYNC_START);
-        syncIntentFilter.addAction(FileSyncAdapter.EVENT_FULL_SYNC_END);
-        syncIntentFilter.addAction(FileSyncAdapter.EVENT_FULL_SYNC_FOLDER_CONTENTS_SYNCED);
-        syncIntentFilter.addAction(RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED);
-        syncIntentFilter.addAction(RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED);
-        mSyncBroadcastReceiver = new SyncBroadcastReceiver();
-        mLocalBroadcastManager.registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
-
-        Timber.d("onResume() end");
-    }
-
-    @Override
-    protected void onPause() {
-        Timber.d("onPause() start");
-        if (mSyncBroadcastReceiver != null) {
-            mLocalBroadcastManager.unregisterReceiver(mSyncBroadcastReceiver);
-            mSyncBroadcastReceiver = null;
-        }
-
-        Timber.d("onPause() end");
-        super.onPause();
     }
 
     @Override
@@ -260,31 +189,9 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     protected OCFile getCurrentFolder() {
         MainFileListFragment listOfFiles = getListOfFilesFragment();
         if (listOfFiles != null) {  // should never be null, indeed
-            OCFile file = listOfFiles.getCurrentFile();
-            if (file != null) {
-                if (file.isFolder()) {
-                    return file;
-                } else if (getStorageManager() != null) {
-                    String parentPath = file.getRemotePath().substring(0,
-                            file.getRemotePath().lastIndexOf(file.getFileName()));
-                    return getStorageManager().getFileByPath(parentPath);
-                }
-            } else if (getStorageManager() != null) {
-                return getStorageManager().getFileByPath(OCFile.ROOT_PATH);
-            }
+            return listOfFiles.getCurrentFile();
         }
         return null;
-    }
-
-    public void browseToRoot() {
-        MainFileListFragment listOfFiles = getListOfFilesFragment();
-        if (listOfFiles != null) {  // should never be null, indeed
-            OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH);
-            listOfFiles.navigateToFolder(root);
-            setFile(listOfFiles.getCurrentFile());
-            updateNavigationElementsInActionBar();
-            startSyncFolderOperation(root, false);
-        }
     }
 
     @Override
@@ -292,8 +199,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         MainFileListFragment listOfFiles = getListOfFilesFragment();
         if (listOfFiles != null) {  // should never be null, indeed
             OCFile fileBeforeBrowsingUp = listOfFiles.getCurrentFile();
-            if (fileBeforeBrowsingUp != null &&
-                    fileBeforeBrowsingUp.getParentId() != null &&
+            if (fileBeforeBrowsingUp.getParentId() != null &&
                     fileBeforeBrowsingUp.getParentId() == OCFile.ROOT_PARENT_ID
             ) {
                 // If we are already at root, let's finish the picker. No sense to keep browsing up.
@@ -394,120 +300,17 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     @Override
     public void sendDownloadedFile(@NonNull OCFile file) {
         // Nothing to do. Clicking on files is not allowed.
-    }
 
-    private class SyncBroadcastReceiver extends BroadcastReceiver {
-
-        /**
-         * {@link BroadcastReceiver} to enable syncing feedback in UI
-         */
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String event = intent.getAction();
-            Timber.d("Received broadcast %s", event);
-            String accountName = intent.getStringExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME);
-            String synchFolderRemotePath = intent.getStringExtra(FileSyncAdapter.EXTRA_FOLDER_PATH);
-            RemoteOperationResult synchResult = (RemoteOperationResult) intent.
-                    getSerializableExtra(FileSyncAdapter.EXTRA_RESULT);
-            boolean sameAccount = (getAccount() != null &&
-                    accountName.equals(getAccount().name) && getStorageManager() != null);
-
-            if (sameAccount) {
-
-                if (FileSyncAdapter.EVENT_FULL_SYNC_START.equals(event)) {
-                    mSyncInProgress = true;
-
-                } else {
-                    OCFile currentFile = (getFile() == null) ? null :
-                            getStorageManager().getFileByPath(getFile().getRemotePath());
-                    OCFile currentDir = (getCurrentFolder() == null) ? null :
-                            getStorageManager().getFileByPath(getCurrentFolder().getRemotePath());
-
-                    if (currentDir == null) {
-                        // current folder was removed from the server
-                        showSnackMessage(
-                                String.format(
-                                        getString(R.string.sync_current_folder_was_removed),
-                                        getCurrentFolder().getFileName()
-                                )
-                        );
-                        browseToRoot();
-
-                    } else {
-                        if (currentFile == null && !getFile().isFolder()) {
-                            // currently selected file was removed in the server, and now we know it
-                            currentFile = currentDir;
-                        }
-
-                        if (currentDir.getRemotePath().equals(synchFolderRemotePath)) {
-                            MainFileListFragment fileListFragment = getListOfFilesFragment();
-                            if (fileListFragment != null) {
-                                fileListFragment.navigateToFolder(currentDir);
-                            }
-                        }
-                        setFile(currentFile);
-                    }
-
-                    mSyncInProgress = (!FileSyncAdapter.EVENT_FULL_SYNC_END.equals(event) &&
-                            !RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED.equals(event));
-
-                    if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED.
-                            equals(event) &&
-                            /// TODO refactor and make common
-                            synchResult != null && !synchResult.isSuccess()) {
-
-                        if (ResultCode.UNAUTHORIZED.equals(synchResult.getCode()) ||
-                                (synchResult.isException() && synchResult.getException()
-                                        instanceof AuthenticatorException)) {
-
-                            requestCredentialsUpdate();
-
-                        } else if (RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED.equals(synchResult.getCode())) {
-
-                            showUntrustedCertDialog(synchResult);
-                        }
-
-                    }
-                }
-                Timber.d("Setting progress visibility to %s", mSyncInProgress);
-
-                MainFileListFragment fileListFragment = getListOfFilesFragment();
-                if (fileListFragment != null) {
-                    fileListFragment.setProgressBarAsIndeterminate(mSyncInProgress);
-                }
-            }
-        }
     }
 
     /**
-     * Shows the information of the {@link OCFile} received as a
-     * parameter in the second fragment.
+     * Nothing to do. Details can't be opened from {@link FolderPickerActivity}
      *
      * @param file {@link OCFile} whose details will be shown
      */
     @Override
     public void showDetails(OCFile file) {
 
-    }
-
-    @Override
-    public void onRefresh() {
-        refreshList(true);
-    }
-
-    @Override
-    public void onRefresh(boolean enforced) {
-        refreshList(enforced);
-    }
-
-    private void refreshList(boolean ignoreETag) {
-        MainFileListFragment listOfFiles = getListOfFilesFragment();
-        if (listOfFiles != null) {
-            OCFile folder = listOfFiles.getCurrentFile();
-            if (folder != null) {
-                startSyncFolderOperation(folder, ignoreETag);
-            }
-        }
     }
 
     public enum PickerMode {
