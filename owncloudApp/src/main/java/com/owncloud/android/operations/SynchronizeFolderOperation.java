@@ -431,13 +431,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
 
             } else if (shouldSyncContents) {
                 /// to sync descendants
-                Intent intent = new Intent(mContext, OperationsService.class);
-                intent.setAction(OperationsService.ACTION_SYNC_FOLDER);
-                intent.putExtra(OperationsService.EXTRA_ACCOUNT, mAccount);
-                intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, localFile.getRemotePath());
-                intent.putExtra(OperationsService.EXTRA_PUSH_ONLY, serverUnchanged);
-                intent.putExtra(OperationsService.EXTRA_SYNC_REGULAR_FILES, mSyncContentOfRegularFiles);
-                mFoldersToSyncContents.add(intent);
+
             }
 
         } else {
