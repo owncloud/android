@@ -28,7 +28,7 @@ import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 
 public class UploadPathActivity extends FolderPickerActivity implements FileFragment.ContainerActivity,
-        OnClickListener, OnEnforceableRefreshListener {
+        OnClickListener {
 
     public static final String KEY_CAMERA_UPLOAD_PATH = "CAMERA_UPLOAD_PATH";
     public static final String KEY_CAMERA_UPLOAD_ACCOUNT = "CAMERA_UPLOAD_ACCOUNT";
@@ -36,8 +36,6 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        String cameraUploadPath = getIntent().getStringExtra(KEY_CAMERA_UPLOAD_PATH);
 
         // The caller activity (Preferences) is not a FileActivity, so it has no OCFile, only a path.
         // FIXME: 13/10/2020 : New_arch: Upload
@@ -59,23 +57,21 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
     protected void onAccountSet(boolean stateWasRecovered) {
         super.onAccountSet(stateWasRecovered);
         if (getAccount() != null) {
+            // Check if we need to open an specific folder and navigate to it.
+            // If there is not, fallback to the root folder for this account.
+            String cameraUploadPath = getIntent().getStringExtra(KEY_CAMERA_UPLOAD_PATH);
+            OCFile initialFile = getStorageManager().getFileByPath(cameraUploadPath);
 
-            updateFileFromDB();
-
-            OCFile folder = getFile();
-            if (folder == null || !folder.isFolder()) {
+            if (initialFile == null || !initialFile.isFolder()) {
                 // fall back to root folder
                 setFile(getStorageManager().getFileByPath(OCFile.ROOT_PATH));
-                folder = getFile();
+            } else {
+                setFile(initialFile);
             }
-
-            onBrowsedDownTo(folder);
 
             if (!stateWasRecovered) {
                 MainFileListFragment listOfFolders = getListOfFilesFragment();
-                listOfFolders.navigateToFolder(folder);
-
-                startSyncFolderOperation(folder, false);
+                listOfFolders.navigateToFolder(getFile());
             }
 
             updateNavigationElementsInActionBar();
