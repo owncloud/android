@@ -138,6 +138,7 @@ public class RefreshFolderOperation extends SyncOperation<ArrayList<RemoteFile>>
         }
 
         // sync list of files, and contents of available offline files & folders
+        //TODO: REMOVE THIS CLASS
         SynchronizeFolderOperation syncOp = new SynchronizeFolderOperation(
                 mContext,
                 mLocalFolder.getRemotePath(),
