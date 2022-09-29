@@ -47,7 +47,6 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.presentation.ui.conflicts.ConflictsResolveActivity;
@@ -263,18 +262,6 @@ public class FileActivity extends DrawerActivity
         } else if (!result.isSuccess() && ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED.equals(result.getCode())) {
 
             showUntrustedCertDialog(result);
-
-        } else if (operation == null ||
-                operation instanceof SynchronizeFolderOperation
-        ) {
-            if (result.isSuccess()) {
-                updateFileFromDB();
-
-            } else if (result.getCode() != ResultCode.CANCELLED) {
-                showSnackMessage(
-                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
-                );
-            }
 
         }
     }
