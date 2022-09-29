@@ -50,11 +50,11 @@ import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import com.owncloud.android.utils.FileStorageUtils
@@ -483,20 +483,21 @@ class DocumentsStorageProvider : DocumentsProvider() {
         Timber.d("Trying to sync $parentDocumentId with server")
         val folderId = parentDocumentId.toLong()
 
-        getFileByIdOrException(folderId)
+        val folderToSync = getFileByIdOrException(folderId)
 
-        val refreshFolderOperation = RefreshFolderOperation(
-            getFileById(folderId),
-            false,
-            getAccountFromFileId(folderId),
-            context
-        ).apply { syncVersionAndProfileEnabled(false) }
+        val synchronizeFolderUseCase by inject<SynchronizeFolderUseCase>()
+        val synchronizeFolderUseCaseParams = SynchronizeFolderUseCase.Params(
+            remotePath = folderToSync.remotePath,
+            accountName = folderToSync.owner,
+            SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER,
+        )
 
-        val thread = Thread {
-            refreshFolderOperation.execute(getStoreManagerFromFileId(folderId), context)
-            notifyChangeInFolder(parentDocumentId)
+        CoroutineScope(Dispatchers.IO).launch {
+            val useCaseResult = synchronizeFolderUseCase.execute(synchronizeFolderUseCaseParams)
+            if (useCaseResult.isSuccess) {
+                notifyChangeInFolder(parentDocumentId)
+            }
         }
-        thread.start()
     }
 
     private fun waitOrGetCancelled(cancellationSignal: CancellationSignal?): Boolean {
