@@ -64,7 +64,7 @@ class OCFileRepositoryTest {
 
         verify(exactly = 1) {
             remoteFileDataSource.createFolder(any(), false, false)
-            localFileDataSource.saveFilesInFolder(any(), OC_FOLDER)
+            localFileDataSource.saveFilesInFolderAndReturnThem(any(), OC_FOLDER)
         }
     }
 
@@ -80,7 +80,7 @@ class OCFileRepositoryTest {
             remoteFileDataSource.createFolder(any(), false, false)
         }
         verify(exactly = 0) {
-            localFileDataSource.saveFilesInFolder(any(), OC_FOLDER)
+            localFileDataSource.saveFilesInFolderAndReturnThem(any(), OC_FOLDER)
         }
     }
 
@@ -203,7 +203,7 @@ class OCFileRepositoryTest {
 
         verify(exactly = 1) {
             remoteFileDataSource.refreshFolder(folderToFetch.remotePath)
-            localFileDataSource.saveFilesInFolder(
+            localFileDataSource.saveFilesInFolderAndReturnThem(
                 listOfFiles = listOfFilesRetrieved.drop(1),
                 folder = listOfFilesRetrieved.first()
             )
@@ -222,7 +222,7 @@ class OCFileRepositoryTest {
             remoteFileDataSource.refreshFolder(OC_FOLDER.remotePath)
         }
         verify(exactly = 0) {
-            localFileDataSource.saveFilesInFolder(any(), any())
+            localFileDataSource.saveFilesInFolderAndReturnThem(any(), any())
         }
     }
 
