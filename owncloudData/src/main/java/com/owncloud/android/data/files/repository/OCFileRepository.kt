@@ -346,6 +346,10 @@ class OCFileRepository(
         localFileDataSource.saveConflict(fileId, eTagInConflict)
     }
 
+    override fun cleanConflict(fileId: Long) {
+        localFileDataSource.cleanConflict(fileId)
+    }
+
     override fun disableThumbnailsForFile(fileId: Long) {
         localFileDataSource.disableThumbnailsForFile(fileId)
     }
