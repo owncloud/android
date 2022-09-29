@@ -39,7 +39,6 @@ import android.os.Process;
 import android.util.Pair;
 
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
@@ -85,8 +84,6 @@ public class OperationsService extends Service {
     private ServiceHandler mOperationsHandler;
     private OperationsServiceBinder mOperationsBinder;
 
-    private SyncFolderHandler mSyncFolderHandler;
-
     /**
      * Service initialization
      */
@@ -100,11 +97,6 @@ public class OperationsService extends Service {
         thread.start();
         mOperationsHandler = new ServiceHandler(thread.getLooper(), this);
         mOperationsBinder = new OperationsServiceBinder(mOperationsHandler);
-
-        /// Separated worker thread for download of folders (WIP)
-        thread = new HandlerThread("Syncfolder thread", Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
-        mSyncFolderHandler = new SyncFolderHandler(thread.getLooper(), this);
     }
 
     /**
@@ -134,9 +126,6 @@ public class OperationsService extends Service {
 
         mOperationsHandler.getLooper().quit();
         mOperationsHandler = null;
-
-        mSyncFolderHandler.getLooper().quit();
-        mSyncFolderHandler = null;
 
         super.onDestroy();
     }
@@ -176,16 +165,6 @@ public class OperationsService extends Service {
 
         OperationsServiceBinder(ServiceHandler serviceHandler) {
             mServiceHandler = serviceHandler;
-        }
-
-        /**
-         * Cancels a pending or current synchronization.
-         *
-         * @param account ownCloud account where the remote folder is stored.
-         * @param file    A folder in the queue of pending synchronizations
-         */
-        public void cancel(Account account, OCFile file) {
-            mSyncFolderHandler.cancel(account, file);
         }
 
         void clearListeners() {
@@ -247,22 +226,6 @@ public class OperationsService extends Service {
                 return !mServiceHandler.mPendingOperations.isEmpty();
             }
         }
-
-        /**
-         * Returns True when the file described by 'file' in the ownCloud account 'account' is
-         * downloading or waiting to download.
-         * <p>
-         * If 'file' is a directory, returns 'true' if some of its descendant files is downloading
-         * or waiting to download.
-         *
-         * @param account ownCloud account where the remote file is stored.
-         * @param file    File to check if something is synchronizing
-         *                / downloading / uploading inside.
-         */
-        public boolean isSynchronizing(Account account, OCFile file) {
-            return mSyncFolderHandler.isSynchronizing(account, file.getRemotePath());
-        }
-
     }
 
     /**

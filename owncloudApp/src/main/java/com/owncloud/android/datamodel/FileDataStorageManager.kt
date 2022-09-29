@@ -395,45 +395,6 @@ class FileDataStorageManager : KoinComponent {
         result ?: listOf()
     }
 
-    // FIXME: 13/10/2020 : New_arch: Migration
-    private fun createFileInstance(c: Cursor?): OCFile? = null//c?.let {
-//        OCFile(it.getStringFromColumnOrThrow(FILE_PATH)).apply {
-//            fileId = it.getLongFromColumnOrThrow(_ID)
-//            parentId = it.getLongFromColumnOrThrow(FILE_PARENT)
-//            mimetype = it.getStringFromColumnOrThrow(FILE_CONTENT_TYPE)
-//            if (!isFolder) {
-//                storagePath = it.getStringFromColumnOrThrow(FILE_STORAGE_PATH)
-//                if (storagePath == null) {
-//                    // try to find existing file and bind it with current account;
-//                    // with the current update of SynchronizeFolderOperation, this won't be
-//                    // necessary anymore after a full synchronization of the account
-//                    val f = File(FileStorageUtils.getDefaultSavePathFor(account.name, this))
-//                    if (f.exists()) {
-//                        storagePath = f.absolutePath
-//                        lastSyncDateForData = f.lastModified()
-//                    }
-//                }
-//            }
-//            fileLength = it.getLongFromColumnOrThrow(FILE_CONTENT_LENGTH)
-//            creationTimestamp = it.getLongFromColumnOrThrow(FILE_CREATION)
-//            modificationTimestamp = it.getLongFromColumnOrThrow(FILE_MODIFIED)
-//            modificationTimestampAtLastSyncForData = it.getLongFromColumnOrThrow(FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA)
-//            lastSyncDateForProperties = it.getLongFromColumnOrThrow(FILE_LAST_SYNC_DATE)
-//            lastSyncDateForData = it.getLongFromColumnOrThrow(FILE_LAST_SYNC_DATE_FOR_DATA)
-//            availableOfflineStatus = fromValue(it.getIntFromColumnOrThrow(FILE_KEEP_IN_SYNC))
-//            etag = it.getStringFromColumnOrThrow(FILE_ETAG)
-//            treeEtag = it.getStringFromColumnOrThrow(FILE_TREE_ETAG)
-//            isSharedViaLink = it.getIntFromColumnOrThrow(FILE_SHARED_VIA_LINK) == 1
-//            isSharedWithSharee = it.getIntFromColumnOrThrow(FILE_SHARED_WITH_SHAREE) == 1
-//            permissions = it.getStringFromColumnOrThrow(FILE_PERMISSIONS)
-//            remoteId = it.getStringFromColumnOrThrow(FILE_REMOTE_ID)
-//            setNeedsUpdateThumbnail(it.getIntFromColumnOrThrow(FILE_UPDATE_THUMBNAIL) == 1)
-//            isDownloading = it.getIntFromColumnOrThrow(FILE_IS_DOWNLOADING) == 1
-//            etagInConflict = it.getStringFromColumnOrThrow(FILE_ETAG_IN_CONFLICT)
-//            privateLink = it.getStringFromColumnOrThrow(FILE_PRIVATE_LINK)
-//        }
-//    }
-
     // TODO: To be removed
     fun saveConflict(file: OCFile, eTagInConflictFromParameter: String?) {
 //        var eTagInConflict = eTagInConflictFromParameter

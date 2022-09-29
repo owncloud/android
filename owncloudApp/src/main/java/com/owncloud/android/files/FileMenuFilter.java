@@ -32,11 +32,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.work.WorkManager;
 import com.owncloud.android.R;
-import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus;
+import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.WorkManagerExtKt;
-import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 
@@ -274,22 +273,10 @@ public class FileMenuFilter {
     private boolean anyFileSynchronizing() {
         boolean synchronizing = false;
         if (mComponentsGetter != null && !mFiles.isEmpty() && mAccount != null) {
-            OperationsServiceBinder opsBinder = mComponentsGetter.getOperationsServiceBinder();
             synchronizing = (
-                    anyFileSynchronizing(opsBinder) ||      // comparing local and remote
-                            anyFileDownloading() ||
+                    anyFileDownloading() ||
                             anyFileUploading()
             );
-        }
-        return synchronizing;
-    }
-
-    private boolean anyFileSynchronizing(OperationsServiceBinder opsBinder) {
-        boolean synchronizing = false;
-        if (opsBinder != null) {
-            for (int i = 0; !synchronizing && i < mFiles.size(); i++) {
-                synchronizing = opsBinder.isSynchronizing(mAccount, mFiles.get(i));
-            }
         }
         return synchronizing;
     }
