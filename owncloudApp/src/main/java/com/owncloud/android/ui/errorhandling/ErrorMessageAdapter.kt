@@ -35,7 +35,6 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.operations.SynchronizeFileOperation
 import com.owncloud.android.operations.SynchronizeFolderOperation
 import com.owncloud.android.ui.errorhandling.TransferOperation.Download
 import java.io.File
@@ -161,10 +160,6 @@ class ErrorMessageAdapter {
             resources: Resources
         ): String {
             val formatter = Formatter(resources)
-
-            if (operation is SynchronizeFileOperation && !operation.transferWasRequested()) {
-                return formatter.format(R.string.sync_file_nothing_to_do_msg)
-            }
 
             return when (result.code) {
                 ResultCode.FORBIDDEN -> {
