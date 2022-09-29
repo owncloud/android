@@ -136,15 +136,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     }
 
     /**
-     * Creates a {@link FileSyncAdapter}
-     * <p>
-     * {@inheritDoc}
-     */
-    public FileSyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
-        super(context, autoInitialize, allowParallelSyncs);
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
