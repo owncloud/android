@@ -148,15 +148,6 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         return null;
     }
 
-    /**
-     * Browse down should be handled by {@link MainFileListFragment}
-     */
-
-    @Override
-    public void onBrowsedDownTo(OCFile directory) {
-
-    }
-
     @Override
     public void onSavedCertificate() {
 

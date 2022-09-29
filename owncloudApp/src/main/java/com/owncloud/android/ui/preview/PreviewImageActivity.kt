@@ -328,10 +328,6 @@ class PreviewImageActivity : FileActivity(),
         }
     }
 
-    override fun onBrowsedDownTo(folder: OCFile) {
-        // TODO Auto-generated method stub
-    }
-
     private fun hideSystemUI(anchorView: View?) {
         anchorView?.systemUiVisibility =
             (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hides NAVIGATION BAR; Android >= 4.0
