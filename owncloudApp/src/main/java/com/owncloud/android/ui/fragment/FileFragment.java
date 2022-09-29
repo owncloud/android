@@ -143,13 +143,5 @@ public abstract class FileFragment extends Fragment {
         ///// TO UNIFY IN A SINGLE CALLBACK METHOD - EVENT NOTIFICATIONs  -> something happened
         // inside the fragment, MAYBE activity is interested --> unify in notification method
 
-        /**
-         * Callback method invoked when a the user browsed into a different folder through the
-         * list of files
-         *
-         * @param folder
-         */
-        void onBrowsedDownTo(OCFile folder);
-
     }
 }
