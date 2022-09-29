@@ -142,7 +142,7 @@ public class SynchronizeFolderOperation extends SyncOperation<ArrayList<RemoteFi
     private final boolean mSyncContentOfRegularFiles;
 
     /**
-     * Creates a new instance of {@link SynchronizeFolderOperation}.
+     * Creates a new instance.
      *
      * @param context                   Application context.
      * @param remotePath                Path to synchronize.

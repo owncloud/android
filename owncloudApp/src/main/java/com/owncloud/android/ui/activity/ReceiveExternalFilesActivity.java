@@ -29,14 +29,11 @@ package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -63,22 +60,20 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.db.PreferenceManager;
+import com.owncloud.android.domain.exceptions.UnauthorizedException;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.extensions.ThrowableExtKt;
 import com.owncloud.android.interfaces.ISecurityEnforced;
 import com.owncloud.android.interfaces.LockType;
 import com.owncloud.android.lib.common.OwnCloudAccount;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.operations.RefreshFolderOperation;
-import com.owncloud.android.operations.common.SyncOperation;
 import com.owncloud.android.presentation.UIResult;
 import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment;
 import com.owncloud.android.presentation.ui.files.SortOptionsView;
@@ -89,7 +84,7 @@ import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialo
 import com.owncloud.android.presentation.ui.files.operations.FileOperation;
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
 import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel;
-import com.owncloud.android.syncadapter.FileSyncAdapter;
+import com.owncloud.android.ui.ReceiveExternalFilesViewModel;
 import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
 import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -144,8 +139,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private ImageView mEmptyListImage;
     private TextView mEmptyListTitle;
 
-    private LocalBroadcastManager mLocalBroadcastManager;
-    private SyncBroadcastReceiver mSyncBroadcastReceiver;
     // this is inited lazily, when an account is selected. If no account is selected but an instance of this would
     // be crated it would result in an null pointer exception.
     private ReceiveExternalFilesAdapter mAdapter = null;
@@ -166,6 +159,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private final static String KEY_ACCOUNT_SELECTION_SHOWING = "ACCOUNT_SELECTION_SHOWING";
 
     private static final String DIALOG_WAIT_COPY_FILE = "DIALOG_WAIT_COPY_FILE";
+
+    private ReceiveExternalFilesViewModel mReceiveExternalFilesViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,14 +205,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
         mListView = findViewById(android.R.id.list);
         mListView.setOnItemClickListener(this);
 
-        // Listen for sync messages
-        IntentFilter syncIntentFilter = new IntentFilter(RefreshFolderOperation.
-                EVENT_SINGLE_FOLDER_CONTENTS_SYNCED);
-        syncIntentFilter.addAction(RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED);
-        mSyncBroadcastReceiver = new SyncBroadcastReceiver();
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
-        mLocalBroadcastManager.registerReceiver(mSyncBroadcastReceiver, syncIntentFilter);
-
         // Init Fragment without UI to retain AsyncTask across configuration changes
         FragmentManager fm = getSupportFragmentManager();
         TaskRetainerFragment taskRetainerFragment =
@@ -260,8 +247,33 @@ public class ReceiveExternalFilesActivity extends FileActivity
     @Override
     protected void onAccountSet(boolean stateWasRecovered) {
         super.onAccountSet(mAccountWasRestored);
+        mReceiveExternalFilesViewModel = get(ReceiveExternalFilesViewModel.class);
         initTargetFolder();
         updateDirectoryList();
+
+        mReceiveExternalFilesViewModel.getSyncFolderLiveData().observe(this, eventUiResult -> {
+            UIResult<Unit> uiResult = eventUiResult.getContentIfNotHandled();
+            if (uiResult != null) {
+                if (uiResult instanceof UIResult.Loading) {
+                    mSyncInProgress = true;
+                } else if (uiResult instanceof UIResult.Error) {
+                    mSyncInProgress = false;
+                    Throwable throwable = ((UIResult.Error<Unit>) uiResult).getError();
+                    if (throwable != null) {
+                        if (throwable instanceof UnauthorizedException) {
+                            requestCredentialsUpdate();
+                        } else if (throwable instanceof CertificateCombinedException) {
+                            showUntrustedCertDialogForThrowable(throwable);
+                        } else {
+                            ActivityExtKt.showErrorInSnackbar(this, R.string.sync_fail_ticker, throwable);
+                        }
+                    }
+                } else if (uiResult instanceof UIResult.Success) {
+                    mSyncInProgress = false;
+                    updateDirectoryList();
+                }
+            }
+        });
     }
 
     @Override
@@ -276,14 +288,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
         outState.putParcelable(FileActivity.EXTRA_ACCOUNT, getAccount());
 
         Timber.v("onSaveInstanceState() end");
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (mSyncBroadcastReceiver != null) {
-            mLocalBroadcastManager.unregisterReceiver(mSyncBroadcastReceiver);
-        }
-        super.onDestroy();
     }
 
     @Override
@@ -501,14 +505,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         mSyncInProgress = true;
 
-        // perform folder synchronization
-        SyncOperation synchFolderOp = new RefreshFolderOperation(
-                folder,
-                false,
-                getAccount(),
-                getApplicationContext()
-        );
-        synchFolderOp.execute(getStorageManager(), this, null, null);
+        mReceiveExternalFilesViewModel.refreshFolderUseCase(folder);
     }
 
     private List<OCFile> sortFileList(List<OCFile> files) {
@@ -777,83 +774,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 showSnackMessage(errorMessage.toString());
             }
         });
-    }
-
-    private class SyncBroadcastReceiver extends BroadcastReceiver {
-
-        /**
-         * {@link BroadcastReceiver} to enable syncing feedback in UI
-         */
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String event = intent.getAction();
-            Timber.d("Received broadcast %s", event);
-            String accountName = intent.getStringExtra(FileSyncAdapter.EXTRA_ACCOUNT_NAME);
-            String synchFolderRemotePath =
-                    intent.getStringExtra(FileSyncAdapter.EXTRA_FOLDER_PATH);
-            RemoteOperationResult synchResult =
-                    (RemoteOperationResult) intent.getSerializableExtra(
-                            FileSyncAdapter.EXTRA_RESULT);
-            boolean sameAccount = (getAccount() != null &&
-                    accountName.equals(getAccount().name) && getStorageManager() != null);
-
-            if (sameAccount) {
-
-                if (FileSyncAdapter.EVENT_FULL_SYNC_START.equals(event)) {
-                    mSyncInProgress = true;
-
-                } else {
-                    OCFile currentFile = (mFile == null) ? null :
-                            getStorageManager().getFileByPath(mFile.getRemotePath());
-                    OCFile currentDir = (getCurrentFolder() == null) ? null :
-                            getStorageManager().getFileByPath(getCurrentFolder().getRemotePath());
-
-                    if (currentDir == null) {
-                        // current folder was removed from the server
-                        showSnackMessage(
-                                String.format(
-                                        getString(R.string.sync_current_folder_was_removed),
-                                        getCurrentFolder().getFileName()
-                                )
-                        );
-                        browseToRoot();
-
-                    } else {
-                        if (currentFile == null && !mFile.isFolder()) {
-                            // currently selected file was removed in the server, and now we know it
-                            currentFile = currentDir;
-                        }
-
-                        if (currentDir.getRemotePath().equals(synchFolderRemotePath)) {
-                            updateDirectoryList();
-                        }
-                        mFile = currentFile;
-                    }
-
-                    mSyncInProgress = (!FileSyncAdapter.EVENT_FULL_SYNC_END.equals(event) &&
-                            !RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED.equals(event));
-
-                    if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED.
-                            equals(event) &&
-                            /// TODO refactor and make common
-                            synchResult != null && !synchResult.isSuccess()) {
-
-                        if (synchResult.getCode() == ResultCode.UNAUTHORIZED ||
-                                (synchResult.isException() && synchResult.getException()
-                                        instanceof AuthenticatorException)) {
-
-                            requestCredentialsUpdate();
-
-                        } else if (RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED.equals(synchResult.getCode())) {
-
-                            showUntrustedCertDialog(synchResult);
-                        }
-                    }
-                }
-                Timber.d("Setting progress visibility to %s", mSyncInProgress);
-
-            }
-        }
     }
 
     /**
