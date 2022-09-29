@@ -23,7 +23,7 @@ import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
+import com.owncloud.android.domain.files.usecases.SaveConflictUseCase
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +34,7 @@ import java.util.UUID
 class SynchronizeFileUseCase(
     private val downloadFileUseCase: DownloadFileUseCase,
     private val uploadFileInConflictUseCase: UploadFileInConflictUseCase,
-    private val saveFileUseCase: SaveFileOrFolderUseCase,
+    private val saveConflictUseCase: SaveConflictUseCase,
     private val fileRepository: FileRepository,
 ) : BaseUseCaseWithResult<SynchronizeFileUseCase.SyncType, SynchronizeFileUseCase.Params>() {
 
@@ -72,7 +72,12 @@ class SynchronizeFileUseCase(
             if (changedLocally && changedRemotely) {
                 // 5.1 File has changed locally and remotely. We got a conflict, save the conflict.
                 Timber.i("File ${fileToSynchronize.fileName} has changed locally and remotely. We got a conflict with etag: ${serverFile.etag}")
-                saveFileUseCase.execute(SaveFileOrFolderUseCase.Params(fileToSynchronize.copy(etagInConflict = serverFile.etag)))
+                saveConflictUseCase.execute(
+                    SaveConflictUseCase.Params(
+                        fileId = fileToSynchronize.id!!,
+                        eTagInConflict = serverFile.etag!!
+                    )
+                )
                 return SyncType.ConflictDetected(serverFile.etag!!)
             } else if (changedRemotely) {
                 // 5.2 File has changed ONLY remotely -> download new version

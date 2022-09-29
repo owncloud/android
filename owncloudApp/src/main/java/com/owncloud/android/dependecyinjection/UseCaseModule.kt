@@ -59,6 +59,7 @@ import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStr
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
+import com.owncloud.android.domain.files.usecases.SaveConflictUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
@@ -138,6 +139,7 @@ val useCaseModule = module {
     factory { SynchronizeFolderUseCase(get(), get()) }
     factory { DisableThumbnailsForFileUseCase(get()) }
     factory { SortFilesUseCase() }
+    factory { SaveConflictUseCase(get()) }
 
     // Av Offline
     factory { GetFilesAvailableOfflineFromAccountUseCase(get()) }
