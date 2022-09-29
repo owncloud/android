@@ -33,6 +33,7 @@ import com.owncloud.android.domain.exceptions.CancelledException
 import com.owncloud.android.domain.exceptions.LocalStorageNotMovedException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.lib.common.OwnCloudAccount
@@ -73,6 +74,7 @@ class DownloadFileWorker(
 
     private val getFileByIdUseCase: GetFileByIdUseCase by inject()
     private val saveFileOrFolderUseCase: SaveFileOrFolderUseCase by inject()
+    private val cleanConflictUseCase: CleanConflictUseCase by inject()
 
     lateinit var account: Account
     lateinit var ocFile: OCFile
@@ -190,7 +192,6 @@ class DownloadFileWorker(
             needsToUpdateThumbnail = true
             modificationTimestamp = downloadRemoteFileOperation.modificationTimestamp
             etag = downloadRemoteFileOperation.etag
-            etagInConflict = null // If file has just downloaded, there cant be conflicts anymore.
             storagePath = finalLocationForFile
             length = (File(finalLocationForFile).length())
             lastSyncDateForProperties = currentTime
@@ -198,10 +199,14 @@ class DownloadFileWorker(
             modifiedAtLastSyncForData = downloadRemoteFileOperation.modificationTimestamp
         }
         saveFileOrFolderUseCase.execute(SaveFileOrFolderUseCase.Params(ocFile))
+        cleanConflictUseCase.execute(
+            CleanConflictUseCase.Params(
+                fileId = ocFile.id!!
+            )
+        )
 
         // To be done. Probably we will move it out from here.
         //mStorageManager.triggerMediaScan(file.getStoragePath())
-        //mStorageManager.saveConflict(file, null)
     }
 
     /**

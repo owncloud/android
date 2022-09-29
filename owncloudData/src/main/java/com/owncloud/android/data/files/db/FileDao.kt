@@ -267,18 +267,33 @@ abstract class FileDao {
     abstract fun updateFileWithAvailableOfflineStatus(id: Long, availableOfflineStatus: Int)
 
     @Transaction
-    open fun updateConflictStatusForFile(id: Long, eTagInConflict: String) {
+    open fun updateConflictStatusForFile(id: Long, eTagInConflict: String?) {
         val fileEntity = getFileById(id)
 
         if (fileEntity?.parentId != ROOT_PARENT_ID) {
             updateFileWithConflictStatus(id, eTagInConflict)
-            val parentFolder = getFileById(fileEntity?.parentId!!)
-            updateConflictStatusForFile(parentFolder!!.id, eTagInConflict)
+
+            // Check if there is any more file with conflicts in this folder, in such case don't update parent's conflict status
+            var cleanConflictInParent = true
+            if (eTagInConflict == null) {
+                val folderContent = getFolderContent(fileEntity?.parentId!!)
+                var indexFileInFolder = 0
+                while (cleanConflictInParent && indexFileInFolder < folderContent.size) {
+                    val child = folderContent[indexFileInFolder]
+                    if (child.etagInConflict != null) {
+                        cleanConflictInParent = false
+                    }
+                    indexFileInFolder++
+                }
+            }
+            if (eTagInConflict != null || cleanConflictInParent) {
+                updateConflictStatusForFile(fileEntity?.parentId!!, eTagInConflict)
+            }
         }
     }
 
     @Query(UPDATE_FILE_WITH_NEW_CONFLICT_STATUS)
-    abstract fun updateFileWithConflictStatus(id: Long, eTagInConflict: String)
+    abstract fun updateFileWithConflictStatus(id: Long, eTagInConflict: String?)
 
     @Query(DISABLE_THUMBNAILS_FOR_FILE)
     abstract fun disableThumbnailsForFile(fileId: Long)

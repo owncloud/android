@@ -34,6 +34,7 @@ import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUs
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
+import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.domain.transfers.TransferRepository
@@ -85,6 +86,7 @@ class UploadFileFromFileSystemWorker(
 
     private lateinit var uploadFileOperation: UploadFileFromFileSystemOperation
     private val saveFileOrFolderUseCase: SaveFileOrFolderUseCase by inject()
+    private val cleanConflictUseCase: CleanConflictUseCase by inject()
 
     // Etag in conflict required to overwrite files in server. Otherwise, the upload will be rejected.
     private var eTagInConflict: String = ""
@@ -134,17 +136,21 @@ class UploadFileFromFileSystemWorker(
                         length = (File(ocTransfer.localPath).length()),
                         lastSyncDateForData = currentTime,
                         modifiedAtLastSyncForData = currentTime,
-                        etagInConflict = null
                     )
                 } else {
                     // Uploading a file should remove any conflicts on the file.
                     ocFile.copy(
                         etagInConflict = null,
-                        storagePath = null,
                     )
                 }
             saveFileOrFolderUseCase.execute(SaveFileOrFolderUseCase.Params(fileWithNewDetails))
+            cleanConflictUseCase.execute(
+                CleanConflictUseCase.Params(
+                    fileId = ocFile.id!!
+                )
+            )
         }
+
     }
 
     private fun areParametersValid(): Boolean {
