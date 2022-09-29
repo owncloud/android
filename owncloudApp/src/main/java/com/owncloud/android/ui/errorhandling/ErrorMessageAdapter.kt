@@ -35,7 +35,6 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.operations.SynchronizeFolderOperation
 import com.owncloud.android.ui.errorhandling.TransferOperation.Download
 import java.io.File
 import java.net.SocketTimeoutException
@@ -172,12 +171,7 @@ class ErrorMessageAdapter {
                 ResultCode.QUOTA_EXCEEDED ->
                     formatter.format(R.string.failed_upload_quota_exceeded_text)
                 ResultCode.FILE_NOT_FOUND -> {
-                    if (operation is SynchronizeFolderOperation)
-                        formatter.format(
-                            R.string.sync_current_folder_was_removed,
-                            File(operation.folderPath).name
-                        )
-                    else formatter.format(R.string.rename_local_fail_msg)
+                    formatter.format(R.string.rename_local_fail_msg)
                 }
                 ResultCode.INVALID_LOCAL_FILE_NAME ->
                     formatter.format(R.string.rename_local_fail_msg)
@@ -249,13 +243,10 @@ class ErrorMessageAdapter {
         ): String {
             val formatter = Formatter(res)
 
-            return when (operation) {
-                is SynchronizeFolderOperation -> formatter.format(
-                    R.string.sync_folder_failed_content,
-                    File(operation.folderPath).name
-                )
-                // if everything else fails
-                else -> if (result.isSuccess) formatter.format(android.R.string.ok) else formatter.format(R.string.common_error_unknown)
+            return if (result.isSuccess) {
+                formatter.format(android.R.string.ok)
+            } else {
+                formatter.format(R.string.common_error_unknown)
             }
         }
     }
