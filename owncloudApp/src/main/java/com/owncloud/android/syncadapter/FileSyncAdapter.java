@@ -35,23 +35,25 @@ import android.content.SyncResult;
 import android.os.Bundle;
 
 import androidx.core.app.NotificationCompat;
-import androidx.core.util.Pair;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import at.bitfire.dav4jvm.exception.DavException;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
+import com.owncloud.android.domain.UseCaseResult;
+import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase;
+import com.owncloud.android.domain.exceptions.UnauthorizedException;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.operations.SyncCapabilitiesOperation;
-import com.owncloud.android.operations.SynchronizeFolderOperation;
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase;
 import com.owncloud.android.utils.NotificationUtils;
+import kotlin.Lazy;
+import kotlin.Unit;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.IOException;
-import java.util.List;
 
 import static com.owncloud.android.utils.NotificationConstantsKt.FILE_SYNC_NOTIFICATION_CHANNEL_ID;
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * Implementation of {@link AbstractThreadedSyncAdapter} responsible for synchronizing
@@ -61,12 +63,6 @@ import static com.owncloud.android.utils.NotificationConstantsKt.FILE_SYNC_NOTIF
  * String, ContentProviderClient, SyncResult)}.
  */
 public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
-
-    /**
-     * Maximum number of failed folder synchronizations that are supported before finishing
-     * the synchronization operation
-     */
-    private static final int MAX_FAILED_RESULTS = 3;
 
     public static final String EVENT_FULL_SYNC_START = FileSyncAdapter.class.getName() +
             ".EVENT_FULL_SYNC_START";
@@ -81,20 +77,9 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     public static final String EXTRA_RESULT = FileSyncAdapter.class.getName() + ".EXTRA_RESULT";
 
     /**
-     * Time stamp for the current synchronization process, used to distinguish fresh data
-     */
-    private long mCurrentSyncTime;
-
-    /**
      * Flag made 'true' when a request to cancel the synchronization is received
      */
     private boolean mCancellation;
-
-    /**
-     * When 'true' the process was requested by the user through the user interface;
-     * when 'false', it was requested automatically by the system
-     */
-    private boolean mIsManualSync;
 
     /**
      * Counter for failed operations in the synchronization process
@@ -104,17 +89,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     /**
      * Result of the last failed operation
      */
-    private RemoteOperationResult mLastFailedResult;
-
-    /**
-     * Counter of conflicts found between local and remote files
-     */
-    private int mConflictsFound;
-
-    /**
-     * Counter of failed operations in synchronization of kept-in-sync files
-     */
-    private int mFailsInFavouritesFound;
+    private Throwable mLastFailedThrowable;
 
     /**
      * {@link SyncResult} instance to return to the system when the synchronization finish
@@ -144,11 +119,12 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
                                            SyncResult syncResult) {
 
         mCancellation = false;
-        mIsManualSync = extras.getBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, false);
+        /*
+         * When 'true' the process was requested by the user through the user interface;
+         * when 'false', it was requested automatically by the system
+         */
+        boolean isManualSync = extras.getBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, false);
         mFailedResultsCounter = 0;
-        mLastFailedResult = null;
-        mConflictsFound = 0;
-        mFailsInFavouritesFound = 0;
         mSyncResult = syncResult;
         mSyncResult.fullSyncRequested = false;
         mSyncResult.delayUntil = (System.currentTimeMillis() / 1000) + 3 * 60 * 60; // avoid too many automatic
@@ -175,9 +151,8 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         // of the synchronization to the UI
         try {
             updateCapabilities();
-            mCurrentSyncTime = System.currentTimeMillis();
             if (!mCancellation) {
-                synchronizeFolder(getStorageManager().getFileByPath(OCFile.ROOT_PATH), false);
+                synchronizeFolder(getStorageManager().getFileByPath(OCFile.ROOT_PATH));
 
             } else {
                 Timber.d("Leaving synchronization before synchronizing the root folder because cancelation request");
@@ -187,7 +162,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             // it's important making this although very unexpected errors occur;
             // that's the reason for the finally
 
-            if (mFailedResultsCounter > 0 && mIsManualSync) {
+            if (mFailedResultsCounter > 0 && isManualSync) {
                 /// don't let the system synchronization manager retries MANUAL synchronizations
                 //      (be careful: "MANUAL" currently includes the synchronization requested when
                 //      a new account is created and when the user changes the current account)
@@ -196,11 +171,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
                 /// notify the user about the failure of MANUAL synchronization
                 notifyFailedSynchronization();
             }
-            if (mConflictsFound > 0 || mFailsInFavouritesFound > 0) {
-                notifyFailsInFavourites();
-            }
-            sendLocalBroadcast(EVENT_FULL_SYNC_END, null, mLastFailedResult);   // message to signal
-            // the end to the UI
         }
 
     }
@@ -213,7 +183,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      * locally saved.
      * <p>
      * See {@link #onPerformSync(Account, Bundle, String, ContentProviderClient, SyncResult)}
-     * and {@link #synchronizeFolder(OCFile, boolean)}.
+     * and {@link #synchronizeFolder(OCFile)}.
      */
     @Override
     public void onSyncCanceled() {
@@ -226,10 +196,13 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      * Updates the local copy of capabilities information of the ownCloud server
      */
     private void updateCapabilities() {
-        SyncCapabilitiesOperation getCapabilities = new SyncCapabilitiesOperation();
-        RemoteOperationResult result = getCapabilities.execute(getStorageManager(), getContext());
-        if (!result.isSuccess()) {
-            mLastFailedResult = result;
+        @NotNull Lazy<RefreshCapabilitiesFromServerAsyncUseCase> refreshCapabilitiesFromServerAsyncUseCase =
+                inject(RefreshCapabilitiesFromServerAsyncUseCase.class);
+        RefreshCapabilitiesFromServerAsyncUseCase.Params params = new RefreshCapabilitiesFromServerAsyncUseCase.Params(getAccount().name);
+        UseCaseResult<Unit> useCaseResult = refreshCapabilitiesFromServerAsyncUseCase.getValue().execute(params);
+
+        if (useCaseResult.isError()) {
+            mLastFailedThrowable = useCaseResult.getThrowableOrNull();
         }
     }
 
@@ -242,120 +215,25 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
      * Enters in the child folders to synchronize their contents also, following a recursive
      * depth first strategy.
      *
-     * @param folder   Folder to synchronize.
-     * @param pushOnly When 'true', it's assumed that the folder did not change in the
-     *                 server, so data will not be fetched. Only local changes of
-     *                 available offline files will be pushed.
+     * @param folder Folder to synchronize.
      */
-    private void synchronizeFolder(OCFile folder, boolean pushOnly) {
+    private void synchronizeFolder(OCFile folder) {
 
-        if (mFailedResultsCounter > MAX_FAILED_RESULTS || isFinisher(mLastFailedResult)) {
-            return;
-        }
+        // Discover full account
+        @NotNull Lazy<SynchronizeFolderUseCase> synchronizeFolderUseCase =
+                inject(SynchronizeFolderUseCase.class);
+        SynchronizeFolderUseCase.Params params = new SynchronizeFolderUseCase.Params(folder.getRemotePath(), folder.getOwner(),
+                SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER_RECURSIVELY);
+        UseCaseResult<Unit> useCaseResult;
 
-        // folder synchronization
-        SynchronizeFolderOperation synchFolderOp = new SynchronizeFolderOperation(
-                getContext(),
-                folder.getRemotePath(),
-                getAccount(),
-                mCurrentSyncTime,
-                pushOnly,
-                true,       // sync full account
-                false       // sync regular files in folder
-        );
+        useCaseResult = synchronizeFolderUseCase.getValue().execute(params);
 
-        RemoteOperationResult result;
-        boolean repeat;
-        do {
-            repeat = false;
-
-            result = synchFolderOp.execute(getClient(), getStorageManager());
-
-        } while (repeat);
-
-        // synchronized folder -> notice to UI - ALWAYS, although !result.isSuccess
-        sendLocalBroadcast(EVENT_FULL_SYNC_FOLDER_CONTENTS_SYNCED, folder.getRemotePath(), result);
-
-        // check the result of synchronizing the folder
-        if (result.isSuccess() || result.getCode() == ResultCode.SYNC_CONFLICT) {
-
-            if (result.getCode() == ResultCode.SYNC_CONFLICT) {
-                mConflictsFound += synchFolderOp.getConflictsFound();
-                mFailsInFavouritesFound += synchFolderOp.getFailsInFileSyncsFound();
-            }
-            if (result.isSuccess()) {
-                // synchronize children folders 
-                List<Pair<OCFile, Boolean>> children = synchFolderOp.getFoldersToVisit();
-                // beware of the 'hidden' recursion here!
-                syncSubfolders(children);
-            }
-
-        } else if (result.getCode() != ResultCode.FILE_NOT_FOUND) {
-            // in failures, the statistics for the global result are updated
-            if (RemoteOperationResult.ResultCode.UNAUTHORIZED.equals(result.getCode())) {
+        // in failures, the statistics for the global result are updated
+        if (useCaseResult.getThrowableOrNull() != null) {
+            if (useCaseResult.getThrowableOrNull() instanceof UnauthorizedException) {
                 mSyncResult.stats.numAuthExceptions++;
-
-            } else if (result.getException() instanceof DavException) {
-                mSyncResult.stats.numParseExceptions++;
-
-            } else if (result.getException() instanceof IOException) {
-                mSyncResult.stats.numIoExceptions++;
             }
             mFailedResultsCounter++;
-            mLastFailedResult = result;
-
-        } // else, ResultCode.FILE_NOT_FOUND is ignored, remote folder was
-        // removed from other thread or other client during the synchronization,
-        // before this thread fetched its contents
-
-    }
-
-    /**
-     * Checks if a failed result should terminate the synchronization process immediately,
-     * according to OUR OWN POLICY
-     *
-     * @param failedResult Remote operation result to check.
-     * @return 'True' if the result should immediately finish the
-     * synchronization
-     */
-    private boolean isFinisher(RemoteOperationResult failedResult) {
-        if (failedResult != null) {
-            RemoteOperationResult.ResultCode code = failedResult.getCode();
-            return (code.equals(RemoteOperationResult.ResultCode.SSL_ERROR) ||
-                    code.equals(RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED) ||
-                    code.equals(RemoteOperationResult.ResultCode.BAD_OC_VERSION) ||
-                    code.equals(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED) ||
-                    code.equals(ResultCode.ACCOUNT_NOT_FOUND) ||
-                    code.equals(ResultCode.ACCOUNT_EXCEPTION)
-            );
-        }
-        return false;
-    }
-
-    /**
-     * Triggers the synchronization of any folder contained in the list of received files.
-     * <p>
-     * Every subfolder comes with a boolean flag, set to true if the previous sync operation detected
-     * that there are pending changes in the file.
-     * <p>
-     * Only folders that have pending changes in the server will be sync'd here.
-     *
-     * @param folders Subfolders to recursively synchronize, with boolean value signaling if there are pending
-     *                changes to sync in the server.
-     */
-    private void syncSubfolders(List<Pair<OCFile, Boolean>> folders) {
-        int i;
-        Pair<OCFile, Boolean> pair;
-        for (i = 0; i < folders.size() && !mCancellation; i++) {
-            pair = folders.get(i);
-            if (pair.first.isFolder()) {
-                synchronizeFolder(pair.first, !pair.second);
-            }
-        }
-
-        if (mCancellation && i < folders.size()) {
-            Timber.d("Leaving synchronization before synchronizing " + folders.get(i).first.getRemotePath() + " due " +
-                    "to cancelation request");
         }
     }
 
@@ -387,8 +265,8 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
     private void notifyFailedSynchronization() {
         NotificationCompat.Builder notificationBuilder = createNotificationBuilder();
         boolean needsToUpdateCredentials = (
-                mLastFailedResult != null &&
-                        ResultCode.UNAUTHORIZED.equals(mLastFailedResult.getCode())
+                mLastFailedThrowable != null &&
+                        mLastFailedThrowable instanceof UnauthorizedException
         );
         if (needsToUpdateCredentials) {
             // let the user update credentials with one click
@@ -408,43 +286,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         }
 
         showNotification(R.string.sync_fail_ticker, notificationBuilder);
-    }
-
-    /**
-     * Notifies the user about conflicts and strange fails when trying to synchronize the contents
-     * of kept-in-sync files.
-     * <p>
-     * By now, we won't consider a failed synchronization.
-     */
-    private void notifyFailsInFavourites() {
-        if (mFailedResultsCounter > 0) {
-            NotificationCompat.Builder notificationBuilder = createNotificationBuilder();
-            notificationBuilder.setTicker(i18n(R.string.sync_fail_in_favourites_ticker));
-
-            // TODO put something smart in the contentIntent below
-            notificationBuilder
-                    .setContentIntent(PendingIntent.getActivity(
-                            getContext(), (int) System.currentTimeMillis(), new Intent(), NotificationUtils.INSTANCE.getPendingIntentFlags()
-                    ))
-                    .setContentTitle(i18n(R.string.sync_fail_in_favourites_ticker))
-                    .setContentText(i18n(R.string.sync_fail_in_favourites_content,
-                            mFailedResultsCounter + mConflictsFound, mConflictsFound));
-
-            showNotification(R.string.sync_fail_in_favourites_ticker, notificationBuilder);
-        } else {
-            NotificationCompat.Builder notificationBuilder = createNotificationBuilder();
-            notificationBuilder.setTicker(i18n(R.string.sync_conflicts_in_favourites_ticker));
-
-            // TODO put something smart in the contentIntent below
-            notificationBuilder
-                    .setContentIntent(PendingIntent.getActivity(
-                            getContext(), (int) System.currentTimeMillis(), new Intent(), NotificationUtils.INSTANCE.getPendingIntentFlags()
-                    ))
-                    .setContentTitle(i18n(R.string.sync_conflicts_in_favourites_ticker))
-                    .setContentText(i18n(R.string.sync_conflicts_in_favourites_ticker, mConflictsFound));
-
-            showNotification(R.string.sync_conflicts_in_favourites_ticker, notificationBuilder);
-        }
     }
 
     /**
