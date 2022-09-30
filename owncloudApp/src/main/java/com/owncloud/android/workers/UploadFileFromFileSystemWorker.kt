@@ -51,9 +51,11 @@ import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
 import com.owncloud.android.lib.resources.files.FileUtils
 import com.owncloud.android.lib.resources.files.UploadFileFromFileSystemOperation
 import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation
+import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation.Companion.CHUNK_SIZE
 import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
+import com.owncloud.android.utils.SecurityUtils
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -217,11 +219,15 @@ class UploadFileFromFileSystemWorker(
         val client = getClientForThisUpload()
 
         val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
-        val capabilitiesForAccount = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(accountName = account.name))
+        val capabilitiesForAccount = getStoredCapabilitiesUseCase.execute(
+            GetStoredCapabilitiesUseCase.Params(
+                accountName = account.name
+            )
+        )
         val isChunkingAllowed = capabilitiesForAccount != null && capabilitiesForAccount.isChunkingAllowed()
-        Timber.d("Chunking is allowed: %s", isChunkingAllowed)
+        Timber.d("Chunking is allowed: %s, and file size is greater than the minimum chunk size: %s", isChunkingAllowed, fileSize > CHUNK_SIZE)
 
-        if (isChunkingAllowed) {
+        if (isChunkingAllowed && fileSize > CHUNK_SIZE) {
             uploadChunkedFile(client)
         } else {
             uploadPlainFile(client)
@@ -247,15 +253,18 @@ class UploadFileFromFileSystemWorker(
     }
 
     private fun uploadChunkedFile(client: OwnCloudClient) {
+        val immutableHashForChunkedFile = SecurityUtils.stringToMD5Hash(uploadPath) + System.currentTimeMillis()
         // Step 1: Create folder where the chunks will be uploaded.
         val createChunksRemoteFolderOperation = CreateRemoteFolderOperation(
-            remotePath = uploadIdInStorageManager.toString(), createFullPath = false, isChunksFolder = true
+            remotePath = immutableHashForChunkedFile,
+            createFullPath = false,
+            isChunksFolder = true
         )
         executeRemoteOperation { createChunksRemoteFolderOperation.execute(client) }
 
         // Step 2: Upload file by chunks
         uploadFileOperation = ChunkedUploadFromFileSystemOperation(
-            transferId = uploadIdInStorageManager.toString(),
+            transferId = immutableHashForChunkedFile,
             localPath = fileSystemPath,
             remotePath = uploadPath,
             mimeType = mimetype,
@@ -270,7 +279,7 @@ class UploadFileFromFileSystemWorker(
         // Step 3: Move remote file to the final remote destination
         val ocChunkService = OCChunkService(client)
         ocChunkService.moveFile(
-            sourceRemotePath = "$uploadIdInStorageManager$PATH_SEPARATOR${FileUtils.FINAL_CHUNKS_FILE}",
+            sourceRemotePath = "$immutableHashForChunkedFile$PATH_SEPARATOR${FileUtils.FINAL_CHUNKS_FILE}",
             targetRemotePath = uploadPath,
             fileLastModificationTimestamp = lastModified,
             fileLength = fileSize

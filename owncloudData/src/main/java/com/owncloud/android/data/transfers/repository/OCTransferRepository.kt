@@ -44,6 +44,10 @@ class OCTransferRepository(
         localTransferDataSource.updateTransferStatusToEnqueuedById(id = id)
     }
 
+    override fun updateTransferLocalPath(id: Long, localPath: String) {
+        localTransferDataSource.updateTransferLocalPath(id = id, localPath = localPath)
+    }
+
     override fun updateTransferWhenFinished(
         id: Long,
         status: TransferStatus,

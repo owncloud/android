@@ -22,6 +22,7 @@
 package com.owncloud.android.usecases.transfers.uploads
 
 import androidx.work.WorkManager
+import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.transfers.TransferRepository
 import timber.log.Timber
@@ -29,10 +30,14 @@ import timber.log.Timber
 class CancelUploadWithIdUseCase(
     private val workManager: WorkManager,
     private val transferRepository: TransferRepository,
+    private val localStorageProvider: LocalStorageProvider,
 ) : BaseUseCase<Unit, CancelUploadWithIdUseCase.Params>() {
 
     override fun run(params: Params) {
         workManager.cancelAllWorkByTag(params.uploadId.toString())
+
+        val transfer = transferRepository.getTransferById(params.uploadId)
+        transfer?.let { localStorageProvider.deleteCacheIfNeeded(it) }
 
         transferRepository.removeTransferById(params.uploadId)
 
