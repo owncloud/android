@@ -46,7 +46,6 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import timber.log.Timber;
@@ -282,11 +281,6 @@ public class OperationsService extends Service {
                             ocAccount = new OwnCloudAccount(mLastTarget.mAccount, mService);
                             mOwnCloudClient = SingleSessionManager.getDefaultSingleton().
                                     getClientFor(ocAccount, mService);
-
-                            OwnCloudVersion version = com.owncloud.android.authentication.AccountUtils.getServerVersion(
-                                    mLastTarget.mAccount
-                            );
-                            mOwnCloudClient.setOwnCloudVersion(version);
 
                             mStorageManager = new FileDataStorageManager(
                                     mService,

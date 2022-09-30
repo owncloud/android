@@ -22,15 +22,19 @@
 
 package com.owncloud.android.data.capabilities.repository
 
+import android.accounts.AccountManager
 import androidx.lifecycle.LiveData
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.lib.common.accounts.AccountUtils
+import com.owncloud.android.lib.resources.status.OwnCloudVersion
 
 class OCCapabilityRepository(
     private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
-    private val remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource
+    private val remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource,
+    private val accountManager: AccountManager,
 ) : CapabilityRepository {
 
     override fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapability?> {
@@ -46,5 +50,21 @@ class OCCapabilityRepository(
     ) {
         val capabilitiesFromNetwork = remoteCapabilitiesDataSource.getCapabilities(accountName)
         localCapabilitiesDataSource.insert(listOf(capabilitiesFromNetwork))
+
+        updateAccountManagerData(capabilitiesFromNetwork, accountName)
+    }
+
+    private fun updateAccountManagerData(
+        capabilitiesFromNetwork: OCCapability,
+        accountName: String
+    ) {
+        val serverVersion = capabilitiesFromNetwork.versionString?.let { OwnCloudVersion(it) }?.version ?: return
+        val accountToUpdate = accountManager.accounts.firstOrNull { it.name == accountName } ?: return
+
+        accountManager.setUserData(
+            accountToUpdate,
+            AccountUtils.Constants.KEY_OC_VERSION,
+            serverVersion
+        )
     }
 }
