@@ -81,6 +81,7 @@
   <string name="prefs_enable_logging">Activer la journalisation</string>
   <string name="prefs_send_feedback">Envoyez des commentaires</string>
   <string name="prefs_app_version">Version de l\'application</string>
+  <string name="prefs_app_version_summary">%1$s %2$s version %3$s (%4$s)</string>
   <string name="pattern_enter_pattern">Veuillez saisir votre schéma</string>
   <string name="pattern_configure_pattern">Saisissez votre schéma</string>
   <string name="pattern_remove_pattern">Supprimer votre schéma</string>
@@ -570,5 +571,9 @@ Téléchargez-le ici : %2$s</string>
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Code de sécurité</string>
   <!--Release Notes-->
+  <string name="release_notes_header">Nouveau dans %1$s</string>
+  <string name="release_notes_footer">Merci d\'utiliser %1$s.\n❤</string>
   <string name="release_notes_proceed">Exécuter</string>
+  <string name="ic_action_open_in_web">Afficher dans le navigateur web</string>
+  <string name="release_notes_2.21.2_title1">Afficher dans le navigateur web</string>
 </resources>
