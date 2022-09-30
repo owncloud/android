@@ -46,7 +46,7 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     factory<AuthenticationRepository> { OCAuthenticationRepository(get(), get()) }
-    factory<CapabilityRepository> { OCCapabilityRepository(get(), get()) }
+    factory<CapabilityRepository> { OCCapabilityRepository(get(), get(), get()) }
     factory<FileRepository> { OCFileRepository(get(), get(), get()) }
     factory<ServerInfoRepository> { OCServerInfoRepository(get()) }
     factory<ShareRepository> { OCShareRepository(get(), get()) }
