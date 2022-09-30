@@ -140,7 +140,7 @@ class UploadFileFromFileSystemWorker(
                 } else {
                     // Uploading a file should remove any conflicts on the file.
                     ocFile.copy(
-                        etagInConflict = null,
+                        storagePath = null,
                     )
                 }
             saveFileOrFolderUseCase.execute(SaveFileOrFolderUseCase.Params(fileWithNewDetails))
