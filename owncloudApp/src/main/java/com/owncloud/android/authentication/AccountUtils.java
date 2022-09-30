@@ -1,18 +1,18 @@
 /**
  * ownCloud Android client application
- *
+ * <p>
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2020 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,12 +26,8 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
-import androidx.annotation.Nullable;
 import com.owncloud.android.MainApp;
-import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import timber.log.Timber;
 
 import java.util.Locale;
@@ -233,37 +229,5 @@ public class AccountUtils {
                 }
             }
         }
-    }
-
-    /**
-     * Access the version of the OC server corresponding to an account SAVED IN THE ACCOUNTMANAGER
-     *
-     * @param   account     ownCloud account
-     * @return Version of the OC server corresponding to account, according to the data saved
-     *                      in the system AccountManager
-     */
-    @Nullable
-    public static OwnCloudVersion getServerVersion(Account account) {
-        OwnCloudVersion serverVersion = null;
-        if (account != null) {
-            // capabilities are now the preferred source for version info
-            FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(
-                    MainApp.Companion.getAppContext(),
-                    account,
-                    MainApp.Companion.getAppContext().getContentResolver()
-            );
-            OCCapability capability = fileDataStorageManager.getCapability(account.name);
-            if (capability != null) {
-                serverVersion = new OwnCloudVersion(capability.getVersionString());
-            } else {
-                // legacy: AccountManager as source of version info
-                AccountManager accountMgr = AccountManager.get(MainApp.Companion.getAppContext());
-                String serverVersionStr = accountMgr.getUserData(account, Constants.KEY_OC_VERSION);
-                if (serverVersionStr != null) {
-                    serverVersion = new OwnCloudVersion(serverVersionStr);
-                }
-            }
-        }
-        return serverVersion;
     }
 }
