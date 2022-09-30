@@ -433,7 +433,7 @@ class FileDataStorageManager : KoinComponent {
 //        }
 //    }
 
-    // FIXME: 13/10/2020 : New_arch: Conflicts
+    // TODO: To be removed
     fun saveConflict(file: OCFile, eTagInConflictFromParameter: String?) {
 //        var eTagInConflict = eTagInConflictFromParameter
 //        if (!file.isDown) {
