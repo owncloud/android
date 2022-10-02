@@ -599,10 +599,25 @@
   <string name="scoped_storage_wizard_explanation">Намерени %1$s данни във външната памет. Те ще бъдат преместени в сигурното хранилище на вашето устройство. Останалите файлове ще бъдат почистени от външното ви хранилище след миграцията за да се избегнат дублирания и уязвимост.</string>
   <string name="scoped_storage_wizard_intro">Приложението ви е актуализирано. Тази актуализация на приложението прехвърля файловете ви на по-сигурно място в устройството ви. Тази еднократна миграция на данни е необходима и може да отнеме минута или повече.</string>
   <string name="scoped_storage_wizard_intro_button">Нека започнем</string>
-  <string name="scoped_storage_wizard_not_enough_space_warning">⚠️ Свободното пространство на устройството ви в момента е ограничено. Някои файлове може да не бъдат прехвърлени, моля проверете дали някои от всички изтегл1щи се файлове продължават да се изтеглят след приключване на процеса.</string>
+  <string name="scoped_storage_wizard_not_enough_space_warning">⚠️ Свободното пространство на устройството ви в момента е ограничено. Някои файлове може да не бъдат прехвърлени, моля проверете дали някои от всички изтеглящи се файлове продължават да се изтеглят след приключване на процеса.</string>
+  <string name="scoped_storage_wizard_migrate_and_clean_button">Мигрирайте сега</string>
+  <string name="scoped_storage_wizard_migration_completed">Миграцията е завършена успешно. Файловете ви вече са по-защитени от всякога.</string>
+  <string name="scoped_storage_wizard_migration_completed_access_files_button">Достъп до вашите файлове</string>
+  <string name="scoped_storage_wizard_migration_in_progress">Прехвърляне на файловете. Моля, не изключвайте устройството си.</string>
+  <string name="scoped_storage_wizard_migration_in_progress_button">Работи... Моля, изчакайте</string>
+  <string name="scoped_storage_wizard_title">Повече сигурност за вашите файлове</string>
   <!--Security Enforced-->
   <string name="security_enforced_title">Моля, изберете начин за заключване на приложението</string>
-  <string name="security_enforced_first_option">Заключваща парола</string>
+  <string name="security_enforced_first_option">Парола за закючване</string>
+  <string name="security_enforced_second_option">Шаблон за заключване</string>
   <!--Release Notes-->
+  <string name="release_notes_header">Новото в %1$s?</string>
+  <string name="release_notes_footer">Благодарим ви, че използвате %1$s.\n❤</string>
   <string name="release_notes_proceed">Продължаване</string>
+  <string name="release_notes_icon">Икона за бележка за изданието</string>
+  <string name="ic_action_open_in_web">Отваряне в мрежата</string>
+  <string name="open_in_web_error_generic">Не може да се отвори в мрежата</string>
+  <string name="open_in_web_error_not_supported">няма приложения, които да поддържат този тип файл</string>
+  <string name="release_notes_2.21.2_title1">Отваряне в мрежата</string>
+  <string name="release_notes_2.21.2_subtitle1">Отваряне на поддържаните от сървъра типове файлове в уеб браузър (само oCIS)</string>
 </resources>
