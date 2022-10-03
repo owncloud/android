@@ -53,7 +53,8 @@ class OCFileRepository(
         remoteFileDataSource.createFolder(
             remotePath = remotePath,
             createFullPath = false,
-            isChunksFolder = false
+            isChunksFolder = false,
+            accountName = parentFolder.owner,
         ).also {
             localFileDataSource.saveFilesInFolderAndReturnThem(
                 folder = parentFolder,
@@ -75,7 +76,10 @@ class OCFileRepository(
 
             // 1. Get the final remote path for this file.
             val expectedRemotePath: String = targetFolder.remotePath + ocFile.fileName
-            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath).let {
+            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(
+                expectedRemotePath,
+                targetFolder.owner
+            ).let {
                 if (ocFile.isFolder) it.plus(File.separator) else it
             }
 
@@ -83,7 +87,8 @@ class OCFileRepository(
             val remoteId = try {
                 remoteFileDataSource.copyFile(
                     sourceRemotePath = ocFile.remotePath,
-                    targetRemotePath = finalRemotePath
+                    targetRemotePath = finalRemotePath,
+                    accountName = ocFile.owner,
                 )
             } catch (targetNodeDoesNotExist: ConflictException) {
                 // Target node does not exist anymore. Remove target folder from database and local storage and return
@@ -154,7 +159,7 @@ class OCFileRepository(
 
             // 1. Get the final remote path for this file.
             val expectedRemotePath: String = targetFile.remotePath + ocFile.fileName
-            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath).let {
+            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath, targetFile.owner).let {
                 if (ocFile.isFolder) it.plus(File.separator) else it
             }
             val finalStoragePath: String = localStorageProvider.getDefaultSavePathFor(targetFile.owner, finalRemotePath)
@@ -163,7 +168,8 @@ class OCFileRepository(
             try {
                 remoteFileDataSource.moveFile(
                     sourceRemotePath = ocFile.remotePath,
-                    targetRemotePath = finalRemotePath
+                    targetRemotePath = finalRemotePath,
+                    accountName = ocFile.owner,
                 )
             } catch (targetNodeDoesNotExist: ConflictException) {
                 // Target node does not exist anymore. Remove target folder from database and local storage and return
@@ -195,15 +201,15 @@ class OCFileRepository(
         }
     }
 
-    override fun readFile(remotePath: String): OCFile {
-        return remoteFileDataSource.readFile(remotePath)
+    override fun readFile(remotePath: String, accountName: String): OCFile {
+        return remoteFileDataSource.readFile(remotePath, accountName)
     }
 
-    override fun refreshFolder(remotePath: String): List<OCFile> {
+    override fun refreshFolder(remotePath: String, accountName: String): List<OCFile> {
         val currentSyncTime = System.currentTimeMillis()
 
         // Retrieve remote folder data
-        val fetchFolderResult = remoteFileDataSource.refreshFolder(remotePath)
+        val fetchFolderResult = remoteFileDataSource.refreshFolder(remotePath, accountName)
         val remoteFolder = fetchFolderResult.first()
         val remoteFolderContent = fetchFolderResult.drop(1)
 
@@ -283,7 +289,7 @@ class OCFileRepository(
         listOfFilesToRemove.forEach { ocFile ->
             if (!removeOnlyLocalCopy) {
                 try {
-                    remoteFileDataSource.removeFile(ocFile.remotePath)
+                    remoteFileDataSource.removeFile(remotePath = ocFile.remotePath, accountName = ocFile.owner)
                 } catch (fileNotFoundException: FileNotFoundException) {
                     Timber.i("File ${ocFile.fileName} was not found in server. Let's remove it from local storage")
                 }
@@ -314,7 +320,8 @@ class OCFileRepository(
             oldName = ocFile.fileName,
             oldRemotePath = ocFile.remotePath,
             newName = newName,
-            isFolder = ocFile.isFolder
+            isFolder = ocFile.isFolder,
+            accountName = ocFile.owner,
         )
 
         // 4. Save new remote path in the local database
