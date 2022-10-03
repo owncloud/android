@@ -62,11 +62,13 @@ class ClientManager(
         val safeClient = ownCloudClient
 
         return if (requiresNewClient || safeClient == null) {
-            OwnCloudClient(Uri.parse(path),
+            OwnCloudClient(
+                Uri.parse(path),
                 connectionValidator,
                 true,
                 SingleSessionManager.getDefaultSingleton(),
-                context).apply {
+                context
+            ).apply {
                 credentials = ownCloudCredentials
             }.also {
                 ownCloudClient = it

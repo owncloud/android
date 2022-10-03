@@ -63,12 +63,13 @@ class FileDataStorageManager : KoinComponent {
         mContext = activity
     }
 
-    // TODO: New_arch: Remove this and call usecase inside FilesViewModel
-    fun getFileByPath(path: String): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
+    fun getFileByPath(remotePath: String): OCFile? = getFileByPathAndAccount(remotePath, account.name)
+
+    private fun getFileByPathAndAccount(remotePath: String, accountName: String): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(account.name, path))
+            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, remotePath))
         }.getDataOrNull()
         result
     }
