@@ -36,7 +36,7 @@ class SynchronizeFolderUseCase(
         val remotePath = params.remotePath
         val accountName = params.accountName
 
-        val folderContent = fileRepository.refreshFolder(remotePath)
+        val folderContent = fileRepository.refreshFolder(remotePath, accountName)
 
         folderContent.forEach { ocFile ->
             if (ocFile.isFolder) {
