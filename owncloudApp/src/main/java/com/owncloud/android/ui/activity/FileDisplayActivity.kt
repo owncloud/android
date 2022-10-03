@@ -247,10 +247,6 @@ class FileDisplayActivity : FileActivity(),
         super.onPostCreate(savedInstanceState)
 
         if (savedInstanceState == null && mAccountWasSet) {
-            val workerProvider = WorkManagerProvider(context = this)
-            workerProvider.enqueueAvailableOfflinePeriodicWorker()
-            val syncProfileOperation = SyncProfileOperation(storageManager.account)
-            syncProfileOperation.syncUserProfile()
             val capabilitiesViewModel: OCCapabilityViewModel by viewModel {
                 parametersOf(
                     account?.name
