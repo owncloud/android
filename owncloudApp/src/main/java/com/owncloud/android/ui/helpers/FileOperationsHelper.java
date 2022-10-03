@@ -174,7 +174,7 @@ public class FileOperationsHelper {
      * Request the synchronization of a file or folder with the OC server, including its contents.
      *
      * @param file The file or folder to synchronize
-     * DEPRECATED: Use the usecases within a viewmodel instead!
+     *             DEPRECATED: Use the usecases within a viewmodel instead!
      */
     @Deprecated
     public void syncFile(OCFile file) {
