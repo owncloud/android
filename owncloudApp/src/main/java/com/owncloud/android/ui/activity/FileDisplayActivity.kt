@@ -311,7 +311,10 @@ class FileDisplayActivity : FileActivity(),
                         startSyncFolderOperation(file, false)
                     }
                 }
-
+                val syncProfileOperation = SyncProfileOperation(account)
+                syncProfileOperation.syncUserProfile()
+                val workManagerProvider = WorkManagerProvider(context = baseContext)
+                workManagerProvider.enqueueAvailableOfflinePeriodicWorker()
             } else {
                 file?.isFolder?.let { isFolder ->
                     updateFragmentsVisibility(!isFolder)
