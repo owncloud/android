@@ -35,7 +35,9 @@ import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
+import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation
 import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_EXPIRED_TOKEN
@@ -69,7 +71,6 @@ class DownloadFileWorker(
     workerParameters
 ), KoinComponent, OnDatatransferProgressListener {
 
-    private val client: OwnCloudClient by inject()
     private val getFileByIdUseCase: GetFileByIdUseCase by inject()
     private val saveFileOrFolderUseCase: SaveFileOrFolderUseCase by inject()
 
@@ -147,6 +148,7 @@ class DownloadFileWorker(
         ).also {
             it.addDatatransferProgressListener(this)
         }
+        val client = getClientForThisDownload()
 
         // It will throw an exception if something goes wrong.
         executeRemoteOperation {
@@ -295,6 +297,9 @@ class DownloadFileWorker(
             0
         )
     }
+
+    private fun getClientForThisDownload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
+        .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext)
 
     override fun onTransferProgress(
         progressRate: Long,
