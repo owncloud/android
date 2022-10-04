@@ -700,4 +700,7 @@
     <string name="open_in_web_error_not_supported">there are no apps that support this file type</string>
     <string name="open_in_web_error_too_early">The requested file is not yet available, please try again later</string>
 
+    <string name="release_notes_3.0_beta1_title1">New sync engine</string>
+    <string name="release_notes_3.0_beta1_subtitle1">The way in which all files are synced has been redesigned</string>
+
 </resources>

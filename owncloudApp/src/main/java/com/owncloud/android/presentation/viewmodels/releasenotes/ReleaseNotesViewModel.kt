@@ -47,7 +47,7 @@ class ReleaseNotesViewModel(
 
     companion object {
         val releaseNotesList = listOf<ReleaseNote>(
-            ReleaseNote(R.string.release_notes_2_21_2_title1, R.string.release_notes_2_21_2_subtitle1, ReleaseNoteType.ENHANCEMENT),
+            ReleaseNote(R.string.release_notes_3_0_beta1_title1, R.string.release_notes_3_0_beta1_subtitle1, ReleaseNoteType.CHANGE),
         )
     }
 }
