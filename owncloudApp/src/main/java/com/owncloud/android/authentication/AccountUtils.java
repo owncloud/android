@@ -192,13 +192,6 @@ public class AccountUtils {
                         // copy base URL
                         accountMgr.setUserData(newAccount, Constants.KEY_OC_BASE_URL, serverUrl);
 
-                        // copy server version
-                        accountMgr.setUserData(
-                                newAccount,
-                                Constants.KEY_OC_VERSION,
-                                accountMgr.getUserData(account, Constants.KEY_OC_VERSION)
-                        );
-
                         String isOauthStr = accountMgr.getUserData(account, Constants.KEY_SUPPORTS_OAUTH2);
                         boolean isOAuth = OAUTH_SUPPORTED_TRUE.equals(isOauthStr);
                         if (isOAuth) {

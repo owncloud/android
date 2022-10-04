@@ -41,7 +41,6 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.ACCOUNT_V
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_DISPLAY_NAME
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BASE_URL
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPORTS_OAUTH2
 import com.owncloud.android.testutil.OC_ACCESS_TOKEN
 import com.owncloud.android.testutil.OC_ACCOUNT
@@ -447,7 +446,6 @@ class OCLocalAuthenticationDataSourceTest {
         verify(exactly = exactly) {
             // The account info is updated
             accountManager.setUserData(account, KEY_OC_ACCOUNT_VERSION, ACCOUNT_VERSION.toString())
-            accountManager.setUserData(account, KEY_OC_VERSION, serverInfo.ownCloudVersion)
             accountManager.setUserData(account, KEY_OC_BASE_URL, serverInfo.baseUrl)
             accountManager.setUserData(account, KEY_DISPLAY_NAME, userInfo.displayName)
         }
