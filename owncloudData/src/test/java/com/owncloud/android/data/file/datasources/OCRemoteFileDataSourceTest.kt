@@ -23,6 +23,7 @@ import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_FOLDER
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.utils.createRemoteOperationResultMock
@@ -56,7 +57,7 @@ class OCRemoteFileDataSourceTest {
             ocFileService.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
         } returns checkPathExistenceRemoteResult
 
-        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
+        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true, OC_ACCOUNT_NAME)
 
         assertNotNull(checkPathExistence)
         assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
@@ -73,7 +74,7 @@ class OCRemoteFileDataSourceTest {
             ocFileService.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
         } returns checkPathExistenceRemoteResult
 
-        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
+        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true, OC_ACCOUNT_NAME)
 
         assertNotNull(checkPathExistence)
         assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
@@ -87,7 +88,7 @@ class OCRemoteFileDataSourceTest {
             ocFileService.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
         } throws Exception()
 
-        ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
+        ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true, OC_ACCOUNT_NAME)
     }
 
     @Test
@@ -99,7 +100,7 @@ class OCRemoteFileDataSourceTest {
             ocFileService.createFolder(remotePath = OC_FOLDER.remotePath, createFullPath = false, isChunkFolder = false)
         } returns createFolderRemoteResult
 
-        val createFolderResult = ocRemoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false)
+        val createFolderResult = ocRemoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME)
 
         assertNotNull(createFolderResult)
         assertEquals(createFolderRemoteResult.data, createFolderResult)
@@ -113,6 +114,6 @@ class OCRemoteFileDataSourceTest {
             ocFileService.createFolder(OC_FOLDER.remotePath, false, false)
         } throws Exception()
 
-        ocRemoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false)
+        ocRemoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME)
     }
 }
