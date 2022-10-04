@@ -109,9 +109,9 @@ class FileDetailsViewModel(
     }
 
     fun startListeningToWorkInfo(uuid: UUID?) {
-        uuid ?: return
-
-        _ongoingTransferUUID.postValue(uuid)
+        uuid?.let {
+            _ongoingTransferUUID.postValue(it)
+        }
     }
 
     fun checkOnGoingTransfersWhenOpening() {
