@@ -44,7 +44,6 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_DISPL
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_ID
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_ACCOUNT_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_BASE_URL
-import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_OC_VERSION
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.KEY_SUPPORTS_OAUTH2
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants.OAUTH_SUPPORTED_TRUE
 import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials
@@ -184,10 +183,6 @@ class OCLocalAuthenticationDataSource(
             newAccount,
             KEY_OC_ACCOUNT_VERSION,
             ACCOUNT_VERSION.toString()
-        )
-
-        accountManager.setUserData(
-            newAccount, KEY_OC_VERSION, serverInfo.ownCloudVersion
         )
 
         accountManager.setUserData(

@@ -50,21 +50,5 @@ class OCCapabilityRepository(
     ) {
         val capabilitiesFromNetwork = remoteCapabilitiesDataSource.getCapabilities(accountName)
         localCapabilitiesDataSource.insert(listOf(capabilitiesFromNetwork))
-
-        updateAccountManagerData(capabilitiesFromNetwork, accountName)
-    }
-
-    private fun updateAccountManagerData(
-        capabilitiesFromNetwork: OCCapability,
-        accountName: String
-    ) {
-        val serverVersion = capabilitiesFromNetwork.versionString?.let { OwnCloudVersion(it) }?.version ?: return
-        val accountToUpdate = accountManager.accounts.firstOrNull { it.name == accountName } ?: return
-
-        accountManager.setUserData(
-            accountToUpdate,
-            AccountUtils.Constants.KEY_OC_VERSION,
-            serverVersion
-        )
     }
 }
