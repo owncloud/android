@@ -694,4 +694,7 @@
     <string name="release_notes_2.21.2_title1">Open in web</string>
     <string name="release_notes_2.21.2_subtitle1">Open server supported file types in web browser (only oCIS)</string>
 
+    <string name="release_notes_3.0_beta1_title1">New sync engine</string>
+    <string name="release_notes_3.0_beta1_subtitle1">The way in which all files are synced has been redesigned</string>
+
 </resources>
