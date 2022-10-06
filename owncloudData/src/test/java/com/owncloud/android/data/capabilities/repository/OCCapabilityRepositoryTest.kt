@@ -20,7 +20,6 @@
 
 package com.owncloud.android.data.capabilities.repository
 
-import android.accounts.AccountManager
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
@@ -31,7 +30,6 @@ import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_CAPABILITY
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkClass
 import io.mockk.verify
 import org.junit.Assert
 import org.junit.Rule
@@ -44,9 +42,8 @@ class OCCapabilityRepositoryTest {
 
     private val localCapabilitiesDataSource = mockk<LocalCapabilitiesDataSource>(relaxed = true)
     private val remoteCapabilitiesDataSource = mockk<RemoteCapabilitiesDataSource>(relaxed = true)
-    private val accountManager = mockkClass(AccountManager::class, relaxed = true)
     private val ocCapabilityRepository: OCCapabilityRepository =
-        OCCapabilityRepository(localCapabilitiesDataSource, remoteCapabilitiesDataSource, accountManager)
+        OCCapabilityRepository(localCapabilitiesDataSource, remoteCapabilitiesDataSource)
 
     @Test
     fun refreshCapabilitiesFromNetworkOk() {
