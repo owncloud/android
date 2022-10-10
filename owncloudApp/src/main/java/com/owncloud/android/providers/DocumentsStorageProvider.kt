@@ -80,7 +80,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private lateinit var fileToUpload: OCFile
 
     override fun openDocument(
-        documentId: String, mode: String, signal: CancellationSignal?
+        documentId: String,
+        mode: String,
+        signal: CancellationSignal?,
     ): ParcelFileDescriptor? {
         Timber.d("Trying to open $documentId in mode $mode")
 
@@ -146,7 +148,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
                         if (result.getDataOrNull() is SynchronizeFileUseCase.SyncType.ConflictDetected) {
                             context?.let {
                                 NotificationUtils.notifyConflict(
-                                    ocFile, AccountUtils.getOwnCloudAccountByName(it, ocFile.owner), it
+                                    fileInConflict = ocFile,
+                                    account = AccountUtils.getOwnCloudAccountByName(it, ocFile.owner),
+                                    context = it
                                 )
                             }
                         }
@@ -159,7 +163,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     override fun queryChildDocuments(
-        parentDocumentId: String, projection: Array<String>?, sortOrder: String?
+        parentDocumentId: String,
+        projection: Array<String>?,
+        sortOrder: String?,
     ): Cursor {
         val folderId = parentDocumentId.toLong()
 
@@ -222,7 +228,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     override fun openDocumentThumbnail(
-        documentId: String, sizeHint: Point?, signal: CancellationSignal?
+        documentId: String,
+        sizeHint: Point?,
+        signal: CancellationSignal?
     ): AssetFileDescriptor {
 
         val file = getFileByIdOrException(documentId.toInt())
@@ -235,7 +243,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     override fun querySearchDocuments(
-        rootId: String, query: String, projection: Array<String>?
+        rootId: String,
+        query: String,
+        projection: Array<String>?
     ): Cursor {
         val result = FileCursor(projection)
 
@@ -249,7 +259,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     override fun createDocument(
-        parentDocumentId: String, mimeType: String, displayName: String
+        parentDocumentId: String,
+        mimeType: String,
+        displayName: String,
     ): String {
         Timber.d("Create Document ParentID $parentDocumentId Type $mimeType DisplayName $displayName")
         val parentDocument = getFileByIdOrException(parentDocumentId.toInt())
@@ -312,7 +324,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     override fun moveDocument(
-        sourceDocumentId: String, sourceParentDocumentId: String, targetParentDocumentId: String
+        sourceDocumentId: String,
+        sourceParentDocumentId: String,
+        targetParentDocumentId: String,
     ): String {
         Timber.d("Trying to move $sourceDocumentId to $targetParentDocumentId")
 
@@ -364,7 +378,11 @@ class DocumentsStorageProvider : DocumentsProvider() {
         }
     }
 
-    private fun createFile(parentDocument: OCFile, mimeType: String, displayName: String): String {
+    private fun createFile(
+        parentDocument: OCFile,
+        mimeType: String,
+        displayName: String,
+    ): String {
         // We just need to return a Document ID, so we'll return an empty one. File does not exist in our db yet.
         // File will be created at [openDocument] method.
         val tempDir = File(FileStorageUtils.getTemporalPath(parentDocument.owner))
