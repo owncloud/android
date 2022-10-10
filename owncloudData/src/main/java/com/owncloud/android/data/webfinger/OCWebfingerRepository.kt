@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author Christian Schabesberger
  * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,23 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.data.webfinger
 
-
-package com.owncloud.android.domain.webfinger.usecases
-
-import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.data.webfinger.datasources.WebfingerRemoteDatasource
 import com.owncloud.android.domain.webfinger.WebfingerRepository
-import com.owncloud.android.domain.webfinger.model.WebfingerResponse
 
-class GetJRDFromWebfingerHost(
-    private val webfingerRepository: WebfingerRepository
-) : BaseUseCaseWithResult<WebfingerResponse, GetJRDFromWebfingerHost.Params>() {
+class OCWebfingerRepository(
+    private val webfingerRemoteDatasource: WebfingerRemoteDatasource,
+) : WebfingerRepository {
 
-    override fun run(params: Params): WebfingerResponse =
-       webfingerRepository.getJRDFromWebFingerHost(params.server, params.resource)
-
-    data class Params(
-        val server: String,
-        val resource: String
-    )
+    override fun getJRDFromWebFingerHost(server: String, resource: String): String =
+        webfingerRemoteDatasource.getJRDFromWebFingerHost(lookupServer = server, username = resource)
 }

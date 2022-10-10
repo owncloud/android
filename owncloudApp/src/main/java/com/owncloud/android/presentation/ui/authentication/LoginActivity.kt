@@ -77,6 +77,7 @@ import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
+import com.owncloud.android.utils.CONFIGURATION_WEBFINGER_LOOKUP_SERVER
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
@@ -186,6 +187,13 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun initLiveDataObservers() {
         // LiveData observers
+        authenticationViewModel.webfingerHost.observe(this) { event ->
+            when (val uiResult = event.peekContent()) {
+                is UIResult.Loading -> getWebfingerIsLoading()
+                is UIResult.Success -> getWebfingerIsSuccess(uiResult)
+                is UIResult.Error -> getWebfingerIsError(uiResult)
+            }
+        }
         authenticationViewModel.serverInfo.observe(this) { event ->
             when (val uiResult = event.peekContent()) {
                 is UIResult.Loading -> getServerInfoIsLoading()
@@ -225,6 +233,36 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
+    private fun getWebfingerIsLoading() {
+        binding.webfingerStatusText.run {
+            text = getString(R.string.auth_testing_connection)
+            setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
+            isVisible = true
+        }
+    }
+
+    private fun getWebfingerIsSuccess(uiResult: UIResult.Success<String>) {
+        val serverUrl = uiResult.data ?: return
+        binding.webfingerLayout.isVisible = false
+        binding.mainLoginLayout.isVisible = true
+        binding.hostUrlInput.setText(serverUrl)
+        checkOcServer()
+    }
+
+    private fun getWebfingerIsError(uiResult: UIResult<String>) {
+        when (uiResult.getThrowableOrNull()) {
+            is NoNetworkConnectionException -> binding.webfingerStatusText.run {
+                text = getString(R.string.error_no_network_connection)
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
+            }
+            else -> binding.webfingerStatusText.run {
+                text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
+            }
+        }
+        binding.webfingerStatusText.isVisible = true
+    }
+
     private fun checkOcServer() {
         val uri = binding.hostUrlInput.text.toString().trim()
         if (uri.isNotEmpty()) {
@@ -237,9 +275,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
-    private fun getServerInfoIsSuccess(uiResult: UIResult<ServerInfo>) {
+    private fun getServerInfoIsSuccess(uiResult: UIResult.Success<ServerInfo>) {
         updateCenteredRefreshButtonVisibility(shouldBeVisible = false)
-        uiResult.getStoredData()?.run {
+        uiResult.data?.run {
             serverBaseUrl = baseUrl
             binding.hostUrlInput.run {
                 setText(baseUrl)
@@ -692,6 +730,20 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     goToUrl(url = getString(R.string.welcome_link_url))
                 }
             } else isVisible = false
+        }
+
+        val webfingerLookupServer = mdmProvider.getBrandingString(CONFIGURATION_WEBFINGER_LOOKUP_SERVER, R.string.webfinger_lookup_server)
+        val shouldShowWebfingerFlow = loginAction == ACTION_CREATE && webfingerLookupServer.isNotBlank()
+        binding.webfingerLayout.isVisible = shouldShowWebfingerFlow
+        binding.mainLoginLayout.isVisible = !shouldShowWebfingerFlow
+
+        if (shouldShowWebfingerFlow) {
+            binding.webfingerButton.setOnClickListener {
+                authenticationViewModel.getWebfingerHost(
+                    webfingerLookupServer,
+                    binding.webfingerUsername.text.toString()
+                )
+            }
         }
     }
 

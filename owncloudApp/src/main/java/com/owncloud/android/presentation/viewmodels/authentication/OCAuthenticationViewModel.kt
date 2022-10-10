@@ -31,6 +31,7 @@ import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.domain.webfinger.usecases.GetJRDFromWebfingerHostUseCase
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
@@ -41,11 +42,28 @@ class OCAuthenticationViewModel(
     private val getServerInfoAsyncUseCase: GetServerInfoAsyncUseCase,
     private val supportsOAuth2UseCase: SupportsOAuth2UseCase,
     private val getBaseUrlUseCase: GetBaseUrlUseCase,
+    private val getJRDFromWebfingerHost: GetJRDFromWebfingerHostUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
     private val _serverInfo = MediatorLiveData<Event<UIResult<ServerInfo>>>()
     val serverInfo: LiveData<Event<UIResult<ServerInfo>>> = _serverInfo
+
+    private val _webfingerHost = MediatorLiveData<Event<UIResult<String>>>()
+    val webfingerHost: LiveData<Event<UIResult<String>>> = _webfingerHost
+
+    fun getWebfingerHost(
+        webfingerLookupServer: String,
+        webfingerUsername: String,
+    ) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            showLoading = true,
+            liveData = _webfingerHost,
+            useCase = getJRDFromWebfingerHost,
+            useCaseParams = GetJRDFromWebfingerHostUseCase.Params(server = webfingerLookupServer, resource = webfingerUsername)
+        )
+    }
 
     fun getServerInfo(
         serverUrl: String

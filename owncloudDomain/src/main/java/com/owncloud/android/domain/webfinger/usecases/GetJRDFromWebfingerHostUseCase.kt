@@ -17,8 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.webfinger
+package com.owncloud.android.domain.webfinger.usecases
 
-interface WebfingerRepository {
-    fun getJRDFromWebFingerHost(server: String, resource: String): String
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.webfinger.WebfingerRepository
+
+class GetJRDFromWebfingerHostUseCase(
+    private val webfingerRepository: WebfingerRepository
+) : BaseUseCaseWithResult<String, GetJRDFromWebfingerHostUseCase.Params>() {
+
+    override fun run(params: Params): String =
+        webfingerRepository.getJRDFromWebFingerHost(server = params.server, resource = params.resource)
+
+    data class Params(
+        val server: String,
+        val resource: String
+    )
 }

@@ -42,6 +42,8 @@ import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRem
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
+import com.owncloud.android.data.webfinger.datasources.WebfingerRemoteDatasource
+import com.owncloud.android.data.webfinger.datasources.implementation.OCWebfingerRemoteDatasource
 import com.owncloud.android.lib.common.ConnectionValidator
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
@@ -57,6 +59,8 @@ import com.owncloud.android.lib.resources.status.services.CapabilityService
 import com.owncloud.android.lib.resources.status.services.ServerInfoService
 import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.lib.resources.status.services.implementation.OCServerInfoService
+import com.owncloud.android.lib.resources.webfinger.services.WebfingerService
+import com.owncloud.android.lib.resources.webfinger.services.implementation.OCWebfingerService
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -74,6 +78,7 @@ val remoteDataSourceModule = module {
     single<OIDCService> { OCOIDCService() }
     single<ShareService> { OCShareService(get()) }
     single<ShareeService> { OCShareeService(get()) }
+    single<WebfingerService> { OCWebfingerService() }
 
     factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get()) }
     factory<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
@@ -85,6 +90,7 @@ val remoteDataSourceModule = module {
     factory<RemoteUserDataSource> {
         OCRemoteUserDataSource(get(), androidContext().resources.getDimension(R.dimen.file_avatar_size).toInt())
     }
+    factory<WebfingerRemoteDatasource> { OCWebfingerRemoteDatasource(get(), get()) }
 
     factory { RemoteCapabilityMapper() }
     factory { RemoteShareMapper() }

@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author Christian Schabesberger
  * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,9 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.data.webfinger.datasources
 
-package com.owncloud.android.domain.webfinger
-
-interface WebfingerRepository {
-    fun getJRDFromWebFingerHost(server: String, resource: String): String
+interface WebfingerRemoteDatasource {
+    fun getJRDFromWebFingerHost(lookupServer: String, username: String): String
 }
