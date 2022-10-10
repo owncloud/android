@@ -294,6 +294,7 @@ class OCFileRepository(
                     Timber.i("File ${ocFile.fileName} was not found in server. Let's remove it from local storage")
                 }
             }
+            localFileDataSource.cleanConflict(ocFile.id!!)
             if (ocFile.isFolder) {
                 removeLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy)
             } else {
