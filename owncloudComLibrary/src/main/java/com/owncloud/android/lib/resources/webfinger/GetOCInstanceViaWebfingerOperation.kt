@@ -31,22 +31,20 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.http.methods.nonwebdav.HttpMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.status.HttpScheme
 import com.owncloud.android.lib.resources.webfinger.responses.WebfingerJrdResponse
 import com.squareup.moshi.Moshi
 import timber.log.Timber
 import java.net.URL
 
 class GetOCInstanceViaWebfingerOperation(
-    private val lockupServerDomain:String,
-    private val rel:String,
-    private val resource:String
+    private val lockupServerDomain: String,
+    private val rel: String,
+    private val resource: String,
 ) : RemoteOperation<String>() {
 
     private fun buildRequestUri() =
         Uri.parse(lockupServerDomain).buildUpon()
-            .scheme(HttpScheme.HTTPS_SCHEME)
-            .path(WEBFINGER_PATH)
+            .path(ENDPOINT_WEBFINGER_PATH)
             .appendQueryParameter("rel", rel)
             .appendQueryParameter("resource", resource)
             .build()
@@ -73,9 +71,9 @@ class GetOCInstanceViaWebfingerOperation(
         return RemoteOperationResult<String>(method)
     }
 
-    private fun onRequestSuccessful(rawResponse:String): RemoteOperationResult<String> {
+    private fun onRequestSuccessful(rawResponse: String): RemoteOperationResult<String> {
         val response = parseResponse(rawResponse)
-        for(i in response.links) {
+        for (i in response.links) {
             if (i.rel == rel) {
                 val operationResult = RemoteOperationResult<String>(RemoteOperationResult.ResultCode.OK)
                 operationResult.data = i.href
@@ -98,13 +96,13 @@ class GetOCInstanceViaWebfingerOperation(
             } else {
                 onResultUnsuccessful(getMethod, response, status)
             }
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             Timber.e(e, "Requesting webfinger info failed")
             RemoteOperationResult<String>(e)
         }
     }
 
     companion object {
-        val WEBFINGER_PATH = "/.well-known/webfinger"
+        private const val ENDPOINT_WEBFINGER_PATH = "/.well-known/webfinger"
     }
 }
