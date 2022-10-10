@@ -24,7 +24,6 @@
 
 package com.owncloud.android.providers
 
-import android.accounts.Account
 import android.content.res.AssetFileDescriptor
 import android.database.Cursor
 import android.graphics.Point
@@ -32,13 +31,12 @@ import android.net.Uri
 import android.os.CancellationSignal
 import android.os.Handler
 import android.os.ParcelFileDescriptor
-import android.preference.PreferenceManager
 import android.provider.DocumentsContract
 import android.provider.DocumentsProvider
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.datamodel.FileDataStorageManager
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.validation.FileNameException
@@ -46,15 +44,17 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
+import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
+import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
+import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.operations.RefreshFolderOperation
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER
 import com.owncloud.android.providers.cursors.FileCursor
 import com.owncloud.android.providers.cursors.RootCursor
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import com.owncloud.android.utils.FileStorageUtils
@@ -77,13 +77,12 @@ class DocumentsStorageProvider : DocumentsProvider() {
      */
     private var requestedFolderIdForSync: Long = -1
     private var syncRequired = true
-    private var currentStorageManager: FileDataStorageManager? = null
     private lateinit var fileToUpload: OCFile
 
     override fun openDocument(
         documentId: String,
         mode: String,
-        signal: CancellationSignal?
+        signal: CancellationSignal?,
     ): ParcelFileDescriptor? {
         Timber.d("Trying to open $documentId in mode $mode")
 
@@ -95,23 +94,18 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val isWrite: Boolean = mode.contains("w")
 
         if (!uploadOnly) {
-            val docId = documentId.toLong()
-            updateCurrentStorageManagerIfNeeded(docId)
-
-            ocFile = getFileByIdOrException(docId)
+            ocFile = getFileByIdOrException(documentId.toInt())
 
             if (!ocFile.isAvailableLocally) {
                 val downloadFileUseCase: DownloadFileUseCase by inject()
 
-                getAccountFromFileId(docId)?.let { account ->
-                    downloadFileUseCase.execute(DownloadFileUseCase.Params(account.name, ocFile))
-                }
+                downloadFileUseCase.execute(DownloadFileUseCase.Params(accountName = ocFile.owner, file = ocFile))
 
                 do {
                     if (!waitOrGetCancelled(signal)) {
                         return null
                     }
-                    ocFile = getFileByIdOrException(docId)
+                    ocFile = getFileByIdOrException(documentId.toInt())
 
                 } while (!ocFile.isAvailableLocally)
             }
@@ -150,12 +144,13 @@ class DocumentsStorageProvider : DocumentsProvider() {
                                 fileToSynchronize = ocFile,
                             )
                         )
+                        Timber.d("Synced ${ocFile.remotePath} from ${ocFile.owner} with result: $result")
                         if (result.getDataOrNull() is SynchronizeFileUseCase.SyncType.ConflictDetected) {
                             context?.let {
                                 NotificationUtils.notifyConflict(
-                                    ocFile,
-                                    getAccountFromFileId(ocFile.id!!),
-                                    it
+                                    fileInConflict = ocFile,
+                                    account = AccountUtils.getOwnCloudAccountByName(it, ocFile.owner),
+                                    context = it
                                 )
                             }
                         }
@@ -170,16 +165,14 @@ class DocumentsStorageProvider : DocumentsProvider() {
     override fun queryChildDocuments(
         parentDocumentId: String,
         projection: Array<String>?,
-        sortOrder: String?
+        sortOrder: String?,
     ): Cursor {
         val folderId = parentDocumentId.toLong()
-        updateCurrentStorageManagerIfNeeded(folderId)
 
         val resultCursor = FileCursor(projection)
 
         // Create result cursor before syncing folder again, in order to enable faster loading
-        currentStorageManager?.getFolderContent(currentStorageManager?.getFileById(folderId))
-            ?.forEach { file -> resultCursor.addFile(file) }
+        getFolderContent(folderId.toInt()).forEach { file -> resultCursor.addFile(file) }
 
         //Create notification listener
         val notifyUri: Uri = toNotifyUri(toUri(parentDocumentId))
@@ -189,7 +182,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
          * This will start syncing the current folder. User will only see this after updating his view with a
          * pull down, or by accessing the folder again.
          */
-        if (requestedFolderIdForSync != folderId && syncRequired && currentStorageManager != null) {
+        if (requestedFolderIdForSync != folderId && syncRequired) {
             // register for sync
             syncDirectoryWithServer(parentDocumentId)
             requestedFolderIdForSync = folderId
@@ -209,11 +202,8 @@ class DocumentsStorageProvider : DocumentsProvider() {
             addFile(fileToUpload)
         }
 
-        val docId = documentId.toLong()
-        updateCurrentStorageManagerIfNeeded(docId)
-
         return FileCursor(projection).apply {
-            getFileById(docId)?.let { addFile(it) }
+            addFile(getFileByIdOrException(documentId.toInt()))
         }
     }
 
@@ -225,13 +215,11 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val accounts = AccountUtils.getAccounts(contextApp)
 
         // If access from document provider is not allowed, return empty cursor
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val preferences: SharedPreferencesProvider by inject()
         val lockAccessFromDocumentProvider = preferences.getBoolean(PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER, false)
         if (lockAccessFromDocumentProvider && accounts.isNotEmpty()) {
             return result.apply { addProtectedRoot(contextApp) }
         }
-
-        initiateStorageMap()
 
         for (account in accounts) {
             result.addRoot(account, contextApp)
@@ -245,17 +233,12 @@ class DocumentsStorageProvider : DocumentsProvider() {
         signal: CancellationSignal?
     ): AssetFileDescriptor {
 
-        val docId = documentId.toLong()
-        updateCurrentStorageManagerIfNeeded(docId)
-
-        val file = getFileById(docId)
+        val file = getFileByIdOrException(documentId.toInt())
 
         val realFile = File(file?.storagePath)
 
         return AssetFileDescriptor(
-            ParcelFileDescriptor.open(realFile, ParcelFileDescriptor.MODE_READ_ONLY),
-            0,
-            AssetFileDescriptor.UNKNOWN_LENGTH
+            ParcelFileDescriptor.open(realFile, ParcelFileDescriptor.MODE_READ_ONLY), 0, AssetFileDescriptor.UNKNOWN_LENGTH
         )
     }
 
@@ -264,11 +247,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
         query: String,
         projection: Array<String>?
     ): Cursor {
-        updateCurrentStorageManagerIfNeeded(rootId)
-
         val result = FileCursor(projection)
 
-        val root = getFileByPath(OCFile.ROOT_PATH) ?: return result
+        val root = getFileByPathOrException(OCFile.ROOT_PATH, AccountUtils.getCurrentOwnCloudAccount(context).name)
 
         for (f in findFiles(root, query)) {
             result.addFile(f)
@@ -280,13 +261,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
     override fun createDocument(
         parentDocumentId: String,
         mimeType: String,
-        displayName: String
+        displayName: String,
     ): String {
         Timber.d("Create Document ParentID $parentDocumentId Type $mimeType DisplayName $displayName")
-        val parentDocId = parentDocumentId.toLong()
-        updateCurrentStorageManagerIfNeeded(parentDocId)
-
-        val parentDocument = getFileByIdOrException(parentDocId)
+        val parentDocument = getFileByIdOrException(parentDocumentId.toInt())
 
         return if (mimeType == DocumentsContract.Document.MIME_TYPE_DIR) {
             createFolder(parentDocument, displayName)
@@ -297,17 +275,13 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     override fun renameDocument(documentId: String, displayName: String): String? {
         Timber.d("Trying to rename $documentId to $displayName")
-        val docId = documentId.toLong()
 
-        updateCurrentStorageManagerIfNeeded(docId)
-
-        val file = getFileByIdOrException(docId)
+        val file = getFileByIdOrException(documentId.toInt())
 
         val renameFileUseCase: RenameFileUseCase by inject()
         renameFileUseCase.execute(RenameFileUseCase.Params(file, displayName)).also {
             checkUseCaseResult(
-                it,
-                file.parentId.toString()
+                it, file.parentId.toString()
             )
         }
 
@@ -316,17 +290,12 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     override fun deleteDocument(documentId: String) {
         Timber.d("Trying to delete $documentId")
-        val docId = documentId.toLong()
-
-        updateCurrentStorageManagerIfNeeded(docId)
-
-        val file = getFileByIdOrException(docId)
+        val file = getFileByIdOrException(documentId.toInt())
 
         val removeFileUseCase: RemoveFileUseCase by inject()
         removeFileUseCase.execute(RemoveFileUseCase.Params(listOf(file), false)).also {
             checkUseCaseResult(
-                it,
-                file.parentId.toString()
+                it, file.parentId.toString()
             )
         }
     }
@@ -334,20 +303,14 @@ class DocumentsStorageProvider : DocumentsProvider() {
     override fun copyDocument(sourceDocumentId: String, targetParentDocumentId: String): String {
         Timber.d("Trying to copy $sourceDocumentId to $targetParentDocumentId")
 
-        val sourceDocId = sourceDocumentId.toLong()
-        updateCurrentStorageManagerIfNeeded(sourceDocId)
-
-        val sourceFile = getFileByIdOrException(sourceDocId)
-
-        val targetParentDocId = targetParentDocumentId.toLong()
-        val targetParentFile = getFileByIdOrException(targetParentDocId)
+        val sourceFile = getFileByIdOrException(sourceDocumentId.toInt())
+        val targetParentFile = getFileByIdOrException(targetParentDocumentId.toInt())
 
         val copyFileUseCase: CopyFileUseCase by inject()
 
         copyFileUseCase.execute(
             CopyFileUseCase.Params(
-                listOfFilesToCopy = listOf(sourceFile),
-                targetFolder = targetParentFile
+                listOfFilesToCopy = listOf(sourceFile), targetFolder = targetParentFile
             )
         ).also { result ->
             syncRequired = false
@@ -355,30 +318,26 @@ class DocumentsStorageProvider : DocumentsProvider() {
             // Returns the document id of the document copied at the target destination
             var newPath = targetParentFile.remotePath + sourceFile.fileName
             if (sourceFile.isFolder) newPath += File.separator
-            val newFile = getFileByPathOrException(newPath)
+            val newFile = getFileByPathOrException(newPath, targetParentFile.owner)
             return newFile.id.toString()
         }
     }
 
     override fun moveDocument(
-        sourceDocumentId: String, sourceParentDocumentId: String, targetParentDocumentId: String
+        sourceDocumentId: String,
+        sourceParentDocumentId: String,
+        targetParentDocumentId: String,
     ): String {
         Timber.d("Trying to move $sourceDocumentId to $targetParentDocumentId")
 
-        val sourceDocId = sourceDocumentId.toLong()
-        updateCurrentStorageManagerIfNeeded(sourceDocId)
-
-        val sourceFile = getFileByIdOrException(sourceDocId)
-
-        val targetParentDocId = targetParentDocumentId.toLong()
-        val targetParentFile = getFileByIdOrException(targetParentDocId)
+        val sourceFile = getFileByIdOrException(sourceDocumentId.toInt())
+        val targetParentFile = getFileByIdOrException(targetParentDocumentId.toInt())
 
         val moveFileUseCase: MoveFileUseCase by inject()
 
         moveFileUseCase.execute(
             MoveFileUseCase.Params(
-                listOfFilesToMove = listOf(sourceFile),
-                targetFolder = targetParentFile
+                listOfFilesToMove = listOf(sourceFile), targetFolder = targetParentFile
             )
         ).also { result ->
             syncRequired = false
@@ -386,20 +345,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
             // Returns the document id of the document moved to the target destination
             var newPath = targetParentFile.remotePath + sourceFile.fileName
             if (sourceFile.isFolder) newPath += File.separator
-            val newFile = getFileByPathOrException(newPath)
+            val newFile = getFileByPathOrException(newPath, targetParentFile.owner)
             return newFile.id.toString()
         }
-    }
-
-    private fun checkOperationResult(result: RemoteOperationResult<Any>, folderToNotify: String) {
-        if (!result.isSuccess) {
-            if (result.code != RemoteOperationResult.ResultCode.WRONG_CONNECTION) notifyChangeInFolder(
-                folderToNotify
-            )
-            throw FileNotFoundException("Remote Operation failed")
-        }
-        syncRequired = false
-        notifyChangeInFolder(folderToNotify)
     }
 
     private fun checkUseCaseResult(result: UseCaseResult<Any>, folderToNotify: String) {
@@ -425,22 +373,22 @@ class DocumentsStorageProvider : DocumentsProvider() {
         createFolderAsyncUseCase.execute(CreateFolderAsyncUseCase.Params(displayName, parentDocument)).run {
             checkUseCaseResult(this, parentDocument.id.toString())
             val newPath = parentDocument.remotePath + displayName + File.separator
-            val newFolder = getFileByPathOrException(newPath)
+            val newFolder = getFileByPathOrException(newPath, parentDocument.owner)
             return newFolder.id.toString()
         }
     }
 
-    private fun createFile(parentDocument: OCFile, mimeType: String, displayName: String): String {
+    private fun createFile(
+        parentDocument: OCFile,
+        mimeType: String,
+        displayName: String,
+    ): String {
         // We just need to return a Document ID, so we'll return an empty one. File does not exist in our db yet.
         // File will be created at [openDocument] method.
-        val tempDir =
-            File(FileStorageUtils.getTemporalPath(getAccountFromFileId(parentDocument.id!!)?.name))
+        val tempDir = File(FileStorageUtils.getTemporalPath(parentDocument.owner))
         val newFile = File(tempDir, displayName)
         fileToUpload = OCFile(
-            remotePath = parentDocument.remotePath + displayName,
-            mimeType = mimeType,
-            parentId = parentDocument.id,
-            owner = parentDocument.owner
+            remotePath = parentDocument.remotePath + displayName, mimeType = mimeType, parentId = parentDocument.id, owner = parentDocument.owner
         ).apply {
             storagePath = newFile.path
         }
@@ -448,55 +396,25 @@ class DocumentsStorageProvider : DocumentsProvider() {
         return NONEXISTENT_DOCUMENT_ID
     }
 
-    private fun updateCurrentStorageManagerIfNeeded(docId: Long) {
-        if (rootIdToStorageManager.isEmpty()) {
-            initiateStorageMap()
-        }
-        if (currentStorageManager == null || (
-                    rootIdToStorageManager.containsKey(docId) &&
-                            currentStorageManager !== rootIdToStorageManager[docId])
-        ) {
-            currentStorageManager = rootIdToStorageManager[docId]
-        }
-    }
-
-    private fun updateCurrentStorageManagerIfNeeded(rootId: String) {
-        if (rootIdToStorageManager.isEmpty()) {
-            return
-        }
-        for (data in rootIdToStorageManager.values) {
-            if (data.account.name == rootId) {
-                currentStorageManager = data
-            }
-        }
-    }
-
-    private fun initiateStorageMap() {
-        for (account in AccountUtils.getAccounts(context)) {
-            val storageManager = FileDataStorageManager(MainApp.appContext, account, MainApp.appContext.contentResolver)
-            val rootDir = storageManager.getFileByPath(OCFile.ROOT_PATH)
-            rootIdToStorageManager[rootDir!!.id!!] = storageManager
-        }
-    }
-
     private fun syncDirectoryWithServer(parentDocumentId: String) {
         Timber.d("Trying to sync $parentDocumentId with server")
-        val folderId = parentDocumentId.toLong()
+        val folderToSync = getFileByIdOrException(parentDocumentId.toInt())
 
-        getFileByIdOrException(folderId)
+        val synchronizeFolderUseCase: SynchronizeFolderUseCase by inject()
+        val synchronizeFolderUseCaseParams = SynchronizeFolderUseCase.Params(
+            remotePath = folderToSync.remotePath,
+            accountName = folderToSync.owner,
+            SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER,
+        )
 
-        val refreshFolderOperation = RefreshFolderOperation(
-            getFileById(folderId),
-            false,
-            getAccountFromFileId(folderId),
-            context
-        ).apply { syncVersionAndProfileEnabled(false) }
+        CoroutineScope(Dispatchers.IO).launch {
+            val useCaseResult = synchronizeFolderUseCase.execute(synchronizeFolderUseCaseParams)
+            Timber.d("${folderToSync.remotePath} from ${folderToSync.owner} was synced with server with result: $useCaseResult")
 
-        val thread = Thread {
-            refreshFolderOperation.execute(getStoreManagerFromFileId(folderId), context)
-            notifyChangeInFolder(parentDocumentId)
+            if (useCaseResult.isSuccess) {
+                notifyChangeInFolder(parentDocumentId)
+            }
         }
-        thread.start()
     }
 
     private fun waitOrGetCancelled(cancellationSignal: CancellationSignal?): Boolean {
@@ -512,7 +430,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     private fun findFiles(root: OCFile, query: String): Vector<OCFile> {
         val result = Vector<OCFile>()
 
-        val folderContent = currentStorageManager?.getFolderContent(root) ?: return result
+        val folderContent = getFolderContent(root.id!!.toInt())
         folderContent.forEach {
             if (it.fileName.contains(query)) {
                 result.add(it)
@@ -527,46 +445,30 @@ class DocumentsStorageProvider : DocumentsProvider() {
     }
 
     private fun toNotifyUri(uri: Uri): Uri = DocumentsContract.buildDocumentUri(
-        context?.resources?.getString(R.string.document_provider_authority),
-        uri.toString()
+        context?.resources?.getString(R.string.document_provider_authority), uri.toString()
     )
 
     private fun toUri(documentId: String): Uri = Uri.parse(documentId)
 
-    private fun getFileByIdOrException(id: Long): OCFile =
-        getFileById(id) ?: throw FileNotFoundException("File $id not found")
-
-    private fun getFileById(id: Long): OCFile? = getStoreManagerFromFileId(id)?.getFileById(id)
-
-    private fun getAccountFromFileId(id: Long): Account? = getStoreManagerFromFileId(id)?.account
-
-    private fun getStoreManagerFromFileId(id: Long): FileDataStorageManager? {
-        // If file is found in current storage manager, return it
-        currentStorageManager?.getFileById(id)?.let { return currentStorageManager }
-
-        //  Else, look for it in other ones
-        var fileFromOtherStorageManager: OCFile?
-        var otherStorageManager: FileDataStorageManager? = null
-        for (key in rootIdToStorageManager.keys) {
-            otherStorageManager = rootIdToStorageManager[key]
-            // Skip current storage manager, already checked
-            if (otherStorageManager == currentStorageManager) continue
-            fileFromOtherStorageManager = otherStorageManager?.getFileById(id)
-            if (fileFromOtherStorageManager != null) {
-                Timber.d("File with id $id found in storage manager: $otherStorageManager")
-                break
-            }
-        }
-        return otherStorageManager
+    private fun getFileByIdOrException(id: Int): OCFile {
+        val getFileByIdUseCase: GetFileByIdUseCase by inject()
+        val result = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(id.toLong()))
+        return result.getDataOrNull() ?: throw FileNotFoundException("File $id not found")
     }
 
-    private fun getFileByPathOrException(path: String): OCFile =
-        getFileByPath(path) ?: throw FileNotFoundException("File $path not found")
+    private fun getFileByPathOrException(remotePath: String, accountName: String): OCFile {
+        val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
+        val result = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(owner = accountName, remotePath = remotePath))
+        return result.getDataOrNull() ?: throw FileNotFoundException("File $remotePath not found")
+    }
 
-    private fun getFileByPath(path: String): OCFile? = currentStorageManager?.getFileByPath(path)
+    private fun getFolderContent(id: Int): List<OCFile> {
+        val getFolderContentUseCase: GetFolderContentUseCase by inject()
+        val result = getFolderContentUseCase.execute(GetFolderContentUseCase.Params(id.toLong()))
+        return result.getDataOrNull() ?: throw FileNotFoundException("Folder $id not found")
+    }
 
     companion object {
-        private var rootIdToStorageManager: MutableMap<Long, FileDataStorageManager> = HashMap()
         const val NONEXISTENT_DOCUMENT_ID = "-1"
     }
 }

@@ -68,10 +68,10 @@ import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.files.model.LIST_MIME_DIR
 import com.owncloud.android.domain.transfers.model.TransferStatus
+import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
 import com.owncloud.android.extensions.getLongFromColumnOrThrow
 import com.owncloud.android.extensions.getStringFromColumnOrThrow
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
 import com.owncloud.android.usecases.transfers.uploads.UploadFileFromSystemUseCase
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -1130,6 +1130,10 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
                     // Drop old uploads table from old database
                     db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.UPLOADS_TABLE_NAME + ";")
+
+                    // Drop old capabilities table from old database
+                    db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + ";")
+
                     db.setTransactionSuccessful()
                     upgraded = true
                 } finally {

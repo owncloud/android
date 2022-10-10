@@ -34,17 +34,19 @@ class OCRemoteFileDataSource(
 
     override fun checkPathExistence(
         path: String,
-        checkUserCredentials: Boolean
-    ): Boolean = clientManager.getFileService().checkPathExistence(
+        checkUserCredentials: Boolean,
+        accountName: String,
+    ): Boolean = clientManager.getFileService(accountName).checkPathExistence(
         path = path,
         isUserLogged = checkUserCredentials
     ).data
 
     override fun copyFile(
         sourceRemotePath: String,
-        targetRemotePath: String
+        targetRemotePath: String,
+        accountName: String,
     ): String = executeRemoteOperation {
-        clientManager.getFileService().copyFile(
+        clientManager.getFileService(accountName).copyFile(
             sourceRemotePath = sourceRemotePath,
             targetRemotePath = targetRemotePath
         )
@@ -53,9 +55,10 @@ class OCRemoteFileDataSource(
     override fun createFolder(
         remotePath: String,
         createFullPath: Boolean,
-        isChunksFolder: Boolean
+        isChunksFolder: Boolean,
+        accountName: String,
     ) = executeRemoteOperation {
-        clientManager.getFileService().createFolder(
+        clientManager.getFileService(accountName).createFolder(
             remotePath = remotePath,
             createFullPath = createFullPath,
             isChunkFolder = isChunksFolder
@@ -69,8 +72,11 @@ class OCRemoteFileDataSource(
      * @param remotePath
      * @return
      */
-    override fun getAvailableRemotePath(remotePath: String): String {
-        var checkExistsFile = checkPathExistence(remotePath, false)
+    override fun getAvailableRemotePath(
+        remotePath: String,
+        accountName: String,
+    ): String {
+        var checkExistsFile = checkPathExistence(remotePath, false, accountName)
         if (!checkExistsFile) {
             return remotePath
         }
@@ -88,9 +94,9 @@ class OCRemoteFileDataSource(
         do {
             suffix = " ($count)"
             checkExistsFile = if (pos >= 0) {
-                checkPathExistence("${remotePath.substringBeforeLast('.', "")}$suffix.$extension", false)
+                checkPathExistence("${remotePath.substringBeforeLast('.', "")}$suffix.$extension", false, accountName)
             } else {
-                checkPathExistence(remotePath + suffix, false)
+                checkPathExistence(remotePath + suffix, false, accountName)
             }
             count++
         } while (checkExistsFile)
@@ -103,28 +109,31 @@ class OCRemoteFileDataSource(
 
     override fun moveFile(
         sourceRemotePath: String,
-        targetRemotePath: String
+        targetRemotePath: String,
+        accountName: String,
     ) = executeRemoteOperation {
-        clientManager.getFileService().moveFile(
+        clientManager.getFileService(accountName).moveFile(
             sourceRemotePath = sourceRemotePath,
             targetRemotePath = targetRemotePath
         )
     }
 
     override fun readFile(
-        remotePath: String
+        remotePath: String,
+        accountName: String,
     ): OCFile = executeRemoteOperation {
-        clientManager.getFileService().readFile(
+        clientManager.getFileService(accountName).readFile(
             remotePath = remotePath
         )
     }.toModel()
 
     override fun refreshFolder(
-        remotePath: String
+        remotePath: String,
+        accountName: String,
     ): List<OCFile> =
         // Assert not null, service should return an empty list if no files there.
         executeRemoteOperation {
-            clientManager.getFileService().refreshFolder(
+            clientManager.getFileService(accountName).refreshFolder(
                 remotePath = remotePath
             )
         }.let { listOfRemote ->
@@ -132,9 +141,10 @@ class OCRemoteFileDataSource(
         }
 
     override fun removeFile(
-        remotePath: String
+        remotePath: String,
+        accountName: String,
     ) = executeRemoteOperation {
-        clientManager.getFileService().removeFile(
+        clientManager.getFileService(accountName).removeFile(
             remotePath = remotePath
         )
     }
@@ -143,9 +153,10 @@ class OCRemoteFileDataSource(
         oldName: String,
         oldRemotePath: String,
         newName: String,
-        isFolder: Boolean
+        isFolder: Boolean,
+        accountName: String,
     ) = executeRemoteOperation {
-        clientManager.getFileService().renameFile(
+        clientManager.getFileService(accountName).renameFile(
             oldName = oldName,
             oldRemotePath = oldRemotePath,
             newName = newName,

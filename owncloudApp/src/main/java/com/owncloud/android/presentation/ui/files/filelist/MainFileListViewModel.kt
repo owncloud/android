@@ -123,6 +123,15 @@ class MainFileListViewModel(
         val sortOrderSelected =
             SortOrder.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_ORDER, SortOrder.SORT_ORDER_ASCENDING.ordinal)]
         sortTypeAndOrder.update { Pair(sortTypeSelected, sortOrderSelected) }
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            synchronizeFolderUseCase.execute(
+                SynchronizeFolderUseCase.Params(
+                    remotePath = initialFolderToDisplay.remotePath,
+                    accountName = initialFolderToDisplay.owner,
+                    syncMode = SYNC_CONTENTS,
+                )
+            )
+        }
     }
 
     fun navigateToFolderId(folderId: Long) {

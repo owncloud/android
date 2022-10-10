@@ -517,6 +517,10 @@ abstract class DrawerActivity : ToolbarActivity() {
             contentResolver.notifyChange(rootsUri, null)
 
             updateAccountList()
+
+            if (drawerViewModel.getAccounts(this).isEmpty()) {
+                mAccountWasSet = false
+            }
         }, Handler(), false)
     }
 

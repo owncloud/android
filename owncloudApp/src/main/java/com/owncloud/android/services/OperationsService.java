@@ -39,7 +39,6 @@ import android.os.Process;
 import android.util.Pair;
 
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
@@ -47,9 +46,7 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
 import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
-import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.operations.common.SyncOperation;
 import timber.log.Timber;
 
@@ -62,14 +59,10 @@ public class OperationsService extends Service {
 
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
     public static final String EXTRA_SERVER_URL = "SERVER_URL";
-    public static final String EXTRA_REMOTE_PATH = "REMOTE_PATH";
     public static final String EXTRA_FILE = "FILE";
-    public static final String EXTRA_PUSH_ONLY = "PUSH_ONLY";
-    public static final String EXTRA_SYNC_REGULAR_FILES = "SYNC_REGULAR_FILES";
 
     public static final String EXTRA_COOKIE = "COOKIE";
 
-    public static final String ACTION_SYNC_FOLDER = "SYNC_FOLDER";
     public static final String ACTION_CHECK_CURRENT_CREDENTIALS = "CHECK_CURRENT_CREDENTIALS";
 
     private ConcurrentMap<Integer, Pair<RemoteOperation, RemoteOperationResult>>
@@ -90,8 +83,6 @@ public class OperationsService extends Service {
     private ServiceHandler mOperationsHandler;
     private OperationsServiceBinder mOperationsBinder;
 
-    private SyncFolderHandler mSyncFolderHandler;
-
     /**
      * Service initialization
      */
@@ -105,16 +96,11 @@ public class OperationsService extends Service {
         thread.start();
         mOperationsHandler = new ServiceHandler(thread.getLooper(), this);
         mOperationsBinder = new OperationsServiceBinder(mOperationsHandler);
-
-        /// Separated worker thread for download of folders (WIP)
-        thread = new HandlerThread("Syncfolder thread", Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
-        mSyncFolderHandler = new SyncFolderHandler(thread.getLooper(), this);
     }
 
     /**
      * Entry point to add a new operation to the queue of operations.
-     *
+     * <p>
      * New operations are added calling to startService(), resulting in a call to this method.
      * This ensures the service will keep on working although the caller activity goes away.
      */
@@ -122,33 +108,9 @@ public class OperationsService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Timber.d("Starting command with id %s", startId);
 
-        // WIP: for the moment, only SYNC_FOLDER is expected here;
-        // the rest of the operations are requested through the Binder
-        if (ACTION_SYNC_FOLDER.equals(intent.getAction())) {
-
-            if (!intent.hasExtra(EXTRA_ACCOUNT) || !intent.hasExtra(EXTRA_REMOTE_PATH)) {
-                Timber.e("Not enough information provided in intent");
-                return START_NOT_STICKY;
-            }
-            Account account = intent.getParcelableExtra(EXTRA_ACCOUNT);
-            String remotePath = intent.getStringExtra(EXTRA_REMOTE_PATH);
-
-            Pair<Account, String> itemSyncKey = new Pair<>(account, remotePath);
-
-            Pair<Target, RemoteOperation> itemToQueue = newOperation(intent);
-            if (itemToQueue != null) {
-                mSyncFolderHandler.add(account, remotePath, (SynchronizeFolderOperation) itemToQueue.second);
-                Message msg = mSyncFolderHandler.obtainMessage();
-                msg.arg1 = startId;
-                msg.obj = itemSyncKey;
-                mSyncFolderHandler.sendMessage(msg);
-            }
-
-        } else {
-            Message msg = mOperationsHandler.obtainMessage();
-            msg.arg1 = startId;
-            mOperationsHandler.sendMessage(msg);
-        }
+        Message msg = mOperationsHandler.obtainMessage();
+        msg.arg1 = startId;
+        mOperationsHandler.sendMessage(msg);
 
         return START_NOT_STICKY;
     }
@@ -163,9 +125,6 @@ public class OperationsService extends Service {
 
         mOperationsHandler.getLooper().quit();
         mOperationsHandler = null;
-
-        mSyncFolderHandler.getLooper().quit();
-        mSyncFolderHandler = null;
 
         super.onDestroy();
     }
@@ -207,16 +166,6 @@ public class OperationsService extends Service {
             mServiceHandler = serviceHandler;
         }
 
-        /**
-         * Cancels a pending or current synchronization.
-         *
-         * @param account ownCloud account where the remote folder is stored.
-         * @param file    A folder in the queue of pending synchronizations
-         */
-        public void cancel(Account account, OCFile file) {
-            mSyncFolderHandler.cancel(account, file);
-        }
-
         void clearListeners() {
             mBoundListeners.clear();
         }
@@ -248,7 +197,7 @@ public class OperationsService extends Service {
 
         /**
          * Creates and adds to the queue a new operation, as described by operationIntent.
-         *
+         * <p>
          * Calls startService to make the operation is processed by the ServiceHandler.
          *
          * @param operationIntent Intent describing a new operation to queue and execute.
@@ -276,27 +225,11 @@ public class OperationsService extends Service {
                 return !mServiceHandler.mPendingOperations.isEmpty();
             }
         }
-
-        /**
-         * Returns True when the file described by 'file' in the ownCloud account 'account' is
-         * downloading or waiting to download.
-         *
-         * If 'file' is a directory, returns 'true' if some of its descendant files is downloading
-         * or waiting to download.
-         *
-         * @param account ownCloud account where the remote file is stored.
-         * @param file    File to check if something is synchronizing
-         *                / downloading / uploading inside.
-         */
-        public boolean isSynchronizing(Account account, OCFile file) {
-            return mSyncFolderHandler.isSynchronizing(account, file.getRemotePath());
-        }
-
     }
 
     /**
      * Operations worker. Performs the pending operations in the order they were requested.
-     *
+     * <p>
      * Created with the Looper of a new thread, started in {@link OperationsService#onCreate()}.
      */
     private static class ServiceHandler extends Handler {
@@ -348,11 +281,6 @@ public class OperationsService extends Service {
                             ocAccount = new OwnCloudAccount(mLastTarget.mAccount, mService);
                             mOwnCloudClient = SingleSessionManager.getDefaultSingleton().
                                     getClientFor(ocAccount, mService);
-
-                            OwnCloudVersion version = com.owncloud.android.authentication.AccountUtils.getServerVersion(
-                                    mLastTarget.mAccount
-                            );
-                            mOwnCloudClient.setOwnCloudVersion(version);
 
                             mStorageManager = new FileDataStorageManager(
                                     mService,
@@ -406,7 +334,7 @@ public class OperationsService extends Service {
 
     /**
      * Creates a new operation, as described by operationIntent.
-     *
+     * <p>
      * TODO - move to ServiceHandler (probably)
      *
      * @param operationIntent Intent describing a new operation to queue and execute.
@@ -434,23 +362,6 @@ public class OperationsService extends Service {
                 String action = operationIntent.getAction();
                 if (action != null) {
                     switch (action) {
-                        case ACTION_SYNC_FOLDER: {
-                            // Sync folder (all its descendant files are synced)
-                            String remotePath = operationIntent.getStringExtra(EXTRA_REMOTE_PATH);
-                            boolean pushOnly = operationIntent.getBooleanExtra(EXTRA_PUSH_ONLY, false);
-                            boolean syncContentOfRegularFiles = operationIntent.getBooleanExtra(EXTRA_SYNC_REGULAR_FILES, false);
-                            operation = new SynchronizeFolderOperation(
-                                    this,                       // TODO remove this dependency from construction time
-                                    remotePath,
-                                    account,
-                                    System.currentTimeMillis(),  // TODO remove this dependency from construction time
-                                    pushOnly,
-                                    false,
-                                    syncContentOfRegularFiles
-                            );
-
-                            break;
-                        }
                         case ACTION_CHECK_CURRENT_CREDENTIALS:
                             // Check validity of currently stored credentials for a given account
                             operation = new CheckCurrentCredentialsOperation(account);

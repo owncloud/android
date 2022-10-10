@@ -31,7 +31,6 @@
 package com.owncloud.android.ui.activity
 
 import android.accounts.Account
-import android.accounts.AuthenticatorException
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -54,7 +53,9 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
+import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
@@ -70,10 +71,11 @@ import com.owncloud.android.interfaces.ISecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
+import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.operations.RefreshFolderOperation
+import com.owncloud.android.operations.SyncProfileOperation
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.ui.files.details.FileDetailsFragment
@@ -81,6 +83,7 @@ import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
+import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.syncadapter.FileSyncAdapter
@@ -104,6 +107,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.io.File
 import kotlin.coroutines.CoroutineContext
@@ -116,8 +120,7 @@ class FileDisplayActivity : FileActivity(),
     FileFragment.ContainerActivity,
     ISecurityEnforced,
     MainFileListFragment.FileActions,
-    MainFileListFragment.UploadActions,
-    OnEnforceableRefreshListener {
+    MainFileListFragment.UploadActions {
 
     private val job = Job()
     override val coroutineContext: CoroutineContext
@@ -244,8 +247,15 @@ class FileDisplayActivity : FileActivity(),
         super.onPostCreate(savedInstanceState)
 
         if (savedInstanceState == null && mAccountWasSet) {
-            val workerProvider = WorkManagerProvider(context = this)
-            workerProvider.enqueueAvailableOfflinePeriodicWorker()
+            val capabilitiesViewModel: OCCapabilityViewModel by viewModel {
+                parametersOf(
+                    account?.name
+                )
+            }
+            capabilitiesViewModel.refreshCapabilitiesFromNetwork()
+            capabilitiesViewModel.capabilities.observe(this, Event.EventObserver {
+                onCapabilitiesOperationFinish(it)
+            })
             initAndShowListOfFiles()
         }
 
@@ -297,7 +307,10 @@ class FileDisplayActivity : FileActivity(),
                         startSyncFolderOperation(file, false)
                     }
                 }
-
+                val syncProfileOperation = SyncProfileOperation(account)
+                syncProfileOperation.syncUserProfile()
+                val workManagerProvider = WorkManagerProvider(context = baseContext)
+                workManagerProvider.enqueueAvailableOfflinePeriodicWorker()
             } else {
                 file?.isFolder?.let { isFolder ->
                     updateFragmentsVisibility(!isFolder)
@@ -683,8 +696,6 @@ class FileDisplayActivity : FileActivity(),
         val syncIntentFilter = IntentFilter(FileSyncAdapter.EVENT_FULL_SYNC_START)
         syncIntentFilter.addAction(FileSyncAdapter.EVENT_FULL_SYNC_END)
         syncIntentFilter.addAction(FileSyncAdapter.EVENT_FULL_SYNC_FOLDER_CONTENTS_SYNCED)
-        syncIntentFilter.addAction(RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED)
-        syncIntentFilter.addAction(RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED)
         syncBroadcastReceiver = SyncBroadcastReceiver()
         localBroadcastManager!!.registerReceiver(syncBroadcastReceiver!!, syncIntentFilter)
 
@@ -768,42 +779,7 @@ class FileDisplayActivity : FileActivity(),
                     }
 
                     syncInProgress =
-                        FileSyncAdapter.EVENT_FULL_SYNC_END != event &&
-                                RefreshFolderOperation.EVENT_SINGLE_FOLDER_SHARES_SYNCED != event
-
-                    if (RefreshFolderOperation.EVENT_SINGLE_FOLDER_CONTENTS_SYNCED == event) {
-                        if (!synchResult?.isSuccess!!) {
-                            /// TODO refactor and make common
-                            if (ResultCode.UNAUTHORIZED == synchResult.code ||
-                                synchResult.isException && synchResult.exception is AuthenticatorException
-                            ) {
-                                launch(Dispatchers.IO) {
-                                    val credentials =
-                                        AccountUtils.getCredentialsForAccount(
-                                            MainApp.appContext,
-                                            account
-                                        )
-
-                                    launch(Dispatchers.Main) {
-                                        if (credentials is OwnCloudBearerCredentials) { // OAuth
-                                            showRequestRegainAccess()
-                                        } else {
-                                            showRequestAccountChangeNotice(
-                                                getString(R.string.auth_failure_snackbar),
-                                                false
-                                            )
-                                        }
-                                    }
-                                }
-                            } else if (ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED == synchResult.code) {
-                                showUntrustedCertDialog(synchResult)
-                            }
-                        }
-
-                        if (synchFolderRemotePath == OCFile.ROOT_PATH) {
-                            setAccountInDrawer(account)
-                        }
-                    }
+                        FileSyncAdapter.EVENT_FULL_SYNC_END != event
                 }
 
                 listMainFileFragment?.setProgressBarAsIndeterminate(syncInProgress)
@@ -1031,17 +1007,6 @@ class FileDisplayActivity : FileActivity(),
     }
 
     /**
-     * {@inheritDoc}
-     * Updates action bar and second fragment, if in dual pane mode.
-     */
-    override fun onBrowsedDownTo(directory: OCFile) {
-        file = directory
-        cleanSecondFragment()
-        // Sync Folder
-        startSyncFolderOperation(directory, false)
-    }
-
-    /**
      * Shows the information of the [OCFile] received as a
      * parameter in the second fragment.
      *
@@ -1251,7 +1216,29 @@ class FileDisplayActivity : FileActivity(),
                     null -> TODO()
                 }
             }
-            is UIResult.Error -> showSnackMessage(getString(R.string.sync_fail_ticker))
+            is UIResult.Error -> {
+                when (uiResult.error) {
+                    is UnauthorizedException -> {
+                        launch(Dispatchers.IO) {
+                            val credentials = AccountUtils.getCredentialsForAccount(MainApp.appContext, account)
+
+                            launch(Dispatchers.Main) {
+                                if (credentials is OwnCloudBearerCredentials) { // OAuth
+                                    showRequestRegainAccess()
+                                } else {
+                                    showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
+                                }
+                            }
+                        }
+                    }
+                    is CertificateCombinedException -> {
+                        showUntrustedCertDialogForThrowable(uiResult.error)
+                    }
+                    else -> {
+                        showSnackMessage(getString(R.string.sync_fail_ticker))
+                    }
+                }
+            }
             is UIResult.Loading -> {
                 /** Not needed at the moment, we may need it later */
             }
@@ -1264,6 +1251,19 @@ class FileDisplayActivity : FileActivity(),
 //            fileWaitingToPreview = null
 //        }
 
+    }
+
+    private fun onCapabilitiesOperationFinish(uiResult: UIResult<OCCapability>) {
+        if (uiResult is UIResult.Success) {
+            val capabilities = uiResult.data
+            capabilities?.versionString?.let { capabilitiesVersionString ->
+                val ownCloudVersion = OwnCloudVersion(capabilitiesVersionString)
+                if (!ownCloudVersion.isServerVersionSupported) {
+                    Timber.d("Server version not supported")
+                    showRequestAccountChangeNotice(getString(R.string.server_not_supported), true)
+                }
+            }
+        }
     }
 
     override fun onSavedCertificate() {
@@ -1286,33 +1286,7 @@ class FileDisplayActivity : FileActivity(),
      * didn't change.
      */
     fun startSyncFolderOperation(folder: OCFile?, ignoreETag: Boolean) {
-
-        // the execution is slightly delayed to allow the activity get the window focus if it's being started
-        // or if the method is called from a dialog that is being dismissed
-        handler.postDelayed(
-            {
-                if (hasWindowFocus()) {
-                    syncInProgress = true
-
-                    // perform folder synchronization
-                    val synchFolderOp = RefreshFolderOperation(
-                        folder,
-                        ignoreETag,
-                        account,
-                        applicationContext
-                    )
-                    synchFolderOp.execute(
-                        storageManager,
-                        MainApp.appContext, null, null
-                    )// unneeded, handling via SyncBroadcastReceiver
-
-                    listMainFileFragment?.setProgressBarAsIndeterminate(true)
-
-                }   // else: NOTHING ; lets' not refresh when the user rotates the device but there is
-                // another window floating over
-            },
-            DELAY_TO_REQUEST_OPERATIONS_LATER + 350
-        )
+        // TODO: SYNC FOLDER
     }
 
     private fun requestForDownload(file: OCFile) {
@@ -1373,7 +1347,7 @@ class FileDisplayActivity : FileActivity(),
      *
      * @param file [OCFile] to download and preview.
      */
-    fun startDownloadForSending(file: OCFile) {
+    private fun startDownloadForSending(file: OCFile) {
         waitingToSend = file
         requestForDownload(file)
         val hasSecondFragment = secondFragment != null
@@ -1387,7 +1361,7 @@ class FileDisplayActivity : FileActivity(),
      *
      * @param file [OCFile] to download and preview.
      */
-    fun startDownloadForOpening(file: OCFile) {
+    private fun startDownloadForOpening(file: OCFile) {
         waitingToOpen = file
         requestForDownload(file)
         val hasSecondFragment = secondFragment != null
@@ -1467,7 +1441,7 @@ class FileDisplayActivity : FileActivity(),
      *
      * @param file [OCFile] to sync and open.
      */
-    fun startSyncThenOpen(file: OCFile) {
+    private fun startSyncThenOpen(file: OCFile) {
         navigateToDetails(account = account, ocFile = file, syncFileAtOpen = true)
 //        fileWaitingToPreview = file
 //        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
@@ -1521,23 +1495,9 @@ class FileDisplayActivity : FileActivity(),
      *
      * @param files list of [OCFile] files which operations are wanted to be cancel
      */
-    fun cancelTransference(files: List<OCFile>) {
+    private fun cancelTransference(files: List<OCFile>) {
         for (file in files) {
             cancelTransference(file)
-        }
-    }
-
-    override fun onRefresh(ignoreETag: Boolean) {
-        refreshList(ignoreETag)
-    }
-
-    override fun onRefresh() {
-        refreshList(true)
-    }
-
-    private fun refreshList(ignoreETag: Boolean) {
-        listMainFileFragment?.getCurrentFile()?.let { folder ->
-            startSyncFolderOperation(folder, ignoreETag)
         }
     }
 

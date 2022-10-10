@@ -47,8 +47,6 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.operations.SynchronizeFileOperation;
-import com.owncloud.android.operations.SynchronizeFolderOperation;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.presentation.ui.conflicts.ConflictsResolveActivity;
@@ -265,21 +263,6 @@ public class FileActivity extends DrawerActivity
 
             showUntrustedCertDialog(result);
 
-        } else if (operation == null ||
-                operation instanceof SynchronizeFolderOperation
-        ) {
-            if (result.isSuccess()) {
-                updateFileFromDB();
-
-            } else if (result.getCode() != ResultCode.CANCELLED) {
-                showSnackMessage(
-                        ErrorMessageAdapter.Companion.getResultMessage(result, operation, getResources())
-                );
-            }
-
-        } else if (operation instanceof SynchronizeFileOperation) {
-            onSynchronizeFileOperationFinish((SynchronizeFileOperation) operation, result);
-
         }
     }
 
@@ -371,18 +354,6 @@ public class FileActivity extends DrawerActivity
         }
     }
 
-    private void onSynchronizeFileOperationFinish(SynchronizeFileOperation operation,
-                                                  RemoteOperationResult result) {
-        invalidateOptionsMenu();
-        OCFile syncedFile = operation.getLocalFile();
-        if (!result.isSuccess()) {
-            if (result.getCode() == ResultCode.SYNC_CONFLICT) {
-                Intent i = new Intent(this, ConflictsResolveActivity.class);
-                i.putExtra(ConflictsResolveActivity.EXTRA_FILE, syncedFile);
-                startActivity(i);
-            }
-        }
-    }
 
     protected void updateFileFromDB() {
         OCFile file = getFile();

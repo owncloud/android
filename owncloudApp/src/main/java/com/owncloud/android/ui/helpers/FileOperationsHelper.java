@@ -42,14 +42,12 @@ import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase;
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase;
 import com.owncloud.android.utils.UriUtilsKt;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
-import java.util.Collection;
-
-import static com.owncloud.android.services.OperationsService.EXTRA_SYNC_REGULAR_FILES;
 import static org.koin.java.KoinJavaComponent.inject;
 
 public class FileOperationsHelper {
@@ -89,7 +87,8 @@ public class FileOperationsHelper {
 
     public void openFile(OCFile ocFile) {
         if (ocFile != null) {
-            Intent intentForSavedMimeType = getIntentForSavedMimeType(UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, ocFile), ocFile.getMimeType());
+            Intent intentForSavedMimeType = getIntentForSavedMimeType(UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, ocFile),
+                    ocFile.getMimeType());
 
             Intent intentForGuessedMimeType = getIntentForGuessedMimeType(ocFile.getStoragePath(), ocFile.getMimeType(),
                     UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, ocFile));
@@ -175,7 +174,9 @@ public class FileOperationsHelper {
      * Request the synchronization of a file or folder with the OC server, including its contents.
      *
      * @param file The file or folder to synchronize
+     *             DEPRECATED: Use the usecases within a viewmodel instead!
      */
+    @Deprecated
     public void syncFile(OCFile file) {
         if (!file.isFolder()) {
             @NotNull Lazy<SynchronizeFileUseCase> synchronizeFileUseCaseLazy = inject(SynchronizeFileUseCase.class);
@@ -183,12 +184,13 @@ public class FileOperationsHelper {
                     new SynchronizeFileUseCase.Params(file)
             );
         } else {
-            Intent intent = new Intent(mFileActivity, OperationsService.class);
-            intent.setAction(OperationsService.ACTION_SYNC_FOLDER);
-            intent.putExtra(OperationsService.EXTRA_ACCOUNT, mFileActivity.getAccount());
-            intent.putExtra(OperationsService.EXTRA_REMOTE_PATH, file.getRemotePath());
-            intent.putExtra(EXTRA_SYNC_REGULAR_FILES, true);
-            mFileActivity.startService(intent);
+            @NotNull Lazy<SynchronizeFolderUseCase> synchronizeFolderUseCaseLazy = inject(SynchronizeFolderUseCase.class);
+            synchronizeFolderUseCaseLazy.getValue().execute(
+                    new SynchronizeFolderUseCase.Params(
+                            file.getRemotePath(),
+                            file.getOwner(),
+                            SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY)
+            );
         }
     }
 

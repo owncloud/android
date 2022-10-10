@@ -30,7 +30,7 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 
 class OCCapabilityRepository(
     private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
-    private val remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource
+    private val remoteCapabilitiesDataSource: RemoteCapabilitiesDataSource,
 ) : CapabilityRepository {
 
     override fun getCapabilitiesAsLiveData(accountName: String): LiveData<OCCapability?> {
