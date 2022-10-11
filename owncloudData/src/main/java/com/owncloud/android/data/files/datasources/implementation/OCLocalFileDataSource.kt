@@ -126,7 +126,7 @@ class OCLocalFileDataSource(
             sourceFile = sourceFile.toEntity(),
             targetFolder = targetFolder.toEntity(),
             finalRemotePath = finalRemotePath,
-            finalStoragePath = sourceFile.storagePath?.let { finalStoragePath }
+            finalStoragePath = finalStoragePath
         )
 
     override fun saveFilesInFolderAndReturnThem(listOfFiles: List<OCFile>, folder: OCFile): List<OCFile> {
@@ -163,7 +163,7 @@ class OCLocalFileDataSource(
             sourceFile = fileToRename.toEntity(),
             targetFolder = fileDao.getFileById(fileToRename.parentId!!)!!,
             finalRemotePath = finalRemotePath,
-            finalStoragePath = fileToRename.storagePath?.let { finalStoragePath }
+            finalStoragePath = finalStoragePath
         )
     }
 
