@@ -37,6 +37,7 @@ import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.Visibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import com.google.android.exoplayer2.text.Cue.TextSizeType
 import com.owncloud.android.R
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
@@ -67,6 +68,7 @@ import com.owncloud.android.testutil.OC_BASIC_USERNAME
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
+import com.owncloud.android.utils.CONFIGURATION_WEBFINGER_LOOKUP_SERVER
 import com.owncloud.android.utils.matchers.assertVisibility
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.isEnabled
@@ -161,10 +163,12 @@ class LoginActivityTest {
         showWelcomeLink: Boolean = true,
         accountType: String = "owncloud",
         loginWelcomeText: String = "",
+        webfingerLookupServer: String = "",
         intent: Intent? = null
     ) {
         every { mdmProvider.getBrandingBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, R.bool.show_server_url_input) } returns showServerUrlInput
         every { mdmProvider.getBrandingString(CONFIGURATION_SERVER_URL, R.string.server_url) } returns serverUrl
+        every { mdmProvider.getBrandingString(CONFIGURATION_WEBFINGER_LOOKUP_SERVER, R.string.webfinger_lookup_server) } returns webfingerLookupServer
         every { ocContextProvider.getBoolean(R.bool.use_login_background_image) } returns showLoginBackGroundImage
         every { ocContextProvider.getBoolean(R.bool.show_welcome_link) } returns showWelcomeLink
         every { ocContextProvider.getString(R.string.account_type) } returns accountType
@@ -183,6 +187,14 @@ class LoginActivityTest {
         launchTest()
 
         assertViewsDisplayed()
+        assertWebfingerFlowDisplayed(webfingerEnabled = false)
+    }
+
+    @Test
+    fun initialViewStatus_brandedOptions_webfinger() {
+        launchTest(webfingerLookupServer = OC_SERVER_INFO.baseUrl)
+
+        assertWebfingerFlowDisplayed(webfingerEnabled = true)
     }
 
     @Test
@@ -737,6 +749,14 @@ class LoginActivityTest {
         R.id.account_password.assertVisibility(Visibility.GONE)
         R.id.loginButton.assertVisibility(Visibility.GONE)
         R.id.auth_status_text.assertVisibility(Visibility.GONE)
+    }
+
+    private fun assertWebfingerFlowDisplayed(
+        webfingerEnabled: Boolean,
+    ) {
+        R.id.webfinger_layout.isDisplayed(webfingerEnabled)
+        R.id.webfinger_username.isDisplayed(webfingerEnabled)
+        R.id.webfinger_button.isDisplayed(webfingerEnabled)
     }
 
     private fun assertViewsDisplayed(
