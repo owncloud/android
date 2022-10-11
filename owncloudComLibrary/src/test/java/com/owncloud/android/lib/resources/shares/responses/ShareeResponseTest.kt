@@ -25,7 +25,6 @@
 package com.owncloud.android.lib.resources.shares.responses
 
 import com.owncloud.android.lib.resources.CommonOcsResponse
-import com.owncloud.android.lib.resources.webfinger.responses.WebfingerJrdResponse
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types

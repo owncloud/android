@@ -4,7 +4,6 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
 import org.junit.Assert
-import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 import java.io.File
