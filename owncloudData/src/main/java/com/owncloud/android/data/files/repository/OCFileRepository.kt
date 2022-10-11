@@ -188,7 +188,10 @@ class OCFileRepository(
                 return@forEach
             }
 
-            // 3. Update database with latest changes
+            // 3. Clean conflict in old location
+            localFileDataSource.cleanConflict(ocFile.id!!)
+
+            // 4. Update database with latest changes
             localFileDataSource.moveFile(
                 sourceFile = ocFile,
                 targetFolder = targetFile,
@@ -196,7 +199,10 @@ class OCFileRepository(
                 finalStoragePath = finalStoragePath
             )
 
-            // 4. Update local storage
+            // 5. Save conflict in new location
+            localFileDataSource.saveConflict(ocFile.id!!, ocFile.etagInConflict!!)
+
+            // 6. Update local storage
             localStorageProvider.moveLocalFile(ocFile, finalStoragePath)
         }
     }
