@@ -201,7 +201,7 @@ abstract class FileDao {
         sourceFile: OCFileEntity,
         targetFolder: OCFileEntity,
         finalRemotePath: String,
-        finalStoragePath: String?
+        finalStoragePath: String
     ) {
         // 1. Update target size
         insert(
@@ -225,7 +225,7 @@ abstract class FileDao {
                 sourceFile = sourceFile,
                 targetFolder = targetFolder,
                 finalRemotePath = finalRemotePath,
-                finalStoragePath = finalStoragePath
+                finalStoragePath = sourceFile.storagePath?.let { finalStoragePath }
             )
         }
     }
@@ -333,7 +333,7 @@ abstract class FileDao {
             sourceFile = sourceFolder,
             targetFolder = targetFolder,
             finalRemotePath = folderRemotePath,
-            finalStoragePath = folderStoragePath
+            finalStoragePath = null
         )
 
         // 2. Move its content
