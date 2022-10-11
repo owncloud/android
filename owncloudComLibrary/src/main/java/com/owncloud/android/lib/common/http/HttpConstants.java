@@ -184,6 +184,7 @@ public class HttpConstants {
     public static final int HTTP_LOCKED = 423;
     // 424 Failed Dependency (WebDAV - RFC 2518)
     public static final int HTTP_FAILED_DEPENDENCY = 424;
+    public static final int HTTP_TOO_EARLY = 425;
 
     /**
      * 5xx Client Error

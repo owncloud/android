@@ -120,7 +120,7 @@ public class RemoteFile implements Parcelable, Serializable {
 
     public RemoteFile(final Response davResource, String userId) {
         this(RemoteFileUtil.Companion.getRemotePathFromUrl(davResource.getHref(), userId));
-        final List<Property> properties = davResource.getProperties();
+        final List<Property> properties = RemoteFileUtil.Companion.getProperties(davResource);
 
         for (Property property : properties) {
             if (property instanceof CreationDate) {
