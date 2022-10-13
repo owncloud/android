@@ -26,14 +26,12 @@ const val CONFIGURATION_LOCK_DELAY_TIME = "lock_delay_time_configuration"
 const val CONFIGURATION_SERVER_URL = "server_url_configuration"
 const val CONFIGURATION_SERVER_URL_INPUT_VISIBILITY = "server_url_input_visibility_configuration"
 const val CONFIGURATION_ALLOW_SCREENSHOTS = "allow_screenshots_configuration"
-const val CONFIGURATION_WEBFINGER_LOOKUP_SERVER = "webfinger_lookup_server_configuration"
 
 @StringDef(
     CONFIGURATION_LOCK_DELAY_TIME,
     CONFIGURATION_SERVER_URL,
     CONFIGURATION_SERVER_URL_INPUT_VISIBILITY,
     CONFIGURATION_ALLOW_SCREENSHOTS,
-    CONFIGURATION_WEBFINGER_LOOKUP_SERVER,
 )
 @Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.VALUE_PARAMETER)

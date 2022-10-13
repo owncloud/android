@@ -42,7 +42,7 @@ class OCAuthenticationViewModel(
     private val getServerInfoAsyncUseCase: GetServerInfoAsyncUseCase,
     private val supportsOAuth2UseCase: SupportsOAuth2UseCase,
     private val getBaseUrlUseCase: GetBaseUrlUseCase,
-    private val getJRDFromWebfingerHost: GetJRDFromWebfingerHostUseCase,
+    private val getJRDFromWebfingerHostUseCase: GetJRDFromWebfingerHostUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -60,7 +60,7 @@ class OCAuthenticationViewModel(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
             showLoading = true,
             liveData = _webfingerHost,
-            useCase = getJRDFromWebfingerHost,
+            useCase = getJRDFromWebfingerHostUseCase,
             useCaseParams = GetJRDFromWebfingerHostUseCase.Params(server = webfingerLookupServer, resource = webfingerUsername)
         )
     }

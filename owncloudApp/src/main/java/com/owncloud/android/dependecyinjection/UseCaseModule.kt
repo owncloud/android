@@ -60,6 +60,7 @@ val useCaseModule = module {
     factory { LoginOAuthAsyncUseCase(get()) }
     factory { SupportsOAuth2UseCase(get()) }
     factory { GetBaseUrlUseCase(get()) }
+    factory { GetJRDFromWebfingerHostUseCase(get()) }
 
     // OAuth
     factory { OIDCDiscoveryUseCase(get()) }
@@ -102,6 +103,4 @@ val useCaseModule = module {
 
     // Files
     factory { GetUrlToOpenInWebUseCase(get()) }
-
-    factory { GetJRDFromWebfingerHostUseCase(get()) }
 }

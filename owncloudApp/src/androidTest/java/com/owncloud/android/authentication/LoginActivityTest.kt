@@ -67,7 +67,6 @@ import com.owncloud.android.testutil.OC_BASIC_USERNAME
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
-import com.owncloud.android.utils.CONFIGURATION_WEBFINGER_LOOKUP_SERVER
 import com.owncloud.android.utils.matchers.assertVisibility
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.isEnabled
@@ -167,7 +166,7 @@ class LoginActivityTest {
     ) {
         every { mdmProvider.getBrandingBoolean(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, R.bool.show_server_url_input) } returns showServerUrlInput
         every { mdmProvider.getBrandingString(CONFIGURATION_SERVER_URL, R.string.server_url) } returns serverUrl
-        every { mdmProvider.getBrandingString(CONFIGURATION_WEBFINGER_LOOKUP_SERVER, R.string.webfinger_lookup_server) } returns webfingerLookupServer
+        every { mdmProvider.getBrandingString(MdmProvider.NO_MDM_RESTRICTION_YET, R.string.webfinger_lookup_server) } returns webfingerLookupServer
         every { ocContextProvider.getBoolean(R.bool.use_login_background_image) } returns showLoginBackGroundImage
         every { ocContextProvider.getBoolean(R.bool.show_welcome_link) } returns showWelcomeLink
         every { ocContextProvider.getString(R.string.account_type) } returns accountType

@@ -74,10 +74,10 @@ import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticat
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.MdmProvider
+import com.owncloud.android.providers.MdmProvider.Companion.NO_MDM_RESTRICTION_YET
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
-import com.owncloud.android.utils.CONFIGURATION_WEBFINGER_LOOKUP_SERVER
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
@@ -732,7 +732,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             } else isVisible = false
         }
 
-        val webfingerLookupServer = mdmProvider.getBrandingString(CONFIGURATION_WEBFINGER_LOOKUP_SERVER, R.string.webfinger_lookup_server)
+        val webfingerLookupServer = mdmProvider.getBrandingString(NO_MDM_RESTRICTION_YET, R.string.webfinger_lookup_server)
         val shouldShowWebfingerFlow = loginAction == ACTION_CREATE && webfingerLookupServer.isNotBlank()
         binding.webfingerLayout.isVisible = shouldShowWebfingerFlow
         binding.mainLoginLayout.isVisible = !shouldShowWebfingerFlow
