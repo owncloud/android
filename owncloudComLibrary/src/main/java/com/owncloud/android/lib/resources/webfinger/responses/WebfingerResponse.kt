@@ -27,13 +27,13 @@ package com.owncloud.android.lib.resources.webfinger.responses
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class WebfingerJrdResponse (
-    val subject:String,
-    val links:List<LinkItem>
+data class WebfingerJrdResponse(
+    val subject: String,
+    val links: List<LinkItem>
 )
 
 @JsonClass(generateAdapter = true)
 data class LinkItem(
-    val href:String,
-    val rel:String
+    val href: String,
+    val rel: String
 )

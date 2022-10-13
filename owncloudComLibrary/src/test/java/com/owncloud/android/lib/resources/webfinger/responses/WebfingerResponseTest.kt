@@ -11,8 +11,7 @@ import java.io.File
 class WebfingerResponseTest {
     lateinit var adapter: JsonAdapter<WebfingerJrdResponse>
 
-    private fun loadResponses(fileName: String) =
-        adapter.fromJson(File(fileName).readText())
+    private fun loadResponses(fileName: String) = adapter.fromJson(File(fileName).readText())
 
     @Before
     fun prepare() {
@@ -21,8 +20,8 @@ class WebfingerResponseTest {
     }
 
     @Test
-    fun `check rel in to much information - ok - correct rell is returned`() {
-        val response = loadResponses(TO_MUCH_INFORMATION_JSON)!!
+    fun `check rel in too much information - ok`() {
+        val response = loadResponses(TOO_MUCH_INFORMATION_JSON)!!
         Assert.assertEquals("https://gast.somedomain.de", response.links[0].href)
         Assert.assertEquals("http://webfinger.owncloud/rel/server-instance", response.links[0].rel)
     }
@@ -40,11 +39,11 @@ class WebfingerResponseTest {
     }
 
     companion object {
-        val RESOURCES_PATH =
+        private const val RESOURCES_PATH =
             "src/test/responses/com.owncloud.android.lib.resources.webfinger.responses"
-        val EXAMPLE_RESPONSE_JSON = "$RESOURCES_PATH/simple_response.json"
-        val TO_MUCH_INFORMATION_JSON = "$RESOURCES_PATH/to_much_information_response.json"
-        val BROKEN_JSON = "$RESOURCES_PATH/broken_response.json"
-        val NOT_CONTAINING_RELEVANT_INFORMATION_JSON = "$RESOURCES_PATH/not_containing_relevant_info_response.json"
+        private const val EXAMPLE_RESPONSE_JSON = "$RESOURCES_PATH/simple_response.json"
+        private const val TOO_MUCH_INFORMATION_JSON = "$RESOURCES_PATH/to_much_information_response.json"
+        private const val BROKEN_JSON = "$RESOURCES_PATH/broken_response.json"
+        private const val NOT_CONTAINING_RELEVANT_INFORMATION_JSON = "$RESOURCES_PATH/not_containing_relevant_info_response.json"
     }
 }
