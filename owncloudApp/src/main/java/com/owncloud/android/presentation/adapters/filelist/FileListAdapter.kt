@@ -185,6 +185,15 @@ class FileListAdapter(
                 filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
             }
 
+            holder.itemView.findViewById<ImageView>(R.id.sharedIcon).apply {
+                isVisible = file.sharedByLink || file.sharedWithSharee == true || file.isSharedWithMe
+                if (file.sharedByLink) {
+                    setImageResource(R.drawable.ic_shared_by_link)
+                } else if (file.sharedWithSharee == true || file.isSharedWithMe) {
+                    setImageResource(R.drawable.shared_via_users)
+                }
+            }
+
             when (viewType) {
                 ViewType.LIST_ITEM.ordinal -> {
                     val view = holder as ListViewHolder
@@ -204,34 +213,9 @@ class FileListAdapter(
                     val view = holder as GridViewHolder
                     view.binding.Filename.text = file.fileName
                 }
-
-                ViewType.GRID_IMAGE.ordinal -> {
-                    //SharedIcon
-                    val view = holder as GridImageViewHolder
-                    view.binding.let {
-                        if (file.sharedByLink) {
-                            it.sharedIcon.apply {
-                                setImageResource(R.drawable.ic_shared_by_link)
-                                isVisible = true
-                                bringToFront()
-                            }
-                        } else if (file.sharedWithSharee == true || file.isSharedWithMe) {
-                            it.sharedIcon.apply {
-                                setImageResource(R.drawable.shared_via_users)
-                                isVisible = true
-                                bringToFront()
-                            }
-                        } else {
-                            it.sharedIcon.isVisible = false
-                        }
-                    }
-                }
-
             }
 
             setIconPinAccordingToFilesLocalState(holder.itemView.findViewById(R.id.localFileIndicator), file)
-
-            holder.itemView.findViewById<ImageView>(R.id.sharedIcon).isVisible = file.sharedByLink
 
             holder.itemView.setOnClickListener {
                 listener.onItemClick(
@@ -298,7 +282,7 @@ class FileListAdapter(
             }
 
         } else { // Is Footer
-            if (viewType == ViewType.FOOTER.ordinal && !isPickerMode) {
+            if (!isPickerMode) {
                 val view = holder as FooterViewHolder
                 val file = files[position] as OCFooterFile
                 (view.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams).apply {
