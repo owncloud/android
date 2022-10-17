@@ -1060,7 +1060,7 @@ class FileDisplayActivity : FileActivity(),
     ) {
         when (uiResult) {
             is UIResult.Loading -> {
-                showLoadingDialog(R.string.wait_a_moment)
+                // Not blocking the UI
             }
             is UIResult.Success -> {
                 dismissLoadingDialog()
