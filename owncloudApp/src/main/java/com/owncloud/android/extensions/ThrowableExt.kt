@@ -86,7 +86,7 @@ fun Throwable.parseError(
             is CopyIntoDescendantException -> resources.getString(R.string.copy_file_invalid_into_descendent)
             is MoveIntoSameFolderException -> resources.getString(R.string.move_file_invalid_overwrite)
             is CopyIntoSameFolderException -> resources.getString(R.string.copy_file_invalid_overwrite)
-            is ForbiddenException -> resources.getString(R.string.forbidden_permissions)
+            is ForbiddenException -> resources.getString(R.string.forbidden_permissions, resources.getString(R.string.uploader_upload_forbidden_permissions))
             is FileNotFoundException -> resources.getString(R.string.common_not_found)
             is InstanceNotConfiguredException -> resources.getString(R.string.auth_not_configured_title)
             is OAuth2ErrorException -> resources.getString(R.string.auth_oauth_error)
