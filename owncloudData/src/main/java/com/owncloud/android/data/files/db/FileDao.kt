@@ -333,7 +333,7 @@ abstract class FileDao {
             sourceFile = sourceFolder,
             targetFolder = targetFolder,
             finalRemotePath = folderRemotePath,
-            finalStoragePath = null
+            finalStoragePath = sourceFolder.storagePath?.let { folderStoragePath }
         )
 
         // 2. Move its content
