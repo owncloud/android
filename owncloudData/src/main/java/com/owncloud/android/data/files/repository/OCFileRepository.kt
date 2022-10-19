@@ -281,12 +281,28 @@ class OCFileRepository(
 
             // Remaining items should be removed from the database and local storage. They do not exists in remote anymore.
             localFilesMap.map { it.value }.forEach { ocFile ->
+                ocFile.etagInConflict?.let {
+                    localFileDataSource.cleanConflict(ocFile.id!!)
+                }
                 if (ocFile.isFolder) {
                     removeLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
                 } else {
                     removeLocalFile(ocFile = ocFile, onlyFromLocalStorage = false)
                 }
             }
+        }
+
+        var cleanConflictInThisFolder = true
+        var i = 0
+        while (cleanConflictInThisFolder && i < folderContentUpdated.size) {
+            if (folderContentUpdated[i].etagInConflict != null) {
+                cleanConflictInThisFolder = false
+            }
+            i++
+        }
+
+        if (cleanConflictInThisFolder) {
+            remoteFolder.etagInConflict = null
         }
 
         return localFileDataSource.saveFilesInFolderAndReturnThem(
