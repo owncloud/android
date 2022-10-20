@@ -168,7 +168,7 @@ object NotificationUtils {
     @JvmStatic
     fun notifyConflict(fileInConflict: OCFile, account: Account?, context: Context) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notificationBuilder = newNotificationBuilder(context, FILE_SYNC_CONFLICT_CHANNEL_ID)
+        val notificationBuilder = newNotificationBuilder(context, FILE_SYNC_CONFLICT_NOTIFICATION_CHANNEL_ID)
         notificationBuilder
             .setTicker(context.getString(R.string.conflict_title))
             .setContentTitle(context.getString(R.string.conflict_title))
