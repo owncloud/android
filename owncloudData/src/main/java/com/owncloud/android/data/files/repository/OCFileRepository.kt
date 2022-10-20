@@ -292,16 +292,9 @@ class OCFileRepository(
             }
         }
 
-        var cleanConflictInThisFolder = true
-        var i = 0
-        while (cleanConflictInThisFolder && i < folderContentUpdated.size) {
-            if (folderContentUpdated[i].etagInConflict != null) {
-                cleanConflictInThisFolder = false
-            }
-            i++
-        }
+        val anyConflictInThisFolder = folderContentUpdated.any { it.etagInConflict != null }
 
-        if (cleanConflictInThisFolder) {
+        if (!anyConflictInThisFolder) {
             remoteFolder.etagInConflict = null
         }
 
