@@ -30,6 +30,7 @@ import android.view.MenuItem;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus;
@@ -42,6 +43,8 @@ import com.owncloud.android.ui.preview.PreviewVideoFragment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.owncloud.android.usecases.transfers.TransferConstantsKt.TRANSFER_TAG_DOWNLOAD;
 
 /**
  * Filters out the file actions available in a given {@link Menu} for a given {@link OCFile}
@@ -272,31 +275,18 @@ public class FileMenuFilter {
 
     private boolean anyFileSynchronizing() {
         boolean synchronizing = false;
-        if (mComponentsGetter != null && !mFiles.isEmpty() && mAccount != null) {
-            synchronizing = (
-                    anyFileDownloading() ||
-                            anyFileUploading()
-            );
+        if (!mFiles.isEmpty() && mAccount != null) {
+            WorkManager workManager = WorkManager.getInstance(mContext);
+            List<WorkInfo> workInfos = WorkManagerExtKt.getRunningWorkInfosByTags(workManager, Arrays.asList(TRANSFER_TAG_DOWNLOAD, mAccount.name));
+            for (int i = 0; !synchronizing && i < workInfos.size(); i++) {
+                if (!workInfos.get(i).getState().isFinished()) {
+                    for (int j = 0; !synchronizing && j < mFiles.size(); j++) {
+                        synchronizing = workInfos.get(i).getTags().contains(mFiles.get(j).getId().toString());
+                    }
+                }
+            }
         }
         return synchronizing;
-    }
-
-    private boolean anyFileDownloading() {
-        WorkManager workManager = WorkManager.getInstance(mContext);
-        boolean downloading = false;
-        for (int i = 0; !downloading && i < mFiles.size(); i++) {
-            downloading = WorkManagerExtKt.isDownloadPending(workManager, mAccount, mFiles.get(i));
-        }
-        return downloading;
-    }
-
-    private boolean anyFileUploading() {
-        WorkManager workManager = WorkManager.getInstance(mContext);
-        boolean uploading = false;
-        for (int i = 0; !uploading && i < mFiles.size(); i++) {
-            uploading = WorkManagerExtKt.isUploadPending(workManager, mAccount, mFiles.get(i));
-        }
-        return uploading;
     }
 
     private boolean anyFileVideoPreviewing() {
