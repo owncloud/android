@@ -188,7 +188,12 @@ class OCFileRepository(
                 return@forEach
             }
 
-            // 3. Update database with latest changes
+            // 3. Clean conflict in old location if there was a conflict
+            ocFile.etagInConflict?.let {
+                localFileDataSource.cleanConflict(ocFile.id!!)
+            }
+
+            // 4. Update database with latest changes
             localFileDataSource.moveFile(
                 sourceFile = ocFile,
                 targetFolder = targetFile,
@@ -196,7 +201,12 @@ class OCFileRepository(
                 finalStoragePath = finalStoragePath
             )
 
-            // 4. Update local storage
+            // 5. Save conflict in new location if there was conflict
+            ocFile.etagInConflict?.let {
+                localFileDataSource.saveConflict(ocFile.id!!, it)
+            }
+
+            // 6. Update local storage
             localStorageProvider.moveLocalFile(ocFile, finalStoragePath)
         }
     }
@@ -271,12 +281,21 @@ class OCFileRepository(
 
             // Remaining items should be removed from the database and local storage. They do not exists in remote anymore.
             localFilesMap.map { it.value }.forEach { ocFile ->
+                ocFile.etagInConflict?.let {
+                    localFileDataSource.cleanConflict(ocFile.id!!)
+                }
                 if (ocFile.isFolder) {
                     removeLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
                 } else {
                     removeLocalFile(ocFile = ocFile, onlyFromLocalStorage = false)
                 }
             }
+        }
+
+        val anyConflictInThisFolder = folderContentUpdated.any { it.etagInConflict != null }
+
+        if (!anyConflictInThisFolder) {
+            remoteFolder.etagInConflict = null
         }
 
         return localFileDataSource.saveFilesInFolderAndReturnThem(
@@ -293,6 +312,9 @@ class OCFileRepository(
                 } catch (fileNotFoundException: FileNotFoundException) {
                     Timber.i("File ${ocFile.fileName} was not found in server. Let's remove it from local storage")
                 }
+            }
+            ocFile.etagInConflict?.let {
+                localFileDataSource.cleanConflict(ocFile.id!!)
             }
             if (ocFile.isFolder) {
                 removeLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy)
@@ -340,6 +362,14 @@ class OCFileRepository(
 
     override fun saveFile(file: OCFile) {
         localFileDataSource.saveFile(file)
+    }
+
+    override fun saveConflict(fileId: Long, eTagInConflict: String) {
+        localFileDataSource.saveConflict(fileId, eTagInConflict)
+    }
+
+    override fun cleanConflict(fileId: Long) {
+        localFileDataSource.cleanConflict(fileId)
     }
 
     override fun disableThumbnailsForFile(fileId: Long) {

@@ -126,7 +126,7 @@ class OCLocalFileDataSource(
             sourceFile = sourceFile.toEntity(),
             targetFolder = targetFolder.toEntity(),
             finalRemotePath = finalRemotePath,
-            finalStoragePath = sourceFile.storagePath?.let { finalStoragePath }
+            finalStoragePath = finalStoragePath
         )
 
     override fun saveFilesInFolderAndReturnThem(listOfFiles: List<OCFile>, folder: OCFile): List<OCFile> {
@@ -142,6 +142,14 @@ class OCLocalFileDataSource(
         fileDao.insert(file.toEntity())
     }
 
+    override fun saveConflict(fileId: Long, eTagInConflict: String) {
+        fileDao.updateConflictStatusForFile(fileId, eTagInConflict)
+    }
+
+    override fun cleanConflict(fileId: Long) {
+        fileDao.updateConflictStatusForFile(fileId, null)
+    }
+
     override fun removeFile(fileId: Long) {
         fileDao.deleteFileWithId(fileId)
     }
@@ -155,7 +163,7 @@ class OCLocalFileDataSource(
             sourceFile = fileToRename.toEntity(),
             targetFolder = fileDao.getFileById(fileToRename.parentId!!)!!,
             finalRemotePath = finalRemotePath,
-            finalStoragePath = fileToRename.storagePath?.let { finalStoragePath }
+            finalStoragePath = finalStoragePath
         )
     }
 

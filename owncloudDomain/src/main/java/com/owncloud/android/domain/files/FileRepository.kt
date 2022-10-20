@@ -3,7 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -46,6 +48,8 @@ interface FileRepository {
     fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean)
     fun renameFile(ocFile: OCFile, newName: String)
     fun saveFile(file: OCFile)
+    fun saveConflict(fileId: Long, eTagInConflict: String)
+    fun cleanConflict(fileId: Long)
 
     fun disableThumbnailsForFile(fileId: Long)
     fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)

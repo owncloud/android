@@ -32,6 +32,7 @@ import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
 import com.owncloud.android.domain.ext.isOneOf
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import kotlinx.coroutines.flow.Flow
 import java.io.File.separatorChar
 
@@ -200,7 +201,7 @@ abstract class FileDao {
         sourceFile: OCFileEntity,
         targetFolder: OCFileEntity,
         finalRemotePath: String,
-        finalStoragePath: String?
+        finalStoragePath: String
     ) {
         // 1. Update target size
         insert(
@@ -224,13 +225,16 @@ abstract class FileDao {
                 sourceFile = sourceFile,
                 targetFolder = targetFolder,
                 finalRemotePath = finalRemotePath,
-                finalStoragePath = finalStoragePath
+                finalStoragePath = sourceFile.storagePath?.let { finalStoragePath }
             )
         }
     }
 
     @Query(DELETE_FILE_WITH_ID)
     abstract fun deleteFileWithId(id: Long)
+
+    @Query(UPDATE_FILES_STORAGE_DIRECTORY)
+    abstract fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
 
     @Transaction
     open fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: Int) {
@@ -240,9 +244,6 @@ abstract class FileDao {
             updateFileWithAvailableOfflineStatus(ocFile.id!!, newAvailableOfflineStatus)
         }
     }
-
-    @Query(UPDATE_FILES_STORAGE_DIRECTORY)
-    abstract fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
 
     private fun updateFolderWithNewAvailableOfflineStatus(ocFolderId: Long, newAvailableOfflineStatus: Int) {
         updateFileWithAvailableOfflineStatus(ocFolderId, newAvailableOfflineStatus)
@@ -264,6 +265,35 @@ abstract class FileDao {
 
     @Query(UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS)
     abstract fun updateFileWithAvailableOfflineStatus(id: Long, availableOfflineStatus: Int)
+
+    @Transaction
+    open fun updateConflictStatusForFile(id: Long, eTagInConflict: String?) {
+        val fileEntity = getFileById(id)
+
+        if (fileEntity?.parentId != ROOT_PARENT_ID) {
+            updateFileWithConflictStatus(id, eTagInConflict)
+
+            // Check if there is any more file with conflicts in this folder, in such case don't update parent's conflict status
+            var cleanConflictInParent = true
+            if (eTagInConflict == null) {
+                val folderContent = getFolderContent(fileEntity?.parentId!!)
+                var indexFileInFolder = 0
+                while (cleanConflictInParent && indexFileInFolder < folderContent.size) {
+                    val child = folderContent[indexFileInFolder]
+                    if (child.etagInConflict != null) {
+                        cleanConflictInParent = false
+                    }
+                    indexFileInFolder++
+                }
+            }
+            if (eTagInConflict != null || cleanConflictInParent) {
+                updateConflictStatusForFile(fileEntity?.parentId!!, eTagInConflict)
+            }
+        }
+    }
+
+    @Query(UPDATE_FILE_WITH_NEW_CONFLICT_STATUS)
+    abstract fun updateFileWithConflictStatus(id: Long, eTagInConflict: String?)
 
     @Query(DISABLE_THUMBNAILS_FOR_FILE)
     abstract fun disableThumbnailsForFile(fileId: Long)
@@ -303,7 +333,7 @@ abstract class FileDao {
             sourceFile = sourceFolder,
             targetFolder = targetFolder,
             finalRemotePath = folderRemotePath,
-            finalStoragePath = folderStoragePath
+            finalStoragePath = sourceFolder.storagePath?.let { folderStoragePath }
         )
 
         // 2. Move its content
@@ -421,6 +451,11 @@ abstract class FileDao {
         private const val UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS =
             "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
                     "SET keepInSync = :availableOfflineStatus " +
+                    "WHERE id = :id"
+
+        private const val UPDATE_FILE_WITH_NEW_CONFLICT_STATUS =
+            "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
+                    "SET etagInConflict = :eTagInConflict " +
                     "WHERE id = :id"
 
         private const val DISABLE_THUMBNAILS_FOR_FILE =

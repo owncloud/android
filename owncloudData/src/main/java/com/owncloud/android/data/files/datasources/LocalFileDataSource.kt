@@ -43,6 +43,8 @@ interface LocalFileDataSource {
     fun moveFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, finalStoragePath: String)
     fun saveFilesInFolderAndReturnThem(listOfFiles: List<OCFile>, folder: OCFile): List<OCFile>
     fun saveFile(file: OCFile)
+    fun saveConflict(fileId: Long, eTagInConflict: String)
+    fun cleanConflict(fileId: Long)
     fun removeFile(fileId: Long)
     fun removeFilesForAccount(accountName: String)
     fun renameFile(fileToRename: OCFile, finalRemotePath: String, finalStoragePath: String)
