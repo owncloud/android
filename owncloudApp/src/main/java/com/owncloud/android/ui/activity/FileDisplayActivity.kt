@@ -450,7 +450,7 @@ class FileDisplayActivity : FileActivity(),
         updateToolbar(null)
     }
 
-    fun refreshListOfFilesFragment(reloadData: Boolean) {
+    private fun refreshListOfFilesFragment() {
         // TODO Remove commented code
         /*val fileListFragment = listOfFilesFragment
         fileListFragment?.listDirectory(reloadData)*/
@@ -690,7 +690,7 @@ class FileDisplayActivity : FileActivity(),
         listMainFileFragment?.updateFileListOption(fileListOption, file)
 
         // refresh list of files
-        refreshListOfFilesFragment(true)
+        refreshListOfFilesFragment()
 
         // Listen for sync messages
         val syncIntentFilter = IntentFilter(FileSyncAdapter.EVENT_FULL_SYNC_START)
@@ -824,13 +824,6 @@ class FileDisplayActivity : FileActivity(),
             val sameFile = renamedInUpload || file.remotePath == uploadedRemotePath
             val success = intent.getBooleanExtra(Extras.EXTRA_UPLOAD_RESULT, false)
 
-            if (sameAccount && isDescendant) {
-                val linkedToRemotePath = intent.getStringExtra(Extras.EXTRA_LINKED_TO_PATH)
-                if (linkedToRemotePath == null || isAscendant(linkedToRemotePath)) {
-                    refreshListOfFilesFragment(true)
-                }
-            }
-
             if (sameAccount && sameFile) {
                 if (success && uploadedRemotePath != null) {
                     file = storageManager.getFileByPath(uploadedRemotePath)
@@ -901,10 +894,6 @@ class FileDisplayActivity : FileActivity(),
             val isDescendant = isDescendant(downloadedRemotePath)
 
             if (sameAccount && isDescendant) {
-                val linkedToRemotePath = intent.getStringExtra(Extras.EXTRA_LINKED_TO_PATH)
-                if (linkedToRemotePath == null || isAscendant(linkedToRemotePath)) {
-                    refreshListOfFilesFragment(true)
-                }
                 refreshSecondFragment(
                     intent.action,
                     downloadedRemotePath,
@@ -1110,8 +1099,6 @@ class FileDisplayActivity : FileActivity(),
             }
             is UIResult.Success -> {
                 dismissLoadingDialog()
-
-                refreshListOfFilesFragment(true)
             }
             is UIResult.Error -> {
                 dismissLoadingDialog()
@@ -1136,8 +1123,6 @@ class FileDisplayActivity : FileActivity(),
             }
             is UIResult.Success -> {
                 dismissLoadingDialog()
-
-                refreshListOfFilesFragment(true)
             }
             is UIResult.Error -> {
                 dismissLoadingDialog()
@@ -1171,10 +1156,6 @@ class FileDisplayActivity : FileActivity(),
                         details.onFileMetadataChanged(updatedRenamedFile)
                         updateToolbar(updatedRenamedFile)
                     }
-                }
-
-                if (uiResult.data?.parentId == currentDir.id) {
-                    refreshListOfFilesFragment(true)
                 }
             }
             is UIResult.Error -> {
@@ -1469,7 +1450,6 @@ class FileDisplayActivity : FileActivity(),
                 waitingToSend = null
             }
         }
-        refreshListOfFilesFragment(false)
 
         val secondFragment = secondFragment
         if (secondFragment != null && file == secondFragment.file) {
