@@ -44,6 +44,7 @@ import androidx.core.widget.doAfterTextChanged
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
+import com.owncloud.android.authentication.AccountUtils.getUsernameOfAccount
 import com.owncloud.android.authentication.oauth.OAuthUtils
 import com.owncloud.android.data.authentication.KEY_USER_ID
 import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
@@ -95,6 +96,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private var loginAction: Byte = ACTION_CREATE
     private var authTokenType: String? = null
     private var userAccount: Account? = null
+    private var username: String? = null
     private lateinit var serverBaseUrl: String
 
     private var oidcSupported = false
@@ -137,6 +139,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         if (loginAction != ACTION_CREATE) {
             binding.accountUsername.isEnabled = false
             binding.accountUsername.isFocusable = false
+            userAccount?.name?.let {
+                username = getUsernameOfAccount(it)
+            }
+
         }
 
         if (savedInstanceState == null) {
@@ -243,6 +249,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun getWebfingerIsSuccess(uiResult: UIResult.Success<String>) {
         val serverUrl = uiResult.data ?: return
+        username = binding.webfingerUsername.text.toString()
         binding.webfingerLayout.isVisible = false
         binding.mainLoginLayout.isVisible = true
         binding.hostUrlInput.setText(serverUrl)
@@ -316,7 +323,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 AuthenticationMethod.BEARER_TOKEN -> {
                     showOrHideBasicAuthFields(shouldBeVisible = false)
                     authTokenType = OAUTH_TOKEN_TYPE
-                    binding.loginButton.isVisible = true
+                    startOIDCOauthorization()
                 }
 
                 else -> {
@@ -499,7 +506,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             responseType = ResponseType.CODE.string,
             scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else "",
             codeChallenge = oauthViewModel.codeChallenge,
-            state = oauthViewModel.oidcState
+            state = oauthViewModel.oidcState,
+            username = username,
         )
 
         try {
@@ -739,10 +747,19 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
         if (shouldShowWebfingerFlow) {
             binding.webfingerButton.setOnClickListener {
-                authenticationViewModel.getWebfingerHost(
-                    webfingerLookupServer,
-                    binding.webfingerUsername.text.toString()
-                )
+                val webfingerUsername = binding.webfingerUsername.text.toString()
+                if (webfingerUsername.isNotEmpty()) {
+                    authenticationViewModel.getWebfingerHost(
+                        webfingerLookupServer,
+                        webfingerUsername
+                    )
+                } else {
+                    binding.webfingerStatusText.run {
+                        text = getString(R.string.error_webfinger_username_empty).also { Timber.d(it) }
+                        setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
+                        isVisible = true
+                    }
+                }
             }
         }
     }

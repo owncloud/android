@@ -669,6 +669,7 @@
 
     <!-- Webfinger -->
     <string name="global_next">Next</string>
+    <string name="error_webfinger_username_empty">Username empty</string>
 
     <!-- Release Notes -->
     <string name="release_notes_header">New in %1$s</string>
