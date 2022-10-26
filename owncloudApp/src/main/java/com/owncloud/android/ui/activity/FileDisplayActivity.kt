@@ -1085,9 +1085,6 @@ class FileDisplayActivity : FileActivity(),
                     file = storageManager.getFileById(lastRemovedFile.parentId!!)
                     cleanSecondFragment()
                 }
-                if (storageManager.getFileById(lastRemovedFile.parentId!!) == currentDir) {
-                    refreshListOfFilesFragment(true)
-                }
                 invalidateOptionsMenu()
             }
             is UIResult.Error -> {
