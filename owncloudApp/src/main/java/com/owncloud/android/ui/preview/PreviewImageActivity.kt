@@ -38,10 +38,14 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import androidx.work.WorkInfo
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.presentation.ui.files.SortOrder
+import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.operations.FileOperation
 import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.ui.activity.FileActivity
@@ -49,12 +53,10 @@ import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.usecases.transfers.DOWNLOAD_ADDED_MESSAGE
 import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
-import com.owncloud.android.utils.FileStorageUtils
 import com.owncloud.android.utils.PreferenceUtils
-import com.owncloud.android.utils.SortFilesUtils
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import java.util.Vector
 
 /**
  * Holds a swiping galley where image files contained in an ownCloud directory are shown
@@ -141,11 +143,16 @@ class PreviewImageActivity : FileActivity(),
             parentFolder = storageManager.getFileByPath(OCFile.ROOT_PATH)
         }
 
-        var imageFiles: List<OCFile> = storageManager.getFolderImages(parentFolder)
-        imageFiles = SortFilesUtils().sortFiles(
-            Vector(imageFiles),
-            FileStorageUtils.mSortOrderFileDisp,
-            FileStorageUtils.mSortAscendingFileDisp
+        val sharedPreferencesProvider: SharedPreferencesProvider by inject()
+        val sortType = sharedPreferencesProvider.getInt(SortType.PREF_FILE_LIST_SORT_TYPE, SortType.SORT_TYPE_BY_NAME.ordinal)
+        val sortOrder = sharedPreferencesProvider.getInt(SortOrder.PREF_FILE_LIST_SORT_ORDER, SortOrder.SORT_ORDER_ASCENDING.ordinal)
+        val sortFilesUseCase: SortFilesUseCase by inject()
+        val imageFiles = sortFilesUseCase.execute(
+            SortFilesUseCase.Params(
+                listOfFiles = storageManager.getFolderImages(parentFolder),
+                sortType = com.owncloud.android.domain.files.usecases.SortType.fromPreferences(sortType),
+                ascending = SortOrder.fromPreference(sortOrder) == SortOrder.SORT_ORDER_ASCENDING
+            )
         )
         previewImagePagerAdapter = PreviewImagePagerAdapter(
             supportFragmentManager,
