@@ -59,7 +59,7 @@ class FileDownloadFragment : FileFragment() {
     private var progressBar: ProgressBar? = null
     private var liveData: LiveData<WorkInfo?>? = null
 
-    val transfersViewModel: TransfersViewModel by viewModel()
+    private val transfersViewModel: TransfersViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -228,7 +228,8 @@ class FileDownloadFragment : FileFragment() {
                     }
                 },
                 onWorkSucceeded = { },
-                onWorkFailed = { }
+                onWorkFailed = { },
+                removeObserverAfterNull = false,
             )
         }
         setButtonsForTransferring(view)
