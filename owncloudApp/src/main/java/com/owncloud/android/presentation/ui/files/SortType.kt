@@ -70,11 +70,11 @@ enum class SortOrder : Parcelable {
     companion object {
         const val PREF_FILE_LIST_SORT_ORDER = "PREF_FILE_LIST_SORT_ORDER"
 
-        fun fromPreference(isAscending: Boolean) =
-            if (isAscending) {
-                SORT_ORDER_ASCENDING
-            } else {
-                SORT_ORDER_DESCENDING
+        fun fromPreference(value: Int) =
+            when (value) {
+                SORT_ORDER_ASCENDING.ordinal -> SORT_ORDER_ASCENDING
+                SORT_ORDER_DESCENDING.ordinal -> SORT_ORDER_DESCENDING
+                else -> SORT_ORDER_ASCENDING
             }
     }
 }
