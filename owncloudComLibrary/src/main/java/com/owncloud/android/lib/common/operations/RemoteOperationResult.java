@@ -237,6 +237,10 @@ public class RemoteOperationResult<T>
                         httpMethod.getResponseBodyAsString(),
                         ResultCode.SPECIFIC_METHOD_NOT_ALLOWED
                 );
+                break;
+            case HttpConstants.HTTP_TOO_EARLY:
+                mCode = ResultCode.TOO_EARLY;
+                break;
             default:
                 break;
         }
@@ -583,6 +587,7 @@ public class RemoteOperationResult<T>
         SPECIFIC_SERVICE_UNAVAILABLE,
         SPECIFIC_UNSUPPORTED_MEDIA_TYPE,
         SPECIFIC_METHOD_NOT_ALLOWED,
-        SPECIFIC_BAD_REQUEST
+        SPECIFIC_BAD_REQUEST,
+        TOO_EARLY,
     }
 }
