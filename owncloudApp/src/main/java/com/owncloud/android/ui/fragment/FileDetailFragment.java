@@ -6,21 +6,24 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2022 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.ui.fragment;
 
 import android.accounts.Account;
@@ -52,6 +55,7 @@ import com.owncloud.android.datamodel.OCFile;
 import com.owncloud.android.datamodel.ThumbnailsCacheManager;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException;
+import com.owncloud.android.domain.exceptions.TooEarlyException;
 import com.owncloud.android.domain.utils.Event;
 import com.owncloud.android.extensions.FragmentExtKt;
 import com.owncloud.android.files.FileMenuFilter;
@@ -200,8 +204,10 @@ public class FileDetailFragment extends FileFragment implements OnClickListener 
                     if (uiResultError.getError() instanceof InstanceNotConfiguredException) {
                         String message = getString(R.string.open_in_web_error_generic) + " " + getString(R.string.error_reason) + " " + getString(R.string.open_in_web_error_not_supported);
                         FragmentExtKt.showMessageInSnackbar(this, message, Snackbar.LENGTH_LONG);
+                    } else if (uiResultError.getError() instanceof TooEarlyException) {
+                        FragmentExtKt.showMessageInSnackbar(this, getString(R.string.open_in_web_error_too_early), Snackbar.LENGTH_LONG);
                     } else {
-                        FragmentExtKt.showErrorInSnackbar(this, R.string.open_in_web_error_generic, (((UIResult.Error<String>) uiResult).getError()));
+                        FragmentExtKt.showErrorInSnackbar(this, R.string.open_in_web_error_generic, ((UIResult.Error<String>) uiResult).getError());
                     }
                 }
             }
