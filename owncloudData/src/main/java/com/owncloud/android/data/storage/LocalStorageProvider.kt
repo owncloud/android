@@ -82,7 +82,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         accountName: String?
     ): String = getRootFolderPath() + File.separator + TEMPORAL_FOLDER_NAME + File.separator + getEncodedAccountName(accountName)
 
-    fun getLogsPath(): String = getRootFolderPath() + LOGS_FOLDER_NAME
+    fun getLogsPath(): String = getRootFolderPath() + File.separator + LOGS_FOLDER_NAME + File.separator
 
     /**
      * Optimistic number of bytes available on sd-card.
@@ -100,7 +100,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         val danglingDirs = mutableListOf<File>()
         rootFolder.listFiles()?.forEach { dir ->
             var dirIsOk = false
-            if (dir.name.equals(TEMPORAL_FOLDER_NAME)) {
+            if (dir.name.equals(TEMPORAL_FOLDER_NAME) || dir.name.equals(LOGS_FOLDER_NAME)) {
                 dirIsOk = true
             } else {
                 remainingAccounts.forEach { account ->
@@ -244,7 +244,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     }
 
     companion object {
-        private const val LOGS_FOLDER_NAME = "/logs/"
+        private const val LOGS_FOLDER_NAME = "logs"
         private const val TEMPORAL_FOLDER_NAME = "tmp"
     }
 }
