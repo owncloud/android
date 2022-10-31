@@ -43,7 +43,7 @@ class RootCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
             manager.getRootPersonalFolder()?.id
         }
 
-        val flags = Root.FLAG_SUPPORTS_SEARCH or Root.FLAG_SUPPORTS_CREATE
+        val flags = Root.FLAG_SUPPORTS_SEARCH or Root.FLAG_SUPPORTS_CREATE or Root.FLAG_SUPPORTS_IS_CHILD
 
         newRow()
             .add(Root.COLUMN_ROOT_ID, account.name)
