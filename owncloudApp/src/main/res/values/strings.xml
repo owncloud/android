@@ -668,7 +668,7 @@
     <string name="security_enforced_second_option">Pattern lock</string>
 
     <!-- Webfinger -->
-    <string name="global_next">Next</string>
+    <string name="global_proceed">Proceed</string>
     <string name="error_webfinger_username_empty">Username empty</string>
 
     <!-- Release Notes -->

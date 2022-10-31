@@ -118,8 +118,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:contentDescription="@string/global_next"
-                            android:text="@string/global_next"
+                            android:contentDescription="@string/global_proceed"
+                            android:text="@string/global_proceed"
                             android:theme="@style/Button.Authenticator" />
                     </LinearLayout>
 
