@@ -57,6 +57,7 @@ import com.owncloud.android.presentation.ui.authentication.LoginActivity
 import com.owncloud.android.presentation.ui.authentication.OAUTH_TOKEN_TYPE
 import com.owncloud.android.presentation.ui.settings.SettingsActivity
 import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
+import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
 import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.MdmProvider
@@ -95,6 +96,7 @@ class LoginActivityTest {
     private lateinit var activityScenario: ActivityScenario<LoginActivity>
 
     private lateinit var ocAuthenticationViewModel: OCAuthenticationViewModel
+    private lateinit var oauthViewModel: OAuthViewModel
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var ocContextProvider: ContextProvider
     private lateinit var mdmProvider: MdmProvider
@@ -110,6 +112,7 @@ class LoginActivityTest {
         context = ApplicationProvider.getApplicationContext()
 
         ocAuthenticationViewModel = mockk(relaxed = true)
+        oauthViewModel = mockk(relaxed = true)
         settingsViewModel = mockk(relaxUnitFun = true)
         ocContextProvider = mockk(relaxed = true)
         mdmProvider = mockk(relaxed = true)
@@ -134,6 +137,9 @@ class LoginActivityTest {
                 module {
                     viewModel {
                         ocAuthenticationViewModel
+                    }
+                    viewModel {
+                        oauthViewModel
                     }
                     viewModel {
                         settingsViewModel
@@ -387,7 +393,7 @@ class LoginActivityTest {
 
         R.id.hostUrlInput.typeText("anything")
 
-        R.id.loginButton.assertVisibility(Visibility.GONE)
+        R.id.auth_status_text.assertVisibility(Visibility.GONE)
     }
 
     @Test
@@ -730,7 +736,7 @@ class LoginActivityTest {
         R.id.account_password.assertVisibility(Visibility.GONE)
         R.id.auth_status_text.assertVisibility(Visibility.GONE)
 
-        with(R.id.loginButton) {
+        with(R.id.server_status_text) {
             isDisplayed(true)
             assertVisibility(Visibility.VISIBLE)
         }
