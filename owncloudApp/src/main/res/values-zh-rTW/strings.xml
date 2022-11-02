@@ -571,6 +571,8 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">密碼鎖</string>
+  <!--Webfinger-->
+  <string name="global_proceed">已執行</string>
   <!--Release Notes-->
   <string name="release_notes_footer">感謝您使用 %1$s.\n❤</string>
   <string name="release_notes_proceed">已執行</string>

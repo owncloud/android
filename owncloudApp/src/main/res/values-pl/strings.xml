@@ -614,6 +614,8 @@
   <string name="security_enforced_title">Proszę wybrać jedną z opcji blokowania aplikacji:</string>
   <string name="security_enforced_first_option">Blokada hasłem</string>
   <string name="security_enforced_second_option">Blokada wzorem</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Wykonaj</string>
   <!--Release Notes-->
   <string name="release_notes_header">Co nowego w %1$s</string>
   <string name="release_notes_footer">Dziękujemy za używanie %1$s.\n❤</string>

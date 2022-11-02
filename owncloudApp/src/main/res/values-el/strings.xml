@@ -545,6 +545,8 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Κλείδωμα με κωδικό</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Συνέχιση</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Συνέχιση</string>
 </resources>

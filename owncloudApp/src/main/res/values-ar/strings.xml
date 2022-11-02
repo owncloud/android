@@ -548,6 +548,8 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">قفل رمز المرور</string>
+  <!--Webfinger-->
+  <string name="global_proceed">متابعة</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">متابعة</string>
 </resources>

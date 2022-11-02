@@ -573,6 +573,8 @@ správce systému.</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Zámek bezpečnostního kódu</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Pokračovat</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Pokračovat</string>
 </resources>

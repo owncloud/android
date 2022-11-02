@@ -528,6 +528,8 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Kunci kode sandi</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Melanjutkan</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Melanjutkan</string>
 </resources>

@@ -612,6 +612,8 @@
   <string name="security_enforced_title">Lütfen uygulamayı kilitlemek için bir seçenek belirleyin:</string>
   <string name="security_enforced_first_option">Parola kod kilidi</string>
   <string name="security_enforced_second_option">Desen kilidi</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Devam et</string>
   <!--Release Notes-->
   <string name="release_notes_header">%1$s\'da yeni</string>
   <string name="release_notes_footer">%1$s kullandığınız için teşekkürler.\n❤</string>

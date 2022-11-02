@@ -535,6 +535,8 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Contrasenya</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Procedeix</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Procedeix</string>
 </resources>

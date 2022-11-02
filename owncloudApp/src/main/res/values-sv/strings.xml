@@ -549,6 +549,8 @@
   <string name="security_enforced_title">Vänligen välj en inställning för att låsa appen:</string>
   <string name="security_enforced_first_option">Lösenordslås</string>
   <string name="security_enforced_second_option">Mösterlås</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Fortsätt</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Fortsätt</string>
 </resources>

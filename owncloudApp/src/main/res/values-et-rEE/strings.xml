@@ -612,6 +612,8 @@
   <string name="security_enforced_title">Palun vali rakenduse sulgemise viis:</string>
   <string name="security_enforced_first_option">Parooli lukk</string>
   <string name="security_enforced_second_option">Mustri lukk</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Jätka</string>
   <!--Release Notes-->
   <string name="release_notes_header">Uut %1$sis</string>
   <string name="release_notes_footer">Aitäh, et kasutad %1$si.\n❤</string>

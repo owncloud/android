@@ -554,6 +554,8 @@ Descárgueo de aquí: %2$s</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Código de bloqueo</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Proceder</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Proceder</string>
 </resources>

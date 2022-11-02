@@ -545,6 +545,8 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">PIN gesperrt</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Fortfahren</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Fortfahren</string>
 </resources>

@@ -558,6 +558,8 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Jelszavas zár</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Végrehajtás</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Végrehajtás</string>
 </resources>

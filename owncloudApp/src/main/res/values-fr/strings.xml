@@ -584,6 +584,8 @@ Téléchargez-le ici : %2$s</string>
   <string name="security_enforced_title">Veuillez s\'il vous plaît sélectionner une option pour vérrouiller l\'application</string>
   <string name="security_enforced_first_option">Code de sécurité</string>
   <string name="security_enforced_second_option">Verrouillage par motif</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Exécuter</string>
   <!--Release Notes-->
   <string name="release_notes_header">Nouveau dans %1$s</string>
   <string name="release_notes_footer">Merci d\'utiliser %1$s.\n❤</string>

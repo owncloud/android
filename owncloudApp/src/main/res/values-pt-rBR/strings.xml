@@ -613,6 +613,8 @@
   <string name="security_enforced_title">Por favor, selecione uma opção para bloquear o aplicativo:</string>
   <string name="security_enforced_first_option">Bloqueio de senha</string>
   <string name="security_enforced_second_option">Bloqueio Padrão</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Prosseguir</string>
   <!--Release Notes-->
   <string name="release_notes_header">Novo em %1$s</string>
   <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>

@@ -610,6 +610,8 @@
   <string name="security_enforced_title">Моля, изберете начин за заключване на приложението</string>
   <string name="security_enforced_first_option">Парола за закючване</string>
   <string name="security_enforced_second_option">Шаблон за заключване</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Продължете</string>
   <!--Release Notes-->
   <string name="release_notes_header">Новото в %1$s?</string>
   <string name="release_notes_footer">Благодарим ви, че използвате %1$s.\n❤</string>

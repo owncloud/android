@@ -610,6 +610,8 @@
   <string name="security_enforced_title">Ju lutemi, përzgjidhni një mundësi për kyçje aplikacioni:</string>
   <string name="security_enforced_first_option">Kyçje me kodkalim</string>
   <string name="security_enforced_second_option">Kyçje me rregullsi</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Bëje</string>
   <!--Release Notes-->
   <string name="release_notes_header">E re në %1$s</string>
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>

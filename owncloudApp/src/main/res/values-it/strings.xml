@@ -602,6 +602,8 @@ Il Download del file inizierà automaticamente</string>
   <!--Security Enforced-->
   <string name="security_enforced_title">Selezionare un\'opzione per sbloccare l\'applicazione:</string>
   <string name="security_enforced_first_option">Blocco con codice di sicurezza</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Procedi</string>
   <!--Release Notes-->
   <string name="release_notes_footer">Grazie di usare %1$s.\n❤</string>
   <string name="release_notes_proceed">Procedi</string>

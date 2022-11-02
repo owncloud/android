@@ -609,6 +609,8 @@
   <string name="security_enforced_title">请选择一个选项来锁定应用程序：</string>
   <string name="security_enforced_first_option">密码锁</string>
   <string name="security_enforced_second_option">图案锁</string>
+  <!--Webfinger-->
+  <string name="global_proceed">继续</string>
   <!--Release Notes-->
   <string name="release_notes_header">新的%1$s</string>
   <string name="release_notes_footer">感谢您使用 %1$s.\n❤</string>

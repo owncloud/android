@@ -584,6 +584,8 @@
   <string name="security_enforced_title">โปรดเลือกตัวเลือกเพื่อล็อคแอป:</string>
   <string name="security_enforced_first_option">ล็อครหัสปลดล็อค</string>
   <string name="security_enforced_second_option">รูปแบบการล็อค</string>
+  <!--Webfinger-->
+  <string name="global_proceed">ดำเนินการ</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">ดำเนินการ</string>
 </resources>

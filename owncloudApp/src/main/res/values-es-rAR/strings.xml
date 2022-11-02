@@ -541,6 +541,8 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Bloqueo con clave</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Prosiga</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Prosiga</string>
 </resources>

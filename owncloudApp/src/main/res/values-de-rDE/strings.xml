@@ -612,6 +612,8 @@
   <string name="security_enforced_title">Bitte wählen Sie eine Option, um diese App zu sperren:</string>
   <string name="security_enforced_first_option">PIN gesperrt</string>
   <string name="security_enforced_second_option">Mustersperre</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Fortfahren</string>
   <!--Release Notes-->
   <string name="release_notes_header">Neu in %1$s</string>
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
