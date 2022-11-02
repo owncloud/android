@@ -43,10 +43,10 @@ import at.bitfire.dav4jvm.property.QuotaUsedBytes
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.webdav.properties.OCShareTypes
+import com.owncloud.android.lib.common.utils.isOneOf
 import com.owncloud.android.lib.resources.shares.ShareType
 import com.owncloud.android.lib.resources.shares.ShareType.Companion.fromValue
 import kotlinx.parcelize.Parcelize
-import com.owncloud.android.lib.common.utils.isOneOf
 import okhttp3.HttpUrl
 import timber.log.Timber
 import java.io.File
