@@ -614,6 +614,7 @@
   <string name="security_enforced_second_option">Sperre mit Muster</string>
   <!--Webfinger-->
   <string name="global_proceed">Fortfahren</string>
+  <string name="error_webfinger_username_empty">Der Benutzername ist leer</string>
   <!--Release Notes-->
   <string name="release_notes_header">Neu in %1$s</string>
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>

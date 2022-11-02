@@ -575,6 +575,7 @@
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Блокировка кодом</string>
   <!--Webfinger-->
+  <string name="global_proceed">Продолжить</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Продолжить</string>
 </resources>
