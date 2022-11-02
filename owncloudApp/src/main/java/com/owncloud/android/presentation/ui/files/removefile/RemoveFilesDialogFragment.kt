@@ -52,7 +52,6 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
      */
     override fun onConfirmation(callerTag: String) {
         fileOperationViewModel.performOperation(FileOperation.RemoveOperation(targetFiles.toList(), removeOnlyLocalCopy = false))
-        dismiss()
     }
 
     /**
@@ -60,7 +59,6 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
      */
     override fun onCancel(callerTag: String) {
         fileOperationViewModel.performOperation(FileOperation.RemoveOperation(targetFiles.toList(), removeOnlyLocalCopy = true))
-        dismiss()
     }
 
     override fun onNeutral(callerTag: String) {
