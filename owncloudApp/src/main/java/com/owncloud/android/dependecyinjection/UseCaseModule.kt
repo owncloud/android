@@ -51,6 +51,7 @@ import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
+import com.owncloud.android.domain.webfinger.usecases.GetJRDFromWebfingerHostUseCase
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -59,6 +60,7 @@ val useCaseModule = module {
     factory { LoginOAuthAsyncUseCase(get()) }
     factory { SupportsOAuth2UseCase(get()) }
     factory { GetBaseUrlUseCase(get()) }
+    factory { GetJRDFromWebfingerHostUseCase(get()) }
 
     // OAuth
     factory { OIDCDiscoveryUseCase(get()) }

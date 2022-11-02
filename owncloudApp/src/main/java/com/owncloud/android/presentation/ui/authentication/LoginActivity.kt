@@ -44,6 +44,7 @@ import androidx.core.widget.doAfterTextChanged
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.R
+import com.owncloud.android.authentication.AccountUtils.getUsernameOfAccount
 import com.owncloud.android.authentication.oauth.OAuthUtils
 import com.owncloud.android.data.authentication.KEY_USER_ID
 import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
@@ -74,6 +75,7 @@ import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticat
 import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.MdmProvider
+import com.owncloud.android.providers.MdmProvider.Companion.NO_MDM_RESTRICTION_YET
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
@@ -94,6 +96,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private var loginAction: Byte = ACTION_CREATE
     private var authTokenType: String? = null
     private var userAccount: Account? = null
+    private var username: String? = null
     private lateinit var serverBaseUrl: String
 
     private var oidcSupported = false
@@ -136,6 +139,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         if (loginAction != ACTION_CREATE) {
             binding.accountUsername.isEnabled = false
             binding.accountUsername.isFocusable = false
+            userAccount?.name?.let {
+                username = getUsernameOfAccount(it)
+            }
+
         }
 
         if (savedInstanceState == null) {
@@ -186,6 +193,13 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun initLiveDataObservers() {
         // LiveData observers
+        authenticationViewModel.webfingerHost.observe(this) { event ->
+            when (val uiResult = event.peekContent()) {
+                is UIResult.Loading -> getWebfingerIsLoading()
+                is UIResult.Success -> getWebfingerIsSuccess(uiResult)
+                is UIResult.Error -> getWebfingerIsError(uiResult)
+            }
+        }
         authenticationViewModel.serverInfo.observe(this) { event ->
             when (val uiResult = event.peekContent()) {
                 is UIResult.Loading -> getServerInfoIsLoading()
@@ -225,6 +239,37 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
+    private fun getWebfingerIsLoading() {
+        binding.webfingerStatusText.run {
+            text = getString(R.string.auth_testing_connection)
+            setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
+            isVisible = true
+        }
+    }
+
+    private fun getWebfingerIsSuccess(uiResult: UIResult.Success<String>) {
+        val serverUrl = uiResult.data ?: return
+        username = binding.webfingerUsername.text.toString()
+        binding.webfingerLayout.isVisible = false
+        binding.mainLoginLayout.isVisible = true
+        binding.hostUrlInput.setText(serverUrl)
+        checkOcServer()
+    }
+
+    private fun getWebfingerIsError(uiResult: UIResult<String>) {
+        when (uiResult.getThrowableOrNull()) {
+            is NoNetworkConnectionException -> binding.webfingerStatusText.run {
+                text = getString(R.string.error_no_network_connection)
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
+            }
+            else -> binding.webfingerStatusText.run {
+                text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
+            }
+        }
+        binding.webfingerStatusText.isVisible = true
+    }
+
     private fun checkOcServer() {
         val uri = binding.hostUrlInput.text.toString().trim()
         if (uri.isNotEmpty()) {
@@ -237,9 +282,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
-    private fun getServerInfoIsSuccess(uiResult: UIResult<ServerInfo>) {
+    private fun getServerInfoIsSuccess(uiResult: UIResult.Success<ServerInfo>) {
         updateCenteredRefreshButtonVisibility(shouldBeVisible = false)
-        uiResult.getStoredData()?.run {
+        uiResult.data?.run {
             serverBaseUrl = baseUrl
             binding.hostUrlInput.run {
                 setText(baseUrl)
@@ -278,7 +323,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 AuthenticationMethod.BEARER_TOKEN -> {
                     showOrHideBasicAuthFields(shouldBeVisible = false)
                     authTokenType = OAUTH_TOKEN_TYPE
-                    binding.loginButton.isVisible = true
+                    startOIDCOauthorization()
                 }
 
                 else -> {
@@ -461,7 +506,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             responseType = ResponseType.CODE.string,
             scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else "",
             codeChallenge = oauthViewModel.codeChallenge,
-            state = oauthViewModel.oidcState
+            state = oauthViewModel.oidcState,
+            username = username,
         )
 
         try {
@@ -692,6 +738,29 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     goToUrl(url = getString(R.string.welcome_link_url))
                 }
             } else isVisible = false
+        }
+
+        val webfingerLookupServer = mdmProvider.getBrandingString(NO_MDM_RESTRICTION_YET, R.string.webfinger_lookup_server)
+        val shouldShowWebfingerFlow = loginAction == ACTION_CREATE && webfingerLookupServer.isNotBlank()
+        binding.webfingerLayout.isVisible = shouldShowWebfingerFlow
+        binding.mainLoginLayout.isVisible = !shouldShowWebfingerFlow
+
+        if (shouldShowWebfingerFlow) {
+            binding.webfingerButton.setOnClickListener {
+                val webfingerUsername = binding.webfingerUsername.text.toString()
+                if (webfingerUsername.isNotEmpty()) {
+                    authenticationViewModel.getWebfingerHost(
+                        webfingerLookupServer,
+                        webfingerUsername
+                    )
+                } else {
+                    binding.webfingerStatusText.run {
+                        text = getString(R.string.error_webfinger_username_empty).also { Timber.d(it) }
+                        setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
+                        isVisible = true
+                    }
+                }
+            }
         }
     }
 

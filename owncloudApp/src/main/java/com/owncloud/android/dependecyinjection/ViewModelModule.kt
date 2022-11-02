@@ -63,7 +63,7 @@ val viewModelModule = module {
         PassCodeViewModel(get(), get(), action)
     }
 
-    viewModel { OCAuthenticationViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { OCAuthenticationViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { OAuthViewModel(get(), get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { SettingsSecurityViewModel(get(), get()) }

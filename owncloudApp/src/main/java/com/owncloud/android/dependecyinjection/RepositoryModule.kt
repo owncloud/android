@@ -28,6 +28,7 @@ import com.owncloud.android.data.server.repository.OCServerInfoRepository
 import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
 import com.owncloud.android.data.sharing.shares.repository.OCShareRepository
 import com.owncloud.android.data.user.repository.OCUserRepository
+import com.owncloud.android.data.webfinger.OCWebfingerRepository
 import com.owncloud.android.domain.authentication.AuthenticationRepository
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.camerauploads.FolderBackupRepository
@@ -37,6 +38,7 @@ import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.sharing.sharees.ShareeRepository
 import com.owncloud.android.domain.sharing.shares.ShareRepository
 import com.owncloud.android.domain.user.UserRepository
+import com.owncloud.android.domain.webfinger.WebfingerRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -49,4 +51,5 @@ val repositoryModule = module {
     factory<UserRepository> { OCUserRepository(get(), get()) }
     factory<OAuthRepository> { OAuthRepositoryImpl(get()) }
     factory<FolderBackupRepository> { FolderBackupRepositoryImpl(get()) }
+    factory<WebfingerRepository> { OCWebfingerRepository(get()) }
 }
