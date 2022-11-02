@@ -111,7 +111,6 @@ val useCaseModule = module {
     factory { LoginBasicAsyncUseCase(get()) }
     factory { LoginOAuthAsyncUseCase(get()) }
     factory { SupportsOAuth2UseCase(get()) }
-    factory { GetBaseUrlUseCase(get()) }
     factory { GetJRDFromWebfingerHostUseCase(get()) }
 
     // OAuth
