@@ -612,6 +612,7 @@
   <string name="security_enforced_second_option">Kyçje me rregullsi</string>
   <!--Webfinger-->
   <string name="global_proceed">Bëje</string>
+  <string name="error_webfinger_username_empty">Emër përdoruesi i zbrazët</string>
   <!--Release Notes-->
   <string name="release_notes_header">E re në %1$s</string>
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
