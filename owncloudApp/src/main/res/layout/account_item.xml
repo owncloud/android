@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2016 ownCloud GmbH.
+  @author Javier Rodríguez Pérez
+  Copyright (C) 2022 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -16,97 +16,101 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="80dp">
 
     <ImageView
         android:id="@+id/icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignParentStart="true"
-        android:layout_centerInParent="true"
         android:layout_marginStart="@dimen/standard_margin"
         android:src="@drawable/ic_account_plus"
-        />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ticker"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_alignEnd="@id/icon"
-        android:layout_alignTop="@id/icon"
-        android:layout_marginEnd="-8dp"
         android:layout_marginTop="-8dp"
+        android:layout_marginEnd="-8dp"
         android:src="@drawable/ic_current"
-        />
+        app:layout_constraintEnd_toEndOf="@id/icon"
+        app:layout_constraintTop_toTopOf="@id/icon" />
     <!-- drawable will be replaced by ic_current_white + tint in runtime;
     ic_current here as a placeholder -->
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="match_parent"
+        android:layout_width="210dp"
         android:layout_height="28dp"
-        android:layout_marginStart="@dimen/standard_margin"
-        android:layout_marginEnd="@dimen/standard_half_margin"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="4dp"
-        android:layout_toEndOf="@id/icon"
-        android:layout_toStartOf="@+id/refreshAccountButton"
-        android:layout_alignParentTop="true"
         android:gravity="bottom"
+        android:maxLines="1"
         android:text="@string/placeholder_filename"
         android:textColor="@color/textColor"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:maxLines="1"
-        android:ellipsize="end" />
+        app:layout_constraintEnd_toStartOf="@+id/refreshAccountButton"
+        app:layout_constraintStart_toEndOf="@id/ticker"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/account"
-        android:layout_width="match_parent"
+        android:layout_width="210dp"
         android:layout_height="44dp"
-        android:layout_marginStart="@dimen/standard_margin"
+        android:layout_marginStart="30dp"
         android:layout_marginEnd="@dimen/standard_half_margin"
         android:layout_marginBottom="4dp"
-        android:layout_toEndOf="@id/icon"
-        android:layout_toStartOf="@id/refreshAccountButton"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/name"
-        android:gravity="top"
+        android:ellipsize="end"
         android:text="@string/placeholder_sentence"
         android:textColor="@color/textColor"
         android:textSize="14sp"
-        android:maxLines="2"
-        android:ellipsize="end" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/refreshAccountButton"
+        app:layout_constraintStart_toEndOf="@id/ticker"
+        app:layout_constraintTop_toBottomOf="@id/name" />
 
     <ImageView
         android:id="@+id/refreshAccountButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_toStartOf="@id/passwordButton"
-        android:layout_centerInParent="true"
         android:contentDescription="@string/actionbar_sync"
         android:paddingLeft="@dimen/standard_half_padding"
         android:paddingTop="@dimen/standard_padding"
-        android:paddingBottom="@dimen/standard_padding"
         android:paddingRight="@dimen/standard_half_padding"
-        app:tint="@color/black"
-        android:src="@drawable/ic_action_refresh" />
+        android:paddingBottom="@dimen/standard_padding"
+        android:src="@drawable/ic_action_refresh"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/passwordButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
 
     <ImageView
         android:id="@+id/passwordButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_toStartOf="@id/removeButton"
-        android:layout_centerInParent="true"
         android:paddingLeft="@dimen/standard_half_padding"
         android:paddingTop="@dimen/standard_padding"
-        android:paddingBottom="@dimen/standard_padding"
         android:paddingRight="@dimen/standard_half_padding"
+        android:paddingBottom="@dimen/standard_padding"
         android:src="@drawable/ic_key"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/removeButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/black" />
 
     <ImageView
@@ -114,13 +118,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_alignParentEnd="true"
-        android:layout_centerInParent="true"
         android:paddingStart="@dimen/standard_half_padding"
         android:paddingTop="@dimen/standard_padding"
-        android:paddingBottom="@dimen/standard_padding"
         android:paddingEnd="@dimen/standard_padding"
-        app:tint="@color/black"
-        android:src="@drawable/ic_action_delete_grey" />
+        android:paddingBottom="@dimen/standard_padding"
+        android:src="@drawable/ic_action_delete_grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

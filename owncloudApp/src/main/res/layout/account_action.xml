@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2016 ownCloud GmbH.
+  @author Javier Rodríguez Pérez
+  Copyright (C) 2022 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -16,33 +16,40 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
     android:weightSum="1">
 
     <ImageView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:layout_marginStart="20dp"
-        app:tint="@color/black"
-        android:src="@drawable/ic_account_plus" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginRight="28dp"
+        android:src="@drawable/ic_account_plus"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="28dp"
-        android:layout_marginStart="20dp"
-        android:layout_weight="1"
+        android:layout_height="0dp"
         android:gravity="center_vertical"
         android:paddingEnd="@dimen/standard_padding"
         android:text="@string/placeholder_filename"
         android:textColor="@color/black"
-        android:textSize="@dimen/two_line_primary_text_size" />
+        android:textSize="@dimen/two_line_primary_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/icon"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>         
+</androidx.constraintlayout.widget.ConstraintLayout>
