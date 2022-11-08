@@ -24,6 +24,7 @@ package com.owncloud.android.data
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.room.AutoMigration
+import androidx.room.BuiltInTypeConverters
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -32,6 +33,7 @@ import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileEntity
+import com.owncloud.android.data.files.db.OCFileSyncEntity
 import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
 import com.owncloud.android.data.folderbackup.db.FolderBackupDao
 import com.owncloud.android.data.migrations.MIGRATION_27_28
@@ -56,6 +58,7 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
         FolderBackUpEntity::class,
         OCCapabilityEntity::class,
         OCFileEntity::class,
+        OCFileSyncEntity::class,
         OCShareEntity::class,
         UserQuotaEntity::class,
         OCTransferEntity::class,
@@ -101,7 +104,14 @@ abstract class OwncloudDatabase : RoomDatabase() {
                     context.applicationContext,
                     OwncloudDatabase::class.java,
                     ProviderMeta.NEW_DB_NAME
-                ).addMigrations(*ALL_MIGRATIONS)
+                )
+                    .addMigrations(*ALL_MIGRATIONS)
+                    .addTypeConverter(
+                        BuiltInTypeConverters(
+                            uuid = BuiltInTypeConverters.State.ENABLED,
+                            enums = BuiltInTypeConverters.State.INHERITED
+                        )
+                    )
                     .build()
                 INSTANCE = instance
                 instance
