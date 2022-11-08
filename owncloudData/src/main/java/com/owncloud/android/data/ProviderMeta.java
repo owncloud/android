@@ -43,6 +43,7 @@ public class ProviderMeta {
         public static final String USER_QUOTAS_TABLE_NAME = "user_quotas";
         public static final String FOLDER_BACKUP_TABLE_NAME = "folder_backup";
         public static final String TRANSFERS_TABLE_NAME = "transfers";
+        public static final String FILES_SYNC_TABLE_NAME = "files_sync";
 
         // Columns of ocshares table
         public static final String OCSHARES_SHARE_TYPE = "share_type";
