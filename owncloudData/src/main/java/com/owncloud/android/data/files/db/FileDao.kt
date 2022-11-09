@@ -26,6 +26,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
@@ -112,8 +113,21 @@ abstract class FileDao {
     @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_EVERY_ACCOUNT)
     abstract fun getFilesAvailableOfflineFromEveryAccount(): List<OCFileEntity>
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    protected abstract fun insertOrIgnore(ocFileEntity: OCFileEntity): Long
+
+    @Update
+    protected abstract fun update(ocFileEntity: OCFileEntity)
+
+    @Transaction
+    open fun upsert(ocFileEntity: OCFileEntity) = com.owncloud.android.data.upsert(
+        item = ocFileEntity,
+        insert = ::insertOrIgnore,
+        update = ::update
+    )
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(ocFileEntity: OCFileEntity): Long
+    abstract fun insertFileSync(ocFileSyncEntity: OCFileSyncEntity): Long
 
     /**
      * Make sure that the ids are set properly. We don't take care of conflicts and that stuff here.
@@ -125,10 +139,12 @@ abstract class FileDao {
         folder: OCFileEntity,
         folderContent: List<OCFileEntity>,
     ): List<OCFileEntity> {
-        val folderId = insert(folder)
+        var folderId = insertOrIgnore(folder)
+        // If it was already in database
+        if (folderId == -1L) folderId = folder.id
 
         folderContent.forEach { fileToInsert ->
-            insert(fileToInsert.apply {
+            upsert(fileToInsert.apply {
                 parentId = folderId
                 availableOfflineStatus = getNewAvailableOfflineStatus(folder.availableOfflineStatus, fileToInsert.availableOfflineStatus)
             })
@@ -145,9 +161,9 @@ abstract class FileDao {
             remotePath = ocFileEntity.remotePath
         )
         return if (localFile == null) {
-            insert(ocFileEntity)
+            insertOrIgnore(ocFileEntity)
         } else {
-            insert(ocFileEntity.copy(
+            insertOrIgnore(ocFileEntity.copy(
                 parentId = localFile.parentId,
                 lastSyncDateForData = localFile.lastSyncDateForData,
                 modifiedAtLastSyncForData = localFile.modifiedAtLastSyncForData,
@@ -169,14 +185,14 @@ abstract class FileDao {
         remoteId: String?
     ) {
         // 1. Update target size
-        insert(
+        upsert(
             targetFolder.copy(
                 length = targetFolder.length + sourceFile.length
             ).apply { id = targetFolder.id }
         )
 
         // 2. Insert a new file with common attributes and retrieved remote id
-        insert(
+        upsert(
             OCFileEntity(
                 parentId = targetFolder.id,
                 owner = targetFolder.owner,
@@ -204,7 +220,7 @@ abstract class FileDao {
         finalStoragePath: String
     ) {
         // 1. Update target size
-        insert(
+        upsert(
             targetFolder.copy(
                 length = targetFolder.length + sourceFile.length
             ).apply { id = targetFolder.id }
@@ -307,7 +323,7 @@ abstract class FileDao {
         finalRemotePath: String,
         finalStoragePath: String?
     ) {
-        insert(
+        upsert(
             sourceFile.copy(
                 parentId = targetFolder.id,
                 remotePath = finalRemotePath,
