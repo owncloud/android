@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.workers
 
 import android.accounts.Account
@@ -34,7 +37,9 @@ import com.owncloud.android.domain.exceptions.LocalStorageNotMovedException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
+import com.owncloud.android.domain.files.usecases.CleanWorkersUUIDUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
+import com.owncloud.android.domain.files.usecases.SaveDownloadWorkerUUIDUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -75,11 +80,13 @@ class DownloadFileWorker(
     private val getFileByIdUseCase: GetFileByIdUseCase by inject()
     private val saveFileOrFolderUseCase: SaveFileOrFolderUseCase by inject()
     private val cleanConflictUseCase: CleanConflictUseCase by inject()
+    private val saveDownloadWorkerUuidUseCase: SaveDownloadWorkerUUIDUseCase by inject()
+    private val cleanWorkersUuidUseCase: CleanWorkersUUIDUseCase by inject()
 
     lateinit var account: Account
     lateinit var ocFile: OCFile
 
-    lateinit var downloadRemoteFileOperation: DownloadRemoteFileOperation
+    private lateinit var downloadRemoteFileOperation: DownloadRemoteFileOperation
     private var lastPercent = 0
 
     /**
@@ -144,6 +151,13 @@ class DownloadFileWorker(
      * @see temporalFolderPath for the temporal location
      */
     private fun downloadFileToTemporalFile() {
+        saveDownloadWorkerUuidUseCase.execute(
+            SaveDownloadWorkerUUIDUseCase.Params(
+                fileId = workerParameters.inputData.getLong(KEY_PARAM_FILE_ID, -1),
+                workerUuid = id
+            )
+        )
+
         downloadRemoteFileOperation = DownloadRemoteFileOperation(
             ocFile.remotePath,
             temporalFolderPath
@@ -215,6 +229,11 @@ class DownloadFileWorker(
     private fun notifyDownloadResult(
         throwable: Throwable?
     ): Result {
+        cleanWorkersUuidUseCase.execute(
+            CleanWorkersUUIDUseCase.Params(
+                fileId = workerParameters.inputData.getLong(KEY_PARAM_FILE_ID, -1)
+            )
+        )
         if (throwable !is CancelledException) {
 
             var tickerId = if (throwable == null) {

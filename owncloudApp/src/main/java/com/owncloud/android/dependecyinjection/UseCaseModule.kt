@@ -46,6 +46,7 @@ import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUs
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.files.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
+import com.owncloud.android.domain.files.usecases.CleanWorkersUUIDUseCase
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.DisableThumbnailsForFileUseCase
@@ -61,6 +62,7 @@ import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.domain.files.usecases.SaveConflictUseCase
+import com.owncloud.android.domain.files.usecases.SaveDownloadWorkerUUIDUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
@@ -144,6 +146,8 @@ val useCaseModule = module {
     factory { SortFilesUseCase() }
     factory { SaveConflictUseCase(get()) }
     factory { CleanConflictUseCase(get()) }
+    factory { SaveDownloadWorkerUUIDUseCase(get()) }
+    factory { CleanWorkersUUIDUseCase(get()) }
 
     // Av Offline
     factory { GetFilesAvailableOfflineFromAccountUseCase(get()) }
