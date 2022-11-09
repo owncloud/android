@@ -58,6 +58,7 @@
   <string name="prefs_camera_picture_upload_summary">Автоматически загружать изображения, сделанные камерой</string>
   <string name="prefs_camera_picture_upload_path_title">Путь загрузки изображений</string>
   <string name="prefs_camera_picture_upload_on_wifi">Загрузка изображений только через wifi</string>
+  <string name="prefs_camera_picture_upload_on_charging">Загрузка изображений только во время зарядки</string>
   <string name="prefs_camera_video_upload">Загрузка видео</string>
   <string name="prefs_camera_video_upload_summary">Автоматически загружать видео, записанные камерой</string>
   <string name="prefs_camera_video_upload_path_title">Путь загрузки видео</string>
