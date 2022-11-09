@@ -3,7 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -36,6 +38,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 
 class OCFileRepository(
     private val localFileDataSource: LocalFileDataSource,
@@ -382,6 +385,18 @@ class OCFileRepository(
 
     override fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String) {
         localFileDataSource.updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory, newDirectory)
+    }
+
+    override fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID) {
+        TODO("Not yet implemented")
+    }
+
+    override fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID) {
+        localFileDataSource.saveDownloadWorkerUuid(fileId, workerUuid)
+    }
+
+    override fun cleanWorkersUuid(fileId: Long) {
+        localFileDataSource.cleanWorkersUuid(fileId)
     }
 
     private fun removeLocalFolderRecursively(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
