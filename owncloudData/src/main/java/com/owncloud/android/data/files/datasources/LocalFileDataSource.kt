@@ -3,7 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,6 +25,7 @@ package com.owncloud.android.data.files.datasources
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.OCFile
 import kotlinx.coroutines.flow.Flow
+import java.util.UUID
 
 interface LocalFileDataSource {
     fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String)
@@ -52,4 +55,7 @@ interface LocalFileDataSource {
     fun disableThumbnailsForFile(fileId: Long)
     fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
     fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
+    fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID)
+    fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID)
+    fun cleanWorkersUuid(fileId: Long)
 }

@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,12 +18,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.files.datasources.implementation
 
 import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileEntity
+import com.owncloud.android.data.files.db.OCFileSyncEntity
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
@@ -30,6 +34,7 @@ import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.UUID
 
 class OCLocalFileDataSource(
     private val fileDao: FileDao,
@@ -139,7 +144,7 @@ class OCLocalFileDataSource(
     }
 
     override fun saveFile(file: OCFile) {
-        fileDao.insert(file.toEntity())
+        fileDao.upsert(file.toEntity())
     }
 
     override fun saveConflict(fileId: Long, eTagInConflict: String) {
@@ -177,6 +182,30 @@ class OCLocalFileDataSource(
 
     override fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String) {
         fileDao.updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory, newDirectory)
+    }
+
+    override fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID) {
+        TODO("Not yet implemented")
+    }
+
+    override fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID) {
+        val fileSyncEntity = OCFileSyncEntity(
+            fileId = fileId,
+            uploadWorkerUuid = null,
+            downloadWorkerUuid = workerUuid,
+            isSynchronizing = true
+        )
+        fileDao.insertFileSync(fileSyncEntity)
+    }
+
+    override fun cleanWorkersUuid(fileId: Long) {
+        val fileSyncEntity = OCFileSyncEntity(
+            fileId = fileId,
+            uploadWorkerUuid = null,
+            downloadWorkerUuid = null,
+            isSynchronizing = false
+        )
+        fileDao.insertFileSync(fileSyncEntity)
     }
 
     companion object {

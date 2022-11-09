@@ -26,6 +26,7 @@ import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import kotlinx.coroutines.flow.Flow
+import java.util.UUID
 
 interface FileRepository {
     fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
@@ -50,6 +51,9 @@ interface FileRepository {
     fun saveFile(file: OCFile)
     fun saveConflict(fileId: Long, eTagInConflict: String)
     fun cleanConflict(fileId: Long)
+    fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID)
+    fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID)
+    fun cleanWorkersUuid(fileId: Long)
 
     fun disableThumbnailsForFile(fileId: Long)
     fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
