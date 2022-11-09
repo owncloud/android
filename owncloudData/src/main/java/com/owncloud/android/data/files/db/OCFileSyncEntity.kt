@@ -31,13 +31,13 @@ import java.util.UUID
     foreignKeys = [ForeignKey(
         entity = OCFileEntity::class,
         parentColumns = arrayOf("id"),
-        childColumns = arrayOf("idFile"),
+        childColumns = arrayOf("fileId"),
         onDelete = ForeignKey.CASCADE
     )]
 )
 data class OCFileSyncEntity(
-    @PrimaryKey val idFile: Long,
-    val uploadWorkerUuid: UUID,
-    val downloadWorkerUuid: UUID,
+    @PrimaryKey val fileId: Long,
+    val uploadWorkerUuid: UUID?,
+    val downloadWorkerUuid: UUID?,
     val isSynchronizing: Boolean
 )

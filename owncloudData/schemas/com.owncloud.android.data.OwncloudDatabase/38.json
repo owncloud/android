@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 38,
-    "identityHash": "0576a21bcf4840964e0ff9cd5e256499",
+    "identityHash": "71dab0c694d243e067f4087932cf1c3d",
     "entities": [
       {
         "tableName": "folder_backup",
@@ -481,11 +481,11 @@
       },
       {
         "tableName": "files_sync",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`idFile` INTEGER NOT NULL, `uploadWorkerUuid` BLOB NOT NULL, `downloadWorkerUuid` BLOB NOT NULL, `isSynchronizing` INTEGER NOT NULL, PRIMARY KEY(`idFile`), FOREIGN KEY(`idFile`) REFERENCES `files`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`fileId` INTEGER NOT NULL, `uploadWorkerUuid` BLOB, `downloadWorkerUuid` BLOB, `isSynchronizing` INTEGER NOT NULL, PRIMARY KEY(`fileId`), FOREIGN KEY(`fileId`) REFERENCES `files`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
-            "fieldPath": "idFile",
-            "columnName": "idFile",
+            "fieldPath": "fileId",
+            "columnName": "fileId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -493,13 +493,13 @@
             "fieldPath": "uploadWorkerUuid",
             "columnName": "uploadWorkerUuid",
             "affinity": "BLOB",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "downloadWorkerUuid",
             "columnName": "downloadWorkerUuid",
             "affinity": "BLOB",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "isSynchronizing",
@@ -510,7 +510,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "idFile"
+            "fileId"
           ],
           "autoGenerate": false
         },
@@ -521,7 +521,7 @@
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "idFile"
+              "fileId"
             ],
             "referencedColumns": [
               "id"
@@ -755,7 +755,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0576a21bcf4840964e0ff9cd5e256499')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '71dab0c694d243e067f4087932cf1c3d')"
     ]
   }
 }
