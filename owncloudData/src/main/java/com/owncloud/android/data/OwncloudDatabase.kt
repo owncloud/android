@@ -24,7 +24,6 @@ package com.owncloud.android.data
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.room.AutoMigration
-import androidx.room.BuiltInTypeConverters
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -106,12 +105,6 @@ abstract class OwncloudDatabase : RoomDatabase() {
                     ProviderMeta.NEW_DB_NAME
                 )
                     .addMigrations(*ALL_MIGRATIONS)
-                    .addTypeConverter(
-                        BuiltInTypeConverters(
-                            uuid = BuiltInTypeConverters.State.ENABLED,
-                            enums = BuiltInTypeConverters.State.INHERITED
-                        )
-                    )
                     .build()
                 INSTANCE = instance
                 instance
