@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Fernando Sanz Velasco
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -22,7 +24,7 @@ package com.owncloud.android.presentation.diffutils
 
 import androidx.recyclerview.widget.DiffUtil
 import com.owncloud.android.domain.files.model.FileListOption
-import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
 
 class FileListDiffCallback(
@@ -48,8 +50,8 @@ class FileListDiffCallback(
             return true
         }
 
-        if (oldItem is OCFile && newItem is OCFile) {
-            return oldItem.id == newItem.id
+        if (oldItem is OCFileWithSyncInfo && newItem is OCFileWithSyncInfo) {
+            return oldItem.file.id == newItem.file.id
         }
 
         if (oldItem is OCFooterFile && newItem is OCFooterFile) {

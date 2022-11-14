@@ -24,6 +24,7 @@ package com.owncloud.android.data.files.datasources
 
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
@@ -38,9 +39,12 @@ interface LocalFileDataSource {
     fun getSearchAvailableOfflineFolderContent(folderId: Long, search: String): List<OCFile>
     fun getSearchSharedByLinkFolderContent(folderId: Long, search: String): List<OCFile>
     fun getFolderContentAsStream(folderId: Long): Flow<List<OCFile>>
+    fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>>
     fun getFolderImages(folderId: Long): List<OCFile>
     fun getSharedByLinkForAccountAsStream(owner: String): Flow<List<OCFile>>
+    fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
     fun getFilesAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFile>>
+    fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
     fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
     fun moveFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, finalStoragePath: String)
