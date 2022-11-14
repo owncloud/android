@@ -41,6 +41,7 @@ import com.owncloud.android.databinding.ListFooterBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
 import com.owncloud.android.presentation.diffutils.FileListDiffCallback
 import com.owncloud.android.utils.DisplayUtils
@@ -58,7 +59,7 @@ class FileListAdapter(
     private var account: Account? = AccountUtils.getCurrentOwnCloudAccount(context)
     private var fileListOption: FileListOption = FileListOption.ALL_FILES
 
-    fun updateFileList(filesToAdd: List<OCFile>, fileListOption: FileListOption) {
+    fun updateFileList(filesToAdd: List<OCFileWithSyncInfo>, fileListOption: FileListOption) {
         val listWithFooter = mutableListOf<Any>()
         listWithFooter.addAll(filesToAdd)
 
@@ -133,7 +134,7 @@ class FileListAdapter(
                 layoutManager.spanCount == 1 -> {
                     ViewType.LIST_ITEM.ordinal
                 }
-                (files[position] as OCFile).isImage -> {
+                (files[position] as OCFileWithSyncInfo).file.isImage -> {
                     ViewType.GRID_IMAGE.ordinal
                 }
                 else -> {
@@ -148,8 +149,9 @@ class FileListAdapter(
         val checkedPositions = getSelectedItems()
 
         for (i in checkedPositions) {
-            if (files[i] is OCFile) {
-                checkedItems.add(files[i] as OCFile)
+            if (files[i] is OCFileWithSyncInfo) {
+                val fileWithSyncInfo = files[i] as OCFileWithSyncInfo
+                checkedItems.add(fileWithSyncInfo.file)
             }
         }
 
@@ -172,7 +174,8 @@ class FileListAdapter(
 
         if (viewType != ViewType.FOOTER.ordinal) { // Is Item
 
-            val file = files[position] as OCFile
+            val fileWithSyncInfo = files[position] as OCFileWithSyncInfo
+            val file = fileWithSyncInfo.file
             val name = file.fileName
             val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail).apply {
                 tag = file.id
@@ -215,7 +218,7 @@ class FileListAdapter(
                 }
             }
 
-            setIconPinAccordingToFilesLocalState(holder.itemView.findViewById(R.id.localFileIndicator), file)
+            setIconPinAccordingToFilesLocalState(holder.itemView.findViewById(R.id.localFileIndicator), fileWithSyncInfo)
 
             holder.itemView.setOnClickListener {
                 listener.onItemClick(
@@ -293,14 +296,14 @@ class FileListAdapter(
         }
     }
 
-    private fun manageListOfFilesAndGenerateText(list: List<OCFile>): String {
+    private fun manageListOfFilesAndGenerateText(list: List<OCFileWithSyncInfo>): String {
         var filesCount = 0
         var foldersCount = 0
-        for (file in list) {
-            if (file.isFolder) {
+        for (fileWithSyncInfo in list) {
+            if (fileWithSyncInfo.file.isFolder) {
                 foldersCount++
             } else {
-                if (!file.isHidden) {
+                if (!fileWithSyncInfo.file.isHidden) {
                     filesCount++
                 }
             }
@@ -309,11 +312,16 @@ class FileListAdapter(
         return generateFooterText(filesCount, foldersCount)
     }
 
-    private fun setIconPinAccordingToFilesLocalState(localStateView: ImageView, file: OCFile) {
+    private fun setIconPinAccordingToFilesLocalState(localStateView: ImageView, fileWithSyncInfo: OCFileWithSyncInfo) {
         // local state
         localStateView.bringToFront()
         localStateView.isVisible = false
-        if (file.etagInConflict != null) {
+
+        val file = fileWithSyncInfo.file
+        if (fileWithSyncInfo.isSynchronizing) {
+            localStateView.setImageResource(R.drawable.sync_pin)
+            localStateView.visibility = View.VISIBLE
+        } else if (file.etagInConflict != null) {
             // conflict
             localStateView.setImageResource(R.drawable.error_pin)
             localStateView.visibility = View.VISIBLE

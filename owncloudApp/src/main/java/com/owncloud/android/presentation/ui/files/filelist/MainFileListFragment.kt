@@ -89,7 +89,7 @@ class MainFileListFragment : Fragment(),
     SortOptionsView.CreateFolderListener,
     SortOptionsView.SortOptionsListener {
 
-    private val mainFileListViewModel by viewModel<MainFileListViewModel>() {
+    private val mainFileListViewModel by viewModel<MainFileListViewModel> {
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
             requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY),
