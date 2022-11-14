@@ -99,11 +99,11 @@ class GetRemoteShareesOperation
             .appendQueryParameter(PARAM_PER_PAGE, perPage.toString())
             .build()
 
-    private fun parseResponse(response: String): ShareeOcsResponse? {
+    private fun parseResponse(response: String?): ShareeOcsResponse? {
         val moshi = Moshi.Builder().build()
         val type: Type = Types.newParameterizedType(CommonOcsResponse::class.java, ShareeOcsResponse::class.java)
         val adapter: JsonAdapter<CommonOcsResponse<ShareeOcsResponse>> = moshi.adapter(type)
-        return adapter.fromJson(response)!!.ocs.data
+        return response?.let { adapter.fromJson(it)?.ocs?.data }
     }
 
     private fun onResultUnsuccessful(
@@ -123,7 +123,7 @@ class GetRemoteShareesOperation
     private fun onRequestSuccessful(response: String?): RemoteOperationResult<ShareeOcsResponse> {
         val result = RemoteOperationResult<ShareeOcsResponse>(OK)
         Timber.d("Successful response: $response")
-        result.data = parseResponse(response!!)
+        result.data = parseResponse(response)
         Timber.d("*** Get Users or groups completed ")
         return result
     }
