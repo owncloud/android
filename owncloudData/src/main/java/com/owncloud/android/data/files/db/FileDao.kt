@@ -36,6 +36,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import kotlinx.coroutines.flow.Flow
 import java.io.File.separatorChar
+import java.util.UUID
 
 @Dao
 abstract class FileDao {
@@ -83,6 +84,11 @@ abstract class FileDao {
     abstract fun getFolderContent(
         folderId: Long
     ): List<OCFileEntity>
+
+    @Query(SELECT_FOLDER_CONTENT)
+    abstract fun getFolderContentWithSyncInfo(
+        folderId: Long
+    ): List<OCFileAndFileSync>
 
     @Query(SELECT_FOLDER_CONTENT)
     abstract fun getFolderContentAsStream(
@@ -143,6 +149,47 @@ abstract class FileDao {
         insert = ::insertOrIgnore,
         update = ::update
     )
+
+    @Transaction
+    open fun updateSyncStatusForFile(id: Long, workerUuid: UUID?) {
+        val fileEntity = getFileById(id)
+
+        if (fileEntity?.parentId != ROOT_PARENT_ID) {
+            val fileSyncEntity = if (workerUuid == null) {
+                OCFileSyncEntity(
+                    fileId = id,
+                    uploadWorkerUuid = null,
+                    downloadWorkerUuid = null,
+                    isSynchronizing = false
+                )
+            } else {
+                OCFileSyncEntity(
+                    fileId = id,
+                    uploadWorkerUuid = null,
+                    downloadWorkerUuid = workerUuid,
+                    isSynchronizing = true
+                )
+            }
+            insertFileSync(fileSyncEntity)
+
+            // Check if there is any more file synchronizing in this folder, in such case don't update parent's sync status
+            var cleanSyncInParent = true
+            if (workerUuid == null) {
+                val folderContent = getFolderContentWithSyncInfo(fileEntity?.parentId!!)
+                var indexFileInFolder = 0
+                while (cleanSyncInParent && indexFileInFolder < folderContent.size) {
+                    val child = folderContent[indexFileInFolder]
+                    if (child.fileSync?.isSynchronizing == true) {
+                        cleanSyncInParent = false
+                    }
+                    indexFileInFolder++
+                }
+            }
+            if (workerUuid != null || cleanSyncInParent) {
+                updateSyncStatusForFile(fileEntity?.parentId!!, workerUuid)
+            }
+        }
+    }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertFileSync(ocFileSyncEntity: OCFileSyncEntity): Long
