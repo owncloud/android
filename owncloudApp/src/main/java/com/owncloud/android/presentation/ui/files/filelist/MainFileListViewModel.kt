@@ -33,12 +33,12 @@ import com.owncloud.android.datamodel.OCFile.ROOT_PATH
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCase
-import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStreamUseCase
-import com.owncloud.android.domain.files.usecases.SortFilesUseCase
+import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.extensions.isDownloadPending
@@ -48,7 +48,6 @@ import com.owncloud.android.presentation.ui.files.SortOrder.Companion.PREF_FILE_
 import com.owncloud.android.presentation.ui.files.SortType
 import com.owncloud.android.presentation.ui.files.SortType.Companion.PREF_FILE_LIST_SORT_TYPE
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
-import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER
@@ -68,16 +67,14 @@ import com.owncloud.android.domain.files.usecases.SortType.Companion as SortType
 
 class MainFileListViewModel(
     private val getFolderContentAsStreamUseCase: GetFolderContentAsStreamUseCase,
-    private val getSearchFolderContentUseCase: GetSearchFolderContentUseCase,
     private val getSharedByLinkForAccountAsStreamUseCase: GetSharedByLinkForAccountAsStreamUseCase,
     private val getFilesAvailableOfflineFromAccountAsStreamUseCase: GetFilesAvailableOfflineFromAccountAsStreamUseCase,
     private val getFileByIdUseCase: GetFileByIdUseCase,
     private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
-    private val sortFilesUseCase: SortFilesUseCase,
+    private val sortFilesWithSyncInfoUseCase: SortFilesWithSyncInfoUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
-    private val contextProvider: ContextProvider,
     private val workManager: WorkManager,
     accountNameParam: String,
     initialFolderToDisplay: OCFile,
@@ -161,10 +158,10 @@ class MainFileListViewModel(
 
     fun isGridModeSetAsPreferred() = sharedPreferencesProvider.getBoolean(RECYCLER_VIEW_PREFERRED, false)
 
-    private fun sortList(files: List<OCFile>, sortTypeAndOrder: Pair<SortType, SortOrder>): List<OCFile> {
-        return sortFilesUseCase.execute(
-            SortFilesUseCase.Params(
-                listOfFiles = files,
+    private fun sortList(filesWithSyncInfo: List<OCFileWithSyncInfo>, sortTypeAndOrder: Pair<SortType, SortOrder>): List<OCFileWithSyncInfo> {
+        return sortFilesWithSyncInfoUseCase.execute(
+            SortFilesWithSyncInfoUseCase.Params(
+                listOfFiles = filesWithSyncInfo,
                 sortType = SortTypeDomain.fromPreferences(sortTypeAndOrder.first.ordinal),
                 ascending = sortTypeAndOrder.second == SortOrder.SORT_ORDER_ASCENDING
             )
@@ -296,7 +293,7 @@ class MainFileListViewModel(
     private fun retrieveFlowForAllFiles(
         currentFolderDisplayed: OCFile,
         accountName: String,
-    ): Flow<List<OCFile>> =
+    ): Flow<List<OCFileWithSyncInfo>> =
         getFolderContentAsStreamUseCase.execute(
             GetFolderContentAsStreamUseCase.Params(
                 folderId = currentFolderDisplayed.id
@@ -311,7 +308,7 @@ class MainFileListViewModel(
     private fun retrieveFlowForShareByLink(
         currentFolderDisplayed: OCFile,
         accountName: String,
-    ): Flow<List<OCFile>> =
+    ): Flow<List<OCFileWithSyncInfo>> =
         if (currentFolderDisplayed.remotePath == ROOT_PATH) {
             getSharedByLinkForAccountAsStreamUseCase.execute(GetSharedByLinkForAccountAsStreamUseCase.Params(accountName))
         } else {
@@ -325,13 +322,14 @@ class MainFileListViewModel(
     private fun retrieveFlowForAvailableOffline(
         currentFolderDisplayed: OCFile,
         accountName: String,
-    ): Flow<List<OCFile>> = if (currentFolderDisplayed.remotePath == ROOT_PATH) {
-        getFilesAvailableOfflineFromAccountAsStreamUseCase.execute(GetFilesAvailableOfflineFromAccountAsStreamUseCase.Params(accountName))
-    } else {
-        retrieveFlowForAllFiles(currentFolderDisplayed, accountName)
-    }
+    ): Flow<List<OCFileWithSyncInfo>> =
+        if (currentFolderDisplayed.remotePath == ROOT_PATH) {
+            getFilesAvailableOfflineFromAccountAsStreamUseCase.execute(GetFilesAvailableOfflineFromAccountAsStreamUseCase.Params(accountName))
+        } else {
+            retrieveFlowForAllFiles(currentFolderDisplayed, accountName)
+        }
 
-    private fun Flow<List<OCFile>>.toFileListUiState(
+    private fun Flow<List<OCFileWithSyncInfo>>.toFileListUiState(
         currentFolderDisplayed: OCFile,
         accountName: String,
         fileListOption: FileListOption,
@@ -341,8 +339,8 @@ class MainFileListViewModel(
         FileListUiState.Success(
             accountName = accountName,
             folderToDisplay = currentFolderDisplayed,
-            folderContent = folderContent.filter { file ->
-                file.fileName.contains(searchFilter ?: "", ignoreCase = true) && (showHiddenFiles || !file.fileName.startsWith("."))
+            folderContent = folderContent.filter { fileWithSyncInfo ->
+                fileWithSyncInfo.file.fileName.contains(searchFilter ?: "", ignoreCase = true) && (showHiddenFiles || !fileWithSyncInfo.file.fileName.startsWith("."))
             }.let { sortList(it, sortTypeAndOrder) },
             fileListOption = fileListOption,
             searchFilter = searchFilter,
@@ -354,7 +352,7 @@ class MainFileListViewModel(
         data class Success(
             val accountName: String,
             val folderToDisplay: OCFile?,
-            val folderContent: List<OCFile>,
+            val folderContent: List<OCFileWithSyncInfo>,
             val fileListOption: FileListOption,
             val searchFilter: String?,
         ) : FileListUiState

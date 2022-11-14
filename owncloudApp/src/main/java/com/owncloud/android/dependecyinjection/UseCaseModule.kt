@@ -65,6 +65,7 @@ import com.owncloud.android.domain.files.usecases.SaveConflictUseCase
 import com.owncloud.android.domain.files.usecases.SaveDownloadWorkerUUIDUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
+import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
@@ -144,6 +145,7 @@ val useCaseModule = module {
     factory { SynchronizeFolderUseCase(get(), get()) }
     factory { DisableThumbnailsForFileUseCase(get()) }
     factory { SortFilesUseCase() }
+    factory { SortFilesWithSyncInfoUseCase() }
     factory { SaveConflictUseCase(get()) }
     factory { CleanConflictUseCase(get()) }
     factory { SaveDownloadWorkerUUIDUseCase(get()) }
