@@ -26,7 +26,6 @@ import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileAndFileSync
 import com.owncloud.android.data.files.db.OCFileEntity
-import com.owncloud.android.data.files.db.OCFileSyncEntity
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
@@ -206,23 +205,11 @@ class OCLocalFileDataSource(
     }
 
     override fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID) {
-        val fileSyncEntity = OCFileSyncEntity(
-            fileId = fileId,
-            uploadWorkerUuid = null,
-            downloadWorkerUuid = workerUuid,
-            isSynchronizing = true
-        )
-        fileDao.insertFileSync(fileSyncEntity)
+        fileDao.updateSyncStatusForFile(fileId, workerUuid)
     }
 
     override fun cleanWorkersUuid(fileId: Long) {
-        val fileSyncEntity = OCFileSyncEntity(
-            fileId = fileId,
-            uploadWorkerUuid = null,
-            downloadWorkerUuid = null,
-            isSynchronizing = false
-        )
-        fileDao.insertFileSync(fileSyncEntity)
+        fileDao.updateSyncStatusForFile(fileId, null)
     }
 
     companion object {
