@@ -24,6 +24,7 @@ package com.owncloud.android.data.files.datasources.implementation
 import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.db.FileDao
+import com.owncloud.android.data.files.db.OCFileAndFileSync
 import com.owncloud.android.data.files.db.OCFileEntity
 import com.owncloud.android.data.files.db.OCFileSyncEntity
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
@@ -32,6 +33,7 @@ import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.UUID
@@ -101,18 +103,33 @@ class OCLocalFileDataSource(
             folderContent.map { it.toModel() }
         }
 
+    override fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>> =
+        fileDao.getFolderContentWithSyncInfoAsStream(folderId = folderId).map { folderContent ->
+            folderContent.map { it.toModel() }
+        }
+
     override fun getFolderImages(folderId: Long): List<OCFile> =
         fileDao.getFolderByMimeType(folderId = folderId, mimeType = MIME_PREFIX_IMAGE).map {
             it.toModel()
         }
 
     override fun getSharedByLinkForAccountAsStream(owner: String): Flow<List<OCFile>> =
-        fileDao.getFilesSharedByLink(accountOwner = owner).map { fileList ->
+        fileDao.getFilesSharedByLinkAsStream(accountOwner = owner).map { fileList ->
+            fileList.map { it.toModel() }
+        }
+
+    override fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
+        fileDao.getFilesWithSyncInfoSharedByLinkAsStream(accountOwner = owner).map { fileList ->
             fileList.map { it.toModel() }
         }
 
     override fun getFilesAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFile>> =
         fileDao.getFilesAvailableOfflineFromAccountAsStream(owner).map { fileList ->
+            fileList.map { it.toModel() }
+        }
+
+    override fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
+        fileDao.getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner).map { fileList ->
             fileList.map { it.toModel() }
         }
 
@@ -265,4 +282,13 @@ class OCLocalFileDataSource(
                 name = fileName
             ).apply { this@toEntity.id?.let { modelId -> this.id = modelId } }
     }
+
+    @VisibleForTesting
+    fun OCFileAndFileSync.toModel(): OCFileWithSyncInfo =
+        OCFileWithSyncInfo(
+            file = file.toModel(),
+            uploadWorkerUuid = fileSync?.uploadWorkerUuid,
+            downloadWorkerUuid = fileSync?.downloadWorkerUuid,
+            isSynchronizing = fileSync?.isSynchronizing == true,
+        )
 }
