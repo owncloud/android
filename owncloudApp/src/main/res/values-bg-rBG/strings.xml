@@ -21,8 +21,8 @@
   <string name="drawer_item_shared_by_link_files">Споделяне с връзка</string>
   <string name="drawer_item_settings">Настройки</string>
   <string name="drawer_item_uploads_list">Качено</string>
-  <string name="drawer_close">Затвори</string>
-  <string name="drawer_open">Отвори</string>
+  <string name="drawer_close">Затваряне</string>
+  <string name="drawer_open">Отваряне</string>
   <string name="drawer_loading_quota">Зареждане на квота</string>
   <string name="drawer_quota">%1$s от %2$s използвани (%3$s%%)</string>
   <string name="drawer_unavailable_free_storage">%1$s в употреба</string>
@@ -101,8 +101,8 @@
   <string name="pattern_not_same_pattern">Схемите не са еднакви</string>
   <string name="pattern_error_set">Възникна грешка при настройването на заключването със схема</string>
   <string name="pattern_error_remove">Възникна грешка при премахването на заключването със схема</string>
-  <string name="pattern_already_set">Заключването със схема и парола не може да бъде активно едновременно, моля деактивирайте първо схемата</string>
-  <string name="passcode_already_set">Заключването със схема и парола не може да бъде активно едновременно, моля деактивирайте първо паролата</string>
+  <string name="pattern_already_set">Заключването със схема и парола не може да бъде едновременно активно, моля деактивирайте първо схемата</string>
+  <string name="passcode_already_set">Заключването със схема и парола не може да бъде едновременно активно, моля деактивирайте първо паролата</string>
   <string name="pattern_no_longer_required">Схемата няма повече да бъде изисквана</string>
   <string name="pattern_configure_your_pattern_explanation">Схемата ще бъде искана при всяко стартиране на приложението</string>
   <string name="document_provider_locked">Заключено</string>
@@ -118,7 +118,7 @@
   <string name="auth_failure_snackbar">Удостоверяването е неуспешно</string>
   <string name="server_not_supported">Вашата версия на сървъра е по-ниска от 10 и не се поддържа, моля надстройте вашия сървър до по-нова версия</string>
   <string name="auth_failure_snackbar_action">Промяна на профила</string>
-  <string name="auth_oauth_failure">Токенът за достъп е изтекъл или е невалиден. Влезте отново за да възстановите достъпа</string>
+  <string name="auth_oauth_failure">Токенът за достъп е изтекъл или е невалиден. Влезте отново, за да възстановите достъпа</string>
   <string name="auth_oauth_failure_snackbar_action">Регистрация</string>
   <string name="auth_check_server">Проверка на сървъра</string>
   <string name="auth_host_url">Адрес на сървъра https://…</string>
@@ -256,7 +256,7 @@
   <string name="pass_code_configure_your_pass_code_migration">Въведете нова %1$d-цифрова парола</string>
   <string name="pass_code_configure_your_pass_code_explanation">Паролата ще се изисква при всяко стартиране на приложението</string>
   <string name="pass_code_reenter_your_pass_code">Моля, въведете отново паролата</string>
-  <string name="pass_code_remove_your_pass_code">Премахване на паролата</string>
+  <string name="pass_code_remove_your_pass_code">Премахване на парола</string>
   <string name="pass_code_mismatch">Паролите не съвпадат</string>
   <string name="pass_code_wrong">Грешна парола</string>
   <string name="pass_code_error_set">Възникна грешка при настройването на заключване с парола</string>
@@ -342,7 +342,7 @@
   <string name="rename_dialog_title">Въведете ново име</string>
   <string name="available_offline_inherited_msg">Папката, която съдържа този файл е достъпна офлайн</string>
   <string name="rename_local_fail_msg">Локалното копие не може да бъде преименувано; опитайте с друго име</string>
-  <string name="rename_server_fail_msg">Преименуването не можа да бъде завършено</string>
+  <string name="rename_server_fail_msg">Преименуването не можe да бъде завършено</string>
   <string name="sync_file_fail_msg">Неуспешна проверка на отдалечения файл</string>
   <string name="sync_file_nothing_to_do_msg">Съдържанието на файла е вече синхронизирано</string>
   <string name="create_dir_fail_msg">Папката не може да бъде създадена</string>
@@ -539,7 +539,7 @@
   <string name="prefs_privacy_policy">Политика за поверителност</string>
   <string name="privacy_policy_error">Възникна грешка:</string>
   <string name="service_unavailable">Сървърът не е наличен</string>
-  <string name="streaming_certificate_error">Потокът не може да се инициализира, защото сертификатът на вашия сървър не е доверен. Изтеглянето на файловете ще започне автоматично</string>
+  <string name="streaming_certificate_error">Потокът не може да се инициализира, защото сертификатът на вашия сървър не е надежден. Изтеглянето на файловете ще започне автоматично</string>
   <string name="streaming_unrecognized_input">Този видео формат не се поддържа</string>
   <string name="streaming_file_not_found_error">Този видео файл вече не е достъпен на сървъра</string>
   <string name="streaming_crossed_redirection">Потокът не е разрешен чрез кръстосани пренасочвания</string>
