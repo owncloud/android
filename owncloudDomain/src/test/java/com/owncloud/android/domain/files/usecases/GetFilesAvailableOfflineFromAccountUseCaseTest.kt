@@ -21,7 +21,7 @@ import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOf
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.testutil.OC_AVAILABLE_OFFLINE_FILES
-import com.owncloud.android.testutil.OC_EMPTY_FILES
+import com.owncloud.android.testutil.OC_FILES_EMPTY
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -48,12 +48,12 @@ class GetFilesAvailableOfflineFromAccountUseCaseTest {
 
     @Test
     fun `get files available offline - ok - empty list`() {
-        every { repository.getFilesAvailableOfflineFromAccount(useCaseParams.owner) } returns OC_EMPTY_FILES
+        every { repository.getFilesAvailableOfflineFromAccount(useCaseParams.owner) } returns OC_FILES_EMPTY
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
-        Assert.assertEquals(OC_EMPTY_FILES, useCaseResult.getDataOrNull())
+        Assert.assertEquals(OC_FILES_EMPTY, useCaseResult.getDataOrNull())
 
         verify(exactly = 1) { repository.getFilesAvailableOfflineFromAccount(useCaseParams.owner) }
     }

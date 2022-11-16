@@ -1,7 +1,9 @@
-/*
+/**
  * ownCloud Android client application
  *
  * @author Fernando Sanz Velasco
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,12 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.files.FileRepository
-import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.testutil.OC_EMPTY_FILES
-import com.owncloud.android.testutil.OC_FILES
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
+import com.owncloud.android.testutil.OC_FILES_WITH_SYNC_INFO
+import com.owncloud.android.testutil.OC_FILES_WITH_SYNC_INFO_EMPTY
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -41,25 +44,25 @@ class GetSharedByLinkForAccountAsStreamUseCaseTest {
 
     @Test
     fun `get files shared by link - ok`() = runTest {
-        every { repository.getSharedByLinkForAccountAsStream(useCaseParams.owner) } returns flowOf(OC_FILES)
+        every { repository.getSharedByLinkWithSyncInfoForAccountAsStream(useCaseParams.owner) } returns flowOf(OC_FILES_WITH_SYNC_INFO)
 
         val useCaseResult = useCase.execute(useCaseParams)
-        val listEmittedByFlow: List<OCFile> = useCaseResult.first()
+        val listEmittedByFlow: List<OCFileWithSyncInfo> = useCaseResult.first()
 
-        Assert.assertTrue(listEmittedByFlow.containsAll(OC_FILES))
+        Assert.assertTrue(listEmittedByFlow.containsAll(OC_FILES_WITH_SYNC_INFO))
 
-        verify(exactly = 1) { repository.getSharedByLinkForAccountAsStream(useCaseParams.owner) }
+        verify(exactly = 1) { repository.getSharedByLinkWithSyncInfoForAccountAsStream(useCaseParams.owner) }
     }
 
     @Test
     fun `get files shared by link - ok - empty list`() = runTest {
-        every { repository.getSharedByLinkForAccountAsStream(useCaseParams.owner) } returns flowOf(OC_EMPTY_FILES)
+        every { repository.getSharedByLinkWithSyncInfoForAccountAsStream(useCaseParams.owner) } returns flowOf(OC_FILES_WITH_SYNC_INFO_EMPTY)
 
         val useCaseResult = useCase.execute(useCaseParams)
-        val listEmittedByFlow: List<OCFile> = useCaseResult.first()
+        val listEmittedByFlow: List<OCFileWithSyncInfo> = useCaseResult.first()
 
         Assert.assertTrue(listEmittedByFlow.isEmpty())
 
-        verify(exactly = 1) { repository.getSharedByLinkForAccountAsStream(useCaseParams.owner) }
+        verify(exactly = 1) { repository.getSharedByLinkWithSyncInfoForAccountAsStream(useCaseParams.owner) }
     }
 }
