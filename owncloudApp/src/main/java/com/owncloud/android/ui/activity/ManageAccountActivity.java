@@ -64,13 +64,13 @@ import static org.koin.java.KoinJavaComponent.inject;
 /**
  * An Activity that allows the user to manage accounts.
  */
-public class ManageAccountsActivity extends FileActivity
+public class ManageAccountActivity extends FileActivity
         implements
         AccountListAdapter.AccountListAdapterListener,
         AccountManagerCallback<Boolean> {
 
-    public static final String KEY_ACCOUNT_LIST_CHANGED = "ACCOUNT_LIST_CHANGED";
-    public static final String KEY_CURRENT_ACCOUNT_CHANGED = "CURRENT_ACCOUNT_CHANGED";
+    public static final String KEY_ACCOUNT_LIST_CHANGED_ = "ACCOUNT_LIST_CHANGED";
+    public static final String KEY_CURRENT_ACCOUNT_CHANGED_ = "CURRENT_ACCOUNT_CHANGED";
 
     private ListView mListView;
     private final Handler mHandler = new Handler();
@@ -95,7 +95,7 @@ public class ManageAccountsActivity extends FileActivity
 
         setContentView(R.layout.accounts_layout);
 
-        mListView = findViewById(R.id.account_list);
+        mListView = findViewById(R.id.account_list_recycler_view);
         mListView.setFilterTouchesWhenObscured(
                 PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getApplicationContext())
         );
@@ -137,8 +137,8 @@ public class ManageAccountsActivity extends FileActivity
     @Override
     public void onBackPressed() {
         Intent resultIntent = new Intent();
-        resultIntent.putExtra(KEY_ACCOUNT_LIST_CHANGED, hasAccountListChanged());
-        resultIntent.putExtra(KEY_CURRENT_ACCOUNT_CHANGED, hasCurrentAccountChanged());
+        resultIntent.putExtra(KEY_ACCOUNT_LIST_CHANGED_, hasAccountListChanged());
+        resultIntent.putExtra(KEY_CURRENT_ACCOUNT_CHANGED_, hasCurrentAccountChanged());
         setResult(RESULT_OK, resultIntent);
 
         finish();
@@ -211,7 +211,7 @@ public class ManageAccountsActivity extends FileActivity
 
     @Override
     public void changePasswordOfAccount(Account account) {
-        Intent updateAccountCredentials = new Intent(ManageAccountsActivity.this, LoginActivity.class);
+        Intent updateAccountCredentials = new Intent(ManageAccountActivity.this, LoginActivity.class);
         updateAccountCredentials.putExtra(AuthenticatorConstants.EXTRA_ACCOUNT, account);
         updateAccountCredentials.putExtra(AuthenticatorConstants.EXTRA_ACTION,
                 AuthenticatorConstants.ACTION_UPDATE_TOKEN);
@@ -253,7 +253,7 @@ public class ManageAccountsActivity extends FileActivity
                             String name = result.getString(AccountManager.KEY_ACCOUNT_NAME);
                             AccountUtils.setCurrentOwnCloudAccount(getApplicationContext(), name);
                             mAccountListAdapter = new AccountListAdapter(
-                                    ManageAccountsActivity.this,
+                                    ManageAccountActivity.this,
                                     getAccountListItems(),
                                     mTintedCheck
                             );
@@ -316,13 +316,13 @@ public class ManageAccountsActivity extends FileActivity
         } else {
             // restart list of files with new account
             AccountUtils.setCurrentOwnCloudAccount(
-                    ManageAccountsActivity.this,
+                    ManageAccountActivity.this,
                     clickedAccount.name
             );
             // Refresh dependencies to be used in selected account
             MainApp.Companion.initDependencyInjection();
             Intent i = new Intent(
-                    ManageAccountsActivity.this,
+                    ManageAccountActivity.this,
                     FileDisplayActivity.class
             );
             i.putExtra(FileActivity.EXTRA_ACCOUNT, clickedAccount);

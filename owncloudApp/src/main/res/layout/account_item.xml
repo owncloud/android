@@ -18,7 +18,7 @@
 -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/relativeLayout"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="80dp">
 
@@ -105,7 +105,7 @@
         android:paddingTop="@dimen/standard_padding"
         android:paddingRight="@dimen/standard_half_padding"
         android:paddingBottom="@dimen/standard_padding"
-        android:src="@drawable/ic_key"
+        android:src="@drawable/ic_baseline_lock_reset_grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/removeButton"
         app:layout_constraintLeft_toLeftOf="parent"

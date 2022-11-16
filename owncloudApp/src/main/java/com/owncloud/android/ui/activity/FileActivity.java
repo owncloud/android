@@ -49,6 +49,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.presentation.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.authentication.LoginActivity;
+import com.owncloud.android.presentation.ui.accounts.AccountManagementActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -271,14 +272,14 @@ public class FileActivity extends DrawerActivity
                     .setTitle(R.string.auth_failure_snackbar_action)
                     .setMessage(errorMessage)
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> startActivity(
-                            new Intent(FileActivity.this, ManageAccountsActivity.class)))
+                            new Intent(FileActivity.this, AccountManagementActivity.class)))
                     .setIcon(R.drawable.common_error_grey)
                     .setCancelable(false)
                     .show();
         } else {
             Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_INDEFINITE)
                     .setAction(R.string.auth_failure_snackbar_action, v ->
-                            startActivity(new Intent(FileActivity.this, ManageAccountsActivity.class)))
+                            startActivity(new Intent(FileActivity.this, AccountManagementActivity.class)))
                     .show();
         }
     }
