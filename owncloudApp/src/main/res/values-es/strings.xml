@@ -614,6 +614,7 @@
   <string name="security_enforced_second_option">Patrón de bloqueo</string>
   <!--Webfinger-->
   <string name="global_proceed">Proceder</string>
+  <string name="error_webfinger_username_empty">Nombre de usuario vacío</string>
   <!--Release Notes-->
   <string name="release_notes_header">Nuevo en %1$s</string>
   <string name="release_notes_footer">Gracias por usar %1$s.\n❤</string>
