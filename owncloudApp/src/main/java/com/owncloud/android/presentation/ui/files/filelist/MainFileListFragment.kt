@@ -47,6 +47,8 @@ import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFileSyncInfo
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.parseError
@@ -213,6 +215,8 @@ class MainFileListFragment : Fragment(),
 
             fileListAdapter.updateFileList(filesToAdd = fileListUiState.folderContent, fileListOption = fileListUiState.fileListOption)
             showOrHideEmptyView(fileListUiState)
+
+            actionMode?.invalidate()
         }
 
         mainFileListViewModel.syncFolder.observe(viewLifecycleOwner, Event.EventObserver {
@@ -439,13 +443,13 @@ class MainFileListFragment : Fragment(),
      */
     @SuppressLint("UseRequireInsteadOfGet")
     private fun onFileActionChosen(menuId: Int?): Boolean {
-        val checkedFiles = fileListAdapter.getCheckedItems() as ArrayList<OCFile>
+        val checkedFilesWithSyncInfo = fileListAdapter.getCheckedItems() as ArrayList<OCFileWithSyncInfo>
 
-        if (checkedFiles.isEmpty()) {
+        if (checkedFilesWithSyncInfo.isEmpty()) {
             return false
-        } else if (checkedFiles.size == 1) {
+        } else if (checkedFilesWithSyncInfo.size == 1) {
             /// action only possible on a single file
-            val singleFile = checkedFiles.first()
+            val singleFile = checkedFilesWithSyncInfo.first().file
             when (menuId) {
                 R.id.action_share_file -> {
                     fileActions?.onShareFileClicked(singleFile)
@@ -502,6 +506,7 @@ class MainFileListFragment : Fragment(),
         }
 
         /// Actions possible on a batch of files
+        val checkedFiles = checkedFilesWithSyncInfo.map { it.file } as ArrayList<OCFile>
         when (menuId) {
             R.id.file_action_select_all -> {
                 fileListAdapter.selectAll()
@@ -588,11 +593,13 @@ class MainFileListFragment : Fragment(),
         }
     }
 
-    override fun onItemClick(ocFile: OCFile, position: Int) {
+    override fun onItemClick(ocFileWithSyncInfo: OCFileWithSyncInfo, position: Int) {
         if (actionMode != null) {
             toggleSelection(position)
             return
         }
+
+        val ocFile = ocFileWithSyncInfo.file
 
         if (ocFile.isFolder) {
             mainFileListViewModel.updateFolderToDisplay(ocFile)
@@ -605,7 +612,7 @@ class MainFileListFragment : Fragment(),
         }
     }
 
-    override fun onLongItemClick(ocFile: OCFile, position: Int): Boolean {
+    override fun onLongItemClick(position: Int): Boolean {
         if (isPickingAFolder()) return false
 
         if (actionMode == null) {
@@ -645,19 +652,30 @@ class MainFileListFragment : Fragment(),
          * Updates available action in menu depending on current selection.
          */
         override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            val checkedFiles = fileListAdapter.getCheckedItems()
-            val checkedCount = checkedFiles.size
+            val checkedFilesWithSyncInfo = fileListAdapter.getCheckedItems()
+            val checkedCount = checkedFilesWithSyncInfo.size
             val title = resources.getQuantityString(
                 R.plurals.items_selected_count,
                 checkedCount,
                 checkedCount
             )
             mode?.title = title
+
+            val checkedFiles = checkedFilesWithSyncInfo.map { it.file }
+
+            val checkedFilesSync = checkedFilesWithSyncInfo.map { OCFileSyncInfo(
+                fileId = it.file.id!!,
+                uploadWorkerUuid = it.uploadWorkerUuid,
+                downloadWorkerUuid = it.downloadWorkerUuid,
+                isSynchronizing = it.isSynchronizing
+            ) }
+
             val fileMenuFilter = FileMenuFilter(
                 checkedFiles,
                 AccountUtils.getCurrentOwnCloudAccount(requireContext()),
                 requireActivity() as FileActivity,
-                activity
+                activity,
+                checkedFilesSync
             )
 
             fileMenuFilter.filter(
@@ -723,7 +741,7 @@ class MainFileListFragment : Fragment(),
         fun syncFile(file: OCFile)
         fun openFile(file: OCFile)
         fun sendDownloadedFile(file: OCFile)
-        fun cancelFileTransference(file: ArrayList<OCFile>)
+        fun cancelFileTransference(files: ArrayList<OCFile>)
         fun setBottomBarVisibility(isVisible: Boolean)
     }
 

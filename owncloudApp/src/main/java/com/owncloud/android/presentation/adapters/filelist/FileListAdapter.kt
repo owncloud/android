@@ -40,7 +40,6 @@ import com.owncloud.android.databinding.ItemFileListBinding
 import com.owncloud.android.databinding.ListFooterBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.FileListOption
-import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
 import com.owncloud.android.presentation.diffutils.FileListDiffCallback
@@ -144,14 +143,14 @@ class FileListAdapter(
         }
     }
 
-    fun getCheckedItems(): List<OCFile> {
-        val checkedItems = mutableListOf<OCFile>()
+    fun getCheckedItems(): List<OCFileWithSyncInfo> {
+        val checkedItems = mutableListOf<OCFileWithSyncInfo>()
         val checkedPositions = getSelectedItems()
 
         for (i in checkedPositions) {
             if (files[i] is OCFileWithSyncInfo) {
                 val fileWithSyncInfo = files[i] as OCFileWithSyncInfo
-                checkedItems.add(fileWithSyncInfo.file)
+                checkedItems.add(fileWithSyncInfo)
             }
         }
 
@@ -222,14 +221,13 @@ class FileListAdapter(
 
             holder.itemView.setOnClickListener {
                 listener.onItemClick(
-                    ocFile = file,
+                    ocFileWithSyncInfo = fileWithSyncInfo,
                     position = position
                 )
             }
 
             holder.itemView.setOnLongClickListener {
                 listener.onLongItemClick(
-                    ocFile = file,
                     position = position
                 )
             }
@@ -381,8 +379,8 @@ class FileListAdapter(
     }
 
     interface FileListAdapterListener {
-        fun onItemClick(ocFile: OCFile, position: Int)
-        fun onLongItemClick(ocFile: OCFile, position: Int): Boolean = true
+        fun onItemClick(ocFileWithSyncInfo: OCFileWithSyncInfo, position: Int)
+        fun onLongItemClick(position: Int): Boolean = true
     }
 
     inner class GridViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root)
