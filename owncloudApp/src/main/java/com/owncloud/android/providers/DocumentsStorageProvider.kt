@@ -131,7 +131,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                     val uploadFilesUseCaseParams = UploadFilesFromSystemUseCase.Params(
                         accountName = ocFile.owner,
                         listOfLocalPaths = listOf(fileToOpen.path),
-                        uploadFolderPath = ocFile.remotePath.substringBeforeLast(PATH_SEPARATOR)
+                        uploadFolderPath = ocFile.remotePath.substringBeforeLast(PATH_SEPARATOR).plus(PATH_SEPARATOR)
                     )
                     CoroutineScope(Dispatchers.IO).launch {
                         uploadFilesUseCase.execute(uploadFilesUseCaseParams)
@@ -235,7 +235,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val file = getFileByIdOrException(documentId.toInt())
 
-        val realFile = File(file?.storagePath)
+        val realFile = File(file.storagePath)
 
         return AssetFileDescriptor(
             ParcelFileDescriptor.open(realFile, ParcelFileDescriptor.MODE_READ_ONLY), 0, AssetFileDescriptor.UNKNOWN_LENGTH
