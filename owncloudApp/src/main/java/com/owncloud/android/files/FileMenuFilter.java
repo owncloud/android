@@ -6,17 +6,19 @@
  * @author Abel García de Prada
  * @author Shashvat Kedia
  * @author David Crespo Rios
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2022 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,6 +38,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.domain.files.model.OCFileSyncInfo;
 import com.owncloud.android.extensions.WorkManagerExtKt;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
@@ -59,6 +62,7 @@ public class FileMenuFilter {
     private ComponentsGetter mComponentsGetter;
     private Account mAccount;
     private Context mContext;
+    private List<OCFileSyncInfo> mFilesSync;
 
     /**
      * Constructor
@@ -74,6 +78,7 @@ public class FileMenuFilter {
         mAccount = account;
         mComponentsGetter = cg;
         mContext = context;
+        mFilesSync = new ArrayList<>();
     }
 
     /**
@@ -87,6 +92,21 @@ public class FileMenuFilter {
     public FileMenuFilter(OCFile targetFile, Account account, ComponentsGetter cg,
                           Context context) {
         this(Arrays.asList(targetFile), account, cg, context);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param targetFiles List of {@link OCFile} file targets of the action to filter in the {@link Menu}.
+     * @param account    ownCloud {@link Account} holding targetFile.
+     * @param cg         Accessor to app components, needed to access synchronization services
+     * @param context    Android {@link Context}, needed to access build setup resources.
+     * @param filesSync  List of {@link OCFileSyncInfo} with info about the sync status of each target file.
+     */
+    public FileMenuFilter(List<OCFile> targetFiles, Account account, ComponentsGetter cg,
+                          Context context, List<OCFileSyncInfo> filesSync) {
+        this(targetFiles, account, cg, context);
+        mFilesSync = filesSync;
     }
 
     /**
@@ -146,7 +166,12 @@ public class FileMenuFilter {
     private void filter(List<Integer> toShow, List<Integer> toHide, boolean displaySelectAll,
                         boolean displaySelectInverse, boolean onlyAvailableOffline, boolean sharedByLinkFiles) {
 
-        boolean synchronizing = anyFileSynchronizing();
+        boolean synchronizing;
+        if (mFilesSync.isEmpty()) {
+            synchronizing = anyFileSynchronizingLookingIntoWorkers();
+        } else {
+            synchronizing = anyFileSynchronizingLookingIntoFilesSync();
+        }
 
         boolean videoPreviewing = anyFileVideoPreviewing();
 
@@ -273,7 +298,7 @@ public class FileMenuFilter {
 
     }
 
-    private boolean anyFileSynchronizing() {
+    private boolean anyFileSynchronizingLookingIntoWorkers() {
         boolean synchronizing = false;
         if (!mFiles.isEmpty() && mAccount != null) {
             WorkManager workManager = WorkManager.getInstance(mContext);
@@ -282,6 +307,20 @@ public class FileMenuFilter {
                 if (!workInfos.get(i).getState().isFinished()) {
                     for (int j = 0; !synchronizing && j < mFiles.size(); j++) {
                         synchronizing = workInfos.get(i).getTags().contains(mFiles.get(j).getId().toString());
+                    }
+                }
+            }
+        }
+        return synchronizing;
+    }
+
+    private boolean anyFileSynchronizingLookingIntoFilesSync() {
+        boolean synchronizing = false;
+        if (!mFiles.isEmpty()) {
+            for (int i = 0; !synchronizing && i < mFilesSync.size(); i++) {
+                for (int j = 0; !synchronizing && j < mFiles.size(); j++) {
+                    if (mFilesSync.get(i).getFileId() == mFiles.get(j).getId()) {
+                        synchronizing = mFilesSync.get(i).isSynchronizing();
                     }
                 }
             }
