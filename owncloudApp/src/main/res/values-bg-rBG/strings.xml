@@ -424,7 +424,7 @@
   <string name="network_error_socket_timeout_exception">Сървърът се забави прекалено много с отговора</string>
   <string name="network_error_connect_timeout_exception">Свързването със сървъра отне твърде много време</string>
   <string name="network_host_not_available">Сървърът не може да бъде намерен</string>
-  <string name="forbidden_permissions">Нямате необходимите за достъп до %s</string>
+  <string name="forbidden_permissions">Нямате необходимите разрешения за %s</string>
   <string name="forbidden_permissions_rename">за преименуване на този файл</string>
   <string name="forbidden_permissions_delete">за изтриване на този файл</string>
   <string name="share_link_forbidden_permissions">за споделяне на този файл</string>
