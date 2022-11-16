@@ -90,11 +90,6 @@ abstract class FileDao {
         folderId: Long
     ): List<OCFileAndFileSync>
 
-    @Query(SELECT_FOLDER_CONTENT)
-    abstract fun getFolderContentAsStream(
-        folderId: Long
-    ): Flow<List<OCFileEntity>>
-
     @Transaction
     @Query(SELECT_FOLDER_CONTENT)
     abstract fun getFolderContentWithSyncInfoAsStream(
@@ -107,21 +102,11 @@ abstract class FileDao {
         mimeType: String
     ): List<OCFileEntity>
 
-    @Query(SELECT_FILES_SHARED_BY_LINK)
-    abstract fun getFilesSharedByLinkAsStream(
-        accountOwner: String
-    ): Flow<List<OCFileEntity>>
-
     @Transaction
     @Query(SELECT_FILES_SHARED_BY_LINK)
     abstract fun getFilesWithSyncInfoSharedByLinkAsStream(
         accountOwner: String
     ): Flow<List<OCFileAndFileSync>>
-
-    @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT)
-    abstract fun getFilesAvailableOfflineFromAccountAsStream(
-        accountOwner: String
-    ): Flow<List<OCFileEntity>>
 
     @Transaction
     @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT)
