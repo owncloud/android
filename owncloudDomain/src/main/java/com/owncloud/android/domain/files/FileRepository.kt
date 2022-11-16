@@ -38,12 +38,9 @@ interface FileRepository {
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
     fun getSearchFolderContent(fileListOption: FileListOption, folderId: Long, search: String): List<OCFile>
     fun getFolderContent(folderId: Long): List<OCFile>
-    fun getFolderContentAsStream(folderId: Long): Flow<List<OCFile>>
     fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>>
     fun getFolderImages(folderId: Long): List<OCFile>
-    fun getSharedByLinkForAccountAsStream(owner: String): Flow<List<OCFile>>
     fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
-    fun getFilesAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFile>>
     fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
     fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>

@@ -97,11 +97,6 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
-    override fun getFolderContentAsStream(folderId: Long): Flow<List<OCFile>> =
-        fileDao.getFolderContentAsStream(folderId = folderId).map { folderContent ->
-            folderContent.map { it.toModel() }
-        }
-
     override fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>> =
         fileDao.getFolderContentWithSyncInfoAsStream(folderId = folderId).map { folderContent ->
             folderContent.map { it.toModel() }
@@ -112,18 +107,8 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
-    override fun getSharedByLinkForAccountAsStream(owner: String): Flow<List<OCFile>> =
-        fileDao.getFilesSharedByLinkAsStream(accountOwner = owner).map { fileList ->
-            fileList.map { it.toModel() }
-        }
-
     override fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
         fileDao.getFilesWithSyncInfoSharedByLinkAsStream(accountOwner = owner).map { fileList ->
-            fileList.map { it.toModel() }
-        }
-
-    override fun getFilesAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFile>> =
-        fileDao.getFilesAvailableOfflineFromAccountAsStream(owner).map { fileList ->
             fileList.map { it.toModel() }
         }
 
