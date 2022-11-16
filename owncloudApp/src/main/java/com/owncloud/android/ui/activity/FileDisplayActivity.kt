@@ -58,6 +58,7 @@ import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedExcept
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.isDownloadPending
@@ -85,6 +86,7 @@ import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewM
 import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
 import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
 import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.fragment.FileFragment
@@ -105,6 +107,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -166,6 +169,8 @@ class FileDisplayActivity : FileActivity(),
 
     var filesUploadHelper: FilesUploadHelper? = null
         internal set
+
+    val getFolderContentUseCase: GetFolderContentUseCase by inject()
 
     private lateinit var binding: ActivityMainBinding
 
@@ -1438,29 +1443,41 @@ class FileDisplayActivity : FileActivity(),
      * @param file [OCFile] file which operation are wanted to be cancel
      */
     fun cancelTransference(file: OCFile) {
-        transfersViewModel.cancelTransfersForFile(file)
-        fileWaitingToPreview?.let {
-            if (it.remotePath == file.remotePath) {
-                fileWaitingToPreview = null
+        if (file.isFolder) {
+            val result = runBlocking(CoroutinesDispatcherProvider().io) {
+                getFolderContentUseCase.execute(GetFolderContentUseCase.Params(file.id!!))
             }
-        }
-
-        waitingToSend?.let {
-            if (it.remotePath == file.remotePath) {
-                waitingToSend = null
+            val files = result.getDataOrNull()
+            files?.let {
+                it.forEach { file ->
+                    cancelTransference(file)
+                }
             }
-        }
-
-        val secondFragment = secondFragment
-        if (secondFragment != null && file == secondFragment.file) {
-            if (!file.fileExists) {
-                cleanSecondFragment()
-            } else {
-                secondFragment.onSyncEvent(DOWNLOAD_FINISH_MESSAGE, false, null)
+        } else {
+            transfersViewModel.cancelTransfersForFile(file)
+            fileWaitingToPreview?.let {
+                if (it.remotePath == file.remotePath) {
+                    fileWaitingToPreview = null
+                }
             }
-        }
 
-        invalidateOptionsMenu()
+            waitingToSend?.let {
+                if (it.remotePath == file.remotePath) {
+                    waitingToSend = null
+                }
+            }
+
+            val secondFragment = secondFragment
+            if (secondFragment != null && file == secondFragment.file) {
+                if (!file.fileExists) {
+                    cleanSecondFragment()
+                } else {
+                    secondFragment.onSyncEvent(DOWNLOAD_FINISH_MESSAGE, false, null)
+                }
+            }
+
+            invalidateOptionsMenu()
+        }
     }
 
     /**
