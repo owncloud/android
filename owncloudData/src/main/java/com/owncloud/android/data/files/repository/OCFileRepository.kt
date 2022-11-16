@@ -140,23 +140,14 @@ class OCFileRepository(
     override fun getFolderContent(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderContent(folderId)
 
-    override fun getFolderContentAsStream(folderId: Long): Flow<List<OCFile>> =
-        localFileDataSource.getFolderContentAsStream(folderId)
-
     override fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>> =
         localFileDataSource.getFolderContentWithSyncInfoAsStream(folderId)
 
     override fun getFolderImages(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderImages(folderId)
 
-    override fun getSharedByLinkForAccountAsStream(owner: String): Flow<List<OCFile>> =
-        localFileDataSource.getSharedByLinkForAccountAsStream(owner)
-
     override fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
         localFileDataSource.getSharedByLinkWithSyncInfoForAccountAsStream(owner)
-
-    override fun getFilesAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFile>> =
-        localFileDataSource.getFilesAvailableOfflineFromAccountAsStream(owner)
 
     override fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
         localFileDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner)
