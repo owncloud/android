@@ -41,6 +41,7 @@ import android.content.res.Resources.NotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.FileUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -104,6 +105,7 @@ import timber.log.Timber;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -536,7 +538,13 @@ public class ReceiveExternalFilesActivity extends FileActivity
         }
 
         for (Uri stream : mStreamsToUpload) {
-            String streamToUpload = stream.toString();
+            String streamToUpload;
+            try {
+                streamToUpload = new File(stream.toString()).getCanonicalPath();
+            } catch (IOException e) {
+                finish();
+                return;
+            }
             if (streamToUpload.contains("/data") &&
                     streamToUpload.contains(getPackageName()) &&
                     !streamToUpload.contains(getCacheDir().getPath())
@@ -960,6 +968,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
                             MAX_FILENAME_LENGTH);
                 } else if (fileName.length() == 0) {
                     error = getString(R.string.uploader_upload_text_dialog_filename_error_empty);
+                } else if (fileName.contains("/")) {
+                   error = getString(R.string.filename_forbidden_characters);
                 } else {
                     fileName += ".txt";
                     Uri fileUri = savePlainTextToFile(fileName);
