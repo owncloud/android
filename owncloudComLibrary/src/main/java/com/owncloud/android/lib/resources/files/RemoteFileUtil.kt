@@ -24,7 +24,11 @@
 package com.owncloud.android.lib.resources.files
 
 import android.net.Uri
+import at.bitfire.dav4jvm.PropStat
+import at.bitfire.dav4jvm.Property
+import at.bitfire.dav4jvm.Response
 import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.http.HttpConstants
 import okhttp3.HttpUrl
 
 class RemoteFileUtil {
@@ -45,5 +49,14 @@ class RemoteFileUtil {
             val pathToOc = absoluteDavPath.split(davFilesPath)[0]
             return absoluteDavPath.replace(pathToOc + davFilesPath, "")
         }
+
+        fun getProperties(response: Response): List<Property> {
+            return if (response.isSuccess())
+                response.propstat.filter { propStat -> propStat.isSuccessOrPostProcessing() }.map { it.properties }.flatten()
+            else
+                emptyList()
+        }
+
+        private fun PropStat.isSuccessOrPostProcessing() = (status.code / 100 == 2 || status.code == HttpConstants.HTTP_TOO_EARLY)
     }
 }
