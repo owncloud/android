@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.MainApp.Companion.authority
@@ -31,14 +32,11 @@ import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-
 const val KEY_CURRENT_ACCOUNT_CHANGED = "CURRENT_ACCOUNT_CHANGED"
 const val KEY_ACCOUNT_LIST_CHANGED = "ACCOUNT_LIST_CHANGED"
 
-class AccountManagementActivity: FileActivity(), AccountManagementAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
+class AccountManagementActivity : FileActivity(), AccountManagementAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
 
-
-    private lateinit var recyclerView: RecyclerView
     private val accountListAdapter: AccountManagementAdapter = AccountManagementAdapter(this)
     lateinit var originalAccounts: Set<String>
     private lateinit var originalCurrentAccount: String
@@ -57,15 +55,19 @@ class AccountManagementActivity: FileActivity(), AccountManagementAdapter.Accoun
         val tint = ContextCompat.getColor(this, R.color.actionbar_start_color)
         DrawableCompat.setTint(tintedCheck, tint)
 
-        recyclerView = findViewById(R.id.account_list_recycler_view)
-        recyclerView.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(applicationContext)
-        setupStandardToolbar(getString(R.string.prefs_manage_accounts),
+        val recyclerView: RecyclerView = findViewById(R.id.account_list_recycler_view)
+        recyclerView.run {
+            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(applicationContext)
+            adapter = accountListAdapter
+            layoutManager = LinearLayoutManager(this@AccountManagementActivity)
+        }
+
+        setupStandardToolbar(
+            getString(R.string.prefs_manage_accounts),
             displayHomeAsUpEnabled = true,
             homeButtonEnabled = true,
             displayShowTitleEnabled = true
         )
-
-        recyclerView.adapter = accountListAdapter
 
         val accountList = AccountManager.get(this).getAccountsByType(accountType)
         originalAccounts = toAccountNameSet(accountList)
@@ -73,18 +75,17 @@ class AccountManagementActivity: FileActivity(), AccountManagementAdapter.Accoun
 
         accountListAdapter.submitAccountList(accountList = getAccountListItems())
 
-
         account = AccountUtils.getCurrentOwnCloudAccount(this)
         onAccountSet(false)
 
         /**
         // added click listener to switch account
         recyclerView.onItemClickListener = OnItemClickListener { parent, view, position, id ->
-            switchAccount(
-                position
-            )
+        switchAccount(
+        position
+        )
         }
-        */
+         */
     }
 
     /**
@@ -136,7 +137,7 @@ class AccountManagementActivity: FileActivity(), AccountManagementAdapter.Accoun
      *
      * @param position A position of the account adapter containing an account.
      */
-     override fun switchAccount(position: Int) {
+    override fun switchAccount(position: Int) {
         val clickedAccount: Account = (accountListAdapter.getItem(position) as AccountManagementAdapter.AccountRecyclerItem.AccountItem).account
         if (account.name == clickedAccount.name) {
             // current account selected, just go back
@@ -165,7 +166,8 @@ class AccountManagementActivity: FileActivity(), AccountManagementAdapter.Accoun
             account,
             removeAccountDialogViewModel.hasCameraUploadsAttached(account.name)
         )
-        dialog.show(supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)    }
+        dialog.show(supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+    }
 
     override fun changePasswordOfAccount(account: Account) {
         val updateAccountCredentials = Intent(this, LoginActivity::class.java)
@@ -228,7 +230,7 @@ class AccountManagementActivity: FileActivity(), AccountManagementAdapter.Accoun
             // Create new adapter with the remaining accounts
             accountListAdapter.submitAccountList(accountList = getAccountListItems())
             val am = AccountManager.get(this)
-            if (am.getAccountsByType(accountType).size == 0) {
+            if (am.getAccountsByType(accountType).isEmpty()) {
                 // Show create account screen if there isn't any account
                 am.addAccount(
                     accountType,

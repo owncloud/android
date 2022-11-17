@@ -19,7 +19,7 @@ import timber.log.Timber
 
 class AccountManagementAdapter(private val accountListener: AccountManagementActivity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var accountItemsList = mutableListOf<AccountRecyclerItem>()
+    private var accountItemsList = listOf<AccountRecyclerItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -35,11 +35,10 @@ class AccountManagementAdapter(private val accountListener: AccountManagementAct
         }
     }
 
-    fun submitAccountList(accountList: List<AccountRecyclerItem>){
-        accountItemsList = accountList.toMutableList()
+    fun submitAccountList(accountList: List<AccountRecyclerItem>) {
+        accountItemsList = accountList
         notifyDataSetChanged()
     }
-
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
@@ -101,7 +100,7 @@ class AccountManagementAdapter(private val accountListener: AccountManagementAct
 
                 ///bind listener to switchAccount
                 holder.binding.account.apply {
-                    setOnClickListener{accountListener.switchAccount(position)}
+                    setOnClickListener { accountListener.switchAccount(position) }
                 }
             }
             is NewAccountViewHolder -> {
@@ -109,7 +108,9 @@ class AccountManagementAdapter(private val accountListener: AccountManagementAct
                 holder.binding.name.setText(R.string.prefs_add_account)
 
                 // bind action listener
-                accountListener.createAccount()
+                holder.binding.linearLayout.setOnClickListener {
+                    accountListener.createAccount()
+                }
             }
         }
 
