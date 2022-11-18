@@ -549,4 +549,5 @@
   <string name="global_proceed">Fortfahren</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Fortfahren</string>
+  <!--Open in web-->
 </resources>

@@ -607,4 +607,5 @@ Il Download del file inizierà automaticamente</string>
   <!--Release Notes-->
   <string name="release_notes_footer">Grazie di usare %1$s.\n❤</string>
   <string name="release_notes_proceed">Procedi</string>
+  <!--Open in web-->
 </resources>

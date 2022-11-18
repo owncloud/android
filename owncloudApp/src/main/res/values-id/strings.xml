@@ -532,4 +532,5 @@
   <string name="global_proceed">Melanjutkan</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Melanjutkan</string>
+  <!--Open in web-->
 </resources>

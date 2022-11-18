@@ -621,4 +621,5 @@
   <string name="release_notes_footer">Dziękujemy za używanie %1$s.\n❤</string>
   <string name="release_notes_proceed">Wykonaj</string>
   <string name="release_notes_icon">Ikona</string>
+  <!--Open in web-->
 </resources>

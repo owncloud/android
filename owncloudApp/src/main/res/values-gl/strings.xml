@@ -558,4 +558,5 @@ Descárgueo de aquí: %2$s</string>
   <string name="global_proceed">Proceder</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Proceder</string>
+  <!--Open in web-->
 </resources>

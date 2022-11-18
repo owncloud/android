@@ -495,4 +495,5 @@
   <string name="global_proceed">Nadaljuj</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Nadaljuj</string>
+  <!--Open in web-->
 </resources>

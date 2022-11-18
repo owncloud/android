@@ -478,4 +478,5 @@
   <string name="global_proceed">Vykdyti</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Vykdyti</string>
+  <!--Open in web-->
 </resources>

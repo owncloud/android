@@ -478,4 +478,5 @@
   <string name="global_proceed">続行</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">続行</string>
+  <!--Open in web-->
 </resources>

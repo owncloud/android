@@ -562,4 +562,5 @@
   <string name="global_proceed">Végrehajtás</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Végrehajtás</string>
+  <!--Open in web-->
 </resources>

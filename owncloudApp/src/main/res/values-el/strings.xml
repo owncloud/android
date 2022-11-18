@@ -549,4 +549,5 @@
   <string name="global_proceed">Συνέχιση</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Συνέχιση</string>
+  <!--Open in web-->
 </resources>

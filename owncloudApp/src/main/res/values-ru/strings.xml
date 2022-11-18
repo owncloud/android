@@ -579,4 +579,5 @@
   <string name="global_proceed">Продолжить</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Продолжить</string>
+  <!--Open in web-->
 </resources>

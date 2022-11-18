@@ -484,4 +484,5 @@
   <string name="global_proceed">진행</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">진행</string>
+  <!--Open in web-->
 </resources>
