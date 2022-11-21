@@ -316,13 +316,9 @@ public class FileMenuFilter {
 
     private boolean anyFileSynchronizingLookingIntoFilesSync() {
         boolean synchronizing = false;
-        if (!mFiles.isEmpty()) {
+        if (!mFilesSync.isEmpty()) {
             for (int i = 0; !synchronizing && i < mFilesSync.size(); i++) {
-                for (int j = 0; !synchronizing && j < mFiles.size(); j++) {
-                    if (mFilesSync.get(i).getFileId() == mFiles.get(j).getId()) {
-                        synchronizing = mFilesSync.get(i).isSynchronizing();
-                    }
-                }
+                synchronizing = mFilesSync.get(i).isSynchronizing();
             }
         }
         return synchronizing;
