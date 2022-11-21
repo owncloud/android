@@ -624,4 +624,5 @@
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="open_in_web_error_generic">S’u hap dot në web</string>
   <string name="open_in_web_error_not_supported">s’ka aplikacione që e mbulojnë këtë lloj kartele</string>
+  <string name="open_in_web_error_too_early">Kartela e kërkuar s’është ende e passhme, ju lutemi, riprovoni më vonë</string>
 </resources>

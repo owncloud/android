@@ -5,7 +5,7 @@
   <string name="global_date">Дата</string>
   <string name="global_size">Размер</string>
   <string name="actionbar_search">Търсене в тази папка</string>
-  <string name="actionbar_sync">Актуализиране на профила</string>
+  <string name="actionbar_sync">Опресняване на профила</string>
   <string name="actionbar_upload">Качване</string>
   <string name="actionbar_upload_from_apps">Съдържание от други приложения</string>
   <string name="actionbar_upload_files">Файлове</string>
@@ -155,7 +155,7 @@
   <string name="file_list_folders">папки</string>
   <string name="file_list_file">файл</string>
   <string name="file_list_files">файлове</string>
-  <string name="filedetails_select_file">Натиснете върху файла за да видите допълнителната информация.</string>
+  <string name="filedetails_select_file">Натиснете върху файла за да видите допълнителна информация.</string>
   <string name="upload_to">Качване в %1$s</string>
   <string name="upload_files_title">Файлове</string>
   <string name="filedetails_size">Размер:</string>
@@ -164,7 +164,7 @@
   <string name="filedetails_modified">Променен на:</string>
   <string name="filedetails_download">Изтегляне</string>
   <string name="filedetails_file_image_content_description">Файл с изображение</string>
-  <string name="filedetails_cancel_btn_content_description">Бутон за отказ на изтеглянето</string>
+  <string name="filedetails_cancel_btn_content_description">Бутон за отмяна на изтеглянето</string>
   <string name="filedetails_sync_file">Синхронизиране</string>
   <string name="filedetails_renamed_in_upload_msg">Файлът беше преименуван на %1$s по време на качването.</string>
   <string name="list_layout">Оформление на списъка</string>
@@ -173,9 +173,9 @@
   <string name="common_no">Не</string>
   <string name="common_remove_upload">Премахване на качването</string>
   <string name="common_retry_upload">Повторно качване</string>
-  <string name="common_cancel_sync">Отмяна на синхронизацията</string>
+  <string name="common_cancel_sync">Прекратяване на синхронизацията</string>
   <string name="common_back">Назад</string>
-  <string name="common_save_exit">Запазване &amp; изход</string>
+  <string name="common_save_exit">Запазване и изход</string>
   <string name="common_error">Грешка</string>
   <string name="common_loading">Зареждане...</string>
   <string name="common_unknown">неизвестен</string>
@@ -215,7 +215,7 @@
   <string name="uploads_view_group_file_count">%d файла</string>
   <string name="uploads_view_group_file_count_single">%d файл</string>
   <string name="uploads_view_upload_status_succeeded">Завършено</string>
-  <string name="uploads_view_upload_status_cancelled">Отказано</string>
+  <string name="uploads_view_upload_status_cancelled">Отменено</string>
   <string name="uploads_view_upload_status_paused">Паузирано</string>
   <string name="uploads_view_upload_status_failed_connection_error">Грешка при свързване</string>
   <string name="uploads_view_upload_status_failed_retry">Качването ще бъде повторено след малко</string>
@@ -301,10 +301,10 @@
   <string name="auth_getting_authorization">Получаване на разрешение...</string>
   <string name="auth_trying_to_login">Опит за влизане...</string>
   <string name="auth_no_net_conn_title">Няма интернет връзка</string>
-  <string name="auth_nossl_plain_ok_title">Няма налична сигурна връзка.</string>
+  <string name="auth_nossl_plain_ok_title">Няма налична защитена връзка.</string>
   <string name="auth_connection_established">Установена е връзка</string>
-  <string name="auth_testing_connection">Проверка на свързаност</string>
-  <string name="auth_not_configured_title">Неправилно зададена сървърна конфигурация</string>
+  <string name="auth_testing_connection">Тестване на връзката</string>
+  <string name="auth_not_configured_title">Неправилна конфигурация на сървъра</string>
   <string name="auth_account_not_new">В устройството вече съществува профил за същия потребител и сървър</string>
   <string name="auth_account_not_the_same">Въведеният потребител не съответства на потребителя на този профил</string>
   <string name="auth_unknown_error_title">Неизвестна грешка!</string>
@@ -397,7 +397,7 @@
   <string name="proper_videos_folder_warning_camera_upload">Моля уверете се, че избраната папка е мястото където камерата, която използвате запазва записаните видеоклипове. В противен случай функцията няма да може да открие вашите видеоклипове. Имайте предвид, че видеоклиповете ще бъдат качени най-малко 15 минути след записването им.</string>
   <string name="conflict_title">Файлов конфликт</string>
   <string name="conflict_description">Има конфликт във файл %1$s, докоснете за да го разрешите</string>
-  <string name="conflict_message">Кои файлове искате да запазите? Ако изберете и двете версии, локалния файл ще има цифри добавени към името си.</string>
+  <string name="conflict_message">Кои файлове искате да запазите? Ако изберете и двете версии, локалния файл ще има числа добавени към името си.</string>
   <string name="conflict_keep_both">Запазване и на двата</string>
   <string name="conflict_use_local_version">Локална версия</string>
   <string name="conflict_use_server_version">Сървърна версия</string>
@@ -441,7 +441,7 @@
   <string name="actionbar_logger">Доклади</string>
   <string name="log_send_history_button">Изпращане на историята</string>
   <string name="log_send_no_mail_app">Не е намерено приложение за изпращане на дневници. Моля, инсталирайте приложение за поща.</string>
-  <string name="log_send_mail_subject">%1$s Android журнали на приложенията</string>
+  <string name="log_send_mail_subject">%1$s Регистри на Android приложения</string>
   <string name="log_progress_dialog_text">Зареждане на данни...</string>
   <string name="actionbar_select_all">Избиране на всички</string>
   <string name="actionbar_select_inverse">Обръщане на избора</string>
@@ -624,4 +624,5 @@
   <string name="ic_action_open_in_web">Отваряне в мрежата</string>
   <string name="open_in_web_error_generic">Не може да се отвори в мрежата</string>
   <string name="open_in_web_error_not_supported">няма приложения, които да поддържат този тип файл</string>
+  <string name="open_in_web_error_too_early">Поисканият файл все още не е наличен, моля опитайте отново по-късно</string>
 </resources>
