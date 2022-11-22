@@ -1281,8 +1281,7 @@ class FileDisplayActivity : FileActivity(),
                     if (file.id == waitingToSend?.id) {
                         waitingToSend = storageManager.getFileByPath(file.remotePath)
                         sendDownloadedFile()
-                    }
-                    else if (file.id == waitingToOpen?.id) {
+                    } else if (file.id == waitingToOpen?.id) {
                         waitingToOpen = storageManager.getFileByPath(file.remotePath)
                         openDownloadedFile()
                     }
@@ -1294,16 +1293,14 @@ class FileDisplayActivity : FileActivity(),
                 )
                 if (file.id == waitingToSend?.id) {
                     waitingToSend = null
-                }
-                else if (file.id == waitingToOpen?.id) {
+                } else if (file.id == waitingToOpen?.id) {
                     waitingToOpen = null
                 }
             },
             onWorkCancelled = {
                 if (file.id == waitingToSend?.id) {
                     waitingToSend = null
-                }
-                else if (file.id == waitingToOpen?.id) {
+                } else if (file.id == waitingToOpen?.id) {
                     waitingToOpen = null
                 }
             },
