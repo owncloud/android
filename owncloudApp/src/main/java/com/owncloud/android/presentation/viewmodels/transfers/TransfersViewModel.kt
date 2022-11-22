@@ -27,6 +27,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
@@ -55,6 +56,7 @@ class TransfersViewModel(
     getAllTransfersAsLiveDataUseCase: GetAllTransfersAsLiveDataUseCase,
     private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
     private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
+    private val getFolderContentUseCase: GetFolderContentUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
@@ -124,6 +126,22 @@ class TransfersViewModel(
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(ocFile))
             cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(ocFile))
+        }
+    }
+
+    fun cancelTransfersRecursively(ocFile: OCFile) {
+        if (ocFile.isFolder) {
+            viewModelScope.launch(coroutinesDispatcherProvider.io) {
+                val result = getFolderContentUseCase.execute(GetFolderContentUseCase.Params(ocFile.id!!))
+                val files = result.getDataOrNull()
+                files?.let {
+                    it.forEach { file ->
+                        cancelTransfersRecursively(file)
+                    }
+                }
+            }
+        } else {
+            cancelTransfersForFile(ocFile)
         }
     }
 
