@@ -1266,9 +1266,9 @@ class FileDisplayActivity : FileActivity(),
     private fun requestForDownload(file: OCFile) {
         val downloadFileUseCase: DownloadFileUseCase by inject()
 
-        val id = downloadFileUseCase.execute(DownloadFileUseCase.Params(account.name, file)) ?: return
+        val uuid = downloadFileUseCase.execute(DownloadFileUseCase.Params(account.name, file)) ?: return
 
-        WorkManager.getInstance(applicationContext).getWorkInfoByIdLiveData(id).observeWorkerTillItFinishes(
+        WorkManager.getInstance(applicationContext).getWorkInfoByIdLiveData(uuid).observeWorkerTillItFinishes(
             owner = this,
             onWorkEnqueued = {
                 showMessageInSnackbar(
@@ -1278,11 +1278,11 @@ class FileDisplayActivity : FileActivity(),
             onWorkRunning = { progress -> Timber.d("Downloading - Progress $progress") },
             onWorkSucceeded = {
                 CoroutineScope(Dispatchers.IO).launch {
-                    waitingToSend?.let {
+                    if (file.id == waitingToSend?.id) {
                         waitingToSend = storageManager.getFileByPath(file.remotePath)
                         sendDownloadedFile()
                     }
-                    waitingToOpen?.let {
+                    else if (file.id == waitingToOpen?.id) {
                         waitingToOpen = storageManager.getFileByPath(file.remotePath)
                         openDownloadedFile()
                     }
@@ -1292,12 +1292,20 @@ class FileDisplayActivity : FileActivity(),
                 showMessageInSnackbar(
                     message = String.format(getString(R.string.downloader_download_failed_ticker), file.fileName)
                 )
-                waitingToSend = null
-                waitingToOpen = null
+                if (file.id == waitingToSend?.id) {
+                    waitingToSend = null
+                }
+                else if (file.id == waitingToOpen?.id) {
+                    waitingToOpen = null
+                }
             },
             onWorkCancelled = {
-                waitingToSend = null
-                waitingToOpen = null
+                if (file.id == waitingToSend?.id) {
+                    waitingToSend = null
+                }
+                else if (file.id == waitingToOpen?.id) {
+                    waitingToOpen = null
+                }
             },
         )
     }
