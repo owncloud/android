@@ -1191,17 +1191,17 @@ class FileDisplayActivity : FileActivity(),
                     }
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
                         if (fileWaitingToPreview != null) {
-                            showSnackMessage("A new version was found in server. Downloading...")
+                            showSnackMessage(getString(R.string.new_remote_version_found_msg))
                             startSyncThenOpen(fileWaitingToPreview!!)
                             fileWaitingToPreview = null
                         } else {
-                            showSnackMessage("Download enqueued")
+                            showSnackMessage(getString(R.string.download_enqueued_msg))
                         }
                     }
                     SynchronizeFileUseCase.SyncType.FileNotFound -> {
                         /** Nothing to do atm. If we are in details view, go back to file list */
                     }
-                    is SynchronizeFileUseCase.SyncType.UploadEnqueued -> showSnackMessage("Upload enqueued")
+                    is SynchronizeFileUseCase.SyncType.UploadEnqueued -> showSnackMessage(getString(R.string.upload_enqueued_msg))
                     null -> TODO()
                 }
             }
