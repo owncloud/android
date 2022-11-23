@@ -159,8 +159,6 @@ class FileDisplayActivity : FileActivity(),
     private var waitingToSend: OCFile? = null
     private var waitingToOpen: OCFile? = null
 
-    private var waitingToPreview = false
-
     private var localBroadcastManager: LocalBroadcastManager? = null
 
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
@@ -1179,9 +1177,8 @@ class FileDisplayActivity : FileActivity(),
             is UIResult.Success -> {
                 when (uiResult.data) {
                     SynchronizeFileUseCase.SyncType.AlreadySynchronized -> {
-                        if (waitingToPreview) {
+                        if (fileWaitingToPreview != null) {
                             startPreview(fileWaitingToPreview)
-                            waitingToPreview = false
                             fileWaitingToPreview = null
                         } else {
                             showSnackMessage(getString(R.string.sync_file_nothing_to_do_msg))
@@ -1193,10 +1190,9 @@ class FileDisplayActivity : FileActivity(),
                         startActivity(showConflictActivityIntent)
                     }
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
-                        if (waitingToPreview) {
+                        if (fileWaitingToPreview != null) {
                             showSnackMessage("A new version was found in server. Downloading...")
                             startSyncThenOpen(fileWaitingToPreview!!)
-                            waitingToPreview = false
                             fileWaitingToPreview = null
                         } else {
                             showSnackMessage("Download enqueued")
@@ -1210,9 +1206,8 @@ class FileDisplayActivity : FileActivity(),
                 }
             }
             is UIResult.Error -> {
-                if (waitingToPreview) {
+                if (fileWaitingToPreview != null) {
                     startPreview(fileWaitingToPreview)
-                    waitingToPreview = false
                     fileWaitingToPreview = null
                 } else {
                     when (uiResult.error) {
@@ -1535,12 +1530,10 @@ class FileDisplayActivity : FileActivity(),
                 startImagePreview(file)
             }
             PreviewTextFragment.canBePreviewed(file) -> {
-                waitingToPreview = true
                 fileWaitingToPreview  = file
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
             }
             PreviewAudioFragment.canBePreviewed(file) -> {
-                waitingToPreview = true
                 fileWaitingToPreview = file
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
             }
