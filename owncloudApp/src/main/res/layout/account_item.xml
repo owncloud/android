@@ -18,19 +18,22 @@
 -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="80dp"
+    android:background="?android:attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginStart="@dimen/standard_margin"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_account_plus"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,11 +41,13 @@
         android:id="@+id/ticker"
         android:layout_width="16dp"
         android:layout_height="16dp"
+        android:src="@drawable/ic_current"
+        tools:layout_editor_absoluteX="48dp"
+        tools:layout_editor_absoluteY="13dp"
         android:layout_marginTop="-8dp"
         android:layout_marginEnd="-8dp"
-        android:src="@drawable/ic_current"
         app:layout_constraintEnd_toEndOf="@id/icon"
-        app:layout_constraintTop_toTopOf="@id/icon" />
+        app:layout_constraintTop_toTopOf="@id/icon"/>
     <!-- drawable will be replaced by ic_current_white + tint in runtime;
     ic_current here as a placeholder -->
 
@@ -50,31 +55,31 @@
         android:id="@+id/name"
         android:layout_width="210dp"
         android:layout_height="28dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
         android:gravity="bottom"
         android:maxLines="1"
         android:text="@string/placeholder_filename"
         android:textColor="@color/textColor"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/refreshAccountButton"
-        app:layout_constraintStart_toEndOf="@id/ticker"
+        app:layout_constraintBottom_toTopOf="@+id/account"
+        app:layout_constraintStart_toEndOf="@+id/ticker"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/account"
         android:layout_width="210dp"
         android:layout_height="44dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="@dimen/standard_half_margin"
-        android:layout_marginBottom="4dp"
+        android:layout_marginStart="8dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
         android:ellipsize="end"
         android:text="@string/placeholder_sentence"
         android:textColor="@color/textColor"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/refreshAccountButton"
         app:layout_constraintStart_toEndOf="@id/ticker"
         app:layout_constraintTop_toBottomOf="@id/name" />
 
@@ -83,6 +88,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/actionbar_sync"
         android:paddingLeft="@dimen/standard_half_padding"
         android:paddingTop="@dimen/standard_padding"
@@ -90,9 +96,9 @@
         android:paddingBottom="@dimen/standard_padding"
         android:src="@drawable/ic_action_refresh"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/passwordButton"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/passwordButton"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/account"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/black" />
 
@@ -101,15 +107,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
         android:paddingLeft="@dimen/standard_half_padding"
         android:paddingTop="@dimen/standard_padding"
         android:paddingRight="@dimen/standard_half_padding"
         android:paddingBottom="@dimen/standard_padding"
         android:src="@drawable/ic_baseline_lock_reset_grey"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/removeButton"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/removeButton"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/black" />
 
@@ -118,6 +124,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
         android:paddingStart="@dimen/standard_half_padding"
         android:paddingTop="@dimen/standard_padding"
         android:paddingEnd="@dimen/standard_padding"
@@ -125,8 +133,6 @@
         android:src="@drawable/ic_action_delete_grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/black" />
 

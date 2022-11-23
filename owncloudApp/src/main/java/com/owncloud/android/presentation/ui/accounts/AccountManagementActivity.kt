@@ -1,5 +1,26 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author Javier Rodríguez Pérez
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.presentation.ui.accounts
 
+import android.R
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
@@ -10,6 +31,7 @@ import android.content.Intent
 import android.content.SyncRequest
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,7 +39,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.MainApp.Companion.authority
 import com.owncloud.android.MainApp.Companion.initDependencyInjection
-import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.presentation.adapters.accounts.AccountManagementAdapter
 import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_TOKEN
@@ -49,13 +70,13 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.accounts_layout)
-        tintedCheck = ContextCompat.getDrawable(this, R.drawable.ic_current_white)!!
+        setContentView(com.owncloud.android.R.layout.accounts_layout)
+        tintedCheck = ContextCompat.getDrawable(this, com.owncloud.android.R.drawable.ic_current_white)!!
         tintedCheck = DrawableCompat.wrap(tintedCheck)
-        val tint = ContextCompat.getColor(this, R.color.actionbar_start_color)
+        val tint = ContextCompat.getColor(this, com.owncloud.android.R.color.actionbar_start_color)
         DrawableCompat.setTint(tintedCheck, tint)
 
-        val recyclerView: RecyclerView = findViewById(R.id.account_list_recycler_view)
+        val recyclerView: RecyclerView = findViewById(com.owncloud.android.R.id.account_list_recycler_view)
         recyclerView.run {
             filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(applicationContext)
             adapter = accountListAdapter
@@ -63,7 +84,7 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
         }
 
         setupStandardToolbar(
-            getString(R.string.prefs_manage_accounts),
+            getString(com.owncloud.android.R.string.prefs_manage_accounts),
             displayHomeAsUpEnabled = true,
             homeButtonEnabled = true,
             displayShowTitleEnabled = true
@@ -78,14 +99,6 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
         account = AccountUtils.getCurrentOwnCloudAccount(this)
         onAccountSet(false)
 
-        /**
-        // added click listener to switch account
-        recyclerView.onItemClickListener = OnItemClickListener { parent, view, position, id ->
-        switchAccount(
-        position
-        )
-        }
-         */
     }
 
     /**
@@ -195,7 +208,7 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
         val request = builder.build()
         ContentResolver.requestSync(request)
 
-        showSnackMessage(getString(R.string.synchronizing_account))
+        showSnackMessage(getString(com.owncloud.android.R.string.synchronizing_account))
     }
 
     override fun createAccount() {
@@ -265,9 +278,18 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
         }
 
         // Add Create Account item at the end of account list if multi-account is enabled
-        if (resources.getBoolean(R.bool.multiaccount_support) || accountList.isEmpty()) {
+        if (resources.getBoolean(com.owncloud.android.R.bool.multiaccount_support) || accountList.isEmpty()) {
             provisionalAccountList.add(AccountManagementAdapter.AccountRecyclerItem.NewAccount)
         }
         return provisionalAccountList
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var retval = true
+        when (item.itemId) {
+            R.id.home -> onBackPressed()
+            else -> retval = super.onOptionsItemSelected(item)
+        }
+        return retval
     }
 }

@@ -1,3 +1,23 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author Javier Rodríguez Pérez
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.presentation.adapters.accounts
 
 import android.accounts.Account
@@ -11,7 +31,6 @@ import com.owncloud.android.databinding.AccountActionBinding
 import com.owncloud.android.databinding.AccountItemBinding
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.ui.accounts.AccountManagementActivity
-import com.owncloud.android.ui.adapter.AccountListAdapter
 import com.owncloud.android.utils.AvatarUtils
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
@@ -33,6 +52,7 @@ class AccountManagementAdapter(private val accountListener: AccountManagementAct
             view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(parent.context)
             NewAccountViewHolder(view)
         }
+
     }
 
     fun submitAccountList(accountList: List<AccountRecyclerItem>) {
@@ -45,6 +65,7 @@ class AccountManagementAdapter(private val accountListener: AccountManagementAct
             is AccountManagementViewHolder -> {
                 val accountItem = getItem(position) as AccountRecyclerItem.AccountItem
                 val account: Account = accountItem.account
+                val accountAvatarRadiusDimension = holder.itemView.context.resources.getDimension(R.dimen.list_item_avatar_icon_radius)
 
                 try {
                     val oca = OwnCloudAccount(account, holder.itemView.context)
@@ -66,7 +87,7 @@ class AccountManagementAdapter(private val accountListener: AccountManagementAct
                         holder.binding.icon,
                         account,
                         true,
-                        20f
+                        accountAvatarRadiusDimension
                     )
                 } catch (e: java.lang.Exception) {
                     Timber.e(e, "Error calculating RGB value for account list item.")
