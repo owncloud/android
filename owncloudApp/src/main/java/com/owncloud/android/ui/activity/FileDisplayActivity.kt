@@ -159,6 +159,8 @@ class FileDisplayActivity : FileActivity(),
     private var waitingToSend: OCFile? = null
     private var waitingToOpen: OCFile? = null
 
+    private var waitingToPreview = false
+
     private var localBroadcastManager: LocalBroadcastManager? = null
 
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
@@ -420,7 +422,7 @@ class FileDisplayActivity : FileActivity(),
         updateFragmentsVisibility(true)
     }
 
-    fun showBottomNavBar(show: Boolean) {
+    private fun showBottomNavBar(show: Boolean) {
         binding.navCoordinatorLayout.bottomNavView.isVisible = show
     }
 
@@ -1176,13 +1178,30 @@ class FileDisplayActivity : FileActivity(),
         when (uiResult) {
             is UIResult.Success -> {
                 when (uiResult.data) {
-                    SynchronizeFileUseCase.SyncType.AlreadySynchronized -> showSnackMessage(getString(R.string.sync_file_nothing_to_do_msg))
+                    SynchronizeFileUseCase.SyncType.AlreadySynchronized -> {
+                        if (waitingToPreview) {
+                            startPreview(fileWaitingToPreview)
+                            waitingToPreview = false
+                            fileWaitingToPreview = null
+                        } else {
+                            showSnackMessage(getString(R.string.sync_file_nothing_to_do_msg))
+                        }
+                    }
                     is SynchronizeFileUseCase.SyncType.ConflictDetected -> {
                         val showConflictActivityIntent = Intent(this, ConflictsResolveActivity::class.java)
                         showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, file)
                         startActivity(showConflictActivityIntent)
                     }
-                    is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> showSnackMessage("Download enqueued")
+                    is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
+                        if (waitingToPreview) {
+                            showSnackMessage("A new version was found in server. Downloading...")
+                            startSyncThenOpen(fileWaitingToPreview!!)
+                            waitingToPreview = false
+                            fileWaitingToPreview = null
+                        } else {
+                            showSnackMessage("Download enqueued")
+                        }
+                    }
                     SynchronizeFileUseCase.SyncType.FileNotFound -> {
                         /** Nothing to do atm. If we are in details view, go back to file list */
                     }
@@ -1191,25 +1210,31 @@ class FileDisplayActivity : FileActivity(),
                 }
             }
             is UIResult.Error -> {
-                when (uiResult.error) {
-                    is UnauthorizedException -> {
-                        launch(Dispatchers.IO) {
-                            val credentials = AccountUtils.getCredentialsForAccount(MainApp.appContext, account)
+                if (waitingToPreview) {
+                    startPreview(fileWaitingToPreview)
+                    waitingToPreview = false
+                    fileWaitingToPreview = null
+                } else {
+                    when (uiResult.error) {
+                        is UnauthorizedException -> {
+                            launch(Dispatchers.IO) {
+                                val credentials = AccountUtils.getCredentialsForAccount(MainApp.appContext, account)
 
-                            launch(Dispatchers.Main) {
-                                if (credentials is OwnCloudBearerCredentials) { // OAuth
-                                    showRequestRegainAccess()
-                                } else {
-                                    showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
+                                launch(Dispatchers.Main) {
+                                    if (credentials is OwnCloudBearerCredentials) { // OAuth
+                                        showRequestRegainAccess()
+                                    } else {
+                                        showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
+                                    }
                                 }
                             }
                         }
-                    }
-                    is CertificateCombinedException -> {
-                        showUntrustedCertDialogForThrowable(uiResult.error)
-                    }
-                    else -> {
-                        showSnackMessage(getString(R.string.sync_fail_ticker))
+                        is CertificateCombinedException -> {
+                            showUntrustedCertDialogForThrowable(uiResult.error)
+                        }
+                        else -> {
+                            showSnackMessage(getString(R.string.sync_fail_ticker))
+                        }
                     }
                 }
             }
@@ -1217,14 +1242,6 @@ class FileDisplayActivity : FileActivity(),
                 /** Not needed at the moment, we may need it later */
             }
         }
-//        TODO:
-//        /// no matter if sync was right or not - if there was no transfer and the file is down, OPEN it
-//        val waitedForPreview = fileWaitingToPreview?.let { it == operation.localFile && it.isAvailableLocally } ?: false
-//        if (!operation.transferWasRequested() and waitedForPreview) {
-//            fileOperationsHelper.openFile(fileWaitingToPreview)
-//            fileWaitingToPreview = null
-//        }
-
     }
 
     private fun onCapabilitiesOperationFinish(uiResult: UIResult<OCCapability>) {
@@ -1418,6 +1435,24 @@ class FileDisplayActivity : FileActivity(),
     }
 
     /**
+     * Chooses the suitable method to preview a file [OCFile].
+     *
+     * @param file File [OCFile] to preview.
+     */
+    private fun startPreview(file: OCFile?) {
+        file?.let {
+            when {
+                PreviewTextFragment.canBePreviewed(file) -> {
+                    startTextPreview(file)
+                }
+                PreviewAudioFragment.canBePreviewed(file) -> {
+                    startAudioPreview(file, 0)
+                }
+            }
+        }
+    }
+
+    /**
      * Requests the synchronization of the received [OCFile],
      * updates the UI to monitor the progress and prepares the activity
      * to preview or open the file when the download finishes.
@@ -1520,12 +1555,13 @@ class FileDisplayActivity : FileActivity(),
                 startImagePreview(file)
             }
             PreviewTextFragment.canBePreviewed(file) -> {
-                startTextPreview(file)
+                waitingToPreview = true
+                fileWaitingToPreview  = file
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
             }
             PreviewAudioFragment.canBePreviewed(file) -> {
-                // media preview
-                startAudioPreview(file, 0)
+                waitingToPreview = true
+                fileWaitingToPreview = file
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
             }
             PreviewVideoFragment.canBePreviewed(file) && !WorkManager.getInstance(this).isDownloadPending(account, file) -> {
