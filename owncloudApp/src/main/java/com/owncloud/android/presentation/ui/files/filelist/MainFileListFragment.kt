@@ -38,6 +38,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -79,6 +80,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment
 import com.owncloud.android.ui.dialog.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
 import com.owncloud.android.utils.ColumnQuantity
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -97,7 +99,7 @@ class MainFileListFragment : Fragment(),
             requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY),
         )
     }
-    private val fileOperationsViewModel by viewModel<FileOperationsViewModel>()
+    private val fileOperationsViewModel by sharedViewModel<FileOperationsViewModel>()
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
@@ -182,9 +184,11 @@ class MainFileListFragment : Fragment(),
 
         // Set Swipe to refresh and its listener
         binding.swipeRefreshMainFileList.setOnRefreshListener {
-            mainFileListViewModel.refreshFolder(
-                ocFolder = mainFileListViewModel.getFile(),
-                isPickingAFolder = isPickingAFolder(),
+            fileOperationsViewModel.performOperation(
+                FileOperation.RefreshFolderOperation(
+                    folderToRefresh = mainFileListViewModel.getFile(),
+                    shouldSyncContents = !isPickingAFolder(), // For picking a folder option, we just need a refresh
+                )
             )
         }
 
@@ -207,6 +211,14 @@ class MainFileListFragment : Fragment(),
         // Observe the current folder displayed and notify the listener
         collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) {
             fileActions?.onCurrentFolderUpdated(it)
+            if (mainFileListViewModel.fileListOption.value.isAllFiles()) {
+                fileOperationsViewModel.performOperation(
+                    FileOperation.RefreshFolderOperation(
+                        folderToRefresh = it,
+                        shouldSyncContents = !isPickingAFolder(), // For picking a folder option, we just need a refresh
+                    )
+                )
+            }
         }
 
         // Observe the file list ui state.
@@ -219,19 +231,10 @@ class MainFileListFragment : Fragment(),
             actionMode?.invalidate()
         }
 
-        mainFileListViewModel.syncFolder.observe(viewLifecycleOwner, Event.EventObserver {
-            binding.syncProgressBar.isIndeterminate = it.isLoading
-            binding.swipeRefreshMainFileList.isRefreshing = it.isLoading
-
-            it.getThrowableOrNull()?.let { throwable ->
-                val message = throwable.parseError(
-                    genericErrorMessage = getString(R.string.sync_folder_failed_content, mainFileListViewModel.getFile().fileName),
-                    resources = resources,
-                    showJustReason = false
-                )
-                showMessageInSnackbar(message)
-            }
-        })
+        fileOperationsViewModel.refreshFolderLiveData.observe(viewLifecycleOwner) {
+            binding.syncProgressBar.isIndeterminate = it.peekContent().isLoading
+            binding.swipeRefreshMainFileList.isRefreshing = it.peekContent().isLoading
+        }
     }
 
     fun navigateToFolderId(folderId: Long) {
@@ -493,7 +496,7 @@ class MainFileListFragment : Fragment(),
                 R.id.action_set_available_offline -> {
                     fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(singleFile)))
                     if (singleFile.isFolder) {
-                        mainFileListViewModel.syncFolder(singleFile)
+                        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFolderOperation(singleFile, singleFile.owner))
                     } else {
                         fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(singleFile, singleFile.owner))
                     }
@@ -538,7 +541,7 @@ class MainFileListFragment : Fragment(),
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(checkedFiles))
                 checkedFiles.forEach { ocFile ->
                     if (ocFile.isFolder) {
-                        mainFileListViewModel.syncFolder(ocFile)
+                        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFolderOperation(ocFile, ocFile.owner))
                     } else {
                         fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(ocFile, ocFile.owner))
                     }
@@ -603,10 +606,6 @@ class MainFileListFragment : Fragment(),
 
         if (ocFile.isFolder) {
             mainFileListViewModel.updateFolderToDisplay(ocFile)
-            mainFileListViewModel.refreshFolder(
-                ocFolder = ocFile,
-                isPickingAFolder = isPickingAFolder(),
-            )
         } else { // Click on a file
             fileActions?.onFileClicked(ocFile)
         }
@@ -715,9 +714,9 @@ class MainFileListFragment : Fragment(),
     private fun syncFiles(files: List<OCFile>) {
         for (file in files) {
             if (file.isFolder) {
-                mainFileListViewModel.syncFolder(ocFolder = file)
+                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFolderOperation(folderToSync = file, accountName = file.owner))
             } else {
-                fileActions?.syncFile(file)
+                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(fileToSync = file, accountName = file.owner))
             }
         }
     }

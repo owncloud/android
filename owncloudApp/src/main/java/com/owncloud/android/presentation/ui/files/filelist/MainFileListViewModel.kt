@@ -21,9 +21,6 @@
 
 package com.owncloud.android.presentation.ui.files.filelist
 
-import android.accounts.Account
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkManager
@@ -39,10 +36,6 @@ import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
-import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
-import com.owncloud.android.extensions.isDownloadPending
-import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.ui.files.SortOrder
 import com.owncloud.android.presentation.ui.files.SortOrder.Companion.PREF_FILE_LIST_SORT_ORDER
 import com.owncloud.android.presentation.ui.files.SortType
@@ -50,9 +43,7 @@ import com.owncloud.android.presentation.ui.files.SortType.Companion.PREF_FILE_L
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
-import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS
-import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -111,9 +102,6 @@ class MainFileListViewModel(
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = FileListUiState.Loading
             )
-
-    private val _syncFolder = MediatorLiveData<Event<UIResult<Unit>>>()
-    val syncFolder: LiveData<Event<UIResult<Unit>>> = _syncFolder
 
     init {
         val sortTypeSelected = SortType.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_TYPE, SortType.SORT_TYPE_BY_NAME.ordinal)]
@@ -210,17 +198,7 @@ class MainFileListViewModel(
             }
 
             updateFolderToDisplay(parentDir!!)
-            if (fileListOption.value.isAllFiles()) {
-                refreshFolder(
-                    ocFolder = parentDir,
-                    isPickingAFolder = false,
-                )
-            }
         }
-    }
-
-    fun fileIsDownloading(file: OCFile, account: Account): Boolean {
-        return workManager.isDownloadPending(account, file)
     }
 
     fun updateFolderToDisplay(newFolderToDisplay: OCFile) {
@@ -241,35 +219,6 @@ class MainFileListViewModel(
         sharedPreferencesProvider.putInt(PREF_FILE_LIST_SORT_ORDER, sortOrder.ordinal)
         sortTypeAndOrder.update { Pair(sortType, sortOrder) }
     }
-
-    fun refreshFolder(
-        ocFolder: OCFile,
-        isPickingAFolder: Boolean,
-    ) = runUseCaseWithResult(
-        coroutineDispatcher = coroutinesDispatcherProvider.io,
-        liveData = _syncFolder,
-        useCase = synchronizeFolderUseCase,
-        showLoading = true,
-        useCaseParams = SynchronizeFolderUseCase.Params(
-            remotePath = ocFolder.remotePath,
-            accountName = ocFolder.owner,
-            syncMode = if (isPickingAFolder) REFRESH_FOLDER else SYNC_CONTENTS
-        )
-    )
-
-    fun syncFolder(
-        ocFolder: OCFile,
-    ) = runUseCaseWithResult(
-        coroutineDispatcher = coroutinesDispatcherProvider.io,
-        liveData = _syncFolder,
-        useCase = synchronizeFolderUseCase,
-        showLoading = true,
-        useCaseParams = SynchronizeFolderUseCase.Params(
-            remotePath = ocFolder.remotePath,
-            accountName = ocFolder.owner,
-            syncMode = SYNC_FOLDER_RECURSIVELY
-        )
-    )
 
     private fun composeFileListUiStateForThisParams(
         currentFolderDisplayed: OCFile,
@@ -340,7 +289,10 @@ class MainFileListViewModel(
             accountName = accountName,
             folderToDisplay = currentFolderDisplayed,
             folderContent = folderContent.filter { fileWithSyncInfo ->
-                fileWithSyncInfo.file.fileName.contains(searchFilter ?: "", ignoreCase = true) && (showHiddenFiles || !fileWithSyncInfo.file.fileName.startsWith("."))
+                fileWithSyncInfo.file.fileName.contains(
+                    searchFilter ?: "",
+                    ignoreCase = true
+                ) && (showHiddenFiles || !fileWithSyncInfo.file.fileName.startsWith("."))
             }.let { sortList(it, sortTypeAndOrder) },
             fileListOption = fileListOption,
             searchFilter = searchFilter,

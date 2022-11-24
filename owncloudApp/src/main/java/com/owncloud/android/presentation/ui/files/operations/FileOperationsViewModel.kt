@@ -40,6 +40,7 @@ import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -50,6 +51,7 @@ class FileOperationsViewModel(
     private val removeFileUseCase: RemoveFileUseCase,
     private val renameFileUseCase: RenameFileUseCase,
     private val synchronizeFileUseCase: SynchronizeFileUseCase,
+    private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
     private val setFilesAsAvailableOfflineUseCase: SetFilesAsAvailableOfflineUseCase,
     private val unsetFilesAsAvailableOfflineUseCase: UnsetFilesAsAvailableOfflineUseCase,
     private val contextProvider: ContextProvider,
@@ -74,6 +76,12 @@ class FileOperationsViewModel(
     private val _syncFileLiveData = MediatorLiveData<Event<UIResult<SynchronizeFileUseCase.SyncType>>>()
     val syncFileLiveData: LiveData<Event<UIResult<SynchronizeFileUseCase.SyncType>>> = _syncFileLiveData
 
+    private val _syncFolderLiveData = MediatorLiveData<Event<UIResult<Unit>>>()
+    val syncFolderLiveData: LiveData<Event<UIResult<Unit>>> = _syncFolderLiveData
+
+    private val _refreshFolderLiveData = MediatorLiveData<Event<UIResult<Unit>>>()
+    val refreshFolderLiveData: LiveData<Event<UIResult<Unit>>> = _refreshFolderLiveData
+
     fun performOperation(fileOperation: FileOperation) {
         when (fileOperation) {
             is FileOperation.MoveOperation -> moveOperation(fileOperation)
@@ -84,6 +92,8 @@ class FileOperationsViewModel(
             is FileOperation.CreateFolder -> createFolderOperation(fileOperation)
             is FileOperation.SetFilesAsAvailableOffline -> setFileAsAvailableOffline(fileOperation)
             is FileOperation.UnsetFilesAsAvailableOffline -> unsetFileAsAvailableOffline(fileOperation)
+            is FileOperation.SynchronizeFolderOperation -> syncFolderOperation(fileOperation)
+            is FileOperation.RefreshFolderOperation -> refreshFolderOperation(fileOperation)
         }
     }
 
@@ -140,6 +150,34 @@ class FileOperationsViewModel(
             liveData = _syncFileLiveData,
             useCase = synchronizeFileUseCase,
             useCaseParams = SynchronizeFileUseCase.Params(fileOperation.fileToSync)
+        )
+    }
+
+    private fun syncFolderOperation(fileOperation: FileOperation.SynchronizeFolderOperation) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            liveData = _syncFolderLiveData,
+            useCase = synchronizeFolderUseCase,
+            showLoading = false,
+            useCaseParams = SynchronizeFolderUseCase.Params(
+                remotePath = fileOperation.folderToSync.remotePath,
+                accountName = fileOperation.folderToSync.owner,
+                syncMode = SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY
+            )
+        )
+    }
+
+    private fun refreshFolderOperation(fileOperation: FileOperation.RefreshFolderOperation) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            liveData = _refreshFolderLiveData,
+            useCase = synchronizeFolderUseCase,
+            showLoading = true,
+            useCaseParams = SynchronizeFolderUseCase.Params(
+                remotePath = fileOperation.folderToRefresh.remotePath,
+                accountName = fileOperation.folderToRefresh.owner,
+                syncMode = if (fileOperation.shouldSyncContents) SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS else SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER
+            )
         )
     }
 
