@@ -28,6 +28,8 @@ sealed interface FileOperation {
     data class RemoveOperation(val listOfFilesToRemove: List<OCFile>, val removeOnlyLocalCopy: Boolean) : FileOperation
     data class RenameOperation(val ocFileToRename: OCFile, val newName: String) : FileOperation
     data class SynchronizeFileOperation(val fileToSync: OCFile, val accountName: String) : FileOperation
+    data class SynchronizeFolderOperation(val folderToSync: OCFile, val accountName: String) : FileOperation
+    data class RefreshFolderOperation(val folderToRefresh: OCFile, val shouldSyncContents: Boolean) : FileOperation
     data class SetFilesAsAvailableOffline(val filesToUpdate: List<OCFile>) : FileOperation
     data class UnsetFilesAsAvailableOffline(val filesToUpdate: List<OCFile>) : FileOperation
 }
