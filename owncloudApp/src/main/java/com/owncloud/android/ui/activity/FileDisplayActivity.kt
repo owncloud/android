@@ -1236,6 +1236,42 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
+    private fun onSynchronizeFolderOperationFinish(
+        uiResult: UIResult<Unit>
+    ) {
+        when (uiResult) {
+            is UIResult.Success -> {
+                // Nothing to handle when synchronizing a folder succeeds
+            }
+            is UIResult.Error -> {
+                when (uiResult.error) {
+                    is UnauthorizedException -> {
+                        launch(Dispatchers.IO) {
+                            val credentials = AccountUtils.getCredentialsForAccount(MainApp.appContext, account)
+
+                            launch(Dispatchers.Main) {
+                                if (credentials is OwnCloudBearerCredentials) { // OAuth
+                                    showRequestRegainAccess()
+                                } else {
+                                    showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
+                                }
+                            }
+                        }
+                    }
+                    is CertificateCombinedException -> {
+                        showUntrustedCertDialogForThrowable(uiResult.error)
+                    }
+                    else -> {
+                        showSnackMessage(getString(R.string.sync_fail_ticker))
+                    }
+                }
+            }
+            is UIResult.Loading -> {
+                /** Not needed at the moment, we may need it later */
+            }
+        }
+    }
+
     private fun onCapabilitiesOperationFinish(uiResult: UIResult<OCCapability>) {
         if (uiResult is UIResult.Success) {
             val capabilities = uiResult.data
@@ -1512,6 +1548,12 @@ class FileDisplayActivity : FileActivity(),
         })
         fileOperationsViewModel.syncFileLiveData.observe(this, Event.EventObserver {
             onSynchronizeFileOperationFinish(it)
+        })
+        fileOperationsViewModel.refreshFolderLiveData.observe(this, Event.EventObserver {
+            onSynchronizeFolderOperationFinish(it)
+        })
+        fileOperationsViewModel.syncFolderLiveData.observe(this, Event.EventObserver {
+            onSynchronizeFolderOperationFinish(it)
         })
     }
 
