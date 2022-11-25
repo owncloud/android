@@ -626,4 +626,5 @@
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="open_in_web_error_generic">Ei saanud veebis avada</string>
   <string name="open_in_web_error_not_supported">seda failitüüpi toetavaid rakendusi ei ole</string>
+  <string name="open_in_web_error_too_early">Nõutud fail ei ole veel saadaval, palun proovige hiljem uuesti</string>
 </resources>
