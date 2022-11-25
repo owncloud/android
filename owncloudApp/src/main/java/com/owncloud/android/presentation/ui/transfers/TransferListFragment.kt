@@ -60,8 +60,8 @@ class TransferListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         transfersAdapter = TransfersAdapter(
-            cancel = { id ->
-                transfersViewModel.cancelTransferWithId(id)
+            cancel = { transfer ->
+                transfersViewModel.cancelUpload(transfer)
             },
             retry = { transfer: OCTransfer ->
                 if (transfer.lastResult == TransferResult.CREDENTIAL_ERROR) {

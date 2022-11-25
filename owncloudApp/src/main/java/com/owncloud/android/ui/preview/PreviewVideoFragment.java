@@ -378,7 +378,9 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 return true;
             }
             case R.id.action_cancel_sync: {
-                ((FileDisplayActivity) mContainerActivity).cancelTransference(getFile());
+                ArrayList<OCFile> fileList = new ArrayList<>();
+                fileList.add(getFile());
+                ((FileDisplayActivity) mContainerActivity).cancelFileTransference(fileList);
                 return true;
             }
             default:
