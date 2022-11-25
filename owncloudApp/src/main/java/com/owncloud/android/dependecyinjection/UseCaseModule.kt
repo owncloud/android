@@ -94,9 +94,11 @@ import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUs
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
+import com.owncloud.android.usecases.transfers.downloads.CancelDownloadsRecursivelyUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccountUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
-import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadsRecursivelyUseCase
 import com.owncloud.android.usecases.transfers.uploads.ClearFailedTransfersUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
@@ -171,6 +173,7 @@ val useCaseModule = module {
 
     // Transfers
     factory { CancelDownloadForFileUseCase(get()) }
+    factory { CancelDownloadsRecursivelyUseCase(get(), get()) }
     factory { DownloadFileUseCase(get()) }
     factory { GetLiveDataForDownloadingFileUseCase(get()) }
     factory { GetLiveDataForFinishedDownloadsFromAccountUseCase(get()) }
@@ -180,11 +183,12 @@ val useCaseModule = module {
     factory { UploadFilesFromSystemUseCase(get(), get()) }
     factory { UploadFileInConflictUseCase(get(), get()) }
     factory { CancelUploadForFileUseCase(get(), get()) }
+    factory { CancelUploadsRecursivelyUseCase(get(), get(), get(), get()) }
     factory { RetryUploadFromSystemUseCase(get(), get(), get()) }
     factory { RetryUploadFromContentUriUseCase(get(), get(), get()) }
     factory { GetAllTransfersAsLiveDataUseCase(get()) }
     factory { GetAllTransfersUseCase(get()) }
-    factory { CancelUploadWithIdUseCase(get(), get(), get()) }
+    factory { CancelUploadUseCase(get(), get(), get()) }
     factory { ClearFailedTransfersUseCase(get(), get(), get()) }
     factory { RetryFailedUploadsUseCase(get(), get(), get(), get()) }
     factory { ClearSuccessfulTransfersUseCase(get()) }
