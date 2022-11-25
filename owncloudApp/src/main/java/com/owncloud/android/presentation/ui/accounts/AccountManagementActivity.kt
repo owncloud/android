@@ -20,7 +20,6 @@
 
 package com.owncloud.android.presentation.ui.accounts
 
-import android.R
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
@@ -39,11 +38,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.MainApp.Companion.authority
 import com.owncloud.android.MainApp.Companion.initDependencyInjection
+import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.presentation.adapters.accounts.AccountManagementAdapter
 import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_TOKEN
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
+import com.owncloud.android.presentation.viewmodels.accounts.AccountsManagementViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
@@ -52,6 +53,7 @@ import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT as EXTRA_ACCOUNT_LOGIN_ACTIVITY
 
 const val KEY_CURRENT_ACCOUNT_CHANGED = "CURRENT_ACCOUNT_CHANGED"
 const val KEY_ACCOUNT_LIST_CHANGED = "ACCOUNT_LIST_CHANGED"
@@ -59,24 +61,25 @@ const val KEY_ACCOUNT_LIST_CHANGED = "ACCOUNT_LIST_CHANGED"
 class AccountManagementActivity : FileActivity(), AccountManagementAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
 
     private val accountListAdapter: AccountManagementAdapter = AccountManagementAdapter(this)
-    lateinit var originalAccounts: Set<String>
+    private lateinit var originalAccounts: Set<String>
     private lateinit var originalCurrentAccount: String
     private lateinit var accountBeingRemoved: String
     private lateinit var tintedCheck: Drawable
 
     private val removeAccountDialogViewModel: RemoveAccountDialogViewModel by viewModel()
+    private val accountsManagementViewModel: AccountsManagementViewModel by viewModel()
 
     @Override
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(com.owncloud.android.R.layout.accounts_layout)
-        tintedCheck = ContextCompat.getDrawable(this, com.owncloud.android.R.drawable.ic_current_white)!!
+        setContentView(R.layout.accounts_layout)
+        tintedCheck = ContextCompat.getDrawable(this, R.drawable.ic_current_white)!!
         tintedCheck = DrawableCompat.wrap(tintedCheck)
-        val tint = ContextCompat.getColor(this, com.owncloud.android.R.color.actionbar_start_color)
+        val tint = ContextCompat.getColor(this, R.color.actionbar_start_color)
         DrawableCompat.setTint(tintedCheck, tint)
 
-        val recyclerView: RecyclerView = findViewById(com.owncloud.android.R.id.account_list_recycler_view)
+        val recyclerView: RecyclerView = findViewById(R.id.account_list_recycler_view)
         recyclerView.run {
             filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(applicationContext)
             adapter = accountListAdapter
@@ -84,19 +87,20 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
         }
 
         setupStandardToolbar(
-            getString(com.owncloud.android.R.string.prefs_manage_accounts),
+            getString(R.string.prefs_manage_accounts),
             displayHomeAsUpEnabled = true,
             homeButtonEnabled = true,
             displayShowTitleEnabled = true
         )
 
-        val accountList = AccountManager.get(this).getAccountsByType(accountType)
+        val accountList = accountsManagementViewModel.getLoggedAccounts()
         originalAccounts = toAccountNameSet(accountList)
-        originalCurrentAccount = AccountUtils.getCurrentOwnCloudAccount(this).name
+        originalCurrentAccount = accountsManagementViewModel.getCurrentAccount()!!.name
+
 
         accountListAdapter.submitAccountList(accountList = getAccountListItems())
 
-        account = AccountUtils.getCurrentOwnCloudAccount(this)
+        account = accountsManagementViewModel.getCurrentAccount()
         onAccountSet(false)
 
     }
@@ -130,7 +134,7 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
      * @return `true` if account list has changed, `false` if not
      */
     private fun hasAccountListChanged(): Boolean {
-        val accountList = AccountManager.get(this).getAccountsByType(accountType)
+        val accountList = accountsManagementViewModel.getLoggedAccounts()
         val actualAccounts = toAccountNameSet(accountList)
         return originalAccounts != actualAccounts
     }
@@ -141,7 +145,7 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
      * @return `true` if account list has changed, `false` if not
      */
     private fun hasCurrentAccountChanged(): Boolean {
-        val currentAccount = AccountUtils.getCurrentOwnCloudAccount(this)
+        val currentAccount = accountsManagementViewModel.getCurrentAccount()
         return currentAccount != null && originalCurrentAccount != currentAccount.name
     }
 
@@ -184,7 +188,7 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
 
     override fun changePasswordOfAccount(account: Account) {
         val updateAccountCredentials = Intent(this, LoginActivity::class.java)
-        updateAccountCredentials.putExtra(EXTRA_ACCOUNT, account)
+        updateAccountCredentials.putExtra(EXTRA_ACCOUNT_LOGIN_ACTIVITY, account)
         updateAccountCredentials.putExtra(
             EXTRA_ACTION,
             ACTION_UPDATE_TOKEN
@@ -208,7 +212,7 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
         val request = builder.build()
         ContentResolver.requestSync(request)
 
-        showSnackMessage(getString(com.owncloud.android.R.string.synchronizing_account))
+        showSnackMessage(getString(R.string.synchronizing_account))
     }
 
     override fun createAccount() {
@@ -226,7 +230,6 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
                         val name = result.getString(AccountManager.KEY_ACCOUNT_NAME)
                         AccountUtils.setCurrentOwnCloudAccount(applicationContext, name)
                         accountListAdapter.submitAccountList(accountList = getAccountListItems())
-                        runOnUiThread { accountListAdapter.notifyDataSetChanged() }
                     } catch (e: OperationCanceledException) {
                         Timber.e(e, "Account creation canceled")
                     } catch (e: Exception) {
@@ -239,11 +242,11 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
     }
 
     override fun run(future: AccountManagerFuture<Boolean>) {
-        if (future != null && future.isDone) {
+        if (future.isDone) {
             // Create new adapter with the remaining accounts
             accountListAdapter.submitAccountList(accountList = getAccountListItems())
             val am = AccountManager.get(this)
-            if (am.getAccountsByType(accountType).isEmpty()) {
+            if (accountsManagementViewModel.getLoggedAccounts().isEmpty()) {
                 // Show create account screen if there isn't any account
                 am.addAccount(
                     accountType,
@@ -252,11 +255,11 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
                     null, null
                 )
             } else {    // at least one account left
-                if (AccountUtils.getCurrentOwnCloudAccount(this) == null) {
+                if (accountsManagementViewModel.getCurrentAccount() == null) {
                     // current account was removed - set another as current
                     var accountName = ""
-                    val accounts = AccountManager.get(this).getAccountsByType(accountType)
-                    if (accounts.size != 0) {
+                    val accounts = accountsManagementViewModel.getLoggedAccounts()
+                    if (accounts.isNotEmpty()) {
                         accountName = accounts[0].name
                     }
                     AccountUtils.setCurrentOwnCloudAccount(this, accountName)
@@ -271,14 +274,14 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
      * @return list of account list items
      */
     private fun getAccountListItems(): List<AccountManagementAdapter.AccountRecyclerItem> {
-        val accountList = AccountManager.get(this).getAccountsByType(accountType)
+        val accountList = accountsManagementViewModel.getLoggedAccounts()
         val provisionalAccountList = mutableListOf<AccountManagementAdapter.AccountRecyclerItem>()
         accountList.forEach {
             provisionalAccountList.add(AccountManagementAdapter.AccountRecyclerItem.AccountItem(it))
         }
 
         // Add Create Account item at the end of account list if multi-account is enabled
-        if (resources.getBoolean(com.owncloud.android.R.bool.multiaccount_support) || accountList.isEmpty()) {
+        if (resources.getBoolean(R.bool.multiaccount_support) || accountList.isEmpty()) {
             provisionalAccountList.add(AccountManagementAdapter.AccountRecyclerItem.NewAccount)
         }
         return provisionalAccountList

@@ -21,7 +21,9 @@
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="?android:attr/selectableItemBackground"
+    >
 
     <ImageView
         android:id="@+id/icon"
@@ -29,7 +31,6 @@
         android:layout_height="33dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:clickable="true"
         android:src="@drawable/ic_account_plus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/name"
@@ -41,7 +42,6 @@
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="?android:attr/selectableItemBackground"
         android:gravity="center_vertical"
         android:paddingEnd="@dimen/standard_padding"
         android:text="@string/placeholder_filename"

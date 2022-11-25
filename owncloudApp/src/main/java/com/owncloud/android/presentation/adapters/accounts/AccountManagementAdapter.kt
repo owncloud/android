@@ -120,7 +120,8 @@ class AccountManagementAdapter(private val accountListener: AccountManagementAct
                 }
 
                 ///bind listener to switchAccount
-                holder.binding.account.apply {
+               // holder.binding.root.apply {
+                holder.itemView.apply {
                     setOnClickListener { accountListener.switchAccount(position) }
                 }
             }

@@ -22,20 +22,20 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="?android:attr/selectableItemBackground"
+    >
 
     <ImageView
         android:id="@+id/icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
         android:scaleType="fitXY"
         android:src="@drawable/ic_account_plus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <ImageView
         android:id="@+id/ticker"
@@ -57,8 +57,6 @@
         android:layout_height="28dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
         android:gravity="bottom"
         android:maxLines="1"
         android:text="@string/placeholder_filename"
@@ -74,8 +72,6 @@
         android:layout_width="210dp"
         android:layout_height="44dp"
         android:layout_marginStart="8dp"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
         android:ellipsize="end"
         android:text="@string/placeholder_sentence"
         android:textColor="@color/textColor"

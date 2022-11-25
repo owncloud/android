@@ -49,6 +49,7 @@ import com.owncloud.android.presentation.settings.autouploads.SettingsVideoUploa
 import com.owncloud.android.presentation.settings.SettingsViewModel
 import com.owncloud.android.presentation.sharing.ShareViewModel
 import com.owncloud.android.presentation.transfers.TransfersViewModel
+import com.owncloud.android.presentation.viewmodels.accounts.AccountsManagementViewModel
 import com.owncloud.android.ui.ReceiveExternalFilesViewModel
 import com.owncloud.android.presentation.accounts.RemoveAccountDialogViewModel
 import com.owncloud.android.ui.preview.PreviewImageViewModel
@@ -109,4 +110,5 @@ val viewModelModule = module {
     viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { (ocFile: OCFile) -> ConflictsResolveViewModel(get(), get(), get(), get(), get(), ocFile) }
     viewModel { ReceiveExternalFilesViewModel(get(), get()) }
+    viewModel { AccountsManagementViewModel(get()) }
 }
