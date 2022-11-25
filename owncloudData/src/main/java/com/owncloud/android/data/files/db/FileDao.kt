@@ -47,6 +47,11 @@ abstract class FileDao {
     ): OCFileEntity?
 
     @Query(SELECT_FILE_WITH_ID)
+    abstract fun getFileWithSyncInfoById(
+        id: Long
+    ): OCFileAndFileSync?
+
+    @Query(SELECT_FILE_WITH_ID)
     abstract fun getFileByIdAsStream(
         id: Long
     ): Flow<OCFileEntity?>
@@ -137,9 +142,10 @@ abstract class FileDao {
 
     @Transaction
     open fun updateSyncStatusForFile(id: Long, workerUuid: UUID?) {
-        val fileEntity = getFileById(id)
+        val fileWithSyncInfoEntity = getFileWithSyncInfoById(id)
 
-        if (fileEntity?.parentId != ROOT_PARENT_ID) {
+        if ((fileWithSyncInfoEntity?.file?.parentId != ROOT_PARENT_ID) &&
+            ((workerUuid == null) != (fileWithSyncInfoEntity?.fileSync?.downloadWorkerUuid == null))) {
             val fileSyncEntity = if (workerUuid == null) {
                 OCFileSyncEntity(
                     fileId = id,
@@ -160,7 +166,7 @@ abstract class FileDao {
             // Check if there is any more file synchronizing in this folder, in such case don't update parent's sync status
             var cleanSyncInParent = true
             if (workerUuid == null) {
-                val folderContent = getFolderContentWithSyncInfo(fileEntity?.parentId!!)
+                val folderContent = getFolderContentWithSyncInfo(fileWithSyncInfoEntity?.file?.parentId!!)
                 var indexFileInFolder = 0
                 while (cleanSyncInParent && indexFileInFolder < folderContent.size) {
                     val child = folderContent[indexFileInFolder]
@@ -171,7 +177,7 @@ abstract class FileDao {
                 }
             }
             if (workerUuid != null || cleanSyncInParent) {
-                updateSyncStatusForFile(fileEntity?.parentId!!, workerUuid)
+                updateSyncStatusForFile(fileWithSyncInfoEntity?.file?.parentId!!, workerUuid)
             }
         }
     }

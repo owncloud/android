@@ -1441,26 +1441,6 @@ class FileDisplayActivity : FileActivity(),
         setSecondFragment(detailsFragment)
     }
 
-    /**
-     * Request stopping the upload/download operation in progress over the given [OCFile] file.
-     *
-     * @param file [OCFile] file which operation are wanted to be cancel
-     */
-    fun cancelTransference(file: OCFile) {
-        transfersViewModel.cancelTransfersRecursively(file)
-    }
-
-    /**
-     * Request stopping all upload/download operations in progress over the given [OCFile] files.
-     *
-     * @param files list of [OCFile] files which operations are wanted to be cancel
-     */
-    private fun cancelTransference(files: List<OCFile>) {
-        for (file in files) {
-            cancelTransference(file)
-        }
-    }
-
     private fun navigateTo(newFileListOption: FileListOption) {
         if (fileListOption != newFileListOption) {
             if (listMainFileFragment != null) {
@@ -1559,7 +1539,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun cancelFileTransference(files: ArrayList<OCFile>) {
-        cancelTransference(files)
+        transfersViewModel.cancelTransfersRecursively(files, account.name)
     }
 
     override fun setBottomBarVisibility(isVisible: Boolean) {
