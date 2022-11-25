@@ -626,4 +626,5 @@
   <string name="ic_action_open_in_web">Abrir en web</string>
   <string name="open_in_web_error_generic">No se pudo abrir en web</string>
   <string name="open_in_web_error_not_supported">No hay aplicaciones que soporten este tipo de fichero</string>
+  <string name="open_in_web_error_too_early">El fichero solicitado no está disponible aún. Por favor, inténtelo más tarde</string>
 </resources>
