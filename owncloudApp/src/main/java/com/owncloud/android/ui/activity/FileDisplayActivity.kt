@@ -1209,27 +1209,26 @@ class FileDisplayActivity : FileActivity(),
                 if (fileWaitingToPreview != null) {
                     startPreview(fileWaitingToPreview)
                     fileWaitingToPreview = null
-                } else {
-                    when (uiResult.error) {
-                        is UnauthorizedException -> {
-                            launch(Dispatchers.IO) {
-                                val credentials = AccountUtils.getCredentialsForAccount(MainApp.appContext, account)
+                }
+                when (uiResult.error) {
+                    is UnauthorizedException -> {
+                        launch(Dispatchers.IO) {
+                            val credentials = AccountUtils.getCredentialsForAccount(MainApp.appContext, account)
 
-                                launch(Dispatchers.Main) {
-                                    if (credentials is OwnCloudBearerCredentials) { // OAuth
-                                        showRequestRegainAccess()
-                                    } else {
-                                        showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
-                                    }
+                            launch(Dispatchers.Main) {
+                                if (credentials is OwnCloudBearerCredentials) { // OAuth
+                                    showRequestRegainAccess()
+                                } else {
+                                    showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
                                 }
                             }
                         }
-                        is CertificateCombinedException -> {
-                            showUntrustedCertDialogForThrowable(uiResult.error)
-                        }
-                        else -> {
-                            showSnackMessage(getString(R.string.sync_fail_ticker))
-                        }
+                    }
+                    is CertificateCombinedException -> {
+                        showUntrustedCertDialogForThrowable(uiResult.error)
+                    }
+                    else -> {
+                        showSnackMessage(getString(R.string.sync_fail_ticker))
                     }
                 }
             }
