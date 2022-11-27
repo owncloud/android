@@ -581,7 +581,7 @@
   <string name="welcome_feature_skip_button">Пропускане</string>
   <string name="welcome_feature_1_title">Управлявайте и  синхронизирайте всичките си файлове</string>
   <string name="welcome_feature_1_text">Можете да копирате, премествате, изтривате</string>
-  <string name="welcome_feature_2_title">Споделяйте файлове и папки</string>
+  <string name="welcome_feature_2_title">Споделяне на файлове и папки</string>
   <string name="welcome_feature_2_text">Можете да споделяте поверително или публично</string>
   <string name="welcome_feature_3_title">Множество профили</string>
   <string name="welcome_feature_3_text">Свържете се с всички свои собствени ownCloud сървъри</string>
