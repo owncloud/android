@@ -33,8 +33,10 @@ import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataU
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
+import com.owncloud.android.usecases.transfers.downloads.CancelDownloadsRecursivelyUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
-import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadsRecursivelyUseCase
 import com.owncloud.android.usecases.transfers.uploads.ClearFailedTransfersUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
@@ -46,7 +48,7 @@ import kotlinx.coroutines.launch
 class TransfersViewModel(
     private val uploadFilesFromContentUriUseCase: UploadFilesFromContentUriUseCase,
     private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase,
-    private val cancelUploadWithIdUseCase: CancelUploadWithIdUseCase,
+    private val cancelUploadUseCase: CancelUploadUseCase,
     private val retryUploadFromSystemUseCase: RetryUploadFromSystemUseCase,
     private val retryUploadFromContentUriUseCase: RetryUploadFromContentUriUseCase,
     private val clearFailedTransfersUseCase: ClearFailedTransfersUseCase,
@@ -55,6 +57,8 @@ class TransfersViewModel(
     getAllTransfersAsLiveDataUseCase: GetAllTransfersAsLiveDataUseCase,
     private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
     private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
+    private val cancelUploadsRecursivelyUseCase: CancelUploadsRecursivelyUseCase,
+    private val cancelDownloadsRecursivelyUseCase: CancelDownloadsRecursivelyUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
@@ -112,10 +116,10 @@ class TransfersViewModel(
         }
     }
 
-    fun cancelTransferWithId(id: Long) {
+    fun cancelUpload(upload: OCTransfer) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            cancelUploadWithIdUseCase.execute(
-                CancelUploadWithIdUseCase.Params(uploadId = id)
+            cancelUploadUseCase.execute(
+                CancelUploadUseCase.Params(upload = upload)
             )
         }
     }
@@ -124,6 +128,15 @@ class TransfersViewModel(
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(ocFile))
             cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(ocFile))
+        }
+    }
+
+    fun cancelTransfersRecursively(ocFiles: List<OCFile>, accountName: String) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            cancelDownloadsRecursivelyUseCase.execute(CancelDownloadsRecursivelyUseCase.Params(ocFiles, accountName))
+        }
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            cancelUploadsRecursivelyUseCase.execute(CancelUploadsRecursivelyUseCase.Params(ocFiles, accountName))
         }
     }
 

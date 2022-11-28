@@ -48,7 +48,7 @@ import timber.log.Timber
 import java.io.File
 
 class TransfersAdapter(
-    val cancel: (Long) -> Unit,
+    val cancel: (OCTransfer) -> Unit,
     val retry: (OCTransfer) -> Unit,
     val clearFailed: () -> Unit,
     val retryFailed: () -> Unit,
@@ -132,7 +132,7 @@ class TransfersAdapter(
                             uploadRightButton.apply {
                                 setImageResource(R.drawable.ic_action_cancel_grey)
                                 setOnClickListener {
-                                    cancel(transferItem.transfer.id!!)
+                                    cancel(transferItem.transfer)
                                 }
                             }
                         }
@@ -140,7 +140,7 @@ class TransfersAdapter(
                             uploadRightButton.apply {
                                 setImageResource(R.drawable.ic_action_delete_grey)
                                 setOnClickListener {
-                                    cancel(transferItem.transfer.id!!)
+                                    cancel(transferItem.transfer)
                                 }
                             }
                             holder.itemView.setOnClickListener {

@@ -25,7 +25,9 @@ package com.owncloud.android.domain.files
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import kotlinx.coroutines.flow.Flow
+import java.util.UUID
 
 interface FileRepository {
     fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
@@ -36,10 +38,10 @@ interface FileRepository {
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
     fun getSearchFolderContent(fileListOption: FileListOption, folderId: Long, search: String): List<OCFile>
     fun getFolderContent(folderId: Long): List<OCFile>
-    fun getFolderContentAsStream(folderId: Long): Flow<List<OCFile>>
+    fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>>
     fun getFolderImages(folderId: Long): List<OCFile>
-    fun getSharedByLinkForAccountAsStream(owner: String): Flow<List<OCFile>>
-    fun getFilesAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFile>>
+    fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
+    fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
     fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
     fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile)
@@ -50,6 +52,9 @@ interface FileRepository {
     fun saveFile(file: OCFile)
     fun saveConflict(fileId: Long, eTagInConflict: String)
     fun cleanConflict(fileId: Long)
+    fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID)
+    fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID)
+    fun cleanWorkersUuid(fileId: Long)
 
     fun disableThumbnailsForFile(fileId: Long)
     fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)

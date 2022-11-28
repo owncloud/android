@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,11 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.files.datasources.implementation
 
 import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.db.FileDao
+import com.owncloud.android.data.files.db.OCFileAndFileSync
 import com.owncloud.android.data.files.db.OCFileEntity
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.MIME_DIR
@@ -28,8 +32,10 @@ import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.UUID
 
 class OCLocalFileDataSource(
     private val fileDao: FileDao,
@@ -91,8 +97,8 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
-    override fun getFolderContentAsStream(folderId: Long): Flow<List<OCFile>> =
-        fileDao.getFolderContentAsStream(folderId = folderId).map { folderContent ->
+    override fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>> =
+        fileDao.getFolderContentWithSyncInfoAsStream(folderId = folderId).map { folderContent ->
             folderContent.map { it.toModel() }
         }
 
@@ -101,13 +107,13 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
-    override fun getSharedByLinkForAccountAsStream(owner: String): Flow<List<OCFile>> =
-        fileDao.getFilesSharedByLink(accountOwner = owner).map { fileList ->
+    override fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
+        fileDao.getFilesWithSyncInfoSharedByLinkAsStream(accountOwner = owner).map { fileList ->
             fileList.map { it.toModel() }
         }
 
-    override fun getFilesAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFile>> =
-        fileDao.getFilesAvailableOfflineFromAccountAsStream(owner).map { fileList ->
+    override fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
+        fileDao.getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner).map { fileList ->
             fileList.map { it.toModel() }
         }
 
@@ -139,7 +145,7 @@ class OCLocalFileDataSource(
     }
 
     override fun saveFile(file: OCFile) {
-        fileDao.insert(file.toEntity())
+        fileDao.upsert(file.toEntity())
     }
 
     override fun saveConflict(fileId: Long, eTagInConflict: String) {
@@ -177,6 +183,18 @@ class OCLocalFileDataSource(
 
     override fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String) {
         fileDao.updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory, newDirectory)
+    }
+
+    override fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID) {
+        TODO("Not yet implemented")
+    }
+
+    override fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID) {
+        fileDao.updateSyncStatusForFile(fileId, workerUuid)
+    }
+
+    override fun cleanWorkersUuid(fileId: Long) {
+        fileDao.updateSyncStatusForFile(fileId, null)
     }
 
     companion object {
@@ -236,4 +254,13 @@ class OCLocalFileDataSource(
                 name = fileName
             ).apply { this@toEntity.id?.let { modelId -> this.id = modelId } }
     }
+
+    @VisibleForTesting
+    fun OCFileAndFileSync.toModel(): OCFileWithSyncInfo =
+        OCFileWithSyncInfo(
+            file = file.toModel(),
+            uploadWorkerUuid = fileSync?.uploadWorkerUuid,
+            downloadWorkerUuid = fileSync?.downloadWorkerUuid,
+            isSynchronizing = fileSync?.isSynchronizing == true,
+        )
 }

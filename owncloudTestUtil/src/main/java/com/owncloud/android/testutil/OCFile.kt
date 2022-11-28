@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,10 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.testutil
 
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 
 val OC_FOLDER = OCFile(
     id = 122,
@@ -52,6 +56,13 @@ val OC_FILE = OCFile(
     availableOfflineStatus = AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE,
 )
 
+val OC_FILE_WITH_SYNC_INFO = OCFileWithSyncInfo(
+    file = OC_FILE,
+    uploadWorkerUuid = null,
+    downloadWorkerUuid = null,
+    isSynchronizing = false,
+)
+
 val OC_AVAILABLE_OFFLINE_FILE = OCFile(
     id = 125,
     parentId = 122,
@@ -68,6 +79,7 @@ val OC_AVAILABLE_OFFLINE_FILE = OCFile(
     length = 3000000
 )
 
-val OC_FILES = listOf(OC_FILE, OC_FILE, OC_FILE)
+val OC_FILES_WITH_SYNC_INFO = listOf(OC_FILE_WITH_SYNC_INFO, OC_FILE_WITH_SYNC_INFO, OC_FILE_WITH_SYNC_INFO)
 val OC_AVAILABLE_OFFLINE_FILES = listOf(OC_AVAILABLE_OFFLINE_FILE, OC_AVAILABLE_OFFLINE_FILE, OC_AVAILABLE_OFFLINE_FILE)
-val OC_EMPTY_FILES = emptyList<OCFile>()
+val OC_FILES_EMPTY = emptyList<OCFile>()
+val OC_FILES_WITH_SYNC_INFO_EMPTY = emptyList<OCFileWithSyncInfo>()

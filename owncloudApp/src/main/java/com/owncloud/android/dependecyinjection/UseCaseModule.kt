@@ -46,6 +46,7 @@ import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUs
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.files.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
+import com.owncloud.android.domain.files.usecases.CleanWorkersUUIDUseCase
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.DisableThumbnailsForFileUseCase
@@ -61,8 +62,10 @@ import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.domain.files.usecases.SaveConflictUseCase
+import com.owncloud.android.domain.files.usecases.SaveDownloadWorkerUUIDUseCase
 import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
+import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
@@ -91,10 +94,13 @@ import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUs
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
+import com.owncloud.android.usecases.transfers.downloads.CancelDownloadsRecursivelyUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccountUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
-import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadUseCase
+import com.owncloud.android.usecases.transfers.uploads.CancelUploadsRecursivelyUseCase
 import com.owncloud.android.usecases.transfers.uploads.ClearFailedTransfersUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsForAccountUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
@@ -142,8 +148,11 @@ val useCaseModule = module {
     factory { SynchronizeFolderUseCase(get(), get()) }
     factory { DisableThumbnailsForFileUseCase(get()) }
     factory { SortFilesUseCase() }
+    factory { SortFilesWithSyncInfoUseCase() }
     factory { SaveConflictUseCase(get()) }
     factory { CleanConflictUseCase(get()) }
+    factory { SaveDownloadWorkerUUIDUseCase(get()) }
+    factory { CleanWorkersUUIDUseCase(get()) }
 
     // Av Offline
     factory { GetFilesAvailableOfflineFromAccountUseCase(get()) }
@@ -165,6 +174,7 @@ val useCaseModule = module {
 
     // Transfers
     factory { CancelDownloadForFileUseCase(get()) }
+    factory { CancelDownloadsRecursivelyUseCase(get(), get()) }
     factory { DownloadFileUseCase(get()) }
     factory { GetLiveDataForDownloadingFileUseCase(get()) }
     factory { GetLiveDataForFinishedDownloadsFromAccountUseCase(get()) }
@@ -174,13 +184,15 @@ val useCaseModule = module {
     factory { UploadFilesFromSystemUseCase(get(), get()) }
     factory { UploadFileInConflictUseCase(get(), get()) }
     factory { CancelUploadForFileUseCase(get(), get()) }
+    factory { CancelUploadsRecursivelyUseCase(get(), get(), get(), get()) }
     factory { RetryUploadFromSystemUseCase(get(), get(), get()) }
     factory { RetryUploadFromContentUriUseCase(get(), get(), get()) }
     factory { GetAllTransfersAsLiveDataUseCase(get()) }
     factory { GetAllTransfersUseCase(get()) }
-    factory { CancelUploadWithIdUseCase(get(), get(), get()) }
+    factory { CancelUploadUseCase(get(), get(), get()) }
     factory { ClearFailedTransfersUseCase(get(), get(), get()) }
     factory { RetryFailedUploadsUseCase(get(), get(), get(), get()) }
+    factory { RetryFailedUploadsForAccountUseCase(get(), get(), get(), get()) }
     factory { ClearSuccessfulTransfersUseCase(get()) }
     factory { CancelTransfersFromAccountUseCase(get(), get()) }
     factory { UpdatePendingUploadsPathUseCase(get()) }

@@ -25,26 +25,50 @@ import androidx.work.WorkManager
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.extensions.getWorkInfoByTags
+import com.owncloud.android.workers.UploadFileFromContentUriWorker
+import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 import timber.log.Timber
 
-class CancelUploadWithIdUseCase(
+class CancelUploadUseCase(
     private val workManager: WorkManager,
     private val transferRepository: TransferRepository,
     private val localStorageProvider: LocalStorageProvider,
-) : BaseUseCase<Unit, CancelUploadWithIdUseCase.Params>() {
+) : BaseUseCase<Unit, CancelUploadUseCase.Params>() {
 
     override fun run(params: Params) {
-        workManager.cancelAllWorkByTag(params.uploadId.toString())
+        val upload = params.upload
 
-        val transfer = transferRepository.getTransferById(params.uploadId)
-        transfer?.let { localStorageProvider.deleteCacheIfNeeded(it) }
+        val workersFromContentUriToCancel = workManager.getWorkInfoByTags(
+            listOf(
+                upload.id.toString(),
+                upload.accountName,
+                UploadFileFromContentUriWorker::class.java.name
+            )
+        )
 
-        transferRepository.removeTransferById(params.uploadId)
+        val workersFromFileSystemToCancel = workManager.getWorkInfoByTags(
+            listOf(
+                upload.id.toString(),
+                upload.accountName,
+                UploadFileFromFileSystemWorker::class.java.name
+            )
+        )
 
-        Timber.i("Upload with id ${params.uploadId} has been cancelled.")
+        val workersToCancel = workersFromContentUriToCancel + workersFromFileSystemToCancel
+
+        workersToCancel.forEach {
+            workManager.cancelWorkById(it.id)
+            Timber.i("Upload with id ${upload.id} has been cancelled.")
+        }
+
+        localStorageProvider.deleteCacheIfNeeded(upload)
+
+        transferRepository.removeTransferById(upload.id!!)
     }
 
     data class Params(
-        val uploadId: Long,
+        val upload: OCTransfer,
     )
 }

@@ -1,8 +1,9 @@
-/*
+/**
  * ownCloud Android client application
  *
- * @author Fernando Sanz Velasco
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,20 +17,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.domain.files.usecases
 
-import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
-import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
-import kotlinx.coroutines.flow.Flow
+import java.util.UUID
 
-class GetSharedByLinkForAccountAsStreamUseCase(
+class SaveDownloadWorkerUUIDUseCase(
     private val fileRepository: FileRepository
-) : BaseUseCase<Flow<List<OCFileWithSyncInfo>>, GetSharedByLinkForAccountAsStreamUseCase.Params>() {
-
-    override fun run(params: Params): Flow<List<OCFileWithSyncInfo>> = fileRepository.getSharedByLinkWithSyncInfoForAccountAsStream(params.owner)
+) : BaseUseCaseWithResult<Unit, SaveDownloadWorkerUUIDUseCase.Params>() {
+    override fun run(params: Params) =
+        fileRepository.saveDownloadWorkerUuid(params.fileId, params.workerUuid)
 
     data class Params(
-        val owner: String
+        val fileId: Long,
+        val workerUuid: UUID
     )
 }

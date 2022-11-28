@@ -3,7 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -33,9 +35,11 @@ import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 
 class OCFileRepository(
     private val localFileDataSource: LocalFileDataSource,
@@ -136,17 +140,17 @@ class OCFileRepository(
     override fun getFolderContent(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderContent(folderId)
 
-    override fun getFolderContentAsStream(folderId: Long): Flow<List<OCFile>> =
-        localFileDataSource.getFolderContentAsStream(folderId)
+    override fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>> =
+        localFileDataSource.getFolderContentWithSyncInfoAsStream(folderId)
 
     override fun getFolderImages(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderImages(folderId)
 
-    override fun getSharedByLinkForAccountAsStream(owner: String): Flow<List<OCFile>> =
-        localFileDataSource.getSharedByLinkForAccountAsStream(owner)
+    override fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
+        localFileDataSource.getSharedByLinkWithSyncInfoForAccountAsStream(owner)
 
-    override fun getFilesAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFile>> =
-        localFileDataSource.getFilesAvailableOfflineFromAccountAsStream(owner)
+    override fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
+        localFileDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner)
 
     override fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile> =
         localFileDataSource.getFilesAvailableOfflineFromAccount(owner)
@@ -382,6 +386,18 @@ class OCFileRepository(
 
     override fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String) {
         localFileDataSource.updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory, newDirectory)
+    }
+
+    override fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID) {
+        TODO("Not yet implemented")
+    }
+
+    override fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID) {
+        localFileDataSource.saveDownloadWorkerUuid(fileId, workerUuid)
+    }
+
+    override fun cleanWorkersUuid(fileId: Long) {
+        localFileDataSource.cleanWorkersUuid(fileId)
     }
 
     private fun removeLocalFolderRecursively(ocFile: OCFile, onlyFromLocalStorage: Boolean) {

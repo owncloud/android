@@ -259,7 +259,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     @Override
-    public void cancelFileTransference(@NonNull ArrayList<OCFile> file) {
+    public void cancelFileTransference(@NonNull ArrayList<OCFile> files) {
 
     }
 

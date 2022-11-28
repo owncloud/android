@@ -26,6 +26,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
@@ -35,6 +36,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import kotlinx.coroutines.flow.Flow
 import java.io.File.separatorChar
+import java.util.UUID
 
 @Dao
 abstract class FileDao {
@@ -43,6 +45,11 @@ abstract class FileDao {
     abstract fun getFileById(
         id: Long
     ): OCFileEntity?
+
+    @Query(SELECT_FILE_WITH_ID)
+    abstract fun getFileWithSyncInfoById(
+        id: Long
+    ): OCFileAndFileSync?
 
     @Query(SELECT_FILE_WITH_ID)
     abstract fun getFileByIdAsStream(
@@ -84,9 +91,15 @@ abstract class FileDao {
     ): List<OCFileEntity>
 
     @Query(SELECT_FOLDER_CONTENT)
-    abstract fun getFolderContentAsStream(
+    abstract fun getFolderContentWithSyncInfo(
         folderId: Long
-    ): Flow<List<OCFileEntity>>
+    ): List<OCFileAndFileSync>
+
+    @Transaction
+    @Query(SELECT_FOLDER_CONTENT)
+    abstract fun getFolderContentWithSyncInfoAsStream(
+        folderId: Long
+    ): Flow<List<OCFileAndFileSync>>
 
     @Query(SELECT_FOLDER_BY_MIMETYPE)
     abstract fun getFolderByMimeType(
@@ -94,15 +107,17 @@ abstract class FileDao {
         mimeType: String
     ): List<OCFileEntity>
 
+    @Transaction
     @Query(SELECT_FILES_SHARED_BY_LINK)
-    abstract fun getFilesSharedByLink(
+    abstract fun getFilesWithSyncInfoSharedByLinkAsStream(
         accountOwner: String
-    ): Flow<List<OCFileEntity>>
+    ): Flow<List<OCFileAndFileSync>>
 
+    @Transaction
     @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT)
-    abstract fun getFilesAvailableOfflineFromAccountAsStream(
+    abstract fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(
         accountOwner: String
-    ): Flow<List<OCFileEntity>>
+    ): Flow<List<OCFileAndFileSync>>
 
     @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT)
     abstract fun getFilesAvailableOfflineFromAccount(
@@ -112,8 +127,63 @@ abstract class FileDao {
     @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_EVERY_ACCOUNT)
     abstract fun getFilesAvailableOfflineFromEveryAccount(): List<OCFileEntity>
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    protected abstract fun insertOrIgnore(ocFileEntity: OCFileEntity): Long
+
+    @Update
+    protected abstract fun update(ocFileEntity: OCFileEntity)
+
+    @Transaction
+    open fun upsert(ocFileEntity: OCFileEntity) = com.owncloud.android.data.upsert(
+        item = ocFileEntity,
+        insert = ::insertOrIgnore,
+        update = ::update
+    )
+
+    @Transaction
+    open fun updateSyncStatusForFile(id: Long, workerUuid: UUID?) {
+        val fileWithSyncInfoEntity = getFileWithSyncInfoById(id)
+
+        if ((fileWithSyncInfoEntity?.file?.parentId != ROOT_PARENT_ID) &&
+            ((workerUuid == null) != (fileWithSyncInfoEntity?.fileSync?.downloadWorkerUuid == null))) {
+            val fileSyncEntity = if (workerUuid == null) {
+                OCFileSyncEntity(
+                    fileId = id,
+                    uploadWorkerUuid = null,
+                    downloadWorkerUuid = null,
+                    isSynchronizing = false
+                )
+            } else {
+                OCFileSyncEntity(
+                    fileId = id,
+                    uploadWorkerUuid = null,
+                    downloadWorkerUuid = workerUuid,
+                    isSynchronizing = true
+                )
+            }
+            insertFileSync(fileSyncEntity)
+
+            // Check if there is any more file synchronizing in this folder, in such case don't update parent's sync status
+            var cleanSyncInParent = true
+            if (workerUuid == null) {
+                val folderContent = getFolderContentWithSyncInfo(fileWithSyncInfoEntity?.file?.parentId!!)
+                var indexFileInFolder = 0
+                while (cleanSyncInParent && indexFileInFolder < folderContent.size) {
+                    val child = folderContent[indexFileInFolder]
+                    if (child.fileSync?.isSynchronizing == true) {
+                        cleanSyncInParent = false
+                    }
+                    indexFileInFolder++
+                }
+            }
+            if (workerUuid != null || cleanSyncInParent) {
+                updateSyncStatusForFile(fileWithSyncInfoEntity?.file?.parentId!!, workerUuid)
+            }
+        }
+    }
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(ocFileEntity: OCFileEntity): Long
+    abstract fun insertFileSync(ocFileSyncEntity: OCFileSyncEntity): Long
 
     /**
      * Make sure that the ids are set properly. We don't take care of conflicts and that stuff here.
@@ -125,10 +195,12 @@ abstract class FileDao {
         folder: OCFileEntity,
         folderContent: List<OCFileEntity>,
     ): List<OCFileEntity> {
-        val folderId = insert(folder)
+        var folderId = insertOrIgnore(folder)
+        // If it was already in database
+        if (folderId == -1L) folderId = folder.id
 
         folderContent.forEach { fileToInsert ->
-            insert(fileToInsert.apply {
+            upsert(fileToInsert.apply {
                 parentId = folderId
                 availableOfflineStatus = getNewAvailableOfflineStatus(folder.availableOfflineStatus, fileToInsert.availableOfflineStatus)
             })
@@ -145,9 +217,9 @@ abstract class FileDao {
             remotePath = ocFileEntity.remotePath
         )
         return if (localFile == null) {
-            insert(ocFileEntity)
+            insertOrIgnore(ocFileEntity)
         } else {
-            insert(ocFileEntity.copy(
+            insertOrIgnore(ocFileEntity.copy(
                 parentId = localFile.parentId,
                 lastSyncDateForData = localFile.lastSyncDateForData,
                 modifiedAtLastSyncForData = localFile.modifiedAtLastSyncForData,
@@ -169,14 +241,14 @@ abstract class FileDao {
         remoteId: String?
     ) {
         // 1. Update target size
-        insert(
+        upsert(
             targetFolder.copy(
                 length = targetFolder.length + sourceFile.length
             ).apply { id = targetFolder.id }
         )
 
         // 2. Insert a new file with common attributes and retrieved remote id
-        insert(
+        upsert(
             OCFileEntity(
                 parentId = targetFolder.id,
                 owner = targetFolder.owner,
@@ -204,7 +276,7 @@ abstract class FileDao {
         finalStoragePath: String
     ) {
         // 1. Update target size
-        insert(
+        upsert(
             targetFolder.copy(
                 length = targetFolder.length + sourceFile.length
             ).apply { id = targetFolder.id }
@@ -307,7 +379,7 @@ abstract class FileDao {
         finalRemotePath: String,
         finalStoragePath: String?
     ) {
-        insert(
+        upsert(
             sourceFile.copy(
                 parentId = targetFolder.id,
                 remotePath = finalRemotePath,
