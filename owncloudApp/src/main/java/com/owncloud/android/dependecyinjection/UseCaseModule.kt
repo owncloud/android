@@ -98,6 +98,7 @@ import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccoun
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadWithIdUseCase
 import com.owncloud.android.usecases.transfers.uploads.ClearFailedTransfersUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsForAccountUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
@@ -187,6 +188,7 @@ val useCaseModule = module {
     factory { CancelUploadWithIdUseCase(get(), get(), get()) }
     factory { ClearFailedTransfersUseCase(get(), get(), get()) }
     factory { RetryFailedUploadsUseCase(get(), get(), get(), get()) }
+    factory { RetryFailedUploadsForAccountUseCase(get(), get(), get(), get()) }
     factory { ClearSuccessfulTransfersUseCase(get()) }
     factory { CancelTransfersFromAccountUseCase(get(), get()) }
     factory { UpdatePendingUploadsPathUseCase(get()) }
