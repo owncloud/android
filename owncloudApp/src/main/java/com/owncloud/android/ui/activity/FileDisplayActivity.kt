@@ -1190,13 +1190,11 @@ class FileDisplayActivity : FileActivity(),
                         startActivity(showConflictActivityIntent)
                     }
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
-                        if (fileWaitingToPreview != null) {
+                        fileWaitingToPreview?.let {
                             showSnackMessage(getString(R.string.new_remote_version_found_msg))
-                            startSyncThenOpen(fileWaitingToPreview!!)
+                            startSyncThenOpen(it)
                             fileWaitingToPreview = null
-                        } else {
-                            showSnackMessage(getString(R.string.download_enqueued_msg))
-                        }
+                        } ?: showSnackMessage(getString(R.string.download_enqueued_msg))
                     }
                     SynchronizeFileUseCase.SyncType.FileNotFound -> {
                         /** Nothing to do atm. If we are in details view, go back to file list */
@@ -1549,7 +1547,7 @@ class FileDisplayActivity : FileActivity(),
                 startImagePreview(file)
             }
             PreviewTextFragment.canBePreviewed(file) -> {
-                fileWaitingToPreview  = file
+                fileWaitingToPreview = file
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
             }
             PreviewAudioFragment.canBePreviewed(file) -> {
