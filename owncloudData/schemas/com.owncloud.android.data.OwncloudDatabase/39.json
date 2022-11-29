@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 38,
-    "identityHash": "ebf911554c28d3e8df34bc85546bdccb",
+    "version": 39,
+    "identityHash": "71dab0c694d243e067f4087932cf1c3d",
     "entities": [
       {
         "tableName": "folder_backup",
@@ -404,7 +404,7 @@
             "notNull": false
           },
           {
-            "fieldPath": "keepInSync",
+            "fieldPath": "availableOfflineStatus",
             "columnName": "keepInSync",
             "affinity": "INTEGER",
             "notNull": false
@@ -478,6 +478,56 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "files_sync",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`fileId` INTEGER NOT NULL, `uploadWorkerUuid` BLOB, `downloadWorkerUuid` BLOB, `isSynchronizing` INTEGER NOT NULL, PRIMARY KEY(`fileId`), FOREIGN KEY(`fileId`) REFERENCES `files`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "fileId",
+            "columnName": "fileId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "uploadWorkerUuid",
+            "columnName": "uploadWorkerUuid",
+            "affinity": "BLOB",
+            "notNull": false
+          },
+          {
+            "fieldPath": "downloadWorkerUuid",
+            "columnName": "downloadWorkerUuid",
+            "affinity": "BLOB",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isSynchronizing",
+            "columnName": "isSynchronizing",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "fileId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "files",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "fileId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       },
       {
         "tableName": "ocshares",
@@ -705,7 +755,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ebf911554c28d3e8df34bc85546bdccb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '71dab0c694d243e067f4087932cf1c3d')"
     ]
   }
 }
