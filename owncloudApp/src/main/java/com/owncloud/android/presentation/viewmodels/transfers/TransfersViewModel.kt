@@ -38,6 +38,7 @@ import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCas
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadsRecursivelyUseCase
 import com.owncloud.android.usecases.transfers.uploads.ClearFailedTransfersUseCase
+import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsForAccountUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
@@ -51,6 +52,7 @@ class TransfersViewModel(
     private val cancelUploadUseCase: CancelUploadUseCase,
     private val retryUploadFromSystemUseCase: RetryUploadFromSystemUseCase,
     private val retryUploadFromContentUriUseCase: RetryUploadFromContentUriUseCase,
+    private val retryFailedUploadsForAccountUseCase: RetryFailedUploadsForAccountUseCase,
     private val clearFailedTransfersUseCase: ClearFailedTransfersUseCase,
     private val retryFailedUploadsUseCase: RetryFailedUploadsUseCase,
     private val clearSuccessfulTransfersUseCase: ClearSuccessfulTransfersUseCase,
@@ -153,6 +155,12 @@ class TransfersViewModel(
             retryUploadFromContentUriUseCase.execute(
                 RetryUploadFromContentUriUseCase.Params(uploadIdInStorageManager = id)
             )
+        }
+    }
+
+    fun retryUploadsForAccount(accountName: String) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            retryFailedUploadsForAccountUseCase.execute(RetryFailedUploadsForAccountUseCase.Params(accountName))
         }
     }
 

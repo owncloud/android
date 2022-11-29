@@ -39,7 +39,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
 import com.owncloud.android.presentation.ui.transfers.TransferListFragment;
-import com.owncloud.android.usecases.transfers.uploads.RetryFailedUploadsForAccountUseCase;
+import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
@@ -56,6 +56,8 @@ import static org.koin.java.KoinJavaComponent.inject;
 public class UploadListActivity extends FileActivity {
 
     private static final String TAG_UPLOAD_LIST_FRAGMENT = "UPLOAD_LIST_FRAGMENT";
+
+    @NotNull Lazy<TransfersViewModel> transfersViewModelLazy = inject(TransfersViewModel.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,9 +130,7 @@ public class UploadListActivity extends FileActivity {
             if (account == null) {
                 return;
             }
-            @NotNull Lazy<RetryFailedUploadsForAccountUseCase> retryFailedUploadsForAccountUseCaseLazy = inject(RetryFailedUploadsForAccountUseCase.class);
-            RetryFailedUploadsForAccountUseCase retryFailedUploadsForAccountUseCase = retryFailedUploadsForAccountUseCaseLazy.getValue();
-            retryFailedUploadsForAccountUseCase.execute(new RetryFailedUploadsForAccountUseCase.Params(account.name));
+            transfersViewModelLazy.getValue().retryUploadsForAccount(account.name);
         }
     }
 
@@ -151,9 +151,7 @@ public class UploadListActivity extends FileActivity {
 
             } else {
                 // already updated -> just retry!
-                @NotNull Lazy<RetryFailedUploadsForAccountUseCase> retryFailedUploadsForAccountUseCaseLazy = inject(RetryFailedUploadsForAccountUseCase.class);
-                RetryFailedUploadsForAccountUseCase retryFailedUploadsForAccountUseCase = retryFailedUploadsForAccountUseCaseLazy.getValue();
-                retryFailedUploadsForAccountUseCase.execute(new RetryFailedUploadsForAccountUseCase.Params(account.name));
+                transfersViewModelLazy.getValue().retryUploadsForAccount(account.name);
             }
 
         } else {
