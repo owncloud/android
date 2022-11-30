@@ -20,7 +20,7 @@
   <string name="drawer_item_only_available_offline">Достъпно офлайн</string>
   <string name="drawer_item_shared_by_link_files">Споделено чрез връзка</string>
   <string name="drawer_item_settings">Настройки</string>
-  <string name="drawer_item_uploads_list">Качено</string>
+  <string name="drawer_item_uploads_list">Качвания</string>
   <string name="drawer_close">Затваряне</string>
   <string name="drawer_open">Отваряне</string>
   <string name="drawer_loading_quota">Зареждане на квота</string>
@@ -104,7 +104,7 @@
   <string name="pattern_already_set">Заключването със схема и парола не може едновременно да бъде активно, моля деактивирайте първо схемата</string>
   <string name="passcode_already_set">Заключването със схема и парола не може едновременно да бъде активно, моля деактивирайте първо паролата</string>
   <string name="pattern_no_longer_required">Схемата няма повече да бъде изисквана</string>
-  <string name="pattern_configure_your_pattern_explanation">Схемата ще се изисква при всяко стартиране на приложението.</string>
+  <string name="pattern_configure_your_pattern_explanation">Схемата ще се изисква при всяко стартиране на приложението</string>
   <string name="document_provider_locked">Заключено</string>
   <string name="illegal_argument_exception_message">Необходимо е валидно ДЕЙСТВИЕ в намерението, към което е предадено</string>
   <!--Bottom navigation bar-->
@@ -113,7 +113,7 @@
   <string name="bottom_nav_offline">Офлайн</string>
   <string name="bottom_nav_links">Връзки</string>
   <string name="recommend_subject">Изпробвайте %1$s на своя смартфон!</string>
-  <string name="recommend_text">Бих желал да те поканя да използваш %1$s на своя смартфон!\nИзтегли го от тук:%2$s</string>
+  <string name="recommend_text">Бих желал да те поканя да използваш %1$s на своя смартфон!\nИзтегли го от тук: %2$s</string>
   <string name="error_reason">защото</string>
   <string name="auth_failure_snackbar">Удостоверяването е неуспешно</string>
   <string name="server_not_supported">Вашата версия на сървъра е по-ниска от 10 и не се поддържа, моля надстройте вашия сървър до по-нова версия</string>
@@ -293,7 +293,7 @@
   <string name="media_err_unknown">Медийният файл не може да бъде възпроизведен с наличния медиен плейър</string>
   <string name="media_err_security_ex">Грешка в сигурността при опит за възпроизвеждане на %1$s</string>
   <string name="media_err_io_ex">Входна грешка при опит за възпроизвеждането на %1$s</string>
-  <string name="media_err_unexpected">Неочаквана грешка при опит за възпроизвеждането на%1$s</string>
+  <string name="media_err_unexpected">Неочаквана грешка при опит за възпроизвеждането на %1$s</string>
   <string name="media_rewind_description">Бутон за превъртане</string>
   <string name="media_play_pause_description">Бутон за възпроизвеждане или пауза</string>
   <string name="media_forward_description">Бутон за бързо превъртане напред</string>
@@ -322,7 +322,8 @@
   <string name="auth_expired_basic_auth_toast">Моля, въведете текущата парола</string>
   <string name="auth_connecting_auth_server">Свързване с удотоверяващия сървър ...</string>
   <string name="auth_unsupported_auth_method">Сървърът не поддържа този метод за удостоверяване</string>
-  <string name="auth_fail_get_user_name">Вашият сървър не връща правилен идентификационен номер на потребител, моля свържете се с администратор</string>
+  <string name="auth_fail_get_user_name">Вашият сървър не връща правилен идентификационен номер на потребител, моля свържете се с администратор
+	</string>
   <string name="auth_can_not_auth_against_server">Неуспешно удостоверяване към този сървър</string>
   <string name="auth_account_does_not_exist">Профилът все още не съществува в устройството</string>
   <string name="set_available_offline">Маркирайте като налични, когато няма мрежа</string>
@@ -379,7 +380,7 @@
   <string name="ssl_validator_label_validity_to">До:</string>
   <string name="ssl_validator_label_signature">Подпис:</string>
   <string name="ssl_validator_label_signature_algorithm">Алгоритъм:</string>
-  <string name="digest_algorithm_not_available">Този алгоритъм не се потдържа от вашия телефон</string>
+  <string name="digest_algorithm_not_available">Този алгоритъм не се поддържа от вашия телефон</string>
   <string name="ssl_validator_label_certificate_fingerprint">Пръстов отпечатък:</string>
   <string name="certificate_load_problem">Има проблем при зареждането на сертификата.</string>
   <string name="ssl_validator_null_cert">Сертификатът не може да бъде показан.</string>
@@ -416,7 +417,7 @@
   <string name="share_link_empty_password">Трябва да въведете парола</string>
   <string name="activity_chooser_send_file_title">Изпращане</string>
   <string name="copy_link">Копиране на връзката</string>
-  <string name="clipboard_text_copied">Копирано е в клипборда</string>
+  <string name="clipboard_text_copied">Копирано в клипборда</string>
   <string name="clipboard_no_text_to_copy">Няма получен текст за копиране в клипборда</string>
   <string name="clipboard_uxexpected_error">Неизвеста грешка при опит за копиране в клипборда</string>
   <string name="clipboard_label">Текстът е копиран от %1$s</string>
@@ -425,7 +426,7 @@
   <string name="network_error_socket_timeout_exception">Отговорът на сървъра отне твърде много време</string>
   <string name="network_error_connect_timeout_exception">Свързването със сървъра отне твърде много време</string>
   <string name="network_host_not_available">Сървърът не може да бъде намерен</string>
-  <string name="forbidden_permissions">Нямате необходимите права за %s</string>
+  <string name="forbidden_permissions">Нямате необходимите права %s</string>
   <string name="forbidden_permissions_rename">за преименуване на този файл</string>
   <string name="forbidden_permissions_delete">за изтриване на този файл</string>
   <string name="share_link_forbidden_permissions">за споделяне на този файл</string>
@@ -452,9 +453,9 @@
   <string name="folder_picker_move_here_button_text">Преместване тук</string>
   <string name="folder_picker_copy_here_button_text">Копиране тук</string>
   <string name="move_file_not_found">Неуспешно преместване. Моля, проверете дали файлът съществува</string>
-  <string name="move_file_invalid_into_descendent">Не е възможно да преместите папка в нейна подпапка.</string>
+  <string name="move_file_invalid_into_descendent">Не е възможно да преместите папка в нейна подпапка</string>
   <string name="move_file_invalid_overwrite">Файлът вече съществува в отдалечената папка.</string>
-  <string name="move_file_error">Настъпи грешка при опит за преместване на този файл или папка.</string>
+  <string name="move_file_error">Настъпи грешка при опит за преместване на този файл или папка</string>
   <string name="forbidden_permissions_move">за да преместите този файл</string>
   <string name="copy_file_not_found">Копирането не е възможно. Проверете дали файлът съществува</string>
   <string name="copy_file_invalid_into_descendent">Не е възможно да копирате папка в нейна подпапка</string>
@@ -482,7 +483,7 @@
   <string name="prefs_picture_upload_account">Профил за качване на изображения</string>
   <string name="prefs_video_upload_account">Профил за качване на видеоклипове</string>
   <string name="prefs_camera_upload_source_path_title">Папка за камерата (%1$s)</string>
-  <string name="prefs_camera_upload_source_path_title_required">изисква се</string>
+  <string name="prefs_camera_upload_source_path_title_required">задължително</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">Оригиналният файл ще бъде</string>
   <string name="prefs_camera_upload_behaviour_title">Оригиналният файл ще бъде</string>
   <string name="prefs_camera_upload_last_sync_title">Последна синхронизация</string>
@@ -554,7 +555,7 @@
   <string name="share_via_link_default_password">*****</string>
   <string name="share_via_link_password_enforced_label">Парола *</string>
   <string name="share_via_link_expiration_date_enforced_label">Изтича на *</string>
-  <string name="share_via_link_expiration_date_explanation_label">Публичната връзка ще изтече не по-късно от %1$d  дни след създаването ѝ.</string>
+  <string name="share_via_link_expiration_date_explanation_label">Публичната връзка ще изтече не по-късно от %1$d  дни след създаването ѝ</string>
   <string name="share_via_link_default_name_template">%1$s връзка</string>
   <string name="share_via_link_empty_password">Паролата е празна</string>
   <string name="private_link_info">Поверителна връзка: Само хората, които имат достъп до файла/папката могат да я използват. Използвайте я като постоянна връзка за себе си, или за да насочвате другите към файловете в рамките на споделянията</string>
@@ -563,10 +564,10 @@
   <string name="download_notification_channel_description">Вижте името на файла и напредъка на изтегляне</string>
   <string name="upload_notification_channel_name">Качвания</string>
   <string name="upload_notification_channel_description">Вижте името на файла и напредъка на качване</string>
-  <string name="media_service_notification_channel_name">Музикален плеър</string>
+  <string name="media_service_notification_channel_name">Музикален плейър</string>
   <string name="media_service_notification_channel_description">Вижте музикалния плейър</string>
   <string name="file_sync_notification_channel_name">Синхронизиране на файлове</string>
-  <string name="file_sync_notification_channel_description">Вижте резултата от синхронизирането на файла</string>
+  <string name="file_sync_notification_channel_description">Вижте резултата от синхронизацията на файла</string>
   <string name="clicks_to_be_developer">Натиснете върху %1$d, за да активирате менюто за програмисти</string>
   <string name="rate_dialog_title">Оценете приложението %1$s!</string>
   <string name="rate_dialog_description">Ако обичате и използвате това приложение, можете ли да отделите малко време за да го оцените? Вашата обратна връзка е много важна за нас.</string>
