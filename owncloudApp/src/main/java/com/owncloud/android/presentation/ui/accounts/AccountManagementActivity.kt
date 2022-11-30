@@ -95,7 +95,7 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
 
         val accountList = accountsManagementViewModel.getLoggedAccounts()
         originalAccounts = toAccountNameSet(accountList)
-        originalCurrentAccount = accountsManagementViewModel.getCurrentAccount()!!.name
+        originalCurrentAccount = accountsManagementViewModel.getCurrentAccount()?.name.toString()
 
 
         accountListAdapter.submitAccountList(accountList = getAccountListItems())
