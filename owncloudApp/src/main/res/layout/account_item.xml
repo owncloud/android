@@ -109,7 +109,7 @@
         android:paddingTop="@dimen/standard_padding"
         android:paddingRight="@dimen/standard_half_padding"
         android:paddingBottom="@dimen/standard_padding"
-        android:src="@drawable/ic_baseline_lock_reset_grey"
+        android:src="@drawable/ic_key"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/removeButton"
         app:layout_constraintTop_toTopOf="parent"

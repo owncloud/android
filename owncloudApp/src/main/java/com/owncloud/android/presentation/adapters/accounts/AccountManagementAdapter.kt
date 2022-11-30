@@ -109,7 +109,7 @@ class AccountManagementAdapter(private val accountListener: AccountManagementAct
 
                 /// bind listener to change password
                 holder.binding.passwordButton.apply {
-                    setImageResource(R.drawable.ic_baseline_lock_reset_grey)
+                    setImageResource(R.drawable.ic_key)
                     setOnClickListener { accountListener.changePasswordOfAccount(account) }
                 }
 
