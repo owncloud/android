@@ -1569,10 +1569,12 @@ class FileDisplayActivity : FileActivity(),
                 startImagePreview(file)
             }
             PreviewTextFragment.canBePreviewed(file) -> {
+                setFile(file)
                 fileWaitingToPreview = file
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
             }
             PreviewAudioFragment.canBePreviewed(file) -> {
+                setFile(file)
                 fileWaitingToPreview = file
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
             }
