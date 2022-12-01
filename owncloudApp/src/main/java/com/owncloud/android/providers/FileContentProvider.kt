@@ -46,8 +46,10 @@ import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
 import android.provider.BaseColumns
 import android.text.TextUtils
+import android.util.Log
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteQueryBuilder
+import androidx.work.WorkManager
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.Executors
@@ -56,14 +58,12 @@ import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toModel
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
-import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileEntity
 import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataSource
 import com.owncloud.android.data.migrations.CameraUploadsMigrationToRoom
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.data.transfers.db.OCTransferEntity
-import com.owncloud.android.data.transfers.db.TransferDao
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.files.model.LIST_MIME_DIR
@@ -284,6 +284,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
     override fun onCreate(): Boolean {
         dbHelper = DataBaseHelper(context)
+        // This sentence is for opening the database, which is necessary to perform the migration correctly to DB version 38
+        dbHelper.writableDatabase
 
         val authority = context?.resources?.getString(R.string.authority)
         uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
@@ -541,7 +543,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         }
 
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-            Timber.i("SQL : Entering in onUpgrade")
+            Log.i("SQLiteOpenHelper", "SQL : Entering in onUpgrade")
             var upgraded = false
 
             if (oldVersion == 1 && newVersion >= 2) {
@@ -1050,8 +1052,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
             }
 
-            if (oldVersion < 37 && newVersion >= 37) {
-                Timber.i("SQL : Entering in #37 to migrate files and uploads from SQLite to Room")
+            if (oldVersion < 38 && newVersion >= 38) {
+                Timber.i("SQL : Entering in #38 to migrate files and uploads from SQLite to Room")
                 db.beginTransaction()
 
                 try {
@@ -1073,7 +1075,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                         } while (cursorFiles.moveToNext())
 
                         // Insert file list to the new files table in new database
-                        val ocFileDao: FileDao by inject()
+                        val ocFileDao = OwncloudDatabase.getDatabase(context!!).fileDao()
                         executors.diskIO().execute {
                             for (file in files) {
                                 ocFileDao.mergeRemoteAndLocalFile(file)
@@ -1103,7 +1105,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                         } while (cursorUploads.moveToNext())
 
                         // Insert uploads list to the new transfers table in new database
-                        val ocTransferDao: TransferDao by inject()
+                        val ocTransferDao = OwncloudDatabase.getDatabase(context!!).transferDao()
                         executors.diskIO().execute {
                             for (upload in uploads) {
                                 ocTransferDao.insert(upload)
@@ -1112,7 +1114,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                                     upload.createdBy != UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_VIDEO.ordinal
                                 ) {
                                     val localFile = File(upload.localPath)
-                                    val uploadFileFromSystemUseCase: UploadFileFromSystemUseCase by inject()
+                                    val uploadFileFromSystemUseCase = UploadFileFromSystemUseCase(WorkManager.getInstance(context!!))
                                     uploadFileFromSystemUseCase.execute(
                                         UploadFileFromSystemUseCase.Params(
                                             accountName = upload.accountName,
@@ -1133,6 +1135,15 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
                     // Drop old capabilities table from old database
                     db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.CAPABILITIES_TABLE_NAME + ";")
+
+                    // Drop old camera uploads sync table from old database
+                    db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME + ";")
+
+                    // Drop old user avatars table from old database
+                    db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.USER_AVATARS__TABLE_NAME + ";")
+
+                    // Drop old user quotas table from old database
+                    db.execSQL("DROP TABLE IF EXISTS " + ProviderTableMeta.USER_QUOTAS_TABLE_NAME + ";")
 
                     db.setTransactionSuccessful()
                     upgraded = true
