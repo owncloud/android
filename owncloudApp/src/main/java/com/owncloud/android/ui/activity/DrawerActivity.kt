@@ -598,7 +598,7 @@ abstract class DrawerActivity : ToolbarActivity() {
         // update Account list and active account if Manage Account activity replies with
         // - ACCOUNT_LIST_CHANGED = true
         // - RESULT_OK
-        if (requestCode == ACTION_MANAGE_ACCOUNTS && resultCode == Activity.RESULT_OK && data!!.getBooleanExtra(
+        if (requestCode == ACTION_MANAGE_ACCOUNTS && resultCode == RESULT_OK && data!!.getBooleanExtra(
                 KEY_ACCOUNT_LIST_CHANGED,
                 false
             )

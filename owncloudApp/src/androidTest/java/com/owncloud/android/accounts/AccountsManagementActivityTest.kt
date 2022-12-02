@@ -89,7 +89,7 @@ class AccountsManagementActivityTest {
     }
 
     @Test
-    fun test_childCount() {
+    fun testChildCount() {
         launchTest(
             accounts = arrayOf(
                 Account("jrodper@owncloud.com", "owncloud"),
@@ -101,19 +101,19 @@ class AccountsManagementActivityTest {
     }
 
     @Test
-    fun test_childCount_empty() {
+    fun testChildCountEmptyAddAccountStays() {
         launchTest(accounts = emptyArray(), account = null)
         R.id.account_list_recycler_view.assertChildCount(1)
     }
 
     @Test
-    fun test_visibility_toolbar() {
+    fun testVisibilityToolbar() {
         launchTest(accounts = emptyArray(), account = null)
         R.id.standard_toolbar.isDisplayed(true)
     }
 
     @Test
-    fun test_check_data() {
+    fun testCheckData() {
         launchTest(
             accounts = arrayOf(
                 Account("jrodper@owncloud.com", "owncloud")

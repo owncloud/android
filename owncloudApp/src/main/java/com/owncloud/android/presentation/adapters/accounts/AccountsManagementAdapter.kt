@@ -36,7 +36,7 @@ import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 import timber.log.Timber
 
-class AccountManagementAdapter(private val accountListener: AccountManagementActivity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AccountsManagementAdapter(private val accountListener: AccountManagementActivity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var accountItemsList = listOf<AccountRecyclerItem>()
 
@@ -72,8 +72,7 @@ class AccountManagementAdapter(private val accountListener: AccountManagementAct
                     holder.binding.name.text = oca.displayName
                 } catch (e: Exception) {
                     Timber.w(
-                        "Account not found right after being read :\\ ; using account name instead of display " +
-                                "name"
+                        "Account not found right after being read :\\ ; using account name instead of display " + "name"
                     )
                     holder.binding.name.text = AccountUtils.getUsernameOfAccount(account.name)
                 }
@@ -120,7 +119,6 @@ class AccountManagementAdapter(private val accountListener: AccountManagementAct
                 }
 
                 ///bind listener to switchAccount
-               // holder.binding.root.apply {
                 holder.itemView.apply {
                     setOnClickListener { accountListener.switchAccount(position) }
                 }
@@ -130,7 +128,7 @@ class AccountManagementAdapter(private val accountListener: AccountManagementAct
                 holder.binding.name.setText(R.string.prefs_add_account)
 
                 // bind action listener
-                holder.binding.linearLayout.setOnClickListener {
+                holder.binding.constraintLayoutAction.setOnClickListener {
                     accountListener.createAccount()
                 }
             }

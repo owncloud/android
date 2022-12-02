@@ -40,7 +40,7 @@ import com.owncloud.android.MainApp.Companion.authority
 import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.presentation.adapters.accounts.AccountManagementAdapter
+import com.owncloud.android.presentation.adapters.accounts.AccountsManagementAdapter
 import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_TOKEN
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
@@ -58,13 +58,16 @@ import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT as EXTR
 const val KEY_CURRENT_ACCOUNT_CHANGED = "CURRENT_ACCOUNT_CHANGED"
 const val KEY_ACCOUNT_LIST_CHANGED = "ACCOUNT_LIST_CHANGED"
 
-class AccountManagementActivity : FileActivity(), AccountManagementAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
 
-    private val accountListAdapter: AccountManagementAdapter = AccountManagementAdapter(this)
+abstract class AccountManagementActivity : FileActivity(), AccountsManagementAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
+
+    abstract var accountListAdapter: AccountsManagementAdapter
     private lateinit var originalAccounts: Set<String>
     private lateinit var originalCurrentAccount: String
     private lateinit var accountBeingRemoved: String
     private lateinit var tintedCheck: Drawable
+    private lateinit var whiteCheck: Drawable
+
 
     private val removeAccountDialogViewModel: RemoveAccountDialogViewModel by viewModel()
     private val accountsManagementViewModel: AccountsManagementViewModel by viewModel()
@@ -73,9 +76,11 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        accountListAdapter = AccountsManagementAdapter(this)
+
         setContentView(R.layout.accounts_layout)
-        tintedCheck = ContextCompat.getDrawable(this, R.drawable.ic_current_white)!!
-        tintedCheck = DrawableCompat.wrap(tintedCheck)
+        whiteCheck = ContextCompat.getDrawable(this, R.drawable.ic_current_white)!!
+        tintedCheck = DrawableCompat.wrap(whiteCheck)
         val tint = ContextCompat.getColor(this, R.color.actionbar_start_color)
         DrawableCompat.setTint(tintedCheck, tint)
 
@@ -97,12 +102,10 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
         originalAccounts = toAccountNameSet(accountList)
         originalCurrentAccount = accountsManagementViewModel.getCurrentAccount()?.name.toString()
 
-
         accountListAdapter.submitAccountList(accountList = getAccountListItems())
 
         account = accountsManagementViewModel.getCurrentAccount()
         onAccountSet(false)
-
     }
 
     /**
@@ -113,7 +116,7 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
      */
     private fun toAccountNameSet(accountList: Array<Account>): Set<String> {
         val actualAccounts: MutableSet<String> = HashSet(accountList.size)
-        for (account in accountList) {
+        accountList.forEach{ account ->
             actualAccounts.add(account.name)
         }
         return actualAccounts
@@ -155,7 +158,7 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
      * @param position A position of the account adapter containing an account.
      */
     override fun switchAccount(position: Int) {
-        val clickedAccount: Account = (accountListAdapter.getItem(position) as AccountManagementAdapter.AccountRecyclerItem.AccountItem).account
+        val clickedAccount: Account = (accountListAdapter.getItem(position) as AccountsManagementAdapter.AccountRecyclerItem.AccountItem).account
         if (account.name == clickedAccount.name) {
             // current account selected, just go back
             finish()
@@ -273,16 +276,16 @@ class AccountManagementActivity : FileActivity(), AccountManagementAdapter.Accou
      *
      * @return list of account list items
      */
-    private fun getAccountListItems(): List<AccountManagementAdapter.AccountRecyclerItem> {
+    private fun getAccountListItems(): List<AccountsManagementAdapter.AccountRecyclerItem> {
         val accountList = accountsManagementViewModel.getLoggedAccounts()
-        val provisionalAccountList = mutableListOf<AccountManagementAdapter.AccountRecyclerItem>()
+        val provisionalAccountList = mutableListOf<AccountsManagementAdapter.AccountRecyclerItem>()
         accountList.forEach {
-            provisionalAccountList.add(AccountManagementAdapter.AccountRecyclerItem.AccountItem(it))
+            provisionalAccountList.add(AccountsManagementAdapter.AccountRecyclerItem.AccountItem(it))
         }
 
         // Add Create Account item at the end of account list if multi-account is enabled
         if (resources.getBoolean(R.bool.multiaccount_support) || accountList.isEmpty()) {
-            provisionalAccountList.add(AccountManagementAdapter.AccountRecyclerItem.NewAccount)
+            provisionalAccountList.add(AccountsManagementAdapter.AccountRecyclerItem.NewAccount)
         }
         return provisionalAccountList
     }
