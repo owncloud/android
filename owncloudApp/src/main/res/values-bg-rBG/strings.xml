@@ -113,7 +113,7 @@
   <string name="bottom_nav_offline">Офлайн</string>
   <string name="bottom_nav_links">Връзки</string>
   <string name="recommend_subject">Изпробвайте %1$s на своя смартфон!</string>
-  <string name="recommend_text">Бих желал да те поканя да използваш %1$s на своя смартфон!\nИзтегли го от тук: %2$s</string>
+  <string name="recommend_text">Бих искал да те поканя да използваш %1$s на своя смартфон!\nИзтегли го от тук: %2$s</string>
   <string name="error_reason">защото</string>
   <string name="auth_failure_snackbar">Удостоверяването е неуспешно</string>
   <string name="server_not_supported">Вашата версия на сървъра е по-ниска от 10 и не се поддържа, моля надстройте вашия сървър до по-нова версия</string>
@@ -211,7 +211,7 @@
   <string name="uploads_view_title">Качвания</string>
   <string name="uploads_view_group_current_uploads">Текущо</string>
   <string name="uploads_view_group_failed_uploads">Неуспешно (докоснете за нов опит)</string>
-  <string name="uploads_view_group_finished_uploads">Качено</string>
+  <string name="uploads_view_group_finished_uploads">Качени</string>
   <string name="uploads_view_group_file_count">%d файла</string>
   <string name="uploads_view_group_file_count_single">%d файл</string>
   <string name="uploads_view_upload_status_succeeded">Завършено</string>
@@ -227,7 +227,7 @@
   <string name="uploads_view_upload_status_failed_firewall_error">Забранено поради правило в защитната стена</string>
   <string name="uploads_view_upload_status_conflict">Конфликт</string>
   <string name="uploads_view_upload_status_service_interrupted">Приложението беше спряно</string>
-  <string name="uploads_view_upload_status_unknown_fail">Непозната грешка</string>
+  <string name="uploads_view_upload_status_unknown_fail">Неизвестна грешка</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Изчакване на Wi-Fi връзка</string>
   <string name="uploads_view_later_waiting_to_upload">В очакване на качване</string>
   <string name="uploads_view_unsupported_media_type">Неподдържан тип медия</string>
