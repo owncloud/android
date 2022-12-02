@@ -707,5 +707,7 @@
 
     <string name="release_notes_3.0_beta1_title1">New sync engine</string>
     <string name="release_notes_3.0_beta1_subtitle1">The way in which all files are synced has been redesigned</string>
+    <string name="release_notes_3.0_beta3_title2">Browser login improved</string>
+    <string name="release_notes_3.0_beta3_subtitle2">Only typing the URL, browser will be triggered</string>
 
 </resources>
