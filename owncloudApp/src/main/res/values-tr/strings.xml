@@ -626,4 +626,5 @@
   <string name="ic_action_open_in_web">Web\'te aç</string>
   <string name="open_in_web_error_generic">Web\'te açılamadı</string>
   <string name="open_in_web_error_not_supported">bu dosya türünü destekleyen hiçbir uygulama yok</string>
+  <string name="open_in_web_error_too_early">İstenen dosya henüz mevcut değil, lütfen daha sonra tekrar deneyin.</string>
 </resources>
