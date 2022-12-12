@@ -1,0 +1,7 @@
+Enhancement: Several transfers running simultaneously
+
+With the sync engine refactor, now several downloads and uploads can run at the same time, improving
+efficiency.
+
+https://github.com/owncloud/android/pull/3710
+https://github.com/owncloud/android/issues/3426

@@ -1,0 +1,7 @@
+Enhancement: Empty views improved
+
+When the list of items is empty, we now show a more attractive view. This applies to file list,
+available offline list, shared by link list, uploads list, logs list and external share list.
+
+https://github.com/owncloud/android/pull/3728
+https://github.com/owncloud/android/issues/3026

@@ -1,0 +1,6 @@
+Bugfix: Fix for thumbnails
+
+Some thumbnails were not shown in the file list. Now, they are all shown correctly.
+
+https://github.com/owncloud/android/pull/3719
+https://github.com/owncloud/android/issues/2818
