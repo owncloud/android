@@ -1,3 +1,72 @@
+Changelog for ownCloud Android Client [3.0.0] (2022-12-12)
+=======================================
+The following sections list the changes in ownCloud Android Client 3.0.0 relevant to
+ownCloud admins and users.
+
+[3.0.0]: https://github.com/owncloud/android/compare/v2.21.2...v3.0.0
+
+Summary
+-------
+
+* Bugfix - Fix for thumbnails: [#3719](https://github.com/owncloud/android/pull/3719)
+* Enhancement - Sync engine rewritten: [#2934](https://github.com/owncloud/android/pull/2934)
+* Enhancement - Faster browser authentication: [#3632](https://github.com/owncloud/android/pull/3632)
+* Enhancement - Several transfers running simultaneously: [#3710](https://github.com/owncloud/android/pull/3710)
+* Enhancement - Empty views improved: [#3728](https://github.com/owncloud/android/pull/3728)
+* Enhancement - Automatic conflicts propagation: [#3766](https://github.com/owncloud/android/pull/3766)
+
+Details
+-------
+
+* Bugfix - Fix for thumbnails: [#3719](https://github.com/owncloud/android/pull/3719)
+
+   Some thumbnails were not shown in the file list. Now, they are all shown correctly.
+
+   https://github.com/owncloud/android/issues/2818
+   https://github.com/owncloud/android/pull/3719
+
+* Enhancement - Sync engine rewritten: [#2934](https://github.com/owncloud/android/pull/2934)
+
+   The whole synchronization engine has been refactored to a new architecture to make it better
+   structured and more efficient.
+
+   https://github.com/owncloud/android/issues/2818
+   https://github.com/owncloud/android/pull/2934
+
+* Enhancement - Faster browser authentication: [#3632](https://github.com/owncloud/android/pull/3632)
+
+   Login flow has been improved by saving a click when the server is OAuth2/OIDC and it is valid.
+   Also, when authenticating again in a OAuth2/OIDC account already saved in the app, the
+   username is already shown in the browser.
+
+   https://github.com/owncloud/android/issues/3759
+   https://github.com/owncloud/android/pull/3632
+
+* Enhancement - Several transfers running simultaneously: [#3710](https://github.com/owncloud/android/pull/3710)
+
+   With the sync engine refactor, now several downloads and uploads can run at the same time,
+   improving efficiency.
+
+   https://github.com/owncloud/android/issues/3426
+   https://github.com/owncloud/android/pull/3710
+
+* Enhancement - Empty views improved: [#3728](https://github.com/owncloud/android/pull/3728)
+
+   When the list of items is empty, we now show a more attractive view. This applies to file list,
+   available offline list, shared by link list, uploads list, logs list and external share list.
+
+   https://github.com/owncloud/android/issues/3026
+   https://github.com/owncloud/android/pull/3728
+
+* Enhancement - Automatic conflicts propagation: [#3766](https://github.com/owncloud/android/pull/3766)
+
+   Conflicts are now propagated automatically to parent folders, and cleaned when solved or
+   removed. Before, it was needed to navigate to the file location for the conflict to propagate.
+   Also, move, copy and remove actions work properly with conflicts.
+
+   https://github.com/owncloud/android/issues/3005
+   https://github.com/owncloud/android/pull/3766
+
 Changelog for ownCloud Android Client [2.21.2] (2022-09-07)
 =======================================
 The following sections list the changes in ownCloud Android Client 2.21.2 relevant to
