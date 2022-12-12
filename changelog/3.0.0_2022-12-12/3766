@@ -1,0 +1,8 @@
+Enhancement: Automatic conflicts propagation
+
+Conflicts are now propagated automatically to parent folders, and cleaned when solved or removed. Before,
+it was needed to navigate to the file location for the conflict to propagate. Also, move, copy and remove
+actions work properly with conflicts.
+
+https://github.com/owncloud/android/pull/3766
+https://github.com/owncloud/android/issues/3005

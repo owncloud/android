@@ -1,0 +1,8 @@
+Enhancement: Faster browser authentication
+
+Login flow has been improved by saving a click when the server is OAuth2/OIDC and it is valid. Also,
+when authenticating again in a OAuth2/OIDC account already saved in the app, the username is already shown
+in the browser.
+
+https://github.com/owncloud/android/pull/3632
+https://github.com/owncloud/android/issues/3759
