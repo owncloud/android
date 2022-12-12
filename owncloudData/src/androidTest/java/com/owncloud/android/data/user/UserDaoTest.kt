@@ -42,7 +42,7 @@ class UserDaoTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var userDao: UserDao
-    private val userQuotaEntity = OC_USER_QUOTA.toEntity(OC_ACCOUNT_NAME)
+    private val userQuotaEntity = OC_USER_QUOTA.toEntity()
 
     @Before
     fun setUp() {

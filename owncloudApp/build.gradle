@@ -93,7 +93,6 @@ dependencies {
 
     debugImplementation "androidx.fragment:fragment-testing:1.4.1"
     debugImplementation 'com.facebook.stetho:stetho:1.6.0'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 }
 
 android {
@@ -105,8 +104,8 @@ android {
 
         testInstrumentationRunner "com.owncloud.android.utils.OCTestAndroidJUnitRunner"
 
-        versionCode = 22100200
-        versionName = "2.21.2"
+        versionCode = 22100203
+        versionName = "3.0-beta.3"
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""

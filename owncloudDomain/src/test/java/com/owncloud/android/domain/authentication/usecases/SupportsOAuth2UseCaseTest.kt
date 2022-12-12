@@ -25,55 +25,48 @@ import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class SupportsOAuth2UseCaseTest {
-    private val authRepository: AuthenticationRepository = spyk()
-    private val supportsOAuth2UseCase = SupportsOAuth2UseCase(authRepository)
-    private val supportsOAuth2UseCaseParams = SupportsOAuth2UseCase.Params(
-        accountName = OC_ACCOUNT_NAME
-    )
+
+    private val repository: AuthenticationRepository = spyk()
+    private val useCase = SupportsOAuth2UseCase(repository)
+    private val useCaseParams = SupportsOAuth2UseCase.Params(OC_ACCOUNT_NAME)
 
     @Test
-    fun invalidParams() {
-        val invalidSupportsOAuth2UseCaseParams = supportsOAuth2UseCaseParams.copy(accountName = "")
-        val supportsOAuth2UseCaseResult = supportsOAuth2UseCase.execute(invalidSupportsOAuth2UseCaseParams)
+    fun `supports OAuth2 - ko - invalid params`() {
+        val invalidSupportsOAuth2UseCaseParams = useCaseParams.copy(accountName = "")
+
+        val supportsOAuth2UseCaseResult = useCase.execute(invalidSupportsOAuth2UseCaseParams)
 
         assertTrue(supportsOAuth2UseCaseResult.isError)
         assertTrue(supportsOAuth2UseCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
-        verify(exactly = 0) { authRepository.supportsOAuth2UseCase(any()) }
+        verify(exactly = 0) { repository.supportsOAuth2UseCase(any()) }
     }
 
     @Test
-    fun supportsOAuth2Success() {
-        every { authRepository.supportsOAuth2UseCase(any()) } returns true
-        val supportsOAuth2UseCaseResult = supportsOAuth2UseCase.execute(supportsOAuth2UseCaseParams)
+    fun `supports OAuth2 - ok`() {
+        every { repository.supportsOAuth2UseCase(any()) } returns true
+
+        val supportsOAuth2UseCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(supportsOAuth2UseCaseResult.isSuccess)
-        assertFalse(supportsOAuth2UseCaseResult.isError)
-
-        assertNull(supportsOAuth2UseCaseResult.getThrowableOrNull())
         assertEquals(true, supportsOAuth2UseCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { authRepository.supportsOAuth2UseCase(any()) }
+        verify(exactly = 1) { repository.supportsOAuth2UseCase(any()) }
     }
 
     @Test
-    fun supportsOAuth2AccountNotFoundException() {
-        every { authRepository.supportsOAuth2UseCase(any()) } throws Exception()
+    fun `supports OAuth2 - ko - another exception`() {
+        every { repository.supportsOAuth2UseCase(any()) } throws Exception()
 
-        val supportsOAuth2UseCaseResult = supportsOAuth2UseCase.execute(supportsOAuth2UseCaseParams)
+        val supportsOAuth2UseCaseResult = useCase.execute(useCaseParams)
 
-        assertFalse(supportsOAuth2UseCaseResult.isSuccess)
         assertTrue(supportsOAuth2UseCaseResult.isError)
-
-        assertNull(supportsOAuth2UseCaseResult.getDataOrNull())
         assertTrue(supportsOAuth2UseCaseResult.getThrowableOrNull() is Exception)
 
-        verify(exactly = 1) { authRepository.supportsOAuth2UseCase(any()) }
+        verify(exactly = 1) { repository.supportsOAuth2UseCase(any()) }
     }
 }

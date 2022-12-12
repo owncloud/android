@@ -24,10 +24,13 @@ package com.owncloud.android.ui.fragment;
 import android.content.Context;
 
 import androidx.fragment.app.Fragment;
-import com.owncloud.android.datamodel.OCFile;
-import com.owncloud.android.files.services.FileDownloader;
-import com.owncloud.android.files.services.FileUploader;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.ui.activity.ComponentsGetter;
+
+import static com.owncloud.android.usecases.transfers.TransferConstantsKt.DOWNLOAD_ADDED_MESSAGE;
+import static com.owncloud.android.usecases.transfers.TransferConstantsKt.DOWNLOAD_FINISH_MESSAGE;
+import static com.owncloud.android.usecases.transfers.TransferConstantsKt.UPLOAD_FINISH_MESSAGE;
+import static com.owncloud.android.usecases.transfers.TransferConstantsKt.UPLOAD_START_MESSAGE;
 
 /**
  * Common methods for {@link Fragment}s containing {@link OCFile}s
@@ -86,10 +89,9 @@ public abstract class FileFragment extends Fragment {
     }
 
     public void onSyncEvent(String syncEvent, boolean success, OCFile updatedFile) {
-        if (syncEvent.equals(FileUploader.getUploadStartMessage())) {
+        if (syncEvent.equals(UPLOAD_START_MESSAGE)) {
             updateViewForSyncInProgress();
-
-        } else if (syncEvent.equals(FileUploader.getUploadFinishMessage())) {
+        } else if (syncEvent.equals(UPLOAD_FINISH_MESSAGE)) {
             if (success) {
                 if (updatedFile != null) {
                     onFileMetadataChanged(updatedFile);
@@ -99,10 +101,10 @@ public abstract class FileFragment extends Fragment {
             }
             updateViewForSyncOff();
 
-        } else if (syncEvent.equals(FileDownloader.getDownloadAddedMessage())) {
+        } else if (syncEvent.equals(DOWNLOAD_ADDED_MESSAGE)) {
             updateViewForSyncInProgress();
 
-        } else if (syncEvent.equals(FileDownloader.getDownloadFinishMessage())) {
+        } else if (syncEvent.equals(DOWNLOAD_FINISH_MESSAGE)) {
             if (success) {
                 if (updatedFile != null) {
                     onFileMetadataChanged(updatedFile);
@@ -118,8 +120,6 @@ public abstract class FileFragment extends Fragment {
     public abstract void updateViewForSyncInProgress();
 
     public abstract void updateViewForSyncOff();
-
-    public abstract void onTransferServiceConnected();
 
     public abstract void onFileMetadataChanged(OCFile updatedFile);
 
@@ -142,14 +142,6 @@ public abstract class FileFragment extends Fragment {
 
         ///// TO UNIFY IN A SINGLE CALLBACK METHOD - EVENT NOTIFICATIONs  -> something happened
         // inside the fragment, MAYBE activity is interested --> unify in notification method
-
-        /**
-         * Callback method invoked when a the user browsed into a different folder through the
-         * list of files
-         *
-         * @param folder
-         */
-        void onBrowsedDownTo(OCFile folder);
 
     }
 }

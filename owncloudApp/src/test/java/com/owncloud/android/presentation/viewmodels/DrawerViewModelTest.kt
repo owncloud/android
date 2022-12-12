@@ -18,15 +18,18 @@
  */
 package com.owncloud.android.presentation.viewmodels
 
+import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
+import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_USER_QUOTA
+import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -43,6 +46,9 @@ import org.koin.dsl.module
 class DrawerViewModelTest : ViewModelTest() {
     private lateinit var drawerViewModel: DrawerViewModel
     private lateinit var getStoredQuotaUseCase: GetStoredQuotaUseCase
+    private lateinit var removeAccountUseCase: RemoveAccountUseCase
+    private lateinit var getUserQuotasUseCase: GetUserQuotasUseCase
+    private lateinit var localStorageProvider: LocalStorageProvider
 
     private lateinit var contextProvider: ContextProvider
 
@@ -66,11 +72,17 @@ class DrawerViewModelTest : ViewModelTest() {
         }
 
         getStoredQuotaUseCase = mockk()
+        removeAccountUseCase = mockk()
+        getUserQuotasUseCase = mockk()
+        localStorageProvider = mockk()
 
         testCoroutineDispatcher.pauseDispatcher()
 
         drawerViewModel = DrawerViewModel(
-            getStoredQuotaUseCase,
+            getStoredQuotaUseCase = getStoredQuotaUseCase,
+            removeAccountUseCase = removeAccountUseCase,
+            getUserQuotasUseCase = getUserQuotasUseCase,
+            localStorageProvider = localStorageProvider,
             coroutinesDispatcherProvider = coroutineDispatcherProvider
         )
     }

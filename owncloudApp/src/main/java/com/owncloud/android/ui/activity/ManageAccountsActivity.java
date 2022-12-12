@@ -1,9 +1,11 @@
-/**
+/*
  * ownCloud Android client application
  *
  * @author Andy Scherzinger
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,30 +27,21 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.OperationCanceledException;
-import android.content.ComponentName;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SyncRequest;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.work.WorkManager;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.files.services.FileDownloader;
-import com.owncloud.android.files.services.FileUploader;
 import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.ui.authentication.LoginActivity;
 import com.owncloud.android.services.OperationsService;
@@ -57,7 +50,6 @@ import com.owncloud.android.ui.adapter.AccountListItem;
 import com.owncloud.android.ui.dialog.RemoveAccountDialogFragment;
 import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel;
 import com.owncloud.android.ui.helpers.FileOperationsHelper;
-import com.owncloud.android.usecases.CancelUploadFromAccountUseCase;
 import com.owncloud.android.utils.PreferenceUtils;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
@@ -75,8 +67,7 @@ import static org.koin.java.KoinJavaComponent.inject;
 public class ManageAccountsActivity extends FileActivity
         implements
         AccountListAdapter.AccountListAdapterListener,
-        AccountManagerCallback<Boolean>,
-        ComponentsGetter {
+        AccountManagerCallback<Boolean> {
 
     public static final String KEY_ACCOUNT_LIST_CHANGED = "ACCOUNT_LIST_CHANGED";
     public static final String KEY_CURRENT_ACCOUNT_CHANGED = "CURRENT_ACCOUNT_CHANGED";
@@ -85,20 +76,17 @@ public class ManageAccountsActivity extends FileActivity
     private final Handler mHandler = new Handler();
     private String mAccountBeingRemoved;
     private AccountListAdapter mAccountListAdapter;
-    protected FileUploader.FileUploaderBinder mUploaderBinder = null;
-    protected FileDownloader.FileDownloaderBinder mDownloaderBinder = null;
-    private ServiceConnection mDownloadServiceConnection, mUploadServiceConnection = null;
     Set<String> mOriginalAccounts;
     String mOriginalCurrentAccount;
     private Drawable mTintedCheck;
 
-    private RemoveAccountDialogViewModel mRemoveAccountDialogViewModel = null;
+    private RemoveAccountDialogViewModel removeAccountDialogViewModel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         @NotNull Lazy<RemoveAccountDialogViewModel> removeAccountDialogViewModelLazy = inject(RemoveAccountDialogViewModel.class);
-        mRemoveAccountDialogViewModel = removeAccountDialogViewModelLazy.getValue();
+        removeAccountDialogViewModel = removeAccountDialogViewModelLazy.getValue();
 
         mTintedCheck = ContextCompat.getDrawable(this, R.drawable.ic_current_white);
         mTintedCheck = DrawableCompat.wrap(mTintedCheck);
@@ -121,15 +109,8 @@ public class ManageAccountsActivity extends FileActivity
         setAccount(AccountUtils.getCurrentOwnCloudAccount(this));
         onAccountSet(false);
 
-        initializeComponentGetters();
-
         // added click listener to switch account
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switchAccount(position);
-            }
-        });
+        mListView.setOnItemClickListener((parent, view, position, id) -> switchAccount(position));
     }
 
     @Override
@@ -146,7 +127,7 @@ public class ManageAccountsActivity extends FileActivity
      * @return set of account names
      */
     private Set<String> toAccountNameSet(Account[] accountList) {
-        Set<String> actualAccounts = new HashSet<String>(accountList.length);
+        Set<String> actualAccounts = new HashSet<>(accountList.length);
         for (Account account : accountList) {
             actualAccounts.add(account.name);
         }
@@ -183,22 +164,6 @@ public class ManageAccountsActivity extends FileActivity
     private boolean hasCurrentAccountChanged() {
         Account currentAccount = AccountUtils.getCurrentOwnCloudAccount(this);
         return (currentAccount != null && !mOriginalCurrentAccount.equals(currentAccount.name));
-    }
-
-    /**
-     * Initialize ComponentsGetters.
-     */
-    private void initializeComponentGetters() {
-        mDownloadServiceConnection = newTransferenceServiceConnection();
-        if (mDownloadServiceConnection != null) {
-            bindService(new Intent(this, FileDownloader.class), mDownloadServiceConnection,
-                    Context.BIND_AUTO_CREATE);
-        }
-        mUploadServiceConnection = newTransferenceServiceConnection();
-        if (mUploadServiceConnection != null) {
-            bindService(new Intent(this, FileUploader.class), mUploadServiceConnection,
-                    Context.BIND_AUTO_CREATE);
-        }
     }
 
     /**
@@ -239,7 +204,7 @@ public class ManageAccountsActivity extends FileActivity
         mAccountBeingRemoved = account.name;
         RemoveAccountDialogFragment dialog = RemoveAccountDialogFragment.newInstance(
                 account,
-                mRemoveAccountDialogViewModel.hasCameraUploadsAttached(account.name)
+                removeAccountDialogViewModel.hasCameraUploadsAttached(account.name)
         );
         dialog.show(getSupportFragmentManager(), RemoveAccountDialogFragment.FTAG_CONFIRMATION);
     }
@@ -281,31 +246,23 @@ public class ManageAccountsActivity extends FileActivity
                 null,
                 null,
                 this,
-                new AccountManagerCallback<Bundle>() {
-                    @Override
-                    public void run(AccountManagerFuture<Bundle> future) {
-                        if (future != null) {
-                            try {
-                                Bundle result = future.getResult();
-                                String name = result.getString(AccountManager.KEY_ACCOUNT_NAME);
-                                AccountUtils.setCurrentOwnCloudAccount(getApplicationContext(), name);
-                                mAccountListAdapter = new AccountListAdapter(
-                                        ManageAccountsActivity.this,
-                                        getAccountListItems(),
-                                        mTintedCheck
-                                );
-                                mListView.setAdapter(mAccountListAdapter);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mAccountListAdapter.notifyDataSetChanged();
-                                    }
-                                });
-                            } catch (OperationCanceledException e) {
-                                Timber.e(e, "Account creation canceled");
-                            } catch (Exception e) {
-                                Timber.e(e, "Account creation finished in exception");
-                            }
+                future -> {
+                    if (future != null) {
+                        try {
+                            Bundle result = future.getResult();
+                            String name = result.getString(AccountManager.KEY_ACCOUNT_NAME);
+                            AccountUtils.setCurrentOwnCloudAccount(getApplicationContext(), name);
+                            mAccountListAdapter = new AccountListAdapter(
+                                    ManageAccountsActivity.this,
+                                    getAccountListItems(),
+                                    mTintedCheck
+                            );
+                            mListView.setAdapter(mAccountListAdapter);
+                            runOnUiThread(() -> mAccountListAdapter.notifyDataSetChanged());
+                        } catch (OperationCanceledException e) {
+                            Timber.e(e, "Account creation canceled");
+                        } catch (Exception e) {
+                            Timber.e(e, "Account creation finished in exception");
                         }
                     }
                 }, mHandler);
@@ -319,19 +276,7 @@ public class ManageAccountsActivity extends FileActivity
     @Override
     public void run(AccountManagerFuture<Boolean> future) {
         if (future != null && future.isDone()) {
-            Account account = new Account(mAccountBeingRemoved, MainApp.Companion.getAccountType());
-            if (!AccountUtils.exists(account.name, MainApp.Companion.getAppContext())) {
-                // Cancel transfers of the removed account
-                if (mUploaderBinder != null) {
-                    mUploaderBinder.cancel(account);
-                }
-                if (mDownloaderBinder != null) {
-                    mDownloaderBinder.cancel(account);
-                }
-                CancelUploadFromAccountUseCase cancelUploadFromAccountUseCase = new CancelUploadFromAccountUseCase(WorkManager.getInstance(getBaseContext()));
-                cancelUploadFromAccountUseCase.execute(new CancelUploadFromAccountUseCase.Params(account.name));
-            }
-
+            // Create new adapter with the remaining accounts
             mAccountListAdapter = new AccountListAdapter(this, getAccountListItems(), mTintedCheck);
             mListView.setAdapter(mAccountListAdapter);
 
@@ -386,31 +331,7 @@ public class ManageAccountsActivity extends FileActivity
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        if (mDownloadServiceConnection != null) {
-            unbindService(mDownloadServiceConnection);
-            mDownloadServiceConnection = null;
-        }
-        if (mUploadServiceConnection != null) {
-            unbindService(mUploadServiceConnection);
-            mUploadServiceConnection = null;
-        }
-
-        super.onDestroy();
-    }
-
     // Methods for ComponentsGetter
-    @Override
-    public FileDownloader.FileDownloaderBinder getFileDownloaderBinder() {
-        return mDownloaderBinder;
-    }
-
-    @Override
-    public FileUploader.FileUploaderBinder getFileUploaderBinder() {
-        return mUploaderBinder;
-    }
-
     @Override
     public OperationsService.OperationsServiceBinder getOperationsServiceBinder() {
         return null;
@@ -424,38 +345,5 @@ public class ManageAccountsActivity extends FileActivity
     @Override
     public FileOperationsHelper getFileOperationsHelper() {
         return null;
-    }
-
-    protected ServiceConnection newTransferenceServiceConnection() {
-        return new ManageAccountsServiceConnection();
-    }
-
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private class ManageAccountsServiceConnection implements ServiceConnection {
-
-        @Override
-        public void onServiceConnected(ComponentName component, IBinder service) {
-
-            if (component.equals(new ComponentName(ManageAccountsActivity.this, FileDownloader.class))) {
-                mDownloaderBinder = (FileDownloader.FileDownloaderBinder) service;
-
-            } else if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
-                Timber.d("Upload service connected");
-                mUploaderBinder = (FileUploader.FileUploaderBinder) service;
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName component) {
-            if (component.equals(new ComponentName(ManageAccountsActivity.this, FileDownloader.class))) {
-                Timber.d("Download service suddenly disconnected");
-                mDownloaderBinder = null;
-            } else if (component.equals(new ComponentName(ManageAccountsActivity.this, FileUploader.class))) {
-                Timber.d("Upload service suddenly disconnected");
-                mUploaderBinder = null;
-            }
-        }
     }
 }

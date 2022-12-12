@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.workers
 
 import android.accounts.Account
@@ -25,38 +28,45 @@ import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.datamodel.OCUpload
-import com.owncloud.android.datamodel.UploadsStorageManager
-import com.owncloud.android.db.UploadResult
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
-import com.owncloud.android.domain.exceptions.ConflictException
-import com.owncloud.android.domain.exceptions.FileNotFoundException
-import com.owncloud.android.domain.exceptions.ForbiddenException
+import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
-import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
-import com.owncloud.android.domain.exceptions.QuotaExceededException
-import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
-import com.owncloud.android.domain.exceptions.ServiceUnavailableException
-import com.owncloud.android.domain.exceptions.SpecificUnsupportedMediaTypeException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
+import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.domain.transfers.model.TransferResult
+import com.owncloud.android.domain.transfers.model.TransferStatus
+import com.owncloud.android.extensions.isContentUri
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperation
-import com.owncloud.android.lib.resources.files.ContentUriRequestBody
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
-import com.owncloud.android.lib.resources.files.UploadFileFromContentUriOperation
+import com.owncloud.android.lib.resources.files.FileUtils
+import com.owncloud.android.lib.resources.files.UploadFileFromFileSystemOperation
+import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation
+import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation.Companion.CHUNK_SIZE
+import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
+import com.owncloud.android.utils.SecurityUtils
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import timber.log.Timber
 import java.io.File
+import java.io.FileOutputStream
 
 class UploadFileFromContentUriWorker(
     private val appContext: Context,
@@ -64,22 +74,40 @@ class UploadFileFromContentUriWorker(
 ) : CoroutineWorker(
     appContext,
     workerParameters
-), KoinComponent {
+), KoinComponent, OnDatatransferProgressListener {
 
     private lateinit var account: Account
     private lateinit var contentUri: Uri
     private lateinit var lastModified: String
-    private lateinit var behavior: FolderBackUpConfiguration.Behavior
+    private lateinit var behavior: UploadBehavior
     private lateinit var uploadPath: String
+    private lateinit var cachePath: String
+    private lateinit var mimeType: String
+    private var fileSize: Long = 0
     private var uploadIdInStorageManager: Long = -1
+
+    private lateinit var uploadFileOperation: UploadFileFromFileSystemOperation
+
+    private var lastPercent = 0
+
+    private val transferRepository: TransferRepository by inject()
 
     override suspend fun doWork(): Result {
 
         if (!areParametersValid()) return Result.failure()
 
+        transferRepository.updateTransferStatusToInProgressById(uploadIdInStorageManager)
+        val ocTransfer = transferRepository.getTransferById(uploadIdInStorageManager)
+
+        val localStorageProvider: LocalStorageProvider by inject()
+        cachePath = localStorageProvider.getTemporalPath(account.name) + uploadPath
+
         return try {
-            checkDocumentFileExists()
-            checkPermissionsToReadDocumentAreGranted()
+            if (ocTransfer!!.isContentUri(appContext)) {
+                checkDocumentFileExists()
+                checkPermissionsToReadDocumentAreGranted()
+                copyFileToLocalStorage()
+            }
             checkParentFolderExistence()
             checkNameCollisionAndGetAnAvailableOneInCase()
             uploadDocument()
@@ -104,7 +132,7 @@ class UploadFileFromContentUriWorker(
         account = AccountUtils.getOwnCloudAccountByName(appContext, paramAccountName) ?: return false
         contentUri = paramContentUri?.toUri() ?: return false
         uploadPath = paramUploadPath ?: return false
-        behavior = paramBehavior?.let { FolderBackUpConfiguration.Behavior.fromString(it) } ?: return false
+        behavior = paramBehavior?.let { UploadBehavior.fromString(it) } ?: return false
         lastModified = paramLastModified ?: return false
         uploadIdInStorageManager = paramUploadId
 
@@ -125,6 +153,37 @@ class UploadFileFromContentUriWorker(
             // File does not exists anymore. Throw an exception to tell the user
             throw LocalFileNotFoundException()
         }
+    }
+
+    private fun copyFileToLocalStorage() {
+        val cacheFile = File(cachePath)
+        val cacheDir = cacheFile.parentFile
+        if (cacheDir != null) {
+            if (!cacheDir.exists()) {
+                cacheDir.mkdirs()
+            }
+        }
+        cacheFile.createNewFile()
+
+        val inputStream = appContext.contentResolver.openInputStream(contentUri)
+        val outputStream = FileOutputStream(cachePath)
+        outputStream.use { fileOut ->
+            inputStream?.copyTo(fileOut)
+        }
+        inputStream?.close()
+        outputStream.close()
+
+        transferRepository.updateTransferLocalPath(uploadIdInStorageManager, cachePath)
+
+        // File is already in cache, so the original one can be removed if the behaviour is MOVE
+        if (behavior == UploadBehavior.MOVE) {
+            removeLocalFile()
+        }
+    }
+
+    private fun removeLocalFile() {
+        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
+        documentFile?.delete()
     }
 
     private fun checkParentFolderExistence() {
@@ -150,40 +209,95 @@ class UploadFileFromContentUriWorker(
 
     private fun uploadDocument() {
         val client = getClientForThisUpload()
-        val requestBody = ContentUriRequestBody(appContext.contentResolver, contentUri)
 
-        val uploadFileFromContentUriOperation = UploadFileFromContentUriOperation(uploadPath, lastModified, requestBody)
+        val cacheFile = File(cachePath)
+        mimeType = cacheFile.extension
+        fileSize = cacheFile.length()
 
-        val result = executeRemoteOperation { uploadFileFromContentUriOperation.execute(client) }
+        val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
+        val capabilitiesForAccount = getStoredCapabilitiesUseCase.execute(
+            GetStoredCapabilitiesUseCase.Params(
+                accountName = account.name
+            )
+        )
+        val isChunkingAllowed = capabilitiesForAccount != null && capabilitiesForAccount.isChunkingAllowed()
+        Timber.d("Chunking is allowed: %s, and file size is greater than the minimum chunk size: %s", isChunkingAllowed, fileSize > CHUNK_SIZE)
 
-        if (result == Unit && behavior == FolderBackUpConfiguration.Behavior.MOVE) {
-            removeLocalFile()
+        if (isChunkingAllowed && fileSize > CHUNK_SIZE) {
+            uploadChunkedFile(client)
+        } else {
+            uploadPlainFile(client)
         }
+        removeCacheFile()
     }
 
-    private fun removeLocalFile() {
-        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
-        documentFile?.delete()
+    private fun uploadPlainFile(client: OwnCloudClient) {
+        uploadFileOperation = UploadFileFromFileSystemOperation(
+            localPath = cachePath,
+            remotePath = uploadPath,
+            mimeType = mimeType,
+            lastModifiedTimestamp = lastModified,
+            requiredEtag = null,
+        ).also {
+            it.addDataTransferProgressListener(this)
+        }
+
+        executeRemoteOperation { uploadFileOperation.execute(client) }
+    }
+
+    private fun uploadChunkedFile(client: OwnCloudClient) {
+        val immutableHashForChunkedFile = SecurityUtils.stringToMD5Hash(uploadPath) + System.currentTimeMillis()
+        // Step 1: Create folder where the chunks will be uploaded.
+        val createChunksRemoteFolderOperation = CreateRemoteFolderOperation(
+            remotePath = immutableHashForChunkedFile,
+            createFullPath = false,
+            isChunksFolder = true
+        )
+        executeRemoteOperation { createChunksRemoteFolderOperation.execute(client) }
+
+        // Step 2: Upload file by chunks
+        uploadFileOperation = ChunkedUploadFromFileSystemOperation(
+            transferId = immutableHashForChunkedFile,
+            localPath = cachePath,
+            remotePath = uploadPath,
+            mimeType = mimeType,
+            lastModifiedTimestamp = lastModified,
+            requiredEtag = null,
+        ).also {
+            it.addDataTransferProgressListener(this)
+        }
+
+        executeRemoteOperation { uploadFileOperation.execute(client) }
+
+        // Step 3: Move remote file to the final remote destination
+        val ocChunkService = OCChunkService(client)
+        ocChunkService.moveFile(
+            sourceRemotePath = "${immutableHashForChunkedFile}${OCFile.PATH_SEPARATOR}${FileUtils.FINAL_CHUNKS_FILE}",
+            targetRemotePath = uploadPath,
+            fileLastModificationTimestamp = lastModified,
+            fileLength = fileSize
+        )
+    }
+
+    private fun removeCacheFile() {
+        val cacheFile = File(cachePath)
+        cacheFile.delete()
     }
 
     private fun updateUploadsDatabaseWithResult(throwable: Throwable?) {
-        val uploadStorageManager = UploadsStorageManager(appContext.contentResolver)
-
-        val ocUpload = OCUpload(contentUri.toString(), uploadPath, account.name).apply {
-            uploadStatus = getUploadStatusForThrowable(throwable)
-            uploadEndTimestamp = System.currentTimeMillis()
-            lastResult = getUploadResultFromThrowable(throwable)
-            uploadId = uploadIdInStorageManager
-        }
-
-        uploadStorageManager.updateUpload(ocUpload)
+        transferRepository.updateTransferWhenFinished(
+            id = uploadIdInStorageManager,
+            status = getUploadStatusForThrowable(throwable),
+            transferEndTimestamp = System.currentTimeMillis(),
+            lastResult = TransferResult.fromThrowable(throwable)
+        )
     }
 
-    private fun getUploadStatusForThrowable(throwable: Throwable?): UploadsStorageManager.UploadStatus {
+    private fun getUploadStatusForThrowable(throwable: Throwable?): TransferStatus {
         return if (throwable == null) {
-            UploadsStorageManager.UploadStatus.UPLOAD_SUCCEEDED
+            TransferStatus.TRANSFER_SUCCEEDED
         } else {
-            UploadsStorageManager.UploadStatus.UPLOAD_FAILED
+            TransferStatus.TRANSFER_FAILED
         }
     }
 
@@ -212,31 +326,29 @@ class UploadFileFromContentUriWorker(
         )
     }
 
-    private fun getUploadResultFromThrowable(throwable: Throwable?): UploadResult {
-        if (throwable == null) return UploadResult.UPLOADED
-
-        return when (throwable) {
-            is LocalFileNotFoundException -> UploadResult.FOLDER_ERROR
-            is NoConnectionWithServerException -> UploadResult.NETWORK_CONNECTION
-            is UnauthorizedException -> UploadResult.CREDENTIAL_ERROR
-            is FileNotFoundException -> UploadResult.FILE_NOT_FOUND
-            is ConflictException -> UploadResult.CONFLICT_ERROR
-            is ForbiddenException -> UploadResult.PRIVILEGES_ERROR
-            is ServiceUnavailableException -> UploadResult.SERVICE_UNAVAILABLE
-            is QuotaExceededException -> UploadResult.QUOTA_EXCEEDED
-            is SpecificUnsupportedMediaTypeException -> UploadResult.SPECIFIC_UNSUPPORTED_MEDIA_TYPE
-            is SSLRecoverablePeerUnverifiedException -> UploadResult.SSL_RECOVERABLE_PEER_UNVERIFIED
-            else -> UploadResult.UNKNOWN
-        }
-    }
-
     private fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
         .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext,
         SingleSessionManager.getConnectionValidator())
 
-    companion object {
-        const val TRANSFER_TAG_CAMERA_UPLOAD = "TRANSFER_TAG_CAMERA_UPLOAD"
+    override fun onTransferProgress(
+        progressRate: Long,
+        totalTransferredSoFar: Long,
+        totalToTransfer: Long,
+        filePath: String
+    ) {
+        val percent: Int = (100.0 * totalTransferredSoFar.toDouble() / totalToTransfer.toDouble()).toInt()
+        if (percent == lastPercent) return
 
+        // Set current progress. Observers will listen.
+        CoroutineScope(Dispatchers.IO).launch {
+            val progress = workDataOf(DownloadFileWorker.WORKER_KEY_PROGRESS to percent)
+            setProgress(progress)
+        }
+
+        lastPercent = percent
+    }
+
+    companion object {
         const val KEY_PARAM_ACCOUNT_NAME = "KEY_PARAM_ACCOUNT_NAME"
         const val KEY_PARAM_BEHAVIOR = "KEY_PARAM_BEHAVIOR"
         const val KEY_PARAM_CONTENT_URI = "KEY_PARAM_CONTENT_URI"

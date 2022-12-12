@@ -83,7 +83,6 @@
   <string name="uploader_error_message_source_file_not_found">O ficheiro a enviar não foi encontrado nesta localização. Por favor, verifique se o ficheiro existe.</string>
   <string name="uploader_error_message_source_file_not_copied">Ocorreu um erro durante a cópia do ficheiro para uma pasta temporária. Por favor, tente submeter novamente.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
-  <string name="file_list_empty">Aqui não existe nada. Envie qualquer coisa!</string>
   <string name="file_list_loading">A carregar...</string>
   <string name="file_list_no_app_for_file_type">Nenhuma aplicação encontrada para o tipo de ficheiro</string>
   <string name="local_file_list_empty">Não existem ficheiros nesta pasta.</string>

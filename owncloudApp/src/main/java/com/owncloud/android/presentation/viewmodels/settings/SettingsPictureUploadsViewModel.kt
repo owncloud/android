@@ -24,13 +24,14 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.pictureUploadsName
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.camerauploads.usecases.GetPictureUploadsConfigurationStreamUseCase
 import com.owncloud.android.domain.camerauploads.usecases.ResetPictureUploadsUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConfigurationUseCase
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
@@ -130,7 +131,7 @@ class SettingsPictureUploadsViewModel(
     }
 
     fun handleSelectBehaviour(behaviorString: String) {
-        val behavior = FolderBackUpConfiguration.Behavior.fromString(behaviorString)
+        val behavior = UploadBehavior.fromString(behaviorString)
 
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             savePictureUploadsConfigurationUseCase.execute(
@@ -165,11 +166,11 @@ class SettingsPictureUploadsViewModel(
         wifiOnly: Boolean? = _pictureUploads.value?.wifiOnly,
         chargingOnly: Boolean? = _pictureUploads.value?.chargingOnly,
         sourcePath: String? = _pictureUploads.value?.sourcePath,
-        behavior: FolderBackUpConfiguration.Behavior? = _pictureUploads.value?.behavior,
+        behavior: UploadBehavior? = _pictureUploads.value?.behavior,
         timestamp: Long? = _pictureUploads.value?.lastSyncTimestamp
     ): FolderBackUpConfiguration = FolderBackUpConfiguration(
         accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
-        behavior = behavior ?: FolderBackUpConfiguration.Behavior.COPY,
+        behavior = behavior ?: UploadBehavior.COPY,
         sourcePath = sourcePath.orEmpty(),
         uploadPath = uploadPath ?: PREF__CAMERA_UPLOADS_DEFAULT_PATH,
         wifiOnly = wifiOnly ?: false,

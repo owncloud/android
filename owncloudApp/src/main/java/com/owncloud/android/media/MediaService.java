@@ -43,7 +43,7 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import com.owncloud.android.R;
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.utils.NotificationUtils;
@@ -55,7 +55,7 @@ import java.io.IOException;
 import static com.owncloud.android.utils.NotificationConstantsKt.MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID;
 
 /**
- * Service that handles media playback, both audio and video. 
+ * Service that handles media playback, both audio and video.
  *
  * Waits for Intents which signal the service to perform specific operations: Play, Pause,
  * Rewind, etc.
@@ -179,14 +179,14 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         } else if (extra == MediaPlayer.MEDIA_ERROR_IO) {
             /*  Added in API level 17
                 File or network related operation errors.
-                Constant Value: -1004 (0xfffffc14) 
+                Constant Value: -1004 (0xfffffc14)
              */
             messageId = R.string.media_err_io;
 
         } else if (extra == MediaPlayer.MEDIA_ERROR_MALFORMED) {
             /*  Added in API level 17
                 Bitstream is not conforming to the related coding standard or file spec.
-                Constant Value: -1007 (0xfffffc11) 
+                Constant Value: -1007 (0xfffffc11)
              */
             messageId = R.string.media_err_malformed;
 
@@ -215,7 +215,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
                 Added in API level 1
                 Media server died. In this case, the application must release the MediaPlayer
                 object and instantiate a new one.
-                Constant Value: 100 (0x00000064) 
+                Constant Value: 100 (0x00000064)
              */
             messageId = R.string.media_err_unknown;
         }
@@ -285,9 +285,9 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
     /**
      * Processes a request to play a media file received as a parameter
      *
-     * TODO If a new request is received when a file is being prepared, it is ignored. Is this what we want? 
+     * TODO If a new request is received when a file is being prepared, it is ignored. Is this what we want?
      *
-     * @param intent    Intent received in the request with the data to identify the file to play. 
+     * @param intent    Intent received in the request with the data to identify the file to play.
      */
     private void processPlayFileRequest(Intent intent) {
         if (mState != State.PREPARING) {
@@ -342,7 +342,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
     }
 
     /**
-     * Processes a request to pause the current playback 
+     * Processes a request to pause the current playback
      */
     protected void processPauseRequest() {
         if (mState == State.PLAYING) {
@@ -406,7 +406,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
     }
 
     /**
-     * Reconfigures MediaPlayer according to audio focus settings and starts/restarts it. 
+     * Reconfigures MediaPlayer according to audio focus settings and starts/restarts it.
      */
     protected void configAndStartMediaPlayer() {
         if (mPlayer == null) {
@@ -434,7 +434,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
     }
 
     /**
-     * Requests the audio focus to the Audio Manager 
+     * Requests the audio focus to the Audio Manager
      */
     private void tryToGetAudioFocus() {
         if (mAudioFocus != AudioFocus.FOCUS
@@ -448,7 +448,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
     }
 
     /**
-     * Starts playing the current media file. 
+     * Starts playing the current media file.
      */
     protected void playMedia() {
         mState = State.STOPPED;
@@ -547,7 +547,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
     }
 
     /**
-     * Called when media player is done preparing. 
+     * Called when media player is done preparing.
      *
      * Time to start.
      */
@@ -627,7 +627,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
     }
 
     /**
-     * Called when there's an error playing media. 
+     * Called when there's an error playing media.
      *
      * Warns the user about the error and resets the media player.
      */
@@ -707,7 +707,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
     /**
      * Accesses the current MediaPlayer instance in the service.
      *
-     * To be handled carefully. Visibility is protected to be accessed only 
+     * To be handled carefully. Visibility is protected to be accessed only
      *
      * @return Current MediaPlayer instance handled by MediaService.
      */

@@ -106,7 +106,8 @@
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/Filename"
             app:layout_constraintTop_toBottomOf="@+id/file_list_size"
-            tools:text="/path/to/file" />
+            tools:text="/path/to/file"
+            tools:visibility="visible"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -126,7 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_shared_by_link"
+            tools:src="@drawable/ic_shared_by_link"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/custom_checkbox"
             app:layout_constraintStart_toStartOf="parent"

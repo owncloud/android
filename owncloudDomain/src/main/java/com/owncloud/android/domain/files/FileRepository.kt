@@ -2,7 +2,10 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Christian Schabesberger
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -19,7 +22,41 @@
 
 package com.owncloud.android.domain.files
 
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
+import com.owncloud.android.domain.files.model.FileListOption
+import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
+import kotlinx.coroutines.flow.Flow
+import java.util.UUID
+
 interface FileRepository {
-    fun checkPathExistence(path: String, userLogged: Boolean): Boolean
     fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
+    fun createFolder(remotePath: String, parentFolder: OCFile)
+    fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile)
+    fun getFileById(fileId: Long): OCFile?
+    fun getFileByIdAsStream(fileId: Long): Flow<OCFile?>
+    fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
+    fun getSearchFolderContent(fileListOption: FileListOption, folderId: Long, search: String): List<OCFile>
+    fun getFolderContent(folderId: Long): List<OCFile>
+    fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>>
+    fun getFolderImages(folderId: Long): List<OCFile>
+    fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
+    fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
+    fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
+    fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
+    fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile)
+    fun readFile(remotePath: String, accountName: String): OCFile
+    fun refreshFolder(remotePath: String, accountName: String): List<OCFile>
+    fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean)
+    fun renameFile(ocFile: OCFile, newName: String)
+    fun saveFile(file: OCFile)
+    fun saveConflict(fileId: Long, eTagInConflict: String)
+    fun cleanConflict(fileId: Long)
+    fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID)
+    fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID)
+    fun cleanWorkersUuid(fileId: Long)
+
+    fun disableThumbnailsForFile(fileId: Long)
+    fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
+    fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
 }

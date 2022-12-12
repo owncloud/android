@@ -38,9 +38,8 @@ import com.owncloud.android.lib.common.accounts.AccountUtils.AccountNotFoundExce
 import java.io.IOException;
 
 /**
- * Base synchronization adapter for ownCloud designed to be subclassed for different
- * resource types, like FileSync, ConcatsSync, CalendarSync, etc..
- *
+ * Base synchronization adapter for ownCloud to discover full account.
+ * <p>
  * Implements the standard {@link AbstractThreadedSyncAdapter}.
  */
 public abstract class AbstractOwnCloudSyncAdapter extends
@@ -55,12 +54,6 @@ public abstract class AbstractOwnCloudSyncAdapter extends
 
     public AbstractOwnCloudSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        this.setAccountManager(AccountManager.get(context));
-    }
-
-    public AbstractOwnCloudSyncAdapter(Context context, boolean autoInitialize,
-                                       boolean allowParallelSyncs) {
-        super(context, autoInitialize, allowParallelSyncs);
         this.setAccountManager(AccountManager.get(context));
     }
 

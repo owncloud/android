@@ -20,13 +20,20 @@
 package com.owncloud.android.providers
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.owncloud.android.extensions.getRunningWorkInfosLiveData
+import com.owncloud.android.workers.AvailableOfflinePeriodicWorker
+import com.owncloud.android.workers.AvailableOfflinePeriodicWorker.Companion.AVAILABLE_OFFLINE_PERIODIC_WORKER
 import com.owncloud.android.workers.CameraUploadsWorker
 import com.owncloud.android.workers.OldLogsCollectorWorker
+import com.owncloud.android.workers.UploadFileFromContentUriWorker
+import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 
 class WorkManagerProvider(
     val context: Context
@@ -55,5 +62,32 @@ class WorkManagerProvider(
 
         WorkManager.getInstance(context)
             .enqueueUniquePeriodicWork(OldLogsCollectorWorker.OLD_LOGS_COLLECTOR_WORKER, ExistingPeriodicWorkPolicy.REPLACE, oldLogsCollectorWorker)
+    }
+
+    fun enqueueAvailableOfflinePeriodicWorker() {
+        val constraintsRequired = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
+
+        val availableOfflinePeriodicWorker = PeriodicWorkRequestBuilder<AvailableOfflinePeriodicWorker>(
+            repeatInterval = AvailableOfflinePeriodicWorker.repeatInterval,
+            repeatIntervalTimeUnit = AvailableOfflinePeriodicWorker.repeatIntervalTimeUnit
+        )
+            .addTag(AVAILABLE_OFFLINE_PERIODIC_WORKER)
+            .setConstraints(constraintsRequired)
+            .build()
+
+        WorkManager.getInstance(context)
+            .enqueueUniquePeriodicWork(AVAILABLE_OFFLINE_PERIODIC_WORKER, ExistingPeriodicWorkPolicy.KEEP, availableOfflinePeriodicWorker)
+    }
+
+    fun getRunningUploadsWorkInfosLiveData(): LiveData<List<WorkInfo>> {
+        return WorkManager.getInstance(context).getRunningWorkInfosLiveData(
+            listOf(
+                UploadFileFromContentUriWorker::class.java.name,
+                UploadFileFromFileSystemWorker::class.java.name
+            )
+        )
     }
 }

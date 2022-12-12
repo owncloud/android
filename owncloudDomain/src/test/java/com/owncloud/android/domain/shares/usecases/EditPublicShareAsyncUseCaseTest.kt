@@ -27,14 +27,12 @@ import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class EditPublicShareAsyncUseCaseTest {
-    private val shareRepository: ShareRepository = spyk()
-    private val useCase = EditPublicShareAsyncUseCase(shareRepository)
+    private val repository: ShareRepository = spyk()
+    private val useCase = EditPublicShareAsyncUseCase(repository)
     private val useCaseParams = EditPublicShareAsyncUseCase.Params(
         OC_SHARE.remoteId,
         "",
@@ -46,15 +44,18 @@ class EditPublicShareAsyncUseCaseTest {
     )
 
     @Test
-    fun editPublicShareOk() {
+    fun `edit public share - ok`() {
+        every {
+            repository.updatePublicShare(any(), any(), any(), any(), any(), any(), any())
+        } returns Unit
+
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
-        assertFalse(useCaseResult.isError)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
         verify(exactly = 1) {
-            shareRepository.updatePublicShare(
+            repository.updatePublicShare(
                 remoteId = OC_SHARE.remoteId,
                 name = "",
                 password = "",
@@ -67,29 +68,18 @@ class EditPublicShareAsyncUseCaseTest {
     }
 
     @Test
-    fun editPublicShareWithUnauthorizedException() {
+    fun `edit public share - ko`() {
         every {
-            shareRepository.updatePublicShare(
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any()
-            )
+            repository.updatePublicShare(any(), any(), any(), any(), any(), any(), any())
         } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        assertFalse(useCaseResult.isSuccess)
         assertTrue(useCaseResult.isError)
-
-        assertNull(useCaseResult.getDataOrNull())
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
         verify(exactly = 1) {
-            shareRepository.updatePublicShare(
+            repository.updatePublicShare(
                 remoteId = OC_SHARE.remoteId,
                 name = "",
                 password = "",

@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.workers
 
 import android.content.Context
@@ -26,19 +29,18 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.OCUpload
-import com.owncloud.android.datamodel.UploadsStorageManager
-import com.owncloud.android.datamodel.UploadsStorageManager.UploadStatus
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConfigurationUseCase
 import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
-import com.owncloud.android.files.services.FileUploader
-import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_PICTURE
-import com.owncloud.android.operations.UploadFileOperation.CREATED_AS_CAMERA_UPLOAD_VIDEO
+import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.presentation.ui.settings.SettingsActivity
-import com.owncloud.android.usecases.UploadFileFromContentUriUseCase
+import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
+import com.owncloud.android.usecases.transfers.uploads.UploadFileFromContentUriUseCase
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
@@ -69,6 +71,8 @@ class CameraUploadsWorker(
     }
 
     private val getCameraUploadsConfigurationUseCase: GetCameraUploadsConfigurationUseCase by inject()
+
+    private val transferRepository: TransferRepository by inject()
 
     override suspend fun doWork(): Result {
 
@@ -143,8 +147,8 @@ class CameraUploadsWorker(
                 accountName = folderBackUpConfiguration.accountName,
                 behavior = folderBackUpConfiguration.behavior,
                 createdByWorker = when (syncType) {
-                    SyncType.PICTURE_UPLOADS -> CREATED_AS_CAMERA_UPLOAD_PICTURE
-                    SyncType.VIDEO_UPLOADS -> CREATED_AS_CAMERA_UPLOAD_VIDEO
+                    SyncType.PICTURE_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_PICTURE
+                    SyncType.VIDEO_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_VIDEO
                 }
             )
             enqueueSingleUpload(
@@ -283,22 +287,21 @@ class CameraUploadsWorker(
         documentFile: DocumentFile,
         uploadPath: String,
         accountName: String,
-        behavior: FolderBackUpConfiguration.Behavior,
-        createdByWorker: Int
+        behavior: UploadBehavior,
+        createdByWorker: UploadEnqueuedBy
     ): Long {
-        val uploadStorageManager = UploadsStorageManager(appContext.contentResolver)
-
-        val ocUpload = OCUpload(documentFile.uri.toString(), uploadPath, accountName).apply {
-            fileSize = documentFile.length()
-            isForceOverwrite = false
+        val ocTransfer = OCTransfer(
+            localPath = documentFile.uri.toString(),
+            remotePath = uploadPath,
+            accountName = accountName,
+            fileSize = documentFile.length(),
+            status = TransferStatus.TRANSFER_QUEUED,
+            localBehaviour = behavior,
+            forceOverwrite = false,
             createdBy = createdByWorker
-            localAction = if (behavior == FolderBackUpConfiguration.Behavior.MOVE)
-                FileUploader.LOCAL_BEHAVIOUR_MOVE
-            else
-                FileUploader.LOCAL_BEHAVIOUR_COPY
-            uploadStatus = UploadStatus.UPLOAD_IN_PROGRESS
-        }
-        return uploadStorageManager.storeUpload(ocUpload)
+        )
+
+        return transferRepository.storeTransfer(ocTransfer)
     }
 
     companion object {

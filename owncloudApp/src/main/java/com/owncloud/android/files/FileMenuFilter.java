@@ -6,17 +6,19 @@
  * @author Abel García de Prada
  * @author Shashvat Kedia
  * @author David Crespo Rios
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2022 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,18 +32,22 @@ import android.view.MenuItem;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
-import com.owncloud.android.files.services.FileDownloader.FileDownloaderBinder;
-import com.owncloud.android.files.services.FileUploader.FileUploaderBinder;
-import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
+import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.domain.files.model.OCFileSyncInfo;
+import com.owncloud.android.extensions.WorkManagerExtKt;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.owncloud.android.usecases.transfers.TransferConstantsKt.TRANSFER_TAG_DOWNLOAD;
 
 /**
  * Filters out the file actions available in a given {@link Menu} for a given {@link OCFile}
@@ -56,6 +62,7 @@ public class FileMenuFilter {
     private ComponentsGetter mComponentsGetter;
     private Account mAccount;
     private Context mContext;
+    private List<OCFileSyncInfo> mFilesSync;
 
     /**
      * Constructor
@@ -71,6 +78,7 @@ public class FileMenuFilter {
         mAccount = account;
         mComponentsGetter = cg;
         mContext = context;
+        mFilesSync = new ArrayList<>();
     }
 
     /**
@@ -84,6 +92,21 @@ public class FileMenuFilter {
     public FileMenuFilter(OCFile targetFile, Account account, ComponentsGetter cg,
                           Context context) {
         this(Arrays.asList(targetFile), account, cg, context);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param targetFiles List of {@link OCFile} file targets of the action to filter in the {@link Menu}.
+     * @param account    ownCloud {@link Account} holding targetFile.
+     * @param cg         Accessor to app components, needed to access synchronization services
+     * @param context    Android {@link Context}, needed to access build setup resources.
+     * @param filesSync  List of {@link OCFileSyncInfo} with info about the sync status of each target file.
+     */
+    public FileMenuFilter(List<OCFile> targetFiles, Account account, ComponentsGetter cg,
+                          Context context, List<OCFileSyncInfo> filesSync) {
+        this(targetFiles, account, cg, context);
+        mFilesSync = filesSync;
     }
 
     /**
@@ -143,7 +166,12 @@ public class FileMenuFilter {
     private void filter(List<Integer> toShow, List<Integer> toHide, boolean displaySelectAll,
                         boolean displaySelectInverse, boolean onlyAvailableOffline, boolean sharedByLinkFiles) {
 
-        boolean synchronizing = anyFileSynchronizing();
+        boolean synchronizing;
+        if (mFilesSync.isEmpty()) {
+            synchronizing = anyFileSynchronizingLookingIntoWorkers();
+        } else {
+            synchronizing = anyFileSynchronizingLookingIntoFilesSync();
+        }
 
         boolean videoPreviewing = anyFileVideoPreviewing();
 
@@ -270,49 +298,30 @@ public class FileMenuFilter {
 
     }
 
-    private boolean anyFileSynchronizing() {
+    private boolean anyFileSynchronizingLookingIntoWorkers() {
         boolean synchronizing = false;
-        if (mComponentsGetter != null && !mFiles.isEmpty() && mAccount != null) {
-            OperationsServiceBinder opsBinder = mComponentsGetter.getOperationsServiceBinder();
-            FileUploaderBinder uploaderBinder = mComponentsGetter.getFileUploaderBinder();
-            FileDownloaderBinder downloaderBinder = mComponentsGetter.getFileDownloaderBinder();
-            synchronizing = (
-                    anyFileSynchronizing(opsBinder) ||      // comparing local and remote
-                            anyFileDownloading(downloaderBinder) ||
-                            anyFileUploading(uploaderBinder)
-            );
-        }
-        return synchronizing;
-    }
-
-    private boolean anyFileSynchronizing(OperationsServiceBinder opsBinder) {
-        boolean synchronizing = false;
-        if (opsBinder != null) {
-            for (int i = 0; !synchronizing && i < mFiles.size(); i++) {
-                synchronizing = opsBinder.isSynchronizing(mAccount, mFiles.get(i));
+        if (!mFiles.isEmpty() && mAccount != null) {
+            WorkManager workManager = WorkManager.getInstance(mContext);
+            List<WorkInfo> workInfos = WorkManagerExtKt.getRunningWorkInfosByTags(workManager, Arrays.asList(TRANSFER_TAG_DOWNLOAD, mAccount.name));
+            for (int i = 0; !synchronizing && i < workInfos.size(); i++) {
+                if (!workInfos.get(i).getState().isFinished()) {
+                    for (int j = 0; !synchronizing && j < mFiles.size(); j++) {
+                        synchronizing = workInfos.get(i).getTags().contains(mFiles.get(j).getId().toString());
+                    }
+                }
             }
         }
         return synchronizing;
     }
 
-    private boolean anyFileDownloading(FileDownloaderBinder downloaderBinder) {
-        boolean downloading = false;
-        if (downloaderBinder != null) {
-            for (int i = 0; !downloading && i < mFiles.size(); i++) {
-                downloading = downloaderBinder.isDownloading(mAccount, mFiles.get(i));
+    private boolean anyFileSynchronizingLookingIntoFilesSync() {
+        boolean synchronizing = false;
+        if (!mFilesSync.isEmpty()) {
+            for (int i = 0; !synchronizing && i < mFilesSync.size(); i++) {
+                synchronizing = mFilesSync.get(i).isSynchronizing();
             }
         }
-        return downloading;
-    }
-
-    private boolean anyFileUploading(FileUploaderBinder uploaderBinder) {
-        boolean uploading = false;
-        if (uploaderBinder != null) {
-            for (int i = 0; !uploading && i < mFiles.size(); i++) {
-                uploading = uploaderBinder.isUploading(mAccount, mFiles.get(i));
-            }
-        }
-        return uploading;
+        return synchronizing;
     }
 
     private boolean anyFileVideoPreviewing() {
@@ -339,7 +348,7 @@ public class FileMenuFilter {
 
     private boolean areDownloaded() {
         for (OCFile file : mFiles) {
-            if (!file.isDown()) {
+            if (!file.isAvailableLocally()) {
                 return false;
             }
         }
@@ -357,7 +366,7 @@ public class FileMenuFilter {
 
     private boolean anyFileDown() {
         for (OCFile file : mFiles) {
-            if (file.isDown()) {
+            if (file.isAvailableLocally()) {
                 return true;
             }
         }
@@ -366,7 +375,7 @@ public class FileMenuFilter {
 
     private boolean anyFavorite() {
         for (OCFile file : mFiles) {
-            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.AVAILABLE_OFFLINE) {
+            if (file.getAvailableOfflineStatus() == AvailableOfflineStatus.AVAILABLE_OFFLINE) {
                 return true;
             }
         }
@@ -375,7 +384,7 @@ public class FileMenuFilter {
 
     private boolean anyUnfavorite() {
         for (OCFile file : mFiles) {
-            if (file.getAvailableOfflineStatus() == OCFile.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
+            if (file.getAvailableOfflineStatus() == AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE) {
                 return true;
             }
         }

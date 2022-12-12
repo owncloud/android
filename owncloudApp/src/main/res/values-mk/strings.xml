@@ -54,7 +54,6 @@
   <string name="uploader_wrn_no_account_setup_btn_text">Нагодување</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Прекини</string>
   <string name="file_list_seconds_ago">пред секунди</string>
-  <string name="file_list_empty">Тука нема ништо. Префрлете нешто!</string>
   <string name="local_file_list_empty">Нема датотеки во оваа папка.</string>
   <string name="file_list_folder">директориум</string>
   <string name="file_list_folders">директориуми</string>

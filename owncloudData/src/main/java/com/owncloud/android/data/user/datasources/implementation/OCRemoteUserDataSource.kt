@@ -42,7 +42,7 @@ class OCRemoteUserDataSource(
     override fun getUserQuota(accountName: String): UserQuota =
         executeRemoteOperation {
             clientManager.getUserService(accountName).getUserQuota()
-        }.toDomain()
+        }.toDomain(accountName)
 
     override fun getUserAvatar(accountName: String): UserAvatar =
         executeRemoteOperation {
@@ -68,8 +68,9 @@ private fun RemoteAvatarData.toDomain(): UserAvatar =
         mimeType = this.mimeType
     )
 
-private fun GetRemoteUserQuotaOperation.RemoteQuota.toDomain(): UserQuota =
+private fun GetRemoteUserQuotaOperation.RemoteQuota.toDomain(accountName: String): UserQuota =
     UserQuota(
+        accountName = accountName,
         available = this.free,
         used = this.used
     )

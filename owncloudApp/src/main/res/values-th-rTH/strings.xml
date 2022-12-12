@@ -137,9 +137,6 @@
   <string name="uploader_error_message_source_file_not_found">ไม่พบเส้นทางของไฟล์ที่ต้องการอัปโหลด กรุณาตรวจสอบว่ายังมีไฟล์นั่นอยู่</string>
   <string name="uploader_error_message_source_file_not_copied">เกิดข้อผิดพลาดขณะที่คัดลอกไฟล์ไปยังโฟลเดอร์ชั่วคราว โปรดลองส่งอีกครั้ง</string>
   <string name="file_list_seconds_ago">ไม่กี่วินาทีก่อนหน้านี้</string>
-  <string name="file_list_empty">ยังไม่มีไฟล์ใดๆเลยลองอัปโหลดดูสิ!</string>
-  <string name="file_list_empty_available_offline">ยังไม่มีไฟล์ออฟไลน์ที่พร้อมใช้งาน</string>
-  <string name="file_list_empty_shared_by_links">ไม่มีการแชร์ไฟล์แบบลิงก์</string>
   <string name="file_list_loading">กำลังโหลด...</string>
   <string name="file_list_no_app_for_file_type">ไม่พบแอปฯที่ตรงกับประเภทของไฟล์</string>
   <string name="local_file_list_empty">ยังไม่มีไฟล์ในโฟลเดอร์นี้</string>

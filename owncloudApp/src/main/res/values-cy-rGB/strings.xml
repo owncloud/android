@@ -20,7 +20,6 @@
   <string name="uploader_wrn_no_account_setup_btn_text">Gosod</string>
   <string name="uploader_wrn_no_account_quit_btn_text">Gadael</string>
   <string name="file_list_seconds_ago">eiliad yn ôl</string>
-  <string name="file_list_empty">Does dim byd fan hyn. Llwythwch rhywbeth i fyny!</string>
   <string name="filedetails_select_file">Tapiwch ffeil i ddangos gwybodaeth ychwanegol</string>
   <string name="filedetails_size">Maint:</string>
   <string name="filedetails_type">Math:</string>

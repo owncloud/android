@@ -92,7 +92,6 @@
   <string name="uploader_error_title_no_file_to_upload">Žiadny súbor na nahrávanie</string>
   <string name="uploader_error_title_file_cannot_be_uploaded">Súbor nie je možné nahrať</string>
   <string name="file_list_seconds_ago">pred sekundami</string>
-  <string name="file_list_empty">Žiadny súbor. Nahrajte niečo!</string>
   <string name="file_list_loading">Načítavam...</string>
   <string name="local_file_list_empty">V tomto priečinku nie sú žiadne súbory.</string>
   <string name="file_list_folder">priečinok</string>

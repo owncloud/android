@@ -94,7 +94,6 @@
   <string name="uploader_error_message_source_file_not_found">Lähetettävä tiedosto ei löytynyt sijainnistaan. Varmista, onko tiedosto olemassa.</string>
   <string name="uploader_error_message_source_file_not_copied">Virhe yritettäessä siirtää tiedostoa väliaikaiskansioon. Yritä lähettää se uudestaan.</string>
   <string name="file_list_seconds_ago">sekuntia sitten</string>
-  <string name="file_list_empty">Täällä ei ole mitään. Lähetä tänne jotakin!</string>
   <string name="file_list_loading">Ladataan…</string>
   <string name="file_list_no_app_for_file_type">Tälle tiedostotyypille ei löytynyt sovellusta</string>
   <string name="local_file_list_empty">Tässä kansiossa ei ole tiedostoja</string>
