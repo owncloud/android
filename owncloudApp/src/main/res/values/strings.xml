@@ -705,9 +705,17 @@
     <string name="open_in_web_error_not_supported">there are no apps that support this file type</string>
     <string name="open_in_web_error_too_early">The requested file is not yet available, please try again later</string>
 
-    <string name="release_notes_3.0_beta1_title1">New sync engine</string>
-    <string name="release_notes_3.0_beta1_subtitle1">The way in which all files are synced has been redesigned</string>
-    <string name="release_notes_3.0_beta3_title2">Browser login improved</string>
-    <string name="release_notes_3.0_beta3_subtitle2">Only typing the URL, browser will be triggered</string>
+    <string name="release_notes_3.0_title1">New sync engine</string>
+    <string name="release_notes_3.0_subtitle1">The way in which all files are synced has been redesigned to improve it</string>
+    <string name="release_notes_3.0_title2">Automatic conflicts propagation</string>
+    <string name="release_notes_3.0_subtitle2">Conflicts are now automatically propagated (and cleaned) to parent folders</string>
+    <string name="release_notes_3.0_title3">Fix for thumbnails</string>
+    <string name="release_notes_3.0_subtitle3">Thumbnails are now shown correctly in the file list</string>
+    <string name="release_notes_3.0_title4">Empty views improved</string>
+    <string name="release_notes_3.0_subtitle4">A new and more attractive view has been added to screens with no items (files, uploads and logs)</string>
+    <string name="release_notes_3.0_title5">Several transfers running simultaneously</string>
+    <string name="release_notes_3.0_subtitle5">With the redesign of the sync engine, now several downloads and uploads can run at the same time</string>
+    <string name="release_notes_3.0_title6">Browser login improved</string>
+    <string name="release_notes_3.0_subtitle6">Only typing the URL, browser will be triggered</string>
 
 </resources>
