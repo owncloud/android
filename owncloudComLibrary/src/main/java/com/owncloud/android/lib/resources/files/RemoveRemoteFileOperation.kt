@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2022 ownCloud GmbH.
+ *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,45 +24,58 @@
 
 package com.owncloud.android.lib.resources.files
 
+import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.common.http.HttpConstants
-import com.owncloud.android.lib.common.http.methods.webdav.PutMethod
-import com.owncloud.android.lib.common.network.ContentUriRequestBody
+import com.owncloud.android.lib.common.http.HttpConstants.HTTP_NO_CONTENT
+import com.owncloud.android.lib.common.http.HttpConstants.HTTP_OK
+import com.owncloud.android.lib.common.http.methods.nonwebdav.DeleteMethod
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.common.utils.isOneOf
 import timber.log.Timber
 import java.net.URL
 
-class UploadFileFromContentUriOperation(
-    private val uploadPath: String,
-    private val lastModified: String,
-    private val requestBody: ContentUriRequestBody
+/**
+ * Remote operation performing the removal of a remote file or folder in the ownCloud server.
+ *
+ * @author David A. Velasco
+ * @author masensio
+ * @author David González Verdugo
+ * @author Abel García de Prada
+ */
+open class RemoveRemoteFileOperation(
+    private val remotePath: String
 ) : RemoteOperation<Unit>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
-        val putMethod = PutMethod(URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(uploadPath)), requestBody).apply {
-            retryOnConnectionFailure = false
-            addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, requestBody.contentLength().toString())
-            addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, lastModified)
-        }
+        var result: RemoteOperationResult<Unit>
+        try {
+            val srcWebDavUri = getSrcWebDavUriForClient(client)
+            val deleteMethod = DeleteMethod(
+                URL(srcWebDavUri.toString() + WebdavUtils.encodePath(remotePath))
+            )
+            val status = client.executeHttpMethod(deleteMethod)
 
-        return try {
-            val status = client.executeHttpMethod(putMethod)
-            if (isSuccess(status)) {
-                RemoteOperationResult<Unit>(RemoteOperationResult.ResultCode.OK).apply { data = Unit }
+            result = if (isSuccess(status)) {
+                RemoteOperationResult<Unit>(ResultCode.OK)
             } else {
-                RemoteOperationResult<Unit>(putMethod)
+                RemoteOperationResult<Unit>(deleteMethod)
             }
+            Timber.i("Remove $remotePath: ${result.logMessage}")
         } catch (e: Exception) {
-            val result = RemoteOperationResult<Unit>(e)
-            Timber.e(e, "Upload from content uri failed : ${result.logMessage}")
-            result
+            result = RemoteOperationResult<Unit>(e)
+            Timber.e(e, "Remove $remotePath: ${result.logMessage}")
         }
+        return result
     }
 
-    fun isSuccess(status: Int): Boolean {
-        return status.isOneOf(HttpConstants.HTTP_OK, HttpConstants.HTTP_CREATED, HttpConstants.HTTP_NO_CONTENT)
-    }
+    /**
+     * For standard removals, we will use [OwnCloudClient.getUserFilesWebDavUri].
+     * In case we need a different source Uri, override this method.
+     */
+    open fun getSrcWebDavUriForClient(client: OwnCloudClient): Uri = client.userFilesWebDavUri
+
+    private fun isSuccess(status: Int) = status.isOneOf(HTTP_OK, HTTP_NO_CONTENT)
 }

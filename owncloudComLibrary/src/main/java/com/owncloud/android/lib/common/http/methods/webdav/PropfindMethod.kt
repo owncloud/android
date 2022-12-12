@@ -53,7 +53,7 @@ class PropfindMethod(
             depth = depth,
             reqProp = propertiesToRequest,
             listOfHeaders = super.getRequestHeadersAsHashMap(),
-            callback = { response: Response, hrefRelation: HrefRelation? ->
+            callback = { response: Response, hrefRelation: HrefRelation ->
                 when (hrefRelation) {
                     HrefRelation.MEMBER -> members.add(response)
                     HrefRelation.SELF -> this.root = response

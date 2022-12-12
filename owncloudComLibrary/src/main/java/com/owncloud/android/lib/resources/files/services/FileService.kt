@@ -25,8 +25,53 @@ package com.owncloud.android.lib.resources.files.services
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.Service
+import com.owncloud.android.lib.resources.files.RemoteFile
 
 interface FileService : Service {
-    fun checkPathExistence(path: String, isUserLogged: Boolean): RemoteOperationResult<Boolean>
     fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): RemoteOperationResult<String>
+
+    fun checkPathExistence(
+        path: String,
+        isUserLogged: Boolean
+    ): RemoteOperationResult<Boolean>
+
+    fun copyFile(
+        sourceRemotePath: String,
+        targetRemotePath: String,
+    ): RemoteOperationResult<String>
+
+    fun createFolder(
+        remotePath: String,
+        createFullPath: Boolean,
+        isChunkFolder: Boolean = false
+    ): RemoteOperationResult<Unit>
+
+    fun downloadFile(
+        remotePath: String,
+        localTempPath: String
+    ): RemoteOperationResult<Unit>
+
+    fun moveFile(
+        sourceRemotePath: String,
+        targetRemotePath: String,
+    ): RemoteOperationResult<Unit>
+
+    fun readFile(
+        remotePath: String
+    ): RemoteOperationResult<RemoteFile>
+
+    fun refreshFolder(
+        remotePath: String
+    ): RemoteOperationResult<ArrayList<RemoteFile>>
+
+    fun removeFile(
+        remotePath: String
+    ): RemoteOperationResult<Unit>
+
+    fun renameFile(
+        oldName: String,
+        oldRemotePath: String,
+        newName: String,
+        isFolder: Boolean,
+    ): RemoteOperationResult<Unit>
 }

@@ -63,31 +63,31 @@ class ShareeResponseTest {
     @Test
     fun `example response - ok - correct sturcture`() {
         val response = loadResponses(EXAMPLE_RESPONSE_JSON)!!
-        assertEquals(2, response.ocs.data.groups.size)
-        assertEquals(0, response.ocs.data.remotes.size)
-        assertEquals(2, response.ocs.data.users.size)
-        assertEquals(0, response.ocs.data.exact?.groups?.size)
-        assertEquals(0, response.ocs.data.exact?.remotes?.size)
-        assertEquals(1, response.ocs.data.exact?.users?.size)
-        assertEquals("user1@user1.com", response.ocs.data.users.get(0).value.additionalInfo)
-        assertNull(response.ocs.data.users[1].value.additionalInfo)
+        assertEquals(2, response.ocs.data?.groups?.size)
+        assertEquals(0, response.ocs.data?.remotes?.size)
+        assertEquals(2, response.ocs.data?.users?.size)
+        assertEquals(0, response.ocs.data?.exact?.groups?.size)
+        assertEquals(0, response.ocs.data?.exact?.remotes?.size)
+        assertEquals(1, response.ocs.data?.exact?.users?.size)
+        assertEquals("user1@user1.com", response.ocs.data?.users?.get(0)?.value?.additionalInfo)
+        assertNull(response.ocs.data?.users?.get(1)?.value?.additionalInfo)
     }
 
     @Test
     fun `check empty response - ok - parsing ok`() {
         val response = loadResponses(EMPTY_RESPONSE_JSON)!!
-        assertTrue(response.ocs.data.exact?.groups?.isEmpty()!!)
-        assertTrue(response.ocs.data.exact?.remotes?.isEmpty()!!)
-        assertTrue(response.ocs.data.exact?.users?.isEmpty()!!)
-        assertTrue(response.ocs.data.groups.isEmpty())
-        assertTrue(response.ocs.data.remotes.isEmpty())
-        assertTrue(response.ocs.data.users.isEmpty())
+        assertTrue(response.ocs.data?.exact?.groups?.isEmpty()!!)
+        assertTrue(response.ocs.data?.exact?.remotes?.isEmpty()!!)
+        assertTrue(response.ocs.data?.exact?.users?.isEmpty()!!)
+        assertTrue(response.ocs.data?.groups?.isEmpty()!!)
+        assertTrue(response.ocs.data?.remotes?.isEmpty()!!)
+        assertTrue(response.ocs.data?.users?.isEmpty()!!)
     }
 
     companion object {
-        val RESOURCES_PATH =
+        private const val RESOURCES_PATH =
             "src/test/responses/com.owncloud.android.lib.resources.sharees.responses"
-        val EXAMPLE_RESPONSE_JSON = "$RESOURCES_PATH/example_sharee_response.json"
-        val EMPTY_RESPONSE_JSON = "$RESOURCES_PATH/empty_sharee_response.json"
+        const val EXAMPLE_RESPONSE_JSON = "$RESOURCES_PATH/example_sharee_response.json"
+        const val EMPTY_RESPONSE_JSON = "$RESOURCES_PATH/empty_sharee_response.json"
     }
 }

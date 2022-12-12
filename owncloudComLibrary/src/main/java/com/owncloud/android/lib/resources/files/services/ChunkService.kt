@@ -1,6 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   @author David González Verdugo
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   Copyright (C) 2021 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +22,20 @@
  *
  */
 
-package com.owncloud.android.lib.resources.files.chunks;
+package com.owncloud.android.lib.resources.files.services
 
-import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.Service
 
-public class RemoveRemoteChunksFolderOperation extends RemoveRemoteFileOperation {
+interface ChunkService : Service {
+    fun removeFile(
+        remotePath: String
+    ): RemoteOperationResult<Unit>
 
-    /**
-     * Constructor
-     *
-     * @param remotePath RemotePath of the remote file or folder to remove from the server
-     */
-    public RemoveRemoteChunksFolderOperation(String remotePath) {
-        super(remotePath);
-        removeChunksFolder = true;
-    }
+    fun moveFile(
+        sourceRemotePath: String,
+        targetRemotePath: String,
+        fileLastModificationTimestamp: String,
+        fileLength: Long
+    ): RemoteOperationResult<Unit>
 }

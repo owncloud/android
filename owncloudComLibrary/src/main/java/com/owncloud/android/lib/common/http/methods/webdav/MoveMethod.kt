@@ -36,7 +36,7 @@ import java.net.URL
 class MoveMethod(
     url: URL,
     private val destinationUrl: String,
-    private val forceOverride: Boolean
+    private val forceOverride: Boolean = false
 ) : DavMethod(url) {
     @Throws(Exception::class)
     override fun onDavExecute(davResource: DavOCResource): Int {

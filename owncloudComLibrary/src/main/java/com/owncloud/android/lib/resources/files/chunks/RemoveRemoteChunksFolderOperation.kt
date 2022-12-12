@@ -1,4 +1,5 @@
 /* ownCloud Android Library is available under MIT license
+ *   @author David González Verdugo
  *   Copyright (C) 2020 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,30 +22,12 @@
  *   THE SOFTWARE.
  *
  */
+package com.owncloud.android.lib.resources.files.chunks
 
-package com.owncloud.android.lib.resources.files.chunks;
+import android.net.Uri
+import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation
 
-import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation;
-
-/**
- * Remote operation to move the file built from chunks after uploading it
- *
- * @author David González Verdugo
- */
-public class MoveRemoteChunksFileOperation extends MoveRemoteFileOperation {
-
-    /**
-     * Constructor.
-     *
-     * @param srcRemotePath    Remote path of the file/folder to move.
-     * @param targetRemotePath Remove path desired for the file/folder after moving it.
-     * @param overwrite
-     */
-    public MoveRemoteChunksFileOperation(String srcRemotePath, String targetRemotePath, boolean overwrite,
-                                         String fileLastModifTimestamp, long fileLength) {
-        super(srcRemotePath, targetRemotePath, overwrite);
-        moveChunkedFile = true;
-        mFileLastModifTimestamp = fileLastModifTimestamp;
-        mFileLength = fileLength;
-    }
+class RemoveRemoteChunksFolderOperation(remotePath: String) : RemoveRemoteFileOperation(remotePath) {
+    override fun getSrcWebDavUriForClient(client: OwnCloudClient): Uri = client.uploadsWebDavUri
 }

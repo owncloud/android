@@ -36,7 +36,6 @@ import com.owncloud.android.lib.common.http.HttpClient;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.HttpBaseMethod;
 import com.owncloud.android.lib.common.utils.RandomUtils;
-import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import okhttp3.Cookie;
 import okhttp3.HttpUrl;
 import timber.log.Timber;
@@ -59,7 +58,6 @@ public class OwnCloudClient extends HttpClient {
     private OwnCloudCredentials mCredentials = null;
     private int mInstanceNumber;
     private Uri mBaseUri;
-    private OwnCloudVersion mVersion = null;
     private OwnCloudAccount mAccount;
     private final ConnectionValidator mConnectionValidator;
     private Object mRequestMutex = new Object();
@@ -185,7 +183,7 @@ public class OwnCloudClient extends HttpClient {
         return (mCredentials instanceof OwnCloudAnonymousCredentials || mAccount == null)
                 ? Uri.parse(mBaseUri + WEBDAV_FILES_PATH_4_0)
                 : Uri.parse(mBaseUri + WEBDAV_FILES_PATH_4_0 + AccountUtils.getUserId(
-                mAccount.getSavedAccount(), getContext()
+                        mAccount.getSavedAccount(), getContext()
                 )
         );
     }
@@ -194,7 +192,7 @@ public class OwnCloudClient extends HttpClient {
         return mCredentials instanceof OwnCloudAnonymousCredentials
                 ? Uri.parse(mBaseUri + WEBDAV_UPLOADS_PATH_4_0)
                 : Uri.parse(mBaseUri + WEBDAV_UPLOADS_PATH_4_0 + AccountUtils.getUserId(
-                mAccount.getSavedAccount(), getContext()
+                        mAccount.getSavedAccount(), getContext()
                 )
         );
     }
@@ -239,14 +237,6 @@ public class OwnCloudClient extends HttpClient {
     public List<Cookie> getCookiesForBaseUri() {
         return getOkHttpClient().cookieJar().loadForRequest(
                 HttpUrl.parse(mBaseUri.toString()));
-    }
-
-    public OwnCloudVersion getOwnCloudVersion() {
-        return mVersion;
-    }
-
-    public void setOwnCloudVersion(OwnCloudVersion version) {
-        mVersion = version;
     }
 
     public OwnCloudAccount getAccount() {

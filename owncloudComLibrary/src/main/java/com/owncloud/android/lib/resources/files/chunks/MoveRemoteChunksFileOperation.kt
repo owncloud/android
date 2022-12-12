@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   Copyright (C) 2021 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -21,32 +21,38 @@
  *   THE SOFTWARE.
  *
  */
-package com.owncloud.android.lib.common.http.methods.webdav
+package com.owncloud.android.lib.resources.files.chunks
 
-import at.bitfire.dav4jvm.DavOCResource
-import okhttp3.Response
-import java.net.URL
+import android.net.Uri
+import com.owncloud.android.lib.common.OwnCloudClient
+import com.owncloud.android.lib.common.http.HttpConstants
+import com.owncloud.android.lib.common.http.methods.webdav.MoveMethod
+import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation
 
 /**
- * Copy calls wrapper
+ * Remote operation to move the file built from chunks after uploading it
  *
- * @author Christian Schabesberger
  * @author David González Verdugo
+ * @author Abel García de Prada
  */
-class CopyMethod(
-    val url: URL,
-    private val destinationUrl: String,
-    private val forceOverride: Boolean = false
-) : DavMethod(url) {
-    @Throws(Exception::class)
-    public override fun onDavExecute(davResource: DavOCResource): Int {
-        davResource.copy(
-            destinationUrl,
-            forceOverride,
-            super.getRequestHeadersAsHashMap()
-        ) { callBackResponse: Response ->
-            response = callBackResponse
+class MoveRemoteChunksFileOperation(
+    sourceRemotePath: String,
+    targetRemotePath: String,
+    private val fileLastModificationTimestamp: String,
+    private val fileLength: Long
+) : MoveRemoteFileOperation(
+    sourceRemotePath = sourceRemotePath,
+    targetRemotePath = targetRemotePath,
+) {
+
+    override fun getSrcWebDavUriForClient(client: OwnCloudClient): Uri = client.uploadsWebDavUri
+
+    override fun addRequestHeaders(moveMethod: MoveMethod) {
+        super.addRequestHeaders(moveMethod)
+
+        moveMethod.apply {
+            addRequestHeader(HttpConstants.OC_X_OC_MTIME_HEADER, fileLastModificationTimestamp)
+            addRequestHeader(HttpConstants.OC_TOTAL_LENGTH_HEADER, fileLength.toString())
         }
-        return super.statusCode
     }
 }

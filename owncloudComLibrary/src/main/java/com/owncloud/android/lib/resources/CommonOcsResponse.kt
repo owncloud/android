@@ -36,7 +36,7 @@ data class CommonOcsResponse<T>(
 @JsonClass(generateAdapter = true)
 data class OCSResponse<T>(
     val meta: MetaData,
-    val data: T
+    val data: T?
 )
 
 @JsonClass(generateAdapter = true)

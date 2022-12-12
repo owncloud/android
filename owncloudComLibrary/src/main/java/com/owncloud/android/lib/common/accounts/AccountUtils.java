@@ -95,26 +95,6 @@ public class AccountUtils {
     }
 
     /**
-     * Get the stored server version corresponding to an OC account.
-     *
-     * @param account An OC account
-     * @param context Application context
-     * @return Version of the OC server, according to last check
-     */
-    public static OwnCloudVersion getServerVersionForAccount(Account account, Context context) {
-        AccountManager ama = AccountManager.get(context);
-        OwnCloudVersion version = null;
-        try {
-            String versionString = ama.getUserData(account, Constants.KEY_OC_VERSION);
-            version = new OwnCloudVersion(versionString);
-
-        } catch (Exception e) {
-            Timber.e(e, "Couldn't get a the server version for an account");
-        }
-        return version;
-    }
-
-    /**
      * @return
      * @throws IOException
      * @throws AuthenticatorException
@@ -209,11 +189,6 @@ public class AccountUtils {
     }
 
     public static class Constants {
-        /**
-         * Version should be 3 numbers separated by dot so it can be parsed by
-         * {@link OwnCloudVersion}
-         */
-        public static final String KEY_OC_VERSION = "oc_version";
         /**
          * Base url should point to owncloud installation without trailing / ie:
          * http://server/path or https://owncloud.server
