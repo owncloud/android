@@ -59,7 +59,7 @@ class CreateFolderDialogFragment : DialogFragment() {
         val inputText: EditText = view.findViewById(R.id.user_input)
         inputText.requestFocus()
 
-        // Build the dialog  
+        // Build the dialog
         val builder = AlertDialog.Builder(requireActivity())
         builder.setView(view)
             .setPositiveButton(android.R.string.ok) { dialog, _ ->

@@ -59,7 +59,7 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
         view.filterTouchesWhenObscured =
             PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
 
-        // Setup layout 
+        // Setup layout
         val currentName = targetFile!!.fileName
         val inputText = view.findViewById<EditText>(R.id.user_input)
         inputText.setText(currentName)
