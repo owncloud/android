@@ -172,6 +172,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
 }
 
 // Updates output file names of a given variant to format
