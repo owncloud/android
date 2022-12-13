@@ -39,4 +39,5 @@ android {
             includeAndroidResources = true
         }
     }
+    namespace 'com.owncloud.android.lib'
 }
