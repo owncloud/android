@@ -141,6 +141,7 @@
   <string name="uploader_error_message_source_file_not_found">Yüklenecek dosya belirtilen konumda bulunamadı. Lütfen dosyanın mevcut olup olmadığını kontrol edin.</string>
   <string name="uploader_error_message_source_file_not_copied">Dosya geçici bir klasöre kopyalanırken hata oluştu. Lütfen tekrar göndermeyi deneyin.</string>
   <string name="file_list_seconds_ago">saniyeler önce</string>
+  <string name="file_list_empty_title_shared_by_links">Paylaşılan bağlantı yok</string>
   <string name="file_list_loading">Yükleniyor...</string>
   <string name="file_list_no_app_for_file_type">Dosya türü için hiçbir uygulama bulunamadı</string>
   <string name="file_list_no_app_for_perform_action">Bu eylem için uygulama bulunamadı</string>
@@ -609,6 +610,7 @@
   <string name="security_enforced_title">Lütfen uygulamayı kilitlemek için bir seçenek belirleyin:</string>
   <string name="security_enforced_first_option">Parola kod kilidi</string>
   <string name="security_enforced_second_option">Desen kilidi</string>
+  <string name="folder_upload_some_content_or_sync_devices">Bir şeyler yükleyin veya aygıtlarınızla eşitleyin!</string>
   <!--Webfinger-->
   <string name="global_proceed">Devam et</string>
   <string name="error_webfinger_username_empty">Kullanıcı adı boş</string>

@@ -128,6 +128,7 @@
   <string name="uploader_error_message_source_file_not_found">Soubor k nahrání nebyl v tomto umístění nalezen. Zkontrolujte prosím zda soubor existuje.</string>
   <string name="uploader_error_message_source_file_not_copied">Došlo k chybě při kopírování souboru do dočasného adresáře. Zkuste prosím zopakovat odeslání.</string>
   <string name="file_list_seconds_ago">před pár sekundami</string>
+  <string name="file_list_empty_title_shared_by_links">Žádné sdílené odkazy</string>
   <string name="file_list_loading">Načítání...</string>
   <string name="file_list_no_app_for_file_type">Pro typ souboru nebyla nalezena aplikace</string>
   <string name="local_file_list_empty">V tomto adresáři nejsou žádné soubory.</string>
@@ -570,6 +571,7 @@ správce systému.</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Zámek bezpečnostního kódu</string>
+  <string name="folder_upload_some_content_or_sync_devices">Nahrajte nějaký obsah nebo synchronizujte se svými přístroji!</string>
   <!--Webfinger-->
   <string name="global_proceed">Pokračovat</string>
   <!--Release Notes-->

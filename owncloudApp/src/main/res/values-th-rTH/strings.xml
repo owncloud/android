@@ -137,6 +137,10 @@
   <string name="uploader_error_message_source_file_not_found">ไม่พบเส้นทางของไฟล์ที่ต้องการอัปโหลด กรุณาตรวจสอบว่ายังมีไฟล์นั่นอยู่</string>
   <string name="uploader_error_message_source_file_not_copied">เกิดข้อผิดพลาดขณะที่คัดลอกไฟล์ไปยังโฟลเดอร์ชั่วคราว โปรดลองส่งอีกครั้ง</string>
   <string name="file_list_seconds_ago">ไม่กี่วินาทีก่อนหน้านี้</string>
+  <string name="file_list_empty_title_all_files">ไม่มีไฟล์ที่นี่</string>
+  <string name="file_list_empty_title_shared_by_links">ไม่มีลิงก์ที่แชร์</string>
+  <string name="file_list_empty_subtitle_all_files">อัปโหลดเนื้อหาบางส่วนหรือประสานข้อมูลกับอุปกรณ์ของคุณอีกครั้ง</string>
+  <string name="file_list_empty_subtitle_shared_by_links">ไฟล์และโฟลเดอร์ที่คุณแชร์โดยลิงก์จะปรากฏขึ้นที่นี่</string>
   <string name="file_list_loading">กำลังโหลด...</string>
   <string name="file_list_no_app_for_file_type">ไม่พบแอปฯที่ตรงกับประเภทของไฟล์</string>
   <string name="local_file_list_empty">ยังไม่มีไฟล์ในโฟลเดอร์นี้</string>
@@ -581,6 +585,7 @@
   <string name="security_enforced_title">โปรดเลือกตัวเลือกเพื่อล็อคแอป:</string>
   <string name="security_enforced_first_option">ล็อครหัสปลดล็อค</string>
   <string name="security_enforced_second_option">รูปแบบการล็อค</string>
+  <string name="folder_upload_some_content_or_sync_devices">อัปโหลดเนื้อหาบางส่วนหรือประสานข้อมูลกับอุปกรณ์ของคุณอีกครั้ง</string>
   <!--Webfinger-->
   <string name="global_proceed">ดำเนินการ</string>
   <!--Release Notes-->

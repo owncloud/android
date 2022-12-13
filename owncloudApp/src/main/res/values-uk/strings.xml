@@ -116,6 +116,10 @@
   <string name="uploader_error_message_source_file_not_found">Файл для надсилання не знайдено у вказаному місці. Будь ласка, перевірте, чи існує файл.</string>
   <string name="uploader_error_message_source_file_not_copied">Сталася помилка під час копіювання файлу до тимчасової теки. Спробуйте надіслати знову.</string>
   <string name="file_list_seconds_ago">секунд тому</string>
+  <string name="file_list_empty_title_all_files">Тут немає файлів</string>
+  <string name="file_list_empty_title_shared_by_links">Немає опублікованих посилань</string>
+  <string name="file_list_empty_subtitle_all_files">Вивантажте щось або синхронізуйте з пристроями!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Файли і папки, якими ви поділилися за посиланням будуть відображатися тут</string>
   <string name="file_list_loading">Завантаження…</string>
   <string name="file_list_no_app_for_file_type">Не знайдено додатка для типу файла</string>
   <string name="local_file_list_empty">В цій теці немає файлів.</string>
@@ -496,6 +500,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Захистити паролем</string>
+  <string name="folder_upload_some_content_or_sync_devices">Вивантажте щось або синхронізуйте з пристроями!</string>
   <!--Webfinger-->
   <string name="global_proceed">Продовжити</string>
   <!--Release Notes-->

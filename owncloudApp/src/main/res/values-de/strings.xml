@@ -141,6 +141,10 @@
   <string name="uploader_error_message_source_file_not_found">Die Hochzuladende Datei wurde am erwarteten Speicherort nicht gefunden. Überprüfe bitte ob sie existiert.</string>
   <string name="uploader_error_message_source_file_not_copied">Es ist ein Fehler beim Kopieren dieser Datei in einen temporären Ordner aufgetreten. Bitte nochmals versuchen, die Datei zu senden.</string>
   <string name="file_list_seconds_ago">Gerade eben</string>
+  <string name="file_list_empty_title_all_files">Keine Dateien vorhanden</string>
+  <string name="file_list_empty_title_shared_by_links">Keine geteilten Links</string>
+  <string name="file_list_empty_subtitle_all_files">Lade Inhalte hoch oder synchronisiere mit Deinen Geräten!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Per Link freigegebene Dateien und Ordner werden hier erscheinen</string>
   <string name="file_list_loading">Lade…</string>
   <string name="file_list_no_app_for_file_type">Keine App für diesen Dateityp gefunden</string>
   <string name="file_list_no_app_for_perform_action">Keine App für diese Aktion gefunden</string>
@@ -609,6 +613,7 @@
   <string name="security_enforced_title">Bitte wählen Sie eine Option, um diese App zu sperren:</string>
   <string name="security_enforced_first_option">PIN Sperre</string>
   <string name="security_enforced_second_option">Sperre mit Muster</string>
+  <string name="folder_upload_some_content_or_sync_devices">Lade Inhalte hoch oder synchronisiere mit Deinen Geräten!</string>
   <!--Webfinger-->
   <string name="global_proceed">Fortfahren</string>
   <string name="error_webfinger_username_empty">Der Benutzername ist leer</string>

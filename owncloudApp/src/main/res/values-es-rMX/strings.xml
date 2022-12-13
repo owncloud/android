@@ -98,6 +98,10 @@
   <string name="uploader_error_message_source_file_not_found">El archivo a subir no se localiza. Compruebe que el archivo existe.</string>
   <string name="uploader_error_message_source_file_not_copied">Ha ocurrido un error al copiar a la carpeta temporal. Por favor intentelo de nuevo.</string>
   <string name="file_list_seconds_ago">hace segundos</string>
+  <string name="file_list_empty_title_all_files">No hay archivos aquí</string>
+  <string name="file_list_empty_title_shared_by_links">No hay vínculos compartidos</string>
+  <string name="file_list_empty_subtitle_all_files">Sube algun contenido o sincroniza tus dispositivos!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Los archivos y carpetas que sean compartidas mediante vínculos serán mostrados aquí</string>
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">No se ha encontrado ninguna aplicación para el tipo de archivo</string>
   <string name="local_file_list_empty">No hay archivos en esta carpeta.</string>
@@ -498,6 +502,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Contraseña</string>
+  <string name="folder_upload_some_content_or_sync_devices">Sube algun contenido o sincroniza tus dispositivos!</string>
   <!--Webfinger-->
   <string name="global_proceed">Proceder</string>
   <!--Release Notes-->

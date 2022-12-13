@@ -141,6 +141,10 @@
   <string name="uploader_error_message_source_file_not_found">Arquivo para envio não foi encontrado em sua localização. Por favor verifique se o arquivo existe.</string>
   <string name="uploader_error_message_source_file_not_copied">Ocorreu um erro ao copiar o arquivo para uma pasta temporária. Por favor, tente enviar novamente.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
+  <string name="file_list_empty_title_all_files">Nenhum arquivo aqui</string>
+  <string name="file_list_empty_title_shared_by_links">Nenhum link compartilhado</string>
+  <string name="file_list_empty_subtitle_all_files">Carregue algum conteúdo ou sincronize com seus dispositivos!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Arquivos e pastas que você compartilha com link são mostrados aqui</string>
   <string name="file_list_loading">Carregando...</string>
   <string name="file_list_no_app_for_file_type">Nenhum aplicativo encontrado para esse tipo de arquivo</string>
   <string name="file_list_no_app_for_perform_action">Nenhum aplicativo encontrado para esta ação</string>
@@ -610,12 +614,18 @@
   <string name="security_enforced_title">Por favor, selecione uma opção para bloquear o aplicativo:</string>
   <string name="security_enforced_first_option">Bloqueio de senha</string>
   <string name="security_enforced_second_option">Bloqueio Padrão</string>
+  <string name="folder_upload_some_content_or_sync_devices">Carregue algum conteúdo ou sincronize com seus dispositivos!</string>
   <!--Webfinger-->
   <string name="global_proceed">Prosseguir</string>
+  <string name="error_webfinger_username_empty">Nome de usuário vazio</string>
   <!--Release Notes-->
   <string name="release_notes_header">Novo em %1$s</string>
   <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Prosseguir</string>
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
+  <string name="release_notes_2.21.2_title1">Abrir na web</string>
   <!--Open in web-->
+  <string name="ic_action_open_in_web">Abrir na web</string>
+  <string name="open_in_web_error_not_supported">Não há aplicativos que suportam este tipo de arquivo</string>
+  <string name="open_in_web_error_too_early">O arquivo requisitado ainda não está disponível, por favor tente novamente mais tarde</string>
 </resources>

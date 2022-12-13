@@ -119,6 +119,8 @@
   <string name="uploader_error_message_source_file_not_found">Το αρχείο που επρόκειτο να μεταφορτώσετε δεν βρέθηκε στην τοποθεσία του. Παρακαλούμε ελέγξτε κατά πόσο το αρχείο υπάρχει.</string>
   <string name="uploader_error_message_source_file_not_copied">Προέκυψε σφάλμα κατά τη διάρκεια αντιγραφής του αρχείου στον προσωρινό φάκελο. Παρακαλούμε προσπαθήστε να το στείλετε ξανά.</string>
   <string name="file_list_seconds_ago">δευτερόλεπτα πριν</string>
+  <string name="file_list_empty_title_shared_by_links">Κανένας διαμοιρασμένος σύνδεσμος</string>
+  <string name="file_list_empty_subtitle_all_files">Μεταφόρτωση περιεχομένου ή συγχρονισμός με τις συσκευές σας!</string>
   <string name="file_list_loading">Γίνεται φόρτωση...</string>
   <string name="file_list_no_app_for_file_type">Δεν βρέθηκε καμία εφαρμογή για τύπο αρχείου</string>
   <string name="local_file_list_empty">Δεν υπάρχουν αρχεία σε αυτό τον φάκελο.</string>
@@ -542,6 +544,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Κλείδωμα με κωδικό</string>
+  <string name="folder_upload_some_content_or_sync_devices">Μεταφόρτωση περιεχομένου ή συγχρονισμός με τις συσκευές σας!</string>
   <!--Webfinger-->
   <string name="global_proceed">Συνέχιση</string>
   <!--Release Notes-->
