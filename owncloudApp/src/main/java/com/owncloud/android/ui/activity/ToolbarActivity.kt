@@ -33,8 +33,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.datamodel.FileDataStorageManager
-import com.owncloud.android.datamodel.OCFile
 import com.owncloud.android.utils.AvatarUtils
 
 /**
@@ -133,15 +131,4 @@ abstract class ToolbarActivity : BaseActivity() {
     private fun getRootToolbar(): ConstraintLayout = findViewById(R.id.root_toolbar)
 
     private fun getStandardToolbar(): Toolbar = findViewById(R.id.standard_toolbar)
-
-    /**
-     * checks if the given file is the root folder.
-     *
-     * @param file file to be checked if it is the root folder
-     * @return `true` if it is `null` or the root folder, else returns `false`
-     */
-    fun isRoot(file: OCFile?): Boolean {
-        return file == null ||
-                (file.isFolder && file.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong())
-    }
 }
