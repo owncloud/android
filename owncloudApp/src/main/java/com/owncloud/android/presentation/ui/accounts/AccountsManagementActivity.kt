@@ -61,7 +61,6 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
     private lateinit var originalAccounts: Set<String>
     private lateinit var originalCurrentAccount: String
     private lateinit var accountBeingRemoved: String
-    private lateinit var tintedCheck: Drawable
 
     private val removeAccountDialogViewModel: RemoveAccountDialogViewModel by viewModel()
     private val accountsManagementViewModel: AccountsManagementViewModel by viewModel()
@@ -72,9 +71,6 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
 
 
         setContentView(R.layout.accounts_layout)
-        tintedCheck = DrawableCompat.wrap(ContextCompat.getDrawable(this, R.drawable.ic_current_white)!!)
-        val tint = ContextCompat.getColor(this, R.color.actionbar_start_color)
-        DrawableCompat.setTint(tintedCheck, tint)
 
         val recyclerView: RecyclerView = findViewById(R.id.account_list_recycler_view)
         recyclerView.run {
@@ -283,12 +279,19 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var retval = true
         when (item.itemId) {
-            R.id.home -> onBackPressed()
-            else -> retval = super.onOptionsItemSelected(item)
+            android.R.id.home -> {
+                if (supportFragmentManager.backStackEntryCount > 0) {
+                    supportFragmentManager.popBackStack()
+                } else {
+                    intent = Intent(this, FileDisplayActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    }
+                    startActivity(intent)
+                }
+            }
         }
-        return retval
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {
