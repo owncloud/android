@@ -1,8 +1,6 @@
 /* ownCloud Android Library is available under MIT license
  *   Copyright (C) 2022 ownCloud GmbH.
  *
- *   @author David González Verdugo
- * 
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
  *   in the Software without restriction, including without limitation the rights
@@ -32,8 +30,7 @@ import com.owncloud.android.lib.resources.status.GetRemoteCapabilitiesOperation
 import com.owncloud.android.lib.resources.status.RemoteCapability
 import com.owncloud.android.lib.resources.status.services.CapabilityService
 
-class OCCapabilityService(override val client: OwnCloudClient) :
-    CapabilityService {
+class OCCapabilityService(override val client: OwnCloudClient) : CapabilityService {
     override fun getCapabilities(): RemoteOperationResult<RemoteCapability> =
         GetRemoteCapabilitiesOperation().execute(client)
 }
