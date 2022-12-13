@@ -30,6 +30,9 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.data.files.db.FileDao
+import com.owncloud.android.data.files.db.OCFileEntity
+import com.owncloud.android.data.files.db.OCFileSyncEntity
 import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
 import com.owncloud.android.data.folderbackup.db.FolderBackupDao
 import com.owncloud.android.data.migrations.MIGRATION_27_28
@@ -41,29 +44,38 @@ import com.owncloud.android.data.migrations.MIGRATION_32_33
 import com.owncloud.android.data.migrations.MIGRATION_33_34
 import com.owncloud.android.data.migrations.MIGRATION_34_35
 import com.owncloud.android.data.migrations.MIGRATION_35_36
+import com.owncloud.android.data.migrations.MIGRATION_37_38
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.data.transfers.db.OCTransferEntity
+import com.owncloud.android.data.transfers.db.TransferDao
 import com.owncloud.android.data.user.db.UserDao
 import com.owncloud.android.data.user.db.UserQuotaEntity
 
 @Database(
     entities = [
-        OCShareEntity::class,
-        OCCapabilityEntity::class,
-        UserQuotaEntity::class,
         FolderBackUpEntity::class,
+        OCCapabilityEntity::class,
+        OCFileEntity::class,
+        OCFileSyncEntity::class,
+        OCShareEntity::class,
+        UserQuotaEntity::class,
+        OCTransferEntity::class,
     ],
     autoMigrations = [
         AutoMigration(from = 36, to = 37),
+        AutoMigration(from = 38, to = 39)
     ],
     version = ProviderMeta.DB_VERSION,
     exportSchema = true
 )
 abstract class OwncloudDatabase : RoomDatabase() {
-    abstract fun shareDao(): OCShareDao
     abstract fun capabilityDao(): OCCapabilityDao
-    abstract fun userDao(): UserDao
+    abstract fun fileDao(): FileDao
     abstract fun folderBackUpDao(): FolderBackupDao
+    abstract fun shareDao(): OCShareDao
+    abstract fun userDao(): UserDao
+    abstract fun transferDao(): TransferDao
 
     companion object {
         @Volatile
@@ -79,6 +91,7 @@ abstract class OwncloudDatabase : RoomDatabase() {
             MIGRATION_33_34,
             MIGRATION_34_35,
             MIGRATION_35_36,
+            MIGRATION_37_38,
         )
 
         fun getDatabase(
@@ -91,7 +104,8 @@ abstract class OwncloudDatabase : RoomDatabase() {
                     context.applicationContext,
                     OwncloudDatabase::class.java,
                     ProviderMeta.NEW_DB_NAME
-                ).addMigrations(*ALL_MIGRATIONS)
+                )
+                    .addMigrations(*ALL_MIGRATIONS)
                     .build()
                 INSTANCE = instance
                 instance

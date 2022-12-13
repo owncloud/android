@@ -119,9 +119,8 @@
   <string name="uploader_error_message_source_file_not_found">A feltöltendő fájl nem található a helyén. Ellenőrizze, hogy létezik-e a fájl.</string>
   <string name="uploader_error_message_source_file_not_copied">Hiba történt a fájl ideiglenes mappába másolása közben. Próbálja meg újra elküldeni.</string>
   <string name="file_list_seconds_ago">másodperce</string>
-  <string name="file_list_empty">Itt nincs semmi. Töltsön fel valamit!</string>
-  <string name="file_list_empty_available_offline">Nincsen elérhető offline fájl.</string>
-  <string name="file_list_empty_shared_by_links">Nem lettek fájlok linkkel megosztva.</string>
+  <string name="file_list_empty_title_shared_by_links">Nincs megosztott link</string>
+  <string name="file_list_empty_subtitle_all_files">Tölts fel néhány tartalmat, vagy szinkronizálj az eszközöddel!</string>
   <string name="file_list_loading">Betöltés…</string>
   <string name="file_list_no_app_for_file_type">Nem található alkalmazás a fájltípushoz</string>
   <string name="local_file_list_empty">Nincs fájl ebben a mappában.</string>
@@ -558,6 +557,10 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Jelszavas zár</string>
+  <string name="folder_upload_some_content_or_sync_devices">Tölts fel néhány tartalmat, vagy szinkronizálj az eszközöddel!</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Végrehajtás</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Végrehajtás</string>
+  <!--Open in web-->
 </resources>

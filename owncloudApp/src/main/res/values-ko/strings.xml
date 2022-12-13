@@ -23,21 +23,40 @@
   <string name="drawer_item_uploads_list">업로드</string>
   <string name="drawer_close">닫기</string>
   <string name="drawer_open">열기</string>
+  <string name="drawer_loading_quota">할당량 불러오는 중</string>
+  <string name="drawer_quota">%2$s 중 %1$s 사용됨(%3$s%%)</string>
+  <string name="drawer_unavailable_free_storage">%1$s사용 중</string>
+  <string name="drawer_unavailable_used_storage">사용 가능한 저장소 사용량 정보가 없습니다.</string>
   <string name="drawer_feedback">피드백</string>
   <string name="drawer_help">도움말</string>
   <string name="prefs_category_general">일반</string>
   <string name="prefs_subsection_logging">로깅</string>
   <string name="prefs_subsection_more">더 보기</string>
   <string name="prefs_subsection_security">보안</string>
+  <string name="prefs_subsection_whatsnew">최신 버전의 새로운 기능은 무엇이 있을까요?</string>
+  <string name="prefs_subsection_security_summary">앱에 액세스하고 표시되는 다른 창을 터치하게 허용 수 있도록 잠금 설정</string>
+  <string name="prefs_subsection_logging_summary">앱 실행으로 생성된 로그 추적</string>
+  <string name="prefs_subsection_more_summary">앱 정보, 피드백 등</string>
   <string name="prefs_accounts">계정</string>
   <string name="prefs_manage_accounts">계정 관리</string>
   <string name="prefs_passcode">암호 잠금</string>
+  <string name="prefs_biometric">생체 잠금</string>
   <string name="prefs_biometric_summary">이 옵션을 활성화하려면 비밀번호나 패턴 잠금을 활성화하십시오</string>
   <string name="prefs_lock_application">애플리케이션 잠그기</string>
   <string name="prefs_lock_application_entries_immediately">즉시</string>
   <string name="prefs_lock_application_entries_1minute">1분 후</string>
   <string name="prefs_lock_application_entries_5minutes">5분 후</string>
   <string name="prefs_lock_application_entries_30minutes">30분 후</string>
+  <string name="prefs_lock_access_from_document_provider">문서 공급자의 액세스 잠금</string>
+  <string name="prefs_lock_access_from_document_provider_summary">Android 네이티브 파일 탐색기를 통해 다른 앱에서 앱에 있는 계정의 파일에 대한 액세스를 잠급니다.</string>
+  <string name="prefs_touches_with_other_visible_windows">표시되는 다른 창과의 터치</string>
+  <string name="prefs_touches_with_other_visible_windows_summary">보기가 다른 표시 창에 가려질 때 터치를 허용합니다. 빛 필터링 앱을 사용할 수 있도록 활성화 합니다.</string>
+  <string name="confirmation_touches_with_other_windows_title">이 기능을 활성화하도록 설정하시겠습니까?</string>
+  <string name="confirmation_touches_with_other_windows_message">이 기능은 사용자의 책임 하에 사용하십시오. 악의적인 응용 프로그램이 다른 보기를 사용하여 사용자가 알지 못하는 상태에서 일부 작업을 수행하도록  속일 수 있습니다.</string>
+  <string name="prefs_subsection_picture_uploads">사진 자동 업로드</string>
+  <string name="prefs_subsection_picture_uploads_summary">자동으로 업로드된 사진의 위치 및 동작 관리</string>
+  <string name="prefs_subsection_video_uploads">동영상 자동 업로드</string>
+  <string name="prefs_subsection_video_uploads_summary">자동으로 업로드된 동영상의 위치 및 동작 관리</string>
   <string name="prefs_camera_picture_upload">사진 업로드</string>
   <string name="prefs_camera_picture_upload_summary">카메라로 찍은 사진 자동으로 업로드</string>
   <string name="prefs_camera_picture_upload_path_title">사진 업로드 경로</string>
@@ -100,7 +119,8 @@
   <string name="uploader_error_message_source_file_not_found">업로드하려고 선택한 파일을 찾을 수 없습니다. 파일이 존재하는지 확인하십시오.</string>
   <string name="uploader_error_message_source_file_not_copied">파일을 임시 폴더에 저장할 수 없습니다. 다시 전송을 시도하십시오.</string>
   <string name="file_list_seconds_ago">초 전</string>
-  <string name="file_list_empty">내용이 없습니다. 업로드할 수 있습니다!</string>
+  <string name="file_list_empty_title_shared_by_links">공유된 링크 없음</string>
+  <string name="file_list_empty_subtitle_all_files">파일을 업로드하거나 장치와 동기화하십시오!</string>
   <string name="file_list_loading">불러오는 중…</string>
   <string name="file_list_no_app_for_file_type">이 파일을 위한 앱이 존재하지 않습니다.</string>
   <string name="local_file_list_empty">이 폴더에 파일이 없습니다.</string>
@@ -480,6 +500,10 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">암호 잠금</string>
+  <string name="folder_upload_some_content_or_sync_devices">파일을 업로드하거나 장치와 동기화하십시오!</string>
+  <!--Webfinger-->
+  <string name="global_proceed">진행</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">진행</string>
+  <!--Open in web-->
 </resources>

@@ -29,10 +29,12 @@ import android.os.AsyncTask;
 import android.widget.Toast;
 
 import com.owncloud.android.R;
-import com.owncloud.android.files.services.TransferRequester;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.operations.UploadFileOperation;
+import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase;
 import com.owncloud.android.utils.FileStorageUtils;
+import com.owncloud.android.utils.UriUtils;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
@@ -40,6 +42,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * AsyncTask to copy a file from a uri in a temporal file
@@ -53,8 +58,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
      *
      * @param   account             OC account to upload the shared files.
      * @param   sourceUris          Array of "content://" URIs to the files to be uploaded.
-     * @param   remotePaths         Array of absolute paths in the OC account to set to the uploaded files.
-     * @param   behaviour           Indicates what to do with the local file once uploaded.
+     * @param   uploadPath          Absolute path in the OC account where we want to upload the files.
      * @param   contentResolver     {@link ContentResolver} instance with appropriate permissions to open the
      *                              URIs in 'sourceUris'.
      *
@@ -78,16 +82,14 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
     public static Object[] makeParamsToExecute(
             Account account,
             Uri[] sourceUris,
-            String[] remotePaths,
-            int behaviour,
+            String uploadPath,
             ContentResolver contentResolver
     ) {
 
         return new Object[]{
                 account,
                 sourceUris,
-                remotePaths,
-                behaviour,
+                uploadPath,
                 contentResolver
         };
     }
@@ -116,7 +118,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
 
     /**
      * @param params    Params to execute the task; see
-     *                  {@link #makeParamsToExecute(Account, Uri[], String[], int, ContentResolver)}
+     *                  {@link #makeParamsToExecute(Account, Uri[], String, ContentResolver)}
      *                  for further details.
      */
     @Override
@@ -132,15 +134,15 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
         try {
             Account account = (Account) params[0];
             Uri[] uris = (Uri[]) params[1];
-            String[] remotePaths = (String[]) params[2];
-            int behaviour = (int) params[3];
-            ContentResolver leakedContentResolver = (ContentResolver) params[4];
+            String uploadPath = (String) params[2];
+            ContentResolver leakedContentResolver = (ContentResolver) params[3];
 
             String currentRemotePath;
+            ArrayList<String> filesToUpload = new ArrayList<>();
 
             for (int i = 0; i < uris.length; i++) {
                 currentUri = uris[i];
-                currentRemotePath = remotePaths[i];
+                currentRemotePath = uploadPath + UriUtils.getDisplayNameForUri(currentUri, mAppContext);
 
                 fullTempPath = FileStorageUtils.getTemporalPath(account.name) + currentRemotePath;
                 inputStream = leakedContentResolver.openInputStream(currentUri);
@@ -158,14 +160,17 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                     outputStream.write(buffer, 0, count);
                 }
 
-                requestUpload(
-                        account,
-                        fullTempPath,
-                        currentRemotePath,
-                        behaviour,
-                        leakedContentResolver.getType(currentUri)
+                filesToUpload.add(fullTempPath);
+                @NotNull Lazy<UploadFilesFromSystemUseCase> uploadFilesFromSystemUseCaseLazy = inject(UploadFilesFromSystemUseCase.class);
+                UploadFilesFromSystemUseCase uploadFilesFromSystemUseCase = uploadFilesFromSystemUseCaseLazy.getValue();
+                UploadFilesFromSystemUseCase.Params useCaseParams = new UploadFilesFromSystemUseCase.Params(
+                        account.name,
+                        filesToUpload,
+                        uploadPath
                 );
+                uploadFilesFromSystemUseCase.execute(useCaseParams);
                 fullTempPath = null;
+                filesToUpload.clear();
             }
 
             result = ResultCode.OK;
@@ -217,20 +222,6 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
         }
 
         return result;
-    }
-
-    private void requestUpload(Account account, String localPath, String remotePath, int behaviour, String mimeType) {
-        TransferRequester requester = new TransferRequester();
-        requester.uploadNewFile(
-                mAppContext,
-                account,
-                localPath,
-                remotePath,
-                behaviour,
-                mimeType,
-                false,      // do not create parent folder if not existent
-                UploadFileOperation.CREATED_BY_USER
-        );
     }
 
     @Override

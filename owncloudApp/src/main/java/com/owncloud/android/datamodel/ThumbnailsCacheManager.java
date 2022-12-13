@@ -37,6 +37,8 @@ import android.widget.ImageView;
 import androidx.core.content.ContextCompat;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.domain.files.usecases.DisableThumbnailsForFileUseCase;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
@@ -44,6 +46,8 @@ import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.ui.adapter.DiskLruImageCache;
 import com.owncloud.android.utils.BitmapUtils;
+import kotlin.Lazy;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
@@ -51,6 +55,8 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.Locale;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * Manager for concurrent access to thumbnails cache.
@@ -201,7 +207,7 @@ public class ThumbnailsCacheManager {
                 if (this == bitmapWorkerTask) {
                     String tagId = "";
                     if (mFile instanceof OCFile) {
-                        tagId = String.valueOf(((OCFile) mFile).getFileId());
+                        tagId = String.valueOf(((OCFile) mFile).getId());
                     } else if (mFile instanceof File) {
                         tagId = String.valueOf(mFile.hashCode());
                     }
@@ -265,7 +271,7 @@ public class ThumbnailsCacheManager {
             Bitmap thumbnail = getBitmapFromDiskCache(imageKey);
 
             // Not found in disk cache
-            if (thumbnail == null || file.needsUpdateThumbnail()) {
+            if (thumbnail == null || file.getNeedsToUpdateThumbnail()) {
 
                 int px = getThumbnailDimension();
 
@@ -283,7 +289,7 @@ public class ThumbnailsCacheManager {
                             thumbnail = ThumbnailUtils.extractThumbnail(bitmap, px, px);
 
                             // Handle PNG
-                            if (file.getMimetype().equalsIgnoreCase("image/png")) {
+                            if (file.getMimeType().equalsIgnoreCase("image/png")) {
                                 thumbnail = handlePNG(thumbnail, px);
                             }
 
@@ -293,6 +299,10 @@ public class ThumbnailsCacheManager {
                             }
                         } else {
                             mClient.exhaustResponse(get.getResponseBodyAsStream());
+                        }
+                        if (status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_NOT_FOUND) {
+                            @NotNull Lazy<DisableThumbnailsForFileUseCase> disableThumbnailsForFileUseCaseLazy = inject(DisableThumbnailsForFileUseCase.class);
+                            disableThumbnailsForFileUseCaseLazy.getValue().execute(new DisableThumbnailsForFileUseCase.Params(file.getId()));
                         }
                     } catch (Exception e) {
                         Timber.e(e);

@@ -23,12 +23,12 @@ import android.os.Bundle;
 import android.view.View.OnClickListener;
 
 import com.owncloud.android.authentication.AccountUtils;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
-import com.owncloud.android.ui.fragment.OCFileListFragment;
 
 public class UploadPathActivity extends FolderPickerActivity implements FileFragment.ContainerActivity,
-        OnClickListener, OnEnforceableRefreshListener {
+        OnClickListener {
 
     public static final String KEY_CAMERA_UPLOAD_PATH = "CAMERA_UPLOAD_PATH";
     public static final String KEY_CAMERA_UPLOAD_ACCOUNT = "CAMERA_UPLOAD_ACCOUNT";
@@ -37,12 +37,12 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String cameraUploadPath = getIntent().getStringExtra(KEY_CAMERA_UPLOAD_PATH);
-
         // The caller activity (Preferences) is not a FileActivity, so it has no OCFile, only a path.
-        OCFile folder = new OCFile(cameraUploadPath);
+        // FIXME: 13/10/2020 : New_arch: Upload
 
-        setFile(folder);
+        //OCFile folder = new OCFile(cameraUploadPath);
+
+        //setFile(folder);
 
         // Account may differ from current one. We need to show the picker for this one, not current.
         String accountName = getIntent().getStringExtra(KEY_CAMERA_UPLOAD_ACCOUNT);
@@ -57,23 +57,21 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
     protected void onAccountSet(boolean stateWasRecovered) {
         super.onAccountSet(stateWasRecovered);
         if (getAccount() != null) {
+            // Check if we need to open an specific folder and navigate to it.
+            // If there is not, fallback to the root folder for this account.
+            String cameraUploadPath = getIntent().getStringExtra(KEY_CAMERA_UPLOAD_PATH);
+            OCFile initialFile = getStorageManager().getFileByPath(cameraUploadPath);
 
-            updateFileFromDB();
-
-            OCFile folder = getFile();
-            if (folder == null || !folder.isFolder()) {
+            if (initialFile == null || !initialFile.isFolder()) {
                 // fall back to root folder
                 setFile(getStorageManager().getFileByPath(OCFile.ROOT_PATH));
-                folder = getFile();
+            } else {
+                setFile(initialFile);
             }
 
-            onBrowsedDownTo(folder);
-
             if (!stateWasRecovered) {
-                OCFileListFragment listOfFolders = getListOfFilesFragment();
-                listOfFolders.listDirectory(folder);
-
-                startSyncFolderOperation(folder, false);
+                MainFileListFragment listOfFolders = getListOfFilesFragment();
+                listOfFolders.navigateToFolder(getFile());
             }
 
             updateNavigationElementsInActionBar();

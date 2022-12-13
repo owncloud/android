@@ -141,9 +141,7 @@
   <string name="uploader_error_message_source_file_not_found">没有在指定位置找到要上传的文件。请检查文件是否存在。</string>
   <string name="uploader_error_message_source_file_not_copied">将文件复制到临时目录时出现错误。请尝试重新发送。</string>
   <string name="file_list_seconds_ago">几秒前</string>
-  <string name="file_list_empty">这里还什么都没有。上传些东西吧！</string>
-  <string name="file_list_empty_available_offline">无可用的离线文件</string>
-  <string name="file_list_empty_shared_by_links">没有文件通过链接共享。</string>
+  <string name="file_list_empty_title_shared_by_links">无分享链接</string>
   <string name="file_list_loading">加载中...</string>
   <string name="file_list_no_app_for_file_type">没有支持此文件的应用</string>
   <string name="file_list_no_app_for_perform_action">未找到此操作的应用</string>
@@ -609,9 +607,13 @@
   <string name="security_enforced_title">请选择一个选项来锁定应用程序：</string>
   <string name="security_enforced_first_option">密码锁</string>
   <string name="security_enforced_second_option">图案锁</string>
+  <string name="folder_upload_some_content_or_sync_devices">上传一些内容或者与设备同步!</string>
+  <!--Webfinger-->
+  <string name="global_proceed">继续</string>
   <!--Release Notes-->
   <string name="release_notes_header">新的%1$s</string>
   <string name="release_notes_footer">感谢您使用 %1$s.\n❤</string>
   <string name="release_notes_proceed">继续</string>
   <string name="release_notes_icon">发行说明图标</string>
+  <!--Open in web-->
 </resources>

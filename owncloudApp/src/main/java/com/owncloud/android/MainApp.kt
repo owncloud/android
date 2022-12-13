@@ -60,7 +60,7 @@ import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.CONFIGURATION_ALLOW_SCREENSHOTS
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.DebugInjector
-import com.owncloud.android.utils.FILE_SYNC_CONFLICT_CHANNEL_ID
+import com.owncloud.android.utils.FILE_SYNC_CONFLICT_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.FILE_SYNC_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
@@ -217,9 +217,9 @@ class MainApp : Application() {
         )
 
         createNotificationChannel(
-            id = FILE_SYNC_CONFLICT_CHANNEL_ID,
-            name = getString(R.string.file_sync_notification_channel_name),
-            description = getString(R.string.file_sync_notification_channel_description),
+            id = FILE_SYNC_CONFLICT_NOTIFICATION_CHANNEL_ID,
+            name = getString(R.string.file_sync_conflict_notification_channel_name),
+            description = getString(R.string.file_sync_conflict_notification_channel_description),
             importance = IMPORTANCE_LOW
         )
 

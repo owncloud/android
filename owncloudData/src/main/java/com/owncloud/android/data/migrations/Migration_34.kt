@@ -26,6 +26,7 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.pictureUploadsName
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.videoUploadsName
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import java.io.File
 
 val MIGRATION_33_34 = object : Migration(33, 34) {
@@ -80,10 +81,10 @@ class CameraUploadsMigrationToRoom(val sharedPreferencesProvider: SharedPreferen
         return sharedPreferencesProvider.getString(keyPreference, null) ?: ""
     }
 
-    private fun getBehaviorForPreference(keyPreference: String): FolderBackUpConfiguration.Behavior {
-        val storedBehaviour = sharedPreferencesProvider.getString(keyPreference, null) ?: return FolderBackUpConfiguration.Behavior.COPY
+    private fun getBehaviorForPreference(keyPreference: String): UploadBehavior {
+        val storedBehaviour = sharedPreferencesProvider.getString(keyPreference, null) ?: return UploadBehavior.COPY
 
-        return FolderBackUpConfiguration.Behavior.fromString(storedBehaviour)
+        return UploadBehavior.fromString(storedBehaviour)
     }
 
     companion object {

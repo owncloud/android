@@ -57,7 +57,6 @@
   <string name="uploader_error_message_source_file_not_found">Fil for opplasting er ikkje funnen, kontroller om fil finst.</string>
   <string name="uploader_error_message_source_file_not_copied">Feil ved kopi av fil til mellombels katalog, prøv å sende fil på ny.</string>
   <string name="file_list_seconds_ago">sekund sidan</string>
-  <string name="file_list_empty">Ingenting her. Last noko opp!</string>
   <string name="file_list_loading">Lastar…</string>
   <string name="file_list_no_app_for_file_type">Ingen program funnen for denne fil type</string>
   <string name="local_file_list_empty">Ingen filer i denne mappa</string>

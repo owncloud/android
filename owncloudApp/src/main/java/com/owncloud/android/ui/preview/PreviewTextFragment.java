@@ -37,12 +37,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.extensions.ActivityExtKt;
+import com.owncloud.android.extensions.FragmentExtKt;
 import com.owncloud.android.files.FileMenuFilter;
+import com.owncloud.android.presentation.ui.files.operations.FileOperation;
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
+import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
-import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
@@ -52,9 +56,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+
+import static org.koin.java.KoinJavaComponent.get;
 
 public class PreviewTextFragment extends FileFragment {
     private static final String EXTRA_FILE = "FILE";
@@ -65,6 +73,8 @@ public class PreviewTextFragment extends FileFragment {
     private TransferProgressController mProgressController;
     private TextView mTextPreview;
     private TextLoadAsyncTask mTextLoadTask;
+
+    FileOperationsViewModel fileOperationsViewModel = get(FileOperationsViewModel.class);
 
     /**
      * Public factory method to create new PreviewTextFragment instances.
@@ -166,7 +176,6 @@ public class PreviewTextFragment extends FileFragment {
         super.onStart();
         Timber.v("onStart");
 
-        mProgressController.startListeningProgressFor(getFile(), mAccount);
         loadAndShowTextPreview();
     }
 
@@ -359,7 +368,7 @@ public class PreviewTextFragment extends FileFragment {
                 return true;
             }
             case R.id.action_remove_file: {
-                RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstance(getFile());
+                RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstanceForSingleFile(getFile());
                 dialog.show(getFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
                 return true;
             }
@@ -368,19 +377,23 @@ public class PreviewTextFragment extends FileFragment {
                 return true;
             }
             case R.id.action_send_file: {
-                mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
+                ActivityExtKt.sendDownloadedFilesByShareSheet(requireActivity(), Collections.singletonList(getFile()));
                 return true;
             }
             case R.id.action_sync_file: {
-                mContainerActivity.getFileOperationsHelper().syncFile(getFile());
+                fileOperationsViewModel.performOperation(new FileOperation.SynchronizeFileOperation(getFile(), mAccount.name));
                 return true;
             }
             case R.id.action_set_available_offline: {
-                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), true);
+                ArrayList<OCFile> fileToSetAsAvailableOffline = new ArrayList<>();
+                fileToSetAsAvailableOffline.add(getFile());
+                fileOperationsViewModel.performOperation(new FileOperation.SetFilesAsAvailableOffline(fileToSetAsAvailableOffline));
                 return true;
             }
             case R.id.action_unset_available_offline: {
-                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
+                ArrayList<OCFile> fileToUnsetAsAvailableOffline = new ArrayList<>();
+                fileToUnsetAsAvailableOffline.add(getFile());
+                fileOperationsViewModel.performOperation(new FileOperation.UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline));
                 return true;
             }
             default:
@@ -399,14 +412,6 @@ public class PreviewTextFragment extends FileFragment {
         if (mTextLoadTask != null) {
             mTextLoadTask.cancel(Boolean.TRUE);
             mTextLoadTask.dismissLoadingDialog();
-        }
-        mProgressController.stopListeningProgressFor(getFile(), mAccount);
-    }
-
-    @Override
-    public void onTransferServiceConnected() {
-        if (mProgressController != null) {
-            mProgressController.startListeningProgressFor(getFile(), mAccount);
         }
     }
 
@@ -465,8 +470,8 @@ public class PreviewTextFragment extends FileFragment {
         unsupportedTypes.add("text/vnd.rn-realtext");
         unsupportedTypes.add("text/vnd.wap.wml");
         unsupportedTypes.add("text/vnd.wap.wmlscript");
-        return (file != null && file.isDown() && file.isText() &&
-                !unsupportedTypes.contains(file.getMimetype()) &&
+        return (file != null && file.isAvailableLocally() && file.isText() &&
+                !unsupportedTypes.contains(file.getMimeType()) &&
                 !unsupportedTypes.contains(file.getMimeTypeFromName())
         );
     }

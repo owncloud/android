@@ -40,7 +40,7 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import java.io.File
 
-@Ignore("Ignored due to emulator errors, check in the future")
+@Ignore
 class LogsListActivityTest {
 
     private lateinit var activityScenario: ActivityScenario<LogsListActivity>
@@ -85,17 +85,16 @@ class LogsListActivityTest {
     @Test
     fun test_isRecyclerViewEmpty_show_label() {
         launchTest(logs = emptyList())
-        with(R.id.textView_no_logs) {
-            isDisplayed(true)
-            withText(R.string.prefs_log_no_logs_list_view)
-        }
+        R.id.logs_list_empty.isDisplayed(true)
+        R.id.list_empty_dataset_title.withText(R.string.prefs_log_no_logs_list_view)
+        R.id.list_empty_dataset_sub_title.withText(R.string.prefs_log_empty_subtitle)
         R.id.recyclerView_activity_logs_list.isDisplayed(false)
     }
 
     @Test
     fun test_isRecyclerViewNotEmpty_hide_label() {
         launchTest(logs = listOf(File("path")))
-        R.id.textView_no_logs.isDisplayed(false)
+        R.id.logs_list_empty.isDisplayed(false)
         R.id.recyclerView_activity_logs_list.isDisplayed(true)
     }
 

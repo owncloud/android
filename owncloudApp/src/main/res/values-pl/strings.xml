@@ -141,9 +141,8 @@
   <string name="uploader_error_message_source_file_not_found">Plik do wysłania nie został znaleziony w wybranej lokalizacji. Proszę sprawdzić, czy w ogóle istnieje.</string>
   <string name="uploader_error_message_source_file_not_copied">Wystąpił błąd podczas kopiowania pliku do folderu tymczasowego. Proszę spróbować go przesłać ponownie.</string>
   <string name="file_list_seconds_ago">sekund temu</string>
-  <string name="file_list_empty">Pusto. Wyślij coś!</string>
-  <string name="file_list_empty_available_offline">Nie ma plików dostępnych offline.</string>
-  <string name="file_list_empty_shared_by_links">Żadne pliki nie są współdzielone przez link.</string>
+  <string name="file_list_empty_title_shared_by_links">Brak udostępnionych odnośników</string>
+  <string name="file_list_empty_subtitle_all_files">Wgraj coś, albo wykonaj synchronizację ze swoimi urządzeniami.</string>
   <string name="file_list_loading">Wczytywanie...</string>
   <string name="file_list_no_app_for_file_type">Nie znaleziono aplikacji dla tego rodzaju pliku</string>
   <string name="file_list_no_app_for_perform_action">Nie znaleziono aplikacji dla tej akcji</string>
@@ -614,9 +613,13 @@
   <string name="security_enforced_title">Proszę wybrać jedną z opcji blokowania aplikacji:</string>
   <string name="security_enforced_first_option">Blokada hasłem</string>
   <string name="security_enforced_second_option">Blokada wzorem</string>
+  <string name="folder_upload_some_content_or_sync_devices">Wgraj coś, albo wykonaj synchronizację ze swoimi urządzeniami.</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Wykonaj</string>
   <!--Release Notes-->
   <string name="release_notes_header">Co nowego w %1$s</string>
   <string name="release_notes_footer">Dziękujemy za używanie %1$s.\n❤</string>
   <string name="release_notes_proceed">Wykonaj</string>
   <string name="release_notes_icon">Ikona</string>
+  <!--Open in web-->
 </resources>

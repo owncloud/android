@@ -24,10 +24,18 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.exceptions.AccountNotNewException
 import com.owncloud.android.domain.exceptions.AccountNotTheSameException
 import com.owncloud.android.domain.exceptions.BadOcVersionException
+import com.owncloud.android.domain.exceptions.ConflictException
+import com.owncloud.android.domain.exceptions.CopyIntoDescendantException
+import com.owncloud.android.domain.exceptions.CopyIntoSameFolderException
+import com.owncloud.android.domain.exceptions.FileAlreadyExistsException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
+import com.owncloud.android.domain.exceptions.ForbiddenException
 import com.owncloud.android.domain.exceptions.IncorrectAddressException
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
+import com.owncloud.android.domain.exceptions.InvalidOverwriteException
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
+import com.owncloud.android.domain.exceptions.MoveIntoDescendantException
+import com.owncloud.android.domain.exceptions.MoveIntoSameFolderException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorAccessDeniedException
@@ -40,6 +48,7 @@ import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.exceptions.ServerResponseTimeoutException
 import com.owncloud.android.domain.exceptions.ServiceUnavailableException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
+import com.owncloud.android.domain.exceptions.validation.FileNameException
 import java.util.Locale
 
 fun Throwable.parseError(
@@ -57,13 +66,29 @@ fun Throwable.parseError(
             is ServerConnectionTimeoutException -> resources.getString(R.string.network_error_connect_timeout_exception)
             is ServerNotReachableException -> resources.getString(R.string.network_host_not_available)
             is ServiceUnavailableException -> resources.getString(R.string.service_unavailable)
+            is ConflictException -> resources.getString(R.string.conflict_title)
             is SSLRecoverablePeerUnverifiedException -> resources.getString(R.string.ssl_certificate_not_trusted)
             is BadOcVersionException -> resources.getString(R.string.auth_bad_oc_version_title)
             is IncorrectAddressException -> resources.getString(R.string.auth_incorrect_address_title)
             is SSLErrorException -> resources.getString(R.string.auth_ssl_general_error_title)
             is UnauthorizedException -> resources.getString(R.string.auth_unauthorized)
-            is InstanceNotConfiguredException -> resources.getString(R.string.auth_not_configured_title)
+            is FileAlreadyExistsException -> resources.getString(R.string.file_already_exists)
+            is FileNameException -> {
+                val stringId = when (this.type) {
+                    FileNameException.FileNameExceptionType.FILE_NAME_EMPTY -> R.string.filename_empty
+                    FileNameException.FileNameExceptionType.FILE_NAME_FORBIDDEN_CHARACTERS -> R.string.filename_forbidden_characters_from_server
+                    FileNameException.FileNameExceptionType.FILE_NAME_TOO_LONG -> R.string.filename_too_long
+                }
+                resources.getString(stringId)
+            }
+            is InvalidOverwriteException -> resources.getString(R.string.file_already_exists)
+            is MoveIntoDescendantException -> resources.getString(R.string.move_file_invalid_into_descendent)
+            is CopyIntoDescendantException -> resources.getString(R.string.copy_file_invalid_into_descendent)
+            is MoveIntoSameFolderException -> resources.getString(R.string.move_file_invalid_overwrite)
+            is CopyIntoSameFolderException -> resources.getString(R.string.copy_file_invalid_overwrite)
+            is ForbiddenException -> resources.getString(R.string.forbidden_permissions, resources.getString(R.string.uploader_upload_forbidden_permissions))
             is FileNotFoundException -> resources.getString(R.string.common_not_found)
+            is InstanceNotConfiguredException -> resources.getString(R.string.auth_not_configured_title)
             is OAuth2ErrorException -> resources.getString(R.string.auth_oauth_error)
             is OAuth2ErrorAccessDeniedException -> resources.getString(R.string.auth_oauth_error_access_denied)
             is AccountNotNewException -> resources.getString(R.string.auth_account_not_new)

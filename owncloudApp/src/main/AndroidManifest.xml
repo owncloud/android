@@ -65,12 +65,10 @@
         android:requestLegacyExternalStorage="true"
         android:resizeableActivity="true"
         android:supportsPictureInPicture="false"
-        android:theme="@style/Theme.ownCloud.Toolbar"
-        tools:targetApi="n">
+        android:theme="@style/Theme.ownCloud.Toolbar">
 
         <meta-data android:name="android.content.APP_RESTRICTIONS"
             android:resource="@xml/managed_configurations" />
-
         <activity
             android:name=".presentation.ui.releasenotes.ReleaseNotesActivity"
             android:exported="false" />
@@ -138,17 +136,6 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter_files" />
         </service>
-        <service
-            android:name=".files.services.RetryUploadJobService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service
-            android:name=".files.services.RetryDownloadJobService"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service
-            android:name=".files.services.AvailableOfflineSyncJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <provider
             android:name=".providers.FileContentProvider"
@@ -172,7 +159,8 @@
             <intent-filter>
                 <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
             </intent-filter>
-        </provider> <!-- new provider used to generate URIs without file:// scheme (forbidden from Android 7) -->
+        </provider>
+        <!-- new provider used to generate URIs without file:// scheme (forbidden from Android 7) -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="@string/file_provider_authority"
@@ -186,8 +174,6 @@
         </provider>
 
         <service android:name=".services.OperationsService" />
-        <service android:name=".files.services.FileDownloader" />
-        <service android:name=".files.services.FileUploader" />
         <service android:name=".media.MediaService" />
 
         <activity
@@ -195,7 +181,7 @@
             android:theme="@style/Theme.ownCloud"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.activity.ConflictsResolveActivity"
+            android:name=".presentation.ui.conflicts.ConflictsResolveActivity"
             android:theme="@style/Theme.ownCloud" />
         <activity
             android:name=".presentation.ui.logging.LogsListActivity"

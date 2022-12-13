@@ -58,6 +58,7 @@
   <string name="prefs_camera_picture_upload_summary">Автоматически загружать изображения, сделанные камерой</string>
   <string name="prefs_camera_picture_upload_path_title">Путь загрузки изображений</string>
   <string name="prefs_camera_picture_upload_on_wifi">Загрузка изображений только через wifi</string>
+  <string name="prefs_camera_picture_upload_on_charging">Загрузка изображений только во время зарядки</string>
   <string name="prefs_camera_video_upload">Загрузка видео</string>
   <string name="prefs_camera_video_upload_summary">Автоматически загружать видео, записанные камерой</string>
   <string name="prefs_camera_video_upload_path_title">Путь загрузки видео</string>
@@ -131,9 +132,10 @@
   <string name="uploader_error_message_source_file_not_found">Файл для загрузки не был найден в положенном месте. Пожалуйста проверьте, существует ли файл.</string>
   <string name="uploader_error_message_source_file_not_copied">Произошла ошибка во время копирования этого файла во временную папку. Пожалуйста попробуйте послать заново.</string>
   <string name="file_list_seconds_ago">несколько секунд назад</string>
-  <string name="file_list_empty">Здесь ничего нет. Загрузите что-нибудь!</string>
-  <string name="file_list_empty_available_offline">Нет доступных автономных файлов.</string>
-  <string name="file_list_empty_shared_by_links">Отсутствуют файлы общего доступа по ссылке</string>
+  <string name="file_list_empty_title_all_files">Здесь нет файлов</string>
+  <string name="file_list_empty_title_shared_by_links">Нет общих ссылок</string>
+  <string name="file_list_empty_subtitle_all_files">Загрузите что-нибудь или синхронизируйте со своими устройствами!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Здесь появятся файлы и каталоги, ссылкой на которые вы поделитесь</string>
   <string name="file_list_loading">Загрузка...</string>
   <string name="file_list_no_app_for_file_type">Не найдено приложение для этого типа файла</string>
   <string name="local_file_list_empty">В этом каталоге нет файлов.</string>
@@ -574,6 +576,10 @@
   <string name="scoped_storage_wizard_intro_button">Давайте начнём</string>
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Блокировка кодом</string>
+  <string name="folder_upload_some_content_or_sync_devices">Загрузите что-нибудь или синхронизируйте со своими устройствами!</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Продолжить</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Продолжить</string>
+  <!--Open in web-->
 </resources>

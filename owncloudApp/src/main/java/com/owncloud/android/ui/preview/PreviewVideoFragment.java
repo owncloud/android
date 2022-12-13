@@ -48,15 +48,25 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
+import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.extensions.ActivityExtKt;
+import com.owncloud.android.extensions.FragmentExtKt;
 import com.owncloud.android.files.FileMenuFilter;
+import com.owncloud.android.presentation.ui.files.operations.FileOperation;
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
+import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
-import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import timber.log.Timber;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+import static org.koin.java.KoinJavaComponent.get;
 
 /**
  * This fragment shows a preview of a downloaded video file, or starts streaming if file is not
@@ -95,6 +105,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     private boolean mExoPlayerBooted = false;
     private boolean mAutoplay;
     private long mPlaybackPosition;
+
+    FileOperationsViewModel fileOperationsViewModel = get(FileOperationsViewModel.class);
 
     /**
      * Public factory method to create new PreviewVideoFragment instances.
@@ -208,18 +220,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        Timber.v("onStart");
-
-        OCFile file = getFile();
-
-        if (file != null) {
-            mProgressController.startListeningProgressFor(file, mAccount);
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         Timber.v("onResume");
@@ -277,14 +277,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         i.putExtra(FileActivity.EXTRA_FILE, getFile());
 
         startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
-    }
-
-    // Progress bar
-    @Override
-    public void onTransferServiceConnected() {
-        if (mProgressController != null) {
-            mProgressController.startListeningProgressFor(getFile(), mAccount);
-        }
     }
 
     @Override
@@ -348,7 +340,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 return true;
             }
             case R.id.action_remove_file: {
-                RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstance(getFile());
+                RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstanceForSingleFile(getFile());
                 dialog.show(getParentFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
                 return true;
             }
@@ -358,7 +350,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             }
             case R.id.action_send_file: {
                 releasePlayer();
-                mContainerActivity.getFileOperationsHelper().sendDownloadedFile(getFile());
+                ActivityExtKt.sendDownloadedFilesByShareSheet(requireActivity(), Collections.singletonList(getFile()));
                 return true;
             }
             case R.id.action_sync_file: {
@@ -366,11 +358,16 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 return true;
             }
             case R.id.action_set_available_offline: {
-                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), true);
+                ArrayList<OCFile> fileToSetAsAvailableOffline = new ArrayList<>();
+                fileToSetAsAvailableOffline.add(getFile());
+                fileOperationsViewModel.performOperation(new FileOperation.SetFilesAsAvailableOffline(fileToSetAsAvailableOffline));
                 return true;
             }
             case R.id.action_unset_available_offline: {
-                mContainerActivity.getFileOperationsHelper().toggleAvailableOffline(getFile(), false);
+
+                ArrayList<OCFile> fileToUnsetAsAvailableOffline = new ArrayList<>();
+                fileToUnsetAsAvailableOffline.add(getFile());
+                fileOperationsViewModel.performOperation(new FileOperation.UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline));
                 return true;
             }
             case R.id.action_download_file: {
@@ -381,7 +378,9 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 return true;
             }
             case R.id.action_cancel_sync: {
-                ((FileDisplayActivity) mContainerActivity).cancelTransference(getFile());
+                ArrayList<OCFile> fileList = new ArrayList<>();
+                fileList.add(getFile());
+                ((FileDisplayActivity) mContainerActivity).cancelFileTransference(fileList);
                 return true;
             }
             default:
@@ -465,7 +464,13 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                             // or involving other parts
                             if (previewVideoError.isParentFolderSyncNeeded()) {
                                 // Start to sync the parent file folder
-                                OCFile folder = new OCFile(getFile().getParentRemotePath());
+                                // TODO: Check if startSyncFolderOperation requires a folder or whether it would be enough with the remote path.
+                                OCFile folder = new OCFile(
+                                        getFile().getParentRemotePath(),
+                                        MimeTypeConstantsKt.MIME_DIR,
+                                        OCFile.ROOT_PARENT_ID,
+                                        mAccount.name
+                                );
                                 ((FileDisplayActivity) requireActivity()).startSyncFolderOperation(folder, false);
                             }
                         })

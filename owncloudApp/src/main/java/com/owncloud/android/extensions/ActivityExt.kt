@@ -35,9 +35,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.enums.LockEnforcedType
 import com.owncloud.android.enums.LockEnforcedType.Companion.parseFromInteger
 import com.owncloud.android.interfaces.BiometricStatus
@@ -50,11 +52,16 @@ import com.owncloud.android.presentation.ui.security.PatternActivity
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
+import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.ALL_FILES_SAF_REGEX
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
 import com.owncloud.android.ui.helpers.ShareSheetHelper
 import com.owncloud.android.utils.MimetypeIconUtil
+import com.owncloud.android.utils.UriUtilsKt
+import com.owncloud.android.utils.UriUtilsKt.getExposedFileUriForOCFile
 import timber.log.Timber
 import java.io.File
+
+const val FRAGMENT_TAG_CHOOSER_DIALOG = "CHOOSER_DIALOG"
 
 fun Activity.showErrorInSnackbar(genericErrorMessageId: Int, throwable: Throwable?) =
     throwable?.let {
@@ -358,5 +365,46 @@ fun Activity.showBiometricDialog(iEnableBiometrics: IEnableBiometrics) {
         .show()
 }
 
+fun FragmentActivity.sendDownloadedFilesByShareSheet(ocFiles: List<OCFile>) {
+    if (ocFiles.isEmpty()) throw IllegalArgumentException("Can't share anything")
 
+    val sendIntent = if (ocFiles.size == 1) {
+        Intent(Intent.ACTION_SEND).apply {
+            type = ocFiles.first().mimeType
+            putExtra(Intent.EXTRA_STREAM, UriUtilsKt.getExposedFileUriForOCFile(this@sendDownloadedFilesByShareSheet, ocFiles.first()))
+        }
+    } else {
+        val fileUris = ocFiles.map { UriUtilsKt.getExposedFileUriForOCFile(this@sendDownloadedFilesByShareSheet, it) }
+        Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+            type = ALL_FILES_SAF_REGEX
+            putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(fileUris))
+        }
+    }
 
+    val packagesToExclude = arrayOf<String>(this@sendDownloadedFilesByShareSheet.packageName)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        val shareSheetIntent = ShareSheetHelper().getShareSheetIntent(
+            sendIntent,
+            this@sendDownloadedFilesByShareSheet,
+            R.string.activity_chooser_send_file_title,
+            packagesToExclude
+        )
+        startActivity(shareSheetIntent)
+    } else {
+        val chooserDialog: DialogFragment = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude)
+        chooserDialog.show(supportFragmentManager, FRAGMENT_TAG_CHOOSER_DIALOG)
+    }
+}
+
+fun Activity.openOCFile(ocFile: OCFile) {
+    val intentForSavedMimeType = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(getExposedFileUriForOCFile(this@openOCFile, ocFile), ocFile.mimeType)
+        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+    }
+
+    try {
+        startActivity(Intent.createChooser(intentForSavedMimeType, getString(R.string.actionbar_open_with)))
+    } catch (anfe: ActivityNotFoundException) {
+        showErrorInSnackbar(genericErrorMessageId = R.string.file_list_no_app_for_file_type, anfe)
+    }
+}

@@ -120,4 +120,6 @@
     <!-- Screenshots -->
     <bool name="allow_screenshots">true</bool>
 
+    <!-- Webfinger -->
+    <string name="webfinger_lookup_server"></string>
 </resources>

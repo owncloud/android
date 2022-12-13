@@ -6,21 +6,22 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
- * <p>
- * Copyright (C) 2021 ownCloud GmbH.
- * <p>
+ *
+ * Copyright (C) 2022 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.storage
 
 import android.accounts.Account
@@ -28,6 +29,8 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import com.owncloud.android.data.extension.moveRecursively
 import timber.log.Timber
+import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.transfers.model.OCTransfer
 import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
@@ -60,13 +63,26 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     ): String = getAccountDirectoryPath(accountName) + remotePath
 
     /**
+     * Get expected remote path for a file creation, rename, move etc
+     */
+    fun getExpectedRemotePath(remotePath: String, newName: String, isFolder: Boolean): String {
+        var parent = (File(remotePath)).parent ?: throw IllegalArgumentException()
+        parent = if (parent.endsWith(File.separator)) parent else parent + File.separator
+        val newRemotePath = parent + newName
+        if (isFolder) {
+            newRemotePath.plus(File.separator)
+        }
+        return newRemotePath
+    }
+
+    /**
      * Get absolute path to tmp folder inside datafolder in sd-card for given accountName.
      */
     fun getTemporalPath(
         accountName: String?
     ): String = getRootFolderPath() + File.separator + TEMPORAL_FOLDER_NAME + File.separator + getEncodedAccountName(accountName)
 
-    fun getLogsPath(): String = getRootFolderPath() + LOGS_FOLDER_NAME
+    fun getLogsPath(): String = getRootFolderPath() + File.separator + LOGS_FOLDER_NAME + File.separator
 
     /**
      * Optimistic number of bytes available on sd-card.
@@ -84,7 +100,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         val danglingDirs = mutableListOf<File>()
         rootFolder.listFiles()?.forEach { dir ->
             var dirIsOk = false
-            if (dir.name.equals(TEMPORAL_FOLDER_NAME)) {
+            if (dir.name.equals(TEMPORAL_FOLDER_NAME) || dir.name.equals(LOGS_FOLDER_NAME)) {
                 dirIsOk = true
             } else {
                 remainingAccounts.forEach { account ->
@@ -158,10 +174,77 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
             return result // return the file size
         }
         return 0
+
+    }
+
+    /**
+     * Best-effort to remove the file locally. If storage path is null, let's try to remove it anyway.
+     */
+    fun deleteLocalFile(ocFile: OCFile): Boolean {
+        val safeStoragePath = ocFile.storagePath ?: getDefaultSavePathFor(accountName = ocFile.owner, remotePath = ocFile.remotePath)
+        val fileToDelete = File(safeStoragePath)
+
+        if (!fileToDelete.exists()) {
+            return true
+        }
+
+        return fileToDelete.deleteRecursively()
+    }
+
+    fun moveLocalFile(ocFile: OCFile, finalStoragePath: String) {
+        val safeStoragePath = ocFile.storagePath ?: getDefaultSavePathFor(accountName = ocFile.owner, remotePath = ocFile.remotePath)
+        val fileToMove = File(safeStoragePath)
+
+        if (!fileToMove.exists()) {
+            return
+        }
+        val targetFile = File(finalStoragePath)
+        val targetFolder = targetFile.parentFile
+        if (targetFolder != null && !targetFolder.exists()) {
+            targetFolder.mkdirs()
+        }
+        fileToMove.renameTo(targetFile)
+    }
+
+    fun clearUnrelatedTemporalFiles(uploads: List<OCTransfer>, accountsNames: List<String>) {
+        accountsNames.forEach { accountName ->
+            val temporalFolderForAccount = File(getTemporalPath(accountName))
+            cleanTemporalRecursively(temporalFolderForAccount) { temporalFile ->
+                if (!uploads.map { it.localPath }.contains(temporalFile.absolutePath)) {
+                    temporalFile.delete()
+                }
+            }
+        }
+    }
+
+    private fun cleanTemporalRecursively(temporalFolder: File, deleteFileInCaseItIsNotNeeded: (file: File) -> Unit) {
+        temporalFolder.listFiles()?.forEach { temporalFile ->
+            if (temporalFile.isDirectory) {
+                cleanTemporalRecursively(temporalFile, deleteFileInCaseItIsNotNeeded)
+            } else {
+                deleteFileInCaseItIsNotNeeded(temporalFile)
+            }
+
+        }
+    }
+
+    fun removeLocalStorageForAccount(accountName: String) {
+        val mainFolderForAccount = File(getAccountDirectoryPath(accountName))
+        val temporalFolderForAccount = File(getTemporalPath(accountName))
+        mainFolderForAccount.deleteRecursively()
+        temporalFolderForAccount.deleteRecursively()
+    }
+
+    fun deleteCacheIfNeeded(transfer: OCTransfer) {
+        val cacheDir = getTemporalPath(transfer.accountName)
+        if (transfer.localPath.startsWith(cacheDir)) {
+            val cacheFile = File(transfer.localPath)
+            cacheFile.delete()
+        }
     }
 
     companion object {
-        private const val LOGS_FOLDER_NAME = "/logs/"
+        private const val LOGS_FOLDER_NAME = "logs"
         private const val TEMPORAL_FOLDER_NAME = "tmp"
     }
 }

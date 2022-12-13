@@ -31,7 +31,7 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 37;
+    public static final int DB_VERSION = 39;
 
     private ProviderMeta() {
     }
@@ -39,8 +39,11 @@ public class ProviderMeta {
     static public class ProviderTableMeta implements BaseColumns {
         public static final String OCSHARES_TABLE_NAME = "ocshares";
         public static final String CAPABILITIES_TABLE_NAME = "capabilities";
+        public static final String FILES_TABLE_NAME = "files";
         public static final String USER_QUOTAS_TABLE_NAME = "user_quotas";
         public static final String FOLDER_BACKUP_TABLE_NAME = "folder_backup";
+        public static final String TRANSFERS_TABLE_NAME = "transfers";
+        public static final String FILES_SYNC_TABLE_NAME = "files_sync";
 
         // Columns of ocshares table
         public static final String OCSHARES_SHARE_TYPE = "share_type";
@@ -94,5 +97,43 @@ public class ProviderMeta {
         public static final String CAPABILITIES_FILES_VERSIONING = "files_versioning";
         public static final String CAPABILITIES_FILES_APP_PROVIDERS = "files_apps_providers";
         public static final String CAPABILITIES_FILES_PRIVATE_LINKS = "files_private_links";
+
+        // Columns of filelist table
+        public static final String FILE_PARENT = "parent";
+        public static final String FILE_NAME = "filename";
+        public static final String FILE_CREATION = "created";
+        public static final String FILE_MODIFIED = "modified";
+        public static final String FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA = "modified_at_last_sync_for_data";
+        public static final String FILE_CONTENT_LENGTH = "content_length";
+        public static final String FILE_CONTENT_TYPE = "content_type";
+        public static final String FILE_STORAGE_PATH = "media_path";
+        public static final String FILE_PATH = "path";
+        public static final String FILE_ACCOUNT_OWNER = "file_owner";
+        public static final String FILE_LAST_SYNC_DATE = "last_sync_date";// _for_properties, but let's keep it as it is
+        public static final String FILE_LAST_SYNC_DATE_FOR_DATA = "last_sync_date_for_data";
+        public static final String FILE_KEEP_IN_SYNC = "keep_in_sync";
+        public static final String FILE_ETAG = "etag";
+        public static final String FILE_TREE_ETAG = "tree_etag";
+        public static final String FILE_SHARED_VIA_LINK = "share_by_link";
+        public static final String FILE_SHARED_WITH_SHAREE = "shared_via_users";
+        public static final String FILE_PERMISSIONS = "permissions";
+        public static final String FILE_REMOTE_ID = "remote_id";
+        public static final String FILE_UPDATE_THUMBNAIL = "update_thumbnail";
+        public static final String FILE_IS_DOWNLOADING = "is_downloading";
+        public static final String FILE_ETAG_IN_CONFLICT = "etag_in_conflict";
+        public static final String FILE_PRIVATE_LINK = "private_link";
+
+        // Columns of list_of_uploads table
+        public static final String UPLOAD_LOCAL_PATH = "local_path";
+        public static final String UPLOAD_REMOTE_PATH = "remote_path";
+        public static final String UPLOAD_ACCOUNT_NAME = "account_name";
+        public static final String UPLOAD_FILE_SIZE = "file_size";
+        public static final String UPLOAD_STATUS = "status";
+        public static final String UPLOAD_LOCAL_BEHAVIOUR = "local_behaviour";
+        public static final String UPLOAD_FORCE_OVERWRITE = "force_overwrite";
+        public static final String UPLOAD_UPLOAD_END_TIMESTAMP = "upload_end_timestamp";
+        public static final String UPLOAD_LAST_RESULT = "last_result";
+        public static final String UPLOAD_CREATED_BY = "created_by";
+        public static final String UPLOAD_TRANSFER_ID = "transfer_id";
     }
 }

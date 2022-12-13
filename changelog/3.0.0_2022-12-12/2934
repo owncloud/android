@@ -1,0 +1,7 @@
+Enhancement: Sync engine rewritten
+
+The whole synchronization engine has been refactored to a new architecture to make it
+better structured and more efficient.
+
+https://github.com/owncloud/android/pull/2934
+https://github.com/owncloud/android/issues/2818

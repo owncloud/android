@@ -54,9 +54,12 @@
   <string name="confirmation_touches_with_other_windows_title">Êtes-vous sûr de vouloir activer cette fonctionnalité ?</string>
   <string name="confirmation_touches_with_other_windows_message">Vous utilisez cette fonctionnalité sous votre propre responsabilité. Une application malveillante pourrait tenter de vous pousser à effectuer des actions en falsifiant l’application.</string>
   <string name="prefs_subsection_picture_uploads">Téléversement automatique des photos</string>
+  <string name="prefs_subsection_video_uploads">Téléversement automatique des vidéos</string>
   <string name="prefs_camera_picture_upload">Envoi d\'images</string>
   <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les images prises par l\'appareil photo</string>
   <string name="prefs_camera_picture_upload_path_title">Chemin d\'accès au répertoire de téléversement des images</string>
+  <string name="prefs_camera_picture_upload_conditions_title">Conditions d\'exécution des téléversements</string>
+  <string name="prefs_camera_picture_upload_conditions_summary">Les téléversements démarreront quand toutes les options seront remplies</string>
   <string name="prefs_camera_picture_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
   <string name="prefs_camera_video_upload">Téléversement de vidéo</string>
   <string name="prefs_camera_video_upload_summary">Téléverser automatiquement les vidéos enregistrées par la caméra</string>
@@ -81,12 +84,15 @@
   <string name="prefs_enable_logging">Activer la journalisation</string>
   <string name="prefs_send_feedback">Envoyez des commentaires</string>
   <string name="prefs_app_version">Version de l\'application</string>
+  <string name="prefs_app_version_summary">%1$s %2$s version %3$s (%4$s)</string>
   <string name="pattern_enter_pattern">Veuillez saisir votre schéma</string>
   <string name="pattern_configure_pattern">Saisissez votre schéma</string>
   <string name="pattern_remove_pattern">Supprimer votre schéma</string>
   <string name="pattern_incorrect_pattern">Motif incorrect</string>
   <string name="pattern_reenter_pattern">Veullez refaire votre votre schéma</string>
   <string name="pattern_not_same_pattern">Les motifs ne sont pas identiques</string>
+  <string name="pattern_error_set">Une erreur s\'est produite lors du paramétrage du verrouillage par motif </string>
+  <string name="pattern_error_remove">Une erreur s\'est produite lors de la suppression du verrouillage par motif</string>
   <string name="pattern_already_set">Un motif et un code de sécurité ne peuvent être activés en même temps. Veuillez d’abord désactiver le motif</string>
   <string name="passcode_already_set">Un motif et un code de sécurité ne peuvent être activés en même temps. Veuillez d’abord désactiver le code de sécurité</string>
   <string name="pattern_no_longer_required">La saisie du motif ne vous sera plus demandée</string>
@@ -127,9 +133,10 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploader_error_message_source_file_not_found">Le fichier à téléverser n\'a pas été trouvé dans son emplacement. Merci de vérifier si ce fichier existe.</string>
   <string name="uploader_error_message_source_file_not_copied">Une erreur est survenue lors de la copie du fichier vers un dossier temporaire. Merci de recommencer votre envoi.</string>
   <string name="file_list_seconds_ago">il y a quelques secondes</string>
-  <string name="file_list_empty">Il n\'y a rien ici ! Envoyez donc quelque chose :)</string>
-  <string name="file_list_empty_available_offline">Il n’y a pas de fichier hors connexion disponible.</string>
-  <string name="file_list_empty_shared_by_links">Aucun fichier n\'a été partagé avec un lien</string>
+  <string name="file_list_empty_title_all_files">Aucun fichier</string>
+  <string name="file_list_empty_title_shared_by_links">Aucun partage par lien</string>
+  <string name="file_list_empty_subtitle_all_files">Déposez du contenu ou synchronisez vos appareils !</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Les fichiers et dossiers que vous partagez par lien apparaîtront ici</string>
   <string name="file_list_loading">Chargement...</string>
   <string name="file_list_no_app_for_file_type">Aucune application trouvée pour ce type de fichier</string>
   <string name="file_list_no_app_for_perform_action">Aucune application trouvée pour cette action</string>
@@ -149,6 +156,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="filedetails_created">Créé le :</string>
   <string name="filedetails_modified">Modifié le :</string>
   <string name="filedetails_download">Télécharger</string>
+  <string name="filedetails_cancel_btn_content_description">Bouton d\'annulation de téléchargement</string>
   <string name="filedetails_sync_file">Synchroniser</string>
   <string name="filedetails_renamed_in_upload_msg">Le fichier a été renommé en %s pendant le téléversement</string>
   <string name="list_layout">Affichage en liste</string>
@@ -183,6 +191,9 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Le nom de fichier ne doit pas être vide</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Le nom de fichier ne doit pas contenir plus de %d caractères</string>
   <string name="uploader_upload_text_filename_hint">Nom du fichier</string>
+  <string name="uploader_upload_picture_upload_files">%d de nouvelles images vont être téléversées</string>
+  <string name="uploader_upload_video_upload_files">%d de nouvelles vidéos vont être téléversées</string>
+  <string name="uploader_upload_camera_upload_source_path_error">Échec des téléversements depuis l\'appareil photo</string>
   <string name="ssl_certificate_not_trusted">Le certificat du serveur n\'est pas sûr</string>
   <string name="uploads_view_title">Chargements</string>
   <string name="uploads_view_group_current_uploads">En ce moment</string>
@@ -567,8 +578,22 @@ Téléchargez-le ici : %2$s</string>
   <string name="scoped_storage_wizard_intro_button">Commençons</string>
   <string name="scoped_storage_wizard_not_enough_space_warning">⚠️ Votre espace libre est actuellement restreint sur votre appareil. Certains fichiers pourraient ne pas être transférés, veuillez vérifier que tous les fichiers transférés sont bien présents a la fin du transfert.</string>
   <string name="scoped_storage_wizard_migrate_and_clean_button">Migrer maintenant</string>
+  <string name="scoped_storage_wizard_migration_completed_access_files_button">Accéder à vos fichiers</string>
+  <string name="scoped_storage_wizard_migration_in_progress_button">En cours... Merci de patienter</string>
+  <string name="scoped_storage_wizard_title">Plus de sécurité pour vos fichiers</string>
   <!--Security Enforced-->
+  <string name="security_enforced_title">Veuillez s\'il vous plaît sélectionner une option pour vérrouiller l\'application</string>
   <string name="security_enforced_first_option">Code de sécurité</string>
+  <string name="security_enforced_second_option">Verrouillage par motif</string>
+  <string name="folder_upload_some_content_or_sync_devices">Déposez du contenu ou synchronisez vos appareils !</string>
+  <!--Webfinger-->
+  <string name="global_proceed">Exécuter</string>
   <!--Release Notes-->
+  <string name="release_notes_header">Nouveau dans %1$s</string>
+  <string name="release_notes_footer">Merci d\'utiliser %1$s.\n❤</string>
   <string name="release_notes_proceed">Exécuter</string>
+  <string name="release_notes_2.21.2_title1">Afficher dans le navigateur web</string>
+  <!--Open in web-->
+  <string name="ic_action_open_in_web">Afficher dans le navigateur web</string>
+  <string name="open_in_web_error_not_supported">Aucune application ne supporte ce type de fichier</string>
 </resources>

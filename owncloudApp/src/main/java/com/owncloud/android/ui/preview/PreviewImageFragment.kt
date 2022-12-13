@@ -48,14 +48,18 @@ import com.github.chrisbanes.photoview.PhotoView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.PreviewImageFragmentBinding
 import com.owncloud.android.databinding.TopProgressBarBinding
-import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.domain.files.MIME_SVG
+import com.owncloud.android.domain.files.model.MIME_SVG
+import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.files.FileMenuFilter
+import com.owncloud.android.presentation.ui.files.operations.FileOperation
+import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
-import com.owncloud.android.ui.dialog.RemoveFilesDialogFragment
+import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
 
@@ -85,6 +89,8 @@ class PreviewImageFragment : FileFragment() {
     private val binding get() = _binding!!
     private var _bindingTopProgress: TopProgressBarBinding? = null
     private val bindingTopProgress get() = _bindingTopProgress!!
+
+    private val fileOperationsViewModel: FileOperationsViewModel by inject()
 
     /**
      * {@inheritDoc}
@@ -148,7 +154,7 @@ class PreviewImageFragment : FileFragment() {
         account = requireArguments().getParcelable(PreviewAudioFragment.EXTRA_ACCOUNT)
         checkNotNull(account) { "Instanced with a NULL ownCloud Account" }
         checkNotNull(file) { "Instanced with a NULL OCFile" }
-        check(file.isDown) { "There is no local file to preview" }
+        check(file.isAvailableLocally) { "There is no local file to preview" }
 
         binding.message.isVisible = false
         binding.progressWheel.isVisible = true
@@ -167,15 +173,8 @@ class PreviewImageFragment : FileFragment() {
     override fun onStart() {
         super.onStart()
         file?.let {
-            progressController?.startListeningProgressFor(it, account)
             loadAndShowImage()
         }
-    }
-
-    override fun onStop() {
-        Timber.v("onStop starts")
-        progressController?.stopListeningProgressFor(file, account)
-        super.onStop()
     }
 
     /**
@@ -193,7 +192,7 @@ class PreviewImageFragment : FileFragment() {
         super.onPrepareOptionsMenu(menu)
         file?.let {
             // Update the file
-            file = mContainerActivity.storageManager.getFileById(it.fileId)
+            file = mContainerActivity.storageManager.getFileById(it.id ?: -1)
             val fileMenuFilter = FileMenuFilter(
                 it,
                 mContainerActivity.storageManager.account,
@@ -253,7 +252,7 @@ class PreviewImageFragment : FileFragment() {
                 true
             }
             R.id.action_send_file -> {
-                mContainerActivity.fileOperationsHelper.sendDownloadedFile(file)
+                requireActivity().sendDownloadedFilesByShareSheet(listOf(file))
                 true
             }
             R.id.action_sync_file -> {
@@ -261,11 +260,11 @@ class PreviewImageFragment : FileFragment() {
                 true
             }
             R.id.action_set_available_offline -> {
-                mContainerActivity.fileOperationsHelper.toggleAvailableOffline(file, true)
+                fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
                 true
             }
             R.id.action_unset_available_offline -> {
-                mContainerActivity.fileOperationsHelper.toggleAvailableOffline(file, false)
+                fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -290,10 +289,6 @@ class PreviewImageFragment : FileFragment() {
     private fun openFile() {
         mContainerActivity.fileOperationsHelper.openFile(file)
         finish()
-    }
-
-    override fun onTransferServiceConnected() {
-        progressController?.startListeningProgressFor(file, account)
     }
 
     override fun onFileMetadataChanged(updatedFile: OCFile) {
@@ -345,7 +340,7 @@ class PreviewImageFragment : FileFragment() {
         binding.photoView.isVisible = true
     }
 
-    private fun isSVGFile(file: OCFile): Boolean = file.mimetype == MIME_SVG
+    private fun isSVGFile(file: OCFile): Boolean = file.mimeType == MIME_SVG
 
     private fun getBackgroundColor(file: OCFile): Int {
         return if (isSVGFile(file)) Color.WHITE else Color.BLACK

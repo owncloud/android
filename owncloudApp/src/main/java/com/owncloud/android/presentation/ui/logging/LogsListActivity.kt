@@ -101,7 +101,12 @@ class LogsListActivity : AppCompatActivity() {
         val items = viewModel.getLogsFiles()
 
         binding.recyclerViewActivityLogsList.isVisible = items.isNotEmpty()
-        binding.textViewNoLogs.isVisible = items.isEmpty()
+        binding.logsListEmpty.apply {
+            root.isVisible = items.isEmpty()
+            listEmptyDatasetIcon.setImageResource(R.drawable.ic_logs)
+            listEmptyDatasetTitle.setText(R.string.prefs_log_no_logs_list_view)
+            listEmptyDatasetSubTitle.setText(R.string.prefs_log_empty_subtitle)
+        }
 
         recyclerViewLogsAdapter.setData(items)
     }

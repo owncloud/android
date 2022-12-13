@@ -82,7 +82,6 @@
   <string name="uploader_error_message_source_file_not_found">پرونده برای بارگذاری در این موقعیّت پیدا نشد. لطفاً بررسی کنید که پرونده وجود داشته باشد.</string>
   <string name="uploader_error_message_source_file_not_copied">هنگام رونوشت پرونده به یک پوشهٔ موقّت، خطایی رخ داد. لطفاً بعداً دوباره تلاش کنید.</string>
   <string name="file_list_seconds_ago">ثانیه پیش</string>
-  <string name="file_list_empty">هیچ‌چیز این‌جا نیست. چیزی بارگذاری کنید!</string>
   <string name="file_list_loading">در حال بار کردن…</string>
   <string name="file_list_no_app_for_file_type">کاره‌ای برای گونهٔ پرونده پیدا نشد</string>
   <string name="local_file_list_empty">هیچ پرونده‌ای در این پوشه نیست.</string>

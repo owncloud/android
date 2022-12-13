@@ -28,6 +28,7 @@ import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.domain.webfinger.usecases.GetJRDFromWebfingerHostUseCase
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.ContextProvider
@@ -62,6 +63,7 @@ class OCAuthenticationViewModelTest : ViewModelTest() {
     private lateinit var getServerInfoAsyncUseCase: GetServerInfoAsyncUseCase
     private lateinit var supportsOAuth2UseCase: SupportsOAuth2UseCase
     private lateinit var getBaseUrlUseCase: GetBaseUrlUseCase
+    private lateinit var getJRDFromWebfingerHostUseCase: GetJRDFromWebfingerHostUseCase
     private lateinit var contextProvider: ContextProvider
 
     private val commonException = ServerNotReachableException()
@@ -88,6 +90,7 @@ class OCAuthenticationViewModelTest : ViewModelTest() {
         getServerInfoAsyncUseCase = mockk()
         supportsOAuth2UseCase = mockk()
         getBaseUrlUseCase = mockk()
+        getJRDFromWebfingerHostUseCase = mockk()
 
         testCoroutineDispatcher.pauseDispatcher()
 
@@ -97,6 +100,7 @@ class OCAuthenticationViewModelTest : ViewModelTest() {
             getServerInfoAsyncUseCase = getServerInfoAsyncUseCase,
             supportsOAuth2UseCase = supportsOAuth2UseCase,
             getBaseUrlUseCase = getBaseUrlUseCase,
+            getJRDFromWebfingerHostUseCase = getJRDFromWebfingerHostUseCase,
             coroutinesDispatcherProvider = coroutineDispatcherProvider
         )
     }

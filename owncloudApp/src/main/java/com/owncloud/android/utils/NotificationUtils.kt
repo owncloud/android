@@ -34,14 +34,14 @@ import android.os.Process
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.owncloud.android.R
-import com.owncloud.android.datamodel.OCFile
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_EXPIRED_TOKEN
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.ui.authentication.LoginActivity
+import com.owncloud.android.presentation.ui.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.ui.settings.SettingsActivity
 import com.owncloud.android.presentation.ui.settings.SettingsActivity.Companion.KEY_NOTIFICATION_INTENT
-import com.owncloud.android.ui.activity.ConflictsResolveActivity
 import com.owncloud.android.ui.activity.UploadListActivity
 import java.util.Random
 
@@ -168,7 +168,7 @@ object NotificationUtils {
     @JvmStatic
     fun notifyConflict(fileInConflict: OCFile, account: Account?, context: Context) {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val notificationBuilder = newNotificationBuilder(context, FILE_SYNC_CONFLICT_CHANNEL_ID)
+        val notificationBuilder = newNotificationBuilder(context, FILE_SYNC_CONFLICT_NOTIFICATION_CHANNEL_ID)
         notificationBuilder
             .setTicker(context.getString(R.string.conflict_title))
             .setContentTitle(context.getString(R.string.conflict_title))
@@ -183,7 +183,6 @@ object NotificationUtils {
         showConflictActivityIntent.flags = showConflictActivityIntent.flags or Intent.FLAG_ACTIVITY_NEW_TASK or
                 Intent.FLAG_FROM_BACKGROUND
         showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, fileInConflict)
-        showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_ACCOUNT, account)
         notificationBuilder.setContentIntent(
             PendingIntent.getActivity(
                 context, System.currentTimeMillis().toInt(),
@@ -193,8 +192,8 @@ object NotificationUtils {
         var notificationId = 0
 
         // We need a notification id for each file in conflict, let's use the file id but in a safe way
-        if (fileInConflict.fileId.toInt() >= Int.MIN_VALUE && fileInConflict.fileId.toInt() <= Int.MAX_VALUE) {
-            notificationId = fileInConflict.fileId.toInt()
+        if (fileInConflict.id!!.toInt() >= Int.MIN_VALUE && fileInConflict.id!!.toInt() <= Int.MAX_VALUE) {
+            notificationId = fileInConflict.id!!.toInt()
         }
         notificationManager.notify(notificationId, notificationBuilder.build())
     }

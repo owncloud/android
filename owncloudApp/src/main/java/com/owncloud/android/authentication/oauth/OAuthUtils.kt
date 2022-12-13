@@ -31,6 +31,7 @@ import com.owncloud.android.data.authentication.QUERY_PARAMETER_REDIRECT_URI
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_RESPONSE_TYPE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_SCOPE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_STATE
+import com.owncloud.android.data.authentication.QUERY_PARAMETER_USERNAME
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import java.net.URLEncoder
 import java.security.MessageDigest
@@ -99,16 +100,18 @@ class OAuthUtils {
             scope: String,
             codeChallenge: String,
             state: String,
+            username: String?
         ): Uri =
-            authorizationEndpoint.buildUpon()
-                .appendQueryParameter(QUERY_PARAMETER_REDIRECT_URI, redirectUri)
-                .appendQueryParameter(QUERY_PARAMETER_CLIENT_ID, clientId)
-                .appendQueryParameter(QUERY_PARAMETER_RESPONSE_TYPE, responseType)
-                .appendQueryParameter(QUERY_PARAMETER_SCOPE, scope)
-                .appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE, codeChallenge)
-                .appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE_METHOD, CODE_CHALLENGE_METHOD)
-                .appendQueryParameter(QUERY_PARAMETER_STATE, state)
-                .build()
+            authorizationEndpoint.buildUpon().apply {
+                appendQueryParameter(QUERY_PARAMETER_REDIRECT_URI, redirectUri)
+                appendQueryParameter(QUERY_PARAMETER_CLIENT_ID, clientId)
+                appendQueryParameter(QUERY_PARAMETER_RESPONSE_TYPE, responseType)
+                appendQueryParameter(QUERY_PARAMETER_SCOPE, scope)
+                appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE, codeChallenge)
+                appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE_METHOD, CODE_CHALLENGE_METHOD)
+                appendQueryParameter(QUERY_PARAMETER_STATE, state)
+                if (!username.isNullOrEmpty()) appendQueryParameter(QUERY_PARAMETER_USERNAME, username)
+            }.build()
 
         fun buildRedirectUri(context: Context): Uri =
             Uri.Builder()

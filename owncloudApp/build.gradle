@@ -26,7 +26,7 @@ dependencies {
 
     // Image loading
     implementation 'com.github.bumptech.glide:glide:4.13.2'
-    implementation 'com.github.corouteam:GlideToVectorYou:v2.0.0'
+    implementation 'com.github.2coffees1team:GlideToVectorYou:v2.0.0'
 
     // CustomTabs required for OAuth2 and OIDC.
     implementation "androidx.browser:browser:1.4.0"
@@ -93,7 +93,6 @@ dependencies {
 
     debugImplementation "androidx.fragment:fragment-testing:1.4.1"
     debugImplementation 'com.facebook.stetho:stetho:1.6.0'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.9.1'
 }
 
 android {
@@ -105,8 +104,8 @@ android {
 
         testInstrumentationRunner "com.owncloud.android.utils.OCTestAndroidJUnitRunner"
 
-        versionCode = 22100200
-        versionName = "2.21.2"
+        versionCode = 30000000
+        versionName = "3.0"
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
