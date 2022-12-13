@@ -23,9 +23,9 @@ package com.owncloud.android.domain.files.model
 import android.os.Parcelable
 import android.webkit.MimeTypeMap
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
-import com.owncloud.android.domain.ext.isOneOf
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+import com.owncloud.android.domain.ext.isOneOf
 import kotlinx.parcelize.Parcelize
 import java.io.File
 import java.util.Locale
@@ -59,7 +59,7 @@ data class OCFile(
 ) : Parcelable {
 
     val fileName: String
-        get() = File(remotePath).name.let { if (it.isBlank()) ROOT_PATH else it }
+        get() = File(remotePath).name.let { it.ifBlank { ROOT_PATH } }
 
     @Deprecated("Do not use this constructor. Remove it as soon as possible")
     constructor(remotePath: String, mimeType: String, parentId: Long?, owner: String) : this(
@@ -173,7 +173,7 @@ data class OCFile(
         mimeType.startsWith(type) || getMimeTypeFromName()?.startsWith(type) ?: false
 
     fun getMimeTypeFromName(): String? {
-        val extension = remotePath.substringAfterLast('.').toLowerCase(Locale.ROOT)
+        val extension = remotePath.substringAfterLast('.').lowercase(Locale.ROOT)
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
     }
 
