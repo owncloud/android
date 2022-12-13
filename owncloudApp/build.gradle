@@ -121,10 +121,6 @@ android {
         xmlReport false
     }
 
-    adbOptions {
-        timeOutInMs(20 * 60 * 1000)
-    }
-
     signingConfigs {
         release {
             if (System.env.OC_RELEASE_KEYSTORE) {
@@ -176,6 +172,9 @@ android {
     packagingOptions {
         resources.excludes.add("META-INF/*")
     }
+
+    namespace 'com.owncloud.android'
+    testNamespace '${applicationId}.test'
 }
 
 // Updates output file names of a given variant to format

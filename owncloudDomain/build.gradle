@@ -30,6 +30,7 @@ android {
     sourceSets {
         test.java.srcDirs += "src/test-common/java"
     }
+    namespace 'com.owncloud.android.domain'
 }
 
 dependencies {
