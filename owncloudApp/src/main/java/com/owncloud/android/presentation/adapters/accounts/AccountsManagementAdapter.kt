@@ -30,13 +30,12 @@ import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.AccountActionBinding
 import com.owncloud.android.databinding.AccountItemBinding
 import com.owncloud.android.lib.common.OwnCloudAccount
-import com.owncloud.android.presentation.ui.accounts.AccountManagementActivity
 import com.owncloud.android.utils.AvatarUtils
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 import timber.log.Timber
 
-class AccountsManagementAdapter(private val accountListener: AccountManagementActivity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AccountsManagementAdapter(private val accountListener: AccountAdapterListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var accountItemsList = listOf<AccountRecyclerItem>()
 
@@ -72,7 +71,7 @@ class AccountsManagementAdapter(private val accountListener: AccountManagementAc
                     holder.binding.name.text = oca.displayName
                 } catch (e: Exception) {
                     Timber.w(
-                        "Account not found right after being read :\\ ; using account name instead of display " + "name"
+                        "Account not found right after being read :\\ ; using account name instead of display name"
                     )
                     holder.binding.name.text = AccountUtils.getUsernameOfAccount(account.name)
                 }

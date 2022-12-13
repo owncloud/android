@@ -55,19 +55,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT as EXTRA_ACCOUNT_LOGIN_ACTIVITY
 
-const val KEY_CURRENT_ACCOUNT_CHANGED = "CURRENT_ACCOUNT_CHANGED"
-const val KEY_ACCOUNT_LIST_CHANGED = "ACCOUNT_LIST_CHANGED"
+class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
 
-
-abstract class AccountManagementActivity : FileActivity(), AccountsManagementAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
-
-    abstract var accountListAdapter: AccountsManagementAdapter
+    private var accountListAdapter: AccountsManagementAdapter = AccountsManagementAdapter(this)
     private lateinit var originalAccounts: Set<String>
     private lateinit var originalCurrentAccount: String
     private lateinit var accountBeingRemoved: String
     private lateinit var tintedCheck: Drawable
-    private lateinit var whiteCheck: Drawable
-
 
     private val removeAccountDialogViewModel: RemoveAccountDialogViewModel by viewModel()
     private val accountsManagementViewModel: AccountsManagementViewModel by viewModel()
@@ -76,11 +70,9 @@ abstract class AccountManagementActivity : FileActivity(), AccountsManagementAda
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        accountListAdapter = AccountsManagementAdapter(this)
 
         setContentView(R.layout.accounts_layout)
-        whiteCheck = ContextCompat.getDrawable(this, R.drawable.ic_current_white)!!
-        tintedCheck = DrawableCompat.wrap(whiteCheck)
+        tintedCheck = DrawableCompat.wrap(ContextCompat.getDrawable(this, R.drawable.ic_current_white)!!)
         val tint = ContextCompat.getColor(this, R.color.actionbar_start_color)
         DrawableCompat.setTint(tintedCheck, tint)
 
@@ -88,7 +80,7 @@ abstract class AccountManagementActivity : FileActivity(), AccountsManagementAda
         recyclerView.run {
             filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(applicationContext)
             adapter = accountListAdapter
-            layoutManager = LinearLayoutManager(this@AccountManagementActivity)
+            layoutManager = LinearLayoutManager(this@AccountsManagementActivity)
         }
 
         setupStandardToolbar(
@@ -116,7 +108,7 @@ abstract class AccountManagementActivity : FileActivity(), AccountsManagementAda
      */
     private fun toAccountNameSet(accountList: Array<Account>): Set<String> {
         val actualAccounts: MutableSet<String> = HashSet(accountList.size)
-        accountList.forEach{ account ->
+        accountList.forEach { account ->
             actualAccounts.add(account.name)
         }
         return actualAccounts
@@ -297,5 +289,10 @@ abstract class AccountManagementActivity : FileActivity(), AccountsManagementAda
             else -> retval = super.onOptionsItemSelected(item)
         }
         return retval
+    }
+
+    companion object {
+        const val KEY_CURRENT_ACCOUNT_CHANGED = "CURRENT_ACCOUNT_CHANGED"
+        const val KEY_ACCOUNT_LIST_CHANGED = "ACCOUNT_LIST_CHANGED"
     }
 }

@@ -27,7 +27,6 @@ package com.owncloud.android.ui.activity
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerFuture
-import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
@@ -61,9 +60,9 @@ import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.presentation.common.DrawerViewModel
 import com.owncloud.android.presentation.avatar.AvatarUtils
-import com.owncloud.android.presentation.ui.accounts.AccountManagementActivity
-import com.owncloud.android.presentation.ui.accounts.KEY_ACCOUNT_LIST_CHANGED
-import com.owncloud.android.presentation.ui.accounts.KEY_CURRENT_ACCOUNT_CHANGED
+import com.owncloud.android.presentation.ui.accounts.AccountsManagementActivity
+import com.owncloud.android.presentation.ui.accounts.AccountsManagementActivity.Companion.KEY_ACCOUNT_LIST_CHANGED
+import com.owncloud.android.presentation.ui.accounts.AccountsManagementActivity.Companion.KEY_CURRENT_ACCOUNT_CHANGED
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -183,7 +182,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                 }
                 R.id.drawer_menu_account_add -> createAccount(false)
                 R.id.drawer_menu_account_manage -> {
-                    val manageAccountsIntent = Intent(applicationContext, AccountManagementActivity::class.java)
+                    val manageAccountsIntent = Intent(applicationContext, AccountsManagementActivity::class.java)
                     startActivityForResult(manageAccountsIntent, ACTION_MANAGE_ACCOUNTS)
                 }
                 R.id.drawer_menu_feedback -> openFeedback()

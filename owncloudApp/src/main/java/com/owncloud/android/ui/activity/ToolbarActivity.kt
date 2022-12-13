@@ -34,7 +34,7 @@ import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.avatar.AvatarUtils
-import com.owncloud.android.presentation.ui.accounts.AccountManagementActivity
+import com.owncloud.android.presentation.ui.accounts.AccountsManagementActivity
 
 /**
  * Base class providing toolbar registration functionality, see [.setupToolbar].
@@ -105,7 +105,7 @@ abstract class ToolbarActivity : BaseActivity() {
             baseContext.resources.getDimension(R.dimen.toolbar_avatar_radius)
         )
         avatarView.setOnClickListener {
-            startActivity(Intent(baseContext, AccountManagementActivity::class.java))
+            startActivity(Intent(baseContext, AccountsManagementActivity::class.java))
         }
     }
 

@@ -29,7 +29,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.presentation.manager.AvatarManager
-import com.owncloud.android.presentation.ui.accounts.AccountManagementActivity
+import com.owncloud.android.presentation.ui.accounts.AccountsManagementActivity
 import com.owncloud.android.presentation.viewmodels.accounts.AccountsManagementViewModel
 import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
 import com.owncloud.android.utils.matchers.assertChildCount
@@ -47,7 +47,7 @@ import org.koin.dsl.module
 
 class AccountsManagementActivityTest {
 
-    private lateinit var activityScenario: ActivityScenario<AccountManagementActivity>
+    private lateinit var activityScenario: ActivityScenario<AccountsManagementActivity>
 
     private lateinit var accountsManagementViewModel: AccountsManagementViewModel
     private lateinit var drawerViewModel: DrawerViewModel
@@ -59,7 +59,7 @@ class AccountsManagementActivityTest {
         every { drawerViewModel.getAccounts(any()) } returns accounts.toList()
         every { drawerViewModel.getCurrentAccount(any()) } returns account
         every { avatarManager.getAvatarForAccount(any(), any(), any()) } returns null
-        activityScenario = ActivityScenario.launch(AccountManagementActivity::class.java)
+        activityScenario = ActivityScenario.launch(AccountsManagementActivity::class.java)
     }
 
     @Before
@@ -104,6 +104,8 @@ class AccountsManagementActivityTest {
     fun testChildCountEmptyAddAccountStays() {
         launchTest(accounts = emptyArray(), account = null)
         R.id.account_list_recycler_view.assertChildCount(1)
+        onView(withId(R.id.account_list_recycler_view)).check(matches(hasDescendant(withText(R.string.prefs_add_account))))
+
     }
 
     @Test
