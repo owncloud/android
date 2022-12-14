@@ -89,7 +89,7 @@ class UploadFileInConflictUseCase(
             createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER
         )
 
-        return transferRepository.storeTransfer(ocTransfer).also {
+        return transferRepository.saveTransfer(ocTransfer).also {
             Timber.i("Upload of $uploadPath has been stored in the uploads database with id: $it")
         }
     }

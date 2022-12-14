@@ -26,7 +26,7 @@ import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
 
 interface LocalTransferDataSource {
-    fun storeTransfer(transfer: OCTransfer): Long
+    fun saveTransfer(transfer: OCTransfer): Long
     fun updateTransfer(transfer: OCTransfer)
     fun updateTransferStatusToInProgressById(id: Long)
     fun updateTransferStatusToEnqueuedById(id: Long)

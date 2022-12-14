@@ -301,7 +301,7 @@ class CameraUploadsWorker(
             createdBy = createdByWorker
         )
 
-        return transferRepository.storeTransfer(ocTransfer)
+        return transferRepository.saveTransfer(ocTransfer)
     }
 
     companion object {
