@@ -37,11 +37,11 @@ import com.andrognito.patternlockview.listener.PatternLockViewListener
 import com.andrognito.patternlockview.utils.PatternLockUtils
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.databinding.ActivityPatternLockBinding
 import com.owncloud.android.extensions.showBiometricDialog
 import com.owncloud.android.interfaces.BiometricStatus
-import com.owncloud.android.interfaces.IEnableBiometrics
+import com.owncloud.android.interfaces.EnableBiometrics
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
@@ -50,7 +50,7 @@ import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class PatternActivity : AppCompatActivity(), IEnableBiometrics {
+class PatternActivity : AppCompatActivity(), EnableBiometrics {
 
     // ViewModel
     private val patternViewModel by viewModel<PatternViewModel>()
@@ -217,7 +217,7 @@ class PatternActivity : AppCompatActivity(), IEnableBiometrics {
     private fun handleActionCheck() {
         if (patternViewModel.checkPatternIsValid(patternValue)) {
             binding.errorPattern.visibility = View.INVISIBLE
-            val preferencesProvider = SharedPreferencesProviderImpl(applicationContext)
+            val preferencesProvider = OCSharedPreferencesProvider(applicationContext)
             preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, SystemClock.elapsedRealtime())
             PatternManager.onActivityStopped(this)
             finish()

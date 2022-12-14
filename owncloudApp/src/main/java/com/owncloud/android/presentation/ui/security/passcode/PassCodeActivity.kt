@@ -45,7 +45,7 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.showBiometricDialog
 import com.owncloud.android.interfaces.BiometricStatus
-import com.owncloud.android.interfaces.IEnableBiometrics
+import com.owncloud.android.interfaces.EnableBiometrics
 import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
 import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
@@ -54,7 +54,7 @@ import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, IEnableBiometrics {
+class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiometrics {
 
     // ViewModel
     private val passCodeViewModel: PassCodeViewModel by viewModel {

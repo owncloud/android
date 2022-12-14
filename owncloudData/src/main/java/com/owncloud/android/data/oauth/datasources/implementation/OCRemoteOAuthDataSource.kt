@@ -17,11 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.oauth.datasource.impl
+package com.owncloud.android.data.oauth.datasources.implementation
 
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
+import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
@@ -34,7 +34,7 @@ import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 import com.owncloud.android.lib.resources.oauth.responses.TokenResponse as RemoteTokenResponse
 
-class RemoteOAuthDataSourceImpl(
+class OCRemoteOAuthDataSource(
     private val clientManager: ClientManager,
     private val oidcService: OIDCService,
 ) : RemoteOAuthDataSource {

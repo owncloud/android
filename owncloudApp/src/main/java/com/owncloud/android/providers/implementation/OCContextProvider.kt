@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.providers.impl
+package com.owncloud.android.providers.implementation
 
 import android.content.Context
 import com.owncloud.android.providers.ContextProvider

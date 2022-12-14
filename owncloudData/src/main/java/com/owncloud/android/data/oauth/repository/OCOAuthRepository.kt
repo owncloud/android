@@ -16,18 +16,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.oauth.datasource
+package com.owncloud.android.data.oauth.repository
 
+import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
+import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 
-interface RemoteOAuthDataSource {
-    fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration
-    fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse
+class OCOAuthRepository(
+    private val oidcRemoteOAuthDataSource: RemoteOAuthDataSource
+) : OAuthRepository {
+    override fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration =
+        oidcRemoteOAuthDataSource.performOIDCDiscovery(baseUrl)
 
-    fun registerClient(clientRegistrationRequest: ClientRegistrationRequest): ClientRegistrationInfo
+    override fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse =
+        oidcRemoteOAuthDataSource.performTokenRequest(tokenRequest)
 
+    override fun registerClient(clientRegistrationRequest: ClientRegistrationRequest): ClientRegistrationInfo =
+        oidcRemoteOAuthDataSource.registerClient(clientRegistrationRequest)
 }

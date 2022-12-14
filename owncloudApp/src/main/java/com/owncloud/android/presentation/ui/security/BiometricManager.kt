@@ -28,7 +28,7 @@ import android.os.SystemClock
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import com.owncloud.android.MainApp.Companion.appContext
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeManager.isPassCodeEnabled
 import com.owncloud.android.presentation.ui.security.PatternManager.isPatternEnabled
 import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
@@ -40,7 +40,7 @@ object BiometricManager {
     private val exemptOfBiometricActivities: MutableSet<Class<*>> =
         mutableSetOf(BiometricActivity::class.java, PassCodeActivity::class.java, PatternActivity::class.java)
     private val visibleActivities: MutableSet<Class<*>> = mutableSetOf()
-    private val preferencesProvider = SharedPreferencesProviderImpl(appContext)
+    private val preferencesProvider = OCSharedPreferencesProvider(appContext)
     private val biometricManager: BiometricManager = BiometricManager.from(appContext)
 
     fun onActivityStarted(activity: Activity) {

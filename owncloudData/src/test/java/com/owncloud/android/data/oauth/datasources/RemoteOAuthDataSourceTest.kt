@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.oauth.datasource
+package com.owncloud.android.data.oauth.datasources
 
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.oauth.OC_REMOTE_CLIENT_REGISTRATION_PARAMS
@@ -25,7 +25,7 @@ import com.owncloud.android.data.oauth.OC_REMOTE_CLIENT_REGISTRATION_RESPONSE
 import com.owncloud.android.data.oauth.OC_REMOTE_OIDC_DISCOVERY_RESPONSE
 import com.owncloud.android.data.oauth.OC_REMOTE_TOKEN_REQUEST_PARAMS_ACCESS
 import com.owncloud.android.data.oauth.OC_REMOTE_TOKEN_RESPONSE
-import com.owncloud.android.data.oauth.datasource.impl.RemoteOAuthDataSourceImpl
+import com.owncloud.android.data.oauth.datasources.implementation.OCRemoteOAuthDataSource
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.oauth.responses.ClientRegistrationResponse
@@ -58,7 +58,7 @@ class RemoteOAuthDataSourceTest {
     fun init() {
         every { clientManager.getClientForAnonymousCredentials(any(), any()) } returns ocClientMocked
 
-        remoteOAuthDataSource = RemoteOAuthDataSourceImpl(
+        remoteOAuthDataSource = OCRemoteOAuthDataSource(
             clientManager = clientManager,
             oidcService = oidcService,
         )

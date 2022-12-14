@@ -27,14 +27,14 @@ import android.os.Build
 import android.os.PowerManager
 import android.os.SystemClock
 import com.owncloud.android.MainApp.Companion.appContext
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import kotlin.math.abs
 
 object PatternManager {
 
     private val exemptOfPatternActivities: MutableSet<Class<*>> = mutableSetOf(PatternActivity::class.java)
     private val visibleActivities: MutableSet<Class<*>> = mutableSetOf()
-    private val preferencesProvider = SharedPreferencesProviderImpl(appContext)
+    private val preferencesProvider = OCSharedPreferencesProvider(appContext)
 
     fun onActivityStarted(activity: Activity) {
         if (!exemptOfPatternActivities.contains(activity.javaClass) && patternShouldBeRequested()) {

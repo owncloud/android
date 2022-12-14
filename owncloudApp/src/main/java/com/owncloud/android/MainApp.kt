@@ -34,7 +34,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.core.content.pm.PackageInfoCompat
 import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.dependecyinjection.commonModule
@@ -163,7 +163,7 @@ class MainApp : Application() {
     }
 
     private fun startLogsIfEnabled() {
-        val preferenceProvider = SharedPreferencesProviderImpl(applicationContext)
+        val preferenceProvider = OCSharedPreferencesProvider(applicationContext)
 
         if (BuildConfig.DEBUG) {
             val alreadySet = preferenceProvider.containsPreference(PREFERENCE_ENABLE_LOGGING)

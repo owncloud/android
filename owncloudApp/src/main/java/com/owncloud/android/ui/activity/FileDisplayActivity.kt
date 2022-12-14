@@ -67,7 +67,7 @@ import com.owncloud.android.extensions.openOCFile
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.interfaces.ISecurityEnforced
+import com.owncloud.android.interfaces.SecurityEnforced
 import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
@@ -118,7 +118,7 @@ import kotlin.coroutines.CoroutineContext
 class FileDisplayActivity : FileActivity(),
     CoroutineScope,
     FileFragment.ContainerActivity,
-    ISecurityEnforced,
+    SecurityEnforced,
     MainFileListFragment.FileActions,
     MainFileListFragment.UploadActions {
 

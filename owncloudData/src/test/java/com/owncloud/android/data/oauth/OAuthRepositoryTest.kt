@@ -18,7 +18,8 @@
  */
 package com.owncloud.android.data.oauth
 
-import com.owncloud.android.data.oauth.datasource.RemoteOAuthDataSource
+import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
+import com.owncloud.android.data.oauth.repository.OCOAuthRepository
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
@@ -34,7 +35,7 @@ import org.junit.Test
 class OAuthRepositoryTest {
 
     private val remoteOAuthDataSource = mockk<RemoteOAuthDataSource>(relaxed = true)
-    private val oAuthRepository: OAuthRepository = OAuthRepositoryImpl(remoteOAuthDataSource)
+    private val oAuthRepository: OAuthRepository = OCOAuthRepository(remoteOAuthDataSource)
 
     @Test
     fun `perform oidc discovery - ok`() {

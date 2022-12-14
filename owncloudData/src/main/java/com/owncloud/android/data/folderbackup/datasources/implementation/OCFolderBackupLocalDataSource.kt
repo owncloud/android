@@ -29,7 +29,7 @@ import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class FolderBackupLocalDataSourceImpl(
+class OCFolderBackupLocalDataSource(
     private val folderBackupDao: FolderBackupDao,
 ) : FolderBackupLocalDataSource {
 

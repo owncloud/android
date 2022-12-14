@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Fernando Sanz Velasco
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,19 +20,10 @@
 
 package com.owncloud.android.interfaces
 
-interface ISecurityEnforced {
-    fun optionLockSelected(type: LockType)
+interface EnableBiometrics {
+    fun onOptionSelected(optionSelected: BiometricStatus)
 }
 
-enum class LockType() {
-    PASSCODE, PATTERN;
-
-    companion object {
-        fun parseFromInteger(value: Int): LockType {
-            return when (value) {
-                0 -> PASSCODE
-                else -> PATTERN
-            }
-        }
-    }
+enum class BiometricStatus {
+    ENABLED_BY_USER, DISABLED_BY_USER
 }

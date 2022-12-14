@@ -24,7 +24,7 @@ import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguratio
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import kotlinx.coroutines.flow.Flow
 
-class FolderBackupRepositoryImpl(
+class OCFolderBackupRepository(
     private val folderBackupLocalDataSource: FolderBackupLocalDataSource
 ) : FolderBackupRepository {
 
