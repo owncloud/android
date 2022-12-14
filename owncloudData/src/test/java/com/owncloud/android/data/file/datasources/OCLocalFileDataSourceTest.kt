@@ -174,20 +174,20 @@ class OCLocalFileDataSourceTest {
 
     @Test
     fun `remove file - ok`() {
-        every { dao.deleteFileWithId(any()) } returns Unit
+        every { dao.deleteFileById(any()) } returns Unit
 
-        localDataSource.removeFile(DUMMY_FILE_ENTITY.id)
+        localDataSource.deleteFile(DUMMY_FILE_ENTITY.id)
 
-        verify { dao.deleteFileWithId(DUMMY_FILE_ENTITY.id) }
+        verify { dao.deleteFileById(DUMMY_FILE_ENTITY.id) }
     }
 
     @Test(expected = Exception::class)
     fun `remove file - ko`() {
-        every { dao.deleteFileWithId(any()) } throws Exception()
+        every { dao.deleteFileById(any()) } throws Exception()
 
-        localDataSource.removeFile(DUMMY_FILE_ENTITY.id)
+        localDataSource.deleteFile(DUMMY_FILE_ENTITY.id)
 
-        verify { dao.deleteFileWithId(DUMMY_FILE_ENTITY.id) }
+        verify { dao.deleteFileById(DUMMY_FILE_ENTITY.id) }
     }
 
     companion object {

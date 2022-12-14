@@ -49,8 +49,8 @@ interface LocalFileDataSource {
     fun saveFile(file: OCFile)
     fun saveConflict(fileId: Long, eTagInConflict: String)
     fun cleanConflict(fileId: Long)
-    fun removeFile(fileId: Long)
-    fun removeFilesForAccount(accountName: String)
+    fun deleteFile(fileId: Long)
+    fun deleteFilesForAccount(accountName: String)
     fun renameFile(fileToRename: OCFile, finalRemotePath: String, finalStoragePath: String)
 
     fun disableThumbnailsForFile(fileId: Long)

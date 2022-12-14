@@ -74,11 +74,11 @@ class OCTransferRepository(
         )
     }
 
-    override fun removeTransferById(id: Long) =
-        localTransferDataSource.removeTransferById(id = id)
+    override fun deleteTransferById(id: Long) =
+        localTransferDataSource.deleteTransferById(id = id)
 
-    override fun removeAllTransfersFromAccount(accountName: String) =
-        localTransferDataSource.removeAllTransfersFromAccount(accountName = accountName)
+    override fun deleteAllTransfersFromAccount(accountName: String) =
+        localTransferDataSource.deleteAllTransfersFromAccount(accountName = accountName)
 
     override fun getTransferById(id: Long): OCTransfer? =
         localTransferDataSource.getTransferById(id = id)

@@ -304,7 +304,7 @@ interface FileDao {
     }
 
     @Query(DELETE_FILE_WITH_ID)
-    fun deleteFileWithId(id: Long)
+    fun deleteFileById(id: Long)
 
     @Query(UPDATE_FILES_STORAGE_DIRECTORY)
     fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)

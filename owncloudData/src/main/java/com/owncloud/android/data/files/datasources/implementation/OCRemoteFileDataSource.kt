@@ -140,7 +140,7 @@ class OCRemoteFileDataSource(
             listOfRemote.map { remoteFile -> remoteFile.toModel() }
         }
 
-    override fun removeFile(
+    override fun deleteFile(
         remotePath: String,
         accountName: String,
     ) = executeRemoteOperation {

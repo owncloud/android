@@ -71,11 +71,11 @@ class OCLocalTransferDataSource(
         transferDao.updateTransferStorageDirectoryInLocalPath(id, oldDirectory, newDirectory)
     }
 
-    override fun removeTransferById(id: Long) {
+    override fun deleteTransferById(id: Long) {
         transferDao.deleteTransferWithId(id)
     }
 
-    override fun removeAllTransfersFromAccount(accountName: String) {
+    override fun deleteAllTransfersFromAccount(accountName: String) {
         transferDao.deleteTransfersWithAccountName(accountName)
     }
 

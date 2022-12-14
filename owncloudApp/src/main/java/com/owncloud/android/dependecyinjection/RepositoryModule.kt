@@ -32,7 +32,7 @@ import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
 import com.owncloud.android.data.sharing.shares.repository.OCShareRepository
 import com.owncloud.android.data.transfers.repository.OCTransferRepository
 import com.owncloud.android.data.user.repository.OCUserRepository
-import com.owncloud.android.data.webfinger.OCWebfingerRepository
+import com.owncloud.android.data.webfinger.repository.OCWebfingerRepository
 import com.owncloud.android.domain.authentication.AuthenticationRepository
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.camerauploads.FolderBackupRepository

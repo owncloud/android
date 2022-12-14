@@ -96,14 +96,14 @@ class OCFileRepository(
                 )
             } catch (targetNodeDoesNotExist: ConflictException) {
                 // Target node does not exist anymore. Remove target folder from database and local storage and return
-                removeLocalFolderRecursively(ocFile = targetFolder, onlyFromLocalStorage = false)
+                deleteLocalFolderRecursively(ocFile = targetFolder, onlyFromLocalStorage = false)
                 return@copyFile
             } catch (sourceFileDoesNotExist: FileNotFoundException) {
                 // Source file does not exist anymore. Remove file from database and local storage and continue
                 if (ocFile.isFolder) {
-                    removeLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
+                    deleteLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
                 } else {
-                    removeLocalFile(
+                    deleteLocalFile(
                         ocFile = ocFile,
                         onlyFromLocalStorage = false
                     )
@@ -177,14 +177,14 @@ class OCFileRepository(
                 )
             } catch (targetNodeDoesNotExist: ConflictException) {
                 // Target node does not exist anymore. Remove target folder from database and local storage and return
-                removeLocalFolderRecursively(ocFile = targetFile, onlyFromLocalStorage = false)
+                deleteLocalFolderRecursively(ocFile = targetFile, onlyFromLocalStorage = false)
                 return@moveFile
             } catch (sourceFileDoesNotExist: FileNotFoundException) {
                 // Source file does not exist anymore. Remove file from database and local storage and continue
                 if (ocFile.isFolder) {
-                    removeLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
+                    deleteLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
                 } else {
-                    removeLocalFile(
+                    deleteLocalFile(
                         ocFile = ocFile,
                         onlyFromLocalStorage = false
                     )
@@ -289,9 +289,9 @@ class OCFileRepository(
                     localFileDataSource.cleanConflict(ocFile.id!!)
                 }
                 if (ocFile.isFolder) {
-                    removeLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
+                    deleteLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
                 } else {
-                    removeLocalFile(ocFile = ocFile, onlyFromLocalStorage = false)
+                    deleteLocalFile(ocFile = ocFile, onlyFromLocalStorage = false)
                 }
             }
         }
@@ -308,11 +308,11 @@ class OCFileRepository(
         )
     }
 
-    override fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean) {
-        listOfFilesToRemove.forEach { ocFile ->
+    override fun deleteFile(listOfFilesToDelete: List<OCFile>, removeOnlyLocalCopy: Boolean) {
+        listOfFilesToDelete.forEach { ocFile ->
             if (!removeOnlyLocalCopy) {
                 try {
-                    remoteFileDataSource.removeFile(remotePath = ocFile.remotePath, accountName = ocFile.owner)
+                    remoteFileDataSource.deleteFile(remotePath = ocFile.remotePath, accountName = ocFile.owner)
                 } catch (fileNotFoundException: FileNotFoundException) {
                     Timber.i("File ${ocFile.fileName} was not found in server. Let's remove it from local storage")
                 }
@@ -321,9 +321,9 @@ class OCFileRepository(
                 localFileDataSource.cleanConflict(ocFile.id!!)
             }
             if (ocFile.isFolder) {
-                removeLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy)
+                deleteLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy)
             } else {
-                removeLocalFile(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy)
+                deleteLocalFile(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy)
             }
         }
     }
@@ -400,28 +400,28 @@ class OCFileRepository(
         localFileDataSource.cleanWorkersUuid(fileId)
     }
 
-    private fun removeLocalFolderRecursively(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
+    private fun deleteLocalFolderRecursively(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         val folderContent = localFileDataSource.getFolderContent(ocFile.id!!)
 
         // 1. Remove folder content recursively
         folderContent.forEach { file ->
             if (file.isFolder) {
-                removeLocalFolderRecursively(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
+                deleteLocalFolderRecursively(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
             } else {
-                removeLocalFile(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
+                deleteLocalFile(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
             }
         }
 
         // 2. Remove the folder itself
-        removeLocalFile(ocFile = ocFile, onlyFromLocalStorage = onlyFromLocalStorage)
+        deleteLocalFile(ocFile = ocFile, onlyFromLocalStorage = onlyFromLocalStorage)
     }
 
-    private fun removeLocalFile(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
+    private fun deleteLocalFile(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         localStorageProvider.deleteLocalFile(ocFile)
         if (onlyFromLocalStorage) {
             localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null))
         } else {
-            localFileDataSource.removeFile(ocFile.id!!)
+            localFileDataSource.deleteFile(ocFile.id!!)
         }
     }
 }

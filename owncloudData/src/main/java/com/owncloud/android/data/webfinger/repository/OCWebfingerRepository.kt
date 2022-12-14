@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.webfinger
+package com.owncloud.android.data.webfinger.repository
 
 import com.owncloud.android.data.webfinger.datasources.WebfingerRemoteDatasource
 import com.owncloud.android.domain.webfinger.WebfingerRepository

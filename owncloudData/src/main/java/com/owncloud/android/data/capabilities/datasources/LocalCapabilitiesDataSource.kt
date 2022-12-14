@@ -34,5 +34,5 @@ interface LocalCapabilitiesDataSource {
 
     fun insert(ocCapabilities: List<OCCapability>)
 
-    fun removeCapabilitiesForAccount(accountName: String)
+    fun deleteCapabilitiesForAccount(accountName: String)
 }
