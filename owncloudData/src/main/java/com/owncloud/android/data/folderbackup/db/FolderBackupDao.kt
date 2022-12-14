@@ -27,12 +27,12 @@ import com.owncloud.android.data.ProviderMeta
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class FolderBackupDao {
+interface FolderBackupDao {
     @Query(
         "SELECT * from " + ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME + " WHERE " +
                 FolderBackUpEntity.folderBackUpEntityNameField + " = :name"
     )
-    abstract fun getFolderBackUpConfigurationByName(
+    fun getFolderBackUpConfigurationByName(
         name: String
     ): FolderBackUpEntity?
 
@@ -40,15 +40,15 @@ abstract class FolderBackupDao {
         "SELECT * from " + ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME + " WHERE " +
                 FolderBackUpEntity.folderBackUpEntityNameField + " = :name"
     )
-    abstract fun getFolderBackUpConfigurationByNameStream(
+    fun getFolderBackUpConfigurationByNameStream(
         name: String
     ): Flow<FolderBackUpEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(folderBackUpEntity: FolderBackUpEntity): Long
+    fun insert(folderBackUpEntity: FolderBackUpEntity): Long
 
     @Transaction
-    open fun update(folderBackUpEntity: FolderBackUpEntity): Long {
+    fun update(folderBackUpEntity: FolderBackUpEntity): Long {
         delete(folderBackUpEntity.name)
         return insert(folderBackUpEntity)
     }
@@ -57,5 +57,5 @@ abstract class FolderBackupDao {
         "DELETE from " + ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME + " WHERE " +
                 FolderBackUpEntity.folderBackUpEntityNameField + " = :name"
     )
-    abstract fun delete(name: String): Int
+    fun delete(name: String): Int
 }

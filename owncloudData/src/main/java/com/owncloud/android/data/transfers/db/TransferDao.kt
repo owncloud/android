@@ -28,45 +28,45 @@ import androidx.room.Query
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.TRANSFERS_TABLE_NAME
 
 @Dao
-abstract class TransferDao {
+interface TransferDao {
     @Query(SELECT_TRANSFER_WITH_ID)
-    abstract fun getTransferWithId(id: Long): OCTransferEntity?
+    fun getTransferWithId(id: Long): OCTransferEntity?
 
     @Query(SELECT_LAST_TRANSFER_WITH_REMOTE_PATH_AND_ACCOUNT_NAME)
-    abstract fun getLastTransferWithRemotePathAndAccountName(remotePath: String, accountName: String): OCTransferEntity?
+    fun getLastTransferWithRemotePathAndAccountName(remotePath: String, accountName: String): OCTransferEntity?
 
     @Query(SELECT_TRANSFERS_WITH_STATUS)
-    abstract fun getTransfersWithStatus(status: List<Int>): List<OCTransferEntity>
+    fun getTransfersWithStatus(status: List<Int>): List<OCTransferEntity>
 
     @Query(SELECT_ALL_TRANSFERS)
-    abstract fun getAllTransfers(): List<OCTransferEntity>
+    fun getAllTransfers(): List<OCTransferEntity>
 
     @Query(SELECT_ALL_TRANSFERS)
-    abstract fun getAllTransfersAsLiveData(): LiveData<List<OCTransferEntity>>
+    fun getAllTransfersAsLiveData(): LiveData<List<OCTransferEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(ocTransferEntity: OCTransferEntity): Long
+    fun insert(ocTransferEntity: OCTransferEntity): Long
 
     @Query(UPDATE_TRANSFER_STATUS_WITH_ID)
-    abstract fun updateTransferStatusWithId(id: Long, newStatus: Int)
+    fun updateTransferStatusWithId(id: Long, newStatus: Int)
 
     @Query(UPDATE_TRANSFER_WHEN_FINISHED)
-    abstract fun updateTransferWhenFinished(id: Long, status: Int, transferEndTimestamp: Long, lastResult: Int)
+    fun updateTransferWhenFinished(id: Long, status: Int, transferEndTimestamp: Long, lastResult: Int)
 
     @Query(UPDATE_TRANSFER_LOCAL_PATH_WITH_ID)
-    abstract fun updateTransferLocalPath(id: Long, localPath: String)
+    fun updateTransferLocalPath(id: Long, localPath: String)
 
     @Query(UPDATE_TRANSFER_STORAGE_DIRECTORY)
-    abstract fun updateTransferStorageDirectoryInLocalPath(id: Long, oldDirectory: String, newDirectory: String)
+    fun updateTransferStorageDirectoryInLocalPath(id: Long, oldDirectory: String, newDirectory: String)
 
     @Query(DELETE_TRANSFER_WITH_ID)
-    abstract fun deleteTransferWithId(id: Long)
+    fun deleteTransferWithId(id: Long)
 
     @Query(DELETE_TRANSFERS_WITH_ACCOUNT_NAME)
-    abstract fun deleteTransfersWithAccountName(accountName: String)
+    fun deleteTransfersWithAccountName(accountName: String)
 
     @Query(DELETE_TRANSFERS_WITH_STATUS)
-    abstract fun deleteTransfersWithStatus(status: Int)
+    fun deleteTransfersWithStatus(status: Int)
 
     companion object {
         private const val SELECT_TRANSFER_WITH_ID =

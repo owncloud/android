@@ -28,12 +28,12 @@ import androidx.room.Transaction
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
 
 @Dao
-abstract class OCShareDao {
+interface OCShareDao {
     @Query(
         "SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
                 ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " = :remoteId"
     )
-    abstract fun getShareAsLiveData(
+    fun getShareAsLiveData(
         remoteId: String
     ): LiveData<OCShareEntity>
 
@@ -43,24 +43,24 @@ abstract class OCShareDao {
                 ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountOwner AND " +
                 ProviderTableMeta.OCSHARES_SHARE_TYPE + " IN (:shareTypes)"
     )
-    abstract fun getSharesAsLiveData(
+    fun getSharesAsLiveData(
         filePath: String, accountOwner: String, shareTypes: List<Int>
     ): LiveData<List<OCShareEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(ocShare: OCShareEntity): Long
+    fun insert(ocShare: OCShareEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(ocShares: List<OCShareEntity>): List<Long>
+    fun insert(ocShares: List<OCShareEntity>): List<Long>
 
     @Transaction
-    open fun update(ocShare: OCShareEntity): Long {
+    fun update(ocShare: OCShareEntity): Long {
         deleteShare(ocShare.remoteId)
         return insert(ocShare)
     }
 
     @Transaction
-    open fun replaceShares(ocShares: List<OCShareEntity>): List<Long> {
+    fun replaceShares(ocShares: List<OCShareEntity>): List<Long> {
         for (ocShare in ocShares) {
             deleteSharesForFile(ocShare.path, ocShare.accountOwner)
         }
@@ -71,18 +71,18 @@ abstract class OCShareDao {
         "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
                 ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " = :remoteId"
     )
-    abstract fun deleteShare(remoteId: String): Int
+    fun deleteShare(remoteId: String): Int
 
     @Query(
         "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
                 ProviderTableMeta.OCSHARES_PATH + " = :filePath AND " +
                 ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountOwner"
     )
-    abstract fun deleteSharesForFile(filePath: String, accountOwner: String)
+    fun deleteSharesForFile(filePath: String, accountOwner: String)
 
     @Query(
         "DELETE FROM " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
                 ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountName "
     )
-    abstract fun deleteSharesForAccount(accountName: String)
+    fun deleteSharesForAccount(accountName: String)
 }
