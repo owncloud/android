@@ -34,7 +34,7 @@ import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
 class OCLocalTransferDataSource(
     private val transferDao: TransferDao
 ) : LocalTransferDataSource {
-    override fun storeTransfer(transfer: OCTransfer): Long {
+    override fun saveTransfer(transfer: OCTransfer): Long {
         return transferDao.insert(transfer.toEntity())
     }
 
