@@ -64,7 +64,7 @@ interface RemoteFileDataSource {
         accountName: String,
     ): List<OCFile>
 
-    fun removeFile(
+    fun deleteFile(
         remotePath: String,
         accountName: String,
     )

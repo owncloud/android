@@ -142,7 +142,7 @@ class OCCapabilityDaoTest {
 
         assertNotNull(capability1)
 
-        ocCapabilityDao.delete(user1)
+        ocCapabilityDao.deleteByAccountName(user1)
 
         val capability2 = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user1).getLastEmittedValue()
 

@@ -42,8 +42,8 @@ interface TransferRepository {
         oldDirectory: String,
         newDirectory: String
     )
-    fun removeTransferById(id: Long)
-    fun removeAllTransfersFromAccount(accountName: String)
+    fun deleteTransferById(id: Long)
+    fun deleteAllTransfersFromAccount(accountName: String)
     fun getTransferById(id: Long): OCTransfer?
     fun getAllTransfers(): List<OCTransfer>
     fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>>

@@ -38,7 +38,7 @@ class CancelTransfersFromAccountUseCase(
     override fun run(params: Params) {
         workManager.cancelAllWorkByTag(params.accountName)
 
-        transferRepository.removeAllTransfersFromAccount(params.accountName)
+        transferRepository.deleteAllTransfersFromAccount(params.accountName)
 
         Timber.i("Uploads and downloads of ${params.accountName} have been cancelled.")
     }

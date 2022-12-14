@@ -156,11 +156,11 @@ class OCLocalFileDataSource(
         fileDao.updateConflictStatusForFile(fileId, null)
     }
 
-    override fun removeFile(fileId: Long) {
-        fileDao.deleteFileWithId(fileId)
+    override fun deleteFile(fileId: Long) {
+        fileDao.deleteFileById(fileId)
     }
 
-    override fun removeFilesForAccount(accountName: String) {
+    override fun deleteFilesForAccount(accountName: String) {
         fileDao.deleteFilesForAccount(accountName)
     }
 

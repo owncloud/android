@@ -45,14 +45,14 @@ interface OCCapabilityDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrReplace(ocCapabilities: List<OCCapabilityEntity>): List<Long>
 
-    @Query(DELETE)
-    fun delete(accountName: String)
+    @Query(DELETE_CAPABILITIES_BY_ACCOUNTNAME)
+    fun deleteByAccountName(accountName: String)
 
     @Transaction
     fun replace(ocCapabilities: List<OCCapabilityEntity>) {
         ocCapabilities.forEach { ocCapability ->
             ocCapability.accountName?.run {
-                delete(this)
+                deleteByAccountName(this)
             }
         }
         insertOrReplace(ocCapabilities)
@@ -64,7 +64,7 @@ interface OCCapabilityDao {
             FROM ${ProviderTableMeta.CAPABILITIES_TABLE_NAME}
             WHERE ${ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME} = :accountName
         """
-        private const val DELETE = """
+        private const val DELETE_CAPABILITIES_BY_ACCOUNTNAME = """
             DELETE
             FROM ${ProviderTableMeta.CAPABILITIES_TABLE_NAME}
             WHERE ${ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME} = :accountName

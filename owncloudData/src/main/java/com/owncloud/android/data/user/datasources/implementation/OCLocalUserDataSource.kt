@@ -43,7 +43,7 @@ class OCLocalUserDataSource(
         }
     }
 
-    override fun removeQuotaForAccount(accountName: String) {
+    override fun deleteQuotaForAccount(accountName: String) {
         userDao.deleteQuotaForAccount(accountName = accountName)
     }
 
