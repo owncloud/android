@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.folderbackup.db
 
 import androidx.room.Dao
@@ -28,18 +29,12 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FolderBackupDao {
-    @Query(
-        "SELECT * from " + ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME + " WHERE " +
-                FolderBackUpEntity.folderBackUpEntityNameField + " = :name"
-    )
+    @Query(SELECT)
     fun getFolderBackUpConfigurationByName(
         name: String
     ): FolderBackUpEntity?
 
-    @Query(
-        "SELECT * from " + ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME + " WHERE " +
-                FolderBackUpEntity.folderBackUpEntityNameField + " = :name"
-    )
+    @Query(SELECT)
     fun getFolderBackUpConfigurationByNameStream(
         name: String
     ): Flow<FolderBackUpEntity?>
@@ -47,15 +42,26 @@ interface FolderBackupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(folderBackUpEntity: FolderBackUpEntity): Long
 
+    @Query(DELETE)
+    fun delete(name: String): Int
+
     @Transaction
     fun update(folderBackUpEntity: FolderBackUpEntity): Long {
         delete(folderBackUpEntity.name)
         return insert(folderBackUpEntity)
     }
 
-    @Query(
-        "DELETE from " + ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME + " WHERE " +
-                FolderBackUpEntity.folderBackUpEntityNameField + " = :name"
-    )
-    fun delete(name: String): Int
+    companion object {
+        private const val SELECT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME}
+            WHERE name = :name
+        """
+
+        private const val DELETE = """
+            DELETE
+            FROM ${ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME}
+            WHERE name = :name
+        """
+    }
 }

@@ -31,12 +31,9 @@ data class FolderBackUpEntity(
     val uploadPath: String,
     val wifiOnly: Boolean,
     val chargingOnly: Boolean,
-    @ColumnInfo(name = folderBackUpEntityNameField) val name: String,
+    @ColumnInfo(name = "name")
+    val name: String,
     val lastSyncTimestamp: Long,
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
-
-    companion object {
-        internal const val folderBackUpEntityNameField = "name"
-    }
 }

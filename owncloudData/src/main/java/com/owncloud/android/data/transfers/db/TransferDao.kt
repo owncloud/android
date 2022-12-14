@@ -69,59 +69,71 @@ interface TransferDao {
     fun deleteTransfersWithStatus(status: Int)
 
     companion object {
-        private const val SELECT_TRANSFER_WITH_ID =
-            "SELECT * " +
-                    "FROM $TRANSFERS_TABLE_NAME " +
-                    "WHERE id = :id"
+        private const val SELECT_TRANSFER_WITH_ID = """
+            SELECT *
+            FROM $TRANSFERS_TABLE_NAME
+            WHERE id = :id
+        """
 
-        private const val SELECT_LAST_TRANSFER_WITH_REMOTE_PATH_AND_ACCOUNT_NAME =
-            "SELECT * " +
-                    "FROM $TRANSFERS_TABLE_NAME " +
-                    "WHERE remotePath = :remotePath AND accountName = :accountName " +
-                    "ORDER BY transferEndTimestamp DESC " +
-                    "LIMIT 1"
+        private const val SELECT_LAST_TRANSFER_WITH_REMOTE_PATH_AND_ACCOUNT_NAME = """
+            SELECT *
+            FROM $TRANSFERS_TABLE_NAME
+            WHERE remotePath = :remotePath AND accountName = :accountName
+            ORDER BY transferEndTimestamp DESC
+            LIMIT 1
+        """
 
-        private const val SELECT_TRANSFERS_WITH_STATUS =
-            "SELECT * " +
-                    "FROM $TRANSFERS_TABLE_NAME " +
-                    "WHERE status IN (:status)"
+        private const val SELECT_TRANSFERS_WITH_STATUS = """
+            SELECT *
+            FROM $TRANSFERS_TABLE_NAME
+            WHERE status IN (:status)
+        """
 
-        private const val SELECT_ALL_TRANSFERS =
-            "SELECT * " +
-                    "FROM $TRANSFERS_TABLE_NAME "
+        private const val SELECT_ALL_TRANSFERS = """
+            SELECT *
+            FROM $TRANSFERS_TABLE_NAME
+        """
 
-        private const val UPDATE_TRANSFER_STATUS_WITH_ID =
-            "UPDATE $TRANSFERS_TABLE_NAME " +
-                    "SET status = :newStatus " +
-                    "WHERE id = :id"
+        private const val UPDATE_TRANSFER_STATUS_WITH_ID = """
+            UPDATE $TRANSFERS_TABLE_NAME
+            SET status = :newStatus
+            WHERE id = :id
+        """
 
-        private const val UPDATE_TRANSFER_WHEN_FINISHED =
-            "UPDATE $TRANSFERS_TABLE_NAME " +
-                    "SET status = :status, " +
-                    "transferEndTimestamp = :transferEndTimestamp," +
-                    "lastResult = :lastResult " +
-                    "WHERE id = :id"
+        private const val UPDATE_TRANSFER_WHEN_FINISHED = """
+            UPDATE $TRANSFERS_TABLE_NAME
+            SET status = :status, transferEndTimestamp = :transferEndTimestamp, lastResult = :lastResult
+            WHERE id = :id
+        """
 
-        private const val UPDATE_TRANSFER_LOCAL_PATH_WITH_ID =
-            "UPDATE $TRANSFERS_TABLE_NAME " +
-                    "SET localPath = :localPath " +
-                    "WHERE id = :id"
+        private const val UPDATE_TRANSFER_LOCAL_PATH_WITH_ID = """
+            UPDATE $TRANSFERS_TABLE_NAME
+            SET localPath = :localPath
+            WHERE id = :id
+        """
 
-        private const val UPDATE_TRANSFER_STORAGE_DIRECTORY =
-            "UPDATE $TRANSFERS_TABLE_NAME " +
-                    "SET localPath = `REPLACE`(localPath, :oldDirectory, :newDirectory) " +
-                    "WHERE id = :id"
+        private const val UPDATE_TRANSFER_STORAGE_DIRECTORY = """
+            UPDATE $TRANSFERS_TABLE_NAME
+            SET localPath = `REPLACE`(localPath, :oldDirectory, :newDirectory)
+            WHERE id = :id
+        """
 
-        private const val DELETE_TRANSFER_WITH_ID =
-            "DELETE FROM $TRANSFERS_TABLE_NAME " +
-                    "WHERE id = :id"
+        private const val DELETE_TRANSFER_WITH_ID = """
+            DELETE
+            FROM $TRANSFERS_TABLE_NAME
+            WHERE id = :id
+        """
 
-        private const val DELETE_TRANSFERS_WITH_ACCOUNT_NAME =
-            "DELETE FROM $TRANSFERS_TABLE_NAME " +
-                    "WHERE accountName = :accountName"
+        private const val DELETE_TRANSFERS_WITH_ACCOUNT_NAME = """
+            DELETE
+            FROM $TRANSFERS_TABLE_NAME
+            WHERE accountName = :accountName
+        """
 
-        private const val DELETE_TRANSFERS_WITH_STATUS =
-            "DELETE FROM $TRANSFERS_TABLE_NAME " +
-                    "WHERE status = :status"
+        private const val DELETE_TRANSFERS_WITH_STATUS = """
+            DELETE
+            FROM $TRANSFERS_TABLE_NAME
+            WHERE status = :status
+        """
     }
 }
