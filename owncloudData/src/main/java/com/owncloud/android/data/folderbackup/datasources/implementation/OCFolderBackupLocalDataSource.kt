@@ -45,8 +45,8 @@ class OCFolderBackupLocalDataSource(
         )
     }
 
-    override fun getFolderBackupConfigurationStreamByName(name: String): Flow<FolderBackUpConfiguration?> =
-        folderBackupDao.getFolderBackUpConfigurationByNameStream(name = name).map { it?.toModel() }
+    override fun getFolderBackupConfigurationByNameAsFlow(name: String): Flow<FolderBackUpConfiguration?> =
+        folderBackupDao.getFolderBackUpConfigurationByNameAsFlow(name = name).map { it?.toModel() }
 
     override fun saveFolderBackupConfiguration(folderBackUpConfiguration: FolderBackUpConfiguration) {
         folderBackupDao.update(folderBackUpConfiguration.toEntity())

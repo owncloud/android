@@ -27,7 +27,7 @@ class GetFolderContentAsStreamUseCase(
     private val repository: FileRepository
 ) : BaseUseCase<Flow<List<OCFileWithSyncInfo>>, GetFolderContentAsStreamUseCase.Params>() {
 
-    override fun run(params: Params) = repository.getFolderContentWithSyncInfoAsStream(params.folderId)
+    override fun run(params: Params) = repository.getFolderContentWithSyncInfoAsFlow(params.folderId)
 
     data class Params(val folderId: Long)
 

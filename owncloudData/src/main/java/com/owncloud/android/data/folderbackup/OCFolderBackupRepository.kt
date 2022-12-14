@@ -31,8 +31,8 @@ class OCFolderBackupRepository(
     override fun getCameraUploadsConfiguration(): CameraUploadsConfiguration? =
         folderBackupLocalDataSource.getCameraUploadsConfiguration()
 
-    override fun getFolderBackupConfigurationStreamByName(name: String): Flow<FolderBackUpConfiguration?> =
-        folderBackupLocalDataSource.getFolderBackupConfigurationStreamByName(name)
+    override fun getFolderBackupConfigurationByNameAsFlow(name: String): Flow<FolderBackUpConfiguration?> =
+        folderBackupLocalDataSource.getFolderBackupConfigurationByNameAsFlow(name)
 
     override fun saveFolderBackupConfiguration(folderBackUpConfiguration: FolderBackUpConfiguration) {
         folderBackupLocalDataSource.saveFolderBackupConfiguration(folderBackUpConfiguration)

@@ -34,14 +34,14 @@ interface FileRepository {
     fun createFolder(remotePath: String, parentFolder: OCFile)
     fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile)
     fun getFileById(fileId: Long): OCFile?
-    fun getFileByIdAsStream(fileId: Long): Flow<OCFile?>
+    fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?>
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
     fun getSearchFolderContent(fileListOption: FileListOption, folderId: Long, search: String): List<OCFile>
     fun getFolderContent(folderId: Long): List<OCFile>
-    fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>>
+    fun getFolderContentWithSyncInfoAsFlow(folderId: Long): Flow<List<OCFileWithSyncInfo>>
     fun getFolderImages(folderId: Long): List<OCFile>
-    fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
-    fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
+    fun getSharedByLinkWithSyncInfoForAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>>
+    fun getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>>
     fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
     fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile)
