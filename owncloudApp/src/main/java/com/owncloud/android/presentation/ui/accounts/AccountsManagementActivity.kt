@@ -28,11 +28,8 @@ import android.accounts.OperationCanceledException
 import android.content.ContentResolver
 import android.content.Intent
 import android.content.SyncRequest
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.MainApp.Companion.accountType
