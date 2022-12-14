@@ -29,17 +29,6 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
 
 @Dao
 interface OCCapabilityDao {
-
-    companion object {
-        private const val SELECT =
-            "SELECT * " +
-                    "FROM ${ProviderTableMeta.CAPABILITIES_TABLE_NAME} " +
-                    "WHERE ${ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME} = :accountName"
-        private const val DELETE =
-            "DELETE FROM ${ProviderTableMeta.CAPABILITIES_TABLE_NAME} " +
-                    "WHERE ${ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME} = :accountName"
-    }
-
     @Query(SELECT)
     fun getCapabilitiesForAccountAsLiveData(
         accountName: String
@@ -67,5 +56,18 @@ interface OCCapabilityDao {
             }
         }
         insert(ocCapabilities)
+    }
+
+    companion object {
+        private const val SELECT = """
+            SELECT *
+            FROM ${ProviderTableMeta.CAPABILITIES_TABLE_NAME}
+            WHERE ${ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME} = :accountName
+        """
+        private const val DELETE = """
+            DELETE
+            FROM ${ProviderTableMeta.CAPABILITIES_TABLE_NAME}
+            WHERE ${ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME} = :accountName
+        """
     }
 }

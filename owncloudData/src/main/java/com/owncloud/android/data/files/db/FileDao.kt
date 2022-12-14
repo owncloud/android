@@ -40,7 +40,6 @@ import java.util.UUID
 
 @Dao
 interface FileDao {
-
     @Query(SELECT_FILE_WITH_ID)
     fun getFileById(
         id: Long
@@ -454,96 +453,106 @@ interface FileDao {
     }
 
     companion object {
-        private const val SELECT_FILE_WITH_ID =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE id = :id"
+        private const val SELECT_FILE_WITH_ID = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE id = :id
+        """
 
-        private const val SELECT_FILE_WITH_REMOTE_ID =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE remoteId = :remoteId"
+        private const val SELECT_FILE_WITH_REMOTE_ID = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE remoteId = :remoteId
+        """
 
-        private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE owner = :owner " +
-                    "AND remotePath = :remotePath"
+        private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE owner = :owner AND remotePath = :remotePath
+        """
 
-        private const val DELETE_FILE_WITH_ID =
-            "DELETE FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE id = :id"
+        private const val DELETE_FILE_WITH_ID = """
+            DELETE
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE id = :id
+        """
 
-        private const val SELECT_FOLDER_CONTENT =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE parentId = :folderId"
+        private const val SELECT_FOLDER_CONTENT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE parentId = :folderId
+        """
 
-        private const val SELECT_FILTERED_FOLDER_CONTENT =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE parentId = :folderId " +
-                    "AND remotePath LIKE '%' || :search || '%'"
+        private const val SELECT_FILTERED_FOLDER_CONTENT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE parentId = :folderId AND remotePath LIKE '%' || :search || '%'
+        """
 
-        private const val SELECT_FILTERED_AVAILABLE_OFFLINE_FOLDER_CONTENT =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE parentId = :folderId " +
-                    "AND keepInSync = '1' " +
-                    "AND remotePath LIKE '%' || :search || '%'"
+        private const val SELECT_FILTERED_AVAILABLE_OFFLINE_FOLDER_CONTENT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE parentId = :folderId AND keepInSync = '1' AND remotePath LIKE '%' || :search || '%'
+        """
 
-        private const val SELECT_FILTERED_SHARED_BY_LINK_FOLDER_CONTENT =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE parentId = :folderId " +
-                    "AND remotePath LIKE '%' || :search || '%'" +
-                    "AND sharedByLink LIKE '%1%' "
+        private const val SELECT_FILTERED_SHARED_BY_LINK_FOLDER_CONTENT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE parentId = :folderId AND remotePath LIKE '%' || :search || '%' AND sharedByLink LIKE '%1%'
+        """
 
-        private const val SELECT_FOLDER_BY_MIMETYPE =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE parentId = :folderId " +
-                    "AND mimeType LIKE :mimeType || '%' "
+        private const val SELECT_FOLDER_BY_MIMETYPE = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE parentId = :folderId AND mimeType LIKE :mimeType || '%'
+        """
 
-        private const val SELECT_FILES_SHARED_BY_LINK =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE owner = :accountOwner " +
-                    "AND sharedByLink LIKE '%1%' "
+        private const val SELECT_FILES_SHARED_BY_LINK = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE owner = :accountOwner AND sharedByLink LIKE '%1%'
+        """
 
-        private const val SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE owner = :accountOwner " +
-                    "AND keepInSync = '1'"
+        private const val SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE owner = :accountOwner AND keepInSync = '1'
+        """
 
-        private const val SELECT_FILES_AVAILABLE_OFFLINE_FROM_EVERY_ACCOUNT =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE keepInSync = '1'"
+        private const val SELECT_FILES_AVAILABLE_OFFLINE_FROM_EVERY_ACCOUNT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE keepInSync = '1'
+        """
 
-        private const val UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS =
-            "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "SET keepInSync = :availableOfflineStatus " +
-                    "WHERE id = :id"
+        private const val UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS = """
+            UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            SET keepInSync = :availableOfflineStatus
+            WHERE id = :id
+        """
 
-        private const val UPDATE_FILE_WITH_NEW_CONFLICT_STATUS =
-            "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "SET etagInConflict = :eTagInConflict " +
-                    "WHERE id = :id"
+        private const val UPDATE_FILE_WITH_NEW_CONFLICT_STATUS = """
+            UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            SET etagInConflict = :eTagInConflict
+            WHERE id = :id
+        """
 
-        private const val DISABLE_THUMBNAILS_FOR_FILE =
-            "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "SET needsToUpdateThumbnail = false " +
-                    "WHERE id = :fileId"
+        private const val DISABLE_THUMBNAILS_FOR_FILE = """
+            UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            SET needsToUpdateThumbnail = false
+            WHERE id = :fileId
+        """
 
-        private const val UPDATE_FILES_STORAGE_DIRECTORY =
-            "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "SET storagePath = `REPLACE`(storagePath, :oldDirectory, :newDirectory) " +
-                    "WHERE storagePath IS NOT NULL"
+        private const val UPDATE_FILES_STORAGE_DIRECTORY = """
+            UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            SET storagePath = `REPLACE`(storagePath, :oldDirectory, :newDirectory)
+            WHERE storagePath IS NOT NULL
+        """
 
-        private const val DELETE_FILES_FOR_ACCOUNT =
-            "DELETE FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE owner = :accountName"
+        private const val DELETE_FILES_FOR_ACCOUNT = """
+            DELETE
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE owner = :accountName
+        """
     }
 }

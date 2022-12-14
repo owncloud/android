@@ -29,20 +29,12 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
 
 @Dao
 interface OCShareDao {
-    @Query(
-        "SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
-                ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " = :remoteId"
-    )
+    @Query(SELECT_SHARE_BY_ID)
     fun getShareAsLiveData(
         remoteId: String
     ): LiveData<OCShareEntity>
 
-    @Query(
-        "SELECT * from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
-                ProviderTableMeta.OCSHARES_PATH + " = :filePath AND " +
-                ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountOwner AND " +
-                ProviderTableMeta.OCSHARES_SHARE_TYPE + " IN (:shareTypes)"
-    )
+    @Query(SELECT_SHARES_BY_FILEPATH_ACCOUNTOWNER_AND_TYPE)
     fun getSharesAsLiveData(
         filePath: String, accountOwner: String, shareTypes: List<Int>
     ): LiveData<List<OCShareEntity>>
@@ -67,22 +59,47 @@ interface OCShareDao {
         return insert(ocShares)
     }
 
-    @Query(
-        "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
-                ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED + " = :remoteId"
-    )
+    @Query(DELETE_SHARE_BY_ID)
     fun deleteShare(remoteId: String): Int
 
-    @Query(
-        "DELETE from " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
-                ProviderTableMeta.OCSHARES_PATH + " = :filePath AND " +
-                ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountOwner"
-    )
+    @Query(DELETE_SHARES_FOR_FILE)
     fun deleteSharesForFile(filePath: String, accountOwner: String)
 
-    @Query(
-        "DELETE FROM " + ProviderTableMeta.OCSHARES_TABLE_NAME + " WHERE " +
-                ProviderTableMeta.OCSHARES_ACCOUNT_OWNER + " = :accountName "
-    )
+    @Query(DELETE_SHARES_FOR_ACCOUNT)
     fun deleteSharesForAccount(accountName: String)
+
+    companion object {
+        private const val SELECT_SHARE_BY_ID = """
+            SELECT *
+            FROM ${ProviderTableMeta.OCSHARES_TABLE_NAME}
+            WHERE ${ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED} = :remoteId
+        """
+
+        private const val SELECT_SHARES_BY_FILEPATH_ACCOUNTOWNER_AND_TYPE = """
+            SELECT *
+            FROM ${ProviderTableMeta.OCSHARES_TABLE_NAME}
+            WHERE ${ProviderTableMeta.OCSHARES_PATH} = :filePath AND
+                ${ProviderTableMeta.OCSHARES_ACCOUNT_OWNER} = :accountOwner AND
+                ${ProviderTableMeta.OCSHARES_SHARE_TYPE} IN (:shareTypes)
+        """
+
+        private const val DELETE_SHARE_BY_ID = """
+            DELETE
+            FROM ${ProviderTableMeta.OCSHARES_TABLE_NAME}
+            WHERE ${ProviderTableMeta.OCSHARES_ID_REMOTE_SHARED} = :remoteId
+        """
+
+        private const val DELETE_SHARES_FOR_FILE = """
+            DELETE
+            FROM ${ProviderTableMeta.OCSHARES_TABLE_NAME}
+            WHERE ${ProviderTableMeta.OCSHARES_PATH} = :filePath AND
+                ${ProviderTableMeta.OCSHARES_ACCOUNT_OWNER} = :accountOwner
+        """
+
+        private const val DELETE_SHARES_FOR_ACCOUNT = """
+            DELETE
+            FROM ${ProviderTableMeta.OCSHARES_TABLE_NAME}
+            WHERE ${ProviderTableMeta.OCSHARES_ACCOUNT_OWNER} = :accountName
+        """
+    }
 }

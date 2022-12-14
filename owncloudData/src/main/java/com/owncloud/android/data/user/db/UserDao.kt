@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.user.db
 
 import androidx.room.Dao
@@ -26,20 +27,6 @@ import com.owncloud.android.data.ProviderMeta
 
 @Dao
 interface UserDao {
-
-    companion object {
-        private const val SELECT_QUOTA =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME} " +
-                    "WHERE accountName = :accountName"
-        private const val SELECT_ALL_QUOTAS =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME} "
-        private const val DELETE_QUOTA =
-            "DELETE FROM ${ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME} " +
-                    "WHERE accountName = :accountName"
-    }
-
     @Query(SELECT_QUOTA)
     fun getQuotaForAccount(
         accountName: String
@@ -53,4 +40,23 @@ interface UserDao {
 
     @Query(DELETE_QUOTA)
     fun deleteQuotaForAccount(accountName: String)
+
+    companion object {
+        private const val SELECT_QUOTA = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME}
+            WHERE accountName = :accountName
+        """
+
+        private const val SELECT_ALL_QUOTAS = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME}
+        """
+
+        private const val DELETE_QUOTA = """
+            DELETE
+            FROM ${ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME}
+            WHERE accountName = :accountName
+        """
+    }
 }
