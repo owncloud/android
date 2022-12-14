@@ -141,7 +141,10 @@
   <string name="uploader_error_message_source_file_not_found">Üleslaetavat faili ei leitud tema askohast. Palun kontrolli, kas fail on olemas.</string>
   <string name="uploader_error_message_source_file_not_copied">Faili kopeerimisel ajutisse kausta tekkis viga. Palun proovi uuesti saata.</string>
   <string name="file_list_seconds_ago">sekundit tagasi</string>
+  <string name="file_list_empty_title_all_files">Siin ei ole faile</string>
   <string name="file_list_empty_title_shared_by_links">Jagatud linke pole</string>
+  <string name="file_list_empty_subtitle_all_files">Laadi sisu üles või süngi oma seadmetega!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Siin kuvatakse faile ja kaustasid, mida sa jagad lingiga</string>
   <string name="file_list_loading">Laadimine...</string>
   <string name="file_list_no_app_for_file_type">Selle failitüübi jaoks ei leitud rakendust</string>
   <string name="file_list_no_app_for_perform_action">Selleks tegevuseks ei leitud rakendust</string>
@@ -610,6 +613,7 @@
   <string name="security_enforced_title">Palun vali rakenduse sulgemise viis:</string>
   <string name="security_enforced_first_option">Parooli lukk</string>
   <string name="security_enforced_second_option">Mustri lukk</string>
+  <string name="folder_upload_some_content_or_sync_devices">Laadi sisu üles või süngi oma seadmetega!</string>
   <!--Webfinger-->
   <string name="global_proceed">Jätka</string>
   <string name="error_webfinger_username_empty">Kasutajanimi on tühi</string>

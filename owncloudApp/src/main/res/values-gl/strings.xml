@@ -120,7 +120,10 @@ Descárgueo de aquí: %2$s</string>
   <string name="uploader_error_message_source_file_not_found">Non se atopou o ficheiro para enviar na súa localización. Comprobe que existe o ficheiro.</string>
   <string name="uploader_error_message_source_file_not_copied">Produciuse un erro ao copiar o ficheiro a un cartafol temporal. Proba a envialo de novo.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
+  <string name="file_list_empty_title_all_files">Aquí non hai ficheiros</string>
   <string name="file_list_empty_title_shared_by_links">Non hai ligazóns compartidas</string>
+  <string name="file_list_empty_subtitle_all_files">Envíe algún contido ou sincronice cos seus dispositivos!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Os ficheiros e cartafoles que comparta por ligazón amosaranse aquí</string>
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">Non se atopou unha aplicación para este tipo de ficheiro</string>
   <string name="local_file_list_empty">Non hai ficheiros neste cartafol.</string>
@@ -552,6 +555,7 @@ Descárgueo de aquí: %2$s</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Código de bloqueo</string>
+  <string name="folder_upload_some_content_or_sync_devices">Envíe algún contido ou sincronice cos seus dispositivos!</string>
   <!--Webfinger-->
   <string name="global_proceed">Proceder</string>
   <!--Release Notes-->

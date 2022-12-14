@@ -141,8 +141,10 @@
   <string name="uploader_error_message_source_file_not_found">El archivo a subir no se localiza. Compruebe que el archivo existe.</string>
   <string name="uploader_error_message_source_file_not_copied">Ha ocurrido un error al copiar a la carpeta temporal. Por favor intentelo de nuevo.</string>
   <string name="file_list_seconds_ago">hace segundos</string>
+  <string name="file_list_empty_title_all_files">Aquí no hay archivos</string>
   <string name="file_list_empty_title_shared_by_links">No hay enlaces compartidos</string>
   <string name="file_list_empty_subtitle_all_files">Suba contenidos o sincronice sus dispositivos.</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Aquí aparecerán archivos y carpetas que usted comparta mediante un enlace</string>
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">No se han encontrado apps para ese tipo de archivos</string>
   <string name="file_list_no_app_for_perform_action">No se encuentra aplicación para esta acción</string>

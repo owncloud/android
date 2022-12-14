@@ -119,6 +119,10 @@
   <string name="uploader_error_message_source_file_not_found">הקובץ להעלאה לא נמצא במיקום שלו. יש לבדוק אם הקובץ קיים.</string>
   <string name="uploader_error_message_source_file_not_copied">שגיאה אירעה בזמן העתקת הקובץ לתיקייה הזמנית. יש לנסות לשלוח שוב.</string>
   <string name="file_list_seconds_ago">שניות</string>
+  <string name="file_list_empty_title_all_files">אין כאן קבצים</string>
+  <string name="file_list_empty_title_shared_by_links">אין קישורים משותפים</string>
+  <string name="file_list_empty_subtitle_all_files">יש להעלות קצת תוכן או לסנכרן עם ההתקנים שלך!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">קבצים ותיקיות ששיתפת עם קישור יוצגו כאן</string>
   <string name="file_list_loading">בטעינה …</string>
   <string name="file_list_no_app_for_file_type">לא נמצא יישום לסוג קובץ</string>
   <string name="local_file_list_empty">אין קבצים בתיקייה זו:</string>
@@ -545,6 +549,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">נעילת סיסמא</string>
+  <string name="folder_upload_some_content_or_sync_devices">יש להעלות קצת תוכן או לסנכרן עם ההתקנים שלך!</string>
   <!--Webfinger-->
   <string name="global_proceed">להמשך</string>
   <!--Release Notes-->

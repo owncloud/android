@@ -134,6 +134,7 @@
   <string name="file_list_empty_title_all_files">沒有任何檔案</string>
   <string name="file_list_empty_title_shared_by_links">沒有已分享的連結</string>
   <string name="file_list_empty_subtitle_all_files">在您的裝置中同步或上傳一些內容</string>
+  <string name="file_list_empty_subtitle_shared_by_links">您分享的檔案與資料夾連結將會顯示在這裡</string>
   <string name="file_list_loading">載入中…</string>
   <string name="file_list_no_app_for_file_type">找不到檔案類型的軟體</string>
   <string name="local_file_list_empty">沒有檔案在這個目錄。</string>

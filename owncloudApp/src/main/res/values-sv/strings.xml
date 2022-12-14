@@ -120,7 +120,10 @@
   <string name="uploader_error_message_source_file_not_found">Filen som skulle laddas upp hittades inte på sin plats. Vänligen kontrollera att filen existerar.</string>
   <string name="uploader_error_message_source_file_not_copied">Ett fel uppstod när filen kopierades till en temporär mapp. Vänligen försök skicka den igen.</string>
   <string name="file_list_seconds_ago">sekunder sedan</string>
+  <string name="file_list_empty_title_all_files">Inga filer kunde hittas</string>
   <string name="file_list_empty_title_shared_by_links">Inga delade länkar</string>
+  <string name="file_list_empty_subtitle_all_files">Ladda upp innehåll eller synkronisera med dina enheter!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Filer och mappar du delar som länkar kommer visas här</string>
   <string name="file_list_loading">Laddar...</string>
   <string name="file_list_no_app_for_file_type">Ingen app hittades för filtypen</string>
   <string name="local_file_list_empty">Det finns inga filer i den här mappen.</string>

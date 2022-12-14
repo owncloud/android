@@ -119,8 +119,10 @@ Download hier: %2$s</string>
   <string name="uploader_error_message_source_file_not_found">Het te uploaden bestand is hier niet. Controleer of het bestand wel bestaat.</string>
   <string name="uploader_error_message_source_file_not_copied">Er trad een fout op bij het kopiëren van het bestand naar een tijdelijke map. Probeer het opnieuw te versturen.</string>
   <string name="file_list_seconds_ago">seconden geleden</string>
+  <string name="file_list_empty_title_all_files">Hier geen bestanden</string>
   <string name="file_list_empty_title_shared_by_links">Geen gedeelde links</string>
   <string name="file_list_empty_subtitle_all_files">Upload bestanden of synchroniseer met uw apparaten!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Bestanden en mappen die u via links deelt, worden hier getoond</string>
   <string name="file_list_loading">Laden...</string>
   <string name="file_list_no_app_for_file_type">Geen app gevonden voor het bestandsformaat</string>
   <string name="local_file_list_empty">Er staan geen bestanden in deze map.</string>

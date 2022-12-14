@@ -101,6 +101,10 @@
   <string name="uploader_error_message_source_file_not_found">Fann ekki skrána sem átti að senda inn á sínum stað. Athugaðu hvort skráin sé til.</string>
   <string name="uploader_error_message_source_file_not_copied">Villa kom upp við að afrita þessa skrá í bráðabirgðamöppu. Prófaðu að senda aftur.</string>
   <string name="file_list_seconds_ago">sekúndum síðan</string>
+  <string name="file_list_empty_title_all_files">Engar skrár hér</string>
+  <string name="file_list_empty_title_shared_by_links">Engir sameignartenglar</string>
+  <string name="file_list_empty_subtitle_all_files">Sendu inn eitthvað efni eða samstilltu við tækin þín!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Skrár og möppur sem þú deilir með tenglum birtast hér</string>
   <string name="file_list_loading">Hleð inn…</string>
   <string name="file_list_no_app_for_file_type">Engin forrit fundust fyrir skráategundina</string>
   <string name="local_file_list_empty">Það eru engar skrár í þessari möppu.</string>
@@ -489,6 +493,7 @@
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Læsing með lykilkóða</string>
+  <string name="folder_upload_some_content_or_sync_devices">Sendu inn eitthvað efni eða samstilltu við tækin þín!</string>
   <!--Webfinger-->
   <string name="global_proceed">Halda áfram</string>
   <!--Release Notes-->

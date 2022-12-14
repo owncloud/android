@@ -141,7 +141,10 @@
   <string name="uploader_error_message_source_file_not_found">Kartela për ngarkim s\’u gjet te vendi i saj. Ju lutemi, shihni nëse ekziston apo jo kartela.</string>
   <string name="uploader_error_message_source_file_not_copied">Ndodhi një gabim teksa kopjohej kartela te një dosje e përkohshme. Ju lutemi, provoni ta ridërgoni.</string>
   <string name="file_list_seconds_ago">sekonda më parë</string>
+  <string name="file_list_empty_title_all_files">S’ka kartela këtu</string>
   <string name="file_list_empty_title_shared_by_links">Pa lidhje ndarjesh</string>
+  <string name="file_list_empty_subtitle_all_files">Ngarkoni ca lëndë ose bëni njëkohësim me pajisjet tuaja!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Këtu do të shfaqen kartelat dhe dosjet që ndani përmes lidhjesh</string>
   <string name="file_list_loading">Po ngarkohet…</string>
   <string name="file_list_no_app_for_file_type">S\’u gjet aplikacion për llojin e kartelës</string>
   <string name="file_list_no_app_for_perform_action">S’u gjet aplikacion për këtë veprim</string>

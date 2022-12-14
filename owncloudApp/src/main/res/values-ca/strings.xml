@@ -110,7 +110,9 @@
   <string name="uploader_error_message_source_file_not_found">L\' arxiu a carregar no va ser trobat en la seva ubicació. Si us plau verifica si l\'arxiu existeix.</string>
   <string name="uploader_error_message_source_file_not_copied">S\'ha produït un error mentre es copiava el fitxer a una carpeta temporal. Sisplau intenta enviar-ho una altra vegada.</string>
   <string name="file_list_seconds_ago">segons enrere</string>
+  <string name="file_list_empty_title_all_files">No hi ha arxius</string>
   <string name="file_list_empty_title_shared_by_links">no hi ha enllaços compartits</string>
+  <string name="file_list_empty_subtitle_all_files">Pugi continguts o sincronitzi els seus dispositius.</string>
   <string name="file_list_loading">Carregant...</string>
   <string name="file_list_no_app_for_file_type">No s\'ha trobat cap aplicació per a aquest tipus d\'arxiu!</string>
   <string name="local_file_list_empty">No hi ha arxius a aquesta carpeta</string>
