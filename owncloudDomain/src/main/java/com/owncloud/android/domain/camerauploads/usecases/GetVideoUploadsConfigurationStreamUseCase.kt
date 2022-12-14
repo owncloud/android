@@ -29,5 +29,5 @@ class GetVideoUploadsConfigurationStreamUseCase(
 ) : BaseUseCase<Flow<FolderBackUpConfiguration?>, Unit>() {
 
     override fun run(params: Unit): Flow<FolderBackUpConfiguration?> =
-        folderBackupRepository.getFolderBackupConfigurationStreamByName(videoUploadsName)
+        folderBackupRepository.getFolderBackupConfigurationByNameAsFlow(videoUploadsName)
 }

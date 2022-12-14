@@ -27,7 +27,7 @@ class GetSharedByLinkForAccountAsStreamUseCase(
     private val fileRepository: FileRepository
 ) : BaseUseCase<Flow<List<OCFileWithSyncInfo>>, GetSharedByLinkForAccountAsStreamUseCase.Params>() {
 
-    override fun run(params: Params): Flow<List<OCFileWithSyncInfo>> = fileRepository.getSharedByLinkWithSyncInfoForAccountAsStream(params.owner)
+    override fun run(params: Params): Flow<List<OCFileWithSyncInfo>> = fileRepository.getSharedByLinkWithSyncInfoForAccountAsFlow(params.owner)
 
     data class Params(
         val owner: String

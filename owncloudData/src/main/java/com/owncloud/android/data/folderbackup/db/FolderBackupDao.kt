@@ -35,7 +35,7 @@ interface FolderBackupDao {
     ): FolderBackUpEntity?
 
     @Query(SELECT)
-    fun getFolderBackUpConfigurationByNameStream(
+    fun getFolderBackUpConfigurationByNameAsFlow(
         name: String
     ): Flow<FolderBackUpEntity?>
 

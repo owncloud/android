@@ -52,7 +52,7 @@ interface FileDao {
     ): OCFileAndFileSync?
 
     @Query(SELECT_FILE_WITH_ID)
-    fun getFileByIdAsStream(
+    fun getFileByIdAsFlow(
         id: Long
     ): Flow<OCFileEntity?>
 
@@ -98,7 +98,7 @@ interface FileDao {
 
     @Transaction
     @Query(SELECT_FOLDER_CONTENT)
-    fun getFolderContentWithSyncInfoAsStream(
+    fun getFolderContentWithSyncInfoAsFlow(
         folderId: Long
     ): Flow<List<OCFileAndFileSync>>
 
@@ -110,13 +110,13 @@ interface FileDao {
 
     @Transaction
     @Query(SELECT_FILES_SHARED_BY_LINK)
-    fun getFilesWithSyncInfoSharedByLinkAsStream(
+    fun getFilesWithSyncInfoSharedByLinkAsFlow(
         accountOwner: String
     ): Flow<List<OCFileAndFileSync>>
 
     @Transaction
     @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT)
-    fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(
+    fun getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(
         accountOwner: String
     ): Flow<List<OCFileAndFileSync>>
 

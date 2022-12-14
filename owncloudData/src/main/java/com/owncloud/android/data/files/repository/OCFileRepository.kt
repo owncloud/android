@@ -124,8 +124,8 @@ class OCFileRepository(
     override fun getFileById(fileId: Long): OCFile? =
         localFileDataSource.getFileById(fileId)
 
-    override fun getFileByIdAsStream(fileId: Long): Flow<OCFile?> =
-        localFileDataSource.getFileByIdAsStream(fileId)
+    override fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?> =
+        localFileDataSource.getFileByIdAsFlow(fileId)
 
     override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? =
         localFileDataSource.getFileByRemotePath(remotePath, owner)
@@ -140,17 +140,17 @@ class OCFileRepository(
     override fun getFolderContent(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderContent(folderId)
 
-    override fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>> =
-        localFileDataSource.getFolderContentWithSyncInfoAsStream(folderId)
+    override fun getFolderContentWithSyncInfoAsFlow(folderId: Long): Flow<List<OCFileWithSyncInfo>> =
+        localFileDataSource.getFolderContentWithSyncInfoAsFlow(folderId)
 
     override fun getFolderImages(folderId: Long): List<OCFile> =
         localFileDataSource.getFolderImages(folderId)
 
-    override fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
-        localFileDataSource.getSharedByLinkWithSyncInfoForAccountAsStream(owner)
+    override fun getSharedByLinkWithSyncInfoForAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>> =
+        localFileDataSource.getSharedByLinkWithSyncInfoForAccountAsFlow(owner)
 
-    override fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
-        localFileDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner)
+    override fun getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>> =
+        localFileDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner)
 
     override fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile> =
         localFileDataSource.getFilesAvailableOfflineFromAccount(owner)
