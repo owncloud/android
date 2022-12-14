@@ -69,7 +69,7 @@ import com.owncloud.android.domain.exceptions.UnauthorizedException;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.extensions.ThrowableExtKt;
-import com.owncloud.android.interfaces.ISecurityEnforced;
+import com.owncloud.android.interfaces.SecurityEnforced;
 import com.owncloud.android.interfaces.LockType;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
@@ -100,7 +100,6 @@ import timber.log.Timber;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,7 +122,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         SortOptionsView.CreateFolderListener,
         SearchView.OnQueryTextListener,
         ReceiveExternalFilesAdapter.OnSearchQueryUpdateListener,
-        ISecurityEnforced,
+        SecurityEnforced,
         CreateFolderDialogFragment.CreateFolderListener {
 
     private static final String FTAG_ERROR_FRAGMENT = "ERROR_FRAGMENT";

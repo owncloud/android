@@ -27,7 +27,7 @@ import android.os.Build
 import android.os.PowerManager
 import android.os.SystemClock
 import com.owncloud.android.MainApp.Companion.appContext
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.presentation.ui.security.BiometricManager
 import com.owncloud.android.presentation.ui.security.LockTimeout
 import com.owncloud.android.presentation.ui.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
@@ -39,7 +39,7 @@ object PassCodeManager {
 
     private val exemptOfPasscodeActivities: MutableSet<Class<*>> = mutableSetOf(PassCodeActivity::class.java)
     private val visibleActivities: MutableSet<Class<*>> = mutableSetOf()
-    private val preferencesProvider = SharedPreferencesProviderImpl(appContext)
+    private val preferencesProvider = OCSharedPreferencesProvider(appContext)
 
     fun onActivityStarted(activity: Activity) {
         if (!exemptOfPasscodeActivities.contains(activity.javaClass) && passCodeShouldBeRequested()) {

@@ -25,7 +25,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.databinding.SortOptionsLayoutBinding
 import com.owncloud.android.presentation.ui.files.SortOrder.Companion.PREF_FILE_LIST_SORT_ORDER
 import com.owncloud.android.presentation.ui.files.SortType.Companion.PREF_FILE_LIST_SORT_TYPE
@@ -70,7 +70,7 @@ class SortOptionsView @JvmOverloads constructor(
     init {
         _binding = SortOptionsLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
-        val sharedPreferencesProvider: SharedPreferencesProvider = SharedPreferencesProviderImpl(context)
+        val sharedPreferencesProvider: SharedPreferencesProvider = OCSharedPreferencesProvider(context)
 
         // Select sort type and order according to preferences.
         sortTypeSelected = SortType.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_TYPE, SortType.SORT_TYPE_BY_NAME.ordinal)]

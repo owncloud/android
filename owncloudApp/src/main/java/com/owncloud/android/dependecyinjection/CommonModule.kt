@@ -28,7 +28,7 @@ import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.providers.WorkManagerProvider
-import com.owncloud.android.providers.impl.OCContextProvider
+import com.owncloud.android.providers.implementation.OCContextProvider
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module

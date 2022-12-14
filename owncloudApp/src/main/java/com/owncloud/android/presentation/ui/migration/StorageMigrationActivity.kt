@@ -26,7 +26,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.data.storage.LegacyStorageProvider
 import com.owncloud.android.presentation.viewmodels.migration.MigrationState
 import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
@@ -82,7 +82,7 @@ class StorageMigrationActivity : AppCompatActivity() {
             legacyStorageFolder.canRead() && legacyStorageFolder.canWrite()
 
         private fun hasAlreadyMigratedToScopedStorage(context: Context): Boolean {
-            val preferenceProvider = SharedPreferencesProviderImpl(context = context)
+            val preferenceProvider = OCSharedPreferencesProvider(context = context)
             return preferenceProvider.getBoolean(key = PREFERENCE_ALREADY_MIGRATED_TO_SCOPED_STORAGE, defaultValue = false)
         }
 

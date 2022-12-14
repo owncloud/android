@@ -24,7 +24,7 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 
-class SharedPreferencesProviderImpl(
+class OCSharedPreferencesProvider(
     context: Context
 ) : SharedPreferencesProvider {
 

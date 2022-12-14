@@ -22,7 +22,7 @@ package com.owncloud.android.presentation.ui.security
 
 import android.os.SystemClock
 import com.owncloud.android.MainApp
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 
 const val PREFERENCE_LOCK_TIMEOUT = "lock_timeout"
 const val PREFERENCE_LAST_UNLOCK_TIMESTAMP = "last_unlock_timestamp"
@@ -60,7 +60,7 @@ enum class LockTimeout {
  * USE WITH CARE
  */
 fun bayPassUnlockOnce() {
-    val preferencesProvider = SharedPreferencesProviderImpl(MainApp.appContext)
+    val preferencesProvider = OCSharedPreferencesProvider(MainApp.appContext)
     val timeout = LockTimeout.valueOf(preferencesProvider.getString(PREFERENCE_LOCK_TIMEOUT, LockTimeout.IMMEDIATELY.name)!!).toMilliseconds()
     val lastUnlockTimestamp = preferencesProvider.getLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, 0)
     if (SystemClock.elapsedRealtime() - lastUnlockTimestamp > timeout) {
