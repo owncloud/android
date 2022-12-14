@@ -28,7 +28,7 @@ import androidx.room.Transaction
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
 
 @Dao
-abstract class OCCapabilityDao {
+interface OCCapabilityDao {
 
     companion object {
         private const val SELECT =
@@ -41,26 +41,26 @@ abstract class OCCapabilityDao {
     }
 
     @Query(SELECT)
-    abstract fun getCapabilitiesForAccountAsLiveData(
+    fun getCapabilitiesForAccountAsLiveData(
         accountName: String
     ): LiveData<OCCapabilityEntity?>
 
     @Query(SELECT)
-    abstract fun getCapabilitiesForAccount(
+    fun getCapabilitiesForAccount(
         accountName: String
     ): OCCapabilityEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(ocCapability: OCCapabilityEntity): Long
+    fun insert(ocCapability: OCCapabilityEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(ocCapabilities: List<OCCapabilityEntity>): List<Long>
+    fun insert(ocCapabilities: List<OCCapabilityEntity>): List<Long>
 
     @Query(DELETE)
-    abstract fun delete(accountName: String)
+    fun delete(accountName: String)
 
     @Transaction
-    open fun replace(ocCapabilities: List<OCCapabilityEntity>) {
+    fun replace(ocCapabilities: List<OCCapabilityEntity>) {
         ocCapabilities.forEach { ocCapability ->
             ocCapability.accountName?.run {
                 delete(this)

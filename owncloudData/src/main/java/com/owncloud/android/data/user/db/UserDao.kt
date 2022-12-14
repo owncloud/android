@@ -25,7 +25,7 @@ import androidx.room.Query
 import com.owncloud.android.data.ProviderMeta
 
 @Dao
-abstract class UserDao {
+interface UserDao {
 
     companion object {
         private const val SELECT_QUOTA =
@@ -41,16 +41,16 @@ abstract class UserDao {
     }
 
     @Query(SELECT_QUOTA)
-    abstract fun getQuotaForAccount(
+    fun getQuotaForAccount(
         accountName: String
     ): UserQuotaEntity?
 
     @Query(SELECT_ALL_QUOTAS)
-    abstract fun getAllUserQuotas(): List<UserQuotaEntity>
+    fun getAllUserQuotas(): List<UserQuotaEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(userQuotaEntity: UserQuotaEntity)
+    fun insert(userQuotaEntity: UserQuotaEntity)
 
     @Query(DELETE_QUOTA)
-    abstract fun deleteQuotaForAccount(accountName: String)
+    fun deleteQuotaForAccount(accountName: String)
 }
