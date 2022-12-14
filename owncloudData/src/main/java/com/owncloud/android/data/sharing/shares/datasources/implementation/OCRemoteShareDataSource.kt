@@ -48,7 +48,7 @@ class OCRemoteShareDataSource(
         }
     }
 
-    override fun insertShare(
+    override fun insert(
         remoteFilePath: String,
         shareType: ShareType,
         shareWith: String,

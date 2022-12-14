@@ -40,15 +40,15 @@ interface OCShareDao {
     ): LiveData<List<OCShareEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(ocShare: OCShareEntity): Long
+    fun insertOrReplace(ocShare: OCShareEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(ocShares: List<OCShareEntity>): List<Long>
+    fun insertOrReplace(ocShares: List<OCShareEntity>): List<Long>
 
     @Transaction
     fun update(ocShare: OCShareEntity): Long {
         deleteShare(ocShare.remoteId)
-        return insert(ocShare)
+        return insertOrReplace(ocShare)
     }
 
     @Transaction
@@ -56,7 +56,7 @@ interface OCShareDao {
         for (ocShare in ocShares) {
             deleteSharesForFile(ocShare.path, ocShare.accountOwner)
         }
-        return insert(ocShares)
+        return insertOrReplace(ocShares)
     }
 
     @Query(DELETE_SHARE_BY_ID)

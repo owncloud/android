@@ -40,7 +40,7 @@ interface FolderBackupDao {
     ): Flow<FolderBackUpEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(folderBackUpEntity: FolderBackUpEntity): Long
+    fun insertOrReplace(folderBackUpEntity: FolderBackUpEntity): Long
 
     @Query(DELETE)
     fun delete(name: String): Int
@@ -48,7 +48,7 @@ interface FolderBackupDao {
     @Transaction
     fun update(folderBackUpEntity: FolderBackUpEntity): Long {
         delete(folderBackUpEntity.name)
-        return insert(folderBackUpEntity)
+        return insertOrReplace(folderBackUpEntity)
     }
 
     companion object {

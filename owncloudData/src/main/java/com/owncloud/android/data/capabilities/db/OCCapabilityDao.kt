@@ -40,10 +40,10 @@ interface OCCapabilityDao {
     ): OCCapabilityEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(ocCapability: OCCapabilityEntity): Long
+    fun insertOrReplace(ocCapability: OCCapabilityEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(ocCapabilities: List<OCCapabilityEntity>): List<Long>
+    fun insertOrReplace(ocCapabilities: List<OCCapabilityEntity>): List<Long>
 
     @Query(DELETE)
     fun delete(accountName: String)
@@ -55,7 +55,7 @@ interface OCCapabilityDao {
                 delete(this)
             }
         }
-        insert(ocCapabilities)
+        insertOrReplace(ocCapabilities)
     }
 
     companion object {

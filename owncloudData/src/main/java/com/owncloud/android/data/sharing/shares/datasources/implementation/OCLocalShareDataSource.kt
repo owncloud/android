@@ -52,12 +52,12 @@ class OCLocalShareDataSource(
         }
 
     override fun insert(ocShare: OCShare): Long =
-        ocShareDao.insert(
+        ocShareDao.insertOrReplace(
             ocShare.toEntity()
         )
 
     override fun insert(ocShares: List<OCShare>): List<Long> =
-        ocShareDao.insert(
+        ocShareDao.insertOrReplace(
             ocShares.map { ocShare -> ocShare.toEntity() }
         )
 
