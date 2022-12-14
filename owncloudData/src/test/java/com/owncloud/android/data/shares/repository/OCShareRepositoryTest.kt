@@ -203,7 +203,7 @@ class OCShareRepositoryTest {
     @Test
     fun insertPublicShareOk() {
         every {
-            remoteShareDataSource.insertShare(
+            remoteShareDataSource.insert(
                 any(),
                 any(),
                 any(),
@@ -227,7 +227,7 @@ class OCShareRepositoryTest {
         )
 
         verify(exactly = 1) {
-            remoteShareDataSource.insertShare(
+            remoteShareDataSource.insert(
                 filePath,
                 ShareType.PUBLIC_LINK,
                 "",
@@ -246,7 +246,7 @@ class OCShareRepositoryTest {
     @Test(expected = FileNotFoundException::class)
     fun insertPublicShareFileNotFoundException() {
         every {
-            remoteShareDataSource.insertShare(
+            remoteShareDataSource.insert(
                 any(),
                 any(),
                 any(),
@@ -270,7 +270,7 @@ class OCShareRepositoryTest {
         )
 
         verify(exactly = 1) {
-            remoteShareDataSource.insertShare(
+            remoteShareDataSource.insert(
                 filePath,
                 ShareType.PUBLIC_LINK,
                 "",
@@ -371,7 +371,7 @@ class OCShareRepositoryTest {
     @Test
     fun insertPrivateShareOk() {
         every {
-            remoteShareDataSource.insertShare(
+            remoteShareDataSource.insert(
                 any(),
                 any(),
                 any(),
@@ -393,7 +393,7 @@ class OCShareRepositoryTest {
         )
 
         verify(exactly = 1) {
-            remoteShareDataSource.insertShare(
+            remoteShareDataSource.insert(
                 filePath,
                 ShareType.GROUP,
                 "whoever",
@@ -408,7 +408,7 @@ class OCShareRepositoryTest {
     @Test(expected = FileNotFoundException::class)
     fun insertPrivateShareFileNotFoundException() {
         every {
-            remoteShareDataSource.insertShare(
+            remoteShareDataSource.insert(
                 any(),
                 any(),
                 any(),
@@ -430,7 +430,7 @@ class OCShareRepositoryTest {
         )
 
         verify(exactly = 1) {
-            remoteShareDataSource.insertShare(
+            remoteShareDataSource.insert(
                 filePath,
                 ShareType.GROUP,
                 "whoever",

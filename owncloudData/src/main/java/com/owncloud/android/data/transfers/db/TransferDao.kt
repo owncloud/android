@@ -45,7 +45,7 @@ interface TransferDao {
     fun getAllTransfersAsLiveData(): LiveData<List<OCTransferEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(ocTransferEntity: OCTransferEntity): Long
+    fun insertOrReplace(ocTransferEntity: OCTransferEntity): Long
 
     @Query(UPDATE_TRANSFER_STATUS_WITH_ID)
     fun updateTransferStatusWithId(id: Long, newStatus: Int)

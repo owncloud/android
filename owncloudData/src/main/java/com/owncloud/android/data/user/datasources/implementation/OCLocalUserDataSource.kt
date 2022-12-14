@@ -32,7 +32,7 @@ class OCLocalUserDataSource(
 ) : LocalUserDataSource {
 
     override fun saveQuotaForAccount(accountName: String, userQuota: UserQuota) =
-        userDao.insert(userQuota.toEntity())
+        userDao.insertOrReplace(userQuota.toEntity())
 
     override fun getQuotaForAccount(accountName: String): UserQuota? =
         userDao.getQuotaForAccount(accountName = accountName)?.toModel()

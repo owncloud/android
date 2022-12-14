@@ -129,7 +129,7 @@ class OCLocalShareDataSourceTest {
 
     @Test
     fun insertPrivateShares() {
-        every { ocSharesDao.insert(privateShares[0]) } returns 10
+        every { ocSharesDao.insertOrReplace(privateShares[0]) } returns 10
 
         val insertedShareId = ocLocalSharesDataSource.insert(
             OC_PRIVATE_SHARE.copy(
@@ -208,7 +208,7 @@ class OCLocalShareDataSourceTest {
 
     @Test
     fun insertPublicShare() {
-        every { ocSharesDao.insert(publicShares[0]) } returns 7
+        every { ocSharesDao.insertOrReplace(publicShares[0]) } returns 7
 
         val insertedShareId = ocLocalSharesDataSource.insert(
             OC_PUBLIC_SHARE.copy(
@@ -224,7 +224,7 @@ class OCLocalShareDataSourceTest {
     @Test
     fun insertPublicShares() {
         val expectedValues = listOf<Long>(1, 2)
-        every { ocSharesDao.insert(publicShares) } returns expectedValues
+        every { ocSharesDao.insertOrReplace(publicShares) } returns expectedValues
 
         val retrievedValues = ocLocalSharesDataSource.insert(
             publicShares.map { it.toModel() }

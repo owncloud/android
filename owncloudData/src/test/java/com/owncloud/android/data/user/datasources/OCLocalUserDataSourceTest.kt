@@ -70,10 +70,10 @@ class OCLocalUserDataSourceTest {
 
     @Test
     fun insertQuota() {
-        every { ocUserQuotaDao.insert(any()) } returns Unit
+        every { ocUserQuotaDao.insertOrReplace(any()) } returns Unit
 
         ocLocalUserDataSource.saveQuotaForAccount(OC_ACCOUNT_NAME, OC_USER_QUOTA)
 
-        verify(exactly = 1) { ocUserQuotaDao.insert(userQuotaEntity) }
+        verify(exactly = 1) { ocUserQuotaDao.insertOrReplace(userQuotaEntity) }
     }
 }

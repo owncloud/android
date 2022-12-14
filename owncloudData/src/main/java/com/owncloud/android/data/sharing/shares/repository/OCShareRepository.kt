@@ -159,7 +159,7 @@ class OCShareRepository(
         publicUpload: Boolean = false,
         accountName: String
     ) {
-        remoteShareDataSource.insertShare(
+        remoteShareDataSource.insert(
             filePath,
             shareType,
             shareWith,

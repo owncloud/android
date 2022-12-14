@@ -36,7 +36,7 @@ interface UserDao {
     fun getAllUserQuotas(): List<UserQuotaEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(userQuotaEntity: UserQuotaEntity)
+    fun insertOrReplace(userQuotaEntity: UserQuotaEntity)
 
     @Query(DELETE_QUOTA)
     fun deleteQuotaForAccount(accountName: String)

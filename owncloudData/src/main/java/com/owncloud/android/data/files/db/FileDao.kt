@@ -162,7 +162,7 @@ interface FileDao {
                     isSynchronizing = true
                 )
             }
-            insertFileSync(fileSyncEntity)
+            insertOrReplaceFileSync(fileSyncEntity)
 
             // Check if there is any more file synchronizing in this folder, in such case don't update parent's sync status
             var cleanSyncInParent = true
@@ -184,7 +184,7 @@ interface FileDao {
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertFileSync(ocFileSyncEntity: OCFileSyncEntity): Long
+    fun insertOrReplaceFileSync(ocFileSyncEntity: OCFileSyncEntity): Long
 
     /**
      * Make sure that the ids are set properly. We don't take care of conflicts and that stuff here.

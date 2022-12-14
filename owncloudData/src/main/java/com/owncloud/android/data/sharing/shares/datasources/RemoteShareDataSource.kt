@@ -31,7 +31,7 @@ interface RemoteShareDataSource {
         accountName: String
     ): List<OCShare>
 
-    fun insertShare(
+    fun insert(
         remoteFilePath: String,
         shareType: ShareType,
         shareWith: String,

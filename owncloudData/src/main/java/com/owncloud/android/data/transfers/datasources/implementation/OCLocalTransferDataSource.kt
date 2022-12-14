@@ -35,11 +35,11 @@ class OCLocalTransferDataSource(
     private val transferDao: TransferDao
 ) : LocalTransferDataSource {
     override fun saveTransfer(transfer: OCTransfer): Long {
-        return transferDao.insert(transfer.toEntity())
+        return transferDao.insertOrReplace(transfer.toEntity())
     }
 
     override fun updateTransfer(transfer: OCTransfer) {
-        transferDao.insert(transfer.toEntity())
+        transferDao.insertOrReplace(transfer.toEntity())
     }
 
     override fun updateTransferStatusToInProgressById(id: Long) {

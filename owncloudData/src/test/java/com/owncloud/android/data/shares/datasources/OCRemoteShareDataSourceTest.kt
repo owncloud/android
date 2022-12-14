@@ -77,7 +77,7 @@ class OCRemoteShareDataSourceTest {
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
-        val privateShareAdded = ocRemoteShareDataSource.insertShare(
+        val privateShareAdded = ocRemoteShareDataSource.insert(
             remoteFilePath = "Photos/",
             shareType = ShareType.USER,
             shareWith = "user",
@@ -161,7 +161,7 @@ class OCRemoteShareDataSourceTest {
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
-        val publicShareAdded = ocRemoteShareDataSource.insertShare(
+        val publicShareAdded = ocRemoteShareDataSource.insert(
             "Photos/img1.png",
             ShareType.PUBLIC_LINK,
             "",
@@ -331,7 +331,7 @@ class OCRemoteShareDataSourceTest {
             ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any(), any())
         } returns createRemoteSharesOperationResult
 
-        ocRemoteShareDataSource.insertShare(
+        ocRemoteShareDataSource.insert(
             "Photos/img2.png",
             ShareType.PUBLIC_LINK,
             "",
