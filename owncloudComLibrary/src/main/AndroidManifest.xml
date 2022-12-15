@@ -23,8 +23,7 @@
 
  -->
 
-<manifest package="com.owncloud.android.lib"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- USE_CREDENTIALS, MANAGE_ACCOUNTS and AUTHENTICATE_ACCOUNTS are needed for API < 23.
         In API >= 23 the do not exist anymore -->
