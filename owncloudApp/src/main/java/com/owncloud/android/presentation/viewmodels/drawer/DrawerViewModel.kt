@@ -36,7 +36,6 @@ import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
-import com.owncloud.android.utils.FileStorageUtils
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
