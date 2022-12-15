@@ -30,7 +30,7 @@ android {
     sourceSets {
         test.java.srcDirs += "src/test-common/java"
     }
-    namespace 'com.owncloud.android.domain'
+    namespace "com.owncloud.android.domain"
 }
 
 dependencies {
@@ -41,7 +41,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$orgJetbrainsKotlinx"
 
     // Dependencies for unit tests
-    testImplementation project(':owncloudTestUtil')
+    testImplementation project(":owncloudTestUtil")
     testImplementation "junit:junit:$junitVersion"
     testImplementation "androidx.arch.core:core-testing:$androidxArchCore"
     testImplementation "io.mockk:mockk:$ioMockk"

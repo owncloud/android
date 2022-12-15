@@ -15,7 +15,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$orgJetbrainsKotlin"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$orgJetbrainsKotlinx"
 
-    // Android x
+    // Android X
     implementation "androidx.annotation:annotation:1.5.0"
     implementation "androidx.appcompat:appcompat:$androidxAppcompat"
     implementation "androidx.biometric:biometric:1.1.0"
@@ -39,34 +39,34 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:$androidxFragment"
 
     // Image loading
-    implementation 'com.github.bumptech.glide:glide:4.13.2'
-    implementation 'com.github.2coffees1team:GlideToVectorYou:v2.0.0'
+    implementation "com.github.bumptech.glide:glide:4.13.2"
+    implementation "com.github.2coffees1team:GlideToVectorYou:v2.0.0"
 
     // Zooming Android ImageView.
-    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    implementation "com.github.chrisbanes:PhotoView:2.3.0"
 
     // Koin dependency injector
     implementation "io.insert-koin:koin-core:$ioInsertKoin"
     implementation "io.insert-koin:koin-androidx-workmanager:$ioInsertKoin"
 
     // Miscellaneous
-    implementation 'com.getbase:floatingactionbutton:1.10.1'
-    implementation 'com.github.aritraroy.PatternLockView:patternlockview:a90b0d4bf0'
-    implementation 'com.google.android.exoplayer:exoplayer:2.16.1'
-    implementation 'com.google.android.material:material:1.7.0'
-    implementation 'com.jakewharton:disklrucache:2.0.2'
+    implementation "com.getbase:floatingactionbutton:1.10.1"
+    implementation "com.github.aritraroy.PatternLockView:patternlockview:a90b0d4bf0"
+    implementation "com.google.android.exoplayer:exoplayer:2.16.1"
+    implementation "com.google.android.material:material:1.7.0"
+    implementation "com.jakewharton:disklrucache:2.0.2"
 
     // Tests
-    testImplementation project(':owncloudTestUtil')
+    testImplementation project(":owncloudTestUtil")
     testImplementation "androidx.arch.core:core-testing:$androidxArchCore"
     testImplementation "io.mockk:mockk:$ioMockk"
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$orgJetbrainsKotlinx"
 
     // Instrumented tests
-    androidTestImplementation project(':owncloudTestUtil')
+    androidTestImplementation project(":owncloudTestUtil")
     androidTestImplementation "androidx.annotation:annotation:$androidxAnnotation"
-    androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$androidxTestEspresso"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxTestEspresso"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$androidxTestEspresso"
@@ -81,7 +81,7 @@ dependencies {
     debugImplementation "androidx.test:monitor:1.6.0"
 
     debugImplementation "androidx.fragment:fragment-testing:$androidxFragment"
-    debugImplementation 'com.facebook.stetho:stetho:1.6.0'
+    debugImplementation "com.facebook.stetho:stetho:1.6.0"
 }
 
 android {
@@ -173,8 +173,8 @@ android {
         resources.excludes.add("META-INF/*")
     }
 
-    namespace 'com.owncloud.android'
-    testNamespace 'com.owncloud.android.test'
+    namespace "com.owncloud.android"
+    testNamespace "com.owncloud.android.test"
 }
 
 // Updates output file names of a given variant to format

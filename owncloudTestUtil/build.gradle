@@ -15,7 +15,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    namespace 'com.owncloud.android.testutil'
+    namespace "com.owncloud.android.testutil"
 }
 
 dependencies {
