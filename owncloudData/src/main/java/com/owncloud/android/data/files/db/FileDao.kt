@@ -31,7 +31,7 @@ import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-import com.owncloud.android.domain.ext.isOneOf
+import com.owncloud.android.domain.extensions.isOneOf
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import kotlinx.coroutines.flow.Flow

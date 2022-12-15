@@ -27,7 +27,7 @@ package com.owncloud.android.data.storage
 import android.accounts.Account
 import android.annotation.SuppressLint
 import android.net.Uri
-import com.owncloud.android.data.extension.moveRecursively
+import com.owncloud.android.data.extensions.moveRecursively
 import timber.log.Timber
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.transfers.model.OCTransfer

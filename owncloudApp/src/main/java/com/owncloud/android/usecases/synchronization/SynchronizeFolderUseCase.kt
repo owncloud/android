@@ -20,7 +20,7 @@
 package com.owncloud.android.usecases.synchronization
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.ext.isOneOf
+import com.owncloud.android.domain.extensions.isOneOf
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER_RECURSIVELY

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.ext
+package com.owncloud.android.domain.extensions
 
 fun Any.isOneOf(vararg values: Any): Boolean {
     return this in values
