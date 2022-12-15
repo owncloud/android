@@ -174,7 +174,7 @@ android {
     }
 
     namespace 'com.owncloud.android'
-    testNamespace '${applicationId}.test'
+    testNamespace 'com.owncloud.android.test'
 }
 
 // Updates output file names of a given variant to format
