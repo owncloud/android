@@ -36,8 +36,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.presentation.ui.security.BiometricActivity;
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity;
 import com.owncloud.android.presentation.ui.security.PatternActivity;
+import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
@@ -132,7 +132,7 @@ public class ManageSpaceActivity extends AppCompatActivity {
             result = result && appPrefsEditor.commit();
 
             final StringBuilder newPassCodeString = new StringBuilder();
-            for(int i = 0; i < numberOfPasscodeDigits && passCodeEnable; i++) {
+            for (int i = 0; i < numberOfPasscodeDigits && passCodeEnable; i++) {
                 newPassCodeString.append(passCodeDigits[i]);
             }
             appPrefsEditor.putString(PassCodeActivity.PREFERENCE_PASSCODE, newPassCodeString.toString());

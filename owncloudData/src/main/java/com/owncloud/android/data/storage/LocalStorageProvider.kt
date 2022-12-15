@@ -116,6 +116,9 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         return danglingDirs
     }
 
+    /**
+     * Cleans up unused files, such as deprecated user directories
+     */
     open fun deleteUnusedUserDirs(remainingAccounts: Array<Account>) {
         val danglingDirs = getDanglingAccountDirs(remainingAccounts)
         danglingDirs.forEach { dd ->
