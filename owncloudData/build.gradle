@@ -41,6 +41,11 @@ android {
         // Room Database Tests
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
+
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
+
     namespace 'com.owncloud.android.data'
 }
 
