@@ -18,7 +18,7 @@
  *
  */
 
-package com.owncloud.android.data.extension
+package com.owncloud.android.data.extensions
 
 import java.io.File
 import java.io.IOException
