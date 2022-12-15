@@ -28,10 +28,8 @@ import android.accounts.Account;
 import android.annotation.SuppressLint;
 import android.webkit.MimeTypeMap;
 
-import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper;
 import com.owncloud.android.data.storage.LocalStorageProvider;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.lib.resources.files.RemoteFile;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
@@ -96,17 +94,6 @@ public class FileStorageUtils {
         String parentPath = new File(remotePath).getParent();
         parentPath = parentPath.endsWith(File.separator) ? parentPath : parentPath + File.separator;
         return parentPath;
-    }
-
-    /**
-     * Creates and populates a new {@link OCFile} object with the data read from the server.
-     *
-     * @param remote remote file read from the server (remote file or folder).
-     * @return New OCFile instance representing the remote resource described by remote.
-     */
-    public static OCFile createOCFileFromRemoteFile(RemoteFile remote) {
-        RemoteFileMapper remoteFileMapper = new RemoteFileMapper();
-        return remoteFileMapper.toModel(remote);
     }
 
     /**
