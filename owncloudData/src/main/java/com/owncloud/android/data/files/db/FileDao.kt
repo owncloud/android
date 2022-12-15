@@ -46,6 +46,7 @@ abstract class FileDao {
         id: Long
     ): OCFileEntity?
 
+    @Transaction
     @Query(SELECT_FILE_WITH_ID)
     abstract fun getFileWithSyncInfoById(
         id: Long
@@ -90,6 +91,7 @@ abstract class FileDao {
         folderId: Long
     ): List<OCFileEntity>
 
+    @Transaction
     @Query(SELECT_FOLDER_CONTENT)
     abstract fun getFolderContentWithSyncInfo(
         folderId: Long

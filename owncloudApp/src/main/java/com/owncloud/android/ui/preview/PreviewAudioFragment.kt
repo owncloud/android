@@ -248,7 +248,7 @@ class PreviewAudioFragment : FileFragment() {
             false
         )
 
-        // additional restriction for this fragment 
+        // additional restriction for this fragment
         // TODO allow renaming in PreviewAudioFragment
         menu.findItem(R.id.action_rename_file).apply {
             isVisible = false

@@ -229,6 +229,10 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
                             icon = R.drawable.ic_user
                             dataUri = Uri.withAppendedPath(userBaseUri, shareWith)
                         }
+                        ShareType.UNKNOWN -> { /* Nothing to do */ }
+                        ShareType.PUBLIC_LINK -> { /* Nothing to do */ }
+                        ShareType.EMAIL -> { /* Nothing to do */ }
+                        ShareType.CONTACT -> { /* Nothing to do */ }
                     }
 
                     if (displayName != null && dataUri != null) {

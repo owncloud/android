@@ -17,8 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.owncloud.android">
+    xmlns:tools="http://schemas.android.com/tools">
     <!--
          GET_ACCOUNTS is needed for API < 23.
         For API >= 23 results in the addition of CONTACTS group to the list of permissions that may be
