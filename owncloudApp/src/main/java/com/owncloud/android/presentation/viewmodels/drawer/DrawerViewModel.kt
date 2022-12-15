@@ -80,7 +80,7 @@ class DrawerViewModel(
     fun removeAccount(context: Context) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val loggedAccounts = AccountUtils.getAccounts(context)
-            FileStorageUtils.deleteUnusedUserDirs(loggedAccounts)
+            localStorageProvider.deleteUnusedUserDirs(loggedAccounts)
 
             val userQuotas = getUserQuotasUseCase.execute(Unit)
             val loggedAccountsNames = loggedAccounts.map { it.name }

@@ -67,8 +67,8 @@ import com.owncloud.android.extensions.openOCFile
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.interfaces.SecurityEnforced
 import com.owncloud.android.interfaces.LockType
+import com.owncloud.android.interfaces.SecurityEnforced
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
 import com.owncloud.android.lib.common.network.CertificateCombinedException
@@ -97,9 +97,7 @@ import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
-import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
-import com.owncloud.android.utils.Extras
 import com.owncloud.android.utils.PreferenceUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -127,7 +125,6 @@ class FileDisplayActivity : FileActivity(),
         get() = job + Dispatchers.Main
 
     private var syncBroadcastReceiver: SyncBroadcastReceiver? = null
-    private var uploadBroadcastReceiver: UploadBroadcastReceiver? = null
     private var lastSslUntrustedServerResult: RemoteOperationResult<*>? = null
 
     /**
@@ -708,10 +705,6 @@ class FileDisplayActivity : FileActivity(),
             localBroadcastManager!!.unregisterReceiver(syncBroadcastReceiver!!)
             syncBroadcastReceiver = null
         }
-        if (uploadBroadcastReceiver != null) {
-            localBroadcastManager!!.unregisterReceiver(uploadBroadcastReceiver!!)
-            uploadBroadcastReceiver = null
-        }
 
         super.onPause()
         Timber.v("onPause() end")
@@ -797,188 +790,6 @@ class FileDisplayActivity : FileActivity(),
                     }
                 } else {
                     showRequestAccountChangeNotice(getString(R.string.auth_failure_snackbar), false)
-                }
-            }
-        }
-    }
-
-    /**
-     * Once the file upload has finished -> update view
-     */
-    private inner class UploadBroadcastReceiver : BroadcastReceiver() {
-        /**
-         * Once the file upload has finished -> update view
-         *
-         * @author David A. Velasco
-         * [BroadcastReceiver] to enable upload feedback in UI
-         */
-        override fun onReceive(context: Context, intent: Intent) {
-            val uploadedRemotePath = intent.getStringExtra(Extras.EXTRA_REMOTE_PATH)
-            val accountName = intent.getStringExtra(Extras.EXTRA_ACCOUNT_NAME)
-            val sameAccount = account != null && accountName == account.name
-            val currentDir = currentDir
-            val isDescendant = currentDir != null &&
-                    uploadedRemotePath != null &&
-                    uploadedRemotePath.startsWith(currentDir.remotePath)
-            val renamedInUpload = file.remotePath == intent.getStringExtra(Extras.EXTRA_OLD_REMOTE_PATH)
-            val sameFile = renamedInUpload || file.remotePath == uploadedRemotePath
-            val success = intent.getBooleanExtra(Extras.EXTRA_UPLOAD_RESULT, false)
-
-            if (sameAccount && sameFile) {
-                if (success && uploadedRemotePath != null) {
-                    file = storageManager.getFileByPath(uploadedRemotePath)
-                }
-                refreshSecondFragment(
-                    intent.action,
-                    success
-                )
-                if (renamedInUpload) {
-                    val newName = File(uploadedRemotePath).name
-                    showMessageInSnackbar(
-                        R.id.list_layout,
-                        String.format(getString(R.string.filedetails_renamed_in_upload_msg), newName)
-                    )
-                    updateToolbar(file)
-                }
-            }
-        }
-
-        private fun refreshSecondFragment(uploadEvent: String?, success: Boolean) {
-
-            val secondFragment = secondFragment
-
-            if (secondFragment != null) {
-                if (!success && !file.fileExists) {
-                    cleanSecondFragment()
-                } else {
-                    val file = file
-                    var fragmentReplaced = false
-                    if (success && secondFragment is FileDetailsFragment) {
-                        // start preview if previewable
-                        fragmentReplaced = true
-                        when {
-                            PreviewImageFragment.canBePreviewed(file) -> startImagePreview(file)
-                            PreviewAudioFragment.canBePreviewed(file) -> startAudioPreview(file, 0)
-                            PreviewVideoFragment.canBePreviewed(file) -> startVideoPreview(file, 0)
-                            PreviewTextFragment.canBePreviewed(file) -> startTextPreview(file)
-                            else -> fragmentReplaced = false
-                        }
-                    }
-                    if (!fragmentReplaced) {
-                        secondFragment.onSyncEvent(uploadEvent, success, file)
-                    }
-                }
-            }
-        }
-
-        // TODO refactor this receiver, and maybe DownloadBroadcastReceiver; this method is duplicated :S
-        private fun isAscendant(linkedToRemotePath: String): Boolean {
-            val currentDir = currentDir
-            return currentDir != null && currentDir.remotePath.startsWith(linkedToRemotePath)
-        }
-    }
-
-    /**
-     * Class waiting for broadcast events from the old FileDownloader service.
-     *
-     * TODO: Check if this is useful with new implementation.
-     *
-     * Updates the UI when a download is started or finished, provided that it is relevant for the
-     * current folder.
-     */
-    private inner class DownloadReceiver() {
-
-        fun refreshSecondFragmentAfterADownload(context: Context, intent: Intent) {
-            val sameAccount = isSameAccount(intent)
-            val downloadedRemotePath = intent.getStringExtra(Extras.EXTRA_REMOTE_PATH)
-            val isDescendant = isDescendant(downloadedRemotePath)
-
-            if (sameAccount && isDescendant) {
-                refreshSecondFragment(
-                    intent.action,
-                    downloadedRemotePath,
-                    intent.getBooleanExtra(Extras.EXTRA_DOWNLOAD_RESULT, false)
-                )
-                invalidateOptionsMenu()
-            }
-
-            waitingToSend = waitingToSend?.let { file ->
-                storageManager.getFileByPath(file.remotePath)
-            }
-            if (waitingToSend?.isAvailableLocally == true) {
-                sendDownloadedFile()
-            }
-
-            waitingToOpen = waitingToOpen?.let { file ->
-                storageManager.getFileByPath(file.remotePath)
-            }
-            if (waitingToOpen?.isAvailableLocally == true) {
-                openDownloadedFile()
-            }
-        }
-
-        private fun isDescendant(downloadedRemotePath: String?): Boolean {
-            val currentDir = currentDir
-            return currentDir != null &&
-                    downloadedRemotePath != null &&
-                    downloadedRemotePath.startsWith(currentDir.remotePath)
-        }
-
-        private fun isAscendant(linkedToRemotePath: String): Boolean {
-            val currentDir = currentDir
-            return currentDir != null && currentDir.remotePath.startsWith(linkedToRemotePath)
-        }
-
-        private fun isSameAccount(intent: Intent): Boolean {
-            val accountName = intent.getStringExtra(Extras.EXTRA_ACCOUNT_NAME)
-            return accountName != null && account != null &&
-                    accountName == account.name
-        }
-
-        private fun refreshSecondFragment(
-            downloadEvent: String?, downloadedRemotePath: String?,
-            success: Boolean
-        ) {
-            val secondFragment = secondFragment
-            if (secondFragment != null) {
-                var fragmentReplaced = false
-                if (secondFragment is FileDetailsFragment) {
-                    /// user was watching download progress
-                    val detailsFragment = secondFragment as FileDetailsFragment?
-                    val fileInFragment = detailsFragment?.file
-                    if (fileInFragment != null && downloadedRemotePath != fileInFragment.remotePath) {
-                        // the user browsed to other file ; forget the automatic preview
-                        fileWaitingToPreview = null
-
-                    } else if (downloadEvent == DOWNLOAD_FINISH_MESSAGE) {
-                        //  replace the right panel if waiting for preview
-                        val waitedPreview = fileWaitingToPreview?.remotePath == downloadedRemotePath
-                        if (waitedPreview) {
-                            if (success) {
-                                // update the file from database, to get the local storage path
-                                fileWaitingToPreview = storageManager.getFileById(fileWaitingToPreview!!.id!!)
-                                when {
-                                    PreviewAudioFragment.canBePreviewed(fileWaitingToPreview) -> {
-                                        fragmentReplaced = true
-                                        startAudioPreview(fileWaitingToPreview!!, 0)
-                                    }
-                                    PreviewVideoFragment.canBePreviewed(fileWaitingToPreview) -> {
-                                        fragmentReplaced = true
-                                        startVideoPreview(fileWaitingToPreview!!, 0)
-                                    }
-                                    PreviewTextFragment.canBePreviewed(fileWaitingToPreview) -> {
-                                        fragmentReplaced = true
-                                        startTextPreview(fileWaitingToPreview)
-                                    }
-                                    else -> fileOperationsHelper.openFile(fileWaitingToPreview)
-                                }
-                            }
-                            fileWaitingToPreview = null
-                        }
-                    }
-                }
-                if (!fragmentReplaced && downloadedRemotePath == secondFragment.file.remotePath) {
-                    secondFragment.onSyncEvent(downloadEvent, success, null)
                 }
             }
         }

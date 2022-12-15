@@ -32,6 +32,7 @@ import at.bitfire.dav4jvm.exception.UnauthorizedException
 import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
+import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.exceptions.CancelledException
 import com.owncloud.android.domain.exceptions.LocalStorageNotMovedException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
@@ -82,6 +83,7 @@ class DownloadFileWorker(
     private val cleanConflictUseCase: CleanConflictUseCase by inject()
     private val saveDownloadWorkerUuidUseCase: SaveDownloadWorkerUUIDUseCase by inject()
     private val cleanWorkersUuidUseCase: CleanWorkersUUIDUseCase by inject()
+    private val localStorageProvider: LocalStorageProvider by inject()
 
     lateinit var account: Account
     lateinit var ocFile: OCFile
@@ -105,11 +107,11 @@ class DownloadFileWorker(
      * Final path where this file should be stored.
      *
      * In case this file was previously downloaded, override it. Otherwise,
-     * @see FileStorageUtils.getDefaultSavePathFor
+     * @see LocalStorageProvider.getDefaultSavePathFor
      */
     private val finalLocationForFile: String
         get() = ocFile.storagePath.takeUnless { it.isNullOrBlank() }
-            ?: FileStorageUtils.getDefaultSavePathFor(account.name, ocFile)
+            ?: localStorageProvider.getDefaultSavePathFor(account.name, ocFile.remotePath)
 
     override suspend fun doWork(): Result {
         if (!areParametersValid()) return Result.failure()
