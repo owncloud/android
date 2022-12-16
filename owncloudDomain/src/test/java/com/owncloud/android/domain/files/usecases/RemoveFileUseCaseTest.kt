@@ -36,26 +36,26 @@ class RemoveFileUseCaseTest {
 
     @Test
     fun `remove file - ok`() {
-        every { repository.deleteFile(any(), any()) } returns Unit
+        every { repository.deleteFiles(any(), any()) } returns Unit
 
         val useCaseResult = useCase.execute(useCaseParams.copy(removeOnlyLocalCopy = false))
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { repository.deleteFile(any(), removeOnlyLocalCopy = false) }
+        verify(exactly = 1) { repository.deleteFiles(any(), removeOnlyLocalCopy = false) }
     }
 
     @Test
     fun `remove file - ok - remove local only`() {
-        every { repository.deleteFile(any(), any()) } returns Unit
+        every { repository.deleteFiles(any(), any()) } returns Unit
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { repository.deleteFile(any(), removeOnlyLocalCopy = true) }
+        verify(exactly = 1) { repository.deleteFiles(any(), removeOnlyLocalCopy = true) }
     }
 
     @Test
@@ -65,18 +65,18 @@ class RemoveFileUseCaseTest {
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
-        verify(exactly = 0) { repository.deleteFile(any(), removeOnlyLocalCopy = true) }
+        verify(exactly = 0) { repository.deleteFiles(any(), removeOnlyLocalCopy = true) }
     }
 
     @Test
     fun `remove file - ko - other exception`() {
-        every { repository.deleteFile(any(), any()) } throws UnauthorizedException()
+        every { repository.deleteFiles(any(), any()) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { repository.deleteFile(any(), any()) }
+        verify(exactly = 1) { repository.deleteFiles(any(), any()) }
     }
 }

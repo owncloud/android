@@ -308,7 +308,7 @@ class OCFileRepository(
         )
     }
 
-    override fun deleteFile(listOfFilesToDelete: List<OCFile>, removeOnlyLocalCopy: Boolean) {
+    override fun deleteFiles(listOfFilesToDelete: List<OCFile>, removeOnlyLocalCopy: Boolean) {
         listOfFilesToDelete.forEach { ocFile ->
             if (!removeOnlyLocalCopy) {
                 try {

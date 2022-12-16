@@ -30,7 +30,7 @@ class RemoveFileUseCase(
 
         require(params.listOfFilesToDelete.isNotEmpty())
 
-        return fileRepository.deleteFile(
+        return fileRepository.deleteFiles(
             listOfFilesToDelete = params.listOfFilesToDelete,
             removeOnlyLocalCopy = params.removeOnlyLocalCopy
         )
