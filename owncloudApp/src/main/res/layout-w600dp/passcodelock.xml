@@ -96,7 +96,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/error" />
 
-    <com.owncloud.android.presentation.ui.security.passcode.NumberKeyboard
+    <com.owncloud.android.presentation.security.passcode.NumberKeyboard
         android:id="@+id/numberKeyboard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

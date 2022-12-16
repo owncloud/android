@@ -34,8 +34,8 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.sharing.fragments.SearchShareesFragment
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.presentation.sharing.SearchShareesFragment
+import com.owncloud.android.presentation.sharing.OCShareViewModel
 import com.owncloud.android.sharing.shares.ui.TestShareFileActivity
 import com.owncloud.android.testutil.OC_SHARE
 import io.mockk.every

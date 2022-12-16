@@ -25,30 +25,30 @@ package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.MainApp
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.presentation.ui.files.details.FileDetailsViewModel
-import com.owncloud.android.presentation.ui.files.filelist.MainFileListViewModel
-import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
-import com.owncloud.android.presentation.ui.security.passcode.PasscodeAction
-import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
-import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
-import com.owncloud.android.presentation.viewmodels.conflicts.ConflictsResolveViewModel
-import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
-import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
-import com.owncloud.android.presentation.viewmodels.migration.MigrationViewModel
-import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
-import com.owncloud.android.presentation.viewmodels.releasenotes.ReleaseNotesViewModel
-import com.owncloud.android.presentation.viewmodels.security.BiometricViewModel
-import com.owncloud.android.presentation.viewmodels.security.PassCodeViewModel
-import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
-import com.owncloud.android.presentation.viewmodels.settings.SettingsAdvancedViewModel
-import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
-import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
-import com.owncloud.android.presentation.viewmodels.settings.SettingsPictureUploadsViewModel
-import com.owncloud.android.presentation.viewmodels.settings.SettingsSecurityViewModel
-import com.owncloud.android.presentation.viewmodels.settings.SettingsVideoUploadsViewModel
-import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
-import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel
+import com.owncloud.android.presentation.files.details.FileDetailsViewModel
+import com.owncloud.android.presentation.files.filelist.MainFileListViewModel
+import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.security.passcode.PasscodeAction
+import com.owncloud.android.presentation.authentication.AuthenticationViewModel
+import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.conflicts.ConflictsResolveViewModel
+import com.owncloud.android.presentation.common.DrawerViewModel
+import com.owncloud.android.presentation.logging.LogListViewModel
+import com.owncloud.android.presentation.migration.MigrationViewModel
+import com.owncloud.android.presentation.authentication.oauth.OAuthViewModel
+import com.owncloud.android.presentation.releasenotes.ReleaseNotesViewModel
+import com.owncloud.android.presentation.security.biometric.BiometricViewModel
+import com.owncloud.android.presentation.security.passcode.PassCodeViewModel
+import com.owncloud.android.presentation.security.pattern.PatternViewModel
+import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedViewModel
+import com.owncloud.android.presentation.settings.logging.SettingsLogsViewModel
+import com.owncloud.android.presentation.settings.more.SettingsMoreViewModel
+import com.owncloud.android.presentation.settings.autouploads.SettingsPictureUploadsViewModel
+import com.owncloud.android.presentation.settings.security.SettingsSecurityViewModel
+import com.owncloud.android.presentation.settings.autouploads.SettingsVideoUploadsViewModel
+import com.owncloud.android.presentation.settings.SettingsViewModel
+import com.owncloud.android.presentation.sharing.OCShareViewModel
+import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.ui.ReceiveExternalFilesViewModel
 import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel
 import com.owncloud.android.ui.preview.PreviewImageViewModel
@@ -60,7 +60,7 @@ val viewModelModule = module {
     viewModel { DrawerViewModel(get(), get(), get(), get(), get()) }
 
     viewModel { (accountName: String) ->
-        OCCapabilityViewModel(accountName, get(), get(), get())
+        CapabilityViewModel(accountName, get(), get(), get())
     }
 
     viewModel { (filePath: String, accountName: String) ->
@@ -71,7 +71,7 @@ val viewModelModule = module {
         PassCodeViewModel(get(), get(), action)
     }
 
-    viewModel { OCAuthenticationViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { AuthenticationViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { OAuthViewModel(get(), get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { SettingsSecurityViewModel(get(), get()) }

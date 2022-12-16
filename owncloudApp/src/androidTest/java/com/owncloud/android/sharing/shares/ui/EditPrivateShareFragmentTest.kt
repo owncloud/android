@@ -35,8 +35,8 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.sharing.fragments.EditPrivateShareFragment
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.presentation.sharing.EditPrivateShareFragment
+import com.owncloud.android.presentation.sharing.OCShareViewModel
 import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_FOLDER

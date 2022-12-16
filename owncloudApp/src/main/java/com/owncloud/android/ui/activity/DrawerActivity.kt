@@ -58,8 +58,8 @@ import com.owncloud.android.extensions.openPrivacyPolicy
 import com.owncloud.android.extensions.sendEmail
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.settings.SettingsActivity
-import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
+import com.owncloud.android.presentation.settings.SettingsActivity
+import com.owncloud.android.presentation.common.DrawerViewModel
 import com.owncloud.android.utils.AvatarUtils
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils

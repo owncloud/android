@@ -25,7 +25,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ReleaseNotesItemBinding
-import com.owncloud.android.presentation.ui.releasenotes.ReleaseNote
+import com.owncloud.android.presentation.releasenotes.ReleaseNote
 
 class ReleaseNotesAdapter() :
     RecyclerView.Adapter<ReleaseNotesAdapter.ViewHolder>() {

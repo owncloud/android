@@ -41,9 +41,9 @@ import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogFragment
-import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.presentation.sharing.PublicShareDialogFragment
+import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.sharing.OCShareViewModel
 import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_CAPABILITY
 import com.owncloud.android.testutil.OC_FILE
@@ -63,14 +63,14 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 class PublicShareCreationDialogFragmentTest {
-    private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
+    private val capabilityViewModel = mockk<CapabilityViewModel>(relaxed = true)
     private val capabilitiesLiveData = MutableLiveData<Event<UIResult<OCCapability>>>()
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
     private val publicShareCreationStatus = MutableLiveData<Event<UIResult<Unit>>>()
 
     @Before
     fun setUp() {
-        every { ocCapabilityViewModel.capabilities } returns capabilitiesLiveData
+        every { capabilityViewModel.capabilities } returns capabilitiesLiveData
         every { ocShareViewModel.publicShareCreationStatus } returns publicShareCreationStatus
 
         stopKoin()
@@ -81,7 +81,7 @@ class PublicShareCreationDialogFragmentTest {
             modules(
                 module {
                     viewModel {
-                        ocCapabilityViewModel
+                        capabilityViewModel
                     }
                     viewModel {
                         ocShareViewModel

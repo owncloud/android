@@ -49,9 +49,9 @@ import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.media.MediaControlView
 import com.owncloud.android.media.MediaService
 import com.owncloud.android.media.MediaServiceBinder
-import com.owncloud.android.presentation.ui.files.operations.FileOperation
-import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
-import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
+import com.owncloud.android.presentation.files.operations.FileOperation
+import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.fragment.FileFragment

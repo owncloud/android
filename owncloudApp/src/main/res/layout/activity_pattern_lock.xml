@@ -55,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout
+    <com.owncloud.android.presentation.security.passcode.SquareFrameLayout
         android:id="@+id/patternContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -79,6 +79,6 @@
             <requestFocus />
 
         </com.andrognito.patternlockview.PatternLockView>
-    </com.owncloud.android.presentation.ui.security.passcode.SquareFrameLayout>
+    </com.owncloud.android.presentation.security.passcode.SquareFrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

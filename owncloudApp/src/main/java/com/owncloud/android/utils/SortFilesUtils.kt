@@ -19,7 +19,7 @@
 package com.owncloud.android.utils
 
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.presentation.ui.files.SortType
+import com.owncloud.android.presentation.files.SortType
 
 class SortFilesUtils {
     fun sortFiles(

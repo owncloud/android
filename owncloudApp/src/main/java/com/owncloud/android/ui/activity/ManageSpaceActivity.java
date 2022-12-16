@@ -35,16 +35,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
 import com.owncloud.android.extensions.ActivityExtKt;
-import com.owncloud.android.presentation.ui.security.BiometricActivity;
-import com.owncloud.android.presentation.ui.security.PatternActivity;
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity;
+import com.owncloud.android.presentation.security.biometric.BiometricActivity;
+import com.owncloud.android.presentation.security.pattern.PatternActivity;
+import com.owncloud.android.presentation.security.passcode.PassCodeActivity;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;
 
 import java.io.File;
 
-import static com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity.PREFERENCE_PASSCODE;
+import static com.owncloud.android.presentation.security.passcode.PassCodeActivity.PREFERENCE_PASSCODE;
 
 public class ManageSpaceActivity extends AppCompatActivity {
 

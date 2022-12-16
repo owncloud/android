@@ -28,9 +28,9 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
-import com.owncloud.android.presentation.viewmodels.settings.SettingsAdvancedViewModel
+import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment
+import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
+import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
 import io.mockk.mockk

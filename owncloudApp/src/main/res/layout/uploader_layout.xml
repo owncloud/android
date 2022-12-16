@@ -38,7 +38,7 @@
             android:layout_gravity="top"
             android:layout_weight="1">
 
-            <com.owncloud.android.presentation.ui.files.SortOptionsView
+            <com.owncloud.android.presentation.files.SortOptionsView
                 android:id="@+id/options_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

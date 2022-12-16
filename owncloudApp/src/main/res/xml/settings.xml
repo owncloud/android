@@ -19,7 +19,7 @@
     app:key="settings_screen">
 
     <Preference
-        app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment"
+        app:fragment="com.owncloud.android.presentation.settings.fragments.SettingsSecurityFragment"
         app:icon="@drawable/ic_lock_colored"
         app:key="security_subsection"
         app:summary="@string/prefs_subsection_security_summary"
@@ -27,7 +27,7 @@
 
     <Preference
         app:allowDividerAbove="true"
-        app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment"
+        app:fragment="com.owncloud.android.presentation.settings.fragments.SettingsLogsFragment"
         app:icon="@drawable/ic_logs"
         app:key="logging_subsection"
         app:summary="@string/prefs_subsection_logging_summary"
@@ -35,14 +35,14 @@
 
     <Preference
         app:allowDividerAbove="true"
-        app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsPictureUploadsFragment"
+        app:fragment="com.owncloud.android.presentation.settings.fragments.SettingsPictureUploadsFragment"
         app:icon="@drawable/ic_picture_uploads"
         app:key="picture_uploads_subsection"
         app:summary="@string/prefs_subsection_picture_uploads_summary"
         app:title="@string/prefs_subsection_picture_uploads" />
 
     <Preference
-        app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsVideoUploadsFragment"
+        app:fragment="com.owncloud.android.presentation.settings.fragments.SettingsVideoUploadsFragment"
         app:icon="@drawable/ic_video_uploads"
         app:key="video_uploads_subsection"
         app:summary="@string/prefs_subsection_video_uploads_summary"
@@ -50,14 +50,14 @@
 
     <Preference
         app:allowDividerAbove="true"
-        app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsAdvancedFragment"
+        app:fragment="com.owncloud.android.presentation.settings.fragments.SettingsAdvancedFragment"
         app:icon="@drawable/ic_settings"
         app:key="advanced_subsection"
         app:title="@string/prefs_subsection_advanced" />
 
     <Preference
         app:allowDividerAbove="true"
-        app:fragment="com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment"
+        app:fragment="com.owncloud.android.presentation.settings.fragments.SettingsMoreFragment"
         app:icon="@drawable/ic_more"
         app:key="more_subsection"
         app:summary="@string/prefs_subsection_more_summary"

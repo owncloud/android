@@ -37,7 +37,7 @@ import androidx.work.WorkInfo
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
-import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel
+import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForDownloadingFileUseCase
 import com.owncloud.android.utils.PreferenceUtils

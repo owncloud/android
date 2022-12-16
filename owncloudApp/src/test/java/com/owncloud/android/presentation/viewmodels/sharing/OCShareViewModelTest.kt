@@ -34,6 +34,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUs
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.sharing.OCShareViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME

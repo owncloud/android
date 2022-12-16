@@ -77,14 +77,14 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.SyncProfileOperation
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.conflicts.ConflictsResolveActivity
-import com.owncloud.android.presentation.ui.files.details.FileDetailsFragment
-import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment
-import com.owncloud.android.presentation.ui.files.operations.FileOperation
-import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
-import com.owncloud.android.presentation.ui.security.bayPassUnlockOnce
-import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
-import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel
+import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
+import com.owncloud.android.presentation.files.details.FileDetailsFragment
+import com.owncloud.android.presentation.files.filelist.MainFileListFragment
+import com.owncloud.android.presentation.files.operations.FileOperation
+import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.security.bayPassUnlockOnce
+import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.syncadapter.FileSyncAdapter
 import com.owncloud.android.ui.fragment.FileFragment
@@ -244,7 +244,7 @@ class FileDisplayActivity : FileActivity(),
         super.onPostCreate(savedInstanceState)
 
         if (savedInstanceState == null && mAccountWasSet) {
-            val capabilitiesViewModel: OCCapabilityViewModel by viewModel {
+            val capabilitiesViewModel: CapabilityViewModel by viewModel {
                 parametersOf(
                     account?.name
                 )
