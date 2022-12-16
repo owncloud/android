@@ -22,7 +22,7 @@ package com.owncloud.android.presentation.viewmodels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.testutil.livedata.getEmittedValues
 import io.mockk.unmockkAll

@@ -37,6 +37,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.OCShare;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
+import com.owncloud.android.presentation.common.ShareSheetHelper;
 import com.owncloud.android.presentation.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;

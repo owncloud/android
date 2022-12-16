@@ -46,7 +46,7 @@ import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.parseError
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.authentication.ACTION_UPDATE_EXPIRED_TOKEN
 import com.owncloud.android.presentation.authentication.ACTION_UPDATE_TOKEN
 import com.owncloud.android.presentation.authentication.BASIC_TOKEN_TYPE

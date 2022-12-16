@@ -144,13 +144,13 @@
             android:label="@string/sync_string_files"
             android:syncable="true" />
         <provider
-            android:name=".presentation.sharing.UsersAndGroupsSearchProvider"
+            android:name=".presentation.sharing.sharees.UsersAndGroupsSearchProvider"
             android:authorities="@string/search_suggest_authority"
             android:enabled="true"
             android:exported="false"
             android:label="@string/search_users_and_groups_hint" />
         <provider
-            android:name=".providers.DocumentsStorageProvider"
+            android:name=".presentation.documentsprovider.DocumentsStorageProvider"
             android:authorities="@string/document_provider_authority"
             android:exported="true"
             android:grantUriPermissions="true"

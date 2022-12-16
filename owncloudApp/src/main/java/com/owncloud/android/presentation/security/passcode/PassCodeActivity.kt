@@ -44,11 +44,11 @@ import com.owncloud.android.databinding.PasscodelockBinding
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.showBiometricDialog
-import com.owncloud.android.interfaces.BiometricStatus
-import com.owncloud.android.interfaces.EnableBiometrics
+import com.owncloud.android.presentation.security.biometric.BiometricStatus
+import com.owncloud.android.presentation.security.biometric.EnableBiometrics
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.presentation.security.biometric.BiometricViewModel
-import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
+import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -302,7 +302,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
     private fun actionRemoveOk() {
         val resultIntent = Intent()
         setResult(RESULT_OK, resultIntent)
-        notifyDocumentProviderRoots(applicationContext)
+        notifyDocumentsProviderRoots(applicationContext)
         finish()
     }
 
@@ -407,7 +407,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
      */
     private fun savePassCodeAndExit() {
         setResult(RESULT_OK, resultIntent)
-        notifyDocumentProviderRoots(applicationContext)
+        notifyDocumentsProviderRoots(applicationContext)
         if (biometricViewModel.isBiometricLockAvailable()) {
             showBiometricDialog(this)
         } else {

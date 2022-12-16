@@ -33,7 +33,7 @@
             android:text="@string/welcome_feature_skip_button"
             android:textColor="@color/white" />
 
-        <com.owncloud.android.ui.whatsnew.ProgressIndicator
+        <com.owncloud.android.wizard.ProgressIndicator
             android:id="@+id/progressIndicator"
             android:layout_width="0dp"
             android:layout_height="match_parent"

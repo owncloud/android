@@ -33,7 +33,7 @@ import com.owncloud.android.R;
 import com.owncloud.android.presentation.authentication.AccountUtils;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.ui.activity.BaseActivity;
-import com.owncloud.android.utils.AvatarUtils;
+import com.owncloud.android.presentation.avatar.AvatarUtils;
 import com.owncloud.android.utils.DisplayUtils;
 import timber.log.Timber;
 

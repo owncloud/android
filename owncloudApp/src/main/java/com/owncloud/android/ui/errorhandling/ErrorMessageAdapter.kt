@@ -35,7 +35,8 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.ui.errorhandling.TransferOperation.Download
+import com.owncloud.android.presentation.transfers.TransferOperation
+import com.owncloud.android.presentation.transfers.TransferOperation.Download
 import java.io.File
 import java.net.SocketTimeoutException
 

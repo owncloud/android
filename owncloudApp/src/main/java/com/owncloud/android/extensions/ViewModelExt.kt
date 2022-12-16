@@ -25,7 +25,7 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.ContextProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch

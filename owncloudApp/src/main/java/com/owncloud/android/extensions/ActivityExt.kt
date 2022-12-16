@@ -40,12 +40,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.enums.LockEnforcedType
-import com.owncloud.android.enums.LockEnforcedType.Companion.parseFromInteger
-import com.owncloud.android.interfaces.BiometricStatus
-import com.owncloud.android.interfaces.EnableBiometrics
-import com.owncloud.android.interfaces.SecurityEnforced
-import com.owncloud.android.interfaces.LockType
+import com.owncloud.android.presentation.security.LockEnforcedType
+import com.owncloud.android.presentation.security.LockEnforcedType.Companion.parseFromInteger
+import com.owncloud.android.presentation.security.biometric.BiometricStatus
+import com.owncloud.android.presentation.security.biometric.EnableBiometrics
+import com.owncloud.android.presentation.security.SecurityEnforced
+import com.owncloud.android.presentation.security.LockType
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.presentation.security.biometric.BiometricActivity
 import com.owncloud.android.presentation.security.pattern.PatternActivity
@@ -54,7 +54,7 @@ import com.owncloud.android.presentation.settings.privacypolicy.PrivacyPolicyAct
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.ALL_FILES_SAF_REGEX
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
-import com.owncloud.android.ui.helpers.ShareSheetHelper
+import com.owncloud.android.presentation.common.ShareSheetHelper
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.UriUtilsKt
 import com.owncloud.android.utils.UriUtilsKt.getExposedFileUriForOCFile

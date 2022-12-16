@@ -42,8 +42,10 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.extensions.showErrorInSnackbar
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.sharing.sharees.ShareUserListAdapter
+import com.owncloud.android.presentation.sharing.shares.SharePublicLinkListAdapter
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
@@ -181,7 +183,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         )
     }
 
-    private val ocShareViewModel: OCShareViewModel by viewModel {
+    private val shareViewModel: ShareViewModel by viewModel {
         parametersOf(
             file?.remotePath,
             account?.name
@@ -322,7 +324,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     }
 
     private fun observeShares() {
-        ocShareViewModel.shares.observe(viewLifecycleOwner) { event ->
+        shareViewModel.shares.observe(viewLifecycleOwner) { event ->
             val uiResult = event.peekContent()
             val shares = uiResult.getStoredData()
             when (uiResult) {

@@ -42,7 +42,7 @@ import com.owncloud.android.presentation.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.security.pattern.PatternActivity
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.settings.SettingsFragment.Companion.removePreferenceFromScreen
-import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
+import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsSecurityFragment : PreferenceFragmentCompat() {
@@ -200,7 +200,7 @@ class SettingsSecurityFragment : PreferenceFragmentCompat() {
         // Lock access from document provider
         prefLockAccessDocumentProvider?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
             securityViewModel.setPrefLockAccessDocumentProvider(true)
-            notifyDocumentProviderRoots(requireContext())
+            notifyDocumentsProviderRoots(requireContext())
             true
         }
 

@@ -31,10 +31,10 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.sharing.ShareFileFragment
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
-import com.owncloud.android.presentation.sharing.OCShareViewModel
+import com.owncloud.android.presentation.sharing.ShareViewModel
 import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_CAPABILITY
 import com.owncloud.android.testutil.OC_FOLDER
@@ -53,13 +53,13 @@ import org.koin.dsl.module
 class ShareFolderFragmentTest {
     private val capabilityViewModel = mockk<CapabilityViewModel>(relaxed = true)
     private val capabilitiesLiveData = MutableLiveData<Event<UIResult<OCCapability>>>()
-    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
+    private val shareViewModel = mockk<ShareViewModel>(relaxed = true)
     private val sharesLiveData = MutableLiveData<Event<UIResult<List<OCShare>>>>()
 
     @Before
     fun setUp() {
         every { capabilityViewModel.capabilities } returns capabilitiesLiveData
-        every { ocShareViewModel.shares } returns sharesLiveData
+        every { shareViewModel.shares } returns sharesLiveData
 
         stopKoin()
 
@@ -72,7 +72,7 @@ class ShareFolderFragmentTest {
                         capabilityViewModel
                     }
                     viewModel {
-                        ocShareViewModel
+                        shareViewModel
                     }
                 }
             )

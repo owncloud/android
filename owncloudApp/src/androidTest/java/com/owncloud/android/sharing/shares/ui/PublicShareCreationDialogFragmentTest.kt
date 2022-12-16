@@ -40,10 +40,10 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.sharing.PublicShareDialogFragment
+import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.presentation.sharing.shares.PublicShareDialogFragment
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
-import com.owncloud.android.presentation.sharing.OCShareViewModel
+import com.owncloud.android.presentation.sharing.ShareViewModel
 import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_CAPABILITY
 import com.owncloud.android.testutil.OC_FILE
@@ -65,13 +65,13 @@ import java.util.Date
 class PublicShareCreationDialogFragmentTest {
     private val capabilityViewModel = mockk<CapabilityViewModel>(relaxed = true)
     private val capabilitiesLiveData = MutableLiveData<Event<UIResult<OCCapability>>>()
-    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
+    private val shareViewModel = mockk<ShareViewModel>(relaxed = true)
     private val publicShareCreationStatus = MutableLiveData<Event<UIResult<Unit>>>()
 
     @Before
     fun setUp() {
         every { capabilityViewModel.capabilities } returns capabilitiesLiveData
-        every { ocShareViewModel.publicShareCreationStatus } returns publicShareCreationStatus
+        every { shareViewModel.publicShareCreationStatus } returns publicShareCreationStatus
 
         stopKoin()
 
@@ -84,7 +84,7 @@ class PublicShareCreationDialogFragmentTest {
                         capabilityViewModel
                     }
                     viewModel {
-                        ocShareViewModel
+                        shareViewModel
                     }
                 }
             )

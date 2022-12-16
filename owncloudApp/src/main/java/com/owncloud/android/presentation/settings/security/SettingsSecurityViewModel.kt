@@ -23,8 +23,8 @@ package com.owncloud.android.presentation.settings.security
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.enums.LockEnforcedType
-import com.owncloud.android.enums.LockEnforcedType.Companion.parseFromInteger
+import com.owncloud.android.presentation.security.LockEnforcedType
+import com.owncloud.android.presentation.security.LockEnforcedType.Companion.parseFromInteger
 import com.owncloud.android.presentation.security.biometric.BiometricActivity
 import com.owncloud.android.presentation.security.LockTimeout
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity
