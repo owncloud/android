@@ -372,7 +372,7 @@ class OCRemoteShareDataSourceTest {
     @Test
     fun deleteShare() {
         val removeRemoteShareOperationResult = createRemoteOperationResultMock(
-            ShareResponse(arrayListOf()),
+            Unit,
             isSuccess = true
         )
 
@@ -397,7 +397,7 @@ class OCRemoteShareDataSourceTest {
 
     private fun deleteShareOperationWithError(resultCode: RemoteOperationResult.ResultCode? = null) {
         val removeRemoteShareOperationResult = createRemoteOperationResultMock(
-            ShareResponse(arrayListOf()),
+            Unit,
             false,
             null,
             resultCode
