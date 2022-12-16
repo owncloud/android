@@ -36,7 +36,7 @@ import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase

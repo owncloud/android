@@ -27,7 +27,7 @@ import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
 import com.owncloud.android.lib.common.accounts.AccountUtils
-import com.owncloud.android.presentation.manager.AvatarManager
+import com.owncloud.android.presentation.avatar.AvatarManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

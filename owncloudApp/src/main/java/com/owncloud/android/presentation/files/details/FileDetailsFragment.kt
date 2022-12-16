@@ -50,7 +50,7 @@ import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.files.FileMenuFilter
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.files.details.FileDetailsViewModel.ActionsInDetailsView.NONE
 import com.owncloud.android.presentation.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC
@@ -64,8 +64,8 @@ import com.owncloud.android.presentation.files.operations.FileOperationsViewMode
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.FRAGMENT_TAG_CONFIRMATION
 import com.owncloud.android.ui.activity.FileDisplayActivity
-import com.owncloud.android.ui.dialog.RenameFileDialogFragment
-import com.owncloud.android.ui.dialog.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
+import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
+import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.preview.PreviewAudioFragment
 import com.owncloud.android.ui.preview.PreviewImageFragment

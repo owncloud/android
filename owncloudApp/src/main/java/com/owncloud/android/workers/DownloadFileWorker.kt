@@ -54,7 +54,7 @@ import com.owncloud.android.presentation.authentication.LoginActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
-import com.owncloud.android.ui.errorhandling.TransferOperation.Download
+import com.owncloud.android.presentation.transfers.TransferOperation.Download
 import com.owncloud.android.ui.preview.PreviewImageActivity
 import com.owncloud.android.ui.preview.PreviewImageFragment.Companion.canBePreviewed
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID

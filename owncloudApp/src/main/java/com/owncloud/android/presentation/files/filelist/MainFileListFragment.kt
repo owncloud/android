@@ -58,7 +58,7 @@ import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
 import com.owncloud.android.files.FileMenuFilter
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.common.BottomSheetFragmentItemView
 import com.owncloud.android.presentation.files.SortBottomSheetFragment
 import com.owncloud.android.presentation.files.SortBottomSheetFragment.Companion.newInstance
@@ -75,9 +75,8 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
-import com.owncloud.android.ui.dialog.RenameFileDialogFragment
-import com.owncloud.android.ui.dialog.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
-import com.owncloud.android.utils.ColumnQuantity
+import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
+import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf

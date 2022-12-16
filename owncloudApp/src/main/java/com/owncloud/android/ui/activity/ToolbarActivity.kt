@@ -33,7 +33,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.presentation.authentication.AccountUtils
-import com.owncloud.android.utils.AvatarUtils
+import com.owncloud.android.presentation.avatar.AvatarUtils
 
 /**
  * Base class providing toolbar registration functionality, see [.setupToolbar].

@@ -64,12 +64,12 @@ import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.showErrorInToast
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.interfaces.SecurityEnforced
-import com.owncloud.android.interfaces.LockType
+import com.owncloud.android.presentation.security.SecurityEnforced
+import com.owncloud.android.presentation.security.LockType
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.network.CertificateCombinedException
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.presentation.authentication.oauth.OAuthViewModel
 import com.owncloud.android.providers.ContextProvider
@@ -78,7 +78,7 @@ import com.owncloud.android.providers.MdmProvider.Companion.NO_MDM_RESTRICTION_Y
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
-import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
+import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -380,7 +380,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         resultBundle = intent.extras
         setResult(Activity.RESULT_OK, intent)
 
-        notifyDocumentProviderRoots(applicationContext)
+        notifyDocumentsProviderRoots(applicationContext)
 
         finish()
     }

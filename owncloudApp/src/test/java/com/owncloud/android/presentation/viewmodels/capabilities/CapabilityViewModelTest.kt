@@ -27,7 +27,7 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider

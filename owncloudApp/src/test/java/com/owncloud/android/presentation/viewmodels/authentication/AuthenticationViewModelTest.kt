@@ -29,7 +29,7 @@ import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.domain.webfinger.usecases.GetJRDFromWebfingerHostUseCase
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.authentication.AuthenticationViewModel
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.ContextProvider

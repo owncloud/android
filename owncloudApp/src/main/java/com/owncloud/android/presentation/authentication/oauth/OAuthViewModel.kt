@@ -32,7 +32,7 @@ import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 
 class OAuthViewModel(

@@ -23,7 +23,7 @@ import androidx.lifecycle.ViewModel
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 

@@ -36,9 +36,12 @@ import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.utils.Event.EventObserver
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.lib.resources.shares.RemoteShare
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.presentation.sharing.sharees.EditPrivateShareFragment
+import com.owncloud.android.presentation.sharing.sharees.SearchShareesFragment
+import com.owncloud.android.presentation.sharing.sharees.UsersAndGroupsSearchProvider
+import com.owncloud.android.presentation.sharing.shares.PublicShareDialogFragment
 import com.owncloud.android.ui.activity.FileActivity
-import com.owncloud.android.ui.dialog.RemoveShareDialogFragment
 import com.owncloud.android.ui.utils.showDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -48,7 +51,7 @@ import timber.log.Timber
  * Activity for sharing files
  */
 class ShareActivity : FileActivity(), ShareFragmentListener {
-    private val ocShareViewModel: OCShareViewModel by viewModel {
+    private val shareViewModel: ShareViewModel by viewModel {
         parametersOf(
             file.remotePath,
             account?.name
@@ -119,7 +122,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     private fun createPrivateShare(shareeName: String, dataAuthority: String?) {
         val shareType = UsersAndGroupsSearchProvider.getShareType(dataAuthority)
 
-        ocShareViewModel.insertPrivateShare(
+        shareViewModel.insertPrivateShare(
             file.remotePath,
             shareType,
             shareeName,
@@ -129,7 +132,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     private fun observePrivateShareCreation() {
-        ocShareViewModel.privateShareCreationStatus.observe(
+        shareViewModel.privateShareCreationStatus.observe(
             this,
             EventObserver { uiResult ->
                 when (uiResult) {
@@ -168,7 +171,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     private fun observePrivateShareEdition() {
-        ocShareViewModel.privateShareEditionStatus.observe(
+        shareViewModel.privateShareEditionStatus.observe(
             this,
             EventObserver { uiResult ->
                 when (uiResult) {
@@ -241,7 +244,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
      **************************************************************************************************************/
 
     private fun observeShareDeletion() {
-        ocShareViewModel.shareDeletionStatus.observe(
+        shareViewModel.shareDeletionStatus.observe(
             this,
             EventObserver { uiResult ->
                 when (uiResult) {
@@ -267,7 +270,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     }
 
     override fun deleteShare(remoteId: String) {
-        ocShareViewModel.deleteShare(remoteId)
+        shareViewModel.deleteShare(remoteId)
     }
 
     override fun copyOrSendPublicLink(share: OCShare) {

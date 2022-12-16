@@ -40,12 +40,12 @@ import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.databinding.ActivityPatternLockBinding
 import com.owncloud.android.extensions.showBiometricDialog
-import com.owncloud.android.interfaces.BiometricStatus
-import com.owncloud.android.interfaces.EnableBiometrics
+import com.owncloud.android.presentation.security.biometric.BiometricStatus
+import com.owncloud.android.presentation.security.biometric.EnableBiometrics
 import com.owncloud.android.presentation.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.security.biometric.BiometricViewModel
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
-import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
+import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -235,7 +235,7 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
             val result = Intent()
             setResult(RESULT_OK, result)
             binding.errorPattern.visibility = View.INVISIBLE
-            notifyDocumentProviderRoots(applicationContext)
+            notifyDocumentsProviderRoots(applicationContext)
             finish()
         } else {
             showErrorAndRestart(
@@ -288,7 +288,7 @@ class PatternActivity : AppCompatActivity(), EnableBiometrics {
     private fun savePatternAndExit() {
         patternViewModel.setPattern(patternValue!!)
         setResult(RESULT_OK, resultIntent)
-        notifyDocumentProviderRoots(applicationContext)
+        notifyDocumentsProviderRoots(applicationContext)
         if (biometricViewModel.isBiometricLockAvailable()) {
             showBiometricDialog(this)
         } else {

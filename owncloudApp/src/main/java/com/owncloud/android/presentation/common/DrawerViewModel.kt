@@ -33,7 +33,7 @@ import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import kotlinx.coroutines.launch

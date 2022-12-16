@@ -40,7 +40,7 @@ import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.extensions.getRunningWorkInfosByTags
 import com.owncloud.android.extensions.isDownload
 import com.owncloud.android.extensions.isUpload
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.files.details.FileDetailsViewModel.ActionsInDetailsView.NONE
 import com.owncloud.android.presentation.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC_AND_OPEN
 import com.owncloud.android.providers.ContextProvider

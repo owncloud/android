@@ -34,7 +34,7 @@
             android:textColor="@color/white"
             android:textSize="14sp" />
 
-        <com.owncloud.android.ui.whatsnew.ProgressIndicator
+        <com.owncloud.android.wizard.ProgressIndicator
             android:id="@+id/progressIndicator"
             android:layout_width="0dp"
             android:layout_height="match_parent"

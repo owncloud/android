@@ -21,7 +21,7 @@
 package com.owncloud.android.dependecyinjection
 
 import androidx.work.WorkManager
-import com.owncloud.android.presentation.manager.AvatarManager
+import com.owncloud.android.presentation.avatar.AvatarManager
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider

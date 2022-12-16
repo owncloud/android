@@ -28,7 +28,7 @@ import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfigur
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.presentation.authentication.oauth.OAuthViewModel
 import com.owncloud.android.providers.ContextProvider

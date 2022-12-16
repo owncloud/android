@@ -33,7 +33,7 @@ import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.domain.webfinger.usecases.GetJRDFromWebfingerHostUseCase
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 
 class AuthenticationViewModel(
