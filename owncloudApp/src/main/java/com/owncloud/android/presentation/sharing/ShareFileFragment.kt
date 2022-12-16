@@ -42,8 +42,8 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.extensions.showErrorInSnackbar
-import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.sharing.sharees.ShareUserListAdapter
 import com.owncloud.android.presentation.sharing.shares.SharePublicLinkListAdapter
 import com.owncloud.android.utils.DisplayUtils

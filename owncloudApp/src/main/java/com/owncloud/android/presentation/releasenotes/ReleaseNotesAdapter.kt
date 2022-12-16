@@ -26,8 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ReleaseNotesItemBinding
 
-class ReleaseNotesAdapter() :
-    RecyclerView.Adapter<ReleaseNotesAdapter.ViewHolder>() {
+class ReleaseNotesAdapter : RecyclerView.Adapter<ReleaseNotesAdapter.ViewHolder>() {
 
     private val dataSet = ArrayList<ReleaseNote>()
 

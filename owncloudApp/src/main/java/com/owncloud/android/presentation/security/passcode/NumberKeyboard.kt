@@ -26,7 +26,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.owncloud.android.R
-import java.util.*
 
 /**
  * Number keyboard to enter the passcode.
@@ -48,7 +47,6 @@ class NumberKeyboard(context: Context, attrs: AttributeSet) : ConstraintLayout(c
     fun setListener(listener: NumberKeyboardListener?) {
         this.listener = listener
     }
-
 
     /**
      * Inflates layout.

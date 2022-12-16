@@ -28,9 +28,9 @@ import android.accounts.Account
 import android.annotation.SuppressLint
 import android.net.Uri
 import com.owncloud.android.data.extensions.moveRecursively
-import timber.log.Timber
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.transfers.model.OCTransfer
+import timber.log.Timber
 import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis

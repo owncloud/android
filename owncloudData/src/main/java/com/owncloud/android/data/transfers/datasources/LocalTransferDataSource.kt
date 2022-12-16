@@ -36,12 +36,14 @@ interface LocalTransferDataSource {
         transferEndTimestamp: Long,
         lastResult: TransferResult
     )
+
     fun updateTransferLocalPath(id: Long, localPath: String)
     fun updateTransferStorageDirectoryInLocalPath(
         id: Long,
         oldDirectory: String,
         newDirectory: String
     )
+
     fun deleteTransferById(id: Long)
     fun deleteAllTransfersFromAccount(accountName: String)
     fun getTransferById(id: Long): OCTransfer?

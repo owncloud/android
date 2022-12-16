@@ -36,9 +36,13 @@ import timber.log.Timber
 
 class ConflictsResolveActivity : AppCompatActivity(), ConflictsResolveDialogFragment.OnConflictDecisionMadeListener {
 
-    private val conflictsResolveViewModel by viewModel<ConflictsResolveViewModel> { parametersOf(intent.getParcelableExtra(
-        EXTRA_FILE
-    )) }
+    private val conflictsResolveViewModel by viewModel<ConflictsResolveViewModel> {
+        parametersOf(
+            intent.getParcelableExtra(
+                EXTRA_FILE
+            )
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

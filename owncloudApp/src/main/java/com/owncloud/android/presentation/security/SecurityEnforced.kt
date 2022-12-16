@@ -24,7 +24,7 @@ interface SecurityEnforced {
     fun optionLockSelected(type: LockType)
 }
 
-enum class LockType() {
+enum class LockType {
     PASSCODE, PATTERN;
 
     companion object {

@@ -33,10 +33,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
-import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.databinding.FragmentTransferListBinding
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.ui.activity.FileActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File

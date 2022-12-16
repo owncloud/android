@@ -31,14 +31,15 @@ import androidx.work.WorkInfo
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.owncloud.android.R
-import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.databinding.UploadListGroupBinding
 import com.owncloud.android.databinding.UploadListItemBinding
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.extensions.statusToStringRes
 import com.owncloud.android.lib.common.OwnCloudAccount
-import com.owncloud.android.presentation.transfers.TransfersAdapter.TransferRecyclerItem.*
+import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.transfers.TransfersAdapter.TransferRecyclerItem.HeaderItem
+import com.owncloud.android.presentation.transfers.TransfersAdapter.TransferRecyclerItem.TransferItem
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
@@ -117,7 +118,12 @@ class TransfersAdapter(
                     Glide.with(holder.itemView)
                         .load(transferItem.transfer.localPath)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .placeholder(MimetypeIconUtil.getFileTypeIconId(MimetypeIconUtil.getBestMimeTypeByFilename(transferItem.transfer.localPath), fileName))
+                        .placeholder(
+                            MimetypeIconUtil.getFileTypeIconId(
+                                MimetypeIconUtil.getBestMimeTypeByFilename(transferItem.transfer.localPath),
+                                fileName
+                            )
+                        )
                         .into(thumbnail)
 
                     uploadRightButton.isVisible = transferItem.transfer.status != TransferStatus.TRANSFER_SUCCEEDED

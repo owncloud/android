@@ -23,7 +23,6 @@ import android.accounts.Account
 import android.view.MenuItem
 import android.widget.ImageView
 import com.owncloud.android.R
-import com.owncloud.android.presentation.avatar.AvatarManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

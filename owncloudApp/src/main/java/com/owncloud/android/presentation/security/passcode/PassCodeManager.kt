@@ -28,11 +28,11 @@ import android.os.PowerManager
 import android.os.SystemClock
 import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
-import com.owncloud.android.presentation.security.biometric.BiometricManager
 import com.owncloud.android.presentation.security.LockTimeout
 import com.owncloud.android.presentation.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.presentation.security.bayPassUnlockOnce
+import com.owncloud.android.presentation.security.biometric.BiometricManager
 import kotlin.math.abs
 
 object PassCodeManager {
@@ -46,7 +46,9 @@ object PassCodeManager {
 
             // Do not ask for passcode if biometric is enabled
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.isBiometricEnabled() && !visibleActivities.contains(
-                    PassCodeActivity::class.java)) {
+                    PassCodeActivity::class.java
+                )
+            ) {
                 visibleActivities.add(activity.javaClass)
                 return
             }
