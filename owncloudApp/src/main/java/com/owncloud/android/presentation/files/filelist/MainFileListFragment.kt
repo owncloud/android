@@ -43,7 +43,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.owncloud.android.R
-import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
@@ -58,8 +57,9 @@ import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
 import com.owncloud.android.files.FileMenuFilter
-import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.common.BottomSheetFragmentItemView
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.files.SortBottomSheetFragment
 import com.owncloud.android.presentation.files.SortBottomSheetFragment.Companion.newInstance
 import com.owncloud.android.presentation.files.SortBottomSheetFragment.SortDialogListener
@@ -71,12 +71,12 @@ import com.owncloud.android.presentation.files.createfolder.CreateFolderDialogFr
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
+import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
+import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
-import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
-import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -659,12 +659,14 @@ class MainFileListFragment : Fragment(),
 
             val checkedFiles = checkedFilesWithSyncInfo.map { it.file }
 
-            val checkedFilesSync = checkedFilesWithSyncInfo.map { OCFileSyncInfo(
-                fileId = it.file.id!!,
-                uploadWorkerUuid = it.uploadWorkerUuid,
-                downloadWorkerUuid = it.downloadWorkerUuid,
-                isSynchronizing = it.isSynchronizing
-            ) }
+            val checkedFilesSync = checkedFilesWithSyncInfo.map {
+                OCFileSyncInfo(
+                    fileId = it.file.id!!,
+                    uploadWorkerUuid = it.uploadWorkerUuid,
+                    downloadWorkerUuid = it.downloadWorkerUuid,
+                    isSynchronizing = it.isSynchronizing
+                )
+            }
 
             val fileMenuFilter = FileMenuFilter(
                 checkedFiles,

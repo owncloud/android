@@ -43,10 +43,10 @@ public class AccountUtils {
      * Can be used to get the currently selected ownCloud {@link Account} in the
      * application preferences.
      *
-     * @param   context     The current application {@link Context}
+     * @param context The current application {@link Context}
      * @return The ownCloud {@link Account} currently saved in preferences, or the first
-     *                      {@link Account} available, if valid (still registered in the system as ownCloud 
-     *                      account). If none is available and valid, returns null.
+     * {@link Account} available, if valid (still registered in the system as ownCloud
+     * account). If none is available and valid, returns null.
      */
     public static Account getCurrentOwnCloudAccount(Context context) {
         Account[] ocAccounts = getAccounts(context);
@@ -117,6 +117,7 @@ public class AccountUtils {
 
     /**
      * Returns owncloud account identified by accountName or null if it does not exist.
+     *
      * @param context
      * @param accountName name of account to be returned
      * @return owncloud account named accountName
@@ -154,11 +155,11 @@ public class AccountUtils {
 
     /**
      * Update the accounts in AccountManager to meet the current version of accounts expected by the app, if needed.
-     *
+     * <p>
      * Introduced to handle a change in the structure of stored account names needed to allow different OC servers
      * in the same domain, but not in the same path.
      *
-     * @param   context     Used to access the AccountManager.
+     * @param context Used to access the AccountManager.
      */
     public static void updateAccountVersion(Context context) {
         Account currentAccount = AccountUtils.getCurrentOwnCloudAccount(context);

@@ -33,7 +33,6 @@ import com.owncloud.android.presentation.security.PREFERENCE_LAST_UNLOCK_TIMESTA
 import com.owncloud.android.presentation.security.biometric.BiometricActivity
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ATTEMPTS
 import com.owncloud.android.providers.ContextProvider
-import java.lang.StringBuilder
 import java.util.concurrent.TimeUnit
 import kotlin.math.max
 import kotlin.math.pow

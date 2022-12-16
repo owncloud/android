@@ -35,14 +35,14 @@ import androidx.preference.PreferenceScreen
 import com.owncloud.android.R
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.presentation.security.biometric.BiometricActivity
-import com.owncloud.android.presentation.security.biometric.BiometricManager
+import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
 import com.owncloud.android.presentation.security.LockTimeout
 import com.owncloud.android.presentation.security.PREFERENCE_LOCK_TIMEOUT
-import com.owncloud.android.presentation.security.pattern.PatternActivity
+import com.owncloud.android.presentation.security.biometric.BiometricActivity
+import com.owncloud.android.presentation.security.biometric.BiometricManager
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.security.pattern.PatternActivity
 import com.owncloud.android.presentation.settings.SettingsFragment.Companion.removePreferenceFromScreen
-import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsSecurityFragment : PreferenceFragmentCompat() {

@@ -32,13 +32,13 @@ import com.owncloud.android.data.preferences.datasources.implementation.OCShared
 import com.owncloud.android.presentation.security.LockTimeout
 import com.owncloud.android.presentation.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.security.PREFERENCE_LOCK_TIMEOUT
-import com.owncloud.android.presentation.security.pattern.PatternActivity
-import com.owncloud.android.presentation.security.pattern.PatternManager
-import com.owncloud.android.presentation.security.passcode.PassCodeManager.isPassCodeEnabled
-import com.owncloud.android.presentation.security.pattern.PatternManager.isPatternEnabled
 import com.owncloud.android.presentation.security.bayPassUnlockOnce
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.security.passcode.PassCodeManager
+import com.owncloud.android.presentation.security.passcode.PassCodeManager.isPassCodeEnabled
+import com.owncloud.android.presentation.security.pattern.PatternActivity
+import com.owncloud.android.presentation.security.pattern.PatternManager
+import com.owncloud.android.presentation.security.pattern.PatternManager.isPatternEnabled
 import kotlin.math.abs
 
 object BiometricManager {

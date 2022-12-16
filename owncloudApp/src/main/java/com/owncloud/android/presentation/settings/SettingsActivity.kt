@@ -30,11 +30,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment
+import com.owncloud.android.presentation.settings.autouploads.SettingsPictureUploadsFragment
+import com.owncloud.android.presentation.settings.autouploads.SettingsVideoUploadsFragment
 import com.owncloud.android.presentation.settings.logging.SettingsLogsFragment
 import com.owncloud.android.presentation.settings.more.SettingsMoreFragment
-import com.owncloud.android.presentation.settings.autouploads.SettingsPictureUploadsFragment
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment
-import com.owncloud.android.presentation.settings.autouploads.SettingsVideoUploadsFragment
 import com.owncloud.android.ui.activity.FileDisplayActivity
 
 class SettingsActivity : AppCompatActivity() {

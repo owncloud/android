@@ -28,7 +28,6 @@ import android.os.Build
 import android.os.Parcelable
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
-import java.util.ArrayList
 
 class ShareSheetHelper {
 

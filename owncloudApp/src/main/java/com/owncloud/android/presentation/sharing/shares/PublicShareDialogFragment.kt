@@ -48,8 +48,8 @@ import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
-import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.sharing.ShareFragmentListener
 import com.owncloud.android.presentation.sharing.ShareViewModel
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment

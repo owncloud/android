@@ -61,7 +61,7 @@ class SettingsPictureUploadsViewModel(
 
     private fun initPictureUploads() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getPictureUploadsConfigurationStreamUseCase.execute(Unit).collect() { pictureUploadsConfiguration ->
+            getPictureUploadsConfigurationStreamUseCase.execute(Unit).collect { pictureUploadsConfiguration ->
                 _pictureUploads.update { pictureUploadsConfiguration }
             }
         }

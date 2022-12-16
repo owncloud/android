@@ -63,7 +63,8 @@ class BiometricViewModel(
             cipher = Cipher.getInstance(
                 KeyProperties.KEY_ALGORITHM_AES + "/" +
                         KeyProperties.BLOCK_MODE_CBC + "/" +
-                        KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                        KeyProperties.ENCRYPTION_PADDING_PKCS7
+            )
         } catch (e: Exception) {
             Timber.e(e, "Error while generating and saving the encryption key")
         }
@@ -123,11 +124,13 @@ class BiometricViewModel(
                 KeyGenParameterSpec.Builder(
                     BiometricActivity.KEY_NAME,
                     KeyProperties.PURPOSE_ENCRYPT or
-                            KeyProperties.PURPOSE_DECRYPT)
+                            KeyProperties.PURPOSE_DECRYPT
+                )
                     .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
                     .setUserAuthenticationRequired(true)
                     .setEncryptionPaddings(
-                        KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                        KeyProperties.ENCRYPTION_PADDING_PKCS7
+                    )
                     .build()
             )
             keyGenerator.generateKey()
