@@ -39,7 +39,7 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:$androidxFragment"
 
     // Image loading
-    implementation "com.github.bumptech.glide:glide:4.13.2"
+    implementation "com.github.bumptech.glide:glide:4.14.2"
     implementation "com.github.2coffees1team:GlideToVectorYou:v2.0.0"
 
     // Zooming Android ImageView.
