@@ -30,7 +30,7 @@ import android.webkit.MimeTypeMap;
 
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
-import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.presentation.authentication.AccountUtils;
 import timber.log.Timber;
 
 import java.io.File;

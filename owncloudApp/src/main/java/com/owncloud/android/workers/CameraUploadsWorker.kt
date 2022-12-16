@@ -38,7 +38,7 @@ import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfig
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
-import com.owncloud.android.presentation.ui.settings.SettingsActivity
+import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
 import com.owncloud.android.usecases.transfers.uploads.UploadFileFromContentUriUseCase
 import com.owncloud.android.utils.MimetypeIconUtil

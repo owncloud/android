@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/login_background_color"
-    tools:context=".presentation.ui.migration.MigrationCompletedFragment">
+    tools:context=".presentation.migration.MigrationCompletedFragment">
 
     <TextView
         android:id="@+id/migration_completed_title"

@@ -39,7 +39,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment;
+import com.owncloud.android.presentation.files.filelist.MainFileListFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.PreferenceUtils;
 import timber.log.Timber;

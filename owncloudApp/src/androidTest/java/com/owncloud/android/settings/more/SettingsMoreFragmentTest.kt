@@ -40,8 +40,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment
-import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
+import com.owncloud.android.presentation.settings.more.SettingsMoreFragment
+import com.owncloud.android.presentation.settings.more.SettingsMoreViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
 import io.mockk.every

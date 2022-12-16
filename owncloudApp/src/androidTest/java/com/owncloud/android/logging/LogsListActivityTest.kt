@@ -22,8 +22,8 @@ package com.owncloud.android.logging
 
 import androidx.test.core.app.ActivityScenario
 import com.owncloud.android.R
-import com.owncloud.android.presentation.ui.logging.LogsListActivity
-import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
+import com.owncloud.android.presentation.logging.LogsListActivity
+import com.owncloud.android.presentation.logging.LogListViewModel
 import com.owncloud.android.utils.matchers.assertChildCount
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withText

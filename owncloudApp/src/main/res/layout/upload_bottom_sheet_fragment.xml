@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/upload_to_text_view" />
 
-    <com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
+    <com.owncloud.android.presentation.common.BottomSheetFragmentItemView
         android:id="@+id/upload_from_files_item_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@id/divider"
         app:title="@string/upload_files_title" />
 
-    <com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
+    <com.owncloud.android.presentation.common.BottomSheetFragmentItemView
         android:id="@+id/upload_from_camera_item_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

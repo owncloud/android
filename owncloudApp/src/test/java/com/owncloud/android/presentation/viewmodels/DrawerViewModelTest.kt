@@ -25,7 +25,7 @@ import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
+import com.owncloud.android.presentation.common.DrawerViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_USER_QUOTA

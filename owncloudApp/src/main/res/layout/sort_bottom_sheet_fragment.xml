@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title" />
 
-    <com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
+    <com.owncloud.android.presentation.common.BottomSheetFragmentItemView
         android:id="@+id/sort_by_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@id/divider"
         app:title="@string/global_name" />
 
-    <com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
+    <com.owncloud.android.presentation.common.BottomSheetFragmentItemView
         android:id="@+id/sort_by_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@id/sort_by_name"
         app:title="@string/global_date" />
 
-    <com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
+    <com.owncloud.android.presentation.common.BottomSheetFragmentItemView
         android:id="@+id/sort_by_size"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

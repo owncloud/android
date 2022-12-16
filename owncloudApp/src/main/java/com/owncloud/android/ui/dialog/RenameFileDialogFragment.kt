@@ -33,8 +33,8 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.presentation.ui.files.operations.FileOperation
-import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.files.operations.FileOperation
+import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 

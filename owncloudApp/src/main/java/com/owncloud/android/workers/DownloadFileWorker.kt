@@ -30,7 +30,7 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import at.bitfire.dav4jvm.exception.UnauthorizedException
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.exceptions.CancelledException
@@ -47,10 +47,10 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation
-import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_EXPIRED_TOKEN
-import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT
-import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
-import com.owncloud.android.presentation.ui.authentication.LoginActivity
+import com.owncloud.android.presentation.authentication.ACTION_UPDATE_EXPIRED_TOKEN
+import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT
+import com.owncloud.android.presentation.authentication.EXTRA_ACTION
+import com.owncloud.android.presentation.authentication.LoginActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter

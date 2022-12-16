@@ -20,8 +20,8 @@
 package com.owncloud.android.utils
 
 import com.owncloud.android.R
-import com.owncloud.android.presentation.ui.releasenotes.ReleaseNote
-import com.owncloud.android.presentation.ui.releasenotes.ReleaseNoteType
+import com.owncloud.android.presentation.releasenotes.ReleaseNote
+import com.owncloud.android.presentation.releasenotes.ReleaseNoteType
 
 val releaseNotesList = listOf(
     ReleaseNote(

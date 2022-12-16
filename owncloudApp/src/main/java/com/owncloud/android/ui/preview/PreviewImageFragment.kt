@@ -52,11 +52,11 @@ import com.owncloud.android.domain.files.model.MIME_SVG
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.files.FileMenuFilter
-import com.owncloud.android.presentation.ui.files.operations.FileOperation
-import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.files.operations.FileOperation
+import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
-import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
+import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject

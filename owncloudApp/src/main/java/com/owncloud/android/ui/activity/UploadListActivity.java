@@ -34,12 +34,12 @@ import android.view.View;
 
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.presentation.authentication.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
-import com.owncloud.android.presentation.ui.transfers.TransferListFragment;
-import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel;
+import com.owncloud.android.presentation.transfers.TransferListFragment;
+import com.owncloud.android.presentation.transfers.TransfersViewModel;
 import com.owncloud.android.utils.MimetypeIconUtil;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;

@@ -30,7 +30,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior

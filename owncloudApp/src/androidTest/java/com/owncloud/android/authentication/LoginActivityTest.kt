@@ -47,18 +47,18 @@ import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_EXPIRED_TOKEN
-import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_TOKEN
-import com.owncloud.android.presentation.ui.authentication.BASIC_TOKEN_TYPE
-import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT
-import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
-import com.owncloud.android.presentation.ui.authentication.KEY_AUTH_TOKEN_TYPE
-import com.owncloud.android.presentation.ui.authentication.LoginActivity
-import com.owncloud.android.presentation.ui.authentication.OAUTH_TOKEN_TYPE
-import com.owncloud.android.presentation.ui.settings.SettingsActivity
-import com.owncloud.android.presentation.viewmodels.authentication.OCAuthenticationViewModel
-import com.owncloud.android.presentation.viewmodels.oauth.OAuthViewModel
-import com.owncloud.android.presentation.viewmodels.settings.SettingsViewModel
+import com.owncloud.android.presentation.authentication.ACTION_UPDATE_EXPIRED_TOKEN
+import com.owncloud.android.presentation.authentication.ACTION_UPDATE_TOKEN
+import com.owncloud.android.presentation.authentication.BASIC_TOKEN_TYPE
+import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT
+import com.owncloud.android.presentation.authentication.EXTRA_ACTION
+import com.owncloud.android.presentation.authentication.KEY_AUTH_TOKEN_TYPE
+import com.owncloud.android.presentation.authentication.LoginActivity
+import com.owncloud.android.presentation.authentication.OAUTH_TOKEN_TYPE
+import com.owncloud.android.presentation.settings.SettingsActivity
+import com.owncloud.android.presentation.authentication.AuthenticationViewModel
+import com.owncloud.android.presentation.authentication.oauth.OAuthViewModel
+import com.owncloud.android.presentation.settings.SettingsViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.testutil.OC_ACCOUNT
@@ -95,7 +95,7 @@ class LoginActivityTest {
 
     private lateinit var activityScenario: ActivityScenario<LoginActivity>
 
-    private lateinit var ocAuthenticationViewModel: OCAuthenticationViewModel
+    private lateinit var authenticationViewModel: AuthenticationViewModel
     private lateinit var oauthViewModel: OAuthViewModel
     private lateinit var settingsViewModel: SettingsViewModel
     private lateinit var ocContextProvider: ContextProvider
@@ -111,7 +111,7 @@ class LoginActivityTest {
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
 
-        ocAuthenticationViewModel = mockk(relaxed = true)
+        authenticationViewModel = mockk(relaxed = true)
         oauthViewModel = mockk(relaxed = true)
         settingsViewModel = mockk(relaxUnitFun = true)
         ocContextProvider = mockk(relaxed = true)
@@ -122,10 +122,10 @@ class LoginActivityTest {
         supportsOauth2LiveData = MutableLiveData()
         baseUrlLiveData = MutableLiveData()
 
-        every { ocAuthenticationViewModel.loginResult } returns loginResultLiveData
-        every { ocAuthenticationViewModel.serverInfo } returns serverInfoLiveData
-        every { ocAuthenticationViewModel.supportsOAuth2 } returns supportsOauth2LiveData
-        every { ocAuthenticationViewModel.baseUrl } returns baseUrlLiveData
+        every { authenticationViewModel.loginResult } returns loginResultLiveData
+        every { authenticationViewModel.serverInfo } returns serverInfoLiveData
+        every { authenticationViewModel.supportsOAuth2 } returns supportsOauth2LiveData
+        every { authenticationViewModel.baseUrl } returns baseUrlLiveData
         every { settingsViewModel.isThereAttachedAccount() } returns false
 
         stopKoin()
@@ -136,7 +136,7 @@ class LoginActivityTest {
             modules(
                 module {
                     viewModel {
-                        ocAuthenticationViewModel
+                        authenticationViewModel
                     }
                     viewModel {
                         oauthViewModel
@@ -212,7 +212,7 @@ class LoginActivityTest {
             showEmbeddedCheckServerButton = false
         )
 
-        verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
     }
 
     @Test
@@ -225,7 +225,7 @@ class LoginActivityTest {
         R.id.centeredRefreshButton.isDisplayed(true)
         R.id.centeredRefreshButton.scrollAndClick()
 
-        verify(exactly = 2) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 2) { authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
         serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC.copy(isSecureConnection = true))))
 
         R.id.centeredRefreshButton.isDisplayed(false)
@@ -271,7 +271,7 @@ class LoginActivityTest {
 
         R.id.embeddedCheckServerButton.scrollAndClick()
 
-        verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
     }
 
     @Test
@@ -281,7 +281,7 @@ class LoginActivityTest {
 
         R.id.thumbnail.scrollAndClick()
 
-        verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
     }
 
     @Test
@@ -410,7 +410,7 @@ class LoginActivityTest {
             withText(R.string.auth_can_not_auth_against_server)
         }
 
-        verify(exactly = 0) { ocAuthenticationViewModel.getServerInfo(any()) }
+        verify(exactly = 0) { authenticationViewModel.getServerInfo(any()) }
     }
 
     @Test
@@ -467,7 +467,7 @@ class LoginActivityTest {
             scrollAndClick()
         }
 
-        verify(exactly = 1) { ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null) }
+        verify(exactly = 1) { authenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null) }
     }
 
     @Test
@@ -485,7 +485,7 @@ class LoginActivityTest {
             scrollAndClick()
         }
 
-        verify(exactly = 1) { ocAuthenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null) }
+        verify(exactly = 1) { authenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null) }
     }
 
     @Test
@@ -594,8 +594,8 @@ class LoginActivityTest {
 
         launchTest(intent = intentWithAccount)
 
-        verify(exactly = 1) { ocAuthenticationViewModel.supportsOAuth2(OC_ACCOUNT.name) }
-        verify(exactly = 1) { ocAuthenticationViewModel.getBaseUrl(OC_ACCOUNT.name) }
+        verify(exactly = 1) { authenticationViewModel.supportsOAuth2(OC_ACCOUNT.name) }
+        verify(exactly = 1) { authenticationViewModel.getBaseUrl(OC_ACCOUNT.name) }
     }
 
     @Test
@@ -669,7 +669,7 @@ class LoginActivityTest {
             isFocusable(false)
         }
 
-        verify(exactly = 0) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 0) { authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
     }
 
     @Test
@@ -691,7 +691,7 @@ class LoginActivityTest {
             isFocusable(false)
         }
 
-        verify(exactly = 1) { ocAuthenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
     }
 
     @Test

@@ -35,7 +35,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
-import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.presentation.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.ui.dialog.LoadingDialog;

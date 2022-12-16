@@ -21,7 +21,8 @@
 package com.owncloud.android.presentation.viewmodels.settings
 
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
+import com.owncloud.android.presentation.settings.logging.SettingsLogsViewModel
+import com.owncloud.android.presentation.settings.logging.SettingsLogsFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.providers.WorkManagerProvider

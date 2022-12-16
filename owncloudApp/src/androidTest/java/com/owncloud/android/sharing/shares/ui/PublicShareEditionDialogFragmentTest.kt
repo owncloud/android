@@ -37,9 +37,9 @@ import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.sharing.fragments.PublicShareDialogFragment
-import com.owncloud.android.presentation.viewmodels.capabilities.OCCapabilityViewModel
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.presentation.sharing.PublicShareDialogFragment
+import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.sharing.OCShareViewModel
 import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_SHARE
@@ -58,7 +58,7 @@ import java.util.GregorianCalendar
 import java.util.TimeZone
 
 class PublicShareEditionDialogFragmentTest {
-    private val ocCapabilityViewModel = mockk<OCCapabilityViewModel>(relaxed = true)
+    private val capabilityViewModel = mockk<CapabilityViewModel>(relaxed = true)
     private val capabilitiesLiveData = MutableLiveData<Event<UIResult<OCCapability>>>()
     private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
 
@@ -66,7 +66,7 @@ class PublicShareEditionDialogFragmentTest {
 
     @Before
     fun setUp() {
-        every { ocCapabilityViewModel.capabilities } returns capabilitiesLiveData
+        every { capabilityViewModel.capabilities } returns capabilitiesLiveData
 
         stopKoin()
 
@@ -76,7 +76,7 @@ class PublicShareEditionDialogFragmentTest {
             modules(
                 module {
                     viewModel {
-                        ocCapabilityViewModel
+                        capabilityViewModel
                     }
                     viewModel {
                         ocShareViewModel

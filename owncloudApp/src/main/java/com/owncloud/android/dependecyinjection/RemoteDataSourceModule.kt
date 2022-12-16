@@ -21,7 +21,7 @@ package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.implementation.OCRemoteAuthenticationDataSource

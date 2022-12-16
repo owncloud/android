@@ -36,7 +36,7 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
-import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
+import com.owncloud.android.presentation.sharing.ShareFragmentListener
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
 import timber.log.Timber
 
