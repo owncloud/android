@@ -21,7 +21,6 @@
 package com.owncloud.android.presentation.transfers
 
 import androidx.recyclerview.widget.DiffUtil
-import com.owncloud.android.presentation.transfers.TransfersAdapter
 
 class TransfersDiffUtil(
     private val oldList: List<TransfersAdapter.TransferRecyclerItem>,
