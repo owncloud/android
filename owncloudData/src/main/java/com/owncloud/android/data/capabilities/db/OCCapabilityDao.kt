@@ -28,44 +28,46 @@ import androidx.room.Transaction
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta
 
 @Dao
-abstract class OCCapabilityDao {
-
-    companion object {
-        private const val SELECT =
-            "SELECT * " +
-                    "FROM ${ProviderTableMeta.CAPABILITIES_TABLE_NAME} " +
-                    "WHERE ${ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME} = :accountName"
-        private const val DELETE =
-            "DELETE FROM ${ProviderTableMeta.CAPABILITIES_TABLE_NAME} " +
-                    "WHERE ${ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME} = :accountName"
-    }
-
+interface OCCapabilityDao {
     @Query(SELECT)
-    abstract fun getCapabilitiesForAccountAsLiveData(
+    fun getCapabilitiesForAccountAsLiveData(
         accountName: String
     ): LiveData<OCCapabilityEntity?>
 
     @Query(SELECT)
-    abstract fun getCapabilitiesForAccount(
+    fun getCapabilitiesForAccount(
         accountName: String
     ): OCCapabilityEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(ocCapability: OCCapabilityEntity): Long
+    fun insertOrReplace(ocCapability: OCCapabilityEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(ocCapabilities: List<OCCapabilityEntity>): List<Long>
+    fun insertOrReplace(ocCapabilities: List<OCCapabilityEntity>): List<Long>
 
-    @Query(DELETE)
-    abstract fun delete(accountName: String)
+    @Query(DELETE_CAPABILITIES_BY_ACCOUNTNAME)
+    fun deleteByAccountName(accountName: String)
 
     @Transaction
-    open fun replace(ocCapabilities: List<OCCapabilityEntity>) {
+    fun replace(ocCapabilities: List<OCCapabilityEntity>) {
         ocCapabilities.forEach { ocCapability ->
             ocCapability.accountName?.run {
-                delete(this)
+                deleteByAccountName(this)
             }
         }
-        insert(ocCapabilities)
+        insertOrReplace(ocCapabilities)
+    }
+
+    companion object {
+        private const val SELECT = """
+            SELECT *
+            FROM ${ProviderTableMeta.CAPABILITIES_TABLE_NAME}
+            WHERE ${ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME} = :accountName
+        """
+        private const val DELETE_CAPABILITIES_BY_ACCOUNTNAME = """
+            DELETE
+            FROM ${ProviderTableMeta.CAPABILITIES_TABLE_NAME}
+            WHERE ${ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME} = :accountName
+        """
     }
 }

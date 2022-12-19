@@ -52,8 +52,8 @@ class OCLocalFileDataSource(
     override fun getFileById(fileId: Long): OCFile? =
         fileDao.getFileById(fileId)?.toModel()
 
-    override fun getFileByIdAsStream(fileId: Long): Flow<OCFile?> =
-        fileDao.getFileByIdAsStream(fileId).map { it?.toModel() }
+    override fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?> =
+        fileDao.getFileByIdAsFlow(fileId).map { it?.toModel() }
 
     override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? {
         fileDao.getFileByOwnerAndRemotePath(owner, remotePath)?.let { return it.toModel() }
@@ -97,8 +97,8 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
-    override fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>> =
-        fileDao.getFolderContentWithSyncInfoAsStream(folderId = folderId).map { folderContent ->
+    override fun getFolderContentWithSyncInfoAsFlow(folderId: Long): Flow<List<OCFileWithSyncInfo>> =
+        fileDao.getFolderContentWithSyncInfoAsFlow(folderId = folderId).map { folderContent ->
             folderContent.map { it.toModel() }
         }
 
@@ -107,13 +107,13 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
-    override fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
-        fileDao.getFilesWithSyncInfoSharedByLinkAsStream(accountOwner = owner).map { fileList ->
+    override fun getSharedByLinkWithSyncInfoForAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>> =
+        fileDao.getFilesWithSyncInfoSharedByLinkAsFlow(accountOwner = owner).map { fileList ->
             fileList.map { it.toModel() }
         }
 
-    override fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
-        fileDao.getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner).map { fileList ->
+    override fun getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>> =
+        fileDao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner).map { fileList ->
             fileList.map { it.toModel() }
         }
 
@@ -156,11 +156,11 @@ class OCLocalFileDataSource(
         fileDao.updateConflictStatusForFile(fileId, null)
     }
 
-    override fun removeFile(fileId: Long) {
-        fileDao.deleteFileWithId(fileId)
+    override fun deleteFile(fileId: Long) {
+        fileDao.deleteFileById(fileId)
     }
 
-    override fun removeFilesForAccount(accountName: String) {
+    override fun deleteFilesForAccount(accountName: String) {
         fileDao.deleteFilesForAccount(accountName)
     }
 

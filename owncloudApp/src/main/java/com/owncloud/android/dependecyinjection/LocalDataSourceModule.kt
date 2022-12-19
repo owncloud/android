@@ -33,9 +33,9 @@ import com.owncloud.android.data.capabilities.datasources.implementation.OCLocal
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource
 import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataSource
-import com.owncloud.android.data.folderbackup.datasources.implementation.FolderBackupLocalDataSourceImpl
+import com.owncloud.android.data.folderbackup.datasources.implementation.OCFolderBackupLocalDataSource
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
 import com.owncloud.android.data.storage.LocalStorageProvider
@@ -57,7 +57,7 @@ val localDataSourceModule = module {
     single { OwncloudDatabase.getDatabase(androidContext()).folderBackUpDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).transferDao() }
 
-    single<SharedPreferencesProvider> { SharedPreferencesProviderImpl(get()) }
+    single<SharedPreferencesProvider> { OCSharedPreferencesProvider(get()) }
     single<LocalStorageProvider> { ScopedStorageProvider(dataFolder, androidContext()) }
 
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
@@ -65,6 +65,6 @@ val localDataSourceModule = module {
     factory<LocalFileDataSource> { OCLocalFileDataSource(get()) }
     factory<LocalShareDataSource> { OCLocalShareDataSource(get()) }
     factory<LocalUserDataSource> { OCLocalUserDataSource(get()) }
-    factory<FolderBackupLocalDataSource> { FolderBackupLocalDataSourceImpl(get()) }
+    factory<FolderBackupLocalDataSource> { OCFolderBackupLocalDataSource(get()) }
     factory<LocalTransferDataSource> { OCLocalTransferDataSource(get()) }
 }

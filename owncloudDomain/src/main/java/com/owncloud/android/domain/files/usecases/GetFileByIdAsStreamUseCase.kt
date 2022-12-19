@@ -28,7 +28,7 @@ class GetFileByIdAsStreamUseCase(
 ) : BaseUseCase<Flow<OCFile?>, GetFileByIdAsStreamUseCase.Params>() {
 
     override fun run(params: Params): Flow<OCFile?> =
-        fileRepository.getFileByIdAsStream(params.fileId)
+        fileRepository.getFileByIdAsFlow(params.fileId)
 
     data class Params(val fileId: Long)
 

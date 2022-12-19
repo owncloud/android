@@ -35,10 +35,10 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
-import com.owncloud.android.presentation.ui.logging.LogsListActivity
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment
-import com.owncloud.android.presentation.viewmodels.logging.LogListViewModel
-import com.owncloud.android.presentation.viewmodels.settings.SettingsLogsViewModel
+import com.owncloud.android.presentation.logging.LogsListActivity
+import com.owncloud.android.presentation.settings.logging.SettingsLogsFragment
+import com.owncloud.android.presentation.logging.LogListViewModel
+import com.owncloud.android.presentation.settings.logging.SettingsLogsViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
 import io.mockk.every
 import io.mockk.mockk

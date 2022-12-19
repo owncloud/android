@@ -62,16 +62,16 @@ class RemoveAccountUseCase(
         )
 
         // Delete files for the removed account in database
-        localFileDataSource.removeFilesForAccount(params.accountName)
+        localFileDataSource.deleteFilesForAccount(params.accountName)
 
         // Delete capabilities for the removed account in database
-        localCapabilitiesDataSource.removeCapabilitiesForAccount(params.accountName)
+        localCapabilitiesDataSource.deleteCapabilitiesForAccount(params.accountName)
 
         // Delete shares for the removed account in database
         localShareDataSource.deleteSharesForAccount(params.accountName)
 
         // Delete quota for the removed account in database
-        localUserDataSource.removeQuotaForAccount(params.accountName)
+        localUserDataSource.deleteQuotaForAccount(params.accountName)
     }
 
     data class Params(

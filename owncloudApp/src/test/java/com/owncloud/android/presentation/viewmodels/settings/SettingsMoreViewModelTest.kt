@@ -21,6 +21,7 @@
 package com.owncloud.android.presentation.viewmodels.settings
 
 import com.owncloud.android.R
+import com.owncloud.android.presentation.settings.more.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.OC_BASE_URL

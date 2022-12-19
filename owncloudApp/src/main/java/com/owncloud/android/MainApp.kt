@@ -33,8 +33,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.core.content.pm.PackageInfoCompat
-import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.dependecyinjection.commonModule
@@ -45,15 +45,15 @@ import com.owncloud.android.dependecyinjection.useCaseModule
 import com.owncloud.android.dependecyinjection.viewModelModule
 import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.SingleSessionManager
-import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity
-import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
-import com.owncloud.android.presentation.ui.security.BiometricActivity
-import com.owncloud.android.presentation.ui.security.BiometricManager
-import com.owncloud.android.presentation.ui.security.PatternActivity
-import com.owncloud.android.presentation.ui.security.PatternManager
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeManager
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
+import com.owncloud.android.presentation.migration.StorageMigrationActivity
+import com.owncloud.android.presentation.releasenotes.ReleaseNotesActivity
+import com.owncloud.android.presentation.security.biometric.BiometricActivity
+import com.owncloud.android.presentation.security.biometric.BiometricManager
+import com.owncloud.android.presentation.security.pattern.PatternActivity
+import com.owncloud.android.presentation.security.pattern.PatternManager
+import com.owncloud.android.presentation.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.security.passcode.PassCodeManager
+import com.owncloud.android.presentation.settings.logging.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.WhatsNewActivity
@@ -163,7 +163,7 @@ class MainApp : Application() {
     }
 
     private fun startLogsIfEnabled() {
-        val preferenceProvider = SharedPreferencesProviderImpl(applicationContext)
+        val preferenceProvider = OCSharedPreferencesProvider(applicationContext)
 
         if (BuildConfig.DEBUG) {
             val alreadySet = preferenceProvider.containsPreference(PREFERENCE_ENABLE_LOGGING)

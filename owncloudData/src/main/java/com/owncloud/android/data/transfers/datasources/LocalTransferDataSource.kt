@@ -26,7 +26,7 @@ import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
 
 interface LocalTransferDataSource {
-    fun storeTransfer(transfer: OCTransfer): Long
+    fun saveTransfer(transfer: OCTransfer): Long
     fun updateTransfer(transfer: OCTransfer)
     fun updateTransferStatusToInProgressById(id: Long)
     fun updateTransferStatusToEnqueuedById(id: Long)
@@ -36,14 +36,16 @@ interface LocalTransferDataSource {
         transferEndTimestamp: Long,
         lastResult: TransferResult
     )
+
     fun updateTransferLocalPath(id: Long, localPath: String)
     fun updateTransferStorageDirectoryInLocalPath(
         id: Long,
         oldDirectory: String,
         newDirectory: String
     )
-    fun removeTransferById(id: Long)
-    fun removeAllTransfersFromAccount(accountName: String)
+
+    fun deleteTransferById(id: Long)
+    fun deleteAllTransfersFromAccount(accountName: String)
     fun getTransferById(id: Long): OCTransfer?
     fun getAllTransfers(): List<OCTransfer>
     fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>>

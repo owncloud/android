@@ -46,8 +46,8 @@ class OCLocalCapabilitiesDataSource(
         )
     }
 
-    override fun removeCapabilitiesForAccount(accountName: String) {
-        ocCapabilityDao.delete(accountName)
+    override fun deleteCapabilitiesForAccount(accountName: String) {
+        ocCapabilityDao.deleteByAccountName(accountName)
     }
 
     companion object {

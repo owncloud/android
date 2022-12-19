@@ -26,7 +26,7 @@ class GetFilesAvailableOfflineFromAccountAsStreamUseCase(
     private val fileRepository: FileRepository
 ) : BaseUseCase<Flow<List<OCFileWithSyncInfo>>, GetFilesAvailableOfflineFromAccountAsStreamUseCase.Params>() {
 
-    override fun run(params: Params): Flow<List<OCFileWithSyncInfo>> = fileRepository.getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(params.owner)
+    override fun run(params: Params): Flow<List<OCFileWithSyncInfo>> = fileRepository.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(params.owner)
 
     data class Params(
         val owner: String

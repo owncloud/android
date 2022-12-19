@@ -65,7 +65,7 @@ class CancelUploadUseCase(
 
         localStorageProvider.deleteCacheIfNeeded(upload)
 
-        transferRepository.removeTransferById(upload.id!!)
+        transferRepository.deleteTransferById(upload.id!!)
     }
 
     data class Params(

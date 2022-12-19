@@ -34,9 +34,9 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.R
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.sharing.fragments.EditPrivateShareFragment
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.presentation.sharing.sharees.EditPrivateShareFragment
+import com.owncloud.android.presentation.sharing.ShareViewModel
 import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_FOLDER
@@ -57,14 +57,14 @@ import org.koin.dsl.module
 class EditPrivateShareFragmentTest {
     private val targetContext = InstrumentationRegistry.getInstrumentation().targetContext
     private val defaultSharedWithDisplayName = "user"
-    private val ocShareViewModel = mockk<OCShareViewModel>(relaxed = true)
+    private val shareViewModel = mockk<ShareViewModel>(relaxed = true)
     private val privateShareAsLiveData = MutableLiveData<Event<UIResult<OCShare>>>()
 
     private lateinit var activityScenario: ActivityScenario<TestShareFileActivity>
 
     @Before
     fun setUp() {
-        every { ocShareViewModel.privateShare } returns privateShareAsLiveData
+        every { shareViewModel.privateShare } returns privateShareAsLiveData
 
         stopKoin()
 
@@ -74,7 +74,7 @@ class EditPrivateShareFragmentTest {
             modules(
                 module {
                     viewModel {
-                        ocShareViewModel
+                        shareViewModel
                     }
                 }
             )

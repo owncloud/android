@@ -30,9 +30,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.files.filelist.MainFileListFragment">
+        tools:context=".presentation.files.filelist.MainFileListFragment">
 
-        <com.owncloud.android.presentation.ui.files.SortOptionsView
+        <com.owncloud.android.presentation.files.SortOptionsView
             android:id="@+id/options_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

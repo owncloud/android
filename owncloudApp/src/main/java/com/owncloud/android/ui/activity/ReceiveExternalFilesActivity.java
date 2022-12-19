@@ -69,21 +69,21 @@ import com.owncloud.android.domain.exceptions.UnauthorizedException;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.extensions.ThrowableExtKt;
-import com.owncloud.android.interfaces.ISecurityEnforced;
-import com.owncloud.android.interfaces.LockType;
+import com.owncloud.android.presentation.security.SecurityEnforced;
+import com.owncloud.android.presentation.security.LockType;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.presentation.UIResult;
-import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment;
-import com.owncloud.android.presentation.ui.files.SortOptionsView;
-import com.owncloud.android.presentation.ui.files.SortOrder;
-import com.owncloud.android.presentation.ui.files.SortType;
-import com.owncloud.android.presentation.ui.files.ViewType;
-import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
-import com.owncloud.android.presentation.ui.files.operations.FileOperation;
-import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
-import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel;
+import com.owncloud.android.presentation.common.UIResult;
+import com.owncloud.android.presentation.files.SortBottomSheetFragment;
+import com.owncloud.android.presentation.files.SortOptionsView;
+import com.owncloud.android.presentation.files.SortOrder;
+import com.owncloud.android.presentation.files.SortType;
+import com.owncloud.android.presentation.files.ViewType;
+import com.owncloud.android.presentation.files.createfolder.CreateFolderDialogFragment;
+import com.owncloud.android.presentation.files.operations.FileOperation;
+import com.owncloud.android.presentation.files.operations.FileOperationsViewModel;
+import com.owncloud.android.presentation.transfers.TransfersViewModel;
 import com.owncloud.android.ui.ReceiveExternalFilesViewModel;
 import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
 import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
@@ -100,7 +100,6 @@ import timber.log.Timber;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,7 +122,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         SortOptionsView.CreateFolderListener,
         SearchView.OnQueryTextListener,
         ReceiveExternalFilesAdapter.OnSearchQueryUpdateListener,
-        ISecurityEnforced,
+        SecurityEnforced,
         CreateFolderDialogFragment.CreateFolderListener {
 
     private static final String FTAG_ERROR_FRAGMENT = "ERROR_FRAGMENT";

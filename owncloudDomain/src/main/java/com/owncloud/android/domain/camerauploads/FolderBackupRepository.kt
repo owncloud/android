@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.Flow
 interface FolderBackupRepository {
     fun getCameraUploadsConfiguration(): CameraUploadsConfiguration?
 
-    fun getFolderBackupConfigurationStreamByName(name: String): Flow<FolderBackUpConfiguration?>
+    fun getFolderBackupConfigurationByNameAsFlow(name: String): Flow<FolderBackUpConfiguration?>
 
     fun saveFolderBackupConfiguration(folderBackUpConfiguration: FolderBackUpConfiguration)
 

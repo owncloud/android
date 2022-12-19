@@ -34,12 +34,12 @@ import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
 class OCLocalTransferDataSource(
     private val transferDao: TransferDao
 ) : LocalTransferDataSource {
-    override fun storeTransfer(transfer: OCTransfer): Long {
-        return transferDao.insert(transfer.toEntity())
+    override fun saveTransfer(transfer: OCTransfer): Long {
+        return transferDao.insertOrReplace(transfer.toEntity())
     }
 
     override fun updateTransfer(transfer: OCTransfer) {
-        transferDao.insert(transfer.toEntity())
+        transferDao.insertOrReplace(transfer.toEntity())
     }
 
     override fun updateTransferStatusToInProgressById(id: Long) {
@@ -71,11 +71,11 @@ class OCLocalTransferDataSource(
         transferDao.updateTransferStorageDirectoryInLocalPath(id, oldDirectory, newDirectory)
     }
 
-    override fun removeTransferById(id: Long) {
+    override fun deleteTransferById(id: Long) {
         transferDao.deleteTransferWithId(id)
     }
 
-    override fun removeAllTransfersFromAccount(accountName: String) {
+    override fun deleteAllTransfersFromAccount(accountName: String) {
         transferDao.deleteTransfersWithAccountName(accountName)
     }
 

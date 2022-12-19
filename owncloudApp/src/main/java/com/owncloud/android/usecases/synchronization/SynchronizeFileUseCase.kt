@@ -48,7 +48,7 @@ class SynchronizeFileUseCase(
                 fileRepository.readFile(fileToSynchronize.remotePath, fileToSynchronize.owner)
             } catch (exception: FileNotFoundException) {
                 // 1.1 File not exists anymore -> remove file locally (DB and Storage)
-                fileRepository.removeFile(listOf(fileToSynchronize), false)
+                fileRepository.deleteFiles(listOf(fileToSynchronize), false)
                 return SyncType.FileNotFound
             }
 

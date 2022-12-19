@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.folderbackup.db
 
 import androidx.room.Dao
@@ -27,35 +28,40 @@ import com.owncloud.android.data.ProviderMeta
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-abstract class FolderBackupDao {
-    @Query(
-        "SELECT * from " + ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME + " WHERE " +
-                FolderBackUpEntity.folderBackUpEntityNameField + " = :name"
-    )
-    abstract fun getFolderBackUpConfigurationByName(
+interface FolderBackupDao {
+    @Query(SELECT)
+    fun getFolderBackUpConfigurationByName(
         name: String
     ): FolderBackUpEntity?
 
-    @Query(
-        "SELECT * from " + ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME + " WHERE " +
-                FolderBackUpEntity.folderBackUpEntityNameField + " = :name"
-    )
-    abstract fun getFolderBackUpConfigurationByNameStream(
+    @Query(SELECT)
+    fun getFolderBackUpConfigurationByNameAsFlow(
         name: String
     ): Flow<FolderBackUpEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(folderBackUpEntity: FolderBackUpEntity): Long
+    fun insertOrReplace(folderBackUpEntity: FolderBackUpEntity): Long
+
+    @Query(DELETE)
+    fun delete(name: String): Int
 
     @Transaction
-    open fun update(folderBackUpEntity: FolderBackUpEntity): Long {
+    fun update(folderBackUpEntity: FolderBackUpEntity): Long {
         delete(folderBackUpEntity.name)
-        return insert(folderBackUpEntity)
+        return insertOrReplace(folderBackUpEntity)
     }
 
-    @Query(
-        "DELETE from " + ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME + " WHERE " +
-                FolderBackUpEntity.folderBackUpEntityNameField + " = :name"
-    )
-    abstract fun delete(name: String): Int
+    companion object {
+        private const val SELECT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME}
+            WHERE name = :name
+        """
+
+        private const val DELETE = """
+            DELETE
+            FROM ${ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME}
+            WHERE name = :name
+        """
+    }
 }

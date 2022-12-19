@@ -30,8 +30,9 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import at.bitfire.dav4jvm.exception.UnauthorizedException
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
+import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.exceptions.CancelledException
 import com.owncloud.android.domain.exceptions.LocalStorageNotMovedException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
@@ -46,14 +47,14 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.network.OnDatatransferProgressListener
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation
-import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_EXPIRED_TOKEN
-import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT
-import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
-import com.owncloud.android.presentation.ui.authentication.LoginActivity
+import com.owncloud.android.presentation.authentication.ACTION_UPDATE_EXPIRED_TOKEN
+import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT
+import com.owncloud.android.presentation.authentication.EXTRA_ACTION
+import com.owncloud.android.presentation.authentication.LoginActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.errorhandling.ErrorMessageAdapter
-import com.owncloud.android.ui.errorhandling.TransferOperation.Download
+import com.owncloud.android.presentation.transfers.TransferOperation.Download
 import com.owncloud.android.ui.preview.PreviewImageActivity
 import com.owncloud.android.ui.preview.PreviewImageFragment.Companion.canBePreviewed
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
@@ -82,6 +83,7 @@ class DownloadFileWorker(
     private val cleanConflictUseCase: CleanConflictUseCase by inject()
     private val saveDownloadWorkerUuidUseCase: SaveDownloadWorkerUUIDUseCase by inject()
     private val cleanWorkersUuidUseCase: CleanWorkersUUIDUseCase by inject()
+    private val localStorageProvider: LocalStorageProvider by inject()
 
     lateinit var account: Account
     lateinit var ocFile: OCFile
@@ -105,11 +107,11 @@ class DownloadFileWorker(
      * Final path where this file should be stored.
      *
      * In case this file was previously downloaded, override it. Otherwise,
-     * @see FileStorageUtils.getDefaultSavePathFor
+     * @see LocalStorageProvider.getDefaultSavePathFor
      */
     private val finalLocationForFile: String
         get() = ocFile.storagePath.takeUnless { it.isNullOrBlank() }
-            ?: FileStorageUtils.getDefaultSavePathFor(account.name, ocFile)
+            ?: localStorageProvider.getDefaultSavePathFor(account.name, ocFile.remotePath)
 
     override suspend fun doWork(): Result {
         if (!areParametersValid()) return Result.failure()

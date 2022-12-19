@@ -31,17 +31,17 @@ import java.util.UUID
 interface LocalFileDataSource {
     fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String)
     fun getFileById(fileId: Long): OCFile?
-    fun getFileByIdAsStream(fileId: Long): Flow<OCFile?>
+    fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?>
     fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
     fun getFileByRemoteId(remoteId: String): OCFile?
     fun getFolderContent(folderId: Long): List<OCFile>
     fun getSearchFolderContent(folderId: Long, search: String): List<OCFile>
     fun getSearchAvailableOfflineFolderContent(folderId: Long, search: String): List<OCFile>
     fun getSearchSharedByLinkFolderContent(folderId: Long, search: String): List<OCFile>
-    fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>>
+    fun getFolderContentWithSyncInfoAsFlow(folderId: Long): Flow<List<OCFileWithSyncInfo>>
     fun getFolderImages(folderId: Long): List<OCFile>
-    fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
-    fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
+    fun getSharedByLinkWithSyncInfoForAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>>
+    fun getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>>
     fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
     fun moveFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, finalStoragePath: String)
@@ -49,8 +49,8 @@ interface LocalFileDataSource {
     fun saveFile(file: OCFile)
     fun saveConflict(fileId: Long, eTagInConflict: String)
     fun cleanConflict(fileId: Long)
-    fun removeFile(fileId: Long)
-    fun removeFilesForAccount(accountName: String)
+    fun deleteFile(fileId: Long)
+    fun deleteFilesForAccount(accountName: String)
     fun renameFile(fileToRename: OCFile, finalRemotePath: String, finalStoragePath: String)
 
     fun disableThumbnailsForFile(fileId: Long)

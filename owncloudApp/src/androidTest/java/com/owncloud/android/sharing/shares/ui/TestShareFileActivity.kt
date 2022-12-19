@@ -25,7 +25,7 @@ import androidx.fragment.app.commit
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
-import com.owncloud.android.presentation.ui.sharing.fragments.ShareFragmentListener
+import com.owncloud.android.presentation.sharing.ShareFragmentListener
 import com.owncloud.android.testing.SingleFragmentActivity
 
 class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {

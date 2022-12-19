@@ -58,7 +58,7 @@ class UserDaoTest {
 
     @Test
     fun insertQuotaForAccount() {
-        userDao.insert(userQuotaEntity)
+        userDao.insertOrReplace(userQuotaEntity)
 
         val userQuotaEntity = userDao.getQuotaForAccount(OC_ACCOUNT_NAME)
 
@@ -68,8 +68,8 @@ class UserDaoTest {
 
     @Test
     fun replaceQuotaForAccount() {
-        userDao.insert(userQuotaEntity)
-        userDao.insert(userQuotaEntity.copy(available = -3))
+        userDao.insertOrReplace(userQuotaEntity)
+        userDao.insertOrReplace(userQuotaEntity.copy(available = -3))
 
         val userQuotaEntity = userDao.getQuotaForAccount(OC_ACCOUNT_NAME)
 

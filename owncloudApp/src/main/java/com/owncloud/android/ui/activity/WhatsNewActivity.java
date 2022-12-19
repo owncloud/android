@@ -44,10 +44,10 @@ import androidx.viewpager.widget.ViewPager;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
-import com.owncloud.android.features.FeatureList;
-import com.owncloud.android.features.FeatureList.FeatureItem;
-import com.owncloud.android.presentation.ui.authentication.LoginActivity;
-import com.owncloud.android.ui.whatsnew.ProgressIndicator;
+import com.owncloud.android.wizard.FeatureList;
+import com.owncloud.android.wizard.FeatureList.FeatureItem;
+import com.owncloud.android.presentation.authentication.LoginActivity;
+import com.owncloud.android.wizard.ProgressIndicator;
 
 /**
  * @author Bartosz Przybylski

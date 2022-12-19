@@ -38,23 +38,23 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.enums.LockEnforcedType
-import com.owncloud.android.enums.LockEnforcedType.Companion.parseFromInteger
-import com.owncloud.android.interfaces.BiometricStatus
-import com.owncloud.android.interfaces.IEnableBiometrics
-import com.owncloud.android.interfaces.ISecurityEnforced
-import com.owncloud.android.interfaces.LockType
+import com.owncloud.android.presentation.security.LockEnforcedType
+import com.owncloud.android.presentation.security.LockEnforcedType.Companion.parseFromInteger
+import com.owncloud.android.presentation.security.biometric.BiometricStatus
+import com.owncloud.android.presentation.security.biometric.EnableBiometrics
+import com.owncloud.android.presentation.security.SecurityEnforced
+import com.owncloud.android.presentation.security.LockType
 import com.owncloud.android.lib.common.network.WebdavUtils
-import com.owncloud.android.presentation.ui.security.BiometricActivity
-import com.owncloud.android.presentation.ui.security.PatternActivity
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
-import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
+import com.owncloud.android.presentation.security.biometric.BiometricActivity
+import com.owncloud.android.presentation.security.pattern.PatternActivity
+import com.owncloud.android.presentation.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.settings.privacypolicy.PrivacyPolicyActivity
+import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.ALL_FILES_SAF_REGEX
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
-import com.owncloud.android.ui.helpers.ShareSheetHelper
+import com.owncloud.android.presentation.common.ShareSheetHelper
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.UriUtilsKt
 import com.owncloud.android.utils.UriUtilsKt.getExposedFileUriForOCFile
@@ -282,8 +282,8 @@ fun Activity.hideSoftKeyboard() {
     }
 }
 
-fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
-    val sharedPreferencesProvider = SharedPreferencesProviderImpl(this)
+fun Activity.checkPasscodeEnforced(securityEnforced: SecurityEnforced) {
+    val sharedPreferencesProvider = OCSharedPreferencesProvider(this)
 
     val lockEnforced: Int = this.resources.getInteger(R.integer.lock_enforced)
     val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
@@ -325,7 +325,7 @@ fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
 
 fun Activity.manageOptionLockSelected(type: LockType) {
 
-    SharedPreferencesProviderImpl(this).let {
+    OCSharedPreferencesProvider(this).let {
         // Remove passcode
         it.removePreference(PassCodeActivity.PREFERENCE_PASSCODE)
         it.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
@@ -350,7 +350,7 @@ fun Activity.manageOptionLockSelected(type: LockType) {
     }
 }
 
-fun Activity.showBiometricDialog(iEnableBiometrics: IEnableBiometrics) {
+fun Activity.showBiometricDialog(iEnableBiometrics: EnableBiometrics) {
     AlertDialog.Builder(this)
         .setCancelable(false)
         .setTitle(getString(R.string.biometric_dialog_title))

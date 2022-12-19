@@ -22,9 +22,9 @@ import android.accounts.Account;
 import android.os.Bundle;
 import android.view.View.OnClickListener;
 
-import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.presentation.authentication.AccountUtils;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.presentation.ui.files.filelist.MainFileListFragment;
+import com.owncloud.android.presentation.files.filelist.MainFileListFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 
 public class UploadPathActivity extends FolderPickerActivity implements FileFragment.ContainerActivity,

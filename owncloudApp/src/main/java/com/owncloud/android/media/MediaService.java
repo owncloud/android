@@ -42,7 +42,7 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.presentation.authentication.AccountUtils;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;

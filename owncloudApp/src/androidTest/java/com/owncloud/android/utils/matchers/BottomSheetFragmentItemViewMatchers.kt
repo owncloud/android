@@ -32,7 +32,7 @@ import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
-import com.owncloud.android.presentation.ui.common.BottomSheetFragmentItemView
+import com.owncloud.android.presentation.common.BottomSheetFragmentItemView
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 

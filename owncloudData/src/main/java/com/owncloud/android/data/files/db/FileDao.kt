@@ -31,7 +31,7 @@ import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
-import com.owncloud.android.domain.ext.isOneOf
+import com.owncloud.android.domain.extensions.isOneOf
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import kotlinx.coroutines.flow.Flow
@@ -39,111 +39,110 @@ import java.io.File.separatorChar
 import java.util.UUID
 
 @Dao
-abstract class FileDao {
-
+interface FileDao {
     @Query(SELECT_FILE_WITH_ID)
-    abstract fun getFileById(
+    fun getFileById(
         id: Long
     ): OCFileEntity?
 
     @Transaction
     @Query(SELECT_FILE_WITH_ID)
-    abstract fun getFileWithSyncInfoById(
+    fun getFileWithSyncInfoById(
         id: Long
     ): OCFileAndFileSync?
 
     @Query(SELECT_FILE_WITH_ID)
-    abstract fun getFileByIdAsStream(
+    fun getFileByIdAsFlow(
         id: Long
     ): Flow<OCFileEntity?>
 
     @Query(SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH)
-    abstract fun getFileByOwnerAndRemotePath(
+    fun getFileByOwnerAndRemotePath(
         owner: String,
         remotePath: String
     ): OCFileEntity?
 
     @Query(SELECT_FILE_WITH_REMOTE_ID)
-    abstract fun getFileByRemoteId(
+    fun getFileByRemoteId(
         remoteId: String
     ): OCFileEntity?
 
     @Query(SELECT_FILTERED_FOLDER_CONTENT)
-    abstract fun getSearchFolderContent(
+    fun getSearchFolderContent(
         folderId: Long,
         search: String
     ): List<OCFileEntity>
 
     @Query(SELECT_FILTERED_AVAILABLE_OFFLINE_FOLDER_CONTENT)
-    abstract fun getSearchAvailableOfflineFolderContent(
+    fun getSearchAvailableOfflineFolderContent(
         folderId: Long,
         search: String
     ): List<OCFileEntity>
 
     @Query(SELECT_FILTERED_SHARED_BY_LINK_FOLDER_CONTENT)
-    abstract fun getSearchSharedByLinkFolderContent(
+    fun getSearchSharedByLinkFolderContent(
         folderId: Long,
         search: String
     ): List<OCFileEntity>
 
     @Query(SELECT_FOLDER_CONTENT)
-    abstract fun getFolderContent(
+    fun getFolderContent(
         folderId: Long
     ): List<OCFileEntity>
 
     @Transaction
     @Query(SELECT_FOLDER_CONTENT)
-    abstract fun getFolderContentWithSyncInfo(
+    fun getFolderContentWithSyncInfo(
         folderId: Long
     ): List<OCFileAndFileSync>
 
     @Transaction
     @Query(SELECT_FOLDER_CONTENT)
-    abstract fun getFolderContentWithSyncInfoAsStream(
+    fun getFolderContentWithSyncInfoAsFlow(
         folderId: Long
     ): Flow<List<OCFileAndFileSync>>
 
     @Query(SELECT_FOLDER_BY_MIMETYPE)
-    abstract fun getFolderByMimeType(
+    fun getFolderByMimeType(
         folderId: Long,
         mimeType: String
     ): List<OCFileEntity>
 
     @Transaction
     @Query(SELECT_FILES_SHARED_BY_LINK)
-    abstract fun getFilesWithSyncInfoSharedByLinkAsStream(
+    fun getFilesWithSyncInfoSharedByLinkAsFlow(
         accountOwner: String
     ): Flow<List<OCFileAndFileSync>>
 
     @Transaction
     @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT)
-    abstract fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(
+    fun getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(
         accountOwner: String
     ): Flow<List<OCFileAndFileSync>>
 
     @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT)
-    abstract fun getFilesAvailableOfflineFromAccount(
+    fun getFilesAvailableOfflineFromAccount(
         accountOwner: String
     ): List<OCFileEntity>
 
     @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_EVERY_ACCOUNT)
-    abstract fun getFilesAvailableOfflineFromEveryAccount(): List<OCFileEntity>
+    fun getFilesAvailableOfflineFromEveryAccount(): List<OCFileEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    protected abstract fun insertOrIgnore(ocFileEntity: OCFileEntity): Long
+    fun insertOrIgnore(ocFileEntity: OCFileEntity): Long
 
     @Update
-    protected abstract fun update(ocFileEntity: OCFileEntity)
+    fun update(ocFileEntity: OCFileEntity)
 
     @Transaction
-    open fun upsert(ocFileEntity: OCFileEntity) = com.owncloud.android.data.upsert(
+    fun upsert(ocFileEntity: OCFileEntity) = com.owncloud.android.data.upsert(
         item = ocFileEntity,
         insert = ::insertOrIgnore,
         update = ::update
     )
 
     @Transaction
-    open fun updateSyncStatusForFile(id: Long, workerUuid: UUID?) {
+    fun updateSyncStatusForFile(id: Long, workerUuid: UUID?) {
         val fileWithSyncInfoEntity = getFileWithSyncInfoById(id)
 
         if ((fileWithSyncInfoEntity?.file?.parentId != ROOT_PARENT_ID) &&
@@ -163,7 +162,7 @@ abstract class FileDao {
                     isSynchronizing = true
                 )
             }
-            insertFileSync(fileSyncEntity)
+            insertOrReplaceFileSync(fileSyncEntity)
 
             // Check if there is any more file synchronizing in this folder, in such case don't update parent's sync status
             var cleanSyncInParent = true
@@ -185,7 +184,7 @@ abstract class FileDao {
     }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertFileSync(ocFileSyncEntity: OCFileSyncEntity): Long
+    fun insertOrReplaceFileSync(ocFileSyncEntity: OCFileSyncEntity): Long
 
     /**
      * Make sure that the ids are set properly. We don't take care of conflicts and that stuff here.
@@ -193,7 +192,7 @@ abstract class FileDao {
      * return folder content
      */
     @Transaction
-    open fun insertFilesInFolderAndReturnThem(
+    fun insertFilesInFolderAndReturnThem(
         folder: OCFileEntity,
         folderContent: List<OCFileEntity>,
     ): List<OCFileEntity> {
@@ -211,7 +210,7 @@ abstract class FileDao {
     }
 
     @Transaction
-    open fun mergeRemoteAndLocalFile(
+    fun mergeRemoteAndLocalFile(
         ocFileEntity: OCFileEntity
     ): Long {
         val localFile: OCFileEntity? = getFileByOwnerAndRemotePath(
@@ -236,7 +235,7 @@ abstract class FileDao {
     }
 
     @Transaction
-    open fun copy(
+    fun copy(
         sourceFile: OCFileEntity,
         targetFolder: OCFileEntity,
         finalRemotePath: String,
@@ -271,7 +270,7 @@ abstract class FileDao {
     }
 
     @Transaction
-    open fun moveFile(
+    fun moveFile(
         sourceFile: OCFileEntity,
         targetFolder: OCFileEntity,
         finalRemotePath: String,
@@ -305,13 +304,13 @@ abstract class FileDao {
     }
 
     @Query(DELETE_FILE_WITH_ID)
-    abstract fun deleteFileWithId(id: Long)
+    fun deleteFileById(id: Long)
 
     @Query(UPDATE_FILES_STORAGE_DIRECTORY)
-    abstract fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
+    fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
 
     @Transaction
-    open fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: Int) {
+    fun updateAvailableOfflineStatusForFile(ocFile: OCFile, newAvailableOfflineStatus: Int) {
         if (ocFile.isFolder) {
             updateFolderWithNewAvailableOfflineStatus(ocFile.id!!, newAvailableOfflineStatus)
         } else {
@@ -338,10 +337,10 @@ abstract class FileDao {
     }
 
     @Query(UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS)
-    abstract fun updateFileWithAvailableOfflineStatus(id: Long, availableOfflineStatus: Int)
+    fun updateFileWithAvailableOfflineStatus(id: Long, availableOfflineStatus: Int)
 
     @Transaction
-    open fun updateConflictStatusForFile(id: Long, eTagInConflict: String?) {
+    fun updateConflictStatusForFile(id: Long, eTagInConflict: String?) {
         val fileEntity = getFileById(id)
 
         if (fileEntity?.parentId != ROOT_PARENT_ID) {
@@ -367,13 +366,13 @@ abstract class FileDao {
     }
 
     @Query(UPDATE_FILE_WITH_NEW_CONFLICT_STATUS)
-    abstract fun updateFileWithConflictStatus(id: Long, eTagInConflict: String?)
+    fun updateFileWithConflictStatus(id: Long, eTagInConflict: String?)
 
     @Query(DISABLE_THUMBNAILS_FOR_FILE)
-    abstract fun disableThumbnailsForFile(fileId: Long)
+    fun disableThumbnailsForFile(fileId: Long)
 
     @Query(DELETE_FILES_FOR_ACCOUNT)
-    abstract fun deleteFilesForAccount(accountName: String)
+    fun deleteFilesForAccount(accountName: String)
 
     private fun moveSingleFile(
         sourceFile: OCFileEntity,
@@ -454,96 +453,106 @@ abstract class FileDao {
     }
 
     companion object {
-        private const val SELECT_FILE_WITH_ID =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE id = :id"
+        private const val SELECT_FILE_WITH_ID = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE id = :id
+        """
 
-        private const val SELECT_FILE_WITH_REMOTE_ID =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE remoteId = :remoteId"
+        private const val SELECT_FILE_WITH_REMOTE_ID = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE remoteId = :remoteId
+        """
 
-        private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE owner = :owner " +
-                    "AND remotePath = :remotePath"
+        private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE owner = :owner AND remotePath = :remotePath
+        """
 
-        private const val DELETE_FILE_WITH_ID =
-            "DELETE FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE id = :id"
+        private const val DELETE_FILE_WITH_ID = """
+            DELETE
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE id = :id
+        """
 
-        private const val SELECT_FOLDER_CONTENT =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE parentId = :folderId"
+        private const val SELECT_FOLDER_CONTENT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE parentId = :folderId
+        """
 
-        private const val SELECT_FILTERED_FOLDER_CONTENT =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE parentId = :folderId " +
-                    "AND remotePath LIKE '%' || :search || '%'"
+        private const val SELECT_FILTERED_FOLDER_CONTENT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE parentId = :folderId AND remotePath LIKE '%' || :search || '%'
+        """
 
-        private const val SELECT_FILTERED_AVAILABLE_OFFLINE_FOLDER_CONTENT =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE parentId = :folderId " +
-                    "AND keepInSync = '1' " +
-                    "AND remotePath LIKE '%' || :search || '%'"
+        private const val SELECT_FILTERED_AVAILABLE_OFFLINE_FOLDER_CONTENT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE parentId = :folderId AND keepInSync = '1' AND remotePath LIKE '%' || :search || '%'
+        """
 
-        private const val SELECT_FILTERED_SHARED_BY_LINK_FOLDER_CONTENT =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE parentId = :folderId " +
-                    "AND remotePath LIKE '%' || :search || '%'" +
-                    "AND sharedByLink LIKE '%1%' "
+        private const val SELECT_FILTERED_SHARED_BY_LINK_FOLDER_CONTENT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE parentId = :folderId AND remotePath LIKE '%' || :search || '%' AND sharedByLink LIKE '%1%'
+        """
 
-        private const val SELECT_FOLDER_BY_MIMETYPE =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE parentId = :folderId " +
-                    "AND mimeType LIKE :mimeType || '%' "
+        private const val SELECT_FOLDER_BY_MIMETYPE = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE parentId = :folderId AND mimeType LIKE :mimeType || '%'
+        """
 
-        private const val SELECT_FILES_SHARED_BY_LINK =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE owner = :accountOwner " +
-                    "AND sharedByLink LIKE '%1%' "
+        private const val SELECT_FILES_SHARED_BY_LINK = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE owner = :accountOwner AND sharedByLink LIKE '%1%'
+        """
 
-        private const val SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE owner = :accountOwner " +
-                    "AND keepInSync = '1'"
+        private const val SELECT_FILES_AVAILABLE_OFFLINE_FROM_ACCOUNT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE owner = :accountOwner AND keepInSync = '1'
+        """
 
-        private const val SELECT_FILES_AVAILABLE_OFFLINE_FROM_EVERY_ACCOUNT =
-            "SELECT * " +
-                    "FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE keepInSync = '1'"
+        private const val SELECT_FILES_AVAILABLE_OFFLINE_FROM_EVERY_ACCOUNT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE keepInSync = '1'
+        """
 
-        private const val UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS =
-            "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "SET keepInSync = :availableOfflineStatus " +
-                    "WHERE id = :id"
+        private const val UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS = """
+            UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            SET keepInSync = :availableOfflineStatus
+            WHERE id = :id
+        """
 
-        private const val UPDATE_FILE_WITH_NEW_CONFLICT_STATUS =
-            "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "SET etagInConflict = :eTagInConflict " +
-                    "WHERE id = :id"
+        private const val UPDATE_FILE_WITH_NEW_CONFLICT_STATUS = """
+            UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            SET etagInConflict = :eTagInConflict
+            WHERE id = :id
+        """
 
-        private const val DISABLE_THUMBNAILS_FOR_FILE =
-            "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "SET needsToUpdateThumbnail = false " +
-                    "WHERE id = :fileId"
+        private const val DISABLE_THUMBNAILS_FOR_FILE = """
+            UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            SET needsToUpdateThumbnail = false
+            WHERE id = :fileId
+        """
 
-        private const val UPDATE_FILES_STORAGE_DIRECTORY =
-            "UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "SET storagePath = `REPLACE`(storagePath, :oldDirectory, :newDirectory) " +
-                    "WHERE storagePath IS NOT NULL"
+        private const val UPDATE_FILES_STORAGE_DIRECTORY = """
+            UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            SET storagePath = `REPLACE`(storagePath, :oldDirectory, :newDirectory)
+            WHERE storagePath IS NOT NULL
+        """
 
-        private const val DELETE_FILES_FOR_ACCOUNT =
-            "DELETE FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME} " +
-                    "WHERE owner = :accountName"
+        private const val DELETE_FILES_FOR_ACCOUNT = """
+            DELETE
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE owner = :accountName
+        """
     }
 }

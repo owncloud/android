@@ -30,12 +30,10 @@ import com.owncloud.android.MainApp;
 
 /**
  * Meta-Class that holds various static field information
+ * This is only used in FileContentProvider for legacy DB
  */
+@Deprecated
 public class ProviderMeta {
-
-    public static final String DB_NAME = "filelist";
-    public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 28;
 
     private ProviderMeta() {
     }

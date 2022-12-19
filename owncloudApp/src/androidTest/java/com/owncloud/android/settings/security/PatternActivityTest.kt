@@ -27,8 +27,8 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager
-import com.owncloud.android.presentation.ui.security.PatternActivity
-import com.owncloud.android.presentation.viewmodels.security.PatternViewModel
+import com.owncloud.android.presentation.security.pattern.PatternActivity
+import com.owncloud.android.presentation.security.pattern.PatternViewModel
 import com.owncloud.android.testutil.security.OC_PATTERN
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withText

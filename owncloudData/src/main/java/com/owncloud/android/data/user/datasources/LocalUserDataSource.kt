@@ -33,7 +33,7 @@ interface LocalUserDataSource {
 
     fun getAllUserQuotas(): List<UserQuota>
 
-    fun removeQuotaForAccount(
+    fun deleteQuotaForAccount(
         accountName: String
     )
 }
