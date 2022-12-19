@@ -58,5 +58,5 @@ interface ShareService : Service {
         publicUpload: Boolean
     ): RemoteOperationResult<ShareResponse>
 
-    fun deleteShare(remoteId: String): RemoteOperationResult<ShareResponse>
+    fun deleteShare(remoteId: String): RemoteOperationResult<Unit>
 }

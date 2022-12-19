@@ -36,13 +36,7 @@ import com.owncloud.android.lib.common.http.HttpConstants.VALUE_FORMAT
 import com.owncloud.android.lib.common.http.methods.nonwebdav.DeleteMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.CommonOcsResponse
-import com.owncloud.android.lib.resources.shares.responses.ShareItem
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 import timber.log.Timber
-import java.lang.reflect.Type
 import java.net.URL
 
 /**
@@ -52,14 +46,10 @@ import java.net.URL
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Fernando Sanz Velasco
- */
-
-/**
- * Constructor
  *
  * @param remoteShareId Share ID
  */
-class RemoveRemoteShareOperation(private val remoteShareId: String) : RemoteOperation<ShareResponse>() {
+class RemoveRemoteShareOperation(private val remoteShareId: String) : RemoteOperation<Unit>() {
 
     private fun buildRequestUri(baseUri: Uri) =
         baseUri.buildUpon()
@@ -68,24 +58,12 @@ class RemoveRemoteShareOperation(private val remoteShareId: String) : RemoteOper
             .appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT)
             .build()
 
-    private fun parseResponse(response: String): ShareResponse? {
-        val moshi = Moshi.Builder().build()
-        val listOfShareItemType: Type = Types.newParameterizedType(List::class.java, ShareItem::class.java)
-        val commonOcsType: Type = Types.newParameterizedType(CommonOcsResponse::class.java, listOfShareItemType)
-        val adapter: JsonAdapter<CommonOcsResponse<List<ShareItem>>> = moshi.adapter(commonOcsType)
-        return adapter.fromJson(response)?.ocs?.data?.let { listOfShareItems ->
-            ShareResponse(listOfShareItems.map { shareItem ->
-                shareItem.toRemoteShare()
-            })
-        }
-    }
-
     private fun onResultUnsuccessful(
         method: DeleteMethod,
         response: String?,
         status: Int
-    ): RemoteOperationResult<ShareResponse> {
-        Timber.e("Failed response while unshare link ")
+    ): RemoteOperationResult<Unit> {
+        Timber.e("Failed response while removing share ")
         if (response != null) {
             Timber.e("*** status code: $status; response message: $response")
         } else {
@@ -94,17 +72,14 @@ class RemoveRemoteShareOperation(private val remoteShareId: String) : RemoteOper
         return RemoteOperationResult(method)
     }
 
-    private fun onRequestSuccessful(response: String?): RemoteOperationResult<ShareResponse> {
-        val result = RemoteOperationResult<ShareResponse>(RemoteOperationResult.ResultCode.OK)
+    private fun onRequestSuccessful(response: String?): RemoteOperationResult<Unit> {
+        val result = RemoteOperationResult<Unit>(RemoteOperationResult.ResultCode.OK)
         Timber.d("Successful response: $response")
-        result.data = parseResponse(response!!)
         Timber.d("*** Unshare link completed ")
         return result
     }
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<ShareResponse> {
-
-
+    override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
         val requestUri = buildRequestUri(client.baseUri)
 
         val deleteMethod = DeleteMethod(URL(requestUri.toString())).apply {
@@ -129,7 +104,7 @@ class RemoveRemoteShareOperation(private val remoteShareId: String) : RemoteOper
     private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
 
     companion object {
-        //OCS Route
+        // OCS Route
         private const val OCS_ROUTE = "ocs/v2.php/apps/files_sharing/api/v1/shares"
     }
 }
