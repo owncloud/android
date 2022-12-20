@@ -103,9 +103,10 @@ class UploadFileFromFileSystemWorker(
 
         return try {
             checkPermissionsToReadDocumentAreGranted()
-            checkParentFolderExistence()
-            checkNameCollisionOrGetAnAvailableOneInCase()
-            uploadDocument()
+            val clientForThisUpload = getClientForThisUpload()
+            checkParentFolderExistence(clientForThisUpload)
+            checkNameCollisionOrGetAnAvailableOneInCase(clientForThisUpload)
+            uploadDocument(clientForThisUpload)
             updateUploadsDatabaseWithResult(null)
             updateFilesDatabaseWithLatestDetails()
             Result.success()
@@ -194,19 +195,19 @@ class UploadFileFromFileSystemWorker(
         fileSize = fileInFileSystem.length()
     }
 
-    private fun checkParentFolderExistence() {
+    private fun checkParentFolderExistence(client: OwnCloudClient) {
         var pathToGrant: String = File(uploadPath).parent ?: ""
         pathToGrant = if (pathToGrant.endsWith(File.separator)) pathToGrant else pathToGrant + File.separator
 
         val checkPathExistenceOperation = CheckPathExistenceRemoteOperation(pathToGrant, false)
-        val checkPathExistenceResult = checkPathExistenceOperation.execute(getClientForThisUpload())
+        val checkPathExistenceResult = checkPathExistenceOperation.execute(client)
         if (checkPathExistenceResult.code == ResultCode.FILE_NOT_FOUND) {
             val createRemoteFolderOperation = CreateRemoteFolderOperation(pathToGrant, true)
-            createRemoteFolderOperation.execute(getClientForThisUpload())
+            createRemoteFolderOperation.execute(client)
         }
     }
 
-    private fun checkNameCollisionOrGetAnAvailableOneInCase() {
+    private fun checkNameCollisionOrGetAnAvailableOneInCase(client: OwnCloudClient) {
         if (ocTransfer.forceOverwrite) {
 
             val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
@@ -220,16 +221,14 @@ class UploadFileFromFileSystemWorker(
         }
 
         Timber.d("Checking name collision in server")
-        val remotePath = getAvailableRemotePath(getClientForThisUpload(), uploadPath)
+        val remotePath = getAvailableRemotePath(client, uploadPath)
         if (remotePath != null && remotePath != uploadPath) {
             uploadPath = remotePath
             Timber.d("Name collision detected, let's rename it to $remotePath")
         }
     }
 
-    private fun uploadDocument() {
-        val client = getClientForThisUpload()
-
+    private fun uploadDocument(client: OwnCloudClient) {
         val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
         val capabilitiesForAccount = getStoredCapabilitiesUseCase.execute(
             GetStoredCapabilitiesUseCase.Params(
@@ -350,8 +349,12 @@ class UploadFileFromFileSystemWorker(
         )
     }
 
-    private fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
-        .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext)
+    private fun getClientForThisUpload(): OwnCloudClient =
+        SingleSessionManager.getDefaultSingleton()
+            .getClientFor(
+                OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext),
+                appContext,
+            )
 
     override fun onTransferProgress(
         progressRate: Long,
