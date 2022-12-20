@@ -1,0 +1,6 @@
+Bugfix: Fix crash when opening uploads section
+
+When upgrading from an old version with uploads with "forget" behaviour, app crashed
+when opening the uploads tab. Now, this has been fixed so that it works correctly.
+
+https://github.com/owncloud/android/pull/3841
