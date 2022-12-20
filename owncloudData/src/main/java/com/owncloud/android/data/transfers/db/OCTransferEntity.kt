@@ -60,6 +60,8 @@ data class OCTransferEntity(
     companion object {
         private const val LEGACY_UPLOAD_IN_PROGRESS = 0
         private const val LEGACY_UPLOAD_FAILED = 1
+        private const val LEGACY_LOCAL_BEHAVIOUR_MOVE = 1
+        private const val LEGACY_LOCAL_BEHAVIOUR_FORGET = 2
 
         fun fromCursor(cursor: Cursor): OCTransferEntity {
             val newStatus = when (cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_STATUS))) {
@@ -68,7 +70,7 @@ data class OCTransferEntity(
                 else -> TransferStatus.TRANSFER_SUCCEEDED.value
             }
             val newLocalBehaviour = cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_LOCAL_BEHAVIOUR)).let {
-                if (it > 1) 1
+                if (it == LEGACY_LOCAL_BEHAVIOUR_FORGET) LEGACY_LOCAL_BEHAVIOUR_MOVE
                 else it
             }
             return OCTransferEntity(
