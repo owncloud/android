@@ -50,7 +50,9 @@ class ReleaseNotesViewModel(
             ReleaseNote(R.string.release_notes_3_0_title3, R.string.release_notes_3_0_subtitle3, ReleaseNoteType.BUGFIX),
             ReleaseNote(R.string.release_notes_3_0_title4, R.string.release_notes_3_0_subtitle4, ReleaseNoteType.ENHANCEMENT),
             ReleaseNote(R.string.release_notes_3_0_title5, R.string.release_notes_3_0_subtitle5, ReleaseNoteType.ENHANCEMENT),
-            ReleaseNote(R.string.release_notes_3_0_title6, R.string.release_notes_3_0_subtitle6, ReleaseNoteType.ENHANCEMENT)
+            ReleaseNote(R.string.release_notes_3_0_title6, R.string.release_notes_3_0_subtitle6, ReleaseNoteType.ENHANCEMENT),
+            ReleaseNote(R.string.release_notes_3_0_1_title1, R.string.release_notes_3_0_1_subtitle1, ReleaseNoteType.BUGFIX),
+            ReleaseNote(R.string.release_notes_3_0_1_title2, R.string.release_notes_3_0_1_subtitle2, ReleaseNoteType.BUGFIX),
         )
     }
 }
