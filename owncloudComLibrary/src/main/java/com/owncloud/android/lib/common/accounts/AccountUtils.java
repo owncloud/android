@@ -112,6 +112,7 @@ public class AccountUtils {
         String username = AccountUtils.getUsernameForAccount(account);
 
         if (isOauth2) {
+            Timber.i("Trying to retrieve credentials for oAuth account" + account.name);
             String accessToken = am.blockingGetAuthToken(
                     account,
                     AccountTypeUtils.getAuthTokenTypeAccessToken(account.type),
