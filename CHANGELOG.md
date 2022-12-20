@@ -1,3 +1,25 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v3.0.0...master
+
+Summary
+-------
+
+* Bugfix - Fix for database migration: [#3836](https://github.com/owncloud/android/pull/3836)
+
+Details
+-------
+
+* Bugfix - Fix for database migration: [#3836](https://github.com/owncloud/android/pull/3836)
+
+   For those users who hadn't migrated the camera uploads data yet, the app crashed. This problem
+   has been solved and now the app upgrades correctly.
+
+   https://github.com/owncloud/android/pull/3836
+
 Changelog for ownCloud Android Client [3.0.0] (2022-12-12)
 =======================================
 The following sections list the changes in ownCloud Android Client 3.0.0 relevant to
