@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Fix crash when upgrading from 2.18: [#3837](https://github.com/owncloud/android/pull/3837)
+* Bugfix - Fix crash when opening uploads section: [#3841](https://github.com/owncloud/android/pull/3841)
 
 Details
 -------
@@ -19,6 +20,13 @@ Details
    This problem has been solved and now the app upgrades correctly.
 
    https://github.com/owncloud/android/pull/3837
+
+* Bugfix - Fix crash when opening uploads section: [#3841](https://github.com/owncloud/android/pull/3841)
+
+   When upgrading from an old version with uploads with "forget" behaviour, app crashed when
+   opening the uploads tab. Now, this has been fixed so that it works correctly.
+
+   https://github.com/owncloud/android/pull/3841
 
 Changelog for ownCloud Android Client [3.0.0] (2022-12-12)
 =======================================
