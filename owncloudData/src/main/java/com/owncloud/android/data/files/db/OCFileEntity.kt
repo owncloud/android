@@ -19,6 +19,7 @@
 package com.owncloud.android.data.files.db
 
 import android.database.Cursor
+import androidx.core.database.getStringOrNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -105,7 +106,7 @@ data class OCFileEntity(
                 creationTimestamp = cursor.getLong(cursor.getColumnIndexOrThrow(FILE_CREATION)),
                 modificationTimestamp = cursor.getLong(cursor.getColumnIndexOrThrow(FILE_MODIFIED)),
                 etag = cursor.getString(cursor.getColumnIndexOrThrow(FILE_ETAG)),
-                mimeType = cursor.getString(cursor.getColumnIndexOrThrow(FILE_CONTENT_TYPE)),
+                mimeType = cursor.getStringOrNull(cursor.getColumnIndexOrThrow(FILE_CONTENT_TYPE)).orEmpty(),
                 length = cursor.getLong(cursor.getColumnIndexOrThrow(FILE_CONTENT_LENGTH)),
                 storagePath = cursor.getString(cursor.getColumnIndexOrThrow(FILE_STORAGE_PATH)),
                 name = cursor.getString(cursor.getColumnIndexOrThrow(FILE_NAME)),
