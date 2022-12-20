@@ -59,9 +59,9 @@ import com.owncloud.android.data.capabilities.datasources.implementation.OCLocal
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toModel
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.files.db.OCFileEntity
-import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataSource
+import com.owncloud.android.data.folderbackup.datasources.implementation.OCFolderBackupLocalDataSource
 import com.owncloud.android.data.migrations.CameraUploadsMigrationToRoom
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
@@ -73,7 +73,6 @@ import com.owncloud.android.extensions.getLongFromColumnOrThrow
 import com.owncloud.android.extensions.getStringFromColumnOrThrow
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.usecases.transfers.uploads.UploadFileFromSystemUseCase
-import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException
@@ -968,7 +967,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 )
 
                 if (cursor.moveToFirst()) {
-                    val ocLocalCapabilitiesDataSource: OCLocalCapabilitiesDataSource by inject()
+                    val ocCapabilityDao = OwncloudDatabase.getDatabase(context!!).capabilityDao()
+                    val ocLocalCapabilitiesDataSource = OCLocalCapabilitiesDataSource(ocCapabilityDao)
 
                     // Insert capability to the new capabilities table in new database
                     executors.diskIO().execute {
@@ -1026,19 +1026,19 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                         videoUploadsTimestamp = cursor.getLongFromColumnOrThrow(ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP)
                     }
 
-                    val sharedPreferencesProvider: SharedPreferencesProvider by inject()
+                    val sharedPreferencesProvider = OCSharedPreferencesProvider(context!!)
                     val migrationToRoom = CameraUploadsMigrationToRoom(sharedPreferencesProvider)
 
                     val pictureUploadsConfiguration = migrationToRoom.getPictureUploadsConfigurationPreferences(pictureUploadsTimestamp)
                     val videoUploadsConfiguration = migrationToRoom.getVideoUploadsConfigurationPreferences(videoUploadsTimestamp)
 
-                    val backupLocalDataSource: FolderBackupLocalDataSource by inject()
+                    val backupLocalDataSource = OCFolderBackupLocalDataSource(OwncloudDatabase.getDatabase(context!!).folderBackUpDao())
                     // Insert camera uploads configuration in new database
                     executors.diskIO().execute {
                         pictureUploadsConfiguration?.let { backupLocalDataSource.saveFolderBackupConfiguration(it) }
                         videoUploadsConfiguration?.let { backupLocalDataSource.saveFolderBackupConfiguration(it) }
                         if (pictureUploadsConfiguration != null || videoUploadsConfiguration != null) {
-                            val workManagerProvider: WorkManagerProvider by inject()
+                            val workManagerProvider = WorkManagerProvider(context!!)
                             workManagerProvider.enqueueCameraUploadsWorker()
                         }
                     }
@@ -1312,7 +1312,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
      * structure to include in it the path to the server instance. Updating the account names and path to local files
      * in the files table is a must to keep the existing account working and the database clean.
      *
-     * See [com.owncloud.android.authentication.AccountUtils.updateAccountVersion]
+     * See [com.owncloud.android.presentation.authentication.AccountUtils.updateAccountVersion]
      *
      * @param db Database where table of files is included.
      */
