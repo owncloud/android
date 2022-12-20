@@ -150,7 +150,7 @@ class OCLocalTransferDataSource(
         accountName = accountName,
         fileSize = fileSize,
         status = TransferStatus.fromValue(status),
-        localBehaviour = UploadBehavior.values()[localBehaviour],
+        localBehaviour = if (localBehaviour > 1) UploadBehavior.MOVE else UploadBehavior.values()[localBehaviour],
         forceOverwrite = forceOverwrite,
         transferEndTimestamp = transferEndTimestamp,
         lastResult = lastResult?.let { TransferResult.fromValue(it) },
