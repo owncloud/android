@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.adapters.accounts
+package com.owncloud.android.presentation.accounts
 
 import android.accounts.Account
 import android.view.LayoutInflater
@@ -26,11 +26,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
 import com.owncloud.android.databinding.AccountActionBinding
 import com.owncloud.android.databinding.AccountItemBinding
 import com.owncloud.android.lib.common.OwnCloudAccount
-import com.owncloud.android.utils.AvatarUtils
+import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.avatar.AvatarUtils
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 import timber.log.Timber
@@ -164,7 +164,7 @@ class AccountsManagementAdapter(private val accountListener: AccountAdapterListe
     }
 
     /**
-     * Listener interface for Activities using the [AccountListAdapter]
+     * Listener interface for Activities using the [AccountsManagementAdapter]
      */
     interface AccountAdapterListener {
         fun removeAccount(account: Account)

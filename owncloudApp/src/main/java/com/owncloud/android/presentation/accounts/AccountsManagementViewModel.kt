@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.viewmodels.accounts
+package com.owncloud.android.presentation.accounts
 
 import android.accounts.Account
 import androidx.lifecycle.ViewModel

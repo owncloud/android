@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.ui.accounts
+package com.owncloud.android.presentation.accounts
 
 import android.accounts.Account
 import android.accounts.AccountManager
@@ -36,21 +36,18 @@ import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.MainApp.Companion.authority
 import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.presentation.adapters.accounts.AccountsManagementAdapter
-import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_TOKEN
-import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
-import com.owncloud.android.presentation.ui.authentication.LoginActivity
-import com.owncloud.android.presentation.viewmodels.accounts.AccountsManagementViewModel
+import com.owncloud.android.presentation.accounts.RemoveAccountDialogFragment.Companion.newInstance
+import com.owncloud.android.presentation.authentication.ACTION_UPDATE_TOKEN
+import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.authentication.EXTRA_ACTION
+import com.owncloud.android.presentation.authentication.LoginActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
-import com.owncloud.android.ui.dialog.RemoveAccountDialogFragment.Companion.newInstance
-import com.owncloud.android.ui.dialog.RemoveAccountDialogViewModel
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT as EXTRA_ACCOUNT_LOGIN_ACTIVITY
+import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT as EXTRA_ACCOUNT_LOGIN_ACTIVITY
 
 class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
 

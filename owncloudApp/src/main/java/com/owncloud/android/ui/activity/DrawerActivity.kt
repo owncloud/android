@@ -60,9 +60,9 @@ import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.presentation.common.DrawerViewModel
 import com.owncloud.android.presentation.avatar.AvatarUtils
-import com.owncloud.android.presentation.ui.accounts.AccountsManagementActivity
-import com.owncloud.android.presentation.ui.accounts.AccountsManagementActivity.Companion.KEY_ACCOUNT_LIST_CHANGED
-import com.owncloud.android.presentation.ui.accounts.AccountsManagementActivity.Companion.KEY_CURRENT_ACCOUNT_CHANGED
+import com.owncloud.android.presentation.accounts.AccountsManagementActivity
+import com.owncloud.android.presentation.accounts.AccountsManagementActivity.Companion.KEY_ACCOUNT_LIST_CHANGED
+import com.owncloud.android.presentation.accounts.AccountsManagementActivity.Companion.KEY_CURRENT_ACCOUNT_CHANGED
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel

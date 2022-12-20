@@ -28,10 +28,10 @@ import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
-import com.owncloud.android.presentation.manager.AvatarManager
-import com.owncloud.android.presentation.ui.accounts.AccountsManagementActivity
-import com.owncloud.android.presentation.viewmodels.accounts.AccountsManagementViewModel
-import com.owncloud.android.presentation.viewmodels.drawer.DrawerViewModel
+import com.owncloud.android.presentation.accounts.AccountsManagementActivity
+import com.owncloud.android.presentation.accounts.AccountsManagementViewModel
+import com.owncloud.android.presentation.avatar.AvatarManager
+import com.owncloud.android.presentation.common.DrawerViewModel
 import com.owncloud.android.utils.matchers.assertChildCount
 import com.owncloud.android.utils.matchers.isDisplayed
 import io.mockk.every

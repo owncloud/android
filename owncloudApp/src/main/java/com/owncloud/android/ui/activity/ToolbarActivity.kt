@@ -34,7 +34,7 @@ import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.avatar.AvatarUtils
-import com.owncloud.android.presentation.ui.accounts.AccountsManagementActivity
+import com.owncloud.android.presentation.accounts.AccountsManagementActivity
 
 /**
  * Base class providing toolbar registration functionality, see [.setupToolbar].
