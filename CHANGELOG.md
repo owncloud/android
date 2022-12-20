@@ -1,3 +1,25 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v3.0.0...master
+
+Summary
+-------
+
+* Bugfix - Fix crash when upgrading from 2.18: [#3837](https://github.com/owncloud/android/pull/3837)
+
+Details
+-------
+
+* Bugfix - Fix crash when upgrading from 2.18: [#3837](https://github.com/owncloud/android/pull/3837)
+
+   Upgrading from 2.18 or older versions made the app crash due to camera uploads data migration.
+   This problem has been solved and now the app upgrades correctly.
+
+   https://github.com/owncloud/android/pull/3837
+
 Changelog for ownCloud Android Client [3.0.0] (2022-12-12)
 =======================================
 The following sections list the changes in ownCloud Android Client 3.0.0 relevant to
