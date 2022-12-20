@@ -1,0 +1,6 @@
+Bugfix: Fix crash when upgrading from 2.18
+
+Upgrading from 2.18 or older versions made the app crash due to camera uploads data migration.
+This problem has been solved and now the app upgrades correctly.
+
+https://github.com/owncloud/android/pull/3837
