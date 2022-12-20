@@ -1,0 +1,6 @@
+Bugfix: Fix for database migration
+
+For those users who hadn't migrated the camera uploads data yet, the app crashed. This problem
+has been solved and now the app upgrades correctly.
+
+https://github.com/owncloud/android/pull/3836
