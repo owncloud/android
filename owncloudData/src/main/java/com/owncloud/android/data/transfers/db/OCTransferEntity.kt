@@ -67,13 +67,17 @@ data class OCTransferEntity(
                 LEGACY_UPLOAD_FAILED -> TransferStatus.TRANSFER_FAILED.value
                 else -> TransferStatus.TRANSFER_SUCCEEDED.value
             }
+            val newLocalBehaviour = cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_LOCAL_BEHAVIOUR)).let {
+                if (it > 1) 1
+                else it
+            }
             return OCTransferEntity(
                 localPath = cursor.getString(cursor.getColumnIndexOrThrow(UPLOAD_LOCAL_PATH)),
                 remotePath = cursor.getString(cursor.getColumnIndexOrThrow(UPLOAD_REMOTE_PATH)),
                 accountName = cursor.getString(cursor.getColumnIndexOrThrow(UPLOAD_ACCOUNT_NAME)),
                 fileSize = cursor.getLong(cursor.getColumnIndexOrThrow(UPLOAD_FILE_SIZE)),
                 status = newStatus,
-                localBehaviour = cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_LOCAL_BEHAVIOUR)),
+                localBehaviour = newLocalBehaviour,
                 forceOverwrite = cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_FORCE_OVERWRITE)) == 1,
                 transferEndTimestamp = cursor.getLong(cursor.getColumnIndexOrThrow(UPLOAD_UPLOAD_END_TIMESTAMP)),
                 lastResult = cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_LAST_RESULT)),
