@@ -76,7 +76,7 @@ class MigrationToDB36Test : MigrationTest() {
                     "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             arrayOf(
                 OC_CAPABILITY.accountName,
-                OC_CAPABILITY.versionMayor,
+                OC_CAPABILITY.versionMajor,
                 OC_CAPABILITY.versionMinor,
                 OC_CAPABILITY.versionMicro,
                 OC_CAPABILITY.versionString,
