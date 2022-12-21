@@ -76,10 +76,10 @@ class OCCapabilityTest {
 
     @Test
     fun isOpenInWebAllowed() {
-        val item1 = OC_CAPABILITY.copy(filesOcisProviders = OCCapability.OcisProvider(true, "", null, null, "/open-with-web", null))
+        val item1 = OC_CAPABILITY.copy(filesAppProviders = OCCapability.AppProviders(true, "", null, null, "/open-with-web", null))
         assertTrue(item1.isOpenInWebAllowed())
 
-        val item2 = OC_CAPABILITY.copy(filesOcisProviders = null)
+        val item2 = OC_CAPABILITY.copy(filesAppProviders = null)
         assertFalse(item2.isOpenInWebAllowed())
     }
 }
