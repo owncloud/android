@@ -37,7 +37,6 @@ import com.owncloud.android.lib.resources.status.RemoteServerInfo
 import org.apache.commons.lang3.exception.ExceptionUtils
 import timber.log.Timber
 import java.io.IOException
-import java.lang.Exception
 
 /**
  * ConnectionValidator
@@ -46,7 +45,7 @@ import java.lang.Exception
  */
 class ConnectionValidator(
     val context: Context,
-    val clearCookiesOnValidation: Boolean
+    private val clearCookiesOnValidation: Boolean
 ) {
     fun validate(baseClient: OwnCloudClient, singleSessionManager: SingleSessionManager, context: Context): Boolean {
         try {
@@ -61,12 +60,12 @@ class ConnectionValidator(
             client.account = baseClient.account
             client.credentials = baseClient.credentials
             while (validationRetryCount < VALIDATION_RETRY_COUNT) {
-                Timber.d("validationRetryCout %d", validationRetryCount)
+                Timber.d("validationRetryCount %d", validationRetryCount)
                 var successCounter = 0
                 var failCounter = 0
 
                 client.setFollowRedirects(true)
-                if (isOnwCloudStatusOk(client)) {
+                if (isOwnCloudStatusOk(client)) {
                     successCounter++
                 } else {
                     failCounter++
@@ -103,7 +102,7 @@ class ConnectionValidator(
         return false
     }
 
-    private fun isOnwCloudStatusOk(client: OwnCloudClient): Boolean {
+    private fun isOwnCloudStatusOk(client: OwnCloudClient): Boolean {
         val reply = getOwnCloudStatus(client)
         // dont check status code. It currently relais on the broken redirect code of the owncloud client
         // TODO: Use okhttp redirect and add this check again
@@ -138,6 +137,12 @@ class ConnectionValidator(
         // test if have all the needed to effectively invalidate ...
         shouldInvalidateAccountCredentials =
             shouldInvalidateAccountCredentials and (account.savedAccount != null)
+        Timber.d(
+            """Received error: $httpStatusCode,
+            account: ${account.name}
+            credentials are real: ${credentials !is OwnCloudAnonymousCredentials},
+            so we need to invalidate credentials for account ${account.name} : $shouldInvalidateAccountCredentials"""
+        )
         return shouldInvalidateAccountCredentials
     }
 
@@ -150,6 +155,7 @@ class ConnectionValidator(
      *
      */
     private fun invalidateAccountCredentials(account: OwnCloudAccount, credentials: OwnCloudCredentials) {
+        Timber.i("Invalidating account credentials for account $account")
         val am = AccountManager.get(context)
         am.invalidateAuthToken(
             account.savedAccount.type,
@@ -167,8 +173,6 @@ class ConnectionValidator(
      *
      * Refresh current credentials if possible, and marks a retry.
      *
-     * @param status
-     * @param repeatCounter
      * @return
      */
     private fun checkUnauthorizedAccess(client: OwnCloudClient, singleSessionManager: SingleSessionManager, status: Int): Boolean {
@@ -181,6 +185,7 @@ class ConnectionValidator(
             if (credentials.authTokenCanBeRefreshed()) {
                 try {
                     // This command does the actual refresh
+                    Timber.i("Trying to refresh auth token for account $account")
                     account.loadCredentials(context)
                     // if mAccount.getCredentials().length() == 0 --> refresh failed
                     client.credentials = account.credentials
@@ -201,6 +206,7 @@ class ConnectionValidator(
                 if (!credentialsWereRefreshed) {
                     // if credentials are not refreshed, client must be removed
                     // from the OwnCloudClientManager to prevent it is reused once and again
+                    Timber.w("Credentials were not refreshed, client will be removed from the Session Manager to prevent using it over and over")
                     singleSessionManager.removeClientFor(account)
                 }
             }
@@ -210,6 +216,6 @@ class ConnectionValidator(
     }
 
     companion object {
-        private val VALIDATION_RETRY_COUNT = 3
+        private const val VALIDATION_RETRY_COUNT = 3
     }
 }
