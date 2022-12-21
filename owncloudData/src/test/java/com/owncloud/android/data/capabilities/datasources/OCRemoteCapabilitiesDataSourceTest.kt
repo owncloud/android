@@ -64,7 +64,7 @@ class OCRemoteCapabilitiesDataSourceTest {
         assertNotNull(capabilities)
 
         assertEquals(OC_CAPABILITY.accountName, capabilities.accountName)
-        assertEquals(OC_CAPABILITY.versionMayor, capabilities.versionMayor)
+        assertEquals(OC_CAPABILITY.versionMajor, capabilities.versionMajor)
         assertEquals(OC_CAPABILITY.versionMinor, capabilities.versionMinor)
         assertEquals(OC_CAPABILITY.versionMicro, capabilities.versionMicro)
     }
