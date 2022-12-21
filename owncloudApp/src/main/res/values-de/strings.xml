@@ -213,6 +213,7 @@
   <string name="uploads_view_group_current_uploads">Wird hochgeladen</string>
   <string name="uploads_view_group_failed_uploads">Fehlgeschlagen (Tippen zum Wiederholen)</string>
   <string name="uploads_view_group_finished_uploads">Hochgeladen</string>
+  <string name="uploads_view_group_queued_uploads">Eingereiht</string>
   <string name="uploads_view_group_file_count">%d Dateien</string>
   <string name="uploads_view_group_file_count_single">%d Datei</string>
   <string name="uploads_view_upload_status_succeeded">Fertiggestellt</string>
@@ -230,6 +231,7 @@
   <string name="uploads_view_upload_status_service_interrupted">Die Anwendung wurde beendet</string>
   <string name="uploads_view_upload_status_unknown_fail">Unbekannter Fehler</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">warten auf eine WLAN Verbindung </string>
+  <string name="uploads_view_upload_status_queued">Eingereiht</string>
   <string name="uploads_view_later_waiting_to_upload">Warten auf hochladen</string>
   <string name="uploads_view_unsupported_media_type">Nicht unterstützter Medientyp</string>
   <string name="downloader_download_in_progress_ticker">Lade herunter...</string>
