@@ -27,7 +27,6 @@ package com.owncloud.android.ui.activity
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerFuture
-import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Build
@@ -61,6 +60,9 @@ import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.presentation.common.DrawerViewModel
 import com.owncloud.android.presentation.avatar.AvatarUtils
+import com.owncloud.android.presentation.accounts.AccountsManagementActivity
+import com.owncloud.android.presentation.accounts.AccountsManagementActivity.Companion.KEY_ACCOUNT_LIST_CHANGED
+import com.owncloud.android.presentation.accounts.AccountsManagementActivity.Companion.KEY_CURRENT_ACCOUNT_CHANGED
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -180,7 +182,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                 }
                 R.id.drawer_menu_account_add -> createAccount(false)
                 R.id.drawer_menu_account_manage -> {
-                    val manageAccountsIntent = Intent(applicationContext, ManageAccountsActivity::class.java)
+                    val manageAccountsIntent = Intent(applicationContext, AccountsManagementActivity::class.java)
                     startActivityForResult(manageAccountsIntent, ACTION_MANAGE_ACCOUNTS)
                 }
                 R.id.drawer_menu_feedback -> openFeedback()
@@ -595,14 +597,14 @@ abstract class DrawerActivity : ToolbarActivity() {
         // update Account list and active account if Manage Account activity replies with
         // - ACCOUNT_LIST_CHANGED = true
         // - RESULT_OK
-        if (requestCode == ACTION_MANAGE_ACCOUNTS && resultCode == Activity.RESULT_OK && data!!.getBooleanExtra(
-                ManageAccountsActivity.KEY_ACCOUNT_LIST_CHANGED,
+        if (requestCode == ACTION_MANAGE_ACCOUNTS && resultCode == RESULT_OK && data!!.getBooleanExtra(
+                KEY_ACCOUNT_LIST_CHANGED,
                 false
             )
         ) {
 
             // current account has changed
-            if (data.getBooleanExtra(ManageAccountsActivity.KEY_CURRENT_ACCOUNT_CHANGED, false)) {
+            if (data.getBooleanExtra(KEY_CURRENT_ACCOUNT_CHANGED, false)) {
                 account = drawerViewModel.getCurrentAccount(this)
                 // Refresh dependencies to be used in selected account
                 initDependencyInjection()
