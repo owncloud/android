@@ -31,7 +31,7 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 39;
+    public static final int DB_VERSION = 40;
 
     private ProviderMeta() {
     }
@@ -63,7 +63,7 @@ public class ProviderMeta {
 
         // Columns of capabilities table
         public static final String CAPABILITIES_ACCOUNT_NAME = "account";
-        public static final String CAPABILITIES_VERSION_MAYOR = "version_mayor";
+        public static final String CAPABILITIES_VERSION_MAJOR = "version_major";
         public static final String CAPABILITIES_VERSION_MINOR = "version_minor";
         public static final String CAPABILITIES_VERSION_MICRO = "version_micro";
         public static final String CAPABILITIES_VERSION_STRING = "version_string";

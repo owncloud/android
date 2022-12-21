@@ -142,7 +142,7 @@ class FileDetailsViewModel(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
             liveData = _openInWebUriLiveData,
             useCase = openInWebUseCase,
-            useCaseParams = GetUrlToOpenInWebUseCase.Params(openWebEndpoint = capabilities.value?.filesOcisProviders?.openWebUrl!!, fileId = fileId),
+            useCaseParams = GetUrlToOpenInWebUseCase.Params(openWebEndpoint = capabilities.value?.filesAppProviders?.openWebUrlAppProviders!!, fileId = fileId),
             showLoading = false,
             requiresConnection = true,
         )

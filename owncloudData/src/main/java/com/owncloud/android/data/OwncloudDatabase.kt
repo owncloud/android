@@ -35,6 +35,7 @@ import com.owncloud.android.data.files.db.OCFileEntity
 import com.owncloud.android.data.files.db.OCFileSyncEntity
 import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
 import com.owncloud.android.data.folderbackup.db.FolderBackupDao
+import com.owncloud.android.data.migrations.AutoMigration39To40
 import com.owncloud.android.data.migrations.MIGRATION_27_28
 import com.owncloud.android.data.migrations.MIGRATION_28_29
 import com.owncloud.android.data.migrations.MIGRATION_29_30
@@ -64,7 +65,8 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
     ],
     autoMigrations = [
         AutoMigration(from = 36, to = 37),
-        AutoMigration(from = 38, to = 39)
+        AutoMigration(from = 38, to = 39),
+        AutoMigration(from = 39, to = 40, spec = AutoMigration39To40::class),
     ],
     version = ProviderMeta.DB_VERSION,
     exportSchema = true

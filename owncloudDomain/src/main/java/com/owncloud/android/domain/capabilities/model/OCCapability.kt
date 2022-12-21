@@ -22,7 +22,7 @@ package com.owncloud.android.domain.capabilities.model
 data class OCCapability(
     val id: Int? = null,
     var accountName: String?,
-    val versionMayor: Int,
+    val versionMajor: Int,
     val versionMinor: Int,
     val versionMicro: Int,
     val versionString: String?,
@@ -49,7 +49,8 @@ data class OCCapability(
     val filesUndelete: CapabilityBooleanType,
     val filesVersioning: CapabilityBooleanType,
     val filesPrivateLinks: CapabilityBooleanType,
-    val filesOcisProviders: OcisProvider?,
+    val filesAppProviders: AppProviders?,
+    val spaces: Spaces?,
 ) {
     fun isChunkingAllowed(): Boolean {
         val doubleChunkingVersion = davChunkingVersion.toDoubleOrNull()
@@ -60,15 +61,21 @@ data class OCCapability(
         return filesSharingUserProfilePicture.isTrue || filesSharingUserProfilePicture.isUnknown
     }
 
-    fun isOpenInWebAllowed(): Boolean = filesOcisProviders?.openWebUrl?.isNotBlank() ?: false
+    fun isOpenInWebAllowed(): Boolean = filesAppProviders?.openWebUrlAppProviders?.isNotBlank() ?: false
 
-    data class OcisProvider(
-        val enabled: Boolean,
-        val version: String,
-        val appsUrl: String?,
-        val openUrl: String?,
-        val openWebUrl: String?,
-        val newUrl: String?,
+    data class AppProviders(
+        val enabledAppProviders: Boolean,
+        val versionAppProviders: String,
+        val appsUrlAppProviders: String?,
+        val openUrlAppProviders: String?,
+        val openWebUrlAppProviders: String?,
+        val newUrlAppProviders: String?,
+    )
+
+    data class Spaces(
+        val enabledSpaces: Boolean,
+        val projectsSpaces: Boolean,
+        val shareJailSpaces: Boolean
     )
 }
 
