@@ -1,32 +1,35 @@
-/* ownCloud Android Library is available under MIT license
- *   @author Abel García de Prada
- *   Copyright (C) 2020 ownCloud GmbH.
+/**
+ * ownCloud Android Library is available under MIT license
  *
- *   Permission is hereby granted, free of charge, to any person obtaining a copy
- *   of this software and associated documentation files (the "Software"), to deal
- *   in the Software without restriction, including without limitation the rights
- *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *   copies of the Software, and to permit persons to whom the Software is
- *   furnished to do so, subject to the following conditions:
+ * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
  *
- *   The above copyright notice and this permission notice shall be included in
- *   all copies or substantial portions of the Software.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *   THE SOFTWARE.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
+
 package com.owncloud.android.lib.resources.status.responses
 
 import com.owncloud.android.lib.resources.status.RemoteCapability
-import com.owncloud.android.lib.resources.status.RemoteCapability.CapabilityBooleanType
-import com.owncloud.android.lib.resources.status.RemoteCapability.RemoteOCISProvider
+import com.owncloud.android.lib.resources.status.RemoteCapability.*
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -37,7 +40,7 @@ data class CapabilityResponse(
     val capabilities: Capabilities?
 ) {
     fun toRemoteCapability(): RemoteCapability = RemoteCapability(
-        versionMayor = serverVersion?.major ?: 0,
+        versionMajor = serverVersion?.major ?: 0,
         versionMinor = serverVersion?.minor ?: 0,
         versionMicro = serverVersion?.micro ?: 0,
         versionString = serverVersion?.string ?: "",
@@ -70,10 +73,11 @@ data class CapabilityResponse(
         filesUndelete = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.undelete),
         filesVersioning = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.versioning),
         filesPrivateLinks = capabilities?.fileCapabilities?.privateLinks?.let { CapabilityBooleanType.fromBooleanValue(it) } ?: CapabilityBooleanType.UNKNOWN,
-        filesAppProviders = capabilities?.fileCapabilities?.appProviders?.map { it.toOCISProvider() },
+        filesAppProviders = capabilities?.fileCapabilities?.appProviders?.map { it.toAppProviders() },
         filesSharingFederationIncoming = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.incoming),
         filesSharingFederationOutgoing = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.outgoing),
         filesSharingUserProfilePicture = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingUser?.profilePicture),
+        spaces = capabilities?.spacesCapabilities?.toSpaces(),
     )
 }
 
@@ -86,7 +90,9 @@ data class Capabilities(
     @Json(name = "files")
     val fileCapabilities: FileCapabilities?,
     @Json(name = "dav")
-    val davCapabilities: DavCapabilities?
+    val davCapabilities: DavCapabilities?,
+    @Json(name = "spaces")
+    val spacesCapabilities: SpacesCapabilities?
 )
 
 @JsonClass(generateAdapter = true)
@@ -182,13 +188,23 @@ data class AppProvider(
     @Json(name = "new_url")
     val newUrl: String?,
 ) {
-    fun toOCISProvider() = RemoteOCISProvider(enabled, version, appsUrl, openUrl, openWebUrl, newUrl)
+    fun toAppProviders() = RemoteAppProviders(enabled, version, appsUrl, openUrl, openWebUrl, newUrl)
 }
 
 @JsonClass(generateAdapter = true)
 data class DavCapabilities(
     val chunking: String?
 )
+
+@JsonClass(generateAdapter = true)
+data class SpacesCapabilities(
+    val enabled: Boolean,
+    val projects: Boolean,
+    @Json(name = "share_jail")
+    val shareJail: Boolean,
+) {
+    fun toSpaces() = RemoteSpaces(enabled, projects, shareJail)
+}
 
 @JsonClass(generateAdapter = true)
 data class ServerVersion(

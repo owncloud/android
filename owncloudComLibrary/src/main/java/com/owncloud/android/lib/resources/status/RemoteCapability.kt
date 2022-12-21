@@ -1,29 +1,33 @@
-/* ownCloud Android Library is available under MIT license
- *   @author masensio
- *   @author David González Verdugo
- *   @author Abel García de Prada
- *   Copyright (C) 2020 ownCloud GmbH.
+/**
+ * ownCloud Android Library is available under MIT license
  *
- *   Permission is hereby granted, free of charge, to any person obtaining a copy
- *   of this software and associated documentation files (the "Software"), to deal
- *   in the Software without restriction, including without limitation the rights
- *   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *   copies of the Software, and to permit persons to whom the Software is
- *   furnished to do so, subject to the following conditions:
+ * @author masensio
+ * @author David González Verdugo
+ * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
  *
- *   The above copyright notice and this permission notice shall be included in
- *   all copies or substantial portions of the Software.
+ * Copyright (C) 2022 ownCloud GmbH.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- *   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- *   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
- *   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
- *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *   THE SOFTWARE.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
+
 package com.owncloud.android.lib.resources.status
 
 /**
@@ -33,7 +37,7 @@ data class RemoteCapability(
     var accountName: String = "",
 
     // Server version
-    var versionMayor: Int = 0,
+    var versionMajor: Int = 0,
     var versionMinor: Int = 0,
     var versionMicro: Int = 0,
     var versionString: String = "",
@@ -68,7 +72,10 @@ data class RemoteCapability(
     var filesUndelete: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     var filesVersioning: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
     val filesPrivateLinks: CapabilityBooleanType = CapabilityBooleanType.UNKNOWN,
-    val filesAppProviders: List<RemoteOCISProvider>?,
+    val filesAppProviders: List<RemoteAppProviders>?,
+
+    // Spaces
+    val spaces: RemoteSpaces?,
 ) {
     /**
      * Enum for Boolean Type in capabilities, with values:
@@ -101,12 +108,18 @@ data class RemoteCapability(
         }
     }
 
-    data class RemoteOCISProvider(
+    data class RemoteAppProviders(
         val enabled: Boolean,
         val version: String,
         val appsUrl: String?,
         val openUrl: String?,
         val openWebUrl: String?,
         val newUrl: String?,
+    )
+
+    data class RemoteSpaces(
+        val enabled: Boolean,
+        val projects: Boolean,
+        val shareJail: Boolean,
     )
 }

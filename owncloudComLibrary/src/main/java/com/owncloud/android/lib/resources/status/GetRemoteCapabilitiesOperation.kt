@@ -45,7 +45,7 @@ import java.net.URL
 
 /**
  * Get the Capabilities from the server
- * Save in Result.getData in a RemoteCapability object
+ * Save Result.getData in a RemoteCapability object
  *
  * @author masensio
  * @author David González Verdugo
