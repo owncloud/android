@@ -38,6 +38,8 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
+import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
+import com.owncloud.android.data.spaces.datasources.implementation.OCLocalSpacesDataSource
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.data.storage.ScopedStorageProvider
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
@@ -67,4 +69,5 @@ val localDataSourceModule = module {
     factory<LocalUserDataSource> { OCLocalUserDataSource(get()) }
     factory<FolderBackupLocalDataSource> { OCFolderBackupLocalDataSource(get()) }
     factory<LocalTransferDataSource> { OCLocalTransferDataSource(get()) }
+    factory<LocalSpacesDataSource> { OCLocalSpacesDataSource() }
 }

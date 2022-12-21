@@ -30,6 +30,7 @@ import com.owncloud.android.data.oauth.repository.OCOAuthRepository
 import com.owncloud.android.data.server.repository.OCServerInfoRepository
 import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
 import com.owncloud.android.data.sharing.shares.repository.OCShareRepository
+import com.owncloud.android.data.spaces.repository.OCSpacesRepository
 import com.owncloud.android.data.transfers.repository.OCTransferRepository
 import com.owncloud.android.data.user.repository.OCUserRepository
 import com.owncloud.android.data.webfinger.repository.OCWebfingerRepository
@@ -41,6 +42,7 @@ import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.sharing.sharees.ShareeRepository
 import com.owncloud.android.domain.sharing.shares.ShareRepository
+import com.owncloud.android.domain.spaces.SpacesRepository
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.user.UserRepository
 import com.owncloud.android.domain.webfinger.WebfingerRepository
@@ -53,6 +55,7 @@ val repositoryModule = module {
     factory<ServerInfoRepository> { OCServerInfoRepository(get()) }
     factory<ShareRepository> { OCShareRepository(get(), get()) }
     factory<ShareeRepository> { OCShareeRepository(get()) }
+    factory<SpacesRepository> { OCSpacesRepository(get(), get()) }
     factory<UserRepository> { OCUserRepository(get(), get()) }
     factory<OAuthRepository> { OCOAuthRepository(get()) }
     factory<FolderBackupRepository> { OCFolderBackupRepository(get()) }

@@ -39,6 +39,8 @@ import com.owncloud.android.data.sharing.sharees.datasources.mapper.RemoteSharee
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
+import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
+import com.owncloud.android.data.spaces.datasources.implementation.OCRemoteSpacesDataSource
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
 import com.owncloud.android.data.webfinger.datasources.WebfingerRemoteDatasource
@@ -68,6 +70,7 @@ val remoteDataSourceModule = module {
     single<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get(), get()) }
     single<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
     single<RemoteShareeDataSource> { OCRemoteShareeDataSource(get(), get()) }
+    single<RemoteSpacesDataSource> { OCRemoteSpacesDataSource(get()) }
     single<RemoteUserDataSource> {
         OCRemoteUserDataSource(get(), androidContext().resources.getDimension(R.dimen.file_avatar_size).toInt())
     }
