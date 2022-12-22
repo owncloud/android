@@ -45,10 +45,10 @@ data class SpaceOwner(
 )
 
 data class SpaceQuota(
-    val remaining: Long,
-    val state: String,
-    val total: Int,
-    val used: Int
+    val remaining: Long?,
+    val state: String?,
+    val total: Long,
+    val used: Long?,
 )
 
 data class SpaceRoot(
