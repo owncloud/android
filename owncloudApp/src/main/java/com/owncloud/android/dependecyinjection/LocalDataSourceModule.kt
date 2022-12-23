@@ -58,6 +58,7 @@ val localDataSourceModule = module {
     single { OwncloudDatabase.getDatabase(androidContext()).userDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).folderBackUpDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).transferDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).spacesDao() }
 
     single<SharedPreferencesProvider> { OCSharedPreferencesProvider(get()) }
     single<LocalStorageProvider> { ScopedStorageProvider(dataFolder, androidContext()) }
@@ -69,5 +70,5 @@ val localDataSourceModule = module {
     factory<LocalUserDataSource> { OCLocalUserDataSource(get()) }
     factory<FolderBackupLocalDataSource> { OCFolderBackupLocalDataSource(get()) }
     factory<LocalTransferDataSource> { OCLocalTransferDataSource(get()) }
-    factory<LocalSpacesDataSource> { OCLocalSpacesDataSource() }
+    factory<LocalSpacesDataSource> { OCLocalSpacesDataSource(get()) }
 }

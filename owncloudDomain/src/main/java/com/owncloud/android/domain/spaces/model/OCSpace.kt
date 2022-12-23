@@ -25,7 +25,7 @@ data class OCSpace(
     val lastModifiedDateTime: String,
     val name: String,
     val owner: SpaceOwner,
-    val quota: SpaceQuota,
+    val quota: SpaceQuota?,
     val root: SpaceRoot,
     val webUrl: String,
     val description: String?,
@@ -35,8 +35,8 @@ data class OCSpace(
     fun isProject() = driveType == DRIVE_TYPE_PROJECT
 
     companion object {
-        const val DRIVE_TYPE_PERSONAL = "personal"
-        const val DRIVE_TYPE_PROJECT = "project"
+        private const val DRIVE_TYPE_PERSONAL = "personal"
+        private const val DRIVE_TYPE_PROJECT = "project"
     }
 }
 
@@ -78,7 +78,7 @@ data class File(
 )
 
 data class SpaceGrantedTo(
-    val user: SpaceUser
+    val user: SpaceUser?
 )
 
 data class SpacePermission(
