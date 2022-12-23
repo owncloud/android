@@ -84,6 +84,7 @@ import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.security.bayPassUnlockOnce
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.spaces.SpacesListFragment
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.syncadapter.FileSyncAdapter
@@ -141,6 +142,9 @@ class FileDisplayActivity : FileActivity(),
 
     private val listMainFileFragment: MainFileListFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES) as MainFileListFragment?
+
+    private val spacesListFragment: SpacesListFragment?
+        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_SPACES) as SpacesListFragment?
 
     private val secondFragment: FileFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
@@ -253,7 +257,11 @@ class FileDisplayActivity : FileActivity(),
             capabilitiesViewModel.capabilities.observe(this, Event.EventObserver {
                 onCapabilitiesOperationFinish(it)
             })
-            initAndShowListOfFiles()
+            if (isSpacesTabSelected()) {
+                initAndShowListOfSpaces()
+            } else {
+                initAndShowListOfFiles()
+            }
         }
 
         startListeningToOperations()
@@ -327,7 +335,14 @@ class FileDisplayActivity : FileActivity(),
             setSearchListener(findViewById(R.id.root_toolbar_search_view))
         }
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.left_fragment_container, mainListOfFiles, TAG_LIST_OF_FILES)
+        transaction.replace(R.id.left_fragment_container, mainListOfFiles, TAG_LIST_OF_FILES)
+        transaction.commit()
+    }
+
+    private fun initAndShowListOfSpaces() {
+        val listOfSpaces = SpacesListFragment()
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.left_fragment_container, listOfSpaces, TAG_LIST_OF_SPACES)
         transaction.commit()
     }
 
@@ -684,7 +699,9 @@ class FileDisplayActivity : FileActivity(),
         super.onResume()
 
         setCheckedItemAtBottomBar(getMenuItemForFileListOption(fileListOption))
-        listMainFileFragment?.updateFileListOption(fileListOption, file)
+        if (!isSpacesTabSelected()) {
+            listMainFileFragment?.updateFileListOption(fileListOption, file)
+        }
 
         // refresh list of files
         refreshListOfFilesFragment()
@@ -843,6 +860,7 @@ class FileDisplayActivity : FileActivity(),
                     FileListOption.AV_OFFLINE -> getString(R.string.drawer_item_only_available_offline)
                     FileListOption.SHARED_BY_LINK -> getString(R.string.drawer_item_shared_by_link_files)
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
+                    FileListOption.SPACES_LIST -> getString(R.string.drawer_item_spaces)
                 }
             setupRootToolbar(title, isSearchEnabled = true)
             listMainFileFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
@@ -1317,15 +1335,25 @@ class FileDisplayActivity : FileActivity(),
 
     private fun navigateTo(newFileListOption: FileListOption) {
         if (fileListOption != newFileListOption) {
-            if (listMainFileFragment != null) {
+            if (newFileListOption == FileListOption.SPACES_LIST) {
+                initAndShowListOfSpaces()
+                fileListOption = FileListOption.SPACES_LIST
+                updateToolbar(null)
+            }
+            else if (listMainFileFragment != null) {
                 fileListOption = newFileListOption
                 file = storageManager.getFileByPath(OCFile.ROOT_PATH)
                 listMainFileFragment?.updateFileListOption(newFileListOption, file)
                 updateToolbar(null)
+            } else if (spacesListFragment != null) {
+                fileListOption = newFileListOption
+                file = storageManager.getFileByPath(OCFile.ROOT_PATH)
+                initAndShowListOfFiles()
+                updateToolbar(null)
             } else {
                 super.navigateToOption(FileListOption.ALL_FILES)
             }
-        } else {
+        } else if (newFileListOption != FileListOption.SPACES_LIST) {
             browseToRoot()
         }
     }
@@ -1335,6 +1363,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun getMenuItemForFileListOption(fileListOption: FileListOption?): Int = when (fileListOption) {
+        FileListOption.SPACES_LIST -> R.id.nav_spaces
         FileListOption.SHARED_BY_LINK -> R.id.nav_shared_by_link_files
         FileListOption.AV_OFFLINE -> R.id.nav_available_offline_files
         else -> R.id.nav_all_files
@@ -1444,6 +1473,7 @@ class FileDisplayActivity : FileActivity(),
 
     companion object {
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
+        private const val TAG_LIST_OF_SPACES = "LIST_OF_SPACES"
         private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 
         private const val KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW"

@@ -43,6 +43,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
@@ -51,7 +52,9 @@ import com.google.android.material.navigation.NavigationView
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
+import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.files.model.FileListOption
+import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.openPrivacyPolicy
 import com.owncloud.android.extensions.sendEmail
@@ -63,9 +66,11 @@ import com.owncloud.android.presentation.avatar.AvatarUtils
 import com.owncloud.android.presentation.accounts.AccountsManagementActivity
 import com.owncloud.android.presentation.accounts.AccountsManagementActivity.Companion.KEY_ACCOUNT_LIST_CHANGED
 import com.owncloud.android.presentation.accounts.AccountsManagementActivity.Companion.KEY_CURRENT_ACCOUNT_CHANGED
+import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import kotlin.math.ceil
 
@@ -76,6 +81,11 @@ import kotlin.math.ceil
 abstract class DrawerActivity : ToolbarActivity() {
 
     private val drawerViewModel by viewModel<DrawerViewModel>()
+    private val capabilitiesViewModel by viewModel<CapabilityViewModel> {
+        parametersOf(
+            account?.name
+        )
+    }
 
     private var menuAccountAvatarRadiusDimension = 0f
     private var currentAccountAvatarRadiusDimension = 0f
@@ -213,6 +223,19 @@ abstract class DrawerActivity : ToolbarActivity() {
     open fun setupNavigationBottomBar(menuItemId: Int) {
         // Allow or disallow touches with other visible windows
         getBottomNavigationView()?.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+        if (account != null) {
+            capabilitiesViewModel.capabilities.observe(this, Event.EventObserver { uiResult: UIResult<OCCapability> ->
+                if (uiResult is UIResult.Success) {
+                    val capabilities = uiResult.data
+                    if (capabilities?.isSpacesAllowed() == true) {
+                        getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_personal)
+                        getBottomNavigationView()?.menu?.get(1)?.isVisible = capabilities.isSpacesProjectsAllowed()
+                    } else {
+                        getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_files)
+                    }
+                }
+            })
+        }
         setCheckedItemAtBottomBar(menuItemId)
         getBottomNavigationView()?.setOnNavigationItemSelectedListener { menuItem: MenuItem ->
             bottomBarNavigationTo(menuItem.itemId, getBottomNavigationView()?.selectedItemId == menuItem.itemId)
@@ -223,6 +246,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     private fun bottomBarNavigationTo(menuItemId: Int, isCurrentOptionActive: Boolean) {
         when (menuItemId) {
             R.id.nav_all_files -> navigateToOption(FileListOption.ALL_FILES)
+            R.id.nav_spaces -> navigateToOption(FileListOption.SPACES_LIST)
             R.id.nav_uploads -> if (!isCurrentOptionActive) {
                 val uploadListIntent = Intent(applicationContext, UploadListActivity::class.java)
                 uploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -679,6 +703,12 @@ abstract class DrawerActivity : ToolbarActivity() {
      * restart helper method which is called after a changing the current account.
      */
     protected abstract fun restart()
+
+    /**
+     * Checks if the spaces tab is currently selected
+     */
+    protected fun isSpacesTabSelected() =
+        getBottomNavigationView()?.menu?.findItem(R.id.nav_spaces)?.isChecked == true
 
     companion object {
         private const val KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE"

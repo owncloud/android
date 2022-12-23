@@ -415,6 +415,12 @@ public class FileActivity extends DrawerActivity
             case ALL_FILES:
                 restart();
                 break;
+            case SPACES_LIST:
+                intent = new Intent(this, FileDisplayActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(EXTRA_FILE_LIST_OPTION, (Parcelable) FileListOption.SPACES_LIST);
+                startActivity(intent);
+                break;
             case SHARED_BY_LINK:
                 intent = new Intent(this, FileDisplayActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
