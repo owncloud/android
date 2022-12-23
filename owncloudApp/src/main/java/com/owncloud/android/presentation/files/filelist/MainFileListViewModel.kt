@@ -182,6 +182,10 @@ class MainFileListViewModel(
                             getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
                         } else fileById
                     }
+                    FileListOption.SPACES_LIST -> {
+                        // TODO: Spaces is not applicable here at the moment
+                        parentDir = TODO()
+                    }
                 }
             } else if (parentId == ROOT_PARENT_ID.toLong()) {
                 // Browsing to parent folder. Root
@@ -231,6 +235,7 @@ class MainFileListViewModel(
             FileListOption.ALL_FILES -> retrieveFlowForAllFiles(currentFolderDisplayed, accountName)
             FileListOption.SHARED_BY_LINK -> retrieveFlowForShareByLink(currentFolderDisplayed, accountName)
             FileListOption.AV_OFFLINE -> retrieveFlowForAvailableOffline(currentFolderDisplayed, accountName)
+            FileListOption.SPACES_LIST -> TODO()
         }.toFileListUiState(
             currentFolderDisplayed,
             accountName,

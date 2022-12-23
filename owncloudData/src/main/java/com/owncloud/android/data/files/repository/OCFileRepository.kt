@@ -133,6 +133,7 @@ class OCFileRepository(
     override fun getSearchFolderContent(fileListOption: FileListOption, folderId: Long, search: String): List<OCFile> =
         when (fileListOption) {
             FileListOption.ALL_FILES -> localFileDataSource.getSearchFolderContent(folderId, search)
+            FileListOption.SPACES_LIST -> emptyList()
             FileListOption.AV_OFFLINE -> localFileDataSource.getSearchAvailableOfflineFolderContent(folderId, search)
             FileListOption.SHARED_BY_LINK -> localFileDataSource.getSearchSharedByLinkFolderContent(folderId, search)
         }
