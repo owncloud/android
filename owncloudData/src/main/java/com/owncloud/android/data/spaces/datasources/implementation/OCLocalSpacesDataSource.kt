@@ -19,12 +19,60 @@
 package com.owncloud.android.data.spaces.datasources.implementation
 
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
+import com.owncloud.android.data.spaces.db.SpaceQuotaEntity
+import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
+import com.owncloud.android.data.spaces.db.SpacesDao
+import com.owncloud.android.data.spaces.db.SpacesEntity
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.SpaceSpecial
 
 class OCLocalSpacesDataSource(
+    private val spacesDao: SpacesDao,
+) : LocalSpacesDataSource {
 
-): LocalSpacesDataSource {
     override fun saveSpacesForAccount(listOfSpaces: List<OCSpace>) {
-        TODO("Not yet implemented")
+        val spaceEntities = mutableListOf<SpacesEntity>()
+        val spaceSpecialEntities = mutableListOf<SpaceSpecialEntity>()
+
+        listOfSpaces.forEach { spaceModel ->
+            spaceEntities.add(spaceModel.toEntity())
+            spaceModel.special?.let { listOfSpacesSpecials ->
+                spaceSpecialEntities.addAll(listOfSpacesSpecials.map { it.toEntity(spaceModel.id) })
+            }
+        }
+
+        spacesDao.insertOrReplaceSpaces(spaceEntities)
+        spacesDao.insertOrReplaceSpecials(spaceSpecialEntities)
     }
+
+    private fun OCSpace.toEntity() =
+        SpacesEntity(
+            driveAlias = driveAlias,
+            driveType = driveType,
+            id = id,
+            lastModifiedDateTime = lastModifiedDateTime,
+            name = name,
+            ownerId = owner.user.id,
+            quota = quota?.let { quotaModel ->
+                SpaceQuotaEntity(remaining = quotaModel.remaining, state = quotaModel.state, total = quotaModel.total, used = quotaModel.used)
+            },
+            rootETag = root.eTag,
+            rootId = root.id,
+            rootWebDavUrl = root.webDavUrl,
+            webUrl = webUrl,
+            description = description,
+        )
+
+    private fun SpaceSpecial.toEntity(spaceId: String): SpaceSpecialEntity =
+        SpaceSpecialEntity(
+            spaceId = spaceId,
+            eTag = eTag,
+            fileMymeType = file.mimeType,
+            id = id,
+            lastModifiedDateTime = lastModifiedDateTime,
+            name = name,
+            size = size,
+            specialFolderName = specialFolder.name,
+            webDavUrl = webDavUrl
+        )
 }
