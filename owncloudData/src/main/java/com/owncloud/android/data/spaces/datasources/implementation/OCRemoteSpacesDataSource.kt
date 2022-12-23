@@ -36,16 +36,17 @@ import com.owncloud.android.lib.resources.spaces.services.SpacesService
 class OCRemoteSpacesDataSource(
     private val spacesService: SpacesService
 ) : RemoteSpacesDataSource {
-    override fun refreshSpacesForAccount(): List<OCSpace> {
+    override fun refreshSpacesForAccount(accountName: String): List<OCSpace> {
         val spacesResponse = executeRemoteOperation {
             spacesService.getSpaces()
         }
 
-        return spacesResponse.map { it.toModel() }
+        return spacesResponse.map { it.toModel(accountName) }
     }
 
-    private fun SpaceResponse.toModel(): OCSpace =
+    private fun SpaceResponse.toModel(accountName: String): OCSpace =
         OCSpace(
+            accountName = accountName,
             driveAlias = driveAlias,
             driveType = driveType,
             id = id,
