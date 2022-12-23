@@ -63,6 +63,10 @@ data class OCCapability(
 
     fun isOpenInWebAllowed(): Boolean = filesAppProviders?.openWebUrlAppProviders?.isNotBlank() ?: false
 
+    fun isSpacesAllowed(): Boolean = spaces?.enabledSpaces == true
+
+    fun isSpacesProjectsAllowed(): Boolean = spaces?.projectsSpaces == true
+
     data class AppProviders(
         val enabledAppProviders: Boolean,
         val versionAppProviders: String,
