@@ -42,6 +42,8 @@ public class ProviderMeta {
         public static final String FILES_TABLE_NAME = "files";
         public static final String FOLDER_BACKUP_TABLE_NAME = "folder_backup";
         public static final String OCSHARES_TABLE_NAME = "ocshares";
+        public static final String SPACES_TABLE_NAME = "spaces";
+        public static final String SPACES_SPECIAL_TABLE_NAME = "spaces_special";
         public static final String TRANSFERS_TABLE_NAME = "transfers";
         public static final String USER_QUOTAS_TABLE_NAME = "user_quotas";
 

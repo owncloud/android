@@ -56,12 +56,14 @@ class OCRemoteSpacesDataSource(
                     id = owner.user.id
                 )
             ),
-            quota = SpaceQuota(
-                remaining = quota.remaining,
-                state = quota.state,
-                total = quota.total,
-                used = quota.used
-            ),
+            quota = quota?.let { quotaResponse ->
+                SpaceQuota(
+                    remaining = quotaResponse.remaining,
+                    state = quotaResponse.state,
+                    total = quotaResponse.total,
+                    used = quotaResponse.used,
+                )
+            },
             root = SpaceRoot(
                 eTag = root.eTag,
                 id = root.id,
