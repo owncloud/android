@@ -19,6 +19,7 @@
 package com.owncloud.android.domain.spaces.model
 
 data class OCSpace(
+    val accountName: String,
     val driveAlias: String,
     val driveType: String,
     val id: String,

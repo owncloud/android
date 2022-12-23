@@ -37,16 +37,16 @@ class OCLocalSpacesDataSource(
         listOfSpaces.forEach { spaceModel ->
             spaceEntities.add(spaceModel.toEntity())
             spaceModel.special?.let { listOfSpacesSpecials ->
-                spaceSpecialEntities.addAll(listOfSpacesSpecials.map { it.toEntity(spaceModel.id) })
+                spaceSpecialEntities.addAll(listOfSpacesSpecials.map { it.toEntity(spaceModel.accountName, spaceModel.id) })
             }
         }
 
-        spacesDao.insertOrReplaceSpaces(spaceEntities)
-        spacesDao.insertOrReplaceSpecials(spaceSpecialEntities)
+        spacesDao.upsertOrDeleteSpaces(spaceEntities, spaceSpecialEntities)
     }
 
     private fun OCSpace.toEntity() =
         SpacesEntity(
+            accountName = accountName,
             driveAlias = driveAlias,
             driveType = driveType,
             id = id,
@@ -63,8 +63,9 @@ class OCLocalSpacesDataSource(
             description = description,
         )
 
-    private fun SpaceSpecial.toEntity(spaceId: String): SpaceSpecialEntity =
+    private fun SpaceSpecial.toEntity(accountName: String, spaceId: String): SpaceSpecialEntity =
         SpaceSpecialEntity(
+            accountName = accountName,
             spaceId = spaceId,
             eTag = eTag,
             fileMymeType = file.mimeType,

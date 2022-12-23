@@ -21,9 +21,10 @@ package com.owncloud.android.data.spaces.db
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.Index
 import androidx.room.Relation
 import com.owncloud.android.data.ProviderMeta
+import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ACCOUNT_NAME
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ID
 
 data class SpacesWithSpecials(
@@ -35,13 +36,18 @@ data class SpacesWithSpecials(
     val specials: List<SpaceSpecialEntity>
 )
 
-@Entity(tableName = ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME)
+@Entity(
+    tableName = ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME,
+    primaryKeys = [SPACES_ACCOUNT_NAME, SPACES_ID],
+)
 data class SpacesEntity(
+    @ColumnInfo(name = SPACES_ACCOUNT_NAME)
+    val accountName: String,
     @ColumnInfo(name = SPACES_DRIVE_ALIAS)
     val driveAlias: String,
     @ColumnInfo(name = SPACES_DRIVE_TYPE)
     val driveType: String,
-    @PrimaryKey @ColumnInfo(name = SPACES_ID)
+    @ColumnInfo(name = SPACES_ID)
     val id: String,
     @ColumnInfo(name = SPACES_LAST_MODIFIED_DATE_TIME)
     val lastModifiedDateTime: String,
@@ -61,6 +67,7 @@ data class SpacesEntity(
     companion object {
         const val DRIVE_TYPE_PERSONAL = "personal"
         const val DRIVE_TYPE_PROJECT = "project"
+        const val SPACES_ACCOUNT_NAME = "account_name"
         const val SPACES_ID = "space_id"
         const val SPACES_DRIVE_ALIAS = "drive_alias"
         const val SPACES_DRIVE_TYPE = "drive_type"

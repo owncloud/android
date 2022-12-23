@@ -21,13 +21,97 @@ package com.owncloud.android.data.spaces.db
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
+import com.owncloud.android.data.ProviderMeta
+import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.DRIVE_TYPE_PERSONAL
+import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.DRIVE_TYPE_PROJECT
+import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ACCOUNT_NAME
+import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_DRIVE_TYPE
+import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ID
 
 @Dao
 interface SpacesDao {
+    @Transaction
+    fun upsertOrDeleteSpaces(
+        listOfSpacesEntities: List<SpacesEntity>,
+        listOfSpecialEntities: List<SpaceSpecialEntity>,
+    ) {
+        val currentAccountName = listOfSpacesEntities.first().accountName
+        val currentSpaces = getAllSpacesForAccount(currentAccountName)
+
+        // Delete spaces that are not attached to the current account anymore
+        val spacesToDelete = currentSpaces.filterNot { oldSpace ->
+            listOfSpacesEntities.any { it.id == oldSpace.id }
+        }
+
+        spacesToDelete.forEach { spaceToDelete ->
+            deleteSpaceForAccountById(accountName = spaceToDelete.accountName, spaceId = spaceToDelete.id)
+        }
+
+        // Upsert new spaces
+        insertOrReplaceSpaces(listOfSpacesEntities)
+        insertOrReplaceSpecials(listOfSpecialEntities)
+    }
+
+    // TODO: Use upsert instead of insert and replace
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrReplaceSpaces(listOfSpacesEntities: List<SpacesEntity>): List<Long>
 
+    // TODO: Use upsert instead of insert and replace
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrReplaceSpecials(listOfSpecialEntities: List<SpaceSpecialEntity>): List<Long>
 
+    @Query(SELECT_ALL_SPACES)
+    fun getAllSpacesForAccount(
+        accountName: String,
+    ): List<SpacesEntity>
+
+    @Query(SELECT_PERSONAL_SPACE)
+    fun getPersonalSpacesForAccount(
+        accountName: String,
+    ): List<SpacesEntity>
+
+    @Query(SELECT_PROJECT_SPACES)
+    fun getProjectSpacesForAccount(
+        accountName: String,
+    ): List<SpacesEntity>
+
+    @Query(DELETE_ALL_SPACES_FOR_ACCOUNT)
+    fun deleteSpacesForAccount(accountName: String)
+
+    @Query(DELETE_SPACE_FOR_ACCOUNT_BY_ID)
+    fun deleteSpaceForAccountById(accountName: String, spaceId: String)
+
+    companion object {
+        private const val SELECT_ALL_SPACES = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
+            WHERE $SPACES_ACCOUNT_NAME = :accountName
+        """
+
+        private const val SELECT_PERSONAL_SPACE = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
+            WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PERSONAL'
+        """
+
+        private const val SELECT_PROJECT_SPACES = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
+            WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PROJECT'
+        """
+
+        private const val DELETE_ALL_SPACES_FOR_ACCOUNT = """
+            DELETE
+            FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
+            WHERE $SPACES_ACCOUNT_NAME = :accountName
+        """
+
+        private const val DELETE_SPACE_FOR_ACCOUNT_BY_ID = """
+            DELETE
+            FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
+            WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_ID LIKE :spaceId
+        """
+    }
 }
