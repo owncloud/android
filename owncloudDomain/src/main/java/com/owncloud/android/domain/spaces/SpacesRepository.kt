@@ -19,5 +19,5 @@
 package com.owncloud.android.domain.spaces
 
 interface SpacesRepository {
-    fun refreshSpacesForAccount()
+    fun refreshSpacesForAccount(accountName: String)
 }

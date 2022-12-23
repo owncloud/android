@@ -2,7 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 40,
+<<<<<<< HEAD
     "identityHash": "91afe77785b47d2d5959b2a98ce4f6fc",
+=======
+    "identityHash": "3e2b989b89b3c14a02a8c4e259a8c022",
+>>>>>>> Add account name to the spaces and save space specials on a different table
     "entities": [
       {
         "tableName": "folder_backup",
@@ -739,8 +743,14 @@
       },
       {
         "tableName": "spaces",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`drive_alias` TEXT NOT NULL, `drive_type` TEXT NOT NULL, `space_id` TEXT NOT NULL, `last_modified_date_time` TEXT NOT NULL, `name` TEXT NOT NULL, `owner_id` TEXT NOT NULL, `rootETag` TEXT NOT NULL, `rootId` TEXT NOT NULL, `rootWebDavUrl` TEXT NOT NULL, `web_url` TEXT NOT NULL, `description` TEXT, `remaining` INTEGER, `state` TEXT, `total` INTEGER, `used` INTEGER, PRIMARY KEY(`space_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`account_name` TEXT NOT NULL, `drive_alias` TEXT NOT NULL, `drive_type` TEXT NOT NULL, `space_id` TEXT NOT NULL, `last_modified_date_time` TEXT NOT NULL, `name` TEXT NOT NULL, `owner_id` TEXT NOT NULL, `rootETag` TEXT NOT NULL, `rootId` TEXT NOT NULL, `rootWebDavUrl` TEXT NOT NULL, `web_url` TEXT NOT NULL, `description` TEXT, `remaining` INTEGER, `state` TEXT, `total` INTEGER, `used` INTEGER, PRIMARY KEY(`account_name`, `space_id`))",
         "fields": [
+          {
+            "fieldPath": "accountName",
+            "columnName": "account_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
           {
             "fieldPath": "driveAlias",
             "columnName": "drive_alias",
@@ -834,6 +844,7 @@
         ],
         "primaryKey": {
           "columnNames": [
+            "account_name",
             "space_id"
           ],
           "autoGenerate": false
@@ -843,11 +854,17 @@
       },
       {
         "tableName": "spaces_special",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`spaces_permission_space_id` TEXT NOT NULL, `eTag` TEXT NOT NULL, `file_mime_type` TEXT NOT NULL, `special_id` TEXT NOT NULL, `last_modified_date_time` TEXT NOT NULL, `name` TEXT NOT NULL, `size` INTEGER NOT NULL, `specialFolderName` TEXT NOT NULL, `webDavUrl` TEXT NOT NULL, PRIMARY KEY(`special_id`), FOREIGN KEY(`spaces_permission_space_id`) REFERENCES `spaces`(`space_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`spaces_special_account_name` TEXT NOT NULL, `spaces_special_space_id` TEXT NOT NULL, `eTag` TEXT NOT NULL, `file_mime_type` TEXT NOT NULL, `special_id` TEXT NOT NULL, `last_modified_date_time` TEXT NOT NULL, `name` TEXT NOT NULL, `size` INTEGER NOT NULL, `specialFolderName` TEXT NOT NULL, `webDavUrl` TEXT NOT NULL, PRIMARY KEY(`spaces_special_space_id`, `special_id`), FOREIGN KEY(`spaces_special_account_name`, `spaces_special_space_id`) REFERENCES `spaces`(`account_name`, `space_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
+            "fieldPath": "accountName",
+            "columnName": "spaces_special_account_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "spaceId",
-            "columnName": "spaces_permission_space_id",
+            "columnName": "spaces_special_space_id",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -902,6 +919,7 @@
         ],
         "primaryKey": {
           "columnNames": [
+            "spaces_special_space_id",
             "special_id"
           ],
           "autoGenerate": false
@@ -913,9 +931,11 @@
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "spaces_permission_space_id"
+              "spaces_special_account_name",
+              "spaces_special_space_id"
             ],
             "referencedColumns": [
+              "account_name",
               "space_id"
             ]
           }
