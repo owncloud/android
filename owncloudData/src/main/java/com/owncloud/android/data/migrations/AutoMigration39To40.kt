@@ -60,4 +60,4 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VER
     fromColumnName = "newUrl",
     toColumnName = "newUrlAppProviders"
 )
-class AutoMigration39To40: AutoMigrationSpec
+class AutoMigration39To40 : AutoMigrationSpec
