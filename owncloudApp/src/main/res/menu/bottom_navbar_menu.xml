@@ -22,6 +22,11 @@
         android:icon="@drawable/ic_folder"
         android:title="@string/bottom_nav_files" />
     <item
+        android:id="@+id/nav_spaces"
+        android:icon="@drawable/ic_spaces"
+        android:title="@string/bottom_nav_spaces"
+        />
+    <item
         android:id="@+id/nav_uploads"
         android:icon="@drawable/ic_uploads"
         android:title="@string/bottom_nav_uploads" />
