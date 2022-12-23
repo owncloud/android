@@ -23,8 +23,12 @@ import com.owncloud.android.domain.spaces.SpacesRepository
 
 class RefreshSpacesFromServerAsyncUseCase(
     private val spacesRepository: SpacesRepository
-) : BaseUseCaseWithResult<Unit, Unit>() {
+) : BaseUseCaseWithResult<Unit, RefreshSpacesFromServerAsyncUseCase.Params>() {
 
-    override fun run(params: Unit) =
-        spacesRepository.refreshSpacesForAccount()
+    override fun run(params: Params) =
+        spacesRepository.refreshSpacesForAccount(accountName = params.accountName)
+
+    data class Params(
+        val accountName: String,
+    )
 }
