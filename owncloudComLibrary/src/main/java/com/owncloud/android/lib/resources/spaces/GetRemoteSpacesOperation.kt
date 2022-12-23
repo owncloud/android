@@ -28,15 +28,11 @@ import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.CommonOcsResponse
-import com.owncloud.android.lib.resources.shares.responses.ShareeOcsResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpacesResponseWrapper
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
 import timber.log.Timber
-import java.lang.reflect.Type
 import java.net.URL
 
 class GetRemoteSpacesOperation : RemoteOperation<List<SpaceResponse>>() {

@@ -38,7 +38,7 @@ data class SpaceResponse(
     val lastModifiedDateTime: String,
     val name: String,
     val owner: OwnerResponse,
-    val quota: QuotaResponse,
+    val quota: QuotaResponse?,
     val root: RootResponse,
     val special: List<SpecialResponse>?,
     val webUrl: String
