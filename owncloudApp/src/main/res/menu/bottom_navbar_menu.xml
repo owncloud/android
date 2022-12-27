@@ -25,6 +25,7 @@
         android:id="@+id/nav_spaces"
         android:icon="@drawable/ic_spaces"
         android:title="@string/bottom_nav_spaces"
+        android:visible="false"
         />
     <item
         android:id="@+id/nav_uploads"
