@@ -232,6 +232,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                         getBottomNavigationView()?.menu?.get(1)?.isVisible = capabilities.isSpacesProjectsAllowed()
                     } else {
                         getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_files)
+                        getBottomNavigationView()?.menu?.get(1)?.isVisible = false
                     }
                 }
             })
