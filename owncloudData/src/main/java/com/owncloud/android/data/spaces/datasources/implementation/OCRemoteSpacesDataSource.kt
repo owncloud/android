@@ -20,7 +20,7 @@ package com.owncloud.android.data.spaces.datasources.implementation
 
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
-import com.owncloud.android.domain.spaces.model.File
+import com.owncloud.android.domain.spaces.model.SpaceFile
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceGrantedTo
 import com.owncloud.android.domain.spaces.model.SpaceOwner
@@ -83,7 +83,7 @@ class OCRemoteSpacesDataSource(
             special = special?.map { specialResponse ->
                 SpaceSpecial(
                     eTag = specialResponse.eTag,
-                    file = File(mimeType = specialResponse.file.mimeType),
+                    file = SpaceFile(mimeType = specialResponse.file.mimeType),
                     id = specialResponse.id,
                     lastModifiedDateTime = specialResponse.lastModifiedDateTime,
                     name = specialResponse.name,
