@@ -2,11 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 40,
-<<<<<<< HEAD
-    "identityHash": "91afe77785b47d2d5959b2a98ce4f6fc",
-=======
-    "identityHash": "3e2b989b89b3c14a02a8c4e259a8c022",
->>>>>>> Add account name to the spaces and save space specials on a different table
+    "identityHash": "69f96a3d4d578df91be813a866bfbed1",
     "entities": [
       {
         "tableName": "folder_backup",
@@ -78,7 +74,7 @@
       },
       {
         "tableName": "capabilities",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`account` TEXT, `version_major` INTEGER NOT NULL, `version_minor` INTEGER NOT NULL, `version_micro` INTEGER NOT NULL, `version_string` TEXT, `version_edition` TEXT, `core_pollinterval` INTEGER NOT NULL, `dav_chunking_version` TEXT NOT NULL, `sharing_api_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_write` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_public_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_days` INTEGER NOT NULL, `sharing_public_expire_date_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_upload` INTEGER NOT NULL DEFAULT -1, `sharing_public_multiple` INTEGER NOT NULL DEFAULT -1, `supports_upload_only` INTEGER NOT NULL DEFAULT -1, `sharing_resharing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_outgoing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_incoming` INTEGER NOT NULL DEFAULT -1, `sharing_user_profile_picture` INTEGER NOT NULL DEFAULT -1, `files_bigfilechunking` INTEGER NOT NULL DEFAULT -1, `files_undelete` INTEGER NOT NULL DEFAULT -1, `files_versioning` INTEGER NOT NULL DEFAULT -1, `files_private_links` INTEGER NOT NULL DEFAULT -1, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `enabled` INTEGER, `version` TEXT, `appsUrl` TEXT, `openUrl` TEXT, `openWebUrl` TEXT, `newUrl` TEXT, `enabled` INTEGER, `projects` INTEGER, `shareJail` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`account` TEXT, `version_major` INTEGER NOT NULL, `version_minor` INTEGER NOT NULL, `version_micro` INTEGER NOT NULL, `version_string` TEXT, `version_edition` TEXT, `core_pollinterval` INTEGER NOT NULL, `dav_chunking_version` TEXT NOT NULL, `sharing_api_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_write` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_public_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_days` INTEGER NOT NULL, `sharing_public_expire_date_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_upload` INTEGER NOT NULL DEFAULT -1, `sharing_public_multiple` INTEGER NOT NULL DEFAULT -1, `supports_upload_only` INTEGER NOT NULL DEFAULT -1, `sharing_resharing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_outgoing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_incoming` INTEGER NOT NULL DEFAULT -1, `sharing_user_profile_picture` INTEGER NOT NULL DEFAULT -1, `files_bigfilechunking` INTEGER NOT NULL DEFAULT -1, `files_undelete` INTEGER NOT NULL DEFAULT -1, `files_versioning` INTEGER NOT NULL DEFAULT -1, `files_private_links` INTEGER NOT NULL DEFAULT -1, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `app_providers_enabled` INTEGER, `app_providers_version` TEXT, `app_providers_appsUrl` TEXT, `app_providers_openUrl` TEXT, `app_providers_openWebUrl` TEXT, `app_providers_newUrl` TEXT, `spaces_enabled` INTEGER, `spaces_projects` INTEGER, `spaces_shareJail` INTEGER)",
         "fields": [
           {
             "fieldPath": "accountName",
@@ -275,55 +271,55 @@
           },
           {
             "fieldPath": "appProviders.enabled",
-            "columnName": "enabled",
+            "columnName": "app_providers_enabled",
             "affinity": "INTEGER",
             "notNull": false
           },
           {
             "fieldPath": "appProviders.version",
-            "columnName": "version",
+            "columnName": "app_providers_version",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "appProviders.appsUrl",
-            "columnName": "appsUrl",
+            "columnName": "app_providers_appsUrl",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "appProviders.openUrl",
-            "columnName": "openUrl",
+            "columnName": "app_providers_openUrl",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "appProviders.openWebUrl",
-            "columnName": "openWebUrl",
+            "columnName": "app_providers_openWebUrl",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "appProviders.newUrl",
-            "columnName": "newUrl",
+            "columnName": "app_providers_newUrl",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "spaces.enabled",
-            "columnName": "enabled",
+            "columnName": "spaces_enabled",
             "affinity": "INTEGER",
             "notNull": false
           },
           {
             "fieldPath": "spaces.projects",
-            "columnName": "projects",
+            "columnName": "spaces_projects",
             "affinity": "INTEGER",
             "notNull": false
           },
           {
             "fieldPath": "spaces.shareJail",
-            "columnName": "shareJail",
+            "columnName": "spaces_shareJail",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -743,7 +739,7 @@
       },
       {
         "tableName": "spaces",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`account_name` TEXT NOT NULL, `drive_alias` TEXT NOT NULL, `drive_type` TEXT NOT NULL, `space_id` TEXT NOT NULL, `last_modified_date_time` TEXT NOT NULL, `name` TEXT NOT NULL, `owner_id` TEXT NOT NULL, `rootETag` TEXT NOT NULL, `rootId` TEXT NOT NULL, `rootWebDavUrl` TEXT NOT NULL, `web_url` TEXT NOT NULL, `description` TEXT, `remaining` INTEGER, `state` TEXT, `total` INTEGER, `used` INTEGER, PRIMARY KEY(`account_name`, `space_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`account_name` TEXT NOT NULL, `drive_alias` TEXT NOT NULL, `drive_type` TEXT NOT NULL, `space_id` TEXT NOT NULL, `last_modified_date_time` TEXT NOT NULL, `name` TEXT NOT NULL, `owner_id` TEXT NOT NULL, `web_url` TEXT NOT NULL, `description` TEXT, `quota_remaining` INTEGER, `quota_state` TEXT, `quota_total` INTEGER, `quota_used` INTEGER, `root_etag` TEXT, `root_id` TEXT, `root_web_dav_url` TEXT, PRIMARY KEY(`account_name`, `space_id`))",
         "fields": [
           {
             "fieldPath": "accountName",
@@ -788,24 +784,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "rootETag",
-            "columnName": "rootETag",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "rootId",
-            "columnName": "rootId",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "rootWebDavUrl",
-            "columnName": "rootWebDavUrl",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
             "fieldPath": "webUrl",
             "columnName": "web_url",
             "affinity": "TEXT",
@@ -819,26 +797,44 @@
           },
           {
             "fieldPath": "quota.remaining",
-            "columnName": "remaining",
+            "columnName": "quota_remaining",
             "affinity": "INTEGER",
             "notNull": false
           },
           {
             "fieldPath": "quota.state",
-            "columnName": "state",
+            "columnName": "quota_state",
             "affinity": "TEXT",
             "notNull": false
           },
           {
             "fieldPath": "quota.total",
-            "columnName": "total",
+            "columnName": "quota_total",
             "affinity": "INTEGER",
             "notNull": false
           },
           {
             "fieldPath": "quota.used",
-            "columnName": "used",
+            "columnName": "quota_used",
             "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "root.eTag",
+            "columnName": "root_etag",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "root.id",
+            "columnName": "root_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "root.webDavUrl",
+            "columnName": "root_web_dav_url",
+            "affinity": "TEXT",
             "notNull": false
           }
         ],
@@ -854,7 +850,7 @@
       },
       {
         "tableName": "spaces_special",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`spaces_special_account_name` TEXT NOT NULL, `spaces_special_space_id` TEXT NOT NULL, `eTag` TEXT NOT NULL, `file_mime_type` TEXT NOT NULL, `special_id` TEXT NOT NULL, `last_modified_date_time` TEXT NOT NULL, `name` TEXT NOT NULL, `size` INTEGER NOT NULL, `specialFolderName` TEXT NOT NULL, `webDavUrl` TEXT NOT NULL, PRIMARY KEY(`spaces_special_space_id`, `special_id`), FOREIGN KEY(`spaces_special_account_name`, `spaces_special_space_id`) REFERENCES `spaces`(`account_name`, `space_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`spaces_special_account_name` TEXT NOT NULL, `spaces_special_space_id` TEXT NOT NULL, `spaces_special_etag` TEXT NOT NULL, `file_mime_type` TEXT NOT NULL, `special_id` TEXT NOT NULL, `last_modified_date_time` TEXT NOT NULL, `name` TEXT NOT NULL, `size` INTEGER NOT NULL, `special_folder_name` TEXT NOT NULL, `special_web_dav_url` TEXT NOT NULL, PRIMARY KEY(`spaces_special_space_id`, `special_id`), FOREIGN KEY(`spaces_special_account_name`, `spaces_special_space_id`) REFERENCES `spaces`(`account_name`, `space_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "accountName",
@@ -870,7 +866,7 @@
           },
           {
             "fieldPath": "eTag",
-            "columnName": "eTag",
+            "columnName": "spaces_special_etag",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -906,13 +902,13 @@
           },
           {
             "fieldPath": "specialFolderName",
-            "columnName": "specialFolderName",
+            "columnName": "special_folder_name",
             "affinity": "TEXT",
             "notNull": true
           },
           {
             "fieldPath": "webDavUrl",
-            "columnName": "webDavUrl",
+            "columnName": "special_web_dav_url",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -977,7 +973,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '91afe77785b47d2d5959b2a98ce4f6fc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '69f96a3d4d578df91be813a866bfbed1')"
     ]
   }
 }

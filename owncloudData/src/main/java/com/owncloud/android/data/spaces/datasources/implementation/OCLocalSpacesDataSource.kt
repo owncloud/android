@@ -20,6 +20,7 @@ package com.owncloud.android.data.spaces.datasources.implementation
 
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.spaces.db.SpaceQuotaEntity
+import com.owncloud.android.data.spaces.db.SpaceRootEntity
 import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
 import com.owncloud.android.data.spaces.db.SpacesDao
 import com.owncloud.android.data.spaces.db.SpacesEntity
@@ -56,9 +57,9 @@ class OCLocalSpacesDataSource(
             quota = quota?.let { quotaModel ->
                 SpaceQuotaEntity(remaining = quotaModel.remaining, state = quotaModel.state, total = quotaModel.total, used = quotaModel.used)
             },
-            rootETag = root.eTag,
-            rootId = root.id,
-            rootWebDavUrl = root.webDavUrl,
+            root = root.let { rootModel ->
+                SpaceRootEntity(eTag = rootModel.eTag, id = rootModel.id, webDavUrl = rootModel.webDavUrl)
+            },
             webUrl = webUrl,
             description = description,
         )
