@@ -94,6 +94,7 @@ class MainFileListFragment : Fragment(),
         parametersOf(
             requireArguments().getString(ARG_ACCOUNT_NAME),
             requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY),
+            requireArguments().getParcelable(ARG_FILE_LIST_OPTION),
         )
     }
     private val fileOperationsViewModel by sharedViewModel<FileOperationsViewModel>()
@@ -125,8 +126,6 @@ class MainFileListFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         initViews()
         subscribeToViewModels()
-
-        mainFileListViewModel.updateFileListOption(requireArguments().getParcelable(ARG_LIST_FILE_OPTION) ?: FileListOption.ALL_FILES)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -197,6 +196,8 @@ class MainFileListFragment : Fragment(),
                 it.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER)
             }
         }
+
+        showOrHideFab(requireArguments().getParcelable(ARG_FILE_LIST_OPTION)!!)
     }
 
     private fun toggleSelection(position: Int) {
@@ -750,9 +751,9 @@ class MainFileListFragment : Fragment(),
 
     companion object {
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
-        val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
         val ARG_ACCOUNT_NAME = "${MainFileListFragment::class.java.canonicalName}.ARG_ACCOUNT_NAME}"
         val ARG_INITIAL_FOLDER_TO_DISPLAY = "${MainFileListFragment::class.java.canonicalName}.ARG_INITIAL_FOLDER_TO_DISPLAY}"
+        val ARG_FILE_LIST_OPTION = "${MainFileListFragment::class.java.canonicalName}.FILE_LIST_OPTION}"
 
         private const val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
 
@@ -760,12 +761,14 @@ class MainFileListFragment : Fragment(),
         fun newInstance(
             accountName: String,
             initialFolderToDisplay: OCFile,
-            pickingAFolder: Boolean = false
+            pickingAFolder: Boolean = false,
+            fileListOption: FileListOption = FileListOption.ALL_FILES,
         ): MainFileListFragment {
             val args = Bundle()
             args.putString(ARG_ACCOUNT_NAME, accountName)
             args.putParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY, initialFolderToDisplay)
             args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
+            args.putParcelable(ARG_FILE_LIST_OPTION, fileListOption)
             return MainFileListFragment().apply { arguments = args }
         }
     }

@@ -326,10 +326,11 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
-    private fun initAndShowListOfFiles() {
+    private fun initAndShowListOfFiles(fileListOption: FileListOption = FileListOption.ALL_FILES) {
         val mainListOfFiles = MainFileListFragment.newInstance(
             accountName = account.name,
             initialFolderToDisplay = file,
+            fileListOption = fileListOption,
         ).apply {
             fileActions = this@FileDisplayActivity
             uploadActions = this@FileDisplayActivity
@@ -1345,11 +1346,10 @@ class FileDisplayActivity : FileActivity(),
     private fun navigateTo(newFileListOption: FileListOption) {
         if (fileListOption != newFileListOption) {
             if (newFileListOption == FileListOption.SPACES_LIST) {
-                initAndShowListOfSpaces()
                 fileListOption = FileListOption.SPACES_LIST
+                initAndShowListOfSpaces()
                 updateToolbar(null)
-            }
-            else if (listMainFileFragment != null) {
+            } else if (listMainFileFragment != null) {
                 fileListOption = newFileListOption
                 file = storageManager.getFileByPath(OCFile.ROOT_PATH)
                 listMainFileFragment?.updateFileListOption(newFileListOption, file)
@@ -1357,7 +1357,7 @@ class FileDisplayActivity : FileActivity(),
             } else if (spacesListFragment != null) {
                 fileListOption = newFileListOption
                 file = storageManager.getFileByPath(OCFile.ROOT_PATH)
-                initAndShowListOfFiles()
+                initAndShowListOfFiles(newFileListOption)
                 updateToolbar(null)
             } else {
                 super.navigateToOption(FileListOption.ALL_FILES)
