@@ -61,7 +61,7 @@ data class SpaceRoot(
 
 data class SpaceSpecial(
     val eTag: String,
-    val file: File,
+    val file: SpaceFile,
     val id: String,
     val lastModifiedDateTime: String,
     val name: String,
@@ -74,17 +74,17 @@ data class SpaceUser(
     val id: String
 )
 
-data class File(
+data class SpaceFile(
     val mimeType: String
-)
-
-data class SpaceGrantedTo(
-    val user: SpaceUser?
 )
 
 data class SpacePermission(
     val grantedTo: List<SpaceGrantedTo>,
     val roles: List<String>
+)
+
+data class SpaceGrantedTo(
+    val user: SpaceUser?
 )
 
 data class SpaceSpecialFolder(
