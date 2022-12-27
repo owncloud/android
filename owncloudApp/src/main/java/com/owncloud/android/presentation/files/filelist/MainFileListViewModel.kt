@@ -23,7 +23,6 @@ package com.owncloud.android.presentation.files.filelist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.WorkManager
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.datamodel.FileDataStorageManager.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
@@ -66,16 +65,16 @@ class MainFileListViewModel(
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
-    private val workManager: WorkManager,
     accountNameParam: String,
     initialFolderToDisplay: OCFile,
+    fileListOptionParam: FileListOption,
 ) : ViewModel() {
 
     private val showHiddenFiles: Boolean = sharedPreferencesProvider.getBoolean(PREF_SHOW_HIDDEN_FILES, false)
 
     private val accountName: MutableStateFlow<String> = MutableStateFlow(accountNameParam)
     val currentFolderDisplayed: MutableStateFlow<OCFile> = MutableStateFlow(initialFolderToDisplay)
-    val fileListOption: MutableStateFlow<FileListOption> = MutableStateFlow(FileListOption.ALL_FILES)
+    val fileListOption: MutableStateFlow<FileListOption> = MutableStateFlow(fileListOptionParam)
     private val searchFilter: MutableStateFlow<String> = MutableStateFlow("")
     private val sortTypeAndOrder = MutableStateFlow(Pair(SortType.SORT_TYPE_BY_NAME, SortOrder.SORT_ORDER_ASCENDING))
 
