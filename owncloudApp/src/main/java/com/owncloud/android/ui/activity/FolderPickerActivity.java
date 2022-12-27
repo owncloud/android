@@ -38,6 +38,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
+import com.owncloud.android.domain.files.model.FileListOption;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
@@ -126,7 +127,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             safeInitialFolder = getFile();
         }
 
-        MainFileListFragment mainListOfFiles = MainFileListFragment.newInstance(getAccount().name, safeInitialFolder, true);
+        MainFileListFragment mainListOfFiles = MainFileListFragment.newInstance(getAccount().name, safeInitialFolder, true, FileListOption.ALL_FILES);
         mainListOfFiles.setFileActions(this);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, mainListOfFiles, TAG_LIST_OF_FOLDERS);
