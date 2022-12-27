@@ -53,8 +53,8 @@ data class OwnerResponse(
 data class QuotaResponse(
     val remaining: Long,
     val state: String,
-    val total: Int,
-    val used: Int
+    val total: Long,
+    val used: Long
 )
 
 @JsonClass(generateAdapter = true)
