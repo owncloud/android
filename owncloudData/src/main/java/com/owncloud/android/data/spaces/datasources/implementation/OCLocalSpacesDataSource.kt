@@ -2,6 +2,8 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.spaces.datasources.implementation
 
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
@@ -25,7 +28,13 @@ import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
 import com.owncloud.android.data.spaces.db.SpacesDao
 import com.owncloud.android.data.spaces.db.SpacesEntity
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.SpaceOwner
+import com.owncloud.android.domain.spaces.model.SpaceQuota
+import com.owncloud.android.domain.spaces.model.SpaceRoot
 import com.owncloud.android.domain.spaces.model.SpaceSpecial
+import com.owncloud.android.domain.spaces.model.SpaceUser
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class OCLocalSpacesDataSource(
     private val spacesDao: SpacesDao,
@@ -42,8 +51,50 @@ class OCLocalSpacesDataSource(
             }
         }
 
-        spacesDao.upsertOrDeleteSpaces(spaceEntities, spaceSpecialEntities)
+        spacesDao.insertOrDeleteSpaces(spaceEntities, spaceSpecialEntities)
     }
+
+    override fun getProjectSpacesForAccountAsFlow(accountName: String): Flow<List<OCSpace>> {
+        return spacesDao.getProjectSpacesForAccountAsFlow(accountName).map { spacesEntitiesList ->
+            spacesEntitiesList.map { spacesEntity ->
+                spacesEntity.toModel()
+            }
+        }
+    }
+
+    private fun SpacesEntity.toModel() =
+        OCSpace(
+            accountName = accountName,
+            driveAlias = driveAlias,
+            driveType = driveType,
+            id = id,
+            lastModifiedDateTime = lastModifiedDateTime,
+            name = name,
+            owner = SpaceOwner(
+                user = SpaceUser(
+                    id = ownerId
+                )
+            ),
+            quota = quota?.let {
+                SpaceQuota(
+                    remaining = it.remaining,
+                    state = it.state,
+                    total = it.total,
+                    used = it.used
+                )
+            },
+            root = root!!.let {
+                SpaceRoot(
+                    eTag = it.eTag,
+                    id = it.id,
+                    permissions = null,
+                    webDavUrl = it.webDavUrl
+                )
+            },
+            webUrl = webUrl,
+            description = description,
+            special = null
+        )
 
     private fun OCSpace.toEntity() =
         SpacesEntity(

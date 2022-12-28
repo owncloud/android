@@ -51,6 +51,7 @@ import com.owncloud.android.presentation.settings.logging.SettingsLogsViewModel
 import com.owncloud.android.presentation.settings.more.SettingsMoreViewModel
 import com.owncloud.android.presentation.settings.security.SettingsSecurityViewModel
 import com.owncloud.android.presentation.sharing.ShareViewModel
+import com.owncloud.android.presentation.spaces.SpacesListViewModel
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.ui.ReceiveExternalFilesViewModel
 import com.owncloud.android.ui.preview.PreviewImageViewModel
@@ -112,4 +113,5 @@ val viewModelModule = module {
     viewModel { (ocFile: OCFile) -> ConflictsResolveViewModel(get(), get(), get(), get(), get(), ocFile) }
     viewModel { ReceiveExternalFilesViewModel(get(), get()) }
     viewModel { AccountsManagementViewModel(get()) }
+    viewModel { SpacesListViewModel(get(), get(), get(), get()) }
 }
