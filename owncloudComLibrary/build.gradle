@@ -17,7 +17,7 @@ dependencies {
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$comSquareupMoshi"
 
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.9.1'
+    testImplementation 'org.robolectric:robolectric:4.9.2'
     debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
 }
 
