@@ -28,13 +28,17 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.owncloud.android.databinding.SpacesListFragmentBinding
 import com.owncloud.android.domain.files.model.FileListOption
+import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SpacesListFragment : Fragment() {
     private var _binding: SpacesListFragmentBinding? = null
     private val binding get() = _binding!!
+
+    private val spacesListViewModel: SpacesListViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,7 +50,18 @@ class SpacesListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        showOrHideEmptyView()
+        initViews()
+        subscribeToViewModels()
+    }
+
+    private fun initViews() {
+
+    }
+
+    private fun subscribeToViewModels() {
+        collectLatestLifecycleFlow(spacesListViewModel.spacesList) {
+            showOrHideEmptyView()
+        }
     }
 
     // TODO: Use this method only when necessary, for the moment the empty view is shown always

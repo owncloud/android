@@ -2,6 +2,8 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.spaces.db
 
 import androidx.room.Dao
@@ -29,11 +32,12 @@ import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.DRIVE_TYPE_PRO
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ACCOUNT_NAME
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_DRIVE_TYPE
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ID
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SpacesDao {
     @Transaction
-    fun upsertOrDeleteSpaces(
+    fun insertOrDeleteSpaces(
         listOfSpacesEntities: List<SpacesEntity>,
         listOfSpecialEntities: List<SpaceSpecialEntity>,
     ) {
@@ -49,7 +53,7 @@ interface SpacesDao {
             deleteSpaceForAccountById(accountName = spaceToDelete.accountName, spaceId = spaceToDelete.id)
         }
 
-        // Upsert new spaces
+        // Insert new spaces
         insertOrReplaceSpaces(listOfSpacesEntities)
         insertOrReplaceSpecials(listOfSpecialEntities)
     }
@@ -62,20 +66,20 @@ interface SpacesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrReplaceSpecials(listOfSpecialEntities: List<SpaceSpecialEntity>): List<Long>
 
-    @Query(SELECT_ALL_SPACES)
+    @Query(SELECT_ALL_SPACES_FOR_ACCOUNT)
     fun getAllSpacesForAccount(
         accountName: String,
     ): List<SpacesEntity>
 
-    @Query(SELECT_PERSONAL_SPACE)
+    @Query(SELECT_PERSONAL_SPACE_FOR_ACCOUNT)
     fun getPersonalSpacesForAccount(
         accountName: String,
     ): List<SpacesEntity>
 
-    @Query(SELECT_PROJECT_SPACES)
-    fun getProjectSpacesForAccount(
+    @Query(SELECT_PROJECT_SPACES_FOR_ACCOUNT)
+    fun getProjectSpacesForAccountAsFlow(
         accountName: String,
-    ): List<SpacesEntity>
+    ): Flow<List<SpacesEntity>>
 
     @Query(DELETE_ALL_SPACES_FOR_ACCOUNT)
     fun deleteSpacesForAccount(accountName: String)
@@ -84,19 +88,19 @@ interface SpacesDao {
     fun deleteSpaceForAccountById(accountName: String, spaceId: String)
 
     companion object {
-        private const val SELECT_ALL_SPACES = """
+        private const val SELECT_ALL_SPACES_FOR_ACCOUNT = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
             WHERE $SPACES_ACCOUNT_NAME = :accountName
         """
 
-        private const val SELECT_PERSONAL_SPACE = """
+        private const val SELECT_PERSONAL_SPACE_FOR_ACCOUNT = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
             WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PERSONAL'
         """
 
-        private const val SELECT_PROJECT_SPACES = """
+        private const val SELECT_PROJECT_SPACES_FOR_ACCOUNT = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
             WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PROJECT'
