@@ -224,23 +224,30 @@ abstract class DrawerActivity : ToolbarActivity() {
         // Allow or disallow touches with other visible windows
         getBottomNavigationView()?.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         if (account != null) {
+            capabilitiesViewModel.capabilities.value?.let {
+                setSpacesVisibilityBottomBar(it.peekContent())
+            }
             capabilitiesViewModel.capabilities.observe(this, Event.EventObserver { uiResult: UIResult<OCCapability> ->
-                if (uiResult is UIResult.Success) {
-                    val capabilities = uiResult.data
-                    if (capabilities?.isSpacesAllowed() == true) {
-                        getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_personal)
-                        getBottomNavigationView()?.menu?.get(1)?.isVisible = capabilities.isSpacesProjectsAllowed()
-                    } else {
-                        getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_files)
-                        getBottomNavigationView()?.menu?.get(1)?.isVisible = false
-                    }
-                }
+                setSpacesVisibilityBottomBar(uiResult)
             })
         }
         setCheckedItemAtBottomBar(menuItemId)
         getBottomNavigationView()?.setOnNavigationItemSelectedListener { menuItem: MenuItem ->
             bottomBarNavigationTo(menuItem.itemId, getBottomNavigationView()?.selectedItemId == menuItem.itemId)
             true
+        }
+    }
+
+    private fun setSpacesVisibilityBottomBar(uiResult: UIResult<OCCapability>) {
+        if (uiResult is UIResult.Success) {
+            val capabilities = uiResult.data
+            if (capabilities?.isSpacesAllowed() == true) {
+                getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_personal)
+                getBottomNavigationView()?.menu?.get(1)?.isVisible = capabilities.isSpacesProjectsAllowed()
+            } else {
+                getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_files)
+                getBottomNavigationView()?.menu?.get(1)?.isVisible = false
+            }
         }
     }
 
