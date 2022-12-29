@@ -67,4 +67,8 @@
     <!-- Bottom Sheet Fragment -->
     <color name="bottom_sheet_fragment_item_color">#6E758C</color>
     <color name="bottom_sheet_fragment_title_color">#6E758C</color>
+
+    <!-- Spaces -->
+    <color name="spaces_card_background_color">#edf3fa</color>
+    <color name="spaces_card_default_image_color">#4c5f79</color>
 </resources>
