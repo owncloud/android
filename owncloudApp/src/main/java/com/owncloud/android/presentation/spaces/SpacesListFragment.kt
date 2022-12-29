@@ -26,6 +26,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import com.owncloud.android.databinding.SpacesListFragmentBinding
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
@@ -39,6 +40,8 @@ class SpacesListFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val spacesListViewModel: SpacesListViewModel by viewModel()
+
+    private lateinit var spacesListAdapter: SpacesListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,21 +58,28 @@ class SpacesListFragment : Fragment() {
     }
 
     private fun initViews() {
+        val spacesListLayoutManager = GridLayoutManager(requireContext(), 2)
+        binding.recyclerSpacesList.layoutManager = spacesListLayoutManager
+        spacesListAdapter = SpacesListAdapter()
+        binding.recyclerSpacesList.adapter = spacesListAdapter
 
+        binding.swipeRefreshSpacesList.setOnRefreshListener {
+
+        }
     }
 
     private fun subscribeToViewModels() {
         collectLatestLifecycleFlow(spacesListViewModel.spacesList) {
             showOrHideEmptyView()
+            spacesListAdapter.setData(spacesListViewModel.spacesList.value)
         }
     }
 
-    // TODO: Use this method only when necessary, for the moment the empty view is shown always
     private fun showOrHideEmptyView() {
-        binding.recyclerSpacesList.isVisible = false
+        binding.recyclerSpacesList.isVisible = spacesListViewModel.spacesList.value.isNotEmpty()
 
         with(binding.emptyDataParent) {
-            root.isVisible = true
+            root.isVisible = spacesListViewModel.spacesList.value.isEmpty()
             listEmptyDatasetIcon.setImageResource(FileListOption.SPACES_LIST.toDrawableRes())
             listEmptyDatasetTitle.setText(FileListOption.SPACES_LIST.toTitleStringRes())
             listEmptyDatasetSubTitle.setText(FileListOption.SPACES_LIST.toSubtitleStringRes())
