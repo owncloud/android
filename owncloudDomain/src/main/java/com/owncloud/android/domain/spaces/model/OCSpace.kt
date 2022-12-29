@@ -2,6 +2,8 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.domain.spaces.model
 
 data class OCSpace(
@@ -38,6 +41,13 @@ data class OCSpace(
     companion object {
         private const val DRIVE_TYPE_PERSONAL = "personal"
         private const val DRIVE_TYPE_PROJECT = "project"
+    }
+
+    fun getSpaceImageUrl(): String? {
+        val imageSpecial = special?.filter {
+            it.specialFolder.name == "image"
+        }
+        return imageSpecial?.first()?.webDavUrl
     }
 }
 
