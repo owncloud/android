@@ -27,11 +27,14 @@ import com.owncloud.android.data.spaces.db.SpaceRootEntity
 import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
 import com.owncloud.android.data.spaces.db.SpacesDao
 import com.owncloud.android.data.spaces.db.SpacesEntity
+import com.owncloud.android.data.spaces.db.SpacesWithSpecials
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.SpaceFile
 import com.owncloud.android.domain.spaces.model.SpaceOwner
 import com.owncloud.android.domain.spaces.model.SpaceQuota
 import com.owncloud.android.domain.spaces.model.SpaceRoot
 import com.owncloud.android.domain.spaces.model.SpaceSpecial
+import com.owncloud.android.domain.spaces.model.SpaceSpecialFolder
 import com.owncloud.android.domain.spaces.model.SpaceUser
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -54,28 +57,28 @@ class OCLocalSpacesDataSource(
         spacesDao.insertOrDeleteSpaces(spaceEntities, spaceSpecialEntities)
     }
 
-    override fun getProjectSpacesForAccountAsFlow(accountName: String): Flow<List<OCSpace>> {
-        return spacesDao.getProjectSpacesForAccountAsFlow(accountName).map { spacesEntitiesList ->
-            spacesEntitiesList.map { spacesEntity ->
-                spacesEntity.toModel()
+    override fun getProjectSpacesWithSpecialsForAccountAsFlow(accountName: String): Flow<List<OCSpace>> {
+        return spacesDao.getProjectSpacesWithSpecialsForAccountAsFlow(accountName).map { spacesWithSpecialsEntitiesList ->
+            spacesWithSpecialsEntitiesList.map { spacesWithSpecialsEntity ->
+                spacesWithSpecialsEntity.toModel()
             }
         }
     }
 
-    private fun SpacesEntity.toModel() =
+    private fun SpacesWithSpecials.toModel() =
         OCSpace(
-            accountName = accountName,
-            driveAlias = driveAlias,
-            driveType = driveType,
-            id = id,
-            lastModifiedDateTime = lastModifiedDateTime,
-            name = name,
+            accountName = space.accountName,
+            driveAlias = space.driveAlias,
+            driveType = space.driveType,
+            id = space.id,
+            lastModifiedDateTime = space.lastModifiedDateTime,
+            name = space.name,
             owner = SpaceOwner(
                 user = SpaceUser(
-                    id = ownerId
+                    id = space.ownerId
                 )
             ),
-            quota = quota?.let {
+            quota = space.quota?.let {
                 SpaceQuota(
                     remaining = it.remaining,
                     state = it.state,
@@ -83,7 +86,7 @@ class OCLocalSpacesDataSource(
                     used = it.used
                 )
             },
-            root = root!!.let {
+            root = space.root!!.let {
                 SpaceRoot(
                     eTag = it.eTag,
                     id = it.id,
@@ -91,9 +94,27 @@ class OCLocalSpacesDataSource(
                     webDavUrl = it.webDavUrl
                 )
             },
-            webUrl = webUrl,
-            description = description,
-            special = null
+            webUrl = space.webUrl,
+            description = space.description,
+            special = specials.map {
+                it.toModel()
+            }
+        )
+
+    private fun SpaceSpecialEntity.toModel() =
+        SpaceSpecial(
+            eTag = eTag,
+            file = SpaceFile(
+                mimeType = fileMimeType
+            ),
+            id = id,
+            lastModifiedDateTime = lastModifiedDateTime,
+            name = name,
+            size = size,
+            specialFolder = SpaceSpecialFolder(
+                name = specialFolderName
+            ),
+            webDavUrl = webDavUrl
         )
 
     private fun OCSpace.toEntity() =
@@ -120,7 +141,7 @@ class OCLocalSpacesDataSource(
             accountName = accountName,
             spaceId = spaceId,
             eTag = eTag,
-            fileMymeType = file.mimeType,
+            fileMimeType = file.mimeType,
             id = id,
             lastModifiedDateTime = lastModifiedDateTime,
             name = name,
