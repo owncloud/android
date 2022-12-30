@@ -45,6 +45,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:src="@drawable/ic_spaces"
+                android:scaleType="center"
+                android:scaleX="2"
+                android:scaleY="2"
                 app:tint="@color/spaces_card_default_image_color" />
 
             <View
@@ -57,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textColor="@color/textColor"
                 android:layout_margin="@dimen/standard_half_margin"
                 android:singleLine="true"

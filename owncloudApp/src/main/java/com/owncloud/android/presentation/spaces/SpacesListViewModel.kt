@@ -24,7 +24,7 @@ import android.accounts.Account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesForAccountAsStreamUseCase
+import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 
 class SpacesListViewModel(
     private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase,
-    getProjectSpacesForAccountAsStreamUseCase: GetProjectSpacesForAccountAsStreamUseCase,
+    getProjectSpacesWithSpecialsForAccountAsStreamUseCase: GetProjectSpacesWithSpecialsForAccountAsStreamUseCase,
     coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val account: Account,
 ) : ViewModel() {
@@ -43,8 +43,8 @@ class SpacesListViewModel(
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             refreshSpacesFromServerAsyncUseCase.execute(RefreshSpacesFromServerAsyncUseCase.Params(account.name))
-            spacesList.update { getProjectSpacesForAccountAsStreamUseCase.execute(
-                GetProjectSpacesForAccountAsStreamUseCase.Params(
+            spacesList.update { getProjectSpacesWithSpecialsForAccountAsStreamUseCase.execute(
+                GetProjectSpacesWithSpecialsForAccountAsStreamUseCase.Params(
                     accountName = account.name
                 )).first() }
         }

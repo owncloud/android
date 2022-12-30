@@ -25,11 +25,11 @@ import com.owncloud.android.domain.spaces.SpacesRepository
 import com.owncloud.android.domain.spaces.model.OCSpace
 import kotlinx.coroutines.flow.Flow
 
-class GetProjectSpacesForAccountAsStreamUseCase(
+class GetProjectSpacesWithSpecialsForAccountAsStreamUseCase(
     private val spacesRepository: SpacesRepository
-) : BaseUseCase<Flow<List<OCSpace>>, GetProjectSpacesForAccountAsStreamUseCase.Params>() {
+) : BaseUseCase<Flow<List<OCSpace>>, GetProjectSpacesWithSpecialsForAccountAsStreamUseCase.Params>() {
 
-    override fun run(params: Params) = spacesRepository.getProjectSpacesForAccountAsFlow(params.accountName)
+    override fun run(params: Params) = spacesRepository.getProjectSpacesWithSpecialsForAccountAsFlow(params.accountName)
 
     data class Params(
         val accountName: String

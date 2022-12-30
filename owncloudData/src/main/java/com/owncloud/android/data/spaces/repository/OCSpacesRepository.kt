@@ -35,6 +35,6 @@ class OCSpacesRepository(
         }
     }
 
-    override fun getProjectSpacesForAccountAsFlow(accountName: String) =
-        localSpacesDataSource.getProjectSpacesForAccountAsFlow(accountName)
+    override fun getProjectSpacesWithSpecialsForAccountAsFlow(accountName: String) =
+        localSpacesDataSource.getProjectSpacesWithSpecialsForAccountAsFlow(accountName)
 }
