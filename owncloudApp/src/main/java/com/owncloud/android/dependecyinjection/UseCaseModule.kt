@@ -77,7 +77,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncU
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
-import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesForAccountAsStreamUseCase
+import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
@@ -176,7 +176,7 @@ val useCaseModule = module {
 
     // Spaces
     factory { RefreshSpacesFromServerAsyncUseCase(get()) }
-    factory { GetProjectSpacesForAccountAsStreamUseCase(get()) }
+    factory { GetProjectSpacesWithSpecialsForAccountAsStreamUseCase(get()) }
 
     // Transfers
     factory { CancelDownloadForFileUseCase(get()) }

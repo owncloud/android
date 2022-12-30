@@ -23,13 +23,11 @@ package com.owncloud.android.presentation.spaces
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.owncloud.android.databinding.SpacesListItemBinding
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.utils.PreferenceUtils
 
-class SpacesListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SpacesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val spacesList = mutableListOf<OCSpace>()
 
@@ -47,15 +45,10 @@ class SpacesListAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             spacesListItemName.text = space.name
             spacesListItemSubtitle.text = space.description
 
-            space.getSpaceImageUrl()?.let {
-                Glide.with(holder.itemView)
-                    .load(it)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(spacesListItemImage)
+            space.getSpaceImageWebDavUrl()?.let {
+
             }
-
         }
-
     }
 
     fun setData(spaces: List<OCSpace>) {
