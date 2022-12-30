@@ -77,9 +77,9 @@ interface SpacesDao {
     ): List<SpacesEntity>
 
     @Query(SELECT_PROJECT_SPACES_FOR_ACCOUNT)
-    fun getProjectSpacesForAccountAsFlow(
+    fun getProjectSpacesWithSpecialsForAccountAsFlow(
         accountName: String,
-    ): Flow<List<SpacesEntity>>
+    ): Flow<List<SpacesWithSpecials>>
 
     @Query(DELETE_ALL_SPACES_FOR_ACCOUNT)
     fun deleteSpacesForAccount(accountName: String)

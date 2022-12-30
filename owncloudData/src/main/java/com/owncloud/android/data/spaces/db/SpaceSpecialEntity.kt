@@ -50,7 +50,7 @@ data class SpaceSpecialEntity(
     @ColumnInfo(name = SPACES_SPECIAL_ETAG)
     val eTag: String,
     @ColumnInfo(name = SPACES_SPECIAL_FILE_MIME_TYPE)
-    val fileMymeType: String,
+    val fileMimeType: String,
     @ColumnInfo(name = SPACES_SPECIAL_ID)
     val id: String,
     @ColumnInfo(name = SPACES_LAST_MODIFIED_DATE_TIME)
