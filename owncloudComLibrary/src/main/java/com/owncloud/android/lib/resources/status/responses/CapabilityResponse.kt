@@ -92,7 +92,7 @@ data class Capabilities(
     @Json(name = "dav")
     val davCapabilities: DavCapabilities?,
     @Json(name = "spaces")
-    val spacesCapabilities: SpacesCapabilities?
+    val spacesCapabilities: SpacesCapabilities?,
 )
 
 @JsonClass(generateAdapter = true)
