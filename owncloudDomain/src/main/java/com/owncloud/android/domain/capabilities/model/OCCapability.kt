@@ -61,25 +61,25 @@ data class OCCapability(
         return filesSharingUserProfilePicture.isTrue || filesSharingUserProfilePicture.isUnknown
     }
 
-    fun isOpenInWebAllowed(): Boolean = filesAppProviders?.openWebUrlAppProviders?.isNotBlank() ?: false
+    fun isOpenInWebAllowed(): Boolean = filesAppProviders?.openWebUrl?.isNotBlank() ?: false
 
-    fun isSpacesAllowed(): Boolean = spaces?.enabledSpaces == true
+    fun isSpacesAllowed(): Boolean = spaces?.enabled == true
 
-    fun isSpacesProjectsAllowed(): Boolean = spaces?.projectsSpaces == true
+    fun isSpacesProjectsAllowed(): Boolean = spaces?.projects == true
 
     data class AppProviders(
-        val enabledAppProviders: Boolean,
-        val versionAppProviders: String,
-        val appsUrlAppProviders: String?,
-        val openUrlAppProviders: String?,
-        val openWebUrlAppProviders: String?,
-        val newUrlAppProviders: String?,
+        val enabled: Boolean,
+        val version: String,
+        val appsUrl: String?,
+        val openUrl: String?,
+        val openWebUrl: String?,
+        val newUrl: String?,
     )
 
     data class Spaces(
-        val enabledSpaces: Boolean,
-        val projectsSpaces: Boolean,
-        val shareJailSpaces: Boolean
+        val enabled: Boolean,
+        val projects: Boolean,
+        val shareJail: Boolean,
     )
 }
 
