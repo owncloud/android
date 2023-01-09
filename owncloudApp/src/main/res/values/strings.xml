@@ -155,7 +155,7 @@
     <string name="file_list_empty_title_available_offline">No available offline files</string>
     <string name="file_list_empty_title_shared_by_links">No shared links</string>
     <string name="file_list_empty_subtitle_all_files">Upload some content or sync with your devices!</string>
-    <string name="spaces_list_empty_subtitle">You don´t have access to any space!</string>
+    <string name="spaces_list_empty_subtitle">You don\'t have access to any space!</string>
     <string name="file_list_empty_subtitle_available_offline">Files and folders you mark as available offline will show up here</string>
     <string name="file_list_empty_subtitle_shared_by_links">Files and folders you share by link will show up here</string>
     <string name="file_list_loading">Loading&#8230;</string>

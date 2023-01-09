@@ -26,6 +26,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_APP_PROVIDERS_PREFIX
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING
@@ -48,6 +49,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHA
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_RESHARING
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_USER_PROFILE_PICTURE
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SPACES_PREFIX
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_EDITION
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MAJOR
@@ -119,9 +121,9 @@ data class OCCapabilityEntity(
     val filesVersioning: Int,
     @ColumnInfo(name = CAPABILITIES_FILES_PRIVATE_LINKS, defaultValue = capabilityBooleanTypeUnknownString)
     val filesPrivateLinks: Int,
-    @Embedded
+    @Embedded(prefix = CAPABILITIES_APP_PROVIDERS_PREFIX)
     val appProviders: OCCapability.AppProviders?,
-    @Embedded
+    @Embedded(prefix = CAPABILITIES_SPACES_PREFIX)
     val spaces: OCCapability.Spaces?,
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0

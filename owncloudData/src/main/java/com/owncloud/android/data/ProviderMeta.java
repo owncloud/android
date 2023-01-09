@@ -96,8 +96,9 @@ public class ProviderMeta {
         public static final String CAPABILITIES_FILES_BIGFILECHUNKING = "files_bigfilechunking";
         public static final String CAPABILITIES_FILES_UNDELETE = "files_undelete";
         public static final String CAPABILITIES_FILES_VERSIONING = "files_versioning";
-        public static final String CAPABILITIES_FILES_APP_PROVIDERS = "files_apps_providers";
         public static final String CAPABILITIES_FILES_PRIVATE_LINKS = "files_private_links";
+        public static final String CAPABILITIES_APP_PROVIDERS_PREFIX = "app_providers_";
+        public static final String CAPABILITIES_SPACES_PREFIX = "spaces_";
 
         // Columns of filelist table
         public static final String FILE_PARENT = "parent";
