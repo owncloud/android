@@ -23,30 +23,51 @@ package com.owncloud.android.presentation.spaces
 import android.accounts.Account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SpacesListViewModel(
     private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase,
-    getProjectSpacesWithSpecialsForAccountAsStreamUseCase: GetProjectSpacesWithSpecialsForAccountAsStreamUseCase,
-    coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    private val getProjectSpacesWithSpecialsForAccountAsStreamUseCase: GetProjectSpacesWithSpecialsForAccountAsStreamUseCase,
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val account: Account,
 ) : ViewModel() {
-    val spacesList: MutableStateFlow<List<OCSpace>> = MutableStateFlow(emptyList())
+
+    private val _spacesList: MutableStateFlow<SpacesListUiState> =
+        MutableStateFlow(SpacesListUiState(spaces = emptyList(), refreshing = false, error = null))
+    val spacesList: StateFlow<SpacesListUiState> = _spacesList
 
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            refreshSpacesFromServerAsyncUseCase.execute(RefreshSpacesFromServerAsyncUseCase.Params(account.name))
-            spacesList.update { getProjectSpacesWithSpecialsForAccountAsStreamUseCase.execute(
-                GetProjectSpacesWithSpecialsForAccountAsStreamUseCase.Params(
-                    accountName = account.name
-                )).first() }
+            refreshSpacesFromServer()
+            getProjectSpacesWithSpecialsForAccountAsStreamUseCase.execute(
+                GetProjectSpacesWithSpecialsForAccountAsStreamUseCase.Params(accountName = account.name)
+            ).collect { spaces ->
+                _spacesList.update { it.copy(spaces = spaces) }
+            }
         }
     }
+
+    fun refreshSpacesFromServer() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            _spacesList.update { it.copy(refreshing = true) }
+            when (val result = refreshSpacesFromServerAsyncUseCase.execute(RefreshSpacesFromServerAsyncUseCase.Params(account.name))) {
+                is UseCaseResult.Success -> _spacesList.update { it.copy(refreshing = false, error = null) }
+                is UseCaseResult.Error -> _spacesList.update { it.copy(refreshing = false, error = result.throwable) }
+            }
+        }
+    }
+
+    data class SpacesListUiState(
+        val spaces: List<OCSpace>,
+        val refreshing: Boolean,
+        val error: Throwable?,
+    )
 }
