@@ -43,11 +43,11 @@ data class OCSpace(
         private const val DRIVE_TYPE_PROJECT = "project"
     }
 
-    fun getSpaceImageWebDavUrl(): String? {
+    fun getSpaceSpecialImage(): SpaceSpecial? {
         val imageSpecial = special?.filter {
             it.specialFolder.name == "image"
         }
-        return if (!imageSpecial.isNullOrEmpty()) imageSpecial.first().webDavUrl else null
+        return imageSpecial?.firstOrNull()
     }
 }
 
