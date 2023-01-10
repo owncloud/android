@@ -35,19 +35,22 @@ data class OCSpace(
     val description: String?,
     val special: List<SpaceSpecial>?,
 ) {
-    fun isPersonal() = driveType == DRIVE_TYPE_PERSONAL
-    fun isProject() = driveType == DRIVE_TYPE_PROJECT
+    val isPersonal get() = driveType == DRIVE_TYPE_PERSONAL
+    val isProject get() = driveType == DRIVE_TYPE_PROJECT
 
-    companion object {
-        private const val DRIVE_TYPE_PERSONAL = "personal"
-        private const val DRIVE_TYPE_PROJECT = "project"
-    }
+    val isDisabled get() = root.deleted?.state == DRIVE_DISABLED
 
     fun getSpaceSpecialImage(): SpaceSpecial? {
         val imageSpecial = special?.filter {
             it.specialFolder.name == "image"
         }
         return imageSpecial?.firstOrNull()
+    }
+
+    companion object {
+        private const val DRIVE_TYPE_PERSONAL = "personal"
+        private const val DRIVE_TYPE_PROJECT = "project"
+        private const val DRIVE_DISABLED = "trashed"
     }
 }
 
@@ -66,7 +69,8 @@ data class SpaceRoot(
     val eTag: String,
     val id: String,
     val permissions: List<SpacePermission>?,
-    val webDavUrl: String
+    val webDavUrl: String,
+    val deleted: SpaceDeleted?,
 )
 
 data class SpaceSpecial(
@@ -78,6 +82,10 @@ data class SpaceSpecial(
     val size: Int,
     val specialFolder: SpaceSpecialFolder,
     val webDavUrl: String
+)
+
+data class SpaceDeleted(
+    val state: String,
 )
 
 data class SpaceUser(
