@@ -64,6 +64,7 @@ import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
 import com.owncloud.android.extensions.openOCFile
+import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
@@ -1103,7 +1104,11 @@ class FileDisplayActivity : FileActivity(),
             is UIResult.Error -> {
                 dismissLoadingDialog()
 
-                showErrorInSnackbar(R.string.move_file_error, uiResult.error)
+                uiResult.error?.let {
+                    showMessageInSnackbar(
+                        message = it.parseError(getString(R.string.copy_file_error), resources, true)
+                    )
+                }
             }
         }
     }
@@ -1127,7 +1132,11 @@ class FileDisplayActivity : FileActivity(),
             is UIResult.Error -> {
                 dismissLoadingDialog()
 
-                showErrorInSnackbar(R.string.copy_file_error, uiResult.error)
+                uiResult.error?.let {
+                    showMessageInSnackbar(
+                        message = it.parseError(getString(R.string.copy_file_error), resources, true)
+                    )
+                }
             }
         }
     }
