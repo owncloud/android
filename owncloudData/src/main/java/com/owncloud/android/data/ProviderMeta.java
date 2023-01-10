@@ -31,7 +31,7 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 39;
+    public static final int DB_VERSION = 40;
 
     private ProviderMeta() {
     }
@@ -63,7 +63,8 @@ public class ProviderMeta {
 
         // Columns of capabilities table
         public static final String CAPABILITIES_ACCOUNT_NAME = "account";
-        public static final String CAPABILITIES_VERSION_MAYOR = "version_mayor";
+        public static final String LEGACY_CAPABILITIES_VERSION_MAYOR = "version_mayor";
+        public static final String CAPABILITIES_VERSION_MAJOR = "version_major";
         public static final String CAPABILITIES_VERSION_MINOR = "version_minor";
         public static final String CAPABILITIES_VERSION_MICRO = "version_micro";
         public static final String CAPABILITIES_VERSION_STRING = "version_string";
@@ -95,8 +96,9 @@ public class ProviderMeta {
         public static final String CAPABILITIES_FILES_BIGFILECHUNKING = "files_bigfilechunking";
         public static final String CAPABILITIES_FILES_UNDELETE = "files_undelete";
         public static final String CAPABILITIES_FILES_VERSIONING = "files_versioning";
-        public static final String CAPABILITIES_FILES_APP_PROVIDERS = "files_apps_providers";
         public static final String CAPABILITIES_FILES_PRIVATE_LINKS = "files_private_links";
+        public static final String CAPABILITIES_APP_PROVIDERS_PREFIX = "app_providers_";
+        public static final String CAPABILITIES_SPACES_PREFIX = "spaces_";
 
         // Columns of filelist table
         public static final String FILE_PARENT = "parent";

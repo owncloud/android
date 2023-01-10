@@ -25,7 +25,7 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 val OC_CAPABILITY =
     OCCapability(
         accountName = OC_ACCOUNT_NAME,
-        versionMayor = 2,
+        versionMajor = 2,
         versionMinor = 1,
         versionMicro = 0,
         versionString = "1.0.0",
@@ -52,5 +52,6 @@ val OC_CAPABILITY =
         filesUndelete = CapabilityBooleanType.FALSE,
         filesVersioning = CapabilityBooleanType.FALSE,
         filesPrivateLinks = CapabilityBooleanType.TRUE,
-        filesOcisProviders = null,
+        filesAppProviders = null,
+        spaces = null
     )
