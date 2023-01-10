@@ -24,6 +24,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.SpacesListItemBinding
@@ -83,12 +84,13 @@ class SpacesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun setData(spaces: List<OCSpace>) {
-        spacesList.clear()
-
         // Let's filter the ones that are disabled for the moment. We may show them as disabled in the future.
         val onlyEnabledSpaces = spaces.filterNot { it.isDisabled }
+        val diffCallback = SpacesListDiffUtil(spacesList, onlyEnabledSpaces)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        spacesList.clear()
         spacesList.addAll(onlyEnabledSpaces)
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun getItemCount(): Int = spacesList.size
