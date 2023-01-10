@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ ownCloud Android client application
   ~
   ~ @author Juan Carlos Garrote Gascón
@@ -31,9 +30,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/spaces_card_background_color"
         app:cardCornerRadius="10dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@color/spaces_card_background_color">
+        app:cardElevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,34 +43,34 @@
                 android:id="@+id/spaces_list_item_image"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:src="@drawable/ic_spaces"
-                android:scaleType="center" />
+                android:scaleType="center"
+                android:src="@drawable/ic_spaces" />
 
             <View
-                android:layout_height="1dp"
                 android:layout_width="match_parent"
+                android:layout_height="1dp"
                 android:background="@color/spaces_card_default_image_color" />
 
             <TextView
                 android:id="@+id/spaces_list_item_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textColor="@color/textColor"
                 android:layout_margin="@dimen/standard_half_margin"
                 android:singleLine="true"
+                android:textColor="@color/textColor"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 tools:text="Name" />
 
             <TextView
                 android:id="@+id/spaces_list_item_subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textColor="@color/textColor"
                 android:layout_marginHorizontal="@dimen/standard_half_margin"
                 android:layout_marginBottom="@dimen/standard_half_margin"
                 android:singleLine="true"
+                android:textColor="@color/textColor"
+                android:textSize="15sp"
                 tools:text="Subtitle" />
 
         </LinearLayout>
