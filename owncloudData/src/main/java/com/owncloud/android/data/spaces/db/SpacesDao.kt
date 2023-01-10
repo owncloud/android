@@ -104,6 +104,7 @@ interface SpacesDao {
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
             WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PROJECT'
+            ORDER BY name COLLATE NOCASE ASC
         """
 
         private const val DELETE_ALL_SPACES_FOR_ACCOUNT = """
