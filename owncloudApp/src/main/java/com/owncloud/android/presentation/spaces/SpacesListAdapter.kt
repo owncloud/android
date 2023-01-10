@@ -22,9 +22,14 @@ package com.owncloud.android.presentation.spaces
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.owncloud.android.R
 import com.owncloud.android.databinding.SpacesListItemBinding
+import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.utils.PreferenceUtils
 
 class SpacesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -45,8 +50,34 @@ class SpacesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             spacesListItemName.text = space.name
             spacesListItemSubtitle.text = space.description
 
-            space.getSpaceImageWebDavUrl()?.let {
+            val spaceSpecialImage = space.getSpaceSpecialImage()
+            spacesListItemImage.tag = spaceSpecialImage?.id
 
+            if (spaceSpecialImage != null) {
+                val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(spaceSpecialImage.id)
+                if (thumbnail != null) {
+                    spacesListItemImage.run {
+                        setImageBitmap(thumbnail)
+                        scaleType = ImageView.ScaleType.CENTER_CROP
+                    }
+                }
+                if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(spaceSpecialImage, spacesListItemImage)) {
+                    val account = AccountUtils.getOwnCloudAccountByName(spacesViewHolder.itemView.context, space.accountName)
+                    val task = ThumbnailsCacheManager.ThumbnailGenerationTask(spacesListItemImage, account)
+                    val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(spacesViewHolder.itemView.resources, thumbnail, task)
+
+                    // If drawable is not visible, do not update it.
+                    if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
+                        spacesListItemImage.run {
+                            spacesListItemImage.setImageDrawable(asyncDrawable)
+                            scaleType = ImageView.ScaleType.CENTER_CROP
+                        }
+                    }
+                    task.execute(spaceSpecialImage)
+                }
+                if (spaceSpecialImage.file.mimeType == "image/png") {
+                    spacesListItemImage.setBackgroundColor(ContextCompat.getColor(spacesViewHolder.itemView.context, R.color.background_color))
+                }
             }
         }
     }

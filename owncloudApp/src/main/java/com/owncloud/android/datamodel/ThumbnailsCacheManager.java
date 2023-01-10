@@ -39,6 +39,7 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.files.usecases.DisableThumbnailsForFileUseCase;
+import com.owncloud.android.domain.spaces.model.SpaceSpecial;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
@@ -75,6 +76,7 @@ public class ThumbnailsCacheManager {
     private static OwnCloudClient mClient = null;
 
     private static final String PREVIEW_URI = "%s/remote.php/dav/files/%s%s?x=%d&y=%d&c=%s&preview=1";
+    private static final String SPACE_SPECIAL_URI = "%s?scalingup=0&a=1&x=%d&y=%d&c=%s&preview=1";
 
     public static Bitmap mDefaultImg =
             BitmapFactory.decodeResource(
@@ -186,6 +188,8 @@ public class ThumbnailsCacheManager {
                     thumbnail = doOCFileInBackground();
                 } else if (mFile instanceof File) {
                     thumbnail = doFileInBackground();
+                } else if (mFile instanceof SpaceSpecial) {
+                    thumbnail = doSpaceImageInBackground();
                     //} else {  do nothing
                 }
 
@@ -210,6 +214,8 @@ public class ThumbnailsCacheManager {
                         tagId = String.valueOf(((OCFile) mFile).getId());
                     } else if (mFile instanceof File) {
                         tagId = String.valueOf(mFile.hashCode());
+                    } else if (mFile instanceof SpaceSpecial) {
+                        tagId = ((SpaceSpecial) mFile).getId();
                     }
                     if (String.valueOf(imageView.getTag()).equals(tagId)) {
                         imageView.setImageBitmap(bitmap);
@@ -349,6 +355,61 @@ public class ThumbnailsCacheManager {
             return thumbnail;
         }
 
+        private String getSpaceSpecialUri(SpaceSpecial spaceSpecial) {
+            return String.format(Locale.ROOT,
+                    SPACE_SPECIAL_URI,
+                    spaceSpecial.getWebDavUrl(),
+                    getThumbnailDimension(),
+                    getThumbnailDimension(),
+                    spaceSpecial.getETag());
+        }
+
+        private Bitmap doSpaceImageInBackground() {
+            SpaceSpecial spaceSpecial = (SpaceSpecial) mFile;
+
+            final String imageKey = spaceSpecial.getId();
+
+            // Check disk cache in background thread
+            Bitmap thumbnail = getBitmapFromDiskCache(imageKey);
+
+            // Not found in disk cache
+            if (thumbnail == null) { // TODO: Check if the current thumbnail is outdated
+                int px = getThumbnailDimension();
+
+                // Download thumbnail from server
+                if (mClient != null) {
+                    GetMethod get;
+                    try {
+                        String uri = getSpaceSpecialUri(spaceSpecial);
+                        Timber.d("URI: %s", uri);
+                        get = new GetMethod(new URL(uri));
+                        int status = mClient.executeHttpMethod(get);
+                        if (status == HttpConstants.HTTP_OK) {
+                            InputStream inputStream = get.getResponseBodyAsStream();
+                            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                            thumbnail = ThumbnailUtils.extractThumbnail(bitmap, px, px);
+
+                            // Handle PNG
+                            if (spaceSpecial.getFile().getMimeType().equalsIgnoreCase("image/png")) {
+                                thumbnail = handlePNG(thumbnail, px);
+                            }
+
+                            // Add thumbnail to cache
+                            if (thumbnail != null) {
+                                addBitmapToCache(imageKey, thumbnail);
+                            }
+                        } else {
+                            mClient.exhaustResponse(get.getResponseBodyAsStream());
+                        }
+                    } catch (Exception e) {
+                        Timber.e(e);
+                    }
+                }
+            }
+
+            return thumbnail;
+
+        }
     }
 
     public static boolean cancelPotentialThumbnailWork(Object file, ImageView imageView) {

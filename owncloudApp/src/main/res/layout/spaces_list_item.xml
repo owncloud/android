@@ -45,10 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:src="@drawable/ic_spaces"
-                android:scaleType="center"
-                android:scaleX="2"
-                android:scaleY="2"
-                app:tint="@color/spaces_card_default_image_color" />
+                android:scaleType="center" />
 
             <View
                 android:layout_height="1dp"
