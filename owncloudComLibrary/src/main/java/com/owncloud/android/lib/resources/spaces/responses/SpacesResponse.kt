@@ -51,10 +51,10 @@ data class OwnerResponse(
 
 @JsonClass(generateAdapter = true)
 data class QuotaResponse(
-    val remaining: Long,
-    val state: String,
+    val remaining: Long?,
+    val state: String?,
     val total: Long,
-    val used: Long
+    val used: Long?,
 )
 
 @JsonClass(generateAdapter = true)
@@ -62,7 +62,8 @@ data class RootResponse(
     val eTag: String,
     val id: String,
     val permissions: List<PermissionResponse>?,
-    val webDavUrl: String
+    val webDavUrl: String,
+    val deleted: DeleteResponse?,
 )
 
 @JsonClass(generateAdapter = true)
@@ -90,6 +91,11 @@ data class FileResponse(
 @JsonClass(generateAdapter = true)
 data class GrantedToResponse(
     val user: UserResponse
+)
+
+@JsonClass(generateAdapter = true)
+data class DeleteResponse(
+    val state: String,
 )
 
 @JsonClass(generateAdapter = true)
