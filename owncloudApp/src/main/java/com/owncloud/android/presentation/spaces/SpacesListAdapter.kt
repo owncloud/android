@@ -88,6 +88,7 @@ class SpacesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         // Let's filter the ones that are disabled for the moment. We may show them as disabled in the future.
         val onlyEnabledSpaces = spaces.filterNot { it.isDisabled }
         spacesList.addAll(onlyEnabledSpaces)
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = spacesList.size
