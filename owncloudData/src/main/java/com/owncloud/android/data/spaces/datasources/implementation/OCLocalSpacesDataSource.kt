@@ -29,6 +29,7 @@ import com.owncloud.android.data.spaces.db.SpacesDao
 import com.owncloud.android.data.spaces.db.SpacesEntity
 import com.owncloud.android.data.spaces.db.SpacesWithSpecials
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.SpaceDeleted
 import com.owncloud.android.domain.spaces.model.SpaceFile
 import com.owncloud.android.domain.spaces.model.SpaceOwner
 import com.owncloud.android.domain.spaces.model.SpaceQuota
@@ -78,20 +79,21 @@ class OCLocalSpacesDataSource(
                     id = space.ownerId
                 )
             ),
-            quota = space.quota?.let {
+            quota = space.quota?.let { spaceQuotaEntity ->
                 SpaceQuota(
-                    remaining = it.remaining,
-                    state = it.state,
-                    total = it.total,
-                    used = it.used
+                    remaining = spaceQuotaEntity.remaining,
+                    state = spaceQuotaEntity.state,
+                    total = spaceQuotaEntity.total,
+                    used = spaceQuotaEntity.used
                 )
             },
-            root = space.root!!.let {
+            root = space.root!!.let { spaceRootEntity ->
                 SpaceRoot(
-                    eTag = it.eTag,
-                    id = it.id,
+                    eTag = spaceRootEntity.eTag,
+                    id = spaceRootEntity.id,
                     permissions = null,
-                    webDavUrl = it.webDavUrl
+                    webDavUrl = spaceRootEntity.webDavUrl,
+                    deleted = spaceRootEntity.deleteState?.let { SpaceDeleted(state = it) }
                 )
             },
             webUrl = space.webUrl,
@@ -130,7 +132,7 @@ class OCLocalSpacesDataSource(
                 SpaceQuotaEntity(remaining = quotaModel.remaining, state = quotaModel.state, total = quotaModel.total, used = quotaModel.used)
             },
             root = root.let { rootModel ->
-                SpaceRootEntity(eTag = rootModel.eTag, id = rootModel.id, webDavUrl = rootModel.webDavUrl)
+                SpaceRootEntity(eTag = rootModel.eTag, id = rootModel.id, webDavUrl = rootModel.webDavUrl, deleteState = rootModel.deleted?.state)
             },
             webUrl = webUrl,
             description = description,
