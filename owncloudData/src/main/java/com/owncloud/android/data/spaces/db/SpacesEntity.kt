@@ -32,6 +32,7 @@ import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_QUOTA_R
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_QUOTA_STATE
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_QUOTA_TOTAL
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_QUOTA_USED
+import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ROOT_DELETED_STATE
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ROOT_ETAG
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ROOT_ID
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ROOT_WEB_DAV_URL
@@ -80,18 +81,19 @@ data class SpacesEntity(
         const val SPACES_ROOT_ETAG = "root_etag"
         const val SPACES_ROOT_ID = "root_id"
         const val SPACES_ROOT_WEB_DAV_URL = "root_web_dav_url"
+        const val SPACES_ROOT_DELETED_STATE = "root_deleted_state"
     }
 }
 
 data class SpaceQuotaEntity(
     @ColumnInfo(name = SPACES_QUOTA_REMAINING)
-    val remaining: Long,
+    val remaining: Long?,
     @ColumnInfo(name = SPACES_QUOTA_STATE)
-    val state: String,
+    val state: String?,
     @ColumnInfo(name = SPACES_QUOTA_TOTAL)
     val total: Long,
     @ColumnInfo(name = SPACES_QUOTA_USED)
-    val used: Long
+    val used: Long?,
 )
 
 data class SpaceRootEntity(
@@ -100,7 +102,9 @@ data class SpaceRootEntity(
     @ColumnInfo(name = SPACES_ROOT_ID)
     val id: String,
     @ColumnInfo(name = SPACES_ROOT_WEB_DAV_URL)
-    val webDavUrl: String
+    val webDavUrl: String,
+    @ColumnInfo(name = SPACES_ROOT_DELETED_STATE)
+    val deleteState: String?,
 )
 
 data class SpacesWithSpecials(

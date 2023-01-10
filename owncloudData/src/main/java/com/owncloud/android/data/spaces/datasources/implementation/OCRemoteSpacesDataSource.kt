@@ -20,8 +20,9 @@ package com.owncloud.android.data.spaces.datasources.implementation
 
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
-import com.owncloud.android.domain.spaces.model.SpaceFile
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.SpaceDeleted
+import com.owncloud.android.domain.spaces.model.SpaceFile
 import com.owncloud.android.domain.spaces.model.SpaceGrantedTo
 import com.owncloud.android.domain.spaces.model.SpaceOwner
 import com.owncloud.android.domain.spaces.model.SpacePermission
@@ -76,7 +77,8 @@ class OCRemoteSpacesDataSource(
                         roles = permissionsResponse.roles,
                     )
                 },
-                webDavUrl = root.webDavUrl
+                webDavUrl = root.webDavUrl,
+                deleted = root.deleted?.let { SpaceDeleted(state = it.state) }
             ),
             webUrl = webUrl,
             description = description,
