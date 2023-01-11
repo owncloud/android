@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ ownCloud Android client application
   ~
   ~ @author Juan Carlos Garrote Gascón
@@ -30,10 +31,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.files.filelist.MainFileListFragment">
+        tools:context=".presentation.spaces.SpacesListFragment">
 
         <ProgressBar
-            android:id="@+id/syncProgressBar"
+            android:id="@+id/sync_progress_bar"
             style="@style/Widget.ownCloud.TopProgressBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/file_list_progress_bar_height"
@@ -58,7 +59,9 @@
                 android:id="@+id/recycler_spaces_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical" />
+                android:scrollbars="vertical"
+                android:paddingHorizontal="@dimen/standard_half_margin"
+                tools:listitem="@layout/spaces_list_item"/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

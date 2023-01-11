@@ -863,7 +863,7 @@ class FileDisplayActivity : FileActivity(),
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
                     FileListOption.SPACES_LIST -> getString(R.string.drawer_item_spaces)
                 }
-            setupRootToolbar(title, isSearchEnabled = true)
+            setupRootToolbar(title, isSearchEnabled = fileListOption != FileListOption.SPACES_LIST)
             listMainFileFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
         } else {
             updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
