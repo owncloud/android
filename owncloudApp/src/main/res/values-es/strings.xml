@@ -74,6 +74,7 @@
   <string name="prefs_show_hidden_files">Mostrar archivos ocultos</string>
   <string name="prefs_log_open_logs_list_view">Archivos de registro</string>
   <string name="prefs_log_no_logs_list_view">¡Carpeta de registros vacía!</string>
+  <string name="prefs_log_empty_subtitle">Active los registros y los archivos de registros aparecerán aquí</string>
   <string name="prefs_log_title">Habilitar registro</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial del registro</string>
@@ -142,9 +143,11 @@
   <string name="uploader_error_message_source_file_not_copied">Ha ocurrido un error al copiar a la carpeta temporal. Por favor intentelo de nuevo.</string>
   <string name="file_list_seconds_ago">hace segundos</string>
   <string name="file_list_empty_title_all_files">Aquí no hay archivos</string>
+  <string name="file_list_empty_title_available_offline">No hay ficheros sin conexión</string>
   <string name="file_list_empty_title_shared_by_links">No hay enlaces compartidos</string>
-  <string name="file_list_empty_subtitle_all_files">Suba contenidos o sincronice sus dispositivos.</string>
-  <string name="file_list_empty_subtitle_shared_by_links">Aquí aparecerán archivos y carpetas que usted comparta mediante un enlace</string>
+  <string name="file_list_empty_subtitle_all_files">¡Suba algún contenido o sincronice con sus dispositivos!</string>
+  <string name="file_list_empty_subtitle_available_offline">Los ficheros y carpetas marcados como disponibles online aparecerán aquí</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Aquí aparecerán los archivos y carpetas compartidos mediante enlace</string>
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">No se han encontrado apps para ese tipo de archivos</string>
   <string name="file_list_no_app_for_perform_action">No se encuentra aplicación para esta acción</string>
@@ -152,6 +155,7 @@
   <string name="local_file_list_empty_just_folders">No hay carpetas en esta carpeta.</string>
   <string name="local_file_list_search_with_no_matches">No hay coincidencias para esta búsqueda</string>
   <string name="upload_list_empty">No hay subidas disponibles</string>
+  <string name="upload_list_empty_subtitle">Suba algo y aparecerá aquí</string>
   <string name="file_list_folder">carpeta</string>
   <string name="file_list_folders">carpetas</string>
   <string name="file_list_file">fichero</string>
@@ -213,6 +217,7 @@
   <string name="uploads_view_group_current_uploads">Actual</string>
   <string name="uploads_view_group_failed_uploads">Fallido (presiona para reintentarlo)</string>
   <string name="uploads_view_group_finished_uploads">Subidos</string>
+  <string name="uploads_view_group_queued_uploads">En cola</string>
   <string name="uploads_view_group_file_count">archivos %d</string>
   <string name="uploads_view_group_file_count_single">archivo %d</string>
   <string name="uploads_view_upload_status_succeeded">Completada</string>
@@ -230,8 +235,13 @@
   <string name="uploads_view_upload_status_service_interrupted">La aplicación se ha interrumpido</string>
   <string name="uploads_view_upload_status_unknown_fail">Error desconocido</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Esperando a la conexión wifi</string>
+  <string name="uploads_view_upload_status_queued">En cola</string>
   <string name="uploads_view_later_waiting_to_upload">Esperando para subir</string>
   <string name="uploads_view_unsupported_media_type">Tipo de archivo no soportado</string>
+  <string name="uploader_upload_enqueued_ticker">La subida de %1$s se ha puesto en cola</string>
+  <string name="uploader_upload_canceled_ticker">Subida cancelada</string>
+  <string name="downloader_download_canceled_ticker">Descarga cancelada</string>
+  <string name="downloader_download_enqueued_ticker">La descarga de %1$s se ha puesto en cola</string>
   <string name="downloader_download_in_progress_ticker">Descargando...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Descargado de %2$s</string>
   <string name="downloader_download_succeeded_ticker">Descarga completa</string>
@@ -345,12 +355,17 @@
   <string name="available_offline_inherited_msg">La carpeta que contiene este archivo está disponible offline</string>
   <string name="rename_local_fail_msg">No se pudo cambiar el nombre de la copia local, trata con un nombre differente</string>
   <string name="rename_server_fail_msg">No se pudo cambiar el nombre</string>
+  <string name="file_already_exists">fichero ya existe</string>
   <string name="sync_file_fail_msg">No se ha podido comprobar el fichero remoto</string>
   <string name="sync_file_nothing_to_do_msg">Ya está sincronizado</string>
+  <string name="new_remote_version_found_msg">Se ha encontrado una nueva versión en el servidor. Descargando...</string>
+  <string name="download_enqueued_msg">Descarga encolada</string>
+  <string name="upload_enqueued_msg">Subida encolada</string>
   <string name="create_dir_fail_msg">No se pudo crear la carpeta</string>
   <string name="filename_forbidden_characters">Carácteres ilegales: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">El nombre del archivo contiene al menos un carácter no válido</string>
   <string name="filename_empty">El nombre de archivo no puede estar vacío</string>
+  <string name="filename_too_long">El nombre del fichero no puede ser tan largo</string>
   <string name="wait_a_moment">Espere un momento</string>
   <string name="wait_checking_credentials">Comprobando las credenciales guardadas</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema inesperado; por favor, pruebe otra app para seleccionar el archivo</string>
@@ -568,6 +583,8 @@
   <string name="media_service_notification_channel_description">Ver reproductor de música</string>
   <string name="file_sync_notification_channel_name">Sincronizado de archivo</string>
   <string name="file_sync_notification_channel_description">Ver el resultado de sincronizado de archivo</string>
+  <string name="file_sync_conflict_notification_channel_name">Conflictos en el fichero</string>
+  <string name="file_sync_conflict_notification_channel_description">Ver los conflictos en los ficheros cuando ocurren</string>
   <string name="clicks_to_be_developer">Está %1$d clics de distancia de habilitar los menús de desarrollador</string>
   <string name="rate_dialog_title">Puntúa %1$s la aplicación!</string>
   <string name="rate_dialog_description">Si disfrutas usando esta aplicación, ¿puedes dedicar un momento a valorarla?. Tus comentarios son muy importantes para nosotros.</string>
@@ -613,7 +630,7 @@
   <string name="security_enforced_title">Por favor, seleccione una opción para bloquear la aplicación:</string>
   <string name="security_enforced_first_option">Código de bloqueo</string>
   <string name="security_enforced_second_option">Patrón de bloqueo</string>
-  <string name="folder_upload_some_content_or_sync_devices">Suba contenidos o sincronice sus dispositivos.</string>
+  <string name="folder_upload_some_content_or_sync_devices">¡Suba algún contenido o sincronice con sus dispositivos!</string>
   <!--Webfinger-->
   <string name="global_proceed">Proceder</string>
   <string name="error_webfinger_username_empty">Nombre de usuario vacío</string>
@@ -629,4 +646,20 @@
   <string name="open_in_web_error_generic">No se pudo abrir en web</string>
   <string name="open_in_web_error_not_supported">No hay aplicaciones que soporten este tipo de fichero</string>
   <string name="open_in_web_error_too_early">El fichero solicitado no está disponible aún. Por favor, inténtelo más tarde</string>
+  <string name="release_notes_3.0_title1">Nuevo motor de sincronización</string>
+  <string name="release_notes_3.0_subtitle1">La manera en la que todos los ficheros se sincronizan ha sido rediseñada para mejorarla</string>
+  <string name="release_notes_3.0_title2">Propagación de conflictos automática</string>
+  <string name="release_notes_3.0_subtitle2">Los conflictos ahora se propagan (y limpian) automáticamente a las carpetas padre</string>
+  <string name="release_notes_3.0_title3">Arreglo para las miniaturas</string>
+  <string name="release_notes_3.0_subtitle3">Las miniaturas ahora se muestran correctamente en la lista de ficheros</string>
+  <string name="release_notes_3.0_title4">Vistas vacías mejoradas</string>
+  <string name="release_notes_3.0_subtitle4">Una vista nueva y más atractiva ha sido añadida a aquellas pantallas sin elementos (ficheros, subidas y logs)</string>
+  <string name="release_notes_3.0_title5">Varias transferencias ejecutándose a la vez</string>
+  <string name="release_notes_3.0_subtitle5">Con el rediseño del motor de sincronización, ahora varias descargas y subidas pueden ejecutarse a la vez</string>
+  <string name="release_notes_3.0_title6">Inicio de sesión a través de navegador mejorado</string>
+  <string name="release_notes_3.0_subtitle6">Cuando se escribe la URL, el navegador se lanzará</string>
+  <string name="release_notes_3.0.1_title1">Arreglo de error al actualizar la app</string>
+  <string name="release_notes_3.0.1_subtitle1">Se han arreglado las actualizaciones de 2.18 (o versiones anteriores) a 3.0</string>
+  <string name="release_notes_3.0.1_title2">Arreglo de error en la pestaña de subidas</string>
+  <string name="release_notes_3.0.1_subtitle2">Se ha arreglado un error que algunos usuarios experimentaban al entrar en la sección de subidas</string>
 </resources>
