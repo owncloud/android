@@ -223,12 +223,9 @@ abstract class DrawerActivity : ToolbarActivity() {
         // Allow or disallow touches with other visible windows
         getBottomNavigationView()?.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         if (account != null) {
-            capabilitiesViewModel.capabilities.value?.let {
-                setSpacesVisibilityBottomBar(it.peekContent())
+            capabilitiesViewModel.capabilities.observe(this) { event: Event<UIResult<OCCapability>> ->
+                setSpacesVisibilityBottomBar(event.peekContent())
             }
-            capabilitiesViewModel.capabilities.observe(this, Event.EventObserver { uiResult: UIResult<OCCapability> ->
-                setSpacesVisibilityBottomBar(uiResult)
-            })
         }
         setCheckedItemAtBottomBar(menuItemId)
         getBottomNavigationView()?.setOnNavigationItemSelectedListener { menuItem: MenuItem ->
