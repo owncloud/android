@@ -49,7 +49,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/spaces_card_default_image_color" />
+                android:background="@color/actionbar_start_color" />
 
             <TextView
                 android:id="@+id/spaces_list_item_name"
