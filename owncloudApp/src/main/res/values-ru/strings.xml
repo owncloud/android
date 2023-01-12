@@ -601,13 +601,20 @@
   <string name="prefs_logs_summary">В логах может содержаться чувствительная информация. Отправка логов третьим лицам находится под вашей ответственностью</string>
   <string name="synchronizing_account">Синхронизация аккаунта</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_intro">Ваше приложение было обновлено. Это обновление приложения переносит ваши файлы в более безопасное место на вашем устройстве. Эта одноразовая миграция данных обязательна и может занять до минуты или больше.</string>
   <string name="scoped_storage_wizard_intro_button">Давайте начнём</string>
+  <string name="scoped_storage_wizard_not_enough_space_warning">В настоящее время ваше свободное место на вашем устройстве ограничено. Некоторые файлы могут не быть перенесены, пожалуйста, убедитесь, что все загруженные файлы продолжают загружаться после завершения процесса.</string>
   <!--Security Enforced-->
+  <string name="security_enforced_title">Пожалуйста, выберите вариант блокировки приложения:</string>
   <string name="security_enforced_first_option">Блокировка кодом</string>
   <string name="folder_upload_some_content_or_sync_devices">Загрузите что-нибудь или синхронизируйте со своими устройствами!</string>
   <!--Webfinger-->
   <string name="global_proceed">Продолжить</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Продолжить</string>
+  <string name="release_notes_2.21.2_title1">Открыть в браузере</string>
   <!--Open in web-->
+  <string name="ic_action_open_in_web">Открыть в браузере</string>
+  <string name="open_in_web_error_too_early">Запрашиваемый файл в данный момент недоступен, пожалуйста, попробуйте позже </string>
+  <string name="release_notes_3.0_title1">Новый механизм синхронизации</string>
 </resources>
