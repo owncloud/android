@@ -21,6 +21,7 @@
 
 package com.owncloud.android.data.spaces.datasources.implementation
 
+import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.spaces.db.SpaceQuotaEntity
 import com.owncloud.android.data.spaces.db.SpaceRootEntity
@@ -66,89 +67,95 @@ class OCLocalSpacesDataSource(
         }
     }
 
-    private fun SpacesWithSpecials.toModel() =
-        OCSpace(
-            accountName = space.accountName,
-            driveAlias = space.driveAlias,
-            driveType = space.driveType,
-            id = space.id,
-            lastModifiedDateTime = space.lastModifiedDateTime,
-            name = space.name,
-            owner = SpaceOwner(
-                user = SpaceUser(
-                    id = space.ownerId
-                )
-            ),
-            quota = space.quota?.let { spaceQuotaEntity ->
-                SpaceQuota(
-                    remaining = spaceQuotaEntity.remaining,
-                    state = spaceQuotaEntity.state,
-                    total = spaceQuotaEntity.total,
-                    used = spaceQuotaEntity.used
-                )
-            },
-            root = space.root!!.let { spaceRootEntity ->
-                SpaceRoot(
-                    eTag = spaceRootEntity.eTag,
-                    id = spaceRootEntity.id,
-                    permissions = null,
-                    webDavUrl = spaceRootEntity.webDavUrl,
-                    deleted = spaceRootEntity.deleteState?.let { SpaceDeleted(state = it) }
-                )
-            },
-            webUrl = space.webUrl,
-            description = space.description,
-            special = specials.map {
-                it.toModel()
-            }
-        )
+    companion object {
+        @VisibleForTesting
+        fun SpacesWithSpecials.toModel() =
+            OCSpace(
+                accountName = space.accountName,
+                driveAlias = space.driveAlias,
+                driveType = space.driveType,
+                id = space.id,
+                lastModifiedDateTime = space.lastModifiedDateTime,
+                name = space.name,
+                owner = SpaceOwner(
+                    user = SpaceUser(
+                        id = space.ownerId
+                    )
+                ),
+                quota = space.quota?.let { spaceQuotaEntity ->
+                    SpaceQuota(
+                        remaining = spaceQuotaEntity.remaining,
+                        state = spaceQuotaEntity.state,
+                        total = spaceQuotaEntity.total,
+                        used = spaceQuotaEntity.used
+                    )
+                },
+                root = space.root!!.let { spaceRootEntity ->
+                    SpaceRoot(
+                        eTag = spaceRootEntity.eTag,
+                        id = spaceRootEntity.id,
+                        permissions = null,
+                        webDavUrl = spaceRootEntity.webDavUrl,
+                        deleted = spaceRootEntity.deleteState?.let { SpaceDeleted(state = it) }
+                    )
+                },
+                webUrl = space.webUrl,
+                description = space.description,
+                special = specials.map {
+                    it.toModel()
+                }
+            )
 
-    private fun SpaceSpecialEntity.toModel() =
-        SpaceSpecial(
-            eTag = eTag,
-            file = SpaceFile(
-                mimeType = fileMimeType
-            ),
-            id = id,
-            lastModifiedDateTime = lastModifiedDateTime,
-            name = name,
-            size = size,
-            specialFolder = SpaceSpecialFolder(
-                name = specialFolderName
-            ),
-            webDavUrl = webDavUrl
-        )
+        @VisibleForTesting
+        fun SpaceSpecialEntity.toModel() =
+            SpaceSpecial(
+                eTag = eTag,
+                file = SpaceFile(
+                    mimeType = fileMimeType
+                ),
+                id = id,
+                lastModifiedDateTime = lastModifiedDateTime,
+                name = name,
+                size = size,
+                specialFolder = SpaceSpecialFolder(
+                    name = specialFolderName
+                ),
+                webDavUrl = webDavUrl
+            )
 
-    private fun OCSpace.toEntity() =
-        SpacesEntity(
-            accountName = accountName,
-            driveAlias = driveAlias,
-            driveType = driveType,
-            id = id,
-            lastModifiedDateTime = lastModifiedDateTime,
-            name = name,
-            ownerId = owner.user.id,
-            quota = quota?.let { quotaModel ->
-                SpaceQuotaEntity(remaining = quotaModel.remaining, state = quotaModel.state, total = quotaModel.total, used = quotaModel.used)
-            },
-            root = root.let { rootModel ->
-                SpaceRootEntity(eTag = rootModel.eTag, id = rootModel.id, webDavUrl = rootModel.webDavUrl, deleteState = rootModel.deleted?.state)
-            },
-            webUrl = webUrl,
-            description = description,
-        )
+        @VisibleForTesting
+        fun OCSpace.toEntity() =
+            SpacesEntity(
+                accountName = accountName,
+                driveAlias = driveAlias,
+                driveType = driveType,
+                id = id,
+                lastModifiedDateTime = lastModifiedDateTime,
+                name = name,
+                ownerId = owner.user.id,
+                quota = quota?.let { quotaModel ->
+                    SpaceQuotaEntity(remaining = quotaModel.remaining, state = quotaModel.state, total = quotaModel.total, used = quotaModel.used)
+                },
+                root = root.let { rootModel ->
+                    SpaceRootEntity(eTag = rootModel.eTag, id = rootModel.id, webDavUrl = rootModel.webDavUrl, deleteState = rootModel.deleted?.state)
+                },
+                webUrl = webUrl,
+                description = description,
+            )
 
-    private fun SpaceSpecial.toEntity(accountName: String, spaceId: String): SpaceSpecialEntity =
-        SpaceSpecialEntity(
-            accountName = accountName,
-            spaceId = spaceId,
-            eTag = eTag,
-            fileMimeType = file.mimeType,
-            id = id,
-            lastModifiedDateTime = lastModifiedDateTime,
-            name = name,
-            size = size,
-            specialFolderName = specialFolder.name,
-            webDavUrl = webDavUrl
-        )
+        @VisibleForTesting
+        fun SpaceSpecial.toEntity(accountName: String, spaceId: String): SpaceSpecialEntity =
+            SpaceSpecialEntity(
+                accountName = accountName,
+                spaceId = spaceId,
+                eTag = eTag,
+                fileMimeType = file.mimeType,
+                id = id,
+                lastModifiedDateTime = lastModifiedDateTime,
+                name = name,
+                size = size,
+                specialFolderName = specialFolder.name,
+                webDavUrl = webDavUrl
+            )
+    }
 }

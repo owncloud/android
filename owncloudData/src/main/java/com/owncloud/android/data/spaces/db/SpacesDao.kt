@@ -77,6 +77,11 @@ interface SpacesDao {
     ): List<SpacesEntity>
 
     @Query(SELECT_PROJECT_SPACES_FOR_ACCOUNT)
+    fun getProjectSpacesWithSpecialsForAccount(
+        accountName: String,
+    ): List<SpacesWithSpecials>
+
+    @Query(SELECT_PROJECT_SPACES_FOR_ACCOUNT)
     fun getProjectSpacesWithSpecialsForAccountAsFlow(
         accountName: String,
     ): Flow<List<SpacesWithSpecials>>
