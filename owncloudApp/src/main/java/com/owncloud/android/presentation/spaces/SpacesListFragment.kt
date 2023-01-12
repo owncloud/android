@@ -73,8 +73,11 @@ class SpacesListFragment : Fragment() {
 
     private fun subscribeToViewModels() {
         collectLatestLifecycleFlow(spacesListViewModel.spacesList) { uiState ->
-            showOrHideEmptyView(uiState.spaces)
-            spacesListAdapter.setData(uiState.spaces)
+            // Let's filter the ones that are disabled for the moment. We may show them as disabled in the future.
+            val onlyEnabledSpaces = uiState.spaces.filterNot { it.isDisabled }
+
+            showOrHideEmptyView(onlyEnabledSpaces)
+            spacesListAdapter.setData(onlyEnabledSpaces)
             binding.swipeRefreshSpacesList.isRefreshing = uiState.refreshing
             uiState.error?.let { showErrorInSnackbar(R.string.spaces_sync_failed, it) }
         }
