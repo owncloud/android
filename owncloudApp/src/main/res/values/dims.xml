@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
   Copyright (C) 2020 ownCloud GmbH.
@@ -77,4 +76,7 @@
     <dimen name="passcode_margin_top">24dp</dimen>
     <dimen name="passcode_margin_bottom">6dp</dimen>
     <dimen name="passcode_margin_buttons">4dp</dimen>
+
+    <!-- Spaces -->
+    <dimen name="spaces_thumbnail_height">156dp</dimen>
 </resources>
