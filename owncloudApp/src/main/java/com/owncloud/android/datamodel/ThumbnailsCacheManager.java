@@ -356,11 +356,14 @@ public class ThumbnailsCacheManager {
         }
 
         private String getSpaceSpecialUri(SpaceSpecial spaceSpecial) {
+            // Converts dp to pixel
+            Resources r = MainApp.Companion.getAppContext().getResources();
+            Integer spacesThumbnailSize = Math.round(r.getDimension(R.dimen.spaces_thumbnail_height)) * 2;
             return String.format(Locale.ROOT,
                     SPACE_SPECIAL_URI,
                     spaceSpecial.getWebDavUrl(),
-                    getThumbnailDimension(),
-                    getThumbnailDimension(),
+                    spacesThumbnailSize,
+                    spacesThumbnailSize,
                     spaceSpecial.getETag());
         }
 
@@ -373,7 +376,7 @@ public class ThumbnailsCacheManager {
             Bitmap thumbnail = getBitmapFromDiskCache(imageKey);
 
             // Not found in disk cache
-            if (thumbnail == null) { // TODO: Check if the current thumbnail is outdated
+            if (thumbnail == null) {
                 int px = getThumbnailDimension();
 
                 // Download thumbnail from server
