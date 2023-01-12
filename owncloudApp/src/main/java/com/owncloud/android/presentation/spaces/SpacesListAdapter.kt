@@ -84,12 +84,10 @@ class SpacesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun setData(spaces: List<OCSpace>) {
-        // Let's filter the ones that are disabled for the moment. We may show them as disabled in the future.
-        val onlyEnabledSpaces = spaces.filterNot { it.isDisabled }
-        val diffCallback = SpacesListDiffUtil(spacesList, onlyEnabledSpaces)
+        val diffCallback = SpacesListDiffUtil(spacesList, spaces)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         spacesList.clear()
-        spacesList.addAll(onlyEnabledSpaces)
+        spacesList.addAll(spaces)
         diffResult.dispatchUpdatesTo(this)
     }
 
