@@ -42,7 +42,7 @@
             <ImageView
                 android:id="@+id/spaces_list_item_image"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="@dimen/spaces_thumbnail_height"
                 android:scaleType="center"
                 android:src="@drawable/ic_spaces" />
 
