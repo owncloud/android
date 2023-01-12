@@ -1,3 +1,26 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v3.0.1...master
+
+Summary
+-------
+
+* Bugfix - Error messages too long in folders operation: [#3852](https://github.com/owncloud/android/pull/3852)
+
+Details
+-------
+
+* Bugfix - Error messages too long in folders operation: [#3852](https://github.com/owncloud/android/pull/3852)
+
+   Error messages when trying to perform a non-allowed action for copying and moving folders have
+   been shortened so that they are shown completely in the snackbar.
+
+   https://github.com/owncloud/android/issues/3820
+   https://github.com/owncloud/android/pull/3852
+
 Changelog for ownCloud Android Client [3.0.1] (2022-12-21)
 =======================================
 The following sections list the changes in ownCloud Android Client 3.0.1 relevant to
