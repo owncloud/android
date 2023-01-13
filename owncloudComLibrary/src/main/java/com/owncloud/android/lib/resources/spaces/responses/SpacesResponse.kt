@@ -35,13 +35,13 @@ data class SpaceResponse(
     val driveAlias: String,
     val driveType: String,
     val id: String,
-    val lastModifiedDateTime: String,
+    val lastModifiedDateTime: String?,
     val name: String,
-    val owner: OwnerResponse,
+    val owner: OwnerResponse?,
     val quota: QuotaResponse?,
     val root: RootResponse,
     val special: List<SpecialResponse>?,
-    val webUrl: String
+    val webUrl: String,
 )
 
 @JsonClass(generateAdapter = true)
@@ -59,7 +59,7 @@ data class QuotaResponse(
 
 @JsonClass(generateAdapter = true)
 data class RootResponse(
-    val eTag: String,
+    val eTag: String?,
     val id: String,
     val permissions: List<PermissionResponse>?,
     val webDavUrl: String,
