@@ -67,6 +67,10 @@ class OCLocalSpacesDataSource(
         }
     }
 
+    override fun deleteSpacesForAccount(accountName: String) {
+        spacesDao.deleteSpacesForAccount(accountName)
+    }
+
     companion object {
         @VisibleForTesting
         fun SpacesWithSpecials.toModel() =
