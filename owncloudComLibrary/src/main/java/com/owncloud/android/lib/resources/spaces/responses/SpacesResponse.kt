@@ -89,8 +89,15 @@ data class FileResponse(
 )
 
 @JsonClass(generateAdapter = true)
-data class GrantedToResponse(
-    val user: UserResponse
+data class IdentityPermissionResponse(
+    val id: String,
+    val displayName: String?,
+)
+
+@JsonClass(generateAdapter = true)
+data class GrantedToIdentitiesResponse(
+    val user: IdentityPermissionResponse?,
+    val group: IdentityPermissionResponse?,
 )
 
 @JsonClass(generateAdapter = true)
@@ -100,9 +107,18 @@ data class DeleteResponse(
 
 @JsonClass(generateAdapter = true)
 data class PermissionResponse(
-    val grantedTo: List<GrantedToResponse>,
-    val roles: List<String>
-)
+    val grantedTo: List<GrantedToIdentitiesResponse>?,
+    val grantedToIdentities: List<GrantedToIdentitiesResponse>?,
+    val roles: List<String>,
+) {
+    /**
+     * Supports api renaming from grantedTo to grantedToIdentities on v1.0.1
+     * https://github.com/owncloud/libre-graph-api/releases/tag/v1.0.1
+     */
+    fun getGrantedToIdentitiesResponse(): List<GrantedToIdentitiesResponse> {
+        return grantedToIdentities ?: grantedTo ?: throw IllegalArgumentException("Permissions not granted to anyone")
+    }
+}
 
 @JsonClass(generateAdapter = true)
 data class SpecialFolderResponse(
