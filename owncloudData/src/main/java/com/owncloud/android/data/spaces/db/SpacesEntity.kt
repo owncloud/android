@@ -51,10 +51,10 @@ data class SpacesEntity(
     @ColumnInfo(name = SPACES_ID)
     val id: String,
     @ColumnInfo(name = SPACES_LAST_MODIFIED_DATE_TIME)
-    val lastModifiedDateTime: String,
+    val lastModifiedDateTime: String?,
     val name: String,
     @ColumnInfo(name = SPACES_OWNER_ID)
-    val ownerId: String,
+    val ownerId: String?,
     @Embedded
     val quota: SpaceQuotaEntity?,
     @Embedded
@@ -98,7 +98,7 @@ data class SpaceQuotaEntity(
 
 data class SpaceRootEntity(
     @ColumnInfo(name = SPACES_ROOT_ETAG)
-    val eTag: String,
+    val eTag: String?,
     @ColumnInfo(name = SPACES_ROOT_ID)
     val id: String,
     @ColumnInfo(name = SPACES_ROOT_WEB_DAV_URL)

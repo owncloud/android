@@ -53,11 +53,13 @@ class OCRemoteSpacesDataSource(
             id = id,
             lastModifiedDateTime = lastModifiedDateTime,
             name = name,
-            owner = SpaceOwner(
-                user = SpaceUser(
-                    id = owner.user.id
+            owner = owner?.let { ownerResponse ->
+                SpaceOwner(
+                    user = SpaceUser(
+                        id = ownerResponse.user.id
+                    )
                 )
-            ),
+            },
             quota = quota?.let { quotaResponse ->
                 SpaceQuota(
                     remaining = quotaResponse.remaining,
