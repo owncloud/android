@@ -26,9 +26,9 @@ data class OCSpace(
     val driveAlias: String,
     val driveType: String,
     val id: String,
-    val lastModifiedDateTime: String,
+    val lastModifiedDateTime: String?,
     val name: String,
-    val owner: SpaceOwner,
+    val owner: SpaceOwner?,
     val quota: SpaceQuota?,
     val root: SpaceRoot,
     val webUrl: String,
@@ -66,7 +66,7 @@ data class SpaceQuota(
 )
 
 data class SpaceRoot(
-    val eTag: String,
+    val eTag: String?,
     val id: String,
     val permissions: List<SpacePermission>?,
     val webDavUrl: String,
@@ -97,12 +97,18 @@ data class SpaceFile(
 )
 
 data class SpacePermission(
-    val grantedTo: List<SpaceGrantedTo>,
+    val grantedToIdentities: List<SpaceGrantedToIdentities>,
     val roles: List<String>
 )
 
-data class SpaceGrantedTo(
-    val user: SpaceUser?
+data class SpaceGrantedToIdentities(
+    val user: SpacePermissionIdentity?,
+    val group: SpacePermissionIdentity?,
+)
+
+data class SpacePermissionIdentity(
+    val id: String,
+    val displayName: String?,
 )
 
 data class SpaceSpecialFolder(

@@ -77,17 +77,19 @@ class OCLocalSpacesDataSource(
                 id = space.id,
                 lastModifiedDateTime = space.lastModifiedDateTime,
                 name = space.name,
-                owner = SpaceOwner(
-                    user = SpaceUser(
-                        id = space.ownerId
+                owner = space.ownerId?.let { spaceOwnerIdEntity ->
+                    SpaceOwner(
+                        user = SpaceUser(
+                            id = spaceOwnerIdEntity
+                        )
                     )
-                ),
+                },
                 quota = space.quota?.let { spaceQuotaEntity ->
                     SpaceQuota(
                         remaining = spaceQuotaEntity.remaining,
                         state = spaceQuotaEntity.state,
                         total = spaceQuotaEntity.total,
-                        used = spaceQuotaEntity.used
+                        used = spaceQuotaEntity.used,
                     )
                 },
                 root = space.root!!.let { spaceRootEntity ->
@@ -96,7 +98,7 @@ class OCLocalSpacesDataSource(
                         id = spaceRootEntity.id,
                         permissions = null,
                         webDavUrl = spaceRootEntity.webDavUrl,
-                        deleted = spaceRootEntity.deleteState?.let { SpaceDeleted(state = it) }
+                        deleted = spaceRootEntity.deleteState?.let { SpaceDeleted(state = it) },
                     )
                 },
                 webUrl = space.webUrl,
@@ -132,7 +134,7 @@ class OCLocalSpacesDataSource(
                 id = id,
                 lastModifiedDateTime = lastModifiedDateTime,
                 name = name,
-                ownerId = owner.user.id,
+                ownerId = owner?.user?.id,
                 quota = quota?.let { quotaModel ->
                     SpaceQuotaEntity(remaining = quotaModel.remaining, state = quotaModel.state, total = quotaModel.total, used = quotaModel.used)
                 },
