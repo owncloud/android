@@ -19,7 +19,7 @@ buildscript {
         orgJetbrainsKotlinx = "1.6.4"
 
         // Koin
-        ioInsertKoin = "3.2.0"
+        ioInsertKoin = "3.3.2"
 
         // Testing
         ioMockk = "1.13.3"
