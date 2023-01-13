@@ -26,9 +26,9 @@ data class OCSpace(
     val driveAlias: String,
     val driveType: String,
     val id: String,
-    val lastModifiedDateTime: String,
+    val lastModifiedDateTime: String?,
     val name: String,
-    val owner: SpaceOwner,
+    val owner: SpaceOwner?,
     val quota: SpaceQuota?,
     val root: SpaceRoot,
     val webUrl: String,
@@ -66,7 +66,7 @@ data class SpaceQuota(
 )
 
 data class SpaceRoot(
-    val eTag: String,
+    val eTag: String?,
     val id: String,
     val permissions: List<SpacePermission>?,
     val webDavUrl: String,
