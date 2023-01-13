@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 40,
-    "identityHash": "50fbdf2d302ff496a8c428b44ea22665",
+    "identityHash": "fecbaa0d5e6dd4dad5f253c7785747b3",
     "entities": [
       {
         "tableName": "folder_backup",
@@ -739,7 +739,7 @@
       },
       {
         "tableName": "spaces",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`account_name` TEXT NOT NULL, `drive_alias` TEXT NOT NULL, `drive_type` TEXT NOT NULL, `space_id` TEXT NOT NULL, `last_modified_date_time` TEXT NOT NULL, `name` TEXT NOT NULL, `owner_id` TEXT NOT NULL, `web_url` TEXT NOT NULL, `description` TEXT, `quota_remaining` INTEGER, `quota_state` TEXT, `quota_total` INTEGER, `quota_used` INTEGER, `root_etag` TEXT, `root_id` TEXT, `root_web_dav_url` TEXT, `root_deleted_state` TEXT, PRIMARY KEY(`account_name`, `space_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`account_name` TEXT NOT NULL, `drive_alias` TEXT NOT NULL, `drive_type` TEXT NOT NULL, `space_id` TEXT NOT NULL, `last_modified_date_time` TEXT, `name` TEXT NOT NULL, `owner_id` TEXT, `web_url` TEXT NOT NULL, `description` TEXT, `quota_remaining` INTEGER, `quota_state` TEXT, `quota_total` INTEGER, `quota_used` INTEGER, `root_etag` TEXT, `root_id` TEXT, `root_web_dav_url` TEXT, `root_deleted_state` TEXT, PRIMARY KEY(`account_name`, `space_id`))",
         "fields": [
           {
             "fieldPath": "accountName",
@@ -769,7 +769,7 @@
             "fieldPath": "lastModifiedDateTime",
             "columnName": "last_modified_date_time",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "name",
@@ -781,7 +781,7 @@
             "fieldPath": "ownerId",
             "columnName": "owner_id",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "webUrl",
@@ -979,7 +979,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '50fbdf2d302ff496a8c428b44ea22665')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fecbaa0d5e6dd4dad5f253c7785747b3')"
     ]
   }
 }
