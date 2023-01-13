@@ -97,12 +97,18 @@ data class SpaceFile(
 )
 
 data class SpacePermission(
-    val grantedTo: List<SpaceGrantedTo>,
+    val grantedToIdentities: List<SpaceGrantedToIdentities>,
     val roles: List<String>
 )
 
-data class SpaceGrantedTo(
-    val user: SpaceUser?
+data class SpaceGrantedToIdentities(
+    val user: SpacePermissionIdentity?,
+    val group: SpacePermissionIdentity?,
+)
+
+data class SpacePermissionIdentity(
+    val id: String,
+    val displayName: String?,
 )
 
 data class SpaceSpecialFolder(
