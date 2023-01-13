@@ -23,6 +23,7 @@ package com.owncloud.android.usecases.accounts
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
+import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
@@ -43,7 +44,8 @@ class RemoveAccountUseCase(
     private val localFileDataSource: LocalFileDataSource,
     private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
     private val localShareDataSource: LocalShareDataSource,
-    private val localUserDataSource: LocalUserDataSource
+    private val localUserDataSource: LocalUserDataSource,
+    private val localSpacesDataSource: LocalSpacesDataSource,
 ) : BaseUseCase<Unit, RemoveAccountUseCase.Params>() {
 
     override fun run(params: Params) {
@@ -72,6 +74,9 @@ class RemoveAccountUseCase(
 
         // Delete quota for the removed account in database
         localUserDataSource.deleteQuotaForAccount(params.accountName)
+
+        // Delete spaces for the removed account in database
+        localSpacesDataSource.deleteSpacesForAccount(params.accountName)
     }
 
     data class Params(
