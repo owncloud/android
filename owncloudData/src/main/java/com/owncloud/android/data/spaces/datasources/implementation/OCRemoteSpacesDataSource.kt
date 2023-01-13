@@ -23,14 +23,16 @@ import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceDeleted
 import com.owncloud.android.domain.spaces.model.SpaceFile
-import com.owncloud.android.domain.spaces.model.SpaceGrantedTo
+import com.owncloud.android.domain.spaces.model.SpaceGrantedToIdentities
 import com.owncloud.android.domain.spaces.model.SpaceOwner
 import com.owncloud.android.domain.spaces.model.SpacePermission
+import com.owncloud.android.domain.spaces.model.SpacePermissionIdentity
 import com.owncloud.android.domain.spaces.model.SpaceQuota
 import com.owncloud.android.domain.spaces.model.SpaceRoot
 import com.owncloud.android.domain.spaces.model.SpaceSpecial
 import com.owncloud.android.domain.spaces.model.SpaceSpecialFolder
 import com.owncloud.android.domain.spaces.model.SpaceUser
+import com.owncloud.android.lib.resources.spaces.responses.IdentityPermissionResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
 import com.owncloud.android.lib.resources.spaces.services.SpacesService
 
@@ -73,8 +75,11 @@ class OCRemoteSpacesDataSource(
                 id = root.id,
                 permissions = root.permissions?.map { permissionsResponse ->
                     SpacePermission(
-                        grantedTo = permissionsResponse.grantedTo.map { grantedToResponse ->
-                            SpaceGrantedTo(SpaceUser(grantedToResponse.user.id))
+                        grantedToIdentities = permissionsResponse.getGrantedToIdentitiesResponse().map { grantedToResponse ->
+                            SpaceGrantedToIdentities(
+                                user = grantedToResponse.user?.toModel(),
+                                group = grantedToResponse.group?.toModel(),
+                            )
                         },
                         roles = permissionsResponse.roles,
                     )
@@ -97,4 +102,11 @@ class OCRemoteSpacesDataSource(
                 )
             }
         )
+
+    private fun IdentityPermissionResponse.toModel() =
+        SpacePermissionIdentity(
+            id = this.id,
+            displayName = this.displayName,
+        )
+
 }
