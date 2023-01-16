@@ -67,6 +67,10 @@ class OCLocalSpacesDataSource(
         }
     }
 
+    override fun getWebDavUrlForSpace(spaceId: String?): String? {
+        TODO("Not yet implemented")
+    }
+
     override fun deleteSpacesForAccount(accountName: String) {
         spacesDao.deleteSpacesForAccount(accountName)
     }

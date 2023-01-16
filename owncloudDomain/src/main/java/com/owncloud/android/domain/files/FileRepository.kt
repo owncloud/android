@@ -46,7 +46,7 @@ interface FileRepository {
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
     fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile)
     fun readFile(remotePath: String, accountName: String): OCFile
-    fun refreshFolder(remotePath: String, accountName: String): List<OCFile>
+    fun refreshFolder(remotePath: String, accountName: String, spaceId: String? = null): List<OCFile>
     fun deleteFiles(listOfFilesToDelete: List<OCFile>, removeOnlyLocalCopy: Boolean)
     fun renameFile(ocFile: OCFile, newName: String)
     fun saveFile(file: OCFile)

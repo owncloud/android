@@ -24,6 +24,7 @@ package com.owncloud.android.data.files.repository
 
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
+import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
@@ -44,7 +45,8 @@ import java.util.UUID
 class OCFileRepository(
     private val localFileDataSource: LocalFileDataSource,
     private val remoteFileDataSource: RemoteFileDataSource,
-    private val localStorageProvider: LocalStorageProvider
+    private val localSpacesDataSource: LocalSpacesDataSource,
+    private val localStorageProvider: LocalStorageProvider,
 ) : FileRepository {
 
     override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String =
@@ -220,11 +222,17 @@ class OCFileRepository(
         return remoteFileDataSource.readFile(remotePath, accountName)
     }
 
-    override fun refreshFolder(remotePath: String, accountName: String): List<OCFile> {
+    override fun refreshFolder(
+        remotePath: String,
+        accountName: String,
+        spaceId: String?,
+    ): List<OCFile> {
         val currentSyncTime = System.currentTimeMillis()
 
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(spaceId)
+
         // Retrieve remote folder data
-        val fetchFolderResult = remoteFileDataSource.refreshFolder(remotePath, accountName)
+        val fetchFolderResult = remoteFileDataSource.refreshFolder(remotePath, accountName, spaceWebDavUrl)
         val remoteFolder = fetchFolderResult.first()
         val remoteFolderContent = fetchFolderResult.drop(1)
 
