@@ -98,10 +98,12 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
         ).execute(client)
 
     override fun refreshFolder(
-        remotePath: String
+        remotePath: String,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<ArrayList<RemoteFile>> =
         ReadRemoteFolderOperation(
-            remotePath = remotePath
+            remotePath = remotePath,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 
     override fun removeFile(

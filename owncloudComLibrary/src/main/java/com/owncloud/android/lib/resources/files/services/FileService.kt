@@ -61,7 +61,8 @@ interface FileService : Service {
     ): RemoteOperationResult<RemoteFile>
 
     fun refreshFolder(
-        remotePath: String
+        remotePath: String,
+        spaceWebDavUrl: String? = null,
     ): RemoteOperationResult<ArrayList<RemoteFile>>
 
     fun removeFile(

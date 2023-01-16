@@ -48,7 +48,8 @@ import java.net.URL
  * @author David González Verdugo
  */
 class ReadRemoteFolderOperation(
-    val remotePath: String
+    val remotePath: String,
+    val spaceWebDavUrl: String? = null,
 ) : RemoteOperation<ArrayList<RemoteFile>>() {
 
     /**
@@ -61,7 +62,7 @@ class ReadRemoteFolderOperation(
             PropertyRegistry.register(OCShareTypes.Factory())
 
             val propfindMethod = PropfindMethod(
-                URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(remotePath)),
+                getFinalWebDavUrl(),
                 DavConstants.DEPTH_1,
                 DavUtils.allPropset
             )
@@ -105,6 +106,12 @@ class ReadRemoteFolderOperation(
                 Timber.e(it.exception, "Synchronized $remotePath")
             }
         }
+    }
+
+    private fun getFinalWebDavUrl(): URL {
+        val baseWebDavUrl = spaceWebDavUrl ?: client.userFilesWebDavUri.toString()
+
+        return URL(baseWebDavUrl + WebdavUtils.encodePath(remotePath))
     }
 
     private fun isSuccess(status: Int): Boolean = status.isOneOf(HTTP_OK, HTTP_MULTI_STATUS)
