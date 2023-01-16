@@ -21,6 +21,7 @@ package com.owncloud.android.data.files.db
 import android.database.Cursor
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_ACCOUNT_OWNER
@@ -47,12 +48,23 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_STORAGE_PAT
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_TREE_ETAG
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_UPDATE_THUMBNAIL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta._ID
+import com.owncloud.android.data.files.db.OCFileEntity.Companion.FILE_OWNER
+import com.owncloud.android.data.files.db.OCFileEntity.Companion.FILE_SPACE_ID
+import com.owncloud.android.data.spaces.db.SpacesEntity
+import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ACCOUNT_NAME
+import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ID
 import com.owncloud.android.domain.extensions.isOneOf
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_DIR_UNIX
 
 @Entity(
-    tableName = FILES_TABLE_NAME
+    tableName = FILES_TABLE_NAME,
+    foreignKeys = [ForeignKey(
+        entity = SpacesEntity::class,
+        parentColumns = arrayOf(SPACES_ACCOUNT_NAME, SPACES_ID),
+        childColumns = arrayOf(FILE_OWNER, FILE_SPACE_ID),
+        onDelete = ForeignKey.CASCADE
+    )]
 )
 data class OCFileEntity(
     var parentId: Long? = null,
@@ -69,7 +81,6 @@ data class OCFileEntity(
     val storagePath: String? = null,
     var name: String? = null,
     val treeEtag: String? = null,
-
     @ColumnInfo(name = "keepInSync")
     var availableOfflineStatus: Int? = null,
     val lastSyncDateForData: Long? = null,
@@ -80,7 +91,8 @@ data class OCFileEntity(
     val etagInConflict: String? = null,
     val fileIsDownloading: Boolean? = null,
     val sharedWithSharee: Boolean? = false,
-    var sharedByLink: Boolean = false
+    var sharedByLink: Boolean = false,
+    val spaceId: String? = null,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
@@ -127,5 +139,8 @@ data class OCFileEntity(
         private fun Cursor.getStringFromColumnOrEmpty(
             columnName: String
         ): String = getColumnIndex(columnName).takeUnless { it < 0 }?.let { getString(it) }.orEmpty()
+
+        const val FILE_OWNER = "owner"
+        const val FILE_SPACE_ID = "spaceId"
     }
 }

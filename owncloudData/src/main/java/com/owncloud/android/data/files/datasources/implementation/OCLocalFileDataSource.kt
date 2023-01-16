@@ -251,7 +251,8 @@ class OCLocalFileDataSource(
                 modifiedAtLastSyncForData = modifiedAtLastSyncForData,
                 etagInConflict = etagInConflict,
                 treeEtag = treeEtag,
-                name = fileName
+                name = fileName,
+                spaceId = spaceId,
             ).apply { this@toEntity.id?.let { modelId -> this.id = modelId } }
     }
 
