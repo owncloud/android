@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -32,6 +32,7 @@ import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.DRIVE_TYPE_PRO
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ACCOUNT_NAME
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_DRIVE_TYPE
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ID
+import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ROOT_WEB_DAV_URL
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -86,6 +87,12 @@ interface SpacesDao {
         accountName: String,
     ): Flow<List<SpacesWithSpecials>>
 
+    @Query(SELECT_WEB_DAV_URL_FOR_SPACE)
+    fun getWebDavUrlForSpace(
+        spaceId: String?,
+        accountName: String,
+    ): String?
+
     @Query(DELETE_ALL_SPACES_FOR_ACCOUNT)
     fun deleteSpacesForAccount(accountName: String)
 
@@ -110,6 +117,13 @@ interface SpacesDao {
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
             WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PROJECT'
             ORDER BY name COLLATE NOCASE ASC
+        """
+
+        // TODO: Use it for personal space too (remove last AND condition)
+        private const val SELECT_WEB_DAV_URL_FOR_SPACE = """
+            SELECT $SPACES_ROOT_WEB_DAV_URL
+            FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
+            WHERE $SPACES_ID = :spaceId AND $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_TYPE NOT LIKE '$DRIVE_TYPE_PERSONAL'
         """
 
         private const val DELETE_ALL_SPACES_FOR_ACCOUNT = """
