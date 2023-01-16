@@ -3,7 +3,9 @@
  *
  * @author David González Verdugo
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -46,7 +48,6 @@ data class OCFile(
     val privateLink: String? = "",
     var storagePath: String? = null,
     var treeEtag: String? = "",
-
     var availableOfflineStatus: AvailableOfflineStatus? = null,
     var lastSyncDateForData: Long? = 0,
     var lastSyncDateForProperties: Long? = 0,
@@ -55,7 +56,8 @@ data class OCFile(
     var etagInConflict: String? = null,
     val fileIsDownloading: Boolean? = false,
     var sharedWithSharee: Boolean? = false,
-    var sharedByLink: Boolean = false
+    var sharedByLink: Boolean = false,
+    val spaceId: String? = null,
 ) : Parcelable {
 
     val fileName: String
