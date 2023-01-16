@@ -5,7 +5,7 @@
  * @author Christian Schabesberger
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -222,6 +222,8 @@ class OCFileRepository(
 
     override fun refreshFolder(remotePath: String, accountName: String): List<OCFile> {
         val currentSyncTime = System.currentTimeMillis()
+
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(spaceId, accountName)
 
         // Retrieve remote folder data
         val fetchFolderResult = remoteFileDataSource.refreshFolder(remotePath, accountName)
