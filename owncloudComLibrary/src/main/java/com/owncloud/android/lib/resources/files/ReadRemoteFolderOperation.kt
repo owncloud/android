@@ -72,12 +72,11 @@ class ReadRemoteFolderOperation(
             if (isSuccess(status)) {
                 val mFolderAndFiles = ArrayList<RemoteFile>()
 
-                // parse data from remote folder
-                // TODO: Remove that !!
                 val remoteFolder = RemoteFile.getRemoteFileFromDav(
                     davResource = propfindMethod.root!!,
                     userId = AccountUtils.getUserId(mAccount, mContext),
-                    userName = mAccount.name
+                    userName = mAccount.name,
+                    spaceWebDavUrl = spaceWebDavUrl,
                 )
                 mFolderAndFiles.add(remoteFolder)
 
@@ -86,7 +85,8 @@ class ReadRemoteFolderOperation(
                     val remoteFile = RemoteFile.getRemoteFileFromDav(
                         davResource = resource,
                         userId = AccountUtils.getUserId(mAccount, mContext),
-                        userName = mAccount.name
+                        userName = mAccount.name,
+                        spaceWebDavUrl = spaceWebDavUrl,
                     )
                     mFolderAndFiles.add(remoteFile)
                 }
