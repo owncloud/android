@@ -326,7 +326,7 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
-    private fun initAndShowListOfFiles(fileListOption: FileListOption = FileListOption.ALL_FILES) {
+    fun initAndShowListOfFiles(fileListOption: FileListOption = FileListOption.ALL_FILES) {
         val mainListOfFiles = MainFileListFragment.newInstance(
             accountName = account.name,
             initialFolderToDisplay = file,
