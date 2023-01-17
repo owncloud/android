@@ -57,11 +57,13 @@ class OCRemoteFileDataSource(
         createFullPath: Boolean,
         isChunksFolder: Boolean,
         accountName: String,
+        spaceWebDavUrl: String?,
     ) = executeRemoteOperation {
         clientManager.getFileService(accountName).createFolder(
             remotePath = remotePath,
             createFullPath = createFullPath,
-            isChunkFolder = isChunksFolder
+            isChunkFolder = isChunksFolder,
+            spaceWebDavUrl = spaceWebDavUrl,
         )
     }
 
