@@ -223,7 +223,8 @@ class OCLocalFileDataSource(
                 lastSyncDateForProperties = lastSyncDateForProperties,
                 modifiedAtLastSyncForData = modifiedAtLastSyncForData,
                 etagInConflict = etagInConflict,
-                treeEtag = treeEtag
+                treeEtag = treeEtag,
+                spaceId = spaceId,
             )
 
         @VisibleForTesting
