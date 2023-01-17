@@ -46,7 +46,8 @@ import java.util.concurrent.TimeUnit
 class CreateRemoteFolderOperation(
     val remotePath: String,
     private val createFullPath: Boolean,
-    private val isChunksFolder: Boolean = false
+    private val isChunksFolder: Boolean = false,
+    val spaceWebDavUrl: String? = null,
 ) : RemoteOperation<Unit>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {

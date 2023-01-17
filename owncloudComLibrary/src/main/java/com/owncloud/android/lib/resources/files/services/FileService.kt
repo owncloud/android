@@ -43,7 +43,8 @@ interface FileService : Service {
     fun createFolder(
         remotePath: String,
         createFullPath: Boolean,
-        isChunkFolder: Boolean = false
+        isChunkFolder: Boolean = false,
+        spaceWebDavUrl: String? = null,
     ): RemoteOperationResult<Unit>
 
     fun downloadFile(

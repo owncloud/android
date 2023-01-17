@@ -64,12 +64,14 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
     override fun createFolder(
         remotePath: String,
         createFullPath: Boolean,
-        isChunkFolder: Boolean
+        isChunkFolder: Boolean,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<Unit> =
         CreateRemoteFolderOperation(
             remotePath = remotePath,
             createFullPath = createFullPath,
-            isChunksFolder = isChunkFolder
+            isChunksFolder = isChunkFolder,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 
     override fun downloadFile(
