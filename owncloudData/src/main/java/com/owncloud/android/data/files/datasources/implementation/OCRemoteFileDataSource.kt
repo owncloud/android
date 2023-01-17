@@ -121,9 +121,11 @@ class OCRemoteFileDataSource(
     override fun readFile(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String?,
     ): OCFile = executeRemoteOperation {
         clientManager.getFileService(accountName).readFile(
-            remotePath = remotePath
+            remotePath = remotePath,
+            spaceWebDavUrl = spaceWebDavUrl,
         )
     }.toModel()
 

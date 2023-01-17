@@ -216,11 +216,13 @@ class OCFileRepository(
         }
     }
 
-    override fun readFile(remotePath: String, accountName: String): OCFile {
-        return remoteFileDataSource.readFile(remotePath, accountName)
+    override fun readFile(remotePath: String, accountName: String, spaceId: String?): OCFile {
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(spaceId, accountName)
+
+        return remoteFileDataSource.readFile(remotePath, accountName, spaceWebDavUrl).copy(spaceId = spaceId)
     }
 
-    override fun refreshFolder(remotePath: String, accountName: String): List<OCFile> {
+    override fun refreshFolder(remotePath: String, accountName: String, spaceId: String?): List<OCFile> {
         val currentSyncTime = System.currentTimeMillis()
 
         val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(spaceId, accountName)
