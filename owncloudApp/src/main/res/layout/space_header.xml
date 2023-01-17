@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ ownCloud Android client application
+  ~
+  ~ @author Juan Carlos Garrote Gascón
+  ~ Copyright (C) 2022 ownCloud GmbH.
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License version 2,
+  ~ as published by the Free Software Foundation.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/standard_margin"
+    android:paddingStart="@dimen/standard_padding"
+    android:paddingTop="@dimen/standard_padding"
+    android:paddingEnd="@dimen/standard_padding">
+
+    <ImageView
+        android:id="@+id/space_header_image"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/space_header_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="26sp"
+        android:layout_marginHorizontal="@dimen/standard_margin"
+        android:layout_marginVertical="@dimen/standard_half_margin"
+        android:textColor="@color/textColor"
+        android:textStyle="bold"
+        android:maxLines="2"
+        android:ellipsize="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/space_header_image"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Space name"/>
+
+    <TextView
+        android:id="@+id/space_header_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:layout_marginHorizontal="@dimen/standard_margin"
+        android:layout_marginVertical="@dimen/standard_half_margin"
+        android:textColor="@color/textColor"
+        android:maxLines="2"
+        android:ellipsize="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/space_header_image"
+        app:layout_constraintTop_toBottomOf="@id/space_header_name"
+        tools:text="Space subtitle"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/standard_margin"
+        app:layout_constraintTop_toBottomOf="@+id/space_header_image"
+        android:background="@color/list_item_lastmod_and_filesize_text"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
