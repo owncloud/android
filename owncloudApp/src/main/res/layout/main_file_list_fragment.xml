@@ -1,8 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ ownCloud Android client application
   ~
   ~ @author Fernando Sanz Velasco
-  ~ Copyright (C) 2021 ownCloud GmbH.
+  ~ @author Juan Carlos Garrote Gascón
+  ~
+  ~ Copyright (C) 2023 ownCloud GmbH.
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License version 2,
@@ -59,6 +62,14 @@
             android:background="@drawable/shadow_gradient"
             fab:layout_constraintTop_toBottomOf="@id/options_layout" />
 
+        <include
+            android:id="@+id/space_header"
+            layout="@layout/space_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/options_layout" />
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh_main_file_list"
             android:layout_width="match_parent"
@@ -66,9 +77,8 @@
             android:layout_marginTop="@dimen/file_list_progress_bar_height"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/options_layout">
+            app:layout_constraintTop_toBottomOf="@id/space_header">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_main_file_list"
