@@ -57,7 +57,8 @@ interface FileService : Service {
     ): RemoteOperationResult<Unit>
 
     fun readFile(
-        remotePath: String
+        remotePath: String,
+        spaceWebDavUrl: String? = null,
     ): RemoteOperationResult<RemoteFile>
 
     fun refreshFolder(
