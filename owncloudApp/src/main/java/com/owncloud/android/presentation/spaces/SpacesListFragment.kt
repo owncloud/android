@@ -36,6 +36,7 @@ import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
+import com.owncloud.android.ui.activity.FileDisplayActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SpacesListFragment : Fragment() {
@@ -63,7 +64,12 @@ class SpacesListFragment : Fragment() {
     private fun initViews() {
         val spacesListLayoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerSpacesList.layoutManager = spacesListLayoutManager
-        spacesListAdapter = SpacesListAdapter()
+        spacesListAdapter = SpacesListAdapter(
+            browseSpace = {
+                val parentActivity = requireActivity() as FileDisplayActivity
+                parentActivity.initAndShowListOfFiles()
+            }
+        )
         binding.recyclerSpacesList.adapter = spacesListAdapter
 
         binding.swipeRefreshSpacesList.setOnRefreshListener {
