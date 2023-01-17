@@ -57,6 +57,7 @@ interface RemoteFileDataSource {
     fun readFile(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String? = null,
     ): OCFile
 
     fun refreshFolder(

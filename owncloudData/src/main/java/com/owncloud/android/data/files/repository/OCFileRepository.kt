@@ -218,8 +218,10 @@ class OCFileRepository(
         }
     }
 
-    override fun readFile(remotePath: String, accountName: String): OCFile {
-        return remoteFileDataSource.readFile(remotePath, accountName)
+    override fun readFile(remotePath: String, accountName: String, spaceId: String?): OCFile {
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(spaceId, accountName)
+
+        return remoteFileDataSource.readFile(remotePath, accountName, spaceWebDavUrl).copy(spaceId = spaceId)
     }
 
     override fun refreshFolder(
