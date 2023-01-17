@@ -52,13 +52,16 @@ class OCFileRepository(
 
     override fun createFolder(
         remotePath: String,
-        parentFolder: OCFile
+        parentFolder: OCFile,
     ) {
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(parentFolder.spaceId, parentFolder.owner)
+
         remoteFileDataSource.createFolder(
             remotePath = remotePath,
             createFullPath = false,
             isChunksFolder = false,
             accountName = parentFolder.owner,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).also {
             localFileDataSource.saveFilesInFolderAndReturnThem(
                 folder = parentFolder,
@@ -68,7 +71,8 @@ class OCFileRepository(
                         owner = parentFolder.owner,
                         modificationTimestamp = System.currentTimeMillis(),
                         length = 0,
-                        mimeType = MIME_DIR
+                        mimeType = MIME_DIR,
+                        spaceId = parentFolder.spaceId,
                     )
                 )
             )

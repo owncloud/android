@@ -41,6 +41,7 @@ interface RemoteFileDataSource {
         createFullPath: Boolean,
         isChunksFolder: Boolean,
         accountName: String,
+        spaceWebDavUrl: String?,
     )
 
     fun getAvailableRemotePath(
