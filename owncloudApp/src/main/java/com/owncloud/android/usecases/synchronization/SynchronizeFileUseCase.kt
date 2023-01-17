@@ -45,7 +45,11 @@ class SynchronizeFileUseCase(
         CoroutineScope(Dispatchers.IO).run {
             // 1. Perform a propfind to check if the file still exists in remote
             val serverFile = try {
-                fileRepository.readFile(fileToSynchronize.remotePath, fileToSynchronize.owner)
+                fileRepository.readFile(
+                    remotePath = fileToSynchronize.remotePath,
+                    accountName = fileToSynchronize.owner,
+                    spaceId = fileToSynchronize.spaceId
+                )
             } catch (exception: FileNotFoundException) {
                 // 1.1 File not exists anymore -> remove file locally (DB and Storage)
                 fileRepository.deleteFiles(listOf(fileToSynchronize), false)
