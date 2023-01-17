@@ -22,6 +22,7 @@ package com.owncloud.android.data.file.repository
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.repository.OCFileRepository
+import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
@@ -41,8 +42,9 @@ class OCFileRepositoryTest {
 
     private val remoteFileDataSource = mockk<RemoteFileDataSource>(relaxed = true)
     private val localFileDataSource = mockk<LocalFileDataSource>(relaxed = true)
+    private val localSpacesDataSource = mockk<LocalSpacesDataSource>(relaxed = true)
     private val localStorageProvider = mockk<LocalStorageProvider>()
-    private val ocFileRepository: OCFileRepository = OCFileRepository(localFileDataSource, remoteFileDataSource, localStorageProvider)
+    private val ocFileRepository: OCFileRepository = OCFileRepository(localFileDataSource, remoteFileDataSource, localSpacesDataSource, localStorageProvider)
 
     private val folderToFetch = OC_FOLDER
     private val listOfFilesRetrieved = listOf(
