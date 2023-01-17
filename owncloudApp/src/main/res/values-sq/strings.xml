@@ -74,6 +74,7 @@
   <string name="prefs_show_hidden_files">Shfaq kartela të fshehura</string>
   <string name="prefs_log_open_logs_list_view">Kartela regjistër</string>
   <string name="prefs_log_no_logs_list_view">Zbraz dosje regjistrash!</string>
+  <string name="prefs_log_empty_subtitle">Aktivizoni regjistrimin dhe kartelat regjistër do të shfaqen këtu</string>
   <string name="prefs_log_title">Aktivizo regjistrimet</string>
   <string name="prefs_log_summary">Kjo përdoret për të regjistruar probleme</string>
   <string name="prefs_log_title_history">Historik regjistrimesh</string>
@@ -142,8 +143,10 @@
   <string name="uploader_error_message_source_file_not_copied">Ndodhi një gabim teksa kopjohej kartela te një dosje e përkohshme. Ju lutemi, provoni ta ridërgoni.</string>
   <string name="file_list_seconds_ago">sekonda më parë</string>
   <string name="file_list_empty_title_all_files">S’ka kartela këtu</string>
+  <string name="file_list_empty_title_available_offline">S’ka kartela “offline” të passhme</string>
   <string name="file_list_empty_title_shared_by_links">Pa lidhje ndarjesh</string>
   <string name="file_list_empty_subtitle_all_files">Ngarkoni ca lëndë ose bëni njëkohësim me pajisjet tuaja!</string>
+  <string name="file_list_empty_subtitle_available_offline">Kartelat dhe dosjet të cilave u vini shenjë si të përdorshme jashtë interneti, do të shfaqen këtu</string>
   <string name="file_list_empty_subtitle_shared_by_links">Këtu do të shfaqen kartelat dhe dosjet që ndani përmes lidhjesh</string>
   <string name="file_list_loading">Po ngarkohet…</string>
   <string name="file_list_no_app_for_file_type">S\’u gjet aplikacion për llojin e kartelës</string>
@@ -152,6 +155,7 @@
   <string name="local_file_list_empty_just_folders">S\’ka dosje brenda kësaj dosjeje.</string>
   <string name="local_file_list_search_with_no_matches">S\’ka përputhje për këtë kërkim</string>
   <string name="upload_list_empty">S\’ka ngarkime te gatshme.</string>
+  <string name="upload_list_empty_subtitle">Ngarkoni diçka dhe do të shfaqet këtu</string>
   <string name="file_list_folder">dosje</string>
   <string name="file_list_folders">dosje</string>
   <string name="file_list_file">kartelë</string>
@@ -213,6 +217,7 @@
   <string name="uploads_view_group_current_uploads">Të tanishëm</string>
   <string name="uploads_view_group_failed_uploads">Dështoi (prekeni që të riprovohet)</string>
   <string name="uploads_view_group_finished_uploads">U ngarkua</string>
+  <string name="uploads_view_group_queued_uploads">U vu në radhë</string>
   <string name="uploads_view_group_file_count">%d kartela</string>
   <string name="uploads_view_group_file_count_single">%d kartelë</string>
   <string name="uploads_view_upload_status_succeeded">Të plotësuara</string>
@@ -230,8 +235,13 @@
   <string name="uploads_view_upload_status_service_interrupted">Aplikacioni u përfundua</string>
   <string name="uploads_view_upload_status_unknown_fail">Gabim i panjohur</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Po pritet për lidhje wifi</string>
+  <string name="uploads_view_upload_status_queued">U vu në radhë</string>
   <string name="uploads_view_later_waiting_to_upload">Po pritet për ngarkim</string>
   <string name="uploads_view_unsupported_media_type">Lloj media i pambuluar</string>
+  <string name="uploader_upload_enqueued_ticker">Ngarkimi i %1$s u vu në radhë</string>
+  <string name="uploader_upload_canceled_ticker">Ngarkimi u anulua</string>
+  <string name="downloader_download_canceled_ticker">Shkarkimi u anulua</string>
+  <string name="downloader_download_enqueued_ticker">Shkarkimi i %1$s u vu në radhë</string>
   <string name="downloader_download_in_progress_ticker">Po shkarkohet…</string>
   <string name="downloader_download_in_progress_content">%1$d%% Shkarkim %2$s</string>
   <string name="downloader_download_succeeded_ticker">Shkarkimi doli me sukses</string>
@@ -344,12 +354,17 @@
   <string name="available_offline_inherited_msg">Një dosje që përmban këtë kartelë është gati “offline”</string>
   <string name="rename_local_fail_msg">Kopja vendore s\’u riemërtua dot; provoni një emër tjetër</string>
   <string name="rename_server_fail_msg">Riemërtimi s\’u plotësua dot</string>
+  <string name="file_already_exists">ka tashmë një kartelë të tillë</string>
   <string name="sync_file_fail_msg">S\’u kap dot kartela e largët</string>
   <string name="sync_file_nothing_to_do_msg">Lëndë kartele tashmë e njëkohësuar</string>
+  <string name="new_remote_version_found_msg">U gjet një version i ri në shërbyes. Po shkarkohet…</string>
+  <string name="download_enqueued_msg">Shkarkimi u vu në radhë</string>
+  <string name="upload_enqueued_msg">Ngarkimi u vu në radhë</string>
   <string name="create_dir_fail_msg">S\’u krijua dot dosja</string>
   <string name="filename_forbidden_characters">Shenja të ndaluara: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Emri i kartelës përmban të paktën një shenjë të pavlefshme</string>
   <string name="filename_empty">Emri i kartelës s\’mund të jetë i zbrazët</string>
+  <string name="filename_too_long">Emri i kartelës s’mund të jetë aq i gjatë</string>
   <string name="wait_a_moment">Pritni një çast</string>
   <string name="wait_checking_credentials">Po kontrollohen kredenciale të depozituara</string>
   <string name="filedisplay_unexpected_bad_get_content">Problem i papritur; ju lutemi, përzgjidhni një kartelë nga një aplikacion tjetër</string>
@@ -567,6 +582,8 @@
   <string name="media_service_notification_channel_description">Shihni lojtësin e muzikës</string>
   <string name="file_sync_notification_channel_name">Njëkohësim kartelash</string>
   <string name="file_sync_notification_channel_description">Shihni përfundim njëkohësimi kartelash</string>
+  <string name="file_sync_conflict_notification_channel_name">Përplasje kartelash</string>
+  <string name="file_sync_conflict_notification_channel_description">Shihni përplasje kartelash kur ndodhin</string>
   <string name="clicks_to_be_developer">Jeni %1$d klikime larg nga aktivizimi i menuve të zhvilluesit</string>
   <string name="rate_dialog_title">Vlerësojeni aplikacionin %1$s!</string>
   <string name="rate_dialog_description">Nëse ju pëlqen ta përdorni këtë aplikacion, do të harxhonit një çast për ta vlerësuar atë? Përshtypjet tuaja janë shumë të rëndësishme për ne. </string>
@@ -627,4 +644,20 @@
   <string name="open_in_web_error_generic">S’u hap dot në web</string>
   <string name="open_in_web_error_not_supported">s’ka aplikacione që e mbulojnë këtë lloj kartele</string>
   <string name="open_in_web_error_too_early">Kartela e kërkuar s’është ende e passhme, ju lutemi, riprovoni më vonë</string>
+  <string name="release_notes_3.0_title1">Motor i ri njëkohësimesh</string>
+  <string name="release_notes_3.0_subtitle1">Mënyra se si njëkohësohen krejt kartelat u rihartua për ta përmirësuar</string>
+  <string name="release_notes_3.0_title2">Përhapje e automatizuar e përplasjeve</string>
+  <string name="release_notes_3.0_subtitle2">Tani përplasjet përhapen (dhe spastrohen) automatikisht te dosjet mëmë</string>
+  <string name="release_notes_3.0_title3">Ndreqje për miniatura</string>
+  <string name="release_notes_3.0_subtitle3">Miniaturat tani shfaqen saktësisht te lista e kartelave</string>
+  <string name="release_notes_3.0_title4">U përmirësuan pamjet e zbrazëta</string>
+  <string name="release_notes_3.0_subtitle4">Te skenat pa objekte (kartela, ngarkime dhe regjistra) është shtuar një pamje e re dhe më tërheqëse</string>
+  <string name="release_notes_3.0_title5">Disa shpërngulje që kryhen në të njëjtën kohë</string>
+  <string name="release_notes_3.0_subtitle5">Me ripunimin e mekanizmit të njëkohësimeve, tani mund të xhirohen në të njëjtën kohë një numër shkarkimesh dhe ngarkimesh</string>
+  <string name="release_notes_3.0_title6">U përmirësua hyrja në shfletues</string>
+  <string name="release_notes_3.0_subtitle6">Shfletuesi do të hapet edhe vetëm duke shtypur URL-në</string>
+  <string name="release_notes_3.0.1_title1">Ndreqje vithisjeje gjatë përmirësimi</string>
+  <string name="release_notes_3.0.1_subtitle1">Ndreqje për përmirësime prej 2.18 (ose versionesh të mëparshëm) në 3.0</string>
+  <string name="release_notes_3.0.1_title2">Ndreqje vithisjeje te skeda e ngarkimeve</string>
+  <string name="release_notes_3.0.1_subtitle2">Ndreqje për disa përdorues që patën hasur vithisje kur hynin te pjesa e ngarkimeve</string>
 </resources>
