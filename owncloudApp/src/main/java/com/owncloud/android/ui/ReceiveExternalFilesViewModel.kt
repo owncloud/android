@@ -45,6 +45,7 @@ class ReceiveExternalFilesViewModel(
         useCaseParams = SynchronizeFolderUseCase.Params(
             accountName = folderToSync.owner,
             remotePath = folderToSync.remotePath,
+            spaceId = folderToSync.spaceId,
             syncMode = SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER
         )
     )

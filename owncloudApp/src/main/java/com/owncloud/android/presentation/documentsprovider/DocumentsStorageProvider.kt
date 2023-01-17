@@ -404,7 +404,8 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val synchronizeFolderUseCaseParams = SynchronizeFolderUseCase.Params(
             remotePath = folderToSync.remotePath,
             accountName = folderToSync.owner,
-            SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER,
+            spaceId = folderToSync.spaceId,
+            syncMode = SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER,
         )
 
         CoroutineScope(Dispatchers.IO).launch {

@@ -36,7 +36,11 @@ class SynchronizeFolderUseCase(
         val remotePath = params.remotePath
         val accountName = params.accountName
 
-        val folderContent = fileRepository.refreshFolder(remotePath, accountName)
+        val folderContent = fileRepository.refreshFolder(
+            remotePath = remotePath,
+            accountName = accountName,
+            spaceId = params.spaceId
+        )
 
         folderContent.forEach { ocFile ->
             if (ocFile.isFolder) {
@@ -45,6 +49,7 @@ class SynchronizeFolderUseCase(
                         Params(
                             remotePath = ocFile.remotePath,
                             accountName = accountName,
+                            spaceId = ocFile.spaceId,
                             syncMode = params.syncMode,
                         )
                     )
@@ -68,6 +73,7 @@ class SynchronizeFolderUseCase(
     data class Params(
         val remotePath: String,
         val accountName: String,
+        val spaceId: String? = null,
         val syncMode: SyncFolderMode,
     )
 

@@ -227,7 +227,10 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         // Discover full account
         @NotNull Lazy<SynchronizeFolderUseCase> synchronizeFolderUseCase =
                 inject(SynchronizeFolderUseCase.class);
-        SynchronizeFolderUseCase.Params params = new SynchronizeFolderUseCase.Params(folder.getRemotePath(), folder.getOwner(),
+        SynchronizeFolderUseCase.Params params = new SynchronizeFolderUseCase.Params(
+                folder.getRemotePath(),
+                folder.getOwner(),
+                folder.getSpaceId(),
                 SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER_RECURSIVELY);
         UseCaseResult<Unit> useCaseResult;
 

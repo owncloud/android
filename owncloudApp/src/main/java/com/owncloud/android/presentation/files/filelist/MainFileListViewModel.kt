@@ -112,6 +112,7 @@ class MainFileListViewModel(
                 SynchronizeFolderUseCase.Params(
                     remotePath = initialFolderToDisplay.remotePath,
                     accountName = initialFolderToDisplay.owner,
+                    spaceId = initialFolderToDisplay.spaceId,
                     syncMode = SYNC_CONTENTS,
                 )
             )
