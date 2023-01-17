@@ -33,7 +33,9 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.utils.PreferenceUtils
 
-class SpacesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SpacesListAdapter(
+    val browseSpace: () -> Unit,
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val spacesList = mutableListOf<OCSpace>()
 
@@ -47,6 +49,10 @@ class SpacesListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val spacesViewHolder = holder as SpacesViewHolder
         spacesViewHolder.binding.apply {
             val space = spacesList[position]
+
+            spacesListItemCard.setOnClickListener {
+                browseSpace()
+            }
 
             spacesListItemName.text = space.name
             spacesListItemSubtitle.text = space.description
