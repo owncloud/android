@@ -87,6 +87,12 @@ interface SpacesDao {
         accountName: String,
     ): Flow<List<SpacesWithSpecials>>
 
+    @Query(SELECT_SPACE_BY_ID_FOR_ACCOUNT)
+    fun getSpaceWithSpecialsByIdForAccount(
+        spaceId: String?,
+        accountName: String,
+    ): SpacesWithSpecials
+
     @Query(SELECT_WEB_DAV_URL_FOR_SPACE)
     fun getWebDavUrlForSpace(
         spaceId: String?,
@@ -117,6 +123,12 @@ interface SpacesDao {
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
             WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PROJECT'
             ORDER BY name COLLATE NOCASE ASC
+        """
+
+        private const val SELECT_SPACE_BY_ID_FOR_ACCOUNT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
+            WHERE $SPACES_ID = :spaceId AND $SPACES_ACCOUNT_NAME = :accountName
         """
 
         // TODO: Use it for personal space too (remove last AND condition)

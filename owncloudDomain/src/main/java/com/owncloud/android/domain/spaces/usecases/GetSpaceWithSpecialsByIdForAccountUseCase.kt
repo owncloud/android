@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
  * Copyright (C) 2023 ownCloud GmbH.
@@ -19,13 +18,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.spaces
+package com.owncloud.android.domain.spaces.usecases
 
+import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.spaces.SpacesRepository
 import com.owncloud.android.domain.spaces.model.OCSpace
-import kotlinx.coroutines.flow.Flow
 
-interface SpacesRepository {
-    fun refreshSpacesForAccount(accountName: String)
-    fun getProjectSpacesWithSpecialsForAccountAsFlow(accountName: String): Flow<List<OCSpace>>
-    fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String): OCSpace
+class GetSpaceWithSpecialsByIdForAccountUseCase(
+    private val spacesRepository: SpacesRepository
+) : BaseUseCase<OCSpace?, GetSpaceWithSpecialsByIdForAccountUseCase.Params>() {
+
+    override fun run(params: Params): OCSpace? {
+        if (params.spaceId == null) return null
+        return spacesRepository.getSpaceWithSpecialsByIdForAccount(params.spaceId, params.accountName)
+    }
+
+    data class Params(
+        val spaceId: String?,
+        val accountName: String,
+    )
 }

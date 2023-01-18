@@ -6,7 +6,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author David Crespo Ríos
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -93,7 +93,7 @@ val viewModelModule = module {
 
     viewModel { PreviewImageViewModel(get(), get(), get()) }
     viewModel { FileOperationsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { (accountName: String, initialFolderToDisplay: OCFile, fileListOption: FileListOption) ->
+    viewModel { (initialFolderToDisplay: OCFile, fileListOption: FileListOption) ->
         MainFileListViewModel(
             get(),
             get(),
@@ -104,7 +104,7 @@ val viewModelModule = module {
             get(),
             get(),
             get(),
-            accountName,
+            get(),
             initialFolderToDisplay,
             fileListOption,
         )
