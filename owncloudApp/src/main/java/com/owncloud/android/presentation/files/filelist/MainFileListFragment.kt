@@ -48,6 +48,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.model.OCFileSyncInfo
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.utils.Event
@@ -227,6 +228,7 @@ class MainFileListFragment : Fragment(),
             fileListAdapter.updateFileList(filesToAdd = fileListUiState.folderContent, fileListOption = fileListUiState.fileListOption)
             showOrHideEmptyView(fileListUiState)
 
+            binding.spaceHeader.root.isVisible = fileListUiState.space != null && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH
             fileListUiState.space?.let {
                 binding.spaceHeader.spaceHeaderName.text = it.name
                 binding.spaceHeader.spaceHeaderSubtitle.text = it.description
