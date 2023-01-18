@@ -131,8 +131,8 @@ class OCFileRepository(
     override fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?> =
         localFileDataSource.getFileByIdAsFlow(fileId)
 
-    override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? =
-        localFileDataSource.getFileByRemotePath(remotePath, owner)
+    override fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String?): OCFile? =
+        localFileDataSource.getFileByRemotePath(remotePath, owner, spaceId)
 
     override fun getSearchFolderContent(fileListOption: FileListOption, folderId: Long, search: String): List<OCFile> =
         when (fileListOption) {
@@ -244,7 +244,7 @@ class OCFileRepository(
 
         // Check if the folder already exists in database.
         val localFolderByRemotePath: OCFile? =
-            localFileDataSource.getFileByRemotePath(remotePath = remoteFolder.remotePath, owner = remoteFolder.owner)
+            localFileDataSource.getFileByRemotePath(remotePath = remoteFolder.remotePath, owner = remoteFolder.owner, spaceId = spaceId)
 
         // If folder doesn't exists in database, insert everything. Easy path
         if (localFolderByRemotePath == null) {
@@ -358,7 +358,7 @@ class OCFileRepository(
         )
 
         // 2. Check if file already exists in database
-        if (localFileDataSource.getFileByRemotePath(newRemotePath, ocFile.owner) != null) {
+        if (localFileDataSource.getFileByRemotePath(newRemotePath, ocFile.owner, ocFile.spaceId) != null) {
             throw FileAlreadyExistsException()
         }
 

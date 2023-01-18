@@ -24,6 +24,9 @@ import android.accounts.Account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
+import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
@@ -36,6 +39,7 @@ import kotlinx.coroutines.launch
 class SpacesListViewModel(
     private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase,
     private val getProjectSpacesWithSpecialsForAccountAsStreamUseCase: GetProjectSpacesWithSpecialsForAccountAsStreamUseCase,
+    private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val account: Account,
 ) : ViewModel() {
@@ -65,8 +69,24 @@ class SpacesListViewModel(
         }
     }
 
+    fun getRootFileForSpace(ocSpace: OCSpace) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val result = getFileByRemotePathUseCase.execute(
+                GetFileByRemotePathUseCase.Params(
+                    owner = ocSpace.accountName,
+                    remotePath = ROOT_PATH,
+                    spaceId = ocSpace.id
+                )
+            )
+            result.getDataOrNull()?.let { rootFolderFromSpace ->
+                _spacesList.update { it.copy(rootFolderFromSelectedSpace = rootFolderFromSpace) }
+            }
+        }
+    }
+
     data class SpacesListUiState(
         val spaces: List<OCSpace>,
+        val rootFolderFromSelectedSpace: OCFile? = null,
         val refreshing: Boolean,
         val error: Throwable?,
     )

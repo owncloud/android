@@ -59,7 +59,8 @@ interface FileDao {
     @Query(SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH)
     fun getFileByOwnerAndRemotePath(
         owner: String,
-        remotePath: String
+        remotePath: String,
+        spaceId: String?,
     ): OCFileEntity?
 
     @Query(SELECT_FILE_WITH_REMOTE_ID)
@@ -215,7 +216,8 @@ interface FileDao {
     ): Long {
         val localFile: OCFileEntity? = getFileByOwnerAndRemotePath(
             owner = ocFileEntity.owner,
-            remotePath = ocFileEntity.remotePath
+            remotePath = ocFileEntity.remotePath,
+            ocFileEntity.spaceId,
         )
         return if (localFile == null) {
             insertOrIgnore(ocFileEntity)
@@ -468,7 +470,7 @@ interface FileDao {
         private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
-            WHERE owner = :owner AND remotePath = :remotePath
+            WHERE owner = :owner AND remotePath = :remotePath AND spaceId IS :spaceId
         """
 
         private const val DELETE_FILE_WITH_ID = """
