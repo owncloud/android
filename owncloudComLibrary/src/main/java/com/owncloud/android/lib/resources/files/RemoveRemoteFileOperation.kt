@@ -24,7 +24,6 @@
 
 package com.owncloud.android.lib.resources.files
 
-import android.net.Uri
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants.HTTP_NO_CONTENT
 import com.owncloud.android.lib.common.http.HttpConstants.HTTP_OK
@@ -46,7 +45,8 @@ import java.net.URL
  * @author Abel García de Prada
  */
 open class RemoveRemoteFileOperation(
-    private val remotePath: String
+    private val remotePath: String,
+    val spaceWebDavUrl: String? = null,
 ) : RemoteOperation<Unit>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Unit> {
@@ -54,7 +54,7 @@ open class RemoveRemoteFileOperation(
         try {
             val srcWebDavUri = getSrcWebDavUriForClient(client)
             val deleteMethod = DeleteMethod(
-                URL(srcWebDavUri.toString() + WebdavUtils.encodePath(remotePath))
+                URL(srcWebDavUri + WebdavUtils.encodePath(remotePath))
             )
             val status = client.executeHttpMethod(deleteMethod)
 
@@ -75,7 +75,7 @@ open class RemoveRemoteFileOperation(
      * For standard removals, we will use [OwnCloudClient.getUserFilesWebDavUri].
      * In case we need a different source Uri, override this method.
      */
-    open fun getSrcWebDavUriForClient(client: OwnCloudClient): Uri = client.userFilesWebDavUri
+    open fun getSrcWebDavUriForClient(client: OwnCloudClient): String = spaceWebDavUrl ?: client.userFilesWebDavUri.toString()
 
     private fun isSuccess(status: Int) = status.isOneOf(HTTP_OK, HTTP_NO_CONTENT)
 }

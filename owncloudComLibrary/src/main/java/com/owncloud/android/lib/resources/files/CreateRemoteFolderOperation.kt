@@ -68,13 +68,13 @@ class CreateRemoteFolderOperation(
         var result: RemoteOperationResult<Unit>
         try {
             val webDavUri = if (isChunksFolder) {
-                client.uploadsWebDavUri
+                client.uploadsWebDavUri.toString()
             } else {
-                client.userFilesWebDavUri
+                spaceWebDavUrl ?: client.userFilesWebDavUri.toString()
             }
 
             val mkCol = MkColMethod(
-                URL(webDavUri.toString() + WebdavUtils.encodePath(remotePath))
+                URL(webDavUri + WebdavUtils.encodePath(remotePath))
             ).apply {
                 setReadTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
                 setConnectionTimeout(CONNECTION_TIMEOUT, TimeUnit.SECONDS)

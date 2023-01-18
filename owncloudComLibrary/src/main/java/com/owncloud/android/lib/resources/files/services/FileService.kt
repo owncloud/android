@@ -68,7 +68,8 @@ interface FileService : Service {
     ): RemoteOperationResult<ArrayList<RemoteFile>>
 
     fun removeFile(
-        remotePath: String
+        remotePath: String,
+        spaceWebDavUrl: String? = null,
     ): RemoteOperationResult<Unit>
 
     fun renameFile(

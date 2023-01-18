@@ -111,10 +111,12 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
         ).execute(client)
 
     override fun removeFile(
-        remotePath: String
+        remotePath: String,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<Unit> =
         RemoveRemoteFileOperation(
-            remotePath = remotePath
+            remotePath = remotePath,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 
     override fun renameFile(
