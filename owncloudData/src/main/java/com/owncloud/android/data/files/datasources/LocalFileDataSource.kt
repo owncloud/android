@@ -32,7 +32,7 @@ interface LocalFileDataSource {
     fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String)
     fun getFileById(fileId: Long): OCFile?
     fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?>
-    fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
+    fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String?): OCFile?
     fun getFileByRemoteId(remoteId: String): OCFile?
     fun getFolderContent(folderId: Long): List<OCFile>
     fun getSearchFolderContent(folderId: Long, search: String): List<OCFile>

@@ -113,5 +113,5 @@ val viewModelModule = module {
     viewModel { (ocFile: OCFile) -> ConflictsResolveViewModel(get(), get(), get(), get(), get(), ocFile) }
     viewModel { ReceiveExternalFilesViewModel(get(), get()) }
     viewModel { AccountsManagementViewModel(get()) }
-    viewModel { SpacesListViewModel(get(), get(), get(), get()) }
+    viewModel { SpacesListViewModel(get(), get(), get(), get(), get()) }
 }
