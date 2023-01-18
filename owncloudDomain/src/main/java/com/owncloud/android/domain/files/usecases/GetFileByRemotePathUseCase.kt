@@ -29,12 +29,14 @@ class GetFileByRemotePathUseCase(
     override fun run(params: Params): OCFile? =
         fileRepository.getFileByRemotePath(
             params.remotePath,
-            params.owner
+            params.owner,
+            params.spaceId,
         )
 
     data class Params(
         val owner: String,
-        val remotePath: String
+        val remotePath: String,
+        val spaceId: String? = null,
     )
 
 }
