@@ -3,7 +3,9 @@
  *
  * @author Fernando Sanz Velasco
  * @author Jose Antonio Barros Ramos
- * Copyright (C) 2022 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -92,7 +94,6 @@ class MainFileListFragment : Fragment(),
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel> {
         parametersOf(
-            requireArguments().getString(ARG_ACCOUNT_NAME),
             requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY),
             requireArguments().getParcelable(ARG_FILE_LIST_OPTION),
         )
@@ -225,6 +226,12 @@ class MainFileListFragment : Fragment(),
 
             fileListAdapter.updateFileList(filesToAdd = fileListUiState.folderContent, fileListOption = fileListUiState.fileListOption)
             showOrHideEmptyView(fileListUiState)
+
+            fileListUiState.space?.let {
+                binding.spaceHeader.spaceHeaderName.text = it.name
+                binding.spaceHeader.spaceHeaderSubtitle.text = it.description
+            }
+
 
             actionMode?.invalidate()
         }
@@ -751,7 +758,6 @@ class MainFileListFragment : Fragment(),
 
     companion object {
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
-        val ARG_ACCOUNT_NAME = "${MainFileListFragment::class.java.canonicalName}.ARG_ACCOUNT_NAME}"
         val ARG_INITIAL_FOLDER_TO_DISPLAY = "${MainFileListFragment::class.java.canonicalName}.ARG_INITIAL_FOLDER_TO_DISPLAY}"
         val ARG_FILE_LIST_OPTION = "${MainFileListFragment::class.java.canonicalName}.FILE_LIST_OPTION}"
 
@@ -759,13 +765,11 @@ class MainFileListFragment : Fragment(),
 
         @JvmStatic
         fun newInstance(
-            accountName: String,
             initialFolderToDisplay: OCFile,
             pickingAFolder: Boolean = false,
             fileListOption: FileListOption = FileListOption.ALL_FILES,
         ): MainFileListFragment {
             val args = Bundle()
-            args.putString(ARG_ACCOUNT_NAME, accountName)
             args.putParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY, initialFolderToDisplay)
             args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
             args.putParcelable(ARG_FILE_LIST_OPTION, fileListOption)

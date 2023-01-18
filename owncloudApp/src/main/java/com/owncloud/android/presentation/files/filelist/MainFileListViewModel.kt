@@ -3,7 +3,9 @@
  *
  * @author Fernando Sanz Velasco
  * @author Jose Antonio Barros Ramos
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -35,6 +37,8 @@ import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
+import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
 import com.owncloud.android.presentation.files.SortOrder
 import com.owncloud.android.presentation.files.SortOrder.Companion.PREF_FILE_LIST_SORT_ORDER
 import com.owncloud.android.presentation.files.SortType
@@ -61,38 +65,38 @@ class MainFileListViewModel(
     private val getFilesAvailableOfflineFromAccountAsStreamUseCase: GetFilesAvailableOfflineFromAccountAsStreamUseCase,
     private val getFileByIdUseCase: GetFileByIdUseCase,
     private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
+    private val getSpaceWithSpecialsByIdForAccountUseCase: GetSpaceWithSpecialsByIdForAccountUseCase,
     private val sortFilesWithSyncInfoUseCase: SortFilesWithSyncInfoUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
-    accountNameParam: String,
     initialFolderToDisplay: OCFile,
     fileListOptionParam: FileListOption,
 ) : ViewModel() {
 
     private val showHiddenFiles: Boolean = sharedPreferencesProvider.getBoolean(PREF_SHOW_HIDDEN_FILES, false)
 
-    private val accountName: MutableStateFlow<String> = MutableStateFlow(accountNameParam)
     val currentFolderDisplayed: MutableStateFlow<OCFile> = MutableStateFlow(initialFolderToDisplay)
     val fileListOption: MutableStateFlow<FileListOption> = MutableStateFlow(fileListOptionParam)
     private val searchFilter: MutableStateFlow<String> = MutableStateFlow("")
     private val sortTypeAndOrder = MutableStateFlow(Pair(SortType.SORT_TYPE_BY_NAME, SortOrder.SORT_ORDER_ASCENDING))
+    private val space: MutableStateFlow<OCSpace?> = MutableStateFlow(null)
 
     /** File list ui state combines the other fields and generate a new state whenever any of them changes */
     val fileListUiState: StateFlow<FileListUiState> =
         combine(
             currentFolderDisplayed,
-            accountName,
             fileListOption,
             searchFilter,
             sortTypeAndOrder,
-        ) { currentFolderDisplayed, accountName, fileListOption, searchFilter, sortTypeAndOrder ->
+            space,
+        ) { currentFolderDisplayed, fileListOption, searchFilter, sortTypeAndOrder, space ->
             composeFileListUiStateForThisParams(
                 currentFolderDisplayed = currentFolderDisplayed,
-                accountName = accountName,
                 fileListOption = fileListOption,
                 searchFilter = searchFilter,
                 sortTypeAndOrder = sortTypeAndOrder,
+                space = space,
             )
         }
             .flatMapLatest { it }
@@ -107,6 +111,7 @@ class MainFileListViewModel(
         val sortOrderSelected =
             SortOrder.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_ORDER, SortOrder.SORT_ORDER_ASCENDING.ordinal)]
         sortTypeAndOrder.update { Pair(sortTypeSelected, sortOrderSelected) }
+        updateSpace()
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             synchronizeFolderUseCase.execute(
                 SynchronizeFolderUseCase.Params(
@@ -208,6 +213,7 @@ class MainFileListViewModel(
     fun updateFolderToDisplay(newFolderToDisplay: OCFile) {
         currentFolderDisplayed.update { newFolderToDisplay }
         searchFilter.update { "" }
+        updateSpace()
     }
 
     fun updateSearchFilter(newSearchFilter: String) {
@@ -224,24 +230,40 @@ class MainFileListViewModel(
         sortTypeAndOrder.update { Pair(sortType, sortOrder) }
     }
 
+    private fun updateSpace() {
+        val folderToDisplay = currentFolderDisplayed.value
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            if (folderToDisplay.remotePath == ROOT_PATH) {
+                val currentSpace = getSpaceWithSpecialsByIdForAccountUseCase.execute(
+                    GetSpaceWithSpecialsByIdForAccountUseCase.Params(
+                        spaceId = folderToDisplay.spaceId,
+                        accountName = folderToDisplay.owner,
+                    )
+                )
+                space.update { currentSpace }
+            }
+        }
+
+    }
+
     private fun composeFileListUiStateForThisParams(
         currentFolderDisplayed: OCFile,
-        accountName: String,
         fileListOption: FileListOption,
         searchFilter: String?,
-        sortTypeAndOrder: Pair<SortType, SortOrder>
+        sortTypeAndOrder: Pair<SortType, SortOrder>,
+        space: OCSpace?,
     ): Flow<FileListUiState> =
         when (fileListOption) {
-            FileListOption.ALL_FILES -> retrieveFlowForAllFiles(currentFolderDisplayed, accountName)
-            FileListOption.SHARED_BY_LINK -> retrieveFlowForShareByLink(currentFolderDisplayed, accountName)
-            FileListOption.AV_OFFLINE -> retrieveFlowForAvailableOffline(currentFolderDisplayed, accountName)
+            FileListOption.ALL_FILES -> retrieveFlowForAllFiles(currentFolderDisplayed, currentFolderDisplayed.owner)
+            FileListOption.SHARED_BY_LINK -> retrieveFlowForShareByLink(currentFolderDisplayed, currentFolderDisplayed.owner)
+            FileListOption.AV_OFFLINE -> retrieveFlowForAvailableOffline(currentFolderDisplayed, currentFolderDisplayed.owner)
             FileListOption.SPACES_LIST -> TODO()
         }.toFileListUiState(
             currentFolderDisplayed,
-            accountName,
             fileListOption,
             searchFilter,
             sortTypeAndOrder,
+            space,
         )
 
     private fun retrieveFlowForAllFiles(
@@ -285,13 +307,12 @@ class MainFileListViewModel(
 
     private fun Flow<List<OCFileWithSyncInfo>>.toFileListUiState(
         currentFolderDisplayed: OCFile,
-        accountName: String,
         fileListOption: FileListOption,
         searchFilter: String?,
         sortTypeAndOrder: Pair<SortType, SortOrder>,
+        space: OCSpace?,
     ) = this.map { folderContent ->
         FileListUiState.Success(
-            accountName = accountName,
             folderToDisplay = currentFolderDisplayed,
             folderContent = folderContent.filter { fileWithSyncInfo ->
                 fileWithSyncInfo.file.fileName.contains(
@@ -301,17 +322,18 @@ class MainFileListViewModel(
             }.let { sortList(it, sortTypeAndOrder) },
             fileListOption = fileListOption,
             searchFilter = searchFilter,
+            space = space,
         )
     }
 
     sealed interface FileListUiState {
         object Loading : FileListUiState
         data class Success(
-            val accountName: String,
             val folderToDisplay: OCFile?,
             val folderContent: List<OCFileWithSyncInfo>,
             val fileListOption: FileListOption,
             val searchFilter: String?,
+            val space: OCSpace?,
         ) : FileListUiState
     }
 

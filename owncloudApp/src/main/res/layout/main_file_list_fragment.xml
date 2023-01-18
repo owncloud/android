@@ -62,14 +62,6 @@
             android:background="@drawable/shadow_gradient"
             fab:layout_constraintTop_toBottomOf="@id/options_layout" />
 
-        <include
-            android:id="@+id/space_header"
-            layout="@layout/space_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/options_layout" />
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh_main_file_list"
             android:layout_width="match_parent"
@@ -78,14 +70,29 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/space_header">
+            app:layout_constraintTop_toBottomOf="@id/shadow_view">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_main_file_list"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical"
-                tools:listitem="@layout/item_file_list" />
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/space_header"
+                    layout="@layout/space_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/shadow_view" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_main_file_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
+                    tools:listitem="@layout/item_file_list" />
+
+            </LinearLayout>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
