@@ -326,10 +326,19 @@ class OCFileRepository(
     }
 
     override fun deleteFiles(listOfFilesToDelete: List<OCFile>, removeOnlyLocalCopy: Boolean) {
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(
+            spaceId = listOfFilesToDelete.first().spaceId,
+            accountName = listOfFilesToDelete.first().owner,
+        )
+
         listOfFilesToDelete.forEach { ocFile ->
             if (!removeOnlyLocalCopy) {
                 try {
-                    remoteFileDataSource.deleteFile(remotePath = ocFile.remotePath, accountName = ocFile.owner)
+                    remoteFileDataSource.deleteFile(
+                        remotePath = ocFile.remotePath,
+                        accountName = ocFile.owner,
+                        spaceWebDavUrl = spaceWebDavUrl,
+                    )
                 } catch (fileNotFoundException: FileNotFoundException) {
                     Timber.i("File ${ocFile.fileName} was not found in server. Let's remove it from local storage")
                 }

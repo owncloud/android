@@ -149,9 +149,11 @@ class OCRemoteFileDataSource(
     override fun deleteFile(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String?,
     ) = executeRemoteOperation {
         clientManager.getFileService(accountName).removeFile(
-            remotePath = remotePath
+            remotePath = remotePath,
+            spaceWebDavUrl = spaceWebDavUrl,
         )
     }
 

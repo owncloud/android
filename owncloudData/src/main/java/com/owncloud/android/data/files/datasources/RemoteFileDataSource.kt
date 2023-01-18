@@ -70,6 +70,7 @@ interface RemoteFileDataSource {
     fun deleteFile(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String? = null,
     )
 
     fun renameFile(
