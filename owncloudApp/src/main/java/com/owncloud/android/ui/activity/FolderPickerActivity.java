@@ -127,7 +127,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             safeInitialFolder = getFile();
         }
 
-        MainFileListFragment mainListOfFiles = MainFileListFragment.newInstance(getAccount().name, safeInitialFolder, true, FileListOption.ALL_FILES);
+        MainFileListFragment mainListOfFiles = MainFileListFragment.newInstance(safeInitialFolder, true, FileListOption.ALL_FILES);
         mainListOfFiles.setFileActions(this);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, mainListOfFiles, TAG_LIST_OF_FOLDERS);

@@ -67,6 +67,10 @@ class OCLocalSpacesDataSource(
         }
     }
 
+    override fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String): OCSpace {
+        return spacesDao.getSpaceWithSpecialsByIdForAccount(spaceId, accountName).toModel()
+    }
+
     override fun getWebDavUrlForSpace(spaceId: String?, accountName: String): String? {
         return spacesDao.getWebDavUrlForSpace(spaceId, accountName)
     }
