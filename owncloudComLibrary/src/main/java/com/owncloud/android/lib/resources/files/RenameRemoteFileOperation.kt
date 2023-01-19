@@ -48,6 +48,7 @@ class RenameRemoteFileOperation(
     private val oldRemotePath: String,
     private val newName: String,
     isFolder: Boolean,
+    val spaceWebDavUrl: String? = null,
 ) : RemoteOperation<Unit>() {
 
     private var newRemotePath: String
@@ -75,8 +76,8 @@ class RenameRemoteFileOperation(
             }
 
             val moveMethod: MoveMethod = MoveMethod(
-                url = URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(oldRemotePath)),
-                destinationUrl = client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(newRemotePath),
+                url = URL((spaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(oldRemotePath)),
+                destinationUrl = (spaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(newRemotePath),
             ).apply {
                 setReadTimeout(RENAME_READ_TIMEOUT, TimeUnit.MILLISECONDS)
                 setConnectionTimeout(RENAME_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)

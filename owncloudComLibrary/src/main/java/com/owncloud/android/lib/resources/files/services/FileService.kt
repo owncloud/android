@@ -77,5 +77,6 @@ interface FileService : Service {
         oldRemotePath: String,
         newName: String,
         isFolder: Boolean,
+        spaceWebDavUrl: String? = null,
     ): RemoteOperationResult<Unit>
 }

@@ -123,12 +123,14 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
         oldName: String,
         oldRemotePath: String,
         newName: String,
-        isFolder: Boolean
+        isFolder: Boolean,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<Unit> =
         RenameRemoteFileOperation(
             oldName = oldName,
             oldRemotePath = oldRemotePath,
             newName = newName,
-            isFolder = isFolder
+            isFolder = isFolder,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 }
