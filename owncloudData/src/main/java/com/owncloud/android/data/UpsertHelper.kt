@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -35,4 +35,23 @@ fun <T> upsert(
 ) {
     val insertResult = insert(item)
     if (insertResult == -1L) update(item)
+}
+
+/**
+ * Performs an upsert by first attempting to insert [items] using [insertMany] with the the result
+ * of the inserts returned.
+ *
+ * If it was not inserted due to conflicts, it is updated using [updateMany]
+ */
+fun <T> upsert(
+    items: List<T>,
+    insertMany: (List<T>) -> List<Long>,
+    updateMany: (List<T>) -> Unit,
+) {
+    val insertResults = insertMany(items)
+    val updateList = items.zip(insertResults)
+        .mapNotNull { (item, insertResult) ->
+            if (insertResult == -1L) item else null
+        }
+    if (updateList.isNotEmpty()) updateMany(updateList)
 }
