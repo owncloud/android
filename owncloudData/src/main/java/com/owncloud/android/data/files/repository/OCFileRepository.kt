@@ -367,23 +367,30 @@ class OCFileRepository(
             throw FileAlreadyExistsException()
         }
 
-        // 3. Perform remote operation
+        // 3. Retrieve the specific web dav url in case there is one.
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(
+            spaceId = ocFile.spaceId,
+            accountName = ocFile.owner,
+        )
+
+        // 4. Perform remote operation
         remoteFileDataSource.renameFile(
             oldName = ocFile.fileName,
             oldRemotePath = ocFile.remotePath,
             newName = newName,
             isFolder = ocFile.isFolder,
             accountName = ocFile.owner,
+            spaceWebDavUrl = spaceWebDavUrl,
         )
 
-        // 4. Save new remote path in the local database
+        // 5. Save new remote path in the local database
         localFileDataSource.renameFile(
             fileToRename = ocFile,
             finalRemotePath = newRemotePath,
             finalStoragePath = localStorageProvider.getDefaultSavePathFor(ocFile.owner, newRemotePath)
         )
 
-        // 5. Update local storage
+        // 6. Update local storage
         localStorageProvider.moveLocalFile(
             ocFile = ocFile,
             finalStoragePath = localStorageProvider.getDefaultSavePathFor(ocFile.owner, newRemotePath)

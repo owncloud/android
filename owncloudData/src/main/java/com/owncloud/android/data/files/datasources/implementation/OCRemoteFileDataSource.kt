@@ -163,12 +163,14 @@ class OCRemoteFileDataSource(
         newName: String,
         isFolder: Boolean,
         accountName: String,
+        spaceWebDavUrl: String?,
     ) = executeRemoteOperation {
         clientManager.getFileService(accountName).renameFile(
             oldName = oldName,
             oldRemotePath = oldRemotePath,
             newName = newName,
-            isFolder = isFolder
+            isFolder = isFolder,
+            spaceWebDavUrl = spaceWebDavUrl,
         )
     }
 
