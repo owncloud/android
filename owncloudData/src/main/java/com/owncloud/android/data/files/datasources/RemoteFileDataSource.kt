@@ -78,5 +78,6 @@ interface RemoteFileDataSource {
         newName: String,
         isFolder: Boolean,
         accountName: String,
+        spaceWebDavUrl: String? = null,
     )
 }

@@ -24,6 +24,7 @@ package com.owncloud.android.data.files.repository
 
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
+import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
@@ -44,6 +45,7 @@ import java.util.UUID
 class OCFileRepository(
     private val localFileDataSource: LocalFileDataSource,
     private val remoteFileDataSource: RemoteFileDataSource,
+    private val localSpacesDataSource: LocalSpacesDataSource,
     private val localStorageProvider: LocalStorageProvider
 ) : FileRepository {
 
@@ -362,23 +364,30 @@ class OCFileRepository(
             throw FileAlreadyExistsException()
         }
 
-        // 3. Perform remote operation
+        // 3. Retrieve the specific web dav url in case there is one.
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(
+            spaceId = ocFile.spaceId,
+            accountName = ocFile.owner,
+        )
+
+        // 4. Perform remote operation
         remoteFileDataSource.renameFile(
             oldName = ocFile.fileName,
             oldRemotePath = ocFile.remotePath,
             newName = newName,
             isFolder = ocFile.isFolder,
             accountName = ocFile.owner,
+            spaceWebDavUrl = spaceWebDavUrl,
         )
 
-        // 4. Save new remote path in the local database
+        // 5. Save new remote path in the local database
         localFileDataSource.renameFile(
             fileToRename = ocFile,
             finalRemotePath = newRemotePath,
             finalStoragePath = localStorageProvider.getDefaultSavePathFor(ocFile.owner, newRemotePath)
         )
 
-        // 5. Update local storage
+        // 6. Update local storage
         localStorageProvider.moveLocalFile(
             ocFile = ocFile,
             finalStoragePath = localStorageProvider.getDefaultSavePathFor(ocFile.owner, newRemotePath)
