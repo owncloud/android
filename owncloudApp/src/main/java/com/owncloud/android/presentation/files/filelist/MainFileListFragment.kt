@@ -32,6 +32,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
@@ -46,6 +47,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
+import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
@@ -228,12 +230,25 @@ class MainFileListFragment : Fragment(),
             fileListAdapter.updateFileList(filesToAdd = fileListUiState.folderContent, fileListOption = fileListUiState.fileListOption)
             showOrHideEmptyView(fileListUiState)
 
-            binding.spaceHeader.root.isVisible = fileListUiState.space != null && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH
+            binding.spaceHeader.root.isVisible = fileListUiState.space?.isProject == true && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH
             fileListUiState.space?.let {
+                val spaceSpecialImage = it.getSpaceSpecialImage()
+                if (spaceSpecialImage != null) {
+                    binding.spaceHeader.spaceHeaderImage.tag = spaceSpecialImage.id
+                    val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(spaceSpecialImage.id)
+                    if (thumbnail != null) {
+                        binding.spaceHeader.spaceHeaderImage.run {
+                            setImageBitmap(thumbnail)
+                            scaleType = ImageView.ScaleType.CENTER_CROP
+                        }
+                        if (spaceSpecialImage.file.mimeType == "image/png") {
+                            binding.spaceHeader.spaceHeaderImage.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background_color))
+                        }
+                    }
+                }
                 binding.spaceHeader.spaceHeaderName.text = it.name
                 binding.spaceHeader.spaceHeaderSubtitle.text = it.description
             }
-
 
             actionMode?.invalidate()
         }
