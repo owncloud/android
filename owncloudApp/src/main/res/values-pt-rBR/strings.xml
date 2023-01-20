@@ -74,6 +74,7 @@
   <string name="prefs_show_hidden_files">Mostrar arquivos escondidos</string>
   <string name="prefs_log_open_logs_list_view">Arquivos log</string>
   <string name="prefs_log_no_logs_list_view">Pasta de log vazia! </string>
+  <string name="prefs_log_empty_subtitle">Ative o log e os arquivos de log aparecerão aqui</string>
   <string name="prefs_log_title">Habilitar login</string>
   <string name="prefs_log_summary">Isto é usado para registrar(log) os problemas</string>
   <string name="prefs_log_title_history">História de logins</string>
@@ -142,8 +143,10 @@
   <string name="uploader_error_message_source_file_not_copied">Ocorreu um erro ao copiar o arquivo para uma pasta temporária. Por favor, tente enviar novamente.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty_title_all_files">Nenhum arquivo aqui</string>
+  <string name="file_list_empty_title_available_offline">Nenhum arquivo off-line disponível</string>
   <string name="file_list_empty_title_shared_by_links">Nenhum link compartilhado</string>
   <string name="file_list_empty_subtitle_all_files">Carregue algum conteúdo ou sincronize com seus dispositivos!</string>
+  <string name="file_list_empty_subtitle_available_offline">Arquivos e pastas marcados como disponíveis off-line aparecerão aqui</string>
   <string name="file_list_empty_subtitle_shared_by_links">Arquivos e pastas que você compartilha com link são mostrados aqui</string>
   <string name="file_list_loading">Carregando...</string>
   <string name="file_list_no_app_for_file_type">Nenhum aplicativo encontrado para esse tipo de arquivo</string>
@@ -152,6 +155,7 @@
   <string name="local_file_list_empty_just_folders">Não existem pastas nessa pasta.</string>
   <string name="local_file_list_search_with_no_matches">Nenhum resultado para esta pesquisa</string>
   <string name="upload_list_empty">Nenhum arquivo enviado está disponível.</string>
+  <string name="upload_list_empty_subtitle">Carregue algo e ele aparecerá aqui</string>
   <string name="file_list_folder">pasta</string>
   <string name="file_list_folders">pastas</string>
   <string name="file_list_file">arquivo</string>
@@ -213,6 +217,7 @@
   <string name="uploads_view_group_current_uploads">Atual</string>
   <string name="uploads_view_group_failed_uploads">Falha (toque para tentar novamente)</string>
   <string name="uploads_view_group_finished_uploads">Enviado</string>
+  <string name="uploads_view_group_queued_uploads">Enfileirado</string>
   <string name="uploads_view_group_file_count">%d arquivos</string>
   <string name="uploads_view_group_file_count_single">%d arquivo</string>
   <string name="uploads_view_upload_status_succeeded">Concluído</string>
@@ -230,8 +235,13 @@
   <string name="uploads_view_upload_status_service_interrupted">App foi encerrado</string>
   <string name="uploads_view_upload_status_unknown_fail">Erro desconhecido</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Aguardando conexão wi-fi</string>
+  <string name="uploads_view_upload_status_queued">Enfileirado</string>
   <string name="uploads_view_later_waiting_to_upload">Aguardando para enviar</string>
   <string name="uploads_view_unsupported_media_type">Tipo de mídia não suportada</string>
+  <string name="uploader_upload_enqueued_ticker">Enviado de %1$s foi colocado na fila</string>
+  <string name="uploader_upload_canceled_ticker">Envio cancelado</string>
+  <string name="downloader_download_canceled_ticker">Baixar cancelado</string>
+  <string name="downloader_download_enqueued_ticker">Baixar de%1$s foi colocado na fila</string>
   <string name="downloader_download_in_progress_ticker">Baixando...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Baixando %2$s</string>
   <string name="downloader_download_succeeded_ticker">Download bem sucedido</string>
@@ -345,12 +355,17 @@
   <string name="available_offline_inherited_msg">Uma pasta que contém este arquivo está disponível off-line</string>
   <string name="rename_local_fail_msg">Cópia local não pôde ser renomeada; tente outro nome</string>
   <string name="rename_server_fail_msg">Renomeação não pôde ser finalizada</string>
+  <string name="file_already_exists">O arquivo já existe</string>
   <string name="sync_file_fail_msg">Arquivo remoto não pode ser verificado</string>
   <string name="sync_file_nothing_to_do_msg">Conteúdo do arquivo já foi sincronizado</string>
+  <string name="new_remote_version_found_msg">Uma nova versão foi encontrada no servidor. Baixando…</string>
+  <string name="download_enqueued_msg">Baixar em fila</string>
+  <string name="upload_enqueued_msg">Enviar em fila</string>
   <string name="create_dir_fail_msg">A pasta não pode ser criada</string>
   <string name="filename_forbidden_characters">Caracteres proibidos: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">O nome do arquivo contem pelo menos um caractere inválido  </string>
   <string name="filename_empty">O nome do arquivo não pode estar vazio</string>
+  <string name="filename_too_long">O nome do arquivo não pode ser tão longo</string>
   <string name="wait_a_moment">Aguarde um momento</string>
   <string name="wait_checking_credentials">Verificando credenciais salvas</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema inesperado; por favor, tente selecionar o arquivo com outro app</string>
@@ -569,6 +584,8 @@
   <string name="media_service_notification_channel_description">Ver reprodutor de músicas</string>
   <string name="file_sync_notification_channel_name">Sincronizar arquivo</string>
   <string name="file_sync_notification_channel_description">Ver o resultado da sincronização</string>
+  <string name="file_sync_conflict_notification_channel_name">Conflitos de arquivos</string>
+  <string name="file_sync_conflict_notification_channel_description">Veja os conflitos de arquivo quando eles ocorrerem</string>
   <string name="clicks_to_be_developer">Você clica %1$d para ativar os menus do desenvolvedor</string>
   <string name="rate_dialog_title">Avalie o aplicativo %1$s !</string>
   <string name="rate_dialog_description">Se você gosta de usar este aplicativo, você poderia ter um tempo para avaliá-lo? Seu feedback é muito importante para nós.</string>
@@ -624,8 +641,26 @@
   <string name="release_notes_proceed">Prosseguir</string>
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
   <string name="release_notes_2.21.2_title1">Abrir na web</string>
+  <string name="release_notes_2.21.2_subtitle1">Tipos de arquivo suportados pelo servidor aberto no navegador da Web (somente oCIS)</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
+  <string name="open_in_web_error_generic">Não foi possível abrir na web</string>
   <string name="open_in_web_error_not_supported">Não há aplicativos que suportam este tipo de arquivo</string>
   <string name="open_in_web_error_too_early">O arquivo requisitado ainda não está disponível, por favor tente novamente mais tarde</string>
+  <string name="release_notes_3.0_title1">Novo mecanismo de sincronização</string>
+  <string name="release_notes_3.0_subtitle1">A maneira como todos os arquivos são sincronizados foi redesenhada para melhorá-la</string>
+  <string name="release_notes_3.0_title2">Propagação automática de conflitos</string>
+  <string name="release_notes_3.0_subtitle2">Os conflitos agora são propagados (e limpos) automaticamente para as pastas principais</string>
+  <string name="release_notes_3.0_title3">Correção para miniaturas</string>
+  <string name="release_notes_3.0_subtitle3">Miniaturas agora são mostradas corretamente na lista de arquivos</string>
+  <string name="release_notes_3.0_title4">Visualizações vazias melhoradas</string>
+  <string name="release_notes_3.0_subtitle4">Uma nova e mais atraente visualização foi adicionada às telas sem itens (arquivos, uploads e logs)</string>
+  <string name="release_notes_3.0_title5">Várias transferências em execução simultaneamente</string>
+  <string name="release_notes_3.0_subtitle5">Com o redesenho do mecanismo de sincronização, agora vários downloads e uploads podem ser executados ao mesmo tempo</string>
+  <string name="release_notes_3.0_title6">Login do navegador melhorado</string>
+  <string name="release_notes_3.0_subtitle6">Apenas digitando a URL, o navegador será acionado</string>
+  <string name="release_notes_3.0.1_title1">Corrigir falha ao atualizar</string>
+  <string name="release_notes_3.0.1_subtitle1">Correção para atualizações de 2.18 (ou versões anteriores) para 3.0</string>
+  <string name="release_notes_3.0.1_title2">Corrigir falha na guia de envios</string>
+  <string name="release_notes_3.0.1_subtitle2">Correção para alguns usuários que experimentaram falhas ao entrar na seção de envios</string>
 </resources>
