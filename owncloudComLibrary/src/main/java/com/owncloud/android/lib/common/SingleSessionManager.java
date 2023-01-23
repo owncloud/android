@@ -31,7 +31,6 @@ import android.net.Uri;
 
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
-import com.owncloud.android.lib.common.http.HttpClient;
 import timber.log.Timber;
 
 import java.io.IOException;
@@ -124,6 +123,24 @@ public class SingleSessionManager {
             }
         } else {
             Timber.v("reusing client for account %s", accountName);
+            if (client.getAccount() != null &&
+                    client.getAccount().getCredentials() != null &&
+                    (client.getAccount().getCredentials().getAuthToken() == null || client.getAccount().getCredentials().getAuthToken().isEmpty())
+            ) {
+                Timber.i("Client " + client.getAccount().getName() + " needs to refresh credentials");
+
+                //the next two lines are a hack because okHttpclient is used as a singleton instead of being an
+                //injected instance that can be deleted when required
+                client.clearCookies();
+                client.clearCredentials();
+
+                client.setAccount(account);
+
+                account.loadCredentials(context);
+                client.setCredentials(account.getCredentials());
+
+                Timber.i("Client " + account.getName() + " with credentials size" + client.getAccount().getCredentials().getAuthToken().length());
+            }
             reusingKnown = true;
         }
 
