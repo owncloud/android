@@ -507,7 +507,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     public void onFileMetadataChanged() {
         FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
         if (storageManager != null) {
-            setFile(storageManager.getFileByPath(getFile().getRemotePath()));
+            setFile(storageManager.getFileByPath(getFile().getRemotePath(), null));
         }
         requireActivity().invalidateOptionsMenu();
     }

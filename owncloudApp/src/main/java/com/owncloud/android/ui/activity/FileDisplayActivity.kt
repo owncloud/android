@@ -289,7 +289,7 @@ class FileDisplayActivity : FileActivity(),
                         file = null // not able to know the directory where the file is uploading
                     }
                 } else {
-                    file = storageManager.getFileByPath(file.remotePath)
+                    file = storageManager.getFileByPath(file.remotePath, file.spaceId)
                     // currentDir = null if not in the current Account
                 }
             }
@@ -698,10 +698,13 @@ class FileDisplayActivity : FileActivity(),
         Timber.v("onResume() start")
         super.onResume()
 
-        setCheckedItemAtBottomBar(getMenuItemForFileListOption(fileListOption))
-        if (!isSpacesTabSelected()) {
-            listMainFileFragment?.updateFileListOption(fileListOption, file)
+        if (listMainFileFragment?.getCurrentSpace()?.isProject == true) {
+            setCheckedItemAtBottomBar(getMenuItemForFileListOption(FileListOption.SPACES_LIST))
+        } else {
+            setCheckedItemAtBottomBar(getMenuItemForFileListOption(fileListOption))
         }
+
+        listMainFileFragment?.updateFileListOption(fileListOption, file)
 
         // refresh list of files
         refreshListOfFilesFragment()

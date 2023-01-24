@@ -152,7 +152,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
             if (!mCancellation) {
                 @NotNull Lazy<GetFileByRemotePathUseCase> getFileByRemotePathUseCaseLazy =
                         inject(GetFileByRemotePathUseCase.class);
-                GetFileByRemotePathUseCase.Params params = new GetFileByRemotePathUseCase.Params(OCFile.ROOT_PATH, account.name);
+                GetFileByRemotePathUseCase.Params params = new GetFileByRemotePathUseCase.Params(OCFile.ROOT_PATH, account.name, null);
 
                 UseCaseResult<OCFile> useCaseResult = getFileByRemotePathUseCaseLazy.getValue().execute(params);
                 if (useCaseResult.getDataOrNull() != null) {
