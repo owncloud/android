@@ -63,13 +63,13 @@ class FileDataStorageManager : KoinComponent {
         mContext = activity
     }
 
-    fun getFileByPath(remotePath: String): OCFile? = getFileByPathAndAccount(remotePath, account.name)
+    fun getFileByPath(remotePath: String, spaceId: String? = null): OCFile? = getFileByPathAndAccount(remotePath, account.name, spaceId)
 
-    private fun getFileByPathAndAccount(remotePath: String, accountName: String): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
+    private fun getFileByPathAndAccount(remotePath: String, accountName: String, spaceId: String? = null): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, remotePath))
+            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, remotePath, spaceId))
         }.getDataOrNull()
         result
     }

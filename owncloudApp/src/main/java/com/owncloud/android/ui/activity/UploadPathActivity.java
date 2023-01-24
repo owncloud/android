@@ -60,11 +60,11 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
             // Check if we need to open an specific folder and navigate to it.
             // If there is not, fallback to the root folder for this account.
             String cameraUploadPath = getIntent().getStringExtra(KEY_CAMERA_UPLOAD_PATH);
-            OCFile initialFile = getStorageManager().getFileByPath(cameraUploadPath);
+            OCFile initialFile = getStorageManager().getFileByPath(cameraUploadPath, null);
 
             if (initialFile == null || !initialFile.isFolder()) {
                 // fall back to root folder
-                setFile(getStorageManager().getFileByPath(OCFile.ROOT_PATH));
+                setFile(getStorageManager().getFileByPath(OCFile.ROOT_PATH, null));
             } else {
                 setFile(initialFile);
             }

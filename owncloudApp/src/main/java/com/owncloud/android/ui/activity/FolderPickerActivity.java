@@ -107,7 +107,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             OCFile folder = getFile();
             if (folder == null || !folder.isFolder()) {
                 // fall back to root folder
-                setFile(getStorageManager().getFileByPath(OCFile.ROOT_PATH));
+                setFile(getStorageManager().getFileByPath(OCFile.ROOT_PATH, null));
                 folder = getFile();
             }
 
@@ -124,7 +124,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         OCFile safeInitialFolder;
         if (getFile() == null) {
             FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(this, getAccount(), getContentResolver());
-            safeInitialFolder = fileDataStorageManager.getFileByPath(OCFile.ROOT_PATH);
+            safeInitialFolder = fileDataStorageManager.getFileByPath(OCFile.ROOT_PATH, null);
         } else {
             safeInitialFolder = getFile();
         }
