@@ -53,6 +53,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.model.OCFileSyncInfo
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
+import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.parseError
@@ -210,9 +211,11 @@ class MainFileListFragment : Fragment(),
     }
 
     private fun subscribeToViewModels() {
-        // Observe the current folder displayed and notify the listener
+        // Observe the current folder displayed
         collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) {
-            fileActions?.onCurrentFolderUpdated(it)
+            if (mainFileListViewModel.space.value == null) {
+                fileActions?.onCurrentFolderUpdated(it)
+            }
             if (mainFileListViewModel.fileListOption.value.isAllFiles()) {
                 fileOperationsViewModel.performOperation(
                     FileOperation.RefreshFolderOperation(
@@ -223,7 +226,7 @@ class MainFileListFragment : Fragment(),
             }
         }
 
-        // Observe the file list ui state.
+        // Observe the file list ui state
         collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
             if (fileListUiState !is MainFileListViewModel.FileListUiState.Success) return@collectLatestLifecycleFlow
 
@@ -248,6 +251,7 @@ class MainFileListFragment : Fragment(),
                 }
                 binding.spaceHeader.spaceHeaderName.text = it.name
                 binding.spaceHeader.spaceHeaderSubtitle.text = it.description
+                fileActions?.onCurrentFolderUpdated(fileListUiState.folderToDisplay!!, it)
             }
 
             actionMode?.invalidate()
@@ -756,7 +760,7 @@ class MainFileListFragment : Fragment(),
     }
 
     interface FileActions {
-        fun onCurrentFolderUpdated(newCurrentFolder: OCFile)
+        fun onCurrentFolderUpdated(newCurrentFolder: OCFile, currentSpace: OCSpace? = null)
         fun onFileClicked(file: OCFile)
         fun onShareFileClicked(file: OCFile)
         fun initDownloadForSending(file: OCFile)

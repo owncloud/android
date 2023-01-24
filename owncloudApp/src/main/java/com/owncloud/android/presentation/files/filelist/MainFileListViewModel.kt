@@ -80,7 +80,7 @@ class MainFileListViewModel(
     val fileListOption: MutableStateFlow<FileListOption> = MutableStateFlow(fileListOptionParam)
     private val searchFilter: MutableStateFlow<String> = MutableStateFlow("")
     private val sortTypeAndOrder = MutableStateFlow(Pair(SortType.SORT_TYPE_BY_NAME, SortOrder.SORT_ORDER_ASCENDING))
-    private val space: MutableStateFlow<OCSpace?> = MutableStateFlow(null)
+    val space: MutableStateFlow<OCSpace?> = MutableStateFlow(null)
 
     /** File list ui state combines the other fields and generate a new state whenever any of them changes */
     val fileListUiState: StateFlow<FileListUiState> =
