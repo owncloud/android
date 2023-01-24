@@ -84,6 +84,7 @@
     <!-- constants that must be respected by the authorization server; if changed, the app must be rebuild -->
     <string name="oauth2_redirect_uri_scheme">oc</string>
     <string name="oauth2_redirect_uri_path">android.owncloud.com</string>
+    <string name="oauth2_openid_scope">openid offline_access email profile</string>
 
     <!-- values that should be provided by ownCloud server -->
 
