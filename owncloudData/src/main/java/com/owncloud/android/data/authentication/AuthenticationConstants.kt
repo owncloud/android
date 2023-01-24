@@ -35,7 +35,6 @@ const val KEY_OAUTH2_REFRESH_TOKEN = "oc_oauth2_refresh_token"
  * OAuth2 scope
  */
 const val KEY_OAUTH2_SCOPE = "oc_oauth2_scope"
-const val OAUTH2_OIDC_SCOPE = "openid offline_access email profile"
 
 /**
  * OIDC Client Registration
