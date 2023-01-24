@@ -47,7 +47,6 @@ import com.owncloud.android.R
 import com.owncloud.android.authentication.AccountUtils.getUsernameOfAccount
 import com.owncloud.android.authentication.oauth.OAuthUtils
 import com.owncloud.android.data.authentication.KEY_USER_ID
-import com.owncloud.android.data.authentication.OAUTH2_OIDC_SCOPE
 import com.owncloud.android.databinding.AccountSetupBinding
 import com.owncloud.android.domain.authentication.oauth.model.ResponseType
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
@@ -77,6 +76,7 @@ import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.providers.MdmProvider.Companion.NO_MDM_RESTRICTION_YET
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
+import com.owncloud.android.utils.CONFIGURATION_OAUTH2_OPEN_ID_SCOPE
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 import com.owncloud.android.utils.DocumentProviderUtils.Companion.notifyDocumentProviderRoots
@@ -504,7 +504,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
             clientId = clientId,
             responseType = ResponseType.CODE.string,
-            scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else "",
+            scope = if (oidcSupported) mdmProvider.getBrandingString(CONFIGURATION_OAUTH2_OPEN_ID_SCOPE, R.string.oauth2_openid_scope) else "",
             codeChallenge = oauthViewModel.codeChallenge,
             state = oauthViewModel.oidcState,
             username = username,
@@ -594,7 +594,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         authTokenType = OAUTH_TOKEN_TYPE,
                         accessToken = tokenResponse.accessToken,
                         refreshToken = tokenResponse.refreshToken.orEmpty(),
-                        scope = if (oidcSupported) OAUTH2_OIDC_SCOPE else tokenResponse.scope,
+                        scope = if (oidcSupported) mdmProvider.getBrandingString(
+                            CONFIGURATION_OAUTH2_OPEN_ID_SCOPE,
+                            R.string.oauth2_openid_scope,
+                        ) else tokenResponse.scope,
                         updateAccountWithUsername = if (loginAction != ACTION_CREATE) userAccount?.name else null,
                         clientRegistrationInfo = clientRegistrationInfo
                     )
