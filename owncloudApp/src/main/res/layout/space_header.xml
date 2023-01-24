@@ -29,12 +29,13 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/space_header_card"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardBackgroundColor="@color/spaces_card_background_color"
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
