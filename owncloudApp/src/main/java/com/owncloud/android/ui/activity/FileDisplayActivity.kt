@@ -498,22 +498,9 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         when (item.itemId) {
             android.R.id.home -> {
-                val second = secondFragment
-                val currentDir = listMainFileFragment?.getCurrentFile()
-
-                val inRootFolder = currentDir != null && currentDir.parentId == 0L
-                val fileFragmentVisible = second != null && second.file != null
-
-                if (!inRootFolder || fileFragmentVisible) {
-                    onBackPressed()
-                } else if (isDrawerOpen()) {
-                    closeDrawer()
-                } else {
-                    openDrawer()
-                }
+                onBackPressed()
             }
         }
 
@@ -668,11 +655,22 @@ class FileDisplayActivity : FileActivity(),
                 updateToolbar(listMainFileFragment?.getCurrentFile())
             } else {
                 val currentDirDisplayed = listMainFileFragment?.getCurrentFile()
-                // if space.isProject and currentFolderDisplayed.parentId == root_parent_id -> go to spaces list
-                // else
-                if (currentDirDisplayed == null || currentDirDisplayed.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) { // and if we are in spaces list
+                // If current file is null (we are in the spaces list, for example), close the app
+                if (currentDirDisplayed == null) {
                     finish()
                     return
+                }
+                // If current file is root folder
+                else if (currentDirDisplayed.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
+                    // If current space is a project space (not personal, not shares), navigate back to the spaces list
+                    if (listMainFileFragment?.getCurrentSpace()?.isProject == true) {
+                        navigateTo(FileListOption.SPACES_LIST)
+                    }
+                    // If current space is not a project space (personal or shares) or it is null ("Files" in oC10), close the app
+                    else {
+                        finish()
+                        return
+                    }
                 } else {
                     listMainFileFragment?.onBrowseUp()
                 }

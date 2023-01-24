@@ -145,7 +145,7 @@ class MainFileListFragment : Fragment(),
             updateActionModeAfterTogglingSelected()
             true
         }
-        if (isPickingAFolder()) {
+        if (isPickingAFolder() || getCurrentSpace() != null) {
             menu.removeItem(menu.findItem(R.id.action_share_current_folder).itemId)
         } else {
             menu.findItem(R.id.action_share_current_folder)?.setOnMenuItemClickListener {
@@ -458,6 +458,10 @@ class MainFileListFragment : Fragment(),
      */
     fun getCurrentFile(): OCFile {
         return mainFileListViewModel.getFile()
+    }
+
+    fun getCurrentSpace(): OCSpace? {
+        return mainFileListViewModel.getSpace()
     }
 
     private fun setDrawerStatus(enabled: Boolean) {
