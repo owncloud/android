@@ -81,8 +81,9 @@
                     layout="@layout/space_header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="visible"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView_main_file_list"
