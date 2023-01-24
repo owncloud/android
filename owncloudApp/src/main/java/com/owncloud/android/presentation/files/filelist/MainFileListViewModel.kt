@@ -137,6 +137,10 @@ class MainFileListViewModel(
         return currentFolderDisplayed.value
     }
 
+    fun getSpace(): OCSpace? {
+        return space.value
+    }
+
     fun setGridModeAsPreferred() {
         savePreferredLayoutManager(true)
     }
@@ -188,8 +192,7 @@ class MainFileListViewModel(
                         } else fileById
                     }
                     FileListOption.SPACES_LIST -> {
-                        // TODO: Spaces is not applicable here at the moment
-                        parentDir = TODO()
+                        parentDir = TODO("Move it to usecase if possible")
                     }
                 }
             } else if (parentId == ROOT_PARENT_ID.toLong()) {
