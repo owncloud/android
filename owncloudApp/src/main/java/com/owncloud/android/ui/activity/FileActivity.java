@@ -358,7 +358,7 @@ public class FileActivity extends DrawerActivity
     protected void updateFileFromDB() {
         OCFile file = getFile();
         if (file != null) {
-            file = getStorageManager().getFileByPath(file.getRemotePath());
+            file = getStorageManager().getFileByPath(file.getRemotePath(), file.getSpaceId());
             setFile(file);
         }
     }
@@ -443,7 +443,7 @@ public class FileActivity extends DrawerActivity
                 return file;
             } else if (getStorageManager() != null) {
                 String parentPath = file.getParentRemotePath();
-                return getStorageManager().getFileByPath(parentPath);
+                return getStorageManager().getFileByPath(parentPath, file.getSpaceId());
             }
         }
         return null;
