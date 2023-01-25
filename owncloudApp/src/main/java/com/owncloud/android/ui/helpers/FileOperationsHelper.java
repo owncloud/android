@@ -73,7 +73,7 @@ public class FileOperationsHelper {
     private Intent getIntentForGuessedMimeType(String storagePath, String type, Uri data) {
         Intent intentForGuessedMimeType = null;
 
-        if (storagePath.lastIndexOf('.') >= 0) {
+        if (storagePath != null && storagePath.lastIndexOf('.') >= 0) {
             String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(storagePath.substring(storagePath.lastIndexOf('.') + 1));
 
             if (guessedMimeType != null && !guessedMimeType.equals(type)) {
