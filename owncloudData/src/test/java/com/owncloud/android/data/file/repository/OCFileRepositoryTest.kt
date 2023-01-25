@@ -60,13 +60,13 @@ class OCFileRepositoryTest {
 
     @Test
     fun `create folder - ok`() {
-        every { remoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME) } returns Unit
+        every { remoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME, null) } returns Unit
 
 
         ocFileRepository.createFolder(OC_FOLDER.remotePath, OC_FOLDER)
 
         verify(exactly = 1) {
-            remoteFileDataSource.createFolder(any(), false, false, OC_ACCOUNT_NAME)
+            remoteFileDataSource.createFolder(any(), false, false, OC_ACCOUNT_NAME, null)
             localFileDataSource.saveFilesInFolderAndReturnThem(any(), OC_FOLDER)
         }
     }
@@ -74,13 +74,13 @@ class OCFileRepositoryTest {
     @Test(expected = NoConnectionWithServerException::class)
     fun `create folder - ko - no connection exception`() {
         every {
-            remoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME)
+            remoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME, null)
         } throws NoConnectionWithServerException()
 
         ocFileRepository.createFolder(OC_FOLDER.remotePath, OC_FOLDER)
 
         verify(exactly = 1) {
-            remoteFileDataSource.createFolder(any(), false, false, OC_ACCOUNT_NAME)
+            remoteFileDataSource.createFolder(any(), false, false, OC_ACCOUNT_NAME, null)
         }
         verify(exactly = 0) {
             localFileDataSource.saveFilesInFolderAndReturnThem(any(), OC_FOLDER)
@@ -126,25 +126,25 @@ class OCFileRepositoryTest {
 
     @Test
     fun `get file by remote path - ok`() {
-        every { localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner) } returns OC_FOLDER
+        every { localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner, null) } returns OC_FOLDER
 
         ocFileRepository.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
 
         verify(exactly = 1) {
-            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
+            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner, null)
         }
     }
 
     @Test(expected = Exception::class)
     fun `get file by remote path - ko`() {
         every {
-            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
+            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner, null)
         } throws Exception()
 
         ocFileRepository.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
 
         verify(exactly = 1) {
-            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
+            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner, null)
         }
     }
 
