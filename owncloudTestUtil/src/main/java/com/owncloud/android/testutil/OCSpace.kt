@@ -94,6 +94,16 @@ val OC_SPACE_PROJECT_WITH_IMAGE = OCSpace(
 )
 
 val OC_SPACE_PROJECT_WITHOUT_IMAGE = OC_SPACE_PROJECT_WITH_IMAGE.copy(
+    id = "8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-1234566789",
+    name = "Space without image",
+    root = SpaceRoot(
+        eTag = "989c7968dbbbde8c5fd9849b9123c384",
+        id = "8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-1234566789",
+        permissions = null,
+        webDavUrl = "https://server.com/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-1234566789",
+        deleted = null
+    ),
+    webUrl = "https://server.com/f/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-1234566789",
     special = listOf(OC_SPACE_SPECIAL_README)
 )
 
