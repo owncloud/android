@@ -78,29 +78,29 @@ class OCLocalFileDataSourceTest {
 
     @Test
     fun `get file by remote path - ok`() {
-        every { dao.getFileByOwnerAndRemotePath(any(), any()) } returns DUMMY_FILE_ENTITY
+        every { dao.getFileByOwnerAndRemotePath(any(), any(), any()) } returns DUMMY_FILE_ENTITY
 
-        val result = localDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
+        val result = localDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner, OC_FILE.spaceId)
 
         assertEquals(OC_FILE, result)
 
-        verify { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, OC_FILE.remotePath) }
+        verify { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, OC_FILE.remotePath, OC_FILE.spaceId) }
     }
 
     @Test
     fun `get file by remote path - ok - null`() {
-        every { dao.getFileByOwnerAndRemotePath(any(), any()) } returns null
+        every { dao.getFileByOwnerAndRemotePath(any(), any(), any()) } returns null
 
-        val result = localDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
+        val result = localDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner, OC_FILE.spaceId)
 
         assertNull(result)
 
-        verify { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, OC_FILE.remotePath) }
+        verify { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, OC_FILE.remotePath, OC_FILE.spaceId) }
     }
 
     @Test
     fun `get file by remote path - ok - null - create root folder`() {
-        every { dao.getFileByOwnerAndRemotePath(any(), any()) } returns null
+        every { dao.getFileByOwnerAndRemotePath(any(), any(), any()) } returns null
         every { dao.mergeRemoteAndLocalFile(any()) } returns 1234
         every { dao.getFileById(1234) } returns DUMMY_FILE_ENTITY.copy(
             parentId = ROOT_PARENT_ID,
@@ -108,7 +108,7 @@ class OCLocalFileDataSourceTest {
             remotePath = ROOT_PATH
         )
 
-        val result = localDataSource.getFileByRemotePath(ROOT_PATH, OC_FILE.owner)
+        val result = localDataSource.getFileByRemotePath(ROOT_PATH, OC_FILE.owner, null)
 
         assertNotNull(result)
         assertEquals(ROOT_PARENT_ID, result!!.parentId)
@@ -117,7 +117,7 @@ class OCLocalFileDataSourceTest {
         assertEquals(ROOT_PATH, result.remotePath)
 
         verify {
-            dao.getFileByOwnerAndRemotePath(OC_FILE.owner, ROOT_PATH)
+            dao.getFileByOwnerAndRemotePath(OC_FILE.owner, ROOT_PATH, null)
             dao.mergeRemoteAndLocalFile(any())
             dao.getFileById(1234)
         }
@@ -125,11 +125,11 @@ class OCLocalFileDataSourceTest {
 
     @Test(expected = Exception::class)
     fun `get file by remote path - ko`() {
-        every { dao.getFileByOwnerAndRemotePath(any(), any()) } throws Exception()
+        every { dao.getFileByOwnerAndRemotePath(any(), any(), any()) } throws Exception()
 
-        localDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner)
+        localDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner, null)
 
-        verify { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, OC_FILE.remotePath) }
+        verify { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, OC_FILE.remotePath, null) }
     }
 
     @Test
