@@ -134,7 +134,7 @@ data class OCCapabilityEntity(
                 it.getString(it.getColumnIndexOrThrow(CAPABILITIES_VERSION_STRING)),
                 it.getString(it.getColumnIndexOrThrow(CAPABILITIES_VERSION_EDITION)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_CORE_POLLINTERVAL)),
-                it.getString(it.getColumnIndexOrThrow(CAPABILITIES_DAV_CHUNKING_VERSION)),
+                it.getColumnIndex(CAPABILITIES_DAV_CHUNKING_VERSION).takeUnless { it < 0 }?.let { index -> it.getString(index) }.orEmpty(),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_API_ENABLED)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_PUBLIC_ENABLED)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_SHARING_PUBLIC_PASSWORD_ENFORCED)),
