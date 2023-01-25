@@ -722,4 +722,8 @@
     <string name="release_notes_3.0.1_title2">Fix crash in uploads tab</string>
     <string name="release_notes_3.0.1_subtitle2">Fix for some users who experimented crashes when entering the uploads section</string>
 
+    <string name="release_notes_3.0.2_title1">Fix double authentication problem</string>
+    <string name="release_notes_3.0.2_subtitle1">Browser authentication is now smoother</string>
+
+
 </resources>
