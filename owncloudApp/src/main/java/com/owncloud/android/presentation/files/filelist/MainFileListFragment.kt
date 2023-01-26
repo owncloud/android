@@ -213,7 +213,7 @@ class MainFileListFragment : Fragment(),
     private fun subscribeToViewModels() {
         // Observe the current folder displayed
         collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) {
-            if (mainFileListViewModel.space.value == null) {
+            if (getCurrentSpace() == null) {
                 fileActions?.onCurrentFolderUpdated(it)
             }
             if (mainFileListViewModel.fileListOption.value.isAllFiles()) {

@@ -37,6 +37,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_LAST_SYNC_D
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_MODIFIED
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_NAME
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_OWNER
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PARENT
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PATH
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PERMISSIONS
@@ -44,12 +45,11 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_PRIVATE_LIN
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_REMOTE_ID
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_SHARED_VIA_LINK
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_SHARED_WITH_SHAREE
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_SPACE_ID
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_STORAGE_PATH
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_TREE_ETAG
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_UPDATE_THUMBNAIL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta._ID
-import com.owncloud.android.data.files.db.OCFileEntity.Companion.FILE_OWNER
-import com.owncloud.android.data.files.db.OCFileEntity.Companion.FILE_SPACE_ID
 import com.owncloud.android.data.spaces.db.SpacesEntity
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ACCOUNT_NAME
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ID
@@ -139,8 +139,5 @@ data class OCFileEntity(
         private fun Cursor.getStringFromColumnOrEmpty(
             columnName: String
         ): String = getColumnIndex(columnName).takeUnless { it < 0 }?.let { getString(it) }.orEmpty()
-
-        const val FILE_OWNER = "owner"
-        const val FILE_SPACE_ID = "spaceId"
     }
 }

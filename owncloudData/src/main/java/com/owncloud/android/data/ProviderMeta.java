@@ -97,7 +97,7 @@ public class ProviderMeta {
         public static final String CAPABILITIES_VERSION_STRING = "version_string";
         public static final String LEGACY_CAPABILITIES_VERSION_MAYOR = "version_mayor";
 
-        // Columns of filelist table
+        // Columns of filelist table (legacy)
         public static final String FILE_ACCOUNT_OWNER = "file_owner";
         public static final String FILE_CONTENT_LENGTH = "content_length";
         public static final String FILE_CONTENT_TYPE = "content_type";
@@ -134,5 +134,9 @@ public class ProviderMeta {
         public static final String UPLOAD_STATUS = "status";
         public static final String UPLOAD_TRANSFER_ID = "transfer_id";
         public static final String UPLOAD_UPLOAD_END_TIMESTAMP = "upload_end_timestamp";
+
+        // Columns of files table
+        public static final String FILE_OWNER = "owner";
+        public static final String FILE_SPACE_ID = "spaceId";
     }
 }
