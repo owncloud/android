@@ -29,8 +29,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/space_header_card"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="@dimen/spaces_header_card_height"
+        android:layout_height="@dimen/spaces_header_card_height"
         android:foreground="?android:attr/selectableItemBackground"
         app:cardBackgroundColor="@color/spaces_card_background_color"
         app:cardCornerRadius="10dp"
