@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.Flow
 interface LocalSpacesDataSource {
     fun saveSpacesForAccount(listOfSpaces: List<OCSpace>)
     fun getProjectSpacesWithSpecialsForAccountAsFlow(accountName: String): Flow<List<OCSpace>>
+    fun getPersonalAndProjectSpacesForAccount(accountName: String): List<OCSpace>
     fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String): OCSpace
     fun getWebDavUrlForSpace(spaceId: String?, accountName: String): String?
     fun deleteSpacesForAccount(accountName: String)

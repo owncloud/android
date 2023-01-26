@@ -67,6 +67,10 @@ class OCLocalSpacesDataSource(
         }
     }
 
+    override fun getPersonalAndProjectSpacesForAccount(accountName: String): List<OCSpace> {
+        return spacesDao.getPersonalAndProjectSpacesForAccount(accountName).map { it.toModel() }
+    }
+
     override fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String): OCSpace {
         return spacesDao.getSpaceWithSpecialsByIdForAccount(spaceId, accountName).toModel()
     }
@@ -104,7 +108,7 @@ class OCLocalSpacesDataSource(
                         used = spaceQuotaEntity.used,
                     )
                 },
-                root = space.root!!.let { spaceRootEntity ->
+                root = space.root.let { spaceRootEntity ->
                     SpaceRoot(
                         eTag = spaceRootEntity.eTag,
                         id = spaceRootEntity.id,
@@ -135,6 +139,44 @@ class OCLocalSpacesDataSource(
                     name = specialFolderName
                 ),
                 webDavUrl = webDavUrl
+            )
+
+        @VisibleForTesting
+        fun SpacesEntity.toModel() =
+            OCSpace(
+                accountName = accountName,
+                driveAlias = driveAlias,
+                driveType = driveType,
+                id = id,
+                lastModifiedDateTime = lastModifiedDateTime,
+                name = name,
+                owner = ownerId?.let { spaceOwnerIdEntity ->
+                    SpaceOwner(
+                        user = SpaceUser(
+                            id = spaceOwnerIdEntity
+                        )
+                    )
+                },
+                quota = quota?.let { spaceQuotaEntity ->
+                    SpaceQuota(
+                        remaining = spaceQuotaEntity.remaining,
+                        state = spaceQuotaEntity.state,
+                        total = spaceQuotaEntity.total,
+                        used = spaceQuotaEntity.used,
+                    )
+                },
+                root = root.let { spaceRootEntity ->
+                    SpaceRoot(
+                        eTag = spaceRootEntity.eTag,
+                        id = spaceRootEntity.id,
+                        permissions = null,
+                        webDavUrl = spaceRootEntity.webDavUrl,
+                        deleted = spaceRootEntity.deleteState?.let { SpaceDeleted(state = it) },
+                    )
+                },
+                webUrl = webUrl,
+                description = description,
+                special = null,
             )
 
         @VisibleForTesting

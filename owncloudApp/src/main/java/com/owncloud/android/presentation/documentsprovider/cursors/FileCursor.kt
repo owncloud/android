@@ -67,7 +67,7 @@ class FileCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
     }
 
     companion object {
-        private val DEFAULT_DOCUMENT_PROJECTION = arrayOf(
+        val DEFAULT_DOCUMENT_PROJECTION = arrayOf(
             Document.COLUMN_DOCUMENT_ID,
             Document.COLUMN_DISPLAY_NAME,
             Document.COLUMN_MIME_TYPE,
