@@ -6,18 +6,20 @@
  * @author David González Verdugo
  * @author Abel García de Prada
  * @author Shashvat Kedia
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2015  Bartosz Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,6 +28,7 @@ package com.owncloud.android.presentation.documentsprovider
 
 import android.content.res.AssetFileDescriptor
 import android.database.Cursor
+import android.database.MatrixCursor
 import android.graphics.Point
 import android.net.Uri
 import android.os.CancellationSignal
@@ -37,10 +40,12 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.validation.FileNameException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
@@ -49,9 +54,11 @@ import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
+import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesForAccountUseCase
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.documentsprovider.cursors.FileCursor
 import com.owncloud.android.presentation.documentsprovider.cursors.RootCursor
+import com.owncloud.android.presentation.documentsprovider.cursors.SpaceCursor
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
@@ -169,29 +176,43 @@ class DocumentsStorageProvider : DocumentsProvider() {
     ): Cursor {
         val folderId = parentDocumentId.toLong()
 
-        val resultCursor = FileCursor(projection)
+        val resultCursor: MatrixCursor
 
-        // Create result cursor before syncing folder again, in order to enable faster loading
-        getFolderContent(folderId.toInt()).forEach { file -> resultCursor.addFile(file) }
+        if (folderId == ROOT_PARENT_ID) {
+            resultCursor = SpaceCursor(projection)
 
-        //Create notification listener
+            val getPersonalAndProjectSpacesForAccountUseCase: GetPersonalAndProjectSpacesForAccountUseCase by inject()
+            getPersonalAndProjectSpacesForAccountUseCase.execute(
+                GetPersonalAndProjectSpacesForAccountUseCase.Params(
+                    accountName = AccountUtils.getCurrentOwnCloudAccount(context).name,
+                )
+            ).forEach { space -> resultCursor.addSpace(space, context)}
+        } else {
+            resultCursor = FileCursor(projection)
+
+            // Create result cursor before syncing folder again, in order to enable faster loading
+            getFolderContent(folderId.toInt()).forEach { file -> resultCursor.addFile(file) }
+
+            /**
+             * This will start syncing the current folder. User will only see this after updating his view with a
+             * pull down, or by accessing the folder again.
+             */
+            if (requestedFolderIdForSync != folderId && syncRequired) {
+                // register for sync
+                syncDirectoryWithServer(parentDocumentId)
+                requestedFolderIdForSync = folderId
+                resultCursor.setMoreToSync(true)
+            } else {
+                requestedFolderIdForSync = -1
+            }
+
+            syncRequired = true
+        }
+
+        // Create notification listener
         val notifyUri: Uri = toNotifyUri(toUri(parentDocumentId))
         resultCursor.setNotificationUri(context?.contentResolver, notifyUri)
 
-        /**
-         * This will start syncing the current folder. User will only see this after updating his view with a
-         * pull down, or by accessing the folder again.
-         */
-        if (requestedFolderIdForSync != folderId && syncRequired) {
-            // register for sync
-            syncDirectoryWithServer(parentDocumentId)
-            requestedFolderIdForSync = folderId
-            resultCursor.setMoreToSync(true)
-        } else {
-            requestedFolderIdForSync = -1
-        }
-
-        syncRequired = true
         return resultCursor
 
     }
@@ -200,6 +221,12 @@ class DocumentsStorageProvider : DocumentsProvider() {
         Timber.d("Query Document: $documentId")
         if (documentId == NONEXISTENT_DOCUMENT_ID) return FileCursor(projection).apply {
             addFile(fileToUpload)
+        }
+
+        if (documentId.toLong() == ROOT_PARENT_ID) {
+            return SpaceCursor(projection).apply {
+                addRootForSpaces()
+            }
         }
 
         return FileCursor(projection).apply {
@@ -222,7 +249,15 @@ class DocumentsStorageProvider : DocumentsProvider() {
         }
 
         for (account in accounts) {
-            result.addRoot(account, contextApp)
+            val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
+            val capabilities = getStoredCapabilitiesUseCase.execute(
+                GetStoredCapabilitiesUseCase.Params(
+                    accountName = account.name
+                )
+            )
+            val spacesAllowed = capabilities?.isSpacesAllowed()
+
+            result.addRoot(account, contextApp, spacesAllowed)
         }
         return result
     }

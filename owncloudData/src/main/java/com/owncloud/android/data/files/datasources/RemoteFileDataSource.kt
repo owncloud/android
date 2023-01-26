@@ -64,6 +64,7 @@ interface RemoteFileDataSource {
     fun refreshFolder(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String? = null,
     ): List<OCFile>
 
     fun deleteFile(

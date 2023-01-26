@@ -3,18 +3,20 @@
  *
  * @author Bartosz Przybylski
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2015  Bartosz Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,15 +33,21 @@ import com.owncloud.android.domain.files.model.OCFile
 
 class RootCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAULT_ROOT_PROJECTION) {
 
-    fun addRoot(account: Account, context: Context) {
+    fun addRoot(account: Account, context: Context, spacesAllowed: Boolean?) {
         val manager = FileDataStorageManager(account)
-        val mainDir = manager.getFileByPath(OCFile.ROOT_PATH)
+        val mainDirId = if (spacesAllowed == true) {
+            // Directory with all the spaces
+            OCFile.ROOT_PARENT_ID
+        } else {
+            // Root directory of the personal space (oCIS) or "Files" (oC10)
+            manager.getFileByPath(OCFile.ROOT_PATH)?.id
+        }
 
         val flags = Root.FLAG_SUPPORTS_SEARCH or Root.FLAG_SUPPORTS_CREATE
 
         newRow()
             .add(Root.COLUMN_ROOT_ID, account.name)
-            .add(Root.COLUMN_DOCUMENT_ID, mainDir?.id)
+            .add(Root.COLUMN_DOCUMENT_ID, mainDirId)
             .add(Root.COLUMN_SUMMARY, account.name)
             .add(Root.COLUMN_TITLE, context.getString(R.string.app_name))
             .add(Root.COLUMN_ICON, R.mipmap.icon)

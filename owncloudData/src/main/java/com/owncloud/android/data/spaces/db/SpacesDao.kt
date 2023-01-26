@@ -106,6 +106,11 @@ interface SpacesDao {
         accountName: String,
     ): Flow<List<SpacesWithSpecials>>
 
+    @Query(SELECT_PERSONAL_AND_PROJECT_SPACES_FOR_ACCOUNT)
+    fun getPersonalAndProjectSpacesForAccount(
+        accountName: String,
+    ): List<SpacesEntity>
+
     @Query(SELECT_SPACE_BY_ID_FOR_ACCOUNT)
     fun getSpaceWithSpecialsByIdForAccount(
         spaceId: String?,
@@ -142,6 +147,13 @@ interface SpacesDao {
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
             WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PROJECT'
             ORDER BY name COLLATE NOCASE ASC
+        """
+
+        private const val SELECT_PERSONAL_AND_PROJECT_SPACES_FOR_ACCOUNT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
+            WHERE $SPACES_ACCOUNT_NAME = :accountName AND ($SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PROJECT' OR $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PERSONAL')
+            ORDER BY $SPACES_DRIVE_TYPE ASC, name COLLATE NOCASE ASC
         """
 
         private const val SELECT_SPACE_BY_ID_FOR_ACCOUNT = """
