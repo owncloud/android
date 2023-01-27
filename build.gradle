@@ -26,7 +26,7 @@ buildscript {
         junitVersion = "4.13.2"
         androidxTestExt = "1.1.5"
         androidxTest = "1.4.0"
-        androidxTestEspresso = "3.5.0"
+        androidxTestEspresso = "3.5.1"
         androidxTestUiautomator = "2.2.0"
         androidxAnnotation = "1.3.0"
     }
