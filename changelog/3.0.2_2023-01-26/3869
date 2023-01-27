@@ -1,0 +1,5 @@
+Enhancement: Branded scope for OpenID Connect
+
+OpenID Connect scope is now brandable via setup.xml file or MDM
+
+https://github.com/owncloud/android/pull/3869

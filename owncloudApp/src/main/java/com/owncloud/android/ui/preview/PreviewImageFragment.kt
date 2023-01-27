@@ -325,7 +325,11 @@ class PreviewImageFragment : FileFragment() {
                 override fun onLoadFailed(
                     e: GlideException?, model: Any, target: Target<Drawable?>, isFirstResource: Boolean
                 ): Boolean {
-                    binding.errorGroup.isVisible = true
+                    try {
+                        binding.errorGroup.isVisible = true
+                    } catch (npe: NullPointerException) {
+                        Timber.e(npe)
+                    }
                     Timber.e(e, "Error loading image")
                     return false
                 }

@@ -25,5 +25,10 @@
         android:title="@string/allow_screenshots_configuration_title"
         android:description="@string/allow_screenshots_configuration_description"
         android:defaultValue="true" />
-
+    <restriction
+        android:key="oauth2_open_id_scope"
+        android:restrictionType="string"
+        android:title="@string/oauth2_open_id_scope_configuration_title"
+        android:description="@string/oauth2_open_id_scope_configuration_description"
+        android:defaultValue="" />
 </restrictions>

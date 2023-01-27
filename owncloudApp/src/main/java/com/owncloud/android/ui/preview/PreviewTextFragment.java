@@ -39,7 +39,6 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ActivityExtKt;
-import com.owncloud.android.extensions.FragmentExtKt;
 import com.owncloud.android.files.FileMenuFilter;
 import com.owncloud.android.presentation.files.operations.FileOperation;
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel;
@@ -252,7 +251,11 @@ public class PreviewTextFragment extends FileFragment {
                 textView.setVisibility(View.VISIBLE);
             }
 
-            dismissLoadingDialog();
+            try {
+                dismissLoadingDialog();
+            } catch (IllegalStateException illegalStateException) {
+                Timber.w(illegalStateException, "Dismissing dialog not allowed after onSaveInstanceState");
+            }
         }
 
         /**
