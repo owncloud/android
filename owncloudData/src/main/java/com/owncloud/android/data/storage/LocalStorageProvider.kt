@@ -68,9 +68,9 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     fun getExpectedRemotePath(remotePath: String, newName: String, isFolder: Boolean): String {
         var parent = (File(remotePath)).parent ?: throw IllegalArgumentException()
         parent = if (parent.endsWith(File.separator)) parent else parent + File.separator
-        val newRemotePath = parent + newName
+        var newRemotePath = parent + newName
         if (isFolder) {
-            newRemotePath.plus(File.separator)
+            newRemotePath += File.separator
         }
         return newRemotePath
     }
