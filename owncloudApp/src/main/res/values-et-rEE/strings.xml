@@ -74,6 +74,7 @@
   <string name="prefs_show_hidden_files">Näita peidetud faile</string>
   <string name="prefs_log_open_logs_list_view">Logifailid</string>
   <string name="prefs_log_no_logs_list_view">Tühi logide kaust!</string>
+  <string name="prefs_log_empty_subtitle">Lülita logimine sisse ning logifailid tekkivad siia</string>
   <string name="prefs_log_title">Luba logimine</string>
   <string name="prefs_log_summary">Kasutatakse probleemide logimiseks</string>
   <string name="prefs_log_title_history">Logimise ajalugu</string>
@@ -142,8 +143,10 @@
   <string name="uploader_error_message_source_file_not_copied">Faili kopeerimisel ajutisse kausta tekkis viga. Palun proovi uuesti saata.</string>
   <string name="file_list_seconds_ago">sekundit tagasi</string>
   <string name="file_list_empty_title_all_files">Siin ei ole faile</string>
+  <string name="file_list_empty_title_available_offline">Võrguühenduseta saadavalolevaid faile ei ole</string>
   <string name="file_list_empty_title_shared_by_links">Jagatud linke pole</string>
   <string name="file_list_empty_subtitle_all_files">Laadi sisu üles või süngi oma seadmetega!</string>
+  <string name="file_list_empty_subtitle_available_offline">Siin kuvatakse faile ja kaustasid, mille oled märkinud saadavaks ilma võrguühenduseta</string>
   <string name="file_list_empty_subtitle_shared_by_links">Siin kuvatakse faile ja kaustasid, mida sa jagad lingiga</string>
   <string name="file_list_loading">Laadimine...</string>
   <string name="file_list_no_app_for_file_type">Selle failitüübi jaoks ei leitud rakendust</string>
@@ -152,6 +155,7 @@
   <string name="local_file_list_empty_just_folders">Selles kaustas ei ole kaustu.</string>
   <string name="local_file_list_search_with_no_matches">Otsingule ei leitud vasteid</string>
   <string name="upload_list_empty">Üleslaadimisi pole saadaval.</string>
+  <string name="upload_list_empty_subtitle">Lae midagi üles ning failid tekkivad siia</string>
   <string name="file_list_folder">kaust</string>
   <string name="file_list_folders">kaustad</string>
   <string name="file_list_file">fail</string>
@@ -213,6 +217,7 @@
   <string name="uploads_view_group_current_uploads">Praegune</string>
   <string name="uploads_view_group_failed_uploads">Ebaõnnestus (uuesti proovimiseks vajuta)</string>
   <string name="uploads_view_group_finished_uploads">Üles laetud</string>
+  <string name="uploads_view_group_queued_uploads">Järjekorras</string>
   <string name="uploads_view_group_file_count">%d faili</string>
   <string name="uploads_view_group_file_count_single">%d fail</string>
   <string name="uploads_view_upload_status_succeeded">Lõpetatud</string>
@@ -230,8 +235,13 @@
   <string name="uploads_view_upload_status_service_interrupted">Rakendus suleti jõuga</string>
   <string name="uploads_view_upload_status_unknown_fail">Tundmatu viga</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Ootan wifi ühendust</string>
+  <string name="uploads_view_upload_status_queued">Järjekorras</string>
   <string name="uploads_view_later_waiting_to_upload">Üleslaadimise ootamine</string>
   <string name="uploads_view_unsupported_media_type">Mittetoetatud meediatüüp</string>
+  <string name="uploader_upload_enqueued_ticker">Üleslaadimine %1$s lisati järjekorda</string>
+  <string name="uploader_upload_canceled_ticker">Üleslaadimine tühistati</string>
+  <string name="downloader_download_canceled_ticker">Allalaadimine tühistati</string>
+  <string name="downloader_download_enqueued_ticker">Allalaadimine %1$s lisati järjekorda</string>
   <string name="downloader_download_in_progress_ticker">Allalaadimine...</string>
   <string name="downloader_download_in_progress_content">%1$d%% allalaadimine %2$s</string>
   <string name="downloader_download_succeeded_ticker">Allalaadimine oli edukas</string>
@@ -345,12 +355,17 @@
   <string name="available_offline_inherited_msg">Kaust, mis sisaldab seda faili, on saadaval võrguühenduseta</string>
   <string name="rename_local_fail_msg">Kohalikku faili ei saa ümber nimetada; proovi teist uut nime</string>
   <string name="rename_server_fail_msg">Ümbernimetamine ebaõnnestus</string>
+  <string name="file_already_exists">fail on juba olemas</string>
   <string name="sync_file_fail_msg">Mujaloleva faili kontrollimine ebaõnnestus</string>
   <string name="sync_file_nothing_to_do_msg">Faili sisu on juba sünkroniseeritud</string>
+  <string name="new_remote_version_found_msg">Serveris leidus uus versioon. Laen alla…</string>
+  <string name="download_enqueued_msg">Allalaadimine lisati järjekorda</string>
+  <string name="upload_enqueued_msg">Üleslaadimine lisati järjekorda</string>
   <string name="create_dir_fail_msg">Kataloogi ei saa tekitada</string>
   <string name="filename_forbidden_characters">Keelatud sümbolid:  / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Faili nimi sisaldab vähemalt üht keelatud märki</string>
   <string name="filename_empty">Faili nime lahter ei saa olla tühi</string>
+  <string name="filename_too_long">Faili nimi ei saa olla nii pikk</string>
   <string name="wait_a_moment">Oota hetk</string>
   <string name="wait_checking_credentials">Kontrollin salvestatud identimisteavet</string>
   <string name="filedisplay_unexpected_bad_get_content">Ootamatu tõrge ; palun kasuta faili valimiseks mõnda teist rakendust</string>
@@ -569,6 +584,8 @@
   <string name="media_service_notification_channel_description">Vaata muusika mängijat</string>
   <string name="file_sync_notification_channel_name">Failide sünkroonimine</string>
   <string name="file_sync_notification_channel_description">Vaata failide sünkroonimise tulemust</string>
+  <string name="file_sync_conflict_notification_channel_name">Failikonfliktid</string>
+  <string name="file_sync_conflict_notification_channel_description">Näita tekkivaid failikonflikte</string>
   <string name="clicks_to_be_developer">Oled %1$d kliki kaugusel arendaja menüüde lubamisest</string>
   <string name="rate_dialog_title">Hinda %1$s rakendust!</string>
   <string name="rate_dialog_description">Kui sulle meeldib selle rakenduse kasutamine, siis kas leiad hetke hinnangu andmiseks? Sinu tagasiside on meile väga oluline.</string>
@@ -629,4 +646,20 @@
   <string name="open_in_web_error_generic">Ei saanud veebis avada</string>
   <string name="open_in_web_error_not_supported">seda failitüüpi toetavaid rakendusi ei ole</string>
   <string name="open_in_web_error_too_early">Nõutud fail ei ole veel saadaval, palun proovige hiljem uuesti</string>
+  <string name="release_notes_3.0_title1">Uus sünkroniseerimismootor</string>
+  <string name="release_notes_3.0_subtitle1">Viis, kuidas kõiki faile sünkroonitakse, on parendamise nimel uuendatud</string>
+  <string name="release_notes_3.0_title2">Automaatne konfliktide levimine</string>
+  <string name="release_notes_3.0_subtitle2">Konfliktid levitatakse (ja korrastatakse) automaatselt ülakaustadesse</string>
+  <string name="release_notes_3.0_title3">Pisipiltide parandus</string>
+  <string name="release_notes_3.0_subtitle3">Pisipilte näidatakse nüüd failinimekirjas korrektselt</string>
+  <string name="release_notes_3.0_title4">Tühjad vaated on parendatud</string>
+  <string name="release_notes_3.0_subtitle4">Uued ja meeldivamad vaated on lisatud ilma üksusteta vaadetele (failid, üleslaadimised ja logid)</string>
+  <string name="release_notes_3.0_title5">Mitmed ülekanded toimuvad samaaegselt</string>
+  <string name="release_notes_3.0_subtitle5">Sünkroniseerimismootori uuendamisega seoses on nüüd võimalikud mitmed samaaegsed üles- ja allalaadimised</string>
+  <string name="release_notes_3.0_title6">Brauseriga sisselogimine on parendatud</string>
+  <string name="release_notes_3.0_subtitle6">Brauser käivitatakse ainuüksi URL-i kirjutamisel</string>
+  <string name="release_notes_3.0.1_title1">Paranda kokkujooksmine uuendamisel</string>
+  <string name="release_notes_3.0.1_subtitle1">Parandus uuendustele 2.18 (või varasematelt versioonidelt) kuni 3.0</string>
+  <string name="release_notes_3.0.1_title2">Paranda kokkujooksmine üleslaadimiste tabil</string>
+  <string name="release_notes_3.0.1_subtitle2">Parandus kasutajatele, kes kogesid kokkujooksmisi üleslaadimise sektsiooni sisenedes</string>
 </resources>
