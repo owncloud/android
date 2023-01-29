@@ -660,4 +660,6 @@
   <string name="release_notes_3.0.1_subtitle1">Ndreqje për përmirësime prej 2.18 (ose versionesh të mëparshëm) në 3.0</string>
   <string name="release_notes_3.0.1_title2">Ndreqje vithisjeje te skeda e ngarkimeve</string>
   <string name="release_notes_3.0.1_subtitle2">Ndreqje për disa përdorues që patën hasur vithisje kur hynin te pjesa e ngarkimeve</string>
+  <string name="release_notes_3.0.2_title1">Ndreqje problemi mirëfilltësimi dyfish</string>
+  <string name="release_notes_3.0.2_subtitle1">Mirëfilltësimi i shfletuesit tani është më i butë</string>
 </resources>
