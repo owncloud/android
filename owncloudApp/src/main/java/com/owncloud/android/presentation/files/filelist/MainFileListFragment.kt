@@ -233,7 +233,15 @@ class MainFileListFragment : Fragment(),
             fileListAdapter.updateFileList(filesToAdd = fileListUiState.folderContent, fileListOption = fileListUiState.fileListOption)
             showOrHideEmptyView(fileListUiState)
 
-            binding.spaceHeader.root.isVisible = fileListUiState.space?.isProject == true && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH
+            binding.spaceHeader.root.apply {
+                if (fileListUiState.space?.isProject == true && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH) {
+                    isVisible = true
+                    animate().translationY(0f).duration = 100
+                } else {
+                    animate().translationY(-height.toFloat()).withEndAction { isVisible = false }
+                }
+            }
+
             fileListUiState.space?.let {
                 val spaceSpecialImage = it.getSpaceSpecialImage()
                 if (spaceSpecialImage != null) {
