@@ -421,7 +421,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         createFolderAsyncUseCase.execute(CreateFolderAsyncUseCase.Params(displayName, parentDocument)).run {
             checkUseCaseResult(this, parentDocument.id.toString())
             val newPath = parentDocument.remotePath + displayName + File.separator
-            val newFolder = getFileByPathOrException(newPath, parentDocument.owner)
+            val newFolder = getFileByPathOrException(newPath, parentDocument.owner, parentDocument.spaceId)
             return newFolder.id.toString()
         }
     }
@@ -505,9 +505,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
         return result.getDataOrNull() ?: throw FileNotFoundException("File $id not found")
     }
 
-    private fun getFileByPathOrException(remotePath: String, accountName: String): OCFile {
+    private fun getFileByPathOrException(remotePath: String, accountName: String, spaceId: String? = null): OCFile {
         val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
-        val result = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(owner = accountName, remotePath = remotePath))
+        val result = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(owner = accountName, remotePath = remotePath, spaceId = spaceId))
         return result.getDataOrNull() ?: throw FileNotFoundException("File $remotePath not found")
     }
 
