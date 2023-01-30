@@ -46,6 +46,7 @@ import com.owncloud.android.domain.exceptions.validation.FileNameException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
@@ -182,11 +183,23 @@ class DocumentsStorageProvider : DocumentsProvider() {
             resultCursor = SpaceCursor(projection)
 
             val getPersonalAndProjectSpacesForAccountUseCase: GetPersonalAndProjectSpacesForAccountUseCase by inject()
+            val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
+
             getPersonalAndProjectSpacesForAccountUseCase.execute(
                 GetPersonalAndProjectSpacesForAccountUseCase.Params(
                     accountName = AccountUtils.getCurrentOwnCloudAccount(context).name,
                 )
-            ).forEach { space -> resultCursor.addSpace(space, context)}
+            ).forEach { space ->
+                getFileByRemotePathUseCase.execute(
+                    GetFileByRemotePathUseCase.Params(
+                        owner = space.accountName,
+                        remotePath = ROOT_PATH,
+                        spaceId = space.id,
+                    )
+                ).getDataOrNull()?.let { rootFolder ->
+                    resultCursor.addSpace(space, rootFolder.id, context)
+                }
+            }
         } else {
             resultCursor = FileCursor(projection)
 
