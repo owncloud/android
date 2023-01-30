@@ -29,7 +29,7 @@ import com.owncloud.android.presentation.documentsprovider.cursors.FileCursor.Co
 
 class SpaceCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAULT_DOCUMENT_PROJECTION) {
 
-    fun addSpace(space: OCSpace, context: Context?) {
+    fun addSpace(space: OCSpace, rootFolderId: Long?, context: Context?) {
         val iconRes = R.drawable.ic_spaces
         val mimeType = Document.MIME_TYPE_DIR
         var flags = Document.FLAG_DIR_SUPPORTS_CREATE
@@ -41,7 +41,7 @@ class SpaceCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAU
         val name = if (space.isPersonal) context?.getString(R.string.bottom_nav_personal) else space.name
 
         newRow()
-            .add(Document.COLUMN_DOCUMENT_ID, space.id)
+            .add(Document.COLUMN_DOCUMENT_ID, rootFolderId)
             .add(Document.COLUMN_DISPLAY_NAME, name)
             .add(Document.COLUMN_LAST_MODIFIED, space.lastModifiedDateTime)
             .add(Document.COLUMN_SIZE, space.quota?.used)
