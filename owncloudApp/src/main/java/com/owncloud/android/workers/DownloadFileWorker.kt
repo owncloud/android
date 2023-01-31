@@ -210,7 +210,6 @@ class DownloadFileWorker(
             etag = downloadRemoteFileOperation.etag
             storagePath = finalLocationForFile
             length = (File(finalLocationForFile).length())
-            lastSyncDateForProperties = currentTime
             lastSyncDateForData = currentTime
             modifiedAtLastSyncForData = downloadRemoteFileOperation.modificationTimestamp
         }
