@@ -10,19 +10,16 @@
  * @author Juan Carlos Garrote Gascón
  *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2022 ownCloud GmbH.
- *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
  *
- *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
@@ -58,6 +55,7 @@ import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedExcept
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.isDownloadPending
@@ -280,7 +278,7 @@ class FileDisplayActivity : FileActivity(),
             // get parent from path
             val parentPath: String
             if (file != null) {
-                if (file.isAvailableLocally && file.lastSyncDateForProperties == 0L) {
+                if (file.isAvailableLocally) {
                     // upload in progress - right now, files are not inserted in the local
                     // cache until the upload is successful get parent from path
                     parentPath = file.remotePath.substring(
@@ -291,7 +289,7 @@ class FileDisplayActivity : FileActivity(),
                         file = null // not able to know the directory where the file is uploading
                     }
                 } else {
-                    file = storageManager.getFileByPath(file.remotePath)
+                    file = storageManager.getFileByPath(file.remotePath, file.spaceId)
                     // currentDir = null if not in the current Account
                 }
             }
@@ -326,9 +324,8 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
-    private fun initAndShowListOfFiles(fileListOption: FileListOption = FileListOption.ALL_FILES) {
+    fun initAndShowListOfFiles(fileListOption: FileListOption = FileListOption.ALL_FILES) {
         val mainListOfFiles = MainFileListFragment.newInstance(
-            accountName = account.name,
             initialFolderToDisplay = file,
             fileListOption = fileListOption,
         ).apply {
@@ -336,6 +333,7 @@ class FileDisplayActivity : FileActivity(),
             uploadActions = this@FileDisplayActivity
             setSearchListener(findViewById(R.id.root_toolbar_search_view))
         }
+        this.fileListOption = fileListOption
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, mainListOfFiles, TAG_LIST_OF_FILES)
         transaction.commit()
@@ -500,22 +498,9 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         when (item.itemId) {
             android.R.id.home -> {
-                val second = secondFragment
-                val currentDir = listMainFileFragment?.getCurrentFile()
-
-                val inRootFolder = currentDir != null && currentDir.parentId == 0L
-                val fileFragmentVisible = second != null && second.file != null
-
-                if (!inRootFolder || fileFragmentVisible) {
-                    onBackPressed()
-                } else if (isDrawerOpen()) {
-                    closeDrawer()
-                } else {
-                    openDrawer()
-                }
+                onBackPressed()
             }
         }
 
@@ -670,9 +655,22 @@ class FileDisplayActivity : FileActivity(),
                 updateToolbar(listMainFileFragment?.getCurrentFile())
             } else {
                 val currentDirDisplayed = listMainFileFragment?.getCurrentFile()
-                if (currentDirDisplayed == null || currentDirDisplayed.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
+                // If current file is null (we are in the spaces list, for example), close the app
+                if (currentDirDisplayed == null) {
                     finish()
                     return
+                }
+                // If current file is root folder
+                else if (currentDirDisplayed.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
+                    // If current space is a project space (not personal, not shares), navigate back to the spaces list
+                    if (listMainFileFragment?.getCurrentSpace()?.isProject == true) {
+                        navigateTo(FileListOption.SPACES_LIST)
+                    }
+                    // If current space is not a project space (personal or shares) or it is null ("Files" in oC10), close the app
+                    else {
+                        finish()
+                        return
+                    }
                 } else {
                     listMainFileFragment?.onBrowseUp()
                 }
@@ -700,10 +698,13 @@ class FileDisplayActivity : FileActivity(),
         Timber.v("onResume() start")
         super.onResume()
 
-        setCheckedItemAtBottomBar(getMenuItemForFileListOption(fileListOption))
-        if (!isSpacesTabSelected()) {
-            listMainFileFragment?.updateFileListOption(fileListOption, file)
+        if (listMainFileFragment?.getCurrentSpace()?.isProject == true) {
+            setCheckedItemAtBottomBar(getMenuItemForFileListOption(FileListOption.SPACES_LIST))
+        } else {
+            setCheckedItemAtBottomBar(getMenuItemForFileListOption(fileListOption))
         }
+
+        listMainFileFragment?.updateFileListOption(fileListOption, file)
 
         // refresh list of files
         refreshListOfFilesFragment()
@@ -853,10 +854,10 @@ class FileDisplayActivity : FileActivity(),
         sendDownloadedFilesByShareSheet(listOf(file))
     }
 
-    private fun updateToolbar(chosenFileFromParam: OCFile?) {
+    private fun updateToolbar(chosenFileFromParam: OCFile?, space: OCSpace? = null) {
         val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
 
-        if (chosenFile == null || chosenFile.remotePath == OCFile.ROOT_PATH) {
+        if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))) {
             val title =
                 when (fileListOption) {
                     FileListOption.AV_OFFLINE -> getString(R.string.drawer_item_only_available_offline)
@@ -866,6 +867,8 @@ class FileDisplayActivity : FileActivity(),
                 }
             setupRootToolbar(title, isSearchEnabled = fileListOption != FileListOption.SPACES_LIST)
             listMainFileFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
+        } else if (space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH) {
+            updateStandardToolbar(title = space.name, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         } else {
             updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         }
@@ -1347,6 +1350,7 @@ class FileDisplayActivity : FileActivity(),
         if (fileListOption != newFileListOption) {
             if (newFileListOption == FileListOption.SPACES_LIST) {
                 fileListOption = FileListOption.SPACES_LIST
+                file = null
                 initAndShowListOfSpaces()
                 updateToolbar(null)
             } else if (listMainFileFragment != null) {
@@ -1406,8 +1410,8 @@ class FileDisplayActivity : FileActivity(),
         })
     }
 
-    override fun onCurrentFolderUpdated(newCurrentFolder: OCFile) {
-        updateToolbar(newCurrentFolder)
+    override fun onCurrentFolderUpdated(newCurrentFolder: OCFile, currentSpace: OCSpace?) {
+        updateToolbar(newCurrentFolder, currentSpace)
         file = newCurrentFolder
     }
 

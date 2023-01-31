@@ -146,9 +146,7 @@ class SpacesDaoTest {
         ) + specialsAlreadyInDatabaseToInsert
 
         val newSpacesToInsert = listOf(
-            OC_SPACE_PROJECT_WITHOUT_IMAGE.copy(
-                id = anotherSpaceId
-            ).toEntity()
+            OC_SPACE_PROJECT_WITHOUT_IMAGE.toEntity()
         ) + spacesAlreadyInDatabaseToInsert
 
         spacesDao.insertOrDeleteSpaces(newSpacesToInsert, newSpecialsToInsert)

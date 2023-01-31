@@ -41,6 +41,7 @@ interface RemoteFileDataSource {
         createFullPath: Boolean,
         isChunksFolder: Boolean,
         accountName: String,
+        spaceWebDavUrl: String?,
     )
 
     fun getAvailableRemotePath(
@@ -57,16 +58,19 @@ interface RemoteFileDataSource {
     fun readFile(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String? = null,
     ): OCFile
 
     fun refreshFolder(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String? = null,
     ): List<OCFile>
 
     fun deleteFile(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String? = null,
     )
 
     fun renameFile(
@@ -75,5 +79,6 @@ interface RemoteFileDataSource {
         newName: String,
         isFolder: Boolean,
         accountName: String,
+        spaceWebDavUrl: String? = null,
     )
 }

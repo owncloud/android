@@ -190,6 +190,7 @@ public class FileOperationsHelper {
                     new SynchronizeFolderUseCase.Params(
                             file.getRemotePath(),
                             file.getOwner(),
+                            file.getSpaceId(),
                             SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY)
             );
         }

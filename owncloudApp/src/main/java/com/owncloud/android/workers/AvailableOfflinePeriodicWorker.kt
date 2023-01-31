@@ -63,6 +63,7 @@ class AvailableOfflinePeriodicWorker(
                     SynchronizeFolderUseCase.Params(
                         remotePath = it.remotePath,
                         accountName = it.owner,
+                        spaceId = it.spaceId,
                         syncMode = SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY
                     )
                 )
@@ -71,6 +72,7 @@ class AvailableOfflinePeriodicWorker(
             }
         }
     }
+
     companion object {
         const val AVAILABLE_OFFLINE_PERIODIC_WORKER = "AVAILABLE_OFFLINE_PERIODIC_WORKER"
         const val repeatInterval: Long = 15L

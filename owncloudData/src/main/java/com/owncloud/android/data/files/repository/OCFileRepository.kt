@@ -5,7 +5,7 @@
  * @author Christian Schabesberger
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,6 +24,7 @@ package com.owncloud.android.data.files.repository
 
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
+import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
@@ -44,7 +45,8 @@ import java.util.UUID
 class OCFileRepository(
     private val localFileDataSource: LocalFileDataSource,
     private val remoteFileDataSource: RemoteFileDataSource,
-    private val localStorageProvider: LocalStorageProvider
+    private val localSpacesDataSource: LocalSpacesDataSource,
+    private val localStorageProvider: LocalStorageProvider,
 ) : FileRepository {
 
     override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String =
@@ -52,13 +54,16 @@ class OCFileRepository(
 
     override fun createFolder(
         remotePath: String,
-        parentFolder: OCFile
+        parentFolder: OCFile,
     ) {
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(parentFolder.spaceId, parentFolder.owner)
+
         remoteFileDataSource.createFolder(
             remotePath = remotePath,
             createFullPath = false,
             isChunksFolder = false,
             accountName = parentFolder.owner,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).also {
             localFileDataSource.saveFilesInFolderAndReturnThem(
                 folder = parentFolder,
@@ -68,7 +73,8 @@ class OCFileRepository(
                         owner = parentFolder.owner,
                         modificationTimestamp = System.currentTimeMillis(),
                         length = 0,
-                        mimeType = MIME_DIR
+                        mimeType = MIME_DIR,
+                        spaceId = parentFolder.spaceId,
                     )
                 )
             )
@@ -127,8 +133,8 @@ class OCFileRepository(
     override fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?> =
         localFileDataSource.getFileByIdAsFlow(fileId)
 
-    override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? =
-        localFileDataSource.getFileByRemotePath(remotePath, owner)
+    override fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String?): OCFile? =
+        localFileDataSource.getFileByRemotePath(remotePath, owner, spaceId)
 
     override fun getSearchFolderContent(fileListOption: FileListOption, folderId: Long, search: String): List<OCFile> =
         when (fileListOption) {
@@ -216,15 +222,23 @@ class OCFileRepository(
         }
     }
 
-    override fun readFile(remotePath: String, accountName: String): OCFile {
-        return remoteFileDataSource.readFile(remotePath, accountName)
+    override fun readFile(remotePath: String, accountName: String, spaceId: String?): OCFile {
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(spaceId, accountName)
+
+        return remoteFileDataSource.readFile(remotePath, accountName, spaceWebDavUrl).copy(spaceId = spaceId)
     }
 
-    override fun refreshFolder(remotePath: String, accountName: String): List<OCFile> {
-        val currentSyncTime = System.currentTimeMillis()
+    override fun refreshFolder(
+        remotePath: String,
+        accountName: String,
+        spaceId: String?,
+    ): List<OCFile> {
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(spaceId, accountName)
 
         // Retrieve remote folder data
-        val fetchFolderResult = remoteFileDataSource.refreshFolder(remotePath, accountName)
+        val fetchFolderResult = remoteFileDataSource.refreshFolder(remotePath, accountName, spaceWebDavUrl).map {
+            it.copy(spaceId = spaceId)
+        }
         val remoteFolder = fetchFolderResult.first()
         val remoteFolderContent = fetchFolderResult.drop(1)
 
@@ -233,7 +247,7 @@ class OCFileRepository(
 
         // Check if the folder already exists in database.
         val localFolderByRemotePath: OCFile? =
-            localFileDataSource.getFileByRemotePath(remotePath = remoteFolder.remotePath, owner = remoteFolder.owner)
+            localFileDataSource.getFileByRemotePath(remotePath = remoteFolder.remotePath, owner = remoteFolder.owner, spaceId = spaceId)
 
         // If folder doesn't exists in database, insert everything. Easy path
         if (localFolderByRemotePath == null) {
@@ -249,8 +263,6 @@ class OCFileRepository(
 
             // Loop to sync every child
             remoteFolderContent.forEach { remoteChild ->
-                remoteChild.lastSyncDateForProperties = currentSyncTime
-
                 // Let's try with remote path if the file does not have remote id yet
                 val localChildToSync = localFilesMap.remove(remoteChild.remoteId) ?: localFilesMap.remove(remoteChild.remotePath)
 
@@ -310,10 +322,19 @@ class OCFileRepository(
     }
 
     override fun deleteFiles(listOfFilesToDelete: List<OCFile>, removeOnlyLocalCopy: Boolean) {
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(
+            spaceId = listOfFilesToDelete.first().spaceId,
+            accountName = listOfFilesToDelete.first().owner,
+        )
+
         listOfFilesToDelete.forEach { ocFile ->
             if (!removeOnlyLocalCopy) {
                 try {
-                    remoteFileDataSource.deleteFile(remotePath = ocFile.remotePath, accountName = ocFile.owner)
+                    remoteFileDataSource.deleteFile(
+                        remotePath = ocFile.remotePath,
+                        accountName = ocFile.owner,
+                        spaceWebDavUrl = spaceWebDavUrl,
+                    )
                 } catch (fileNotFoundException: FileNotFoundException) {
                     Timber.i("File ${ocFile.fileName} was not found in server. Let's remove it from local storage")
                 }
@@ -338,27 +359,34 @@ class OCFileRepository(
         )
 
         // 2. Check if file already exists in database
-        if (localFileDataSource.getFileByRemotePath(newRemotePath, ocFile.owner) != null) {
+        if (localFileDataSource.getFileByRemotePath(newRemotePath, ocFile.owner, ocFile.spaceId) != null) {
             throw FileAlreadyExistsException()
         }
 
-        // 3. Perform remote operation
+        // 3. Retrieve the specific web dav url in case there is one.
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(
+            spaceId = ocFile.spaceId,
+            accountName = ocFile.owner,
+        )
+
+        // 4. Perform remote operation
         remoteFileDataSource.renameFile(
             oldName = ocFile.fileName,
             oldRemotePath = ocFile.remotePath,
             newName = newName,
             isFolder = ocFile.isFolder,
             accountName = ocFile.owner,
+            spaceWebDavUrl = spaceWebDavUrl,
         )
 
-        // 4. Save new remote path in the local database
+        // 5. Save new remote path in the local database
         localFileDataSource.renameFile(
             fileToRename = ocFile,
             finalRemotePath = newRemotePath,
             finalStoragePath = localStorageProvider.getDefaultSavePathFor(ocFile.owner, newRemotePath)
         )
 
-        // 5. Update local storage
+        // 6. Update local storage
         localStorageProvider.moveLocalFile(
             ocFile = ocFile,
             finalStoragePath = localStorageProvider.getDefaultSavePathFor(ocFile.owner, newRemotePath)

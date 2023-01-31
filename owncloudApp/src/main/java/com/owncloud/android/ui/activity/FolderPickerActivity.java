@@ -34,12 +34,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.FileListOption;
 import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.domain.spaces.model.OCSpace;
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.PreferenceUtils;
@@ -105,7 +107,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
             OCFile folder = getFile();
             if (folder == null || !folder.isFolder()) {
                 // fall back to root folder
-                setFile(getStorageManager().getFileByPath(OCFile.ROOT_PATH));
+                setFile(getStorageManager().getFileByPath(OCFile.ROOT_PATH, null));
                 folder = getFile();
             }
 
@@ -122,12 +124,12 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
         OCFile safeInitialFolder;
         if (getFile() == null) {
             FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(this, getAccount(), getContentResolver());
-            safeInitialFolder = fileDataStorageManager.getFileByPath(OCFile.ROOT_PATH);
+            safeInitialFolder = fileDataStorageManager.getFileByPath(OCFile.ROOT_PATH, null);
         } else {
             safeInitialFolder = getFile();
         }
 
-        MainFileListFragment mainListOfFiles = MainFileListFragment.newInstance(getAccount().name, safeInitialFolder, true, FileListOption.ALL_FILES);
+        MainFileListFragment mainListOfFiles = MainFileListFragment.newInstance(safeInitialFolder, true, FileListOption.ALL_FILES);
         mainListOfFiles.setFileActions(this);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_container, mainListOfFiles, TAG_LIST_OF_FOLDERS);
@@ -249,7 +251,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     }
 
     @Override
-    public void onCurrentFolderUpdated(@NonNull OCFile newCurrentFolder) {
+    public void onCurrentFolderUpdated(@NonNull OCFile newCurrentFolder, @Nullable OCSpace currentSpace) {
         updateNavigationElementsInActionBar();
         setFile(newCurrentFolder);
     }

@@ -362,7 +362,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         } else {
             mParents.pop();
             String full_path = generatePath(mParents);
-            startSyncFolderOperation(getStorageManager().getFileByPath(full_path));
+            startSyncFolderOperation(getStorageManager().getFileByPath(full_path, null));
             updateDirectoryList();
         }
     }
@@ -448,7 +448,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         String full_path = generatePath(mParents);
         Timber.d("Populating view with content of : %s", full_path);
-        mFile = getStorageManager().getFileByPath(full_path);
+        mFile = getStorageManager().getFileByPath(full_path, null);
         if (mFile != null) {
             if (mAdapter == null) {
                 mAdapter = new ReceiveExternalFilesAdapter(
@@ -692,14 +692,14 @@ public class ReceiveExternalFilesActivity extends FileActivity
             if (file.isFolder()) {
                 return file;
             } else if (getStorageManager() != null) {
-                return getStorageManager().getFileByPath(file.getParentRemotePath());
+                return getStorageManager().getFileByPath(file.getParentRemotePath(), null);
             }
         }
         return null;
     }
 
     private void browseToRoot() {
-        OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH);
+        OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH, null);
         mFile = root;
         startSyncFolderOperation(root);
     }

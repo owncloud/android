@@ -36,9 +36,10 @@ import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
+import com.owncloud.android.ui.activity.FileDisplayActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SpacesListFragment : Fragment() {
+class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment() {
     private var _binding: SpacesListFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -63,7 +64,7 @@ class SpacesListFragment : Fragment() {
     private fun initViews() {
         val spacesListLayoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerSpacesList.layoutManager = spacesListLayoutManager
-        spacesListAdapter = SpacesListAdapter()
+        spacesListAdapter = SpacesListAdapter(this)
         binding.recyclerSpacesList.adapter = spacesListAdapter
 
         binding.swipeRefreshSpacesList.setOnRefreshListener {
@@ -80,6 +81,12 @@ class SpacesListFragment : Fragment() {
             spacesListAdapter.setData(onlyEnabledSpaces)
             binding.swipeRefreshSpacesList.isRefreshing = uiState.refreshing
             uiState.error?.let { showErrorInSnackbar(R.string.spaces_sync_failed, it) }
+
+            uiState.rootFolderFromSelectedSpace?.let {
+                val parentActivity = requireActivity() as FileDisplayActivity
+                parentActivity.file = it
+                parentActivity.initAndShowListOfFiles()
+            }
         }
     }
 
@@ -92,5 +99,9 @@ class SpacesListFragment : Fragment() {
             listEmptyDatasetTitle.setText(FileListOption.SPACES_LIST.toTitleStringRes())
             listEmptyDatasetSubTitle.setText(FileListOption.SPACES_LIST.toSubtitleStringRes())
         }
+    }
+
+    override fun onItemClick(ocSpace: OCSpace) {
+        spacesListViewModel.getRootFileForSpace(ocSpace)
     }
 }

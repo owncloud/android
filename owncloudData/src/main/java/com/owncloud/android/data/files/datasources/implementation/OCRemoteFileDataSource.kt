@@ -57,11 +57,13 @@ class OCRemoteFileDataSource(
         createFullPath: Boolean,
         isChunksFolder: Boolean,
         accountName: String,
+        spaceWebDavUrl: String?,
     ) = executeRemoteOperation {
         clientManager.getFileService(accountName).createFolder(
             remotePath = remotePath,
             createFullPath = createFullPath,
-            isChunkFolder = isChunksFolder
+            isChunkFolder = isChunksFolder,
+            spaceWebDavUrl = spaceWebDavUrl,
         )
     }
 
@@ -121,20 +123,24 @@ class OCRemoteFileDataSource(
     override fun readFile(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String?,
     ): OCFile = executeRemoteOperation {
         clientManager.getFileService(accountName).readFile(
-            remotePath = remotePath
+            remotePath = remotePath,
+            spaceWebDavUrl = spaceWebDavUrl,
         )
     }.toModel()
 
     override fun refreshFolder(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String?,
     ): List<OCFile> =
         // Assert not null, service should return an empty list if no files there.
         executeRemoteOperation {
             clientManager.getFileService(accountName).refreshFolder(
-                remotePath = remotePath
+                remotePath = remotePath,
+                spaceWebDavUrl = spaceWebDavUrl,
             )
         }.let { listOfRemote ->
             listOfRemote.map { remoteFile -> remoteFile.toModel() }
@@ -143,9 +149,11 @@ class OCRemoteFileDataSource(
     override fun deleteFile(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String?,
     ) = executeRemoteOperation {
         clientManager.getFileService(accountName).removeFile(
-            remotePath = remotePath
+            remotePath = remotePath,
+            spaceWebDavUrl = spaceWebDavUrl,
         )
     }
 
@@ -155,12 +163,14 @@ class OCRemoteFileDataSource(
         newName: String,
         isFolder: Boolean,
         accountName: String,
+        spaceWebDavUrl: String?,
     ) = executeRemoteOperation {
         clientManager.getFileService(accountName).renameFile(
             oldName = oldName,
             oldRemotePath = oldRemotePath,
             newName = newName,
-            isFolder = isFolder
+            isFolder = isFolder,
+            spaceWebDavUrl = spaceWebDavUrl,
         )
     }
 
