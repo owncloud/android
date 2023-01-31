@@ -238,7 +238,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         if (documentId.toLong() == ROOT_PARENT_ID) {
             return SpaceCursor(projection).apply {
-                addRootForSpaces()
+                addRootForSpaces(context)
             }
         }
 
