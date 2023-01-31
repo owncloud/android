@@ -174,11 +174,16 @@ class DocumentsStorageProvider : DocumentsProvider() {
         projection: Array<String>?,
         sortOrder: String?,
     ): Cursor {
-        val folderId = parentDocumentId.toLong()
-
         val resultCursor: MatrixCursor
 
-        if (folderId == DISPLAY_SPACES_DOCUMENT_ID) {
+        val folderId = try {
+            parentDocumentId.toLong()
+        } catch (numberFormatException: NumberFormatException) {
+            null
+        }
+
+        // Folder id is null, so at this point we need to list the spaces for the account.
+        if (folderId == null) {
             resultCursor = SpaceCursor(projection)
 
             val getPersonalAndProjectSpacesForAccountUseCase: GetPersonalAndProjectSpacesForAccountUseCase by inject()
@@ -186,7 +191,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
             getPersonalAndProjectSpacesForAccountUseCase.execute(
                 GetPersonalAndProjectSpacesForAccountUseCase.Params(
-                    accountName = AccountUtils.getCurrentOwnCloudAccount(context).name,
+                    accountName = parentDocumentId,
                 )
             ).forEach { space ->
                 getFileByRemotePathUseCase.execute(
@@ -200,6 +205,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 }
             }
         } else {
+            // Folder id is not null, so this is a regular folder
             resultCursor = FileCursor(projection)
 
             // Create result cursor before syncing folder again, in order to enable faster loading
@@ -235,14 +241,22 @@ class DocumentsStorageProvider : DocumentsProvider() {
             addFile(fileToUpload)
         }
 
-        if (documentId.toLong() == DISPLAY_SPACES_DOCUMENT_ID) {
-            return SpaceCursor(projection).apply {
-                addRootForSpaces(context)
-            }
+        val fileId = try {
+            documentId.toInt()
+        } catch (numberFormatException: NumberFormatException) {
+            null
         }
 
-        return FileCursor(projection).apply {
-            addFile(getFileByIdOrException(documentId.toInt()))
+        return if (fileId != null) {
+            // file id is not null, this is a regular file.
+            FileCursor(projection).apply {
+                addFile(getFileByIdOrException(fileId))
+            }
+        } else {
+            // file id is null, so at this point this is the root folder for spaces supported account.
+            SpaceCursor(projection).apply {
+                addRootForSpaces(context = context, accountName = documentId)
+            }
         }
     }
 
@@ -279,7 +293,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         sizeHint: Point?,
         signal: CancellationSignal?
     ): AssetFileDescriptor {
-
+        // TODO: Show thumbnail for spaces
         val file = getFileByIdOrException(documentId.toInt())
 
         val realFile = File(file.storagePath)
@@ -506,7 +520,8 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun getFileByPathOrException(remotePath: String, accountName: String, spaceId: String? = null): OCFile {
         val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
-        val result = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(owner = accountName, remotePath = remotePath, spaceId = spaceId))
+        val result =
+            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(owner = accountName, remotePath = remotePath, spaceId = spaceId))
         return result.getDataOrNull() ?: throw FileNotFoundException("File $remotePath not found")
     }
 
@@ -518,6 +533,5 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     companion object {
         const val NONEXISTENT_DOCUMENT_ID = "-1"
-        const val DISPLAY_SPACES_DOCUMENT_ID = -2L
     }
 }
