@@ -20,10 +20,12 @@
 
 package com.owncloud.android.data.migrations
 
+import androidx.room.DeleteColumn
 import androidx.room.RenameColumn
 import androidx.room.migration.AutoMigrationSpec
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MAJOR
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME
 
 @RenameColumn(
     tableName = CAPABILITIES_TABLE_NAME,
@@ -59,5 +61,9 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VER
     tableName = CAPABILITIES_TABLE_NAME,
     fromColumnName = "newUrl",
     toColumnName = "newUrlAppProviders"
+)
+@DeleteColumn(
+    tableName = FILES_TABLE_NAME,
+    columnName = "lastSyncDateForProperties"
 )
 class AutoMigration39To40 : AutoMigrationSpec

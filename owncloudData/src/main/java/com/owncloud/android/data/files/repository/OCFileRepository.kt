@@ -228,13 +228,14 @@ class OCFileRepository(
         return remoteFileDataSource.readFile(remotePath, accountName, spaceWebDavUrl).copy(spaceId = spaceId)
     }
 
-    override fun refreshFolder(remotePath: String, accountName: String, spaceId: String?): List<OCFile> {
-        val currentSyncTime = System.currentTimeMillis()
-
+    override fun refreshFolder(
+        remotePath: String,
+        accountName: String,
+        spaceId: String?,
+    ): List<OCFile> {
         val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(spaceId, accountName)
 
         // Retrieve remote folder data
-
         val fetchFolderResult = remoteFileDataSource.refreshFolder(remotePath, accountName, spaceWebDavUrl).map {
             it.copy(spaceId = spaceId)
         }
@@ -262,8 +263,6 @@ class OCFileRepository(
 
             // Loop to sync every child
             remoteFolderContent.forEach { remoteChild ->
-                remoteChild.lastSyncDateForProperties = currentSyncTime
-
                 // Let's try with remote path if the file does not have remote id yet
                 val localChildToSync = localFilesMap.remove(remoteChild.remoteId) ?: localFilesMap.remove(remoteChild.remotePath)
 

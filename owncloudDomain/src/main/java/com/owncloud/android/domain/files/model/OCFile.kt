@@ -50,7 +50,6 @@ data class OCFile(
     var treeEtag: String? = "",
     var availableOfflineStatus: AvailableOfflineStatus? = null,
     var lastSyncDateForData: Long? = 0,
-    var lastSyncDateForProperties: Long? = 0,
     var needsToUpdateThumbnail: Boolean = false,
     var modifiedAtLastSyncForData: Long? = 0,
     var etagInConflict: String? = null,
