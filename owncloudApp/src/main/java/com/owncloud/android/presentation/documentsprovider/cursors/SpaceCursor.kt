@@ -24,8 +24,8 @@ import android.content.Context
 import android.database.MatrixCursor
 import android.provider.DocumentsContract.Document
 import com.owncloud.android.R
-import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.presentation.documentsprovider.DocumentsStorageProvider.Companion.DISPLAY_SPACES_DOCUMENT_ID
 import com.owncloud.android.presentation.documentsprovider.cursors.FileCursor.Companion.DEFAULT_DOCUMENT_PROJECTION
 
 class SpaceCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAULT_DOCUMENT_PROJECTION) {
@@ -51,7 +51,7 @@ class SpaceCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAU
 
     fun addRootForSpaces(context: Context?) {
         newRow()
-            .add(Document.COLUMN_DOCUMENT_ID, ROOT_PARENT_ID)
+            .add(Document.COLUMN_DOCUMENT_ID, DISPLAY_SPACES_DOCUMENT_ID)
             .add(Document.COLUMN_DISPLAY_NAME, context?.getString(R.string.bottom_nav_spaces))
             .add(Document.COLUMN_LAST_MODIFIED, null)
             .add(Document.COLUMN_SIZE, null)

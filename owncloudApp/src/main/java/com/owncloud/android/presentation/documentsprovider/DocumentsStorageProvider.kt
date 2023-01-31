@@ -45,7 +45,6 @@ import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.validation.FileNameException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
-import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
@@ -179,7 +178,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val resultCursor: MatrixCursor
 
-        if (folderId == ROOT_PARENT_ID) {
+        if (folderId == DISPLAY_SPACES_DOCUMENT_ID) {
             resultCursor = SpaceCursor(projection)
 
             val getPersonalAndProjectSpacesForAccountUseCase: GetPersonalAndProjectSpacesForAccountUseCase by inject()
@@ -236,7 +235,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
             addFile(fileToUpload)
         }
 
-        if (documentId.toLong() == ROOT_PARENT_ID) {
+        if (documentId.toLong() == DISPLAY_SPACES_DOCUMENT_ID) {
             return SpaceCursor(projection).apply {
                 addRootForSpaces(context)
             }
@@ -297,7 +296,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     ): Cursor {
         val result = FileCursor(projection)
 
-        val root = getFileByPathOrException(OCFile.ROOT_PATH, AccountUtils.getCurrentOwnCloudAccount(context).name)
+        val root = getFileByPathOrException(ROOT_PATH, AccountUtils.getCurrentOwnCloudAccount(context).name)
 
         for (f in findFiles(root, query)) {
             result.addFile(f)
@@ -519,5 +518,6 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     companion object {
         const val NONEXISTENT_DOCUMENT_ID = "-1"
+        const val DISPLAY_SPACES_DOCUMENT_ID = -2L
     }
 }
