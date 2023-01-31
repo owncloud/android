@@ -30,6 +30,7 @@ import android.provider.DocumentsContract.Root
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.presentation.documentsprovider.DocumentsStorageProvider
 
 class RootCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAULT_ROOT_PROJECTION) {
 
@@ -37,7 +38,7 @@ class RootCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
         val manager = FileDataStorageManager(account)
         val mainDirId = if (spacesAllowed == true) {
             // Directory with all the spaces
-            OCFile.ROOT_PARENT_ID
+            DocumentsStorageProvider.DISPLAY_SPACES_DOCUMENT_ID
         } else {
             // Root directory of the personal space (oCIS) or "Files" (oC10)
             manager.getFileByPath(OCFile.ROOT_PATH)?.id
