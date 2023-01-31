@@ -25,7 +25,6 @@ import android.database.MatrixCursor
 import android.provider.DocumentsContract.Document
 import com.owncloud.android.R
 import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.presentation.documentsprovider.DocumentsStorageProvider.Companion.DISPLAY_SPACES_DOCUMENT_ID
 import com.owncloud.android.presentation.documentsprovider.cursors.FileCursor.Companion.DEFAULT_DOCUMENT_PROJECTION
 
 class SpaceCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAULT_DOCUMENT_PROJECTION) {
@@ -49,9 +48,14 @@ class SpaceCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAU
             .add(Document.COLUMN_MIME_TYPE, Document.MIME_TYPE_DIR)
     }
 
-    fun addRootForSpaces(context: Context?) {
+    /**
+     * Add root for spaces. Main difference is that we add the account name as the document id,
+     * so we need to take it into account in order to display the list of spaces or
+     * the actual list of files inside the folder.
+     */
+    fun addRootForSpaces(context: Context?, accountName: String) {
         newRow()
-            .add(Document.COLUMN_DOCUMENT_ID, DISPLAY_SPACES_DOCUMENT_ID)
+            .add(Document.COLUMN_DOCUMENT_ID, accountName)
             .add(Document.COLUMN_DISPLAY_NAME, context?.getString(R.string.bottom_nav_spaces))
             .add(Document.COLUMN_LAST_MODIFIED, null)
             .add(Document.COLUMN_SIZE, null)
