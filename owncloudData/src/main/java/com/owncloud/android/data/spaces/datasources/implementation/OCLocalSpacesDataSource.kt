@@ -86,43 +86,7 @@ class OCLocalSpacesDataSource(
     companion object {
         @VisibleForTesting
         fun SpacesWithSpecials.toModel() =
-            OCSpace(
-                accountName = space.accountName,
-                driveAlias = space.driveAlias,
-                driveType = space.driveType,
-                id = space.id,
-                lastModifiedDateTime = space.lastModifiedDateTime,
-                name = space.name,
-                owner = space.ownerId?.let { spaceOwnerIdEntity ->
-                    SpaceOwner(
-                        user = SpaceUser(
-                            id = spaceOwnerIdEntity
-                        )
-                    )
-                },
-                quota = space.quota?.let { spaceQuotaEntity ->
-                    SpaceQuota(
-                        remaining = spaceQuotaEntity.remaining,
-                        state = spaceQuotaEntity.state,
-                        total = spaceQuotaEntity.total,
-                        used = spaceQuotaEntity.used,
-                    )
-                },
-                root = space.root.let { spaceRootEntity ->
-                    SpaceRoot(
-                        eTag = spaceRootEntity.eTag,
-                        id = spaceRootEntity.id,
-                        permissions = null,
-                        webDavUrl = spaceRootEntity.webDavUrl,
-                        deleted = spaceRootEntity.deleteState?.let { SpaceDeleted(state = it) },
-                    )
-                },
-                webUrl = space.webUrl,
-                description = space.description,
-                special = specials.map {
-                    it.toModel()
-                }
-            )
+            space.toModel(specials = specials)
 
         @VisibleForTesting
         fun SpaceSpecialEntity.toModel() =
@@ -142,7 +106,7 @@ class OCLocalSpacesDataSource(
             )
 
         @VisibleForTesting
-        fun SpacesEntity.toModel() =
+        fun SpacesEntity.toModel(specials: List<SpaceSpecialEntity>? = null) =
             OCSpace(
                 accountName = accountName,
                 driveAlias = driveAlias,
@@ -176,7 +140,7 @@ class OCLocalSpacesDataSource(
                 },
                 webUrl = webUrl,
                 description = description,
-                special = null,
+                special = specials?.map { it.toModel() },
             )
 
         @VisibleForTesting
