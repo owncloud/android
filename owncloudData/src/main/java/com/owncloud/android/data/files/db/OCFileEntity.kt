@@ -32,7 +32,6 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_ETAG
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_ETAG_IN_CONFLICT
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_IS_DOWNLOADING
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_KEEP_IN_SYNC
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_LAST_SYNC_DATE
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_MODIFIED
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA
