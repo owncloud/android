@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 40,
-    "identityHash": "72151f55aa7990b47067c2ac269e3cd9",
+    "identityHash": "a16159ce0a3e084a5f3d044c85ea7fba",
     "entities": [
       {
         "tableName": "folder_backup",
@@ -335,7 +335,7 @@
       },
       {
         "tableName": "files",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`parentId` INTEGER, `owner` TEXT NOT NULL, `remotePath` TEXT NOT NULL, `remoteId` TEXT, `length` INTEGER NOT NULL, `creationTimestamp` INTEGER, `modificationTimestamp` INTEGER NOT NULL, `mimeType` TEXT NOT NULL, `etag` TEXT, `permissions` TEXT, `privateLink` TEXT, `storagePath` TEXT, `name` TEXT, `treeEtag` TEXT, `keepInSync` INTEGER, `lastSyncDateForData` INTEGER, `fileShareViaLink` INTEGER, `lastSyncDateForProperties` INTEGER, `needsToUpdateThumbnail` INTEGER NOT NULL, `modifiedAtLastSyncForData` INTEGER, `etagInConflict` TEXT, `fileIsDownloading` INTEGER, `sharedWithSharee` INTEGER, `sharedByLink` INTEGER NOT NULL, `spaceId` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`owner`, `spaceId`) REFERENCES `spaces`(`account_name`, `space_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`parentId` INTEGER, `owner` TEXT NOT NULL, `remotePath` TEXT NOT NULL, `remoteId` TEXT, `length` INTEGER NOT NULL, `creationTimestamp` INTEGER, `modificationTimestamp` INTEGER NOT NULL, `mimeType` TEXT NOT NULL, `etag` TEXT, `permissions` TEXT, `privateLink` TEXT, `storagePath` TEXT, `name` TEXT, `treeEtag` TEXT, `keepInSync` INTEGER, `lastSyncDateForData` INTEGER, `fileShareViaLink` INTEGER, `needsToUpdateThumbnail` INTEGER NOT NULL, `modifiedAtLastSyncForData` INTEGER, `etagInConflict` TEXT, `fileIsDownloading` INTEGER, `sharedWithSharee` INTEGER, `sharedByLink` INTEGER NOT NULL, `spaceId` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`owner`, `spaceId`) REFERENCES `spaces`(`account_name`, `space_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "parentId",
@@ -436,12 +436,6 @@
           {
             "fieldPath": "fileShareViaLink",
             "columnName": "fileShareViaLink",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "lastSyncDateForProperties",
-            "columnName": "lastSyncDateForProperties",
             "affinity": "INTEGER",
             "notNull": false
           },
@@ -999,7 +993,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '72151f55aa7990b47067c2ac269e3cd9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a16159ce0a3e084a5f3d044c85ea7fba')"
     ]
   }
 }

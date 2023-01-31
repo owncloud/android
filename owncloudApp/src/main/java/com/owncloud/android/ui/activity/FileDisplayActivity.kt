@@ -278,7 +278,7 @@ class FileDisplayActivity : FileActivity(),
             // get parent from path
             val parentPath: String
             if (file != null) {
-                if (file.isAvailableLocally && file.lastSyncDateForProperties == 0L) {
+                if (file.isAvailableLocally) {
                     // upload in progress - right now, files are not inserted in the local
                     // cache until the upload is successful get parent from path
                     parentPath = file.remotePath.substring(
