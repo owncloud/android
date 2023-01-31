@@ -24,14 +24,13 @@ import android.content.Context
 import android.database.MatrixCursor
 import android.provider.DocumentsContract.Document
 import com.owncloud.android.R
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.presentation.documentsprovider.cursors.FileCursor.Companion.DEFAULT_DOCUMENT_PROJECTION
 
 class SpaceCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAULT_DOCUMENT_PROJECTION) {
 
     fun addSpace(space: OCSpace, rootFolderId: Long?, context: Context?) {
-        val iconRes = R.drawable.ic_spaces
-        val mimeType = Document.MIME_TYPE_DIR
         var flags = Document.FLAG_DIR_SUPPORTS_CREATE
 
         if (space.isPersonal) {
@@ -46,19 +45,17 @@ class SpaceCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAU
             .add(Document.COLUMN_LAST_MODIFIED, space.lastModifiedDateTime)
             .add(Document.COLUMN_SIZE, space.quota?.used)
             .add(Document.COLUMN_FLAGS, flags)
-            .add(Document.COLUMN_ICON, iconRes)
-            .add(Document.COLUMN_MIME_TYPE, mimeType)
+            .add(Document.COLUMN_ICON, R.drawable.ic_spaces)
+            .add(Document.COLUMN_MIME_TYPE, Document.MIME_TYPE_DIR)
     }
 
-    fun addRootForSpaces() {
-        val mimeType = Document.MIME_TYPE_DIR
-
+    fun addRootForSpaces(context: Context?) {
         newRow()
-            .add(Document.COLUMN_DOCUMENT_ID, 0)
-            .add(Document.COLUMN_DISPLAY_NAME, "Spaces")
+            .add(Document.COLUMN_DOCUMENT_ID, ROOT_PARENT_ID)
+            .add(Document.COLUMN_DISPLAY_NAME, context?.getString(R.string.bottom_nav_spaces))
             .add(Document.COLUMN_LAST_MODIFIED, null)
             .add(Document.COLUMN_SIZE, null)
             .add(Document.COLUMN_FLAGS, 0)
-            .add(Document.COLUMN_MIME_TYPE, mimeType)
+            .add(Document.COLUMN_MIME_TYPE, Document.MIME_TYPE_DIR)
     }
 }
