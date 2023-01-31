@@ -663,4 +663,6 @@
   <string name="release_notes_3.0.1_subtitle1">Correção para atualizações de 2.18 (ou versões anteriores) para 3.0</string>
   <string name="release_notes_3.0.1_title2">Corrigir falha na guia de envios</string>
   <string name="release_notes_3.0.1_subtitle2">Correção para alguns usuários que experimentaram falhas ao entrar na seção de envios</string>
+  <string name="release_notes_3.0.2_title1">Corrigir problema de autenticação dupla</string>
+  <string name="release_notes_3.0.2_subtitle1">A autenticação do navegador agora é mais suave</string>
 </resources>
