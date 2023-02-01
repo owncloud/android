@@ -15,7 +15,7 @@ buildscript {
         androidxLegacy = "1.0.0"
 
         // Kotlin
-        orgJetbrainsKotlin = "1.7.20"
+        orgJetbrainsKotlin = "1.8.0"
         orgJetbrainsKotlinx = "1.6.4"
 
         // Koin
