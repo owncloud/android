@@ -78,7 +78,7 @@ dependencies {
     androidTestImplementation "androidx.test:runner:$androidxTest"
     androidTestImplementation "com.github.tmurakami:dexopener:2.0.5"
     androidTestImplementation("io.mockk:mockk-android:$ioMockk") { exclude module: "objenesis" }
-    debugImplementation "androidx.test:monitor:1.6.0"
+    debugImplementation "androidx.test:monitor:1.6.1"
 
     debugImplementation "androidx.fragment:fragment-testing:$androidxFragment"
     debugImplementation "com.facebook.stetho:stetho:1.6.0"
