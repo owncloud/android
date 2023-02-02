@@ -83,14 +83,16 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
             Account account,
             Uri[] sourceUris,
             String uploadPath,
-            ContentResolver contentResolver
+            ContentResolver contentResolver,
+            String spaceId
     ) {
 
         return new Object[]{
                 account,
                 sourceUris,
                 uploadPath,
-                contentResolver
+                contentResolver,
+                spaceId
         };
     }
 
@@ -136,6 +138,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
             Uri[] uris = (Uri[]) params[1];
             String uploadPath = (String) params[2];
             ContentResolver leakedContentResolver = (ContentResolver) params[3];
+            String spaceId = (String) params[4];
 
             String currentRemotePath;
             ArrayList<String> filesToUpload = new ArrayList<>();
@@ -144,7 +147,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                 currentUri = uris[i];
                 currentRemotePath = uploadPath + UriUtils.getDisplayNameForUri(currentUri, mAppContext);
 
-                fullTempPath = FileStorageUtils.getTemporalPath(account.name) + currentRemotePath;
+                fullTempPath = FileStorageUtils.getTemporalPath(account.name, spaceId) + currentRemotePath;
                 inputStream = leakedContentResolver.openInputStream(currentUri);
                 File cacheFile = new File(fullTempPath);
                 File tempDir = cacheFile.getParentFile();

@@ -58,6 +58,7 @@ import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStreamUseCase
+import com.owncloud.android.domain.files.usecases.GetWebDavUrlForSpaceUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
@@ -181,6 +182,7 @@ val useCaseModule = module {
     factory { GetProjectSpacesWithSpecialsForAccountAsStreamUseCase(get()) }
     factory { GetSpaceWithSpecialsByIdForAccountUseCase(get()) }
     factory { RefreshSpacesFromServerAsyncUseCase(get()) }
+    factory { GetWebDavUrlForSpaceUseCase(get()) }
 
     // Transfers
     factory { CancelDownloadForFileUseCase(get()) }

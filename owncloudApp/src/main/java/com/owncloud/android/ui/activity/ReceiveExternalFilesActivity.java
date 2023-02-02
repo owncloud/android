@@ -69,8 +69,6 @@ import com.owncloud.android.domain.exceptions.UnauthorizedException;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.extensions.ThrowableExtKt;
-import com.owncloud.android.presentation.security.SecurityEnforced;
-import com.owncloud.android.presentation.security.LockType;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
@@ -83,6 +81,8 @@ import com.owncloud.android.presentation.files.ViewType;
 import com.owncloud.android.presentation.files.createfolder.CreateFolderDialogFragment;
 import com.owncloud.android.presentation.files.operations.FileOperation;
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel;
+import com.owncloud.android.presentation.security.LockType;
+import com.owncloud.android.presentation.security.SecurityEnforced;
 import com.owncloud.android.presentation.transfers.TransfersViewModel;
 import com.owncloud.android.ui.ReceiveExternalFilesViewModel;
 import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
@@ -583,6 +583,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 mStreamsToUpload,
                 mUploadPath,
                 getAccount(),
+                mFile.getSpaceId(),
                 true, // Show waiting dialog while file is being copied from private storage
                 this  // Copy temp task listener
         );
@@ -879,7 +880,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 } else if (fileName.length() == 0) {
                     error = getString(R.string.uploader_upload_text_dialog_filename_error_empty);
                 } else if (fileName.contains("/")) {
-                   error = getString(R.string.filename_forbidden_characters);
+                    error = getString(R.string.filename_forbidden_characters);
                 } else {
                     fileName += ".txt";
                     String filePath = savePlainTextToFile(fileName);
