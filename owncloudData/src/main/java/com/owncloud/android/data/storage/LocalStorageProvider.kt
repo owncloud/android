@@ -62,12 +62,10 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         remotePath: String,
         spaceId: String?,
     ): String {
-        val defaultPathWithoutSpace = getAccountDirectoryPath(accountName) + remotePath
-
         return if (spaceId != null) {
-            defaultPathWithoutSpace + getEncodedSpace(spaceId) + File.separator
+            getAccountDirectoryPath(accountName) + File.separator + spaceId + File.separator + remotePath
         } else {
-            defaultPathWithoutSpace
+            getAccountDirectoryPath(accountName) + remotePath
         }
     }
 
@@ -95,7 +93,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
             getRootFolderPath() + File.separator + TEMPORAL_FOLDER_NAME + File.separator + getEncodedAccountName(accountName)
 
         return if (spaceId != null) {
-            temporalPathWithoutSpace + File.separator + getEncodedSpace(spaceId)
+            temporalPathWithoutSpace + File.separator + spaceId
         } else {
             temporalPathWithoutSpace
         }
@@ -150,12 +148,6 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
      * that can be in the accountName since 0.1.190B
      */
     private fun getEncodedAccountName(accountName: String?): String = Uri.encode(accountName, "@")
-
-    /**
-     * URL encoding is an 'easy fix' to overcome that NTFS and FAT32 don't allow ":" in file names,
-     * that can be in the accountName since 0.1.190B
-     */
-    private fun getEncodedSpace(spaceId: String?): String = Uri.encode(spaceId, "-$")
 
     fun moveLegacyToScopedStorage() {
         val timeInMillis = measureTimeMillis {
