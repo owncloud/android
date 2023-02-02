@@ -36,7 +36,6 @@ import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
-import java.util.HashSet
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -47,7 +46,8 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 class DownloadRemoteFileOperation(
     private val remotePath: String,
-    localFolderPath: String
+    localFolderPath: String,
+    private val spaceWebDavUrl: String? = null,
 ) : RemoteOperation<Unit>() {
 
     private val cancellationRequested = AtomicBoolean(false)
@@ -84,7 +84,8 @@ class DownloadRemoteFileOperation(
         var bis: BufferedInputStream? = null
         var savedFile = false
 
-        val getMethod = GetMethod(URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(remotePath)))
+        val webDavUri = spaceWebDavUrl ?: client.userFilesWebDavUri.toString()
+        val getMethod = GetMethod(URL(webDavUri + WebdavUtils.encodePath(remotePath)))
 
         try {
             val status = client.executeHttpMethod(getMethod)
