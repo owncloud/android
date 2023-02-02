@@ -27,8 +27,9 @@ class DeleteShareAsyncUseCase(
 ) : BaseUseCaseWithResult<Unit, DeleteShareAsyncUseCase.Params>() {
     override fun run(params: Params): Unit =
         shareRepository.deleteShare(
-            params.remoteId
+            remoteId = params.remoteId,
+            accountName = params.accountName,
         )
 
-    data class Params(val remoteId: String)
+    data class Params(val remoteId: String, val accountName: String)
 }

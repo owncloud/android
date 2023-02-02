@@ -54,6 +54,7 @@ interface RemoteShareDataSource {
     ): OCShare
 
     fun deleteShare(
-        remoteId: String
+        remoteId: String,
+        accountName: String,
     )
 }

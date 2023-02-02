@@ -70,7 +70,6 @@ val remoteDataSourceModule = module {
 
     single<ServerInfoService> { OCServerInfoService() }
     single<OIDCService> { OCOIDCService() }
-    single<ShareService> { OCShareService(get()) }
     single<ShareeService> { OCShareeService(get()) }
     single<WebfingerService> { OCWebfingerService() }
 
