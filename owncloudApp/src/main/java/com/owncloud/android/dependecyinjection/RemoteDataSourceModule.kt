@@ -21,7 +21,6 @@ package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.implementation.OCRemoteAuthenticationDataSource
@@ -45,8 +44,6 @@ import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDat
 import com.owncloud.android.data.webfinger.datasources.WebfingerRemoteDatasource
 import com.owncloud.android.data.webfinger.datasources.implementation.OCWebfingerRemoteDatasource
 import com.owncloud.android.lib.common.ConnectionValidator
-import com.owncloud.android.lib.common.OwnCloudAccount
-import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 import com.owncloud.android.lib.resources.oauth.services.implementation.OCOIDCService
 import com.owncloud.android.lib.resources.status.services.ServerInfoService
@@ -57,10 +54,6 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val remoteDataSourceModule = module {
-    single { AccountUtils.getCurrentOwnCloudAccount(androidContext()) }
-    single { OwnCloudAccount(get(), androidContext()) }
-    single { SingleSessionManager.getDefaultSingleton().getClientFor(get(), androidContext(), get()) }
-
     single { ConnectionValidator(androidContext(), androidContext().resources.getBoolean(R.bool.clear_cookies_on_validation)) }
     single { ClientManager(get(), get(), androidContext(), MainApp.accountType, get()) }
 
