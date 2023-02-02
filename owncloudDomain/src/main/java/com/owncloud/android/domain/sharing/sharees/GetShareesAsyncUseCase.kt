@@ -27,14 +27,16 @@ class GetShareesAsyncUseCase(
 ) : BaseUseCaseWithResult<List<OCSharee>, GetShareesAsyncUseCase.Params>() {
     override fun run(params: Params): List<OCSharee> =
         shareeRepository.getSharees(
-            params.searchString,
-            params.page,
-            params.perPage
+            searchString = params.searchString,
+            page = params.page,
+            perPage = params.perPage,
+            accountName = params.accountName,
         )
 
     data class Params(
         val searchString: String,
         val page: Int,
-        val perPage: Int
+        val perPage: Int,
+        val accountName: String,
     )
 }

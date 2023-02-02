@@ -33,7 +33,9 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.resources.files.services.FileService
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
 import com.owncloud.android.lib.resources.shares.services.ShareService
+import com.owncloud.android.lib.resources.shares.services.ShareeService
 import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
+import com.owncloud.android.lib.resources.shares.services.implementation.OCShareeService
 import com.owncloud.android.lib.resources.status.services.CapabilityService
 import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.lib.resources.users.services.UserService
@@ -126,5 +128,10 @@ class ClientManager(
     fun getShareService(accountName: String? = ""): ShareService {
         val ownCloudClient = getClientForAccount(accountName)
         return OCShareService(client = ownCloudClient)
+    }
+
+    fun getShareeService(accountName: String? = ""): ShareeService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCShareeService(client = ownCloudClient)
     }
 }

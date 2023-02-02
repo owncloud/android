@@ -19,23 +19,31 @@
 
 package com.owncloud.android.data.sharing.sharees.datasources.implementation
 
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.mapper.RemoteShareeMapper
 import com.owncloud.android.domain.sharing.sharees.model.OCSharee
-import com.owncloud.android.lib.resources.shares.services.ShareeService
 
 class OCRemoteShareeDataSource(
-    private val shareeService: ShareeService,
+    private val clientManager: ClientManager,
     private val shareeMapper: RemoteShareeMapper
 ) : RemoteShareeDataSource {
 
     override fun getSharees(
         searchString: String,
         page: Int,
-        perPage: Int
+        perPage: Int,
+        accountName: String,
     ): List<OCSharee> =
-        executeRemoteOperation { shareeService.getSharees(searchString, page, perPage) }.let {
+        executeRemoteOperation {
+            clientManager.getShareeService(accountName)
+                .getSharees(
+                    searchString = searchString,
+                    page = page,
+                    perPage = perPage
+                )
+        }.let {
             shareeMapper.toModel(it)
         }
 }

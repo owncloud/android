@@ -22,6 +22,7 @@ package com.owncloud.android.data.sharees.repository
 import com.owncloud.android.data.sharing.sharees.datasources.RemoteShareeDataSource
 import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -34,23 +35,23 @@ class OCShareeRepositoryTest {
 
     @Test
     fun readShareesFromNetworkOk() {
-        every { remoteShareeDataSource.getSharees(any(), any(), any()) } returns arrayListOf()
+        every { remoteShareeDataSource.getSharees(any(), any(), any(), any()) } returns arrayListOf()
 
-        oCShareeRepository.getSharees("user", 1, 5)
+        oCShareeRepository.getSharees("user", 1, 5, OC_ACCOUNT_NAME)
 
         verify(exactly = 1) {
-            remoteShareeDataSource.getSharees("user", 1, 5)
+            remoteShareeDataSource.getSharees("user", 1, 5, OC_ACCOUNT_NAME)
         }
     }
 
     @Test(expected = NoConnectionWithServerException::class)
     fun readShareesFromNetworkNoConnection() {
-        every { remoteShareeDataSource.getSharees(any(), any(), any()) } throws NoConnectionWithServerException()
+        every { remoteShareeDataSource.getSharees(any(), any(), any(), any()) } throws NoConnectionWithServerException()
 
-        oCShareeRepository.getSharees("user", 1, 5)
+        oCShareeRepository.getSharees("user", 1, 5, OC_ACCOUNT_NAME)
 
         verify(exactly = 1) {
-            remoteShareeDataSource.getSharees("user", 1, 5)
+            remoteShareeDataSource.getSharees("user", 1, 5, OC_ACCOUNT_NAME)
         }
     }
 }
