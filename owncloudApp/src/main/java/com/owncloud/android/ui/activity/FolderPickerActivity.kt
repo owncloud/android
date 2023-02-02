@@ -48,6 +48,7 @@ open class FolderPickerActivity : FileActivity(),
 
     private lateinit var cancelButton: Button
     private lateinit var chooseButton: Button
+    private lateinit var pickerMode: PickerMode
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("onCreate() start")
@@ -60,13 +61,22 @@ open class FolderPickerActivity : FileActivity(),
         val filesFolderPickerLayout = findViewById<LinearLayout>(R.id.filesFolderPickerLayout)
         filesFolderPickerLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
+        pickerMode = intent.getSerializableExtra(EXTRA_PICKER_OPTION) as PickerMode
+
         if (savedInstanceState == null) {
-            initAndShowListOfFilesFragment()
+            when (pickerMode) {
+                PickerMode.MOVE -> {}
+                PickerMode.COPY -> {}
+                PickerMode.CAMERA_FOLDER -> {
+                    // Show the personal space
+                    initAndShowListOfFilesFragment(spaceId = null)
+                }
+            }
         }
 
         // Set callback listeners for UI elements
         initPickerListeners()
-        
+
         // Action bar setup
         setupStandardToolbar(
             title = null,
@@ -198,10 +208,10 @@ open class FolderPickerActivity : FileActivity(),
         // Nothing to do. Details can't be opened here.
     }
 
-    private fun initAndShowListOfFilesFragment() {
+    private fun initAndShowListOfFilesFragment(spaceId: String?) {
         val safeInitialFolder = if (file == null) {
             val fileDataStorageManager = FileDataStorageManager(account)
-            fileDataStorageManager.getFileByPath(OCFile.ROOT_PATH)
+            fileDataStorageManager.getFileByPath(OCFile.ROOT_PATH, spaceId)
         } else {
             file
         }
@@ -226,7 +236,6 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     private fun setActionButtonText() {
-        val pickerMode = intent.getSerializableExtra(EXTRA_PICKER_OPTION) as PickerMode
         chooseButton.text = getString(pickerMode.getButtonString())
     }
 
@@ -265,7 +274,7 @@ open class FolderPickerActivity : FileActivity(),
     enum class PickerMode {
         MOVE, COPY, CAMERA_FOLDER;
 
-         fun getButtonString(): Int {
+        fun getButtonString(): Int {
             return when (this) {
                 MOVE -> R.string.folder_picker_move_here_button_text
                 COPY -> R.string.folder_picker_copy_here_button_text
