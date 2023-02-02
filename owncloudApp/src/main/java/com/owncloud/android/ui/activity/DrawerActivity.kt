@@ -252,8 +252,6 @@ abstract class DrawerActivity : ToolbarActivity() {
     private fun accountClicked(accountName: String) {
         if (drawerViewModel.getCurrentAccount(this)?.name != accountName) {
             if (drawerViewModel.setCurrentAccount(applicationContext, accountName)) {
-                // Refresh dependencies to be used in selected account
-                initDependencyInjection()
                 restart()
             } else {
                 Timber.d("Was not able to change account")
@@ -606,8 +604,6 @@ abstract class DrawerActivity : ToolbarActivity() {
             // current account has changed
             if (data.getBooleanExtra(KEY_CURRENT_ACCOUNT_CHANGED, false)) {
                 account = drawerViewModel.getCurrentAccount(this)
-                // Refresh dependencies to be used in selected account
-                initDependencyInjection()
                 restart()
             } else {
                 updateAccountList()
@@ -620,8 +616,6 @@ abstract class DrawerActivity : ToolbarActivity() {
         super.onAccountCreationSuccessful(future)
         updateAccountList()
         updateQuota()
-        // Refresh dependencies to be used in selected account
-        initDependencyInjection()
         restart()
     }
 
