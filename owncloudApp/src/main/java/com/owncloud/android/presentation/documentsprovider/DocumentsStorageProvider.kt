@@ -6,18 +6,20 @@
  * @author David González Verdugo
  * @author Abel García de Prada
  * @author Shashvat Kedia
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2015  Bartosz Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,6 +28,7 @@ package com.owncloud.android.presentation.documentsprovider
 
 import android.content.res.AssetFileDescriptor
 import android.database.Cursor
+import android.database.MatrixCursor
 import android.graphics.Point
 import android.net.Uri
 import android.os.CancellationSignal
@@ -37,10 +40,12 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.validation.FileNameException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
@@ -49,9 +54,11 @@ import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
+import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesForAccountUseCase
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.documentsprovider.cursors.FileCursor
 import com.owncloud.android.presentation.documentsprovider.cursors.RootCursor
+import com.owncloud.android.presentation.documentsprovider.cursors.SpaceCursor
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.PREFERENCE_LOCK_ACCESS_FROM_DOCUMENT_PROVIDER
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
@@ -167,31 +174,63 @@ class DocumentsStorageProvider : DocumentsProvider() {
         projection: Array<String>?,
         sortOrder: String?,
     ): Cursor {
-        val folderId = parentDocumentId.toLong()
+        val resultCursor: MatrixCursor
 
-        val resultCursor = FileCursor(projection)
+        val folderId = try {
+            parentDocumentId.toLong()
+        } catch (numberFormatException: NumberFormatException) {
+            null
+        }
 
-        // Create result cursor before syncing folder again, in order to enable faster loading
-        getFolderContent(folderId.toInt()).forEach { file -> resultCursor.addFile(file) }
+        // Folder id is null, so at this point we need to list the spaces for the account.
+        if (folderId == null) {
+            resultCursor = SpaceCursor(projection)
 
-        //Create notification listener
+            val getPersonalAndProjectSpacesForAccountUseCase: GetPersonalAndProjectSpacesForAccountUseCase by inject()
+            val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
+
+            getPersonalAndProjectSpacesForAccountUseCase.execute(
+                GetPersonalAndProjectSpacesForAccountUseCase.Params(
+                    accountName = parentDocumentId,
+                )
+            ).forEach { space ->
+                getFileByRemotePathUseCase.execute(
+                    GetFileByRemotePathUseCase.Params(
+                        owner = space.accountName,
+                        remotePath = ROOT_PATH,
+                        spaceId = space.id,
+                    )
+                ).getDataOrNull()?.let { rootFolder ->
+                    resultCursor.addSpace(space, rootFolder.id, context)
+                }
+            }
+        } else {
+            // Folder id is not null, so this is a regular folder
+            resultCursor = FileCursor(projection)
+
+            // Create result cursor before syncing folder again, in order to enable faster loading
+            getFolderContent(folderId.toInt()).forEach { file -> resultCursor.addFile(file) }
+
+            /**
+             * This will start syncing the current folder. User will only see this after updating his view with a
+             * pull down, or by accessing the folder again.
+             */
+            if (requestedFolderIdForSync != folderId && syncRequired) {
+                // register for sync
+                syncDirectoryWithServer(parentDocumentId)
+                requestedFolderIdForSync = folderId
+                resultCursor.setMoreToSync(true)
+            } else {
+                requestedFolderIdForSync = -1
+            }
+
+            syncRequired = true
+        }
+
+        // Create notification listener
         val notifyUri: Uri = toNotifyUri(toUri(parentDocumentId))
         resultCursor.setNotificationUri(context?.contentResolver, notifyUri)
 
-        /**
-         * This will start syncing the current folder. User will only see this after updating his view with a
-         * pull down, or by accessing the folder again.
-         */
-        if (requestedFolderIdForSync != folderId && syncRequired) {
-            // register for sync
-            syncDirectoryWithServer(parentDocumentId)
-            requestedFolderIdForSync = folderId
-            resultCursor.setMoreToSync(true)
-        } else {
-            requestedFolderIdForSync = -1
-        }
-
-        syncRequired = true
         return resultCursor
 
     }
@@ -202,8 +241,22 @@ class DocumentsStorageProvider : DocumentsProvider() {
             addFile(fileToUpload)
         }
 
-        return FileCursor(projection).apply {
-            addFile(getFileByIdOrException(documentId.toInt()))
+        val fileId = try {
+            documentId.toInt()
+        } catch (numberFormatException: NumberFormatException) {
+            null
+        }
+
+        return if (fileId != null) {
+            // file id is not null, this is a regular file.
+            FileCursor(projection).apply {
+                addFile(getFileByIdOrException(fileId))
+            }
+        } else {
+            // file id is null, so at this point this is the root folder for spaces supported account.
+            SpaceCursor(projection).apply {
+                addRootForSpaces(context = context, accountName = documentId)
+            }
         }
     }
 
@@ -222,7 +275,15 @@ class DocumentsStorageProvider : DocumentsProvider() {
         }
 
         for (account in accounts) {
-            result.addRoot(account, contextApp)
+            val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
+            val capabilities = getStoredCapabilitiesUseCase.execute(
+                GetStoredCapabilitiesUseCase.Params(
+                    accountName = account.name
+                )
+            )
+            val spacesAllowed = capabilities?.isSpacesAllowed()
+
+            result.addRoot(account, contextApp, spacesAllowed)
         }
         return result
     }
@@ -232,7 +293,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         sizeHint: Point?,
         signal: CancellationSignal?
     ): AssetFileDescriptor {
-
+        // TODO: Show thumbnail for spaces
         val file = getFileByIdOrException(documentId.toInt())
 
         val realFile = File(file.storagePath)
@@ -249,7 +310,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     ): Cursor {
         val result = FileCursor(projection)
 
-        val root = getFileByPathOrException(OCFile.ROOT_PATH, AccountUtils.getCurrentOwnCloudAccount(context).name)
+        val root = getFileByPathOrException(ROOT_PATH, AccountUtils.getCurrentOwnCloudAccount(context).name)
 
         for (f in findFiles(root, query)) {
             result.addFile(f)
@@ -373,7 +434,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         createFolderAsyncUseCase.execute(CreateFolderAsyncUseCase.Params(displayName, parentDocument)).run {
             checkUseCaseResult(this, parentDocument.id.toString())
             val newPath = parentDocument.remotePath + displayName + File.separator
-            val newFolder = getFileByPathOrException(newPath, parentDocument.owner)
+            val newFolder = getFileByPathOrException(newPath, parentDocument.owner, parentDocument.spaceId)
             return newFolder.id.toString()
         }
     }
@@ -457,9 +518,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
         return result.getDataOrNull() ?: throw FileNotFoundException("File $id not found")
     }
 
-    private fun getFileByPathOrException(remotePath: String, accountName: String): OCFile {
+    private fun getFileByPathOrException(remotePath: String, accountName: String, spaceId: String? = null): OCFile {
         val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
-        val result = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(owner = accountName, remotePath = remotePath))
+        val result =
+            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(owner = accountName, remotePath = remotePath, spaceId = spaceId))
         return result.getDataOrNull() ?: throw FileNotFoundException("File $remotePath not found")
     }
 
