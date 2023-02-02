@@ -118,7 +118,8 @@ class FileDisplayActivity : FileActivity(),
     FileFragment.ContainerActivity,
     SecurityEnforced,
     MainFileListFragment.FileActions,
-    MainFileListFragment.UploadActions {
+    MainFileListFragment.UploadActions,
+    SpacesListFragment.SpacesActions {
 
     private val job = Job()
     override val coroutineContext: CoroutineContext
@@ -324,7 +325,7 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
-    fun initAndShowListOfFiles(fileListOption: FileListOption = FileListOption.ALL_FILES) {
+    private fun initAndShowListOfFiles(fileListOption: FileListOption = FileListOption.ALL_FILES) {
         val mainListOfFiles = MainFileListFragment.newInstance(
             initialFolderToDisplay = file,
             fileListOption = fileListOption,
@@ -340,7 +341,9 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun initAndShowListOfSpaces() {
-        val listOfSpaces = SpacesListFragment()
+        val listOfSpaces = SpacesListFragment().apply {
+            spacesActions = this@FileDisplayActivity
+        }
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, listOfSpaces, TAG_LIST_OF_SPACES)
         transaction.commit()
@@ -1482,6 +1485,11 @@ class FileDisplayActivity : FileActivity(),
             Intent.createChooser(action, getString(R.string.upload_chooser_title)),
             REQUEST_CODE__SELECT_CONTENT_FROM_APPS
         )
+    }
+
+    override fun onSpaceClicked(rootFolder: OCFile) {
+        file = rootFolder
+        initAndShowListOfFiles()
     }
 
     companion object {

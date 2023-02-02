@@ -30,13 +30,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.owncloud.android.R
 import com.owncloud.android.databinding.SpacesListFragmentBinding
 import com.owncloud.android.domain.files.model.FileListOption
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
-import com.owncloud.android.ui.activity.FileDisplayActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment() {
@@ -46,6 +46,8 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
     private val spacesListViewModel: SpacesListViewModel by viewModel()
 
     private lateinit var spacesListAdapter: SpacesListAdapter
+
+    var spacesActions: SpacesActions? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,9 +85,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
             uiState.error?.let { showErrorInSnackbar(R.string.spaces_sync_failed, it) }
 
             uiState.rootFolderFromSelectedSpace?.let {
-                val parentActivity = requireActivity() as FileDisplayActivity
-                parentActivity.file = it
-                parentActivity.initAndShowListOfFiles()
+               spacesActions?.onSpaceClicked(it)
             }
         }
     }
@@ -103,5 +103,9 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
 
     override fun onItemClick(ocSpace: OCSpace) {
         spacesListViewModel.getRootFileForSpace(ocSpace)
+    }
+
+    interface SpacesActions {
+        fun onSpaceClicked(rootFolder: OCFile)
     }
 }
