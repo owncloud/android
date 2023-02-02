@@ -32,9 +32,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.owncloud.android.R
+import com.owncloud.android.presentation.accounts.AccountsManagementActivity
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.avatar.AvatarUtils
-import com.owncloud.android.presentation.accounts.AccountsManagementActivity
 
 /**
  * Base class providing toolbar registration functionality, see [.setupToolbar].
@@ -105,7 +105,9 @@ abstract class ToolbarActivity : BaseActivity() {
             baseContext.resources.getDimension(R.dimen.toolbar_avatar_radius)
         )
         avatarView.setOnClickListener {
-            startActivity(Intent(baseContext, AccountsManagementActivity::class.java))
+            // The drawer activity will take care of checking if the account changed.
+            val manageAccountsIntent = Intent(applicationContext, AccountsManagementActivity::class.java)
+            startActivityForResult(manageAccountsIntent, DrawerActivity.ACTION_MANAGE_ACCOUNTS)
         }
     }
 

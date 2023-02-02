@@ -677,7 +677,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     companion object {
         private const val KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE"
         private const val KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM"
-        private const val ACTION_MANAGE_ACCOUNTS = 101
+        const val ACTION_MANAGE_ACCOUNTS = 101
         private const val MENU_ORDER_ACCOUNT = 1
         private const val MENU_ORDER_ACCOUNT_FUNCTION = 2
         private const val USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD = 4
