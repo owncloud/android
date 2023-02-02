@@ -65,12 +65,17 @@ open class FolderPickerActivity : FileActivity(),
 
         if (savedInstanceState == null) {
             when (pickerMode) {
-                PickerMode.MOVE -> {}
+                PickerMode.MOVE -> {
+                    // Show the space where the files come from
+                    val targetFiles = intent.getParcelableArrayListExtra<OCFile>(EXTRA_FILES)
+                    val spaceIdOfFiles = targetFiles?.get(0)?.spaceId
+                    initAndShowListOfFilesFragment(spaceId = spaceIdOfFiles)
+                }
                 PickerMode.COPY -> {}
                 PickerMode.CAMERA_FOLDER -> {
                     // Show the personal space
                     initAndShowListOfFilesFragment(spaceId = null)
-                }
+            }
             }
         }
 
@@ -215,6 +220,8 @@ open class FolderPickerActivity : FileActivity(),
         } else {
             file
         }
+
+        file = safeInitialFolder
 
         safeInitialFolder?.let {
             val mainListOfFiles = MainFileListFragment.newInstance(it, true, FileListOption.ALL_FILES)
