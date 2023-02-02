@@ -19,15 +19,15 @@
 
 package com.owncloud.android.data.sharing.shares.datasources.implementation
 
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
-import com.owncloud.android.lib.resources.shares.services.ShareService
 
 class OCRemoteShareDataSource(
-    private val shareService: ShareService,
+    private val clientManager: ClientManager,
     private val remoteShareMapper: RemoteShareMapper
 ) : RemoteShareDataSource {
 
@@ -38,7 +38,7 @@ class OCRemoteShareDataSource(
         accountName: String
     ): List<OCShare> {
         executeRemoteOperation {
-            shareService.getShares(remoteFilePath, reshares, subfiles)
+            clientManager.getShareService(accountName).getShares(remoteFilePath, reshares, subfiles)
         }.let {
             return it.shares.map { remoteShare ->
                 remoteShareMapper.toModel(remoteShare)!!.apply {
@@ -60,7 +60,7 @@ class OCRemoteShareDataSource(
         accountName: String
     ): OCShare {
         executeRemoteOperation {
-            shareService.insertShare(
+            clientManager.getShareService(accountName).insertShare(
                 remoteFilePath,
                 com.owncloud.android.lib.resources.shares.ShareType.fromValue(shareType.value)!!,
                 shareWith,
@@ -87,7 +87,7 @@ class OCRemoteShareDataSource(
         accountName: String
     ): OCShare {
         executeRemoteOperation {
-            shareService.updateShare(
+            clientManager.getShareService(accountName).updateShare(
                 remoteId,
                 name,
                 password,
@@ -102,9 +102,9 @@ class OCRemoteShareDataSource(
         }
     }
 
-    override fun deleteShare(remoteId: String) {
+    override fun deleteShare(remoteId: String, accountName: String) {
         executeRemoteOperation {
-            shareService.deleteShare(remoteId)
+            clientManager.getShareService(accountName).deleteShare(remoteId)
         }
     }
 }
