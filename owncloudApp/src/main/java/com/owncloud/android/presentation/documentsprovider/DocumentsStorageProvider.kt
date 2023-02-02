@@ -446,7 +446,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
     ): String {
         // We just need to return a Document ID, so we'll return an empty one. File does not exist in our db yet.
         // File will be created at [openDocument] method.
-        val tempDir = File(FileStorageUtils.getTemporalPath(parentDocument.owner))
+        val tempDir = File(FileStorageUtils.getTemporalPath(parentDocument.owner, parentDocument.spaceId))
         val newFile = File(tempDir, displayName)
         fileToUpload = OCFile(
             remotePath = parentDocument.remotePath + displayName, mimeType = mimeType, parentId = parentDocument.id, owner = parentDocument.owner
