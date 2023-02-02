@@ -37,6 +37,7 @@ import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment
+import com.owncloud.android.presentation.spaces.SpacesListFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
 import timber.log.Timber
@@ -44,7 +45,8 @@ import timber.log.Timber
 open class FolderPickerActivity : FileActivity(),
     FileFragment.ContainerActivity,
     OnClickListener,
-    MainFileListFragment.FileActions {
+    MainFileListFragment.FileActions,
+    SpacesListFragment.SpacesActions {
 
     private lateinit var cancelButton: Button
     private lateinit var chooseButton: Button
@@ -71,11 +73,14 @@ open class FolderPickerActivity : FileActivity(),
                     val spaceIdOfFiles = targetFiles?.get(0)?.spaceId
                     initAndShowListOfFilesFragment(spaceId = spaceIdOfFiles)
                 }
-                PickerMode.COPY -> {}
+                PickerMode.COPY -> {
+                    // Show the list of spaces
+                    initAndShowListOfSpaces()
+                }
                 PickerMode.CAMERA_FOLDER -> {
                     // Show the personal space
                     initAndShowListOfFilesFragment(spaceId = null)
-            }
+                }
             }
         }
 
@@ -213,7 +218,12 @@ open class FolderPickerActivity : FileActivity(),
         // Nothing to do. Details can't be opened here.
     }
 
-    private fun initAndShowListOfFilesFragment(spaceId: String?) {
+    override fun onSpaceClicked(rootFolder: OCFile) {
+        file = rootFolder
+        initAndShowListOfFilesFragment()
+    }
+
+    private fun initAndShowListOfFilesFragment(spaceId: String? = null) {
         val safeInitialFolder = if (file == null) {
             val fileDataStorageManager = FileDataStorageManager(account)
             fileDataStorageManager.getFileByPath(OCFile.ROOT_PATH, spaceId)
@@ -227,9 +237,17 @@ open class FolderPickerActivity : FileActivity(),
             val mainListOfFiles = MainFileListFragment.newInstance(it, true, FileListOption.ALL_FILES)
             mainListOfFiles.fileActions = this
             val transaction = supportFragmentManager.beginTransaction()
-            transaction.add(R.id.fragment_container, mainListOfFiles, TAG_LIST_OF_FOLDERS)
+            transaction.replace(R.id.fragment_container, mainListOfFiles, TAG_LIST_OF_FOLDERS)
             transaction.commit()
         }
+    }
+
+    private fun initAndShowListOfSpaces() {
+        val listOfSpaces = SpacesListFragment()
+        listOfSpaces.spacesActions = this
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, listOfSpaces)
+        transaction.commit()
     }
 
     /**
