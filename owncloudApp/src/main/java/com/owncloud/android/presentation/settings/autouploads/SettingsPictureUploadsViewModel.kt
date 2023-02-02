@@ -35,7 +35,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
-import com.owncloud.android.ui.activity.UploadPathActivity
+import com.owncloud.android.ui.activity.FolderPickerActivity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -111,7 +111,7 @@ class SettingsPictureUploadsViewModel(
     fun getPictureUploadsSourcePath(): String? = _pictureUploads.value?.sourcePath
 
     fun handleSelectPictureUploadsPath(data: Intent?) {
-        val folderToUpload = data?.getParcelableExtra<OCFile>(UploadPathActivity.EXTRA_FOLDER)
+        val folderToUpload = data?.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER)
         folderToUpload?.remotePath?.let {
             viewModelScope.launch(coroutinesDispatcherProvider.io) {
                 savePictureUploadsConfigurationUseCase.execute(
