@@ -47,8 +47,6 @@ import com.owncloud.android.data.webfinger.datasources.implementation.OCWebfinge
 import com.owncloud.android.lib.common.ConnectionValidator
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
-import com.owncloud.android.lib.resources.files.services.ChunkService
-import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 import com.owncloud.android.lib.resources.oauth.services.implementation.OCOIDCService
 import com.owncloud.android.lib.resources.shares.services.ShareService
@@ -70,7 +68,6 @@ val remoteDataSourceModule = module {
     single { ConnectionValidator(androidContext(), androidContext().resources.getBoolean(R.bool.clear_cookies_on_validation)) }
     single { ClientManager(get(), get(), androidContext(), MainApp.accountType, get()) }
 
-    single<ChunkService> { OCChunkService(get()) }
     single<ServerInfoService> { OCServerInfoService() }
     single<OIDCService> { OCOIDCService() }
     single<ShareService> { OCShareService(get()) }
