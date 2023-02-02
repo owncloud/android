@@ -113,7 +113,7 @@ class DownloadFileWorker(
      */
     private val finalLocationForFile: String
         get() = ocFile.storagePath.takeUnless { it.isNullOrBlank() }
-            ?: localStorageProvider.getDefaultSavePathFor(account.name, ocFile.remotePath, ocFile.spaceId)
+            ?: localStorageProvider.getDefaultSavePathFor(accountName = account.name, remotePath = ocFile.remotePath, spaceId = ocFile.spaceId)
 
     override suspend fun doWork(): Result {
         if (!areParametersValid()) return Result.failure()
