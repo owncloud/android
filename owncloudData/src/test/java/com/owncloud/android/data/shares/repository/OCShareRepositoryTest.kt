@@ -28,6 +28,7 @@ import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_PRIVATE_SHARE
 import com.owncloud.android.testutil.OC_PUBLIC_SHARE
 import com.owncloud.android.testutil.OC_SHARE
@@ -509,9 +510,9 @@ class OCShareRepositoryTest {
     @Test
     fun removeShare() {
         val shareId = "fjCZxtidwFrzoCl"
-        ocShareRepository.deleteShare(shareId)
+        ocShareRepository.deleteShare(shareId, OC_ACCOUNT_NAME)
 
-        verify(exactly = 1) { remoteShareDataSource.deleteShare(shareId) }
+        verify(exactly = 1) { remoteShareDataSource.deleteShare(shareId, OC_ACCOUNT_NAME) }
         verify(exactly = 1) { localShareDataSource.deleteShare(shareId) }
     }
 
@@ -520,12 +521,12 @@ class OCShareRepositoryTest {
         val shareId = "fjCZxtidwFrzoCl"
 
         every {
-            remoteShareDataSource.deleteShare(shareId)
+            remoteShareDataSource.deleteShare(shareId, OC_ACCOUNT_NAME)
         } throws FileNotFoundException()
 
-        ocShareRepository.deleteShare(shareId)
+        ocShareRepository.deleteShare(shareId, OC_ACCOUNT_NAME)
 
-        verify(exactly = 1) { remoteShareDataSource.deleteShare(shareId) }
+        verify(exactly = 1) { remoteShareDataSource.deleteShare(shareId, OC_ACCOUNT_NAME) }
         verify(exactly = 0) { localShareDataSource.deleteShare(shareId) }
     }
 }

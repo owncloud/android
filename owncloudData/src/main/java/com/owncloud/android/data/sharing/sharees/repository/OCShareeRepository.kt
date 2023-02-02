@@ -30,6 +30,12 @@ class OCShareeRepository(
     override fun getSharees(
         searchString: String,
         page: Int,
-        perPage: Int
-    ): List<OCSharee> = remoteShareeDataSource.getSharees(searchString, page, perPage)
+        perPage: Int,
+        accountName: String,
+    ): List<OCSharee> = remoteShareeDataSource.getSharees(
+        searchString = searchString,
+        page = page,
+        perPage = perPage,
+        accountName = accountName,
+    )
 }

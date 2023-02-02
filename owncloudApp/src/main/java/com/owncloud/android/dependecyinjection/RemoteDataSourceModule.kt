@@ -49,10 +49,6 @@ import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 import com.owncloud.android.lib.resources.oauth.services.implementation.OCOIDCService
-import com.owncloud.android.lib.resources.shares.services.ShareService
-import com.owncloud.android.lib.resources.shares.services.ShareeService
-import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
-import com.owncloud.android.lib.resources.shares.services.implementation.OCShareeService
 import com.owncloud.android.lib.resources.status.services.ServerInfoService
 import com.owncloud.android.lib.resources.status.services.implementation.OCServerInfoService
 import com.owncloud.android.lib.resources.webfinger.services.WebfingerService
@@ -70,7 +66,6 @@ val remoteDataSourceModule = module {
 
     single<ServerInfoService> { OCServerInfoService() }
     single<OIDCService> { OCOIDCService() }
-    single<ShareeService> { OCShareeService(get()) }
     single<WebfingerService> { OCWebfingerService() }
 
     factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get()) }
