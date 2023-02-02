@@ -32,6 +32,8 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.getAnonymousCredentials
 import com.owncloud.android.lib.resources.files.services.FileService
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
+import com.owncloud.android.lib.resources.status.services.CapabilityService
+import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.lib.resources.users.services.UserService
 import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 
@@ -112,5 +114,10 @@ class ClientManager(
     fun getFileService(accountName: String? = ""): FileService {
         val ownCloudClient = getClientForAccount(accountName)
         return OCFileService(client = ownCloudClient)
+    }
+
+    fun getCapabilityService(accountName: String? = ""): CapabilityService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCCapabilityService(client = ownCloudClient)
     }
 }

@@ -55,9 +55,7 @@ import com.owncloud.android.lib.resources.shares.services.ShareService
 import com.owncloud.android.lib.resources.shares.services.ShareeService
 import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
 import com.owncloud.android.lib.resources.shares.services.implementation.OCShareeService
-import com.owncloud.android.lib.resources.status.services.CapabilityService
 import com.owncloud.android.lib.resources.status.services.ServerInfoService
-import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.lib.resources.status.services.implementation.OCServerInfoService
 import com.owncloud.android.lib.resources.webfinger.services.WebfingerService
 import com.owncloud.android.lib.resources.webfinger.services.implementation.OCWebfingerService
@@ -72,7 +70,6 @@ val remoteDataSourceModule = module {
     single { ConnectionValidator(androidContext(), androidContext().resources.getBoolean(R.bool.clear_cookies_on_validation)) }
     single { ClientManager(get(), get(), androidContext(), MainApp.accountType, get()) }
 
-    single<CapabilityService> { OCCapabilityService(get()) }
     single<ChunkService> { OCChunkService(get()) }
     single<ServerInfoService> { OCServerInfoService() }
     single<OIDCService> { OCOIDCService() }
