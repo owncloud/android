@@ -73,10 +73,10 @@
   <string name="prefs_subsection_advanced">Fortgeschritten</string>
   <string name="prefs_show_hidden_files">Versteckte Dateien anzeigen</string>
   <string name="prefs_log_open_logs_list_view">Protokolle</string>
-  <string name="prefs_log_no_logs_list_view">Leerer Log Ordner!</string>
+  <string name="prefs_log_no_logs_list_view">Leerer Protokoll-Ordner!</string>
   <string name="prefs_log_title">Protokollierung aktivieren</string>
   <string name="prefs_log_summary">Dies wird zur Protokollierung von Problemen genutzt</string>
-  <string name="prefs_log_title_history">Log Historie</string>
+  <string name="prefs_log_title_history">Protokollverlauf</string>
   <string name="prefs_log_summary_history">Gespeicherten Protokolle ansehen</string>
   <string name="prefs_log_delete_history_button">Verlauf löschen</string>
   <string name="prefs_help">Hilfe</string>
