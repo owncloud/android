@@ -703,6 +703,7 @@ class FileDisplayActivity : FileActivity(),
 
         if (listMainFileFragment?.getCurrentSpace()?.isProject == true) {
             setCheckedItemAtBottomBar(getMenuItemForFileListOption(FileListOption.SPACES_LIST))
+            updateToolbar(null, listMainFileFragment?.getCurrentSpace())
         } else {
             setCheckedItemAtBottomBar(getMenuItemForFileListOption(fileListOption))
         }
