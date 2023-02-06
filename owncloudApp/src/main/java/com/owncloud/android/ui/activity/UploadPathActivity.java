@@ -57,6 +57,7 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
     protected void onAccountSet(boolean stateWasRecovered) {
         super.onAccountSet(stateWasRecovered);
         if (getAccount() != null) {
+            // TODO: Check how to solve glitch when accessing the folder picker from camera uploads, sending the app to background, returning and avoid falling back to initial folder
             // Check if we need to open an specific folder and navigate to it.
             // If there is not, fallback to the root folder for this account.
             String cameraUploadPath = getIntent().getStringExtra(KEY_CAMERA_UPLOAD_PATH);
@@ -70,7 +71,7 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
             }
 
             if (!stateWasRecovered) {
-                MainFileListFragment listOfFolders = getListOfFilesFragment();
+                MainFileListFragment listOfFolders = getListMainFileFragment();
                 listOfFolders.navigateToFolder(getFile());
             }
 

@@ -48,6 +48,9 @@ open class FolderPickerActivity : FileActivity(),
     MainFileListFragment.FileActions,
     SpacesListFragment.SpacesActions {
 
+    protected val listMainFileFragment: MainFileListFragment?
+        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FOLDERS) as MainFileListFragment?
+
     private lateinit var cancelButton: Button
     private lateinit var chooseButton: Button
     private lateinit var pickerMode: PickerMode
@@ -101,6 +104,11 @@ open class FolderPickerActivity : FileActivity(),
         Timber.d("onCreate() end")
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateToolbar(null, listMainFileFragment?.getCurrentSpace())
+    }
+
     /**
      * Called when the ownCloud {@link Account} associated to the Activity was just updated.
      */
@@ -118,8 +126,7 @@ open class FolderPickerActivity : FileActivity(),
             }
 
             if (!stateWasRecovered) {
-                val listOfFolders = getListOfFilesFragment()
-                listOfFolders?.navigateToFolder(folder)
+                listMainFileFragment?.navigateToFolder(folder)
             }
 
             updateNavigationElementsInActionBar()
@@ -132,32 +139,37 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        var returnValue = true
         when (item.itemId) {
             android.R.id.home -> {
-                val currentDir = getCurrentFolder()
-                if (currentDir != null && currentDir.parentId != 0L) {
-                    onBackPressed()
-                }
+                onBackPressed()
             }
-            else -> returnValue = super.onOptionsItemSelected(item)
         }
 
-        return returnValue
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
-        val listOfFiles = getListOfFilesFragment()
-        if (listOfFiles != null) {  // Should never be null, indeed
-            val fileBeforeBrowsingUp = listOfFiles.getCurrentFile()
-            if (fileBeforeBrowsingUp.parentId != null && fileBeforeBrowsingUp.parentId == OCFile.ROOT_PARENT_ID) {
-                // If we are already at root, let's finish the picker. No sense to keep browsing up.
+        val currentDirDisplayed = listMainFileFragment?.getCurrentFile()
+        // If current file is null (we are in the spaces list, for example), close the activity
+        if (currentDirDisplayed == null) {
+            finish()
+            return
+        }
+        // If current file is root folder
+        else if (currentDirDisplayed.parentId == OCFile.ROOT_PARENT_ID) {
+            // If we are not in COPY mode, close the activity
+            if (pickerMode != PickerMode.COPY) {
                 finish()
                 return
             }
-            listOfFiles.onBrowseUp()
-            file = listOfFiles.getCurrentFile()
-            updateNavigationElementsInActionBar()
+            // If we are in COPY mode and inside a space, navigate back to the spaces list
+            if (listMainFileFragment?.getCurrentSpace()?.isProject == true || listMainFileFragment?.getCurrentSpace()?.isPersonal == true) {
+                file = null
+                initAndShowListOfSpaces()
+                updateToolbar(null)
+            }
+        } else {
+            listMainFileFragment?.onBrowseUp()
         }
     }
 
@@ -178,7 +190,7 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     override fun onCurrentFolderUpdated(newCurrentFolder: OCFile, currentSpace: OCSpace?) {
-        updateNavigationElementsInActionBar()
+        updateToolbar(newCurrentFolder, currentSpace)
         file = newCurrentFolder
     }
 
@@ -264,21 +276,23 @@ open class FolderPickerActivity : FileActivity(),
         chooseButton.text = getString(pickerMode.getButtonString())
     }
 
-    protected fun getListOfFilesFragment(): MainFileListFragment? {
-        val listOfFiles = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FOLDERS)
-        if (listOfFiles != null) {
-            return listOfFiles as MainFileListFragment
+    private fun getCurrentFolder(): OCFile? {
+        if (listMainFileFragment != null) {
+            return listMainFileFragment?.getCurrentFile()
         }
-        Timber.e("Access to unexisting list of files fragment!!")
         return null
     }
 
-    private fun getCurrentFolder(): OCFile? {
-        val listOfFiles = getListOfFilesFragment()
-        if (listOfFiles != null) {  // should never be null, indeed
-            return listOfFiles.getCurrentFile()
+    private fun updateToolbar(chosenFileFromParam: OCFile?, space: OCSpace? = null) {
+        val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
+
+        if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))) {
+            updateStandardToolbar(title = getString(R.string.default_display_name_for_root_folder), displayHomeAsUpEnabled = false, homeButtonEnabled = false)
+        } else if (space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH) {
+            updateStandardToolbar(title = space.name, displayHomeAsUpEnabled = pickerMode == PickerMode.COPY, homeButtonEnabled = pickerMode == PickerMode.COPY)
+        } else {
+            updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         }
-        return null
     }
 
     protected fun updateNavigationElementsInActionBar() {
