@@ -255,7 +255,7 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     private fun initAndShowListOfSpaces() {
-        val listOfSpaces = SpacesListFragment()
+        val listOfSpaces = SpacesListFragment(showPersonalSpace = true)
         listOfSpaces.spacesActions = this
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, listOfSpaces)
@@ -285,8 +285,9 @@ open class FolderPickerActivity : FileActivity(),
 
     private fun updateToolbar(chosenFileFromParam: OCFile?, space: OCSpace? = null) {
         val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
-
-        if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))) {
+        if (chosenFile != null && chosenFile.remotePath == OCFile.ROOT_PATH && space?.isProject == false && pickerMode == PickerMode.COPY) {
+            updateStandardToolbar(title = getString(R.string.default_display_name_for_root_folder), displayHomeAsUpEnabled = true, homeButtonEnabled = true)
+        } else if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))) {
             updateStandardToolbar(title = getString(R.string.default_display_name_for_root_folder), displayHomeAsUpEnabled = false, homeButtonEnabled = false)
         } else if (space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH) {
             updateStandardToolbar(title = space.name, displayHomeAsUpEnabled = pickerMode == PickerMode.COPY, homeButtonEnabled = pickerMode == PickerMode.COPY)

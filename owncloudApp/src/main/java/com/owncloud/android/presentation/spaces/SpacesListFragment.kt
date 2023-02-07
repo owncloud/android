@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -38,12 +38,19 @@ import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment() {
+class SpacesListFragment(
+    val showPersonalSpace: Boolean = false,
+) : SpacesListAdapter.SpacesListAdapterListener, Fragment() {
     private var _binding: SpacesListFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val spacesListViewModel: SpacesListViewModel by viewModel()
+    private val spacesListViewModel: SpacesListViewModel by viewModel() {
+        parametersOf(
+            showPersonalSpace
+        )
+    }
 
     private lateinit var spacesListAdapter: SpacesListAdapter
 
