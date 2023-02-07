@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -26,6 +28,7 @@ interface RemoteFileDataSource {
         path: String,
         checkUserCredentials: Boolean,
         accountName: String,
+        spaceWebDavUrl: String?,
     ): Boolean
 
     fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
@@ -47,12 +50,14 @@ interface RemoteFileDataSource {
     fun getAvailableRemotePath(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String?,
     ): String
 
     fun moveFile(
         sourceRemotePath: String,
         targetRemotePath: String,
         accountName: String,
+        spaceWebDavUrl: String?,
     )
 
     fun readFile(
