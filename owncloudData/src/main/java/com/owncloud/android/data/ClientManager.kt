@@ -40,7 +40,6 @@ import com.owncloud.android.lib.resources.status.services.CapabilityService
 import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.lib.resources.users.services.UserService
 import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
-import timber.log.Timber
 
 class ClientManager(
     private val accountManager: AccountManager,
@@ -91,23 +90,15 @@ class ClientManager(
     private fun getClientForAccount(
         accountName: String?
     ): OwnCloudClient {
-        val safeClient = ownCloudClientForCurrentAccount
-
         val account: Account? = if (accountName.isNullOrBlank()) {
             getCurrentAccount()
         } else {
             accountManager.getAccountsByType(accountType).firstOrNull { it.name == accountName }
         }
 
-        return if (account != null && safeClient != null && safeClient.account != null && safeClient.account.name == account.name) {
-            Timber.i("Reusing the cached client for account ${account.name}")
-            safeClient
-        } else {
-            Timber.i("Current cached client is for account ${safeClient?.account?.name}. We will retrieve a new client for account ${account?.name}")
-            val ownCloudAccount = OwnCloudAccount(account, context)
-            SingleSessionManager.getDefaultSingleton().getClientFor(ownCloudAccount, context, connectionValidator).also {
-                ownCloudClientForCurrentAccount = it
-            }
+        val ownCloudAccount = OwnCloudAccount(account, context)
+        return SingleSessionManager.getDefaultSingleton().getClientFor(ownCloudAccount, context, connectionValidator).also {
+            ownCloudClientForCurrentAccount = it
         }
     }
 
