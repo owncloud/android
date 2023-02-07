@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -28,6 +28,7 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
@@ -38,10 +39,12 @@ import kotlinx.coroutines.launch
 
 class SpacesListViewModel(
     private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase,
+    private val getPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase: GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase,
     private val getProjectSpacesWithSpecialsForAccountAsStreamUseCase: GetProjectSpacesWithSpecialsForAccountAsStreamUseCase,
     private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val account: Account,
+    private val showPersonalSpace: Boolean,
 ) : ViewModel() {
 
     private val _spacesList: MutableStateFlow<SpacesListUiState> =
@@ -51,9 +54,12 @@ class SpacesListViewModel(
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             refreshSpacesFromServer()
-            getProjectSpacesWithSpecialsForAccountAsStreamUseCase.execute(
+            val spacesListFlow = if (showPersonalSpace) getPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase.execute(
+                GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase.Params(accountName = account.name)
+            ) else getProjectSpacesWithSpecialsForAccountAsStreamUseCase.execute(
                 GetProjectSpacesWithSpecialsForAccountAsStreamUseCase.Params(accountName = account.name)
-            ).collect { spaces ->
+            )
+            spacesListFlow.collect { spaces ->
                 _spacesList.update { it.copy(spaces = spaces) }
             }
         }
