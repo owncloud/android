@@ -61,17 +61,17 @@ val remoteDataSourceModule = module {
     single<OIDCService> { OCOIDCService() }
     single<WebfingerService> { OCWebfingerService() }
 
-    factory<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get()) }
-    factory<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
-    factory<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
-    factory<RemoteOAuthDataSource> { OCRemoteOAuthDataSource(get(), get()) }
-    factory<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get(), get()) }
-    factory<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
-    factory<RemoteShareeDataSource> { OCRemoteShareeDataSource(get(), get()) }
-    factory<RemoteUserDataSource> {
+    single<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get()) }
+    single<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
+    single<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
+    single<RemoteOAuthDataSource> { OCRemoteOAuthDataSource(get(), get()) }
+    single<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get(), get()) }
+    single<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
+    single<RemoteShareeDataSource> { OCRemoteShareeDataSource(get(), get()) }
+    single<RemoteUserDataSource> {
         OCRemoteUserDataSource(get(), androidContext().resources.getDimension(R.dimen.file_avatar_size).toInt())
     }
-    factory<WebfingerRemoteDatasource> { OCWebfingerRemoteDatasource(get(), get()) }
+    single<WebfingerRemoteDatasource> { OCWebfingerRemoteDatasource(get(), get()) }
 
     factory { RemoteCapabilityMapper() }
     factory { RemoteShareMapper() }
