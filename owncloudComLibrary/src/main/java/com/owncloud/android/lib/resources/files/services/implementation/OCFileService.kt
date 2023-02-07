@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2022 ownCloud GmbH.
+ *   Copyright (C) 2023 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -42,11 +42,13 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
 
     override fun checkPathExistence(
         path: String,
-        isUserLogged: Boolean
+        isUserLogged: Boolean,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<Boolean> =
         CheckPathExistenceRemoteOperation(
             remotePath = path,
-            isUserLoggedIn = isUserLogged
+            isUserLoggedIn = isUserLogged,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 
     override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): RemoteOperationResult<String> =
@@ -86,10 +88,12 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
     override fun moveFile(
         sourceRemotePath: String,
         targetRemotePath: String,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<Unit> =
         MoveRemoteFileOperation(
             sourceRemotePath = sourceRemotePath,
             targetRemotePath = targetRemotePath,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 
     override fun readFile(

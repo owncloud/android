@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   Copyright (C) 2023 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,8 @@ interface FileService : Service {
 
     fun checkPathExistence(
         path: String,
-        isUserLogged: Boolean
+        isUserLogged: Boolean,
+        spaceWebDavUrl: String? = null,
     ): RemoteOperationResult<Boolean>
 
     fun copyFile(
@@ -55,6 +56,7 @@ interface FileService : Service {
     fun moveFile(
         sourceRemotePath: String,
         targetRemotePath: String,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<Unit>
 
     fun readFile(
