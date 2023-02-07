@@ -194,14 +194,16 @@ class DocumentsStorageProvider : DocumentsProvider() {
                     accountName = parentDocumentId,
                 )
             ).forEach { space ->
-                getFileByRemotePathUseCase.execute(
-                    GetFileByRemotePathUseCase.Params(
-                        owner = space.accountName,
-                        remotePath = ROOT_PATH,
-                        spaceId = space.id,
-                    )
-                ).getDataOrNull()?.let { rootFolder ->
-                    resultCursor.addSpace(space, rootFolder.id, context)
+                if (!space.isDisabled) {
+                    getFileByRemotePathUseCase.execute(
+                        GetFileByRemotePathUseCase.Params(
+                            owner = space.accountName,
+                            remotePath = ROOT_PATH,
+                            spaceId = space.id,
+                        )
+                    ).getDataOrNull()?.let { rootFolder ->
+                        resultCursor.addSpace(space, rootFolder.id, context)
+                    }
                 }
             }
         } else {
