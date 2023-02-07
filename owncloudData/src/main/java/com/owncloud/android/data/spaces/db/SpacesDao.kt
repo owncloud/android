@@ -111,6 +111,11 @@ interface SpacesDao {
         accountName: String,
     ): List<SpacesEntity>
 
+    @Query(SELECT_PERSONAL_AND_PROJECT_SPACES_FOR_ACCOUNT)
+    fun getPersonalAndProjectSpacesWithSpecialsForAccountAsFlow(
+        accountName: String,
+    ): Flow<List<SpacesWithSpecials>>
+
     @Query(SELECT_SPACE_BY_ID_FOR_ACCOUNT)
     fun getSpaceWithSpecialsByIdForAccount(
         spaceId: String?,

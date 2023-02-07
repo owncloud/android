@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -54,36 +54,42 @@ class SpacesListAdapter(
                 listener.onItemClick(space)
             }
 
-            spacesListItemName.text = space.name
-            spacesListItemSubtitle.text = space.description
+            if (space.isPersonal) {
+                spacesListItemName.text = holder.itemView.context.getString(R.string.bottom_nav_personal)
 
-            val spaceSpecialImage = space.getSpaceSpecialImage()
-            spacesListItemImage.tag = spaceSpecialImage?.id
+                spacesListItemImage.setImageResource(R.drawable.ic_folder)
+            } else {
+                spacesListItemName.text = space.name
+                spacesListItemSubtitle.text = space.description
 
-            if (spaceSpecialImage != null) {
-                val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(spaceSpecialImage.id)
-                if (thumbnail != null) {
-                    spacesListItemImage.run {
-                        setImageBitmap(thumbnail)
-                        scaleType = ImageView.ScaleType.CENTER_CROP
-                    }
-                }
-                if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(spaceSpecialImage, spacesListItemImage)) {
-                    val account = AccountUtils.getOwnCloudAccountByName(spacesViewHolder.itemView.context, space.accountName)
-                    val task = ThumbnailsCacheManager.ThumbnailGenerationTask(spacesListItemImage, account)
-                    val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(spacesViewHolder.itemView.resources, thumbnail, task)
+                val spaceSpecialImage = space.getSpaceSpecialImage()
+                spacesListItemImage.tag = spaceSpecialImage?.id
 
-                    // If drawable is not visible, do not update it.
-                    if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
+                if (spaceSpecialImage != null) {
+                    val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(spaceSpecialImage.id)
+                    if (thumbnail != null) {
                         spacesListItemImage.run {
-                            spacesListItemImage.setImageDrawable(asyncDrawable)
+                            setImageBitmap(thumbnail)
                             scaleType = ImageView.ScaleType.CENTER_CROP
                         }
                     }
-                    task.execute(spaceSpecialImage)
-                }
-                if (spaceSpecialImage.file.mimeType == "image/png") {
-                    spacesListItemImage.setBackgroundColor(ContextCompat.getColor(spacesViewHolder.itemView.context, R.color.background_color))
+                    if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(spaceSpecialImage, spacesListItemImage)) {
+                        val account = AccountUtils.getOwnCloudAccountByName(spacesViewHolder.itemView.context, space.accountName)
+                        val task = ThumbnailsCacheManager.ThumbnailGenerationTask(spacesListItemImage, account)
+                        val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(spacesViewHolder.itemView.resources, thumbnail, task)
+
+                        // If drawable is not visible, do not update it.
+                        if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
+                            spacesListItemImage.run {
+                                spacesListItemImage.setImageDrawable(asyncDrawable)
+                                scaleType = ImageView.ScaleType.CENTER_CROP
+                            }
+                        }
+                        task.execute(spaceSpecialImage)
+                    }
+                    if (spaceSpecialImage.file.mimeType == "image/png") {
+                        spacesListItemImage.setBackgroundColor(ContextCompat.getColor(spacesViewHolder.itemView.context, R.color.background_color))
+                    }
                 }
             }
         }
