@@ -82,13 +82,16 @@ class OCFileRepository(
     }
 
     override fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile) {
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(targetFolder.spaceId, targetFolder.owner)
+
         listOfFilesToCopy.forEach { ocFile ->
 
             // 1. Get the final remote path for this file.
             val expectedRemotePath: String = targetFolder.remotePath + ocFile.fileName
             val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(
                 expectedRemotePath,
-                targetFolder.owner
+                targetFolder.owner,
+                spaceWebDavUrl,
             ).let {
                 if (ocFile.isFolder) it.plus(File.separator) else it
             }
@@ -166,11 +169,13 @@ class OCFileRepository(
         localFileDataSource.getFilesAvailableOfflineFromEveryAccount()
 
     override fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile) {
+        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(targetFile.spaceId, targetFile.owner)
+
         listOfFilesToMove.forEach { ocFile ->
 
             // 1. Get the final remote path for this file.
             val expectedRemotePath: String = targetFile.remotePath + ocFile.fileName
-            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath, targetFile.owner).let {
+            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath, targetFile.owner, spaceWebDavUrl).let {
                 if (ocFile.isFolder) it.plus(File.separator) else it
             }
             val finalStoragePath: String = localStorageProvider.getDefaultSavePathFor(targetFile.owner, finalRemotePath, targetFile.spaceId)
@@ -181,6 +186,7 @@ class OCFileRepository(
                     sourceRemotePath = ocFile.remotePath,
                     targetRemotePath = finalRemotePath,
                     accountName = ocFile.owner,
+                    spaceWebDavUrl = spaceWebDavUrl,
                 )
             } catch (targetNodeDoesNotExist: ConflictException) {
                 // Target node does not exist anymore. Remove target folder from database and local storage and return
