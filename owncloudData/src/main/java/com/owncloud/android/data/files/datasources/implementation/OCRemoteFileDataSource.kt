@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -36,9 +38,11 @@ class OCRemoteFileDataSource(
         path: String,
         checkUserCredentials: Boolean,
         accountName: String,
+        spaceWebDavUrl: String?,
     ): Boolean = clientManager.getFileService(accountName).checkPathExistence(
         path = path,
-        isUserLogged = checkUserCredentials
+        isUserLogged = checkUserCredentials,
+        spaceWebDavUrl = spaceWebDavUrl,
     ).data
 
     override fun copyFile(
@@ -77,8 +81,9 @@ class OCRemoteFileDataSource(
     override fun getAvailableRemotePath(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String?,
     ): String {
-        var checkExistsFile = checkPathExistence(remotePath, false, accountName)
+        var checkExistsFile = checkPathExistence(remotePath, false, accountName, spaceWebDavUrl)
         if (!checkExistsFile) {
             return remotePath
         }
@@ -96,9 +101,9 @@ class OCRemoteFileDataSource(
         do {
             suffix = " ($count)"
             checkExistsFile = if (pos >= 0) {
-                checkPathExistence("${remotePath.substringBeforeLast('.', "")}$suffix.$extension", false, accountName)
+                checkPathExistence("${remotePath.substringBeforeLast('.', "")}$suffix.$extension", false, accountName, spaceWebDavUrl)
             } else {
-                checkPathExistence(remotePath + suffix, false, accountName)
+                checkPathExistence(remotePath + suffix, false, accountName, spaceWebDavUrl)
             }
             count++
         } while (checkExistsFile)
@@ -113,10 +118,12 @@ class OCRemoteFileDataSource(
         sourceRemotePath: String,
         targetRemotePath: String,
         accountName: String,
+        spaceWebDavUrl: String?,
     ) = executeRemoteOperation {
         clientManager.getFileService(accountName).moveFile(
             sourceRemotePath = sourceRemotePath,
-            targetRemotePath = targetRemotePath
+            targetRemotePath = targetRemotePath,
+            spaceWebDavUrl = spaceWebDavUrl,
         )
     }
 
