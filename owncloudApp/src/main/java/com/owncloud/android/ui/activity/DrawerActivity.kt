@@ -50,7 +50,6 @@ import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.owncloud.android.BuildConfig
-import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.extensions.goToUrl
