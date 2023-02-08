@@ -39,6 +39,8 @@ interface FileService : Service {
     fun copyFile(
         sourceRemotePath: String,
         targetRemotePath: String,
+        sourceSpaceWebDavUrl: String?,
+        targetSpaceWebDavUrl: String?,
     ): RemoteOperationResult<String>
 
     fun createFolder(

@@ -56,11 +56,15 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
 
     override fun copyFile(
         sourceRemotePath: String,
-        targetRemotePath: String
+        targetRemotePath: String,
+        sourceSpaceWebDavUrl: String?,
+        targetSpaceWebDavUrl: String?,
     ): RemoteOperationResult<String> =
         CopyRemoteFileOperation(
-            srcRemotePath = sourceRemotePath,
-            targetRemotePath = targetRemotePath
+            sourceRemotePath = sourceRemotePath,
+            targetRemotePath = targetRemotePath,
+            sourceSpaceWebDavUrl = sourceSpaceWebDavUrl,
+            targetSpaceWebDavUrl = targetSpaceWebDavUrl,
         ).execute(client)
 
     override fun createFolder(
