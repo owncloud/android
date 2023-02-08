@@ -1,3 +1,25 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v3.0.2...master
+
+Summary
+-------
+
+* Bugfix - Fix problems after authentication: [#3889](https://github.com/owncloud/android/pull/3889)
+
+Details
+-------
+
+* Bugfix - Fix problems after authentication: [#3889](https://github.com/owncloud/android/pull/3889)
+
+   Client for session are now fetched on demand to avoid reinitialize DI, making the process
+   smoother
+
+   https://github.com/owncloud/android/pull/3889
+
 Changelog for ownCloud Android Client [3.0.2] (2023-01-26)
 =======================================
 The following sections list the changes in ownCloud Android Client 3.0.2 relevant to
