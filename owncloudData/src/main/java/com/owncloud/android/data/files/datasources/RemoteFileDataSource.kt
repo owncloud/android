@@ -37,6 +37,8 @@ interface RemoteFileDataSource {
         sourceRemotePath: String,
         targetRemotePath: String,
         accountName: String,
+        sourceSpaceWebDavUrl: String?,
+        targetSpaceWebDavUrl: String?,
     ): String
 
     fun createFolder(

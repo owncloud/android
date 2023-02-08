@@ -82,7 +82,8 @@ class OCFileRepository(
     }
 
     override fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile) {
-        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(targetFolder.spaceId, targetFolder.owner)
+        val sourceSpaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(listOfFilesToCopy[0].spaceId, listOfFilesToCopy[0].owner)
+        val targetSpaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(targetFolder.spaceId, targetFolder.owner)
 
         listOfFilesToCopy.forEach { ocFile ->
 
@@ -91,7 +92,7 @@ class OCFileRepository(
             val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(
                 expectedRemotePath,
                 targetFolder.owner,
-                spaceWebDavUrl,
+                targetSpaceWebDavUrl,
             ).let {
                 if (ocFile.isFolder) it.plus(File.separator) else it
             }
@@ -102,6 +103,8 @@ class OCFileRepository(
                     sourceRemotePath = ocFile.remotePath,
                     targetRemotePath = finalRemotePath,
                     accountName = ocFile.owner,
+                    sourceSpaceWebDavUrl = sourceSpaceWebDavUrl,
+                    targetSpaceWebDavUrl = targetSpaceWebDavUrl,
                 )
             } catch (targetNodeDoesNotExist: ConflictException) {
                 // Target node does not exist anymore. Remove target folder from database and local storage and return
