@@ -49,10 +49,14 @@ class OCRemoteFileDataSource(
         sourceRemotePath: String,
         targetRemotePath: String,
         accountName: String,
+        sourceSpaceWebDavUrl: String?,
+        targetSpaceWebDavUrl: String?,
     ): String = executeRemoteOperation {
         clientManager.getFileService(accountName).copyFile(
             sourceRemotePath = sourceRemotePath,
-            targetRemotePath = targetRemotePath
+            targetRemotePath = targetRemotePath,
+            sourceSpaceWebDavUrl = sourceSpaceWebDavUrl,
+            targetSpaceWebDavUrl = targetSpaceWebDavUrl,
         )
     }
 
