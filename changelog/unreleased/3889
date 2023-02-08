@@ -1,0 +1,5 @@
+Bugfix: Fix problems after authentication 
+
+Client for session are now fetched on demand to avoid reinitialize DI, making the process smoother
+
+https://github.com/owncloud/android/pull/3889
