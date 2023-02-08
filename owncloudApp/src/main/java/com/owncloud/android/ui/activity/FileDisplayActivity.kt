@@ -343,7 +343,7 @@ class FileDisplayActivity : FileActivity(),
             val secondFragment = chooseInitialSecondFragment(file)
             secondFragment?.let {
                 setSecondFragment(it)
-                updateToolbar(file)
+                updateToolbar(it.file)
             } ?: cleanSecondFragment()
 
         } else {
@@ -359,8 +359,8 @@ class FileDisplayActivity : FileActivity(),
      * @return a new second fragment instance if it has not been chosen before, or the fragment
      * previously chosen otherwise
      */
-    private fun chooseInitialSecondFragment(file: OCFile): Fragment? {
-        val secondFragment = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
+    private fun chooseInitialSecondFragment(file: OCFile): FileFragment? {
+        val secondFragment = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
 
         // Return second fragment if it has been already chosen
         if (secondFragment != null) return secondFragment
