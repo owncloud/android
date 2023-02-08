@@ -760,11 +760,11 @@ class FileDisplayActivity : FileActivity(),
                     var currentFile: OCFile? = if (file == null)
                         null
                     else
-                        storageManager.getFileByPath(file.remotePath)
+                        storageManager.getFileByPath(file.remotePath, file.spaceId)
                     val currentDir = if (currentDir == null)
                         null
                     else
-                        storageManager.getFileByPath(currentDir!!.remotePath)
+                        storageManager.getFileByPath(currentDir!!.remotePath, currentDir.spaceId)
 
                     if (currentDir == null) {
                         // current folder was removed from the server
@@ -1166,10 +1166,10 @@ class FileDisplayActivity : FileActivity(),
             onWorkSucceeded = {
                 CoroutineScope(Dispatchers.IO).launch {
                     if (file.id == waitingToSend?.id) {
-                        waitingToSend = storageManager.getFileByPath(file.remotePath)
+                        waitingToSend = storageManager.getFileByPath(file.remotePath, file.spaceId)
                         sendDownloadedFile()
                     } else if (file.id == waitingToOpen?.id) {
-                        waitingToOpen = storageManager.getFileByPath(file.remotePath)
+                        waitingToOpen = storageManager.getFileByPath(file.remotePath, file.spaceId)
                         openDownloadedFile()
                     }
                 }
