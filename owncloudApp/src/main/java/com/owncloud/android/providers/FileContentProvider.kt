@@ -412,9 +412,9 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         return c
     }
 
-    private fun computeProjection(projectionIn: Array<String>?): Array<String?> {
+    private fun computeProjection(projectionIn: Array<String>?): Array<String> {
         if (!projectionIn.isNullOrEmpty()) {
-            val projection = arrayOfNulls<String>(projectionIn.size)
+            val projection = mutableListOf<String>()
             val length = projectionIn.size
 
             for (i in 0 until length) {
@@ -422,17 +422,17 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 val column = shareProjectionMap[userColumn]
 
                 if (column != null) {
-                    projection[i] = column
+                    projection.add(column)
                     continue
                 }
 
                 throw IllegalArgumentException("Invalid column " + projectionIn[i])
             }
-            return projection
+            return projection.toTypedArray()
         } else {
             // Return all columns in projection map.
             val entrySet = shareProjectionMap.entries
-            val projection = arrayOfNulls<String>(entrySet.size)
+            val projection = mutableListOf<String>()
             val entryIter = entrySet.iterator()
             var i = 0
 
@@ -443,9 +443,9 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 if (entry.key == BaseColumns._COUNT) {
                     continue
                 }
-                projection[i++] = entry.value
+                projection.add(entry.value)
             }
-            return projection
+            return projection.toTypedArray()
         }
     }
 
