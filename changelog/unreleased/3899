@@ -1,0 +1,7 @@
+Bugfix: Toolbar in file details view
+
+When returning from the share screen to details screen, the toolbar didn't show
+the correct options and title. Now it does.
+
+https://github.com/owncloud/android/pull/3899
+https://github.com/owncloud/android/issues/3866
