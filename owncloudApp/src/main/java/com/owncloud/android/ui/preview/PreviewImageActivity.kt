@@ -137,10 +137,10 @@ class PreviewImageActivity : FileActivity(),
             0,
             file.remotePath.lastIndexOf(file.fileName)
         )
-        var parentFolder = storageManager.getFileByPath(parentPath)
+        var parentFolder = storageManager.getFileByPath(parentPath, file.spaceId)
         if (parentFolder == null) {
             // should not be necessary
-            parentFolder = storageManager.getFileByPath(OCFile.ROOT_PATH)
+            parentFolder = storageManager.getFileByPath(OCFile.ROOT_PATH, file.spaceId)
         }
 
         val sharedPreferencesProvider: SharedPreferencesProvider by inject()

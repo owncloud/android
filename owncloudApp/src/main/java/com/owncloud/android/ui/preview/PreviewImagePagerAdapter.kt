@@ -160,7 +160,7 @@ class PreviewImagePagerAdapter(
                 // trigger the creation of new PreviewImageFragment to replace current FileDownloadFragment
                 // only if the download succeeded. If not trigger an error
                 notifyDataSetChanged()
-            } else fragment?.onSyncEvent(action, success, null)
+            } else fragment?.onSyncEvent(action, success, file)
         }
     }
 }
