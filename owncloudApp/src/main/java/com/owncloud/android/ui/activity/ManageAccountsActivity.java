@@ -319,8 +319,6 @@ public class ManageAccountsActivity extends FileActivity
                     ManageAccountsActivity.this,
                     clickedAccount.name
             );
-            // Refresh dependencies to be used in selected account
-            MainApp.Companion.initDependencyInjection();
             Intent i = new Intent(
                     ManageAccountsActivity.this,
                     FileDisplayActivity.class

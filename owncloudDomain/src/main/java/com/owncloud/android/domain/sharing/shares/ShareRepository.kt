@@ -79,5 +79,5 @@ interface ShareRepository {
 
     fun refreshSharesFromNetwork(filePath: String, accountName: String)
 
-    fun deleteShare(remoteId: String)
+    fun deleteShare(remoteId: String, accountName: String)
 }

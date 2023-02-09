@@ -139,9 +139,10 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
         val getShareesResult = getShareesAsyncUseCase.execute(
             GetShareesAsyncUseCase.Params(
-                userQuery,
-                REQUESTED_PAGE,
-                RESULTS_PER_PAGE
+                searchString = userQuery,
+                page = REQUESTED_PAGE,
+                perPage = RESULTS_PER_PAGE,
+                accountName = account.name
             )
         )
 

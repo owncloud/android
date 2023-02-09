@@ -50,7 +50,6 @@ import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.owncloud.android.BuildConfig
-import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.extensions.goToUrl
@@ -250,8 +249,6 @@ abstract class DrawerActivity : ToolbarActivity() {
     private fun accountClicked(accountName: String) {
         if (drawerViewModel.getCurrentAccount(this)?.name != accountName) {
             if (drawerViewModel.setCurrentAccount(applicationContext, accountName)) {
-                // Refresh dependencies to be used in selected account
-                initDependencyInjection()
                 restart()
             } else {
                 Timber.d("Was not able to change account")
@@ -604,8 +601,6 @@ abstract class DrawerActivity : ToolbarActivity() {
             // current account has changed
             if (data.getBooleanExtra(ManageAccountsActivity.KEY_CURRENT_ACCOUNT_CHANGED, false)) {
                 account = drawerViewModel.getCurrentAccount(this)
-                // Refresh dependencies to be used in selected account
-                initDependencyInjection()
                 restart()
             } else {
                 updateAccountList()
@@ -618,8 +613,6 @@ abstract class DrawerActivity : ToolbarActivity() {
         super.onAccountCreationSuccessful(future)
         updateAccountList()
         updateQuota()
-        // Refresh dependencies to be used in selected account
-        initDependencyInjection()
         restart()
     }
 
@@ -681,7 +674,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     companion object {
         private const val KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE"
         private const val KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM"
-        private const val ACTION_MANAGE_ACCOUNTS = 101
+        const val ACTION_MANAGE_ACCOUNTS = 101
         private const val MENU_ORDER_ACCOUNT = 1
         private const val MENU_ORDER_ACCOUNT_FUNCTION = 2
         private const val USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD = 4

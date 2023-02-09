@@ -20,14 +20,15 @@
 
 package com.owncloud.android.data.shares.datasources
 
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
-import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
 import com.owncloud.android.domain.exceptions.ShareForbiddenException
 import com.owncloud.android.domain.exceptions.ShareNotFoundException
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.ShareResponse
+import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
 import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
@@ -43,10 +44,13 @@ class OCRemoteShareDataSourceTest {
 
     private val ocShareService: OCShareService = mockk()
     private val remoteShareMapper = RemoteShareMapper()
+    private val clientManager: ClientManager = mockk(relaxed = true)
 
     @Before
     fun init() {
-        ocRemoteShareDataSource = OCRemoteShareDataSource(ocShareService, remoteShareMapper)
+        every { clientManager.getShareService(any()) } returns ocShareService
+
+        ocRemoteShareDataSource = OCRemoteShareDataSource(clientManager, remoteShareMapper)
     }
 
     /******************************************************************************************************
@@ -380,7 +384,7 @@ class OCRemoteShareDataSourceTest {
             ocShareService.deleteShare(any())
         } returns removeRemoteShareOperationResult
 
-        ocRemoteShareDataSource.deleteShare("3")
+        ocRemoteShareDataSource.deleteShare(remoteId = "3", accountName = "user@server")
 
         // We check there's no exception here
     }
@@ -407,6 +411,6 @@ class OCRemoteShareDataSourceTest {
             ocShareService.deleteShare(any())
         } returns removeRemoteShareOperationResult
 
-        ocRemoteShareDataSource.deleteShare("1")
+        ocRemoteShareDataSource.deleteShare(remoteId = "1", accountName = "user@server")
     }
 }

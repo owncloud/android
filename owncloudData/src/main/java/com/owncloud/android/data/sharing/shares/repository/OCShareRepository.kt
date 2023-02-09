@@ -143,8 +143,8 @@ class OCShareRepository(
         }
     }
 
-    override fun deleteShare(remoteId: String) {
-        remoteShareDataSource.deleteShare(remoteId)
+    override fun deleteShare(remoteId: String, accountName: String) {
+        remoteShareDataSource.deleteShare(remoteId, accountName)
         localShareDataSource.deleteShare(remoteId)
     }
 

@@ -50,7 +50,9 @@ class RemoteOAuthDataSourceImpl(
     }
 
     override fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse {
-        val ownCloudClient = clientManager.getClientForAnonymousCredentials(tokenRequest.baseUrl, false)
+        // For token refreshments, a new client is required, otherwise it could keep outdated credentials or data.
+        val requiresNewClient = tokenRequest is TokenRequest.RefreshToken
+        val ownCloudClient = clientManager.getClientForAnonymousCredentials(path = tokenRequest.baseUrl, requiresNewClient = requiresNewClient)
 
         val tokenResponse = executeRemoteOperation {
             oidcService.performTokenRequest(

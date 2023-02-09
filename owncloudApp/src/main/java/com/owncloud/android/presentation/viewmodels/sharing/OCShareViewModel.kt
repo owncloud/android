@@ -92,7 +92,8 @@ class OCShareViewModel(
         liveData = _shareDeletionStatus,
         useCase = deletePublicShareUseCase,
         useCaseParams = DeleteShareAsyncUseCase.Params(
-            remoteId
+            remoteId = remoteId,
+            accountName = accountName,
         ),
         postSuccess = false
     )

@@ -34,29 +34,29 @@ class DeleteShareAsyncUseCaseTest {
 
     private val repository: ShareRepository = spyk()
     private val useCase = DeleteShareAsyncUseCase(repository)
-    private val useCaseParams = DeleteShareAsyncUseCase.Params(OC_SHARE.remoteId)
+    private val useCaseParams = DeleteShareAsyncUseCase.Params(OC_SHARE.remoteId, OC_SHARE.accountOwner)
 
     @Test
     fun `delete share - ok`() {
-        every { repository.deleteShare(any()) } returns Unit
+        every { repository.deleteShare(any(), any()) } returns Unit
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { repository.deleteShare(OC_SHARE.remoteId) }
+        verify(exactly = 1) { repository.deleteShare(OC_SHARE.remoteId, OC_SHARE.accountOwner) }
     }
 
     @Test
     fun `delete share - ko`() {
-        every { repository.deleteShare(any()) } throws UnauthorizedException()
+        every { repository.deleteShare(any(), any()) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { repository.deleteShare(OC_SHARE.remoteId) }
+        verify(exactly = 1) { repository.deleteShare(OC_SHARE.remoteId, OC_SHARE.accountOwner) }
     }
 }

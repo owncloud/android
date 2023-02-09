@@ -32,6 +32,12 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.getAnonymousCredentials
 import com.owncloud.android.lib.resources.files.services.FileService
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
+import com.owncloud.android.lib.resources.shares.services.ShareService
+import com.owncloud.android.lib.resources.shares.services.ShareeService
+import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
+import com.owncloud.android.lib.resources.shares.services.implementation.OCShareeService
+import com.owncloud.android.lib.resources.status.services.CapabilityService
+import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.lib.resources.users.services.UserService
 import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
 
@@ -44,6 +50,9 @@ class ClientManager(
 ) {
     // This client will maintain cookies across the whole login process.
     private var ownCloudClient: OwnCloudClient? = null
+
+    // Cached client to avoid retrieving the client for each service
+    private var ownCloudClientForCurrentAccount: OwnCloudClient? = null
 
     init {
         SingleSessionManager.setConnectionValidator(connectionValidator)
@@ -86,8 +95,11 @@ class ClientManager(
         } else {
             accountManager.getAccountsByType(accountType).firstOrNull { it.name == accountName }
         }
+
         val ownCloudAccount = OwnCloudAccount(account, context)
-        return SingleSessionManager.getDefaultSingleton().getClientFor(ownCloudAccount, context, connectionValidator)
+        return SingleSessionManager.getDefaultSingleton().getClientFor(ownCloudAccount, context, connectionValidator).also {
+            ownCloudClientForCurrentAccount = it
+        }
     }
 
     private fun getCurrentAccount(): Account? {
@@ -112,5 +124,20 @@ class ClientManager(
     fun getFileService(accountName: String? = ""): FileService {
         val ownCloudClient = getClientForAccount(accountName)
         return OCFileService(client = ownCloudClient)
+    }
+
+    fun getCapabilityService(accountName: String? = ""): CapabilityService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCCapabilityService(client = ownCloudClient)
+    }
+
+    fun getShareService(accountName: String? = ""): ShareService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCShareService(client = ownCloudClient)
+    }
+
+    fun getShareeService(accountName: String? = ""): ShareeService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCShareeService(client = ownCloudClient)
     }
 }
