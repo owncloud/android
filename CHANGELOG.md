@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Fix problems after authentication: [#3889](https://github.com/owncloud/android/pull/3889)
+* Bugfix - Toolbar in file details view: [#3899](https://github.com/owncloud/android/pull/3899)
 
 Details
 -------
@@ -19,6 +20,14 @@ Details
    smoother
 
    https://github.com/owncloud/android/pull/3889
+
+* Bugfix - Toolbar in file details view: [#3899](https://github.com/owncloud/android/pull/3899)
+
+   When returning from the share screen to details screen, the toolbar didn't show the correct
+   options and title. Now it does.
+
+   https://github.com/owncloud/android/issues/3866
+   https://github.com/owncloud/android/pull/3899
 
 Changelog for ownCloud Android Client [3.0.2] (2023-01-26)
 =======================================
