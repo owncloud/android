@@ -52,6 +52,7 @@ public class UriUploader {
 
     private String mUploadPath;
     private Account mAccount;
+    private String mSpaceId;
     private boolean mShowWaitingDialog;
 
     private UriUploaderResultCode mCode = UriUploaderResultCode.OK;
@@ -69,6 +70,7 @@ public class UriUploader {
             ArrayList<Uri> uris,
             String uploadPath,
             Account account,
+            String spaceId,
             boolean showWaitingDialog,
             CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener copyTmpTaskListener
     ) {
@@ -76,6 +78,7 @@ public class UriUploader {
         mUrisToUpload = uris;
         mUploadPath = uploadPath;
         mAccount = account;
+        mSpaceId = spaceId;
         mShowWaitingDialog = showWaitingDialog;
         mCopyTmpTaskListener = copyTmpTaskListener;
     }
@@ -102,7 +105,7 @@ public class UriUploader {
 
             if (!contentUris.isEmpty()) {
                 /// content: uris will be copied to temporary files before calling the upload usecase
-                copyThenUpload(contentUris.toArray(new Uri[0]), mUploadPath);
+                copyThenUpload(contentUris.toArray(new Uri[0]), mUploadPath, mSpaceId);
 
                 // Listen to CopyAndUploadContentUrisTask before killing the app or a SecurityException may appear.
                 // At least when receiving files to upload.
@@ -128,7 +131,7 @@ public class UriUploader {
      * @param sourceUris Array of content:// URIs to the files to upload
      * @param uploadPath Absolute paths where we want to upload the selected files
      */
-    private void copyThenUpload(Uri[] sourceUris, String uploadPath) {
+    private void copyThenUpload(Uri[] sourceUris, String uploadPath, String spaceId) {
         if (mShowWaitingDialog) {
             mActivity.showLoadingDialog(R.string.wait_for_tmp_copy_from_private_storage);
         }
@@ -151,7 +154,8 @@ public class UriUploader {
                         mAccount,
                         sourceUris,
                         uploadPath,
-                        mActivity.getContentResolver()
+                        mActivity.getContentResolver(),
+                        spaceId
                 )
         );
     }

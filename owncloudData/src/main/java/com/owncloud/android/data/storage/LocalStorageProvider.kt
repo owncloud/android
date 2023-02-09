@@ -7,7 +7,7 @@
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -48,8 +48,8 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     /**
      * Get local storage path for accountName.
      */
-    fun getAccountDirectoryPath(
-        accountName: String?
+    private fun getAccountDirectoryPath(
+        accountName: String
     ): String = getRootFolderPath() + File.separator + getEncodedAccountName(accountName)
 
     /**
@@ -58,9 +58,16 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
      * file.
      */
     fun getDefaultSavePathFor(
-        accountName: String?,
-        remotePath: String
-    ): String = getAccountDirectoryPath(accountName) + remotePath
+        accountName: String,
+        remotePath: String,
+        spaceId: String?,
+    ): String {
+        return if (spaceId != null) {
+            getAccountDirectoryPath(accountName) + File.separator + spaceId + File.separator + remotePath
+        } else {
+            getAccountDirectoryPath(accountName) + remotePath
+        }
+    }
 
     /**
      * Get expected remote path for a file creation, rename, move etc
@@ -79,8 +86,18 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
      * Get absolute path to tmp folder inside datafolder in sd-card for given accountName.
      */
     fun getTemporalPath(
-        accountName: String?
-    ): String = getRootFolderPath() + File.separator + TEMPORAL_FOLDER_NAME + File.separator + getEncodedAccountName(accountName)
+        accountName: String?,
+        spaceId: String? = null,
+    ): String {
+        val temporalPathWithoutSpace =
+            getRootFolderPath() + File.separator + TEMPORAL_FOLDER_NAME + File.separator + getEncodedAccountName(accountName)
+
+        return if (spaceId != null) {
+            temporalPathWithoutSpace + File.separator + spaceId
+        } else {
+            temporalPathWithoutSpace
+        }
+    }
 
     fun getLogsPath(): String = getRootFolderPath() + File.separator + LOGS_FOLDER_NAME + File.separator
 
@@ -184,7 +201,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
      * Best-effort to remove the file locally. If storage path is null, let's try to remove it anyway.
      */
     fun deleteLocalFile(ocFile: OCFile): Boolean {
-        val safeStoragePath = ocFile.storagePath ?: getDefaultSavePathFor(accountName = ocFile.owner, remotePath = ocFile.remotePath)
+        val safeStoragePath = ocFile.getStoragePathOrExpectedPathForFile()
         val fileToDelete = File(safeStoragePath)
 
         if (!fileToDelete.exists()) {
@@ -195,7 +212,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
     }
 
     fun moveLocalFile(ocFile: OCFile, finalStoragePath: String) {
-        val safeStoragePath = ocFile.storagePath ?: getDefaultSavePathFor(accountName = ocFile.owner, remotePath = ocFile.remotePath)
+        val safeStoragePath = ocFile.getStoragePathOrExpectedPathForFile()
         val fileToMove = File(safeStoragePath)
 
         if (!fileToMove.exists()) {
@@ -245,6 +262,17 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
             cacheFile.delete()
         }
     }
+
+    /**
+     * Return the storage path if the file is already in the device storage or
+     * the expected storage path for the file in case it's not available locally yet.
+     */
+    private fun OCFile.getStoragePathOrExpectedPathForFile() =
+        storagePath.takeUnless { it.isNullOrBlank() } ?: getDefaultSavePathFor(
+            accountName = owner,
+            remotePath = remotePath,
+            spaceId = spaceId,
+        )
 
     companion object {
         private const val LOGS_FOLDER_NAME = "logs"

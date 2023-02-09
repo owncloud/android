@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 40,
-    "identityHash": "a16159ce0a3e084a5f3d044c85ea7fba",
+    "identityHash": "a0b1f509e19a5d74d809760baa02dc08",
     "entities": [
       {
         "tableName": "folder_backup",
@@ -753,7 +753,7 @@
       },
       {
         "tableName": "spaces",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`account_name` TEXT NOT NULL, `drive_alias` TEXT NOT NULL, `drive_type` TEXT NOT NULL, `space_id` TEXT NOT NULL, `last_modified_date_time` TEXT, `name` TEXT NOT NULL, `owner_id` TEXT, `web_url` TEXT NOT NULL, `description` TEXT, `quota_remaining` INTEGER, `quota_state` TEXT, `quota_total` INTEGER, `quota_used` INTEGER, `root_etag` TEXT, `root_id` TEXT, `root_web_dav_url` TEXT, `root_deleted_state` TEXT, PRIMARY KEY(`account_name`, `space_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`account_name` TEXT NOT NULL, `drive_alias` TEXT NOT NULL, `drive_type` TEXT NOT NULL, `space_id` TEXT NOT NULL, `last_modified_date_time` TEXT, `name` TEXT NOT NULL, `owner_id` TEXT, `web_url` TEXT NOT NULL, `description` TEXT, `quota_remaining` INTEGER, `quota_state` TEXT, `quota_total` INTEGER, `quota_used` INTEGER, `root_etag` TEXT, `root_id` TEXT NOT NULL, `root_web_dav_url` TEXT NOT NULL, `root_deleted_state` TEXT, PRIMARY KEY(`account_name`, `space_id`))",
         "fields": [
           {
             "fieldPath": "accountName",
@@ -843,13 +843,13 @@
             "fieldPath": "root.id",
             "columnName": "root_id",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "root.webDavUrl",
             "columnName": "root_web_dav_url",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "root.deleteState",
@@ -993,7 +993,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a16159ce0a3e084a5f3d044c85ea7fba')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a0b1f509e19a5d74d809760baa02dc08')"
     ]
   }
 }

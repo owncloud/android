@@ -146,7 +146,7 @@ class MainFileListFragment : Fragment(),
             true
         }
         if (isPickingAFolder() || getCurrentSpace() != null) {
-            menu.removeItem(menu.findItem(R.id.action_share_current_folder).itemId)
+            menu.findItem(R.id.action_share_current_folder)?.itemId?.let { menu.removeItem(it) }
         } else {
             menu.findItem(R.id.action_share_current_folder)?.setOnMenuItemClickListener {
                 fileActions?.onShareFileClicked(mainFileListViewModel.getFile())
