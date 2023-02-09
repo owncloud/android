@@ -726,6 +726,10 @@
 
     <string name="release_notes_3.0.3_title1">Authentication process smoother and more consistent</string>
     <string name="release_notes_3.0.3_subtitle1">Improved the internal process to handle credentials</string>
+    <string name="release_notes_3.0.3_title2">Fixed navigation glitch</string>
+    <string name="release_notes_3.0.3_subtitle2">Toolbar with incorrect status when browsing back from Share view</string>
+    <string name="release_notes_3.0.3_title3">Error message shortened</string>
+    <string name="release_notes_3.0.3_subtitle3">Error message in copy operation was so long that was not readable in device</string>
 
 
 
