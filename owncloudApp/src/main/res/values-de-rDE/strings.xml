@@ -658,7 +658,7 @@
   <string name="release_notes_3.0_subtitle5">Durch die Überarbeitung der Sync-Engine können nun gleichzeitig mehrere Datein hoch- und runtergeladen werden.</string>
   <string name="release_notes_3.0_title6">Verbesserte Anmeldung via Browser</string>
   <string name="release_notes_3.0_subtitle6">Schon durch das Tippen der URL wird der Browser angesteuert.</string>
-  <string name="release_notes_3.0.1_title1">Absturzprobleme beim Upgade behoben</string>
+  <string name="release_notes_3.0.1_title1">Absturzprobleme beim Upgrade behoben</string>
   <string name="release_notes_3.0.1_subtitle1">Probleme beim Upgrade von Version 2.18 oder älter auf Version 3.0 wurden behoben.</string>
   <string name="release_notes_3.0.1_title2">Probleme in der Übersicht für Hochgeladenes behoben.</string>
   <string name="release_notes_3.0.1_subtitle2">Manche Benutzer erlebten Abstürze, wenn sie in die Ansicht für Hochgeladenes wechselten. Dieses Problem ist nun behoben.</string>
