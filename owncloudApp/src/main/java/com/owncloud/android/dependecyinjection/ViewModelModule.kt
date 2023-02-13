@@ -23,6 +23,7 @@
 
 package com.owncloud.android.dependecyinjection
 
+import android.accounts.Account
 import com.owncloud.android.MainApp
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
@@ -113,7 +114,7 @@ val viewModelModule = module {
     viewModel { (ocFile: OCFile) -> ConflictsResolveViewModel(get(), get(), get(), get(), get(), ocFile) }
     viewModel { ReceiveExternalFilesViewModel(get(), get()) }
     viewModel { AccountsManagementViewModel(get()) }
-    viewModel { (showPersonalSpace: Boolean) ->
-        SpacesListViewModel(get(), get(), get(), get(), get(), get(), showPersonalSpace)
+    viewModel { (account: Account, showPersonalSpace: Boolean) ->
+        SpacesListViewModel(get(), get(), get(), get(), get(), account, showPersonalSpace)
     }
 }
