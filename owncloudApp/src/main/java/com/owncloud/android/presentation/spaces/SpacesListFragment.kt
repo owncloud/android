@@ -24,13 +24,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import androidx.recyclerview.widget.GridLayoutManager
 import com.owncloud.android.R
 import com.owncloud.android.databinding.SpacesListFragmentBinding
 import com.owncloud.android.domain.files.model.FileListOption
-import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
@@ -46,15 +47,13 @@ class SpacesListFragment(
     private var _binding: SpacesListFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val spacesListViewModel: SpacesListViewModel by viewModel() {
+    private val spacesListViewModel: SpacesListViewModel by viewModel {
         parametersOf(
             showPersonalSpace
         )
     }
 
     private lateinit var spacesListAdapter: SpacesListAdapter
-
-    var spacesActions: SpacesActions? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -92,7 +91,7 @@ class SpacesListFragment(
             uiState.error?.let { showErrorInSnackbar(R.string.spaces_sync_failed, it) }
 
             uiState.rootFolderFromSelectedSpace?.let {
-               spacesActions?.onSpaceClicked(it)
+               setFragmentResult(REQUEST_KEY_CLICK_SPACE, bundleOf(BUNDLE_KEY_CLICK_SPACE to it))
             }
         }
     }
@@ -112,7 +111,8 @@ class SpacesListFragment(
         spacesListViewModel.getRootFileForSpace(ocSpace)
     }
 
-    interface SpacesActions {
-        fun onSpaceClicked(rootFolder: OCFile)
+    companion object {
+        const val REQUEST_KEY_CLICK_SPACE = "REQUEST_KEY_CLICK_SPACE"
+        const val BUNDLE_KEY_CLICK_SPACE = "BUNDLE_KEY_CLICK_SPACE"
     }
 }

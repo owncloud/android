@@ -27,10 +27,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.LinearLayout
+import androidx.annotation.StringRes
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.FileListOption
@@ -44,15 +43,11 @@ import timber.log.Timber
 
 open class FolderPickerActivity : FileActivity(),
     FileFragment.ContainerActivity,
-    OnClickListener,
-    MainFileListFragment.FileActions,
-    SpacesListFragment.SpacesActions {
+    MainFileListFragment.FileActions {
 
-    protected val listMainFileFragment: MainFileListFragment?
+    protected val mainFileListFragment: MainFileListFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FOLDERS) as MainFileListFragment?
 
-    private lateinit var cancelButton: Button
-    private lateinit var chooseButton: Button
     private lateinit var pickerMode: PickerMode
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +61,7 @@ open class FolderPickerActivity : FileActivity(),
         val filesFolderPickerLayout = findViewById<LinearLayout>(R.id.filesFolderPickerLayout)
         filesFolderPickerLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
-        pickerMode = intent.getSerializableExtra(EXTRA_PICKER_OPTION) as PickerMode
+        pickerMode = intent.getSerializableExtra(EXTRA_PICKER_MODE) as PickerMode
 
         if (savedInstanceState == null) {
             when (pickerMode) {
@@ -101,12 +96,18 @@ open class FolderPickerActivity : FileActivity(),
         // Set action button text
         setActionButtonText()
 
+        supportFragmentManager.setFragmentResultListener(SpacesListFragment.REQUEST_KEY_CLICK_SPACE, this) { _, bundle ->
+            val rootSpaceFolder = bundle.getParcelable<OCFile>(SpacesListFragment.BUNDLE_KEY_CLICK_SPACE)
+            file = rootSpaceFolder
+            initAndShowListOfFilesFragment()
+        }
+
         Timber.d("onCreate() end")
     }
 
     override fun onResume() {
         super.onResume()
-        updateToolbar(null, listMainFileFragment?.getCurrentSpace())
+        updateToolbar(null, mainFileListFragment?.getCurrentSpace())
     }
 
     /**
@@ -126,7 +127,7 @@ open class FolderPickerActivity : FileActivity(),
             }
 
             if (!stateWasRecovered) {
-                listMainFileFragment?.navigateToFolder(folder)
+                mainFileListFragment?.navigateToFolder(folder)
             }
 
             updateNavigationElementsInActionBar()
@@ -149,7 +150,7 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     override fun onBackPressed() {
-        val currentDirDisplayed = listMainFileFragment?.getCurrentFile()
+        val currentDirDisplayed = mainFileListFragment?.getCurrentFile()
         // If current file is null (we are in the spaces list, for example), close the activity
         if (currentDirDisplayed == null) {
             finish()
@@ -163,29 +164,13 @@ open class FolderPickerActivity : FileActivity(),
                 return
             }
             // If we are in COPY mode and inside a space, navigate back to the spaces list
-            if (listMainFileFragment?.getCurrentSpace()?.isProject == true || listMainFileFragment?.getCurrentSpace()?.isPersonal == true) {
+            if (mainFileListFragment?.getCurrentSpace()?.isProject == true || mainFileListFragment?.getCurrentSpace()?.isPersonal == true) {
                 file = null
                 initAndShowListOfSpaces()
                 updateToolbar(null)
             }
         } else {
-            listMainFileFragment?.onBrowseUp()
-        }
-    }
-
-    override fun onClick(v: View?) {
-        when (v) {
-            cancelButton -> finish()
-            chooseButton -> {
-                val data = Intent().apply {
-                    val targetFiles = intent.getParcelableArrayListExtra<OCFile>(EXTRA_FILES)
-                    putExtra(EXTRA_FOLDER, getCurrentFolder())
-                    putParcelableArrayListExtra(EXTRA_FILES, targetFiles)
-                }
-                setResult(RESULT_OK, data)
-
-                finish()
-            }
+            mainFileListFragment?.onBrowseUp()
         }
     }
 
@@ -230,11 +215,6 @@ open class FolderPickerActivity : FileActivity(),
         // Nothing to do. Details can't be opened here.
     }
 
-    override fun onSpaceClicked(rootFolder: OCFile) {
-        file = rootFolder
-        initAndShowListOfFilesFragment()
-    }
-
     private fun initAndShowListOfFilesFragment(spaceId: String? = null) {
         val safeInitialFolder = if (file == null) {
             val fileDataStorageManager = FileDataStorageManager(this, account, contentResolver)
@@ -256,7 +236,6 @@ open class FolderPickerActivity : FileActivity(),
 
     private fun initAndShowListOfSpaces() {
         val listOfSpaces = SpacesListFragment(showPersonalSpace = true)
-        listOfSpaces.spacesActions = this
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, listOfSpaces)
         transaction.commit()
@@ -266,31 +245,44 @@ open class FolderPickerActivity : FileActivity(),
      * Set per-view controllers
      */
     private fun initPickerListeners() {
-        cancelButton = findViewById(R.id.folder_picker_btn_cancel)
-        cancelButton.setOnClickListener(this)
-        chooseButton = findViewById(R.id.folder_picker_btn_choose)
-        chooseButton.setOnClickListener(this)
+        findViewById<Button>(R.id.folder_picker_btn_cancel).setOnClickListener {
+            finish()
+        }
+        findViewById<Button>(R.id.folder_picker_btn_choose).setOnClickListener {
+            val data = Intent().apply {
+                val targetFiles = intent.getParcelableArrayListExtra<OCFile>(EXTRA_FILES)
+                putExtra(EXTRA_FOLDER, getCurrentFolder())
+                putParcelableArrayListExtra(EXTRA_FILES, targetFiles)
+            }
+            setResult(RESULT_OK, data)
+
+            finish()
+        }
     }
 
     private fun setActionButtonText() {
-        chooseButton.text = getString(pickerMode.getButtonString())
+        findViewById<Button>(R.id.folder_picker_btn_choose).text = getString(pickerMode.toStringRes())
     }
 
     private fun getCurrentFolder(): OCFile? {
-        if (listMainFileFragment != null) {
-            return listMainFileFragment?.getCurrentFile()
+        if (mainFileListFragment != null) {
+            return mainFileListFragment?.getCurrentFile()
         }
         return null
     }
 
     private fun updateToolbar(chosenFileFromParam: OCFile?, space: OCSpace? = null) {
         val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
-        if (chosenFile != null && chosenFile.remotePath == OCFile.ROOT_PATH && space?.isProject == false && pickerMode == PickerMode.COPY) {
+        val isRootFromPersonalInCopyMode = chosenFile != null && chosenFile.remotePath == OCFile.ROOT_PATH && space?.isProject == false && pickerMode == PickerMode.COPY
+        val isRootFromPersonal = chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))
+        val isRootFromProject = space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH
+
+        if (isRootFromPersonalInCopyMode) {
             updateStandardToolbar(title = getString(R.string.default_display_name_for_root_folder), displayHomeAsUpEnabled = true, homeButtonEnabled = true)
-        } else if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))) {
+        } else if (isRootFromPersonal) {
             updateStandardToolbar(title = getString(R.string.default_display_name_for_root_folder), displayHomeAsUpEnabled = false, homeButtonEnabled = false)
-        } else if (space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH) {
-            updateStandardToolbar(title = space.name, displayHomeAsUpEnabled = pickerMode == PickerMode.COPY, homeButtonEnabled = pickerMode == PickerMode.COPY)
+        } else if (isRootFromProject) {
+            updateStandardToolbar(title = space!!.name, displayHomeAsUpEnabled = pickerMode == PickerMode.COPY, homeButtonEnabled = pickerMode == PickerMode.COPY)
         } else {
             updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         }
@@ -314,7 +306,8 @@ open class FolderPickerActivity : FileActivity(),
     enum class PickerMode {
         MOVE, COPY, CAMERA_FOLDER;
 
-        fun getButtonString(): Int {
+        @StringRes
+        fun toStringRes(): Int {
             return when (this) {
                 MOVE -> R.string.folder_picker_move_here_button_text
                 COPY -> R.string.folder_picker_copy_here_button_text
@@ -326,7 +319,7 @@ open class FolderPickerActivity : FileActivity(),
     companion object {
         const val EXTRA_FOLDER = "FOLDER_PICKER_EXTRA_FOLDER"
         const val EXTRA_FILES = "FOLDER_PICKER_EXTRA_FILES"
-        const val EXTRA_PICKER_OPTION = "FOLDER_PICKER_EXTRA_PICKER_OPTION"
+        const val EXTRA_PICKER_MODE = "FOLDER_PICKER_EXTRA_PICKER_MODE"
         private const val TAG_LIST_OF_FOLDERS = "LIST_OF_FOLDERS"
     }
 }
