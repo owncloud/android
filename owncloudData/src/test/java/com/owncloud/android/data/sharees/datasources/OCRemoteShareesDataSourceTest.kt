@@ -19,15 +19,17 @@
 
 package com.owncloud.android.data.sharees.datasources
 
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.sharing.sharees.datasources.implementation.OCRemoteShareeDataSource
 import com.owncloud.android.data.sharing.sharees.datasources.mapper.RemoteShareeMapper
 import com.owncloud.android.domain.sharing.sharees.model.OCSharee
-import com.owncloud.android.lib.resources.shares.services.implementation.OCShareeService
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.resources.shares.responses.ExactSharees
 import com.owncloud.android.lib.resources.shares.responses.ShareeItem
 import com.owncloud.android.lib.resources.shares.responses.ShareeOcsResponse
 import com.owncloud.android.lib.resources.shares.responses.ShareeValue
+import com.owncloud.android.lib.resources.shares.services.implementation.OCShareeService
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
@@ -41,12 +43,14 @@ import org.junit.Test
 class OCRemoteShareesDataSourceTest {
     private lateinit var ocRemoteShareesDataSource: OCRemoteShareeDataSource
     private val ocShareeService: OCShareeService = mockk()
+    private val clientManager: ClientManager = mockk()
     private lateinit var sharees: List<OCSharee>
 
     @Before
     fun init() {
+        every { clientManager.getShareeService(any()) } returns ocShareeService
         ocRemoteShareesDataSource =
-            OCRemoteShareeDataSource(ocShareeService, RemoteShareeMapper())
+            OCRemoteShareeDataSource(clientManager, RemoteShareeMapper())
 
         val getRemoteShareesOperationResult = createRemoteOperationResultMock(
             REMOTE_SHAREES,
@@ -61,7 +65,8 @@ class OCRemoteShareesDataSourceTest {
         sharees = ocRemoteShareesDataSource.getSharees(
             "user",
             1,
-            30
+            30,
+            OC_ACCOUNT_NAME,
         )
     }
 
@@ -136,7 +141,8 @@ class OCRemoteShareesDataSourceTest {
         val emptySharees = ocRemoteShareesDataSource.getSharees(
             "user",
             1,
-            30
+            30,
+            OC_ACCOUNT_NAME,
         )
 
         assertTrue(emptySharees.isEmpty())

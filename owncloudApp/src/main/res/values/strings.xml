@@ -721,9 +721,16 @@
     <string name="release_notes_3.0.1_subtitle1">Fix for upgrades from 2.18 (or previous versions) to 3.0</string>
     <string name="release_notes_3.0.1_title2">Fix crash in uploads tab</string>
     <string name="release_notes_3.0.1_subtitle2">Fix for some users who experimented crashes when entering the uploads section</string>
-
     <string name="release_notes_3.0.2_title1">Fix double authentication problem</string>
     <string name="release_notes_3.0.2_subtitle1">Browser authentication is now smoother</string>
+
+    <string name="release_notes_3.0.3_title1">Authentication process smoother and more consistent</string>
+    <string name="release_notes_3.0.3_subtitle1">Improved the internal process to handle credentials</string>
+    <string name="release_notes_3.0.3_title2">Fixed navigation glitch</string>
+    <string name="release_notes_3.0.3_subtitle2">Toolbar with incorrect status when browsing back from Share view</string>
+    <string name="release_notes_3.0.3_title3">Error message shortened</string>
+    <string name="release_notes_3.0.3_subtitle3">Error message in copy operation was so long that was not readable in device</string>
+
 
 
 </resources>
