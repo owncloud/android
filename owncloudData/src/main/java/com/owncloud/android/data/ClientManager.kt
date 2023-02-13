@@ -36,6 +36,8 @@ import com.owncloud.android.lib.resources.shares.services.ShareService
 import com.owncloud.android.lib.resources.shares.services.ShareeService
 import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
 import com.owncloud.android.lib.resources.shares.services.implementation.OCShareeService
+import com.owncloud.android.lib.resources.spaces.services.OCSpacesService
+import com.owncloud.android.lib.resources.spaces.services.SpacesService
 import com.owncloud.android.lib.resources.status.services.CapabilityService
 import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.lib.resources.users.services.UserService
@@ -139,5 +141,10 @@ class ClientManager(
     fun getShareeService(accountName: String? = ""): ShareeService {
         val ownCloudClient = getClientForAccount(accountName)
         return OCShareeService(client = ownCloudClient)
+    }
+
+    fun getSpacesService(accountName: String): SpacesService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCSpacesService(client = ownCloudClient)
     }
 }

@@ -38,6 +38,7 @@ import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
+import com.owncloud.android.presentation.authentication.AccountUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -49,6 +50,7 @@ class SpacesListFragment(
 
     private val spacesListViewModel: SpacesListViewModel by viewModel {
         parametersOf(
+            AccountUtils.getCurrentOwnCloudAccount(context),
             showPersonalSpace
         )
     }

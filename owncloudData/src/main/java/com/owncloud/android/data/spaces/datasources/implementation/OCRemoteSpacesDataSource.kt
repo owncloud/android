@@ -18,6 +18,7 @@
  */
 package com.owncloud.android.data.spaces.datasources.implementation
 
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
 import com.owncloud.android.domain.spaces.model.OCSpace
@@ -34,14 +35,13 @@ import com.owncloud.android.domain.spaces.model.SpaceSpecialFolder
 import com.owncloud.android.domain.spaces.model.SpaceUser
 import com.owncloud.android.lib.resources.spaces.responses.IdentityPermissionResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
-import com.owncloud.android.lib.resources.spaces.services.SpacesService
 
 class OCRemoteSpacesDataSource(
-    private val spacesService: SpacesService
+    private val clientManager: ClientManager,
 ) : RemoteSpacesDataSource {
     override fun refreshSpacesForAccount(accountName: String): List<OCSpace> {
         val spacesResponse = executeRemoteOperation {
-            spacesService.getSpaces()
+            clientManager.getSpacesService(accountName).getSpaces()
         }
 
         return spacesResponse.map { it.toModel(accountName) }
