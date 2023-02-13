@@ -1,14 +1,16 @@
-Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+Changelog for ownCloud Android Client [3.0.3] (2023-02-13)
 =======================================
-The following sections list the changes in ownCloud Android Client unreleased relevant to
+The following sections list the changes in ownCloud Android Client 3.0.3 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/android/compare/v3.0.2...master
+[3.0.3]: https://github.com/owncloud/android/compare/v3.0.2...v3.0.3
 
 Summary
 -------
 
 * Bugfix - Error messages too long in folders operation: [#3852](https://github.com/owncloud/android/pull/3852)
+* Bugfix - Fix problems after authentication: [#3889](https://github.com/owncloud/android/pull/3889)
+* Bugfix - Toolbar in file details view: [#3899](https://github.com/owncloud/android/pull/3899)
 
 Details
 -------
@@ -20,6 +22,21 @@ Details
 
    https://github.com/owncloud/android/issues/3820
    https://github.com/owncloud/android/pull/3852
+
+* Bugfix - Fix problems after authentication: [#3889](https://github.com/owncloud/android/pull/3889)
+
+   Client for session are now fetched on demand to avoid reinitialize DI, making the process
+   smoother
+
+   https://github.com/owncloud/android/pull/3889
+
+* Bugfix - Toolbar in file details view: [#3899](https://github.com/owncloud/android/pull/3899)
+
+   When returning from the share screen to details screen, the toolbar didn't show the correct
+   options and title. Now it does.
+
+   https://github.com/owncloud/android/issues/3866
+   https://github.com/owncloud/android/pull/3899
 
 Changelog for ownCloud Android Client [3.0.2] (2023-01-26)
 =======================================
