@@ -84,6 +84,8 @@ import com.owncloud.android.presentation.files.operations.FileOperationsViewMode
 import com.owncloud.android.presentation.security.bayPassUnlockOnce
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.spaces.SpacesListFragment
+import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.BUNDLE_KEY_CLICK_SPACE
+import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.REQUEST_KEY_CLICK_SPACE
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.syncadapter.FileSyncAdapter
@@ -118,8 +120,7 @@ class FileDisplayActivity : FileActivity(),
     FileFragment.ContainerActivity,
     SecurityEnforced,
     MainFileListFragment.FileActions,
-    MainFileListFragment.UploadActions,
-    SpacesListFragment.SpacesActions {
+    MainFileListFragment.UploadActions {
 
     private val job = Job()
     override val coroutineContext: CoroutineContext
@@ -130,7 +131,7 @@ class FileDisplayActivity : FileActivity(),
 
     /**
      * FileDisplayActivity is based on those two containers.
-     * Left one is used for showing a list of files - [listMainFileFragment]
+     * Left one is used for showing a list of files - [mainFileListFragment]
      * Right one is used for showing previews, details... - [secondFragment]
      *
      * We should rename them to a more accurate names.
@@ -140,7 +141,7 @@ class FileDisplayActivity : FileActivity(),
     private var leftFragmentContainer: FrameLayout? = null
     private var rightFragmentContainer: FrameLayout? = null
 
-    private val listMainFileFragment: MainFileListFragment?
+    private val mainFileListFragment: MainFileListFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES) as MainFileListFragment?
 
     private val spacesListFragment: SpacesListFragment?
@@ -237,11 +238,17 @@ class FileDisplayActivity : FileActivity(),
                 .add(taskRetainerFragment, TaskRetainerFragment.FTAG_TASK_RETAINER_FRAGMENT).commit()
         }   // else, Fragment already created and retained across configuration change
 
-        Timber.v("onCreate() end")
+        supportFragmentManager.setFragmentResultListener(REQUEST_KEY_CLICK_SPACE, this) { _, bundle ->
+            val rootSpaceFolder = bundle.getParcelable<OCFile>(BUNDLE_KEY_CLICK_SPACE)
+            file = rootSpaceFolder
+            initAndShowListOfFiles()
+        }
 
         if (resources.getBoolean(R.bool.enable_rate_me_feature) && !BuildConfig.DEBUG) {
             AppRater.appLaunched(this, packageName)
         }
+
+        Timber.v("onCreate() end")
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -341,9 +348,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun initAndShowListOfSpaces() {
-        val listOfSpaces = SpacesListFragment().apply {
-            spacesActions = this@FileDisplayActivity
-        }
+        val listOfSpaces = SpacesListFragment()
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, listOfSpaces, TAG_LIST_OF_SPACES)
         transaction.commit()
@@ -352,7 +357,7 @@ class FileDisplayActivity : FileActivity(),
     private fun initFragmentsWithFile() {
         if (account != null && file != null) {
             /// First fragment
-            listMainFileFragment?.navigateToFolder(currentDir)
+            mainFileListFragment?.navigateToFolder(currentDir)
                 ?: Timber.e("Still have a chance to lose the initialization of list fragment >(")
 
             /// Second fragment
@@ -470,8 +475,8 @@ class FileDisplayActivity : FileActivity(),
         /*val fileListFragment = listOfFilesFragment
         fileListFragment?.listDirectory(reloadData)*/
         if (file != null) {
-            val fileListFragment = listMainFileFragment
-            listMainFileFragment?.fileActions = this
+            val fileListFragment = mainFileListFragment
+            mainFileListFragment?.fileActions = this
             fileListFragment?.navigateToFolder(file)
         }
     }
@@ -631,7 +636,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun onBackPressed() {
-        val isFabOpen = listMainFileFragment?.isFabExpanded() ?: false
+        val isFabOpen = mainFileListFragment?.isFabExpanded() ?: false
 
         /*
          * BackPressed priority/hierarchy:
@@ -647,17 +652,17 @@ class FileDisplayActivity : FileActivity(),
             super.onBackPressed()
         } else if (!isDrawerOpen() && isFabOpen) {
             // close fab
-            listMainFileFragment?.collapseFab()
+            mainFileListFragment?.collapseFab()
         } else {
             // Every single menu is collapsed. We can navigate up.
             if (secondFragment != null) {
                 // If secondFragment was shown, we need to navigate to the parent of the displayed file
                 // Need a cleanup
-                listMainFileFragment?.navigateToFolderId(secondFragment!!.file!!.parentId!!)
+                mainFileListFragment?.navigateToFolderId(secondFragment!!.file!!.parentId!!)
                 cleanSecondFragment()
-                updateToolbar(listMainFileFragment?.getCurrentFile())
+                updateToolbar(mainFileListFragment?.getCurrentFile())
             } else {
-                val currentDirDisplayed = listMainFileFragment?.getCurrentFile()
+                val currentDirDisplayed = mainFileListFragment?.getCurrentFile()
                 // If current file is null (we are in the spaces list, for example), close the app
                 if (currentDirDisplayed == null) {
                     finish()
@@ -666,7 +671,7 @@ class FileDisplayActivity : FileActivity(),
                 // If current file is root folder
                 else if (currentDirDisplayed.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
                     // If current space is a project space (not personal, not shares), navigate back to the spaces list
-                    if (listMainFileFragment?.getCurrentSpace()?.isProject == true) {
+                    if (mainFileListFragment?.getCurrentSpace()?.isProject == true) {
                         navigateTo(FileListOption.SPACES_LIST)
                     }
                     // If current space is not a project space (personal or shares) or it is null ("Files" in oC10), close the app
@@ -675,7 +680,7 @@ class FileDisplayActivity : FileActivity(),
                         return
                     }
                 } else {
-                    listMainFileFragment?.onBrowseUp()
+                    mainFileListFragment?.onBrowseUp()
                 }
             }
         }
@@ -701,14 +706,14 @@ class FileDisplayActivity : FileActivity(),
         Timber.v("onResume() start")
         super.onResume()
 
-        if (listMainFileFragment?.getCurrentSpace()?.isProject == true) {
+        if (mainFileListFragment?.getCurrentSpace()?.isProject == true) {
             setCheckedItemAtBottomBar(getMenuItemForFileListOption(FileListOption.SPACES_LIST))
-            updateToolbar(null, listMainFileFragment?.getCurrentSpace())
+            updateToolbar(null, mainFileListFragment?.getCurrentSpace())
         } else {
             setCheckedItemAtBottomBar(getMenuItemForFileListOption(fileListOption))
         }
 
-        listMainFileFragment?.updateFileListOption(fileListOption, file)
+        mainFileListFragment?.updateFileListOption(fileListOption, file)
 
         // refresh list of files
         refreshListOfFilesFragment()
@@ -790,7 +795,7 @@ class FileDisplayActivity : FileActivity(),
                         }
 
                         if (synchFolderRemotePath != null && currentDir.remotePath == synchFolderRemotePath) {
-                            listMainFileFragment?.navigateToFolder(currentDir)
+                            mainFileListFragment?.navigateToFolder(currentDir)
                         }
                         file = currentFile
                     }
@@ -799,7 +804,7 @@ class FileDisplayActivity : FileActivity(),
                         FileSyncAdapter.EVENT_FULL_SYNC_END != event
                 }
 
-                listMainFileFragment?.setProgressBarAsIndeterminate(syncInProgress)
+                mainFileListFragment?.setProgressBarAsIndeterminate(syncInProgress)
                 Timber.d("Setting progress visibility to $syncInProgress")
             }
 
@@ -820,7 +825,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     fun browseToRoot() {
-        val listOfFiles = listMainFileFragment
+        val listOfFiles = mainFileListFragment
         if (listOfFiles != null) {  // should never be null, indeed
             val root = storageManager.getFileByPath(OCFile.ROOT_PATH)
             listOfFiles.navigateToFolder(root!!)
@@ -870,7 +875,7 @@ class FileDisplayActivity : FileActivity(),
                     FileListOption.SPACES_LIST -> getString(R.string.drawer_item_spaces)
                 }
             setupRootToolbar(title, isSearchEnabled = fileListOption != FileListOption.SPACES_LIST)
-            listMainFileFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
+            mainFileListFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
         } else if (space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH) {
             updateStandardToolbar(title = space.name, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         } else {
@@ -1357,10 +1362,10 @@ class FileDisplayActivity : FileActivity(),
                 file = null
                 initAndShowListOfSpaces()
                 updateToolbar(null)
-            } else if (listMainFileFragment != null) {
+            } else if (mainFileListFragment != null) {
                 fileListOption = newFileListOption
                 file = storageManager.getFileByPath(OCFile.ROOT_PATH)
-                listMainFileFragment?.updateFileListOption(newFileListOption, file)
+                mainFileListFragment?.updateFileListOption(newFileListOption, file)
                 updateToolbar(null)
             } else if (spacesListFragment != null) {
                 fileListOption = newFileListOption
@@ -1486,11 +1491,6 @@ class FileDisplayActivity : FileActivity(),
             Intent.createChooser(action, getString(R.string.upload_chooser_title)),
             REQUEST_CODE__SELECT_CONTENT_FROM_APPS
         )
-    }
-
-    override fun onSpaceClicked(rootFolder: OCFile) {
-        file = rootFolder
-        initAndShowListOfFiles()
     }
 
     companion object {
