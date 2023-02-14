@@ -15,7 +15,7 @@ buildscript {
         androidxLegacy = "1.0.0"
 
         // Kotlin
-        orgJetbrainsKotlin = "1.7.20"
+        orgJetbrainsKotlin = "1.8.10"
         orgJetbrainsKotlinx = "1.6.4"
 
         // Koin
@@ -37,7 +37,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:7.3.1"
+        classpath "com.android.tools.build:gradle:7.4.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$orgJetbrainsKotlin"
         classpath "org.jlleitschuh.gradle:ktlint-gradle:11.1.0"
     }

@@ -12,7 +12,7 @@ dependencies {
     implementation project(':owncloudData')
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$orgJetbrainsKotlin"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$orgJetbrainsKotlin"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$orgJetbrainsKotlinx"
 
     // Android X

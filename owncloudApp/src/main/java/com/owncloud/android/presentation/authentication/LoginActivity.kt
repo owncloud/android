@@ -74,11 +74,11 @@ import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.MdmProvider
-import com.owncloud.android.providers.MdmProvider.Companion.NO_MDM_RESTRICTION_YET
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.CONFIGURATION_OAUTH2_OPEN_ID_SCOPE
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
+import com.owncloud.android.utils.NO_MDM_RESTRICTION_YET
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel

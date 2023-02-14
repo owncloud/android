@@ -37,7 +37,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidxAppcompat"
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$orgJetbrainsKotlin"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$orgJetbrainsKotlin"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$orgJetbrainsKotlinx"
 
     // Dependencies for unit tests
