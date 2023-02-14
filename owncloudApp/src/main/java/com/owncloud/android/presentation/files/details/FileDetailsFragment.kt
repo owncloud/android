@@ -374,13 +374,13 @@ class FileDetailsFragment : FileFragment() {
     }
 
     private fun updateLayoutForRunningTransfer(workInfo: WorkInfo) {
-        val safeFile = fileDetailsViewModel.getCurrentFile() ?: return
+        fileDetailsViewModel.getCurrentFile() ?: return
 
         showProgressView(isTransferGoingOn = true)
         binding.fdProgressText.text = if (workInfo.isDownload()) {
-            getString(R.string.downloader_download_in_progress_ticker, safeFile.fileName)
+            getString(R.string.downloader_download_in_progress_ticker)
         } else { // Transfer is upload (?)
-            getString(R.string.uploader_upload_in_progress_ticker, safeFile.fileName)
+            getString(R.string.uploader_upload_in_progress_ticker)
         }
         binding.fdProgressBar.apply {
             isIndeterminate = false

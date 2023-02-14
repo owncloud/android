@@ -30,8 +30,8 @@ import com.owncloud.android.presentation.security.biometric.BiometricActivity
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.security.pattern.PatternActivity
 import com.owncloud.android.providers.MdmProvider
-import com.owncloud.android.providers.MdmProvider.Companion.NO_MDM_RESTRICTION_YET
 import com.owncloud.android.utils.CONFIGURATION_LOCK_DELAY_TIME
+import com.owncloud.android.utils.NO_MDM_RESTRICTION_YET
 
 class SettingsSecurityViewModel(
     private val preferencesProvider: SharedPreferencesProvider,

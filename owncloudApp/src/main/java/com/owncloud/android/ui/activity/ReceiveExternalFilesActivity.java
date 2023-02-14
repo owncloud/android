@@ -135,7 +135,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private SortOptionsView mSortOptionsView;
     private SearchView mSearchView;
 
-    private ConstraintLayout mEmptyListView;
+    private View mEmptyListView;
     private ImageView mEmptyListImage;
     private TextView mEmptyListTitle;
 

@@ -61,7 +61,7 @@ class WorkManagerProvider(
             .build()
 
         WorkManager.getInstance(context)
-            .enqueueUniquePeriodicWork(OldLogsCollectorWorker.OLD_LOGS_COLLECTOR_WORKER, ExistingPeriodicWorkPolicy.REPLACE, oldLogsCollectorWorker)
+            .enqueueUniquePeriodicWork(OldLogsCollectorWorker.OLD_LOGS_COLLECTOR_WORKER, ExistingPeriodicWorkPolicy.UPDATE, oldLogsCollectorWorker)
     }
 
     fun enqueueAvailableOfflinePeriodicWorker() {
