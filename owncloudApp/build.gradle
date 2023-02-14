@@ -30,7 +30,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$androidxRoom"
     implementation "androidx.sqlite:sqlite-ktx:2.3.0"
     implementation "androidx.work:work-runtime-ktx:2.8.0"
-    implementation("androidx.browser:browser:1.4.0") { because "CustomTabs required for OAuth2 and OIDC" }
+    implementation("androidx.browser:browser:1.5.0") { because "CustomTabs required for OAuth2 and OIDC" }
     implementation("androidx.enterprise:enterprise-feedback:1.1.0") { because "MDM feedback" }
 
     // KTX extensions, see https://developer.android.com/kotlin/ktx.html
