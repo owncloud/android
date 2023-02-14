@@ -33,9 +33,9 @@ import com.owncloud.android.domain.files.model.OCFile
 
 class RootCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAULT_ROOT_PROJECTION) {
 
-    fun addRoot(account: Account, context: Context, spacesAllowed: Boolean?) {
+    fun addRoot(account: Account, context: Context, spacesAllowed: Boolean) {
         val manager = FileDataStorageManager(account)
-        val mainDirId = if (spacesAllowed == true) {
+        val mainDirId = if (spacesAllowed) {
             // To display the list of spaces for an account, we need to do this trick.
             // If the document id is not a number, we will know that it is the time to display the list of spaces for the account
             account.name

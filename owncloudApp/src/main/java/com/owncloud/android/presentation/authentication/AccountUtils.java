@@ -32,6 +32,8 @@ import timber.log.Timber;
 
 import java.util.Locale;
 
+import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_FEATURE_ALLOWED;
+import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_FEATURE_SPACES;
 import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.SELECTED_ACCOUNT;
 import static com.owncloud.android.lib.common.accounts.AccountUtils.Constants.OAUTH_SUPPORTED_TRUE;
 
@@ -131,6 +133,12 @@ public class AccountUtils {
             }
         }
         return null;
+    }
+
+    public static boolean isFeatureSpacesAllowedForAccount(Context context, Account account) {
+        AccountManager accountManager = AccountManager.get(context);
+        String spacesFeatureValue = accountManager.getUserData(account, KEY_FEATURE_SPACES);
+        return KEY_FEATURE_ALLOWED.equals(spacesFeatureValue);
     }
 
     public static boolean setCurrentOwnCloudAccount(Context context, String accountName) {
