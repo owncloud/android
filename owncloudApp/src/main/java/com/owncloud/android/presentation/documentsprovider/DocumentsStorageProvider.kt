@@ -277,13 +277,14 @@ class DocumentsStorageProvider : DocumentsProvider() {
         }
 
         for (account in accounts) {
+            val spacesFeatureAllowedForAccount = AccountUtils.isFeatureSpacesAllowedForAccount(contextApp, account)
             val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
             val capabilities = getStoredCapabilitiesUseCase.execute(
                 GetStoredCapabilitiesUseCase.Params(
                     accountName = account.name
                 )
             )
-            val spacesAllowed = capabilities?.isSpacesAllowed()
+            val spacesAllowed = spacesFeatureAllowedForAccount && capabilities?.isSpacesAllowed() == true
 
             result.addRoot(account, contextApp, spacesAllowed)
         }
