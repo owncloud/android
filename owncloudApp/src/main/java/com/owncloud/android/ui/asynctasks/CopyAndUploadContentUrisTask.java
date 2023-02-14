@@ -120,7 +120,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
 
     /**
      * @param params    Params to execute the task; see
-     *                  {@link #makeParamsToExecute(Account, Uri[], String, ContentResolver)}
+     *                  {@link #makeParamsToExecute(Account, Uri[], String, ContentResolver, String)}
      *                  for further details.
      */
     @Override
@@ -169,7 +169,8 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                 UploadFilesFromSystemUseCase.Params useCaseParams = new UploadFilesFromSystemUseCase.Params(
                         account.name,
                         filesToUpload,
-                        uploadPath
+                        uploadPath,
+                        null
                 );
                 uploadFilesFromSystemUseCase.execute(useCaseParams);
                 fullTempPath = null;
