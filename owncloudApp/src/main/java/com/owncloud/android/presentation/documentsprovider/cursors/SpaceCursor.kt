@@ -22,12 +22,21 @@ package com.owncloud.android.presentation.documentsprovider.cursors
 
 import android.content.Context
 import android.database.MatrixCursor
+import android.os.Bundle
+import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
 import com.owncloud.android.R
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.presentation.documentsprovider.cursors.FileCursor.Companion.DEFAULT_DOCUMENT_PROJECTION
 
 class SpaceCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAULT_DOCUMENT_PROJECTION) {
+    private var cursorExtras = Bundle.EMPTY
+
+    override fun getExtras(): Bundle = cursorExtras
+
+    fun setMoreToSync(hasMoreToSync: Boolean) {
+        cursorExtras = Bundle().apply { putBoolean(DocumentsContract.EXTRA_LOADING, hasMoreToSync) }
+    }
 
     fun addSpace(space: OCSpace, rootFolderId: Long?, context: Context?) {
         var flags = Document.FLAG_DIR_SUPPORTS_CREATE
