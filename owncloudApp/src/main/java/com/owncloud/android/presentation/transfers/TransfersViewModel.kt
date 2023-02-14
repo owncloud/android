@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -89,14 +89,16 @@ class TransfersViewModel(
     fun uploadFilesFromContentUri(
         accountName: String,
         listOfContentUris: List<Uri>,
-        uploadFolderPath: String
+        uploadFolderPath: String,
+        spaceId: String?
     ) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             uploadFilesFromContentUriUseCase.execute(
                 UploadFilesFromContentUriUseCase.Params(
                     accountName = accountName,
                     listOfContentUris = listOfContentUris,
-                    uploadFolderPath = uploadFolderPath
+                    uploadFolderPath = uploadFolderPath,
+                    spaceId = spaceId,
                 )
             )
         }
@@ -105,14 +107,16 @@ class TransfersViewModel(
     fun uploadFilesFromSystem(
         accountName: String,
         listOfLocalPaths: List<String>,
-        uploadFolderPath: String
+        uploadFolderPath: String,
+        spaceId: String?,
     ) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             uploadFilesFromSystemUseCase.execute(
                 UploadFilesFromSystemUseCase.Params(
                     accountName = accountName,
                     listOfLocalPaths = listOfLocalPaths,
-                    uploadFolderPath = uploadFolderPath
+                    uploadFolderPath = uploadFolderPath,
+                    spaceId = spaceId,
                 )
             )
         }

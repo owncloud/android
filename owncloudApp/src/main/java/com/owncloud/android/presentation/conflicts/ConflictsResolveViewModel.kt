@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -69,7 +69,8 @@ class ConflictsResolveViewModel(
                 UploadFileInConflictUseCase.Params(
                     accountName = fileToUpload.owner,
                     localPath = fileToUpload.storagePath!!,
-                    uploadFolderPath = fileToUpload.getParentRemotePath()
+                    uploadFolderPath = fileToUpload.getParentRemotePath(),
+                    spaceId = fileToUpload.spaceId,
                 )
             )
         }
@@ -82,7 +83,8 @@ class ConflictsResolveViewModel(
                 UploadFilesFromSystemUseCase.Params(
                     accountName = fileToUpload.owner,
                     listOfLocalPaths = listOf(fileToUpload.storagePath!!),
-                    uploadFolderPath = fileToUpload.getParentRemotePath()
+                    uploadFolderPath = fileToUpload.getParentRemotePath(),
+                    spaceId = fileToUpload.spaceId,
                 )
             )
         }

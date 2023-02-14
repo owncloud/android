@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 40,
-    "identityHash": "a0b1f509e19a5d74d809760baa02dc08",
+    "identityHash": "969520027f05b3092f269be71f829072",
     "entities": [
       {
         "tableName": "folder_backup",
@@ -64,10 +64,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -325,10 +325,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -489,10 +489,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [],
         "foreignKeys": [
@@ -541,10 +541,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "fileId"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [],
         "foreignKeys": [
@@ -657,17 +657,17 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [],
         "foreignKeys": []
       },
       {
         "tableName": "transfers",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`localPath` TEXT NOT NULL, `remotePath` TEXT NOT NULL, `accountName` TEXT NOT NULL, `fileSize` INTEGER NOT NULL, `status` INTEGER NOT NULL, `localBehaviour` INTEGER NOT NULL, `forceOverwrite` INTEGER NOT NULL, `transferEndTimestamp` INTEGER, `lastResult` INTEGER, `createdBy` INTEGER NOT NULL, `transferId` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`localPath` TEXT NOT NULL, `remotePath` TEXT NOT NULL, `accountName` TEXT NOT NULL, `fileSize` INTEGER NOT NULL, `status` INTEGER NOT NULL, `localBehaviour` INTEGER NOT NULL, `forceOverwrite` INTEGER NOT NULL, `transferEndTimestamp` INTEGER, `lastResult` INTEGER, `createdBy` INTEGER NOT NULL, `transferId` TEXT, `spaceId` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
         "fields": [
           {
             "fieldPath": "localPath",
@@ -736,6 +736,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "spaceId",
+            "columnName": "spaceId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
@@ -743,10 +749,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -859,11 +865,11 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "account_name",
             "space_id"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -934,11 +940,11 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "spaces_special_space_id",
             "special_id"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [],
         "foreignKeys": [
@@ -981,10 +987,10 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "accountName"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -993,7 +999,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a0b1f509e19a5d74d809760baa02dc08')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '969520027f05b3092f269be71f829072')"
     ]
   }
 }
