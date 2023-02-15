@@ -74,6 +74,7 @@ import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.MdmProvider
+import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.CONFIGURATION_OAUTH2_OPEN_ID_SCOPE
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
@@ -379,6 +380,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, contextProvider.getString(R.string.account_type))
         resultBundle = intent.extras
         setResult(Activity.RESULT_OK, intent)
+
+        if (loginAction == ACTION_CREATE && accountName != null) {
+            WorkManagerProvider(applicationContext).enqueueAccountDiscovery(accountName)
+        }
 
         notifyDocumentsProviderRoots(applicationContext)
 
