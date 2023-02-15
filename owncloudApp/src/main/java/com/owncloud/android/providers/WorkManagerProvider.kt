@@ -24,10 +24,13 @@ import androidx.lifecycle.LiveData
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import androidx.work.workDataOf
 import com.owncloud.android.extensions.getRunningWorkInfosLiveData
+import com.owncloud.android.workers.AccountDiscoveryWorker
 import com.owncloud.android.workers.AvailableOfflinePeriodicWorker
 import com.owncloud.android.workers.AvailableOfflinePeriodicWorker.Companion.AVAILABLE_OFFLINE_PERIODIC_WORKER
 import com.owncloud.android.workers.CameraUploadsWorker
@@ -62,6 +65,22 @@ class WorkManagerProvider(
 
         WorkManager.getInstance(context)
             .enqueueUniquePeriodicWork(OldLogsCollectorWorker.OLD_LOGS_COLLECTOR_WORKER, ExistingPeriodicWorkPolicy.UPDATE, oldLogsCollectorWorker)
+    }
+
+    fun enqueueAccountDiscovery(accountName: String) {
+        val constraintsRequired = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+
+        val inputData = workDataOf(
+            AccountDiscoveryWorker.KEY_PARAM_DISCOVERY_ACCOUNT to accountName,
+        )
+
+        val accountDiscoveryWorker = OneTimeWorkRequestBuilder<AccountDiscoveryWorker>()
+            .setInputData(inputData)
+            .addTag(accountName)
+            .setConstraints(constraintsRequired)
+            .build()
+
+        WorkManager.getInstance(context).enqueue(accountDiscoveryWorker)
     }
 
     fun enqueueAvailableOfflinePeriodicWorker() {
