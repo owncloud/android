@@ -55,6 +55,7 @@ import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesForAccountUseCase
+import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.documentsprovider.cursors.FileCursor
 import com.owncloud.android.presentation.documentsprovider.cursors.RootCursor
@@ -84,6 +85,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
      */
     private var requestedFolderIdForSync: Long = -1
     private var syncRequired = true
+
+    private var spacesSyncRequired = true
+
     private lateinit var fileToUpload: OCFile
 
     override fun openDocument(
@@ -206,6 +210,17 @@ class DocumentsStorageProvider : DocumentsProvider() {
                     }
                 }
             }
+
+            /**
+             * This will start syncing the spaces. User will only see this after updating his view with a
+             * pull down, or by accessing the spaces folder.
+             */
+            if (spacesSyncRequired) {
+                syncSpacesWithServer(parentDocumentId)
+                resultCursor.setMoreToSync(true)
+            }
+
+            spacesSyncRequired = true
         } else {
             // Folder id is not null, so this is a regular folder
             resultCursor = FileCursor(projection)
@@ -478,6 +493,25 @@ class DocumentsStorageProvider : DocumentsProvider() {
             if (useCaseResult.isSuccess) {
                 notifyChangeInFolder(parentDocumentId)
             }
+        }
+    }
+
+    private fun syncSpacesWithServer(parentDocumentId: String) {
+        Timber.d("Trying to sync spaces from account $parentDocumentId with server")
+
+        val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase by inject()
+        val refreshSpacesFromServerAsyncUseCaseParams = RefreshSpacesFromServerAsyncUseCase.Params(
+            accountName = parentDocumentId,
+        )
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val useCaseResult = refreshSpacesFromServerAsyncUseCase.execute(refreshSpacesFromServerAsyncUseCaseParams)
+            Timber.d("Spaces from account were synced with server with result: $useCaseResult")
+
+            if (useCaseResult.isSuccess) {
+                notifyChangeInFolder(parentDocumentId)
+            }
+            spacesSyncRequired = false
         }
     }
 
