@@ -665,4 +665,10 @@
   <string name="release_notes_3.0.1_subtitle2">Correção para alguns usuários que experimentaram falhas ao entrar na seção de envios</string>
   <string name="release_notes_3.0.2_title1">Corrigir problema de autenticação dupla</string>
   <string name="release_notes_3.0.2_subtitle1">A autenticação do navegador agora é mais suave</string>
+  <string name="release_notes_3.0.3_title1">Processo de autenticação mais suave e consistente</string>
+  <string name="release_notes_3.0.3_subtitle1">Melhorou o processo interno para lidar com credenciais</string>
+  <string name="release_notes_3.0.3_title2">Falha de navegação corrigida</string>
+  <string name="release_notes_3.0.3_subtitle2">Barra de ferramentas com status incorreto ao voltar da visualização Compartilhar</string>
+  <string name="release_notes_3.0.3_title3">Mensagem de erro encurtada</string>
+  <string name="release_notes_3.0.3_subtitle3">A mensagem de erro na operação de cópia era tão longa que não era legível no dispositivo</string>
 </resources>

@@ -662,4 +662,10 @@
   <string name="release_notes_3.0.1_subtitle2">Ndreqje për disa përdorues që patën hasur vithisje kur hynin te pjesa e ngarkimeve</string>
   <string name="release_notes_3.0.2_title1">Ndreqje problemi mirëfilltësimi dyfish</string>
   <string name="release_notes_3.0.2_subtitle1">Mirëfilltësimi i shfletuesit tani është më i butë</string>
+  <string name="release_notes_3.0.3_title1">Proces mirëfilltësimi më i rrjedhshëm dhe më i qëndrueshëm</string>
+  <string name="release_notes_3.0.3_subtitle1">U përmirësua procesi i brendshëm për trajtim kredencialesh</string>
+  <string name="release_notes_3.0.3_title2">U ndreq e metë lëvizjeje</string>
+  <string name="release_notes_3.0.3_subtitle2">Panel me gjendje të pasaktë, kur shfletohet pas parjes “Ndaje me të tjerë”</string>
+  <string name="release_notes_3.0.3_title3">U shkurtua mesazh gabimi</string>
+  <string name="release_notes_3.0.3_subtitle3">Një mesazh gabimi për veprim kopjimi qe kaq i gjatë sa s’qe i lexueshëm në pajisje</string>
 </resources>

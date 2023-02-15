@@ -664,4 +664,10 @@
   <string name="release_notes_3.0.1_subtitle2">Parandus kasutajatele, kes kogesid kokkujooksmisi üleslaadimise sektsiooni sisenedes</string>
   <string name="release_notes_3.0.2_title1">Parandati probleem topelt autentimisega</string>
   <string name="release_notes_3.0.2_subtitle1">Brauseri kaudu autentimine on nüüd sujuvam</string>
+  <string name="release_notes_3.0.3_title1">Autentimine on sujuvam ja järjepidevam</string>
+  <string name="release_notes_3.0.3_subtitle1">Parandatud on sisemine kasutajatunnuste käitlemise protsess</string>
+  <string name="release_notes_3.0.3_title2">Parandatud on navigeerimise tõrge</string>
+  <string name="release_notes_3.0.3_subtitle2">Tööriistariba näitab vale staatust kui navigeerida tagasi Share-vaatest</string>
+  <string name="release_notes_3.0.3_title3">Veateade lühendatud</string>
+  <string name="release_notes_3.0.3_subtitle3">Veateade kopeerimisel oli nii pikk, et ei olnud seadmel loetav</string>
 </resources>
