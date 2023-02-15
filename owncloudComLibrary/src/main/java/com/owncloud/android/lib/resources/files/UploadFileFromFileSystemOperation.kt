@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2022 ownCloud GmbH.
+ *   Copyright (C) 2023 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -48,6 +48,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @author masensio
  * @author David González Verdugo
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
  */
 open class UploadFileFromFileSystemOperation(
     val localPath: String,
@@ -55,6 +56,7 @@ open class UploadFileFromFileSystemOperation(
     val mimeType: String,
     val lastModifiedTimestamp: String,
     val requiredEtag: String?,
+    val spaceWebDavUrl: String? = null,
 ) : RemoteOperation<Unit>() {
 
     protected val cancellationRequested = AtomicBoolean(false)
@@ -97,7 +99,8 @@ open class UploadFileFromFileSystemOperation(
             synchronized(dataTransferListener) { it.addDatatransferProgressListeners(dataTransferListener) }
         }
 
-        putMethod = PutMethod(URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(remotePath)), fileRequestBody!!).apply {
+        val baseStringUrl = spaceWebDavUrl ?: client.userFilesWebDavUri.toString()
+        putMethod = PutMethod(URL(baseStringUrl + WebdavUtils.encodePath(remotePath)), fileRequestBody!!).apply {
             retryOnConnectionFailure = false
             if (!requiredEtag.isNullOrBlank()) {
                 addRequestHeader(HttpConstants.IF_MATCH_HEADER, requiredEtag)
