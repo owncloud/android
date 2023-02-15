@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -32,8 +34,12 @@ class RemoteFileUtils {
          * @param remotePath
          * @return
          */
-        fun getAvailableRemotePath(ownCloudClient: OwnCloudClient, remotePath: String): String? {
-            var checkExistsFile = existsFile(ownCloudClient, remotePath)
+        fun getAvailableRemotePath(
+            ownCloudClient: OwnCloudClient,
+            remotePath: String,
+            spaceWebDavUrl: String? = null
+        ): String {
+            var checkExistsFile = existsFile(ownCloudClient, remotePath, spaceWebDavUrl)
             if (!checkExistsFile) {
                 return remotePath
             }
@@ -50,9 +56,9 @@ class RemoteFileUtils {
             do {
                 suffix = " ($count)"
                 checkExistsFile = if (pos >= 0) {
-                    existsFile(ownCloudClient, "${remotePath.substringBeforeLast('.', "")}$suffix.$extension")
+                    existsFile(ownCloudClient, "${remotePath.substringBeforeLast('.', "")}$suffix.$extension", spaceWebDavUrl)
                 } else {
-                    existsFile(ownCloudClient, remotePath + suffix)
+                    existsFile(ownCloudClient, remotePath + suffix, spaceWebDavUrl)
                 }
                 count++
             } while (checkExistsFile)
@@ -63,11 +69,16 @@ class RemoteFileUtils {
             }
         }
 
-        private fun existsFile(ownCloudClient: OwnCloudClient, remotePath: String): Boolean {
+        private fun existsFile(
+            ownCloudClient: OwnCloudClient,
+            remotePath: String,
+            spaceWebDavUrl: String?,
+        ): Boolean {
             val existsOperation =
                 CheckPathExistenceRemoteOperation(
-                    remotePath,
-                    false
+                    remotePath = remotePath,
+                    isUserLoggedIn = false,
+                    spaceWebDavUrl = spaceWebDavUrl,
                 )
             return existsOperation.execute(ownCloudClient).isSuccess
         }
