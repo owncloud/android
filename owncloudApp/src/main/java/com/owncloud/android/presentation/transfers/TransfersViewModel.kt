@@ -27,6 +27,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.usecases.GetAllSpacesUseCase
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
@@ -44,6 +46,9 @@ import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUri
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TransfersViewModel(
@@ -61,6 +66,7 @@ class TransfersViewModel(
     private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
     private val cancelUploadsRecursivelyUseCase: CancelUploadsRecursivelyUseCase,
     private val cancelDownloadsRecursivelyUseCase: CancelDownloadsRecursivelyUseCase,
+    private val getAllSpacesUseCase: GetAllSpacesUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
@@ -77,12 +83,20 @@ class TransfersViewModel(
 
     private var workInfosLiveData = workManagerProvider.getRunningUploadsWorkInfosLiveData()
 
+    private val _spaces: MutableStateFlow<List<OCSpace>> = MutableStateFlow(emptyList())
+    val spaces: StateFlow<List<OCSpace>>
+        get() = _spaces
+
     init {
         _transfersListLiveData.addSource(transfersLiveData) { transfers ->
             _transfersListLiveData.postValue(transfers)
         }
         _workInfosListLiveData.addSource(workInfosLiveData) { workInfos ->
             _workInfosListLiveData.postValue(workInfos)
+        }
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val spacesList = getAllSpacesUseCase.execute(Unit)
+            _spaces.update { spacesList }
         }
     }
 

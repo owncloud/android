@@ -67,6 +67,10 @@ class OCLocalSpacesDataSource(
         return spacesDao.getSharesSpaceForAccount(accountName)?.toModel()
     }
 
+    override fun getAllSpaces(): List<OCSpace> {
+        return spacesDao.getAllSpaces().map { it.toModel() }
+    }
+
     override fun getProjectSpacesWithSpecialsForAccountAsFlow(accountName: String): Flow<List<OCSpace>> {
         return spacesDao.getProjectSpacesWithSpecialsForAccountAsFlow(accountName).map { spacesWithSpecialsEntitiesList ->
             spacesWithSpecialsEntitiesList.map { spacesWithSpecialsEntity ->
