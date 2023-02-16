@@ -56,6 +56,7 @@ import com.owncloud.android.domain.files.usecases.DisableThumbnailsForFileUseCas
 import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
+import com.owncloud.android.domain.files.usecases.GetFileWithSyncInfoByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
@@ -73,7 +74,6 @@ import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
-import com.owncloud.android.domain.files.usecases.GetFileWithSyncInfoByIdUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -125,135 +125,137 @@ import com.owncloud.android.usecases.transfers.uploads.UploadFileFromSystemUseCa
 import com.owncloud.android.usecases.transfers.uploads.UploadFileInConflictUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val useCaseModule = module {
     // Authentication
-    factory { GetBaseUrlUseCase(get()) }
-    factory { LoginBasicAsyncUseCase(get()) }
-    factory { LoginOAuthAsyncUseCase(get()) }
-    factory { SupportsOAuth2UseCase(get()) }
-    factory { GetOwnCloudInstanceFromWebFingerUseCase(get()) }
-    factory { GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase(get()) }
+    factoryOf(::GetBaseUrlUseCase)
+    factoryOf(::LoginBasicAsyncUseCase)
+    factoryOf(::LoginOAuthAsyncUseCase)
+    factoryOf(::SupportsOAuth2UseCase)
+    factoryOf(::GetOwnCloudInstanceFromWebFingerUseCase)
+    factoryOf(::GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase)
 
     // OAuth
-    factory { OIDCDiscoveryUseCase(get()) }
-    factory { RequestTokenUseCase(get()) }
-    factory { RegisterClientUseCase(get()) }
+    factoryOf(::OIDCDiscoveryUseCase)
+    factoryOf(::RegisterClientUseCase)
+    factoryOf(::RequestTokenUseCase)
 
     // Capabilities
-    factory { GetCapabilitiesAsLiveDataUseCase(get()) }
-    factory { GetStoredCapabilitiesUseCase(get()) }
-    factory { RefreshCapabilitiesFromServerAsyncUseCase(get()) }
+    factoryOf(::GetCapabilitiesAsLiveDataUseCase)
+    factoryOf(::GetStoredCapabilitiesUseCase)
+    factoryOf(::RefreshCapabilitiesFromServerAsyncUseCase)
 
     // Files
-    factory { CreateFolderAsyncUseCase(get()) }
-    factory { CopyFileUseCase(get()) }
-    factory { GetFileByIdUseCase(get()) }
-    factory { GetFileByIdAsStreamUseCase(get()) }
-    factory { GetFileByRemotePathUseCase(get()) }
-    factory { GetFolderContentUseCase(get()) }
-    factory { GetFolderContentAsStreamUseCase(get()) }
-    factory { GetFolderImagesUseCase(get()) }
-    factory { GetPersonalRootFolderForAccountUseCase(get()) }
-    factory { GetSharesRootFolderForAccount(get()) }
-    factory { MoveFileUseCase(get()) }
-    factory { RemoveFileUseCase(get()) }
-    factory { RenameFileUseCase(get()) }
-    factory { SaveFileOrFolderUseCase(get()) }
-    factory { GetSharedByLinkForAccountAsStreamUseCase(get()) }
-    factory { GetSearchFolderContentUseCase(get()) }
-    factory { SynchronizeFileUseCase(get(), get(), get(), get()) }
-    factory { SynchronizeFolderUseCase(get(), get()) }
-    factory { DisableThumbnailsForFileUseCase(get()) }
-    factory { SortFilesUseCase() }
-    factory { SortFilesWithSyncInfoUseCase() }
-    factory { SaveConflictUseCase(get()) }
-    factory { CleanConflictUseCase(get()) }
-    factory { SaveDownloadWorkerUUIDUseCase(get()) }
-    factory { CleanWorkersUUIDUseCase(get()) }
-    factory { FilterFileMenuOptionsUseCase(get(), get(), get()) }
-    factory { GetFileWithSyncInfoByIdUseCase(get()) }
+    factoryOf(::CleanConflictUseCase)
+    factoryOf(::CleanWorkersUUIDUseCase)
+    factoryOf(::CopyFileUseCase)
+    factoryOf(::CreateFolderAsyncUseCase)
+    factoryOf(::DisableThumbnailsForFileUseCase)
+    factoryOf(::FilterFileMenuOptionsUseCase)
+    factoryOf(::GetFileByIdAsStreamUseCase)
+    factoryOf(::GetFileByIdUseCase)
+    factoryOf(::GetFileByRemotePathUseCase)
+    factoryOf(::GetFileWithSyncInfoByIdUseCase)
+    factoryOf(::GetFolderContentAsStreamUseCase)
+    factoryOf(::GetFolderContentUseCase)
+    factoryOf(::GetFolderImagesUseCase)
+    factoryOf(::GetPersonalRootFolderForAccountUseCase)
+    factoryOf(::GetSearchFolderContentUseCase)
+    factoryOf(::GetSharedByLinkForAccountAsStreamUseCase)
+    factoryOf(::GetSharesRootFolderForAccount)
+    factoryOf(::GetUrlToOpenInWebUseCase)
+    factoryOf(::MoveFileUseCase)
+    factoryOf(::RemoveFileUseCase)
+    factoryOf(::RenameFileUseCase)
+    factoryOf(::SaveConflictUseCase)
+    factoryOf(::SaveDownloadWorkerUUIDUseCase)
+    factoryOf(::SaveFileOrFolderUseCase)
+    factoryOf(::SortFilesUseCase)
+    factoryOf(::SortFilesWithSyncInfoUseCase)
+    factoryOf(::SynchronizeFileUseCase)
+    factoryOf(::SynchronizeFolderUseCase)
 
     // Open in web
-    factory { GetUrlToOpenInWebUseCase(get(), get()) }
-    factory { GetAppRegistryForMimeTypeAsStreamUseCase(get()) }
-    factory { GetAppRegistryWhichAllowCreationAsStreamUseCase(get()) }
-    factory { CreateFileWithAppProviderUseCase(get(), get()) }
+    factoryOf(::CreateFileWithAppProviderUseCase)
+    factoryOf(::GetAppRegistryForMimeTypeAsStreamUseCase)
+    factoryOf(::GetAppRegistryWhichAllowCreationAsStreamUseCase)
+    factoryOf(::GetUrlToOpenInWebUseCase)
 
     // Av Offline
-    factory { GetFilesAvailableOfflineFromAccountUseCase(get()) }
-    factory { GetFilesAvailableOfflineFromAccountAsStreamUseCase(get()) }
-    factory { GetFilesAvailableOfflineFromEveryAccountUseCase(get()) }
-    factory { SetFilesAsAvailableOfflineUseCase(get()) }
-    factory { UnsetFilesAsAvailableOfflineUseCase(get()) }
+    factoryOf(::GetFilesAvailableOfflineFromAccountAsStreamUseCase)
+    factoryOf(::GetFilesAvailableOfflineFromAccountUseCase)
+    factoryOf(::GetFilesAvailableOfflineFromEveryAccountUseCase)
+    factoryOf(::SetFilesAsAvailableOfflineUseCase)
+    factoryOf(::UnsetFilesAsAvailableOfflineUseCase)
 
     // Sharing
-    factory { CreatePrivateShareAsyncUseCase(get()) }
-    factory { CreatePublicShareAsyncUseCase(get()) }
-    factory { DeleteShareAsyncUseCase(get()) }
-    factory { EditPrivateShareAsyncUseCase(get()) }
-    factory { EditPublicShareAsyncUseCase(get()) }
-    factory { GetShareAsLiveDataUseCase(get()) }
-    factory { GetShareesAsyncUseCase(get()) }
-    factory { GetSharesAsLiveDataUseCase(get()) }
-    factory { RefreshSharesFromServerAsyncUseCase(get()) }
+    factoryOf(::CreatePrivateShareAsyncUseCase)
+    factoryOf(::CreatePublicShareAsyncUseCase)
+    factoryOf(::DeleteShareAsyncUseCase)
+    factoryOf(::EditPrivateShareAsyncUseCase)
+    factoryOf(::EditPublicShareAsyncUseCase)
+    factoryOf(::GetShareAsLiveDataUseCase)
+    factoryOf(::GetShareesAsyncUseCase)
+    factoryOf(::GetSharesAsLiveDataUseCase)
+    factoryOf(::RefreshSharesFromServerAsyncUseCase)
 
     // Spaces
-    factory { GetSpacesFromEveryAccountUseCaseAsStream(get()) }
-    factory { GetPersonalSpaceForAccountUseCase(get()) }
-    factory { GetPersonalAndProjectSpacesForAccountUseCase(get()) }
-    factory { GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase(get()) }
-    factory { GetProjectSpacesWithSpecialsForAccountAsStreamUseCase(get()) }
-    factory { GetSpaceWithSpecialsByIdForAccountUseCase(get()) }
-    factory { RefreshSpacesFromServerAsyncUseCase(get()) }
-    factory { GetWebDavUrlForSpaceUseCase(get()) }
+    factoryOf(::GetSpacesFromEveryAccountUseCaseAsStream)
+    factoryOf(::GetPersonalSpaceForAccountUseCase)
+    factoryOf(::GetPersonalAndProjectSpacesForAccountUseCase)
+    factoryOf(::GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase)
+    factoryOf(::GetProjectSpacesWithSpecialsForAccountAsStreamUseCase)
+    factoryOf(::GetSpaceWithSpecialsByIdForAccountUseCase)
+    factoryOf(::RefreshSpacesFromServerAsyncUseCase)
+    factoryOf(::GetWebDavUrlForSpaceUseCase)
 
     // Transfers
-    factory { CancelDownloadForFileUseCase(get()) }
-    factory { CancelDownloadsRecursivelyUseCase(get(), get()) }
-    factory { DownloadFileUseCase(get()) }
-    factory { GetLiveDataForDownloadingFileUseCase(get()) }
-    factory { GetLiveDataForFinishedDownloadsFromAccountUseCase(get()) }
-    factory { UploadFileFromSystemUseCase(get()) }
-    factory { UploadFileFromContentUriUseCase(get()) }
-    factory { UploadFilesFromContentUriUseCase(get(), get()) }
-    factory { UploadFilesFromSystemUseCase(get(), get()) }
-    factory { UploadFileInConflictUseCase(get(), get()) }
-    factory { CancelUploadForFileUseCase(get(), get()) }
-    factory { CancelUploadsRecursivelyUseCase(get(), get(), get(), get()) }
-    factory { RetryUploadFromSystemUseCase(get(), get(), get()) }
-    factory { RetryUploadFromContentUriUseCase(get(), get(), get()) }
-    factory { GetAllTransfersAsStreamUseCase(get()) }
-    factory { GetAllTransfersUseCase(get()) }
-    factory { CancelUploadUseCase(get(), get(), get()) }
-    factory { ClearFailedTransfersUseCase(get(), get(), get()) }
-    factory { RetryFailedUploadsUseCase(get(), get(), get(), get()) }
-    factory { RetryFailedUploadsForAccountUseCase(get(), get(), get(), get()) }
-    factory { ClearSuccessfulTransfersUseCase(get()) }
-    factory { CancelTransfersFromAccountUseCase(get(), get()) }
-    factory { UpdatePendingUploadsPathUseCase(get()) }
-    factory { UpdateAlreadyDownloadedFilesPathUseCase(get()) }
+    factoryOf(::CancelDownloadForFileUseCase)
+    factoryOf(::CancelDownloadsRecursivelyUseCase)
+    factoryOf(::CancelTransfersFromAccountUseCase)
+    factoryOf(::CancelUploadForFileUseCase)
+    factoryOf(::CancelUploadUseCase)
+    factoryOf(::CancelUploadsRecursivelyUseCase)
+    factoryOf(::ClearFailedTransfersUseCase)
+    factoryOf(::ClearSuccessfulTransfersUseCase)
+    factoryOf(::DownloadFileUseCase)
+    factoryOf(::GetAllTransfersAsStreamUseCase)
+    factoryOf(::GetAllTransfersUseCase)
+    factoryOf(::GetLiveDataForDownloadingFileUseCase)
+    factoryOf(::GetLiveDataForFinishedDownloadsFromAccountUseCase)
+    factoryOf(::RetryFailedUploadsForAccountUseCase)
+    factoryOf(::RetryFailedUploadsUseCase)
+    factoryOf(::RetryUploadFromContentUriUseCase)
+    factoryOf(::RetryUploadFromSystemUseCase)
+    factoryOf(::UpdateAlreadyDownloadedFilesPathUseCase)
+    factoryOf(::UpdatePendingUploadsPathUseCase)
+    factoryOf(::UploadFileFromContentUriUseCase)
+    factoryOf(::UploadFileFromSystemUseCase)
+    factoryOf(::UploadFileInConflictUseCase)
+    factoryOf(::UploadFilesFromContentUriUseCase)
+    factoryOf(::UploadFilesFromSystemUseCase)
 
     // User
-    factory { GetStoredQuotaUseCase(get()) }
-    factory { GetUserQuotasUseCase(get()) }
-    factory { GetUserAvatarAsyncUseCase(get()) }
-    factory { GetUserInfoAsyncUseCase(get()) }
-    factory { RefreshUserQuotaFromServerAsyncUseCase(get()) }
+    factoryOf(::GetStoredQuotaUseCase)
+    factoryOf(::GetUserAvatarAsyncUseCase)
+    factoryOf(::GetUserInfoAsyncUseCase)
+    factoryOf(::GetUserQuotasUseCase)
+    factoryOf(::RefreshUserQuotaFromServerAsyncUseCase)
 
     // Server
-    factory { GetServerInfoAsyncUseCase(get()) }
+    factoryOf(::GetServerInfoAsyncUseCase)
 
     // Camera Uploads
-    factory { GetCameraUploadsConfigurationUseCase(get()) }
-    factory { SavePictureUploadsConfigurationUseCase(get()) }
-    factory { SaveVideoUploadsConfigurationUseCase(get()) }
-    factory { ResetPictureUploadsUseCase(get()) }
-    factory { ResetVideoUploadsUseCase(get()) }
-    factory { GetPictureUploadsConfigurationStreamUseCase(get()) }
-    factory { GetVideoUploadsConfigurationStreamUseCase(get()) }
+    factoryOf(::GetCameraUploadsConfigurationUseCase)
+    factoryOf(::GetPictureUploadsConfigurationStreamUseCase)
+    factoryOf(::GetVideoUploadsConfigurationStreamUseCase)
+    factoryOf(::ResetPictureUploadsUseCase)
+    factoryOf(::ResetVideoUploadsUseCase)
+    factoryOf(::SavePictureUploadsConfigurationUseCase)
+    factoryOf(::SaveVideoUploadsConfigurationUseCase)
 
     // Accounts
-    factory { RemoveAccountUseCase(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    factoryOf(::RemoveAccountUseCase)
 }
