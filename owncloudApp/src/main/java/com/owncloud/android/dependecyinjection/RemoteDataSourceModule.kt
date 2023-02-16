@@ -55,31 +55,32 @@ import com.owncloud.android.lib.resources.status.services.implementation.OCServe
 import com.owncloud.android.lib.resources.webfinger.services.WebFingerService
 import com.owncloud.android.lib.resources.webfinger.services.implementation.OCWebFingerService
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val remoteDataSourceModule = module {
     single { ConnectionValidator(androidContext(), androidContext().resources.getBoolean(R.bool.clear_cookies_on_validation)) }
     single { ClientManager(get(), get(), androidContext(), MainApp.accountType, get()) }
 
-    single<ServerInfoService> { OCServerInfoService() }
-    single<OIDCService> { OCOIDCService() }
-    single<WebFingerService> { OCWebFingerService() }
+    singleOf(::OCServerInfoService) bind ServerInfoService::class
+    singleOf(::OCOIDCService) bind OIDCService::class
+    singleOf(::OCWebFingerService) bind WebFingerService::class
 
-    single<RemoteAppRegistryDataSource> { OCRemoteAppRegistryDataSource(get()) }
-    single<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get()) }
-    single<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
-    single<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }
-    single<RemoteOAuthDataSource> { OCRemoteOAuthDataSource(get(), get()) }
-    single<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get(), get()) }
-    single<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
-    single<RemoteShareeDataSource> { OCRemoteShareeDataSource(get(), get()) }
-    single<RemoteSpacesDataSource> { OCRemoteSpacesDataSource(get()) }
-    single<RemoteUserDataSource> {
-        OCRemoteUserDataSource(get(), androidContext().resources.getDimension(R.dimen.file_avatar_size).toInt())
-    }
-    single<RemoteWebFingerDatasource> { OCRemoteWebFingerDatasource(get(), get()) }
+    singleOf(::OCRemoteAppRegistryDataSource) bind RemoteAppRegistryDataSource::class
+    singleOf(::OCRemoteAuthenticationDataSource) bind RemoteAuthenticationDataSource::class
+    singleOf(::OCRemoteCapabilitiesDataSource) bind RemoteCapabilitiesDataSource::class
+    singleOf(::OCRemoteFileDataSource) bind RemoteFileDataSource::class
+    singleOf(::OCRemoteOAuthDataSource) bind RemoteOAuthDataSource::class
+    singleOf(::OCRemoteServerInfoDataSource) bind RemoteServerInfoDataSource::class
+    singleOf(::OCRemoteShareDataSource) bind RemoteShareDataSource::class
+    singleOf(::OCRemoteShareeDataSource) bind RemoteShareeDataSource::class
+    singleOf(::OCRemoteSpacesDataSource) bind RemoteSpacesDataSource::class
+    singleOf(::OCRemoteWebFingerDatasource) bind RemoteWebFingerDatasource::class
+    single<RemoteUserDataSource> { OCRemoteUserDataSource(get(), androidContext().resources.getDimension(R.dimen.file_avatar_size).toInt()) }
 
-    factory { RemoteCapabilityMapper() }
-    factory { RemoteShareMapper() }
-    factory { RemoteShareeMapper() }
+    factoryOf(::RemoteCapabilityMapper)
+    factoryOf(::RemoteShareMapper)
+    factoryOf(::RemoteShareeMapper)
 }
