@@ -49,6 +49,9 @@ import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTra
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val localDataSourceModule = module {
@@ -63,16 +66,16 @@ val localDataSourceModule = module {
     single { OwncloudDatabase.getDatabase(androidContext()).transferDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).spacesDao() }
 
-    single<SharedPreferencesProvider> { OCSharedPreferencesProvider(get()) }
+    singleOf(::OCSharedPreferencesProvider) bind SharedPreferencesProvider::class
     single<LocalStorageProvider> { ScopedStorageProvider(dataFolder, androidContext()) }
 
     factory<LocalAppRegistryDataSource> { OCLocalAppRegistryDataSource(get()) }
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
-    factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get()) }
-    factory<LocalFileDataSource> { OCLocalFileDataSource(get()) }
-    factory<LocalShareDataSource> { OCLocalShareDataSource(get()) }
-    factory<LocalUserDataSource> { OCLocalUserDataSource(get()) }
-    factory<FolderBackupLocalDataSource> { OCFolderBackupLocalDataSource(get()) }
-    factory<LocalTransferDataSource> { OCLocalTransferDataSource(get()) }
-    factory<LocalSpacesDataSource> { OCLocalSpacesDataSource(get()) }
+    factoryOf(::OCFolderBackupLocalDataSource) bind FolderBackupLocalDataSource::class
+    factoryOf(::OCLocalCapabilitiesDataSource) bind LocalCapabilitiesDataSource::class
+    factoryOf(::OCLocalFileDataSource) bind LocalFileDataSource::class
+    factoryOf(::OCLocalShareDataSource) bind LocalShareDataSource::class
+    factoryOf(::OCLocalTransferDataSource) bind LocalTransferDataSource::class
+    factoryOf(::OCLocalUserDataSource) bind LocalUserDataSource::class
+    factoryOf(::OCLocalSpacesDataSource) bind LocalSpacesDataSource::class
 }
