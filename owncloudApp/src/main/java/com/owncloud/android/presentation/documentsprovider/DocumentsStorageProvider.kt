@@ -298,9 +298,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
                     accountName = account.name
                 )
             )
-            val spacesAllowed = capabilities?.isSpacesAllowed()
+            val spacesFeatureAllowedForAccount = AccountUtils.isSpacesFeatureAllowedForAccount(contextApp, account, capabilities)
 
-            result.addRoot(account, contextApp, spacesAllowed)
+            result.addRoot(account, contextApp, spacesFeatureAllowedForAccount)
         }
         return result
     }

@@ -37,6 +37,12 @@ const val KEY_OAUTH2_REFRESH_TOKEN = "oc_oauth2_refresh_token"
 const val KEY_OAUTH2_SCOPE = "oc_oauth2_scope"
 
 /**
+ * Features allowed for the account
+ */
+const val KEY_FEATURE_ALLOWED = "KEY_FEATURE_ALLOWED"
+const val KEY_FEATURE_SPACES = "KEY_FEATURE_SPACES"
+
+/**
  * OIDC Client Registration
  */
 const val KEY_CLIENT_REGISTRATION_CLIENT_ID = "client_id"

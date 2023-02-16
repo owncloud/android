@@ -58,14 +58,15 @@ import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.openPrivacyPolicy
 import com.owncloud.android.extensions.sendEmail
 import com.owncloud.android.lib.common.OwnCloudAccount
-import com.owncloud.android.presentation.common.UIResult
-import com.owncloud.android.presentation.settings.SettingsActivity
-import com.owncloud.android.presentation.common.DrawerViewModel
-import com.owncloud.android.presentation.avatar.AvatarUtils
 import com.owncloud.android.presentation.accounts.AccountsManagementActivity
 import com.owncloud.android.presentation.accounts.AccountsManagementActivity.Companion.KEY_ACCOUNT_LIST_CHANGED
 import com.owncloud.android.presentation.accounts.AccountsManagementActivity.Companion.KEY_CURRENT_ACCOUNT_CHANGED
+import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.avatar.AvatarUtils
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.common.DrawerViewModel
+import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -237,9 +238,9 @@ abstract class DrawerActivity : ToolbarActivity() {
     private fun setSpacesVisibilityBottomBar(uiResult: UIResult<OCCapability>) {
         if (uiResult is UIResult.Success) {
             val capabilities = uiResult.data
-            if (capabilities?.isSpacesAllowed() == true) {
+            if (AccountUtils.isSpacesFeatureAllowedForAccount(baseContext, account, capabilities)) {
                 getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_personal)
-                getBottomNavigationView()?.menu?.get(1)?.isVisible = capabilities.isSpacesProjectsAllowed()
+                getBottomNavigationView()?.menu?.get(1)?.isVisible = capabilities?.isSpacesProjectsAllowed() == true
             } else {
                 getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_files)
                 getBottomNavigationView()?.menu?.get(1)?.isVisible = false
