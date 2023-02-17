@@ -25,7 +25,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.ListenableWorker
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
@@ -33,21 +32,15 @@ import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCas
 import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
-import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
-import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.domain.webfinger.usecases.GetJRDFromWebfingerHostUseCase
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
-import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import kotlinx.coroutines.launch
-import org.koin.core.definition._createDefinition
 import timber.log.Timber
 
 class AuthenticationViewModel(

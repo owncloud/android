@@ -117,6 +117,7 @@
     <string name="bottom_nav_uploads">Uploads</string>
     <string name="bottom_nav_offline">Offline</string>
     <string name="bottom_nav_links">Links</string>
+    <string name="bottom_nav_shares">Shares</string>
 
     <string name="recommend_subject">Try %1$s on your smartphone!</string>
     <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
