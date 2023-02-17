@@ -870,7 +870,7 @@ class FileDisplayActivity : FileActivity(),
             val title =
                 when (fileListOption) {
                     FileListOption.AV_OFFLINE -> getString(R.string.drawer_item_only_available_offline)
-                    FileListOption.SHARED_BY_LINK -> getString(R.string.drawer_item_shared_by_link_files)
+                    FileListOption.SHARED_BY_LINK -> if (chosenFile.spaceId != null) getString(R.string.bottom_nav_shares) else getString(R.string.bottom_nav_links)
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
                     FileListOption.SPACES_LIST -> getString(R.string.drawer_item_spaces)
                 }
