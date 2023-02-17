@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ListItemLayout"
     android:layout_width="match_parent"
     android:orientation="horizontal"
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/standard_half_padding"
     android:paddingBottom="@dimen/standard_half_padding"
-    android:filterTouchesWhenObscured="true">
+    android:filterTouchesWhenObscured="true"
+    android:baselineAligned="false">
 
     <FrameLayout
         android:layout_width="60dp"
@@ -93,14 +95,44 @@
             tools:text="@string/auth_username"
             android:textSize="12dip" />
 
-        <TextView
-            android:id="@+id/upload_remote_path"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/list_item_lastmod_and_filesize_text"
-            android:ellipsize="middle"
-            android:singleLine="true"
-            android:textSize="12dip" />
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/space_icon"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginEnd="2dp"
+                android:src="@drawable/ic_spaces"
+                android:visibility="gone"
+                app:tint="@color/list_item_lastmod_and_filesize_text"/>
+
+            <TextView
+                android:id="@+id/upload_space_name"
+                android:layout_width="wrap_content"
+                android:maxWidth="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/standard_half_margin"
+                android:textColor="@color/list_item_lastmod_and_filesize_text"
+                android:textStyle="bold"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:textSize="12dip"
+                android:visibility="gone"
+                tools:text="Space name"/>
+
+            <TextView
+                android:id="@+id/upload_remote_path"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/list_item_lastmod_and_filesize_text"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:textSize="12dip" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
