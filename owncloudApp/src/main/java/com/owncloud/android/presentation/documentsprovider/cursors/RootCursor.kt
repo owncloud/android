@@ -29,7 +29,6 @@ import android.database.MatrixCursor
 import android.provider.DocumentsContract.Root
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.FileDataStorageManager
-import com.owncloud.android.domain.files.model.OCFile
 
 class RootCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAULT_ROOT_PROJECTION) {
 
@@ -41,7 +40,7 @@ class RootCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
             account.name
         } else {
             // Root directory of the personal space (oCIS) or "Files" (oC10)
-            manager.getFileByPath(OCFile.ROOT_PATH)?.id
+            manager.getRootPersonalFolder()?.id
         }
 
         val flags = Root.FLAG_SUPPORTS_SEARCH or Root.FLAG_SUPPORTS_CREATE

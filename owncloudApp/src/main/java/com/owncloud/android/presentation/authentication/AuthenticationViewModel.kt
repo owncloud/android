@@ -20,21 +20,35 @@
 
 package com.owncloud.android.presentation.authentication
 
+import android.accounts.Account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.work.ListenableWorker
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
+import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
+import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesForAccountUseCase
+import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.domain.webfinger.usecases.GetJRDFromWebfingerHostUseCase
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
+import kotlinx.coroutines.launch
+import org.koin.core.definition._createDefinition
+import timber.log.Timber
 
 class AuthenticationViewModel(
     private val loginBasicAsyncUseCase: LoginBasicAsyncUseCase,
@@ -43,7 +57,10 @@ class AuthenticationViewModel(
     private val supportsOAuth2UseCase: SupportsOAuth2UseCase,
     private val getBaseUrlUseCase: GetBaseUrlUseCase,
     private val getJRDFromWebfingerHostUseCase: GetJRDFromWebfingerHostUseCase,
-    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
+    private val refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
+    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
+    private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase,
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
     private val _serverInfo = MediatorLiveData<Event<UIResult<ServerInfo>>>()
@@ -149,4 +166,29 @@ class AuthenticationViewModel(
             accountName = accountName
         )
     )
+
+    private val _accountDiscovery = MediatorLiveData<Event<UIResult<Unit>>>()
+    val accountDiscovery: LiveData<Event<UIResult<Unit>>> = _accountDiscovery
+
+    fun discoverAccount(account: Account, discoveryNeeded: Boolean = false) {
+        Timber.d("Account Discovery for account: $account needed: $discoveryNeeded")
+        if (!discoveryNeeded) {
+            _accountDiscovery.postValue(Event(UIResult.Success()))
+            return
+        }
+        _accountDiscovery.postValue(Event(UIResult.Loading()))
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            // 1. Refresh capabilities for account
+            refreshCapabilitiesFromServerAsyncUseCase.execute(RefreshCapabilitiesFromServerAsyncUseCase.Params(account.name))
+            val capabilities = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(account.name))
+
+            val spacesAvailableForAccount = capabilities?.isSpacesAllowed() == true
+
+            // 2 If Account does not support spaces we can skip this
+            if (spacesAvailableForAccount) {
+                refreshSpacesFromServerAsyncUseCase.execute(RefreshSpacesFromServerAsyncUseCase.Params(account.name))
+            }
+            _accountDiscovery.postValue(Event(UIResult.Success()))
+        }
+    }
 }

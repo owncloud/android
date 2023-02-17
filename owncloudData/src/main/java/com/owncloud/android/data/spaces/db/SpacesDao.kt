@@ -26,9 +26,11 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
 import com.owncloud.android.data.ProviderMeta
+import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.DRIVE_ALIAS_SPACES_SHARES
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.DRIVE_TYPE_PERSONAL
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.DRIVE_TYPE_PROJECT
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ACCOUNT_NAME
+import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_DRIVE_ALIAS
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_DRIVE_TYPE
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ID
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ROOT_WEB_DAV_URL
@@ -72,7 +74,12 @@ interface SpacesDao {
     @Query(SELECT_PERSONAL_SPACE_FOR_ACCOUNT)
     fun getPersonalSpaceForAccount(
         accountName: String,
-    ): List<SpacesEntity>
+    ): SpacesEntity?
+
+    @Query(SELECT_SHARES_SPACE_FOR_ACCOUNT)
+    fun getSharesSpaceForAccount(
+        accountName: String,
+    ): SpacesEntity?
 
     @Query(SELECT_PROJECT_SPACES_FOR_ACCOUNT)
     fun getProjectSpacesWithSpecialsForAccount(
@@ -125,6 +132,12 @@ interface SpacesDao {
             WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PERSONAL'
         """
 
+        private const val SELECT_SHARES_SPACE_FOR_ACCOUNT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
+            WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_ALIAS LIKE '$DRIVE_ALIAS_SPACES_SHARES'
+        """
+
         private const val SELECT_PROJECT_SPACES_FOR_ACCOUNT = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
@@ -145,11 +158,10 @@ interface SpacesDao {
             WHERE $SPACES_ID = :spaceId AND $SPACES_ACCOUNT_NAME = :accountName
         """
 
-        // TODO: Use it for personal space too (remove last AND condition)
         private const val SELECT_WEB_DAV_URL_FOR_SPACE = """
             SELECT $SPACES_ROOT_WEB_DAV_URL
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
-            WHERE $SPACES_ID = :spaceId AND $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_TYPE NOT LIKE '$DRIVE_TYPE_PERSONAL'
+            WHERE $SPACES_ID = :spaceId AND $SPACES_ACCOUNT_NAME = :accountName
         """
 
         private const val DELETE_ALL_SPACES_FOR_ACCOUNT = """

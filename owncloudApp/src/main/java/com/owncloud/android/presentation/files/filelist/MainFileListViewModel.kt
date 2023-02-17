@@ -181,7 +181,7 @@ class MainFileListViewModel(
                     }
                     FileListOption.SHARED_BY_LINK -> {
                         val fileById = fileByIdResult.getDataOrNull()!!
-                        parentDir = if (!fileById.sharedByLink || fileById.sharedWithSharee != true) {
+                        parentDir = if ((!fileById.sharedByLink || fileById.sharedWithSharee != true) && fileById.spaceId == null) {
                             getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
                         } else fileById
                     }
@@ -288,7 +288,7 @@ class MainFileListViewModel(
         currentFolderDisplayed: OCFile,
         accountName: String,
     ): Flow<List<OCFileWithSyncInfo>> =
-        if (currentFolderDisplayed.remotePath == ROOT_PATH) {
+        if (currentFolderDisplayed.remotePath == ROOT_PATH && currentFolderDisplayed.spaceId == null) {
             getSharedByLinkForAccountAsStreamUseCase.execute(GetSharedByLinkForAccountAsStreamUseCase.Params(accountName))
         } else {
             retrieveFlowForAllFiles(currentFolderDisplayed, accountName)

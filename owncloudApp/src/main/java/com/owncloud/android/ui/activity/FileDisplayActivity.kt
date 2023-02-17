@@ -66,8 +66,6 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.presentation.security.LockType
-import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
 import com.owncloud.android.lib.common.network.CertificateCombinedException
@@ -75,14 +73,16 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.SyncProfileOperation
+import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.files.details.FileDetailsFragment
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.security.LockType
+import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.security.bayPassUnlockOnce
-import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.spaces.SpacesListFragment
 import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.BUNDLE_KEY_CLICK_SPACE
 import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.REQUEST_KEY_CLICK_SPACE
@@ -303,7 +303,7 @@ class FileDisplayActivity : FileActivity(),
             }
             if (file == null) {
                 // fall back to root folder
-                file = storageManager.getFileByPath(OCFile.ROOT_PATH)  // never returns null
+                file = storageManager.getRootPersonalFolder()  // never returns null
             }
             setFile(file)
 
@@ -827,7 +827,7 @@ class FileDisplayActivity : FileActivity(),
     fun browseToRoot() {
         val listOfFiles = mainFileListFragment
         if (listOfFiles != null) {  // should never be null, indeed
-            val root = storageManager.getFileByPath(OCFile.ROOT_PATH)
+            val root = storageManager.getRootPersonalFolder()
             listOfFiles.navigateToFolder(root!!)
             file = root
             startSyncFolderOperation(root, false)
@@ -1364,12 +1364,16 @@ class FileDisplayActivity : FileActivity(),
                 updateToolbar(null)
             } else if (mainFileListFragment != null) {
                 fileListOption = newFileListOption
-                file = storageManager.getFileByPath(OCFile.ROOT_PATH)
+                file = if (!newFileListOption.isSharedByLink()) {
+                    storageManager.getRootPersonalFolder()
+                } else {
+                    storageManager.getRootSharesFolder() ?: storageManager.getRootPersonalFolder()
+                }
                 mainFileListFragment?.updateFileListOption(newFileListOption, file)
                 updateToolbar(null)
             } else if (spacesListFragment != null) {
                 fileListOption = newFileListOption
-                file = storageManager.getFileByPath(OCFile.ROOT_PATH)
+                file = storageManager.getRootPersonalFolder()
                 initAndShowListOfFiles(newFileListOption)
                 updateToolbar(null)
             } else {

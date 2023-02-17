@@ -700,7 +700,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     private void browseToRoot() {
-        OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH, null);
+        OCFile root = getStorageManager().getRootPersonalFolder();
         mFile = root;
         startSyncFolderOperation(root);
     }

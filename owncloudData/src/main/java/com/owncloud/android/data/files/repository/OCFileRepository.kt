@@ -36,6 +36,7 @@ import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
@@ -141,6 +142,24 @@ class OCFileRepository(
 
     override fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String?): OCFile? =
         localFileDataSource.getFileByRemotePath(remotePath, owner, spaceId)
+
+    override fun getRootFolderPersonal(owner: String): OCFile {
+        val personalSpace = localSpacesDataSource.getPersonalSpaceForAccount(owner)
+        if (personalSpace == null) {
+            val legacyRootFolder = localFileDataSource.getFileByRemotePath(remotePath = ROOT_PATH, owner = owner, spaceId = null)
+            return legacyRootFolder!!
+        }
+        // TODO: Retrieving the root folders should return a non nullable. If they don't exist yet, they are created and returned. Remove nullability
+        val personalRootFolder = localFileDataSource.getFileByRemotePath(remotePath = ROOT_PATH, owner = owner, spaceId = personalSpace.root.id)
+        return personalRootFolder!!
+    }
+
+    override fun getRootFolderShares(owner: String): OCFile? {
+        val sharesSpaces = localSpacesDataSource.getSharesSpaceForAccount(owner) ?: return null
+
+        val personalRootFolder = localFileDataSource.getFileByRemotePath(remotePath = ROOT_PATH, owner = owner, spaceId = sharesSpaces.root.id)
+        return personalRootFolder!!
+    }
 
     override fun getSearchFolderContent(fileListOption: FileListOption, folderId: Long, search: String): List<OCFile> =
         when (fileListOption) {

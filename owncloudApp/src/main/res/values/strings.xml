@@ -182,6 +182,7 @@
     <string name="filedetails_renamed_in_upload_msg">File was renamed to %1$s during upload</string>
     <string name="list_layout">List layout</string>
     <string name="action_share">Share</string>
+    <string name="login_account_preparing">Preparing account for first launch</string>
     <string name="common_yes">Yes</string>
     <string name="common_no">No</string>
     <string name="common_remove_upload">Remove upload</string>
