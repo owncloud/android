@@ -62,7 +62,7 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
 
             if (initialFile == null || !initialFile.isFolder()) {
                 // fall back to root folder
-                setFile(getStorageManager().getFileByPath(OCFile.ROOT_PATH, null));
+                setFile(getStorageManager().getRootPersonalFolder());
             } else {
                 setFile(initialFile);
             }

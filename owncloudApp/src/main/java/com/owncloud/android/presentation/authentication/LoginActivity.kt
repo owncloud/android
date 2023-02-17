@@ -43,6 +43,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.accountType
+import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.R
 import com.owncloud.android.data.authentication.KEY_USER_ID
 import com.owncloud.android.databinding.AccountSetupBinding
@@ -74,7 +75,6 @@ import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.MdmProvider
-import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.CONFIGURATION_OAUTH2_OPEN_ID_SCOPE
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
@@ -213,6 +213,20 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 is UIResult.Loading -> loginIsLoading()
                 is UIResult.Success -> loginIsSuccess(uiResult)
                 is UIResult.Error -> loginIsError(uiResult)
+            }
+        }
+
+        authenticationViewModel.accountDiscovery.observe(this) {
+            if (it.peekContent() is UIResult.Success) {
+                notifyDocumentsProviderRoots(applicationContext)
+
+                finish()
+            } else {
+                binding.authStatusText.run {
+                    text = context.getString(R.string.login_account_preparing)
+                    isVisible = true
+                    setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
+                }
             }
         }
 
@@ -381,13 +395,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         resultBundle = intent.extras
         setResult(Activity.RESULT_OK, intent)
 
-        if (loginAction == ACTION_CREATE && accountName != null) {
-            WorkManagerProvider(applicationContext).enqueueAccountDiscovery(accountName)
-        }
-
-        notifyDocumentsProviderRoots(applicationContext)
-
-        finish()
+        val account = com.owncloud.android.presentation.authentication.AccountUtils.getOwnCloudAccountByName(appContext, accountName)
+        authenticationViewModel.discoverAccount(account = account, discoveryNeeded = loginAction == ACTION_CREATE)
     }
 
     private fun loginIsLoading() {

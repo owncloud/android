@@ -122,7 +122,7 @@ open class FolderPickerActivity : FileActivity(),
             var folder = file
             if (folder == null || !folder.isFolder) {
                 // Fall back to root folder
-                file = storageManager.getFileByPath(OCFile.ROOT_PATH)
+                file = storageManager.getRootPersonalFolder()
                 folder = file
             }
 

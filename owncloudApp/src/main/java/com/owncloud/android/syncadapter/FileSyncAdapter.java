@@ -152,7 +152,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         try {
             updateCapabilities();
             if (!mCancellation) {
-                synchronizeFolder(getStorageManager().getFileByPath(OCFile.ROOT_PATH, null));
+                synchronizeFolder(getStorageManager().getRootPersonalFolder());
 
             } else {
                 Timber.d("Leaving synchronization before synchronizing the root folder because cancelation request");

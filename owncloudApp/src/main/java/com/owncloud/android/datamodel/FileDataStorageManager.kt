@@ -31,10 +31,13 @@ import android.content.Context
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
+import com.owncloud.android.domain.files.usecases.GetRootFolderPersonalUseCase
+import com.owncloud.android.domain.files.usecases.GetRootFolderSharesUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
@@ -63,7 +66,12 @@ class FileDataStorageManager : KoinComponent {
         mContext = activity
     }
 
-    fun getFileByPath(remotePath: String, spaceId: String? = null): OCFile? = getFileByPathAndAccount(remotePath, account.name, spaceId)
+    fun getFileByPath(remotePath: String, spaceId: String? = null): OCFile? =
+        if (remotePath == ROOT_PATH && spaceId == null) {
+            getRootPersonalFolder()
+        } else {
+            getFileByPathAndAccount(remotePath, account.name, spaceId)
+        }
 
     private fun getFileByPathAndAccount(remotePath: String, accountName: String, spaceId: String? = null): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
@@ -71,6 +79,24 @@ class FileDataStorageManager : KoinComponent {
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
             getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, remotePath, spaceId))
         }.getDataOrNull()
+        result
+    }
+
+    fun getRootPersonalFolder() = runBlocking(CoroutinesDispatcherProvider().io) {
+        val getRootFolderPersonalUseCase: GetRootFolderPersonalUseCase by inject()
+
+        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+            getRootFolderPersonalUseCase.execute(GetRootFolderPersonalUseCase.Params(account.name))
+        }
+        result
+    }
+
+    fun getRootSharesFolder() = runBlocking(CoroutinesDispatcherProvider().io) {
+        val getRootFolderSharesUseCase: GetRootFolderSharesUseCase by inject()
+
+        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+            getRootFolderSharesUseCase.execute(GetRootFolderSharesUseCase.Params(account.name))
+        }
         result
     }
 

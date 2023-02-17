@@ -184,6 +184,7 @@
     <string name="filedetails_renamed_in_upload_msg">File was renamed to %1$s during upload</string>
     <string name="list_layout">List layout</string>
     <string name="action_share">Share</string>
+    <string name="login_account_preparing">Preparing account for first launch</string>
     <string name="common_yes">Yes</string>
     <string name="common_no">No</string>
     <string name="common_remove_upload">Remove upload</string>
@@ -736,7 +737,5 @@
     <string name="release_notes_3.0.3_subtitle2">Toolbar with incorrect status when browsing back from Share view</string>
     <string name="release_notes_3.0.3_title3">Error message shortened</string>
     <string name="release_notes_3.0.3_subtitle3">Error message in copy operation was so long that was not readable in device</string>
-
-
 
 </resources>

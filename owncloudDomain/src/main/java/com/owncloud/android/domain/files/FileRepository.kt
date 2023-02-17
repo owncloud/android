@@ -36,6 +36,8 @@ interface FileRepository {
     fun getFileById(fileId: Long): OCFile?
     fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?>
     fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String? = null): OCFile?
+    fun getRootFolderPersonal(owner: String): OCFile
+    fun getRootFolderShares(owner: String): OCFile?
     fun getSearchFolderContent(fileListOption: FileListOption, folderId: Long, search: String): List<OCFile>
     fun getFolderContent(folderId: Long): List<OCFile>
     fun getFolderContentWithSyncInfoAsFlow(folderId: Long): Flow<List<OCFileWithSyncInfo>>
