@@ -469,7 +469,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                                         getFile().getParentRemotePath(),
                                         MimeTypeConstantsKt.MIME_DIR,
                                         OCFile.ROOT_PARENT_ID,
-                                        mAccount.name
+                                        mAccount.name,
+                                        getFile().getSpaceId()
                                 );
                                 ((FileDisplayActivity) requireActivity()).startSyncFolderOperation(folder, false);
                             }

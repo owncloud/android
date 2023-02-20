@@ -244,7 +244,8 @@ class TransfersAdapter(
                     if (it.isPersonal) {
                         spaceName = personalName
                         isFromPersonalSpace = true
-                    } else {
+                    } // TODO: Add else if for shares space
+                    else {
                         spaceName = it.name
                     }
                 }
