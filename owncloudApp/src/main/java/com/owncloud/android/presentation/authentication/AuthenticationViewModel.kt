@@ -20,7 +20,6 @@
 
 package com.owncloud.android.presentation.authentication
 
-import android.accounts.Account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -163,8 +162,8 @@ class AuthenticationViewModel(
     private val _accountDiscovery = MediatorLiveData<Event<UIResult<Unit>>>()
     val accountDiscovery: LiveData<Event<UIResult<Unit>>> = _accountDiscovery
 
-    fun discoverAccount(account: Account, discoveryNeeded: Boolean = false) {
-        Timber.d("Account Discovery for account: $account needed: $discoveryNeeded")
+    fun discoverAccount(accountName: String, discoveryNeeded: Boolean = false) {
+        Timber.d("Account Discovery for account: $accountName needed: $discoveryNeeded")
         if (!discoveryNeeded) {
             _accountDiscovery.postValue(Event(UIResult.Success()))
             return
@@ -172,14 +171,14 @@ class AuthenticationViewModel(
         _accountDiscovery.postValue(Event(UIResult.Loading()))
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             // 1. Refresh capabilities for account
-            refreshCapabilitiesFromServerAsyncUseCase.execute(RefreshCapabilitiesFromServerAsyncUseCase.Params(account.name))
-            val capabilities = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(account.name))
+            refreshCapabilitiesFromServerAsyncUseCase.execute(RefreshCapabilitiesFromServerAsyncUseCase.Params(accountName))
+            val capabilities = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(accountName))
 
             val spacesAvailableForAccount = capabilities?.isSpacesAllowed() == true
 
             // 2 If Account does not support spaces we can skip this
             if (spacesAvailableForAccount) {
-                refreshSpacesFromServerAsyncUseCase.execute(RefreshSpacesFromServerAsyncUseCase.Params(account.name))
+                refreshSpacesFromServerAsyncUseCase.execute(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
             }
             _accountDiscovery.postValue(Event(UIResult.Success()))
         }
