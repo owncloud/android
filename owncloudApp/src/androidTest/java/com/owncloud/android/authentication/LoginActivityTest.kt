@@ -22,7 +22,6 @@ package com.owncloud.android.authentication
 
 import android.accounts.AccountManager.KEY_ACCOUNT_NAME
 import android.accounts.AccountManager.KEY_ACCOUNT_TYPE
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
@@ -46,18 +45,18 @@ import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.parseError
-import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.authentication.ACTION_UPDATE_EXPIRED_TOKEN
 import com.owncloud.android.presentation.authentication.ACTION_UPDATE_TOKEN
+import com.owncloud.android.presentation.authentication.AuthenticationViewModel
 import com.owncloud.android.presentation.authentication.BASIC_TOKEN_TYPE
 import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT
 import com.owncloud.android.presentation.authentication.EXTRA_ACTION
 import com.owncloud.android.presentation.authentication.KEY_AUTH_TOKEN_TYPE
 import com.owncloud.android.presentation.authentication.LoginActivity
 import com.owncloud.android.presentation.authentication.OAUTH_TOKEN_TYPE
-import com.owncloud.android.presentation.settings.SettingsActivity
-import com.owncloud.android.presentation.authentication.AuthenticationViewModel
 import com.owncloud.android.presentation.authentication.oauth.OAuthViewModel
+import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.presentation.settings.SettingsViewModel
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.MdmProvider
@@ -107,6 +106,7 @@ class LoginActivityTest {
     private lateinit var serverInfoLiveData: MutableLiveData<Event<UIResult<ServerInfo>>>
     private lateinit var supportsOauth2LiveData: MutableLiveData<Event<UIResult<Boolean>>>
     private lateinit var baseUrlLiveData: MutableLiveData<Event<UIResult<String>>>
+    private lateinit var accountDiscoveryLiveData: MutableLiveData<Event<UIResult<Unit>>>
 
     @Before
     fun setUp() {
@@ -122,11 +122,13 @@ class LoginActivityTest {
         serverInfoLiveData = MutableLiveData()
         supportsOauth2LiveData = MutableLiveData()
         baseUrlLiveData = MutableLiveData()
+        accountDiscoveryLiveData = MutableLiveData()
 
         every { authenticationViewModel.loginResult } returns loginResultLiveData
         every { authenticationViewModel.serverInfo } returns serverInfoLiveData
         every { authenticationViewModel.supportsOAuth2 } returns supportsOauth2LiveData
         every { authenticationViewModel.baseUrl } returns baseUrlLiveData
+        every { authenticationViewModel.accountDiscovery } returns accountDiscoveryLiveData
         every { settingsViewModel.isThereAttachedAccount() } returns false
 
         stopKoin()
@@ -527,8 +529,9 @@ class LoginActivityTest {
         launchTest()
 
         loginResultLiveData.postValue(Event(UIResult.Success(data = "Account_name")))
+        accountDiscoveryLiveData.postValue(Event(UIResult.Success()))
 
-        assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
+        assertEquals(activityScenario.result.resultCode, RESULT_OK)
         val accountName: String? = activityScenario.result?.resultData?.extras?.getString(KEY_ACCOUNT_NAME)
         val accountType: String? = activityScenario.result?.resultData?.extras?.getString(KEY_ACCOUNT_TYPE)
 
@@ -543,8 +546,9 @@ class LoginActivityTest {
         launchTest(accountType = "notOwnCloud")
 
         loginResultLiveData.postValue(Event(UIResult.Success(data = "Account_name")))
+        accountDiscoveryLiveData.postValue(Event(UIResult.Success()))
 
-        assertEquals(activityScenario.result.resultCode, Activity.RESULT_OK)
+        assertEquals(activityScenario.result.resultCode, RESULT_OK)
         val accountName: String? = activityScenario.result?.resultData?.extras?.getString(KEY_ACCOUNT_NAME)
         val accountType: String? = activityScenario.result?.resultData?.extras?.getString(KEY_ACCOUNT_TYPE)
 

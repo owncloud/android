@@ -43,7 +43,6 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.accountType
-import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.R
 import com.owncloud.android.data.authentication.KEY_USER_ID
 import com.owncloud.android.databinding.AccountSetupBinding
@@ -270,8 +269,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         checkOcServer()
     }
 
-    private fun getWebfingerIsError(uiResult: UIResult<String>) {
-        when (uiResult.getThrowableOrNull()) {
+    private fun getWebfingerIsError(uiResult: UIResult.Error<String>) {
+        when (uiResult.error) {
             is NoNetworkConnectionException -> binding.webfingerStatusText.run {
                 text = getString(R.string.error_no_network_connection)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
@@ -359,11 +358,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
-    private fun getServerInfoIsError(uiResult: UIResult<ServerInfo>) {
+    private fun getServerInfoIsError(uiResult: UIResult.Error<ServerInfo>) {
         updateCenteredRefreshButtonVisibility(shouldBeVisible = true)
-        when (uiResult.getThrowableOrNull()) {
+        when (uiResult.error) {
             is CertificateCombinedException ->
-                showUntrustedCertDialog(uiResult.getThrowableOrNull() as CertificateCombinedException)
+                showUntrustedCertDialog(uiResult.error)
             is OwncloudVersionNotSupportedException -> binding.serverStatusText.run {
                 text = getString(R.string.server_not_supported)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
@@ -373,7 +372,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
             }
             else -> binding.serverStatusText.run {
-                text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
+                text = uiResult.error?.parseError("", resources, true)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             }
         }
@@ -381,22 +380,21 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         showOrHideBasicAuthFields(shouldBeVisible = false)
     }
 
-    private fun loginIsSuccess(uiResult: UIResult<String>) {
+    private fun loginIsSuccess(uiResult: UIResult.Success<String>) {
         binding.authStatusText.run {
             isVisible = false
             text = ""
         }
 
         // Return result to account authenticator, multiaccount does not work without this
-        val accountName = uiResult.getStoredData()
+        val accountName = uiResult.data!!
         val intent = Intent()
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName)
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, contextProvider.getString(R.string.account_type))
         resultBundle = intent.extras
         setResult(Activity.RESULT_OK, intent)
 
-        val account = com.owncloud.android.presentation.authentication.AccountUtils.getOwnCloudAccountByName(appContext, accountName)
-        authenticationViewModel.discoverAccount(account = account, discoveryNeeded = loginAction == ACTION_CREATE)
+        authenticationViewModel.discoverAccount(accountName = accountName, discoveryNeeded = loginAction == ACTION_CREATE)
     }
 
     private fun loginIsLoading() {
@@ -407,8 +405,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
-    private fun loginIsError(uiResult: UIResult<String>) {
-        when (uiResult.getThrowableOrNull()) {
+    private fun loginIsError(uiResult: UIResult.Error<String>) {
+        when (uiResult.error) {
             is NoNetworkConnectionException, is ServerNotReachableException -> {
                 binding.serverStatusText.run {
                     text = getString(R.string.error_no_network_connection)
@@ -419,7 +417,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             else -> {
                 binding.serverStatusText.isVisible = false
                 binding.authStatusText.run {
-                    text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
+                    text = uiResult.error?.parseError("", resources, true)
                     isVisible = true
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
                 }
