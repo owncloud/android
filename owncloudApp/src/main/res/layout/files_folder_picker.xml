@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
 ownCloud Android client application
 
-Copyright (C) 2020 ownCloud GmbH.
+Copyright (C) 2023 ownCloud GmbH.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License version 2,
@@ -34,6 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:padding="@dimen/standard_half_padding"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
@@ -43,14 +44,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             android:layout_weight="1"
             android:text="@android:string/cancel"
             android:theme="@style/Button.Secondary" />
-
-        <ImageButton
-            android:id="@+id/folder_picker_btn_home"
-            style="?android:buttonStyle"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_home_black"
-            android:visibility="gone" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/folder_picker_btn_choose"

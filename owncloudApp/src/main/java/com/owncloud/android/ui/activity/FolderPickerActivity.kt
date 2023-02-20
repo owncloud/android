@@ -30,6 +30,7 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.FileListOption
@@ -55,7 +56,7 @@ open class FolderPickerActivity : FileActivity(),
 
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.files_folder_picker) // Beware - inflated in other activities too
+        setContentView(R.layout.files_folder_picker)
 
         // Allow or disallow touches with other visible windows
         val filesFolderPickerLayout = findViewById<LinearLayout>(R.id.filesFolderPickerLayout)
@@ -232,6 +233,8 @@ open class FolderPickerActivity : FileActivity(),
             transaction.replace(R.id.fragment_container, mainListOfFiles, TAG_LIST_OF_FOLDERS)
             transaction.commit()
         }
+
+        findViewById<Button>(R.id.folder_picker_btn_choose).isVisible = true
     }
 
     private fun initAndShowListOfSpaces() {
@@ -239,6 +242,7 @@ open class FolderPickerActivity : FileActivity(),
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, listOfSpaces)
         transaction.commit()
+        findViewById<Button>(R.id.folder_picker_btn_choose).isVisible = false
     }
 
     /**
