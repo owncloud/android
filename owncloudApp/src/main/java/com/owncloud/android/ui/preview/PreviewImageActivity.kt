@@ -42,6 +42,7 @@ import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvid
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.files.SortOrder
@@ -321,7 +322,7 @@ class PreviewImageActivity : FileActivity(),
         require(file.isImage) { "Non-image file passed as argument" }
 
         // Update file according to DB file, if it is possible
-        if (file.id!! > FileDataStorageManager.ROOT_PARENT_ID) {
+        if (file.id!! > ROOT_PARENT_ID) {
             file = storageManager.getFileById(file.id!!)
         }
         if (file != null) {

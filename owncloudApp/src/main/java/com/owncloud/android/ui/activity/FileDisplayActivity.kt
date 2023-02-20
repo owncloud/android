@@ -55,6 +55,7 @@ import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedExcept
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.checkPasscodeEnforced
@@ -669,7 +670,7 @@ class FileDisplayActivity : FileActivity(),
                     return
                 }
                 // If current file is root folder
-                else if (currentDirDisplayed.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
+                else if (currentDirDisplayed.parentId == ROOT_PARENT_ID) {
                     // If current space is a project space (not personal, not shares), navigate back to the spaces list
                     if (mainFileListFragment?.getCurrentSpace()?.isProject == true) {
                         navigateTo(FileListOption.SPACES_LIST)

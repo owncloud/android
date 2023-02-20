@@ -150,8 +150,4 @@ class FileDataStorageManager : KoinComponent {
         }
         capability
     }
-
-    companion object {
-        const val ROOT_PARENT_ID = 0
-    }
 }
