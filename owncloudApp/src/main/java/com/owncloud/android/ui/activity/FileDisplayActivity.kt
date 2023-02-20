@@ -48,7 +48,6 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ActivityMainBinding
-import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
