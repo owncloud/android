@@ -22,6 +22,8 @@ package com.owncloud.android.presentation.spaces
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
@@ -72,6 +74,8 @@ class SpacesListFragment(
     }
 
     private fun initViews() {
+        setHasOptionsMenu(true)
+
         val spacesListLayoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerSpacesList.layoutManager = spacesListLayoutManager
         spacesListAdapter = SpacesListAdapter(this)
@@ -111,6 +115,12 @@ class SpacesListFragment(
 
     override fun onItemClick(ocSpace: OCSpace) {
         spacesListViewModel.getRootFileForSpace(ocSpace)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.findItem(R.id.action_share_current_folder)?.itemId?.let { menu.removeItem(it) }
+        menu.findItem(R.id.action_search)?.itemId?.let { menu.removeItem(it) }
     }
 
     companion object {
