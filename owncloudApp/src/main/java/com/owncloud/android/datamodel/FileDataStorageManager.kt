@@ -130,8 +130,4 @@ class FileDataStorageManager(
         }
         capability
     }
-
-    companion object {
-        const val ROOT_PARENT_ID = 0
-    }
 }

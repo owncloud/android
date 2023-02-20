@@ -26,10 +26,10 @@ package com.owncloud.android.presentation.files.filelist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.datamodel.FileDataStorageManager.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
@@ -195,7 +195,7 @@ class MainFileListViewModel(
                         parentDir = TODO("Move it to usecase if possible")
                     }
                 }
-            } else if (parentId == ROOT_PARENT_ID.toLong()) {
+            } else if (parentId == ROOT_PARENT_ID) {
                 // Browsing to parent folder. Root
                 val rootFolderForAccountResult = getFileByRemotePathUseCase.execute(
                     GetFileByRemotePathUseCase.Params(
