@@ -467,7 +467,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val tempDir = File(FileStorageUtils.getTemporalPath(parentDocument.owner, parentDocument.spaceId))
         val newFile = File(tempDir, displayName)
         fileToUpload = OCFile(
-            remotePath = parentDocument.remotePath + displayName, mimeType = mimeType, parentId = parentDocument.id, owner = parentDocument.owner
+            remotePath = parentDocument.remotePath + displayName, mimeType = mimeType, parentId = parentDocument.id, owner = parentDocument.owner, spaceId = parentDocument.spaceId
         ).apply {
             storagePath = newFile.path
         }

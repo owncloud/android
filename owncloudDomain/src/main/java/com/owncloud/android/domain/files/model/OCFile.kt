@@ -63,11 +63,12 @@ data class OCFile(
         get() = File(remotePath).name.let { it.ifBlank { ROOT_PATH } }
 
     @Deprecated("Do not use this constructor. Remove it as soon as possible")
-    constructor(remotePath: String, mimeType: String, parentId: Long?, owner: String) : this(
+    constructor(remotePath: String, mimeType: String, parentId: Long?, owner: String, spaceId: String? = null) : this(
         remotePath = remotePath,
         mimeType = mimeType,
         parentId = parentId,
         owner = owner,
+        spaceId = spaceId,
         modificationTimestamp = 0,
         length = 0
     )
