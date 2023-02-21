@@ -86,13 +86,16 @@ class TransfersAdapter(
                     }
                     uploadName.text = fileName
 
-                    transferItem.spaceName?.let {
-                        spaceIcon.isVisible = true
-                        if (transferItem.isFromPersonalSpace) {
-                            spaceIcon.setImageResource(R.drawable.ic_folder)
-                        }
+                    transferItem.space?.let {
                         uploadSpaceName.isVisible = true
-                        uploadSpaceName.text = it
+                        spaceIcon.isVisible = true
+                        if (it.isPersonal) {
+                            spaceIcon.setImageResource(R.drawable.ic_folder)
+                            uploadSpaceName.text = personalName
+                        } // TODO: Add else if for shares space
+                        else {
+                            uploadSpaceName.text = it.name
+                        }
                     }
 
                     uploadRemotePath.text = remoteFile.parent
@@ -238,18 +241,8 @@ class TransfersAdapter(
             val headerItem = HeaderItem(transferMap.key, transferMap.value.size)
             newTransferItemsList.add(headerItem)
             val transferItems = transferMap.value.sortedByDescending { it.transferEndTimestamp ?: it.id }.map { transfer ->
-                var spaceName: String? = null
-                var isFromPersonalSpace = false
-                spaces.firstOrNull { it.id == transfer.spaceId }?.let {
-                    if (it.isPersonal) {
-                        spaceName = personalName
-                        isFromPersonalSpace = true
-                    } // TODO: Add else if for shares space
-                    else {
-                        spaceName = it.name
-                    }
-                }
-                TransferItem(transfer, spaceName, isFromPersonalSpace)
+                val space = spaces.firstOrNull { it.id == transfer.spaceId && it.accountName == transfer.accountName }
+                TransferItem(transfer, space)
             }
             newTransferItemsList.addAll(transferItems)
         }
@@ -287,8 +280,7 @@ class TransfersAdapter(
     sealed interface TransferRecyclerItem {
         data class TransferItem(
             val transfer: OCTransfer,
-            val spaceName: String?,
-            val isFromPersonalSpace: Boolean,
+            val space: OCSpace?,
         ) : TransferRecyclerItem
         data class HeaderItem(
             val status: TransferStatus,
