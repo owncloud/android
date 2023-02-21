@@ -1397,7 +1397,7 @@ class FileDisplayActivity : FileActivity(),
                         initAndShowListOfShares()
                         updateToolbar(null)
                     } else {
-                        file = storageManager.getRootPersonalFolder()
+                        file = rootFolderForShares ?: personalFolder
                         fileListOption = newFileListOption
                         mainFileListFragment?.updateFileListOption(newFileListOption, file) ?: initAndShowListOfFiles(newFileListOption)
                         updateToolbar(null)
