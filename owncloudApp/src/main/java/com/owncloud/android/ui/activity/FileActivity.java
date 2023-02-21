@@ -405,6 +405,7 @@ public class FileActivity extends DrawerActivity
     public void restart() {
         Intent i = new Intent(this, FileDisplayActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.putExtra(EXTRA_FILE_LIST_OPTION, (Parcelable) FileListOption.ALL_FILES);
         startActivity(i);
     }
 

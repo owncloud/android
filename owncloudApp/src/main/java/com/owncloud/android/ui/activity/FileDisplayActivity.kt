@@ -83,6 +83,7 @@ import com.owncloud.android.presentation.files.operations.FileOperationsViewMode
 import com.owncloud.android.presentation.security.LockType
 import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.security.bayPassUnlockOnce
+import com.owncloud.android.presentation.shares.SharesFragment
 import com.owncloud.android.presentation.spaces.SpacesListFragment
 import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.BUNDLE_KEY_CLICK_SPACE
 import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.REQUEST_KEY_CLICK_SPACE
@@ -146,6 +147,9 @@ class FileDisplayActivity : FileActivity(),
 
     private val spacesListFragment: SpacesListFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_SPACES) as SpacesListFragment?
+
+    private val sharesListFragment: SharesFragment?
+        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_SHARES) as SharesFragment?
 
     private val secondFragment: FileFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
@@ -264,11 +268,7 @@ class FileDisplayActivity : FileActivity(),
             capabilitiesViewModel.capabilities.observe(this, Event.EventObserver {
                 onCapabilitiesOperationFinish(it)
             })
-            if (isSpacesTabSelected()) {
-                initAndShowListOfSpaces()
-            } else {
-                initAndShowListOfFiles()
-            }
+            navigateTo(fileListOption, initialState = true)
         }
 
         startListeningToOperations()
@@ -349,8 +349,17 @@ class FileDisplayActivity : FileActivity(),
 
     private fun initAndShowListOfSpaces() {
         val listOfSpaces = SpacesListFragment()
+        this.fileListOption = FileListOption.SPACES_LIST
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, listOfSpaces, TAG_LIST_OF_SPACES)
+        transaction.commit()
+    }
+
+    private fun initAndShowListOfShares() {
+        val listOfSpaces = SharesFragment()
+        this.fileListOption = FileListOption.SHARED_BY_LINK
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.left_fragment_container, listOfSpaces, TAG_LIST_OF_SHARES)
         transaction.commit()
     }
 
@@ -870,7 +879,11 @@ class FileDisplayActivity : FileActivity(),
             val title =
                 when (fileListOption) {
                     FileListOption.AV_OFFLINE -> getString(R.string.drawer_item_only_available_offline)
-                    FileListOption.SHARED_BY_LINK -> if (chosenFile.spaceId != null) getString(R.string.bottom_nav_shares) else getString(R.string.bottom_nav_links)
+                    FileListOption.SHARED_BY_LINK -> if (chosenFile == null || chosenFile.spaceId != null) {
+                        getString(R.string.bottom_nav_shares)
+                    } else {
+                        getString(R.string.bottom_nav_links)
+                    }
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
                     FileListOption.SPACES_LIST -> getString(R.string.bottom_nav_spaces)
                 }
@@ -1355,32 +1368,50 @@ class FileDisplayActivity : FileActivity(),
         setSecondFragment(detailsFragment)
     }
 
-    private fun navigateTo(newFileListOption: FileListOption) {
-        if (fileListOption != newFileListOption) {
-            if (newFileListOption == FileListOption.SPACES_LIST) {
-                fileListOption = FileListOption.SPACES_LIST
-                file = null
-                initAndShowListOfSpaces()
-                updateToolbar(null)
-            } else if (mainFileListFragment != null) {
-                fileListOption = newFileListOption
-                file = if (!newFileListOption.isSharedByLink()) {
-                    storageManager.getRootPersonalFolder()
+    private fun navigateTo(newFileListOption: FileListOption, initialState: Boolean = false) {
+        val previousFileListOption = fileListOption
+        when (newFileListOption) {
+            FileListOption.ALL_FILES -> {
+                if (previousFileListOption != newFileListOption || initialState) {
+                    file = storageManager.getRootPersonalFolder()
+                    fileListOption = newFileListOption
+                    mainFileListFragment?.updateFileListOption(newFileListOption, file) ?: initAndShowListOfFiles(newFileListOption)
+                    updateToolbar(file)
                 } else {
-                    storageManager.getRootSharesFolder() ?: storageManager.getRootPersonalFolder()
+                    browseToRoot()
                 }
-                mainFileListFragment?.updateFileListOption(newFileListOption, file)
-                updateToolbar(null)
-            } else if (spacesListFragment != null) {
-                fileListOption = newFileListOption
-                file = storageManager.getRootPersonalFolder()
-                initAndShowListOfFiles(newFileListOption)
-                updateToolbar(null)
-            } else {
-                super.navigateToOption(FileListOption.ALL_FILES)
             }
-        } else if (newFileListOption != FileListOption.SPACES_LIST) {
-            browseToRoot()
+            FileListOption.SPACES_LIST -> {
+                if (previousFileListOption != newFileListOption || initialState) {
+                    file = null
+                    initAndShowListOfSpaces()
+                    updateToolbar(null)
+                }
+            }
+            FileListOption.SHARED_BY_LINK -> {
+                if (previousFileListOption != newFileListOption || initialState) {
+                    val rootFolderForShares = storageManager.getRootSharesFolder()
+                    val personalFolder = storageManager.getRootPersonalFolder()
+                    if (rootFolderForShares == null && personalFolder?.spaceId != null) {
+                        fileListOption = newFileListOption
+                        initAndShowListOfShares()
+                        updateToolbar(null)
+                    } else {
+                        file = storageManager.getRootPersonalFolder()
+                        fileListOption = newFileListOption
+                        mainFileListFragment?.updateFileListOption(newFileListOption, file) ?: initAndShowListOfFiles(newFileListOption)
+                        updateToolbar(null)
+                    }
+                }
+            }
+            FileListOption.AV_OFFLINE -> {
+                if (previousFileListOption != newFileListOption || initialState) {
+                    file = storageManager.getRootPersonalFolder()
+                    fileListOption = newFileListOption
+                    mainFileListFragment?.updateFileListOption(newFileListOption, file) ?: initAndShowListOfFiles(newFileListOption)
+                    updateToolbar(file)
+                }
+            }
         }
     }
 
@@ -1500,6 +1531,7 @@ class FileDisplayActivity : FileActivity(),
     companion object {
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
         private const val TAG_LIST_OF_SPACES = "LIST_OF_SPACES"
+        private const val TAG_LIST_OF_SHARES = "LIST_OF_SHARES"
         private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 
         private const val KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW"

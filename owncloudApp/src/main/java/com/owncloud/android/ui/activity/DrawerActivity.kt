@@ -706,12 +706,6 @@ abstract class DrawerActivity : ToolbarActivity() {
      */
     protected abstract fun restart()
 
-    /**
-     * Checks if the spaces tab is currently selected
-     */
-    protected fun isSpacesTabSelected() =
-        getBottomNavigationView()?.menu?.findItem(R.id.nav_spaces)?.isChecked == true
-
     companion object {
         private const val KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE"
         private const val KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM"
