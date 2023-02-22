@@ -147,6 +147,7 @@ interface SpacesDao {
         private const val SELECT_ALL_SPACES = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
+            WHERE $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PROJECT' OR $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PERSONAL'
         """
 
         private const val SELECT_ALL_SPACES_FOR_ACCOUNT = """

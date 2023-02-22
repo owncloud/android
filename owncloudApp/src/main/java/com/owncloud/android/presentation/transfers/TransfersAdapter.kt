@@ -92,8 +92,7 @@ class TransfersAdapter(
                         if (it.isPersonal) {
                             spaceIcon.setImageResource(R.drawable.ic_folder)
                             uploadSpaceName.text = personalName
-                        } // TODO: Add else if for shares space
-                        else {
+                        } else {
                             uploadSpaceName.text = it.name
                         }
                     }
