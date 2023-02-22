@@ -285,9 +285,16 @@ class MainFileListFragment : Fragment(),
         with(binding.emptyDataParent) {
             root.isVisible = fileListUiState.folderContent.isEmpty()
 
-            listEmptyDatasetIcon.setImageResource(fileListUiState.fileListOption.toDrawableRes())
-            listEmptyDatasetTitle.setText(fileListUiState.fileListOption.toTitleStringRes())
-            listEmptyDatasetSubTitle.setText(fileListUiState.fileListOption.toSubtitleStringRes())
+            if (fileListUiState.fileListOption.isSharedByLink() && fileListUiState.space != null) {
+                // Temporary solution for shares space
+                listEmptyDatasetIcon.setImageResource(R.drawable.ic_ocis_shares)
+                listEmptyDatasetTitle.setText(R.string.shares_list_empty_title)
+                listEmptyDatasetSubTitle.setText(R.string.shares_list_empty_subtitle)
+            } else {
+                listEmptyDatasetIcon.setImageResource(fileListUiState.fileListOption.toDrawableRes())
+                listEmptyDatasetTitle.setText(fileListUiState.fileListOption.toTitleStringRes())
+                listEmptyDatasetSubTitle.setText(fileListUiState.fileListOption.toSubtitleStringRes())
+            }
         }
     }
 
