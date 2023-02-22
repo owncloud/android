@@ -28,7 +28,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.domain.spaces.usecases.GetAllSpacesUseCase
+import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCase
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
@@ -66,7 +66,7 @@ class TransfersViewModel(
     private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
     private val cancelUploadsRecursivelyUseCase: CancelUploadsRecursivelyUseCase,
     private val cancelDownloadsRecursivelyUseCase: CancelDownloadsRecursivelyUseCase,
-    private val getAllSpacesUseCase: GetAllSpacesUseCase,
+    private val getSpacesFromEveryAccountUseCase: GetSpacesFromEveryAccountUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
@@ -95,7 +95,7 @@ class TransfersViewModel(
             _workInfosListLiveData.postValue(workInfos)
         }
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val spacesList = getAllSpacesUseCase.execute(Unit)
+            val spacesList = getSpacesFromEveryAccountUseCase.execute(Unit)
             _spaces.update { spacesList }
         }
     }

@@ -28,7 +28,7 @@ interface LocalSpacesDataSource {
     fun saveSpacesForAccount(listOfSpaces: List<OCSpace>)
     fun getPersonalSpaceForAccount(accountName: String): OCSpace?
     fun getSharesSpaceForAccount(accountName: String): OCSpace?
-    fun getAllSpaces(): List<OCSpace>
+    fun getSpacesFromEveryAccount(): List<OCSpace>
     fun getProjectSpacesWithSpecialsForAccountAsFlow(accountName: String): Flow<List<OCSpace>>
     fun getPersonalAndProjectSpacesWithSpecialsForAccountAsFlow(accountName: String): Flow<List<OCSpace>>
     fun getPersonalAndProjectSpacesForAccount(accountName: String): List<OCSpace>

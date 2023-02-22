@@ -35,8 +35,8 @@ class OCSpacesRepository(
         }
     }
 
-    override fun getAllSpaces() =
-        localSpacesDataSource.getAllSpaces()
+    override fun getSpacesFromEveryAccount() =
+        localSpacesDataSource.getSpacesFromEveryAccount()
 
     override fun getProjectSpacesWithSpecialsForAccountAsFlow(accountName: String) =
         localSpacesDataSource.getProjectSpacesWithSpecialsForAccountAsFlow(accountName)
