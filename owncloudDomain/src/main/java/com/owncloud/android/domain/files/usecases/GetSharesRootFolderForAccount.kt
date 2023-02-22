@@ -21,12 +21,18 @@ import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
-class GetRootFolderSharesUseCase(
+/**
+ * Returns the root folder for the shares space.
+ *
+ * For oC10 accounts returns null
+ * For oCIS accounts returns the root folder from Shares jail
+ */
+class GetSharesRootFolderForAccount(
     private val fileRepository: FileRepository
-) : BaseUseCase<OCFile?, GetRootFolderSharesUseCase.Params>() {
+) : BaseUseCase<OCFile?, GetSharesRootFolderForAccount.Params>() {
 
     override fun run(params: Params): OCFile? =
-        fileRepository.getRootFolderShares(owner = params.owner)
+        fileRepository.getSharesRootFolderForAccount(owner = params.owner)
 
     data class Params(
         val owner: String,

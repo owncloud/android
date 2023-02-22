@@ -48,9 +48,12 @@ data class OCSpace(
     }
 
     companion object {
-        private const val DRIVE_TYPE_PERSONAL = "personal"
-        private const val DRIVE_TYPE_PROJECT = "project"
+        const val DRIVE_TYPE_PERSONAL = "personal"
+        const val DRIVE_TYPE_PROJECT = "project"
         private const val DRIVE_DISABLED = "trashed"
+
+        // https://github.com/owncloud/web/blob/2ab7e6da432cb344cd86f3451eea1678461c5c90/packages/web-client/src/helpers/space/types.ts#L11
+        const val SPACE_ID_SHARES = "a0ca6a90-a365-4782-871e-d44447bbc668\$a0ca6a90-a365-4782-871e-d44447bbc668"
     }
 }
 

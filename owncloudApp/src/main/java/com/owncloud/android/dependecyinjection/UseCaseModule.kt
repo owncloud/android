@@ -56,8 +56,8 @@ import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
-import com.owncloud.android.domain.files.usecases.GetRootFolderPersonalUseCase
-import com.owncloud.android.domain.files.usecases.GetRootFolderSharesUseCase
+import com.owncloud.android.domain.files.usecases.GetPersonalRootFolderForAccountUseCase
+import com.owncloud.android.domain.files.usecases.GetSharesRootFolderForAccount
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetWebDavUrlForSpaceUseCase
@@ -146,8 +146,8 @@ val useCaseModule = module {
     factory { GetFolderContentUseCase(get()) }
     factory { GetFolderContentAsStreamUseCase(get()) }
     factory { GetFolderImagesUseCase(get()) }
-    factory { GetRootFolderPersonalUseCase(get()) }
-    factory { GetRootFolderSharesUseCase(get()) }
+    factory { GetPersonalRootFolderForAccountUseCase(get()) }
+    factory { GetSharesRootFolderForAccount(get()) }
     factory { MoveFileUseCase(get()) }
     factory { RemoveFileUseCase(get()) }
     factory { RenameFileUseCase(get()) }

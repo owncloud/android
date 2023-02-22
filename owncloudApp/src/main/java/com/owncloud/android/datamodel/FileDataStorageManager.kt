@@ -33,8 +33,8 @@ import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
-import com.owncloud.android.domain.files.usecases.GetRootFolderPersonalUseCase
-import com.owncloud.android.domain.files.usecases.GetRootFolderSharesUseCase
+import com.owncloud.android.domain.files.usecases.GetPersonalRootFolderForAccountUseCase
+import com.owncloud.android.domain.files.usecases.GetSharesRootFolderForAccount
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
@@ -63,19 +63,19 @@ class FileDataStorageManager(
     }
 
     fun getRootPersonalFolder() = runBlocking(CoroutinesDispatcherProvider().io) {
-        val getRootFolderPersonalUseCase: GetRootFolderPersonalUseCase by inject()
+        val getPersonalRootFolderForAccountUseCase: GetPersonalRootFolderForAccountUseCase by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getRootFolderPersonalUseCase.execute(GetRootFolderPersonalUseCase.Params(account.name))
+            getPersonalRootFolderForAccountUseCase.execute(GetPersonalRootFolderForAccountUseCase.Params(account.name))
         }
         result
     }
 
     fun getRootSharesFolder() = runBlocking(CoroutinesDispatcherProvider().io) {
-        val getRootFolderSharesUseCase: GetRootFolderSharesUseCase by inject()
+        val getSharesRootFolderForAccount: GetSharesRootFolderForAccount by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getRootFolderSharesUseCase.execute(GetRootFolderSharesUseCase.Params(account.name))
+            getSharesRootFolderForAccount.execute(GetSharesRootFolderForAccount.Params(account.name))
         }
         result
     }

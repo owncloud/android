@@ -26,14 +26,13 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
 import com.owncloud.android.data.ProviderMeta
-import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.DRIVE_ALIAS_SPACES_SHARES
-import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.DRIVE_TYPE_PERSONAL
-import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.DRIVE_TYPE_PROJECT
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ACCOUNT_NAME
-import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_DRIVE_ALIAS
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_DRIVE_TYPE
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ID
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ROOT_WEB_DAV_URL
+import com.owncloud.android.domain.spaces.model.OCSpace.Companion.DRIVE_TYPE_PERSONAL
+import com.owncloud.android.domain.spaces.model.OCSpace.Companion.DRIVE_TYPE_PROJECT
+import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARES
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -135,7 +134,7 @@ interface SpacesDao {
         private const val SELECT_SHARES_SPACE_FOR_ACCOUNT = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
-            WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_ALIAS LIKE '$DRIVE_ALIAS_SPACES_SHARES'
+            WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_ID LIKE '$SPACE_ID_SHARES'
         """
 
         private const val SELECT_PROJECT_SPACES_FOR_ACCOUNT = """

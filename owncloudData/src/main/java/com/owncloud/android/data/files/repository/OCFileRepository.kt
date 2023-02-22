@@ -143,7 +143,7 @@ class OCFileRepository(
     override fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String?): OCFile? =
         localFileDataSource.getFileByRemotePath(remotePath, owner, spaceId)
 
-    override fun getRootFolderPersonal(owner: String): OCFile {
+    override fun getPersonalRootFolderForAccount(owner: String): OCFile {
         val personalSpace = localSpacesDataSource.getPersonalSpaceForAccount(owner)
         if (personalSpace == null) {
             val legacyRootFolder = localFileDataSource.getFileByRemotePath(remotePath = ROOT_PATH, owner = owner, spaceId = null)
@@ -154,7 +154,7 @@ class OCFileRepository(
         return personalRootFolder!!
     }
 
-    override fun getRootFolderShares(owner: String): OCFile? {
+    override fun getSharesRootFolderForAccount(owner: String): OCFile? {
         val sharesSpaces = localSpacesDataSource.getSharesSpaceForAccount(owner) ?: return null
 
         val personalRootFolder = localFileDataSource.getFileByRemotePath(remotePath = ROOT_PATH, owner = owner, spaceId = sharesSpaces.root.id)

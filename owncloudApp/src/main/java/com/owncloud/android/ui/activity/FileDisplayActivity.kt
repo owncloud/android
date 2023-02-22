@@ -145,12 +145,6 @@ class FileDisplayActivity : FileActivity(),
     private val mainFileListFragment: MainFileListFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES) as MainFileListFragment?
 
-    private val spacesListFragment: SpacesListFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_SPACES) as SpacesListFragment?
-
-    private val sharesListFragment: SharesFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_SHARES) as SharesFragment?
-
     private val secondFragment: FileFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
 
@@ -356,10 +350,10 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun initAndShowListOfShares() {
-        val listOfSpaces = SharesFragment()
+        val sharesFragment = SharesFragment()
         this.fileListOption = FileListOption.SHARED_BY_LINK
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.left_fragment_container, listOfSpaces, TAG_LIST_OF_SHARES)
+        transaction.replace(R.id.left_fragment_container, sharesFragment)
         transaction.commit()
     }
 
@@ -1531,7 +1525,6 @@ class FileDisplayActivity : FileActivity(),
     companion object {
         private const val TAG_LIST_OF_FILES = "LIST_OF_FILES"
         private const val TAG_LIST_OF_SPACES = "LIST_OF_SPACES"
-        private const val TAG_LIST_OF_SHARES = "LIST_OF_SHARES"
         private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 
         private const val KEY_WAITING_TO_PREVIEW = "WAITING_TO_PREVIEW"
