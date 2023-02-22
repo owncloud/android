@@ -4,6 +4,7 @@ about: List of checklist to accomplish for the ownCloud team to finish the relea
 title: "[RELEASE]"
 labels: Release
 assignees: ''
+---
 
 <!--
 Another release for the ownCloud Android client!
