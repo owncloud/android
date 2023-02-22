@@ -84,12 +84,12 @@ class UploadFileFromFileSystemWorker(
     private var uploadIdInStorageManager: Long = -1
     private lateinit var ocTransfer: OCTransfer
     private var fileSize: Long = 0
-    private var spaceId: String? = null
     private var spaceWebDavUrl: String? = null
 
     private lateinit var uploadFileOperation: UploadFileFromFileSystemOperation
     private val saveFileOrFolderUseCase: SaveFileOrFolderUseCase by inject()
     private val cleanConflictUseCase: CleanConflictUseCase by inject()
+    private val getWebdavUrlForSpaceUseCase: GetWebDavUrlForSpaceUseCase by inject()
 
     // Etag in conflict required to overwrite files in server. Otherwise, the upload will be rejected.
     private var eTagInConflict: String = ""
@@ -104,11 +104,8 @@ class UploadFileFromFileSystemWorker(
 
         transferRepository.updateTransferStatusToInProgressById(uploadIdInStorageManager)
 
-        spaceId = ocTransfer.spaceId
-
-        val getWebdavUrlForSpaceUseCase: GetWebDavUrlForSpaceUseCase by inject()
         spaceWebDavUrl =
-            getWebdavUrlForSpaceUseCase.execute(GetWebDavUrlForSpaceUseCase.Params(accountName = account.name, spaceId = spaceId))
+            getWebdavUrlForSpaceUseCase.execute(GetWebDavUrlForSpaceUseCase.Params(accountName = account.name, spaceId = ocTransfer.spaceId))
 
         return try {
             checkPermissionsToReadDocumentAreGranted()
@@ -195,7 +192,7 @@ class UploadFileFromFileSystemWorker(
         if (ocTransfer.forceOverwrite) {
 
             val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
-            val useCaseResult = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(ocTransfer.accountName, ocTransfer.remotePath, spaceId))
+            val useCaseResult = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(ocTransfer.accountName, ocTransfer.remotePath, ocTransfer.spaceId))
 
             eTagInConflict = useCaseResult.getDataOrNull()?.etagInConflict.orEmpty()
 
@@ -317,7 +314,7 @@ class UploadFileFromFileSystemWorker(
     private fun updateFilesDatabaseWithLatestDetails() {
         val currentTime = System.currentTimeMillis()
         val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
-        val file = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(account.name, ocTransfer.remotePath, spaceId))
+        val file = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(account.name, ocTransfer.remotePath, ocTransfer.spaceId))
         file.getDataOrNull()?.let { ocFile ->
             val fileWithNewDetails =
                 if (ocTransfer.forceOverwrite) {
