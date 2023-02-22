@@ -143,8 +143,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
         authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl)
 
         assertEmittedValues(
-            expectedValues = listOf
-                (
+            expectedValues = listOf(
                 Event(UIResult.Loading()),
                 Event(UIResult.Error(commonException))
             ),

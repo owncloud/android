@@ -21,12 +21,18 @@ import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
-class GetRootFolderPersonalUseCase(
+/**
+ * Returns the root folder for the account.
+ *
+ * For oC10 accounts returns the root folder
+ * For oCIS accounts returns the root folder from Personal space
+ */
+class GetPersonalRootFolderForAccountUseCase(
     private val fileRepository: FileRepository
-) : BaseUseCase<OCFile?, GetRootFolderPersonalUseCase.Params>() {
+) : BaseUseCase<OCFile?, GetPersonalRootFolderForAccountUseCase.Params>() {
 
     override fun run(params: Params): OCFile =
-        fileRepository.getRootFolderPersonal(owner = params.owner)
+        fileRepository.getPersonalRootFolderForAccount(owner = params.owner)
 
     data class Params(
         val owner: String,
