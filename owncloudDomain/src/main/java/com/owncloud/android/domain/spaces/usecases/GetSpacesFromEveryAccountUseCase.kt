@@ -24,9 +24,9 @@ import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.spaces.SpacesRepository
 import com.owncloud.android.domain.spaces.model.OCSpace
 
-class GetAllSpacesUseCase(
+class GetSpacesFromEveryAccountUseCase(
     private val spacesRepository: SpacesRepository
 ) : BaseUseCase<List<OCSpace>, Unit>() {
     override fun run(params: Unit) =
-        spacesRepository.getAllSpaces()
+        spacesRepository.getSpacesFromEveryAccount()
 }

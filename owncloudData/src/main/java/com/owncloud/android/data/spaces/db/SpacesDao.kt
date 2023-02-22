@@ -66,7 +66,7 @@ interface SpacesDao {
     fun upsertSpecials(listOfSpecialEntities: List<SpaceSpecialEntity>)
 
     @Query(SELECT_ALL_SPACES)
-    fun getAllSpaces(): List<SpacesEntity>
+    fun getSpacesFromEveryAccount(): List<SpacesEntity>
 
     @Query(SELECT_ALL_SPACES_FOR_ACCOUNT)
     fun getAllSpacesForAccount(
