@@ -40,6 +40,7 @@ import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetWebDavUrlForSpaceUseCase
 import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.extensions.isContentUri
@@ -86,7 +87,7 @@ class UploadFileFromContentUriWorker(
     private lateinit var mimeType: String
     private var fileSize: Long = 0
     private var uploadIdInStorageManager: Long = -1
-    private var spaceId: String? = null
+    private lateinit var ocTransfer: OCTransfer
     private var spaceWebDavUrl: String? = null
 
     private lateinit var uploadFileOperation: UploadFileFromFileSystemOperation
@@ -94,22 +95,19 @@ class UploadFileFromContentUriWorker(
     private var lastPercent = 0
 
     private val transferRepository: TransferRepository by inject()
+    private val getWebdavUrlForSpaceUseCase: GetWebDavUrlForSpaceUseCase by inject()
 
     override suspend fun doWork(): Result {
 
         if (!areParametersValid()) return Result.failure()
 
         transferRepository.updateTransferStatusToInProgressById(uploadIdInStorageManager)
-        val ocTransfer = transferRepository.getTransferById(uploadIdInStorageManager)
 
-        spaceId = ocTransfer!!.spaceId
-
-        val getWebdavUrlForSpaceUseCase: GetWebDavUrlForSpaceUseCase by inject()
         spaceWebDavUrl =
-            getWebdavUrlForSpaceUseCase.execute(GetWebDavUrlForSpaceUseCase.Params(accountName = account.name, spaceId = spaceId))
+            getWebdavUrlForSpaceUseCase.execute(GetWebDavUrlForSpaceUseCase.Params(accountName = account.name, spaceId = ocTransfer.spaceId))
 
         val localStorageProvider: LocalStorageProvider by inject()
-        cachePath = localStorageProvider.getTemporalPath(account.name, spaceId) + uploadPath
+        cachePath = localStorageProvider.getTemporalPath(account.name, ocTransfer.spaceId) + uploadPath
 
         return try {
             if (ocTransfer.isContentUri(appContext)) {
@@ -145,8 +143,21 @@ class UploadFileFromContentUriWorker(
         behavior = paramBehavior?.let { UploadBehavior.fromString(it) } ?: return false
         lastModified = paramLastModified ?: return false
         uploadIdInStorageManager = paramUploadId
+        ocTransfer = retrieveUploadInfoFromDatabase() ?: return false
 
         return true
+    }
+
+    private fun retrieveUploadInfoFromDatabase(): OCTransfer? {
+        return transferRepository.getTransferById(uploadIdInStorageManager).also {
+            if (it != null) {
+                Timber.d("Upload with id ($uploadIdInStorageManager) has been found in database.")
+                Timber.d("Upload info: $it")
+            } else {
+                Timber.w("Upload with id ($uploadIdInStorageManager) has not been found in database.")
+                Timber.w("$uploadPath won't be uploaded")
+            }
+        }
     }
 
     private fun checkDocumentFileExists() {
