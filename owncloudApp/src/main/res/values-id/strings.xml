@@ -428,8 +428,7 @@
   <string name="upload_copy_files">Salin file</string>
   <string name="upload_move_files">Pindahkan file</string>
   <string name="pref_behaviour_entries_keep_file">Disimpan dalam folder asli</string>
-  <string name="pref_behaviour_entries_move">Pindah ke folder aplikasi</string>
-  <string name="share_dialog_title">Bagikan</string>
+    <string name="share_dialog_title">Bagikan</string>
   <string name="share_file">Bagikan %1$s</string>
   <string name="share_with_user_section_title">Pengguna dan Kelompok</string>
   <string name="share_no_users">Tidak ada data yang dibagikan dengan pengguna</string>

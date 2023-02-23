@@ -234,8 +234,7 @@
   <string name="upload_copy_files">Kopii dosieron</string>
   <string name="upload_move_files">Movi dosieron</string>
   <string name="pref_behaviour_entries_keep_file">konservita en origina dosierujo</string>
-  <string name="pref_behaviour_entries_move">movita al aplikaĵa dosierujo</string>
-  <string name="share_dialog_title">Kunhavigi</string>
+    <string name="share_dialog_title">Kunhavigi</string>
   <string name="share_no_users">Nenio da datumoj kunhaviĝis kun uzantoj ankoraŭ</string>
   <string name="share_add_user_or_group">Aldoni uzanton aŭ grupon</string>
   <string name="share_cancel_public_link_button">Nuligi</string>

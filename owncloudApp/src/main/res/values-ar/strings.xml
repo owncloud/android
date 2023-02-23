@@ -437,8 +437,7 @@
   <string name="upload_copy_files">نسخ الملف</string>
   <string name="upload_move_files">نقل الملف</string>
   <string name="pref_behaviour_entries_keep_file">سيظل في المجلد الأصلي</string>
-  <string name="pref_behaviour_entries_move">نُقِل إلى مجلد التطبيق</string>
-  <string name="share_dialog_title">مشاركة</string>
+    <string name="share_dialog_title">مشاركة</string>
   <string name="share_file">مشاركة %1$s</string>
   <string name="share_with_user_section_title">المستخدمون والمجموعات</string>
   <string name="share_no_users">لم تتم مشاركة أي بيانات مع المستخدمين بعد</string>

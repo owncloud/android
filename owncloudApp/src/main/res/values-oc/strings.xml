@@ -311,8 +311,7 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="upload_copy_files">Copiar lo fichièr</string>
   <string name="upload_move_files">Desplaçar lo fichièr</string>
   <string name="pref_behaviour_entries_keep_file">gardat dins lo dorsièr original</string>
-  <string name="pref_behaviour_entries_move">desplaçat cap al dorsièr de l\'aplicacion</string>
-  <string name="share_dialog_title">Partejar</string>
+    <string name="share_dialog_title">Partejar</string>
   <string name="share_file">Partejar %1$s</string>
   <string name="share_no_users">Cap de donada es pas partejada amb d\'utilizaires pel moment</string>
   <string name="share_add_user_or_group">Apondre un Utilizaire o un Grop</string>

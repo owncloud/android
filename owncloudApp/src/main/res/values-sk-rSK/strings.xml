@@ -366,8 +366,7 @@
   <string name="upload_copy_files">Kopírovanie súboru</string>
   <string name="upload_move_files">Presunutie súboru</string>
   <string name="pref_behaviour_entries_keep_file">Ponechať v originálnom Adresári</string>
-  <string name="pref_behaviour_entries_move">Presunúť do App Adresára</string>
-  <string name="share_dialog_title">Zdieľať</string>
+    <string name="share_dialog_title">Zdieľať</string>
   <string name="share_file">Zdieľať %1$s</string>
   <string name="share_with_user_section_title">Užívatelia a Skupiny</string>
   <string name="share_no_users">Zatiaľ s používateľmi nezdieľate žiadne dáta.</string>

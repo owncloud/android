@@ -491,8 +491,7 @@
   <string name="upload_copy_files">Копиране на файл</string>
   <string name="upload_move_files">Преместване на файл</string>
   <string name="pref_behaviour_entries_keep_file">се съхранява в оригинална папка</string>
-  <string name="pref_behaviour_entries_move">преместено в папката с приложения</string>
-  <string name="share_dialog_title">Споделяне</string>
+    <string name="share_dialog_title">Споделяне</string>
   <string name="share_file">Споделяне на %1$s</string>
   <string name="share_with_user_section_title">Потребители и групи</string>
   <string name="share_no_users">Все още няма споделени данни с потребители </string>

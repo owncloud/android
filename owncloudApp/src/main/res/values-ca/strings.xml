@@ -428,8 +428,7 @@
   <string name="upload_copy_files">Copiar fitxer</string>
   <string name="upload_move_files">Moure fitxer</string>
   <string name="pref_behaviour_entries_keep_file">conserva\'t en la carpeta original</string>
-  <string name="pref_behaviour_entries_move">mogut a la carpeta de l\'aplicació</string>
-  <string name="share_dialog_title">Compartir</string>
+    <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Comparteix %1$s</string>
   <string name="share_with_user_section_title">Usuaris i Grups</string>
   <string name="share_no_users">No s\'han compartit dades amb usuaris encara</string>

@@ -377,8 +377,7 @@
   <string name="upload_copy_files">Kopioi tiedosto</string>
   <string name="upload_move_files">Siirrä tiedosto</string>
   <string name="pref_behaviour_entries_keep_file">pidetään alkuperäisessä kansiossa</string>
-  <string name="pref_behaviour_entries_move">siirretään sovelluskansioon</string>
-  <string name="share_dialog_title">Jaa</string>
+    <string name="share_dialog_title">Jaa</string>
   <string name="share_file">Jaa %1$s</string>
   <string name="share_with_user_section_title">Käyttäjät ja ryhmät</string>
   <string name="share_no_users">Ei dataa jaettuna käyttäjien kanssa vielä</string>

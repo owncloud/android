@@ -96,7 +96,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsSourcePath = findPreference(PREF__CAMERA_PICTURE_UPLOADS_SOURCE)
         prefPictureUploadsLastSync = findPreference(PREF__CAMERA_PICTURE_UPLOADS_LAST_SYNC)
         prefPictureUploadsBehaviour = findPreference<ListPreference>(PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR)?.apply {
-            entries = listOf(getString(R.string.pref_behaviour_entries_keep_file), getString(R.string.pref_behaviour_entries_move)).toTypedArray()
+            entries = listOf(getString(R.string.pref_behaviour_entries_keep_file), getString(R.string.pref_behaviour_entries_remove_original_file)).toTypedArray()
             entryValues = listOf(UploadBehavior.COPY.name, UploadBehavior.MOVE.name).toTypedArray()
         }
         prefPictureUploadsAccount = findPreference<ListPreference>(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)?.apply {

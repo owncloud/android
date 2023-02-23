@@ -392,8 +392,7 @@
   <string name="upload_copy_files">Kopier fil</string>
   <string name="upload_move_files">Flyt fil</string>
   <string name="pref_behaviour_entries_keep_file">opbevares i den oprindelige mappe</string>
-  <string name="pref_behaviour_entries_move">flyttet til app-mappe</string>
-  <string name="share_dialog_title">Del</string>
+    <string name="share_dialog_title">Del</string>
   <string name="share_file">Del %1$s</string>
   <string name="share_with_user_section_title">Brugere og Grupper</string>
   <string name="share_no_users">Intet data delt med brugere endnu</string>

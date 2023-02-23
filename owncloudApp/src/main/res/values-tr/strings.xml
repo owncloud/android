@@ -491,8 +491,7 @@
   <string name="upload_copy_files">Dosyayı kopyala</string>
   <string name="upload_move_files">Dosyayı taşı</string>
   <string name="pref_behaviour_entries_keep_file">özgün klasöründe tutuldu</string>
-  <string name="pref_behaviour_entries_move">app klasörüne taşındı</string>
-  <string name="share_dialog_title">Paylaş</string>
+    <string name="share_dialog_title">Paylaş</string>
   <string name="share_file">%1$s paylaş</string>
   <string name="share_with_user_section_title">Kullanıcılar ve Gruplar</string>
   <string name="share_no_users">Henüz kullanıcılara paylaşılan veri yok</string>
