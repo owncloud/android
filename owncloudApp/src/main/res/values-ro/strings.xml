@@ -318,8 +318,7 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmare</string>
-  <string name="conflict_title">Conflict de fișiere</string>
-  <string name="conflict_message">Care fișiere doriți să păstrați? Dacă selectați „ambele”, fișierului local i se va adăuga un număr numelui său.</string>
+    <string name="conflict_message">Care fișiere doriți să păstrați? Dacă selectați „ambele”, fișierului local i se va adăuga un număr numelui său.</string>
   <string name="conflict_keep_both">Păstrează ambele</string>
   <string name="conflict_use_local_version">versiunea locală</string>
   <string name="conflict_use_server_version">versiunea de pe server</string>

@@ -239,8 +239,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="prefs_camera_picture_upload_on_wifi">D\'Biller nëmmen iwwer WiFi eroplueden</string>
   <string name="prefs_camera_video_upload_on_wifi">D\'Videoen nëmmen iwwer WiFi eroplueden</string>
-  <string name="conflict_title">Fichier-Konflikt</string>
-  <string name="conflict_message">Wéi eng Fichiere wëlls de halen? Wann s de déi zwou Versiounen auswiels kritt d\' kopéierte Fichier eng Nummer bei den Numm derbäi gesat</string>
+    <string name="conflict_message">Wéi eng Fichiere wëlls de halen? Wann s de déi zwou Versiounen auswiels kritt d\' kopéierte Fichier eng Nummer bei den Numm derbäi gesat</string>
   <string name="conflict_keep_both">Béid halen</string>
   <string name="conflict_use_local_version">Lokal Versioun</string>
   <string name="conflict_use_server_version">Server Versioun</string>

@@ -138,8 +138,7 @@
   <string name="placeholder_filesize">389 KB</string>
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="conflict_title">ਫਾਈਲ ਅਪਵਾਦ</string>
-  <string name="conflict_keep_both">ਦੋਵੇਂ ਰੱਖੋ</string>
+    <string name="conflict_keep_both">ਦੋਵੇਂ ਰੱਖੋ</string>
   <string name="preview_image_description">ਚਿੱਤਰ ਝਲਕ</string>
   <string name="share_link_password_title">ਇੱਕ ਪਾਸਵਰਡ ਭਰੋ</string>
   <string name="share_link_empty_password">ਤੁਹਾਨੂੰ ਇੱਕ ਪਾਸਵਰਡ ਦੇਣਾ ਪਵੇਗਾ</string>
