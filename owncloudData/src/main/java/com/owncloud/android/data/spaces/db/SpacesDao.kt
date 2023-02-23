@@ -22,11 +22,9 @@
 package com.owncloud.android.data.spaces.db
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Update
+import androidx.room.Upsert
 import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.DRIVE_TYPE_PERSONAL
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.DRIVE_TYPE_PROJECT
@@ -60,31 +58,11 @@ interface SpacesDao {
         upsertSpecials(listOfSpecialEntities)
     }
 
-    @Transaction
-    fun upsertSpaces(listOfSpacesEntities: List<SpacesEntity>) = com.owncloud.android.data.upsert(
-        items = listOfSpacesEntities,
-        insertMany = ::insertOrIgnoreSpaces,
-        updateMany = ::updateSpaces
-    )
+    @Upsert
+    fun upsertSpaces(listOfSpacesEntities: List<SpacesEntity>)
 
-    @Transaction
-    fun upsertSpecials(listOfSpecialEntities: List<SpaceSpecialEntity>) = com.owncloud.android.data.upsert(
-        items = listOfSpecialEntities,
-        insertMany = ::insertOrIgnoreSpecials,
-        updateMany = ::updateSpecials
-    )
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnoreSpaces(listOfSpacesEntities: List<SpacesEntity>): List<Long>
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertOrIgnoreSpecials(listOfSpecialEntities: List<SpaceSpecialEntity>): List<Long>
-
-    @Update
-    fun updateSpaces(listOfSpacesEntities: List<SpacesEntity>)
-
-    @Update
-    fun updateSpecials(listOfSpecialEntities: List<SpaceSpecialEntity>)
+    @Upsert
+    fun upsertSpecials(listOfSpecialEntities: List<SpaceSpecialEntity>)
 
     @Query(SELECT_ALL_SPACES_FOR_ACCOUNT)
     fun getAllSpacesForAccount(
