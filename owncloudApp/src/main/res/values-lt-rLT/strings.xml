@@ -390,8 +390,7 @@
   <string name="upload_copy_files">Kopijuoti failą</string>
   <string name="upload_move_files">Perkelti failą</string>
   <string name="pref_behaviour_entries_keep_file">paliktas pradiniame aplanke</string>
-  <string name="pref_behaviour_entries_move">perkelti į app aplanką</string>
-  <string name="share_dialog_title">Dalintis</string>
+    <string name="share_dialog_title">Dalintis</string>
   <string name="share_file">Dalintis %1$s</string>
   <string name="share_with_user_section_title">Naudotojai ir grupės</string>
   <string name="share_no_users">Su vartotojais niekuo nesidalinama</string>

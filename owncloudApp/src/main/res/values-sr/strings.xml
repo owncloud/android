@@ -308,8 +308,7 @@
   <string name="upload_copy_files">Копирај фајл</string>
   <string name="upload_move_files">Премести фајл</string>
   <string name="pref_behaviour_entries_keep_file">остављен у изворној фасцикли</string>
-  <string name="pref_behaviour_entries_move">премештен у фасциклу апликације</string>
-  <string name="share_dialog_title">Дељење</string>
+    <string name="share_dialog_title">Дељење</string>
   <string name="share_add_user_or_group">Додај корисника или групу</string>
   <string name="share_cancel_public_link_button">Откажи</string>
   <string name="share_confirm_public_link_button">Сачувај</string>

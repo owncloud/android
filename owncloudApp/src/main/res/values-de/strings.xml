@@ -506,8 +506,7 @@
   <string name="upload_copy_files">kopiere Datei</string>
   <string name="upload_move_files">verschiebe Datei</string>
   <string name="pref_behaviour_entries_keep_file">im Originalordner behalten</string>
-  <string name="pref_behaviour_entries_move">in den App-Ordner verschoben</string>
-  <string name="share_dialog_title">Teilen</string>
+    <string name="share_dialog_title">Teilen</string>
   <string name="share_file">Teile %1$s</string>
   <string name="share_with_user_section_title">Nutzer und Gruppen</string>
   <string name="share_no_users">Es wurden noch keine Dateien mit Benutzern geteilt</string>

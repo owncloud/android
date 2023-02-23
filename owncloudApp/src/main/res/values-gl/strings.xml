@@ -445,8 +445,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="upload_copy_files">Copiar ficheiro</string>
   <string name="upload_move_files">Mover ficheiro</string>
   <string name="pref_behaviour_entries_keep_file">mantense no cartafol orixinal</string>
-  <string name="pref_behaviour_entries_move">movido cara ao cartafol da aplicación</string>
-  <string name="share_dialog_title">Compartir</string>
+    <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Compartir %1$s</string>
   <string name="share_with_user_section_title">Usuarios e grupos</string>
   <string name="share_no_users">Aínda non hai datos compartidos con usuarios</string>

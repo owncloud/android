@@ -425,8 +425,7 @@
   <string name="upload_copy_files">Kopier fil</string>
   <string name="upload_move_files">Flytt fil</string>
   <string name="pref_behaviour_entries_keep_file">beholdt i opprinnelig mappe</string>
-  <string name="pref_behaviour_entries_move">flyttet til app-mappe</string>
-  <string name="share_dialog_title">Delt ressurs</string>
+    <string name="share_dialog_title">Delt ressurs</string>
   <string name="share_file">Del %1$s</string>
   <string name="share_with_user_section_title">Brukere og grupper</string>
   <string name="share_no_users">Ingen data delt med brukere ennå</string>

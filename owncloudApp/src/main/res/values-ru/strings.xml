@@ -491,8 +491,7 @@
   <string name="upload_copy_files">Копировать файл</string>
   <string name="upload_move_files">Переместить файл</string>
   <string name="pref_behaviour_entries_keep_file">остался в исходной папке</string>
-  <string name="pref_behaviour_entries_move">перемещен в папку приложения</string>
-  <string name="share_dialog_title">Общий доступ</string>
+    <string name="share_dialog_title">Общий доступ</string>
   <string name="share_file">Поделиться %1$s</string>
   <string name="share_with_user_section_title">Пользователи и группы</string>
   <string name="share_no_users">Нет данных используемых совместно с другими пользователями</string>

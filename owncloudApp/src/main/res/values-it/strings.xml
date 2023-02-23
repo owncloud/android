@@ -484,8 +484,7 @@
   <string name="upload_copy_files">Copia file</string>
   <string name="upload_move_files">Sposta file</string>
   <string name="pref_behaviour_entries_keep_file">lasciato nella cartella originale</string>
-  <string name="pref_behaviour_entries_move">spostato nella cartella dell\'applicazione</string>
-  <string name="share_dialog_title">Condividi</string>
+    <string name="share_dialog_title">Condividi</string>
   <string name="share_file">Condividi %1$s</string>
   <string name="share_with_user_section_title">Utenti e Gruppi</string>
   <string name="share_no_users">Ancora nessun dato condiviso con gli utenti </string>

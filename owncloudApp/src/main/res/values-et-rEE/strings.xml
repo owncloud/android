@@ -506,8 +506,7 @@
   <string name="upload_copy_files">Kopeeri fail</string>
   <string name="upload_move_files">Liiguta fail</string>
   <string name="pref_behaviour_entries_keep_file">hoitakse algses kaustas</string>
-  <string name="pref_behaviour_entries_move">liigutatakse rakenduse kausta</string>
-  <string name="share_dialog_title">Jaga</string>
+    <string name="share_dialog_title">Jaga</string>
   <string name="share_file">Jaga %1$s</string>
   <string name="share_with_user_section_title">Kasutajad ja grupid</string>
   <string name="share_no_users">Kasutajatega pole veel midagi jagatud</string>

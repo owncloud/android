@@ -313,8 +313,7 @@
   <string name="upload_copy_files">Fichier kopéieren</string>
   <string name="upload_move_files">Fichier réckelen</string>
   <string name="pref_behaviour_entries_keep_file">Am original Dossier gehalen</string>
-  <string name="pref_behaviour_entries_move">An den App Fichier geréckelt</string>
-  <string name="share_dialog_title">Deelen</string>
+    <string name="share_dialog_title">Deelen</string>
   <string name="share_file">%1$s deelen</string>
   <string name="share_no_users">Nach keng Donnéeë mat Benotzer gedeelt</string>
   <string name="share_add_user_or_group">Benotzer oder Grupp bäisetzen</string>

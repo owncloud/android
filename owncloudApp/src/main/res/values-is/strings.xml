@@ -400,8 +400,7 @@
   <string name="upload_copy_files">Afrita skrá</string>
   <string name="upload_move_files">Færa skrá</string>
   <string name="pref_behaviour_entries_keep_file">áfram í upprunalegri möppu</string>
-  <string name="pref_behaviour_entries_move">færð í forritsmöppu</string>
-  <string name="share_dialog_title">Deila</string>
+    <string name="share_dialog_title">Deila</string>
   <string name="share_file">Deila %1$s</string>
   <string name="share_with_user_section_title">Notendur og hópar</string>
   <string name="share_no_users">Engum gögnum ennþá deilt með notendum</string>
