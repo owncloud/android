@@ -110,7 +110,7 @@ class OCFileRepository(
             } catch (targetNodeDoesNotExist: ConflictException) {
                 // Target node does not exist anymore. Remove target folder from database and local storage and return
                 deleteLocalFolderRecursively(ocFile = targetFolder, onlyFromLocalStorage = false)
-                return@copyFile
+                throw targetNodeDoesNotExist
             } catch (sourceFileDoesNotExist: FileNotFoundException) {
                 // Source file does not exist anymore. Remove file from database and local storage and continue
                 if (ocFile.isFolder) {
@@ -121,7 +121,11 @@ class OCFileRepository(
                         onlyFromLocalStorage = false
                     )
                 }
-                return@forEach
+                if (listOfFilesToCopy.size == 1) {
+                    throw sourceFileDoesNotExist
+                } else {
+                    return@forEach
+                }
             }
 
             // 3. Update database with latest changes
@@ -213,7 +217,7 @@ class OCFileRepository(
             } catch (targetNodeDoesNotExist: ConflictException) {
                 // Target node does not exist anymore. Remove target folder from database and local storage and return
                 deleteLocalFolderRecursively(ocFile = targetFile, onlyFromLocalStorage = false)
-                return@moveFile
+                throw targetNodeDoesNotExist
             } catch (sourceFileDoesNotExist: FileNotFoundException) {
                 // Source file does not exist anymore. Remove file from database and local storage and continue
                 if (ocFile.isFolder) {
@@ -224,7 +228,11 @@ class OCFileRepository(
                         onlyFromLocalStorage = false
                     )
                 }
-                return@forEach
+                if (listOfFilesToMove.size == 1) {
+                    throw sourceFileDoesNotExist
+                } else {
+                    return@forEach
+                }
             }
 
             // 3. Clean conflict in old location if there was a conflict

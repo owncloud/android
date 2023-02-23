@@ -238,8 +238,7 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="placeholder_filesize">389 Ko</string>
   <string name="placeholder_timestamp">18/05/2012 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="conflict_title">Conflicte de fichièrs</string>
-  <string name="conflict_message">Quin(s) fichièr(s) volètz gardar ? Se seleccionatz los dos, una chifra serà aponduda al nom del fichièr local.</string>
+    <string name="conflict_message">Quin(s) fichièr(s) volètz gardar ? Se seleccionatz los dos, una chifra serà aponduda al nom del fichièr local.</string>
   <string name="conflict_keep_both">Gardar las doas versions</string>
   <string name="conflict_use_local_version">version locala</string>
   <string name="conflict_use_server_version">version servidor</string>

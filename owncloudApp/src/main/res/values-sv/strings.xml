@@ -352,8 +352,7 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Bekräfta</string>
-  <string name="conflict_title">Filkonflikt</string>
-  <string name="conflict_description">Det är en konflikt i filen %1$s, klicka för att lösa den</string>
+    <string name="conflict_description">Det är en konflikt i filen %1$s, klicka för att lösa den</string>
   <string name="conflict_message">Vilka filer vill du behålla? Om du markerar båda kommer den lokala filen få ett nummer tillagt i slutet på filnamnet.</string>
   <string name="conflict_keep_both">Behåll båda</string>
   <string name="conflict_use_local_version">lokala versionen</string>
