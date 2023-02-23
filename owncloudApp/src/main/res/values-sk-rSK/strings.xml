@@ -277,8 +277,7 @@
 Čakajúce obrázky nebudú nahrané</string>
   <string name="confirmation_disable_videos_upload_message">Vážne chcete vypnúť túto funkcionalitu ?
 Čakajúce videá nebudú nahraté</string>
-  <string name="conflict_title">Konflikt súborov</string>
-  <string name="conflict_description">Konflok v súbore %1$s, klikni sem a odstráň to</string>
+    <string name="conflict_description">Konflok v súbore %1$s, klikni sem a odstráň to</string>
   <string name="conflict_message">Ktoré súbory si prajate ponachať? Pokiaľ to budú obe verzie, lokálnej pribudne k názvu číslo.</string>
   <string name="conflict_keep_both">Ponechať oba</string>
   <string name="conflict_use_local_version">lokálnu verziu</string>

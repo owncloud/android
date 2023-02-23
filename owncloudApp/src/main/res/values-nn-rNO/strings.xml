@@ -215,8 +215,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="prefs_camera_picture_upload_on_wifi">Last opp kun med trådlaust nett</string>
   <string name="prefs_camera_video_upload_on_wifi">Last opp video kun med trådlaust nett</string>
-  <string name="conflict_title">Fil konflikt</string>
-  <string name="conflict_keep_both">Behald båe</string>
+    <string name="conflict_keep_both">Behald båe</string>
   <string name="conflict_use_local_version">lokal versjon</string>
   <string name="conflict_use_server_version">tenar versjon</string>
   <string name="preview_image_description">Førehandsvisning av bilde</string>
