@@ -33,19 +33,13 @@ import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.FileDataStorageManager
-import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.presentation.authentication.AccountUtils
-import com.owncloud.android.presentation.capabilities.CapabilityViewModel
-import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.spaces.SpacesListFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 open class FolderPickerActivity : FileActivity(),
@@ -56,13 +50,6 @@ open class FolderPickerActivity : FileActivity(),
         get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FOLDERS) as MainFileListFragment?
 
     private lateinit var pickerMode: PickerMode
-    private var capabilities: OCCapability? = null
-
-    private val capabilitiesViewModel by viewModel<CapabilityViewModel> {
-        parametersOf(
-            account?.name
-        )
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("onCreate() start")
@@ -86,18 +73,13 @@ open class FolderPickerActivity : FileActivity(),
                     initAndShowListOfFilesFragment(spaceId = spaceIdOfFiles)
                 }
                 PickerMode.COPY -> {
-                    capabilitiesViewModel.capabilities.observe(this) { event ->
-                        val uiResult = event.peekContent()
-                        if (uiResult is UIResult.Success) {
-                            capabilities = uiResult.data
-                            if (AccountUtils.isSpacesFeatureAllowedForAccount(baseContext, account, capabilities)) {
-                                // Show the list of spaces
-                                initAndShowListOfSpaces()
-                            } else {
-                                // Show the personal space
-                                initAndShowListOfFilesFragment(spaceId = null)
-                            }
-                        }
+                    val targetFiles = intent.getParcelableArrayListExtra<OCFile>(EXTRA_FILES)
+                    if (targetFiles?.get(0)?.spaceId != null) {
+                        // Show the list of spaces
+                        initAndShowListOfSpaces()
+                    } else {
+                        // Show the personal space
+                        initAndShowListOfFilesFragment(spaceId = null)
                     }
                 }
                 PickerMode.CAMERA_FOLDER -> {
@@ -184,7 +166,7 @@ open class FolderPickerActivity : FileActivity(),
         // If current file is root folder
         else if (currentDirDisplayed.parentId == OCFile.ROOT_PARENT_ID) {
             // If we are not in COPY mode, or if we are in COPY mode and spaces are not allowed, close the activity
-            if (pickerMode != PickerMode.COPY || (pickerMode == PickerMode.COPY && !AccountUtils.isSpacesFeatureAllowedForAccount(baseContext, account, capabilities))) {
+            if (pickerMode != PickerMode.COPY || (pickerMode == PickerMode.COPY && currentDirDisplayed.spaceId == null)) {
                 finish()
                 return
             }
@@ -262,14 +244,11 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     private fun initAndShowListOfSpaces() {
-        // To avoid tingling, we check if this fragment is already created
-        if (supportFragmentManager.findFragmentByTag(TAG_LIST_OF_SPACES) == null) {
-            val listOfSpaces = SpacesListFragment(showPersonalSpace = true)
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, listOfSpaces, TAG_LIST_OF_SPACES)
-            transaction.commit()
-            findViewById<Button>(R.id.folder_picker_btn_choose).isVisible = false
-        }
+        val listOfSpaces = SpacesListFragment(showPersonalSpace = true)
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, listOfSpaces)
+        transaction.commit()
+        findViewById<Button>(R.id.folder_picker_btn_choose).isVisible = false
     }
 
     /**
@@ -309,11 +288,23 @@ open class FolderPickerActivity : FileActivity(),
         val isRootFromProject = space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH
 
         if (isRootFromPersonalInCopyMode) {
-            updateStandardToolbar(title = getString(R.string.default_display_name_for_root_folder), displayHomeAsUpEnabled = true, homeButtonEnabled = true)
+            updateStandardToolbar(
+                title = getString(R.string.default_display_name_for_root_folder),
+                displayHomeAsUpEnabled = true,
+                homeButtonEnabled = true
+            )
         } else if (isRootFromPersonal) {
-            updateStandardToolbar(title = getString(R.string.default_display_name_for_root_folder), displayHomeAsUpEnabled = false, homeButtonEnabled = false)
+            updateStandardToolbar(
+                title = getString(R.string.default_display_name_for_root_folder),
+                displayHomeAsUpEnabled = false,
+                homeButtonEnabled = false
+            )
         } else if (isRootFromProject) {
-            updateStandardToolbar(title = space!!.name, displayHomeAsUpEnabled = pickerMode == PickerMode.COPY, homeButtonEnabled = pickerMode == PickerMode.COPY)
+            updateStandardToolbar(
+                title = space!!.name,
+                displayHomeAsUpEnabled = pickerMode == PickerMode.COPY,
+                homeButtonEnabled = pickerMode == PickerMode.COPY
+            )
         } else {
             updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         }
@@ -352,6 +343,5 @@ open class FolderPickerActivity : FileActivity(),
         const val EXTRA_FILES = "FOLDER_PICKER_EXTRA_FILES"
         const val EXTRA_PICKER_MODE = "FOLDER_PICKER_EXTRA_PICKER_MODE"
         private const val TAG_LIST_OF_FOLDERS = "LIST_OF_FOLDERS"
-        private const val TAG_LIST_OF_SPACES = "LIST_OF_SPACES"
     }
 }
