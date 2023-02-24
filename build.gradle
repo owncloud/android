@@ -28,7 +28,7 @@ buildscript {
         androidxTest = "1.4.0"
         androidxTestEspresso = "3.5.1"
         androidxTestUiautomator = "2.2.0"
-        androidxAnnotation = "1.3.0"
+        androidxAnnotation = "1.6.0"
     }
 
     repositories {
