@@ -6,7 +6,7 @@ buildscript {
         sdkTargetVersion = 31
 
         // Android jetpack
-        androidxArchCore = "2.1.0"
+        androidxArchCore = "2.2.0"
         androidxLifecycle = "2.5.1"
         androidxRoom = "2.5.0"
         androidxCore = "1.9.0"
