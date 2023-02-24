@@ -467,7 +467,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="upload_copy_files">Copier fichier</string>
   <string name="upload_move_files">Déplacer fichier</string>
   <string name="pref_behaviour_entries_keep_file">conserver dans le dossier original</string>
-    <string name="share_dialog_title">Partager</string>
+  <string name="share_dialog_title">Partager</string>
   <string name="share_file">Partager %1$s</string>
   <string name="share_with_user_section_title">Utilisateurs et Groupes</string>
   <string name="share_no_users">Aucunes données partagées avec les utilisateurs</string>

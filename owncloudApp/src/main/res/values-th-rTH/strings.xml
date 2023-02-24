@@ -467,7 +467,7 @@
   <string name="upload_copy_files">คัดลอกไฟล์</string>
   <string name="upload_move_files">ย้ายไฟล์</string>
   <string name="pref_behaviour_entries_keep_file">เก็บไว้ในโฟลเดอร์ต้นฉบับ</string>
-    <string name="share_dialog_title">แชร์</string>
+  <string name="share_dialog_title">แชร์</string>
   <string name="share_file">แชร์ %1$s</string>
   <string name="share_with_user_section_title">ผู้ใช้และกลุ่ม</string>
   <string name="share_no_users">ยังไม่มีข้อมูลที่แชร์กับผู้ใช้ในตอนนี้</string>

@@ -463,7 +463,7 @@
   <string name="upload_copy_files">複製檔案</string>
   <string name="upload_move_files">移動檔案</string>
   <string name="pref_behaviour_entries_keep_file">保留在原先的資料夾</string>
-    <string name="share_dialog_title">分享</string>
+  <string name="share_dialog_title">分享</string>
   <string name="share_file">分享 %1$s</string>
   <string name="share_with_user_section_title">使用者及群組</string>
   <string name="share_no_users">目前沒有任何您分享的內容</string>

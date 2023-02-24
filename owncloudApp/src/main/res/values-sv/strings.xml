@@ -441,7 +441,7 @@
   <string name="upload_copy_files">Kopiera fil</string>
   <string name="upload_move_files">Flytta fil</string>
   <string name="pref_behaviour_entries_keep_file">behållas i orginalmapp</string>
-    <string name="share_dialog_title">Dela</string>
+  <string name="share_dialog_title">Dela</string>
   <string name="share_file">Dela %1$s</string>
   <string name="share_with_user_section_title">Användare och grupper</string>
   <string name="share_no_users">Ingen data delar med användare än</string>

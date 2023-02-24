@@ -450,7 +450,7 @@
   <string name="upload_copy_files">Fájl másolása</string>
   <string name="upload_move_files">Fájl mozgatása</string>
   <string name="pref_behaviour_entries_keep_file">eredeti mappában tárolva</string>
-    <string name="share_dialog_title">Megosztás</string>
+  <string name="share_dialog_title">Megosztás</string>
   <string name="share_file">Megosztás %1$s</string>
   <string name="share_with_user_section_title">Felhasználók és csoportok</string>
   <string name="share_no_users">Nincs még semmi megosztva a felhasználókkal</string>

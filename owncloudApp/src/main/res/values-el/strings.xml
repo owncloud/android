@@ -440,7 +440,7 @@
   <string name="upload_copy_files">Αντιγραφή αρχείου</string>
   <string name="upload_move_files">Μετακίνηση αρχείου</string>
   <string name="pref_behaviour_entries_keep_file">διατηρήθηκε στον αρχικό φάκελο</string>
-    <string name="share_dialog_title">Διαμοιρασμός</string>
+  <string name="share_dialog_title">Διαμοιρασμός</string>
   <string name="share_file">Διαμοιρασμός %1$s</string>
   <string name="share_with_user_section_title">Χρήστες και Ομάδες</string>
   <string name="share_no_users">Δεν έχουν διαμοιραστεί ακόμα δεδομένα με τους χρήστες</string>

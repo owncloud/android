@@ -506,7 +506,7 @@
   <string name="upload_copy_files">Copiar o arquivo</string>
   <string name="upload_move_files">Mover o arquivo</string>
   <string name="pref_behaviour_entries_keep_file">mantido na pasta original</string>
-    <string name="share_dialog_title">Compartilhar</string>
+  <string name="share_dialog_title">Compartilhar</string>
   <string name="share_file">Compartilhar %1$s</string>
   <string name="share_with_user_section_title">Usuários e Grupos</string>
   <string name="share_no_users">Ainda não existe nenhum dado compartilhado com usuários</string>

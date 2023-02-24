@@ -506,7 +506,7 @@
   <string name="upload_copy_files">Datei kopieren</string>
   <string name="upload_move_files">Datei verschieben</string>
   <string name="pref_behaviour_entries_keep_file">im Originalordner behalten</string>
-    <string name="share_dialog_title">Teilen</string>
+  <string name="share_dialog_title">Teilen</string>
   <string name="share_file">%1$s teilen</string>
   <string name="share_with_user_section_title">Nutzer und Gruppen</string>
   <string name="share_no_users">Sie haben noch keine Dateien mit anderen geteilt.</string>
@@ -663,4 +663,10 @@
   <string name="release_notes_3.0.1_subtitle2">Manche Benutzer erlebten Abstürze, wenn sie in die Ansicht für Hochgeladenes wechselten. Dieses Problem ist nun behoben.</string>
   <string name="release_notes_3.0.2_title1">Problem der zweifachen Authentifizierung wurde gelöst.</string>
   <string name="release_notes_3.0.2_subtitle1">Authentifizierung im Browser funktioniert jetzt geschmeidiger.</string>
+  <string name="release_notes_3.0.3_title1">Authentifizierungsprozess geschmeidiger und konsistenter</string>
+  <string name="release_notes_3.0.3_subtitle1">Interner Prozess zur Handhabung von Anmeldedaten verbessert</string>
+  <string name="release_notes_3.0.3_title2">Navigationsproblem behoben</string>
+  <string name="release_notes_3.0.3_subtitle2">Werkzeugleiste mit falschem Status nach dem Verlassen der Ansicht geteilter Inhalte.</string>
+  <string name="release_notes_3.0.3_title3">Fehlermeldung gekürzt</string>
+  <string name="release_notes_3.0.3_subtitle3">Fehlermeldung beim Kopieren war zu lang, um auf dem Gerät vollständig angezeigt zu werden.</string>
 </resources>

@@ -491,7 +491,7 @@
   <string name="upload_copy_files">Kopiuj plik</string>
   <string name="upload_move_files">Przenieś plik</string>
   <string name="pref_behaviour_entries_keep_file">zachowany w oryginalnym folderze</string>
-    <string name="share_dialog_title">Udostępnij</string>
+  <string name="share_dialog_title">Udostępnij</string>
   <string name="share_file">Współdziel %1$s</string>
   <string name="share_with_user_section_title">Użytkownicy i grupy</string>
   <string name="share_no_users">Brak danych współdzielonych z użytkownikami</string>

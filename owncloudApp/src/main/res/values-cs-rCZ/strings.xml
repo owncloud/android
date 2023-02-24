@@ -486,7 +486,7 @@ správce systému.</string>
   <string name="upload_copy_files">Zkopírovat soubor</string>
   <string name="upload_move_files">Přesunout soubor</string>
   <string name="pref_behaviour_entries_keep_file">ponechán ve výchozím adresáři</string>
-    <string name="share_dialog_title">Sdílet</string>
+  <string name="share_dialog_title">Sdílet</string>
   <string name="share_file">Sdílet %1$s</string>
   <string name="share_with_user_section_title">Uživatelé a skupiny</string>
   <string name="share_no_users">Zatím nebyla s uživateli sdílena žádná data</string>
