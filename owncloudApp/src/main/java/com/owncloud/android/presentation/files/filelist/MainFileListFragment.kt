@@ -83,6 +83,7 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
+import kotlinx.coroutines.delay
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -212,17 +213,15 @@ class MainFileListFragment : Fragment(),
 
     private fun subscribeToViewModels() {
         // Observe the current folder displayed
-        collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) {
-            if (getCurrentSpace() == null) {
-                fileActions?.onCurrentFolderUpdated(it)
-            }
+        collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) { currentFolderDisplayed: OCFile ->
+            fileActions?.onCurrentFolderUpdated(currentFolderDisplayed, mainFileListViewModel.getSpace())
             val fileListOption = mainFileListViewModel.fileListOption.value
             val refreshFolderNeeded = fileListOption.isAllFiles() ||
-                    (!fileListOption.isAllFiles() && it.remotePath != ROOT_PATH)
+                    (!fileListOption.isAllFiles() && currentFolderDisplayed.remotePath != ROOT_PATH)
             if (refreshFolderNeeded) {
                 fileOperationsViewModel.performOperation(
                     FileOperation.RefreshFolderOperation(
-                        folderToRefresh = it,
+                        folderToRefresh = currentFolderDisplayed,
                         shouldSyncContents = !isPickingAFolder(), // For picking a folder option, we just need a refresh
                     )
                 )
@@ -236,16 +235,16 @@ class MainFileListFragment : Fragment(),
             fileListAdapter.updateFileList(filesToAdd = fileListUiState.folderContent, fileListOption = fileListUiState.fileListOption)
             showOrHideEmptyView(fileListUiState)
 
-            binding.spaceHeader.root.apply {
-                if (fileListUiState.space?.isProject == true && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH) {
-                    isVisible = true
-                    animate().translationY(0f).duration = 100
-                } else {
-                    animate().translationY(-height.toFloat()).withEndAction { isVisible = false }
-                }
-            }
-
             fileListUiState.space?.let {
+                binding.spaceHeader.root.apply {
+                    if (fileListUiState.space.isProject && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH) {
+                        isVisible = true
+                        animate().translationY(0f).duration = 100
+                    } else {
+                        animate().translationY(-height.toFloat()).withEndAction { isVisible = false }
+                    }
+                }
+
                 val spaceSpecialImage = it.getSpaceSpecialImage()
                 if (spaceSpecialImage != null) {
                     binding.spaceHeader.spaceHeaderImage.tag = spaceSpecialImage.id
@@ -262,7 +261,6 @@ class MainFileListFragment : Fragment(),
                 }
                 binding.spaceHeader.spaceHeaderName.text = it.name
                 binding.spaceHeader.spaceHeaderSubtitle.text = it.description
-                fileActions?.onCurrentFolderUpdated(fileListUiState.folderToDisplay!!, it)
             }
 
             actionMode?.invalidate()
