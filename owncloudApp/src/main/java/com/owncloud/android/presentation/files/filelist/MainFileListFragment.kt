@@ -216,7 +216,10 @@ class MainFileListFragment : Fragment(),
             if (getCurrentSpace() == null) {
                 fileActions?.onCurrentFolderUpdated(it)
             }
-            if (mainFileListViewModel.fileListOption.value.isAllFiles()) {
+            val fileListOption = mainFileListViewModel.fileListOption.value
+            val refreshFolderNeeded = fileListOption.isAllFiles() ||
+                    (!fileListOption.isAllFiles() && it.remotePath != ROOT_PATH)
+            if (refreshFolderNeeded) {
                 fileOperationsViewModel.performOperation(
                     FileOperation.RefreshFolderOperation(
                         folderToRefresh = it,
