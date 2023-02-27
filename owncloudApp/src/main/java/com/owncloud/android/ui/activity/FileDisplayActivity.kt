@@ -872,7 +872,7 @@ class FileDisplayActivity : FileActivity(),
                     FileListOption.AV_OFFLINE -> getString(R.string.drawer_item_only_available_offline)
                     FileListOption.SHARED_BY_LINK -> getString(R.string.drawer_item_shared_by_link_files)
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
-                    FileListOption.SPACES_LIST -> getString(R.string.drawer_item_spaces)
+                    FileListOption.SPACES_LIST -> getString(R.string.bottom_nav_spaces)
                 }
             setupRootToolbar(title, isSearchEnabled = fileListOption != FileListOption.SPACES_LIST)
             mainFileListFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))

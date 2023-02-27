@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2020 ownCloud GmbH.
+  Copyright (C) 2023 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -36,5 +36,8 @@
     <string name="server_url_input_visibility_configuration_feedback_ok">The URL input visibility was set correctly</string>
     <string name="allow_screenshots_configuration_feedback_ok">The preference for allowing screenshots was set correctly</string>
     <string name="oauth2_open_id_scope_configuration_feedback_ok">The OpenID Connect scope was set correctly</string>
+
+    <!-- Spaces -->
+    <string name="bottom_nav_spaces">Spaces</string>
 
 </resources>
