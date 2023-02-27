@@ -170,7 +170,7 @@ public class CopyAndUploadContentUrisTask extends AsyncTask<Object, Void, Result
                         account.name,
                         filesToUpload,
                         uploadPath,
-                        null
+                        spaceId
                 );
                 uploadFilesFromSystemUseCase.execute(useCaseParams);
                 fullTempPath = null;
