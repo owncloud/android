@@ -83,7 +83,6 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
-import kotlinx.coroutines.delay
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -225,6 +224,13 @@ class MainFileListFragment : Fragment(),
                         shouldSyncContents = !isPickingAFolder(), // For picking a folder option, we just need a refresh
                     )
                 )
+            }
+        }
+        // Observe the current space to update the toolbar.
+        // We cant rely exclusively on the [currentFolderDisplayed] because sometimes retrieving the space takes more time
+        collectLatestLifecycleFlow(mainFileListViewModel.space) { currentSpace: OCSpace? ->
+            currentSpace?.let {
+                fileActions?.onCurrentFolderUpdated(mainFileListViewModel.getFile(), currentSpace)
             }
         }
 
