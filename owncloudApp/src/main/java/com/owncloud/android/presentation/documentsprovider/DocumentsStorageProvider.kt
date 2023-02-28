@@ -466,6 +466,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         // File will be created at [openDocument] method.
         val tempDir = File(FileStorageUtils.getTemporalPath(parentDocument.owner, parentDocument.spaceId))
         val newFile = File(tempDir, displayName)
+        newFile.parentFile?.mkdirs()
         fileToUpload = OCFile(
             remotePath = parentDocument.remotePath + displayName, mimeType = mimeType, parentId = parentDocument.id, owner = parentDocument.owner, spaceId = parentDocument.spaceId
         ).apply {
