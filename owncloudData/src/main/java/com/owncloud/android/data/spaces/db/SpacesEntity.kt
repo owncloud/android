@@ -65,8 +65,6 @@ data class SpacesEntity(
 ) {
 
     companion object {
-        const val DRIVE_TYPE_PERSONAL = "personal"
-        const val DRIVE_TYPE_PROJECT = "project"
         const val SPACES_ACCOUNT_NAME = "account_name"
         const val SPACES_ID = "space_id"
         const val SPACES_DRIVE_ALIAS = "drive_alias"

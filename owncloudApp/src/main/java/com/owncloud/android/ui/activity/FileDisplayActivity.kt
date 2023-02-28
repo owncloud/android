@@ -48,13 +48,13 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.databinding.ActivityMainBinding
-import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.checkPasscodeEnforced
@@ -66,8 +66,6 @@ import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.presentation.security.LockType
-import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials
 import com.owncloud.android.lib.common.network.CertificateCombinedException
@@ -75,14 +73,17 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.SyncProfileOperation
+import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.files.details.FileDetailsFragment
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.security.LockType
+import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.security.bayPassUnlockOnce
-import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.shares.SharesFragment
 import com.owncloud.android.presentation.spaces.SpacesListFragment
 import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.BUNDLE_KEY_CLICK_SPACE
 import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.REQUEST_KEY_CLICK_SPACE
@@ -143,9 +144,6 @@ class FileDisplayActivity : FileActivity(),
 
     private val mainFileListFragment: MainFileListFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FILES) as MainFileListFragment?
-
-    private val spacesListFragment: SpacesListFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_SPACES) as SpacesListFragment?
 
     private val secondFragment: FileFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
@@ -264,11 +262,7 @@ class FileDisplayActivity : FileActivity(),
             capabilitiesViewModel.capabilities.observe(this, Event.EventObserver {
                 onCapabilitiesOperationFinish(it)
             })
-            if (isSpacesTabSelected()) {
-                initAndShowListOfSpaces()
-            } else {
-                initAndShowListOfFiles()
-            }
+            navigateTo(fileListOption, initialState = true)
         }
 
         startListeningToOperations()
@@ -303,7 +297,7 @@ class FileDisplayActivity : FileActivity(),
             }
             if (file == null) {
                 // fall back to root folder
-                file = storageManager.getFileByPath(OCFile.ROOT_PATH)  // never returns null
+                file = storageManager.getRootPersonalFolder()  // never returns null
             }
             setFile(file)
 
@@ -349,8 +343,17 @@ class FileDisplayActivity : FileActivity(),
 
     private fun initAndShowListOfSpaces() {
         val listOfSpaces = SpacesListFragment()
+        this.fileListOption = FileListOption.SPACES_LIST
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, listOfSpaces, TAG_LIST_OF_SPACES)
+        transaction.commit()
+    }
+
+    private fun initAndShowListOfShares() {
+        val sharesFragment = SharesFragment()
+        this.fileListOption = FileListOption.SHARED_BY_LINK
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.left_fragment_container, sharesFragment)
         transaction.commit()
     }
 
@@ -669,7 +672,7 @@ class FileDisplayActivity : FileActivity(),
                     return
                 }
                 // If current file is root folder
-                else if (currentDirDisplayed.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong()) {
+                else if (currentDirDisplayed.parentId == ROOT_PARENT_ID) {
                     // If current space is a project space (not personal, not shares), navigate back to the spaces list
                     if (mainFileListFragment?.getCurrentSpace()?.isProject == true) {
                         navigateTo(FileListOption.SPACES_LIST)
@@ -827,7 +830,7 @@ class FileDisplayActivity : FileActivity(),
     fun browseToRoot() {
         val listOfFiles = mainFileListFragment
         if (listOfFiles != null) {  // should never be null, indeed
-            val root = storageManager.getFileByPath(OCFile.ROOT_PATH)
+            val root = storageManager.getRootPersonalFolder()
             listOfFiles.navigateToFolder(root!!)
             file = root
             startSyncFolderOperation(root, false)
@@ -870,7 +873,11 @@ class FileDisplayActivity : FileActivity(),
             val title =
                 when (fileListOption) {
                     FileListOption.AV_OFFLINE -> getString(R.string.drawer_item_only_available_offline)
-                    FileListOption.SHARED_BY_LINK -> getString(R.string.drawer_item_shared_by_link_files)
+                    FileListOption.SHARED_BY_LINK -> if (chosenFile == null || chosenFile.spaceId != null) {
+                        getString(R.string.bottom_nav_shares)
+                    } else {
+                        getString(R.string.bottom_nav_links)
+                    }
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
                     FileListOption.SPACES_LIST -> getString(R.string.bottom_nav_spaces)
                 }
@@ -1355,28 +1362,50 @@ class FileDisplayActivity : FileActivity(),
         setSecondFragment(detailsFragment)
     }
 
-    private fun navigateTo(newFileListOption: FileListOption) {
-        if (fileListOption != newFileListOption) {
-            if (newFileListOption == FileListOption.SPACES_LIST) {
-                fileListOption = FileListOption.SPACES_LIST
-                file = null
-                initAndShowListOfSpaces()
-                updateToolbar(null)
-            } else if (mainFileListFragment != null) {
-                fileListOption = newFileListOption
-                file = storageManager.getFileByPath(OCFile.ROOT_PATH)
-                mainFileListFragment?.updateFileListOption(newFileListOption, file)
-                updateToolbar(null)
-            } else if (spacesListFragment != null) {
-                fileListOption = newFileListOption
-                file = storageManager.getFileByPath(OCFile.ROOT_PATH)
-                initAndShowListOfFiles(newFileListOption)
-                updateToolbar(null)
-            } else {
-                super.navigateToOption(FileListOption.ALL_FILES)
+    private fun navigateTo(newFileListOption: FileListOption, initialState: Boolean = false) {
+        val previousFileListOption = fileListOption
+        when (newFileListOption) {
+            FileListOption.ALL_FILES -> {
+                if (previousFileListOption != newFileListOption || initialState) {
+                    file = storageManager.getRootPersonalFolder()
+                    fileListOption = newFileListOption
+                    mainFileListFragment?.updateFileListOption(newFileListOption, file) ?: initAndShowListOfFiles(newFileListOption)
+                    updateToolbar(file)
+                } else {
+                    browseToRoot()
+                }
             }
-        } else if (newFileListOption != FileListOption.SPACES_LIST) {
-            browseToRoot()
+            FileListOption.SPACES_LIST -> {
+                if (previousFileListOption != newFileListOption || initialState) {
+                    file = null
+                    initAndShowListOfSpaces()
+                    updateToolbar(null)
+                }
+            }
+            FileListOption.SHARED_BY_LINK -> {
+                if (previousFileListOption != newFileListOption || initialState) {
+                    val rootFolderForShares = storageManager.getRootSharesFolder()
+                    val personalFolder = storageManager.getRootPersonalFolder()
+                    if (rootFolderForShares == null && personalFolder?.spaceId != null) {
+                        fileListOption = newFileListOption
+                        initAndShowListOfShares()
+                        updateToolbar(null)
+                    } else {
+                        file = rootFolderForShares ?: personalFolder
+                        fileListOption = newFileListOption
+                        mainFileListFragment?.updateFileListOption(newFileListOption, file) ?: initAndShowListOfFiles(newFileListOption)
+                        updateToolbar(null)
+                    }
+                }
+            }
+            FileListOption.AV_OFFLINE -> {
+                if (previousFileListOption != newFileListOption || initialState) {
+                    file = storageManager.getRootPersonalFolder()
+                    fileListOption = newFileListOption
+                    mainFileListFragment?.updateFileListOption(newFileListOption, file) ?: initAndShowListOfFiles(newFileListOption)
+                    updateToolbar(file)
+                }
+            }
         }
     }
 

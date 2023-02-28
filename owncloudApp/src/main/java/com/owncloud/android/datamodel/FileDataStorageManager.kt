@@ -31,10 +31,13 @@ import android.content.Context
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
+import com.owncloud.android.domain.files.usecases.GetPersonalRootFolderForAccountUseCase
+import com.owncloud.android.domain.files.usecases.GetSharesRootFolderForAccount
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
@@ -63,7 +66,12 @@ class FileDataStorageManager : KoinComponent {
         mContext = activity
     }
 
-    fun getFileByPath(remotePath: String, spaceId: String? = null): OCFile? = getFileByPathAndAccount(remotePath, account.name, spaceId)
+    fun getFileByPath(remotePath: String, spaceId: String? = null): OCFile? =
+        if (remotePath == ROOT_PATH && spaceId == null) {
+            getRootPersonalFolder()
+        } else {
+            getFileByPathAndAccount(remotePath, account.name, spaceId)
+        }
 
     private fun getFileByPathAndAccount(remotePath: String, accountName: String, spaceId: String? = null): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
@@ -71,6 +79,24 @@ class FileDataStorageManager : KoinComponent {
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
             getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, remotePath, spaceId))
         }.getDataOrNull()
+        result
+    }
+
+    fun getRootPersonalFolder() = runBlocking(CoroutinesDispatcherProvider().io) {
+        val getPersonalRootFolderForAccountUseCase: GetPersonalRootFolderForAccountUseCase by inject()
+
+        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+            getPersonalRootFolderForAccountUseCase.execute(GetPersonalRootFolderForAccountUseCase.Params(account.name))
+        }
+        result
+    }
+
+    fun getRootSharesFolder() = runBlocking(CoroutinesDispatcherProvider().io) {
+        val getSharesRootFolderForAccount: GetSharesRootFolderForAccount by inject()
+
+        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+            getSharesRootFolderForAccount.execute(GetSharesRootFolderForAccount.Params(account.name))
+        }
         result
     }
 
@@ -123,9 +149,5 @@ class FileDataStorageManager : KoinComponent {
             getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(accountName))
         }
         capability
-    }
-
-    companion object {
-        const val ROOT_PARENT_ID = 0
     }
 }

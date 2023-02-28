@@ -212,17 +212,25 @@ class MainFileListFragment : Fragment(),
 
     private fun subscribeToViewModels() {
         // Observe the current folder displayed
-        collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) {
-            if (getCurrentSpace() == null) {
-                fileActions?.onCurrentFolderUpdated(it)
-            }
-            if (mainFileListViewModel.fileListOption.value.isAllFiles()) {
+        collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) { currentFolderDisplayed: OCFile ->
+            fileActions?.onCurrentFolderUpdated(currentFolderDisplayed, mainFileListViewModel.getSpace())
+            val fileListOption = mainFileListViewModel.fileListOption.value
+            val refreshFolderNeeded = fileListOption.isAllFiles() ||
+                    (!fileListOption.isAllFiles() && currentFolderDisplayed.remotePath != ROOT_PATH)
+            if (refreshFolderNeeded) {
                 fileOperationsViewModel.performOperation(
                     FileOperation.RefreshFolderOperation(
-                        folderToRefresh = it,
+                        folderToRefresh = currentFolderDisplayed,
                         shouldSyncContents = !isPickingAFolder(), // For picking a folder option, we just need a refresh
                     )
                 )
+            }
+        }
+        // Observe the current space to update the toolbar.
+        // We cant rely exclusively on the [currentFolderDisplayed] because sometimes retrieving the space takes more time
+        collectLatestLifecycleFlow(mainFileListViewModel.space) { currentSpace: OCSpace? ->
+            currentSpace?.let {
+                fileActions?.onCurrentFolderUpdated(mainFileListViewModel.getFile(), currentSpace)
             }
         }
 
@@ -233,16 +241,16 @@ class MainFileListFragment : Fragment(),
             fileListAdapter.updateFileList(filesToAdd = fileListUiState.folderContent, fileListOption = fileListUiState.fileListOption)
             showOrHideEmptyView(fileListUiState)
 
-            binding.spaceHeader.root.apply {
-                if (fileListUiState.space?.isProject == true && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH) {
-                    isVisible = true
-                    animate().translationY(0f).duration = 100
-                } else {
-                    animate().translationY(-height.toFloat()).withEndAction { isVisible = false }
-                }
-            }
-
             fileListUiState.space?.let {
+                binding.spaceHeader.root.apply {
+                    if (fileListUiState.space.isProject && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH) {
+                        isVisible = true
+                        animate().translationY(0f).duration = 100
+                    } else {
+                        animate().translationY(-height.toFloat()).withEndAction { isVisible = false }
+                    }
+                }
+
                 val spaceSpecialImage = it.getSpaceSpecialImage()
                 if (spaceSpecialImage != null) {
                     binding.spaceHeader.spaceHeaderImage.tag = spaceSpecialImage.id
@@ -259,7 +267,6 @@ class MainFileListFragment : Fragment(),
                 }
                 binding.spaceHeader.spaceHeaderName.text = it.name
                 binding.spaceHeader.spaceHeaderSubtitle.text = it.description
-                fileActions?.onCurrentFolderUpdated(fileListUiState.folderToDisplay!!, it)
             }
 
             actionMode?.invalidate()
@@ -285,9 +292,16 @@ class MainFileListFragment : Fragment(),
         with(binding.emptyDataParent) {
             root.isVisible = fileListUiState.folderContent.isEmpty()
 
-            listEmptyDatasetIcon.setImageResource(fileListUiState.fileListOption.toDrawableRes())
-            listEmptyDatasetTitle.setText(fileListUiState.fileListOption.toTitleStringRes())
-            listEmptyDatasetSubTitle.setText(fileListUiState.fileListOption.toSubtitleStringRes())
+            if (fileListUiState.fileListOption.isSharedByLink() && fileListUiState.space != null) {
+                // Temporary solution for shares space
+                listEmptyDatasetIcon.setImageResource(R.drawable.ic_ocis_shares)
+                listEmptyDatasetTitle.setText(R.string.shares_list_empty_title)
+                listEmptyDatasetSubTitle.setText(R.string.shares_list_empty_subtitle)
+            } else {
+                listEmptyDatasetIcon.setImageResource(fileListUiState.fileListOption.toDrawableRes())
+                listEmptyDatasetTitle.setText(fileListUiState.fileListOption.toTitleStringRes())
+                listEmptyDatasetSubTitle.setText(fileListUiState.fileListOption.toSubtitleStringRes())
+            }
         }
     }
 

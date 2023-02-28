@@ -215,6 +215,20 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             }
         }
 
+        authenticationViewModel.accountDiscovery.observe(this) {
+            if (it.peekContent() is UIResult.Success) {
+                notifyDocumentsProviderRoots(applicationContext)
+
+                finish()
+            } else {
+                binding.authStatusText.run {
+                    text = context.getString(R.string.login_account_preparing)
+                    isVisible = true
+                    setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
+                }
+            }
+        }
+
         authenticationViewModel.supportsOAuth2.observe(this) { event ->
             when (val uiResult = event.peekContent()) {
                 is UIResult.Loading -> {}
@@ -255,8 +269,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         checkOcServer()
     }
 
-    private fun getWebfingerIsError(uiResult: UIResult<String>) {
-        when (uiResult.getThrowableOrNull()) {
+    private fun getWebfingerIsError(uiResult: UIResult.Error<String>) {
+        when (uiResult.error) {
             is NoNetworkConnectionException -> binding.webfingerStatusText.run {
                 text = getString(R.string.error_no_network_connection)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
@@ -344,11 +358,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
-    private fun getServerInfoIsError(uiResult: UIResult<ServerInfo>) {
+    private fun getServerInfoIsError(uiResult: UIResult.Error<ServerInfo>) {
         updateCenteredRefreshButtonVisibility(shouldBeVisible = true)
-        when (uiResult.getThrowableOrNull()) {
+        when (uiResult.error) {
             is CertificateCombinedException ->
-                showUntrustedCertDialog(uiResult.getThrowableOrNull() as CertificateCombinedException)
+                showUntrustedCertDialog(uiResult.error)
             is OwncloudVersionNotSupportedException -> binding.serverStatusText.run {
                 text = getString(R.string.server_not_supported)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
@@ -358,7 +372,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
             }
             else -> binding.serverStatusText.run {
-                text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
+                text = uiResult.error?.parseError("", resources, true)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             }
         }
@@ -366,23 +380,21 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         showOrHideBasicAuthFields(shouldBeVisible = false)
     }
 
-    private fun loginIsSuccess(uiResult: UIResult<String>) {
+    private fun loginIsSuccess(uiResult: UIResult.Success<String>) {
         binding.authStatusText.run {
             isVisible = false
             text = ""
         }
 
         // Return result to account authenticator, multiaccount does not work without this
-        val accountName = uiResult.getStoredData()
+        val accountName = uiResult.data!!
         val intent = Intent()
         intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName)
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, contextProvider.getString(R.string.account_type))
         resultBundle = intent.extras
         setResult(Activity.RESULT_OK, intent)
 
-        notifyDocumentsProviderRoots(applicationContext)
-
-        finish()
+        authenticationViewModel.discoverAccount(accountName = accountName, discoveryNeeded = loginAction == ACTION_CREATE)
     }
 
     private fun loginIsLoading() {
@@ -393,8 +405,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
-    private fun loginIsError(uiResult: UIResult<String>) {
-        when (uiResult.getThrowableOrNull()) {
+    private fun loginIsError(uiResult: UIResult.Error<String>) {
+        when (uiResult.error) {
             is NoNetworkConnectionException, is ServerNotReachableException -> {
                 binding.serverStatusText.run {
                     text = getString(R.string.error_no_network_connection)
@@ -405,7 +417,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             else -> {
                 binding.serverStatusText.isVisible = false
                 binding.authStatusText.run {
-                    text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
+                    text = uiResult.error?.parseError("", resources, true)
                     isVisible = true
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
                 }

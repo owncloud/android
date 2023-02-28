@@ -26,10 +26,10 @@ package com.owncloud.android.presentation.files.filelist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.datamodel.FileDataStorageManager.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
@@ -80,7 +80,7 @@ class MainFileListViewModel(
     val fileListOption: MutableStateFlow<FileListOption> = MutableStateFlow(fileListOptionParam)
     private val searchFilter: MutableStateFlow<String> = MutableStateFlow("")
     private val sortTypeAndOrder = MutableStateFlow(Pair(SortType.SORT_TYPE_BY_NAME, SortOrder.SORT_ORDER_ASCENDING))
-    private val space: MutableStateFlow<OCSpace?> = MutableStateFlow(null)
+    val space: MutableStateFlow<OCSpace?> = MutableStateFlow(null)
 
     /** File list ui state combines the other fields and generate a new state whenever any of them changes */
     val fileListUiState: StateFlow<FileListUiState> =
@@ -181,7 +181,7 @@ class MainFileListViewModel(
                     }
                     FileListOption.SHARED_BY_LINK -> {
                         val fileById = fileByIdResult.getDataOrNull()!!
-                        parentDir = if (!fileById.sharedByLink || fileById.sharedWithSharee != true) {
+                        parentDir = if ((!fileById.sharedByLink || fileById.sharedWithSharee != true) && fileById.spaceId == null) {
                             getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
                         } else fileById
                     }
@@ -195,7 +195,7 @@ class MainFileListViewModel(
                         parentDir = TODO("Move it to usecase if possible")
                     }
                 }
-            } else if (parentId == ROOT_PARENT_ID.toLong()) {
+            } else if (parentId == ROOT_PARENT_ID) {
                 // Browsing to parent folder. Root
                 val rootFolderForAccountResult = getFileByRemotePathUseCase.execute(
                     GetFileByRemotePathUseCase.Params(
@@ -288,7 +288,7 @@ class MainFileListViewModel(
         currentFolderDisplayed: OCFile,
         accountName: String,
     ): Flow<List<OCFileWithSyncInfo>> =
-        if (currentFolderDisplayed.remotePath == ROOT_PATH) {
+        if (currentFolderDisplayed.remotePath == ROOT_PATH && currentFolderDisplayed.spaceId == null) {
             getSharedByLinkForAccountAsStreamUseCase.execute(GetSharedByLinkForAccountAsStreamUseCase.Params(accountName))
         } else {
             retrieveFlowForAllFiles(currentFolderDisplayed, accountName)

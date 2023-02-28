@@ -132,6 +132,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private ArrayList<Uri> mStreamsToUpload = new ArrayList<>();
     private String mUploadPath;
     private OCFile mFile;
+    private String mPersonalSpaceId;
     private SortOptionsView mSortOptionsView;
     private SearchView mSearchView;
 
@@ -249,6 +250,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         super.onAccountSet(mAccountWasRestored);
         mReceiveExternalFilesViewModel = get(ReceiveExternalFilesViewModel.class);
         initTargetFolder();
+        mPersonalSpaceId = getStorageManager().getRootPersonalFolder().getSpaceId();
         updateDirectoryList();
 
         mReceiveExternalFilesViewModel.getSyncFolderLiveData().observe(this, eventUiResult -> {
@@ -362,7 +364,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         } else {
             mParents.pop();
             String full_path = generatePath(mParents);
-            startSyncFolderOperation(getStorageManager().getFileByPath(full_path, null));
+            startSyncFolderOperation(getStorageManager().getFileByPath(full_path, mPersonalSpaceId));
             updateDirectoryList();
         }
     }
@@ -448,7 +450,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         String full_path = generatePath(mParents);
         Timber.d("Populating view with content of : %s", full_path);
-        mFile = getStorageManager().getFileByPath(full_path, null);
+        mFile = getStorageManager().getFileByPath(full_path, mPersonalSpaceId);
         if (mFile != null) {
             if (mAdapter == null) {
                 mAdapter = new ReceiveExternalFilesAdapter(
@@ -693,14 +695,14 @@ public class ReceiveExternalFilesActivity extends FileActivity
             if (file.isFolder()) {
                 return file;
             } else if (getStorageManager() != null) {
-                return getStorageManager().getFileByPath(file.getParentRemotePath(), null);
+                return getStorageManager().getFileByPath(file.getParentRemotePath(), mPersonalSpaceId);
             }
         }
         return null;
     }
 
     private void browseToRoot() {
-        OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH, null);
+        OCFile root = getStorageManager().getRootPersonalFolder();
         mFile = root;
         startSyncFolderOperation(root);
     }

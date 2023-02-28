@@ -40,6 +40,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.GravityCompat
@@ -240,10 +241,12 @@ abstract class DrawerActivity : ToolbarActivity() {
             val capabilities = uiResult.data
             if (AccountUtils.isSpacesFeatureAllowedForAccount(baseContext, account, capabilities)) {
                 getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_personal)
-                getBottomNavigationView()?.menu?.get(1)?.isVisible = capabilities?.isSpacesProjectsAllowed() == true
+                getBottomNavigationView()?.menu?.get(1)?.title = getString(R.string.bottom_nav_shares)
+                getBottomNavigationView()?.menu?.get(1)?.icon = AppCompatResources.getDrawable(this, R.drawable.ic_ocis_shares)
+                getBottomNavigationView()?.menu?.get(2)?.isVisible = capabilities?.isSpacesProjectsAllowed() == true
             } else {
                 getBottomNavigationView()?.menu?.get(0)?.title = getString(R.string.bottom_nav_files)
-                getBottomNavigationView()?.menu?.get(1)?.isVisible = false
+                getBottomNavigationView()?.menu?.get(2)?.isVisible = false
             }
         }
     }
@@ -702,12 +705,6 @@ abstract class DrawerActivity : ToolbarActivity() {
      * restart helper method which is called after a changing the current account.
      */
     protected abstract fun restart()
-
-    /**
-     * Checks if the spaces tab is currently selected
-     */
-    protected fun isSpacesTabSelected() =
-        getBottomNavigationView()?.menu?.findItem(R.id.nav_spaces)?.isChecked == true
 
     companion object {
         private const val KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE"

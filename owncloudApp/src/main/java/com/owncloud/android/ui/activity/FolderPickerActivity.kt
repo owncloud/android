@@ -30,6 +30,7 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.annotation.StringRes
+import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.FileListOption
@@ -55,7 +56,7 @@ open class FolderPickerActivity : FileActivity(),
 
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.files_folder_picker) // Beware - inflated in other activities too
+        setContentView(R.layout.files_folder_picker)
 
         // Allow or disallow touches with other visible windows
         val filesFolderPickerLayout = findViewById<LinearLayout>(R.id.filesFolderPickerLayout)
@@ -72,8 +73,14 @@ open class FolderPickerActivity : FileActivity(),
                     initAndShowListOfFilesFragment(spaceId = spaceIdOfFiles)
                 }
                 PickerMode.COPY -> {
-                    // Show the list of spaces
-                    initAndShowListOfSpaces()
+                    val targetFiles = intent.getParcelableArrayListExtra<OCFile>(EXTRA_FILES)
+                    if (targetFiles?.get(0)?.spaceId != null) {
+                        // Show the list of spaces
+                        initAndShowListOfSpaces()
+                    } else {
+                        // Show the personal space
+                        initAndShowListOfFilesFragment(spaceId = null)
+                    }
                 }
                 PickerMode.CAMERA_FOLDER -> {
                     // Show the personal space
@@ -122,7 +129,7 @@ open class FolderPickerActivity : FileActivity(),
             var folder = file
             if (folder == null || !folder.isFolder) {
                 // Fall back to root folder
-                file = storageManager.getFileByPath(OCFile.ROOT_PATH)
+                file = storageManager.getRootPersonalFolder()
                 folder = file
             }
 
@@ -158,8 +165,8 @@ open class FolderPickerActivity : FileActivity(),
         }
         // If current file is root folder
         else if (currentDirDisplayed.parentId == OCFile.ROOT_PARENT_ID) {
-            // If we are not in COPY mode, close the activity
-            if (pickerMode != PickerMode.COPY) {
+            // If we are not in COPY mode, or if we are in COPY mode and spaces are not allowed, close the activity
+            if (pickerMode != PickerMode.COPY || (pickerMode == PickerMode.COPY && currentDirDisplayed.spaceId == null)) {
                 finish()
                 return
             }
@@ -232,6 +239,8 @@ open class FolderPickerActivity : FileActivity(),
             transaction.replace(R.id.fragment_container, mainListOfFiles, TAG_LIST_OF_FOLDERS)
             transaction.commit()
         }
+
+        findViewById<Button>(R.id.folder_picker_btn_choose).isVisible = true
     }
 
     private fun initAndShowListOfSpaces() {
@@ -239,6 +248,7 @@ open class FolderPickerActivity : FileActivity(),
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, listOfSpaces)
         transaction.commit()
+        findViewById<Button>(R.id.folder_picker_btn_choose).isVisible = false
     }
 
     /**
@@ -278,11 +288,23 @@ open class FolderPickerActivity : FileActivity(),
         val isRootFromProject = space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH
 
         if (isRootFromPersonalInCopyMode) {
-            updateStandardToolbar(title = getString(R.string.default_display_name_for_root_folder), displayHomeAsUpEnabled = true, homeButtonEnabled = true)
+            updateStandardToolbar(
+                title = getString(R.string.default_display_name_for_root_folder),
+                displayHomeAsUpEnabled = true,
+                homeButtonEnabled = true
+            )
         } else if (isRootFromPersonal) {
-            updateStandardToolbar(title = getString(R.string.default_display_name_for_root_folder), displayHomeAsUpEnabled = false, homeButtonEnabled = false)
+            updateStandardToolbar(
+                title = getString(R.string.default_display_name_for_root_folder),
+                displayHomeAsUpEnabled = false,
+                homeButtonEnabled = false
+            )
         } else if (isRootFromProject) {
-            updateStandardToolbar(title = space!!.name, displayHomeAsUpEnabled = pickerMode == PickerMode.COPY, homeButtonEnabled = pickerMode == PickerMode.COPY)
+            updateStandardToolbar(
+                title = space!!.name,
+                displayHomeAsUpEnabled = pickerMode == PickerMode.COPY,
+                homeButtonEnabled = pickerMode == PickerMode.COPY
+            )
         } else {
             updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         }

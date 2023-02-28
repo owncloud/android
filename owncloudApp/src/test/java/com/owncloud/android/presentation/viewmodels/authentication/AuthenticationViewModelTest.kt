@@ -24,13 +24,15 @@ import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
+import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
-import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
+import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.domain.webfinger.usecases.GetJRDFromWebfingerHostUseCase
-import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.authentication.AuthenticationViewModel
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.OC_ACCESS_TOKEN
@@ -65,6 +67,9 @@ class AuthenticationViewModelTest : ViewModelTest() {
     private lateinit var supportsOAuth2UseCase: SupportsOAuth2UseCase
     private lateinit var getBaseUrlUseCase: GetBaseUrlUseCase
     private lateinit var getJRDFromWebfingerHostUseCase: GetJRDFromWebfingerHostUseCase
+    private lateinit var refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase
+    private lateinit var refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase
+    private lateinit var getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase
     private lateinit var contextProvider: ContextProvider
 
     private val commonException = ServerNotReachableException()
@@ -92,6 +97,9 @@ class AuthenticationViewModelTest : ViewModelTest() {
         supportsOAuth2UseCase = mockk()
         getBaseUrlUseCase = mockk()
         getJRDFromWebfingerHostUseCase = mockk()
+        refreshCapabilitiesFromServerAsyncUseCase = mockk()
+        refreshSpacesFromServerAsyncUseCase = mockk()
+        getStoredCapabilitiesUseCase = mockk()
 
         testCoroutineDispatcher.pauseDispatcher()
 
@@ -102,6 +110,9 @@ class AuthenticationViewModelTest : ViewModelTest() {
             supportsOAuth2UseCase = supportsOAuth2UseCase,
             getBaseUrlUseCase = getBaseUrlUseCase,
             getJRDFromWebfingerHostUseCase = getJRDFromWebfingerHostUseCase,
+            refreshCapabilitiesFromServerAsyncUseCase = refreshCapabilitiesFromServerAsyncUseCase,
+            refreshSpacesFromServerAsyncUseCase = refreshSpacesFromServerAsyncUseCase,
+            getStoredCapabilitiesUseCase = getStoredCapabilitiesUseCase,
             coroutinesDispatcherProvider = coroutineDispatcherProvider
         )
     }
@@ -118,8 +129,9 @@ class AuthenticationViewModelTest : ViewModelTest() {
         authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl)
 
         assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<ServerInfo>>>(
-                Event(UIResult.Loading()), Event(UIResult.Success(OC_SERVER_INFO))
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Success(OC_SERVER_INFO))
             ),
             liveData = authenticationViewModel.serverInfo
         )
@@ -131,8 +143,10 @@ class AuthenticationViewModelTest : ViewModelTest() {
         authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl)
 
         assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<ServerInfo>>>
-                (Event(UIResult.Loading()), Event(UIResult.Error(commonException))),
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Error(commonException))
+            ),
             liveData = authenticationViewModel.serverInfo
         )
     }
@@ -143,8 +157,9 @@ class AuthenticationViewModelTest : ViewModelTest() {
         authenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, OC_ACCOUNT_NAME)
 
         assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<String>>>(
-                Event(UIResult.Loading()), Event(UIResult.Success(OC_BASIC_USERNAME))
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Success(OC_BASIC_USERNAME))
             ),
             liveData = authenticationViewModel.loginResult
         )
@@ -156,8 +171,9 @@ class AuthenticationViewModelTest : ViewModelTest() {
         authenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null)
 
         assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<String>>>(
-                Event(UIResult.Loading()), Event(UIResult.Error(commonException))
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Error(commonException))
             ),
             liveData = authenticationViewModel.loginResult
         )
@@ -176,8 +192,9 @@ class AuthenticationViewModelTest : ViewModelTest() {
         )
 
         assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<String>>>(
-                Event(UIResult.Loading()), Event(UIResult.Success(OC_BASIC_USERNAME))
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Success(OC_BASIC_USERNAME))
             ),
             liveData = authenticationViewModel.loginResult
         )
@@ -196,8 +213,9 @@ class AuthenticationViewModelTest : ViewModelTest() {
         )
 
         assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<String>>>(
-                Event(UIResult.Loading()), Event(UIResult.Error(commonException))
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Error(commonException))
             ),
             liveData = authenticationViewModel.loginResult
         )

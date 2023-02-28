@@ -37,13 +37,13 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import androidx.work.WorkInfo
 import com.owncloud.android.R
-import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.files.SortOrder
 import com.owncloud.android.presentation.files.SortType
 import com.owncloud.android.presentation.files.operations.FileOperation
@@ -321,7 +321,7 @@ class PreviewImageActivity : FileActivity(),
         require(file.isImage) { "Non-image file passed as argument" }
 
         // Update file according to DB file, if it is possible
-        if (file.id!! > FileDataStorageManager.ROOT_PARENT_ID) {
+        if (file.id!! > ROOT_PARENT_ID) {
             file = storageManager.getFileById(file.id!!)
         }
         if (file != null) {

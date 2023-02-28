@@ -117,6 +117,7 @@
     <string name="bottom_nav_uploads">Uploads</string>
     <string name="bottom_nav_offline">Offline</string>
     <string name="bottom_nav_links">Links</string>
+    <string name="bottom_nav_shares">Shares</string>
 
     <string name="recommend_subject">Try %1$s on your smartphone!</string>
     <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
@@ -153,6 +154,8 @@
     <string name="file_list_empty_title_available_offline">No available offline files</string>
     <string name="file_list_empty_title_shared_by_links">No shared links</string>
     <string name="file_list_empty_subtitle_all_files">Upload some content or sync with your devices!</string>
+    <string name="shares_list_empty_title">No shares</string>
+    <string name="shares_list_empty_subtitle">You are not collaborating on other people\'s resources</string>
     <string name="spaces_list_empty_subtitle">You don\'t have access to any space!</string>
     <string name="file_list_empty_subtitle_available_offline">Files and folders you mark as available offline will show up here</string>
     <string name="file_list_empty_subtitle_shared_by_links">Files and folders you share by link will show up here</string>
@@ -182,6 +185,7 @@
     <string name="filedetails_renamed_in_upload_msg">File was renamed to %1$s during upload</string>
     <string name="list_layout">List layout</string>
     <string name="action_share">Share</string>
+    <string name="login_account_preparing">Preparing account for first launch</string>
     <string name="common_yes">Yes</string>
     <string name="common_no">No</string>
     <string name="common_remove_upload">Remove upload</string>
@@ -431,7 +435,7 @@
     <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature? The pending videos will not be uploaded</string>
     <string name="proper_pics_folder_warning_camera_upload">"Please make sure the folder selected is where the camera you are using saves the pictures taken. Otherwise, the feature will not be able to detect your pictures. Keep in mind that pictures will be uploaded in at least 15 minutes after taking them."</string>
     <string name="proper_videos_folder_warning_camera_upload">"Please make sure the folder selected is where the camera you are using saves the videos recorded. Otherwise, the feature will not be able to detect your videos. Keep in mind that videos will be uploaded in at least 15 minutes after recording them."</string>
-    <string name="conflict_title">File conflict</string>
+    <string name="conflict_title">An error occurred in the destination folder</string>
     <string name="conflict_description">There is a conflict in file %1$s, tap to solve it</string>
     <string name="conflict_message">Which files do you want to keep? If you select both versions, the local file will have a number added to its name.</string>
     <string name="conflict_keep_both">Keep both</string>
@@ -734,7 +738,5 @@
     <string name="release_notes_3.0.3_subtitle2">Toolbar with incorrect status when browsing back from Share view</string>
     <string name="release_notes_3.0.3_title3">Error message shortened</string>
     <string name="release_notes_3.0.3_subtitle3">Error message in copy operation was so long that was not readable in device</string>
-
-
 
 </resources>
