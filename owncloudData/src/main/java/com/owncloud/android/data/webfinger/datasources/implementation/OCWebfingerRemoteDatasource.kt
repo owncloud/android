@@ -20,6 +20,7 @@ package com.owncloud.android.data.webfinger.datasources.implementation
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.webfinger.datasources.WebfingerRemoteDatasource
+import com.owncloud.android.domain.webfinger.model.WebfingerRel
 import com.owncloud.android.lib.resources.webfinger.services.WebfingerService
 
 class OCWebfingerRemoteDatasource(
@@ -27,12 +28,17 @@ class OCWebfingerRemoteDatasource(
     private val clientManager: ClientManager,
 ) : WebfingerRemoteDatasource {
 
-    override fun getJRDFromWebFingerHost(lookupServer: String, username: String): String {
+    override fun getInstancesFromWebFinger(
+        lookupServer: String,
+        rel: WebfingerRel,
+        username: String
+    ): List<String> {
         val ownCloudClient = clientManager.getClientForAnonymousCredentials(lookupServer, false)
 
         return executeRemoteOperation {
-            webfingerService.getInstanceFromWebfinger(
+            webfingerService.getInstancesFromWebfinger(
                 lookupServer = lookupServer,
+                rel = rel.uri,
                 username = username,
                 client = ownCloudClient
             )

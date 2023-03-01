@@ -57,7 +57,7 @@ val repositoryModule = module {
     factory<ShareeRepository> { OCShareeRepository(get()) }
     factory<SpacesRepository> { OCSpacesRepository(get(), get()) }
     factory<UserRepository> { OCUserRepository(get(), get()) }
-    factory<OAuthRepository> { OCOAuthRepository(get()) }
+    factory<OAuthRepository> { OCOAuthRepository(get(), get()) }
     factory<FolderBackupRepository> { OCFolderBackupRepository(get()) }
     factory<WebfingerRepository> { OCWebfingerRepository(get()) }
     factory<TransferRepository> { OCTransferRepository(get()) }

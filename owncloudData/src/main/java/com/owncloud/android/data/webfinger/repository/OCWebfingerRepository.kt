@@ -19,11 +19,20 @@ package com.owncloud.android.data.webfinger.repository
 
 import com.owncloud.android.data.webfinger.datasources.WebfingerRemoteDatasource
 import com.owncloud.android.domain.webfinger.WebfingerRepository
+import com.owncloud.android.domain.webfinger.model.WebfingerRel
 
 class OCWebfingerRepository(
     private val webfingerRemoteDatasource: WebfingerRemoteDatasource,
 ) : WebfingerRepository {
 
-    override fun getJRDFromWebFingerHost(server: String, resource: String): String =
-        webfingerRemoteDatasource.getJRDFromWebFingerHost(lookupServer = server, username = resource)
+    override fun getJRDFromWebFingerHost(
+        server: String,
+        rel: WebfingerRel,
+        resource: String
+    ): List<String> =
+        webfingerRemoteDatasource.getInstancesFromWebFinger(
+            lookupServer = server,
+            rel = rel,
+            username = resource
+        )
 }

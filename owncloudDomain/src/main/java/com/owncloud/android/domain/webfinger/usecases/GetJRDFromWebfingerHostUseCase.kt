@@ -21,13 +21,18 @@ package com.owncloud.android.domain.webfinger.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.webfinger.WebfingerRepository
+import com.owncloud.android.domain.webfinger.model.WebfingerRel
 
 class GetJRDFromWebfingerHostUseCase(
     private val webfingerRepository: WebfingerRepository
 ) : BaseUseCaseWithResult<String, GetJRDFromWebfingerHostUseCase.Params>() {
 
     override fun run(params: Params): String =
-        webfingerRepository.getJRDFromWebFingerHost(server = params.server, resource = params.resource)
+        webfingerRepository.getJRDFromWebFingerHost(
+            server = params.server,
+            rel = WebfingerRel.OWNCLOUD_INSTANCE,
+            resource = params.resource
+        ).first()
 
     data class Params(
         val server: String,
