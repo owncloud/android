@@ -192,13 +192,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun initLiveDataObservers() {
         // LiveData observers
-        authenticationViewModel.webfingerHost.observe(this) { event ->
+        authenticationViewModel.legacyWebfingerHost.observe(this) { event ->
             when (val uiResult = event.peekContent()) {
-                is UIResult.Loading -> getWebfingerIsLoading()
-                is UIResult.Success -> getWebfingerIsSuccess(uiResult)
-                is UIResult.Error -> getWebfingerIsError(uiResult)
+                is UIResult.Loading -> getLegacyWebfingerIsLoading()
+                is UIResult.Success -> getLegacyWebfingerIsSuccess(uiResult)
+                is UIResult.Error -> getLegacyWebfingerIsError(uiResult)
             }
         }
+
         authenticationViewModel.serverInfo.observe(this) { event ->
             when (val uiResult = event.peekContent()) {
                 is UIResult.Loading -> getServerInfoIsLoading()
@@ -252,7 +253,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
-    private fun getWebfingerIsLoading() {
+    private fun getLegacyWebfingerIsLoading() {
         binding.webfingerStatusText.run {
             text = getString(R.string.auth_testing_connection)
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
@@ -260,7 +261,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
-    private fun getWebfingerIsSuccess(uiResult: UIResult.Success<String>) {
+    private fun getLegacyWebfingerIsSuccess(uiResult: UIResult.Success<String>) {
         val serverUrl = uiResult.data ?: return
         username = binding.webfingerUsername.text.toString()
         binding.webfingerLayout.isVisible = false
@@ -269,7 +270,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         checkOcServer()
     }
 
-    private fun getWebfingerIsError(uiResult: UIResult.Error<String>) {
+    private fun getLegacyWebfingerIsError(uiResult: UIResult.Error<String>) {
         when (uiResult.error) {
             is NoNetworkConnectionException -> binding.webfingerStatusText.run {
                 text = getString(R.string.error_no_network_connection)
@@ -754,17 +755,17 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             } else isVisible = false
         }
 
-        val webfingerLookupServer = mdmProvider.getBrandingString(NO_MDM_RESTRICTION_YET, R.string.webfinger_lookup_server)
-        val shouldShowWebfingerFlow = loginAction == ACTION_CREATE && webfingerLookupServer.isNotBlank()
-        binding.webfingerLayout.isVisible = shouldShowWebfingerFlow
-        binding.mainLoginLayout.isVisible = !shouldShowWebfingerFlow
+        val legacyWebfingerLookupServer = mdmProvider.getBrandingString(NO_MDM_RESTRICTION_YET, R.string.webfinger_lookup_server)
+        val shouldShowLegacyWebfingerFlow = loginAction == ACTION_CREATE && legacyWebfingerLookupServer.isNotBlank()
+        binding.webfingerLayout.isVisible = shouldShowLegacyWebfingerFlow
+        binding.mainLoginLayout.isVisible = !shouldShowLegacyWebfingerFlow
 
-        if (shouldShowWebfingerFlow) {
+        if (shouldShowLegacyWebfingerFlow) {
             binding.webfingerButton.setOnClickListener {
                 val webfingerUsername = binding.webfingerUsername.text.toString()
                 if (webfingerUsername.isNotEmpty()) {
-                    authenticationViewModel.getWebfingerHost(
-                        webfingerLookupServer,
+                    authenticationViewModel.getLegacyWebfingerHost(
+                        legacyWebfingerLookupServer,
                         webfingerUsername
                     )
                 } else {
