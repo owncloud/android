@@ -30,7 +30,8 @@ import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.domain.webfinger.usecases.GetJRDFromWebfingerHostUseCase
+import com.owncloud.android.domain.webfinger.usecases.GetInstancesFromWebfingerUseCase
+import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
 import com.owncloud.android.presentation.authentication.AuthenticationViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
@@ -66,7 +67,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
     private lateinit var getServerInfoAsyncUseCase: GetServerInfoAsyncUseCase
     private lateinit var supportsOAuth2UseCase: SupportsOAuth2UseCase
     private lateinit var getBaseUrlUseCase: GetBaseUrlUseCase
-    private lateinit var getJRDFromWebfingerHostUseCase: GetJRDFromWebfingerHostUseCase
+    private lateinit var getOwnCloudInstanceFromWebFingerUseCase: GetOwnCloudInstanceFromWebFingerUseCase
     private lateinit var refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase
     private lateinit var refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase
     private lateinit var getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase
@@ -96,7 +97,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
         getServerInfoAsyncUseCase = mockk()
         supportsOAuth2UseCase = mockk()
         getBaseUrlUseCase = mockk()
-        getJRDFromWebfingerHostUseCase = mockk()
+        getOwnCloudInstanceFromWebFingerUseCase = mockk()
         refreshCapabilitiesFromServerAsyncUseCase = mockk()
         refreshSpacesFromServerAsyncUseCase = mockk()
         getStoredCapabilitiesUseCase = mockk()
@@ -109,7 +110,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
             getServerInfoAsyncUseCase = getServerInfoAsyncUseCase,
             supportsOAuth2UseCase = supportsOAuth2UseCase,
             getBaseUrlUseCase = getBaseUrlUseCase,
-            getJRDFromWebfingerHostUseCase = getJRDFromWebfingerHostUseCase,
+            getOwnCloudInstanceFromWebFingerUseCase = getOwnCloudInstanceFromWebFingerUseCase,
             refreshCapabilitiesFromServerAsyncUseCase = refreshCapabilitiesFromServerAsyncUseCase,
             refreshSpacesFromServerAsyncUseCase = refreshSpacesFromServerAsyncUseCase,
             getStoredCapabilitiesUseCase = getStoredCapabilitiesUseCase,

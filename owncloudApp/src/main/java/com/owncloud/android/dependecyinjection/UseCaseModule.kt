@@ -95,7 +95,8 @@ import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
-import com.owncloud.android.domain.webfinger.usecases.GetJRDFromWebfingerHostUseCase
+import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
+import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
@@ -126,7 +127,8 @@ val useCaseModule = module {
     factory { LoginBasicAsyncUseCase(get()) }
     factory { LoginOAuthAsyncUseCase(get()) }
     factory { SupportsOAuth2UseCase(get()) }
-    factory { GetJRDFromWebfingerHostUseCase(get()) }
+    factory { GetOwnCloudInstanceFromWebFingerUseCase(get()) }
+    factory { GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase(get()) }
 
     // OAuth
     factory { OIDCDiscoveryUseCase(get()) }
