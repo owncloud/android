@@ -30,8 +30,8 @@ import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.domain.webfinger.usecases.GetInstancesFromWebfingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
+import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.presentation.authentication.AuthenticationViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
@@ -68,6 +68,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
     private lateinit var supportsOAuth2UseCase: SupportsOAuth2UseCase
     private lateinit var getBaseUrlUseCase: GetBaseUrlUseCase
     private lateinit var getOwnCloudInstanceFromWebFingerUseCase: GetOwnCloudInstanceFromWebFingerUseCase
+    private lateinit var getOwnCloudInstancesFromAuthenticatedWebFingerUseCase: GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
     private lateinit var refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase
     private lateinit var refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase
     private lateinit var getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase
@@ -98,6 +99,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
         supportsOAuth2UseCase = mockk()
         getBaseUrlUseCase = mockk()
         getOwnCloudInstanceFromWebFingerUseCase = mockk()
+        getOwnCloudInstancesFromAuthenticatedWebFingerUseCase = mockk()
         refreshCapabilitiesFromServerAsyncUseCase = mockk()
         refreshSpacesFromServerAsyncUseCase = mockk()
         getStoredCapabilitiesUseCase = mockk()
@@ -111,6 +113,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
             supportsOAuth2UseCase = supportsOAuth2UseCase,
             getBaseUrlUseCase = getBaseUrlUseCase,
             getOwnCloudInstanceFromWebFingerUseCase = getOwnCloudInstanceFromWebFingerUseCase,
+            getOwnCloudInstancesFromAuthenticatedWebFingerUseCase = getOwnCloudInstancesFromAuthenticatedWebFingerUseCase,
             refreshCapabilitiesFromServerAsyncUseCase = refreshCapabilitiesFromServerAsyncUseCase,
             refreshSpacesFromServerAsyncUseCase = refreshSpacesFromServerAsyncUseCase,
             getStoredCapabilitiesUseCase = getStoredCapabilitiesUseCase,
@@ -183,6 +186,8 @@ class AuthenticationViewModelTest : ViewModelTest() {
     @Test
     fun loginOAuthOk() {
         every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
+        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(any()) } returns UseCaseResult.Success(listOf(OC_BASE_URL))
+
         authenticationViewModel.loginOAuth(
             username = OC_BASIC_USERNAME,
             authTokenType = OC_AUTH_TOKEN_TYPE,

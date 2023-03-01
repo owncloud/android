@@ -35,8 +35,8 @@ import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
+import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
@@ -119,19 +119,23 @@ class AuthenticationViewModel(
             _loginResult.postValue(Event(UIResult.Loading()))
 
             var serverInfo = serverInfo.value?.peekContent()?.getStoredData() ?: throw java.lang.IllegalArgumentException()
-            val ownCloudInstancesAvailable = getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(
-                GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase.Params(
-                    server = serverInfo.baseUrl,
-                    username = username,
-                    accessToken = accessToken,
-                )
-            )
-            Timber.d("Instances retrieved from authenticated webfinger: $ownCloudInstancesAvailable")
 
-            // Multiple instances are not supported yet. Let's use the first instance we receive for the moment.
-            ownCloudInstancesAvailable.getDataOrNull()?.let {
-                if (it.isNotEmpty()) {
-                    serverInfo = serverInfo.copy(baseUrl = it.first())
+            // Authenticated WebFinger needed only for account creations. Logged accounts already know their instances.
+            if (updateAccountWithUsername == null) {
+                val ownCloudInstancesAvailable = getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(
+                    GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase.Params(
+                        server = serverInfo.baseUrl,
+                        username = username,
+                        accessToken = accessToken,
+                    )
+                )
+                Timber.d("Instances retrieved from authenticated webfinger: $ownCloudInstancesAvailable")
+
+                // Multiple instances are not supported yet. Let's use the first instance we receive for the moment.
+                ownCloudInstancesAvailable.getDataOrNull()?.let {
+                    if (it.isNotEmpty()) {
+                        serverInfo = serverInfo.copy(baseUrl = it.first())
+                    }
                 }
             }
 
