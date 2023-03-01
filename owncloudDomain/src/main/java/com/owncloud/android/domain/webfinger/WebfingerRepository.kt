@@ -19,6 +19,12 @@
 
 package com.owncloud.android.domain.webfinger
 
+import com.owncloud.android.domain.webfinger.model.WebfingerRel
+
 interface WebfingerRepository {
-    fun getJRDFromWebFingerHost(server: String, resource: String): String
+    fun getJRDFromWebFingerHost(
+        server: String,
+        rel: WebfingerRel,
+        resource: String
+    ): List<String>
 }

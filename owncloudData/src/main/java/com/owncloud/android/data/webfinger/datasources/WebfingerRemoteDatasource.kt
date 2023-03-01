@@ -17,6 +17,12 @@
  */
 package com.owncloud.android.data.webfinger.datasources
 
+import com.owncloud.android.domain.webfinger.model.WebfingerRel
+
 interface WebfingerRemoteDatasource {
-    fun getJRDFromWebFingerHost(lookupServer: String, username: String): String
+    fun getInstancesFromWebFinger(
+        lookupServer: String,
+        rel: WebfingerRel,
+        username: String
+    ): List<String>
 }
