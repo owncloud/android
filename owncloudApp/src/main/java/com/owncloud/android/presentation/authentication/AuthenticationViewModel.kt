@@ -55,24 +55,24 @@ class AuthenticationViewModel(
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
-    private val _serverInfo = MediatorLiveData<Event<UIResult<ServerInfo>>>()
-    val serverInfo: LiveData<Event<UIResult<ServerInfo>>> = _serverInfo
+    private val _legacyWebfingerHost = MediatorLiveData<Event<UIResult<String>>>()
+    val legacyWebfingerHost: LiveData<Event<UIResult<String>>> = _legacyWebfingerHost
 
-    private val _webfingerHost = MediatorLiveData<Event<UIResult<String>>>()
-    val webfingerHost: LiveData<Event<UIResult<String>>> = _webfingerHost
-
-    fun getWebfingerHost(
+    fun getLegacyWebfingerHost(
         webfingerLookupServer: String,
         webfingerUsername: String,
     ) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
             showLoading = true,
-            liveData = _webfingerHost,
+            liveData = _legacyWebfingerHost,
             useCase = getJRDFromWebfingerHostUseCase,
             useCaseParams = GetJRDFromWebfingerHostUseCase.Params(server = webfingerLookupServer, resource = webfingerUsername)
         )
     }
+
+    private val _serverInfo = MediatorLiveData<Event<UIResult<ServerInfo>>>()
+    val serverInfo: LiveData<Event<UIResult<ServerInfo>>> = _serverInfo
 
     fun getServerInfo(
         serverUrl: String
