@@ -39,11 +39,7 @@ class SpaceCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAU
     }
 
     fun addSpace(space: OCSpace, rootFolderId: Long?, context: Context?) {
-        var flags = Document.FLAG_DIR_SUPPORTS_CREATE
-
-        if (space.isPersonal) {
-            flags = flags or Document.FLAG_SUPPORTS_WRITE
-        }
+        val flags = Document.FLAG_DIR_SUPPORTS_CREATE or Document.FLAG_SUPPORTS_WRITE
 
         val name = if (space.isPersonal) context?.getString(R.string.bottom_nav_personal) else space.name
 

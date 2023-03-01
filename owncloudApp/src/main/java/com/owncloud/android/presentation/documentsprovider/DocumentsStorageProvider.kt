@@ -99,7 +99,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         // If documentId == NONEXISTENT_DOCUMENT_ID only Upload is needed because file does not exist in our database yet.
         var ocFile: OCFile
-        val uploadOnly: Boolean = documentId == NONEXISTENT_DOCUMENT_ID
+        val uploadOnly: Boolean = documentId == NONEXISTENT_DOCUMENT_ID || documentId == "null"
 
         var accessMode: Int = ParcelFileDescriptor.parseMode(mode)
         val isWrite: Boolean = mode.contains("w")
