@@ -36,11 +36,11 @@ import com.squareup.moshi.Moshi
 import timber.log.Timber
 import java.net.URL
 
-class GetOCInstanceViaWebfingerOperation(
+class GetInstancesViaWebfingerOperation(
     private val lockupServerDomain: String,
     private val rel: String,
     private val resource: String,
-) : RemoteOperation<String>() {
+) : RemoteOperation<List<String>>() {
 
     private fun buildRequestUri() =
         Uri.parse(lockupServerDomain).buildUpon()
@@ -61,30 +61,25 @@ class GetOCInstanceViaWebfingerOperation(
         method: HttpMethod,
         response: String?,
         status: Int
-    ): RemoteOperationResult<String> {
+    ): RemoteOperationResult<List<String>> {
         Timber.e("Failed requesting webfinger info")
         if (response != null) {
             Timber.e("*** status code: $status; response message: $response")
         } else {
             Timber.e("*** status code: $status")
         }
-        return RemoteOperationResult<String>(method)
+        return RemoteOperationResult<List<String>>(method)
     }
 
-    private fun onRequestSuccessful(rawResponse: String): RemoteOperationResult<String> {
+    private fun onRequestSuccessful(rawResponse: String): RemoteOperationResult<List<String>> {
         val response = parseResponse(rawResponse)
-        for (i in response.links) {
-            if (i.rel == rel) {
-                val operationResult = RemoteOperationResult<String>(RemoteOperationResult.ResultCode.OK)
-                operationResult.data = i.href
-                return operationResult
-            }
-        }
-        Timber.e("Could not find ownCloud relevant information in webfinger response: $rawResponse")
-        throw java.lang.Exception("Could not find ownCloud relevant information in webfinger response")
+        Timber.d("Successful Webfinger request: $response")
+        val operationResult = RemoteOperationResult<List<String>>(RemoteOperationResult.ResultCode.OK)
+        operationResult.data = response.links.map { it.href }
+        return operationResult
     }
 
-    override fun run(client: OwnCloudClient): RemoteOperationResult<String> {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<List<String>> {
         val requestUri = buildRequestUri()
         val getMethod = GetMethod(URL(requestUri.toString()))
         return try {
@@ -98,7 +93,7 @@ class GetOCInstanceViaWebfingerOperation(
             }
         } catch (e: Exception) {
             Timber.e(e, "Requesting webfinger info failed")
-            RemoteOperationResult<String>(e)
+            RemoteOperationResult<List<String>>(e)
         }
     }
 

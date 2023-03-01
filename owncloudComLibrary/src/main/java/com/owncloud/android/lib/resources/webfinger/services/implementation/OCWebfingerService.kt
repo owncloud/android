@@ -19,20 +19,16 @@ package com.owncloud.android.lib.resources.webfinger.services.implementation
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.webfinger.GetOCInstanceViaWebfingerOperation
+import com.owncloud.android.lib.resources.webfinger.GetInstancesViaWebfingerOperation
 import com.owncloud.android.lib.resources.webfinger.services.WebfingerService
 
 class OCWebfingerService : WebfingerService {
 
-    override fun getInstanceFromWebfinger(
+    override fun getInstancesFromWebfinger(
         lookupServer: String,
         username: String,
+        rel: String,
         client: OwnCloudClient,
-    ): RemoteOperationResult<String> =
-        GetOCInstanceViaWebfingerOperation(lookupServer, OWNCLOUD_REL, username).execute(client)
-
-    companion object {
-        private const val OWNCLOUD_REL = "http://webfinger.owncloud/rel/server-instance"
-    }
-
+    ): RemoteOperationResult<List<String>> =
+        GetInstancesViaWebfingerOperation(lookupServer, rel, username).execute(client)
 }
