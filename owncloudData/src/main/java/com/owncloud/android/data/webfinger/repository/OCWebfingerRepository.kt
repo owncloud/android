@@ -25,7 +25,7 @@ class OCWebfingerRepository(
     private val webfingerRemoteDatasource: WebfingerRemoteDatasource,
 ) : WebfingerRepository {
 
-    override fun getJRDFromWebFingerHost(
+    override fun getInstancesFromWebFinger(
         server: String,
         rel: WebfingerRel,
         resource: String
@@ -34,5 +34,18 @@ class OCWebfingerRepository(
             lookupServer = server,
             rel = rel,
             username = resource
+        )
+
+    override fun getInstancesFromAuthenticatedWebFinger(
+        server: String,
+        rel: WebfingerRel,
+        username: String,
+        accessToken: String,
+    ): List<String> =
+        webfingerRemoteDatasource.getInstancesFromAuthenticatedWebfinger(
+            lookupServer = server,
+            rel = rel,
+            username = username,
+            accessToken = accessToken,
         )
 }
