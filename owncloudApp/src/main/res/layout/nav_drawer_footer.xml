@@ -38,10 +38,10 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginTop="@dimen/standard_half_margin"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/account_quota_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/drawer_logo"
-        android:src="@drawable/drawer_logo"
         tools:src="@drawable/drawer_logo"
         tools:visibility="visible" />
 
@@ -54,10 +54,10 @@
         android:textColor="@color/textColor"
         android:textSize="17sp"
         android:singleLine="true"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/account_quota_bar"
         app:layout_constraintStart_toEndOf="@+id/drawer_link_icon"
         app:layout_constraintTop_toBottomOf="@+id/drawer_logo"
-        android:text="Link"
         tools:text="Link"
         tools:visibility="visible"/>
 
