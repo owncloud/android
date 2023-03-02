@@ -142,7 +142,8 @@ class DocumentsStorageProvider : DocumentsProvider() {
                     val uploadFilesUseCaseParams = UploadFilesFromSystemUseCase.Params(
                         accountName = ocFile.owner,
                         listOfLocalPaths = listOf(fileToOpen.path),
-                        uploadFolderPath = ocFile.remotePath.substringBeforeLast(PATH_SEPARATOR).plus(PATH_SEPARATOR)
+                        uploadFolderPath = ocFile.remotePath.substringBeforeLast(PATH_SEPARATOR).plus(PATH_SEPARATOR),
+                        spaceId = ocFile.spaceId,
                     )
                     CoroutineScope(Dispatchers.IO).launch {
                         uploadFilesUseCase.execute(uploadFilesUseCaseParams)
@@ -466,7 +467,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val tempDir = File(FileStorageUtils.getTemporalPath(parentDocument.owner, parentDocument.spaceId))
         val newFile = File(tempDir, displayName)
         fileToUpload = OCFile(
-            remotePath = parentDocument.remotePath + displayName, mimeType = mimeType, parentId = parentDocument.id, owner = parentDocument.owner
+            remotePath = parentDocument.remotePath + displayName, mimeType = mimeType, parentId = parentDocument.id, owner = parentDocument.owner, spaceId = parentDocument.spaceId
         ).apply {
             storagePath = newFile.path
         }

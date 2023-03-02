@@ -3,7 +3,7 @@
  *
  * @author Abel García de Prada
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -123,6 +123,7 @@ class SynchronizeFileUseCase(
                 accountName = accountName,
                 localPath = ocFile.storagePath!!,
                 uploadFolderPath = ocFile.getParentRemotePath(),
+                spaceId = ocFile.spaceId,
             )
         )
     }

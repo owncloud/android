@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -155,7 +155,8 @@ class OCLocalTransferDataSource(
         transferEndTimestamp = transferEndTimestamp,
         lastResult = lastResult?.let { TransferResult.fromValue(it) },
         createdBy = UploadEnqueuedBy.values()[createdBy],
-        transferId = transferId
+        transferId = transferId,
+        spaceId = spaceId,
     )
 
     private fun OCTransfer.toEntity() = OCTransferEntity(
@@ -169,7 +170,8 @@ class OCLocalTransferDataSource(
         transferEndTimestamp = transferEndTimestamp,
         lastResult = lastResult?.value,
         createdBy = createdBy.ordinal,
-        transferId = transferId
+        transferId = transferId,
+        spaceId = spaceId,
     ).apply { this@toEntity.id?.let { this.id = it } }
 
 }

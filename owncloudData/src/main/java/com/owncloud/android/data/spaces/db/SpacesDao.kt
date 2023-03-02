@@ -65,6 +65,9 @@ interface SpacesDao {
     @Upsert
     fun upsertSpecials(listOfSpecialEntities: List<SpaceSpecialEntity>)
 
+    @Query(SELECT_ALL_SPACES)
+    fun getSpacesFromEveryAccount(): List<SpacesEntity>
+
     @Query(SELECT_ALL_SPACES_FOR_ACCOUNT)
     fun getAllSpacesForAccount(
         accountName: String,
@@ -119,6 +122,12 @@ interface SpacesDao {
     fun deleteSpaceForAccountById(accountName: String, spaceId: String)
 
     companion object {
+        private const val SELECT_ALL_SPACES = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
+            WHERE $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PROJECT' OR $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PERSONAL'
+        """
+
         private const val SELECT_ALL_SPACES_FOR_ACCOUNT = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
