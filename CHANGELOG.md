@@ -9,6 +9,7 @@ Summary
 -------
 
 * Enhancement - Link in drawer menu: [#3949](https://github.com/owncloud/android/pull/3949)
+* Enhancement - Authenticated WebFinger: [#3943](https://github.com/owncloud/android/issues/3943)
 
 Details
 -------
@@ -20,6 +21,16 @@ Details
 
    https://github.com/owncloud/android/issues/3907
    https://github.com/owncloud/android/pull/3949
+
+* Enhancement - Authenticated WebFinger: [#3943](https://github.com/owncloud/android/issues/3943)
+
+   Authenticated WebFinger was introduced into the authentication flow. Now, WebFinger is used
+   to retrieve the OpenID Connect issuer and the available ownCloud instances. For the moment,
+   multiple oC instances are not supported, only the first available instance is used.
+
+   https://github.com/owncloud/android/issues/3943
+   https://github.com/owncloud/android/pull/3945
+   https://doc.owncloud.com/ocis/next/deployment/services/s-list/webfinger.html
 
 Changelog for ownCloud Android Client [3.0.3] (2023-02-13)
 =======================================
