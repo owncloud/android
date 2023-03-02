@@ -54,13 +54,17 @@
   <string name="confirmation_touches_with_other_windows_title">Êtes-vous sûr de vouloir activer cette fonctionnalité ?</string>
   <string name="confirmation_touches_with_other_windows_message">Vous utilisez cette fonctionnalité sous votre propre responsabilité. Une application malveillante pourrait tenter de vous pousser à effectuer des actions en falsifiant l’application.</string>
   <string name="prefs_subsection_picture_uploads">Téléversement automatique des photos</string>
+  <string name="prefs_subsection_picture_uploads_summary">Gérer l\'emplacement et le comportement des images téléversées automatiquement</string>
   <string name="prefs_subsection_video_uploads">Téléversement automatique des vidéos</string>
+  <string name="prefs_subsection_video_uploads_summary">Gérer l\'emplacement et le comportement des vidéos téléversées automatiquement</string>
   <string name="prefs_camera_picture_upload">Envoi d\'images</string>
   <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les images prises par l\'appareil photo</string>
   <string name="prefs_camera_picture_upload_path_title">Chemin d\'accès au répertoire de téléversement des images</string>
   <string name="prefs_camera_picture_upload_conditions_title">Conditions d\'exécution des téléversements</string>
   <string name="prefs_camera_picture_upload_conditions_summary">Les téléversements démarreront quand toutes les options seront remplies</string>
   <string name="prefs_camera_picture_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
+  <string name="prefs_camera_picture_upload_on_charging">Téléverser les images uniquement lorsque l\'appareil est en charge</string>
+  <string name="prefs_camera_upload_on_charging_summary">Veuillez activer l\'option \"Wifi uniquement\" pour activer cette option</string>
   <string name="prefs_camera_video_upload">Téléversement de vidéo</string>
   <string name="prefs_camera_video_upload_summary">Téléverser automatiquement les vidéos enregistrées par la caméra</string>
   <string name="prefs_camera_video_upload_path_title">Chemin d\'accès au répertoire de téléversement des vidéos</string>
