@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2020 ownCloud GmbH.
+  Copyright (C) 2023 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -33,14 +33,43 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/drawer_logo" />
 
+    <ImageView
+        android:id="@+id/drawer_link_icon"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="@dimen/standard_half_margin"
+        app:layout_constraintBottom_toTopOf="@id/account_quota_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/drawer_logo"
+        android:src="@drawable/drawer_logo"
+        tools:src="@drawable/drawer_logo"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/drawer_link_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_half_margin"
+        android:textStyle="bold"
+        android:textColor="@color/textColor"
+        android:textSize="17sp"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@+id/account_quota_bar"
+        app:layout_constraintStart_toEndOf="@+id/drawer_link_icon"
+        app:layout_constraintTop_toBottomOf="@+id/drawer_logo"
+        android:text="Link"
+        tools:text="Link"
+        tools:visibility="visible"/>
+
     <ProgressBar
         android:id="@+id/account_quota_bar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/standard_half_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/drawer_logo"
+        app:layout_constraintTop_toBottomOf="@id/drawer_link_icon"
         tools:progress="25" />
 
     <androidx.appcompat.widget.AppCompatTextView
