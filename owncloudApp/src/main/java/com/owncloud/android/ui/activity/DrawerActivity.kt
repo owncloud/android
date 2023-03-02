@@ -112,24 +112,25 @@ abstract class DrawerActivity : ToolbarActivity() {
         getDrawerLayout()?.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         getNavView()?.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
-        // Set background header image and logo, if any
+        // Set background header image, if any
         if (resources.getBoolean(R.bool.use_drawer_background_header)) {
             getDrawerHeaderBackground()?.setImageResource(R.drawable.drawer_header_background)
         }
-        if (resources.getBoolean(R.bool.use_drawer_logo)) {
-            getDrawerLogo()?.setImageResource(R.drawable.drawer_logo)
-        }
 
-        // Set logo icon and text for drawer link, if any
-        getDrawerLinkIcon()?.apply {
-            isVisible = true
-            setImageResource(R.drawable.drawer_logo)
-            setOnClickListener { openDrawerLink() }
-        }
-        getDrawerLinkText()?.apply {
-            isVisible = true
-            text = "Link"
-            setOnClickListener { openDrawerLink() }
+        // Set logo and text for drawer link, if any
+        if (isDrawerLinkEnabled()) {
+            getDrawerLinkIcon()?.apply {
+                isVisible = true
+                setImageResource(R.drawable.drawer_logo)
+                setOnClickListener { openDrawerLink() }
+            }
+            getDrawerLinkText()?.apply {
+                isVisible = true
+                text = resources.getString(R.string.drawer_link_label)
+                setOnClickListener { openDrawerLink() }
+            }
+        } else if (resources.getBoolean(R.bool.use_drawer_logo)) {
+            getDrawerLogo()?.setImageResource(R.drawable.drawer_logo)
         }
 
         getDrawerAccountChooserToggle()?.setImageResource(R.drawable.ic_down)
@@ -288,8 +289,11 @@ abstract class DrawerActivity : ToolbarActivity() {
     }
 
     private fun openDrawerLink() {
-        goToUrl(url = "https://owncloud.com/")
+        goToUrl(url = resources.getString(R.string.drawer_link))
     }
+
+    private fun isDrawerLinkEnabled() =
+        resources.getString(R.string.drawer_link_label).isNotEmpty() && resources.getString(R.string.drawer_link).isNotEmpty()
 
     /**
      * sets the new/current account and restarts. In case the given account equals the actual/current account the
