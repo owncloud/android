@@ -48,6 +48,7 @@ import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.setMain
@@ -184,9 +185,12 @@ class AuthenticationViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun loginOAuthOk() {
+    fun loginOAuthWebFingerInstancesOk() {
+        every { getServerInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_SERVER_INFO)
+        authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl)
+
         every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
-        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(any()) } returns UseCaseResult.Success(listOf(OC_BASE_URL))
+        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(any()) } returns UseCaseResult.Success(listOf("WEBFINGER_INSTANCE"))
 
         authenticationViewModel.loginOAuth(
             username = OC_BASIC_USERNAME,
@@ -204,11 +208,72 @@ class AuthenticationViewModelTest : ViewModelTest() {
             ),
             liveData = authenticationViewModel.loginResult
         )
+
+        verify(exactly = 1) {
+            loginOAuthAsyncUseCase.execute(
+                params = LoginOAuthAsyncUseCase.Params(
+                    serverInfo = OC_SERVER_INFO.copy(baseUrl = "WEBFINGER_INSTANCE"),
+                    username = OC_BASIC_USERNAME,
+                    authTokenType = OC_AUTH_TOKEN_TYPE,
+                    accessToken = OC_ACCESS_TOKEN,
+                    refreshToken = OC_REFRESH_TOKEN,
+                    scope = OC_SCOPE,
+                    updateAccountWithUsername = null,
+                    clientRegistrationInfo = OC_CLIENT_REGISTRATION
+                )
+            )
+        }
+    }
+
+    @Test
+    fun loginOAuthOk() {
+        every { getServerInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_SERVER_INFO)
+        authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl)
+
+        every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
+        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+
+        authenticationViewModel.loginOAuth(
+            username = OC_BASIC_USERNAME,
+            authTokenType = OC_AUTH_TOKEN_TYPE,
+            accessToken = OC_ACCESS_TOKEN,
+            refreshToken = OC_REFRESH_TOKEN,
+            scope = OC_SCOPE,
+            clientRegistrationInfo = OC_CLIENT_REGISTRATION
+        )
+
+        assertEmittedValues(
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Success(OC_BASIC_USERNAME))
+            ),
+            liveData = authenticationViewModel.loginResult
+        )
+
+        verify(exactly = 1) {
+            loginOAuthAsyncUseCase.execute(
+                params = LoginOAuthAsyncUseCase.Params(
+                    serverInfo = OC_SERVER_INFO,
+                    username = OC_BASIC_USERNAME,
+                    authTokenType = OC_AUTH_TOKEN_TYPE,
+                    accessToken = OC_ACCESS_TOKEN,
+                    refreshToken = OC_REFRESH_TOKEN,
+                    scope = OC_SCOPE,
+                    updateAccountWithUsername = null,
+                    clientRegistrationInfo = OC_CLIENT_REGISTRATION
+                )
+            )
+        }
     }
 
     @Test
     fun loginOAuthException() {
+        every { getServerInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_SERVER_INFO)
+        authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl)
+
         every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+
         authenticationViewModel.loginOAuth(
             username = OC_BASIC_USERNAME,
             authTokenType = OC_AUTH_TOKEN_TYPE,
