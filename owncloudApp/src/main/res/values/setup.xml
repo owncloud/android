@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- App name  and other strings-->
+    <!-- App name and other strings-->
     <string name="app_name" formatted="false">ownCloud</string>
     <string name="account_type" formatted="false">owncloud</string>    <!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
     <string name="authority" formatted="false">org.owncloud</string>
@@ -124,4 +124,8 @@
 
     <!-- Webfinger -->
     <string name="webfinger_lookup_server"></string>
+
+    <!-- Drawer link -->
+    <string name="drawer_link_label"></string>
+    <string name="drawer_link"></string>
 </resources>
