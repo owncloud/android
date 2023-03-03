@@ -19,18 +19,18 @@
 
 package com.owncloud.android.domain.webfinger
 
-import com.owncloud.android.domain.webfinger.model.WebfingerRel
+import com.owncloud.android.domain.webfinger.model.WebFingerRel
 
 interface WebfingerRepository {
     fun getInstancesFromWebFinger(
         server: String,
-        rel: WebfingerRel,
+        rel: WebFingerRel,
         resource: String
     ): List<String>
 
     fun getInstancesFromAuthenticatedWebFinger(
         server: String,
-        rel: WebfingerRel,
+        rel: WebFingerRel,
         username: String,
         accessToken: String,
     ): List<String>

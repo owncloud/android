@@ -1,7 +1,8 @@
 /**
  * ownCloud Android client application
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * @author Abel García de Prada
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -15,21 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.webfinger.datasources
+package com.owncloud.android.domain.webfinger.model
 
-import com.owncloud.android.domain.webfinger.model.WebfingerRel
+enum class WebFingerRel(val uri: String) {
+    OWNCLOUD_INSTANCE("http://webfinger.owncloud/rel/server-instance"),
 
-interface WebfingerRemoteDatasource {
-    fun getInstancesFromWebFinger(
-        lookupServer: String,
-        rel: WebfingerRel,
-        username: String
-    ): List<String>
-
-    fun getInstancesFromAuthenticatedWebfinger(
-        lookupServer: String,
-        rel: WebfingerRel,
-        username: String,
-        accessToken: String,
-    ): List<String>
+    // https://openid.net/specs/openid-connect-discovery-1_0.html#IssuerDiscovery
+    OIDC_ISSUER_DISCOVERY("http://openid.net/specs/connect/1.0/issuer")
 }
