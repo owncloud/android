@@ -19,20 +19,20 @@ package com.owncloud.android.data.webfinger.datasources.implementation
 
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.data.webfinger.datasources.WebfingerRemoteDatasource
-import com.owncloud.android.domain.webfinger.model.WebfingerRel
+import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDatasource
+import com.owncloud.android.domain.webfinger.model.WebFingerRel
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
-import com.owncloud.android.lib.resources.webfinger.services.WebfingerService
+import com.owncloud.android.lib.resources.webfinger.services.WebFingerService
 
-class OCWebfingerRemoteDatasource(
-    private val webfingerService: WebfingerService,
+class OCRemoteWebFingerDatasource(
+    private val webfingerService: WebFingerService,
     private val clientManager: ClientManager,
-) : WebfingerRemoteDatasource {
+) : RemoteWebFingerDatasource {
 
     override fun getInstancesFromWebFinger(
         lookupServer: String,
-        rel: WebfingerRel,
+        rel: WebFingerRel,
         username: String
     ): List<String> {
         val ownCloudClient = clientManager.getClientForAnonymousCredentials(lookupServer, false)
@@ -49,7 +49,7 @@ class OCWebfingerRemoteDatasource(
 
     override fun getInstancesFromAuthenticatedWebfinger(
         lookupServer: String,
-        rel: WebfingerRel,
+        rel: WebFingerRel,
         username: String,
         accessToken: String,
     ): List<String> {

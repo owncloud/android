@@ -20,7 +20,7 @@ package com.owncloud.android.data.oauth
 
 import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.repository.OCOAuthRepository
-import com.owncloud.android.data.webfinger.datasources.WebfingerRemoteDatasource
+import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDatasource
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.testutil.OC_SERVER_INFO
@@ -38,7 +38,7 @@ import org.junit.Test
 class OAuthRepositoryTest {
 
     private val remoteOAuthDataSource = mockk<RemoteOAuthDataSource>(relaxed = true)
-    private val remoteWebFingerDataSource = mockk<WebfingerRemoteDatasource>(relaxed = true)
+    private val remoteWebFingerDataSource = mockk<RemoteWebFingerDatasource>(relaxed = true)
     private val oAuthRepository: OAuthRepository = OCOAuthRepository(remoteOAuthDataSource, remoteWebFingerDataSource)
 
     private val issuerOIDCFromWebFinger = "server.url/oidc/issuer"

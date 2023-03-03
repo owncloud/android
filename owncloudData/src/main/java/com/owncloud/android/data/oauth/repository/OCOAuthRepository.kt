@@ -19,7 +19,7 @@
 package com.owncloud.android.data.oauth.repository
 
 import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
-import com.owncloud.android.data.webfinger.datasources.WebfingerRemoteDatasource
+import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDatasource
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
@@ -27,21 +27,21 @@ import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfigur
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 import com.owncloud.android.domain.exceptions.FileNotFoundException
-import com.owncloud.android.domain.webfinger.model.WebfingerRel
+import com.owncloud.android.domain.webfinger.model.WebFingerRel
 import timber.log.Timber
 
 class OCOAuthRepository(
     private val oidcRemoteOAuthDataSource: RemoteOAuthDataSource,
-    private val webfingerRemoteDatasource: WebfingerRemoteDatasource,
+    private val remoteWebFingerDatasource: RemoteWebFingerDatasource,
 ) : OAuthRepository {
 
     override fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration {
         // First, we will try to retrieve the OpenID Connect issuer from webfinger.
         // https://openid.net/specs/openid-connect-discovery-1_0.html#IssuerDiscovery
         val oidcIssuerFromWebFinger: String? = try {
-            webfingerRemoteDatasource.getInstancesFromWebFinger(
+            remoteWebFingerDatasource.getInstancesFromWebFinger(
                 lookupServer = baseUrl,
-                rel = WebfingerRel.OIDC_ISSUER_DISCOVERY,
+                rel = WebFingerRel.OIDC_ISSUER_DISCOVERY,
                 username = baseUrl
             ).firstOrNull()
         } catch (fileNotFoundException: FileNotFoundException) {

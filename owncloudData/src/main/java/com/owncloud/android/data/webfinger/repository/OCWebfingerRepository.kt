@@ -17,20 +17,20 @@
  */
 package com.owncloud.android.data.webfinger.repository
 
-import com.owncloud.android.data.webfinger.datasources.WebfingerRemoteDatasource
+import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDatasource
 import com.owncloud.android.domain.webfinger.WebfingerRepository
-import com.owncloud.android.domain.webfinger.model.WebfingerRel
+import com.owncloud.android.domain.webfinger.model.WebFingerRel
 
 class OCWebfingerRepository(
-    private val webfingerRemoteDatasource: WebfingerRemoteDatasource,
+    private val remoteWebFingerDatasource: RemoteWebFingerDatasource,
 ) : WebfingerRepository {
 
     override fun getInstancesFromWebFinger(
         server: String,
-        rel: WebfingerRel,
+        rel: WebFingerRel,
         resource: String
     ): List<String> =
-        webfingerRemoteDatasource.getInstancesFromWebFinger(
+        remoteWebFingerDatasource.getInstancesFromWebFinger(
             lookupServer = server,
             rel = rel,
             username = resource
@@ -38,11 +38,11 @@ class OCWebfingerRepository(
 
     override fun getInstancesFromAuthenticatedWebFinger(
         server: String,
-        rel: WebfingerRel,
+        rel: WebFingerRel,
         username: String,
         accessToken: String,
     ): List<String> =
-        webfingerRemoteDatasource.getInstancesFromAuthenticatedWebfinger(
+        remoteWebFingerDatasource.getInstancesFromAuthenticatedWebfinger(
             lookupServer = server,
             rel = rel,
             username = username,
