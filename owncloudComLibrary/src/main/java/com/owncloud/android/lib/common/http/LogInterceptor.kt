@@ -51,7 +51,7 @@ class LogInterceptor : Interceptor {
 
         val request = chain.request().also {
             val requestId = it.headers[OC_X_REQUEST_ID]
-            logHttp(REQUEST, INFO, requestId, "Type: ${it.method} URL: ${it.url}")
+            logHttp(REQUEST, INFO, requestId, "Method: ${it.method} URL: ${it.url}")
             logHeaders(requestId, it.headers, REQUEST)
             logRequestBody(requestId, it.body)
         }
@@ -64,7 +64,7 @@ class LogInterceptor : Interceptor {
                 RESPONSE,
                 INFO,
                 requestId,
-                "Code: ${it.code}  Message: ${it.message} IsSuccessful: ${it.isSuccessful}"
+                "Method: ${request.method} URL: ${request.url} Code: ${it.code} Message: ${it.message}"
             )
             logHeaders(requestId, it.headers, RESPONSE)
             logResponseBody(requestId, it.body)
