@@ -35,31 +35,34 @@
 
     <ImageView
         android:id="@+id/drawer_link_icon"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginTop="@dimen/standard_half_margin"
         android:visibility="gone"
+        android:src="@drawable/drawer_logo"
         app:layout_constraintBottom_toTopOf="@id/account_quota_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/drawer_logo"
-        tools:src="@drawable/drawer_logo"
         tools:visibility="visible" />
 
     <TextView
         android:id="@+id/drawer_link_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/standard_half_margin"
-        android:textStyle="bold"
-        android:textColor="@color/textColor"
-        android:textSize="17sp"
         android:singleLine="true"
+        android:textColor="@color/textColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:ellipsize="end"
+        android:text="@string/drawer_link_label"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/account_quota_bar"
-        app:layout_constraintStart_toEndOf="@+id/drawer_link_icon"
-        app:layout_constraintTop_toBottomOf="@+id/drawer_logo"
+        app:layout_constraintBottom_toTopOf="@id/account_quota_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/drawer_link_icon"
+        app:layout_constraintTop_toBottomOf="@id/drawer_logo"
         tools:text="Link"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
     <ProgressBar
         android:id="@+id/account_quota_bar"

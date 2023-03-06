@@ -121,12 +121,10 @@ abstract class DrawerActivity : ToolbarActivity() {
         if (isDrawerLinkEnabled()) {
             getDrawerLinkIcon()?.apply {
                 isVisible = true
-                setImageResource(R.drawable.drawer_logo)
                 setOnClickListener { openDrawerLink() }
             }
             getDrawerLinkText()?.apply {
                 isVisible = true
-                text = resources.getString(R.string.drawer_link_label)
                 setOnClickListener { openDrawerLink() }
             }
         } else if (resources.getBoolean(R.bool.use_drawer_logo)) {
@@ -293,7 +291,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     }
 
     private fun isDrawerLinkEnabled() =
-        resources.getString(R.string.drawer_link_label).isNotEmpty() && resources.getString(R.string.drawer_link).isNotEmpty()
+        resources.getString(R.string.drawer_link_label).isNotBlank() && resources.getString(R.string.drawer_link).isNotBlank()
 
     /**
      * sets the new/current account and restarts. In case the given account equals the actual/current account the

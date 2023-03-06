@@ -105,9 +105,11 @@
     <!-- Login background -->
     <bool name="use_login_background_image">true</bool>
 
-    <!-- Header images -->
+    <!-- Drawer menu -->
     <bool name="use_drawer_background_header">true</bool>
     <bool name="use_drawer_logo">true</bool>
+    <string name="drawer_link_label"></string>
+    <string name="drawer_link"></string>
 
     <!-- Number of passcode digits -->
     <integer name="passcode_digits">4</integer>
@@ -124,8 +126,4 @@
 
     <!-- Webfinger -->
     <string name="webfinger_lookup_server"></string>
-
-    <!-- Drawer link -->
-    <string name="drawer_link_label"></string>
-    <string name="drawer_link"></string>
 </resources>
