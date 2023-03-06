@@ -21,7 +21,7 @@ package com.owncloud.android.data
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
-import android.net.Uri
+import androidx.core.net.toUri
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.lib.common.ConnectionValidator
@@ -42,6 +42,7 @@ import com.owncloud.android.lib.resources.status.services.CapabilityService
 import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.lib.resources.users.services.UserService
 import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
+import timber.log.Timber
 
 class ClientManager(
     private val accountManager: AccountManager,
@@ -71,10 +72,12 @@ class ClientManager(
         ownCloudCredentials: OwnCloudCredentials? = getAnonymousCredentials()
     ): OwnCloudClient {
         val safeClient = ownCloudClient
+        val pathUri = path.toUri()
 
-        return if (requiresNewClient || safeClient == null) {
+        return if (requiresNewClient || safeClient == null || safeClient.baseUri != pathUri) {
+            Timber.d("Creating new client for path: $pathUri. Old client path: ${safeClient?.baseUri}, requiresNewClient: $requiresNewClient")
             OwnCloudClient(
-                Uri.parse(path),
+                pathUri,
                 connectionValidator,
                 true,
                 SingleSessionManager.getDefaultSingleton(),
@@ -85,6 +88,7 @@ class ClientManager(
                 ownCloudClient = it
             }
         } else {
+            Timber.d("Reusing anonymous client for ${safeClient.baseUri}")
             safeClient
         }
     }
