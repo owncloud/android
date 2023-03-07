@@ -118,18 +118,21 @@ abstract class DrawerActivity : ToolbarActivity() {
         }
 
         // Set logo and text for drawer link, if any
-        if (isDrawerLinkEnabled()) {
-            getDrawerLinkIcon()?.apply {
-                isVisible = true
-                setOnClickListener { openDrawerLink() }
+        if (resources.getBoolean(R.bool.use_drawer_logo)) {
+            if (isDrawerLinkEnabled()) {
+                getDrawerLinkIcon()?.apply {
+                    isVisible = true
+                    setOnClickListener { openDrawerLink() }
+                }
+                getDrawerLinkText()?.apply {
+                    isVisible = true
+                    setOnClickListener { openDrawerLink() }
+                }
+            } else {
+                getDrawerLogo()?.setImageResource(R.drawable.drawer_logo)
             }
-            getDrawerLinkText()?.apply {
-                isVisible = true
-                setOnClickListener { openDrawerLink() }
-            }
-        } else if (resources.getBoolean(R.bool.use_drawer_logo)) {
-            getDrawerLogo()?.setImageResource(R.drawable.drawer_logo)
         }
+
 
         getDrawerAccountChooserToggle()?.setImageResource(R.drawable.ic_down)
         isAccountChooserActive = false
