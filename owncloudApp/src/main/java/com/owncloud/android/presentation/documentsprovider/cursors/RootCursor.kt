@@ -32,7 +32,7 @@ import com.owncloud.android.domain.files.model.OCFile
 class RootCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAULT_ROOT_PROJECTION) {
 
     fun addRoot(account: Account, context: Context) {
-        val manager = FileDataStorageManager(context, account, context.contentResolver)
+        val manager = FileDataStorageManager(account)
         val mainDir = manager.getFileByPath(OCFile.ROOT_PATH)
 
         val flags = Root.FLAG_SUPPORTS_SEARCH or Root.FLAG_SUPPORTS_CREATE

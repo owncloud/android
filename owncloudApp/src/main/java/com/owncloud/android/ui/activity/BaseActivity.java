@@ -173,7 +173,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void onAccountSet(boolean stateWasRecovered) {
         if (getAccount() != null) {
-            mStorageManager = new FileDataStorageManager(this, getAccount(), getContentResolver());
+            mStorageManager = new FileDataStorageManager(getAccount());
             Timber.d("Account set: %s", getAccount().name);
         } else {
             Timber.e("onAccountChanged was called with NULL account associated!");

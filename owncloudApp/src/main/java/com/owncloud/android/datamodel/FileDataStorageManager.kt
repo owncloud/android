@@ -25,9 +25,6 @@
 package com.owncloud.android.datamodel
 
 import android.accounts.Account
-import android.content.ContentProviderClient
-import android.content.ContentResolver
-import android.content.Context
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.files.model.OCFile
@@ -42,26 +39,9 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class FileDataStorageManager : KoinComponent {
-
-    private var contentResolver: ContentResolver? = null
-    private var contentProviderClient: ContentProviderClient? = null
-    var account: Account
-    private var mContext: Context? = null
-
-    constructor(activity: Context, account: Account, cr: ContentResolver) {
-        contentProviderClient = null
-        contentResolver = cr
-        this.account = account
-        mContext = activity
-    }
-
-    constructor(activity: Context, account: Account, cp: ContentProviderClient) {
-        contentProviderClient = cp
-        contentResolver = null
-        this.account = account
-        mContext = activity
-    }
+class FileDataStorageManager(
+    val account: Account,
+) : KoinComponent {
 
     fun getFileByPath(remotePath: String): OCFile? = getFileByPathAndAccount(remotePath, account.name)
 

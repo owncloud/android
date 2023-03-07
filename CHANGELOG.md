@@ -1,3 +1,54 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v3.0.4...master
+
+Summary
+-------
+
+* Enhancement - Update label on Camera Uploads: [#3930](https://github.com/owncloud/android/pull/3930)
+
+Details
+-------
+
+* Enhancement - Update label on Camera Uploads: [#3930](https://github.com/owncloud/android/pull/3930)
+
+   Update label on camera uploads to avoid confusions with the behavior of original files. Now, it
+   is clear that original files will be removed.
+
+   https://github.com/owncloud/android/pull/3930
+
+Changelog for ownCloud Android Client [3.0.4] (2023-03-07)
+=======================================
+The following sections list the changes in ownCloud Android Client 3.0.4 relevant to
+ownCloud admins and users.
+
+[3.0.4]: https://github.com/owncloud/android/compare/v3.0.3...v3.0.4
+
+Summary
+-------
+
+* Security - Fix for security issues with database: [#3952](https://github.com/owncloud/android/pull/3952)
+* Enhancement - HTTP logs show more info: [#547](https://github.com/owncloud/android-library/pull/547)
+
+Details
+-------
+
+* Security - Fix for security issues with database: [#3952](https://github.com/owncloud/android/pull/3952)
+
+   Some fixes have been added so that now no part of the app's database can be accessed from other
+   apps.
+
+   https://github.com/owncloud/android/pull/3952
+
+* Enhancement - HTTP logs show more info: [#547](https://github.com/owncloud/android-library/pull/547)
+
+   When enabling HTTP logs, now the URL for each log will be shown as well to make debugging easier.
+
+   https://github.com/owncloud/android-library/pull/547
+
 Changelog for ownCloud Android Client [3.0.3] (2023-02-13)
 =======================================
 The following sections list the changes in ownCloud Android Client 3.0.3 relevant to

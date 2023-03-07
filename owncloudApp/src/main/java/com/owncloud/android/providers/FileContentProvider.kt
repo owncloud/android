@@ -44,11 +44,7 @@ import android.database.sqlite.SQLiteQueryBuilder
 import android.net.Uri
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
-import android.provider.BaseColumns
 import android.text.TextUtils
-import android.util.Log
-import androidx.sqlite.db.SupportSQLiteDatabase
-import androidx.sqlite.db.SupportSQLiteQueryBuilder
 import androidx.work.WorkManager
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
@@ -64,7 +60,6 @@ import com.owncloud.android.data.folderbackup.datasources.implementation.OCFolde
 import com.owncloud.android.data.migrations.CameraUploadsMigrationToRoom
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
-import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
@@ -167,8 +162,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             }
             ROOT_DIRECTORY ->
                 count = db.delete(ProviderTableMeta.FILE_TABLE_NAME, where, whereArgs)
-            SHARES -> count =
-                OwncloudDatabase.getDatabase(MainApp.appContext).shareDao().deleteShare(uri.pathSegments[1])
+            SHARES -> count = db.delete(ProviderTableMeta.OCSHARES_TABLE_NAME, where, whereArgs)
             CAPABILITIES -> count = db.delete(ProviderTableMeta.CAPABILITIES_TABLE_NAME, where, whereArgs)
             UPLOADS -> count = db.delete(ProviderTableMeta.UPLOADS_TABLE_NAME, where, whereArgs)
             CAMERA_UPLOADS_SYNC -> count = db.delete(ProviderTableMeta.CAMERA_UPLOADS_SYNC_TABLE_NAME, where, whereArgs)
@@ -178,7 +172,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         return count
     }
 
-    override fun getType(uri: Uri): String? {
+    override fun getType(uri: Uri): String {
         return when (uriMatcher.match(uri)) {
             ROOT_DIRECTORY -> ProviderTableMeta.CONTENT_TYPE
             SINGLE_FILE -> ProviderTableMeta.CONTENT_TYPE_ITEM
@@ -234,11 +228,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 }
             }
             SHARES -> {
-                val shareId = values?.let {
-                    OwncloudDatabase.getDatabase(MainApp.appContext).shareDao().insertOrReplace(
-                        OCShareEntity.fromContentValues(it)
-                    )
-                } ?: 0
+                val shareId = db.insert(ProviderTableMeta.OCSHARES_TABLE_NAME, null, values)
 
                 if (shareId <= 0) throw SQLException("ERROR $uri")
                 return ContentUris.withAppendedId(ProviderTableMeta.CONTENT_URI_SHARE, shareId)
@@ -343,22 +333,11 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 sqlQuery.projectionMap = fileProjectionMap
             }
             SHARES -> {
-                val supportSqlQuery = SupportSQLiteQueryBuilder
-                    .builder(ProviderTableMeta.OCSHARES_TABLE_NAME)
-                    .columns(computeProjection(projection))
-                    .selection(selection, selectionArgs)
-                    .orderBy(
-                        if (TextUtils.isEmpty(sortOrder)) {
-                            sortOrder
-                        } else {
-                            ProviderTableMeta.OCSHARES_DEFAULT_SORT_ORDER
-                        }
-                    ).create()
-
-                // To use full SQL queries within Room
-                val newDb: SupportSQLiteDatabase =
-                    OwncloudDatabase.getDatabase(MainApp.appContext).openHelper.writableDatabase
-                return newDb.query(supportSqlQuery)
+                sqlQuery.tables = ProviderTableMeta.OCSHARES_TABLE_NAME
+                if (uri.pathSegments.size > 1) {
+                    sqlQuery.appendWhereEscapeString(ProviderTableMeta._ID + "=" + uri.pathSegments[1])
+                }
+                sqlQuery.projectionMap = shareProjectionMap
             }
             CAPABILITIES -> {
                 sqlQuery.tables = ProviderTableMeta.CAPABILITIES_TABLE_NAME
@@ -412,43 +391,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         return c
     }
 
-    private fun computeProjection(projectionIn: Array<String>?): Array<String> {
-        if (!projectionIn.isNullOrEmpty()) {
-            val projection = mutableListOf<String>()
-            val length = projectionIn.size
-
-            for (i in 0 until length) {
-                val userColumn = projectionIn[i]
-                val column = shareProjectionMap[userColumn]
-
-                if (column != null) {
-                    projection.add(column)
-                    continue
-                }
-
-                throw IllegalArgumentException("Invalid column " + projectionIn[i])
-            }
-            return projection.toTypedArray()
-        } else {
-            // Return all columns in projection map.
-            val entrySet = shareProjectionMap.entries
-            val projection = mutableListOf<String>()
-            val entryIter = entrySet.iterator()
-            var i = 0
-
-            while (entryIter.hasNext()) {
-                val entry = entryIter.next()
-
-                // Don't include the _count column when people ask for no projectionIn.
-                if (entry.key == BaseColumns._COUNT) {
-                    continue
-                }
-                projection.add(entry.value)
-            }
-            return projection.toTypedArray()
-        }
-    }
-
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int {
         val count: Int
         val db = dbHelper.writableDatabase
@@ -475,10 +417,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         }
         when (uriMatcher.match(uri)) {
             DIRECTORY -> return 0 //updateFolderSize(db, selectionArgs[0]);
-            SHARES -> return values?.let {
-                OwncloudDatabase.getDatabase(context!!).shareDao()
-                    .update(OCShareEntity.fromContentValues(it)).toInt()
-            } ?: 0
+            SHARES -> return db.update(ProviderTableMeta.OCSHARES_TABLE_NAME, values, selection, selectionArgs)
             CAPABILITIES -> return db.update(ProviderTableMeta.CAPABILITIES_TABLE_NAME, values, selection, selectionArgs)
             UPLOADS -> {
                 val ret = db.update(ProviderTableMeta.UPLOADS_TABLE_NAME, values, selection, selectionArgs)
@@ -544,7 +483,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
         }
 
         override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-            Log.i("SQLiteOpenHelper", "SQL : Entering in onUpgrade")
+            Timber.i("SQL : Entering in onUpgrade")
             var upgraded = false
 
             if (oldVersion == 1 && newVersion >= 2) {
@@ -1354,9 +1293,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
                     Timber.d("SQL : Updated account in database: old name == $oldAccountName, new name == $newAccountName ($num rows updated )")
 
-                    // update path for downloaded files
-                    updateDownloadedFiles(db, newAccountName, oldAccountName)
-
                     db.setTransactionSuccessful()
 
                 } catch (e: SQLException) {
@@ -1369,63 +1305,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             Timber.e(e, "Exception upgrading account names or paths in database")
         }
 
-    }
-
-    /**
-     * Rename the local ownCloud folder of one account to match the a rename of the account itself. Updates the
-     * table of files in database so that the paths to the local files keep being the same.
-     *
-     * @param db             Database where table of files is included.
-     * @param newAccountName New name for the target OC account.
-     * @param oldAccountName Old name of the target OC account.
-     */
-    private fun updateDownloadedFiles(
-        db: SQLiteDatabase, newAccountName: String,
-        oldAccountName: String
-    ) {
-        // FIXME: 13/10/2020 : New_arch: Download
-
-//        val whereClause = ProviderTableMeta.FILE_ACCOUNT_OWNER + "=? AND " +
-//                ProviderTableMeta.FILE_STORAGE_PATH + " IS NOT NULL"
-//
-//        val c = db.query(
-//            ProviderTableMeta.FILE_TABLE_NAME, null,
-//            whereClause,
-//            arrayOf(newAccountName), null, null, null
-//        )
-//
-//        c.use {
-//            if (it.moveToFirst()) {
-//                // create storage path
-//                val oldAccountPath = FileStorageUtils.getSavePath(oldAccountName)
-//                val newAccountPath = FileStorageUtils.getSavePath(newAccountName)
-//
-//                // move files
-//                val oldAccountFolder = File(oldAccountPath)
-//                val newAccountFolder = File(newAccountPath)
-//                oldAccountFolder.renameTo(newAccountFolder)
-//
-//                // update database
-//                do {
-//                    // Update database
-//                    val oldPath = it.getStringFromColumnOrThrow(ProviderTableMeta.FILE_STORAGE_PATH)
-//                    val file = OCFileLegacy(it.getStringFromColumnOrThrow(ProviderTableMeta.FILE_PATH))
-//                    val newPath = FileStorageUtils.getDefaultSavePathFor(newAccountName, file)
-//
-//                    val cv = ContentValues()
-//                    cv.put(ProviderTableMeta.FILE_STORAGE_PATH, newPath)
-//                    db.update(
-//                        ProviderTableMeta.FILE_TABLE_NAME,
-//                        cv,
-//                        ProviderTableMeta.FILE_STORAGE_PATH + "=?",
-//                        arrayOf(oldPath)
-//                    )
-//
-//                    Timber.v("SQL : Updated path of downloaded file: old file name == $oldPath, new file name == $newPath")
-//
-//                } while (it.moveToNext())
-//            }
-//        }
     }
 
     @Throws(FileNotFoundException::class)
