@@ -37,11 +37,11 @@ import android.os.Bundle;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.owncloud.android.R;
-import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.UseCaseResult;
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase;
 import com.owncloud.android.domain.exceptions.UnauthorizedException;
 import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase;
 import com.owncloud.android.utils.NotificationUtils;
@@ -133,8 +133,6 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(getContext());
 
         this.setAccount(account);
-        this.setContentProviderClient(providerClient);
-        this.setStorageManager(new FileDataStorageManager(getContext(), account, providerClient));
 
         try {
             this.initClientForCurrentAccount();
@@ -152,7 +150,14 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         try {
             updateCapabilities();
             if (!mCancellation) {
-                synchronizeFolder(getStorageManager().getFileByPath(OCFile.ROOT_PATH));
+                @NotNull Lazy<GetFileByRemotePathUseCase> getFileByRemotePathUseCaseLazy =
+                        inject(GetFileByRemotePathUseCase.class);
+                GetFileByRemotePathUseCase.Params params = new GetFileByRemotePathUseCase.Params(OCFile.ROOT_PATH, account.name);
+
+                UseCaseResult<OCFile> useCaseResult = getFileByRemotePathUseCaseLazy.getValue().execute(params);
+                if (useCaseResult.getDataOrNull() != null) {
+                    synchronizeFolder(useCaseResult.getDataOrNull());
+                }
 
             } else {
                 Timber.d("Leaving synchronization before synchronizing the root folder because cancelation request");
