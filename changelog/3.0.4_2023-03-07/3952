@@ -1,0 +1,6 @@
+Security: Fix for security issues with database
+
+Some fixes have been added so that now no part of the app's database
+can be accessed from other apps.
+
+https://github.com/owncloud/android/pull/3952

@@ -1,0 +1,6 @@
+Enhancement: HTTP logs show more info
+
+When enabling HTTP logs, now the URL for each log will be shown as well to
+make debugging easier.
+
+https://github.com/owncloud/android-library/pull/547

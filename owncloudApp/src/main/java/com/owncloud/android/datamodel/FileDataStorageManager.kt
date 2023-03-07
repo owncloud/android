@@ -25,9 +25,6 @@
 package com.owncloud.android.datamodel
 
 import android.accounts.Account
-import android.content.ContentProviderClient
-import android.content.ContentResolver
-import android.content.Context
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.files.model.OCFile
