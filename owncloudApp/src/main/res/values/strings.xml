@@ -731,6 +731,9 @@
     <string name="release_notes_3.0.3_title3">Error message shortened</string>
     <string name="release_notes_3.0.3_subtitle3">Error message in copy operation was so long that was not readable in device</string>
 
-
+    <string name="release_notes_3.0.4_title1">Security fixes</string>
+    <string name="release_notes_3.0.4_subtitle1">Fixed some issues related to the database</string>
+    <string name="release_notes_3.0.4_title2">Http logs enhancement</string>
+    <string name="release_notes_3.0.4_subtitle2">Improve some http logs to help debugging</string>
 
 </resources>
