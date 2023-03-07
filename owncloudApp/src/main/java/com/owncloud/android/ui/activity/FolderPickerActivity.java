@@ -120,7 +120,7 @@ public class FolderPickerActivity extends FileActivity implements FileFragment.C
     private void initAndShowListOfFilesFragment() {
         OCFile safeInitialFolder;
         if (getFile() == null) {
-            FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(this, getAccount(), getContentResolver());
+            FileDataStorageManager fileDataStorageManager = new FileDataStorageManager(getAccount());
             safeInitialFolder = fileDataStorageManager.getFileByPath(OCFile.ROOT_PATH);
         } else {
             safeInitialFolder = getFile();

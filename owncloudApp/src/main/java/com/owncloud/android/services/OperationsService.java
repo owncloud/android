@@ -282,11 +282,7 @@ public class OperationsService extends Service {
                             mOwnCloudClient = SingleSessionManager.getDefaultSingleton().
                                     getClientFor(ocAccount, mService);
 
-                            mStorageManager = new FileDataStorageManager(
-                                    mService,
-                                    mLastTarget.mAccount,
-                                    mService.getContentResolver()
-                            );
+                            mStorageManager = new FileDataStorageManager(mLastTarget.mAccount);
                         } else {
                             OwnCloudCredentials credentials = null;
                             ocAccount = new OwnCloudAccount(mLastTarget.mServerUrl, credentials);
