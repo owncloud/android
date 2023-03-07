@@ -99,7 +99,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         // If documentId == NONEXISTENT_DOCUMENT_ID only Upload is needed because file does not exist in our database yet.
         var ocFile: OCFile
-        val uploadOnly: Boolean = documentId == NONEXISTENT_DOCUMENT_ID
+        val uploadOnly: Boolean = documentId == NONEXISTENT_DOCUMENT_ID || documentId == "null"
 
         var accessMode: Int = ParcelFileDescriptor.parseMode(mode)
         val isWrite: Boolean = mode.contains("w")
@@ -466,6 +466,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         // File will be created at [openDocument] method.
         val tempDir = File(FileStorageUtils.getTemporalPath(parentDocument.owner, parentDocument.spaceId))
         val newFile = File(tempDir, displayName)
+        newFile.parentFile?.mkdirs()
         fileToUpload = OCFile(
             remotePath = parentDocument.remotePath + displayName, mimeType = mimeType, parentId = parentDocument.id, owner = parentDocument.owner, spaceId = parentDocument.spaceId
         ).apply {
