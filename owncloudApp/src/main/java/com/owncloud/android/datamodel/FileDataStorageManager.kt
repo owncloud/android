@@ -5,9 +5,10 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2012 Bartek Przybylski
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -35,6 +36,8 @@ import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
 import com.owncloud.android.domain.files.usecases.GetPersonalRootFolderForAccountUseCase
 import com.owncloud.android.domain.files.usecases.GetSharesRootFolderForAccount
+import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
@@ -129,5 +132,18 @@ class FileDataStorageManager(
             getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(accountName))
         }
         capability
+    }
+
+    fun getSpace(spaceId: String?, accountName: String): OCSpace? = runBlocking(CoroutinesDispatcherProvider().io) {
+        if (spaceId == null) return@runBlocking null
+        val getSpaceWithSpecialsByIdForAccountUseCase: GetSpaceWithSpecialsByIdForAccountUseCase by inject()
+
+        val space = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+            getSpaceWithSpecialsByIdForAccountUseCase.execute(GetSpaceWithSpecialsByIdForAccountUseCase.Params(
+                spaceId = spaceId,
+                accountName = accountName,
+            ))
+        }
+        return@runBlocking space
     }
 }
