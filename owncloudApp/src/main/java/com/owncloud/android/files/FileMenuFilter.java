@@ -261,10 +261,10 @@ public class FileMenuFilter {
                 capability != null && capability.getFilesSharingResharing().isFalse();
 
         OCSpace space = mComponentsGetter.getStorageManager().getSpace(mFiles.get(0).getSpaceId(), mAccount.name);
-        boolean notAllowSharing = space != null && !space.isPersonal();
+        boolean notPersonalSpace = space != null && !space.isPersonal();
 
         if ((!shareViaLinkAllowed && !shareWithUsersAllowed) || !isSingleSelection() ||
-                notAllowResharing || onlyAvailableOffline || notAllowSharing) {
+                notAllowResharing || onlyAvailableOffline || notPersonalSpace) {
             toHide.add(R.id.action_share_file);
         } else {
             toShow.add(R.id.action_share_file);
