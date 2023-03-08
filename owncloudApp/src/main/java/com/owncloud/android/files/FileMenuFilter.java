@@ -8,7 +8,7 @@
  * @author David Crespo Rios
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -39,6 +39,7 @@ import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.files.model.OCFileSyncInfo;
+import com.owncloud.android.domain.spaces.model.OCSpace;
 import com.owncloud.android.extensions.WorkManagerExtKt;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
@@ -259,8 +260,11 @@ public class FileMenuFilter {
         boolean notAllowResharing = anyFileSharedWithMe() &&
                 capability != null && capability.getFilesSharingResharing().isFalse();
 
+        OCSpace space = mComponentsGetter.getStorageManager().getSpace(mFiles.get(0).getSpaceId(), mAccount.name);
+        boolean notPersonalSpace = space != null && !space.isPersonal();
+
         if ((!shareViaLinkAllowed && !shareWithUsersAllowed) || !isSingleSelection() ||
-                notAllowResharing || onlyAvailableOffline) {
+                notAllowResharing || onlyAvailableOffline || notPersonalSpace) {
             toHide.add(R.id.action_share_file);
         } else {
             toShow.add(R.id.action_share_file);
