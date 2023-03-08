@@ -31,12 +31,12 @@ import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod
 import com.owncloud.android.lib.common.http.methods.nonwebdav.HttpMethod
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
-import com.owncloud.android.lib.resources.webfinger.responses.WebfingerJrdResponse
+import com.owncloud.android.lib.resources.webfinger.responses.WebFingerResponse
 import com.squareup.moshi.Moshi
 import timber.log.Timber
 import java.net.URL
 
-class GetInstancesViaWebfingerOperation(
+class GetInstancesViaWebFingerOperation(
     private val lockupServerDomain: String,
     private val rel: String,
     private val resource: String,
@@ -51,9 +51,9 @@ class GetInstancesViaWebfingerOperation(
 
     private fun isSuccess(status: Int): Boolean = status == HttpConstants.HTTP_OK
 
-    private fun parseResponse(response: String): WebfingerJrdResponse {
+    private fun parseResponse(response: String): WebFingerResponse {
         val moshi = Moshi.Builder().build()
-        val adapter = moshi.adapter(WebfingerJrdResponse::class.java)
+        val adapter = moshi.adapter(WebFingerResponse::class.java)
         return adapter.fromJson(response)!!
     }
 
@@ -62,7 +62,7 @@ class GetInstancesViaWebfingerOperation(
         response: String?,
         status: Int
     ): RemoteOperationResult<List<String>> {
-        Timber.e("Failed requesting webfinger info")
+        Timber.e("Failed requesting WebFinger info")
         if (response != null) {
             Timber.e("*** status code: $status; response message: $response")
         } else {
@@ -73,7 +73,7 @@ class GetInstancesViaWebfingerOperation(
 
     private fun onRequestSuccessful(rawResponse: String): RemoteOperationResult<List<String>> {
         val response = parseResponse(rawResponse)
-        Timber.d("Successful Webfinger request: $response")
+        Timber.d("Successful WebFinger request: $response")
         val operationResult = RemoteOperationResult<List<String>>(RemoteOperationResult.ResultCode.OK)
         operationResult.data = response.links.map { it.href }
         return operationResult
@@ -92,7 +92,7 @@ class GetInstancesViaWebfingerOperation(
                 onResultUnsuccessful(getMethod, response, status)
             }
         } catch (e: Exception) {
-            Timber.e(e, "Requesting webfinger info failed")
+            Timber.e(e, "Requesting WebFinger info failed")
             RemoteOperationResult<List<String>>(e)
         }
     }
