@@ -8,19 +8,11 @@ ownCloud admins and users.
 Summary
 -------
 
-* Enhancement - Link in drawer menu: [#3949](https://github.com/owncloud/android/pull/3949)
 * Enhancement - Authenticated WebFinger: [#3943](https://github.com/owncloud/android/issues/3943)
+* Enhancement - Link in drawer menu: [#3949](https://github.com/owncloud/android/pull/3949)
 
 Details
 -------
-
-* Enhancement - Link in drawer menu: [#3949](https://github.com/owncloud/android/pull/3949)
-
-   Customers will be able now to set a personalized label and link that will appear in the drawer
-   menu, together with the drawer logo as an icon.
-
-   https://github.com/owncloud/android/issues/3907
-   https://github.com/owncloud/android/pull/3949
 
 * Enhancement - Authenticated WebFinger: [#3943](https://github.com/owncloud/android/issues/3943)
 
@@ -31,6 +23,14 @@ Details
    https://github.com/owncloud/android/issues/3943
    https://github.com/owncloud/android/pull/3945
    https://doc.owncloud.com/ocis/next/deployment/services/s-list/webfinger.html
+
+* Enhancement - Link in drawer menu: [#3949](https://github.com/owncloud/android/pull/3949)
+
+   Customers will be able now to set a personalized label and link that will appear in the drawer
+   menu, together with the drawer logo as an icon.
+
+   https://github.com/owncloud/android/issues/3907
+   https://github.com/owncloud/android/pull/3949
 
 Changelog for ownCloud Android Client [3.0.3] (2023-02-13)
 =======================================
