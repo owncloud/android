@@ -33,7 +33,7 @@ import com.owncloud.android.data.sharing.shares.repository.OCShareRepository
 import com.owncloud.android.data.spaces.repository.OCSpacesRepository
 import com.owncloud.android.data.transfers.repository.OCTransferRepository
 import com.owncloud.android.data.user.repository.OCUserRepository
-import com.owncloud.android.data.webfinger.repository.OCWebfingerRepository
+import com.owncloud.android.data.webfinger.repository.OCWebFingerRepository
 import com.owncloud.android.domain.authentication.AuthenticationRepository
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.camerauploads.FolderBackupRepository
@@ -45,7 +45,7 @@ import com.owncloud.android.domain.sharing.shares.ShareRepository
 import com.owncloud.android.domain.spaces.SpacesRepository
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.user.UserRepository
-import com.owncloud.android.domain.webfinger.WebfingerRepository
+import com.owncloud.android.domain.webfinger.WebFingerRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
@@ -59,7 +59,7 @@ val repositoryModule = module {
     factory<UserRepository> { OCUserRepository(get(), get()) }
     factory<OAuthRepository> { OCOAuthRepository(get(), get()) }
     factory<FolderBackupRepository> { OCFolderBackupRepository(get()) }
-    factory<WebfingerRepository> { OCWebfingerRepository(get()) }
+    factory<WebFingerRepository> { OCWebFingerRepository(get()) }
     factory<TransferRepository> { OCTransferRepository(get()) }
 
 }

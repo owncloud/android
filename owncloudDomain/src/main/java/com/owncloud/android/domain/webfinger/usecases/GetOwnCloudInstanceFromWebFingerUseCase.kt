@@ -20,11 +20,11 @@
 package com.owncloud.android.domain.webfinger.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.webfinger.WebfingerRepository
+import com.owncloud.android.domain.webfinger.WebFingerRepository
 import com.owncloud.android.domain.webfinger.model.WebFingerRel
 
 class GetOwnCloudInstanceFromWebFingerUseCase(
-    private val webfingerRepository: WebfingerRepository
+    private val webfingerRepository: WebFingerRepository
 ) : BaseUseCaseWithResult<String, GetOwnCloudInstanceFromWebFingerUseCase.Params>() {
 
     override fun run(params: Params): String =

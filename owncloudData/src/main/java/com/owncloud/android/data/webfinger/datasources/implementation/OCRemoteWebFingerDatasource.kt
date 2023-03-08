@@ -26,7 +26,7 @@ import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory
 import com.owncloud.android.lib.resources.webfinger.services.WebFingerService
 
 class OCRemoteWebFingerDatasource(
-    private val webfingerService: WebFingerService,
+    private val webFingerService: WebFingerService,
     private val clientManager: ClientManager,
 ) : RemoteWebFingerDatasource {
 
@@ -38,18 +38,19 @@ class OCRemoteWebFingerDatasource(
         val ownCloudClient = clientManager.getClientForAnonymousCredentials(lookupServer, false)
 
         return executeRemoteOperation {
-            webfingerService.getInstancesFromWebfinger(
+            webFingerService.getInstancesFromWebFinger(
                 lookupServer = lookupServer,
                 rel = rel.uri,
-                username = username,
+                resource = username,
                 client = ownCloudClient
             )
         }
     }
 
-    override fun getInstancesFromAuthenticatedWebfinger(
+    override fun getInstancesFromAuthenticatedWebFinger(
         lookupServer: String,
         rel: WebFingerRel,
+        resource: String,
         username: String,
         accessToken: String,
     ): List<String> {
@@ -62,10 +63,10 @@ class OCRemoteWebFingerDatasource(
             ).apply { credentials = ownCloudCredentials }
 
         return executeRemoteOperation {
-            webfingerService.getInstancesFromWebfinger(
+            webFingerService.getInstancesFromWebFinger(
                 lookupServer = lookupServer,
                 rel = rel.uri,
-                username = username,
+                resource = resource,
                 client = ownCloudClient
             )
         }

@@ -26,9 +26,10 @@ interface RemoteWebFingerDatasource {
         username: String
     ): List<String>
 
-    fun getInstancesFromAuthenticatedWebfinger(
+    fun getInstancesFromAuthenticatedWebFinger(
         lookupServer: String,
         rel: WebFingerRel,
+        resource: String,
         username: String,
         accessToken: String,
     ): List<String>
