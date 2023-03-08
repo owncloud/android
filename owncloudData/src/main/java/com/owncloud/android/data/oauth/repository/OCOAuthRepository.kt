@@ -45,7 +45,7 @@ class OCOAuthRepository(
                 username = baseUrl
             ).firstOrNull()
         } catch (fileNotFoundException: FileNotFoundException) {
-            Timber.e(fileNotFoundException, "Could not retrieve oidc issuer from webfinger")
+            Timber.e(fileNotFoundException, "Could not retrieve oidc issuer from WebFinger")
             null
         }
 
