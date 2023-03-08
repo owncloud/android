@@ -112,13 +112,27 @@ abstract class DrawerActivity : ToolbarActivity() {
         getDrawerLayout()?.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
         getNavView()?.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
-        // Set background header image and logo, if any
+        // Set background header image, if any
         if (resources.getBoolean(R.bool.use_drawer_background_header)) {
             getDrawerHeaderBackground()?.setImageResource(R.drawable.drawer_header_background)
         }
+
+        // Set logo and text for drawer link, if any
         if (resources.getBoolean(R.bool.use_drawer_logo)) {
-            getDrawerLogo()?.setImageResource(R.drawable.drawer_logo)
+            if (isDrawerLinkEnabled()) {
+                getDrawerLinkIcon()?.apply {
+                    isVisible = true
+                    setOnClickListener { openDrawerLink() }
+                }
+                getDrawerLinkText()?.apply {
+                    isVisible = true
+                    setOnClickListener { openDrawerLink() }
+                }
+            } else {
+                getDrawerLogo()?.setImageResource(R.drawable.drawer_logo)
+            }
         }
+
 
         getDrawerAccountChooserToggle()?.setImageResource(R.drawable.ic_down)
         isAccountChooserActive = false
@@ -274,6 +288,13 @@ abstract class DrawerActivity : ToolbarActivity() {
         val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.drawer_feedback)
         sendEmail(email = feedbackMail, subject = feedback)
     }
+
+    private fun openDrawerLink() {
+        goToUrl(url = resources.getString(R.string.drawer_link))
+    }
+
+    private fun isDrawerLinkEnabled() =
+        resources.getString(R.string.drawer_link_label).isNotBlank() && resources.getString(R.string.drawer_link).isNotBlank()
 
     /**
      * sets the new/current account and restarts. In case the given account equals the actual/current account the
@@ -520,7 +541,7 @@ abstract class DrawerActivity : ToolbarActivity() {
         getDrawerAccountChooserToggle()?.setImageResource(if (isAccountChooserActive) R.drawable.ic_up else R.drawable.ic_down)
         navigationView.menu.setGroupVisible(R.id.drawer_menu_accounts, isAccountChooserActive)
         navigationView.menu.setGroupVisible(R.id.drawer_menu_settings_etc, !isAccountChooserActive)
-        getDrawerLogo()?.isVisible = !isAccountChooserActive || accountCount < USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD
+        getDrawerLogo()?.isVisible = !isAccountChooserActive || accountCount < USER_ITEMS_ALLOWED_BEFORE_REMOVING_LOGO
     }
 
     /**
@@ -667,8 +688,10 @@ abstract class DrawerActivity : ToolbarActivity() {
 
     private fun getDrawerLayout(): DrawerLayout? = findViewById(R.id.drawer_layout)
     private fun getNavView(): NavigationView? = findViewById(R.id.nav_view)
-    private fun getDrawerLogo(): AppCompatImageView? = findViewById(R.id.drawer_logo)
     private fun getBottomNavigationView(): BottomNavigationView? = findViewById(R.id.bottom_nav_view)
+    private fun getDrawerLogo(): AppCompatImageView? = findViewById(R.id.drawer_logo)
+    private fun getDrawerLinkIcon(): ImageView? = findViewById(R.id.drawer_link_icon)
+    private fun getDrawerLinkText(): TextView? = findViewById(R.id.drawer_link_text)
     private fun getAccountQuotaText(): TextView? = findViewById(R.id.account_quota_text)
     private fun getAccountQuotaBar(): ProgressBar? = findViewById(R.id.account_quota_bar)
     private fun getDrawerAccountChooserToggle() = findNavigationViewChildById(R.id.drawer_account_chooser_toggle) as ImageView?
@@ -712,6 +735,6 @@ abstract class DrawerActivity : ToolbarActivity() {
         const val ACTION_MANAGE_ACCOUNTS = 101
         private const val MENU_ORDER_ACCOUNT = 1
         private const val MENU_ORDER_ACCOUNT_FUNCTION = 2
-        private const val USER_ITEMS_ALLOWED_BEFORE_REMOVING_CLOUD = 4
+        private const val USER_ITEMS_ALLOWED_BEFORE_REMOVING_LOGO = 4
     }
 }

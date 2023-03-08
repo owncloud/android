@@ -1,3 +1,26 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v3.0.3...master
+
+Summary
+-------
+
+* Enhancement - Link in drawer menu: [#3949](https://github.com/owncloud/android/pull/3949)
+
+Details
+-------
+
+* Enhancement - Link in drawer menu: [#3949](https://github.com/owncloud/android/pull/3949)
+
+   Customers will be able now to set a personalized label and link that will appear in the drawer
+   menu, together with the drawer logo as an icon.
+
+   https://github.com/owncloud/android/issues/3907
+   https://github.com/owncloud/android/pull/3949
+
 Changelog for ownCloud Android Client [3.0.3] (2023-02-13)
 =======================================
 The following sections list the changes in ownCloud Android Client 3.0.3 relevant to
