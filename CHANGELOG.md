@@ -8,10 +8,23 @@ ownCloud admins and users.
 Summary
 -------
 
+* Enhancement - Support for spaces: [#3851](https://github.com/owncloud/android/pull/3851)
 * Enhancement - Update label on Camera Uploads: [#3930](https://github.com/owncloud/android/pull/3930)
+* Enhancement - Authenticated WebFinger: [#3943](https://github.com/owncloud/android/issues/3943)
+* Enhancement - Link in drawer menu: [#3949](https://github.com/owncloud/android/pull/3949)
 
 Details
 -------
+
+* Enhancement - Support for spaces: [#3851](https://github.com/owncloud/android/pull/3851)
+
+   Spaces are now supported in oCIS accounts. A new tab has been added, which allows to list and
+   browse through all the available spaces for the current account. The supported operations for
+   files in spaces are: download, upload, remove, rename, create folder, copy and move. The
+   documents provider has been adapted as well to be able to browse through spaces and perform the
+   operations already mentioned.
+
+   https://github.com/owncloud/android/pull/3851
 
 * Enhancement - Update label on Camera Uploads: [#3930](https://github.com/owncloud/android/pull/3930)
 
@@ -19,6 +32,24 @@ Details
    is clear that original files will be removed.
 
    https://github.com/owncloud/android/pull/3930
+
+* Enhancement - Authenticated WebFinger: [#3943](https://github.com/owncloud/android/issues/3943)
+
+   Authenticated WebFinger was introduced into the authentication flow. Now, WebFinger is used
+   to retrieve the OpenID Connect issuer and the available ownCloud instances. For the moment,
+   multiple oC instances are not supported, only the first available instance is used.
+
+   https://github.com/owncloud/android/issues/3943
+   https://github.com/owncloud/android/pull/3945
+   https://doc.owncloud.com/ocis/next/deployment/services/s-list/webfinger.html
+
+* Enhancement - Link in drawer menu: [#3949](https://github.com/owncloud/android/pull/3949)
+
+   Customers will be able now to set a personalized label and link that will appear in the drawer
+   menu, together with the drawer logo as an icon.
+
+   https://github.com/owncloud/android/issues/3907
+   https://github.com/owncloud/android/pull/3949
 
 Changelog for ownCloud Android Client [3.0.4] (2023-03-07)
 =======================================
