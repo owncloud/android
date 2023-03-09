@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion sdkCompileVersion
@@ -11,11 +11,11 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        // Room Database Tests
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
-            }
+        // The schemas directory contains a schema file for each version of the Room database.
+        // This is required to enable Room auto migrations.
+        // See https://developer.android.com/reference/kotlin/androidx/room/AutoMigration.
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
     }
 
@@ -61,7 +61,7 @@ dependencies {
 
     // Room
     implementation "androidx.room:room-ktx:$androidxRoom"
-    kapt "androidx.room:room-compiler:$androidxRoom"
+    ksp "androidx.room:room-compiler:$androidxRoom"
 
     // Dependencies for unit tests
     testImplementation project(":owncloudTestUtil")
