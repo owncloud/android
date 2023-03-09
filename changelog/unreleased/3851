@@ -1,0 +1,9 @@
+Enhancement: Support for spaces
+
+Spaces are now supported in oCIS accounts. A new tab has been added, which allows to list and
+browse through all the available spaces for the current account. The supported operations
+for files in spaces are: download, upload, remove, rename, create folder, copy and move. The
+documents provider has been adapted as well to be able to browse through spaces and perform
+the operations already mentioned.
+
+https://github.com/owncloud/android/pull/3851
