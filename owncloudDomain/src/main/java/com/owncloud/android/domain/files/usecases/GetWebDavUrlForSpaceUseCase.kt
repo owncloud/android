@@ -1,8 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * @author Christian Schabesberger
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -17,20 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.webfinger.usecases
+package com.owncloud.android.domain.files.usecases
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.webfinger.WebfingerRepository
+import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.spaces.SpacesRepository
 
-class GetJRDFromWebfingerHostUseCase(
-    private val webfingerRepository: WebfingerRepository
-) : BaseUseCaseWithResult<String, GetJRDFromWebfingerHostUseCase.Params>() {
+class GetWebDavUrlForSpaceUseCase(
+    private val spacesRepository: SpacesRepository
+) : BaseUseCase<String?, GetWebDavUrlForSpaceUseCase.Params>() {
 
-    override fun run(params: Params): String =
-        webfingerRepository.getJRDFromWebFingerHost(server = params.server, resource = params.resource)
+    override fun run(params: Params): String? = spacesRepository.getWebDavUrlForSpace(
+        accountName = params.accountName,
+        spaceId = params.spaceId,
+    )
 
     data class Params(
-        val server: String,
-        val resource: String
+        val accountName: String,
+        val spaceId: String?,
     )
 }

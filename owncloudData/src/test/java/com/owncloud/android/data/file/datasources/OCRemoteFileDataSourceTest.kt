@@ -57,7 +57,7 @@ class OCRemoteFileDataSourceTest {
             ocFileService.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
         } returns checkPathExistenceRemoteResult
 
-        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true, OC_ACCOUNT_NAME)
+        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true, OC_ACCOUNT_NAME, null)
 
         assertNotNull(checkPathExistence)
         assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
@@ -74,7 +74,7 @@ class OCRemoteFileDataSourceTest {
             ocFileService.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
         } returns checkPathExistenceRemoteResult
 
-        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true, OC_ACCOUNT_NAME)
+        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true, OC_ACCOUNT_NAME, null)
 
         assertNotNull(checkPathExistence)
         assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
@@ -88,7 +88,7 @@ class OCRemoteFileDataSourceTest {
             ocFileService.checkPathExistence(OC_SERVER_INFO.baseUrl, true)
         } throws Exception()
 
-        ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true, OC_ACCOUNT_NAME)
+        ocRemoteFileDataSource.checkPathExistence(OC_SERVER_INFO.baseUrl, true, OC_ACCOUNT_NAME, null)
     }
 
     @Test
@@ -100,7 +100,7 @@ class OCRemoteFileDataSourceTest {
             ocFileService.createFolder(remotePath = OC_FOLDER.remotePath, createFullPath = false, isChunkFolder = false)
         } returns createFolderRemoteResult
 
-        val createFolderResult = ocRemoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME)
+        val createFolderResult = ocRemoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME, null)
 
         assertNotNull(createFolderResult)
         assertEquals(createFolderRemoteResult.data, createFolderResult)
@@ -114,6 +114,6 @@ class OCRemoteFileDataSourceTest {
             ocFileService.createFolder(OC_FOLDER.remotePath, false, false)
         } throws Exception()
 
-        ocRemoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME)
+        ocRemoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME, null)
     }
 }

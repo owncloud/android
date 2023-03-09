@@ -39,17 +39,19 @@ import com.owncloud.android.data.sharing.sharees.datasources.mapper.RemoteSharee
 import com.owncloud.android.data.sharing.shares.datasources.RemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
+import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
+import com.owncloud.android.data.spaces.datasources.implementation.OCRemoteSpacesDataSource
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
-import com.owncloud.android.data.webfinger.datasources.WebfingerRemoteDatasource
-import com.owncloud.android.data.webfinger.datasources.implementation.OCWebfingerRemoteDatasource
+import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDatasource
+import com.owncloud.android.data.webfinger.datasources.implementation.OCRemoteWebFingerDatasource
 import com.owncloud.android.lib.common.ConnectionValidator
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 import com.owncloud.android.lib.resources.oauth.services.implementation.OCOIDCService
 import com.owncloud.android.lib.resources.status.services.ServerInfoService
 import com.owncloud.android.lib.resources.status.services.implementation.OCServerInfoService
-import com.owncloud.android.lib.resources.webfinger.services.WebfingerService
-import com.owncloud.android.lib.resources.webfinger.services.implementation.OCWebfingerService
+import com.owncloud.android.lib.resources.webfinger.services.WebFingerService
+import com.owncloud.android.lib.resources.webfinger.services.implementation.OCWebFingerService
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -59,7 +61,7 @@ val remoteDataSourceModule = module {
 
     single<ServerInfoService> { OCServerInfoService() }
     single<OIDCService> { OCOIDCService() }
-    single<WebfingerService> { OCWebfingerService() }
+    single<WebFingerService> { OCWebFingerService() }
 
     single<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get()) }
     single<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
@@ -68,10 +70,11 @@ val remoteDataSourceModule = module {
     single<RemoteServerInfoDataSource> { OCRemoteServerInfoDataSource(get(), get()) }
     single<RemoteShareDataSource> { OCRemoteShareDataSource(get(), get()) }
     single<RemoteShareeDataSource> { OCRemoteShareeDataSource(get(), get()) }
+    single<RemoteSpacesDataSource> { OCRemoteSpacesDataSource(get()) }
     single<RemoteUserDataSource> {
         OCRemoteUserDataSource(get(), androidContext().resources.getDimension(R.dimen.file_avatar_size).toInt())
     }
-    single<WebfingerRemoteDatasource> { OCWebfingerRemoteDatasource(get(), get()) }
+    single<RemoteWebFingerDatasource> { OCRemoteWebFingerDatasource(get(), get()) }
 
     factory { RemoteCapabilityMapper() }
     factory { RemoteShareMapper() }

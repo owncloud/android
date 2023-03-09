@@ -67,7 +67,7 @@ fun Throwable.parseError(
             is ServerConnectionTimeoutException -> resources.getString(R.string.network_error_connect_timeout_exception)
             is ServerNotReachableException -> resources.getString(R.string.network_host_not_available)
             is ServiceUnavailableException -> resources.getString(R.string.service_unavailable)
-            is ConflictException -> resources.getString(R.string.conflict_title)
+            is ConflictException -> resources.getString(R.string.error_conflict)
             is SSLRecoverablePeerUnverifiedException -> resources.getString(R.string.ssl_certificate_not_trusted)
             is BadOcVersionException -> resources.getString(R.string.auth_bad_oc_version_title)
             is IncorrectAddressException -> resources.getString(R.string.auth_incorrect_address_title)

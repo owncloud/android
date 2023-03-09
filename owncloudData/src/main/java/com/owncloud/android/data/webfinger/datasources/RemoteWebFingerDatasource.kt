@@ -15,15 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.webfinger.repository
+package com.owncloud.android.data.webfinger.datasources
 
-import com.owncloud.android.data.webfinger.datasources.WebfingerRemoteDatasource
-import com.owncloud.android.domain.webfinger.WebfingerRepository
+import com.owncloud.android.domain.webfinger.model.WebFingerRel
 
-class OCWebfingerRepository(
-    private val webfingerRemoteDatasource: WebfingerRemoteDatasource,
-) : WebfingerRepository {
+interface RemoteWebFingerDatasource {
+    fun getInstancesFromWebFinger(
+        lookupServer: String,
+        rel: WebFingerRel,
+        username: String
+    ): List<String>
 
-    override fun getJRDFromWebFingerHost(server: String, resource: String): String =
-        webfingerRemoteDatasource.getJRDFromWebFingerHost(lookupServer = server, username = resource)
+    fun getInstancesFromAuthenticatedWebFinger(
+        lookupServer: String,
+        rel: WebFingerRel,
+        resource: String,
+        username: String,
+        accessToken: String,
+    ): List<String>
 }

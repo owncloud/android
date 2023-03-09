@@ -332,8 +332,7 @@
   <string name="confirmation_disable_camera_uploads_title">확인</string>
   <string name="confirmation_disable_pictures_upload_message">이 기능을 비활성화 하시겠습니까? 아직 업로드 되지 않은 사진은 자동으로 업로드 되지 않습니다</string>
   <string name="confirmation_disable_videos_upload_message">이 기능을 비활성화 하시겠습니까? 아직 업로드 되지 않은 동영상은 자동으로 업로드 되지 않습니다</string>
-  <string name="conflict_title">파일 충돌</string>
-  <string name="conflict_message">어떤 파일을 저장하시겠습니까? 모두 저장을 선택하면 로컬 버전의 파일 이름에 숫자를 추가합니다.</string>
+    <string name="conflict_message">어떤 파일을 저장하시겠습니까? 모두 저장을 선택하면 로컬 버전의 파일 이름에 숫자를 추가합니다.</string>
   <string name="conflict_keep_both">모두 저장</string>
   <string name="conflict_use_local_version">로컬 버전</string>
   <string name="conflict_use_server_version">서버 버전</string>

@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -18,21 +18,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data
+package com.owncloud.android.domain.spaces.usecases
 
-/**
- * Adapted from https://github.com/android/nowinandroid/pull/311/files#diff-e57442ef4a5bca050805509aa8cebe7e2b1c2a34792b0f355a67492f5b91b1d3
- *
- * Performs an upsert by first attempting to insert [item] using [insert] with the the result
- * of the insert returned.
- *
- * If it was not inserted due to conflicts, it is updated using [update]
- */
-fun <T> upsert(
-    item: T,
-    insert: (T) -> Long,
-    update: (T) -> Unit,
-) {
-    val insertResult = insert(item)
-    if (insertResult == -1L) update(item)
+import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.spaces.SpacesRepository
+import com.owncloud.android.domain.spaces.model.OCSpace
+
+class GetPersonalAndProjectSpacesForAccountUseCase(
+    private val spacesRepository: SpacesRepository
+) : BaseUseCase<List<OCSpace>, GetPersonalAndProjectSpacesForAccountUseCase.Params>() {
+
+    override fun run(params: Params) = spacesRepository.getPersonalAndProjectSpacesForAccount(params.accountName)
+
+    data class Params(
+        val accountName: String
+    )
 }

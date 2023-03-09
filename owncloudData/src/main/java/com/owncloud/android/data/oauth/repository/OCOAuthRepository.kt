@@ -19,18 +19,41 @@
 package com.owncloud.android.data.oauth.repository
 
 import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
+import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDatasource
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
+import com.owncloud.android.domain.exceptions.FileNotFoundException
+import com.owncloud.android.domain.webfinger.model.WebFingerRel
+import timber.log.Timber
 
 class OCOAuthRepository(
-    private val oidcRemoteOAuthDataSource: RemoteOAuthDataSource
+    private val oidcRemoteOAuthDataSource: RemoteOAuthDataSource,
+    private val remoteWebFingerDatasource: RemoteWebFingerDatasource,
 ) : OAuthRepository {
-    override fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration =
-        oidcRemoteOAuthDataSource.performOIDCDiscovery(baseUrl)
+
+    override fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration {
+        // First, we will try to retrieve the OpenID Connect issuer from webfinger.
+        // https://openid.net/specs/openid-connect-discovery-1_0.html#IssuerDiscovery
+        val oidcIssuerFromWebFinger: String? = try {
+            remoteWebFingerDatasource.getInstancesFromWebFinger(
+                lookupServer = baseUrl,
+                rel = WebFingerRel.OIDC_ISSUER_DISCOVERY,
+                username = baseUrl
+            ).firstOrNull()
+        } catch (fileNotFoundException: FileNotFoundException) {
+            Timber.e(fileNotFoundException, "Could not retrieve oidc issuer from WebFinger")
+            null
+        }
+
+        // If oidcIssuer was not retrieved from webfinger, perform oidc discovery against the base url
+        val oidcIssuer = if (oidcIssuerFromWebFinger.isNullOrBlank()) baseUrl else oidcIssuerFromWebFinger
+        Timber.d("OIDC discovery will be done against $oidcIssuer")
+        return oidcRemoteOAuthDataSource.performOIDCDiscovery(oidcIssuer)
+    }
 
     override fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse =
         oidcRemoteOAuthDataSource.performTokenRequest(tokenRequest)

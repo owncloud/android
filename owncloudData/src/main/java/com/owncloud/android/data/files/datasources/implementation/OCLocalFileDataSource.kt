@@ -55,8 +55,8 @@ class OCLocalFileDataSource(
     override fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?> =
         fileDao.getFileByIdAsFlow(fileId).map { it?.toModel() }
 
-    override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? {
-        fileDao.getFileByOwnerAndRemotePath(owner, remotePath)?.let { return it.toModel() }
+    override fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String?): OCFile? {
+        fileDao.getFileByOwnerAndRemotePath(owner, remotePath, spaceId)?.let { return it.toModel() }
 
         // If root folder do not exists, create and return it.
         if (remotePath == ROOT_PATH) {
@@ -66,7 +66,8 @@ class OCLocalFileDataSource(
                 remotePath = ROOT_PATH,
                 length = 0,
                 mimeType = MIME_DIR,
-                modificationTimestamp = 0
+                modificationTimestamp = 0,
+                spaceId = spaceId,
             )
             fileDao.mergeRemoteAndLocalFile(rootFolder.toEntity()).also { return getFileById(it) }
         }
@@ -220,10 +221,10 @@ class OCLocalFileDataSource(
                 needsToUpdateThumbnail = needsToUpdateThumbnail,
                 fileIsDownloading = fileIsDownloading,
                 lastSyncDateForData = lastSyncDateForData,
-                lastSyncDateForProperties = lastSyncDateForProperties,
                 modifiedAtLastSyncForData = modifiedAtLastSyncForData,
                 etagInConflict = etagInConflict,
-                treeEtag = treeEtag
+                treeEtag = treeEtag,
+                spaceId = spaceId,
             )
 
         @VisibleForTesting
@@ -247,11 +248,11 @@ class OCLocalFileDataSource(
                 needsToUpdateThumbnail = needsToUpdateThumbnail,
                 fileIsDownloading = fileIsDownloading,
                 lastSyncDateForData = lastSyncDateForData,
-                lastSyncDateForProperties = lastSyncDateForProperties,
                 modifiedAtLastSyncForData = modifiedAtLastSyncForData,
                 etagInConflict = etagInConflict,
                 treeEtag = treeEtag,
-                name = fileName
+                name = fileName,
+                spaceId = spaceId,
             ).apply { this@toEntity.id?.let { modelId -> this.id = modelId } }
     }
 

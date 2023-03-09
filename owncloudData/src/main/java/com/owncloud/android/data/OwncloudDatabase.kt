@@ -35,6 +35,7 @@ import com.owncloud.android.data.files.db.OCFileEntity
 import com.owncloud.android.data.files.db.OCFileSyncEntity
 import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
 import com.owncloud.android.data.folderbackup.db.FolderBackupDao
+import com.owncloud.android.data.migrations.AutoMigration39To40
 import com.owncloud.android.data.migrations.MIGRATION_27_28
 import com.owncloud.android.data.migrations.MIGRATION_28_29
 import com.owncloud.android.data.migrations.MIGRATION_29_30
@@ -47,6 +48,9 @@ import com.owncloud.android.data.migrations.MIGRATION_35_36
 import com.owncloud.android.data.migrations.MIGRATION_37_38
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
+import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
+import com.owncloud.android.data.spaces.db.SpacesDao
+import com.owncloud.android.data.spaces.db.SpacesEntity
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.data.transfers.db.TransferDao
 import com.owncloud.android.data.user.db.UserDao
@@ -59,12 +63,15 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
         OCFileEntity::class,
         OCFileSyncEntity::class,
         OCShareEntity::class,
-        UserQuotaEntity::class,
         OCTransferEntity::class,
+        SpacesEntity::class,
+        SpaceSpecialEntity::class,
+        UserQuotaEntity::class,
     ],
     autoMigrations = [
         AutoMigration(from = 36, to = 37),
-        AutoMigration(from = 38, to = 39)
+        AutoMigration(from = 38, to = 39),
+        AutoMigration(from = 39, to = 40, spec = AutoMigration39To40::class),
     ],
     version = ProviderMeta.DB_VERSION,
     exportSchema = true
@@ -74,8 +81,9 @@ abstract class OwncloudDatabase : RoomDatabase() {
     abstract fun fileDao(): FileDao
     abstract fun folderBackUpDao(): FolderBackupDao
     abstract fun shareDao(): OCShareDao
-    abstract fun userDao(): UserDao
+    abstract fun spacesDao(): SpacesDao
     abstract fun transferDao(): TransferDao
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile

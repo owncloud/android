@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,6 +27,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCase
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
@@ -44,6 +46,9 @@ import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUri
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TransfersViewModel(
@@ -61,6 +66,7 @@ class TransfersViewModel(
     private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
     private val cancelUploadsRecursivelyUseCase: CancelUploadsRecursivelyUseCase,
     private val cancelDownloadsRecursivelyUseCase: CancelDownloadsRecursivelyUseCase,
+    private val getSpacesFromEveryAccountUseCase: GetSpacesFromEveryAccountUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
@@ -77,6 +83,10 @@ class TransfersViewModel(
 
     private var workInfosLiveData = workManagerProvider.getRunningUploadsWorkInfosLiveData()
 
+    private val _spaces: MutableStateFlow<List<OCSpace>> = MutableStateFlow(emptyList())
+    val spaces: StateFlow<List<OCSpace>>
+        get() = _spaces
+
     init {
         _transfersListLiveData.addSource(transfersLiveData) { transfers ->
             _transfersListLiveData.postValue(transfers)
@@ -84,19 +94,25 @@ class TransfersViewModel(
         _workInfosListLiveData.addSource(workInfosLiveData) { workInfos ->
             _workInfosListLiveData.postValue(workInfos)
         }
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val spacesList = getSpacesFromEveryAccountUseCase.execute(Unit)
+            _spaces.update { spacesList }
+        }
     }
 
     fun uploadFilesFromContentUri(
         accountName: String,
         listOfContentUris: List<Uri>,
-        uploadFolderPath: String
+        uploadFolderPath: String,
+        spaceId: String?
     ) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             uploadFilesFromContentUriUseCase.execute(
                 UploadFilesFromContentUriUseCase.Params(
                     accountName = accountName,
                     listOfContentUris = listOfContentUris,
-                    uploadFolderPath = uploadFolderPath
+                    uploadFolderPath = uploadFolderPath,
+                    spaceId = spaceId,
                 )
             )
         }
@@ -105,14 +121,16 @@ class TransfersViewModel(
     fun uploadFilesFromSystem(
         accountName: String,
         listOfLocalPaths: List<String>,
-        uploadFolderPath: String
+        uploadFolderPath: String,
+        spaceId: String?,
     ) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             uploadFilesFromSystemUseCase.execute(
                 UploadFilesFromSystemUseCase.Params(
                     accountName = accountName,
                     listOfLocalPaths = listOfLocalPaths,
-                    uploadFolderPath = uploadFolderPath
+                    uploadFolderPath = uploadFolderPath,
+                    spaceId = spaceId,
                 )
             )
         }

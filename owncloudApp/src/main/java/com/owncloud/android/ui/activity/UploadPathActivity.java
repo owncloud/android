@@ -20,15 +20,13 @@ package com.owncloud.android.ui.activity;
 
 import android.accounts.Account;
 import android.os.Bundle;
-import android.view.View.OnClickListener;
 
 import com.owncloud.android.presentation.authentication.AccountUtils;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment;
 import com.owncloud.android.ui.fragment.FileFragment;
 
-public class UploadPathActivity extends FolderPickerActivity implements FileFragment.ContainerActivity,
-        OnClickListener {
+public class UploadPathActivity extends FolderPickerActivity implements FileFragment.ContainerActivity {
 
     public static final String KEY_CAMERA_UPLOAD_PATH = "CAMERA_UPLOAD_PATH";
     public static final String KEY_CAMERA_UPLOAD_ACCOUNT = "CAMERA_UPLOAD_ACCOUNT";
@@ -60,17 +58,17 @@ public class UploadPathActivity extends FolderPickerActivity implements FileFrag
             // Check if we need to open an specific folder and navigate to it.
             // If there is not, fallback to the root folder for this account.
             String cameraUploadPath = getIntent().getStringExtra(KEY_CAMERA_UPLOAD_PATH);
-            OCFile initialFile = getStorageManager().getFileByPath(cameraUploadPath);
+            OCFile initialFile = getStorageManager().getFileByPath(cameraUploadPath, null);
 
             if (initialFile == null || !initialFile.isFolder()) {
                 // fall back to root folder
-                setFile(getStorageManager().getFileByPath(OCFile.ROOT_PATH));
+                setFile(getStorageManager().getRootPersonalFolder());
             } else {
                 setFile(initialFile);
             }
 
             if (!stateWasRecovered) {
-                MainFileListFragment listOfFolders = getListOfFilesFragment();
+                MainFileListFragment listOfFolders = getMainFileListFragment();
                 listOfFolders.navigateToFolder(getFile());
             }
 

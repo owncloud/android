@@ -3,7 +3,7 @@
  *
  * @author Abel García de Prada
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -45,10 +45,19 @@ class SynchronizeFileUseCase(
         CoroutineScope(Dispatchers.IO).run {
             // 1. Perform a propfind to check if the file still exists in remote
             val serverFile = try {
-                fileRepository.readFile(fileToSynchronize.remotePath, fileToSynchronize.owner)
+                fileRepository.readFile(
+                    remotePath = fileToSynchronize.remotePath,
+                    accountName = fileToSynchronize.owner,
+                    spaceId = fileToSynchronize.spaceId
+                )
             } catch (exception: FileNotFoundException) {
-                // 1.1 File not exists anymore -> remove file locally (DB and Storage)
-                fileRepository.deleteFiles(listOf(fileToSynchronize), false)
+                // 1.1 File does not exist anymore in remote
+                val localFile = fileToSynchronize.id?.let { fileRepository.getFileById(it) }
+                // If it still exists locally, but file has different path, another operation could have been done simultaneously
+                // Do not remove the file in that case. It may be synced later
+                if (localFile != null && (localFile.remotePath == fileToSynchronize.remotePath && localFile.spaceId == fileToSynchronize.spaceId)) {
+                    fileRepository.deleteFiles(listOf(fileToSynchronize), false)
+                }
                 return SyncType.FileNotFound
             }
 
@@ -114,6 +123,7 @@ class SynchronizeFileUseCase(
                 accountName = accountName,
                 localPath = ocFile.storagePath!!,
                 uploadFolderPath = ocFile.getParentRemotePath(),
+                spaceId = ocFile.spaceId,
             )
         )
     }

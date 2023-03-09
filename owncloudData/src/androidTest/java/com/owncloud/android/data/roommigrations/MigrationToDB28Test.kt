@@ -28,7 +28,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACC
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_EXPIRE_DATE_DAYS
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MAYOR
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.LEGACY_CAPABILITIES_VERSION_MAYOR
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
 import com.owncloud.android.data.migrations.MIGRATION_27_28
@@ -84,7 +84,7 @@ class MigrationToDB28Test : MigrationTest() {
     companion object {
         val cvWithDefaultValues = ContentValues().apply {
             put(CAPABILITIES_ACCOUNT_NAME, OC_CAPABILITY.accountName)
-            put(CAPABILITIES_VERSION_MAYOR, OC_CAPABILITY.versionMayor)
+            put(LEGACY_CAPABILITIES_VERSION_MAYOR, OC_CAPABILITY.versionMajor)
             put(CAPABILITIES_VERSION_MINOR, OC_CAPABILITY.versionMinor)
             put(CAPABILITIES_VERSION_MICRO, OC_CAPABILITY.versionMicro)
             put(CAPABILITIES_CORE_POLLINTERVAL, OC_CAPABILITY.corePollInterval)

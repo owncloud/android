@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * @author Christian Schabesberger
+ * @author Abel García de Prada
  * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,11 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.domain.spaces.usecases
 
-package com.owncloud.android.domain.webfinger.model
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.spaces.SpacesRepository
 
-data class WebfingerRequest(
-    val server: String,
-    val resource: String,
-    val rel: String
-)
+class RefreshSpacesFromServerAsyncUseCase(
+    private val spacesRepository: SpacesRepository
+) : BaseUseCaseWithResult<Unit, RefreshSpacesFromServerAsyncUseCase.Params>() {
+
+    override fun run(params: Params) =
+        spacesRepository.refreshSpacesForAccount(accountName = params.accountName)
+
+    data class Params(
+        val accountName: String,
+    )
+}

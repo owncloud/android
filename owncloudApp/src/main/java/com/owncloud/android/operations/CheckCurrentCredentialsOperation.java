@@ -50,7 +50,7 @@ public class CheckCurrentCredentialsOperation extends SyncOperation<Account> {
             return new RemoteOperationResult<>(new IllegalStateException(
                     "Account to validate is not the account connected to!"));
         } else {
-            RemoteOperation checkPathExistenceOperation = new CheckPathExistenceRemoteOperation(OCFile.ROOT_PATH, false);
+            RemoteOperation checkPathExistenceOperation = new CheckPathExistenceRemoteOperation(OCFile.ROOT_PATH, false, null);
             final RemoteOperationResult existenceCheckResult = checkPathExistenceOperation.execute(client);
             final RemoteOperationResult<Account> result
                     = new RemoteOperationResult<>(existenceCheckResult.getCode());

@@ -26,6 +26,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_ACCOUNT_NAME
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_APP_PROVIDERS_PREFIX
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_CORE_POLLINTERVAL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_DAV_CHUNKING_VERSION
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_BIGFILECHUNKING
@@ -48,9 +49,10 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHA
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_PUBLIC_UPLOAD
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_RESHARING
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_USER_PROFILE_PICTURE
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SPACES_PREFIX
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_TABLE_NAME
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_EDITION
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MAYOR
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MAJOR
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MICRO
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_MINOR
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_VERSION_STRING
@@ -65,8 +67,8 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 data class OCCapabilityEntity(
     @ColumnInfo(name = CAPABILITIES_ACCOUNT_NAME)
     val accountName: String?,
-    @ColumnInfo(name = CAPABILITIES_VERSION_MAYOR)
-    val versionMayor: Int,
+    @ColumnInfo(name = CAPABILITIES_VERSION_MAJOR)
+    val versionMajor: Int,
     @ColumnInfo(name = CAPABILITIES_VERSION_MINOR)
     val versionMinor: Int,
     @ColumnInfo(name = CAPABILITIES_VERSION_MICRO)
@@ -119,8 +121,10 @@ data class OCCapabilityEntity(
     val filesVersioning: Int,
     @ColumnInfo(name = CAPABILITIES_FILES_PRIVATE_LINKS, defaultValue = capabilityBooleanTypeUnknownString)
     val filesPrivateLinks: Int,
-    @Embedded
-    val ocisProvider: OCCapability.OcisProvider?
+    @Embedded(prefix = CAPABILITIES_APP_PROVIDERS_PREFIX)
+    val appProviders: OCCapability.AppProviders?,
+    @Embedded(prefix = CAPABILITIES_SPACES_PREFIX)
+    val spaces: OCCapability.Spaces?,
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
@@ -128,7 +132,7 @@ data class OCCapabilityEntity(
         fun fromCursor(cursor: Cursor): OCCapabilityEntity = cursor.use { it ->
             OCCapabilityEntity(
                 it.getString(it.getColumnIndexOrThrow(CAPABILITIES_ACCOUNT_NAME)),
-                it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_VERSION_MAYOR)),
+                it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_VERSION_MAJOR)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_VERSION_MINOR)),
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_VERSION_MICRO)),
                 it.getString(it.getColumnIndexOrThrow(CAPABILITIES_VERSION_STRING)),
@@ -156,7 +160,8 @@ data class OCCapabilityEntity(
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_FILES_VERSIONING)),
                 it.getColumnIndex(CAPABILITIES_FILES_PRIVATE_LINKS).takeUnless { it < 0 }?.let { index -> it.getInt(index) }
                     ?: CapabilityBooleanType.UNKNOWN.value,
-                null
+                null,
+                null,
             )
         }
     }

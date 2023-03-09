@@ -58,8 +58,8 @@ public class FileStorageUtils {
     /**
      * Get absolute path to tmp folder inside datafolder in sd-card for given accountName.
      */
-    public static String getTemporalPath(String accountName) {
-        return getLocalStorageProvider().getTemporalPath(accountName);
+    public static String getTemporalPath(String accountName, String spaceId) {
+        return getLocalStorageProvider().getTemporalPath(accountName, spaceId);
     }
 
     /**

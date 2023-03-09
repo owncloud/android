@@ -3,7 +3,9 @@
  *
  * @author Fernando Sanz Velasco
  * @author Jose Antonio Barros Ramos
- * Copyright (C) 2022 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,6 +32,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
@@ -44,10 +47,13 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
+import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.model.OCFileSyncInfo
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
+import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.parseError
@@ -92,8 +98,8 @@ class MainFileListFragment : Fragment(),
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel> {
         parametersOf(
-            requireArguments().getString(ARG_ACCOUNT_NAME),
             requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY),
+            requireArguments().getParcelable(ARG_FILE_LIST_OPTION),
         )
     }
     private val fileOperationsViewModel by sharedViewModel<FileOperationsViewModel>()
@@ -125,8 +131,6 @@ class MainFileListFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         initViews()
         subscribeToViewModels()
-
-        mainFileListViewModel.updateFileListOption(requireArguments().getParcelable(ARG_LIST_FILE_OPTION) ?: FileListOption.ALL_FILES)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -141,8 +145,8 @@ class MainFileListFragment : Fragment(),
             updateActionModeAfterTogglingSelected()
             true
         }
-        if (isPickingAFolder()) {
-            menu.removeItem(menu.findItem(R.id.action_share_current_folder).itemId)
+        if (isPickingAFolder() || getCurrentSpace()?.isPersonal == false) {
+            menu.findItem(R.id.action_share_current_folder)?.itemId?.let { menu.removeItem(it) }
         } else {
             menu.findItem(R.id.action_share_current_folder)?.setOnMenuItemClickListener {
                 fileActions?.onShareFileClicked(mainFileListViewModel.getFile())
@@ -197,6 +201,8 @@ class MainFileListFragment : Fragment(),
                 it.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER)
             }
         }
+
+        showOrHideFab(requireArguments().getParcelable(ARG_FILE_LIST_OPTION)!!)
     }
 
     private fun toggleSelection(position: Int) {
@@ -205,25 +211,63 @@ class MainFileListFragment : Fragment(),
     }
 
     private fun subscribeToViewModels() {
-        // Observe the current folder displayed and notify the listener
-        collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) {
-            fileActions?.onCurrentFolderUpdated(it)
-            if (mainFileListViewModel.fileListOption.value.isAllFiles()) {
+        // Observe the current folder displayed
+        collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) { currentFolderDisplayed: OCFile ->
+            fileActions?.onCurrentFolderUpdated(currentFolderDisplayed, mainFileListViewModel.getSpace())
+            val fileListOption = mainFileListViewModel.fileListOption.value
+            val refreshFolderNeeded = fileListOption.isAllFiles() ||
+                    (!fileListOption.isAllFiles() && currentFolderDisplayed.remotePath != ROOT_PATH)
+            if (refreshFolderNeeded) {
                 fileOperationsViewModel.performOperation(
                     FileOperation.RefreshFolderOperation(
-                        folderToRefresh = it,
+                        folderToRefresh = currentFolderDisplayed,
                         shouldSyncContents = !isPickingAFolder(), // For picking a folder option, we just need a refresh
                     )
                 )
             }
         }
+        // Observe the current space to update the toolbar.
+        // We cant rely exclusively on the [currentFolderDisplayed] because sometimes retrieving the space takes more time
+        collectLatestLifecycleFlow(mainFileListViewModel.space) { currentSpace: OCSpace? ->
+            currentSpace?.let {
+                fileActions?.onCurrentFolderUpdated(mainFileListViewModel.getFile(), currentSpace)
+            }
+        }
 
-        // Observe the file list ui state.
+        // Observe the file list ui state
         collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
             if (fileListUiState !is MainFileListViewModel.FileListUiState.Success) return@collectLatestLifecycleFlow
 
             fileListAdapter.updateFileList(filesToAdd = fileListUiState.folderContent, fileListOption = fileListUiState.fileListOption)
             showOrHideEmptyView(fileListUiState)
+
+            fileListUiState.space?.let {
+                binding.spaceHeader.root.apply {
+                    if (fileListUiState.space.isProject && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH) {
+                        isVisible = true
+                        animate().translationY(0f).duration = 100
+                    } else {
+                        animate().translationY(-height.toFloat()).withEndAction { isVisible = false }
+                    }
+                }
+
+                val spaceSpecialImage = it.getSpaceSpecialImage()
+                if (spaceSpecialImage != null) {
+                    binding.spaceHeader.spaceHeaderImage.tag = spaceSpecialImage.id
+                    val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(spaceSpecialImage.id)
+                    if (thumbnail != null) {
+                        binding.spaceHeader.spaceHeaderImage.run {
+                            setImageBitmap(thumbnail)
+                            scaleType = ImageView.ScaleType.CENTER_CROP
+                        }
+                        if (spaceSpecialImage.file.mimeType == "image/png") {
+                            binding.spaceHeader.spaceHeaderImage.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background_color))
+                        }
+                    }
+                }
+                binding.spaceHeader.spaceHeaderName.text = it.name
+                binding.spaceHeader.spaceHeaderSubtitle.text = it.description
+            }
 
             actionMode?.invalidate()
         }
@@ -248,9 +292,16 @@ class MainFileListFragment : Fragment(),
         with(binding.emptyDataParent) {
             root.isVisible = fileListUiState.folderContent.isEmpty()
 
-            listEmptyDatasetIcon.setImageResource(fileListUiState.fileListOption.toDrawableRes())
-            listEmptyDatasetTitle.setText(fileListUiState.fileListOption.toTitleStringRes())
-            listEmptyDatasetSubTitle.setText(fileListUiState.fileListOption.toSubtitleStringRes())
+            if (fileListUiState.fileListOption.isSharedByLink() && fileListUiState.space != null) {
+                // Temporary solution for shares space
+                listEmptyDatasetIcon.setImageResource(R.drawable.ic_ocis_shares)
+                listEmptyDatasetTitle.setText(R.string.shares_list_empty_title)
+                listEmptyDatasetSubTitle.setText(R.string.shares_list_empty_subtitle)
+            } else {
+                listEmptyDatasetIcon.setImageResource(fileListUiState.fileListOption.toDrawableRes())
+                listEmptyDatasetTitle.setText(fileListUiState.fileListOption.toTitleStringRes())
+                listEmptyDatasetSubTitle.setText(fileListUiState.fileListOption.toSubtitleStringRes())
+            }
         }
     }
 
@@ -431,6 +482,10 @@ class MainFileListFragment : Fragment(),
         return mainFileListViewModel.getFile()
     }
 
+    fun getCurrentSpace(): OCSpace? {
+        return mainFileListViewModel.getSpace()
+    }
+
     private fun setDrawerStatus(enabled: Boolean) {
         (activity as FileActivity).setDrawerLockMode(if (enabled) DrawerLayout.LOCK_MODE_UNLOCKED else DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
@@ -555,7 +610,7 @@ class MainFileListFragment : Fragment(),
             R.id.action_move -> {
                 val action = Intent(activity, FolderPickerActivity::class.java)
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
-                action.putExtra(FolderPickerActivity.EXTRA_PICKER_OPTION, FolderPickerActivity.PickerMode.MOVE)
+                action.putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.MOVE)
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES)
                 fileListAdapter.clearSelection()
                 updateActionModeAfterTogglingSelected()
@@ -564,7 +619,7 @@ class MainFileListFragment : Fragment(),
             R.id.action_copy -> {
                 val action = Intent(activity, FolderPickerActivity::class.java)
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
-                action.putExtra(FolderPickerActivity.EXTRA_PICKER_OPTION, FolderPickerActivity.PickerMode.COPY)
+                action.putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.COPY)
                 requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES)
                 fileListAdapter.clearSelection()
                 updateActionModeAfterTogglingSelected()
@@ -731,7 +786,7 @@ class MainFileListFragment : Fragment(),
     }
 
     interface FileActions {
-        fun onCurrentFolderUpdated(newCurrentFolder: OCFile)
+        fun onCurrentFolderUpdated(newCurrentFolder: OCFile, currentSpace: OCSpace? = null)
         fun onFileClicked(file: OCFile)
         fun onShareFileClicked(file: OCFile)
         fun initDownloadForSending(file: OCFile)
@@ -750,22 +805,21 @@ class MainFileListFragment : Fragment(),
 
     companion object {
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
-        val ARG_LIST_FILE_OPTION = "${MainFileListFragment::class.java.canonicalName}.LIST_FILE_OPTION}"
-        val ARG_ACCOUNT_NAME = "${MainFileListFragment::class.java.canonicalName}.ARG_ACCOUNT_NAME}"
         val ARG_INITIAL_FOLDER_TO_DISPLAY = "${MainFileListFragment::class.java.canonicalName}.ARG_INITIAL_FOLDER_TO_DISPLAY}"
+        val ARG_FILE_LIST_OPTION = "${MainFileListFragment::class.java.canonicalName}.FILE_LIST_OPTION}"
 
         private const val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
 
         @JvmStatic
         fun newInstance(
-            accountName: String,
             initialFolderToDisplay: OCFile,
-            pickingAFolder: Boolean = false
+            pickingAFolder: Boolean = false,
+            fileListOption: FileListOption = FileListOption.ALL_FILES,
         ): MainFileListFragment {
             val args = Bundle()
-            args.putString(ARG_ACCOUNT_NAME, accountName)
             args.putParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY, initialFolderToDisplay)
             args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
+            args.putParcelable(ARG_FILE_LIST_OPTION, fileListOption)
             return MainFileListFragment().apply { arguments = args }
         }
     }

@@ -41,7 +41,7 @@ import com.owncloud.android.domain.UseCaseResult;
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase;
 import com.owncloud.android.domain.exceptions.UnauthorizedException;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase;
+import com.owncloud.android.domain.files.usecases.GetPersonalRootFolderForAccountUseCase;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase;
 import com.owncloud.android.utils.NotificationUtils;
@@ -150,13 +150,13 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         try {
             updateCapabilities();
             if (!mCancellation) {
-                @NotNull Lazy<GetFileByRemotePathUseCase> getFileByRemotePathUseCaseLazy =
-                        inject(GetFileByRemotePathUseCase.class);
-                GetFileByRemotePathUseCase.Params params = new GetFileByRemotePathUseCase.Params(OCFile.ROOT_PATH, account.name);
+                @NotNull Lazy<GetPersonalRootFolderForAccountUseCase> getRootFolderPersonalUseCaseLazy =
+                        inject(GetPersonalRootFolderForAccountUseCase.class);
+                GetPersonalRootFolderForAccountUseCase.Params params = new GetPersonalRootFolderForAccountUseCase.Params(account.name);
 
-                UseCaseResult<OCFile> useCaseResult = getFileByRemotePathUseCaseLazy.getValue().execute(params);
-                if (useCaseResult.getDataOrNull() != null) {
-                    synchronizeFolder(useCaseResult.getDataOrNull());
+                OCFile rootFolder = getRootFolderPersonalUseCaseLazy.getValue().execute(params);
+                if (rootFolder != null) {
+                    synchronizeFolder(rootFolder);
                 }
 
             } else {
@@ -227,7 +227,10 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         // Discover full account
         @NotNull Lazy<SynchronizeFolderUseCase> synchronizeFolderUseCase =
                 inject(SynchronizeFolderUseCase.class);
-        SynchronizeFolderUseCase.Params params = new SynchronizeFolderUseCase.Params(folder.getRemotePath(), folder.getOwner(),
+        SynchronizeFolderUseCase.Params params = new SynchronizeFolderUseCase.Params(
+                folder.getRemotePath(),
+                folder.getOwner(),
+                folder.getSpaceId(),
                 SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER_RECURSIVELY);
         UseCaseResult<Unit> useCaseResult;
 

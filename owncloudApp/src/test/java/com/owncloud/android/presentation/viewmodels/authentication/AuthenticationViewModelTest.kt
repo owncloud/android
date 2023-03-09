@@ -24,13 +24,16 @@ import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
+import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
-import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
+import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.domain.webfinger.usecases.GetJRDFromWebfingerHostUseCase
-import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
+import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.presentation.authentication.AuthenticationViewModel
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.testutil.OC_ACCESS_TOKEN
@@ -45,6 +48,7 @@ import com.owncloud.android.testutil.OC_SERVER_INFO
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.setMain
@@ -64,7 +68,11 @@ class AuthenticationViewModelTest : ViewModelTest() {
     private lateinit var getServerInfoAsyncUseCase: GetServerInfoAsyncUseCase
     private lateinit var supportsOAuth2UseCase: SupportsOAuth2UseCase
     private lateinit var getBaseUrlUseCase: GetBaseUrlUseCase
-    private lateinit var getJRDFromWebfingerHostUseCase: GetJRDFromWebfingerHostUseCase
+    private lateinit var getOwnCloudInstanceFromWebFingerUseCase: GetOwnCloudInstanceFromWebFingerUseCase
+    private lateinit var getOwnCloudInstancesFromAuthenticatedWebFingerUseCase: GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
+    private lateinit var refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase
+    private lateinit var refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase
+    private lateinit var getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase
     private lateinit var contextProvider: ContextProvider
 
     private val commonException = ServerNotReachableException()
@@ -91,7 +99,11 @@ class AuthenticationViewModelTest : ViewModelTest() {
         getServerInfoAsyncUseCase = mockk()
         supportsOAuth2UseCase = mockk()
         getBaseUrlUseCase = mockk()
-        getJRDFromWebfingerHostUseCase = mockk()
+        getOwnCloudInstanceFromWebFingerUseCase = mockk()
+        getOwnCloudInstancesFromAuthenticatedWebFingerUseCase = mockk()
+        refreshCapabilitiesFromServerAsyncUseCase = mockk()
+        refreshSpacesFromServerAsyncUseCase = mockk()
+        getStoredCapabilitiesUseCase = mockk()
 
         testCoroutineDispatcher.pauseDispatcher()
 
@@ -101,7 +113,11 @@ class AuthenticationViewModelTest : ViewModelTest() {
             getServerInfoAsyncUseCase = getServerInfoAsyncUseCase,
             supportsOAuth2UseCase = supportsOAuth2UseCase,
             getBaseUrlUseCase = getBaseUrlUseCase,
-            getJRDFromWebfingerHostUseCase = getJRDFromWebfingerHostUseCase,
+            getOwnCloudInstanceFromWebFingerUseCase = getOwnCloudInstanceFromWebFingerUseCase,
+            getOwnCloudInstancesFromAuthenticatedWebFingerUseCase = getOwnCloudInstancesFromAuthenticatedWebFingerUseCase,
+            refreshCapabilitiesFromServerAsyncUseCase = refreshCapabilitiesFromServerAsyncUseCase,
+            refreshSpacesFromServerAsyncUseCase = refreshSpacesFromServerAsyncUseCase,
+            getStoredCapabilitiesUseCase = getStoredCapabilitiesUseCase,
             coroutinesDispatcherProvider = coroutineDispatcherProvider
         )
     }
@@ -118,8 +134,9 @@ class AuthenticationViewModelTest : ViewModelTest() {
         authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl)
 
         assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<ServerInfo>>>(
-                Event(UIResult.Loading()), Event(UIResult.Success(OC_SERVER_INFO))
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Success(OC_SERVER_INFO))
             ),
             liveData = authenticationViewModel.serverInfo
         )
@@ -131,8 +148,10 @@ class AuthenticationViewModelTest : ViewModelTest() {
         authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl)
 
         assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<ServerInfo>>>
-                (Event(UIResult.Loading()), Event(UIResult.Error(commonException))),
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Error(commonException))
+            ),
             liveData = authenticationViewModel.serverInfo
         )
     }
@@ -143,8 +162,9 @@ class AuthenticationViewModelTest : ViewModelTest() {
         authenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, OC_ACCOUNT_NAME)
 
         assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<String>>>(
-                Event(UIResult.Loading()), Event(UIResult.Success(OC_BASIC_USERNAME))
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Success(OC_BASIC_USERNAME))
             ),
             liveData = authenticationViewModel.loginResult
         )
@@ -156,16 +176,63 @@ class AuthenticationViewModelTest : ViewModelTest() {
         authenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null)
 
         assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<String>>>(
-                Event(UIResult.Loading()), Event(UIResult.Error(commonException))
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Error(commonException))
             ),
             liveData = authenticationViewModel.loginResult
         )
+    }
+
+    @Test
+    fun loginOAuthWebFingerInstancesOk() {
+        every { getServerInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_SERVER_INFO)
+        authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl)
+
+        every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
+        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(any()) } returns UseCaseResult.Success(listOf("WEBFINGER_INSTANCE"))
+
+        authenticationViewModel.loginOAuth(
+            username = OC_BASIC_USERNAME,
+            authTokenType = OC_AUTH_TOKEN_TYPE,
+            accessToken = OC_ACCESS_TOKEN,
+            refreshToken = OC_REFRESH_TOKEN,
+            scope = OC_SCOPE,
+            clientRegistrationInfo = OC_CLIENT_REGISTRATION
+        )
+
+        assertEmittedValues(
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Success(OC_BASIC_USERNAME))
+            ),
+            liveData = authenticationViewModel.loginResult
+        )
+
+        verify(exactly = 1) {
+            loginOAuthAsyncUseCase.execute(
+                params = LoginOAuthAsyncUseCase.Params(
+                    serverInfo = OC_SERVER_INFO.copy(baseUrl = "WEBFINGER_INSTANCE"),
+                    username = OC_BASIC_USERNAME,
+                    authTokenType = OC_AUTH_TOKEN_TYPE,
+                    accessToken = OC_ACCESS_TOKEN,
+                    refreshToken = OC_REFRESH_TOKEN,
+                    scope = OC_SCOPE,
+                    updateAccountWithUsername = null,
+                    clientRegistrationInfo = OC_CLIENT_REGISTRATION
+                )
+            )
+        }
     }
 
     @Test
     fun loginOAuthOk() {
+        every { getServerInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_SERVER_INFO)
+        authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl)
+
         every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
+        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+
         authenticationViewModel.loginOAuth(
             username = OC_BASIC_USERNAME,
             authTokenType = OC_AUTH_TOKEN_TYPE,
@@ -176,16 +243,37 @@ class AuthenticationViewModelTest : ViewModelTest() {
         )
 
         assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<String>>>(
-                Event(UIResult.Loading()), Event(UIResult.Success(OC_BASIC_USERNAME))
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Success(OC_BASIC_USERNAME))
             ),
             liveData = authenticationViewModel.loginResult
         )
+
+        verify(exactly = 1) {
+            loginOAuthAsyncUseCase.execute(
+                params = LoginOAuthAsyncUseCase.Params(
+                    serverInfo = OC_SERVER_INFO,
+                    username = OC_BASIC_USERNAME,
+                    authTokenType = OC_AUTH_TOKEN_TYPE,
+                    accessToken = OC_ACCESS_TOKEN,
+                    refreshToken = OC_REFRESH_TOKEN,
+                    scope = OC_SCOPE,
+                    updateAccountWithUsername = null,
+                    clientRegistrationInfo = OC_CLIENT_REGISTRATION
+                )
+            )
+        }
     }
 
     @Test
     fun loginOAuthException() {
+        every { getServerInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_SERVER_INFO)
+        authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl)
+
         every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+
         authenticationViewModel.loginOAuth(
             username = OC_BASIC_USERNAME,
             authTokenType = OC_AUTH_TOKEN_TYPE,
@@ -196,8 +284,9 @@ class AuthenticationViewModelTest : ViewModelTest() {
         )
 
         assertEmittedValues(
-            expectedValues = listOf<Event<UIResult<String>>>(
-                Event(UIResult.Loading()), Event(UIResult.Error(commonException))
+            expectedValues = listOf(
+                Event(UIResult.Loading()),
+                Event(UIResult.Error(commonException))
             ),
             liveData = authenticationViewModel.loginResult
         )

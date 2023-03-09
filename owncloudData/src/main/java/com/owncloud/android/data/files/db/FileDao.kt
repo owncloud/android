@@ -26,7 +26,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Update
+import androidx.room.Upsert
 import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
@@ -59,7 +59,8 @@ interface FileDao {
     @Query(SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH)
     fun getFileByOwnerAndRemotePath(
         owner: String,
-        remotePath: String
+        remotePath: String,
+        spaceId: String?,
     ): OCFileEntity?
 
     @Query(SELECT_FILE_WITH_REMOTE_ID)
@@ -131,22 +132,16 @@ interface FileDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnore(ocFileEntity: OCFileEntity): Long
 
-    @Update
-    fun update(ocFileEntity: OCFileEntity)
-
-    @Transaction
-    fun upsert(ocFileEntity: OCFileEntity) = com.owncloud.android.data.upsert(
-        item = ocFileEntity,
-        insert = ::insertOrIgnore,
-        update = ::update
-    )
+    @Upsert
+    fun upsert(ocFileEntity: OCFileEntity)
 
     @Transaction
     fun updateSyncStatusForFile(id: Long, workerUuid: UUID?) {
         val fileWithSyncInfoEntity = getFileWithSyncInfoById(id)
 
         if ((fileWithSyncInfoEntity?.file?.parentId != ROOT_PARENT_ID) &&
-            ((workerUuid == null) != (fileWithSyncInfoEntity?.fileSync?.downloadWorkerUuid == null))) {
+            ((workerUuid == null) != (fileWithSyncInfoEntity?.fileSync?.downloadWorkerUuid == null))
+        ) {
             val fileSyncEntity = if (workerUuid == null) {
                 OCFileSyncEntity(
                     fileId = id,
@@ -215,7 +210,8 @@ interface FileDao {
     ): Long {
         val localFile: OCFileEntity? = getFileByOwnerAndRemotePath(
             owner = ocFileEntity.owner,
-            remotePath = ocFileEntity.remotePath
+            remotePath = ocFileEntity.remotePath,
+            ocFileEntity.spaceId,
         )
         return if (localFile == null) {
             insertOrIgnore(ocFileEntity)
@@ -468,7 +464,7 @@ interface FileDao {
         private const val SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
-            WHERE owner = :owner AND remotePath = :remotePath
+            WHERE owner = :owner AND remotePath = :remotePath AND spaceId IS :spaceId
         """
 
         private const val DELETE_FILE_WITH_ID = """

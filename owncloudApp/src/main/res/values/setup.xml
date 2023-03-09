@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- App name  and other strings-->
+    <!-- App name and other strings-->
     <string name="app_name" formatted="false">ownCloud</string>
     <string name="account_type" formatted="false">owncloud</string>    <!-- better if was a domain name; but changing it now would require migrate accounts when the app is updated -->
     <string name="authority" formatted="false">org.owncloud</string>
@@ -45,6 +45,7 @@
     <color name="secondary_button_background_color">#D6D7D7</color>
     <color name="secondary_button_text_color">@color/black</color>
     <color name="drawer_header_color">@color/owncloud_blue_accent</color>
+    <color name="spaces_card_background_color">#edf3fa</color>
 
     <!-- Splash Screen Background -->
     <color name="splash_background">@color/owncloud_blue</color>
@@ -104,9 +105,11 @@
     <!-- Login background -->
     <bool name="use_login_background_image">true</bool>
 
-    <!-- Header images -->
+    <!-- Drawer menu -->
     <bool name="use_drawer_background_header">true</bool>
     <bool name="use_drawer_logo">true</bool>
+    <string name="drawer_link_label"></string>
+    <string name="drawer_link"></string>
 
     <!-- Number of passcode digits -->
     <integer name="passcode_digits">4</integer>

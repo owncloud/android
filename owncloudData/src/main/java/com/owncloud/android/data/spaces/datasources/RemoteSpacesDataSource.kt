@@ -1,7 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * @author Christian Schabesberger
+ * @author Abel García de Prada
  * Copyright (C) 2022 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,9 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package com.owncloud.android.data.spaces.datasources
 
-package com.owncloud.android.domain.webfinger
+import com.owncloud.android.domain.spaces.model.OCSpace
 
-interface WebfingerRepository {
-    fun getJRDFromWebFingerHost(server: String, resource: String): String
+interface RemoteSpacesDataSource {
+    fun refreshSpacesForAccount(accountName: String): List<OCSpace>
 }

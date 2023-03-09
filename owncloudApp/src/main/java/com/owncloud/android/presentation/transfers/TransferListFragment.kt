@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -36,6 +36,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.FragmentTransferListBinding
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
+import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.ui.activity.FileActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -89,7 +90,8 @@ class TransferListFragment : Fragment() {
             },
             clearSuccessful = {
                 transfersViewModel.clearSuccessfulTransfers()
-            }
+            },
+            personalName = getString(R.string.bottom_nav_personal),
         )
         binding.transfersRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -109,6 +111,11 @@ class TransferListFragment : Fragment() {
                 transfersAdapter.updateTransferProgress(workInfo)
             }
         }
+
+        collectLatestLifecycleFlow(transfersViewModel.spaces) {
+            transfersViewModel.transfersListLiveData.value?.let { transfers -> setData(transfers) }
+        }
+
     }
 
     override fun onDestroy() {
@@ -124,6 +131,6 @@ class TransferListFragment : Fragment() {
             listEmptyDatasetTitle.setText(R.string.upload_list_empty)
             listEmptyDatasetSubTitle.setText(R.string.upload_list_empty_subtitle)
         }
-        transfersAdapter.setData(items)
+        transfersAdapter.setData(items, transfersViewModel.spaces.value)
     }
 }

@@ -358,7 +358,7 @@ public class FileActivity extends DrawerActivity
     protected void updateFileFromDB() {
         OCFile file = getFile();
         if (file != null) {
-            file = getStorageManager().getFileByPath(file.getRemotePath());
+            file = getStorageManager().getFileByPath(file.getRemotePath(), file.getSpaceId());
             setFile(file);
         }
     }
@@ -405,6 +405,7 @@ public class FileActivity extends DrawerActivity
     public void restart() {
         Intent i = new Intent(this, FileDisplayActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.putExtra(EXTRA_FILE_LIST_OPTION, (Parcelable) FileListOption.ALL_FILES);
         startActivity(i);
     }
 
@@ -414,6 +415,12 @@ public class FileActivity extends DrawerActivity
         switch (fileListOption) {
             case ALL_FILES:
                 restart();
+                break;
+            case SPACES_LIST:
+                intent = new Intent(this, FileDisplayActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(EXTRA_FILE_LIST_OPTION, (Parcelable) FileListOption.SPACES_LIST);
+                startActivity(intent);
                 break;
             case SHARED_BY_LINK:
                 intent = new Intent(this, FileDisplayActivity.class);
@@ -437,7 +444,7 @@ public class FileActivity extends DrawerActivity
                 return file;
             } else if (getStorageManager() != null) {
                 String parentPath = file.getParentRemotePath();
-                return getStorageManager().getFileByPath(parentPath);
+                return getStorageManager().getFileByPath(parentPath, file.getSpaceId());
             }
         }
         return null;
