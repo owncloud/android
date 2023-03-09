@@ -668,4 +668,8 @@
   <string name="release_notes_3.0.3_subtitle2">Panel me gjendje të pasaktë, kur shfletohet pas parjes “Ndaje me të tjerë”</string>
   <string name="release_notes_3.0.3_title3">U shkurtua mesazh gabimi</string>
   <string name="release_notes_3.0.3_subtitle3">Një mesazh gabimi për veprim kopjimi qe kaq i gjatë sa s’qe i lexueshëm në pajisje</string>
+  <string name="release_notes_3.0.4_title1">Ndreqje sigurie</string>
+  <string name="release_notes_3.0.4_subtitle1">U ndreqën ca probleme të lidhura me bazën e të dhënave</string>
+  <string name="release_notes_3.0.4_title2">Thellim regjistrash http</string>
+  <string name="release_notes_3.0.4_subtitle2">Përmirësim i disa regjistrave http, për të ndihmuar diagnostikimin</string>
 </resources>

@@ -506,6 +506,7 @@
   <string name="upload_copy_files">Kopeeri fail</string>
   <string name="upload_move_files">Liiguta fail</string>
   <string name="pref_behaviour_entries_keep_file">hoitakse algses kaustas</string>
+  <string name="pref_behaviour_entries_remove_original_file">eemaldatud algsest kaustast</string>
   <string name="share_dialog_title">Jaga</string>
   <string name="share_file">Jaga %1$s</string>
   <string name="share_with_user_section_title">Kasutajad ja grupid</string>
@@ -669,4 +670,8 @@
   <string name="release_notes_3.0.3_subtitle2">Tööriistariba näitab vale staatust kui navigeerida tagasi Share-vaatest</string>
   <string name="release_notes_3.0.3_title3">Veateade lühendatud</string>
   <string name="release_notes_3.0.3_subtitle3">Veateade kopeerimisel oli nii pikk, et ei olnud seadmel loetav</string>
+  <string name="release_notes_3.0.4_title1">Turvaparandused</string>
+  <string name="release_notes_3.0.4_subtitle1">Parandatud mõned andmebaasiga seotud vead</string>
+  <string name="release_notes_3.0.4_title2">Http logide täiendus</string>
+  <string name="release_notes_3.0.4_subtitle2">Parandatud mõned http logid, et lihtsustada veatuvastust</string>
 </resources>
