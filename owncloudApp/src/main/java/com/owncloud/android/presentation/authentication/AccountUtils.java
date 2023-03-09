@@ -31,7 +31,6 @@ import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import timber.log.Timber;
 
-import javax.annotation.Nullable;
 import java.util.Locale;
 
 import static com.owncloud.android.data.authentication.AuthenticationConstantsKt.KEY_FEATURE_ALLOWED;
@@ -137,7 +136,7 @@ public class AccountUtils {
         return null;
     }
 
-    public static boolean isSpacesFeatureAllowedForAccount(Context context, Account account, @Nullable OCCapability capability) {
+    public static boolean isSpacesFeatureAllowedForAccount(Context context, Account account, OCCapability capability) {
         if (capability == null || !capability.isSpacesAllowed()) {
             return false;
         }
