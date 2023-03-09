@@ -20,10 +20,11 @@ package com.owncloud.android.lib.resources.webfinger.services
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 
-interface WebfingerService {
-    fun getInstanceFromWebfinger(
+interface WebFingerService {
+    fun getInstancesFromWebFinger(
         lookupServer: String,
-        username: String,
+        resource: String,
+        rel: String,
         client: OwnCloudClient,
-    ): RemoteOperationResult<String>
+    ): RemoteOperationResult<List<String>>
 }

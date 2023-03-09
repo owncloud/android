@@ -8,15 +8,15 @@ import org.junit.Before
 import org.junit.Test
 import java.io.File
 
-class WebfingerResponseTest {
-    lateinit var adapter: JsonAdapter<WebfingerJrdResponse>
+class WebFingerResponseTest {
+    lateinit var adapter: JsonAdapter<WebFingerResponse>
 
     private fun loadResponses(fileName: String) = adapter.fromJson(File(fileName).readText())
 
     @Before
     fun prepare() {
         val moshi = Moshi.Builder().build()
-        adapter = moshi.adapter(WebfingerJrdResponse::class.java)
+        adapter = moshi.adapter(WebFingerResponse::class.java)
     }
 
     @Test

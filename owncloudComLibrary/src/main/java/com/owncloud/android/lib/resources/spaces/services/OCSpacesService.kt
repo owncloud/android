@@ -1,6 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   @author David González Verdugo
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   Copyright (C) 2022 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -20,13 +19,16 @@
  *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
- *
  */
-package com.owncloud.android.lib.resources.files.chunks
+package com.owncloud.android.lib.resources.spaces.services
 
 import com.owncloud.android.lib.common.OwnCloudClient
-import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.spaces.GetRemoteSpacesOperation
+import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
 
-class RemoveRemoteChunksFolderOperation(remotePath: String) : RemoveRemoteFileOperation(remotePath) {
-    override fun getSrcWebDavUriForClient(client: OwnCloudClient): String = client.uploadsWebDavUri.toString()
+class OCSpacesService(override val client: OwnCloudClient) : SpacesService {
+    override fun getSpaces(): RemoteOperationResult<List<SpaceResponse>> {
+        return GetRemoteSpacesOperation().execute(client)
+    }
 }

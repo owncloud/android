@@ -26,6 +26,7 @@ package com.owncloud.android.lib.resources.files
 
 import android.net.Uri
 import android.os.Parcelable
+import androidx.annotation.VisibleForTesting
 import at.bitfire.dav4jvm.PropStat
 import at.bitfire.dav4jvm.Property
 import at.bitfire.dav4jvm.Response
@@ -100,8 +101,13 @@ data class RemoteFile(
         const val MIME_DIR = "DIR"
         const val MIME_DIR_UNIX = "httpd/unix-directory"
 
-        fun getRemoteFileFromDav(davResource: Response, userId: String, userName: String): RemoteFile {
-            val remotePath = getRemotePathFromUrl(davResource.href, userId)
+        fun getRemoteFileFromDav(
+            davResource: Response,
+            userId: String,
+            userName: String,
+            spaceWebDavUrl: String? = null
+        ): RemoteFile {
+            val remotePath = getRemotePathFromUrl(davResource.href, userId, spaceWebDavUrl)
             val remoteFile = RemoteFile(remotePath = remotePath, owner = userName)
             val properties = getPropertiesEvenIfPostProcessing(davResource)
 
@@ -164,15 +170,25 @@ data class RemoteFile(
          * Retrieves a relative path from a remote file url
          *
          *
-         * Example: url:port/remote.php/dav/files/username/Documents/text.txt => /Documents/text.txt
+         * Example legacy:
+         * /remote.php/dav/files/username/Documents/text.txt => /Documents/text.txt
+         *
+         * Example spaces:
+         * /dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f38$05bca744-d89f-4e9c-a990-25a0d7f03fe9/Documents/text.txt => /Documents/text.txt
          *
          * @param url    remote file url
          * @param userId file owner
+         * @param spaceWebDavUrl custom web dav url for space
          * @return remote relative path of the file
          */
-        private fun getRemotePathFromUrl(url: HttpUrl, userId: String): String {
-            val davFilesPath = OwnCloudClient.WEBDAV_FILES_PATH_4_0 + userId
-            val absoluteDavPath = Uri.decode(url.encodedPath)
+        @VisibleForTesting
+        fun getRemotePathFromUrl(
+            url: HttpUrl,
+            userId: String,
+            spaceWebDavUrl: String? = null,
+        ): String {
+            val davFilesPath = spaceWebDavUrl ?: (OwnCloudClient.WEBDAV_FILES_PATH_4_0 + userId)
+            val absoluteDavPath = if (spaceWebDavUrl != null) Uri.decode(url.toString()) else Uri.decode(url.encodedPath)
             val pathToOc = absoluteDavPath.split(davFilesPath).first()
             return absoluteDavPath.replace(pathToOc + davFilesPath, "")
         }

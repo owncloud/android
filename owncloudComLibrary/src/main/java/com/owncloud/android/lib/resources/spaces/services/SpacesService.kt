@@ -1,5 +1,4 @@
 /* ownCloud Android Library is available under MIT license
- *
  *   Copyright (C) 2022 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,19 +20,12 @@
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  */
+package com.owncloud.android.lib.resources.spaces.services
 
-package com.owncloud.android.lib.resources.webfinger.responses
+import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.Service
+import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
 
-import com.squareup.moshi.JsonClass
-
-@JsonClass(generateAdapter = true)
-data class WebfingerJrdResponse(
-    val subject: String,
-    val links: List<LinkItem>
-)
-
-@JsonClass(generateAdapter = true)
-data class LinkItem(
-    val href: String,
-    val rel: String
-)
+interface SpacesService : Service {
+    fun getSpaces(): RemoteOperationResult<List<SpaceResponse>>
+}

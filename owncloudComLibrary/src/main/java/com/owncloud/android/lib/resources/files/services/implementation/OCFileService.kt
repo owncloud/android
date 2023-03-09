@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2022 ownCloud GmbH.
+ *   Copyright (C) 2023 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -42,11 +42,13 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
 
     override fun checkPathExistence(
         path: String,
-        isUserLogged: Boolean
+        isUserLogged: Boolean,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<Boolean> =
         CheckPathExistenceRemoteOperation(
             remotePath = path,
-            isUserLoggedIn = isUserLogged
+            isUserLoggedIn = isUserLogged,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 
     override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): RemoteOperationResult<String> =
@@ -54,22 +56,28 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
 
     override fun copyFile(
         sourceRemotePath: String,
-        targetRemotePath: String
+        targetRemotePath: String,
+        sourceSpaceWebDavUrl: String?,
+        targetSpaceWebDavUrl: String?,
     ): RemoteOperationResult<String> =
         CopyRemoteFileOperation(
-            srcRemotePath = sourceRemotePath,
-            targetRemotePath = targetRemotePath
+            sourceRemotePath = sourceRemotePath,
+            targetRemotePath = targetRemotePath,
+            sourceSpaceWebDavUrl = sourceSpaceWebDavUrl,
+            targetSpaceWebDavUrl = targetSpaceWebDavUrl,
         ).execute(client)
 
     override fun createFolder(
         remotePath: String,
         createFullPath: Boolean,
-        isChunkFolder: Boolean
+        isChunkFolder: Boolean,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<Unit> =
         CreateRemoteFolderOperation(
             remotePath = remotePath,
             createFullPath = createFullPath,
-            isChunksFolder = isChunkFolder
+            isChunksFolder = isChunkFolder,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 
     override fun downloadFile(
@@ -84,43 +92,53 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
     override fun moveFile(
         sourceRemotePath: String,
         targetRemotePath: String,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<Unit> =
         MoveRemoteFileOperation(
             sourceRemotePath = sourceRemotePath,
             targetRemotePath = targetRemotePath,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 
     override fun readFile(
-        remotePath: String
+        remotePath: String,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<RemoteFile> =
         ReadRemoteFileOperation(
-            remotePath = remotePath
+            remotePath = remotePath,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 
     override fun refreshFolder(
-        remotePath: String
+        remotePath: String,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<ArrayList<RemoteFile>> =
         ReadRemoteFolderOperation(
-            remotePath = remotePath
+            remotePath = remotePath,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 
     override fun removeFile(
-        remotePath: String
+        remotePath: String,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<Unit> =
         RemoveRemoteFileOperation(
-            remotePath = remotePath
+            remotePath = remotePath,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 
     override fun renameFile(
         oldName: String,
         oldRemotePath: String,
         newName: String,
-        isFolder: Boolean
+        isFolder: Boolean,
+        spaceWebDavUrl: String?,
     ): RemoteOperationResult<Unit> =
         RenameRemoteFileOperation(
             oldName = oldName,
             oldRemotePath = oldRemotePath,
             newName = newName,
-            isFolder = isFolder
+            isFolder = isFolder,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 }

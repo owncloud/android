@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2022 ownCloud GmbH.
+ *   Copyright (C) 2023 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -44,25 +44,29 @@ import java.util.concurrent.TimeUnit
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author David González V.
+ * @author Juan Carlos Garrote Gascón
  *
- * @param srcRemotePath    Remote path of the file/folder to copy.
+ * @param sourceRemotePath    Remote path of the file/folder to copy.
  * @param targetRemotePath Remote path desired for the file/folder to copy it.
  */
 class CopyRemoteFileOperation(
-    private val srcRemotePath: String,
+    private val sourceRemotePath: String,
     private val targetRemotePath: String,
+    private val sourceSpaceWebDavUrl: String? = null,
+    private val targetSpaceWebDavUrl: String? = null,
 ) : RemoteOperation<String>() {
+
     /**
      * Performs the rename operation.
      *
      * @param client Client object to communicate with the remote ownCloud server.
      */
     override fun run(client: OwnCloudClient): RemoteOperationResult<String> {
-        if (targetRemotePath == srcRemotePath) {
+        if (targetRemotePath == sourceRemotePath && sourceSpaceWebDavUrl == targetSpaceWebDavUrl) {
             // nothing to do!
             return RemoteOperationResult(ResultCode.OK)
         }
-        if (targetRemotePath.startsWith(srcRemotePath)) {
+        if (targetRemotePath.startsWith(sourceRemotePath) && sourceSpaceWebDavUrl == targetSpaceWebDavUrl) {
             return RemoteOperationResult(ResultCode.INVALID_COPY_INTO_DESCENDANT)
         }
 
@@ -70,8 +74,8 @@ class CopyRemoteFileOperation(
         var result: RemoteOperationResult<String>
         try {
             val copyMethod = CopyMethod(
-                URL(client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(srcRemotePath)),
-                client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(targetRemotePath),
+                URL((sourceSpaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(sourceRemotePath)),
+                (targetSpaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(targetRemotePath),
             ).apply {
                 setReadTimeout(COPY_READ_TIMEOUT, TimeUnit.SECONDS)
                 setConnectionTimeout(COPY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
@@ -95,10 +99,10 @@ class CopyRemoteFileOperation(
                     client.exhaustResponse(copyMethod.getResponseBodyAsStream())
                 }
             }
-            Timber.i("Copy $srcRemotePath to $targetRemotePath: ${result.logMessage}")
+            Timber.i("Copy $sourceRemotePath to $targetRemotePath: ${result.logMessage}")
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
-            Timber.e(e, "Copy $srcRemotePath to $targetRemotePath: ${result.logMessage}")
+            Timber.e(e, "Copy $sourceRemotePath to $targetRemotePath: ${result.logMessage}")
         }
         return result
     }

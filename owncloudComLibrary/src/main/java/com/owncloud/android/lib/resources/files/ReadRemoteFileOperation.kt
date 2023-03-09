@@ -46,7 +46,10 @@ import java.util.concurrent.TimeUnit
  * @author David González Verdugo
  */
 
-class ReadRemoteFileOperation(val remotePath: String) : RemoteOperation<RemoteFile>() {
+class ReadRemoteFileOperation(
+    val remotePath: String,
+    val spaceWebDavUrl: String? = null,
+) : RemoteOperation<RemoteFile>() {
 
     /**
      * Performs the read operation.
@@ -57,7 +60,7 @@ class ReadRemoteFileOperation(val remotePath: String) : RemoteOperation<RemoteFi
     override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteFile> {
         try {
             val propFind = PropfindMethod(
-                url = URL("${client.userFilesWebDavUri}${WebdavUtils.encodePath(remotePath)}"),
+                url = getFinalWebDavUrl(),
                 depth = DEPTH_0,
                 propertiesToRequest = DavUtils.allPropset
             ).apply {
@@ -69,10 +72,11 @@ class ReadRemoteFileOperation(val remotePath: String) : RemoteOperation<RemoteFi
             Timber.i("Read remote file $remotePath with status ${propFind.statusCode}")
 
             return if (isSuccess(status)) {
-                // TODO: Remove that !!
                 val remoteFile = RemoteFile.getRemoteFileFromDav(
-                    propFind.root!!,
-                    AccountUtils.getUserId(mAccount, mContext), mAccount.name
+                    davResource = propFind.root!!,
+                    userId = AccountUtils.getUserId(mAccount, mContext),
+                    userName = mAccount.name,
+                    spaceWebDavUrl = spaceWebDavUrl,
                 )
 
                 RemoteOperationResult<RemoteFile>(RemoteOperationResult.ResultCode.OK).apply {
@@ -86,6 +90,12 @@ class ReadRemoteFileOperation(val remotePath: String) : RemoteOperation<RemoteFi
         } catch (exception: Exception) {
             return RemoteOperationResult(exception)
         }
+    }
+
+    private fun getFinalWebDavUrl(): URL {
+        val baseWebDavUrl = spaceWebDavUrl ?: client.userFilesWebDavUri.toString()
+
+        return URL(baseWebDavUrl + WebdavUtils.encodePath(remotePath))
     }
 
     private fun isSuccess(status: Int) = status.isOneOf(HTTP_MULTI_STATUS, HTTP_OK)

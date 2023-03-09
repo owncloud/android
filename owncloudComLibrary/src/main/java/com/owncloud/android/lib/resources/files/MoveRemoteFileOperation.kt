@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2021 ownCloud GmbH.
+ *   Copyright (C) 2023 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -38,17 +38,22 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Remote operation moving a remote file or folder in the ownCloud server to a different folder
- * in the same account.
+ * in the same account and space.
  *
  * Allows renaming the moving file/folder at the same time.
  *
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
+ * @param sourceRemotePath  Remote path of the file/folder to copy.
+ * @param targetRemotePath  Remote path desired for the file/folder to copy it.
  */
 open class MoveRemoteFileOperation(
     private val sourceRemotePath: String,
     private val targetRemotePath: String,
+    private val spaceWebDavUrl: String? = null,
 ) : RemoteOperation<Unit>() {
 
     /**
@@ -73,8 +78,8 @@ open class MoveRemoteFileOperation(
             // so this uri has to be customizable
             val srcWebDavUri = getSrcWebDavUriForClient(client)
             val moveMethod = MoveMethod(
-                url = URL(srcWebDavUri.toString() + WebdavUtils.encodePath(sourceRemotePath)),
-                destinationUrl = client.userFilesWebDavUri.toString() + WebdavUtils.encodePath(targetRemotePath),
+                url = URL((spaceWebDavUrl ?: srcWebDavUri.toString()) + WebdavUtils.encodePath(sourceRemotePath)),
+                destinationUrl = (spaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(targetRemotePath),
             ).apply {
                 addRequestHeaders(this)
                 setReadTimeout(MOVE_READ_TIMEOUT, TimeUnit.SECONDS)
