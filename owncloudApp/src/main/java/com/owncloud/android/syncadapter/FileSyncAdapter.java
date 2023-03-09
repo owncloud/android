@@ -41,7 +41,7 @@ import com.owncloud.android.domain.UseCaseResult;
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase;
 import com.owncloud.android.domain.exceptions.UnauthorizedException;
 import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.domain.files.usecases.GetRootFolderPersonalUseCase;
+import com.owncloud.android.domain.files.usecases.GetPersonalRootFolderForAccountUseCase;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase;
 import com.owncloud.android.utils.NotificationUtils;
@@ -150,9 +150,9 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         try {
             updateCapabilities();
             if (!mCancellation) {
-                @NotNull Lazy<GetRootFolderPersonalUseCase> getRootFolderPersonalUseCaseLazy =
-                        inject(GetRootFolderPersonalUseCase.class);
-                GetRootFolderPersonalUseCase.Params params = new GetRootFolderPersonalUseCase.Params(account.name);
+                @NotNull Lazy<GetPersonalRootFolderForAccountUseCase> getRootFolderPersonalUseCaseLazy =
+                        inject(GetPersonalRootFolderForAccountUseCase.class);
+                GetPersonalRootFolderForAccountUseCase.Params params = new GetPersonalRootFolderForAccountUseCase.Params(account.name);
 
                 OCFile rootFolder = getRootFolderPersonalUseCaseLazy.getValue().execute(params);
                 if (rootFolder != null) {
