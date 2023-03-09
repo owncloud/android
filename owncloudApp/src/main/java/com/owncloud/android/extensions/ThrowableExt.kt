@@ -40,6 +40,7 @@ import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorAccessDeniedException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorException
+import com.owncloud.android.domain.exceptions.QuotaExceededException
 import com.owncloud.android.domain.exceptions.RedirectToNonSecureException
 import com.owncloud.android.domain.exceptions.SSLErrorException
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
@@ -95,6 +96,7 @@ fun Throwable.parseError(
             is AccountNotTheSameException -> resources.getString(R.string.auth_account_not_the_same)
             is RedirectToNonSecureException -> resources.getString(R.string.auth_redirect_non_secure_connection_title)
             is LocalFileNotFoundException -> resources.getString(R.string.local_file_not_found_toast)
+            is QuotaExceededException -> resources.getString(R.string.failed_upload_quota_exceeded_text)
             else -> resources.getString(R.string.common_error_unknown)
         }
 
