@@ -109,9 +109,11 @@
   <string name="illegal_argument_exception_message">Una AZIONE valida è necessaria per l\'intenzione di passare a</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">File</string>
+  <string name="bottom_nav_personal">Personale</string>
   <string name="bottom_nav_uploads">Upload</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Collegamenti</string>
+  <string name="bottom_nav_shares">Condivisioni</string>
   <string name="recommend_subject">Prova %1$s sul tuo smartphone!</string>
   <string name="recommend_text">Vorrei invitarti a usare %1$s sul tuo smartphone!\nScarica qui: %2$s</string>
   <string name="error_reason">perchè</string>
@@ -392,7 +394,7 @@
   <string name="confirmation_disable_videos_upload_message">Sei sicuro di voler disabilitare questa funzionalità? I video immagini rimanenti non saranno caricati</string>
   <string name="proper_pics_folder_warning_camera_upload">Assicurati che la cartella selezionata sia quella che la tua fotocamera usa per salvare le foto scattate. Altrimenti, la funzione non sarà in grado di rilevare le tue foto. Tieni presente che le foto verranno inviate entro almeno 15 minuti dopo averle scattate.</string>
   <string name="proper_videos_folder_warning_camera_upload">Assicurati che la cartella selezionata sia quella che la tua fotocamera usa per salvare i video registrati. Altrimenti, la funzione non sarà in grado di rilevare i tuoi video. Tieni presente che i video verranno inviati entro almeno 15 minuti dopo averli registrati.</string>
-    <string name="conflict_description">C\'è un conflitto nel file %1$s, tocca per risolverlo</string>
+  <string name="conflict_description">C\'è un conflitto nel file %1$s, tocca per risolverlo</string>
   <string name="conflict_message">Quali file vuoi tenere? Se selezioni entrambi le versioni, il file locale avrà un numero aggiunto al suo nome.</string>
   <string name="conflict_keep_both">Mantieni entrambi</string>
   <string name="conflict_use_local_version">Versione locale</string>

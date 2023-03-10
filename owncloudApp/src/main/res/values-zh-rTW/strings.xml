@@ -99,9 +99,11 @@
   <string name="illegal_argument_exception_message">傳遞給的Intent中需要有效的ACTION</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">檔案</string>
+  <string name="bottom_nav_personal">個人</string>
   <string name="bottom_nav_uploads">上傳</string>
   <string name="bottom_nav_offline">下線</string>
   <string name="bottom_nav_links">連結</string>
+  <string name="bottom_nav_shares">分享</string>
   <string name="recommend_subject">在您的手機中試用%1$s!</string>
   <string name="recommend_text">我想邀起您也在智慧型手機上使用%1$s!\n下載:%2$s</string>
   <string name="error_reason">因為</string>
@@ -371,7 +373,7 @@
   <string name="confirmation_disable_videos_upload_message">您確定您要停用此功能嗎？ 待處理的視頻將不會上傳</string>
   <string name="proper_pics_folder_warning_camera_upload">請確保選擇的目錄是您正在使用的相機保存所拍攝照片的位置。 否則，該功能將無法檢測您的照片。 請記住，照片將在拍攝後至少15分鐘內上傳。</string>
   <string name="proper_videos_folder_warning_camera_upload">請確保選擇的目錄是您正在使用的相機保存錄製的視頻的位置。 否則，該功能將無法檢測您的視頻。 請記住，視頻將在錄製後至少15分鐘內上傳。</string>
-    <string name="conflict_description">檔案%1$s中存在衝突點擊解決</string>
+  <string name="conflict_description">檔案%1$s中存在衝突點擊解決</string>
   <string name="conflict_message">您要保留那個檔案? 如果您同時選擇兩個版本, 本地的檔案將在檔案名稱後面會加上編號</string>
   <string name="conflict_keep_both">都保留</string>
   <string name="conflict_use_local_version">本地版本</string>

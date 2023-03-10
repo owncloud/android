@@ -108,9 +108,11 @@
   <string name="illegal_argument_exception_message">Допустимое ДЕЙСТВИЕ требуется для передачи в намерениях</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Файлы</string>
+  <string name="bottom_nav_personal">Личный</string>
   <string name="bottom_nav_uploads">Загрузки</string>
   <string name="bottom_nav_offline">Оффлайн</string>
   <string name="bottom_nav_links">Ссылки</string>
+  <string name="bottom_nav_shares">События обмена файлами</string>
   <string name="recommend_subject">Попробуйте %1$s на вашем смартфоне!</string>
   <string name="recommend_text">Хочу предложить вам использовать %1$s на смартфоне!\nЗагрузить можно здесь: %2$s
 	</string>
@@ -397,7 +399,7 @@
   <string name="confirmation_disable_videos_upload_message">Вы уверены, что хотите отключить эту возможность? Последующие видеозаписи не будут загружены</string>
   <string name="proper_pics_folder_warning_camera_upload">Пожалуйста, удостоверьтесь, что выбранный вами каталог — тот самый, в который ваша камера сохраняет снятые изображения. Иначе приложение не сможет обнаружить ваши снимки. Учитывайте, что загрузка изображений происходит как минимум через 15 минут после момента съёмки.</string>
   <string name="proper_videos_folder_warning_camera_upload">Пожалуйста, удостоверьтесь,что выбранный вами каталог, тот самый, где камера сохраняет снятые видеоролики. Иначе приложение не сможет обнаружить ваши видео. Учитывайте, что ролики буду закачиваться не раньше чем через 15 минут после их записи.</string>
-    <string name="conflict_description">Конфликт в файле %1$s, нажмите чтобы разрешить его</string>
+  <string name="conflict_description">Конфликт в файле %1$s, нажмите чтобы разрешить его</string>
   <string name="conflict_message">Какие файлы Вы хотите сохранить? При выборе обеих версий, к названию локального файла будет добавлена цифра</string>
   <string name="conflict_keep_both">Сохранить оба</string>
   <string name="conflict_use_local_version">локальная версия</string>

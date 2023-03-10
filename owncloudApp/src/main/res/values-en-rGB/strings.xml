@@ -85,9 +85,11 @@
   <string name="illegal_argument_exception_message">A valid ACTION is needed in the Intent passed to</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Files</string>
+  <string name="bottom_nav_personal">Personal</string>
   <string name="bottom_nav_uploads">Uploads</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Links</string>
+  <string name="bottom_nav_shares">Shares</string>
   <string name="recommend_subject">Try %1$s on your smartphone!</string>
   <string name="recommend_text">I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s</string>
   <string name="error_reason">because</string>
@@ -349,7 +351,7 @@
   <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature? The pending videos will not be uploaded</string>
   <string name="proper_pics_folder_warning_camera_upload">Please make sure the folder selected is where the camera you are using saves the pictures taken. Otherwise, the feature will not be able to detect your pictures. Keep in mind that pictures will be uploaded in at least 15 minutes after taking them.</string>
   <string name="proper_videos_folder_warning_camera_upload">Please make sure the folder selected is where the camera you are using saves the videos recorded. Otherwise, the feature will not be able to detect your videos. Keep in mind that videos will be uploaded in at least 15 minutes after recording them.</string>
-    <string name="conflict_description">There is a conflict in file %1$s, tap to solve it</string>
+  <string name="conflict_description">There is a conflict in file %1$s, tap to solve it</string>
   <string name="conflict_message">Which files do you want to keep? If you select both versions, the local file will have a number added to its name.</string>
   <string name="conflict_keep_both">Keep both</string>
   <string name="conflict_use_local_version">local version</string>

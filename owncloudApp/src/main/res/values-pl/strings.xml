@@ -109,9 +109,11 @@
   <string name="illegal_argument_exception_message">Wymagana poprawna AKCJA dla Zamiaru</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Pliki</string>
+  <string name="bottom_nav_personal">Osobiste</string>
   <string name="bottom_nav_uploads">Wrzucone</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Linki</string>
+  <string name="bottom_nav_shares">Udziały</string>
   <string name="recommend_subject">Wypróbuj %1$s na swoim smartphonie!</string>
   <string name="recommend_text">Chciałbym zaprosić Cię do używania %1$s na swoim smartfonie!\nŚciągnij tutaj: %2$s</string>
   <string name="error_reason">ponieważ</string>
@@ -397,7 +399,7 @@
   <string name="confirmation_disable_videos_upload_message">Czy jesteś pewien że chcesz dezaktywować tą usługę ? Oczekujące filmy nie zostaną wrzucone</string>
   <string name="proper_pics_folder_warning_camera_upload">Upewnij się, że wskazany folder jest tym samym folderem używanym przez aparat do zapisu. W innym przypadku nie zarejestruje twoich zdjęć. Miej na uwadze że zdjęcia zostaną wysłane w ciągu przynajmniej 15 minut od ich powstania.</string>
   <string name="proper_videos_folder_warning_camera_upload">Upewnij się, że wskazany folder jest tym samym folderem używanym przez aparat do zapisu. W innym przypadku nie zarejestruje twoich filmów. Miej na uwadze że filmy zostaną wysłane w ciągu przynajmniej 15 minut od ich powstania.</string>
-    <string name="conflict_description">W pliku %1$swystąpił konflikt, naciśnij żeby go rozwiązać</string>
+  <string name="conflict_description">W pliku %1$swystąpił konflikt, naciśnij żeby go rozwiązać</string>
   <string name="conflict_message">Które pliki chcesz zachować? Jeśli wybierzesz obie wersje, do nazwy pliku lokalnego zostanie dodana liczba.</string>
   <string name="conflict_keep_both">Zatrzymaj oba</string>
   <string name="conflict_use_local_version">wersja lokalna</string>

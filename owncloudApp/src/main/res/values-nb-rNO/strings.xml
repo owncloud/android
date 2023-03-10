@@ -79,9 +79,11 @@
   <string name="illegal_argument_exception_message">En gyldig ACTION må være med i intent sendt til</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Filer</string>
+  <string name="bottom_nav_personal">Personlig</string>
   <string name="bottom_nav_uploads">Last opp</string>
   <string name="bottom_nav_offline">Frakoblet</string>
   <string name="bottom_nav_links">Lenker</string>
+  <string name="bottom_nav_shares">Delinger</string>
   <string name="recommend_subject">Prøv %1$s på smarttelefonen din!</string>
   <string name="recommend_text">Jeg ønsker å invitere deg til å bruke %1$s på smarttelefonen din!\nLast ned her: %2$s</string>
   <string name="error_reason">fordi</string>
@@ -340,7 +342,7 @@
   <string name="confirmation_disable_videos_upload_message">Er du sikker på at du vil deaktivere denne funksjonen? De ventende videoene vil ikke bli lastet opp</string>
   <string name="proper_pics_folder_warning_camera_upload">Sørg for å velge mappen som kameraet ditt lagrer bildene i. Hvis ikke vil programmet ikke være i stand til å detektere bildene dine. Vær obs på at når du tar bilder vil det ta minst 15 minutter før de blir lastet opp.</string>
   <string name="proper_videos_folder_warning_camera_upload">Sørg for å velge mappen som kameraet ditt lagrer videoene dine i. Hvis ikke vil programmet ikke være i stand til å detektere videoene. Vær obs på at når du er ferdig å ta opp en video vil det ta minst 15 minutter før de blir lastet opp.</string>
-    <string name="conflict_description">Det er en konflikt i fil %1$s, trykk for å løse den</string>
+  <string name="conflict_description">Det er en konflikt i fil %1$s, trykk for å løse den</string>
   <string name="conflict_message">Hvilke filer ønsker du å beholder? Hvis du velger begge versjonene, får den lokale filen lagt til et tall i navnet.</string>
   <string name="conflict_keep_both">Behold begge</string>
   <string name="conflict_use_local_version">lokal versjon</string>

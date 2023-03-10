@@ -89,9 +89,11 @@
   <string name="document_provider_locked">Låst</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Filer</string>
+  <string name="bottom_nav_personal">Personligt</string>
   <string name="bottom_nav_uploads">Uppladdningar</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Länkar</string>
+  <string name="bottom_nav_shares">Delningar</string>
   <string name="recommend_subject">Prova %1$s på din smartphone!</string>
   <string name="recommend_text">Jag skullje vilja bjuda in dig till att prova %1$s på din smartphone!\nLadda ner appen från Google Play här: %2$s</string>
   <string name="error_reason">för att</string>
@@ -352,7 +354,7 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Bekräfta</string>
-    <string name="conflict_description">Det är en konflikt i filen %1$s, klicka för att lösa den</string>
+  <string name="conflict_description">Det är en konflikt i filen %1$s, klicka för att lösa den</string>
   <string name="conflict_message">Vilka filer vill du behålla? Om du markerar båda kommer den lokala filen få ett nummer tillagt i slutet på filnamnet.</string>
   <string name="conflict_keep_both">Behåll båda</string>
   <string name="conflict_use_local_version">lokala versionen</string>

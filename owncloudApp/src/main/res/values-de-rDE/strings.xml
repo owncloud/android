@@ -110,9 +110,11 @@
   <string name="illegal_argument_exception_message">Eine gültige AKTION wird zur Weitergabe benötigt</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Dateien</string>
+  <string name="bottom_nav_personal">Persönlich</string>
   <string name="bottom_nav_uploads">Hochgeladenes</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Links</string>
+  <string name="bottom_nav_shares">Freigaben</string>
   <string name="recommend_subject">%1$s auf Ihrem Smartphone ausprobieren!</string>
   <string name="recommend_text">Ich möchte Sie einladen, %1$s auf Ihrem Smartphone zu verwenden!\nHier herunterladen: %2$s</string>
   <string name="error_reason">weil</string>
@@ -412,7 +414,7 @@
   <string name="confirmation_disable_videos_upload_message">Sind Sie sicher, dass Sie diese Funktion deaktivieren möchten? Videos in der Warteschlange werden nicht hochgeladen.</string>
   <string name="proper_pics_folder_warning_camera_upload">Bitte stellen Sie sicher, dass der Ordner ausgewählt ist, in dem die Kamera die Bilder speichert. Anderenfalls werden Ihre Bilder nicht gefunden. Bitte beachten Sie, dass Bilder frühestens 15 Minuten, nachdem sie aufgenommen wurden, hochgeladen werden.</string>
   <string name="proper_videos_folder_warning_camera_upload">Bitte stellen Sie sicher, dass der Ordner ausgewählt ist, in dem die Kamera die Videos speichert. Anderenfalls werden Ihre Videos nicht gefunden. Bitte beachten Sie, dass Videos frühestens 15 Minuten, nachdem sie aufgenommen wurden, hochgeladen werden.</string>
-    <string name="conflict_description">Ein Konflikt ist in der Datei %1$s aufgetreten. Hier tippen, um das Problem zu lösen.</string>
+  <string name="conflict_description">Ein Konflikt ist in der Datei %1$s aufgetreten. Hier tippen, um das Problem zu lösen.</string>
   <string name="conflict_message">Welche Datei möchten Sie behalten? Wenn Sie beide Versionen auswählen, wird der lokalen Datei eine Zahl ans Ende ihres Dateinamens angehängt.</string>
   <string name="conflict_keep_both">Beide behalten</string>
   <string name="conflict_use_local_version">lokale Version</string>

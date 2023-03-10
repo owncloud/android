@@ -89,9 +89,11 @@
   <string name="illegal_argument_exception_message">Μια έγκυρη ΕΝΕΡΓΕΙΑ είναι απαραίτητη για την πρόθεση να περάσει σε</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Αρχεία</string>
+  <string name="bottom_nav_personal">Προσωπικό</string>
   <string name="bottom_nav_uploads">Μεταφορτώσεις</string>
   <string name="bottom_nav_offline">Εκτός σύνδεσης</string>
   <string name="bottom_nav_links">Σύνδεσμοι</string>
+  <string name="bottom_nav_shares">Κοινόχρηστοι φάκελοι</string>
   <string name="recommend_subject">Δοκιμάστε %1$s στο κινητό σας!</string>
   <string name="recommend_text">Θα ήθελα να σε προσκαλέσω να χρησιμοποιήσεις το %1$s στο κινητό σου!\nΛήψη εδώ: %2$s</string>
   <string name="error_reason">επειδή</string>
@@ -349,7 +351,7 @@
   <string name="confirmation_disable_videos_upload_message">Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε αυτήν τη λειτουργία; Τα βίντεο που εκκρεμούν δεν θα μεταφορτωθούν</string>
   <string name="proper_pics_folder_warning_camera_upload">Βεβαιωθείτε ότι ο επιλεγμένος φάκελος είναι εκεί όπου η κάμερα που χρησιμοποιείτε αποθηκεύει τις φωτογραφίες που έχετε τραβήξει. Διαφορετικά, η λειτουργία δεν θα είναι σε θέση να ανιχνεύσει τις φωτογραφίες σας. Λάβετε υπόψη ότι οι φωτογραφίες θα μεταφορτωθούν τουλάχιστον 15 λεπτά μετά τη λήψη τους.</string>
   <string name="proper_videos_folder_warning_camera_upload">Βεβαιωθείτε ότι ο επιλεγμένος φάκελος είναι εκεί όπου η κάμερα που χρησιμοποιείτε αποθηκεύει τα εγγεγραμμένα βίντεο. Διαφορετικά, η λειτουργία δεν θα είναι σε θέση να ανιχνεύσει τα βίντεό σας. Λάβετε υπόψη ότι τα βίντεο θα μεταφορτωθούν τουλάχιστον 15 λεπτά μετά την εγγραφή τους.</string>
-    <string name="conflict_description">Υπάρχει μια σύγκρουση στο αρχείο %1$s, πατήστε για να το λύσετε</string>
+  <string name="conflict_description">Υπάρχει μια σύγκρουση στο αρχείο %1$s, πατήστε για να το λύσετε</string>
   <string name="conflict_message">Ποια αρχεία θέλετε να διατηρήσετε; Αν επιλέξετε και τις δύο εκδόσεις, το τοπικό αρχείο θα έχει έναν αριθμό που έχει προστεθεί στο όνομά του.</string>
   <string name="conflict_keep_both">Διατήρηση και των δύο</string>
   <string name="conflict_use_local_version">τοπική έκδοση</string>
