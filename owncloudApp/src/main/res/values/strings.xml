@@ -706,6 +706,13 @@
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
 
+    <string name="release_notes_4_0_title_1">Support for Spaces</string>
+    <string name="release_notes_4_0_subtitle_1">Introducing support for spaces feature (oCIS). Only available for new accounts</string>
+    <string name="release_notes_4_0_title_2">Bottom navigation bar</string>
+    <string name="release_notes_4_0_subtitle_2">Reordered some tabs</string>
+    <string name="release_notes_4_0_title_3">End of support Lollipop</string>
+    <string name="release_notes_4_0_subtitle_3">This will be the last release with support for Android Lollipop (v5.0)</string>
+
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
     <string name="open_in_web_error_generic">Couldn\'t open in web</string>
