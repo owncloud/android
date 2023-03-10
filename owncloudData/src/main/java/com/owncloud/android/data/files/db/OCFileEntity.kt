@@ -67,7 +67,6 @@ import com.owncloud.android.domain.files.model.MIME_DIR_UNIX
 )
 data class OCFileEntity(
     var parentId: Long? = null,
-    @ColumnInfo(index = true)
     val owner: String,
     val remotePath: String,
     val remoteId: String?,
@@ -91,7 +90,6 @@ data class OCFileEntity(
     val fileIsDownloading: Boolean? = null,
     val sharedWithSharee: Boolean? = false,
     var sharedByLink: Boolean = false,
-    @ColumnInfo(index = true)
     val spaceId: String? = null,
 ) {
     @PrimaryKey(autoGenerate = true)
