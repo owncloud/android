@@ -641,35 +641,9 @@
   <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Prosseguir</string>
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
-  <string name="release_notes_2.21.2_title1">Abrir na web</string>
-  <string name="release_notes_2.21.2_subtitle1">Tipos de arquivo suportados pelo servidor aberto no navegador da Web (somente oCIS)</string>
-  <!--Open in web-->
+    <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="open_in_web_error_generic">Não foi possível abrir na web</string>
   <string name="open_in_web_error_not_supported">Não há aplicativos que suportam este tipo de arquivo</string>
   <string name="open_in_web_error_too_early">O arquivo requisitado ainda não está disponível, por favor tente novamente mais tarde</string>
-  <string name="release_notes_3.0_title1">Novo mecanismo de sincronização</string>
-  <string name="release_notes_3.0_subtitle1">A maneira como todos os arquivos são sincronizados foi redesenhada para melhorá-la</string>
-  <string name="release_notes_3.0_title2">Propagação automática de conflitos</string>
-  <string name="release_notes_3.0_subtitle2">Os conflitos agora são propagados (e limpos) automaticamente para as pastas principais</string>
-  <string name="release_notes_3.0_title3">Correção para miniaturas</string>
-  <string name="release_notes_3.0_subtitle3">Miniaturas agora são mostradas corretamente na lista de arquivos</string>
-  <string name="release_notes_3.0_title4">Visualizações vazias melhoradas</string>
-  <string name="release_notes_3.0_subtitle4">Uma nova e mais atraente visualização foi adicionada às telas sem itens (arquivos, uploads e logs)</string>
-  <string name="release_notes_3.0_title5">Várias transferências em execução simultaneamente</string>
-  <string name="release_notes_3.0_subtitle5">Com o redesenho do mecanismo de sincronização, agora vários downloads e uploads podem ser executados ao mesmo tempo</string>
-  <string name="release_notes_3.0_title6">Login do navegador melhorado</string>
-  <string name="release_notes_3.0_subtitle6">Apenas digitando a URL, o navegador será acionado</string>
-  <string name="release_notes_3.0.1_title1">Corrigir falha ao atualizar</string>
-  <string name="release_notes_3.0.1_subtitle1">Correção para atualizações de 2.18 (ou versões anteriores) para 3.0</string>
-  <string name="release_notes_3.0.1_title2">Corrigir falha na guia de envios</string>
-  <string name="release_notes_3.0.1_subtitle2">Correção para alguns usuários que experimentaram falhas ao entrar na seção de envios</string>
-  <string name="release_notes_3.0.2_title1">Corrigir problema de autenticação dupla</string>
-  <string name="release_notes_3.0.2_subtitle1">A autenticação do navegador agora é mais suave</string>
-  <string name="release_notes_3.0.3_title1">Processo de autenticação mais suave e consistente</string>
-  <string name="release_notes_3.0.3_subtitle1">Melhorou o processo interno para lidar com credenciais</string>
-  <string name="release_notes_3.0.3_title2">Falha de navegação corrigida</string>
-  <string name="release_notes_3.0.3_subtitle2">Barra de ferramentas com status incorreto ao voltar da visualização Compartilhar</string>
-  <string name="release_notes_3.0.3_title3">Mensagem de erro encurtada</string>
-  <string name="release_notes_3.0.3_subtitle3">A mensagem de erro na operação de cópia era tão longa que não era legível no dispositivo</string>
 </resources>

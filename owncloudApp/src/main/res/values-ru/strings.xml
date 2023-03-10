@@ -612,9 +612,7 @@
   <string name="global_proceed">Продолжить</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Продолжить</string>
-  <string name="release_notes_2.21.2_title1">Открыть в браузере</string>
-  <!--Open in web-->
+    <!--Open in web-->
   <string name="ic_action_open_in_web">Открыть в браузере</string>
   <string name="open_in_web_error_too_early">Запрашиваемый файл в данный момент недоступен, пожалуйста, попробуйте позже </string>
-  <string name="release_notes_3.0_title1">Новый механизм синхронизации</string>
 </resources>

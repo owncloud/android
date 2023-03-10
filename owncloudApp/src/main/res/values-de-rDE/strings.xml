@@ -639,35 +639,9 @@
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
   <string name="release_notes_icon">Symbol für Veröffentlichungsnotizen</string>
-  <string name="release_notes_2.21.2_title1">Öffnen im Webbrowser</string>
-  <string name="release_notes_2.21.2_subtitle1">Von Open Server unterstütze Filetypen im Webbrowser (nur für Infinite Scale)</string>
-  <!--Open in web-->
+    <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="open_in_web_error_generic">Kann im Webbrowser nicht geöffnet werden</string>
   <string name="open_in_web_error_not_supported">es gibt keine Apps die diesen Filetyp unterstützen</string>
   <string name="open_in_web_error_too_early">Die Datei ist derzeit nicht verfügbar, bitte versuchen Sie es später noch einmal.</string>
-  <string name="release_notes_3.0_title1">Neuer Sync-Engine</string>
-  <string name="release_notes_3.0_subtitle1">Die Art, wie alle Dateien synchronisiert werden, wurde verbessert.</string>
-  <string name="release_notes_3.0_title2">Automatische Konfliktübertragung</string>
-  <string name="release_notes_3.0_subtitle2">Konflikte werden nun automatisch auf die übergeordneten Ordner übertragen (und bereinigt).</string>
-  <string name="release_notes_3.0_title3">Fehlerbehebung für die Vorschau</string>
-  <string name="release_notes_3.0_subtitle3">Miniaturbilder werden nun korrekt in der Dateiliste angezeigt.</string>
-  <string name="release_notes_3.0_title4">Leere Ansicht verbessert</string>
-  <string name="release_notes_3.0_subtitle4">Seiten ohne Inhalte (Dateien, Uploads und Protokoll-Dateien) wurden attraktiver gestaltet.</string>
-  <string name="release_notes_3.0_title5">Mehrere Übertragungen laufen gleichzeitig.</string>
-  <string name="release_notes_3.0_subtitle5">Durch die Überarbeitung der Sync-Engine können nun gleichzeitig mehrere Datein hoch- und runtergeladen werden.</string>
-  <string name="release_notes_3.0_title6">Verbesserte Anmeldung via Browser</string>
-  <string name="release_notes_3.0_subtitle6">Schon durch das Tippen der URL wird der Browser angesteuert.</string>
-  <string name="release_notes_3.0.1_title1">Absturzprobleme beim Upgrade behoben</string>
-  <string name="release_notes_3.0.1_subtitle1">Probleme beim Upgrade von Version 2.18 oder älter auf Version 3.0 wurden behoben.</string>
-  <string name="release_notes_3.0.1_title2">Probleme in der Übersicht für Hochgeladenes behoben.</string>
-  <string name="release_notes_3.0.1_subtitle2">Manche Benutzer erlebten Abstürze, wenn sie in die Ansicht für Hochgeladenes wechselten. Dieses Problem ist nun behoben.</string>
-  <string name="release_notes_3.0.2_title1">Problem der zweifachen Authentifizierung wurde gelöst.</string>
-  <string name="release_notes_3.0.2_subtitle1">Authentifizierung im Browser funktioniert jetzt geschmeidiger.</string>
-  <string name="release_notes_3.0.3_title1">Authentifizierungsprozess geschmeidiger und konsistenter</string>
-  <string name="release_notes_3.0.3_subtitle1">Interner Prozess zur Handhabung von Anmeldedaten verbessert</string>
-  <string name="release_notes_3.0.3_title2">Navigationsproblem behoben</string>
-  <string name="release_notes_3.0.3_subtitle2">Werkzeugleiste mit falschem Status nach dem Verlassen der Ansicht geteilter Inhalte.</string>
-  <string name="release_notes_3.0.3_title3">Fehlermeldung gekürzt</string>
-  <string name="release_notes_3.0.3_subtitle3">Fehlermeldung beim Kopieren war zu lang, um auf dem Gerät vollständig angezeigt zu werden.</string>
 </resources>
