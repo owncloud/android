@@ -83,11 +83,13 @@ interface SpacesDao {
         accountName: String,
     ): SpacesEntity?
 
+    @Transaction
     @Query(SELECT_PROJECT_SPACES_FOR_ACCOUNT)
     fun getProjectSpacesWithSpecialsForAccount(
         accountName: String,
     ): List<SpacesWithSpecials>
 
+    @Transaction
     @Query(SELECT_PROJECT_SPACES_FOR_ACCOUNT)
     fun getProjectSpacesWithSpecialsForAccountAsFlow(
         accountName: String,
@@ -98,11 +100,13 @@ interface SpacesDao {
         accountName: String,
     ): List<SpacesEntity>
 
+    @Transaction
     @Query(SELECT_PERSONAL_AND_PROJECT_SPACES_FOR_ACCOUNT)
     fun getPersonalAndProjectSpacesWithSpecialsForAccountAsFlow(
         accountName: String,
     ): Flow<List<SpacesWithSpecials>>
 
+    @Transaction
     @Query(SELECT_SPACE_BY_ID_FOR_ACCOUNT)
     fun getSpaceWithSpecialsByIdForAccount(
         spaceId: String?,
