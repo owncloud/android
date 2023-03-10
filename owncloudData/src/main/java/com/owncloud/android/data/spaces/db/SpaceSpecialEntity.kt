@@ -43,9 +43,9 @@ import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_LAST_MO
     )]
 )
 data class SpaceSpecialEntity(
-    @ColumnInfo(name = SPACES_SPECIAL_ACCOUNT_NAME)
+    @ColumnInfo(name = SPACES_SPECIAL_ACCOUNT_NAME, index = true)
     val accountName: String,
-    @ColumnInfo(name = SPACES_SPECIAL_SPACE_ID)
+    @ColumnInfo(name = SPACES_SPECIAL_SPACE_ID, index = true)
     val spaceId: String,
     @ColumnInfo(name = SPACES_SPECIAL_ETAG)
     val eTag: String,
