@@ -25,7 +25,7 @@ package com.owncloud.android.lib.resources.files
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
-import com.owncloud.android.lib.common.http.methods.webdav.DavUtils.allPropset
+import com.owncloud.android.lib.common.http.methods.webdav.DavUtils.allPropSet
 import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperation
@@ -59,7 +59,7 @@ class CheckPathExistenceRemoteOperation(
         val stringUrl = baseStringUrl + WebdavUtils.encodePath(remotePath)
 
         return try {
-            val propFindMethod = PropfindMethod(URL(stringUrl), 0, allPropset).apply {
+            val propFindMethod = PropfindMethod(URL(stringUrl), 0, allPropSet).apply {
                 setReadTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
                 setConnectionTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
             }

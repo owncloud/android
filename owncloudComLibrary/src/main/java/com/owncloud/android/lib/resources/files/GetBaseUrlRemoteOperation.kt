@@ -44,7 +44,7 @@ class GetBaseUrlRemoteOperation : RemoteOperation<String?>() {
         return try {
             val stringUrl = client.baseFilesWebDavUri.toString()
 
-            val propFindMethod = PropfindMethod(URL(stringUrl), 0, DavUtils.allPropset).apply {
+            val propFindMethod = PropfindMethod(URL(stringUrl), 0, DavUtils.allPropSet).apply {
                 setReadTimeout(TIMEOUT, TimeUnit.SECONDS)
                 setConnectionTimeout(TIMEOUT, TimeUnit.SECONDS)
             }

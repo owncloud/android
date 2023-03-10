@@ -62,7 +62,7 @@ class ReadRemoteFileOperation(
             val propFind = PropfindMethod(
                 url = getFinalWebDavUrl(),
                 depth = DEPTH_0,
-                propertiesToRequest = DavUtils.allPropset
+                propertiesToRequest = DavUtils.allPropSet
             ).apply {
                 setReadTimeout(SYNC_READ_TIMEOUT, TimeUnit.SECONDS)
                 setConnectionTimeout(SYNC_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
