@@ -638,39 +638,9 @@
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
-  <string name="release_notes_2.21.2_title1">Hape në web</string>
-  <string name="release_notes_2.21.2_subtitle1">Lloje kartelash të mbuluara për shërbyes të hapët në shfletues (vetëm oCIS)</string>
-  <!--Open in web-->
+    <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="open_in_web_error_generic">S’u hap dot në web</string>
   <string name="open_in_web_error_not_supported">s’ka aplikacione që e mbulojnë këtë lloj kartele</string>
   <string name="open_in_web_error_too_early">Kartela e kërkuar s’është ende e passhme, ju lutemi, riprovoni më vonë</string>
-  <string name="release_notes_3.0_title1">Motor i ri njëkohësimesh</string>
-  <string name="release_notes_3.0_subtitle1">Mënyra se si njëkohësohen krejt kartelat u rihartua për ta përmirësuar</string>
-  <string name="release_notes_3.0_title2">Përhapje e automatizuar e përplasjeve</string>
-  <string name="release_notes_3.0_subtitle2">Tani përplasjet përhapen (dhe spastrohen) automatikisht te dosjet mëmë</string>
-  <string name="release_notes_3.0_title3">Ndreqje për miniatura</string>
-  <string name="release_notes_3.0_subtitle3">Miniaturat tani shfaqen saktësisht te lista e kartelave</string>
-  <string name="release_notes_3.0_title4">U përmirësuan pamjet e zbrazëta</string>
-  <string name="release_notes_3.0_subtitle4">Te skenat pa objekte (kartela, ngarkime dhe regjistra) është shtuar një pamje e re dhe më tërheqëse</string>
-  <string name="release_notes_3.0_title5">Disa shpërngulje që kryhen në të njëjtën kohë</string>
-  <string name="release_notes_3.0_subtitle5">Me ripunimin e mekanizmit të njëkohësimeve, tani mund të xhirohen në të njëjtën kohë një numër shkarkimesh dhe ngarkimesh</string>
-  <string name="release_notes_3.0_title6">U përmirësua hyrja në shfletues</string>
-  <string name="release_notes_3.0_subtitle6">Shfletuesi do të hapet edhe vetëm duke shtypur URL-në</string>
-  <string name="release_notes_3.0.1_title1">Ndreqje vithisjeje gjatë përmirësimi</string>
-  <string name="release_notes_3.0.1_subtitle1">Ndreqje për përmirësime prej 2.18 (ose versionesh të mëparshëm) në 3.0</string>
-  <string name="release_notes_3.0.1_title2">Ndreqje vithisjeje te skeda e ngarkimeve</string>
-  <string name="release_notes_3.0.1_subtitle2">Ndreqje për disa përdorues që patën hasur vithisje kur hynin te pjesa e ngarkimeve</string>
-  <string name="release_notes_3.0.2_title1">Ndreqje problemi mirëfilltësimi dyfish</string>
-  <string name="release_notes_3.0.2_subtitle1">Mirëfilltësimi i shfletuesit tani është më i butë</string>
-  <string name="release_notes_3.0.3_title1">Proces mirëfilltësimi më i rrjedhshëm dhe më i qëndrueshëm</string>
-  <string name="release_notes_3.0.3_subtitle1">U përmirësua procesi i brendshëm për trajtim kredencialesh</string>
-  <string name="release_notes_3.0.3_title2">U ndreq e metë lëvizjeje</string>
-  <string name="release_notes_3.0.3_subtitle2">Panel me gjendje të pasaktë, kur shfletohet pas parjes “Ndaje me të tjerë”</string>
-  <string name="release_notes_3.0.3_title3">U shkurtua mesazh gabimi</string>
-  <string name="release_notes_3.0.3_subtitle3">Një mesazh gabimi për veprim kopjimi qe kaq i gjatë sa s’qe i lexueshëm në pajisje</string>
-  <string name="release_notes_3.0.4_title1">Ndreqje sigurie</string>
-  <string name="release_notes_3.0.4_subtitle1">U ndreqën ca probleme të lidhura me bazën e të dhënave</string>
-  <string name="release_notes_3.0.4_title2">Thellim regjistrash http</string>
-  <string name="release_notes_3.0.4_subtitle2">Përmirësim i disa regjistrave http, për të ndihmuar diagnostikimin</string>
 </resources>

@@ -640,39 +640,9 @@
   <string name="release_notes_footer">Aitäh, et kasutad %1$si.\n❤</string>
   <string name="release_notes_proceed">Jätka</string>
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
-  <string name="release_notes_2.21.2_title1">Ava veebis</string>
-  <string name="release_notes_2.21.2_subtitle1">Ava serveri poolt toetatud failitüüpe otse veebis (ainult ownCloud Infinity Scale korral)</string>
-  <!--Open in web-->
+    <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="open_in_web_error_generic">Ei saanud veebis avada</string>
   <string name="open_in_web_error_not_supported">seda failitüüpi toetavaid rakendusi ei ole</string>
   <string name="open_in_web_error_too_early">Nõutud fail ei ole veel saadaval, palun proovige hiljem uuesti</string>
-  <string name="release_notes_3.0_title1">Uus sünkroniseerimismootor</string>
-  <string name="release_notes_3.0_subtitle1">Viis, kuidas kõiki faile sünkroonitakse, on parendamise nimel uuendatud</string>
-  <string name="release_notes_3.0_title2">Automaatne konfliktide levimine</string>
-  <string name="release_notes_3.0_subtitle2">Konfliktid levitatakse (ja korrastatakse) automaatselt ülakaustadesse</string>
-  <string name="release_notes_3.0_title3">Pisipiltide parandus</string>
-  <string name="release_notes_3.0_subtitle3">Pisipilte näidatakse nüüd failinimekirjas korrektselt</string>
-  <string name="release_notes_3.0_title4">Tühjad vaated on parendatud</string>
-  <string name="release_notes_3.0_subtitle4">Uued ja meeldivamad vaated on lisatud ilma üksusteta vaadetele (failid, üleslaadimised ja logid)</string>
-  <string name="release_notes_3.0_title5">Mitmed ülekanded toimuvad samaaegselt</string>
-  <string name="release_notes_3.0_subtitle5">Sünkroniseerimismootori uuendamisega seoses on nüüd võimalikud mitmed samaaegsed üles- ja allalaadimised</string>
-  <string name="release_notes_3.0_title6">Brauseriga sisselogimine on parendatud</string>
-  <string name="release_notes_3.0_subtitle6">Brauser käivitatakse ainuüksi URL-i kirjutamisel</string>
-  <string name="release_notes_3.0.1_title1">Paranda kokkujooksmine uuendamisel</string>
-  <string name="release_notes_3.0.1_subtitle1">Parandus uuendustele 2.18 (või varasematelt versioonidelt) kuni 3.0</string>
-  <string name="release_notes_3.0.1_title2">Paranda kokkujooksmine üleslaadimiste tabil</string>
-  <string name="release_notes_3.0.1_subtitle2">Parandus kasutajatele, kes kogesid kokkujooksmisi üleslaadimise sektsiooni sisenedes</string>
-  <string name="release_notes_3.0.2_title1">Parandati probleem topelt autentimisega</string>
-  <string name="release_notes_3.0.2_subtitle1">Brauseri kaudu autentimine on nüüd sujuvam</string>
-  <string name="release_notes_3.0.3_title1">Autentimine on sujuvam ja järjepidevam</string>
-  <string name="release_notes_3.0.3_subtitle1">Parandatud on sisemine kasutajatunnuste käitlemise protsess</string>
-  <string name="release_notes_3.0.3_title2">Parandatud on navigeerimise tõrge</string>
-  <string name="release_notes_3.0.3_subtitle2">Tööriistariba näitab vale staatust kui navigeerida tagasi Share-vaatest</string>
-  <string name="release_notes_3.0.3_title3">Veateade lühendatud</string>
-  <string name="release_notes_3.0.3_subtitle3">Veateade kopeerimisel oli nii pikk, et ei olnud seadmel loetav</string>
-  <string name="release_notes_3.0.4_title1">Turvaparandused</string>
-  <string name="release_notes_3.0.4_subtitle1">Parandatud mõned andmebaasiga seotud vead</string>
-  <string name="release_notes_3.0.4_title2">Http logide täiendus</string>
-  <string name="release_notes_3.0.4_subtitle2">Parandatud mõned http logid, et lihtsustada veatuvastust</string>
 </resources>

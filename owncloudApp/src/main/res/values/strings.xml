@@ -705,44 +705,11 @@
     <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
-    <string name="release_notes_2.21.2_title1">Open in web</string>
-    <string name="release_notes_2.21.2_subtitle1">Open server supported file types in web browser (only oCIS)</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
     <string name="open_in_web_error_generic">Couldn\'t open in web</string>
     <string name="open_in_web_error_not_supported">there are no apps that support this file type</string>
     <string name="open_in_web_error_too_early">The requested file is not yet available, please try again later</string>
-
-    <string name="release_notes_3.0_title1">New sync engine</string>
-    <string name="release_notes_3.0_subtitle1">The way in which all files are synced has been redesigned to improve it</string>
-    <string name="release_notes_3.0_title2">Automatic conflicts propagation</string>
-    <string name="release_notes_3.0_subtitle2">Conflicts are now automatically propagated (and cleaned) to parent folders</string>
-    <string name="release_notes_3.0_title3">Fix for thumbnails</string>
-    <string name="release_notes_3.0_subtitle3">Thumbnails are now shown correctly in the file list</string>
-    <string name="release_notes_3.0_title4">Empty views improved</string>
-    <string name="release_notes_3.0_subtitle4">A new and more attractive view has been added to screens with no items (files, uploads and logs)</string>
-    <string name="release_notes_3.0_title5">Several transfers running simultaneously</string>
-    <string name="release_notes_3.0_subtitle5">With the redesign of the sync engine, now several downloads and uploads can run at the same time</string>
-    <string name="release_notes_3.0_title6">Browser login improved</string>
-    <string name="release_notes_3.0_subtitle6">Only typing the URL, browser will be triggered</string>
-    <string name="release_notes_3.0.1_title1">Fix crash when upgrading</string>
-    <string name="release_notes_3.0.1_subtitle1">Fix for upgrades from 2.18 (or previous versions) to 3.0</string>
-    <string name="release_notes_3.0.1_title2">Fix crash in uploads tab</string>
-    <string name="release_notes_3.0.1_subtitle2">Fix for some users who experimented crashes when entering the uploads section</string>
-    <string name="release_notes_3.0.2_title1">Fix double authentication problem</string>
-    <string name="release_notes_3.0.2_subtitle1">Browser authentication is now smoother</string>
-
-    <string name="release_notes_3.0.3_title1">Authentication process smoother and more consistent</string>
-    <string name="release_notes_3.0.3_subtitle1">Improved the internal process to handle credentials</string>
-    <string name="release_notes_3.0.3_title2">Fixed navigation glitch</string>
-    <string name="release_notes_3.0.3_subtitle2">Toolbar with incorrect status when browsing back from Share view</string>
-    <string name="release_notes_3.0.3_title3">Error message shortened</string>
-    <string name="release_notes_3.0.3_subtitle3">Error message in copy operation was so long that was not readable in device</string>
-
-    <string name="release_notes_3.0.4_title1">Security fixes</string>
-    <string name="release_notes_3.0.4_subtitle1">Fixed some issues related to the database</string>
-    <string name="release_notes_3.0.4_title2">Http logs enhancement</string>
-    <string name="release_notes_3.0.4_subtitle2">Improve some http logs to help debugging</string>
 
 </resources>

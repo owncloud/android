@@ -605,8 +605,7 @@ správce systému.</string>
   <string name="release_notes_header">Novinka v %1$s</string>
   <string name="release_notes_footer">Děkujeme, že využíváte %1$s.\n❤</string>
   <string name="release_notes_proceed">Pokračovat</string>
-  <string name="release_notes_2.21.2_title1">Otevřít na webu</string>
-  <!--Open in web-->
+    <!--Open in web-->
   <string name="ic_action_open_in_web">Otevřít na webu</string>
   <string name="open_in_web_error_generic">Nepodařilo se otevřít na webu</string>
 </resources>
