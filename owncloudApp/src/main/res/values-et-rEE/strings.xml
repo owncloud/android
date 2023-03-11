@@ -145,9 +145,13 @@
   <string name="uploader_error_message_source_file_not_copied">Faili kopeerimisel ajutisse kausta tekkis viga. Palun proovi uuesti saata.</string>
   <string name="file_list_seconds_ago">sekundit tagasi</string>
   <string name="file_list_empty_title_all_files">Siin ei ole faile</string>
+  <string name="spaces_list_empty_title">Ruume ei ole</string>
   <string name="file_list_empty_title_available_offline">Võrguühenduseta saadavalolevaid faile ei ole</string>
   <string name="file_list_empty_title_shared_by_links">Jagatud linke pole</string>
   <string name="file_list_empty_subtitle_all_files">Laadi sisu üles või süngi oma seadmetega!</string>
+  <string name="shares_list_empty_title">Jagamisi ei ole</string>
+  <string name="shares_list_empty_subtitle">Sa ei tee koostööd teiste inimeste ressurssides</string>
+  <string name="spaces_list_empty_subtitle">Sul ei ole juurdepääsu ühelegi ruumile!</string>
   <string name="file_list_empty_subtitle_available_offline">Siin kuvatakse faile ja kaustasid, mille oled märkinud saadavaks ilma võrguühenduseta</string>
   <string name="file_list_empty_subtitle_shared_by_links">Siin kuvatakse faile ja kaustasid, mida sa jagad lingiga</string>
   <string name="file_list_loading">Laadimine...</string>
@@ -176,6 +180,7 @@
   <string name="filedetails_renamed_in_upload_msg">Fail nimetati üleslaadimise käigus ümber %1$ </string>
   <string name="list_layout">Nimekiri</string>
   <string name="action_share">Jaga</string>
+  <string name="login_account_preparing">Valmistan kontot ette esimeseks käivitamiseks</string>
   <string name="common_yes">Jah</string>
   <string name="common_no">Ei</string>
   <string name="common_remove_upload">Eemalda üleslaadimine</string>
@@ -414,11 +419,13 @@
   <string name="confirmation_disable_videos_upload_message">Kas oled kindel, et soovid selle võimaluse keelata? Ootel videosid ei laeta üles</string>
   <string name="proper_pics_folder_warning_camera_upload">Palun kontrolli, et valitud kaust oleks see, kuhu kaamera salvestab tehtud pildid. Vastasel juhul ei suuda funktsionaalsus su pilte tuvastada. Pea meeles, et fotod laetakse üles vähemalt 15 minuti jooksul nende tegemist.</string>
   <string name="proper_videos_folder_warning_camera_upload">Palun kontrolli, et valitud kaust oleks see, kuhu kaamera salvestab tehtud videod. Vastasel juhul ei suuda funktsionaalsus su videosid tuvastada. Pea meeles, et videod laetakse üles vähemalt 15 minuti jooksul peale nende salvestamist.</string>
+  <string name="conflict_title">Konfliktne fail</string>
   <string name="conflict_description">Failis %1$s on konflikt, vajuta lahendamiseks</string>
   <string name="conflict_message">Millist faili sa soovid säilitada? Kui valid mõlemad versioonid, siis lisatakse kohaliku faili nimele number.</string>
   <string name="conflict_keep_both">Säilita mõlemad</string>
   <string name="conflict_use_local_version">kohalik versioon</string>
   <string name="conflict_use_server_version">serveri versioon</string>
+  <string name="error_conflict">Sihtkaustas tekkis viga</string>
   <string name="preview_image_description">Pildi eelvaade</string>
   <string name="preview_image_error_unknown_format">Seda pilti ei saa näidata</string>
   <string name="error__upload__local_file_not_copied">%1$s ei suudetud kopeerida kohalikku kataloogi %2$s</string>
@@ -616,6 +623,7 @@
   <string name="prefs_http_logs">Logi HTTP-päringuid ja -vastuseid</string>
   <string name="prefs_logs_summary">Logid võivad sisaldada tundlikku infot. Logide jagamine teistega on ainult kasutaja vastutusel.</string>
   <string name="synchronizing_account">Sünkroonin kontot</string>
+  <string name="spaces_sync_failed">Ruume ei õnnestunud värskendada</string>
   <!--Scoped storage migration wizard-->
   <string name="scoped_storage_wizard_explanation">Leiti %1$s andmeid sinu välisel andmekandjal. Need liigutatakse turvalisse salvestuskohta sinu seadmel. Allesjäänud failid eemaldatakse sinu väliselt andmekandjalt peale migratsiooni duplikaatide ja haavatavuste vältimiseks.</string>
   <string name="scoped_storage_wizard_intro">Sinu rakendus on uuendatud. See rakenduse uuendus migreerib failid turvalisemasse kohta sinu seadmes. See ühekorde andmete migratsioon on nõutav ja võib võtta minuti või rohkem.</string>
