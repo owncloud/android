@@ -75,7 +75,7 @@ class CameraUploadsWorker(
     private val transferRepository: TransferRepository by inject()
 
     override suspend fun doWork(): Result {
-
+        Timber.i("Starting CameraUploadsWorker with UUID ${this.id}")
         when (val useCaseResult = getCameraUploadsConfigurationUseCase.execute(Unit)) {
             is UseCaseResult.Success -> {
                 val cameraUploadsConfiguration = useCaseResult.data
@@ -106,6 +106,7 @@ class CameraUploadsWorker(
                 Timber.e(useCaseResult.throwable, "Worker ${useCaseResult.throwable}")
             }
         }
+        Timber.i("Finishing CameraUploadsWorker with UUID ${this.id}")
         return Result.success()
     }
 
