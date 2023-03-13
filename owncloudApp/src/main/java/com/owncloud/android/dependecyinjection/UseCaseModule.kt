@@ -131,11 +131,11 @@ import org.koin.dsl.module
 val useCaseModule = module {
     // Authentication
     factoryOf(::GetBaseUrlUseCase)
+    factoryOf(::GetOwnCloudInstanceFromWebFingerUseCase)
+    factoryOf(::GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase)
     factoryOf(::LoginBasicAsyncUseCase)
     factoryOf(::LoginOAuthAsyncUseCase)
     factoryOf(::SupportsOAuth2UseCase)
-    factoryOf(::GetOwnCloudInstanceFromWebFingerUseCase)
-    factoryOf(::GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase)
 
     // OAuth
     factoryOf(::OIDCDiscoveryUseCase)
@@ -202,14 +202,14 @@ val useCaseModule = module {
     factoryOf(::RefreshSharesFromServerAsyncUseCase)
 
     // Spaces
-    factoryOf(::GetSpacesFromEveryAccountUseCaseAsStream)
-    factoryOf(::GetPersonalSpaceForAccountUseCase)
     factoryOf(::GetPersonalAndProjectSpacesForAccountUseCase)
     factoryOf(::GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase)
+    factoryOf(::GetPersonalSpaceForAccountUseCase)
     factoryOf(::GetProjectSpacesWithSpecialsForAccountAsStreamUseCase)
     factoryOf(::GetSpaceWithSpecialsByIdForAccountUseCase)
-    factoryOf(::RefreshSpacesFromServerAsyncUseCase)
+    factoryOf(::GetSpacesFromEveryAccountUseCaseAsStream)
     factoryOf(::GetWebDavUrlForSpaceUseCase)
+    factoryOf(::RefreshSpacesFromServerAsyncUseCase)
 
     // Transfers
     factoryOf(::CancelDownloadForFileUseCase)
