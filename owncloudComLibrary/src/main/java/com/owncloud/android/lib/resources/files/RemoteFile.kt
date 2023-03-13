@@ -39,8 +39,6 @@ import at.bitfire.dav4jvm.property.OCId
 import at.bitfire.dav4jvm.property.OCPermissions
 import at.bitfire.dav4jvm.property.OCPrivatelink
 import at.bitfire.dav4jvm.property.OCSize
-import at.bitfire.dav4jvm.property.QuotaAvailableBytes
-import at.bitfire.dav4jvm.property.QuotaUsedBytes
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.webdav.properties.OCShareTypes
@@ -51,7 +49,6 @@ import kotlinx.parcelize.Parcelize
 import okhttp3.HttpUrl
 import timber.log.Timber
 import java.io.File
-import java.math.BigDecimal
 
 /**
  * Contains the data of a Remote File from a WebDavEntry
@@ -73,8 +70,6 @@ data class RemoteFile(
     var permissions: String? = null,
     var remoteId: String? = null,
     var size: Long = 0,
-    var quotaUsedBytes: BigDecimal? = null,
-    var quotaAvailableBytes: BigDecimal? = null,
     var privateLink: String? = null,
     var owner: String,
     var sharedByLink: Boolean = false,
@@ -136,12 +131,6 @@ data class RemoteFile(
                     }
                     is OCSize -> {
                         remoteFile.size = property.size
-                    }
-                    is QuotaUsedBytes -> {
-                        remoteFile.quotaUsedBytes = BigDecimal.valueOf(property.quotaUsedBytes)
-                    }
-                    is QuotaAvailableBytes -> {
-                        remoteFile.quotaAvailableBytes = BigDecimal.valueOf(property.quotaAvailableBytes)
                     }
                     is OCPrivatelink -> {
                         remoteFile.privateLink = property.link

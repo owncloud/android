@@ -64,7 +64,7 @@ class ReadRemoteFolderOperation(
             val propfindMethod = PropfindMethod(
                 getFinalWebDavUrl(),
                 DavConstants.DEPTH_1,
-                DavUtils.allPropset
+                DavUtils.allPropSet
             )
 
             val status = client.executeHttpMethod(propfindMethod)
