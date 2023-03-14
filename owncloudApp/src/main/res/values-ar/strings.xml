@@ -86,9 +86,11 @@
   <string name="illegal_argument_exception_message">هناك حاجة إلى إجراء صحيح في الهدف الممرر إلى</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">ملفات</string>
+  <string name="bottom_nav_personal">شخصي</string>
   <string name="bottom_nav_uploads">التحميلات</string>
   <string name="bottom_nav_offline">غير متصل</string>
   <string name="bottom_nav_links">روابط</string>
+  <string name="bottom_nav_shares">المشاركات</string>
   <string name="recommend_subject">جرب %1$s على هاتفك الذكي!</string>
   <string name="recommend_text">أود أن أدعوك إلى استخدام %1$s على هاتفك الذكي!\nتنزيل من هنا:%2$s</string>
   <string name="error_reason">بسبب</string>

@@ -72,9 +72,11 @@
   <string name="pattern_not_same_pattern">Mynstrin eru ekki eins</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Skrár</string>
+  <string name="bottom_nav_personal">Einka</string>
   <string name="bottom_nav_uploads">Innsendingar</string>
   <string name="bottom_nav_offline">Ónettengt</string>
   <string name="bottom_nav_links">Tenglar</string>
+  <string name="bottom_nav_shares">Sameignir</string>
   <string name="recommend_subject">Prófaðu %1$s á snjallsímanum þínum!</string>
   <string name="recommend_text">Ég vil gjarnan bjóða þér að nota %1$s á snjallsímanum þínum!\nSæktu það hér: %2$s</string>
   <string name="auth_failure_snackbar">Auðkenning mistókst</string>
@@ -318,7 +320,7 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 EH</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Staðfesta</string>
-    <string name="conflict_message">Ef þú velur báðar útgáfur, þá mun verða bætt tölustaf aftan við heiti skrárinnar á tölvunni.</string>
+  <string name="conflict_message">Ef þú velur báðar útgáfur, þá mun verða bætt tölustaf aftan við heiti skrárinnar á tölvunni.</string>
   <string name="conflict_keep_both">Halda báðum</string>
   <string name="conflict_use_local_version">útgáfu á tölvu</string>
   <string name="conflict_use_server_version">útgáfu á þjóni</string>
@@ -399,7 +401,7 @@
   <string name="upload_copy_files">Afrita skrá</string>
   <string name="upload_move_files">Færa skrá</string>
   <string name="pref_behaviour_entries_keep_file">áfram í upprunalegri möppu</string>
-    <string name="share_dialog_title">Deila</string>
+  <string name="share_dialog_title">Deila</string>
   <string name="share_file">Deila %1$s</string>
   <string name="share_with_user_section_title">Notendur og hópar</string>
   <string name="share_no_users">Engum gögnum ennþá deilt með notendum</string>

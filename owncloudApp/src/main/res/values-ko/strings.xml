@@ -91,9 +91,11 @@
   <string name="passcode_already_set">패턴과 비밀번호 잠금은 동시에 활성화 될 수 없으니, 비밀번호를 비활성화하시오</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">파일</string>
+  <string name="bottom_nav_personal">개인</string>
   <string name="bottom_nav_uploads">업로드</string>
   <string name="bottom_nav_offline">오프라인</string>
   <string name="bottom_nav_links">링크</string>
+  <string name="bottom_nav_shares">공유</string>
   <string name="recommend_subject">%1$s을(를) 스마트폰에서 사용해 보세요!</string>
   <string name="recommend_text">%1$s을(를) 스마트폰에서 사용해 보는 것을 추천합니다!\n다운로드 링크: %2$s</string>
   <string name="auth_failure_snackbar">인증 실패</string>
@@ -332,7 +334,7 @@
   <string name="confirmation_disable_camera_uploads_title">확인</string>
   <string name="confirmation_disable_pictures_upload_message">이 기능을 비활성화 하시겠습니까? 아직 업로드 되지 않은 사진은 자동으로 업로드 되지 않습니다</string>
   <string name="confirmation_disable_videos_upload_message">이 기능을 비활성화 하시겠습니까? 아직 업로드 되지 않은 동영상은 자동으로 업로드 되지 않습니다</string>
-    <string name="conflict_message">어떤 파일을 저장하시겠습니까? 모두 저장을 선택하면 로컬 버전의 파일 이름에 숫자를 추가합니다.</string>
+  <string name="conflict_message">어떤 파일을 저장하시겠습니까? 모두 저장을 선택하면 로컬 버전의 파일 이름에 숫자를 추가합니다.</string>
   <string name="conflict_keep_both">모두 저장</string>
   <string name="conflict_use_local_version">로컬 버전</string>
   <string name="conflict_use_server_version">서버 버전</string>

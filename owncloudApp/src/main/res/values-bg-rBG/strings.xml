@@ -74,6 +74,7 @@
   <string name="prefs_show_hidden_files">Показване на скрити файлове</string>
   <string name="prefs_log_open_logs_list_view">Регистрационни файлове</string>
   <string name="prefs_log_no_logs_list_view">Папката на дневника е празна!</string>
+  <string name="prefs_log_empty_subtitle">Активирайте воденето на дневник и файловете от дневника ще се покажат тук</string>
   <string name="prefs_log_title">Активиране на воденето на дневник</string>
   <string name="prefs_log_summary">Това се използва за регистриране на проблеми</string>
   <string name="prefs_log_title_history">История на регистрирането</string>
@@ -109,9 +110,11 @@
   <string name="illegal_argument_exception_message">Необходимо е валидно ДЕЙСТВИЕ в намерението, към което е предадено</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Файлове</string>
+  <string name="bottom_nav_personal">Лично</string>
   <string name="bottom_nav_uploads">Качвания</string>
   <string name="bottom_nav_offline">Офлайн</string>
   <string name="bottom_nav_links">Връзки</string>
+  <string name="bottom_nav_shares">Споделяния</string>
   <string name="recommend_subject">Изпробвайте %1$s на своя смартфон!</string>
   <string name="recommend_text">Бих искал да те поканя да използваш %1$s на своя смартфон!\nИзтегли го от тук: %2$s</string>
   <string name="error_reason">защото</string>
@@ -142,8 +145,14 @@
   <string name="uploader_error_message_source_file_not_copied">Възникна грешка при копиране на файла във временната папка. Моля, опитайте отново да го изпратите.</string>
   <string name="file_list_seconds_ago">преди секунди</string>
   <string name="file_list_empty_title_all_files">Тук няма файлове</string>
+  <string name="spaces_list_empty_title">Няма пространства</string>
+  <string name="file_list_empty_title_available_offline">Няма налични офлайн файлове</string>
   <string name="file_list_empty_title_shared_by_links">Няма споделени връзки</string>
   <string name="file_list_empty_subtitle_all_files">Качете някакво съдържание или го синхронизирайте с устройствата си!</string>
+  <string name="shares_list_empty_title">Няма споделяния</string>
+  <string name="shares_list_empty_subtitle">Не си сътрудничите с ресурси на други хора</string>
+  <string name="spaces_list_empty_subtitle">Нямате достъп до никакво пространство!</string>
+  <string name="file_list_empty_subtitle_available_offline">Файловете и папките, които сте маркирали като налични офлайн, ще се покажат тук.</string>
   <string name="file_list_empty_subtitle_shared_by_links">Файловете и папките, които споделяте чрез връзка ще се покажат тук</string>
   <string name="file_list_loading">Зареждане…</string>
   <string name="file_list_no_app_for_file_type">Не е намерено приложение за този тип файл</string>
@@ -152,6 +161,7 @@
   <string name="local_file_list_empty_just_folders">В тази папка няма папки.</string>
   <string name="local_file_list_search_with_no_matches">Няма съвпадения за това търсене</string>
   <string name="upload_list_empty">Няма налични файлове за качване.</string>
+  <string name="upload_list_empty_subtitle">Качете нещо и то ще се покаже тук</string>
   <string name="file_list_folder">папка</string>
   <string name="file_list_folders">папки</string>
   <string name="file_list_file">файл</string>
@@ -170,6 +180,7 @@
   <string name="filedetails_renamed_in_upload_msg">Файлът беше преименуван на %1$s по време на качването.</string>
   <string name="list_layout">Оформление на списъка</string>
   <string name="action_share">Споделяне</string>
+  <string name="login_account_preparing">Подготовка на профила за първоначално стартиране</string>
   <string name="common_yes">Да</string>
   <string name="common_no">Не</string>
   <string name="common_remove_upload">Премахване на качването</string>
@@ -189,7 +200,7 @@
   <string name="upload_chooser_title">Качване от</string>
   <string name="uploader_info_dirname">Име на папката</string>
   <string name="uploader_upload_in_progress_ticker">Качване...</string>
-  <string name="uploader_upload_in_progress_content">%1$d%% Качване %2$s</string>
+  <string name="uploader_upload_in_progress_content">%1$d%% Качване на %2$s</string>
   <string name="uploader_upload_succeeded_ticker">Качването е успешно</string>
   <string name="uploader_upload_succeeded_content_single">%1$s е качен</string>
   <string name="uploader_upload_failed_ticker">Качването е неуспешно</string>
@@ -213,6 +224,7 @@
   <string name="uploads_view_group_current_uploads">Текущо</string>
   <string name="uploads_view_group_failed_uploads">Неуспешно (докоснете за нов опит)</string>
   <string name="uploads_view_group_finished_uploads">Качени</string>
+  <string name="uploads_view_group_queued_uploads">В опашката</string>
   <string name="uploads_view_group_file_count">%d файла</string>
   <string name="uploads_view_group_file_count_single">%d файл</string>
   <string name="uploads_view_upload_status_succeeded">Завършено</string>
@@ -230,8 +242,13 @@
   <string name="uploads_view_upload_status_service_interrupted">Приложението беше спряно</string>
   <string name="uploads_view_upload_status_unknown_fail">Неизвестна грешка</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Изчакване на Wi-Fi връзка</string>
+  <string name="uploads_view_upload_status_queued">В опашката</string>
   <string name="uploads_view_later_waiting_to_upload">В очакване на качване</string>
   <string name="uploads_view_unsupported_media_type">Неподдържан тип медия</string>
+  <string name="uploader_upload_enqueued_ticker">Качването на %1$s е в опашката</string>
+  <string name="uploader_upload_canceled_ticker">Качването е прекратено</string>
+  <string name="downloader_download_canceled_ticker">Изтеглянето е прекратено</string>
+  <string name="downloader_download_enqueued_ticker">Изтеглянето на %1$s е в опашката</string>
   <string name="downloader_download_in_progress_ticker">Изтегляне...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Изтегля се %2$s</string>
   <string name="downloader_download_succeeded_ticker">Изтеглянето е успешно.</string>
@@ -250,7 +267,7 @@
   <string name="sync_conflicts_in_favourites_ticker">Открити са конфликти</string>
   <string name="sync_conflicts_in_favourites_content">%1$d съхранявани файла не могат да бъдат сихронизирани</string>
   <string name="sync_fail_in_favourites_ticker">Неуспешно съхранение на синхронизираните файлове</string>
-  <string name="sync_fail_in_favourites_content">Неуспешно синхронизиране на съдържанието на %1$d файла (%2$d конфликта).</string>
+  <string name="sync_fail_in_favourites_content">Неуспешно синхронизиране съдържанието на %1$d файла (%2$d конфликта).</string>
   <string name="sync_current_folder_was_removed">Папката %1$s вече не съществува</string>
   <string name="pass_code_enter_pass_code">Моля, въведете своята парола</string>
   <string name="pass_code_configure_your_pass_code">Въведете своята парола</string>
@@ -332,7 +349,7 @@
   <string name="common_rename">Преименуване</string>
   <string name="common_remove">Премахване</string>
   <string name="confirmation_remove_file_alert">Наистина ли искате да изтриете %1$s?</string>
-  <string name="confirmation_remove_folder_alert">Наистина ли искате да премахнете %1$s и съдържанието му?</string>
+  <string name="confirmation_remove_folder_alert">Наистина ли искате да премахнете %1$s и неговото съдържание?</string>
   <string name="confirmation_remove_local">Само локално</string>
   <string name="confirmation_remove_account_alert">Сигурни ли сте, че желаете да премахнете профила на %1$s?</string>
   <string name="confirmation_remove_account_alert_camera_uploads">Този профил има прикачени качвания от камерата, премахването му ще деактивира качванията от камерата. Наистина ли искате да премахнете профила на %1$s?</string>
@@ -345,12 +362,17 @@
   <string name="available_offline_inherited_msg">Папката, която съдържа този файл е налична офлайн</string>
   <string name="rename_local_fail_msg">Локалното копие не може да бъде преименувано; опитайте с друго име</string>
   <string name="rename_server_fail_msg">Преименуването не можe да бъде завършено</string>
+  <string name="file_already_exists">файлът вече съществува</string>
   <string name="sync_file_fail_msg">Неуспешна проверка на отдалечения файл</string>
   <string name="sync_file_nothing_to_do_msg">Съдържанието на файла вече е синхронизирано</string>
+  <string name="new_remote_version_found_msg">В сървъра е открита нова версия. Изтегляне...</string>
+  <string name="download_enqueued_msg">Изтеглянето е поставено в опашка</string>
+  <string name="upload_enqueued_msg">Качването е поставено в опашка</string>
   <string name="create_dir_fail_msg">Папката не може да бъде създадена</string>
   <string name="filename_forbidden_characters">Забранени символи: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Името на файла съдържа поне един невалиден символ</string>
   <string name="filename_empty">Името на файла не може да бъде празно</string>
+  <string name="filename_too_long">Името на файла не може да бъде толкова дълго</string>
   <string name="wait_a_moment">Изчакайте малко</string>
   <string name="wait_checking_credentials">Проверка на запаметените идентификационни данни</string>
   <string name="filedisplay_unexpected_bad_get_content">Неочакван проблем; моля изберете файла от друго приложение</string>
@@ -397,11 +419,13 @@
   <string name="confirmation_disable_videos_upload_message">Наистина ли искате да деактивирате тази функция? Изчакващите видеоклипове няма да бъдат качени</string>
   <string name="proper_pics_folder_warning_camera_upload">Моля уверете се, че избраната папка е мястото където камерата, която използвате запазва направените изображения. В противен случай функцията няма да може да ги открие. Имайте предвид, че изображенията ще бъдат качени най-малко 15 минути след заснемането им.</string>
   <string name="proper_videos_folder_warning_camera_upload">Моля уверете се, че избраната папка е мястото където камерата, която използвате запазва записаните видеоклипове. В противен случай функцията няма да може да открие вашите видеоклипове. Имайте предвид, че видеоклиповете ще бъдат качени най-малко 15 минути след записването им.</string>
+  <string name="conflict_title">Файл в конфликт</string>
   <string name="conflict_description">Има конфликт във файл %1$s, докоснете за да го разрешите</string>
   <string name="conflict_message">Кои файлове искате да запазите? Ако изберете и двете версии, локалния файл ще има числа добавени към името си.</string>
   <string name="conflict_keep_both">Запазване и на двата</string>
   <string name="conflict_use_local_version">Локална версия</string>
   <string name="conflict_use_server_version">Сървърна версия</string>
+  <string name="error_conflict">Възникна грешка в целевата папка</string>
   <string name="preview_image_description">Преглед на изображението</string>
   <string name="preview_image_error_unknown_format">Изображението не може да бъде показано</string>
   <string name="error__upload__local_file_not_copied">%1$s не може да бъде копиран в локалната папка %2$s</string>
@@ -490,6 +514,7 @@
   <string name="upload_copy_files">Копиране на файл</string>
   <string name="upload_move_files">Преместване на файл</string>
   <string name="pref_behaviour_entries_keep_file">се съхранява в оригинална папка</string>
+  <string name="pref_behaviour_entries_remove_original_file">премахнати от оригиналната папка</string>
   <string name="share_dialog_title">Споделяне</string>
   <string name="share_file">Споделяне на %1$s</string>
   <string name="share_with_user_section_title">Потребители и групи</string>
@@ -567,6 +592,8 @@
   <string name="media_service_notification_channel_description">Вижте музикалния плейър</string>
   <string name="file_sync_notification_channel_name">Синхронизиране на файлове</string>
   <string name="file_sync_notification_channel_description">Вижте резултата от синхронизацията на файла</string>
+  <string name="file_sync_conflict_notification_channel_name">Конфликти във файловете</string>
+  <string name="file_sync_conflict_notification_channel_description">Вижте конфликтите на файлове, когато възникнат</string>
   <string name="clicks_to_be_developer">Натиснете върху %1$d, за да активирате менюто за програмисти</string>
   <string name="rate_dialog_title">Оценете приложението %1$s!</string>
   <string name="rate_dialog_description">Ако обичате и използвате това приложение, можете ли да отделите малко време за да го оцените? Вашата обратна връзка е много важна за нас.</string>
@@ -596,6 +623,7 @@
   <string name="prefs_http_logs">Дневник за HTTP заявки и отговори</string>
   <string name="prefs_logs_summary">Дневниците могат да съдържат чувствителна информация. Споделянето на дневници с други лица е отговорност единствено на потребителя</string>
   <string name="synchronizing_account">Синхронизиране на профила</string>
+  <string name="spaces_sync_failed">Пространствата не можаха да се опреснят</string>
   <!--Scoped storage migration wizard-->
   <string name="scoped_storage_wizard_explanation">Намерени %1$s данни във външната памет. Те ще бъдат преместени в защитеното хранилище на вашето устройство. Останалите файлове ще бъдат почистени от външното ви хранилище след миграцията, за да се избегнат дублирания и уязвимост.</string>
   <string name="scoped_storage_wizard_intro">Приложението ви е актуализирано. Тази актуализация на приложението ще прехвърли файловете ви на по-сигурно място във вашето устройство. Тази еднократна миграция на данни е необходима и може да отнеме минута или повече.</string>
@@ -620,7 +648,7 @@
   <string name="release_notes_footer">Благодарим ви, че използвате %1$s.\n❤</string>
   <string name="release_notes_proceed">Продължаване</string>
   <string name="release_notes_icon">Икона за бележка по изданието</string>
-    <!--Open in web-->
+  <!--Open in web-->
   <string name="ic_action_open_in_web">Отваряне в мрежата</string>
   <string name="open_in_web_error_generic">Не може да се отвори в мрежата</string>
   <string name="open_in_web_error_not_supported">няма приложения, които да поддържат този тип файл</string>

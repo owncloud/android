@@ -76,9 +76,11 @@
   <string name="illegal_argument_exception_message">Una ACCIÓ vàlida es requereix per passar a</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Arxius</string>
+  <string name="bottom_nav_personal">Personal</string>
   <string name="bottom_nav_uploads">Càrrega</string>
   <string name="bottom_nav_offline">Fora de línia </string>
   <string name="bottom_nav_links">Enllaços</string>
+  <string name="bottom_nav_shares">Compartits</string>
   <string name="recommend_subject">Proveu %1$s a un telèfon avançat!</string>
   <string name="recommend_text">Vull invitar-te a utilitzar %1$s al teu smartphone!\nDescarrega-ho aqui: %2$s</string>
   <string name="error_reason">ja que</string>

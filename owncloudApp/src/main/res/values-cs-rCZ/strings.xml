@@ -103,9 +103,11 @@
   <string name="pattern_configure_your_pattern_explanation">Gesto bude vyžadováno při každém startu aplikace</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Soubory</string>
+  <string name="bottom_nav_personal">Osobní</string>
   <string name="bottom_nav_uploads">Nahrání</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Odkazy</string>
+  <string name="bottom_nav_shares">Sdílení</string>
   <string name="recommend_subject">Zkuste %1$s na svém chytrém telefonu!</string>
   <string name="recommend_text">Chtěl bych vás pozvat k používání %1$s na vašem chytrém telefonu!\nKe stažení zde: %2$s</string>
   <string name="error_reason">protože</string>
@@ -605,7 +607,7 @@ správce systému.</string>
   <string name="release_notes_header">Novinka v %1$s</string>
   <string name="release_notes_footer">Děkujeme, že využíváte %1$s.\n❤</string>
   <string name="release_notes_proceed">Pokračovat</string>
-    <!--Open in web-->
+  <!--Open in web-->
   <string name="ic_action_open_in_web">Otevřít na webu</string>
   <string name="open_in_web_error_generic">Nepodařilo se otevřít na webu</string>
 </resources>
