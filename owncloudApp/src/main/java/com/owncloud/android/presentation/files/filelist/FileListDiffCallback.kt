@@ -4,7 +4,7 @@
  * @author Fernando Sanz Velasco
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -17,14 +17,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package com.owncloud.android.presentation.files.filelist
 
 import androidx.recyclerview.widget.DiffUtil
 import com.owncloud.android.domain.files.model.FileListOption
-import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
 
 class FileListDiffCallback(
@@ -50,8 +48,8 @@ class FileListDiffCallback(
             return true
         }
 
-        if (oldItem is OCFileWithSyncInfo && newItem is OCFileWithSyncInfo) {
-            return oldItem.file.id == newItem.file.id
+        if (oldItem is FileListAdapter.FileItem && newItem is FileListAdapter.FileItem) {
+            return oldItem.fileWithSyncInfo.file.id == newItem.fileWithSyncInfo.file.id
         }
 
         if (oldItem is OCFooterFile && newItem is OCFooterFile) {

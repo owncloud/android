@@ -18,7 +18,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package com.owncloud.android.presentation.files.filelist
@@ -178,7 +177,8 @@ class MainFileListFragment : Fragment(),
             context = requireContext(),
             layoutManager = layoutManager,
             isPickerMode = isPickingAFolder(),
-            listener = this@MainFileListFragment
+            listener = this@MainFileListFragment,
+            personalName = getString(R.string.bottom_nav_personal),
         )
 
         binding.recyclerViewMainFileList.adapter = fileListAdapter
@@ -238,7 +238,11 @@ class MainFileListFragment : Fragment(),
         collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
             if (fileListUiState !is MainFileListViewModel.FileListUiState.Success) return@collectLatestLifecycleFlow
 
-            fileListAdapter.updateFileList(filesToAdd = fileListUiState.folderContent, fileListOption = fileListUiState.fileListOption)
+            fileListAdapter.updateFileList(
+                filesToAdd = fileListUiState.folderContent,
+                fileListOption = fileListUiState.fileListOption,
+                spaces = mainFileListViewModel.spaces.value,
+            )
             showOrHideEmptyView(fileListUiState)
 
             fileListUiState.space?.let {

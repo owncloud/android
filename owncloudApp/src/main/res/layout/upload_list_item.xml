@@ -107,7 +107,8 @@
                 android:layout_marginEnd="2dp"
                 android:src="@drawable/ic_spaces"
                 android:visibility="gone"
-                app:tint="@color/list_item_lastmod_and_filesize_text"/>
+                app:tint="@color/list_item_lastmod_and_filesize_text"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/upload_space_name"
@@ -121,7 +122,8 @@
                 android:singleLine="true"
                 android:textSize="12sp"
                 android:visibility="gone"
-                tools:text="Space name"/>
+                tools:text="Space name"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/upload_remote_path"
@@ -130,7 +132,9 @@
                 android:textColor="@color/list_item_lastmod_and_filesize_text"
                 android:ellipsize="middle"
                 android:singleLine="true"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:text="/path/to/file"
+                tools:visibility="visible" />
 
         </LinearLayout>
 
