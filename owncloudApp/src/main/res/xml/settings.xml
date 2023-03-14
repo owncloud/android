@@ -27,6 +27,12 @@
 
     <Preference
         app:allowDividerAbove="true"
+        app:icon="@drawable/ic_notifications"
+        app:key="notifications_subsection"
+        app:title="@string/prefs_subsection_notifications" />
+
+    <Preference
+        app:allowDividerAbove="true"
         app:fragment="com.owncloud.android.presentation.settings.logging.SettingsLogsFragment"
         app:icon="@drawable/ic_logs"
         app:key="logging_subsection"

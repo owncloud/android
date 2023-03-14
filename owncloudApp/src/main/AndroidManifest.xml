@@ -40,6 +40,11 @@
     -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--
+        Notifications are off by default since API 33;
+        See note in https://developer.android.com/develop/ui/views/notifications/notification-permission
+    -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <!--
          Next permissions are always approved in installation time,
         the apps needs to do nothing special in runtime
     -->

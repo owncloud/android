@@ -24,7 +24,9 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
@@ -50,6 +52,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private var subsectionMore: Preference? = null
     private var prefPrivacyPolicy: Preference? = null
     private var subsectionWhatsNew: Preference? = null
+    private var subsectionNotifications: Preference? = null
     private var prefAboutApp: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -61,6 +64,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         subsectionMore = findPreference(SUBSECTION_MORE)
         prefPrivacyPolicy = findPreference(PREFERENCE_PRIVACY_POLICY)
         subsectionWhatsNew = findPreference(SUBSECTION_WHATSNEW)
+        subsectionNotifications = findPreference(SUBSECTION_NOTIFICATIONS)
         prefAboutApp = findPreference(PREFERENCE_ABOUT_APP)
 
         subsectionPictureUploads?.isVisible = settingsViewModel.isThereAttachedAccount()
@@ -89,6 +93,18 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            subsectionNotifications?.setOnPreferenceClickListener {
+                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                    putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+                }
+                startActivity(intent)
+                true
+            }
+        } else {
+            settingsScreen.removePreferenceFromScreen(subsectionNotifications)
+        }
+
         prefAboutApp?.apply {
             summary = String.format(
                 getString(R.string.prefs_app_version_summary),
@@ -114,6 +130,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         private const val SUBSECTION_PICTURE_UPLOADS = "picture_uploads_subsection"
         private const val SUBSECTION_VIDEO_UPLOADS = "video_uploads_subsection"
         private const val SUBSECTION_MORE = "more_subsection"
+        private const val SUBSECTION_NOTIFICATIONS = "notifications_subsection"
 
         // Remove preference with nullability check
         fun PreferenceScreen?.removePreferenceFromScreen(preference: Preference?) {
