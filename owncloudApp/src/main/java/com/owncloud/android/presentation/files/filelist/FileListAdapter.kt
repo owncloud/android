@@ -220,7 +220,7 @@ class FileListAdapter(
                             }
                             fileItem.space?.let { space ->
                                 it.fileSpaceIcon.isVisible = true
-                                it.fileSpaceName.isVisible= true
+                                it.fileSpaceName.isVisible = true
                                 if (space.isPersonal) {
                                     it.fileSpaceIcon.setImageResource(R.drawable.ic_folder)
                                     it.fileSpaceName.text = personalName
@@ -231,7 +231,7 @@ class FileListAdapter(
                         } else {
                             it.fileListPath.isVisible = false
                             it.fileSpaceIcon.isVisible = false
-                            it.fileSpaceName.isVisible= false
+                            it.fileSpaceName.isVisible = false
                         }
 
                     }
