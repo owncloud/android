@@ -45,6 +45,7 @@ import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
+import java.io.File
 
 class FileListAdapter(
     private val context: Context,
@@ -203,10 +204,13 @@ class FileListAdapter(
                         it.Filename.text = file.fileName
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
-                        it.fileListPath.apply {
-                            text = file.remotePath
-                            isVisible = !fileListOption.isAllFiles()
+                        if (fileListOption.isAvailableOffline()) {
+                            it.fileListPath.apply {
+                                text = File(file.remotePath).parent
+                                isVisible = true
+                            }
                         }
+
                     }
                 }
                 ViewType.GRID_ITEM.ordinal -> {
