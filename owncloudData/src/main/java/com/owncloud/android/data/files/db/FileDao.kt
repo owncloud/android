@@ -26,6 +26,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import androidx.room.Upsert
 import com.owncloud.android.data.ProviderMeta
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE
@@ -132,6 +133,9 @@ interface FileDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnore(ocFileEntity: OCFileEntity): Long
 
+    @Update
+    fun updateFile(ocFileEntity: OCFileEntity)
+
     @Upsert
     fun upsert(ocFileEntity: OCFileEntity)
 
@@ -193,7 +197,10 @@ interface FileDao {
     ): List<OCFileEntity> {
         var folderId = insertOrIgnore(folder)
         // If it was already in database
-        if (folderId == -1L) folderId = folder.id
+        if (folderId == -1L) {
+            updateFile(folder)
+            folderId = folder.id
+        }
 
         folderContent.forEach { fileToInsert ->
             upsert(fileToInsert.apply {
