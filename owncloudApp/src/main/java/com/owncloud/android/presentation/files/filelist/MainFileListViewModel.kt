@@ -68,7 +68,7 @@ class MainFileListViewModel(
     private val getSpaceWithSpecialsByIdForAccountUseCase: GetSpaceWithSpecialsByIdForAccountUseCase,
     private val sortFilesWithSyncInfoUseCase: SortFilesWithSyncInfoUseCase,
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
-    private val getSpacesFromEveryAccountUseCase: GetSpacesFromEveryAccountUseCase,
+    private val getSpacesFromEveryAccountUseCase: GetSpacesFromEveryAccountUseCase, // TODO: To be deleted when adding the space to the file entity
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
     initialFolderToDisplay: OCFile,

@@ -126,6 +126,7 @@ interface SpacesDao {
     fun deleteSpaceForAccountById(accountName: String, spaceId: String)
 
     companion object {
+        // TODO: Shares space (last OR) to be deleted from this query when adding the space to the file entity
         private const val SELECT_ALL_SPACES = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
