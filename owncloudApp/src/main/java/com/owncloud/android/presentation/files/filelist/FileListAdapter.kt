@@ -47,7 +47,6 @@ import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
-import java.io.File
 
 class FileListAdapter(
     private val context: Context,
@@ -212,19 +211,21 @@ class FileListAdapter(
                         it.Filename.text = file.fileName
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
-                        if (fileListOption.isAvailableOffline()) {
+                        if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileItem.space == null)) {
                             it.fileListPath.apply {
-                                text = File(file.remotePath).parent
+                                text = file.getParentRemotePath()
                                 isVisible = true
                             }
-                            fileItem.space?.let { space ->
-                                it.fileSpaceIcon.isVisible = true
-                                it.fileSpaceName.isVisible = true
-                                if (space.isPersonal) {
-                                    it.fileSpaceIcon.setImageResource(R.drawable.ic_folder)
-                                    it.fileSpaceName.setText(R.string.bottom_nav_personal)
-                                } else {
-                                    it.fileSpaceName.text = space.name
+                            if (fileListOption.isAvailableOffline()) {
+                                fileItem.space?.let { space ->
+                                    it.fileSpaceIcon.isVisible = true
+                                    it.fileSpaceName.isVisible = true
+                                    if (space.isPersonal) {
+                                        it.fileSpaceIcon.setImageResource(R.drawable.ic_folder)
+                                        it.fileSpaceName.setText(R.string.bottom_nav_personal)
+                                    } else {
+                                        it.fileSpaceName.text = space.name
+                                    }
                                 }
                             }
                         } else {
@@ -232,7 +233,6 @@ class FileListAdapter(
                             it.fileSpaceIcon.isVisible = false
                             it.fileSpaceName.isVisible = false
                         }
-
                     }
                 }
                 ViewType.GRID_ITEM.ordinal -> {
