@@ -145,9 +145,13 @@
   <string name="uploader_error_message_source_file_not_copied">Es ist ein Fehler beim Kopieren dieser Datei in einen temporären Ordner aufgetreten. Bitte nochmals versuchen, die Datei zu senden.</string>
   <string name="file_list_seconds_ago">Gerade eben</string>
   <string name="file_list_empty_title_all_files">Keine Dateien vorhanden</string>
+  <string name="spaces_list_empty_title">Keine Spaces</string>
   <string name="file_list_empty_title_available_offline">Keine Offline-Dateien vorhanden</string>
   <string name="file_list_empty_title_shared_by_links">Keine geteilten Links</string>
   <string name="file_list_empty_subtitle_all_files">Lade Inhalte hoch oder synchronisiere mit Deinen Geräten!</string>
+  <string name="shares_list_empty_title">Keine Freigaben</string>
+  <string name="shares_list_empty_subtitle">Sie arbeiten nicht mit anderen zusammen an deren Ressourcen.</string>
+  <string name="spaces_list_empty_subtitle">Sie haben keinen Zugriff auf einen Space!</string>
   <string name="file_list_empty_subtitle_available_offline">Dateien und Ordner, die Sie als offline verfügbar markieren, werden hier angezeigt.</string>
   <string name="file_list_empty_subtitle_shared_by_links">Per Link freigegebene Dateien und Ordner werden hier erscheinen.</string>
   <string name="file_list_loading">Lade…</string>
@@ -176,6 +180,7 @@
   <string name="filedetails_renamed_in_upload_msg">Datei wurde wärend des Uploads zu %1$s umbenannt</string>
   <string name="list_layout">Layout der Liste</string>
   <string name="action_share">Teilen</string>
+  <string name="login_account_preparing">Konto wird für erste Verwendung vorbereitet</string>
   <string name="common_yes">Ja</string>
   <string name="common_no">Nein</string>
   <string name="common_remove_upload">Hochgeladene Datei entfernen</string>
@@ -414,11 +419,13 @@
   <string name="confirmation_disable_videos_upload_message">Bist du dir sicher, dass du dieses Feature deaktivieren möchtest? Alle Videos in der Warteschlange werden nicht hochgeladen</string>
   <string name="proper_pics_folder_warning_camera_upload">Bitte stelle sicher, dass sich der ausgewählte Ordner an der Stelle befindet, an der die von Ihnen verwendete Kamera die aufgenommenen Bilder speichert. Andernfalls kann die Funktion Ihre Bilder nicht erkennen. Beachte, dass die Bilder innerhalb von mindestens 15 Minuten nach der Aufnahme hochgeladen werden.</string>
   <string name="proper_videos_folder_warning_camera_upload">Bitte stelle sicher, dass sich der ausgewählte Ordner an der Stelle befindet, an der die von Ihnen verwendete Kamera die aufgenommenen Videos speichert. Andernfalls kann die Funktion Ihre Videos nicht erkennen. Beachte, dass Videos innerhalb von mindestens 15 Minuten nach der Aufnahme hochgeladen werden.</string>
+  <string name="conflict_title">Dateikonflikt</string>
   <string name="conflict_description">Ein Konflikt ist in der Datei %1$s aufgetreten, hier tippen um dies zu lösen</string>
   <string name="conflict_message">Welche Datei möchtest du behalten? Wenn du beide Versionen auswählst, wird der lokalen Datei eine Zahl am Ende Ihres Dateiname angehangen.</string>
   <string name="conflict_keep_both">Beide behalten</string>
   <string name="conflict_use_local_version">Lokale Version</string>
   <string name="conflict_use_server_version">Serverversion</string>
+  <string name="error_conflict">Im Zielordner ist ein Fehler aufgetreten.</string>
   <string name="preview_image_description">Bildvorschau</string>
   <string name="preview_image_error_unknown_format">Dieses Bild kann nicht angezeigt werden</string>
   <string name="error__upload__local_file_not_copied">%1$s konnte nicht in den lokalen %2$s Ordner kopiert werden</string>
@@ -507,6 +514,7 @@
   <string name="upload_copy_files">kopiere Datei</string>
   <string name="upload_move_files">verschiebe Datei</string>
   <string name="pref_behaviour_entries_keep_file">im Originalordner behalten</string>
+  <string name="pref_behaviour_entries_remove_original_file">aus Originalordner entfernt</string>
   <string name="share_dialog_title">Teilen</string>
   <string name="share_file">Teile %1$s</string>
   <string name="share_with_user_section_title">Nutzer und Gruppen</string>
@@ -615,6 +623,7 @@
   <string name="prefs_http_logs">HTTP-Anfragen und -Antworten aufzeichnen</string>
   <string name="prefs_logs_summary">Protokolle können sensible Informationen enthalten. Die gemeinsame Nutzung von Protokollen mit anderen liegt in der alleinigen Verantwortung des Benutzers</string>
   <string name="synchronizing_account">Konto wird synchronisiert</string>
+  <string name="spaces_sync_failed">Spaces konnten nicht aktualisiert werden.</string>
   <!--Scoped storage migration wizard-->
   <string name="scoped_storage_wizard_explanation">Es wurde(n) %1$s der Daten auf externem Speicher gefunden. Diese werden auf den sicheren Speicher auf dem Gerät verschoben. Verbleibende Dateien auf externem Speicher werden nach der Migration aufgeräumt, um Duplikate und Sicherheitslücken vorzubeugen.</string>
   <string name="scoped_storage_wizard_intro">Ihre App wurde aktualisiert. Dieses Anwendungs-Update migriert Ihre Dateien an einen sichereren Ort auf Ihrem Gerät. Diese einmalige Datenmigration ist erforderlich und kann bis zu einer Minute oder länger dauern.</string>
@@ -639,6 +648,12 @@
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
   <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
+  <string name="release_notes_4_0_title_1">Unterstützung für Spaces</string>
+  <string name="release_notes_4_0_subtitle_1">Unterstützung von Spaces (oCIS) ist für neue Konten verfügbar.</string>
+  <string name="release_notes_4_0_title_2">Untere Navigationsleiste</string>
+  <string name="release_notes_4_0_subtitle_2">Einige Tabs neu angeordnet</string>
+  <string name="release_notes_4_0_title_3">Unterstützung von Lollipop endet.</string>
+  <string name="release_notes_4_0_subtitle_3">Mit dieser Version wird zum letzten Mal Android Lollipop (v5.0) unterstützt.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="open_in_web_error_generic">Kann im Webbrowser nicht geöffnet werden</string>
