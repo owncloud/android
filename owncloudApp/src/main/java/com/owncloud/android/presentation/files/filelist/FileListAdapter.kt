@@ -216,16 +216,14 @@ class FileListAdapter(
                                 text = file.getParentRemotePath()
                                 isVisible = true
                             }
-                            if (fileListOption.isAvailableOffline()) {
-                                fileItem.space?.let { space ->
-                                    it.spacePathLine.spaceIcon.isVisible = true
-                                    it.spacePathLine.spaceName.isVisible = true
-                                    if (space.isPersonal) {
-                                        it.spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
-                                        it.spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
-                                    } else {
-                                        it.spacePathLine.spaceName.text = space.name
-                                    }
+                            fileItem.space?.let { space ->
+                                it.spacePathLine.spaceIcon.isVisible = true
+                                it.spacePathLine.spaceName.isVisible = true
+                                if (space.isPersonal) {
+                                    it.spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
+                                    it.spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
+                                } else {
+                                    it.spacePathLine.spaceName.text = space.name
                                 }
                             }
                         } else {
