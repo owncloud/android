@@ -178,7 +178,6 @@ class MainFileListFragment : Fragment(),
             layoutManager = layoutManager,
             isPickerMode = isPickingAFolder(),
             listener = this@MainFileListFragment,
-            personalName = getString(R.string.bottom_nav_personal),
         )
 
         binding.recyclerViewMainFileList.adapter = fileListAdapter

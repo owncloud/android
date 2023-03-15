@@ -54,7 +54,6 @@ class TransfersAdapter(
     val clearFailed: () -> Unit,
     val retryFailed: () -> Unit,
     val clearSuccessful: () -> Unit,
-    private val personalName: String,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val transferItemsList = mutableListOf<TransferRecyclerItem>()
@@ -91,7 +90,7 @@ class TransfersAdapter(
                         spaceIcon.isVisible = true
                         if (it.isPersonal) {
                             spaceIcon.setImageResource(R.drawable.ic_folder)
-                            uploadSpaceName.text = personalName
+                            uploadSpaceName.setText(R.string.bottom_nav_personal)
                         } else {
                             uploadSpaceName.text = it.name
                         }

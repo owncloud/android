@@ -54,7 +54,6 @@ class FileListAdapter(
     private val isPickerMode: Boolean,
     private val layoutManager: StaggeredGridLayoutManager,
     private val listener: FileListAdapterListener,
-    private val personalName: String,
 ) : SelectableAdapter<RecyclerView.ViewHolder>() {
 
     var files = mutableListOf<Any>()
@@ -223,7 +222,7 @@ class FileListAdapter(
                                 it.fileSpaceName.isVisible = true
                                 if (space.isPersonal) {
                                     it.fileSpaceIcon.setImageResource(R.drawable.ic_folder)
-                                    it.fileSpaceName.text = personalName
+                                    it.fileSpaceName.setText(R.string.bottom_nav_personal)
                                 } else {
                                     it.fileSpaceName.text = space.name
                                 }
