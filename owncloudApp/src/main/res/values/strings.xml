@@ -549,6 +549,7 @@
     <string name="prefs_camera_upload_behaviour_dialog_title">Original file will be</string>
     <string name="prefs_camera_upload_behaviour_title">Original file will be</string>
     <string name="prefs_camera_upload_last_sync_title">Last synchronization</string>
+    <string name="notifications_permission_denied">You can update your preferences in Settings</string>
     <string name="upload_copy_files">Copy file</string>
     <string name="upload_move_files">Move file</string>
 
