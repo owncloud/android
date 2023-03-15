@@ -33,6 +33,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.owncloud.android.R
 import com.owncloud.android.databinding.UploadListGroupBinding
 import com.owncloud.android.databinding.UploadListItemBinding
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
@@ -86,17 +87,19 @@ class TransfersAdapter(
                     uploadName.text = fileName
 
                     transferItem.space?.let {
-                        uploadSpaceName.isVisible = true
-                        spaceIcon.isVisible = true
+                        spacePathLine.spaceName.isVisible = true
+                        spacePathLine.spaceIcon.isVisible = true
                         if (it.isPersonal) {
-                            spaceIcon.setImageResource(R.drawable.ic_folder)
-                            uploadSpaceName.setText(R.string.bottom_nav_personal)
+                            spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
+                            spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
                         } else {
-                            uploadSpaceName.text = it.name
+                            spacePathLine.spaceName.text = it.name
                         }
                     }
 
-                    uploadRemotePath.text = remoteFile.parent
+                    remoteFile.parent?.let {
+                        spacePathLine.path.text = if (it.endsWith("${OCFile.PATH_SEPARATOR}")) it else "$it${OCFile.PATH_SEPARATOR}"
+                    }
 
                     uploadFileSize.text = DisplayUtils.bytesToHumanReadable(transferItem.transfer.fileSize, holder.itemView.context)
 

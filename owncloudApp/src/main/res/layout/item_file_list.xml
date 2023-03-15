@@ -95,50 +95,14 @@
             app:layout_constraintTop_toBottomOf="@id/Filename"
             tools:text="Mod Date" />
 
-        <ImageView
-            android:id="@+id/file_space_icon"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/ic_spaces"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <include
+            android:id="@+id/space_path_line"
+            layout="@layout/space_path_line"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@+id/Filename"
-            app:layout_constraintTop_toBottomOf="@+id/file_list_size"
-            app:tint="@color/list_item_lastmod_and_filesize_text"
-            tools:visibility="visible" />
+            app:layout_constraintTop_toBottomOf="@+id/file_list_size" />
 
-        <TextView
-            android:id="@+id/file_space_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="@dimen/standard_half_margin"
-            android:paddingEnd="@dimen/standard_half_padding"
-            android:ellipsize="middle"
-            android:maxWidth="100dp"
-            android:singleLine="true"
-            android:textColor="@color/list_item_lastmod_and_filesize_text"
-            android:textSize="@dimen/two_line_secondary_text_size"
-            android:textStyle="bold"
-            android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@id/file_space_icon"
-            app:layout_constraintTop_toBottomOf="@+id/file_list_size"
-            tools:text="Space name"
-            tools:visibility="visible" />
-
-        <TextView
-            android:id="@+id/file_list_path"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="middle"
-            android:singleLine="true"
-            android:textColor="@color/list_item_lastmod_and_filesize_text"
-            android:textSize="@dimen/two_line_secondary_text_size"
-            android:visibility="gone"
-            app:layout_constraintStart_toEndOf="@+id/file_space_name"
-            app:layout_constraintTop_toBottomOf="@+id/file_list_size"
-            tools:text="/path/to/file"
-            tools:visibility="visible"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

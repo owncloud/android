@@ -212,26 +212,26 @@ class FileListAdapter(
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
                         if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileItem.space == null)) {
-                            it.fileListPath.apply {
+                            it.spacePathLine.path.apply {
                                 text = file.getParentRemotePath()
                                 isVisible = true
                             }
                             if (fileListOption.isAvailableOffline()) {
                                 fileItem.space?.let { space ->
-                                    it.fileSpaceIcon.isVisible = true
-                                    it.fileSpaceName.isVisible = true
+                                    it.spacePathLine.spaceIcon.isVisible = true
+                                    it.spacePathLine.spaceName.isVisible = true
                                     if (space.isPersonal) {
-                                        it.fileSpaceIcon.setImageResource(R.drawable.ic_folder)
-                                        it.fileSpaceName.setText(R.string.bottom_nav_personal)
+                                        it.spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
+                                        it.spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
                                     } else {
-                                        it.fileSpaceName.text = space.name
+                                        it.spacePathLine.spaceName.text = space.name
                                     }
                                 }
                             }
                         } else {
-                            it.fileListPath.isVisible = false
-                            it.fileSpaceIcon.isVisible = false
-                            it.fileSpaceName.isVisible = false
+                            it.spacePathLine.path.isVisible = false
+                            it.spacePathLine.spaceIcon.isVisible = false
+                            it.spacePathLine.spaceName.isVisible = false
                         }
                     }
                 }
