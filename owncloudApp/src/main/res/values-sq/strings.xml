@@ -646,6 +646,12 @@
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
+  <string name="release_notes_4_0_title_1">Mbulim për Hapësira</string>
+  <string name="release_notes_4_0_subtitle_1">Prezantim i mbulimi për veçorinë hapësira (oCIS). E përdorshme vetëm për llogari të reja</string>
+  <string name="release_notes_4_0_title_2">Shtyllë lëvizjesh në fund</string>
+  <string name="release_notes_4_0_subtitle_2">U rirenditën disa skeda</string>
+  <string name="release_notes_4_0_title_3">Fund i mbulimit për Lollipop</string>
+  <string name="release_notes_4_0_subtitle_3">Kjo do të jetë hedhja e fundit në qarkullim me mbulim për Android Lollipop (v5.0)</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="open_in_web_error_generic">S’u hap dot në web</string>

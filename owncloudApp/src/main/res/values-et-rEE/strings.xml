@@ -648,6 +648,12 @@
   <string name="release_notes_footer">Aitäh, et kasutad %1$si.\n❤</string>
   <string name="release_notes_proceed">Jätka</string>
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
+  <string name="release_notes_4_0_title_1">Ruumide tugi</string>
+  <string name="release_notes_4_0_subtitle_1">Tutvustame tuge ruumide funktsioonile (oCIS). Saadaval ainult uutele kontodele</string>
+  <string name="release_notes_4_0_title_2">Alumine navigatsiooniriba</string>
+  <string name="release_notes_4_0_subtitle_2">Mõnede kaartide ümberjärjestamine</string>
+  <string name="release_notes_4_0_title_3">Lollipop toe lõpp</string>
+  <string name="release_notes_4_0_subtitle_3">See on viimane väljalase, mis toetab Android Lollipop (v5.0) versiooni</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="open_in_web_error_generic">Ei saanud veebis avada</string>

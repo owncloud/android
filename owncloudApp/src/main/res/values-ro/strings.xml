@@ -36,6 +36,7 @@
   <string name="prefs_manage_accounts">Administrare conturi</string>
   <string name="prefs_passcode">Parolă de blocare</string>
   <string name="prefs_biometric">Blocare biometrică</string>
+  <string name="prefs_lock_access_from_document_provider_summary">Blocați accesul din alte aplicații la fișierele conturilor din aplicație prin exploratorul de fișiere nativ Android.</string>
   <string name="confirmation_touches_with_other_windows_title">Ești sigur că dorești activarea acestei funcții?</string>
   <string name="prefs_camera_picture_upload">Încărcări fotografii</string>
   <string name="prefs_camera_picture_upload_summary">Încarcă automat fotografiile create cu camera</string>
@@ -68,9 +69,11 @@
   <string name="pattern_not_same_pattern">Modelele nu sunt identice</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Fișiere</string>
+  <string name="bottom_nav_personal">Personal</string>
   <string name="bottom_nav_uploads">Încărcări</string>
   <string name="bottom_nav_offline">Fără conexiune</string>
   <string name="bottom_nav_links">Link-uri</string>
+  <string name="bottom_nav_shares">Partajări</string>
   <string name="recommend_subject">Încearcă %1$s pe smartphone-ul tău!</string>
   <string name="recommend_text">Te invit să folosești %1$s pe smartphone-ul tău!\nDescarcă aici: %2$s</string>
   <string name="error_reason">pentru că</string>
@@ -318,7 +321,7 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Confirmare</string>
-    <string name="conflict_message">Care fișiere doriți să păstrați? Dacă selectați „ambele”, fișierului local i se va adăuga un număr numelui său.</string>
+  <string name="conflict_message">Care fișiere doriți să păstrați? Dacă selectați „ambele”, fișierului local i se va adăuga un număr numelui său.</string>
   <string name="conflict_keep_both">Păstrează ambele</string>
   <string name="conflict_use_local_version">versiunea locală</string>
   <string name="conflict_use_server_version">versiunea de pe server</string>
@@ -398,7 +401,7 @@
   <string name="upload_copy_files">Copiază fișier</string>
   <string name="upload_move_files">Mută fișier</string>
   <string name="pref_behaviour_entries_keep_file">păstrat in dosarul original</string>
-    <string name="share_dialog_title">Partajează</string>
+  <string name="share_dialog_title">Partajează</string>
   <string name="share_file">Partajează %1$s</string>
   <string name="share_with_user_section_title">Utilizatori și Grupuri</string>
   <string name="share_no_users">Nicio informație partajată cu utilizatorii încă</string>
