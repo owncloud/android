@@ -42,7 +42,6 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
-import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -59,14 +58,10 @@ class FileListAdapter(
     private var account: Account? = AccountUtils.getCurrentOwnCloudAccount(context)
     private var fileListOption: FileListOption = FileListOption.ALL_FILES
 
-    fun updateFileList(filesToAdd: List<OCFileWithSyncInfo>, fileListOption: FileListOption, spaces: List<OCSpace>) {
-        val fileItems = filesToAdd.map { fileWithSyncInfo ->
-            val space = spaces.firstOrNull { it.id == fileWithSyncInfo.file.spaceId && it.accountName == fileWithSyncInfo.file.owner }
-            FileItem(fileWithSyncInfo, space)
-        }
+    fun updateFileList(filesToAdd: List<OCFileWithSyncInfo>, fileListOption: FileListOption) {
 
         val listWithFooter = mutableListOf<Any>()
-        listWithFooter.addAll(fileItems)
+        listWithFooter.addAll(filesToAdd)
 
         if (listWithFooter.isNotEmpty()) {
             listWithFooter.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
@@ -139,7 +134,7 @@ class FileListAdapter(
                 layoutManager.spanCount == 1 -> {
                     ViewType.LIST_ITEM.ordinal
                 }
-                (files[position] as FileItem).fileWithSyncInfo.file.isImage -> {
+                (files[position] as OCFileWithSyncInfo).file.isImage -> {
                     ViewType.GRID_IMAGE.ordinal
                 }
                 else -> {
@@ -179,8 +174,7 @@ class FileListAdapter(
 
         if (viewType != ViewType.FOOTER.ordinal) { // Is Item
 
-            val fileItem = files[position] as FileItem
-            val fileWithSyncInfo = fileItem.fileWithSyncInfo
+            val fileWithSyncInfo = files[position] as OCFileWithSyncInfo
             val file = fileWithSyncInfo.file
             val name = file.fileName
             val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail).apply {
@@ -211,12 +205,12 @@ class FileListAdapter(
                         it.Filename.text = file.fileName
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
-                        if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileItem.space == null)) {
+                        if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileWithSyncInfo.space == null)) {
                             it.spacePathLine.path.apply {
                                 text = file.getParentRemotePath()
                                 isVisible = true
                             }
-                            fileItem.space?.let { space ->
+                            fileWithSyncInfo.space?.let { space ->
                                 it.spacePathLine.spaceIcon.isVisible = true
                                 it.spacePathLine.spaceName.isVisible = true
                                 if (space.isPersonal) {
@@ -405,8 +399,6 @@ class FileListAdapter(
         fun onItemClick(ocFileWithSyncInfo: OCFileWithSyncInfo, position: Int)
         fun onLongItemClick(position: Int): Boolean = true
     }
-
-    data class FileItem(val fileWithSyncInfo: OCFileWithSyncInfo, val space: OCSpace?)
 
     inner class GridViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root)
     inner class GridImageViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root)

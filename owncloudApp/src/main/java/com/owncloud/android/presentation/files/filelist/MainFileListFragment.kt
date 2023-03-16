@@ -240,7 +240,6 @@ class MainFileListFragment : Fragment(),
             fileListAdapter.updateFileList(
                 filesToAdd = fileListUiState.folderContent,
                 fileListOption = fileListUiState.fileListOption,
-                spaces = mainFileListViewModel.spaces.value,
             )
             showOrHideEmptyView(fileListUiState)
 

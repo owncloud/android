@@ -38,7 +38,6 @@ import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStr
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
-import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCase
 import com.owncloud.android.presentation.files.SortOrder
 import com.owncloud.android.presentation.files.SortOrder.Companion.PREF_FILE_LIST_SORT_ORDER
 import com.owncloud.android.presentation.files.SortType
@@ -68,7 +67,6 @@ class MainFileListViewModel(
     private val getSpaceWithSpecialsByIdForAccountUseCase: GetSpaceWithSpecialsByIdForAccountUseCase,
     private val sortFilesWithSyncInfoUseCase: SortFilesWithSyncInfoUseCase,
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
-    private val getSpacesFromEveryAccountUseCase: GetSpacesFromEveryAccountUseCase, // TODO: To be deleted when adding the space to the file entity
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
     initialFolderToDisplay: OCFile,
@@ -82,10 +80,6 @@ class MainFileListViewModel(
     private val searchFilter: MutableStateFlow<String> = MutableStateFlow("")
     private val sortTypeAndOrder = MutableStateFlow(Pair(SortType.SORT_TYPE_BY_NAME, SortOrder.SORT_ORDER_ASCENDING))
     val space: MutableStateFlow<OCSpace?> = MutableStateFlow(null)
-
-    private val _spaces: MutableStateFlow<List<OCSpace>> = MutableStateFlow(emptyList())
-    val spaces: StateFlow<List<OCSpace>>
-        get() = _spaces
 
     /** File list ui state combines the other fields and generate a new state whenever any of them changes */
     val fileListUiState: StateFlow<FileListUiState> =
@@ -126,10 +120,6 @@ class MainFileListViewModel(
                     syncMode = SYNC_CONTENTS,
                 )
             )
-        }
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val spacesList = getSpacesFromEveryAccountUseCase.execute(Unit)
-            _spaces.update { spacesList }
         }
     }
 

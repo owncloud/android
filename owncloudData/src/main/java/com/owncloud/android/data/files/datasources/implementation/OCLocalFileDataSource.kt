@@ -26,6 +26,7 @@ import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileAndFileSync
 import com.owncloud.android.data.files.db.OCFileEntity
+import com.owncloud.android.data.spaces.datasources.implementation.OCLocalSpacesDataSource.Companion.toModel
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
@@ -263,5 +264,6 @@ class OCLocalFileDataSource(
             uploadWorkerUuid = fileSync?.uploadWorkerUuid,
             downloadWorkerUuid = fileSync?.downloadWorkerUuid,
             isSynchronizing = fileSync?.isSynchronizing == true,
+            space = space?.toModel(),
         )
 }
