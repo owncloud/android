@@ -106,6 +106,18 @@ data class OCFile(
         get() = isOfType(MIME_PREFIX_TEXT)
 
     /**
+     * @return 'True' if the file has the 'C' (can add file) within its group of permissions
+     */
+    val hasAddFilePermission: Boolean
+        get() = permissions?.contains(char = 'C', ignoreCase = true) ?: false
+
+    /**
+     * @return 'True' if the file has the 'K' (can add subdirectories) within its group of permissions
+     */
+    val hasAddSubdirectoriesPermission: Boolean
+        get() = permissions?.contains(char = 'K', ignoreCase = true) ?: false
+
+    /**
      * get remote path of parent file
      * @return remote path
      */
