@@ -25,6 +25,7 @@ import android.content.ActivityNotFoundException
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
@@ -40,21 +41,21 @@ import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.lib.common.network.WebdavUtils
+import com.owncloud.android.presentation.common.ShareSheetHelper
 import com.owncloud.android.presentation.security.LockEnforcedType
 import com.owncloud.android.presentation.security.LockEnforcedType.Companion.parseFromInteger
+import com.owncloud.android.presentation.security.LockType
+import com.owncloud.android.presentation.security.SecurityEnforced
+import com.owncloud.android.presentation.security.biometric.BiometricActivity
 import com.owncloud.android.presentation.security.biometric.BiometricStatus
 import com.owncloud.android.presentation.security.biometric.EnableBiometrics
-import com.owncloud.android.presentation.security.SecurityEnforced
-import com.owncloud.android.presentation.security.LockType
-import com.owncloud.android.lib.common.network.WebdavUtils
-import com.owncloud.android.presentation.security.biometric.BiometricActivity
-import com.owncloud.android.presentation.security.pattern.PatternActivity
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.security.pattern.PatternActivity
 import com.owncloud.android.presentation.settings.privacypolicy.PrivacyPolicyActivity
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.ALL_FILES_SAF_REGEX
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
-import com.owncloud.android.presentation.common.ShareSheetHelper
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.UriUtilsKt
 import com.owncloud.android.utils.UriUtilsKt.getExposedFileUriForOCFile
@@ -341,10 +342,12 @@ fun Activity.manageOptionLockSelected(type: LockType) {
     when (type) {
         LockType.PASSCODE -> startActivity(Intent(this, PassCodeActivity::class.java).apply {
             action = PassCodeActivity.ACTION_CREATE
+            flags = FLAG_ACTIVITY_NO_HISTORY
             putExtra(EXTRAS_LOCK_ENFORCED, true)
         })
         LockType.PATTERN -> startActivity(Intent(this, PatternActivity::class.java).apply {
             action = PatternActivity.ACTION_REQUEST_WITH_RESULT
+            flags = FLAG_ACTIVITY_NO_HISTORY
             putExtra(EXTRAS_LOCK_ENFORCED, true)
         })
     }
