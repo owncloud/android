@@ -79,9 +79,10 @@ class AccountDiscoveryWorker(
             val spaces = getPersonalAndProjectSpacesForAccountUseCase.execute(GetPersonalAndProjectSpacesForAccountUseCase.Params(accountName))
 
             // First we discover the root of the personal space since it is the first thing seen after login
-            val personalSpace = spaces.firstOrNull{ it.isPersonal }
+            val personalSpace = spaces.firstOrNull { it.isPersonal }
             personalSpace?.let { space ->
-                val rootFolderForSpace = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, ROOT_PATH, space.root.id)).getDataOrNull()
+                val rootFolderForSpace =
+                    getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, ROOT_PATH, space.root.id)).getDataOrNull()
                 rootFolderForSpace?.let {
                     discoverRootFolder(it)
                 }
