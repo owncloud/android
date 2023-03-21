@@ -74,7 +74,6 @@ import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.MdmProvider
-import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.CONFIGURATION_OAUTH2_OPEN_ID_SCOPE
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
@@ -397,10 +396,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         setResult(Activity.RESULT_OK, intent)
 
         authenticationViewModel.discoverAccount(accountName = accountName, discoveryNeeded = loginAction == ACTION_CREATE)
-
-        if (loginAction == ACTION_CREATE) {
-            WorkManagerProvider(applicationContext).enqueueAccountDiscovery(accountName)
-        }
     }
 
     private fun loginIsLoading() {
