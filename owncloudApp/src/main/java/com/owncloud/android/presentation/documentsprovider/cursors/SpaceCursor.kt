@@ -26,6 +26,7 @@ import android.os.Bundle
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
 import com.owncloud.android.R
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.presentation.documentsprovider.cursors.FileCursor.Companion.DEFAULT_DOCUMENT_PROJECTION
 
@@ -38,13 +39,15 @@ class SpaceCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAU
         cursorExtras = Bundle().apply { putBoolean(DocumentsContract.EXTRA_LOADING, hasMoreToSync) }
     }
 
-    fun addSpace(space: OCSpace, rootFolderId: Long?, context: Context?) {
-        val flags = Document.FLAG_DIR_SUPPORTS_CREATE or Document.FLAG_SUPPORTS_WRITE
+    fun addSpace(space: OCSpace, rootFolder: OCFile, context: Context?) {
+        val flags = if (rootFolder.hasAddFilePermission && rootFolder.hasAddSubdirectoriesPermission) {
+            Document.FLAG_DIR_SUPPORTS_CREATE
+        } else 0
 
         val name = if (space.isPersonal) context?.getString(R.string.bottom_nav_personal) else space.name
 
         newRow()
-            .add(Document.COLUMN_DOCUMENT_ID, rootFolderId)
+            .add(Document.COLUMN_DOCUMENT_ID, rootFolder.id)
             .add(Document.COLUMN_DISPLAY_NAME, name)
             .add(Document.COLUMN_LAST_MODIFIED, space.lastModifiedDateTime)
             .add(Document.COLUMN_SIZE, space.quota?.used)
