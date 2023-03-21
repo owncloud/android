@@ -54,7 +54,7 @@ fun OCTransfer.statusToStringRes(): Int {
              // Should not get here; status should be UPLOAD_SUCCESS
              TransferResult.UPLOADED -> R.string.uploads_view_upload_status_succeeded
              // We don't know the specific forbidden error message because it is not being saved in transfers storage
-             TransferResult.SPECIFIC_FORBIDDEN -> R.string.uploader_upload_forbidden
+             TransferResult.SPECIFIC_FORBIDDEN -> R.string.uploads_view_upload_status_failed_permission_error
              // We don't know the specific unavailable service error message because it is not being saved in transfers storage
              TransferResult.SPECIFIC_SERVICE_UNAVAILABLE -> R.string.service_unavailable
              // We don't know the specific unsupported media type error message because it is not being saved in transfers storage
