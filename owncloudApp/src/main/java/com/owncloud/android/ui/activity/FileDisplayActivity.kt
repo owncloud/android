@@ -27,18 +27,23 @@
 
 package com.owncloud.android.ui.activity
 
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.accounts.Account
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -47,6 +52,7 @@ import com.owncloud.android.AppRater
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
+import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.model.OCCapability
@@ -164,6 +170,8 @@ class FileDisplayActivity : FileActivity(),
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
     private val transfersViewModel: TransfersViewModel by viewModel()
 
+    private val sharedPreferences: SharedPreferencesProvider by inject()
+
     var filesUploadHelper: FilesUploadHelper? = null
         internal set
 
@@ -246,7 +254,32 @@ class FileDisplayActivity : FileActivity(),
             AppRater.appLaunched(this, packageName)
         }
 
+        checkNotificationPermission()
         Timber.v("onCreate() end")
+    }
+
+    private fun checkNotificationPermission() {
+        // Ask for permission only in case it's api >= 33 and notifications are not granted.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+            ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        ) return
+
+        // Permission denied. Can be because notifications are off by default or because they were denied by the user.
+        val alreadyRequested = sharedPreferences.getBoolean(PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED, false)
+        val shouldShowPermissionRequest = shouldShowRequestPermissionRationale(POST_NOTIFICATIONS)
+        Timber.d("Already requested notification permission $alreadyRequested and should ask again $shouldShowPermissionRequest")
+        if (!alreadyRequested || shouldShowPermissionRequest) {
+            // Not requested yet or system considers we can request the permission again.
+            val requestPermissionLauncher =
+                registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+                    Timber.d("Permission to send notifications granted: $isGranted")
+                    if (!isGranted) {
+                        showSnackMessage(getString(R.string.notifications_permission_denied))
+                    }
+                    sharedPreferences.putBoolean(PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED, true)
+                }
+            requestPermissionLauncher.launch(POST_NOTIFICATIONS)
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -1535,6 +1568,7 @@ class FileDisplayActivity : FileActivity(),
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
 
+        private const val PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED = "PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED"
         const val ALL_FILES_SAF_REGEX = "*/*"
 
         const val ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS"

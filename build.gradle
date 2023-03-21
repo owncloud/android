@@ -3,7 +3,7 @@ buildscript {
         // SDK
         sdkCompileVersion = 33
         sdkMinVersion = 21
-        sdkTargetVersion = 31
+        sdkTargetVersion = 33
 
         // Android jetpack
         androidxArchCore = "2.2.0"
