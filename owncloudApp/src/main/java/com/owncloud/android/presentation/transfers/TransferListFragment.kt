@@ -99,7 +99,7 @@ class TransferListFragment : Fragment() {
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
 
-        transfersViewModel.transfersListLiveData.observe(viewLifecycleOwner) { transfers ->
+        collectLatestLifecycleFlow(transfersViewModel.transfersStateFlow) { transfers ->
             val recyclerViewState = binding.transfersRecyclerView.layoutManager?.onSaveInstanceState()
             setData(transfers)
             binding.transfersRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
@@ -112,7 +112,7 @@ class TransferListFragment : Fragment() {
         }
 
         collectLatestLifecycleFlow(transfersViewModel.spaces) {
-            transfersViewModel.transfersListLiveData.value?.let { transfers -> setData(transfers) }
+            transfersViewModel.transfersStateFlow.value.let { transfers -> setData(transfers) }
         }
 
     }

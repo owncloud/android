@@ -87,7 +87,7 @@ import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsF
 import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
-import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
+import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsStreamUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.UpdatePendingUploadsPathUseCase
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
@@ -209,7 +209,7 @@ val useCaseModule = module {
     factory { CancelUploadsRecursivelyUseCase(get(), get(), get(), get()) }
     factory { RetryUploadFromSystemUseCase(get(), get(), get()) }
     factory { RetryUploadFromContentUriUseCase(get(), get(), get()) }
-    factory { GetAllTransfersAsLiveDataUseCase(get()) }
+    factory { GetAllTransfersAsStreamUseCase(get()) }
     factory { GetAllTransfersUseCase(get()) }
     factory { CancelUploadUseCase(get(), get(), get()) }
     factory { ClearFailedTransfersUseCase(get(), get(), get()) }

@@ -20,12 +20,12 @@
 
 package com.owncloud.android.data.transfers.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.TRANSFERS_TABLE_NAME
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TransferDao {
@@ -42,7 +42,7 @@ interface TransferDao {
     fun getAllTransfers(): List<OCTransferEntity>
 
     @Query(SELECT_ALL_TRANSFERS)
-    fun getAllTransfersAsLiveData(): LiveData<List<OCTransferEntity>>
+    fun getAllTransfersAsStream(): Flow<List<OCTransferEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrReplace(ocTransferEntity: OCTransferEntity): Long

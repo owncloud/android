@@ -31,7 +31,7 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCase
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
-import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsLiveDataUseCase
+import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsStreamUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
@@ -47,7 +47,9 @@ import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseC
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -61,7 +63,7 @@ class TransfersViewModel(
     private val clearFailedTransfersUseCase: ClearFailedTransfersUseCase,
     private val retryFailedUploadsUseCase: RetryFailedUploadsUseCase,
     private val clearSuccessfulTransfersUseCase: ClearSuccessfulTransfersUseCase,
-    getAllTransfersAsLiveDataUseCase: GetAllTransfersAsLiveDataUseCase,
+    getAllTransfersAsStreamUseCase: GetAllTransfersAsStreamUseCase,
     private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
     private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
     private val cancelUploadsRecursivelyUseCase: CancelUploadsRecursivelyUseCase,
@@ -70,16 +72,15 @@ class TransfersViewModel(
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
-
-    private val _transfersListLiveData = MediatorLiveData<List<OCTransfer>>()
-    val transfersListLiveData: LiveData<List<OCTransfer>>
-        get() = _transfersListLiveData
-
     private val _workInfosListLiveData = MediatorLiveData<List<WorkInfo>>()
     val workInfosListLiveData: LiveData<List<WorkInfo>>
         get() = _workInfosListLiveData
 
-    private var transfersLiveData = getAllTransfersAsLiveDataUseCase.execute(Unit)
+    val transfersStateFlow: StateFlow<List<OCTransfer>> = getAllTransfersAsStreamUseCase.execute(Unit).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = emptyList()
+    )
 
     private var workInfosLiveData = workManagerProvider.getRunningUploadsWorkInfosLiveData()
 
@@ -88,9 +89,6 @@ class TransfersViewModel(
         get() = _spaces
 
     init {
-        _transfersListLiveData.addSource(transfersLiveData) { transfers ->
-            _transfersListLiveData.postValue(transfers)
-        }
         _workInfosListLiveData.addSource(workInfosLiveData) { workInfos ->
             _workInfosListLiveData.postValue(workInfos)
         }
