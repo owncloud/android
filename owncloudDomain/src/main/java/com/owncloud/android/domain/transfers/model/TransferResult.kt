@@ -28,6 +28,7 @@ import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.QuotaExceededException
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
 import com.owncloud.android.domain.exceptions.ServiceUnavailableException
+import com.owncloud.android.domain.exceptions.SpecificForbiddenException
 import com.owncloud.android.domain.exceptions.SpecificServiceUnavailableException
 import com.owncloud.android.domain.exceptions.SpecificUnsupportedMediaTypeException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
@@ -85,6 +86,7 @@ enum class TransferResult constructor(val value: Int) {
                 is FileNotFoundException -> FILE_NOT_FOUND
                 is ConflictException -> CONFLICT_ERROR
                 is ForbiddenException -> PRIVILEGES_ERROR
+                is SpecificForbiddenException -> SPECIFIC_FORBIDDEN
                 is ServiceUnavailableException -> SERVICE_UNAVAILABLE
                 is SpecificServiceUnavailableException -> SPECIFIC_SERVICE_UNAVAILABLE
                 is QuotaExceededException -> QUOTA_EXCEEDED
