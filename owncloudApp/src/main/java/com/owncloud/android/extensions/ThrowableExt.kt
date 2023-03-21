@@ -78,10 +78,7 @@ fun Throwable.parseError(
                 resources.getString(stringId)
             }
             is FileNotFoundException -> resources.getString(R.string.common_not_found)
-            is ForbiddenException -> resources.getString(
-                R.string.forbidden_permissions,
-                resources.getString(R.string.uploader_upload_forbidden_permissions)
-            )
+            is ForbiddenException -> resources.getString(R.string.uploads_view_upload_status_failed_permission_error)
             is IncorrectAddressException -> resources.getString(R.string.auth_incorrect_address_title)
             is InstanceNotConfiguredException -> resources.getString(R.string.auth_not_configured_title)
             is InvalidOverwriteException -> resources.getString(R.string.file_already_exists)
@@ -100,7 +97,7 @@ fun Throwable.parseError(
             is ServerNotReachableException -> resources.getString(R.string.network_host_not_available)
             is ServerResponseTimeoutException -> resources.getString(R.string.network_error_socket_timeout_exception)
             is ServiceUnavailableException -> resources.getString(R.string.service_unavailable)
-            is SpecificForbiddenException -> resources.getString(R.string.uploader_upload_forbidden)
+            is SpecificForbiddenException -> resources.getString(R.string.uploads_view_upload_status_failed_permission_error)
             is UnauthorizedException -> resources.getString(R.string.auth_unauthorized)
             else -> resources.getString(R.string.common_error_unknown)
         }
