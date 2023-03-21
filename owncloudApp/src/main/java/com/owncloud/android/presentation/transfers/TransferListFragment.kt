@@ -91,7 +91,6 @@ class TransferListFragment : Fragment() {
             clearSuccessful = {
                 transfersViewModel.clearSuccessfulTransfers()
             },
-            personalName = getString(R.string.bottom_nav_personal),
         )
         binding.transfersRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)

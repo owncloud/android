@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Fernando Sanz Velasco
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -15,7 +17,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package com.owncloud.android.presentation.files.filelist
@@ -41,6 +42,7 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
+import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -57,9 +59,14 @@ class FileListAdapter(
     private var account: Account? = AccountUtils.getCurrentOwnCloudAccount(context)
     private var fileListOption: FileListOption = FileListOption.ALL_FILES
 
-    fun updateFileList(filesToAdd: List<OCFileWithSyncInfo>, fileListOption: FileListOption) {
+    fun updateFileList(filesToAdd: List<OCFileWithSyncInfo>, fileListOption: FileListOption, spaces: List<OCSpace>) {
+        val fileItems = filesToAdd.map { fileWithSyncInfo ->
+            val space = spaces.firstOrNull { it.id == fileWithSyncInfo.file.spaceId && it.accountName == fileWithSyncInfo.file.owner }
+            FileItem(fileWithSyncInfo, space)
+        }
+
         val listWithFooter = mutableListOf<Any>()
-        listWithFooter.addAll(filesToAdd)
+        listWithFooter.addAll(fileItems)
 
         if (listWithFooter.isNotEmpty()) {
             listWithFooter.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
@@ -132,7 +139,7 @@ class FileListAdapter(
                 layoutManager.spanCount == 1 -> {
                     ViewType.LIST_ITEM.ordinal
                 }
-                (files[position] as OCFileWithSyncInfo).file.isImage -> {
+                (files[position] as FileItem).fileWithSyncInfo.file.isImage -> {
                     ViewType.GRID_IMAGE.ordinal
                 }
                 else -> {
@@ -172,7 +179,8 @@ class FileListAdapter(
 
         if (viewType != ViewType.FOOTER.ordinal) { // Is Item
 
-            val fileWithSyncInfo = files[position] as OCFileWithSyncInfo
+            val fileItem = files[position] as FileItem
+            val fileWithSyncInfo = fileItem.fileWithSyncInfo
             val file = fileWithSyncInfo.file
             val name = file.fileName
             val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail).apply {
@@ -203,9 +211,25 @@ class FileListAdapter(
                         it.Filename.text = file.fileName
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
-                        it.fileListPath.apply {
-                            text = file.remotePath
-                            isVisible = !fileListOption.isAllFiles()
+                        if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileItem.space == null)) {
+                            it.spacePathLine.path.apply {
+                                text = file.getParentRemotePath()
+                                isVisible = true
+                            }
+                            fileItem.space?.let { space ->
+                                it.spacePathLine.spaceIcon.isVisible = true
+                                it.spacePathLine.spaceName.isVisible = true
+                                if (space.isPersonal) {
+                                    it.spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
+                                    it.spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
+                                } else {
+                                    it.spacePathLine.spaceName.text = space.name
+                                }
+                            }
+                        } else {
+                            it.spacePathLine.path.isVisible = false
+                            it.spacePathLine.spaceIcon.isVisible = false
+                            it.spacePathLine.spaceName.isVisible = false
                         }
                     }
                 }
@@ -381,6 +405,8 @@ class FileListAdapter(
         fun onItemClick(ocFileWithSyncInfo: OCFileWithSyncInfo, position: Int)
         fun onLongItemClick(position: Int): Boolean = true
     }
+
+    data class FileItem(val fileWithSyncInfo: OCFileWithSyncInfo, val space: OCSpace?)
 
     inner class GridViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root)
     inner class GridImageViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root)
