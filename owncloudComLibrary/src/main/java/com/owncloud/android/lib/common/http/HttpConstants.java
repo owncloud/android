@@ -40,6 +40,7 @@ public class HttpConstants {
     public static final String IF_MATCH_HEADER = "If-Match";
     public static final String IF_NONE_MATCH_HEADER = "If-None-Match";
     public static final String CONTENT_TYPE_HEADER = "Content-Type";
+    public static final String ACCEPT_LANGUAGE_HEADER = "Accept-Language";
     public static final String CONTENT_LENGTH_HEADER = "Content-Length";
     public static final String OC_TOTAL_LENGTH_HEADER = "OC-Total-Length";
     public static final String OC_X_OC_MTIME_HEADER = "X-OC-Mtime";
