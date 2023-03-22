@@ -27,9 +27,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.datamodel.FileDataStorageManager
@@ -175,6 +179,7 @@ open class FolderPickerActivity : FileActivity(),
                 file = null
                 initAndShowListOfSpaces()
                 updateToolbar(null)
+                findViewById<TextView>(R.id.folder_picker_no_permissions_message).isVisible = false
             }
         } else {
             mainFileListFragment?.onBrowseUp()
@@ -183,6 +188,7 @@ open class FolderPickerActivity : FileActivity(),
 
     override fun onCurrentFolderUpdated(newCurrentFolder: OCFile, currentSpace: OCSpace?) {
         updateToolbar(newCurrentFolder, currentSpace)
+        updateButtonsVisibilityAccordingToPermissions(newCurrentFolder)
         file = newCurrentFolder
     }
 
@@ -307,6 +313,20 @@ open class FolderPickerActivity : FileActivity(),
             )
         } else {
             updateStandardToolbar(title = chosenFile.fileName, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
+        }
+    }
+
+    private fun updateButtonsVisibilityAccordingToPermissions(currentFolder: OCFile) {
+        currentFolder.hasAddFilePermission.let {
+            findViewById<Button>(R.id.folder_picker_btn_choose).isVisible = it
+            findViewById<TextView>(R.id.folder_picker_no_permissions_message).isVisible = !it
+        }
+        findViewById<AppCompatImageView>(R.id.view_type_selector).let {
+            if (currentFolder.hasAddSubdirectoriesPermission) {
+                it.visibility = VISIBLE
+            } else {
+                it.visibility = INVISIBLE
+            }
         }
     }
 

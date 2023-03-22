@@ -76,6 +76,7 @@ class OCFileRepository(
                         length = 0,
                         mimeType = MIME_DIR,
                         spaceId = parentFolder.spaceId,
+                        permissions = "CK" // To be able to write inside a folder before the fetch is done
                     )
                 )
             )
