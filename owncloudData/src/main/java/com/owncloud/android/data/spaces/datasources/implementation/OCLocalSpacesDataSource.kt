@@ -164,7 +164,6 @@ class OCLocalSpacesDataSource(
                     SpaceRoot(
                         eTag = spaceRootEntity.eTag,
                         id = spaceRootEntity.id,
-                        permissions = null,
                         webDavUrl = spaceRootEntity.webDavUrl,
                         deleted = spaceRootEntity.deleteState?.let { SpaceDeleted(state = it) },
                     )
