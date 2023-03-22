@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Change - Bump target SDK to 33: [#3617](https://github.com/owncloud/android/issues/3617)
 * Enhancement - Support for spaces: [#3851](https://github.com/owncloud/android/pull/3851)
 * Enhancement - Update label on Camera Uploads: [#3930](https://github.com/owncloud/android/pull/3930)
 * Enhancement - Authenticated WebFinger: [#3943](https://github.com/owncloud/android/issues/3943)
@@ -15,6 +16,15 @@ Summary
 
 Details
 -------
+
+* Change - Bump target SDK to 33: [#3617](https://github.com/owncloud/android/issues/3617)
+
+   Target SDK was upgraded to 33 to keep the app updated with the latest android changes. A new
+   setting was introduced to manage notifications in an easier way.
+
+   https://github.com/owncloud/android/issues/3617
+   https://github.com/owncloud/android/pull/3972
+   https://developer.android.com/about/versions/13/behavior-changes-13
 
 * Enhancement - Support for spaces: [#3851](https://github.com/owncloud/android/pull/3851)
 
