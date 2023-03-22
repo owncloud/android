@@ -30,6 +30,9 @@ import com.owncloud.android.data.spaces.db.SpacesDao
 import com.owncloud.android.data.spaces.db.SpacesEntity
 import com.owncloud.android.data.spaces.db.SpacesWithSpecials
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.OCSpace.Companion.DRIVE_TYPE_PERSONAL
+import com.owncloud.android.domain.spaces.model.OCSpace.Companion.DRIVE_TYPE_PROJECT
+import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARES
 import com.owncloud.android.domain.spaces.model.SpaceDeleted
 import com.owncloud.android.domain.spaces.model.SpaceFile
 import com.owncloud.android.domain.spaces.model.SpaceOwner
@@ -60,27 +63,30 @@ class OCLocalSpacesDataSource(
     }
 
     override fun getPersonalSpaceForAccount(accountName: String): OCSpace? {
-        return spacesDao.getPersonalSpaceForAccount(accountName)?.toModel()
+        return spacesDao.getSpacesByDriveTypeForAccount(
+            accountName = accountName,
+            filterDriveTypes = setOf(DRIVE_TYPE_PERSONAL)
+        ).map { it.toModel() }.firstOrNull()
     }
 
     override fun getSharesSpaceForAccount(accountName: String): OCSpace? {
-        return spacesDao.getSharesSpaceForAccount(accountName)?.toModel()
+        return spacesDao.getSpaceByIdForAccount(spaceId = SPACE_ID_SHARES, accountName = accountName)?.toModel()
     }
 
     override fun getSpacesFromEveryAccount(): List<OCSpace> {
-        return spacesDao.getSpacesFromEveryAccount().map { it.toModel() }
+        return spacesDao.getSpacesByDriveTypeFromEveryAccount(
+            filterDriveTypes = setOf(DRIVE_TYPE_PERSONAL, DRIVE_TYPE_PROJECT),
+        ).map { it.toModel() }
     }
 
-    override fun getProjectSpacesWithSpecialsForAccountAsFlow(accountName: String): Flow<List<OCSpace>> {
-        return spacesDao.getProjectSpacesWithSpecialsForAccountAsFlow(accountName).map { spacesWithSpecialsEntitiesList ->
-            spacesWithSpecialsEntitiesList.map { spacesWithSpecialsEntity ->
-                spacesWithSpecialsEntity.toModel()
-            }
-        }
-    }
-
-    override fun getPersonalAndProjectSpacesWithSpecialsForAccountAsFlow(accountName: String): Flow<List<OCSpace>> {
-        return spacesDao.getPersonalAndProjectSpacesWithSpecialsForAccountAsFlow(accountName).map { spacesWithSpecialsEntitiesList ->
+    override fun getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
+        accountName: String,
+        filterDriveTypes: Set<String>,
+    ): Flow<List<OCSpace>> {
+        return spacesDao.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
+            accountName = accountName,
+            filterDriveTypes = filterDriveTypes,
+        ).map { spacesWithSpecialsEntitiesList ->
             spacesWithSpecialsEntitiesList.map { spacesWithSpecialsEntity ->
                 spacesWithSpecialsEntity.toModel()
             }
@@ -88,7 +94,10 @@ class OCLocalSpacesDataSource(
     }
 
     override fun getPersonalAndProjectSpacesForAccount(accountName: String): List<OCSpace> {
-        return spacesDao.getPersonalAndProjectSpacesForAccount(accountName).map { it.toModel() }
+        return spacesDao.getSpacesByDriveTypeForAccount(
+            accountName = accountName,
+            filterDriveTypes = setOf(DRIVE_TYPE_PERSONAL, DRIVE_TYPE_PROJECT),
+        ).map { it.toModel() }
     }
 
     override fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String): OCSpace {

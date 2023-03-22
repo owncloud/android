@@ -38,11 +38,8 @@ class OCSpacesRepository(
     override fun getSpacesFromEveryAccount() =
         localSpacesDataSource.getSpacesFromEveryAccount()
 
-    override fun getProjectSpacesWithSpecialsForAccountAsFlow(accountName: String) =
-        localSpacesDataSource.getProjectSpacesWithSpecialsForAccountAsFlow(accountName)
-
-    override fun getPersonalAndProjectSpacesWithSpecialsForAccountAsFlow(accountName: String) =
-        localSpacesDataSource.getPersonalAndProjectSpacesWithSpecialsForAccountAsFlow(accountName)
+    override fun getSpacesByDriveTypeWithSpecialsForAccountAsFlow(accountName: String, filterDriveTypes: Set<String>) =
+        localSpacesDataSource.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(accountName = accountName, filterDriveTypes = filterDriveTypes)
 
     override fun getPersonalAndProjectSpacesForAccount(accountName: String) =
         localSpacesDataSource.getPersonalAndProjectSpacesForAccount(accountName)
