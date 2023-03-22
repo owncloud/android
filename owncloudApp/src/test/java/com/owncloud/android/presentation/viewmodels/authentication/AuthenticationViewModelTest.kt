@@ -36,6 +36,7 @@ import com.owncloud.android.presentation.authentication.AuthenticationViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.ContextProvider
+import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.testutil.OC_ACCESS_TOKEN
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
@@ -73,6 +74,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
     private lateinit var refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase
     private lateinit var refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase
     private lateinit var getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase
+    private lateinit var workManagerProvider: WorkManagerProvider
     private lateinit var contextProvider: ContextProvider
 
     private val commonException = ServerNotReachableException()
@@ -103,6 +105,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
         getOwnCloudInstancesFromAuthenticatedWebFingerUseCase = mockk()
         refreshCapabilitiesFromServerAsyncUseCase = mockk()
         refreshSpacesFromServerAsyncUseCase = mockk()
+        workManagerProvider = mockk(relaxUnitFun = true)
         getStoredCapabilitiesUseCase = mockk()
 
         testCoroutineDispatcher.pauseDispatcher()
@@ -118,6 +121,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
             refreshCapabilitiesFromServerAsyncUseCase = refreshCapabilitiesFromServerAsyncUseCase,
             refreshSpacesFromServerAsyncUseCase = refreshSpacesFromServerAsyncUseCase,
             getStoredCapabilitiesUseCase = getStoredCapabilitiesUseCase,
+            workManagerProvider = workManagerProvider,
             coroutinesDispatcherProvider = coroutineDispatcherProvider
         )
     }

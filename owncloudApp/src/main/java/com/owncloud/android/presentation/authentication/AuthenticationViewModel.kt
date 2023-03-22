@@ -40,6 +40,7 @@ import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAu
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.providers.WorkManagerProvider
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -54,6 +55,7 @@ class AuthenticationViewModel(
     private val refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase,
+    private val workManagerProvider: WorkManagerProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
@@ -213,5 +215,6 @@ class AuthenticationViewModel(
             }
             _accountDiscovery.postValue(Event(UIResult.Success()))
         }
+        workManagerProvider.enqueueAccountDiscovery(accountName)
     }
 }
