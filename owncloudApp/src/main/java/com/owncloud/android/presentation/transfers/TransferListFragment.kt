@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.databinding.FragmentTransferListBinding
+import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
@@ -99,7 +100,7 @@ class TransferListFragment : Fragment() {
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
 
-        collectLatestLifecycleFlow(transfersViewModel.transfersStateFlow) { transfers ->
+        collectLatestLifecycleFlow(transfersViewModel.transfersWithSpaceStateFlow) { transfers ->
             val recyclerViewState = binding.transfersRecyclerView.layoutManager?.onSaveInstanceState()
             setData(transfers)
             binding.transfersRecyclerView.layoutManager?.onRestoreInstanceState(recyclerViewState)
@@ -111,10 +112,6 @@ class TransferListFragment : Fragment() {
             }
         }
 
-        collectLatestLifecycleFlow(transfersViewModel.spaces) {
-            transfersViewModel.transfersStateFlow.value.let { transfers -> setData(transfers) }
-        }
-
     }
 
     override fun onDestroy() {
@@ -122,14 +119,14 @@ class TransferListFragment : Fragment() {
         _binding = null
     }
 
-    private fun setData(items: List<OCTransfer>) {
-        binding.transfersRecyclerView.isVisible = items.isNotEmpty()
+    private fun setData(transfersWithSpace: List<Pair<OCTransfer, OCSpace?>>) {
+        binding.transfersRecyclerView.isVisible = transfersWithSpace.isNotEmpty()
         binding.transfersListEmpty.apply {
-            root.isVisible = items.isEmpty()
+            root.isVisible = transfersWithSpace.isEmpty()
             listEmptyDatasetIcon.setImageResource(R.drawable.ic_uploads)
             listEmptyDatasetTitle.setText(R.string.upload_list_empty)
             listEmptyDatasetSubTitle.setText(R.string.upload_list_empty_subtitle)
         }
-        transfersAdapter.setData(items, transfersViewModel.spaces.value)
+        transfersAdapter.setData(transfersWithSpace)
     }
 }

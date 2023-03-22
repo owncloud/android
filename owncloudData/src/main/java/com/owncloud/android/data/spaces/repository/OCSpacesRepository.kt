@@ -35,8 +35,8 @@ class OCSpacesRepository(
         }
     }
 
-    override fun getSpacesFromEveryAccount() =
-        localSpacesDataSource.getSpacesFromEveryAccount()
+    override fun getSpacesFromEveryAccountAsStream() =
+        localSpacesDataSource.getSpacesFromEveryAccountAsStream()
 
     override fun getSpacesByDriveTypeWithSpecialsForAccountAsFlow(accountName: String, filterDriveTypes: Set<String>) =
         localSpacesDataSource.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(accountName = accountName, filterDriveTypes = filterDriveTypes)

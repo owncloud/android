@@ -63,9 +63,9 @@ interface SpacesDao {
     fun upsertSpecials(listOfSpecialEntities: List<SpaceSpecialEntity>)
 
     @Query(SELECT_SPACES_BY_DRIVE_TYPE)
-    fun getSpacesByDriveTypeFromEveryAccount(
+    fun getSpacesByDriveTypeFromEveryAccountAsStream(
         filterDriveTypes: Set<String>,
-    ): List<SpacesEntity>
+    ): Flow<List<SpacesEntity>>
 
     @Query(SELECT_ALL_SPACES_FOR_ACCOUNT)
     fun getAllSpacesForAccount(

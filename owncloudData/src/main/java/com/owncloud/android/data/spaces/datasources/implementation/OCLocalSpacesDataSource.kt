@@ -73,10 +73,12 @@ class OCLocalSpacesDataSource(
         return spacesDao.getSpaceByIdForAccount(spaceId = SPACE_ID_SHARES, accountName = accountName)?.toModel()
     }
 
-    override fun getSpacesFromEveryAccount(): List<OCSpace> {
-        return spacesDao.getSpacesByDriveTypeFromEveryAccount(
-            filterDriveTypes = setOf(DRIVE_TYPE_PERSONAL, DRIVE_TYPE_PROJECT),
-        ).map { it.toModel() }
+    override fun getSpacesFromEveryAccountAsStream(): Flow<List<OCSpace>> {
+        return spacesDao.getSpacesByDriveTypeFromEveryAccountAsStream(
+            filterDriveTypes = setOf(DRIVE_TYPE_PERSONAL, DRIVE_TYPE_PROJECT)
+        ).map { spaceEntities ->
+            spaceEntities.map { spaceEntity -> spaceEntity.toModel() }
+        }
     }
 
     override fun getSpacesByDriveTypeWithSpecialsForAccountAsFlow(

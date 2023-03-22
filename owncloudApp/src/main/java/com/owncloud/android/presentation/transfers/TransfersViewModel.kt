@@ -28,7 +28,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCase
+import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCaseAsStream
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsStreamUseCase
@@ -46,11 +46,10 @@ import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromContentUri
 import com.owncloud.android.usecases.transfers.uploads.RetryUploadFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromContentUriUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class TransfersViewModel(
@@ -68,7 +67,7 @@ class TransfersViewModel(
     private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
     private val cancelUploadsRecursivelyUseCase: CancelUploadsRecursivelyUseCase,
     private val cancelDownloadsRecursivelyUseCase: CancelDownloadsRecursivelyUseCase,
-    private val getSpacesFromEveryAccountUseCase: GetSpacesFromEveryAccountUseCase,
+    getSpacesFromEveryAccountUseCaseAsStream: GetSpacesFromEveryAccountUseCaseAsStream,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     workManagerProvider: WorkManagerProvider,
 ) : ViewModel() {
@@ -76,7 +75,15 @@ class TransfersViewModel(
     val workInfosListLiveData: LiveData<List<WorkInfo>>
         get() = _workInfosListLiveData
 
-    val transfersStateFlow: StateFlow<List<OCTransfer>> = getAllTransfersAsStreamUseCase.execute(Unit).stateIn(
+    val transfersWithSpaceStateFlow: StateFlow<List<Pair<OCTransfer, OCSpace?>>> = combine(
+        getAllTransfersAsStreamUseCase.execute(Unit),
+        getSpacesFromEveryAccountUseCaseAsStream.execute(Unit)
+    ) { transfers: List<OCTransfer>, spaces: List<OCSpace> ->
+        transfers.map { transfer ->
+            val spaceForTransfer = spaces.firstOrNull { space -> transfer.spaceId == space.id && transfer.accountName == space.accountName }
+            Pair(transfer, spaceForTransfer)
+        }
+    }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = emptyList()
@@ -84,17 +91,9 @@ class TransfersViewModel(
 
     private var workInfosLiveData = workManagerProvider.getRunningUploadsWorkInfosLiveData()
 
-    private val _spaces: MutableStateFlow<List<OCSpace>> = MutableStateFlow(emptyList())
-    val spaces: StateFlow<List<OCSpace>>
-        get() = _spaces
-
     init {
         _workInfosListLiveData.addSource(workInfosLiveData) { workInfos ->
             _workInfosListLiveData.postValue(workInfos)
-        }
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val spacesList = getSpacesFromEveryAccountUseCase.execute(Unit)
-            _spaces.update { spacesList }
         }
     }
 
