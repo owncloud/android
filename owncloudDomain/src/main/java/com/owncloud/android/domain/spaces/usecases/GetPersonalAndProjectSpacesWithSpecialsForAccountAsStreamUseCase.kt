@@ -29,7 +29,10 @@ class GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase(
     private val spacesRepository: SpacesRepository
 ) : BaseUseCase<Flow<List<OCSpace>>, GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase.Params>() {
 
-    override fun run(params: Params) = spacesRepository.getPersonalAndProjectSpacesWithSpecialsForAccountAsFlow(params.accountName)
+    override fun run(params: Params) = spacesRepository.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
+        accountName = params.accountName,
+        filterDriveTypes = setOf(OCSpace.DRIVE_TYPE_PERSONAL, OCSpace.DRIVE_TYPE_PROJECT),
+    )
 
     data class Params(
         val accountName: String

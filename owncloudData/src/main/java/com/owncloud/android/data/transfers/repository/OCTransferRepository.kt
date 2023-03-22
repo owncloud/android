@@ -20,12 +20,12 @@
 
 package com.owncloud.android.data.transfers.repository
 
-import androidx.lifecycle.LiveData
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
+import kotlinx.coroutines.flow.Flow
 
 class OCTransferRepository(
     private val localTransferDataSource: LocalTransferDataSource
@@ -86,8 +86,8 @@ class OCTransferRepository(
     override fun getAllTransfers(): List<OCTransfer> =
         localTransferDataSource.getAllTransfers()
 
-    override fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>> =
-        localTransferDataSource.getAllTransfersAsLiveData()
+    override fun getAllTransfersAsStream(): Flow<List<OCTransfer>> =
+        localTransferDataSource.getAllTransfersAsStream()
 
     override fun getLastTransferFor(remotePath: String, accountName: String) =
         localTransferDataSource.getLastTransferFor(remotePath = remotePath, accountName = accountName)

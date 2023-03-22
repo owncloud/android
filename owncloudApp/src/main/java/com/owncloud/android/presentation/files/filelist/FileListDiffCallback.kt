@@ -23,6 +23,7 @@ package com.owncloud.android.presentation.files.filelist
 
 import androidx.recyclerview.widget.DiffUtil
 import com.owncloud.android.domain.files.model.FileListOption
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
 
 class FileListDiffCallback(
@@ -48,8 +49,8 @@ class FileListDiffCallback(
             return true
         }
 
-        if (oldItem is FileListAdapter.FileItem && newItem is FileListAdapter.FileItem) {
-            return oldItem.fileWithSyncInfo.file.id == newItem.fileWithSyncInfo.file.id
+        if (oldItem is OCFileWithSyncInfo && newItem is OCFileWithSyncInfo) {
+            return oldItem.file.id == newItem.file.id
         }
 
         if (oldItem is OCFooterFile && newItem is OCFooterFile) {

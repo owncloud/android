@@ -20,8 +20,6 @@
 
 package com.owncloud.android.data.transfers.datasources.implementation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.data.transfers.db.TransferDao
@@ -30,6 +28,8 @@ import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class OCLocalTransferDataSource(
     private val transferDao: TransferDao
@@ -89,8 +89,8 @@ class OCLocalTransferDataSource(
         }
     }
 
-    override fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>> {
-        return Transformations.map(transferDao.getAllTransfersAsLiveData()) { transferEntitiesList ->
+    override fun getAllTransfersAsStream(): Flow<List<OCTransfer>> {
+        return transferDao.getAllTransfersAsStream().map { transferEntitiesList ->
             val transfers = transferEntitiesList.map { transferEntity ->
                 transferEntity.toModel()
             }

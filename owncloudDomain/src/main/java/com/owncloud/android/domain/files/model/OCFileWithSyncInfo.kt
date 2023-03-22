@@ -20,14 +20,13 @@
 
 package com.owncloud.android.domain.files.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.owncloud.android.domain.spaces.model.OCSpace
 import java.util.UUID
 
-@Parcelize
 data class OCFileWithSyncInfo(
     val file: OCFile,
     val uploadWorkerUuid: UUID? = null,
     val downloadWorkerUuid: UUID? = null,
-    val isSynchronizing: Boolean = false
-) : Parcelable
+    val isSynchronizing: Boolean = false,
+    val space: OCSpace? = null,
+)

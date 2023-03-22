@@ -235,15 +235,14 @@ class TransfersAdapter(
         }
     }
 
-    fun setData(transfers: List<OCTransfer>, spaces: List<OCSpace>) {
-        val transfersGroupedByStatus = transfers.groupBy { it.status }
+    fun setData(transfersWithSpace: List<Pair<OCTransfer, OCSpace?>>) {
+        val transfersGroupedByStatus = transfersWithSpace.groupBy { it.first.status }
         val newTransferItemsList = mutableListOf<TransferRecyclerItem>()
         transfersGroupedByStatus.forEach { transferMap ->
             val headerItem = HeaderItem(transferMap.key, transferMap.value.size)
             newTransferItemsList.add(headerItem)
-            val transferItems = transferMap.value.sortedByDescending { it.transferEndTimestamp ?: it.id }.map { transfer ->
-                val space = spaces.firstOrNull { it.id == transfer.spaceId && it.accountName == transfer.accountName }
-                TransferItem(transfer, space)
+            val transferItems = transferMap.value.sortedByDescending { it.first.transferEndTimestamp ?: it.first.id }.map { transfersWithSpace ->
+                TransferItem(transfersWithSpace.first, transfersWithSpace.second)
             }
             newTransferItemsList.addAll(transferItems)
         }
@@ -283,6 +282,7 @@ class TransfersAdapter(
             val transfer: OCTransfer,
             val space: OCSpace?,
         ) : TransferRecyclerItem
+
         data class HeaderItem(
             val status: TransferStatus,
             val numberTransfers: Int,

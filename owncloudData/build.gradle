@@ -71,6 +71,7 @@ dependencies {
 
     // Dependencies for instrumented tests
     androidTestImplementation project(":owncloudTestUtil")
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$orgJetbrainsKotlinx"
     androidTestImplementation "androidx.test:runner:$androidxTest"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxTestEspresso"
     androidTestImplementation "androidx.test.ext:junit:$androidxTestExt"

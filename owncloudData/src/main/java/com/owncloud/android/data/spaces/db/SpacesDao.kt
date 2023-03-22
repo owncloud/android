@@ -30,9 +30,6 @@ import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ACCOUNT
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_DRIVE_TYPE
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ID
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ROOT_WEB_DAV_URL
-import com.owncloud.android.domain.spaces.model.OCSpace.Companion.DRIVE_TYPE_PERSONAL
-import com.owncloud.android.domain.spaces.model.OCSpace.Companion.DRIVE_TYPE_PROJECT
-import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARES
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -65,45 +62,27 @@ interface SpacesDao {
     @Upsert
     fun upsertSpecials(listOfSpecialEntities: List<SpaceSpecialEntity>)
 
-    @Query(SELECT_ALL_SPACES)
-    fun getSpacesFromEveryAccount(): List<SpacesEntity>
+    @Query(SELECT_SPACES_BY_DRIVE_TYPE)
+    fun getSpacesByDriveTypeFromEveryAccountAsStream(
+        filterDriveTypes: Set<String>,
+    ): Flow<List<SpacesEntity>>
 
     @Query(SELECT_ALL_SPACES_FOR_ACCOUNT)
     fun getAllSpacesForAccount(
         accountName: String,
     ): List<SpacesEntity>
 
-    @Query(SELECT_PERSONAL_SPACE_FOR_ACCOUNT)
-    fun getPersonalSpaceForAccount(
+    @Query(SELECT_SPACES_BY_DRIVE_TYPE_FOR_ACCOUNT)
+    fun getSpacesByDriveTypeForAccount(
         accountName: String,
-    ): SpacesEntity?
-
-    @Query(SELECT_SHARES_SPACE_FOR_ACCOUNT)
-    fun getSharesSpaceForAccount(
-        accountName: String,
-    ): SpacesEntity?
-
-    @Transaction
-    @Query(SELECT_PROJECT_SPACES_FOR_ACCOUNT)
-    fun getProjectSpacesWithSpecialsForAccount(
-        accountName: String,
-    ): List<SpacesWithSpecials>
-
-    @Transaction
-    @Query(SELECT_PROJECT_SPACES_FOR_ACCOUNT)
-    fun getProjectSpacesWithSpecialsForAccountAsFlow(
-        accountName: String,
-    ): Flow<List<SpacesWithSpecials>>
-
-    @Query(SELECT_PERSONAL_AND_PROJECT_SPACES_FOR_ACCOUNT)
-    fun getPersonalAndProjectSpacesForAccount(
-        accountName: String,
+        filterDriveTypes: Set<String>,
     ): List<SpacesEntity>
 
     @Transaction
-    @Query(SELECT_PERSONAL_AND_PROJECT_SPACES_FOR_ACCOUNT)
-    fun getPersonalAndProjectSpacesWithSpecialsForAccountAsFlow(
+    @Query(SELECT_SPACES_BY_DRIVE_TYPE_FOR_ACCOUNT)
+    fun getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
         accountName: String,
+        filterDriveTypes: Set<String>,
     ): Flow<List<SpacesWithSpecials>>
 
     @Transaction
@@ -112,6 +91,12 @@ interface SpacesDao {
         spaceId: String?,
         accountName: String,
     ): SpacesWithSpecials
+
+    @Query(SELECT_SPACE_BY_ID_FOR_ACCOUNT)
+    fun getSpaceByIdForAccount(
+        spaceId: String?,
+        accountName: String,
+    ): SpacesEntity?
 
     @Query(SELECT_WEB_DAV_URL_FOR_SPACE)
     fun getWebDavUrlForSpace(
@@ -126,11 +111,10 @@ interface SpacesDao {
     fun deleteSpaceForAccountById(accountName: String, spaceId: String)
 
     companion object {
-        // TODO: Shares space (last OR) to be deleted from this query when adding the space to the file entity
-        private const val SELECT_ALL_SPACES = """
+        private const val SELECT_SPACES_BY_DRIVE_TYPE = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
-            WHERE $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PROJECT' OR $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PERSONAL' OR $SPACES_ID LIKE '$SPACE_ID_SHARES'
+            WHERE $SPACES_DRIVE_TYPE IN (:filterDriveTypes)
         """
 
         private const val SELECT_ALL_SPACES_FOR_ACCOUNT = """
@@ -139,29 +123,10 @@ interface SpacesDao {
             WHERE $SPACES_ACCOUNT_NAME = :accountName
         """
 
-        private const val SELECT_PERSONAL_SPACE_FOR_ACCOUNT = """
+        private const val SELECT_SPACES_BY_DRIVE_TYPE_FOR_ACCOUNT = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
-            WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PERSONAL'
-        """
-
-        private const val SELECT_SHARES_SPACE_FOR_ACCOUNT = """
-            SELECT *
-            FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
-            WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_ID LIKE '$SPACE_ID_SHARES'
-        """
-
-        private const val SELECT_PROJECT_SPACES_FOR_ACCOUNT = """
-            SELECT *
-            FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
-            WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PROJECT'
-            ORDER BY name COLLATE NOCASE ASC
-        """
-
-        private const val SELECT_PERSONAL_AND_PROJECT_SPACES_FOR_ACCOUNT = """
-            SELECT *
-            FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
-            WHERE $SPACES_ACCOUNT_NAME = :accountName AND ($SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PROJECT' OR $SPACES_DRIVE_TYPE LIKE '$DRIVE_TYPE_PERSONAL')
+            WHERE $SPACES_ACCOUNT_NAME = :accountName AND ($SPACES_DRIVE_TYPE IN (:filterDriveTypes))
             ORDER BY $SPACES_DRIVE_TYPE ASC, name COLLATE NOCASE ASC
         """
 

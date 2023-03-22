@@ -26,16 +26,21 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.spaces.datasources.implementation.OCLocalSpacesDataSource.Companion.toEntity
 import com.owncloud.android.data.spaces.datasources.implementation.OCLocalSpacesDataSource.Companion.toModel
+import com.owncloud.android.domain.spaces.model.OCSpace.Companion.DRIVE_TYPE_PROJECT
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITHOUT_IMAGE
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
 import com.owncloud.android.testutil.OC_SPACE_SPECIAL_IMAGE
 import com.owncloud.android.testutil.OC_SPACE_SPECIAL_README
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @MediumTest
 class SpacesDaoTest {
     @Rule
@@ -53,7 +58,7 @@ class SpacesDaoTest {
     }
 
     @Test
-    fun insertOrDeleteSpacesWithEmptyDatabase() {
+    fun insertOrDeleteSpacesWithEmptyDatabase() = runTest {
         val accountName = OC_SPACE_PROJECT_WITHOUT_IMAGE.accountName
 
         val specialsToInsert = listOf(
@@ -68,7 +73,10 @@ class SpacesDaoTest {
 
         spacesDao.insertOrDeleteSpaces(spacesToInsert, specialsToInsert)
 
-        val spacesInDatabase = spacesDao.getProjectSpacesWithSpecialsForAccount(accountName).map { it.toModel() }
+        val spacesInDatabase = spacesDao.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
+            accountName = accountName,
+            filterDriveTypes = setOf(DRIVE_TYPE_PROJECT),
+        ).first().map { it.toModel() }
 
         assertNotNull(spacesInDatabase)
         assertEquals(1, spacesInDatabase.size)
@@ -76,7 +84,7 @@ class SpacesDaoTest {
     }
 
     @Test
-    fun insertOrDeleteSpacesWithSpacesAlreadyInDatabaseNotAttachedToAccountAnymore() {
+    fun insertOrDeleteSpacesWithSpacesAlreadyInDatabaseNotAttachedToAccountAnymore() = runTest {
         val accountName = OC_SPACE_PROJECT_WITHOUT_IMAGE.accountName
 
         val specialsAlreadyInDatabaseToInsert = listOf(
@@ -90,7 +98,10 @@ class SpacesDaoTest {
 
         spacesDao.insertOrDeleteSpaces(spacesAlreadyInDatabaseToInsert, specialsAlreadyInDatabaseToInsert)
 
-        val spacesAlreadyInDatabase = spacesDao.getProjectSpacesWithSpecialsForAccount(accountName)
+        val spacesAlreadyInDatabase = spacesDao.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
+            accountName = accountName,
+            filterDriveTypes = setOf(DRIVE_TYPE_PROJECT),
+        ).first()
 
         assertEquals(1, spacesAlreadyInDatabase.size)
         assertEquals(2, spacesAlreadyInDatabase[0].specials.size)
@@ -107,7 +118,11 @@ class SpacesDaoTest {
 
         spacesDao.insertOrDeleteSpaces(newSpacesToInsert, newSpecialsToInsert)
 
-        val spacesInDatabaseEntity = spacesDao.getProjectSpacesWithSpecialsForAccount(accountName)
+        val spacesInDatabaseEntity = spacesDao.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
+            accountName = accountName,
+            filterDriveTypes = setOf(DRIVE_TYPE_PROJECT),
+        ).first()
+
         val spacesInDatabase = spacesInDatabaseEntity.map { it.toModel() }
         val specialsInDatabase = spacesInDatabaseEntity.flatMap { it.specials }
 
@@ -118,7 +133,7 @@ class SpacesDaoTest {
     }
 
     @Test
-    fun insertOrDeleteSpacesWithSpacesAlreadyInDatabaseStillAttachedToAccount() {
+    fun insertOrDeleteSpacesWithSpacesAlreadyInDatabaseStillAttachedToAccount() = runTest {
         val accountName = OC_SPACE_PROJECT_WITHOUT_IMAGE.accountName
 
         val specialsAlreadyInDatabaseToInsert = listOf(
@@ -132,7 +147,10 @@ class SpacesDaoTest {
 
         spacesDao.insertOrDeleteSpaces(spacesAlreadyInDatabaseToInsert, specialsAlreadyInDatabaseToInsert)
 
-        val spacesAlreadyInDatabase = spacesDao.getProjectSpacesWithSpecialsForAccount(accountName)
+        val spacesAlreadyInDatabase = spacesDao.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
+            accountName = accountName,
+            filterDriveTypes = setOf(DRIVE_TYPE_PROJECT),
+        ).first()
 
         assertEquals(1, spacesAlreadyInDatabase.size)
         assertEquals(2, spacesAlreadyInDatabase[0].specials.size)
@@ -151,7 +169,10 @@ class SpacesDaoTest {
 
         spacesDao.insertOrDeleteSpaces(newSpacesToInsert, newSpecialsToInsert)
 
-        val spacesInDatabase = spacesDao.getProjectSpacesWithSpecialsForAccount(accountName)
+        val spacesInDatabase = spacesDao.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
+            accountName = accountName,
+            filterDriveTypes = setOf(DRIVE_TYPE_PROJECT),
+        ).first()
         val specialsInDatabase = spacesInDatabase.flatMap { it.specials }
 
         assertNotNull(spacesInDatabase)
