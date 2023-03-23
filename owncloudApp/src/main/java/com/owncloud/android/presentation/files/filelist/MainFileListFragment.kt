@@ -771,8 +771,8 @@ class MainFileListFragment : Fragment(),
             // reset to previous color
             requireActivity().window.statusBarColor = statusBarColor!!
 
-            // show FAB on multi selection mode exit
-            toggleFabVisibility(true)
+            // show or hide FAB on multi selection mode exit
+            showOrHideFab(mainFileListViewModel.fileListOption.value, mainFileListViewModel.currentFolderDisplayed.value)
 
             fileActions?.setBottomBarVisibility(true)
 
