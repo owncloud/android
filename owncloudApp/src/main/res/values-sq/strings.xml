@@ -71,6 +71,7 @@
   <string name="prefs_camera_video_upload_on_wifi">Videot ngarkoji vetëm përmes wifi-it</string>
   <string name="prefs_camera_video_upload_on_charging">Ngarko video vetëm kur ngarkohet bateria</string>
   <string name="prefs_subsection_advanced">Të mëtejshme</string>
+  <string name="prefs_subsection_notifications">Administroni njoftime</string>
   <string name="prefs_show_hidden_files">Shfaq kartela të fshehura</string>
   <string name="prefs_log_open_logs_list_view">Kartela regjistër</string>
   <string name="prefs_log_no_logs_list_view">Zbraz dosje regjistrash!</string>
@@ -509,6 +510,7 @@
   <string name="prefs_camera_upload_behaviour_dialog_title">Kartela origjinale do të jetë</string>
   <string name="prefs_camera_upload_behaviour_title">Kartela origjinale do të jetë</string>
   <string name="prefs_camera_upload_last_sync_title">Njëkohësimi i fundit</string>
+  <string name="notifications_permission_denied">Parapëlqimet tuaja mund t’i përditësoni te Rregullimet</string>
   <string name="upload_copy_files">Kopjoje kartelën</string>
   <string name="upload_move_files">Lëvize kartelën</string>
   <string name="pref_behaviour_entries_keep_file">mbajtur në dosjen origjinale</string>
