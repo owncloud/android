@@ -193,15 +193,17 @@ class MainFileListFragment : Fragment(),
         }
 
         // Set SortOptions and its listeners
-        binding.optionsLayout.let {
-            it.onSortOptionsListener = this
-            if (isPickingAFolder()) {
-                it.onCreateFolderListener = this
-                it.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER)
-            }
-        }
+        binding.optionsLayout.onSortOptionsListener = this
+        setViewTypeSelector(SortOptionsView.AdditionalView.CREATE_FOLDER)
 
         showOrHideFab(requireArguments().getParcelable(ARG_FILE_LIST_OPTION)!!, requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY)!!)
+    }
+
+    private fun setViewTypeSelector(additionalView: SortOptionsView.AdditionalView) {
+        if (isPickingAFolder()) {
+            binding.optionsLayout.onCreateFolderListener = this
+            binding.optionsLayout.selectAdditionalView(additionalView)
+        }
     }
 
     private fun toggleSelection(position: Int) {
@@ -223,6 +225,11 @@ class MainFileListFragment : Fragment(),
                         shouldSyncContents = !isPickingAFolder(), // For picking a folder option, we just need a refresh
                     )
                 )
+            }
+            if (currentFolderDisplayed.hasAddSubdirectoriesPermission) {
+                setViewTypeSelector(SortOptionsView.AdditionalView.CREATE_FOLDER)
+            } else {
+                setViewTypeSelector(SortOptionsView.AdditionalView.HIDDEN)
             }
         }
         // Observe the current space to update the toolbar.
