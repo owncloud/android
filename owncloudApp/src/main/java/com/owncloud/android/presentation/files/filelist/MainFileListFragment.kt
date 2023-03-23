@@ -48,6 +48,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import coil.load
+import coil.memory.MemoryCache
+import coil.request.CachePolicy
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -90,6 +93,7 @@ import com.owncloud.android.presentation.files.operations.FileOperationsViewMode
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
+import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
@@ -331,16 +335,12 @@ class MainFileListFragment : Fragment(),
 
                 val spaceSpecialImage = it.getSpaceSpecialImage()
                 if (spaceSpecialImage != null) {
-                    binding.spaceHeader.spaceHeaderImage.tag = spaceSpecialImage.id
-                    val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(spaceSpecialImage.id)
-                    if (thumbnail != null) {
-                        binding.spaceHeader.spaceHeaderImage.run {
-                            setImageBitmap(thumbnail)
-                            scaleType = ImageView.ScaleType.CENTER_CROP
-                        }
-                        if (spaceSpecialImage.file.mimeType == "image/png") {
-                            binding.spaceHeader.spaceHeaderImage.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background_color))
-                        }
+                    binding.spaceHeader.spaceHeaderImage.load(
+                        ThumbnailsRequester.getPreviewUriForSpaceSpecial(spaceSpecialImage),
+                        ThumbnailsRequester.getCoilImageLoader()
+                    ) {
+                        memoryCachePolicy(CachePolicy.ENABLED)
+                        memoryCacheKey(MemoryCache.Key(spaceSpecialImage.id))
                     }
                 }
                 binding.spaceHeader.spaceHeaderName.text = it.name

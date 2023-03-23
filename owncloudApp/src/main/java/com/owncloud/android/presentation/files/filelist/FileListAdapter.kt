@@ -35,6 +35,9 @@ import androidx.core.view.setMargins
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import coil.load
+import coil.memory.MemoryCache
+import coil.request.CachePolicy
 import com.owncloud.android.R
 import com.owncloud.android.databinding.GridItemBinding
 import com.owncloud.android.databinding.ItemFileListBinding
@@ -44,6 +47,7 @@ import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
 import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
@@ -283,22 +287,12 @@ class FileListAdapter(
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
                 fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
                 if (file.remoteId != null) {
-                    val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
-                    if (thumbnail != null) {
-                        fileIcon.setImageBitmap(thumbnail)
-                    }
-                    if (file.needsToUpdateThumbnail) {
-                        // generate new Thumbnail
-                        if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
-                            val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
-                            val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
-
-                            // If drawable is not visible, do not update it.
-                            if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
-                                fileIcon.setImageDrawable(asyncDrawable)
-                            }
-                            task.execute(file)
-                        }
+                    fileIcon.load(
+                        ThumbnailsRequester.getPreviewUriForFile(fileWithSyncInfo, account!!),
+                        ThumbnailsRequester.getCoilImageLoader()
+                    ) {
+                        memoryCachePolicy(CachePolicy.ENABLED)
+                        memoryCacheKey(MemoryCache.Key(file.remoteId!!))
                     }
 
                     if (file.mimeType == "image/png") {

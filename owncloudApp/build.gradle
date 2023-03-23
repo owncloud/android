@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.androidx.enterprise.feedback) { because "MDM feedback" }
 
     // Image loading
+    implementation("io.coil-kt:coil:2.2.2")
     implementation libs.glide
     implementation libs.glide.vector
 
