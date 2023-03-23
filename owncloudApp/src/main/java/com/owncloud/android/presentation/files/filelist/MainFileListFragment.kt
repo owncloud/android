@@ -226,6 +226,7 @@ class MainFileListFragment : Fragment(),
                     )
                 )
             }
+            showOrHideFab(fileListOption, currentFolderDisplayed)
             if (currentFolderDisplayed.hasAddSubdirectoriesPermission) {
                 setViewTypeSelector(SortOptionsView.AdditionalView.CREATE_FOLDER)
             } else {
@@ -367,16 +368,14 @@ class MainFileListFragment : Fragment(),
      * @param newFileListOption new file list option to enable.
      */
     private fun showOrHideFab(newFileListOption: FileListOption, currentFolder: OCFile) {
-        if (!newFileListOption.isAllFiles() || isPickingAFolder() || (currentFolder.permissions != null && !currentFolder.hasAddFilePermission && !currentFolder.hasAddSubdirectoriesPermission)) {
+        if (!newFileListOption.isAllFiles() || isPickingAFolder() || (!currentFolder.hasAddFilePermission && !currentFolder.hasAddSubdirectoriesPermission)) {
             toggleFabVisibility(false)
         } else {
             toggleFabVisibility(true)
-            if (currentFolder.permissions != null) {
-                if (!currentFolder.hasAddFilePermission) {
-                    binding.fabUpload.isVisible = false
-                } else if (!currentFolder.hasAddSubdirectoriesPermission) {
-                    binding.fabMkdir.isVisible = false
-                }
+            if (!currentFolder.hasAddFilePermission) {
+                binding.fabUpload.isVisible = false
+            } else if (!currentFolder.hasAddSubdirectoriesPermission) {
+                binding.fabMkdir.isVisible = false
             }
             registerFabUploadListener()
             registerFabMkDirListener()
