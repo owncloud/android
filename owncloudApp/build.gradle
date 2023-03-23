@@ -39,6 +39,7 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:$androidxFragment"
 
     // Image loading
+    implementation("io.coil-kt:coil:2.2.2")
     implementation "com.github.bumptech.glide:glide:4.15.1"
     implementation "com.github.2coffees1team:GlideToVectorYou:v2.0.0"
 
