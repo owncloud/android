@@ -13,6 +13,7 @@ Summary
 * Enhancement - Update label on Camera Uploads: [#3930](https://github.com/owncloud/android/pull/3930)
 * Enhancement - Authenticated WebFinger: [#3943](https://github.com/owncloud/android/issues/3943)
 * Enhancement - Link in drawer menu: [#3949](https://github.com/owncloud/android/pull/3949)
+* Enhancement - Send language header in all requests: [#3980](https://github.com/owncloud/android/issues/3980)
 
 Details
 -------
@@ -60,6 +61,15 @@ Details
 
    https://github.com/owncloud/android/issues/3907
    https://github.com/owncloud/android/pull/3949
+
+* Enhancement - Send language header in all requests: [#3980](https://github.com/owncloud/android/issues/3980)
+
+   Added Accept-Language header to all requests so the android App can receive translated
+   content.
+
+   https://github.com/owncloud/android/issues/3980
+   https://github.com/owncloud/android/pull/3982
+   https://github.com/owncloud/android-library/pull/551
 
 Changelog for ownCloud Android Client [3.0.4] (2023-03-07)
 =======================================
