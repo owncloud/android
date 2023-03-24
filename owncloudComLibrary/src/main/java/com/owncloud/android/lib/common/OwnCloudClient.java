@@ -43,6 +43,7 @@ import timber.log.Timber;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale;
 
 import static com.owncloud.android.lib.common.http.HttpConstants.AUTHORIZATION_HEADER;
 import static com.owncloud.android.lib.common.http.HttpConstants.HTTP_MOVED_PERMANENTLY;
@@ -128,6 +129,7 @@ public class OwnCloudClient extends HttpClient {
             Timber.d("Executing in request with id %s", requestId);
             method.setRequestHeader(HttpConstants.OC_X_REQUEST_ID, requestId);
             method.setRequestHeader(HttpConstants.USER_AGENT_HEADER, SingleSessionManager.getUserAgent());
+            method.setRequestHeader(HttpConstants.ACCEPT_LANGUAGE_HEADER, Locale.getDefault().getLanguage());
             method.setRequestHeader(HttpConstants.ACCEPT_ENCODING_HEADER, HttpConstants.ACCEPT_ENCODING_IDENTITY);
             if (mCredentials.getHeaderAuth() != null && !mCredentials.getHeaderAuth().isEmpty()) {
                 method.setRequestHeader(AUTHORIZATION_HEADER, mCredentials.getHeaderAuth());
