@@ -28,11 +28,11 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.extensions.isOneOf
-import com.owncloud.android.domain.files.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
 import com.owncloud.android.domain.utils.Event
@@ -142,7 +142,11 @@ class FileDetailsViewModel(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
             liveData = _openInWebUriLiveData,
             useCase = openInWebUseCase,
-            useCaseParams = GetUrlToOpenInWebUseCase.Params(openWebEndpoint = capabilities.value?.filesAppProviders?.openWebUrl!!, fileId = fileId),
+            useCaseParams = GetUrlToOpenInWebUseCase.Params(
+                openWebEndpoint = capabilities.value?.filesAppProviders?.openWebUrl!!,
+                fileId = fileId,
+                accountName = getAccount().name
+            ),
             showLoading = false,
             requiresConnection = true,
         )

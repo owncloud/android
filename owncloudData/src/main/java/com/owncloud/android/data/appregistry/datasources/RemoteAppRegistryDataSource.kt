@@ -24,4 +24,6 @@ interface RemoteAppRegistryDataSource {
     fun getAppRegistryForAccount(
         accountName: String
     ): AppRegistry
+
+    fun getUrlToOpenInWeb(accountName: String, openWebEndpoint: String, fileId: String): String
 }

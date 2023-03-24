@@ -30,10 +30,6 @@ import com.owncloud.android.lib.resources.files.RemoteFile
 class OCRemoteFileDataSource(
     private val clientManager: ClientManager,
 ) : RemoteFileDataSource {
-
-    override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String =
-        executeRemoteOperation { clientManager.getFileService().getUrlToOpenInWeb(openWebEndpoint = openWebEndpoint, fileId = fileId) }
-
     override fun checkPathExistence(
         path: String,
         checkUserCredentials: Boolean,

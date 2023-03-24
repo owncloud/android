@@ -44,7 +44,7 @@ import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfig
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
-import com.owncloud.android.domain.files.GetUrlToOpenInWebUseCase
+import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
 import com.owncloud.android.domain.files.usecases.CleanWorkersUUIDUseCase
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase

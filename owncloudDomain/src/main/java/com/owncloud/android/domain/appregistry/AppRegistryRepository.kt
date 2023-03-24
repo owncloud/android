@@ -22,4 +22,6 @@ package com.owncloud.android.domain.appregistry
 
 interface AppRegistryRepository {
     fun refreshAppRegistryForAccount(accountName: String)
+
+    fun getUrlToOpenInWeb(accountName: String, openWebEndpoint: String, fileId: String): String
 }

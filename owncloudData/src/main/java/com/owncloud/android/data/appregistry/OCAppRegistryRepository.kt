@@ -21,16 +21,17 @@ package com.owncloud.android.data.appregistry
 import com.owncloud.android.data.appregistry.datasources.LocalAppRegistryDataSource
 import com.owncloud.android.data.appregistry.datasources.RemoteAppRegistryDataSource
 import com.owncloud.android.domain.appregistry.AppRegistryRepository
-import com.owncloud.android.domain.capabilities.model.OCCapability
 
 class OCAppRegistryRepository(
     private val localAppRegistryDataSource: LocalAppRegistryDataSource,
     private val remoteAppRegistryDataSource: RemoteAppRegistryDataSource,
-) : AppRegistryRepository{
+) : AppRegistryRepository {
     override fun refreshAppRegistryForAccount(accountName: String) {
         remoteAppRegistryDataSource.getAppRegistryForAccount(accountName).also {
             localAppRegistryDataSource.saveAppRegistryForAccount(it)
         }
     }
 
+    override fun getUrlToOpenInWeb(accountName: String, openWebEndpoint: String, fileId: String): String =
+        remoteAppRegistryDataSource.getUrlToOpenInWeb(accountName = accountName, openWebEndpoint = openWebEndpoint, fileId = fileId)
 }

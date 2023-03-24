@@ -16,18 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.domain.files
+package com.owncloud.android.domain.appregistry.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.appregistry.AppRegistryRepository
 
 class GetUrlToOpenInWebUseCase(
-    private val fileRepository: FileRepository,
+    private val appRegistryRepository: AppRegistryRepository,
 ) : BaseUseCaseWithResult<String, GetUrlToOpenInWebUseCase.Params>() {
 
     override fun run(params: Params) =
-        fileRepository.getUrlToOpenInWeb(openWebEndpoint = params.openWebEndpoint, fileId = params.fileId)
+        appRegistryRepository.getUrlToOpenInWeb(accountName = params.accountName, openWebEndpoint = params.openWebEndpoint, fileId = params.fileId)
 
     data class Params(
+        val accountName: String,
         val fileId: String,
         val openWebEndpoint: String,
     )

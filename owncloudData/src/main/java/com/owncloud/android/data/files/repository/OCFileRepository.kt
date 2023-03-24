@@ -49,10 +49,6 @@ class OCFileRepository(
     private val localSpacesDataSource: LocalSpacesDataSource,
     private val localStorageProvider: LocalStorageProvider
 ) : FileRepository {
-
-    override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String =
-        remoteFileDataSource.getUrlToOpenInWeb(openWebEndpoint = openWebEndpoint, fileId = fileId)
-
     override fun createFolder(
         remotePath: String,
         parentFolder: OCFile,

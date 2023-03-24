@@ -34,6 +34,11 @@ class OCRemoteAppRegistryDataSource(
             clientManager.getAppRegistryService(accountName).getAppRegistry()
         }.toModel(accountName)
 
+    override fun getUrlToOpenInWeb(accountName: String, openWebEndpoint: String, fileId: String): String =
+        executeRemoteOperation {
+            clientManager.getAppRegistryService(accountName).getUrlToOpenInWeb(openWebEndpoint = openWebEndpoint, fileId = fileId)
+        }
+
     private fun AppRegistryResponse.toModel(accountName: String) =
         AppRegistry(
             accountName = accountName,
