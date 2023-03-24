@@ -21,7 +21,7 @@
 *   THE SOFTWARE.
 *
 */
-package com.owncloud.android.lib.resources.files
+package com.owncloud.android.lib.resources.appregistry
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
@@ -30,7 +30,7 @@ import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.lib.resources.files.GetUrlToOpenInWebRemoteOperation.OpenInWebParams.Companion.PARAM_FILE_ID
+import com.owncloud.android.lib.resources.appregistry.GetUrlToOpenInWebRemoteOperation.OpenInWebParams.Companion.PARAM_FILE_ID
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi

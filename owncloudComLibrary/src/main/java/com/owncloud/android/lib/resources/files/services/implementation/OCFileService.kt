@@ -29,7 +29,6 @@ import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperatio
 import com.owncloud.android.lib.resources.files.CopyRemoteFileOperation
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation
-import com.owncloud.android.lib.resources.files.GetUrlToOpenInWebRemoteOperation
 import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation
@@ -39,7 +38,6 @@ import com.owncloud.android.lib.resources.files.RenameRemoteFileOperation
 import com.owncloud.android.lib.resources.files.services.FileService
 
 class OCFileService(override val client: OwnCloudClient) : FileService {
-
     override fun checkPathExistence(
         path: String,
         isUserLogged: Boolean,
@@ -50,9 +48,6 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
             isUserLoggedIn = isUserLogged,
             spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
-
-    override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): RemoteOperationResult<String> =
-        GetUrlToOpenInWebRemoteOperation(openWithWebEndpoint = openWebEndpoint, fileId = fileId).execute(client)
 
     override fun copyFile(
         sourceRemotePath: String,
