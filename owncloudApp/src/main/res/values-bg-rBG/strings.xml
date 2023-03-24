@@ -71,6 +71,7 @@
   <string name="prefs_camera_video_upload_on_wifi">Качване на видеоклипове само през Wi-Fi</string>
   <string name="prefs_camera_video_upload_on_charging">Качване на видеоклипове само при зареждане</string>
   <string name="prefs_subsection_advanced">Разширени</string>
+  <string name="prefs_subsection_notifications">Управление на известия</string>
   <string name="prefs_show_hidden_files">Показване на скрити файлове</string>
   <string name="prefs_log_open_logs_list_view">Регистрационни файлове</string>
   <string name="prefs_log_no_logs_list_view">Папката на дневника е празна!</string>
@@ -511,6 +512,7 @@
   <string name="prefs_camera_upload_behaviour_dialog_title">Оригиналният файл ще бъде</string>
   <string name="prefs_camera_upload_behaviour_title">Оригиналният файл ще бъде</string>
   <string name="prefs_camera_upload_last_sync_title">Последна синхронизация</string>
+  <string name="notifications_permission_denied">Можете да актуализирате предпочитанията си в Настройки</string>
   <string name="upload_copy_files">Копиране на файл</string>
   <string name="upload_move_files">Преместване на файл</string>
   <string name="pref_behaviour_entries_keep_file">се съхранява в оригинална папка</string>
@@ -648,6 +650,12 @@
   <string name="release_notes_footer">Благодарим ви, че използвате %1$s.\n❤</string>
   <string name="release_notes_proceed">Продължаване</string>
   <string name="release_notes_icon">Икона за бележка по изданието</string>
+  <string name="release_notes_4_0_title_1">Поддръжка за пространства</string>
+  <string name="release_notes_4_0_subtitle_1">Въвеждане на поддръжка за функцията за пространства (oCIS). Налична само за нови профили</string>
+  <string name="release_notes_4_0_title_2">Долна лента за навигация</string>
+  <string name="release_notes_4_0_subtitle_2">Пренареждане на някои раздели</string>
+  <string name="release_notes_4_0_title_3">Край на поддръжката на Lollipop</string>
+  <string name="release_notes_4_0_subtitle_3">Това ще бъде последната версия с поддръжка на Android Lollipop (v5.0)</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Отваряне в мрежата</string>
   <string name="open_in_web_error_generic">Не може да се отвори в мрежата</string>
