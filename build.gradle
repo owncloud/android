@@ -21,6 +21,9 @@ buildscript {
         // Koin
         ioInsertKoin = "3.3.3"
 
+        // Moshi
+        comSquareupMoshi = '1.14.0'
+
         // Testing
         ioMockk = "1.13.3"
         junitVersion = "4.13.2"

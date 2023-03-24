@@ -63,6 +63,9 @@ dependencies {
     implementation "androidx.room:room-ktx:$androidxRoom"
     ksp "androidx.room:room-compiler:$androidxRoom"
 
+    implementation("com.squareup.moshi:moshi-kotlin:$comSquareupMoshi")
+    ksp "com.squareup.moshi:moshi-kotlin-codegen:$comSquareupMoshi"
+
     // Dependencies for unit tests
     testImplementation project(":owncloudTestUtil")
     testImplementation "junit:junit:$junitVersion"
@@ -77,7 +80,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxTestExt"
     androidTestImplementation "androidx.arch.core:core-testing:$androidxArchCore"
     androidTestImplementation "androidx.room:room-testing:$androidxRoom"
-    androidTestImplementation ("io.mockk:mockk-android:$ioMockk") {
+    androidTestImplementation("io.mockk:mockk-android:$ioMockk") {
         exclude module: "objenesis"
     }
 }

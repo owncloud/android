@@ -22,6 +22,8 @@ package com.owncloud.android.dependecyinjection
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.ClientManager
+import com.owncloud.android.data.appregistry.datasources.RemoteAppRegistryDataSource
+import com.owncloud.android.data.appregistry.datasources.implementation.OCRemoteAppRegistryDataSource
 import com.owncloud.android.data.authentication.datasources.RemoteAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.implementation.OCRemoteAuthenticationDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
@@ -63,6 +65,7 @@ val remoteDataSourceModule = module {
     single<OIDCService> { OCOIDCService() }
     single<WebFingerService> { OCWebFingerService() }
 
+    single<RemoteAppRegistryDataSource> { OCRemoteAppRegistryDataSource(get()) }
     single<RemoteAuthenticationDataSource> { OCRemoteAuthenticationDataSource(get()) }
     single<RemoteCapabilitiesDataSource> { OCRemoteCapabilitiesDataSource(get(), get()) }
     single<RemoteFileDataSource> { OCRemoteFileDataSource(get()) }

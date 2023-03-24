@@ -22,6 +22,7 @@
 
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.data.appregistry.OCAppRegistryRepository
 import com.owncloud.android.data.authentication.repository.OCAuthenticationRepository
 import com.owncloud.android.data.capabilities.repository.OCCapabilityRepository
 import com.owncloud.android.data.files.repository.OCFileRepository
@@ -34,6 +35,7 @@ import com.owncloud.android.data.spaces.repository.OCSpacesRepository
 import com.owncloud.android.data.transfers.repository.OCTransferRepository
 import com.owncloud.android.data.user.repository.OCUserRepository
 import com.owncloud.android.data.webfinger.repository.OCWebFingerRepository
+import com.owncloud.android.domain.appregistry.AppRegistryRepository
 import com.owncloud.android.domain.authentication.AuthenticationRepository
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.camerauploads.FolderBackupRepository
@@ -49,8 +51,9 @@ import com.owncloud.android.domain.webfinger.WebFingerRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
+    factory<AppRegistryRepository> { OCAppRegistryRepository(get(), get()) }
     factory<AuthenticationRepository> { OCAuthenticationRepository(get(), get()) }
-    factory<CapabilityRepository> { OCCapabilityRepository(get(), get()) }
+    factory<CapabilityRepository> { OCCapabilityRepository(get(), get(), get()) }
     factory<FileRepository> { OCFileRepository(get(), get(), get(), get()) }
     factory<ServerInfoRepository> { OCServerInfoRepository(get(), get(), get()) }
     factory<ShareRepository> { OCShareRepository(get(), get()) }

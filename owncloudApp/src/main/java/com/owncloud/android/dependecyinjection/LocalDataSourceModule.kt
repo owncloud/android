@@ -26,6 +26,8 @@ import android.accounts.AccountManager
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.MainApp.Companion.dataFolder
 import com.owncloud.android.data.OwncloudDatabase
+import com.owncloud.android.data.appregistry.datasources.LocalAppRegistryDataSource
+import com.owncloud.android.data.appregistry.datasources.implementation.OCLocalAppRegistryDataSource
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.implementation.OCLocalAuthenticationDataSource
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
@@ -52,6 +54,7 @@ import org.koin.dsl.module
 val localDataSourceModule = module {
     single { AccountManager.get(androidContext()) }
 
+    single { OwncloudDatabase.getDatabase(androidContext()).appRegistryDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).capabilityDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).fileDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }
@@ -63,6 +66,7 @@ val localDataSourceModule = module {
     single<SharedPreferencesProvider> { OCSharedPreferencesProvider(get()) }
     single<LocalStorageProvider> { ScopedStorageProvider(dataFolder, androidContext()) }
 
+    factory<LocalAppRegistryDataSource> { OCLocalAppRegistryDataSource(get()) }
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get()) }
     factory<LocalFileDataSource> { OCLocalFileDataSource(get()) }
