@@ -60,15 +60,21 @@
   <string name="prefs_camera_picture_upload">사진 업로드</string>
   <string name="prefs_camera_picture_upload_summary">카메라로 찍은 사진 자동으로 업로드</string>
   <string name="prefs_camera_picture_upload_path_title">사진 업로드 경로</string>
+  <string name="prefs_camera_picture_upload_conditions_title">업로드에서 제외할 조건</string>
+  <string name="prefs_camera_picture_upload_conditions_summary">아래 옵션에 모두 부합하는 경우에만 업로드가 실행됨</string>
   <string name="prefs_camera_picture_upload_on_wifi">Wi-Fi에서만 사진 업로드</string>
+  <string name="prefs_camera_picture_upload_on_charging">충전 중일 때만 사진 업로드</string>
+  <string name="prefs_camera_upload_on_charging_summary">Wi-Fi 사용 중일 때만 업로드 설정을 켜서 옵션 선택</string>
   <string name="prefs_camera_video_upload">동영상 업로드</string>
   <string name="prefs_camera_video_upload_summary">카메라로 찍은 동영상 자동으로 업로드</string>
   <string name="prefs_camera_video_upload_path_title">동영상 업로드 경로</string>
   <string name="prefs_camera_video_upload_on_wifi">Wi-Fi에서만 동영상 업로드</string>
+  <string name="prefs_camera_video_upload_on_charging">충전 중일 때만 비디오 업로드</string>
   <string name="prefs_subsection_advanced">고급</string>
   <string name="prefs_subsection_notifications">알림 관리</string>
   <string name="prefs_show_hidden_files">숨김 파일 보이기</string>
   <string name="prefs_log_open_logs_list_view">로그 파일</string>
+  <string name="prefs_log_no_logs_list_view">로그 폴더 비어 있음!</string>
   <string name="prefs_log_empty_subtitle">로깅을 켜면 여기에서 로그 파일을 확인할 수 있습니다</string>
   <string name="prefs_log_title">로그 활성화</string>
   <string name="prefs_log_summary">문제점을 기록하는 데 사용됩니다</string>
@@ -144,10 +150,14 @@
   <string name="file_list_empty_title_available_offline">사용할 수 있는 오프라인 파일 없음</string>
   <string name="file_list_empty_title_shared_by_links">공유된 링크 없음</string>
   <string name="file_list_empty_subtitle_all_files">파일을 업로드하거나 장치와 동기화하십시오!</string>
+  <string name="shares_list_empty_title">공유 없음</string>
+  <string name="shares_list_empty_subtitle">다른 사람의 리소스에 대해 공동 작업하지 않고 있음</string>
+  <string name="spaces_list_empty_subtitle">어떤 스페이스에도 접근할 수 없습니다!</string>
   <string name="file_list_empty_subtitle_available_offline">오프라인에서 이용 가능하도록 설정한 파일과 폴더가 여기에 표시됩니다</string>
   <string name="file_list_empty_subtitle_shared_by_links">내가 링크로 공유하는 파일과 폴더가 여기에 나타납니다</string>
   <string name="file_list_loading">불러오는 중…</string>
   <string name="file_list_no_app_for_file_type">이 파일을 위한 앱이 존재하지 않습니다.</string>
+  <string name="file_list_no_app_for_perform_action">이 작업에 대한 앱 없음</string>
   <string name="local_file_list_empty">이 폴더에 파일이 없습니다.</string>
   <string name="local_file_list_empty_just_folders">이 폴더 안에는 다른 폴더가 없습니다.</string>
   <string name="local_file_list_search_with_no_matches">검색 결과 없음</string>
@@ -171,6 +181,7 @@
   <string name="filedetails_renamed_in_upload_msg">업로드 중 파일 이름이 %1$s(으)로 변경됨</string>
   <string name="list_layout">목록 레이아웃</string>
   <string name="action_share">공유</string>
+  <string name="login_account_preparing">첫 실행을 위해 계정 준비 중</string>
   <string name="common_yes">예</string>
   <string name="common_no">아니요</string>
   <string name="common_remove_upload">업로드 항목 제거</string>
@@ -202,6 +213,9 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">파일 이름은 %d글자를 초과하면 안 됩니다.</string>
   <string name="uploader_upload_text_filename_hint">파일 이름</string>
   <string name="uploader_upload_camera_upload_files">카메라 파일을 업로드 중</string>
+  <string name="uploader_upload_picture_upload_files">새 사진 %d개가 곧 업로드됨</string>
+  <string name="uploader_upload_video_upload_files">새 비디오 %d개가 곧 업로드됨</string>
+  <string name="uploader_upload_camera_upload_source_path_error">카메라 업로드 실패</string>
   <string name="uploader_upload_available_offline_files">사용 가능한 오프라인 파일 업로드 중</string>
   <string name="uploader_upload_requested_from_wifi_files">요청된 WIFI 파일 업로드 중</string>
   <string name="ssl_certificate_not_trusted">서버 인증서를 신뢰할 수 없음</string>
@@ -209,6 +223,7 @@
   <string name="uploads_view_group_current_uploads">현재</string>
   <string name="uploads_view_group_failed_uploads">실패함(눌러서 다시 시도)</string>
   <string name="uploads_view_group_finished_uploads">업로드됨</string>
+  <string name="uploads_view_group_queued_uploads">대기 중</string>
   <string name="uploads_view_group_file_count">파일 %d개</string>
   <string name="uploads_view_group_file_count_single">파일 %d개</string>
   <string name="uploads_view_upload_status_succeeded">완료됨</string>
@@ -226,10 +241,13 @@
   <string name="uploads_view_upload_status_service_interrupted">앱 종료됨</string>
   <string name="uploads_view_upload_status_unknown_fail">알 수 없는 오류</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Wi-Fi 연결을 기다리는 중</string>
+  <string name="uploads_view_upload_status_queued">대기 중</string>
   <string name="uploads_view_later_waiting_to_upload">업로드 대기 중</string>
   <string name="uploads_view_unsupported_media_type">지원하지 않는 미디어 형식</string>
+  <string name="uploader_upload_enqueued_ticker">%1$s 업로드 대기 중</string>
   <string name="uploader_upload_canceled_ticker">업로드 취소됨</string>
   <string name="downloader_download_canceled_ticker">다운로드 취소됨</string>
+  <string name="downloader_download_enqueued_ticker">%1$s 다운로드 대기 중</string>
   <string name="downloader_download_in_progress_ticker">다운로드 중…</string>
   <string name="downloader_download_in_progress_content">%1$d%% %2$s 다운로드 중</string>
   <string name="downloader_download_succeeded_ticker">다운로드됨</string>
@@ -346,6 +364,8 @@
   <string name="sync_file_fail_msg">원격 파일을 확인할 수 없음</string>
   <string name="sync_file_nothing_to_do_msg">파일 내용이 이미 동기화됨</string>
   <string name="new_remote_version_found_msg">새 버전을 서버 내에서 찾았습니다. 다운로드 중…</string>
+  <string name="download_enqueued_msg">다운로드 대기 중</string>
+  <string name="upload_enqueued_msg">업로드 대기 중</string>
   <string name="create_dir_fail_msg">폴더를 만들 수 없음</string>
   <string name="filename_forbidden_characters">사용할 수 없는 문자: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">파일 이름에 하나 이상의 사용할 수 없는 문자가 포함되어 있음</string>
@@ -403,6 +423,7 @@
   <string name="conflict_keep_both">모두 저장</string>
   <string name="conflict_use_local_version">로컬 버전</string>
   <string name="conflict_use_server_version">서버 버전</string>
+  <string name="error_conflict">대상 폴더에서 오류 발생</string>
   <string name="preview_image_description">사진 미리 보기</string>
   <string name="preview_image_error_unknown_format">이 사진을 미리 볼 수 없음</string>
   <string name="error__upload__local_file_not_copied">%1$s을(를) 로컬 폴더 %2$s(으)로 복사할 수 없습니다</string>
@@ -486,10 +507,12 @@
   <string name="prefs_camera_upload_source_path_title_required">필수</string>
   <string name="prefs_camera_upload_behaviour_dialog_title">원래 파일은</string>
   <string name="prefs_camera_upload_behaviour_title">원래 파일은</string>
+  <string name="prefs_camera_upload_last_sync_title">마지막 동기화</string>
   <string name="notifications_permission_denied">설정에서 환경설정을 업데이트할 수 있습니다</string>
   <string name="upload_copy_files">파일 복사</string>
   <string name="upload_move_files">파일 이동</string>
   <string name="pref_behaviour_entries_keep_file">원래 폴더에 유지됨</string>
+  <string name="pref_behaviour_entries_remove_original_file">원래 폴더에서 삭제됨</string>
   <string name="share_dialog_title">공유</string>
   <string name="share_file">%1$s 공유</string>
   <string name="share_with_user_section_title">사용자 및 그룹</string>
@@ -598,11 +621,14 @@
   <string name="prefs_http_logs">HTTP 요청 및 응답 로그</string>
   <string name="prefs_logs_summary">로그에는 민감한 정보가 포함되어 있습니다. 로그를 다른 사람에게 공유하는 것은 전적으로 이용자의 책임입니다</string>
   <string name="synchronizing_account">계정 동기화 중</string>
+  <string name="spaces_sync_failed">스페이스를 새로 고칠 수 없음</string>
   <!--Scoped storage migration wizard-->
   <string name="scoped_storage_wizard_explanation">%1$s 데이터를 외부 저장소에서 찾았습니다. 내 장치의 안전한 저장소에 옮겨지게 됩니다. 외부 저장소에 남아 있는 파일은 중복 및 취약점을 방지하기 위해 삭제됩니다.</string>
   <string name="scoped_storage_wizard_intro">앱이 업데이트 되었습니다. 이 앱 업데이트는 장치 내 보다 더 안전한 저장 공간으로 데이터를 이동합니다. 데이터 이동은 단 한 번만 진행되며 약 1분 가량이 걸립니다.</string>
   <string name="scoped_storage_wizard_intro_button">시작합시다</string>
+  <string name="scoped_storage_wizard_not_enough_space_warning">⚠️ 장치의 여유 공간이 제한되어 있습니다. 일부 파일은 이동되지 않았을 수 있습니다. 단계가 완료된 후에도 다운로드한 파일들이 계속 다운로드 되는지 확인하세요.</string>
   <string name="scoped_storage_wizard_migrate_and_clean_button">지금 이동</string>
+  <string name="scoped_storage_wizard_migration_completed">이동이 완료되었습니다. 파일이 그 어느 때보다 안전해졌습니다.</string>
   <string name="scoped_storage_wizard_migration_completed_access_files_button">내 파일에 접근</string>
   <string name="scoped_storage_wizard_migration_in_progress">파일 이동 중입니다. 장치를 끄지 마십시오.</string>
   <string name="scoped_storage_wizard_migration_in_progress_button">작업 중… 잠시 기다려주세요</string>
@@ -620,7 +646,12 @@
   <string name="release_notes_header">%1$s 신규 추가</string>
   <string name="release_notes_footer">%1$s을(를) 사용해주셔서 감사합니다.\n❤</string>
   <string name="release_notes_proceed">진행</string>
+  <string name="release_notes_4_0_title_1">스페이스 관련 도움</string>
+  <string name="release_notes_4_0_subtitle_1">스페이스 기능 관련 고객지원을 소개합니다 (oCIS). 새로 만들어진 계정에서만 이용할 수 있습니다.</string>
+  <string name="release_notes_4_0_title_2">하단 내비게이션 바</string>
+  <string name="release_notes_4_0_subtitle_2">일부 탭을 재정렬함</string>
   <string name="release_notes_4_0_title_3">Lollipop 지원 종료</string>
+  <string name="release_notes_4_0_subtitle_3">Android Lollipop (v5.0)을 위한 마지막 지원 버전입니다</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">웹에서 열기</string>
   <string name="open_in_web_error_generic">웹에서 열 수 없음</string>

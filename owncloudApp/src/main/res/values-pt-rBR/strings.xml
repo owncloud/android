@@ -71,6 +71,7 @@
   <string name="prefs_camera_video_upload_on_wifi">Envio de vídeos apenas por wifi</string>
   <string name="prefs_camera_video_upload_on_charging">Envie vídeos apenas durante o carregamento</string>
   <string name="prefs_subsection_advanced">Avançado</string>
+  <string name="prefs_subsection_notifications">Manage notifications</string>
   <string name="prefs_show_hidden_files">Mostrar arquivos escondidos</string>
   <string name="prefs_log_open_logs_list_view">Arquivos log</string>
   <string name="prefs_log_no_logs_list_view">Pasta de log vazia! </string>
@@ -145,9 +146,13 @@
   <string name="uploader_error_message_source_file_not_copied">Ocorreu um erro ao copiar o arquivo para uma pasta temporária. Por favor, tente enviar novamente.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty_title_all_files">Nenhum arquivo aqui</string>
+  <string name="spaces_list_empty_title">No spaces</string>
   <string name="file_list_empty_title_available_offline">Nenhum arquivo off-line disponível</string>
   <string name="file_list_empty_title_shared_by_links">Nenhum link compartilhado</string>
   <string name="file_list_empty_subtitle_all_files">Carregue algum conteúdo ou sincronize com seus dispositivos!</string>
+  <string name="shares_list_empty_title">Sem compartilhamentos</string>
+  <string name="shares_list_empty_subtitle">You are not collaborating on other people\'s resources</string>
+  <string name="spaces_list_empty_subtitle">You don\'t have access to any space!</string>
   <string name="file_list_empty_subtitle_available_offline">Arquivos e pastas marcados como disponíveis off-line aparecerão aqui</string>
   <string name="file_list_empty_subtitle_shared_by_links">Arquivos e pastas que você compartilha com link são mostrados aqui</string>
   <string name="file_list_loading">Carregando...</string>
@@ -176,6 +181,7 @@
   <string name="filedetails_renamed_in_upload_msg">Arquivo foi renomeado para %1$s durante o envio</string>
   <string name="list_layout">Layout da lista</string>
   <string name="action_share">Compartilhar</string>
+  <string name="login_account_preparing">Preparing account for first launch</string>
   <string name="common_yes">Sim</string>
   <string name="common_no">Não</string>
   <string name="common_remove_upload">Remover arquivo enviado</string>
@@ -414,11 +420,13 @@
   <string name="confirmation_disable_videos_upload_message">Tem certeza de que deseja desativar esse recurso? Os vídeos pendentes não serão carregadas</string>
   <string name="proper_pics_folder_warning_camera_upload">Por favor, verifique se a pasta selecionada é onde a câmera que você está usando salva as fotos tiradas. Caso contrário, o recurso não poderá detectar suas fotos. Tenha em mente que as fotos serão enviadas em pelo menos 15 minutos depois de serem tiradas.</string>
   <string name="proper_videos_folder_warning_camera_upload">Por favor, verifique se a pasta selecionada é onde a câmera que você está usando salva os vídeos gravados. Caso contrário, o recurso não poderá detectar seus vídeos. Tenha em mente que os vídeos serão enviados em pelo menos 15 minutos depois de serem gravados.</string>
+  <string name="conflict_title">Arquivo em conflito</string>
   <string name="conflict_description">Há um conflito no arquivo %1$s, toque para resolvê-lo</string>
   <string name="conflict_message">Quais arquivos você deseja manter? Se você selecionar ambas as versões, o arquivo local terá um número adicionado ao seu nome.</string>
   <string name="conflict_keep_both">Manter ambos</string>
   <string name="conflict_use_local_version">versão local</string>
   <string name="conflict_use_server_version">versão do servidor</string>
+  <string name="error_conflict">An error occurred in the destination folder</string>
   <string name="preview_image_description">Pré-visualização da imagem</string>
   <string name="preview_image_error_unknown_format">Esta imagem não pode ser mostrada</string>
   <string name="error__upload__local_file_not_copied">%1$s não pôde ser copiado para pasta local %2$s</string>
@@ -504,6 +512,7 @@
   <string name="prefs_camera_upload_behaviour_dialog_title">Arquivo original será</string>
   <string name="prefs_camera_upload_behaviour_title">Arquivo original será</string>
   <string name="prefs_camera_upload_last_sync_title">Última sincronização </string>
+  <string name="notifications_permission_denied">You can update your preferences in Settings</string>
   <string name="upload_copy_files">Copiar o arquivo</string>
   <string name="upload_move_files">Mover o arquivo</string>
   <string name="pref_behaviour_entries_keep_file">mantido na pasta original</string>
@@ -617,6 +626,7 @@
   <string name="prefs_http_logs">Registrar solicitações e respostas HTTP</string>
   <string name="prefs_logs_summary">Os logs podem conter informações confidenciais. O compartilhamento de registros com outras pessoas é de responsabilidade exclusiva do usuário</string>
   <string name="synchronizing_account">Sincronizando conta</string>
+  <string name="spaces_sync_failed">Spaces could not be refreshed</string>
   <!--Scoped storage migration wizard-->
   <string name="scoped_storage_wizard_explanation">Encontrados %1$s de dados em seu armazenamento externo. Isto será movido para o armazenamento seguro em seu dispositivo. Arquivos remanescentes podem ser removidos de seu armazenamento externo depois da migração para evitar duplicatas e vulnerabilidades.</string>
   <string name="scoped_storage_wizard_intro">Seu aplicativo foi atualizado. Esta atualização do aplicativo migra seu arquivos para um local mais seguro em seu dispositivo. Esta aplicação de dados única é necessária e pode levar um minuto ou mais.</string>
@@ -641,6 +651,12 @@
   <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Prosseguir</string>
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
+  <string name="release_notes_4_0_title_1">Support for Spaces</string>
+  <string name="release_notes_4_0_subtitle_1">Introducing support for spaces feature (oCIS). Only available for new accounts</string>
+  <string name="release_notes_4_0_title_2">Bottom navigation bar</string>
+  <string name="release_notes_4_0_subtitle_2">Reordered some tabs</string>
+  <string name="release_notes_4_0_title_3">Fim do suporte Lollipop</string>
+  <string name="release_notes_4_0_subtitle_3">This will be the last release with support for Android Lollipop (v5.0)</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="open_in_web_error_generic">Não foi possível abrir na web</string>
