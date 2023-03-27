@@ -21,9 +21,9 @@ package com.owncloud.android.data.appregistry.datasources.implementation
 import com.owncloud.android.data.appregistry.datasources.LocalAppRegistryDataSource
 import com.owncloud.android.data.appregistry.db.AppRegistryDao
 import com.owncloud.android.data.appregistry.db.AppRegistryEntity
-import com.owncloud.android.domain.appregistry.AppRegistry
-import com.owncloud.android.domain.appregistry.AppRegistryMimeType
-import com.owncloud.android.domain.appregistry.AppRegistryProvider
+import com.owncloud.android.domain.appregistry.model.AppRegistry
+import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
+import com.owncloud.android.domain.appregistry.model.AppRegistryProvider
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types

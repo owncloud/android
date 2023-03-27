@@ -21,6 +21,8 @@ package com.owncloud.android.data.appregistry
 import com.owncloud.android.data.appregistry.datasources.LocalAppRegistryDataSource
 import com.owncloud.android.data.appregistry.datasources.RemoteAppRegistryDataSource
 import com.owncloud.android.domain.appregistry.AppRegistryRepository
+import com.owncloud.android.domain.appregistry.model.AppRegistry
+import kotlinx.coroutines.flow.Flow
 
 class OCAppRegistryRepository(
     private val localAppRegistryDataSource: LocalAppRegistryDataSource,
@@ -31,6 +33,9 @@ class OCAppRegistryRepository(
             localAppRegistryDataSource.saveAppRegistryForAccount(it)
         }
     }
+
+    override fun getAppRegistriesForAccount(accountName: String): Flow<AppRegistry?> =
+        localAppRegistryDataSource.getAppRegistryForAccountAsStream(accountName)
 
     override fun getUrlToOpenInWeb(accountName: String, openWebEndpoint: String, fileId: String): String =
         remoteAppRegistryDataSource.getUrlToOpenInWeb(accountName = accountName, openWebEndpoint = openWebEndpoint, fileId = fileId)

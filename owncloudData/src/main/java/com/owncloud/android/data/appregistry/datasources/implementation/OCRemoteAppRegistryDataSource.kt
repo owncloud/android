@@ -21,9 +21,9 @@ package com.owncloud.android.data.appregistry.datasources.implementation
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.appregistry.datasources.RemoteAppRegistryDataSource
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.domain.appregistry.AppRegistry
-import com.owncloud.android.domain.appregistry.AppRegistryMimeType
-import com.owncloud.android.domain.appregistry.AppRegistryProvider
+import com.owncloud.android.domain.appregistry.model.AppRegistry
+import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
+import com.owncloud.android.domain.appregistry.model.AppRegistryProvider
 import com.owncloud.android.lib.resources.appregistry.responses.AppRegistryResponse
 
 class OCRemoteAppRegistryDataSource(

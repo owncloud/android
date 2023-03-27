@@ -18,7 +18,7 @@
  */
 package com.owncloud.android.data.appregistry.datasources
 
-import com.owncloud.android.domain.appregistry.AppRegistry
+import com.owncloud.android.domain.appregistry.model.AppRegistry
 
 interface RemoteAppRegistryDataSource {
     fun getAppRegistryForAccount(
