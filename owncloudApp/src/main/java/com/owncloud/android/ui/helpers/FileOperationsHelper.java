@@ -64,14 +64,18 @@ public class FileOperationsHelper {
         mFileActivity = fileActivity;
     }
 
-    private Intent getIntentForSavedMimeType(Uri data, String type) {
+    private Intent getIntentForSavedMimeType(Uri data, String type, boolean hasWritePermission) {
         Intent intentForSavedMimeType = new Intent(Intent.ACTION_VIEW);
         intentForSavedMimeType.setDataAndType(data, type);
-        intentForSavedMimeType.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        int flags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+        if (hasWritePermission) {
+            flags = flags | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+        }
+        intentForSavedMimeType.setFlags(flags);
         return intentForSavedMimeType;
     }
 
-    private Intent getIntentForGuessedMimeType(String storagePath, String type, Uri data) {
+    private Intent getIntentForGuessedMimeType(String storagePath, String type, Uri data, boolean hasWritePermission) {
         Intent intentForGuessedMimeType = null;
 
         if (storagePath != null && storagePath.lastIndexOf('.') >= 0) {
@@ -80,7 +84,11 @@ public class FileOperationsHelper {
             if (guessedMimeType != null && !guessedMimeType.equals(type)) {
                 intentForGuessedMimeType = new Intent(Intent.ACTION_VIEW);
                 intentForGuessedMimeType.setDataAndType(data, guessedMimeType);
-                intentForGuessedMimeType.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                int flags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                if (hasWritePermission) {
+                    flags = flags | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+                }
+                intentForGuessedMimeType.setFlags(flags);
             }
         }
         return intentForGuessedMimeType;
@@ -89,10 +97,10 @@ public class FileOperationsHelper {
     public void openFile(OCFile ocFile) {
         if (ocFile != null) {
             Intent intentForSavedMimeType = getIntentForSavedMimeType(UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, ocFile),
-                    ocFile.getMimeType());
+                    ocFile.getMimeType(), ocFile.getHasWritePermission());
 
             Intent intentForGuessedMimeType = getIntentForGuessedMimeType(ocFile.getStoragePath(), ocFile.getMimeType(),
-                    UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, ocFile));
+                    UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, ocFile), ocFile.getHasWritePermission());
 
             openFileWithIntent(intentForSavedMimeType, intentForGuessedMimeType);
 

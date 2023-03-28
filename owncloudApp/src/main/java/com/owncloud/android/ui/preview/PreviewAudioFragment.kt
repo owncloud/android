@@ -245,7 +245,8 @@ class PreviewAudioFragment : FileFragment() {
             false,
             false,
             false,
-            false
+            false,
+            file.hasWritePermission,
         )
 
         // additional restriction for this fragment

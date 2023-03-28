@@ -106,6 +106,12 @@ data class OCFile(
         get() = isOfType(MIME_PREFIX_TEXT)
 
     /**
+     * @return 'True' if the file has the 'W' (can write) within its group of permissions
+     */
+    val hasWritePermission: Boolean
+        get() = permissions?.contains(char = 'W', ignoreCase = true) ?: false
+
+    /**
      * @return 'True' if the file has the 'C' (can add file) within its group of permissions
      */
     val hasAddFilePermission: Boolean

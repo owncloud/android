@@ -207,7 +207,8 @@ class FileDetailsFragment : FileFragment() {
             false,
             false,
             false,
-            false
+            false,
+            fileDetailsViewModel.getCurrentFile()?.hasWritePermission == true,
         )
 
         menu.findItem(R.id.action_see_details)?.apply {

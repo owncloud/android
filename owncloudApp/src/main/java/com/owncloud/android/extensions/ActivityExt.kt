@@ -57,7 +57,6 @@ import com.owncloud.android.presentation.settings.security.SettingsSecurityFragm
 import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.ALL_FILES_SAF_REGEX
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
 import com.owncloud.android.utils.MimetypeIconUtil
-import com.owncloud.android.utils.UriUtilsKt
 import com.owncloud.android.utils.UriUtilsKt.getExposedFileUriForOCFile
 import timber.log.Timber
 import java.io.File
@@ -374,10 +373,10 @@ fun FragmentActivity.sendDownloadedFilesByShareSheet(ocFiles: List<OCFile>) {
     val sendIntent = if (ocFiles.size == 1) {
         Intent(Intent.ACTION_SEND).apply {
             type = ocFiles.first().mimeType
-            putExtra(Intent.EXTRA_STREAM, UriUtilsKt.getExposedFileUriForOCFile(this@sendDownloadedFilesByShareSheet, ocFiles.first()))
+            putExtra(Intent.EXTRA_STREAM, getExposedFileUriForOCFile(this@sendDownloadedFilesByShareSheet, ocFiles.first()))
         }
     } else {
-        val fileUris = ocFiles.map { UriUtilsKt.getExposedFileUriForOCFile(this@sendDownloadedFilesByShareSheet, it) }
+        val fileUris = ocFiles.map { getExposedFileUriForOCFile(this@sendDownloadedFilesByShareSheet, it) }
         Intent(Intent.ACTION_SEND_MULTIPLE).apply {
             type = ALL_FILES_SAF_REGEX
             putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(fileUris))
@@ -402,7 +401,10 @@ fun FragmentActivity.sendDownloadedFilesByShareSheet(ocFiles: List<OCFile>) {
 fun Activity.openOCFile(ocFile: OCFile) {
     val intentForSavedMimeType = Intent(Intent.ACTION_VIEW).apply {
         setDataAndType(getExposedFileUriForOCFile(this@openOCFile, ocFile), ocFile.mimeType)
-        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        if (ocFile.hasWritePermission) {
+            flags = flags or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        }
     }
 
     try {

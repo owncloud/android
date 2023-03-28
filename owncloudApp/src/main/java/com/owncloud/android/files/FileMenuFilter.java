@@ -117,7 +117,7 @@ public class FileMenuFilter {
      * @param menu Options or context menu to filter.
      */
     public void filter(Menu menu, boolean displaySelectAll, boolean displaySelectInverse,
-                       boolean onlyAvailableOffline, boolean sharedByLinkFiles) {
+                       boolean onlyAvailableOffline, boolean sharedByLinkFiles, boolean hasWritePermission) {
         if (mFiles == null || mFiles.size() <= 0) {
             hideAll(menu);
 
@@ -133,6 +133,13 @@ public class FileMenuFilter {
                 if (item != null) {
                     item.setVisible(true);
                     item.setEnabled(true);
+                    if (i == R.id.action_open_file_with) {
+                        if (!hasWritePermission) {
+                            item.setTitle(R.string.actionbar_open_with_read_only);
+                        } else {
+                            item.setTitle(R.string.actionbar_open_with);
+                        }
+                    }
                 }
             }
 

@@ -748,12 +748,14 @@ class MainFileListFragment : Fragment(),
                 checkedFilesSync
             )
 
+            val hasWritePermission = if (checkedCount == 1) checkedFiles.first().hasWritePermission else false
             fileMenuFilter.filter(
                 menu,
                 checkedCount != fileListAdapter.itemCount - 1, // -1 because one of them is the footer :S
                 true,
                 mainFileListViewModel.fileListOption.value.isAvailableOffline(),
                 mainFileListViewModel.fileListOption.value.isSharedByLink(),
+                hasWritePermission
             )
 
             return true
