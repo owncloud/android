@@ -35,10 +35,8 @@ import java.lang.reflect.Type
 class OCLocalAppRegistryDataSource(
     private val appRegistryDao: AppRegistryDao,
 ) : LocalAppRegistryDataSource {
-    override fun getAppRegistryForAccountAsStream(accountName: String): Flow<AppRegistry?> =
-        appRegistryDao.getAppRegistryForAccount(accountName).map {
-            it.toModel()
-        }
+    override fun getAppRegistryForMimeTypeAsStream(accountName: String, mimeType: String): Flow<AppRegistryMimeType?> =
+        appRegistryDao.getAppRegistryForMimeType(accountName, mimeType).map { it?.toModel() }
 
     override fun saveAppRegistryForAccount(appRegistry: AppRegistry) {
         val appRegistryEntitiesToInsert = mutableListOf<AppRegistryEntity>()
@@ -72,25 +70,17 @@ class OCLocalAppRegistryDataSource(
         }
     }
 
-    private fun List<AppRegistryEntity>.toModel(): AppRegistry? {
-        if (this.isEmpty()) return null
-
-        return AppRegistry(
-            accountName = this.first().accountName,
-            mimetypes = map { mimeTypeEntity ->
-                AppRegistryMimeType(
-                    mimeType = mimeTypeEntity.mimeType,
-                    ext = mimeTypeEntity.ext,
-                    appProviders = mimeTypeEntity.appProviders.toAppRegistryProvider(),
-                    name = mimeTypeEntity.name,
-                    icon = mimeTypeEntity.icon,
-                    description = mimeTypeEntity.description,
-                    allowCreation = mimeTypeEntity.allowCreation,
-                    defaultApplication = mimeTypeEntity.defaultApplication,
-                )
-            }
+    private fun AppRegistryEntity.toModel(): AppRegistryMimeType =
+        AppRegistryMimeType(
+            mimeType = mimeType,
+            ext = ext,
+            appProviders = appProviders.toAppRegistryProvider(),
+            name = name,
+            icon = icon,
+            description = description,
+            allowCreation = allowCreation,
+            defaultApplication = defaultApplication,
         )
-    }
 
     private fun List<AppRegistryProvider>.toJsonString(): String {
         val moshi: Moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()

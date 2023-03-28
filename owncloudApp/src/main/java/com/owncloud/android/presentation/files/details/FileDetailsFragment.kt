@@ -231,12 +231,14 @@ class FileDetailsFragment : FileFragment() {
             isEnabled = false
         }
 
-        fileDetailsViewModel.appRegistryMimeType.value?.appProviders?.forEach { appRegistryProvider ->
-            val menuItemAlreadySaved = mutableOpenInWebProviders[appRegistryProvider.name]
-            // If the app provider is already in [mutableOpenInWebProviders] and already in the menu, return. Otherwise we will have duplicated items.
-            if (menuItemAlreadySaved != null && menu.findItem(menuItemAlreadySaved.itemId) != null) return@forEach
+        // Remove items and then add them again. Otherwise we can get duplications or missing some app providers...
+        mutableOpenInWebProviders.forEach { (_, menuItem) ->
+            menu.removeItem(menuItem.itemId)
+        }
 
-            menu.add(getString(R.string.ic_action_open_with_web, appRegistryProvider.name)).also {
+        val appRegistryProviders = fileDetailsViewModel.appRegistryMimeType.value?.appProviders
+        appRegistryProviders?.forEachIndexed { index, appRegistryProvider ->
+            menu.add(Menu.NONE, index, 0, getString(R.string.ic_action_open_with_web, appRegistryProvider.name)).also {
                 mutableOpenInWebProviders[appRegistryProvider.name] = it
             }
         }
@@ -247,7 +249,7 @@ class FileDetailsFragment : FileFragment() {
 
         // Let's match the ones that are dynamic first.
         mutableOpenInWebProviders.forEach { (openInWebProviderName, menuItem) ->
-            if (menuItem.itemId == item.itemId) {
+            if (menuItem == item) {
                 fileDetailsViewModel.openInWeb(safeFile.remoteId!!, openInWebProviderName)
                 return true
             }

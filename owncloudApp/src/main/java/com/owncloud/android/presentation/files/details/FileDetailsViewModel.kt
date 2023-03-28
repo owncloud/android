@@ -29,7 +29,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
-import com.owncloud.android.domain.appregistry.usecases.GetAppRegistriesForAccountAsStreamUseCase
+import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryForMimeTypeAsStreamUseCase
 import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.extensions.isOneOf
@@ -51,16 +51,16 @@ import com.owncloud.android.workers.DownloadFileWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.UUID
 
 class FileDetailsViewModel(
     private val openInWebUseCase: GetUrlToOpenInWebUseCase,
     refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
-    getAppRegistriesForAccountAsStreamUseCase: GetAppRegistriesForAccountAsStreamUseCase,
+    getAppRegistryForMimeTypeAsStreamUseCase: GetAppRegistryForMimeTypeAsStreamUseCase,
     val contextProvider: ContextProvider,
     private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
     getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
@@ -76,14 +76,13 @@ class FileDetailsViewModel(
     val openInWebUriLiveData: LiveData<Event<UIResult<String?>>> = _openInWebUriLiveData
 
     val appRegistryMimeType: StateFlow<AppRegistryMimeType?> =
-        getAppRegistriesForAccountAsStreamUseCase.execute(
-            GetAppRegistriesForAccountAsStreamUseCase.Params(accountName = account.name)
-        ).map { it?.mimetypes?.firstOrNull { it.mimeType == currentFile.value?.mimeType } }
-            .stateIn(
-                viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = null
-            )
+        getAppRegistryForMimeTypeAsStreamUseCase.execute(
+            GetAppRegistryForMimeTypeAsStreamUseCase.Params(accountName = account.name, ocFile.mimeType)
+        ).stateIn(
+            viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = null
+        )
 
     private val account: StateFlow<Account> = MutableStateFlow(account)
     val currentFile: StateFlow<OCFile?> =

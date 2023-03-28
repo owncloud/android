@@ -19,12 +19,14 @@
 package com.owncloud.android.data.appregistry.datasources
 
 import com.owncloud.android.domain.appregistry.model.AppRegistry
+import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import kotlinx.coroutines.flow.Flow
 
 interface LocalAppRegistryDataSource {
-    fun getAppRegistryForAccountAsStream(
-        accountName: String
-    ): Flow<AppRegistry?>
+    fun getAppRegistryForMimeTypeAsStream(
+        accountName: String,
+        mimeType: String,
+    ): Flow<AppRegistryMimeType?>
 
     fun saveAppRegistryForAccount(
         appRegistry: AppRegistry

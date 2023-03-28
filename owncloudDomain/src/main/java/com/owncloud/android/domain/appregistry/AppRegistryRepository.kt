@@ -20,13 +20,13 @@
 
 package com.owncloud.android.domain.appregistry
 
-import com.owncloud.android.domain.appregistry.model.AppRegistry
+import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import kotlinx.coroutines.flow.Flow
 
 interface AppRegistryRepository {
     fun refreshAppRegistryForAccount(accountName: String)
 
-    fun getAppRegistriesForAccount(accountName: String): Flow<AppRegistry?>
+    fun getAppRegistryForMimeTypeAsStream(accountName: String, mimeType: String): Flow<AppRegistryMimeType?>
 
     fun getUrlToOpenInWeb(accountName: String, openWebEndpoint: String, fileId: String, appName: String): String
 }

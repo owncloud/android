@@ -24,6 +24,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
+import com.owncloud.android.domain.appregistry.AppRegistryRepository
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
@@ -42,8 +43,9 @@ class OCCapabilityRepositoryTest {
 
     private val localCapabilitiesDataSource = mockk<LocalCapabilitiesDataSource>(relaxed = true)
     private val remoteCapabilitiesDataSource = mockk<RemoteCapabilitiesDataSource>(relaxed = true)
+    private val appRegistryRepository = mockk<AppRegistryRepository>()
     private val ocCapabilityRepository: OCCapabilityRepository =
-        OCCapabilityRepository(localCapabilitiesDataSource, remoteCapabilitiesDataSource)
+        OCCapabilityRepository(localCapabilitiesDataSource, remoteCapabilitiesDataSource, appRegistryRepository)
 
     @Test
     fun refreshCapabilitiesFromNetworkOk() {
