@@ -41,6 +41,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         android:text="@string/folder_picker_no_permissions_message_text"
         tools:visibility="visible"/>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:src="@drawable/uploader_list_separator" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
