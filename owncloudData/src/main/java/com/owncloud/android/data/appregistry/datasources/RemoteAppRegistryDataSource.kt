@@ -25,5 +25,10 @@ interface RemoteAppRegistryDataSource {
         accountName: String
     ): AppRegistry
 
-    fun getUrlToOpenInWeb(accountName: String, openWebEndpoint: String, fileId: String): String
+    fun getUrlToOpenInWeb(
+        accountName: String,
+        openWebEndpoint: String,
+        fileId: String,
+        appName: String
+    ): String
 }

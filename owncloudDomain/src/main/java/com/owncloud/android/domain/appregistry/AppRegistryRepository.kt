@@ -28,5 +28,5 @@ interface AppRegistryRepository {
 
     fun getAppRegistriesForAccount(accountName: String): Flow<AppRegistry?>
 
-    fun getUrlToOpenInWeb(accountName: String, openWebEndpoint: String, fileId: String): String
+    fun getUrlToOpenInWeb(accountName: String, openWebEndpoint: String, fileId: String, appName: String): String
 }

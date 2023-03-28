@@ -22,6 +22,8 @@
 
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.domain.appregistry.usecases.GetAppRegistriesForAccountAsStreamUseCase
+import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.authentication.oauth.OIDCDiscoveryUseCase
 import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
 import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase
@@ -44,7 +46,6 @@ import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfig
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
-import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
 import com.owncloud.android.domain.files.usecases.CleanWorkersUUIDUseCase
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
@@ -167,6 +168,10 @@ val useCaseModule = module {
     factory { SaveDownloadWorkerUUIDUseCase(get()) }
     factory { CleanWorkersUUIDUseCase(get()) }
 
+    // Open in web
+    factory { GetUrlToOpenInWebUseCase(get(), get()) }
+    factory { GetAppRegistriesForAccountAsStreamUseCase(get()) }
+
     // Av Offline
     factory { GetFilesAvailableOfflineFromAccountUseCase(get()) }
     factory { GetFilesAvailableOfflineFromAccountAsStreamUseCase(get()) }
@@ -238,9 +243,6 @@ val useCaseModule = module {
     factory { ResetVideoUploadsUseCase(get()) }
     factory { GetPictureUploadsConfigurationStreamUseCase(get()) }
     factory { GetVideoUploadsConfigurationStreamUseCase(get()) }
-
-    // Files
-    factory { GetUrlToOpenInWebUseCase(get()) }
 
     // Accounts
     factory { RemoveAccountUseCase(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }

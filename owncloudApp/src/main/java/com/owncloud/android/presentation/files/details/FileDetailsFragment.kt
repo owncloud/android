@@ -38,7 +38,6 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.databinding.FileDetailsFragmentBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
-import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.TooEarlyException
 import com.owncloud.android.domain.files.model.OCFile
@@ -94,6 +93,8 @@ class FileDetailsFragment : FileFragment() {
     private var _binding: FileDetailsFragmentBinding? = null
     private val binding get() = _binding!!
 
+    private val mutableOpenInWebProviders: MutableMap<String, MenuItem> = hashMapOf()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -118,9 +119,9 @@ class FileDetailsFragment : FileFragment() {
             }
         }
 
-        fileDetailsViewModel.capabilities.observe(viewLifecycleOwner) { ocCapability: OCCapability? ->
-            if (ocCapability != null && ocCapability.isOpenInWebAllowed()) {
-                // Show or hide openInWeb option. Hidden by default.
+        collectLatestLifecycleFlow(fileDetailsViewModel.appRegistryMimeType) { appRegistryMimeType ->
+            if (appRegistryMimeType != null) {
+                // Show or hide open in web options. Hidden by default.
                 requireActivity().invalidateOptionsMenu()
             }
         }
@@ -230,14 +231,28 @@ class FileDetailsFragment : FileFragment() {
             isEnabled = false
         }
 
-        menu.findItem(R.id.action_open_in_web)?.apply {
-            isVisible = fileDetailsViewModel.isOpenInWebAvailable()
-            isEnabled = fileDetailsViewModel.isOpenInWebAvailable()
+        fileDetailsViewModel.appRegistryMimeType.value?.appProviders?.forEach { appRegistryProvider ->
+            val menuItemAlreadySaved = mutableOpenInWebProviders[appRegistryProvider.name]
+            // If the app provider is already in [mutableOpenInWebProviders] and already in the menu, return. Otherwise we will have duplicated items.
+            if (menuItemAlreadySaved != null && menu.findItem(menuItemAlreadySaved.itemId) != null) return@forEach
+
+            menu.add(getString(R.string.ic_action_open_with_web, appRegistryProvider.name)).also {
+                mutableOpenInWebProviders[appRegistryProvider.name] = it
+            }
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val safeFile = fileDetailsViewModel.getCurrentFile() ?: return false
+
+        // Let's match the ones that are dynamic first.
+        mutableOpenInWebProviders.forEach { (openInWebProviderName, menuItem) ->
+            if (menuItem.itemId == item.itemId) {
+                fileDetailsViewModel.openInWeb(safeFile.remoteId!!, openInWebProviderName)
+                return true
+            }
+        }
+
         return when (item.itemId) {
             R.id.action_share_file -> {
                 mContainerActivity.fileOperationsHelper.showShareFile(fileDetailsViewModel.getCurrentFile())
@@ -286,10 +301,6 @@ class FileDetailsFragment : FileFragment() {
             }
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(UnsetFilesAsAvailableOffline(listOf(safeFile)))
-                true
-            }
-            R.id.action_open_in_web -> {
-                fileDetailsViewModel.openInWeb(file.remoteId!!)
                 true
             }
             else -> super.onOptionsItemSelected(item)

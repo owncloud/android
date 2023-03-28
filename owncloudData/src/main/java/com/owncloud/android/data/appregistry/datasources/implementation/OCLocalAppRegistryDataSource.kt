@@ -102,7 +102,7 @@ class OCLocalAppRegistryDataSource(
     }
 
     private fun String.toAppRegistryProvider(): List<AppRegistryProvider> {
-        val moshi: Moshi = Moshi.Builder().build()
+        val moshi: Moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
         val type: Type = Types.newParameterizedType(List::class.java, AppRegistryProvider::class.java)
 
         val jsonAdapter: JsonAdapter<List<AppRegistryProvider>> = moshi.adapter(type)
