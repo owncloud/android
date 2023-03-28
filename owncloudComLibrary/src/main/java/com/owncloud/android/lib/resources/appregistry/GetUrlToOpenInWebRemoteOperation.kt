@@ -30,7 +30,6 @@ import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.lib.resources.appregistry.GetUrlToOpenInWebRemoteOperation.OpenInWebParams.Companion.PARAM_FILE_ID
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
@@ -43,14 +42,16 @@ import java.util.concurrent.TimeUnit
 class GetUrlToOpenInWebRemoteOperation(
     val openWithWebEndpoint: String,
     val fileId: String,
+    val appName: String,
 ) : RemoteOperation<String>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<String> {
         return try {
 
-            val openInWebRequestBody = OpenInWebParams(fileId).toRequestBody()
+            val openInWebRequestBody = OpenInWebParams(fileId, appName).toRequestBody()
 
-            val stringUrl = client.baseUri.toString() + WebdavUtils.encodePath(openWithWebEndpoint) + "?$PARAM_FILE_ID=$fileId"
+            val stringUrl =
+                client.baseUri.toString() + WebdavUtils.encodePath(openWithWebEndpoint)
 
             val postMethod = PostMethod(URL(stringUrl), openInWebRequestBody).apply {
                 setReadTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
@@ -77,12 +78,19 @@ class GetUrlToOpenInWebRemoteOperation(
 
     private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_MULTI_STATUS
 
-    data class OpenInWebParams(val fileId: String) {
+    data class OpenInWebParams(
+        val fileId: String,
+        val appName: String,
+    ) {
         fun toRequestBody(): RequestBody =
-            FormBody.Builder().build()
+            FormBody.Builder()
+                .add(PARAM_FILE_ID, fileId)
+                .add(PARAM_APP_NAME, appName)
+                .build()
 
         companion object {
             const val PARAM_FILE_ID = "file_id"
+            const val PARAM_APP_NAME = "app_name"
         }
     }
 

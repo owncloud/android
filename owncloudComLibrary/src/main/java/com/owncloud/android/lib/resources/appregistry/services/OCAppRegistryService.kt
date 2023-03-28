@@ -32,6 +32,10 @@ class OCAppRegistryService(override val client: OwnCloudClient) : AppRegistrySer
     override fun getAppRegistry(): RemoteOperationResult<AppRegistryResponse> =
         GetRemoteAppRegistryOperation().execute(client)
 
-    override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): RemoteOperationResult<String> =
-        GetUrlToOpenInWebRemoteOperation(openWithWebEndpoint = openWebEndpoint, fileId = fileId).execute(client)
+    override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String, appName: String): RemoteOperationResult<String> =
+        GetUrlToOpenInWebRemoteOperation(
+            openWithWebEndpoint = openWebEndpoint,
+            fileId = fileId,
+            appName = appName
+        ).execute(client)
 }
