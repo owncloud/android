@@ -112,6 +112,12 @@ data class OCFile(
         get() = permissions?.contains(char = 'W', ignoreCase = true) ?: false
 
     /**
+     * @return 'True' if the file has the 'D' (can delete) within its group of permissions
+     */
+    val hasDeletePermission: Boolean
+        get() = permissions?.contains(char = 'D', ignoreCase = true) ?: false
+
+    /**
      * @return 'True' if the file has the 'C' (can add file) within its group of permissions
      */
     val hasAddFilePermission: Boolean

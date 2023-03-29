@@ -206,6 +206,7 @@ class PreviewImageFragment : FileFragment() {
                 false,
                 false,
                 file.hasWritePermission,
+                file.hasDeletePermission,
             )
         }
 

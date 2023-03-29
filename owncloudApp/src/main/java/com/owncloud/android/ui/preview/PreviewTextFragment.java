@@ -313,7 +313,8 @@ public class PreviewTextFragment extends FileFragment {
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, false, false, false, false, getFile().getHasWritePermission());
+            mf.filter(menu, false, false, false,
+                    false, getFile().getHasWritePermission(), getFile().getHasDeletePermission());
         }
 
         // additional restriction for this fragment

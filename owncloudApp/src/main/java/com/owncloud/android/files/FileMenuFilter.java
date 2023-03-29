@@ -117,7 +117,8 @@ public class FileMenuFilter {
      * @param menu Options or context menu to filter.
      */
     public void filter(Menu menu, boolean displaySelectAll, boolean displaySelectInverse,
-                       boolean onlyAvailableOffline, boolean sharedByLinkFiles, boolean hasWritePermission) {
+                       boolean onlyAvailableOffline, boolean sharedByLinkFiles, boolean hasWritePermission,
+                       boolean hasDeletePermission) {
         if (mFiles == null || mFiles.size() <= 0) {
             hideAll(menu);
 
@@ -125,7 +126,8 @@ public class FileMenuFilter {
             List<Integer> toShow = new ArrayList<>();
             List<Integer> toHide = new ArrayList<>();
 
-            filter(toShow, toHide, displaySelectAll, displaySelectInverse, onlyAvailableOffline, sharedByLinkFiles);
+            filter(toShow, toHide, displaySelectAll, displaySelectInverse, onlyAvailableOffline, sharedByLinkFiles,
+                    hasDeletePermission);
 
             MenuItem item;
             for (int i : toShow) {
@@ -172,7 +174,8 @@ public class FileMenuFilter {
      */
 
     private void filter(List<Integer> toShow, List<Integer> toHide, boolean displaySelectAll,
-                        boolean displaySelectInverse, boolean onlyAvailableOffline, boolean sharedByLinkFiles) {
+                        boolean displaySelectInverse, boolean onlyAvailableOffline, boolean sharedByLinkFiles,
+                        boolean hasDeletePermission) {
 
         boolean synchronizing;
         if (mFilesSync.isEmpty()) {
@@ -226,9 +229,8 @@ public class FileMenuFilter {
         }
 
         // REMOVE
-        if (mFiles.isEmpty() || synchronizing || onlyAvailableOffline || sharedByLinkFiles) {
+        if (mFiles.isEmpty() || synchronizing || onlyAvailableOffline || sharedByLinkFiles || !hasDeletePermission) {
             toHide.add(R.id.action_remove_file);
-
         } else {
             toShow.add(R.id.action_remove_file);
         }
