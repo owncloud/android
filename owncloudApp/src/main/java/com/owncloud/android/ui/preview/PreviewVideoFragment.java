@@ -314,7 +314,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 getActivity()
         );
         mf.filter(menu, false, false, false,
-                false, getFile().getHasWritePermission(), getFile().getHasDeletePermission());
+                false, getFile().getHasWritePermission(), getFile().getHasDeletePermission(),
+                getFile().getHasRenamePermission());
 
         // additional restrictions for this fragment
 

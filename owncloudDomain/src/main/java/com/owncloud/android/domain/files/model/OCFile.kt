@@ -118,6 +118,12 @@ data class OCFile(
         get() = permissions?.contains(char = 'D', ignoreCase = true) ?: false
 
     /**
+     * @return 'True' if the file has the 'N' (can rename) within its group of permissions
+     */
+    val hasRenamePermission: Boolean
+        get() = permissions?.contains(char = 'N', ignoreCase = true) ?: false
+
+    /**
      * @return 'True' if the file has the 'C' (can add file) within its group of permissions
      */
     val hasAddFilePermission: Boolean

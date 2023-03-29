@@ -118,7 +118,7 @@ public class FileMenuFilter {
      */
     public void filter(Menu menu, boolean displaySelectAll, boolean displaySelectInverse,
                        boolean onlyAvailableOffline, boolean sharedByLinkFiles, boolean hasWritePermission,
-                       boolean hasDeletePermission) {
+                       boolean hasDeletePermission, boolean hasRenamePermission) {
         if (mFiles == null || mFiles.size() <= 0) {
             hideAll(menu);
 
@@ -127,7 +127,7 @@ public class FileMenuFilter {
             List<Integer> toHide = new ArrayList<>();
 
             filter(toShow, toHide, displaySelectAll, displaySelectInverse, onlyAvailableOffline, sharedByLinkFiles,
-                    hasDeletePermission);
+                    hasDeletePermission, hasRenamePermission);
 
             MenuItem item;
             for (int i : toShow) {
@@ -175,7 +175,7 @@ public class FileMenuFilter {
 
     private void filter(List<Integer> toShow, List<Integer> toHide, boolean displaySelectAll,
                         boolean displaySelectInverse, boolean onlyAvailableOffline, boolean sharedByLinkFiles,
-                        boolean hasDeletePermission) {
+                        boolean hasDeletePermission, boolean hasRenamePermission) {
 
         boolean synchronizing;
         if (mFilesSync.isEmpty()) {
@@ -211,9 +211,8 @@ public class FileMenuFilter {
         }
 
         // RENAME
-        if (!isSingleSelection() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles) {
+        if (!isSingleSelection() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles || !hasRenamePermission) {
             toHide.add(R.id.action_rename_file);
-
         } else {
             toShow.add(R.id.action_rename_file);
         }

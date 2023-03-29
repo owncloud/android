@@ -750,6 +750,7 @@ class MainFileListFragment : Fragment(),
 
             val hasWritePermission = if (checkedCount == 1) checkedFiles.first().hasWritePermission else false
             val hasDeletePermission = checkedFiles.all { it.hasDeletePermission }
+            val hasRenamePermission = if (checkedCount == 1) checkedFiles.first().hasRenamePermission else false
 
             fileMenuFilter.filter(
                 menu,
@@ -759,6 +760,7 @@ class MainFileListFragment : Fragment(),
                 mainFileListViewModel.fileListOption.value.isSharedByLink(),
                 hasWritePermission,
                 hasDeletePermission,
+                hasRenamePermission,
             )
 
             return true

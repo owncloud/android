@@ -248,6 +248,7 @@ class PreviewAudioFragment : FileFragment() {
             false,
             file.hasWritePermission,
             file.hasDeletePermission,
+            file.hasRenamePermission
         )
 
         // additional restriction for this fragment

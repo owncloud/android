@@ -210,6 +210,7 @@ class FileDetailsFragment : FileFragment() {
             false,
             fileDetailsViewModel.getCurrentFile()?.hasWritePermission == true,
             fileDetailsViewModel.getCurrentFile()?.hasDeletePermission == true,
+            fileDetailsViewModel.getCurrentFile()?.hasRenamePermission == true,
         )
 
         menu.findItem(R.id.action_see_details)?.apply {
