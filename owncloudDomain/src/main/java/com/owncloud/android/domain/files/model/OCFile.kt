@@ -142,6 +142,12 @@ data class OCFile(
         get() = permissions?.contains(char = 'K', ignoreCase = true) ?: false
 
     /**
+     * @return 'True' if the file has the 'R' (can reshare) within its group of permissions
+     */
+    val hasResharePermission: Boolean
+        get() = permissions?.contains(char = 'R', ignoreCase = true) ?: false
+
+    /**
      * get remote path of parent file
      * @return remote path
      */

@@ -315,7 +315,7 @@ public class PreviewTextFragment extends FileFragment {
             );
             mf.filter(menu, false, false, false,
                     false, getFile().getHasWritePermission(), getFile().getHasDeletePermission(),
-                    getFile().getHasRenamePermission(), false);
+                    getFile().getHasRenamePermission(), false, getFile().getHasResharePermission());
         }
 
         // additional restriction for this fragment

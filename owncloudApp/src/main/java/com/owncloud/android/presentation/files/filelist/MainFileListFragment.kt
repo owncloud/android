@@ -752,6 +752,7 @@ class MainFileListFragment : Fragment(),
             val hasDeletePermission = checkedFiles.all { it.hasDeletePermission }
             val hasRenamePermission = if (checkedCount == 1) checkedFiles.first().hasRenamePermission else false
             val hasMovePermission = checkedFiles.all { it.hasMovePermission }
+            val hasResharePermission = if (checkedCount == 1) checkedFiles.first().hasResharePermission else false
 
             fileMenuFilter.filter(
                 menu,
@@ -763,6 +764,7 @@ class MainFileListFragment : Fragment(),
                 hasDeletePermission,
                 hasRenamePermission,
                 hasMovePermission,
+                hasResharePermission,
             )
 
             return true

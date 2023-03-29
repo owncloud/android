@@ -118,7 +118,8 @@ public class FileMenuFilter {
      */
     public void filter(Menu menu, boolean displaySelectAll, boolean displaySelectInverse,
                        boolean onlyAvailableOffline, boolean sharedByLinkFiles, boolean hasWritePermission,
-                       boolean hasDeletePermission, boolean hasRenamePermission, boolean hasMovePermission) {
+                       boolean hasDeletePermission, boolean hasRenamePermission, boolean hasMovePermission,
+                       boolean hasResharePermission) {
         if (mFiles == null || mFiles.size() <= 0) {
             hideAll(menu);
 
@@ -127,7 +128,7 @@ public class FileMenuFilter {
             List<Integer> toHide = new ArrayList<>();
 
             filter(toShow, toHide, displaySelectAll, displaySelectInverse, onlyAvailableOffline, sharedByLinkFiles,
-                    hasDeletePermission, hasRenamePermission, hasMovePermission);
+                    hasDeletePermission, hasRenamePermission, hasMovePermission, hasResharePermission);
 
             MenuItem item;
             for (int i : toShow) {
@@ -175,7 +176,8 @@ public class FileMenuFilter {
 
     private void filter(List<Integer> toShow, List<Integer> toHide, boolean displaySelectAll,
                         boolean displaySelectInverse, boolean onlyAvailableOffline, boolean sharedByLinkFiles,
-                        boolean hasDeletePermission, boolean hasRenamePermission, boolean hasMovePermission) {
+                        boolean hasDeletePermission, boolean hasRenamePermission, boolean hasMovePermission,
+                        boolean hasResharePermission) {
 
         boolean synchronizing;
         if (mFilesSync.isEmpty()) {
@@ -276,7 +278,7 @@ public class FileMenuFilter {
         boolean notPersonalSpace = space != null && !space.isPersonal();
 
         if ((!shareViaLinkAllowed && !shareWithUsersAllowed) || !isSingleSelection() ||
-                notAllowResharing || onlyAvailableOffline || notPersonalSpace) {
+                notAllowResharing || onlyAvailableOffline || notPersonalSpace || !hasResharePermission) {
             toHide.add(R.id.action_share_file);
         } else {
             toShow.add(R.id.action_share_file);
