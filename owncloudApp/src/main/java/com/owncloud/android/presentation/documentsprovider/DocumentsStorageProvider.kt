@@ -207,7 +207,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                             spaceId = space.id,
                         )
                     ).getDataOrNull()?.let { rootFolder ->
-                        resultCursor.addSpace(space, rootFolder.id, context)
+                        resultCursor.addSpace(space, rootFolder, context)
                     }
                 }
             }

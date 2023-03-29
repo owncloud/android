@@ -92,18 +92,27 @@ class SortOptionsView @JvmOverloads constructor(
     fun selectAdditionalView(additionalView: AdditionalView) {
         when (additionalView) {
             AdditionalView.CREATE_FOLDER -> {
-                binding.viewTypeSelector.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_create_dir))
-                binding.viewTypeSelector.setOnClickListener {
-                    onCreateFolderListener?.onCreateFolderListener()
+                binding.viewTypeSelector.apply {
+                    visibility = VISIBLE
+                    setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_create_dir))
+                    setOnClickListener {
+                        onCreateFolderListener?.onCreateFolderListener()
+                    }
                 }
             }
             AdditionalView.VIEW_TYPE -> {
                 viewTypeSelected = viewTypeSelected
-                binding.viewTypeSelector.setOnClickListener {
-                    onSortOptionsListener?.onViewTypeListener(
-                        viewTypeSelected.getOppositeViewType()
-                    )
+                binding.viewTypeSelector.apply {
+                    visibility = VISIBLE
+                    setOnClickListener {
+                        onSortOptionsListener?.onViewTypeListener(
+                            viewTypeSelected.getOppositeViewType()
+                        )
+                    }
                 }
+            }
+            AdditionalView.HIDDEN -> {
+                binding.viewTypeSelector.visibility = INVISIBLE
             }
         }
     }
@@ -118,6 +127,6 @@ class SortOptionsView @JvmOverloads constructor(
     }
 
     enum class AdditionalView {
-        CREATE_FOLDER, VIEW_TYPE
+        CREATE_FOLDER, VIEW_TYPE, HIDDEN
     }
 }

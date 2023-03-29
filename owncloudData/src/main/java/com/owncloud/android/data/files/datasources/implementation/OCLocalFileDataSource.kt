@@ -69,6 +69,7 @@ class OCLocalFileDataSource(
                 mimeType = MIME_DIR,
                 modificationTimestamp = 0,
                 spaceId = spaceId,
+                permissions = "CK",
             )
             fileDao.mergeRemoteAndLocalFile(rootFolder.toEntity()).also { return getFileById(it) }
         }

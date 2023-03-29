@@ -461,10 +461,24 @@ public class ReceiveExternalFilesActivity extends FileActivity
             mAdapter.setNewItemVector(files);
 
             Button btnChooseFolder = findViewById(R.id.uploader_choose_folder);
-            btnChooseFolder.setOnClickListener(this);
+            TextView noPermissionsMessage = findViewById(R.id.uploader_no_permissions_message);
+            if (getCurrentFolder().getHasAddFilePermission()) {
+                btnChooseFolder.setOnClickListener(this);
+                btnChooseFolder.setVisibility(View.VISIBLE);
+                noPermissionsMessage.setVisibility(View.GONE);
+            } else {
+                btnChooseFolder.setVisibility(View.GONE);
+                noPermissionsMessage.setVisibility(View.VISIBLE);
+            }
 
-            Button btnNewFolder = findViewById(R.id.uploader_cancel);
-            btnNewFolder.setOnClickListener(this);
+            Button btnCancel = findViewById(R.id.uploader_cancel);
+            btnCancel.setOnClickListener(this);
+
+            if (getCurrentFolder().getHasAddSubdirectoriesPermission()) {
+                mSortOptionsView.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER);
+            } else {
+                mSortOptionsView.selectAdditionalView(SortOptionsView.AdditionalView.HIDDEN);
+            }
 
             updateEmptyListMessage(getString(R.string.file_list_empty_title_all_files));
         }

@@ -193,15 +193,17 @@ class MainFileListFragment : Fragment(),
         }
 
         // Set SortOptions and its listeners
-        binding.optionsLayout.let {
-            it.onSortOptionsListener = this
-            if (isPickingAFolder()) {
-                it.onCreateFolderListener = this
-                it.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER)
-            }
-        }
+        binding.optionsLayout.onSortOptionsListener = this
+        setViewTypeSelector(SortOptionsView.AdditionalView.CREATE_FOLDER)
 
-        showOrHideFab(requireArguments().getParcelable(ARG_FILE_LIST_OPTION)!!)
+        showOrHideFab(requireArguments().getParcelable(ARG_FILE_LIST_OPTION)!!, requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY)!!)
+    }
+
+    private fun setViewTypeSelector(additionalView: SortOptionsView.AdditionalView) {
+        if (isPickingAFolder()) {
+            binding.optionsLayout.onCreateFolderListener = this
+            binding.optionsLayout.selectAdditionalView(additionalView)
+        }
     }
 
     private fun toggleSelection(position: Int) {
@@ -223,6 +225,12 @@ class MainFileListFragment : Fragment(),
                         shouldSyncContents = !isPickingAFolder(), // For picking a folder option, we just need a refresh
                     )
                 )
+            }
+            showOrHideFab(fileListOption, currentFolderDisplayed)
+            if (currentFolderDisplayed.hasAddSubdirectoriesPermission) {
+                setViewTypeSelector(SortOptionsView.AdditionalView.CREATE_FOLDER)
+            } else {
+                setViewTypeSelector(SortOptionsView.AdditionalView.HIDDEN)
             }
         }
         // Observe the current space to update the toolbar.
@@ -347,30 +355,35 @@ class MainFileListFragment : Fragment(),
     fun updateFileListOption(newFileListOption: FileListOption, file: OCFile) {
         mainFileListViewModel.updateFolderToDisplay(file)
         mainFileListViewModel.updateFileListOption(newFileListOption)
-        showOrHideFab(newFileListOption)
+        showOrHideFab(newFileListOption, file)
     }
 
     /**
-     * Check whether the fab should be shown or hidden depending on the [FileListOption]
+     * Check whether the fab should be shown or hidden depending on the [FileListOption] and
+     * the current folder displayed permissions
      *
      * Show FAB when [FileListOption.ALL_FILES] and not picking a folder
      * Hide FAB When [FileListOption.SHARED_BY_LINK], [FileListOption.AV_OFFLINE] or picking a folder
      *
      * @param newFileListOption new file list option to enable.
      */
-    private fun showOrHideFab(newFileListOption: FileListOption) {
-        if (!newFileListOption.isAllFiles() || isPickingAFolder()) {
+    private fun showOrHideFab(newFileListOption: FileListOption, currentFolder: OCFile) {
+        if (!newFileListOption.isAllFiles() || isPickingAFolder() || (!currentFolder.hasAddFilePermission && !currentFolder.hasAddSubdirectoriesPermission)) {
             toggleFabVisibility(false)
         } else {
             toggleFabVisibility(true)
-
+            if (!currentFolder.hasAddFilePermission) {
+                binding.fabUpload.isVisible = false
+            } else if (!currentFolder.hasAddSubdirectoriesPermission) {
+                binding.fabMkdir.isVisible = false
+            }
             registerFabUploadListener()
             registerFabMkDirListener()
         }
     }
 
     /**
-     * Sets the 'visibility' state of the FAB contained in the fragment.
+     * Sets the 'visibility' state of the main FAB and its mini FABs contained in the fragment.
      *
      * When 'false' is set, FAB visibility is set to View.GONE programmatically.
      * Mini FABs are automatically hidden after hiding the main one.
@@ -379,6 +392,8 @@ class MainFileListFragment : Fragment(),
      */
     private fun toggleFabVisibility(shouldBeShown: Boolean) {
         binding.fabMain.isVisible = shouldBeShown
+        binding.fabUpload.isVisible = shouldBeShown
+        binding.fabMkdir.isVisible = shouldBeShown
     }
 
     /**
@@ -755,8 +770,8 @@ class MainFileListFragment : Fragment(),
             // reset to previous color
             requireActivity().window.statusBarColor = statusBarColor!!
 
-            // show FAB on multi selection mode exit
-            toggleFabVisibility(true)
+            // show or hide FAB on multi selection mode exit
+            showOrHideFab(mainFileListViewModel.fileListOption.value, mainFileListViewModel.currentFolderDisplayed.value)
 
             fileActions?.setBottomBarVisibility(true)
 
