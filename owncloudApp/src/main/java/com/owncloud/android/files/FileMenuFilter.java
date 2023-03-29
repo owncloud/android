@@ -118,7 +118,7 @@ public class FileMenuFilter {
      */
     public void filter(Menu menu, boolean displaySelectAll, boolean displaySelectInverse,
                        boolean onlyAvailableOffline, boolean sharedByLinkFiles, boolean hasWritePermission,
-                       boolean hasDeletePermission, boolean hasRenamePermission) {
+                       boolean hasDeletePermission, boolean hasRenamePermission, boolean hasMovePermission) {
         if (mFiles == null || mFiles.size() <= 0) {
             hideAll(menu);
 
@@ -127,7 +127,7 @@ public class FileMenuFilter {
             List<Integer> toHide = new ArrayList<>();
 
             filter(toShow, toHide, displaySelectAll, displaySelectInverse, onlyAvailableOffline, sharedByLinkFiles,
-                    hasDeletePermission, hasRenamePermission);
+                    hasDeletePermission, hasRenamePermission, hasMovePermission);
 
             MenuItem item;
             for (int i : toShow) {
@@ -175,7 +175,7 @@ public class FileMenuFilter {
 
     private void filter(List<Integer> toShow, List<Integer> toHide, boolean displaySelectAll,
                         boolean displaySelectInverse, boolean onlyAvailableOffline, boolean sharedByLinkFiles,
-                        boolean hasDeletePermission, boolean hasRenamePermission) {
+                        boolean hasDeletePermission, boolean hasRenamePermission, boolean hasMovePermission) {
 
         boolean synchronizing;
         if (mFilesSync.isEmpty()) {
@@ -217,13 +217,17 @@ public class FileMenuFilter {
             toShow.add(R.id.action_rename_file);
         }
 
-        // MOVE & COPY
-        if (mFiles.isEmpty() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles) {
+        // MOVE
+        if (mFiles.isEmpty() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles || !hasMovePermission) {
             toHide.add(R.id.action_move);
-            toHide.add(R.id.action_copy);
-
         } else {
             toShow.add(R.id.action_move);
+        }
+
+        // COPY
+        if (mFiles.isEmpty() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles) {
+            toHide.add(R.id.action_copy);
+        } else {
             toShow.add(R.id.action_copy);
         }
 

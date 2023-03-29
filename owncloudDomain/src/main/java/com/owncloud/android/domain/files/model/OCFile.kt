@@ -124,6 +124,12 @@ data class OCFile(
         get() = permissions?.contains(char = 'N', ignoreCase = true) ?: false
 
     /**
+     * @return 'True' if the file has the 'V' (can move) within its group of permissions
+     */
+    val hasMovePermission: Boolean
+        get() = permissions?.contains(char = 'V', ignoreCase = true) ?: false
+
+    /**
      * @return 'True' if the file has the 'C' (can add file) within its group of permissions
      */
     val hasAddFilePermission: Boolean
