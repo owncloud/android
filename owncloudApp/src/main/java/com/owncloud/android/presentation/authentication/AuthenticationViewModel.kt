@@ -24,20 +24,31 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.MainApp
+import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.authentication.oauth.OIDCDiscoveryUseCase
+import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
+import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
+import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
+import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
+import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginBasicAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCase
 import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.domain.webfinger.usecases.GetOIDCDiscoveryFromWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
+import com.owncloud.android.presentation.authentication.oauth.OAuthUtils
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
@@ -56,8 +67,16 @@ class AuthenticationViewModel(
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase,
     private val workManagerProvider: WorkManagerProvider,
+    private val getOIDCDiscoveryUseCase: OIDCDiscoveryUseCase,
+    private val requestTokenUseCase: RequestTokenUseCase,
+    private val registerClientUseCase: RegisterClientUseCase,
+    private val getOIDCDiscoveryFromWebFingerUseCase: GetOIDCDiscoveryFromWebFingerUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
+        val codeVerifier: String = OAuthUtils().generateRandomCodeVerifier()
+        val codeChallenge: String = OAuthUtils().generateCodeChallenge(codeVerifier)
+        val oidcState: String = OAuthUtils().generateRandomState()
+
 
     private val _legacyWebfingerHost = MediatorLiveData<Event<UIResult<String>>>()
     val legacyWebfingerHost: LiveData<Event<UIResult<String>>> = _legacyWebfingerHost
@@ -79,14 +98,41 @@ class AuthenticationViewModel(
     val serverInfo: LiveData<Event<UIResult<ServerInfo>>> = _serverInfo
 
     fun getServerInfo(
-        serverUrl: String
-    ) = runUseCaseWithResult(
-        coroutineDispatcher = coroutinesDispatcherProvider.io,
-        showLoading = true,
-        liveData = _serverInfo,
-        useCase = getServerInfoAsyncUseCase,
-        useCaseParams = GetServerInfoAsyncUseCase.Params(serverPath = serverUrl)
-    )
+        serverUrl: String,
+        creatingAccount: Boolean = false,
+    ) {
+        // 1. Let's try to connect to WebFinger.
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+
+            val oidcIssuer = if (creatingAccount) {
+                getOIDCDiscoveryFromWebFingerUseCase.execute(GetOIDCDiscoveryFromWebFingerUseCase.Params(serverUrl, serverUrl))
+            } else UseCaseResult.Error(IllegalArgumentException())
+
+            if (oidcIssuer is UseCaseResult.Success) {
+                _serverInfo.postValue(
+                    Event(
+                        UIResult.Success(
+                            data = ServerInfo(
+                                ownCloudVersion = "10.12",
+                                baseUrl = serverUrl,
+                                authenticationMethod = AuthenticationMethod.BEARER_TOKEN,
+                                isSecureConnection = true,
+                                oidcIssuer = oidcIssuer.data
+                            )
+                        )
+                    )
+                )
+            } else {
+                runUseCaseWithResult(
+                    coroutineDispatcher = coroutinesDispatcherProvider.io,
+                    showLoading = true,
+                    liveData = _serverInfo,
+                    useCase = getServerInfoAsyncUseCase,
+                    useCaseParams = GetServerInfoAsyncUseCase.Params(serverPath = serverUrl)
+                )
+            }
+        }
+    }
 
     private val _loginResult = MediatorLiveData<Event<UIResult<String>>>()
     val loginResult: LiveData<Event<UIResult<String>>> = _loginResult
@@ -190,6 +236,53 @@ class AuthenticationViewModel(
         useCaseParams = GetBaseUrlUseCase.Params(
             accountName = accountName
         )
+    )
+
+
+    private val _oidcDiscovery = MediatorLiveData<Event<UIResult<OIDCServerConfiguration>>>()
+    val oidcDiscovery: LiveData<Event<UIResult<OIDCServerConfiguration>>> = _oidcDiscovery
+
+    fun getOIDCServerConfiguration(
+        serverUrl: String
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
+        showLoading = false,
+        liveData = _oidcDiscovery,
+        useCase = getOIDCDiscoveryUseCase,
+        useCaseParams = OIDCDiscoveryUseCase.Params(baseUrl = serverUrl)
+    )
+
+    private val _registerClient = MediatorLiveData<Event<UIResult<ClientRegistrationInfo>>>()
+    val registerClient: LiveData<Event<UIResult<ClientRegistrationInfo>>> = _registerClient
+
+    fun registerClient(
+        registrationEndpoint: String
+    ) {
+        val registrationRequest = OAuthUtils.buildClientRegistrationRequest(
+            registrationEndpoint = registrationEndpoint,
+            MainApp.appContext
+        )
+
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            showLoading = false,
+            liveData = _registerClient,
+            useCase = registerClientUseCase,
+            useCaseParams = RegisterClientUseCase.Params(registrationRequest)
+        )
+    }
+
+    private val _requestToken = MediatorLiveData<Event<UIResult<TokenResponse>>>()
+    val requestToken: LiveData<Event<UIResult<TokenResponse>>> = _requestToken
+
+    fun requestToken(
+        tokenRequest: TokenRequest
+    ) = runUseCaseWithResult(
+        coroutineDispatcher = coroutinesDispatcherProvider.io,
+        showLoading = false,
+        liveData = _requestToken,
+        useCase = requestTokenUseCase,
+        useCaseParams = RequestTokenUseCase.Params(tokenRequest = tokenRequest)
     )
 
     private val _accountDiscovery = MediatorLiveData<Event<UIResult<Unit>>>()

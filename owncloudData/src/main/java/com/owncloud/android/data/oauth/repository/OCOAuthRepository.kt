@@ -36,23 +36,8 @@ class OCOAuthRepository(
 ) : OAuthRepository {
 
     override fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration {
-        // First, we will try to retrieve the OpenID Connect issuer from webfinger.
-        // https://openid.net/specs/openid-connect-discovery-1_0.html#IssuerDiscovery
-        val oidcIssuerFromWebFinger: String? = try {
-            remoteWebFingerDatasource.getInstancesFromWebFinger(
-                lookupServer = baseUrl,
-                rel = WebFingerRel.OIDC_ISSUER_DISCOVERY,
-                username = baseUrl
-            ).firstOrNull()
-        } catch (fileNotFoundException: FileNotFoundException) {
-            Timber.e(fileNotFoundException, "Could not retrieve oidc issuer from WebFinger")
-            null
-        }
-
-        // If oidcIssuer was not retrieved from webfinger, perform oidc discovery against the base url
-        val oidcIssuer = if (oidcIssuerFromWebFinger.isNullOrBlank()) baseUrl else oidcIssuerFromWebFinger
-        Timber.d("OIDC discovery will be done against $oidcIssuer")
-        return oidcRemoteOAuthDataSource.performOIDCDiscovery(oidcIssuer)
+        Timber.d("OIDC discovery will be done against $baseUrl")
+        return oidcRemoteOAuthDataSource.performOIDCDiscovery(baseUrl)
     }
 
     override fun performTokenRequest(tokenRequest: TokenRequest): TokenResponse =

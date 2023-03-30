@@ -23,5 +23,6 @@ data class ServerInfo(
     val ownCloudVersion: String,
     var baseUrl: String,
     val authenticationMethod: AuthenticationMethod,
-    val isSecureConnection: Boolean
+    val isSecureConnection: Boolean,
+    val oidcIssuer: String? = null,
 )
