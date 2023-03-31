@@ -63,7 +63,6 @@ class SpacesListAdapter(
                 spacesListItemSubtitle.text = space.description
 
                 val spaceSpecialImage = space.getSpaceSpecialImage()
-                spacesListItemImage.tag = spaceSpecialImage?.id
 
                 if (spaceSpecialImage != null) {
                     val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(spaceSpecialImage.id)
@@ -89,6 +88,12 @@ class SpacesListAdapter(
                     }
                     if (spaceSpecialImage.file.mimeType == "image/png") {
                         spacesListItemImage.setBackgroundColor(ContextCompat.getColor(spacesViewHolder.itemView.context, R.color.background_color))
+                    }
+                } else {
+                    spacesListItemImage.apply {
+                        setImageResource(R.drawable.ic_spaces)
+                        scaleType = ImageView.ScaleType.CENTER
+                        setBackgroundColor(ContextCompat.getColor(spacesViewHolder.itemView.context, R.color.spaces_card_background_color))
                     }
                 }
             }
