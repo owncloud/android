@@ -19,10 +19,32 @@
 
 package com.owncloud.android.domain.server.model
 
-data class ServerInfo(
+import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
+
+sealed class ServerInfo(
     val ownCloudVersion: String,
     var baseUrl: String,
-    val authenticationMethod: AuthenticationMethod,
-    val isSecureConnection: Boolean,
-    val oidcIssuer: String? = null,
-)
+) {
+    val isSecureConnection get() = baseUrl.startsWith(HTTPS_PREFIX, ignoreCase = true)
+
+    class OIDCServer(
+        ownCloudVersion: String,
+        baseUrl: String,
+        val oidcServerConfiguration: OIDCServerConfiguration,
+    ) : ServerInfo(ownCloudVersion = ownCloudVersion, baseUrl = baseUrl)
+
+    class OAuth2Server(
+        ownCloudVersion: String,
+        baseUrl: String,
+    ) : ServerInfo(ownCloudVersion = ownCloudVersion, baseUrl = baseUrl)
+
+    class BasicServer(
+        ownCloudVersion: String,
+        baseUrl: String,
+    ) : ServerInfo(ownCloudVersion = ownCloudVersion, baseUrl = baseUrl)
+
+    companion object {
+        const val HTTP_PREFIX = "http://"
+        const val HTTPS_PREFIX = "https://"
+    }
+}

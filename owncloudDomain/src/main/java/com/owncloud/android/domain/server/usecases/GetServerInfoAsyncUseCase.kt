@@ -22,16 +22,33 @@ package com.owncloud.android.domain.server.usecases
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.server.model.ServerInfo
+import com.owncloud.android.domain.server.model.ServerInfo.Companion.HTTPS_PREFIX
+import com.owncloud.android.domain.server.model.ServerInfo.Companion.HTTP_PREFIX
+import java.util.Locale
 
 class GetServerInfoAsyncUseCase(
     private val serverInfoRepository: ServerInfoRepository
 ) : BaseUseCaseWithResult<ServerInfo, GetServerInfoAsyncUseCase.Params>() {
-    override fun run(params: Params): ServerInfo =
-        serverInfoRepository.getServerInfo(params.serverPath.trimEnd(TRAILING_SLASH))
+    override fun run(params: Params): ServerInfo {
+        val normalizedServerUrl = normalizeProtocolPrefix(params.serverPath).trimEnd(TRAILING_SLASH)
+        return serverInfoRepository.getServerInfo(normalizedServerUrl, params.creatingAccount)
+    }
 
     data class Params(
-        val serverPath: String
+        val serverPath: String,
+        val creatingAccount: Boolean,
     )
+
+    /**
+     * In case the user introduces a server url without prefix, we will try to connect to https
+     */
+    private fun normalizeProtocolPrefix(url: String): String {
+        return if (!url.lowercase(Locale.getDefault()).startsWith(HTTP_PREFIX) &&
+            !url.lowercase(Locale.getDefault()).startsWith(HTTPS_PREFIX)
+        ) {
+            return "$HTTPS_PREFIX$url"
+        } else url
+    }
 
     companion object {
         const val TRAILING_SLASH = '/'

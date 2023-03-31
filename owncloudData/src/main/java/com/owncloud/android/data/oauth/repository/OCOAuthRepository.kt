@@ -19,24 +19,18 @@
 package com.owncloud.android.data.oauth.repository
 
 import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
-import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDatasource
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
-import com.owncloud.android.domain.exceptions.FileNotFoundException
-import com.owncloud.android.domain.webfinger.model.WebFingerRel
-import timber.log.Timber
 
 class OCOAuthRepository(
     private val oidcRemoteOAuthDataSource: RemoteOAuthDataSource,
-    private val remoteWebFingerDatasource: RemoteWebFingerDatasource,
 ) : OAuthRepository {
 
     override fun performOIDCDiscovery(baseUrl: String): OIDCServerConfiguration {
-        Timber.d("OIDC discovery will be done against $baseUrl")
         return oidcRemoteOAuthDataSource.performOIDCDiscovery(baseUrl)
     }
 

@@ -25,12 +25,9 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.MainApp
-import com.owncloud.android.domain.UseCaseResult
-import com.owncloud.android.domain.authentication.oauth.OIDCDiscoveryUseCase
 import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
 import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
-import com.owncloud.android.domain.authentication.oauth.model.OIDCServerConfiguration
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse
 import com.owncloud.android.domain.authentication.usecases.GetBaseUrlUseCase
@@ -39,12 +36,10 @@ import com.owncloud.android.domain.authentication.usecases.LoginOAuthAsyncUseCas
 import com.owncloud.android.domain.authentication.usecases.SupportsOAuth2UseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
-import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.domain.webfinger.usecases.GetOIDCDiscoveryFromWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
@@ -67,16 +62,14 @@ class AuthenticationViewModel(
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase,
     private val workManagerProvider: WorkManagerProvider,
-    private val getOIDCDiscoveryUseCase: OIDCDiscoveryUseCase,
     private val requestTokenUseCase: RequestTokenUseCase,
     private val registerClientUseCase: RegisterClientUseCase,
-    private val getOIDCDiscoveryFromWebFingerUseCase: GetOIDCDiscoveryFromWebFingerUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
-        val codeVerifier: String = OAuthUtils().generateRandomCodeVerifier()
-        val codeChallenge: String = OAuthUtils().generateCodeChallenge(codeVerifier)
-        val oidcState: String = OAuthUtils().generateRandomState()
 
+    val codeVerifier: String = OAuthUtils().generateRandomCodeVerifier()
+    val codeChallenge: String = OAuthUtils().generateCodeChallenge(codeVerifier)
+    val oidcState: String = OAuthUtils().generateRandomState()
 
     private val _legacyWebfingerHost = MediatorLiveData<Event<UIResult<String>>>()
     val legacyWebfingerHost: LiveData<Event<UIResult<String>>> = _legacyWebfingerHost
@@ -101,37 +94,13 @@ class AuthenticationViewModel(
         serverUrl: String,
         creatingAccount: Boolean = false,
     ) {
-        // 1. Let's try to connect to WebFinger.
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-
-            val oidcIssuer = if (creatingAccount) {
-                getOIDCDiscoveryFromWebFingerUseCase.execute(GetOIDCDiscoveryFromWebFingerUseCase.Params(serverUrl, serverUrl))
-            } else UseCaseResult.Error(IllegalArgumentException())
-
-            if (oidcIssuer is UseCaseResult.Success) {
-                _serverInfo.postValue(
-                    Event(
-                        UIResult.Success(
-                            data = ServerInfo(
-                                ownCloudVersion = "10.12",
-                                baseUrl = serverUrl,
-                                authenticationMethod = AuthenticationMethod.BEARER_TOKEN,
-                                isSecureConnection = true,
-                                oidcIssuer = oidcIssuer.data
-                            )
-                        )
-                    )
-                )
-            } else {
-                runUseCaseWithResult(
-                    coroutineDispatcher = coroutinesDispatcherProvider.io,
-                    showLoading = true,
-                    liveData = _serverInfo,
-                    useCase = getServerInfoAsyncUseCase,
-                    useCaseParams = GetServerInfoAsyncUseCase.Params(serverPath = serverUrl)
-                )
-            }
-        }
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            showLoading = true,
+            liveData = _serverInfo,
+            useCase = getServerInfoAsyncUseCase,
+            useCaseParams = GetServerInfoAsyncUseCase.Params(serverPath = serverUrl, creatingAccount = creatingAccount)
+        )
     }
 
     private val _loginResult = MediatorLiveData<Event<UIResult<String>>>()
@@ -155,6 +124,7 @@ class AuthenticationViewModel(
     )
 
     fun loginOAuth(
+        serverBaseUrl: String,
         username: String,
         authTokenType: String,
         accessToken: String,
@@ -166,13 +136,13 @@ class AuthenticationViewModel(
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             _loginResult.postValue(Event(UIResult.Loading()))
 
-            var serverInfo = serverInfo.value?.peekContent()?.getStoredData() ?: throw java.lang.IllegalArgumentException()
+            val serverInfo = serverInfo.value?.peekContent()?.getStoredData() ?: throw java.lang.IllegalArgumentException()
 
             // Authenticated WebFinger needed only for account creations. Logged accounts already know their instances.
             if (updateAccountWithUsername == null) {
                 val ownCloudInstancesAvailable = getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(
                     GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase.Params(
-                        server = serverInfo.baseUrl,
+                        server = serverBaseUrl,
                         username = username,
                         accessToken = accessToken,
                     )
@@ -182,7 +152,7 @@ class AuthenticationViewModel(
                 // Multiple instances are not supported yet. Let's use the first instance we receive for the moment.
                 ownCloudInstancesAvailable.getDataOrNull()?.let {
                     if (it.isNotEmpty()) {
-                        serverInfo = serverInfo.copy(baseUrl = it.first())
+                        serverInfo.baseUrl = it.first()
                     }
                 }
             }
@@ -236,20 +206,6 @@ class AuthenticationViewModel(
         useCaseParams = GetBaseUrlUseCase.Params(
             accountName = accountName
         )
-    )
-
-
-    private val _oidcDiscovery = MediatorLiveData<Event<UIResult<OIDCServerConfiguration>>>()
-    val oidcDiscovery: LiveData<Event<UIResult<OIDCServerConfiguration>>> = _oidcDiscovery
-
-    fun getOIDCServerConfiguration(
-        serverUrl: String
-    ) = runUseCaseWithResult(
-        coroutineDispatcher = coroutinesDispatcherProvider.io,
-        showLoading = false,
-        liveData = _oidcDiscovery,
-        useCase = getOIDCDiscoveryUseCase,
-        useCaseParams = OIDCDiscoveryUseCase.Params(baseUrl = serverUrl)
     )
 
     private val _registerClient = MediatorLiveData<Event<UIResult<ClientRegistrationInfo>>>()
