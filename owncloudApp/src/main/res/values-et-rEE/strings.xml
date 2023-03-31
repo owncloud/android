@@ -477,6 +477,7 @@
   <string name="folder_picker_choose_button_text">Vali</string>
   <string name="folder_picker_move_here_button_text">Liiguta siia</string>
   <string name="folder_picker_copy_here_button_text">Kopeeri siia</string>
+  <string name="folder_picker_no_permissions_message_text">Sul puuduvad õigused siia sisu lisamiseks!</string>
   <string name="move_file_not_found">Liigutamine ebaõnnestus. Palun kontrolli, kas fail on olemas</string>
   <string name="move_file_invalid_into_descendent">Kausta ei saa liigutada selle alamkausta</string>
   <string name="move_file_invalid_overwrite">See fail on juba sihtkaustas olemas</string>

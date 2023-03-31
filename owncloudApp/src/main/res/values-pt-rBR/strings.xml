@@ -477,6 +477,7 @@
   <string name="folder_picker_choose_button_text">Escolher</string>
   <string name="folder_picker_move_here_button_text">Mover para aqui</string>
   <string name="folder_picker_copy_here_button_text">Copie aqui</string>
+  <string name="folder_picker_no_permissions_message_text">Você não tem permissão para adicionar conteúdo aqui!</string>
   <string name="move_file_not_found">Não é possível mover. Por favor verifique se o arquivo existe</string>
   <string name="move_file_invalid_into_descendent">Não é possível mover a pasta para uma descendente</string>
   <string name="move_file_invalid_overwrite">O arquivo já existe na pasta de destino</string>
