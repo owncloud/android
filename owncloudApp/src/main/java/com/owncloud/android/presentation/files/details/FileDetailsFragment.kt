@@ -208,11 +208,6 @@ class FileDetailsFragment : FileFragment() {
             false,
             false,
             false,
-            fileDetailsViewModel.getCurrentFile()?.hasWritePermission == true,
-            fileDetailsViewModel.getCurrentFile()?.hasDeletePermission == true,
-            fileDetailsViewModel.getCurrentFile()?.hasRenamePermission == true,
-            false,
-            fileDetailsViewModel.getCurrentFile()?.hasResharePermission == true,
         )
 
         menu.findItem(R.id.action_see_details)?.apply {

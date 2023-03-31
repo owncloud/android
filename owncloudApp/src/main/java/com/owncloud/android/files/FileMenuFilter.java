@@ -34,6 +34,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
+import com.google.common.collect.Iterables;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
@@ -117,19 +118,21 @@ public class FileMenuFilter {
      * @param menu Options or context menu to filter.
      */
     public void filter(Menu menu, boolean displaySelectAll, boolean displaySelectInverse,
-                       boolean onlyAvailableOffline, boolean sharedByLinkFiles, boolean hasWritePermission,
-                       boolean hasDeletePermission, boolean hasRenamePermission, boolean hasMovePermission,
-                       boolean hasResharePermission) {
+                       boolean onlyAvailableOffline, boolean sharedByLinkFiles) {
         if (mFiles == null || mFiles.size() <= 0) {
             hideAll(menu);
-
         } else {
             List<Integer> toShow = new ArrayList<>();
             List<Integer> toHide = new ArrayList<>();
 
-            filter(toShow, toHide, displaySelectAll, displaySelectInverse, onlyAvailableOffline, sharedByLinkFiles,
-                    hasDeletePermission, hasRenamePermission, hasMovePermission, hasResharePermission);
+            filter(toShow, toHide, displaySelectAll, displaySelectInverse, onlyAvailableOffline, sharedByLinkFiles);
 
+            boolean hasWritePermission;
+            if (mFiles.size() == 1) {
+                hasWritePermission = mFiles.get(0).getHasWritePermission();
+            } else {
+                hasWritePermission = false;
+            }
             MenuItem item;
             for (int i : toShow) {
                 item = menu.findItem(i);
@@ -175,9 +178,7 @@ public class FileMenuFilter {
      */
 
     private void filter(List<Integer> toShow, List<Integer> toHide, boolean displaySelectAll,
-                        boolean displaySelectInverse, boolean onlyAvailableOffline, boolean sharedByLinkFiles,
-                        boolean hasDeletePermission, boolean hasRenamePermission, boolean hasMovePermission,
-                        boolean hasResharePermission) {
+                        boolean displaySelectInverse, boolean onlyAvailableOffline, boolean sharedByLinkFiles) {
 
         boolean synchronizing;
         if (mFilesSync.isEmpty()) {
@@ -213,6 +214,12 @@ public class FileMenuFilter {
         }
 
         // RENAME
+        boolean hasRenamePermission;
+        if (mFiles.size() == 1) {
+            hasRenamePermission = mFiles.get(0).getHasRenamePermission();
+        } else {
+            hasRenamePermission = false;
+        }
         if (!isSingleSelection() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles || !hasRenamePermission) {
             toHide.add(R.id.action_rename_file);
         } else {
@@ -220,6 +227,7 @@ public class FileMenuFilter {
         }
 
         // MOVE
+        boolean hasMovePermission = Iterables.all(mFiles, OCFile::getHasMovePermission);
         if (mFiles.isEmpty() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles || !hasMovePermission) {
             toHide.add(R.id.action_move);
         } else {
@@ -234,6 +242,7 @@ public class FileMenuFilter {
         }
 
         // REMOVE
+        boolean hasDeletePermission = Iterables.all(mFiles, OCFile::getHasDeletePermission);
         if (mFiles.isEmpty() || synchronizing || onlyAvailableOffline || sharedByLinkFiles || !hasDeletePermission) {
             toHide.add(R.id.action_remove_file);
         } else {
@@ -277,6 +286,12 @@ public class FileMenuFilter {
         OCSpace space = mComponentsGetter.getStorageManager().getSpace(mFiles.get(0).getSpaceId(), mAccount.name);
         boolean notPersonalSpace = space != null && !space.isPersonal();
 
+        boolean hasResharePermission;
+        if (mFiles.size() == 1) {
+            hasResharePermission = mFiles.get(0).getHasResharePermission();
+        } else {
+            hasResharePermission = false;
+        }
         if ((!shareViaLinkAllowed && !shareWithUsersAllowed) || !isSingleSelection() ||
                 notAllowResharing || onlyAvailableOffline || notPersonalSpace || !hasResharePermission) {
             toHide.add(R.id.action_share_file);

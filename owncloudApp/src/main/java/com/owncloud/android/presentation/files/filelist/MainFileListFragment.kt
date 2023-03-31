@@ -748,23 +748,12 @@ class MainFileListFragment : Fragment(),
                 checkedFilesSync
             )
 
-            val hasWritePermission = if (checkedCount == 1) checkedFiles.first().hasWritePermission else false
-            val hasDeletePermission = checkedFiles.all { it.hasDeletePermission }
-            val hasRenamePermission = if (checkedCount == 1) checkedFiles.first().hasRenamePermission else false
-            val hasMovePermission = checkedFiles.all { it.hasMovePermission }
-            val hasResharePermission = if (checkedCount == 1) checkedFiles.first().hasResharePermission else false
-
             fileMenuFilter.filter(
                 menu,
                 checkedCount != fileListAdapter.itemCount - 1, // -1 because one of them is the footer :S
                 true,
                 mainFileListViewModel.fileListOption.value.isAvailableOffline(),
                 mainFileListViewModel.fileListOption.value.isSharedByLink(),
-                hasWritePermission,
-                hasDeletePermission,
-                hasRenamePermission,
-                hasMovePermission,
-                hasResharePermission,
             )
 
             return true
