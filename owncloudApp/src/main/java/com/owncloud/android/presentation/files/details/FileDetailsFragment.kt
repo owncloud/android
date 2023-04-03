@@ -207,7 +207,7 @@ class FileDetailsFragment : FileFragment() {
             false,
             false,
             false,
-            false
+            false,
         )
 
         menu.findItem(R.id.action_see_details)?.apply {

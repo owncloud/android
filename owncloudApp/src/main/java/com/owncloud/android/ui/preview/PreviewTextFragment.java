@@ -313,7 +313,13 @@ public class PreviewTextFragment extends FileFragment {
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, false, false, false, false);
+            mf.filter(
+                    menu,
+                    false,
+                    false,
+                    false,
+                    false
+            );
         }
 
         // additional restriction for this fragment

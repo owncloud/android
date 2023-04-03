@@ -106,6 +106,30 @@ data class OCFile(
         get() = isOfType(MIME_PREFIX_TEXT)
 
     /**
+     * @return 'True' if the file has the 'W' (can write) within its group of permissions
+     */
+    val hasWritePermission: Boolean
+        get() = permissions?.contains(char = 'W', ignoreCase = true) ?: false
+
+    /**
+     * @return 'True' if the file has the 'D' (can delete) within its group of permissions
+     */
+    val hasDeletePermission: Boolean
+        get() = permissions?.contains(char = 'D', ignoreCase = true) ?: false
+
+    /**
+     * @return 'True' if the file has the 'N' (can rename) within its group of permissions
+     */
+    val hasRenamePermission: Boolean
+        get() = permissions?.contains(char = 'N', ignoreCase = true) ?: false
+
+    /**
+     * @return 'True' if the file has the 'V' (can move) within its group of permissions
+     */
+    val hasMovePermission: Boolean
+        get() = permissions?.contains(char = 'V', ignoreCase = true) ?: false
+
+    /**
      * @return 'True' if the file has the 'C' (can add file) within its group of permissions
      */
     val hasAddFilePermission: Boolean
@@ -116,6 +140,12 @@ data class OCFile(
      */
     val hasAddSubdirectoriesPermission: Boolean
         get() = permissions?.contains(char = 'K', ignoreCase = true) ?: false
+
+    /**
+     * @return 'True' if the file has the 'R' (can reshare) within its group of permissions
+     */
+    val hasResharePermission: Boolean
+        get() = permissions?.contains(char = 'R', ignoreCase = true) ?: false
 
     /**
      * get remote path of parent file

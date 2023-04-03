@@ -245,7 +245,7 @@ class PreviewAudioFragment : FileFragment() {
             false,
             false,
             false,
-            false
+            false,
         )
 
         // additional restriction for this fragment

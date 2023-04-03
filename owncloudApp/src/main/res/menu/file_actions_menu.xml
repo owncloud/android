@@ -92,13 +92,13 @@
         android:id="@+id/action_move"
         android:title="@string/actionbar_move"
         android:icon="@drawable/ic_action_move"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:orderInCategory="1" />
     <item
         android:id="@+id/action_copy"
         android:title="@android:string/copy"
         android:icon="@drawable/ic_action_copy"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:orderInCategory="1" />
     <item
         android:id="@+id/action_rename_file"
