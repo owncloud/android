@@ -24,6 +24,7 @@ package com.owncloud.android.authentication
 import android.accounts.AccountManager.KEY_ACCOUNT_NAME
 import android.accounts.AccountManager.KEY_ACCOUNT_TYPE
 import android.app.Activity.RESULT_OK
+import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.MutableLiveData
@@ -34,6 +35,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.ViewMatchers.Visibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -83,6 +85,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
+import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -345,11 +348,14 @@ class LoginActivityTest {
 
     @Test
     fun checkServerInfo_isSuccess_Bearer() {
+        Intents.init()
         launchTest()
+        avoidOpeningChromeCustomTab()
 
         serverInfoLiveData.postValue(Event(UIResult.Success(SECURE_SERVER_INFO_BEARER)))
 
         checkBearerFieldsVisibility()
+        Intents.release()
     }
 
     @Test
@@ -381,7 +387,9 @@ class LoginActivityTest {
 
     @Test
     fun checkServerInfo_isSuccess_bearerModifyUrlInput() {
+        Intents.init()
         launchTest()
+        avoidOpeningChromeCustomTab()
 
         serverInfoLiveData.postValue(Event(UIResult.Success(SECURE_SERVER_INFO_BEARER)))
 
@@ -390,6 +398,7 @@ class LoginActivityTest {
         R.id.hostUrlInput.typeText("anything")
 
         R.id.auth_status_text.assertVisibility(Visibility.GONE)
+        Intents.release()
     }
 
     @Test
@@ -704,6 +713,11 @@ class LoginActivityTest {
         intended(hasComponent(SettingsActivity::class.java.name))
 
         Intents.release()
+    }
+
+    private fun avoidOpeningChromeCustomTab() {
+        Intents.intending(allOf(IntentMatchers.hasAction(Intent.ACTION_VIEW)))
+            .respondWith(Instrumentation.ActivityResult(RESULT_OK, null))
     }
 
     private fun checkBasicFieldsVisibility(
