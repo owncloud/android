@@ -24,7 +24,7 @@ import com.owncloud.android.R
 import com.owncloud.android.presentation.settings.more.SettingsMoreViewModel
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.ContextProvider
-import com.owncloud.android.testutil.OC_BASE_URL
+import com.owncloud.android.testutil.OC_SECURE_BASE_URL
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -81,11 +81,11 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `get help url - ok`() {
-        every { contextProvider.getString(any()) } returns OC_BASE_URL
+        every { contextProvider.getString(any()) } returns OC_SECURE_BASE_URL
 
         val helpUrl = moreViewModel.getHelpUrl()
 
-        assertEquals(OC_BASE_URL, helpUrl)
+        assertEquals(OC_SECURE_BASE_URL, helpUrl)
 
         verify(exactly = 1) {
             contextProvider.getString(R.string.url_help)
@@ -120,11 +120,11 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `get sync url - ok`() {
-        every { contextProvider.getString(any()) } returns OC_BASE_URL
+        every { contextProvider.getString(any()) } returns OC_SECURE_BASE_URL
 
         val syncUrl = moreViewModel.getSyncUrl()
 
-        assertEquals(OC_BASE_URL, syncUrl)
+        assertEquals(OC_SECURE_BASE_URL, syncUrl)
 
         verify(exactly = 1) {
             contextProvider.getString(R.string.url_sync_calendar_contacts)
@@ -237,11 +237,11 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
     @Test
     fun `get imprint url - ok`() {
-        every { contextProvider.getString(any()) } returns OC_BASE_URL
+        every { contextProvider.getString(any()) } returns OC_SECURE_BASE_URL
 
         val imprintUrl = moreViewModel.getImprintUrl()
 
-        assertEquals(OC_BASE_URL, imprintUrl)
+        assertEquals(OC_SECURE_BASE_URL, imprintUrl)
 
         verify(exactly = 1) {
             contextProvider.getString(R.string.url_imprint)

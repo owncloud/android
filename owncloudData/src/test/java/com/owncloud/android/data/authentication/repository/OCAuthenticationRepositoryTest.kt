@@ -30,7 +30,7 @@ import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_REDIRECTION_PATH
 import com.owncloud.android.testutil.OC_REFRESH_TOKEN
 import com.owncloud.android.testutil.OC_SCOPE
-import com.owncloud.android.testutil.OC_SERVER_INFO
+import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
 import com.owncloud.android.testutil.OC_USER_INFO
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import io.mockk.every
@@ -58,19 +58,19 @@ class OCAuthenticationRepositoryTest {
         } returns OC_ACCOUNT_NAME
 
         val accountName = ocAuthenticationRepository.loginBasic(
-            OC_SERVER_INFO,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
             "username",
             "password",
             null
         )
 
         verify(exactly = 1) {
-            remoteAuthenticationDataSource.loginBasic(OC_SERVER_INFO.baseUrl, "username", "password")
+            remoteAuthenticationDataSource.loginBasic(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, "username", "password")
             localAuthenticationDataSource.addBasicAccount(
                 "username",
                 OC_REDIRECTION_PATH.lastPermanentLocation,
                 "password",
-                OC_SERVER_INFO,
+                OC_SECURE_SERVER_INFO_BASIC_AUTH,
                 OC_USER_INFO,
                 null
             )
@@ -89,7 +89,7 @@ class OCAuthenticationRepositoryTest {
             localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
         } returns OC_ACCOUNT_NAME
 
-        ocAuthenticationRepository.loginBasic(OC_SERVER_INFO, "test", "test", null)
+        ocAuthenticationRepository.loginBasic(OC_SECURE_SERVER_INFO_BASIC_AUTH, "test", "test", null)
 
         verify(exactly = 1) {
             remoteAuthenticationDataSource.loginBasic(any(), any(), any())
@@ -108,7 +108,7 @@ class OCAuthenticationRepositoryTest {
             localAuthenticationDataSource.addBasicAccount(any(), any(), any(), any(), any(), any())
         } throws AccountNotNewException()
 
-        ocAuthenticationRepository.loginBasic(OC_SERVER_INFO, "test", "test", null)
+        ocAuthenticationRepository.loginBasic(OC_SECURE_SERVER_INFO_BASIC_AUTH, "test", "test", null)
 
         verify(exactly = 1) {
             remoteAuthenticationDataSource.loginBasic(any(), any(), any())
@@ -139,7 +139,7 @@ class OCAuthenticationRepositoryTest {
         } returns OC_ACCOUNT_NAME
 
         val accountName = ocAuthenticationRepository.loginOAuth(
-            OC_SERVER_INFO,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
             "username",
             OC_AUTH_TOKEN_TYPE,
             OC_ACCESS_TOKEN,
@@ -150,13 +150,13 @@ class OCAuthenticationRepositoryTest {
         )
 
         verify(exactly = 1) {
-            remoteAuthenticationDataSource.loginOAuth(OC_SERVER_INFO.baseUrl, "username", OC_ACCESS_TOKEN)
+            remoteAuthenticationDataSource.loginOAuth(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, "username", OC_ACCESS_TOKEN)
             localAuthenticationDataSource.addOAuthAccount(
                 "username",
                 OC_REDIRECTION_PATH.lastPermanentLocation,
                 OC_AUTH_TOKEN_TYPE,
                 OC_ACCESS_TOKEN,
-                OC_SERVER_INFO,
+                OC_SECURE_SERVER_INFO_BASIC_AUTH,
                 OC_USER_INFO,
                 OC_REFRESH_TOKEN,
                 OC_SCOPE,
@@ -190,7 +190,7 @@ class OCAuthenticationRepositoryTest {
         } returns OC_ACCOUNT_NAME
 
         ocAuthenticationRepository.loginOAuth(
-            OC_SERVER_INFO,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
             "test",
             OC_AUTH_TOKEN_TYPE,
             OC_ACCESS_TOKEN,
@@ -240,7 +240,7 @@ class OCAuthenticationRepositoryTest {
         } throws AccountNotNewException()
 
         ocAuthenticationRepository.loginOAuth(
-            OC_SERVER_INFO,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
             "test",
             OC_AUTH_TOKEN_TYPE,
             OC_ACCESS_TOKEN,
@@ -297,7 +297,7 @@ class OCAuthenticationRepositoryTest {
     fun getBaseUrlOk() {
         every {
             localAuthenticationDataSource.getBaseUrl(any())
-        } returns OC_SERVER_INFO.baseUrl
+        } returns OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl
 
         ocAuthenticationRepository.getBaseUrl(OC_ACCOUNT_NAME)
 

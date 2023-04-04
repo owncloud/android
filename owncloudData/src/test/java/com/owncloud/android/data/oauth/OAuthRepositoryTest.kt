@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,14 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.oauth
 
 import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
 import com.owncloud.android.data.oauth.repository.OCOAuthRepository
-import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDatasource
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
-import com.owncloud.android.domain.exceptions.FileNotFoundException
-import com.owncloud.android.testutil.OC_SERVER_INFO
+import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION_REQUEST
 import com.owncloud.android.testutil.oauth.OC_OIDC_SERVER_CONFIGURATION
@@ -38,14 +39,12 @@ import org.junit.Test
 class OAuthRepositoryTest {
 
     private val remoteOAuthDataSource = mockk<RemoteOAuthDataSource>(relaxed = true)
-    private val remoteWebFingerDataSource = mockk<RemoteWebFingerDatasource>(relaxed = true)
-    private val oAuthRepository: OAuthRepository = OCOAuthRepository(remoteOAuthDataSource, remoteWebFingerDataSource)
+    private val oAuthRepository: OAuthRepository = OCOAuthRepository(remoteOAuthDataSource)
 
     private val issuerOIDCFromWebFinger = "server.url/oidc/issuer"
 
     @Test
     fun `perform oidc discovery - issuer from webfinger - ok`() {
-        every { remoteWebFingerDataSource.getInstancesFromWebFinger(any(), any(), any()) } returns listOf(issuerOIDCFromWebFinger)
         every { remoteOAuthDataSource.performOIDCDiscovery(issuerOIDCFromWebFinger) } returns OC_OIDC_SERVER_CONFIGURATION
 
         val oidcServerConfiguration = oAuthRepository.performOIDCDiscovery(issuerOIDCFromWebFinger)
@@ -58,13 +57,12 @@ class OAuthRepositoryTest {
 
     @Test
     fun `perform oidc discovery - issuer from base url - ok`() {
-        every { remoteWebFingerDataSource.getInstancesFromWebFinger(any(), any(), any()) } throws FileNotFoundException()
-        every { remoteOAuthDataSource.performOIDCDiscovery(OC_SERVER_INFO.baseUrl) } returns OC_OIDC_SERVER_CONFIGURATION
+        every { remoteOAuthDataSource.performOIDCDiscovery(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl) } returns OC_OIDC_SERVER_CONFIGURATION
 
-        val oidcServerConfiguration = oAuthRepository.performOIDCDiscovery(OC_SERVER_INFO.baseUrl)
+        val oidcServerConfiguration = oAuthRepository.performOIDCDiscovery(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
         verify(exactly = 1) {
-            remoteOAuthDataSource.performOIDCDiscovery(OC_SERVER_INFO.baseUrl)
+            remoteOAuthDataSource.performOIDCDiscovery(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
         }
         assertEquals(OC_OIDC_SERVER_CONFIGURATION, oidcServerConfiguration)
 
@@ -72,9 +70,9 @@ class OAuthRepositoryTest {
 
     @Test(expected = Exception::class)
     fun `perform oidc discovery - ko`() {
-        every { remoteOAuthDataSource.performOIDCDiscovery(OC_SERVER_INFO.baseUrl) } throws Exception()
+        every { remoteOAuthDataSource.performOIDCDiscovery(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl) } throws Exception()
 
-        oAuthRepository.performOIDCDiscovery(OC_SERVER_INFO.baseUrl)
+        oAuthRepository.performOIDCDiscovery(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
     }
 
     @Test

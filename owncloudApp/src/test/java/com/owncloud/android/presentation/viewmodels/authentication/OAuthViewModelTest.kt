@@ -32,7 +32,7 @@ import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.presentation.authentication.oauth.OAuthViewModel
 import com.owncloud.android.providers.ContextProvider
-import com.owncloud.android.testutil.OC_SERVER_INFO
+import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
 import com.owncloud.android.testutil.oauth.OC_OIDC_SERVER_CONFIGURATION
 import com.owncloud.android.testutil.oauth.OC_TOKEN_REQUEST_ACCESS
 import com.owncloud.android.testutil.oauth.OC_TOKEN_REQUEST_REFRESH
@@ -106,7 +106,7 @@ class OAuthViewModelTest : ViewModelTest() {
     @Test
     fun `get oidc server configuration - ok`() {
         every { getOIDCDiscoveryUseCase.execute(any()) } returns UseCaseResult.Success(OC_OIDC_SERVER_CONFIGURATION)
-        oAuthViewModel.getOIDCServerConfiguration(OC_SERVER_INFO.baseUrl)
+        oAuthViewModel.getOIDCServerConfiguration(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
         assertEmittedValues(
             expectedValues = listOf(
@@ -123,7 +123,7 @@ class OAuthViewModelTest : ViewModelTest() {
     @Test
     fun `get oidc server configuration - ko - exception`() {
         every { getOIDCDiscoveryUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
-        oAuthViewModel.getOIDCServerConfiguration(OC_SERVER_INFO.baseUrl)
+        oAuthViewModel.getOIDCServerConfiguration(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
         assertEmittedValues(
             expectedValues = listOf(Event<UIResult<OIDCServerConfiguration>>(UIResult.Error(commonException))),

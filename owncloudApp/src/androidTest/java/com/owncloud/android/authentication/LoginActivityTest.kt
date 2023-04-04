@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -41,7 +42,6 @@ import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
-import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.parseError
@@ -64,7 +64,9 @@ import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_BASIC_PASSWORD
 import com.owncloud.android.testutil.OC_BASIC_USERNAME
-import com.owncloud.android.testutil.OC_SERVER_INFO
+import com.owncloud.android.testutil.OC_INSECURE_SERVER_INFO_BASIC_AUTH
+import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
+import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BEARER_AUTH
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 import com.owncloud.android.utils.NO_MDM_RESTRICTION_YET
@@ -199,14 +201,14 @@ class LoginActivityTest {
 
     @Test
     fun initialViewStatus_brandedOptions_webfinger() {
-        launchTest(webfingerLookupServer = OC_SERVER_INFO.baseUrl)
+        launchTest(webfingerLookupServer = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
         assertWebfingerFlowDisplayed(webfingerEnabled = true)
     }
 
     @Test
     fun initialViewStatus_brandedOptions_serverInfoInSetup() {
-        launchTest(showServerUrlInput = false, serverUrl = OC_SERVER_INFO.baseUrl)
+        launchTest(showServerUrlInput = false, serverUrl = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
         assertViewsDisplayed(
             showHostUrlFrame = false,
@@ -215,21 +217,21 @@ class LoginActivityTest {
             showEmbeddedCheckServerButton = false
         )
 
-        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true) }
     }
 
     @Test
     fun initialViewStatus_brandedOptions_serverInfoInSetup_connectionFails() {
 
-        launchTest(showServerUrlInput = false, serverUrl = OC_SERVER_INFO.baseUrl)
+        launchTest(showServerUrlInput = false, serverUrl = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
         serverInfoLiveData.postValue(Event(UIResult.Error(NoNetworkConnectionException())))
 
         R.id.centeredRefreshButton.isDisplayed(true)
         R.id.centeredRefreshButton.scrollAndClick()
 
-        verify(exactly = 2) { authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
-        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC.copy(isSecureConnection = true))))
+        verify(exactly = 2) { authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true) }
+        serverInfoLiveData.postValue(Event(UIResult.Success(SECURE_SERVER_INFO_BASIC)))
 
         R.id.centeredRefreshButton.isDisplayed(false)
     }
@@ -270,21 +272,21 @@ class LoginActivityTest {
     fun checkServerInfo_clickButton_callGetServerInfo() {
         launchTest()
 
-        R.id.hostUrlInput.typeText(OC_SERVER_INFO.baseUrl)
+        R.id.hostUrlInput.typeText(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
         R.id.embeddedCheckServerButton.scrollAndClick()
 
-        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true) }
     }
 
     @Test
     fun checkServerInfo_clickLogo_callGetServerInfo() {
         launchTest()
-        R.id.hostUrlInput.typeText(OC_SERVER_INFO.baseUrl)
+        R.id.hostUrlInput.typeText(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
         R.id.thumbnail.scrollAndClick()
 
-        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true) }
     }
 
     @Test
@@ -303,15 +305,15 @@ class LoginActivityTest {
         launchTest()
         R.id.hostUrlInput.typeText("demo.owncloud.com")
 
-        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC.copy(isSecureConnection = true))))
+        serverInfoLiveData.postValue(Event(UIResult.Success(SECURE_SERVER_INFO_BASIC)))
 
-        R.id.hostUrlInput.withText(SERVER_INFO_BASIC.baseUrl)
+        R.id.hostUrlInput.withText(SECURE_SERVER_INFO_BASIC.baseUrl)
     }
 
     @Test
     fun checkServerInfo_isSuccess_Secure() {
         launchTest()
-        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC.copy(isSecureConnection = true))))
+        serverInfoLiveData.postValue(Event(UIResult.Success(SECURE_SERVER_INFO_BASIC)))
 
         with(R.id.server_status_text) {
             isDisplayed(true)
@@ -323,7 +325,7 @@ class LoginActivityTest {
     @Test
     fun checkServerInfo_isSuccess_NotSecure() {
         launchTest()
-        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC.copy(isSecureConnection = false))))
+        serverInfoLiveData.postValue(Event(UIResult.Success(INSECURE_SERVER_INFO_BASIC)))
 
         with(R.id.server_status_text) {
             isDisplayed(true)
@@ -336,7 +338,7 @@ class LoginActivityTest {
     fun checkServerInfo_isSuccess_Basic() {
         launchTest()
 
-        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC)))
+        serverInfoLiveData.postValue(Event(UIResult.Success(SECURE_SERVER_INFO_BASIC)))
 
         checkBasicFieldsVisibility(loginButtonShouldBeVisible = false)
     }
@@ -345,25 +347,16 @@ class LoginActivityTest {
     fun checkServerInfo_isSuccess_Bearer() {
         launchTest()
 
-        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BEARER)))
+        serverInfoLiveData.postValue(Event(UIResult.Success(SECURE_SERVER_INFO_BEARER)))
 
         checkBearerFieldsVisibility()
-    }
-
-    @Test
-    fun checkServerInfo_isSuccess_None() {
-        launchTest()
-
-        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC.copy(authenticationMethod = AuthenticationMethod.NONE))))
-
-        assertNoneFieldsVisibility()
     }
 
     @Test
     fun checkServerInfo_isSuccess_basicModifyUrlInput() {
         launchTest()
 
-        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC)))
+        serverInfoLiveData.postValue(Event(UIResult.Success(SECURE_SERVER_INFO_BASIC)))
 
         checkBasicFieldsVisibility()
 
@@ -390,7 +383,7 @@ class LoginActivityTest {
     fun checkServerInfo_isSuccess_bearerModifyUrlInput() {
         launchTest()
 
-        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BEARER)))
+        serverInfoLiveData.postValue(Event(UIResult.Success(SECURE_SERVER_INFO_BEARER)))
 
         checkBearerFieldsVisibility()
 
@@ -459,7 +452,7 @@ class LoginActivityTest {
     fun loginBasic_callLoginBasic() {
         launchTest()
 
-        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC)))
+        serverInfoLiveData.postValue(Event(UIResult.Success(SECURE_SERVER_INFO_BASIC)))
 
         R.id.account_username.typeText(OC_BASIC_USERNAME)
 
@@ -477,7 +470,7 @@ class LoginActivityTest {
     fun loginBasic_callLoginBasic_trimUsername() {
         launchTest()
 
-        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC)))
+        serverInfoLiveData.postValue(Event(UIResult.Success(SECURE_SERVER_INFO_BASIC)))
 
         R.id.account_username.typeText("  $OC_BASIC_USERNAME  ")
 
@@ -495,7 +488,7 @@ class LoginActivityTest {
     fun loginBasic_showOrHideFields() {
         launchTest()
 
-        serverInfoLiveData.postValue(Event(UIResult.Success(SERVER_INFO_BASIC)))
+        serverInfoLiveData.postValue(Event(UIResult.Success(SECURE_SERVER_INFO_BASIC)))
 
         R.id.account_username.typeText(OC_BASIC_USERNAME)
 
@@ -664,17 +657,17 @@ class LoginActivityTest {
 
         launchTest(intent = intentWithAccount)
 
-        baseUrlLiveData.postValue(Event(UIResult.Success(OC_SERVER_INFO.baseUrl)))
+        baseUrlLiveData.postValue(Event(UIResult.Success(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)))
 
         with(R.id.hostUrlInput) {
-            withText(OC_SERVER_INFO.baseUrl)
+            withText(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
             assertVisibility(Visibility.VISIBLE)
             isDisplayed(true)
             isEnabled(false)
             isFocusable(false)
         }
 
-        verify(exactly = 0) { authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 0) { authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl) }
     }
 
     @Test
@@ -686,17 +679,17 @@ class LoginActivityTest {
 
         launchTest(intent = intentWithAccount)
 
-        baseUrlLiveData.postValue(Event(UIResult.Success(OC_SERVER_INFO.baseUrl)))
+        baseUrlLiveData.postValue(Event(UIResult.Success(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)))
 
         with(R.id.hostUrlInput) {
-            withText(OC_SERVER_INFO.baseUrl)
+            withText(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
             assertVisibility(Visibility.VISIBLE)
             isDisplayed(true)
             isEnabled(false)
             isFocusable(false)
         }
 
-        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SERVER_INFO.baseUrl) }
+        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl) }
     }
 
     @Test
@@ -747,19 +740,6 @@ class LoginActivityTest {
         }
     }
 
-    private fun assertNoneFieldsVisibility() {
-        with(R.id.server_status_text) {
-            isDisplayed(true)
-            assertVisibility(Visibility.VISIBLE)
-            withText(R.string.auth_unsupported_auth_method)
-        }
-
-        R.id.account_username.assertVisibility(Visibility.GONE)
-        R.id.account_password.assertVisibility(Visibility.GONE)
-        R.id.loginButton.assertVisibility(Visibility.GONE)
-        R.id.auth_status_text.assertVisibility(Visibility.GONE)
-    }
-
     private fun assertWebfingerFlowDisplayed(
         webfingerEnabled: Boolean,
     ) {
@@ -803,8 +783,9 @@ class LoginActivityTest {
     }
 
     companion object {
-        val SERVER_INFO_BASIC = OC_SERVER_INFO
-        val SERVER_INFO_BEARER = OC_SERVER_INFO.copy(authenticationMethod = AuthenticationMethod.BEARER_TOKEN)
+        val SECURE_SERVER_INFO_BASIC = OC_SECURE_SERVER_INFO_BASIC_AUTH
+        val INSECURE_SERVER_INFO_BASIC = OC_INSECURE_SERVER_INFO_BASIC_AUTH
+        val SECURE_SERVER_INFO_BEARER = OC_SECURE_SERVER_INFO_BEARER_AUTH
         private const val CUSTOM_WELCOME_TEXT = "Welcome to this test"
         private const val BRANDED_APP_NAME = "BrandedAppName"
     }

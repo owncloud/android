@@ -47,13 +47,13 @@ import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_ACCOUNT_ID
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
-import com.owncloud.android.testutil.OC_BASE_URL
+import com.owncloud.android.testutil.OC_SECURE_BASE_URL
 import com.owncloud.android.testutil.OC_BASIC_USERNAME
 import com.owncloud.android.testutil.OC_OAUTH_SUPPORTED_TRUE
 import com.owncloud.android.testutil.OC_REDIRECTION_PATH
 import com.owncloud.android.testutil.OC_REFRESH_TOKEN
 import com.owncloud.android.testutil.OC_SCOPE
-import com.owncloud.android.testutil.OC_SERVER_INFO
+import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
 import com.owncloud.android.testutil.OC_USER_INFO
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import io.mockk.every
@@ -97,7 +97,7 @@ class OCLocalAuthenticationDataSourceTest {
             OC_ACCOUNT_ID,
             OC_REDIRECTION_PATH.lastPermanentLocation,
             "password",
-            OC_SERVER_INFO,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
             OC_USER_INFO,
             null
         )
@@ -108,7 +108,7 @@ class OCLocalAuthenticationDataSourceTest {
         verifyAccountsByTypeAreGot(newAccount.type, 2)
 
         verifyAccountIsExplicitlyAdded(newAccount, "password", 1)
-        verifyAccountInfoIsUpdated(newAccount, OC_SERVER_INFO, OC_USER_INFO, 1)
+        verifyAccountInfoIsUpdated(newAccount, OC_SECURE_SERVER_INFO_BASIC_AUTH, OC_USER_INFO, 1)
 
         assertEquals(newAccount.name, newAccountName)
     }
@@ -123,7 +123,7 @@ class OCLocalAuthenticationDataSourceTest {
             OC_ACCOUNT_ID,
             OC_REDIRECTION_PATH.lastPermanentLocation,
             "password",
-            OC_SERVER_INFO,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
             OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             null
         )
@@ -149,7 +149,7 @@ class OCLocalAuthenticationDataSourceTest {
             OC_ACCOUNT_ID,
             OC_REDIRECTION_PATH.lastPermanentLocation,
             "password",
-            OC_SERVER_INFO,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
             OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             OC_ACCOUNT_NAME
         )
@@ -161,7 +161,7 @@ class OCLocalAuthenticationDataSourceTest {
         verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
 
         // The account already exists, so update it
-        verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 1)
+        verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SECURE_SERVER_INFO_BASIC_AUTH, OC_USER_INFO, 1)
     }
 
     @Test
@@ -178,7 +178,7 @@ class OCLocalAuthenticationDataSourceTest {
                 OC_BASIC_USERNAME,
                 OC_REDIRECTION_PATH.lastPermanentLocation,
                 "password",
-                OC_SERVER_INFO,
+                OC_SECURE_SERVER_INFO_BASIC_AUTH,
                 OC_USER_INFO,
                 "NotTheSameAccount"
             )
@@ -189,7 +189,7 @@ class OCLocalAuthenticationDataSourceTest {
             verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
 
             // The account is not the same, so no update needed
-            verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 0)
+            verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SECURE_SERVER_INFO_BASIC_AUTH, OC_USER_INFO, 0)
         }
     }
 
@@ -207,7 +207,7 @@ class OCLocalAuthenticationDataSourceTest {
             OC_REDIRECTION_PATH.lastPermanentLocation,
             OC_AUTH_TOKEN_TYPE,
             OC_ACCESS_TOKEN,
-            OC_SERVER_INFO,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
             OC_USER_INFO,
             OC_REFRESH_TOKEN,
             OC_SCOPE,
@@ -221,7 +221,7 @@ class OCLocalAuthenticationDataSourceTest {
         verifyAccountsByTypeAreGot(newAccount.type, 2)
 
         verifyAccountIsExplicitlyAdded(newAccount, "", 1)
-        verifyAccountInfoIsUpdated(newAccount, OC_SERVER_INFO, OC_USER_INFO, 1)
+        verifyAccountInfoIsUpdated(newAccount, OC_SECURE_SERVER_INFO_BASIC_AUTH, OC_USER_INFO, 1)
 
         // OAuth params are updated
         verifyOAuthParamsAreUpdated(newAccount, OC_ACCESS_TOKEN, OC_OAUTH_SUPPORTED_TRUE, OC_REFRESH_TOKEN, OC_SCOPE, OC_CLIENT_REGISTRATION, 1)
@@ -240,7 +240,7 @@ class OCLocalAuthenticationDataSourceTest {
             OC_REDIRECTION_PATH.lastPermanentLocation,
             OC_AUTH_TOKEN_TYPE,
             OC_ACCESS_TOKEN,
-            OC_SERVER_INFO,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
             OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             OC_REFRESH_TOKEN,
             OC_SCOPE,
@@ -270,7 +270,7 @@ class OCLocalAuthenticationDataSourceTest {
             OC_REDIRECTION_PATH.lastPermanentLocation,
             OC_AUTH_TOKEN_TYPE,
             OC_ACCESS_TOKEN,
-            OC_SERVER_INFO,
+            OC_SECURE_SERVER_INFO_BASIC_AUTH,
             OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             OC_REFRESH_TOKEN,
             OC_SCOPE,
@@ -285,7 +285,7 @@ class OCLocalAuthenticationDataSourceTest {
         verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
 
         // The account already exists, so update it
-        verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 1)
+        verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SECURE_SERVER_INFO_BASIC_AUTH, OC_USER_INFO, 1)
         verifyOAuthParamsAreUpdated(OC_ACCOUNT, OC_ACCESS_TOKEN, OC_OAUTH_SUPPORTED_TRUE, OC_REFRESH_TOKEN, OC_SCOPE, OC_CLIENT_REGISTRATION, 1)
     }
 
@@ -308,7 +308,7 @@ class OCLocalAuthenticationDataSourceTest {
                 OC_REDIRECTION_PATH.lastPermanentLocation,
                 OC_AUTH_TOKEN_TYPE,
                 OC_ACCESS_TOKEN,
-                OC_SERVER_INFO,
+                OC_SECURE_SERVER_INFO_BASIC_AUTH,
                 OC_USER_INFO,
                 OC_REFRESH_TOKEN,
                 OC_SCOPE,
@@ -322,7 +322,7 @@ class OCLocalAuthenticationDataSourceTest {
             verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
 
             // The account already exists, so update it
-            verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SERVER_INFO, OC_USER_INFO, 0)
+            verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SECURE_SERVER_INFO_BASIC_AUTH, OC_USER_INFO, 0)
             verifyOAuthParamsAreUpdated(
                 OC_ACCOUNT,
                 OC_ACCESS_TOKEN,
@@ -370,14 +370,14 @@ class OCLocalAuthenticationDataSourceTest {
 
         every {
             accountManager.getUserData(OC_ACCOUNT, KEY_OC_BASE_URL)
-        } returns OC_BASE_URL
+        } returns OC_SECURE_BASE_URL
 
         val baseUrl = ocLocalAuthenticationDataSource.getBaseUrl(OC_ACCOUNT.name)
 
         verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
         verifyUserDataIsGot(OC_ACCOUNT, KEY_OC_BASE_URL, 1)
 
-        assertEquals(OC_BASE_URL, baseUrl)
+        assertEquals(OC_SECURE_BASE_URL, baseUrl)
     }
 
     @Test(expected = AccountNotFoundException::class)

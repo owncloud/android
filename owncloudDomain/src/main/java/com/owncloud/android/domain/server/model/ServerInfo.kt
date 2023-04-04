@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,11 +29,32 @@ sealed class ServerInfo(
 ) {
     val isSecureConnection get() = baseUrl.startsWith(HTTPS_PREFIX, ignoreCase = true)
 
+    override fun equals(other: Any?): Boolean {
+        if (other !is ServerInfo) return false
+        if (ownCloudVersion != other.ownCloudVersion) return false
+        if (baseUrl != other.baseUrl) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
+    }
+
     class OIDCServer(
         ownCloudVersion: String,
         baseUrl: String,
         val oidcServerConfiguration: OIDCServerConfiguration,
-    ) : ServerInfo(ownCloudVersion = ownCloudVersion, baseUrl = baseUrl)
+    ) : ServerInfo(ownCloudVersion = ownCloudVersion, baseUrl = baseUrl) {
+        override fun equals(other: Any?): Boolean {
+            if (other !is OIDCServer) return false
+            if (oidcServerConfiguration != other.oidcServerConfiguration) return false
+            return super.equals(other)
+        }
+
+        override fun hashCode(): Int {
+            return javaClass.hashCode()
+        }
+    }
 
     class OAuth2Server(
         ownCloudVersion: String,
