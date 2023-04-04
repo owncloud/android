@@ -33,7 +33,7 @@ class OCRemoteWebFingerDatasource(
     override fun getInstancesFromWebFinger(
         lookupServer: String,
         rel: WebFingerRel,
-        username: String
+        resource: String
     ): List<String> {
         val ownCloudClient = clientManager.getClientForAnonymousCredentials(lookupServer, false)
 
@@ -41,7 +41,7 @@ class OCRemoteWebFingerDatasource(
             webFingerService.getInstancesFromWebFinger(
                 lookupServer = lookupServer,
                 rel = rel.uri,
-                resource = username,
+                resource = resource,
                 client = ownCloudClient
             )
         }

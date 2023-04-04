@@ -52,12 +52,12 @@ val repositoryModule = module {
     factory<AuthenticationRepository> { OCAuthenticationRepository(get(), get()) }
     factory<CapabilityRepository> { OCCapabilityRepository(get(), get()) }
     factory<FileRepository> { OCFileRepository(get(), get(), get(), get()) }
-    factory<ServerInfoRepository> { OCServerInfoRepository(get()) }
+    factory<ServerInfoRepository> { OCServerInfoRepository(get(), get(), get()) }
     factory<ShareRepository> { OCShareRepository(get(), get()) }
     factory<ShareeRepository> { OCShareeRepository(get()) }
     factory<SpacesRepository> { OCSpacesRepository(get(), get()) }
     factory<UserRepository> { OCUserRepository(get(), get()) }
-    factory<OAuthRepository> { OCOAuthRepository(get(), get()) }
+    factory<OAuthRepository> { OCOAuthRepository(get()) }
     factory<FolderBackupRepository> { OCFolderBackupRepository(get()) }
     factory<WebFingerRepository> { OCWebFingerRepository(get()) }
     factory<TransferRepository> { OCTransferRepository(get()) }

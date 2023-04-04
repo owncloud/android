@@ -96,11 +96,16 @@ class OCRemoteServerInfoDataSource(
         // Second step: get authentication method required by the server
         val authenticationMethod = getAuthenticationMethod(normalizedProtocolPrefix)
 
-        return ServerInfo(
-            ownCloudVersion = remoteServerInfo.ownCloudVersion.version,
-            baseUrl = normalizedProtocolPrefix,
-            authenticationMethod = authenticationMethod,
-            isSecureConnection = remoteServerInfo.isSecureConnection
-        )
+        return if (authenticationMethod == AuthenticationMethod.BEARER_TOKEN) {
+            ServerInfo.OAuth2Server(
+                ownCloudVersion = remoteServerInfo.ownCloudVersion.version,
+                baseUrl = normalizedProtocolPrefix
+            )
+        } else {
+            ServerInfo.BasicServer(
+                ownCloudVersion = remoteServerInfo.ownCloudVersion.version,
+                baseUrl = normalizedProtocolPrefix,
+            )
+        }
     }
 }

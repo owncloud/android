@@ -1,0 +1,9 @@
+Enhancement: Updated WebFinger flow
+
+WebFinger call won't follow redirections. WebFinger will be requested first and will skip status.php
+in case it's successful, and in case the lookup server is not directly accessible, we will continue
+the authentication flow with the regular status.php.
+
+https://github.com/owncloud/android/issues/3998
+https://github.com/owncloud/android/pull/4000
+https://github.com/owncloud/android-library/pull/555

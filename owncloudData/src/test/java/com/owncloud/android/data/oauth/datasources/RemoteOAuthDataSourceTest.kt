@@ -32,7 +32,7 @@ import com.owncloud.android.lib.resources.oauth.responses.ClientRegistrationResp
 import com.owncloud.android.lib.resources.oauth.responses.OIDCDiscoveryResponse
 import com.owncloud.android.lib.resources.oauth.responses.TokenResponse
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
-import com.owncloud.android.testutil.OC_BASE_URL
+import com.owncloud.android.testutil.OC_SECURE_BASE_URL
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION_REQUEST
 import com.owncloud.android.testutil.oauth.OC_OIDC_SERVER_CONFIGURATION
@@ -73,7 +73,7 @@ class RemoteOAuthDataSourceTest {
             oidcService.getOIDCServerDiscovery(ocClientMocked)
         } returns oidcDiscoveryResult
 
-        val oidcDiscovery = remoteOAuthDataSource.performOIDCDiscovery(OC_BASE_URL)
+        val oidcDiscovery = remoteOAuthDataSource.performOIDCDiscovery(OC_SECURE_BASE_URL)
 
         assertNotNull(oidcDiscovery)
         assertEquals(OC_OIDC_SERVER_CONFIGURATION, oidcDiscovery)
@@ -85,7 +85,7 @@ class RemoteOAuthDataSourceTest {
             oidcService.getOIDCServerDiscovery(ocClientMocked)
         } throws Exception()
 
-        remoteOAuthDataSource.performOIDCDiscovery(OC_BASE_URL)
+        remoteOAuthDataSource.performOIDCDiscovery(OC_SECURE_BASE_URL)
     }
 
     @Test

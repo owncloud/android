@@ -33,7 +33,7 @@ class OCWebFingerRepository(
         remoteWebFingerDatasource.getInstancesFromWebFinger(
             lookupServer = server,
             rel = rel,
-            username = resource
+            resource = resource
         )
 
     override fun getInstancesFromAuthenticatedWebFinger(

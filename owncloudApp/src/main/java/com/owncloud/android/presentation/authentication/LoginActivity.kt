@@ -53,7 +53,6 @@ import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedExcepti
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.exceptions.StateMismatchException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
-import com.owncloud.android.domain.server.model.AuthenticationMethod
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.goToUrl
@@ -66,7 +65,6 @@ import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.network.CertificateCombinedException
 import com.owncloud.android.presentation.authentication.AccountUtils.getUsernameOfAccount
 import com.owncloud.android.presentation.authentication.oauth.OAuthUtils
-import com.owncloud.android.presentation.authentication.oauth.OAuthViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
 import com.owncloud.android.presentation.security.LockType
@@ -88,7 +86,6 @@ import java.io.File
 class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrustedCertListener, SecurityEnforced {
 
     private val authenticationViewModel by viewModel<AuthenticationViewModel>()
-    private val oauthViewModel by viewModel<OAuthViewModel>()
     private val contextProvider by inject<ContextProvider>()
     private val mdmProvider by inject<MdmProvider>()
 
@@ -168,9 +165,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         binding.embeddedCheckServerButton.setOnClickListener { checkOcServer() }
 
         binding.loginButton.setOnClickListener {
-            if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) == authTokenType) { // OAuth
-                startOIDCOauthorization()
-            } else { // Basic
+            if (AccountTypeUtils.getAuthTokenTypeAccessToken(accountType) != authTokenType) { // Basic
                 authenticationViewModel.loginBasic(
                     binding.accountUsername.text.toString().trim(),
                     binding.accountPassword.text.toString(),
@@ -287,7 +282,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun checkOcServer() {
         val uri = binding.hostUrlInput.text.toString().trim()
         if (uri.isNotEmpty()) {
-            authenticationViewModel.getServerInfo(serverUrl = uri)
+            authenticationViewModel.getServerInfo(serverUrl = uri, loginAction == ACTION_CREATE)
         } else {
             binding.serverStatusText.run {
                 text = getString(R.string.auth_can_not_auth_against_server).also { Timber.d(it) }
@@ -326,20 +321,39 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 isVisible = true
             }
 
-            when (authenticationMethod) {
-                AuthenticationMethod.BASIC_HTTP_AUTH -> {
+            when (this) {
+                is ServerInfo.BasicServer -> {
                     authTokenType = BASIC_TOKEN_TYPE
+                    oidcSupported = false
                     showOrHideBasicAuthFields(shouldBeVisible = true)
                     binding.accountUsername.doAfterTextChanged { updateLoginButtonVisibility() }
                     binding.accountPassword.doAfterTextChanged { updateLoginButtonVisibility() }
                 }
 
-                AuthenticationMethod.BEARER_TOKEN -> {
+                is ServerInfo.OAuth2Server -> {
                     showOrHideBasicAuthFields(shouldBeVisible = false)
                     authTokenType = OAUTH_TOKEN_TYPE
-                    startOIDCOauthorization()
+                    oidcSupported = false
+
+                    val oauth2authorizationEndpoint =
+                        Uri.parse("$baseUrl${File.separator}${getString(R.string.oauth2_url_endpoint_auth)}")
+                    performGetAuthorizationCodeRequest(oauth2authorizationEndpoint)
                 }
 
+                is ServerInfo.OIDCServer -> {
+                    showOrHideBasicAuthFields(shouldBeVisible = false)
+                    authTokenType = OAUTH_TOKEN_TYPE
+                    oidcSupported = true
+                    val registrationEndpoint = oidcServerConfiguration.registrationEndpoint
+                    if (registrationEndpoint != null) {
+                        registerClient(
+                            authorizationEndpoint = oidcServerConfiguration.authorizationEndpoint.toUri(),
+                            registrationEndpoint = registrationEndpoint
+                        )
+                    } else {
+                        performGetAuthorizationCodeRequest(oidcServerConfiguration.authorizationEndpoint.toUri())
+                    }
+                }
                 else -> {
                     binding.serverStatusText.run {
                         text = getString(R.string.auth_unsupported_auth_method)
@@ -427,52 +441,14 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     }
 
     /**
-     * OAuth step 1: Get authorization code
-     * Firstly, try the OAuth authorization with Open Id Connect, checking whether there's an available .well-known url
-     * to use or not
-     */
-    private fun startOIDCOauthorization() {
-        binding.serverStatusText.run {
-            setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
-            text = resources.getString(R.string.oauth_login_connection)
-        }
-
-        oauthViewModel.getOIDCServerConfiguration(serverBaseUrl)
-        oauthViewModel.oidcDiscovery.observe(this) {
-            when (val uiResult = it.peekContent()) {
-                is UIResult.Loading -> {}
-                is UIResult.Success -> {
-                    Timber.d("Service discovery: ${uiResult.data}")
-                    oidcSupported = true
-                    uiResult.data?.let { oidcServerConfiguration ->
-                        val registrationEndpoint = oidcServerConfiguration.registrationEndpoint
-                        if (registrationEndpoint != null) {
-                            registerClient(
-                                authorizationEndpoint = oidcServerConfiguration.authorizationEndpoint.toUri(),
-                                registrationEndpoint = registrationEndpoint
-                            )
-                        } else {
-                            performGetAuthorizationCodeRequest(oidcServerConfiguration.authorizationEndpoint.toUri())
-                        }
-                    }
-                }
-                is UIResult.Error -> {
-                    Timber.e(uiResult.error, "OIDC failed. Try with normal OAuth")
-                    startNormalOauthorization()
-                }
-            }
-        }
-    }
-
-    /**
      * Register client if possible.
      */
     private fun registerClient(
         authorizationEndpoint: Uri,
         registrationEndpoint: String
     ) {
-        oauthViewModel.registerClient(registrationEndpoint)
-        oauthViewModel.registerClient.observe(this) {
+        authenticationViewModel.registerClient(registrationEndpoint)
+        authenticationViewModel.registerClient.observe(this) {
             when (val uiResult = it.peekContent()) {
                 is UIResult.Loading -> {}
                 is UIResult.Success -> {
@@ -492,16 +468,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
-    /**
-     * OAuth step 1: Get authorization code
-     * If OIDC is not available, falling back to normal OAuth
-     */
-    private fun startNormalOauthorization() {
-        val oauth2authorizationEndpoint =
-            Uri.parse("$serverBaseUrl${File.separator}${getString(R.string.oauth2_url_endpoint_auth)}")
-        performGetAuthorizationCodeRequest(oauth2authorizationEndpoint)
-    }
-
     private fun performGetAuthorizationCodeRequest(
         authorizationEndpoint: Uri,
         clientId: String = getString(R.string.oauth2_client_id)
@@ -517,8 +483,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             clientId = clientId,
             responseType = ResponseType.CODE.string,
             scope = if (oidcSupported) mdmProvider.getBrandingString(CONFIGURATION_OAUTH2_OPEN_ID_SCOPE, R.string.oauth2_openid_scope) else "",
-            codeChallenge = oauthViewModel.codeChallenge,
-            state = oauthViewModel.oidcState,
+            codeChallenge = authenticationViewModel.codeChallenge,
+            state = authenticationViewModel.oidcState,
             username = username,
         )
 
@@ -545,7 +511,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val authorizationCode = intent.data?.getQueryParameter("code")
         val state = intent.data?.getQueryParameter("state")
 
-        if (state != oauthViewModel.oidcState) {
+        if (state != authenticationViewModel.oidcState) {
             Timber.e("OAuth request to get authorization code failed. State mismatching, maybe somebody is trying a CSRF attack.")
             updateOAuthStatusIconAndText(StateMismatchException())
         } else {
@@ -570,7 +536,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun exchangeAuthorizationCodeForTokens(authorizationCode: String) {
         binding.serverStatusText.text = getString(R.string.auth_getting_authorization)
 
-        val clientRegistrationInfo = oauthViewModel.registerClient.value?.peekContent()?.getStoredData()
+        val clientRegistrationInfo = authenticationViewModel.registerClient.value?.peekContent()?.getStoredData()
 
         val clientAuth = if (clientRegistrationInfo?.clientId != null && clientRegistrationInfo.clientSecret != null) {
             OAuthUtils.getClientAuth(clientRegistrationInfo.clientSecret as String, clientRegistrationInfo.clientId)
@@ -580,8 +546,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
 
         // Use oidc discovery one, or build an oauth endpoint using serverBaseUrl + Setup string.
-        val tokenEndPoint = oauthViewModel.oidcDiscovery.value?.peekContent()?.getStoredData()?.tokenEndpoint
-            ?: "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
+        val tokenEndPoint = when (val serverInfo = authenticationViewModel.serverInfo.value?.peekContent()?.getStoredData()) {
+            is ServerInfo.OIDCServer -> serverInfo.oidcServerConfiguration.tokenEndpoint
+            else -> "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
+        }
 
         val requestToken = TokenRequest.AccessToken(
             baseUrl = serverBaseUrl,
@@ -589,12 +557,12 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             authorizationCode = authorizationCode,
             redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
             clientAuth = clientAuth,
-            codeVerifier = oauthViewModel.codeVerifier
+            codeVerifier = authenticationViewModel.codeVerifier
         )
 
-        oauthViewModel.requestToken(requestToken)
+        authenticationViewModel.requestToken(requestToken)
 
-        oauthViewModel.requestToken.observe(this) {
+        authenticationViewModel.requestToken.observe(this) {
             when (val uiResult = it.peekContent()) {
                 is UIResult.Loading -> {}
                 is UIResult.Success -> {
@@ -602,6 +570,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     val tokenResponse = uiResult.data ?: return@observe
 
                     authenticationViewModel.loginOAuth(
+                        serverBaseUrl = serverBaseUrl,
                         username = tokenResponse.additionalParameters?.get(KEY_USER_ID).orEmpty(),
                         authTokenType = OAUTH_TOKEN_TYPE,
                         accessToken = tokenResponse.accessToken,

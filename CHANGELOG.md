@@ -14,6 +14,7 @@ Summary
 * Enhancement - Authenticated WebFinger: [#3943](https://github.com/owncloud/android/issues/3943)
 * Enhancement - Link in drawer menu: [#3949](https://github.com/owncloud/android/pull/3949)
 * Enhancement - Send language header in all requests: [#3980](https://github.com/owncloud/android/issues/3980)
+* Enhancement - Updated WebFinger flow: [#3998](https://github.com/owncloud/android/issues/3998)
 
 Details
 -------
@@ -70,6 +71,16 @@ Details
    https://github.com/owncloud/android/issues/3980
    https://github.com/owncloud/android/pull/3982
    https://github.com/owncloud/android-library/pull/551
+
+* Enhancement - Updated WebFinger flow: [#3998](https://github.com/owncloud/android/issues/3998)
+
+   WebFinger call won't follow redirections. WebFinger will be requested first and will skip
+   status.php in case it's successful, and in case the lookup server is not directly accessible,
+   we will continue the authentication flow with the regular status.php.
+
+   https://github.com/owncloud/android/issues/3998
+   https://github.com/owncloud/android/pull/4000
+   https://github.com/owncloud/android-library/pull/555
 
 Changelog for ownCloud Android Client [3.0.4] (2023-03-07)
 =======================================
