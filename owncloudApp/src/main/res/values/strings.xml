@@ -721,8 +721,10 @@
     <string name="release_notes_4_0_subtitle_4">For WebFinger servers, lookup server will be requested first, and if not successful, regular authentication flow will be followed</string>
     <string name="release_notes_4_0_title_5">Permission handling</string>
     <string name="release_notes_4_0_subtitle_5">Now, when there is lack of permissions to perform some actions over a folder or a file, those actions will be hidden</string>
-    <string name="release_notes_4_0_title_6">Minor bugfixes and improvements</string>
-    <string name="release_notes_4_0_subtitle_6">Some minor bugs have been fixed, and minor technical improvements were introduced to improve the experience in the app</string>
+    <string name="release_notes_4_0_title_6">New "Manage notifications" setting</string>
+    <string name="release_notes_4_0_subtitle_6">A new item has been added in the settings, which redirects to the app notifications settings of the device</string>
+    <string name="release_notes_4_0_title_7">Minor bugfixes and improvements</string>
+    <string name="release_notes_4_0_subtitle_7">Some minor bugs have been fixed, and minor technical improvements were introduced to improve the experience in the app</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
