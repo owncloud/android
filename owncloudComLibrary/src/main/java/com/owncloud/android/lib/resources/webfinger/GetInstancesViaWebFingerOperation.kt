@@ -75,13 +75,17 @@ class GetInstancesViaWebFingerOperation(
         val response = parseResponse(rawResponse)
         Timber.d("Successful WebFinger request: $response")
         val operationResult = RemoteOperationResult<List<String>>(RemoteOperationResult.ResultCode.OK)
-        operationResult.data = response.links.map { it.href }
+        operationResult.data = response.links?.map { it.href } ?: listOf()
         return operationResult
     }
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<List<String>> {
         val requestUri = buildRequestUri()
         val getMethod = GetMethod(URL(requestUri.toString()))
+
+        // First iteration won't follow redirections.
+        getMethod.followRedirects = false
+
         return try {
             val status = client.executeHttpMethod(getMethod)
             val response = getMethod.getResponseBodyAsString()!!
