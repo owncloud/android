@@ -10,6 +10,7 @@
   <string name="actionbar_upload_from_apps">Lëndë nga aplikacione të tjera</string>
   <string name="actionbar_upload_files">Kartela</string>
   <string name="actionbar_open_with">Hape me</string>
+  <string name="actionbar_open_with_read_only">Hape me (vetëm për lexim)</string>
   <string name="actionbar_mkdir">Dosje e re</string>
   <string name="actionbar_settings">Rregullime</string>
   <string name="actionbar_see_details">Hollësi</string>
