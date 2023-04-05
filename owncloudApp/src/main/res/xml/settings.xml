@@ -48,6 +48,7 @@
         app:title="@string/prefs_subsection_picture_uploads" />
 
     <Preference
+        app:allowDividerAbove="true"
         app:fragment="com.owncloud.android.presentation.settings.autouploads.SettingsVideoUploadsFragment"
         app:icon="@drawable/ic_video_uploads"
         app:key="video_uploads_subsection"
