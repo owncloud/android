@@ -378,6 +378,7 @@ class MainFileListFragment : Fragment(),
                 binding.fabMkdir.isVisible = false
             }
             registerFabUploadListener()
+            registerFabCameraListener()
             registerFabMkDirListener()
         }
     }
@@ -408,11 +409,21 @@ class MainFileListFragment : Fragment(),
     }
 
     /**
-     * Registers [android.view.View.OnClickListener] on the 'Uplodd' mini FAB for the linked action.
+     * Registers [android.view.View.OnClickListener] on the 'Upload' mini FAB for the linked action.
      */
     private fun registerFabUploadListener() {
         binding.fabUpload.setOnClickListener {
-            openBottomSheetToUploadFiles()
+            uploadActions?.uploadFromFileSystem()
+            collapseFab()
+        }
+    }
+
+    /**
+     * Registers [android.view.View.OnClickListener] on the 'Camera' mini FAB for the linked action.
+     */
+    private fun registerFabCameraListener() {
+        binding.fabCamera.setOnClickListener {
+            uploadActions?.uploadFromCamera()
             collapseFab()
         }
     }
@@ -422,30 +433,6 @@ class MainFileListFragment : Fragment(),
     }
 
     fun isFabExpanded() = binding.fabMain.isExpanded
-
-    private fun openBottomSheetToUploadFiles() {
-        val uploadBottomSheet = layoutInflater.inflate(R.layout.upload_bottom_sheet_fragment, null)
-        val dialog = BottomSheetDialog(requireContext())
-        dialog.setContentView(uploadBottomSheet)
-        val uploadFromFilesItemView: BottomSheetFragmentItemView = uploadBottomSheet.findViewById(R.id.upload_from_files_item_view)
-        val uploadFromCameraItemView: BottomSheetFragmentItemView = uploadBottomSheet.findViewById(R.id.upload_from_camera_item_view)
-        val uploadToTextView = uploadBottomSheet.findViewById<TextView>(R.id.upload_to_text_view)
-        uploadFromFilesItemView.setOnClickListener {
-            uploadActions?.uploadFromFileSystem()
-            dialog.hide()
-        }
-        uploadFromCameraItemView.setOnClickListener {
-            uploadActions?.uploadFromCamera()
-            dialog.hide()
-        }
-        uploadToTextView.text = String.format(
-            resources.getString(R.string.upload_to),
-            resources.getString(R.string.app_name)
-        )
-        val uploadBottomSheetBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(uploadBottomSheet.parent as View)
-        dialog.setOnShowListener { uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.measuredHeight) }
-        dialog.show()
-    }
 
     override fun onFolderNameSet(newFolderName: String, parentFolder: OCFile) {
         fileOperationsViewModel.performOperation(FileOperation.CreateFolder(newFolderName, parentFolder))

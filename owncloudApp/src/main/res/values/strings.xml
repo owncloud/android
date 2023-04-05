@@ -10,7 +10,6 @@
     <string name="actionbar_sync">Refresh account</string>
     <string name="actionbar_upload">Upload</string>
     <string name="actionbar_upload_from_apps">Content from other apps</string>
-    <string name="actionbar_upload_files">Files</string>
     <string name="actionbar_open_with">Open with</string>
     <string name="actionbar_open_with_read_only">Open with (read only)</string>
     <string name="actionbar_mkdir">New folder</string>
