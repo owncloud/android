@@ -656,6 +656,14 @@
   <string name="release_notes_4_0_subtitle_2">U rirenditën disa skeda</string>
   <string name="release_notes_4_0_title_3">Fund i mbulimit për Lollipop</string>
   <string name="release_notes_4_0_subtitle_3">Kjo do të jetë hedhja e fundit në qarkullim me mbulim për Android Lollipop (v5.0)</string>
+  <string name="release_notes_4_0_title_4">Përditësoni rrjedhë WebFinger</string>
+  <string name="release_notes_4_0_subtitle_4">Për shërbyes WebFinger, shërbyesi i kërkimeve do të kërkohet i pari dhe, nëse kjo s’ka sukses, do të ndiqet rrjedha e mirëfilltësimit të rregullt</string>
+  <string name="release_notes_4_0_title_5">Trajtim lejesh</string>
+  <string name="release_notes_4_0_subtitle_5">Tani, kur ka mungesë lejesh për kryerje të disa veprimeve mbi një dosje ose kartelë, këto veprime do të fshihen</string>
+  <string name="release_notes_4_0_title_6">Rregullim i ri “Administroni njoftime”</string>
+  <string name="release_notes_4_0_subtitle_6">Te rregullimet është shtuar një zë i ri, i cili ridrejton te rregullimet e njoftimeve të aplikacioneve të pajisjes</string>
+  <string name="release_notes_4_0_title_7">Ndreqje të metash të vockla dhe përmirësime</string>
+  <string name="release_notes_4_0_subtitle_7">Janë ndrequr disa të meta të cokla dhe u sollën për herë të parë përmirësime të vockla teknike për të përmirësuar punën te aplikacioni</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="open_in_web_error_generic">S’u hap dot në web</string>

@@ -658,6 +658,14 @@
   <string name="release_notes_4_0_subtitle_2">Mõnede kaartide ümberjärjestamine</string>
   <string name="release_notes_4_0_title_3">Lollipop toe lõpp</string>
   <string name="release_notes_4_0_subtitle_3">See on viimane väljalase, mis toetab Android Lollipop (v5.0) versiooni</string>
+  <string name="release_notes_4_0_title_4">WebFinger\'i voog on uuendatud</string>
+  <string name="release_notes_4_0_subtitle_4">WebFinger\'i serveri puhul saadetakse päring kõigepealt otsinguserverile ja ebaedu korral jätkatakse tavalise autentimise vooga</string>
+  <string name="release_notes_4_0_title_5">Õiguste käsitlemine</string>
+  <string name="release_notes_4_0_subtitle_5">Kui õigused osutuvad kausta või failitegevuste korral ebapiisavaks, siis vastavad tegevused peidetakse</string>
+  <string name="release_notes_4_0_title_6">Uus \"Halda teavitusi\" seadistus</string>
+  <string name="release_notes_4_0_subtitle_6">Seadetesse on lisatud uus valik, mis suunab rakenduse seadme teavituste seadetesse</string>
+  <string name="release_notes_4_0_title_7">Väiksemad veaparandused ja parendused</string>
+  <string name="release_notes_4_0_subtitle_7">Parandatud on mõned väiksemad tarkvaravead ning lisatud on väiksemad tehnilised parendused, et parandada rakenduse kasutajakogemust</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="open_in_web_error_generic">Ei saanud veebis avada</string>
