@@ -28,8 +28,6 @@ import com.owncloud.android.lib.resources.Service
 import com.owncloud.android.lib.resources.files.RemoteFile
 
 interface FileService : Service {
-    fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): RemoteOperationResult<String>
-
     fun checkPathExistence(
         path: String,
         isUserLogged: Boolean,
