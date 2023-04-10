@@ -22,6 +22,8 @@
 
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryForMimeTypeAsStreamUseCase
+import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.authentication.oauth.OIDCDiscoveryUseCase
 import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
 import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase
@@ -44,7 +46,6 @@ import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfig
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
-import com.owncloud.android.domain.files.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
 import com.owncloud.android.domain.files.usecases.CleanWorkersUUIDUseCase
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
@@ -57,9 +58,9 @@ import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCas
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
 import com.owncloud.android.domain.files.usecases.GetPersonalRootFolderForAccountUseCase
-import com.owncloud.android.domain.files.usecases.GetSharesRootFolderForAccount
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStreamUseCase
+import com.owncloud.android.domain.files.usecases.GetSharesRootFolderForAccount
 import com.owncloud.android.domain.files.usecases.GetWebDavUrlForSpaceUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
@@ -80,11 +81,11 @@ import com.owncloud.android.domain.sharing.shares.usecases.EditPublicShareAsyncU
 import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
-import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCaseAsStream
 import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
+import com.owncloud.android.domain.spaces.usecases.GetSpacesFromEveryAccountUseCaseAsStream
 import com.owncloud.android.domain.spaces.usecases.RefreshSpacesFromServerAsyncUseCase
 import com.owncloud.android.domain.transfers.usecases.ClearSuccessfulTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersAsStreamUseCase
@@ -95,8 +96,8 @@ import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
-import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
+import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
@@ -166,6 +167,10 @@ val useCaseModule = module {
     factory { CleanConflictUseCase(get()) }
     factory { SaveDownloadWorkerUUIDUseCase(get()) }
     factory { CleanWorkersUUIDUseCase(get()) }
+
+    // Open in web
+    factory { GetUrlToOpenInWebUseCase(get(), get()) }
+    factory { GetAppRegistryForMimeTypeAsStreamUseCase(get()) }
 
     // Av Offline
     factory { GetFilesAvailableOfflineFromAccountUseCase(get()) }
@@ -239,9 +244,6 @@ val useCaseModule = module {
     factory { GetPictureUploadsConfigurationStreamUseCase(get()) }
     factory { GetVideoUploadsConfigurationStreamUseCase(get()) }
 
-    // Files
-    factory { GetUrlToOpenInWebUseCase(get()) }
-
     // Accounts
-    factory { RemoveAccountUseCase(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    factory { RemoveAccountUseCase(get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 }

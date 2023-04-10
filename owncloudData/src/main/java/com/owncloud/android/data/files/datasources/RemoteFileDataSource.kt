@@ -31,8 +31,6 @@ interface RemoteFileDataSource {
         spaceWebDavUrl: String?,
     ): Boolean
 
-    fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
-
     fun copyFile(
         sourceRemotePath: String,
         targetRemotePath: String,

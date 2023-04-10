@@ -28,6 +28,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
+import com.owncloud.android.data.appregistry.db.AppRegistryDao
+import com.owncloud.android.data.appregistry.db.AppRegistryEntity
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.files.db.FileDao
@@ -58,6 +60,7 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
 
 @Database(
     entities = [
+        AppRegistryEntity::class,
         FolderBackUpEntity::class,
         OCCapabilityEntity::class,
         OCFileEntity::class,
@@ -72,11 +75,13 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
         AutoMigration(from = 36, to = 37),
         AutoMigration(from = 38, to = 39),
         AutoMigration(from = 39, to = 40, spec = AutoMigration39To40::class),
+        AutoMigration(from = 40, to = 41),
     ],
     version = ProviderMeta.DB_VERSION,
     exportSchema = true
 )
 abstract class OwncloudDatabase : RoomDatabase() {
+    abstract fun appRegistryDao(): AppRegistryDao
     abstract fun capabilityDao(): OCCapabilityDao
     abstract fun fileDao(): FileDao
     abstract fun folderBackUpDao(): FolderBackupDao

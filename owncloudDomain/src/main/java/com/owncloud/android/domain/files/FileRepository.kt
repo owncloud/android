@@ -30,7 +30,6 @@ import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 interface FileRepository {
-    fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
     fun createFolder(remotePath: String, parentFolder: OCFile)
     fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile)
     fun getFileById(fileId: Long): OCFile?

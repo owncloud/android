@@ -28,11 +28,11 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
+import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
+import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryForMimeTypeAsStreamUseCase
+import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.extensions.isOneOf
-import com.owncloud.android.domain.files.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
 import com.owncloud.android.domain.utils.Event
@@ -59,7 +59,7 @@ import java.util.UUID
 class FileDetailsViewModel(
     private val openInWebUseCase: GetUrlToOpenInWebUseCase,
     refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
-    getCapabilitiesAsLiveDataUseCase: GetCapabilitiesAsLiveDataUseCase,
+    getAppRegistryForMimeTypeAsStreamUseCase: GetAppRegistryForMimeTypeAsStreamUseCase,
     val contextProvider: ContextProvider,
     private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
     getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
@@ -74,8 +74,14 @@ class FileDetailsViewModel(
     private val _openInWebUriLiveData: MediatorLiveData<Event<UIResult<String?>>> = MediatorLiveData()
     val openInWebUriLiveData: LiveData<Event<UIResult<String?>>> = _openInWebUriLiveData
 
-    var capabilities: LiveData<OCCapability?> =
-        getCapabilitiesAsLiveDataUseCase.execute(GetCapabilitiesAsLiveDataUseCase.Params(account.name))
+    val appRegistryMimeType: StateFlow<AppRegistryMimeType?> =
+        getAppRegistryForMimeTypeAsStreamUseCase.execute(
+            GetAppRegistryForMimeTypeAsStreamUseCase.Params(accountName = account.name, ocFile.mimeType)
+        ).stateIn(
+            viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = null
+        )
 
     private val account: StateFlow<Account> = MutableStateFlow(account)
     val currentFile: StateFlow<OCFile?> =
@@ -135,14 +141,16 @@ class FileDetailsViewModel(
         }
     }
 
-    fun isOpenInWebAvailable(): Boolean = capabilities.value?.isOpenInWebAllowed() ?: false
-
-    fun openInWeb(fileId: String) {
+    fun openInWeb(fileId: String, appName: String) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
             liveData = _openInWebUriLiveData,
             useCase = openInWebUseCase,
-            useCaseParams = GetUrlToOpenInWebUseCase.Params(openWebEndpoint = capabilities.value?.filesAppProviders?.openWebUrl!!, fileId = fileId),
+            useCaseParams = GetUrlToOpenInWebUseCase.Params(
+                fileId = fileId,
+                accountName = getAccount().name,
+                appName = appName,
+            ),
             showLoading = false,
             requiresConnection = true,
         )
