@@ -27,6 +27,7 @@ import com.owncloud.android.R
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_CLIENT_ID
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_CODE_CHALLENGE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_CODE_CHALLENGE_METHOD
+import com.owncloud.android.data.authentication.QUERY_PARAMETER_PROMPT
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_REDIRECT_URI
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_RESPONSE_TYPE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_SCOPE
@@ -98,6 +99,7 @@ class OAuthUtils {
             clientId: String,
             responseType: String,
             scope: String,
+            prompt: String,
             codeChallenge: String,
             state: String,
             username: String?
@@ -107,6 +109,7 @@ class OAuthUtils {
                 appendQueryParameter(QUERY_PARAMETER_CLIENT_ID, clientId)
                 appendQueryParameter(QUERY_PARAMETER_RESPONSE_TYPE, responseType)
                 appendQueryParameter(QUERY_PARAMETER_SCOPE, scope)
+                appendQueryParameter(QUERY_PARAMETER_PROMPT, prompt)
                 appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE, codeChallenge)
                 appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE_METHOD, CODE_CHALLENGE_METHOD)
                 appendQueryParameter(QUERY_PARAMETER_STATE, state)

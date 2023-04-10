@@ -36,6 +36,7 @@
     <string name="server_url_input_visibility_configuration_feedback_ok">The URL input visibility was set correctly</string>
     <string name="allow_screenshots_configuration_feedback_ok">The preference for allowing screenshots was set correctly</string>
     <string name="oauth2_open_id_scope_configuration_feedback_ok">The OpenID Connect scope was set correctly</string>
+    <string name="oauth2_open_id_prompt_configuration_feedback_ok">The OpenID Connect prompt was set correctly</string>
 
     <!-- Spaces -->
     <string name="bottom_nav_spaces">Spaces</string>
