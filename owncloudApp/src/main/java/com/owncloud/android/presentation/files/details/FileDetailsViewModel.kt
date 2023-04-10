@@ -22,9 +22,9 @@ import android.accounts.Account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
@@ -93,7 +93,7 @@ class FileDetailsViewModel(
             )
 
     private val _ongoingTransferUUID = MutableLiveData<UUID>()
-    private val _ongoingTransfer = Transformations.switchMap(_ongoingTransferUUID) { transferUUID ->
+    private val _ongoingTransfer = _ongoingTransferUUID.switchMap { transferUUID ->
         workManager.getWorkInfoByIdLiveData(transferUUID)
     }.map { Event(it) }
     val ongoingTransfer: LiveData<Event<WorkInfo?>> = _ongoingTransfer

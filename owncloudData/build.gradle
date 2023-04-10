@@ -58,6 +58,7 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$orgJetbrainsKotlin"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$orgJetbrainsKotlinx"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidxLifecycle"
 
     // Room
     implementation "androidx.room:room-ktx:$androidxRoom"

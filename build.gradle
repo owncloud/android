@@ -7,15 +7,15 @@ buildscript {
 
         // Android jetpack
         androidxArchCore = "2.2.0"
-        androidxLifecycle = "2.5.1"
-        androidxRoom = "2.5.0"
+        androidxLifecycle = "2.6.1"
+        androidxRoom = "2.5.1"
         androidxCore = "1.9.0"
         androidxFragment = "1.5.5"
         androidxAppcompat = "1.5.1"
         androidxLegacy = "1.0.0"
 
         // Kotlin
-        orgJetbrainsKotlin = "1.8.10"
+        orgJetbrainsKotlin = "1.8.20"
         orgJetbrainsKotlinx = "1.6.4"
 
         // Koin
@@ -48,7 +48,7 @@ buildscript {
 
 plugins {
     id "org.sonarqube" version "4.0.0.2929"
-    id 'com.google.devtools.ksp' version '1.8.10-1.0.9' apply false
+    id 'com.google.devtools.ksp' version '1.8.20-1.0.10' apply false
 }
 
 allprojects {
