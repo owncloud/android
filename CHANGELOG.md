@@ -14,6 +14,7 @@ Summary
 * Enhancement - Authenticated WebFinger: [#3943](https://github.com/owncloud/android/issues/3943)
 * Enhancement - Link in drawer menu: [#3949](https://github.com/owncloud/android/pull/3949)
 * Enhancement - Send language header in all requests: [#3980](https://github.com/owncloud/android/issues/3980)
+* Enhancement - Open in specific web provider: [#3994](https://github.com/owncloud/android/issues/3994)
 * Enhancement - Updated WebFinger flow: [#3998](https://github.com/owncloud/android/issues/3998)
 
 Details
@@ -71,6 +72,18 @@ Details
    https://github.com/owncloud/android/issues/3980
    https://github.com/owncloud/android/pull/3982
    https://github.com/owncloud/android-library/pull/551
+
+* Enhancement - Open in specific web provider: [#3994](https://github.com/owncloud/android/issues/3994)
+
+   We've added the specific web app providers instead of opening the file with the default web
+   provider.
+
+   The user can open their files with any of the available specific web app providers from the
+   server. Previously, file was opened with the default one.
+
+   https://github.com/owncloud/android/issues/3994
+   https://github.com/owncloud/android/pull/3990
+   https://owncloud.dev/services/app-registry/apps/#app-registry
 
 * Enhancement - Updated WebFinger flow: [#3998](https://github.com/owncloud/android/issues/3998)
 
