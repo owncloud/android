@@ -10,6 +10,7 @@
   <string name="actionbar_upload_from_apps">来自其它应用的内容</string>
   <string name="actionbar_upload_files">文件</string>
   <string name="actionbar_open_with">打开方式</string>
+  <string name="actionbar_open_with_read_only">打开方式（只读）</string>
   <string name="actionbar_mkdir">新建文件夹</string>
   <string name="actionbar_settings">设置</string>
   <string name="actionbar_see_details">详细信息</string>
