@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -166,7 +167,10 @@ public class RemoteOperationResult<T>
         } else if (e instanceof FileNotFoundException) {
             mCode = ResultCode.LOCAL_FILE_NOT_FOUND;
 
-        } else {
+        } else if (e instanceof ProtocolException) {
+            mCode = ResultCode.NETWORK_ERROR;
+        }
+        else {
             mCode = ResultCode.UNKNOWN_ERROR;
         }
     }
@@ -589,5 +593,6 @@ public class RemoteOperationResult<T>
         SPECIFIC_METHOD_NOT_ALLOWED,
         SPECIFIC_BAD_REQUEST,
         TOO_EARLY,
+        NETWORK_ERROR,
     }
 }
