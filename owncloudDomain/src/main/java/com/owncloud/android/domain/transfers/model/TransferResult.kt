@@ -24,6 +24,7 @@ import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.ForbiddenException
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
+import com.owncloud.android.domain.exceptions.NetworkErrorException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.QuotaExceededException
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
@@ -82,6 +83,7 @@ enum class TransferResult constructor(val value: Int) {
             return when (throwable) {
                 is LocalFileNotFoundException -> FOLDER_ERROR
                 is NoConnectionWithServerException -> NETWORK_CONNECTION
+                is NetworkErrorException -> NETWORK_CONNECTION
                 is UnauthorizedException -> CREDENTIAL_ERROR
                 is FileNotFoundException -> FILE_NOT_FOUND
                 is ConflictException -> CONFLICT_ERROR

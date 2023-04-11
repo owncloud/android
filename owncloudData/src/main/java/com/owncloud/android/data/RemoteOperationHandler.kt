@@ -44,6 +44,7 @@ import com.owncloud.android.domain.exceptions.LocalStorageNotCopiedException
 import com.owncloud.android.domain.exceptions.LocalStorageNotMovedException
 import com.owncloud.android.domain.exceptions.LocalStorageNotRemovedException
 import com.owncloud.android.domain.exceptions.MoveIntoDescendantException
+import com.owncloud.android.domain.exceptions.NetworkErrorException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorAccessDeniedException
@@ -140,6 +141,7 @@ private fun <T> handleRemoteOperationResult(
         RemoteOperationResult.ResultCode.SHARE_NOT_FOUND -> throw ShareNotFoundException(remoteOperationResult.httpPhrase)
         RemoteOperationResult.ResultCode.SHARE_FORBIDDEN -> throw ShareForbiddenException(remoteOperationResult.httpPhrase)
         RemoteOperationResult.ResultCode.TOO_EARLY -> throw TooEarlyException()
+        RemoteOperationResult.ResultCode.NETWORK_ERROR -> throw NetworkErrorException()
         else -> throw Exception()
     }
 }
