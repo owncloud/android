@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Error message for protocol exception: [#3948](https://github.com/owncloud/android/issues/3948)
 * Change - Bump target SDK to 33: [#3617](https://github.com/owncloud/android/issues/3617)
 * Enhancement - Support for spaces: [#3851](https://github.com/owncloud/android/pull/3851)
 * Enhancement - Update label on Camera Uploads: [#3930](https://github.com/owncloud/android/pull/3930)
@@ -19,6 +20,15 @@ Summary
 
 Details
 -------
+
+* Bugfix - Error message for protocol exception: [#3948](https://github.com/owncloud/android/issues/3948)
+
+   Previously, when the network connection is lost while uploading a file, "Unknown error" was
+   shown. Now, we show a more specific error.
+
+   https://github.com/owncloud/android/issues/3948
+   https://github.com/owncloud/android/pull/4013
+   https://github.com/owncloud/android-library/pull/558
 
 * Change - Bump target SDK to 33: [#3617](https://github.com/owncloud/android/issues/3617)
 
