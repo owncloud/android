@@ -33,6 +33,7 @@ import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.owncloud.android.R
+import com.owncloud.android.databinding.FilesFolderPickerBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
@@ -48,19 +49,22 @@ open class FolderPickerActivity : FileActivity(),
     MainFileListFragment.FileActions {
 
     protected val mainFileListFragment: MainFileListFragment?
-        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FOLDERS) as MainFileListFragment?
+       get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FOLDERS) as MainFileListFragment?
 
     private lateinit var pickerMode: PickerMode
 
+    private  lateinit var binding : FilesFolderPickerBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("onCreate() start")
 
         super.onCreate(savedInstanceState)
 
+        binding = FilesFolderPickerBinding.inflate(layoutInflater)
         setContentView(R.layout.files_folder_picker)
 
         // Allow or disallow touches with other visible windows
-        val filesFolderPickerLayout = findViewById<LinearLayout>(R.id.filesFolderPickerLayout)
+
+        val filesFolderPickerLayout = binding.filesFolderPickerLayout
         filesFolderPickerLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
         pickerMode = intent.getSerializableExtra(EXTRA_PICKER_MODE) as PickerMode
@@ -176,7 +180,7 @@ open class FolderPickerActivity : FileActivity(),
                 file = null
                 initAndShowListOfSpaces()
                 updateToolbar(null)
-                findViewById<TextView>(R.id.folder_picker_no_permissions_message).isVisible = false
+                binding.folderPickerNoPermissionsMessage.isVisible = false
             }
         } else {
             mainFileListFragment?.onBrowseUp()
@@ -243,7 +247,8 @@ open class FolderPickerActivity : FileActivity(),
             transaction.commit()
         }
 
-        findViewById<Button>(R.id.folder_picker_btn_choose).isVisible = true
+
+        binding.folderPickerBtnChoose.isVisible = true
     }
 
     private fun initAndShowListOfSpaces() {
@@ -251,17 +256,19 @@ open class FolderPickerActivity : FileActivity(),
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, listOfSpaces)
         transaction.commit()
-        findViewById<Button>(R.id.folder_picker_btn_choose).isVisible = false
+        binding.folderPickerBtnChoose.isVisible = false
     }
 
     /**
      * Set per-view controllers
      */
     private fun initPickerListeners() {
-        findViewById<Button>(R.id.folder_picker_btn_cancel).setOnClickListener {
+
+        binding.folderPickerBtnCancel.setOnClickListener {
             finish()
         }
-        findViewById<Button>(R.id.folder_picker_btn_choose).setOnClickListener {
+
+        binding.folderPickerBtnChoose.setOnClickListener {
             val data = Intent().apply {
                 val targetFiles = intent.getParcelableArrayListExtra<OCFile>(EXTRA_FILES)
                 putExtra(EXTRA_FOLDER, getCurrentFolder())
@@ -274,7 +281,7 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     private fun setActionButtonText() {
-        findViewById<Button>(R.id.folder_picker_btn_choose).text = getString(pickerMode.toStringRes())
+        binding.folderPickerBtnChoose.text = getString(pickerMode.toStringRes())
     }
 
     private fun getCurrentFolder(): OCFile? {
@@ -315,8 +322,8 @@ open class FolderPickerActivity : FileActivity(),
 
     private fun updateButtonsVisibilityAccordingToPermissions(currentFolder: OCFile) {
         currentFolder.hasAddFilePermission.let {
-            findViewById<Button>(R.id.folder_picker_btn_choose).isVisible = it
-            findViewById<TextView>(R.id.folder_picker_no_permissions_message).isVisible = !it
+            binding.folderPickerBtnChoose.isVisible = it
+            binding.folderPickerNoPermissionsMessage.isVisible = !it
         }
     }
 
