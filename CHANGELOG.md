@@ -17,6 +17,7 @@ Summary
 * Enhancement - Send language header in all requests: [#3980](https://github.com/owncloud/android/issues/3980)
 * Enhancement - Open in specific web provider: [#3994](https://github.com/owncloud/android/issues/3994)
 * Enhancement - Updated WebFinger flow: [#3998](https://github.com/owncloud/android/issues/3998)
+* Enhancement - Add prompt parameter to OIDC flow: [#4011](https://github.com/owncloud/android/pull/4011)
 
 Details
 -------
@@ -104,6 +105,15 @@ Details
    https://github.com/owncloud/android/issues/3998
    https://github.com/owncloud/android/pull/4000
    https://github.com/owncloud/android-library/pull/555
+
+* Enhancement - Add prompt parameter to OIDC flow: [#4011](https://github.com/owncloud/android/pull/4011)
+
+   Added prompt parameter to the authorization request in case OIDC is supported. By default,
+   select_account will be sent. It can be changed via branding or MDM.
+
+   https://github.com/owncloud/android/issues/3862
+   https://github.com/owncloud/android/issues/3984
+   https://github.com/owncloud/android/pull/4011
 
 Changelog for ownCloud Android Client [3.0.4] (2023-03-07)
 =======================================
