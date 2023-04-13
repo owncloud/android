@@ -36,6 +36,7 @@ import com.owncloud.android.domain.exceptions.InvalidOverwriteException
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
 import com.owncloud.android.domain.exceptions.MoveIntoDescendantException
 import com.owncloud.android.domain.exceptions.MoveIntoSameFolderException
+import com.owncloud.android.domain.exceptions.NetworkErrorException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorAccessDeniedException
@@ -99,6 +100,7 @@ fun Throwable.parseError(
             is ServiceUnavailableException -> resources.getString(R.string.service_unavailable)
             is SpecificForbiddenException -> resources.getString(R.string.uploads_view_upload_status_failed_permission_error)
             is UnauthorizedException -> resources.getString(R.string.auth_unauthorized)
+            is NetworkErrorException -> resources.getString(R.string.network_error_message)
             else -> resources.getString(R.string.common_error_unknown)
         }
 
