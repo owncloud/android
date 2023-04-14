@@ -10,6 +10,7 @@
   <string name="actionbar_upload_from_apps">תוכן מיישומים אחרים</string>
   <string name="actionbar_upload_files">קבצים</string>
   <string name="actionbar_open_with">פתיחה על בסיס</string>
+  <string name="actionbar_open_with_read_only">פתיחה עם (קריאה בלבד)</string>
   <string name="actionbar_mkdir">תיקייה חדשה</string>
   <string name="actionbar_settings">הגדרות</string>
   <string name="actionbar_see_details">פרטים</string>
@@ -33,6 +34,7 @@
   <string name="prefs_subsection_logging">התחברות</string>
   <string name="prefs_subsection_more">יותר</string>
   <string name="prefs_subsection_security">אבטחה</string>
+  <string name="prefs_subsection_whatsnew">מה חדש בגרסה העדכנית ביותר?</string>
   <string name="prefs_accounts">חשבונות</string>
   <string name="prefs_manage_accounts">ניהול חשבונות</string>
   <string name="prefs_passcode">נעילת סיסמא</string>
@@ -56,7 +58,10 @@
   <string name="prefs_camera_video_upload_path_title">נתיב להעלאת סרטונים</string>
   <string name="prefs_camera_video_upload_on_wifi">העלאת סרטים על בסיס חיבור wifi בלבד</string>
   <string name="prefs_subsection_advanced">מתקדם</string>
+  <string name="prefs_subsection_notifications">ניהול התראות</string>
   <string name="prefs_show_hidden_files">הצגת קבצים נסתרים</string>
+  <string name="prefs_log_open_logs_list_view">קובצי יומנים</string>
+  <string name="prefs_log_no_logs_list_view">תיקיית היומנים ריקה!</string>
   <string name="prefs_log_title">מאפשר התחברות</string>
   <string name="prefs_log_summary">משמש לתיעוד בעיות</string>
   <string name="prefs_log_title_history">הסטורית התחברות</string>
@@ -74,6 +79,7 @@
   <string name="prefs_enable_logging">מאפשר התחברות</string>
   <string name="prefs_enable_logging_summary">כאשר מופעל, יומני תיעוד עלולים להשפיע על הביצועים ולכלול מידע רגיש. עם זאת, היומנים אינם כפופים להגשה אוטומטית לשרתים של ownCloud. שיתוף יומנים עם אחרים הנו באחריות הבלעדית של המשתמש.</string>
   <string name="prefs_send_feedback">שליחת משוב</string>
+  <string name="prefs_app_version">גרסת היישומון</string>
   <string name="pattern_enter_pattern">נא להזין את התבנית שלך</string>
   <string name="pattern_configure_pattern">נא להזין את התבנית שלך</string>
   <string name="pattern_remove_pattern">הסרת התבנית שלך</string>
@@ -143,6 +149,7 @@
   <string name="filedetails_created">מועד היצירה:</string>
   <string name="filedetails_modified">מועד השינוי:</string>
   <string name="filedetails_download">הורדה</string>
+  <string name="filedetails_file_image_content_description">קובץ תמונה</string>
   <string name="filedetails_sync_file">סנכרון</string>
   <string name="filedetails_renamed_in_upload_msg">שם הקובץ השתנה ל־ %1$s במהלך ההעלאה</string>
   <string name="list_layout">תצורת רשימה</string>
