@@ -51,7 +51,8 @@ open class FolderPickerActivity : FileActivity(),
     private lateinit var pickerMode: PickerMode
 
     private lateinit var binding: FilesFolderPickerBinding
-    override fun onCreate(savedInstanceState:Bundle?) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("onCreate() start")
 
         super.onCreate(savedInstanceState)
@@ -60,7 +61,6 @@ open class FolderPickerActivity : FileActivity(),
         setContentView(binding.root)
 
         // Allow or disallow touches with other visible windows
-
         binding.filesFolderPickerLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
         pickerMode = intent.getSerializableExtra(EXTRA_PICKER_MODE) as PickerMode
