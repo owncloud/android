@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Error message for protocol exception: [#3948](https://github.com/owncloud/android/issues/3948)
 * Change - Bump target SDK to 33: [#3617](https://github.com/owncloud/android/issues/3617)
 * Enhancement - Support for spaces: [#3851](https://github.com/owncloud/android/pull/3851)
 * Enhancement - Update label on Camera Uploads: [#3930](https://github.com/owncloud/android/pull/3930)
@@ -16,9 +17,19 @@ Summary
 * Enhancement - Send language header in all requests: [#3980](https://github.com/owncloud/android/issues/3980)
 * Enhancement - Open in specific web provider: [#3994](https://github.com/owncloud/android/issues/3994)
 * Enhancement - Updated WebFinger flow: [#3998](https://github.com/owncloud/android/issues/3998)
+* Enhancement - Add prompt parameter to OIDC flow: [#4011](https://github.com/owncloud/android/pull/4011)
 
 Details
 -------
+
+* Bugfix - Error message for protocol exception: [#3948](https://github.com/owncloud/android/issues/3948)
+
+   Previously, when the network connection is lost while uploading a file, "Unknown error" was
+   shown. Now, we show a more specific error.
+
+   https://github.com/owncloud/android/issues/3948
+   https://github.com/owncloud/android/pull/4013
+   https://github.com/owncloud/android-library/pull/558
 
 * Change - Bump target SDK to 33: [#3617](https://github.com/owncloud/android/issues/3617)
 
@@ -94,6 +105,15 @@ Details
    https://github.com/owncloud/android/issues/3998
    https://github.com/owncloud/android/pull/4000
    https://github.com/owncloud/android-library/pull/555
+
+* Enhancement - Add prompt parameter to OIDC flow: [#4011](https://github.com/owncloud/android/pull/4011)
+
+   Added prompt parameter to the authorization request in case OIDC is supported. By default,
+   select_account will be sent. It can be changed via branding or MDM.
+
+   https://github.com/owncloud/android/issues/3862
+   https://github.com/owncloud/android/issues/3984
+   https://github.com/owncloud/android/pull/4011
 
 Changelog for ownCloud Android Client [3.0.4] (2023-03-07)
 =======================================

@@ -475,6 +475,7 @@
     <string name="network_error_socket_timeout_exception">The server took too long to respond</string>
     <string name="network_error_connect_timeout_exception">The server took too long to connect</string>
     <string name="network_host_not_available">Server could not be reached</string>
+    <string name="network_error_message">An error occurred in the network</string>
 
     <string name="forbidden_permissions">You do not have permission %s</string>
 

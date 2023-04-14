@@ -1,0 +1,8 @@
+Bugfix: Error message for protocol exception
+
+Previously, when the network connection is lost while uploading a file, "Unknown error" was
+shown. Now, we show a more specific error.
+
+https://github.com/owncloud/android/issues/3948
+https://github.com/owncloud/android/pull/4013
+https://github.com/owncloud/android-library/pull/558

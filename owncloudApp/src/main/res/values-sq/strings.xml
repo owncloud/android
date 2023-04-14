@@ -666,6 +666,7 @@
   <string name="release_notes_4_0_subtitle_7">Janë ndrequr disa të meta të cokla dhe u sollën për herë të parë përmirësime të vockla teknike për të përmirësuar punën te aplikacioni</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
+  <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
   <string name="open_in_web_error_generic">S’u hap dot në web</string>
   <string name="open_in_web_error_not_supported">s’ka aplikacione që e mbulojnë këtë lloj kartele</string>
   <string name="open_in_web_error_too_early">Kartela e kërkuar s’është ende e passhme, ju lutemi, riprovoni më vonë</string>

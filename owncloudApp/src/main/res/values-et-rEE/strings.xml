@@ -668,6 +668,7 @@
   <string name="release_notes_4_0_subtitle_7">Parandatud on mõned väiksemad tarkvaravead ning lisatud on väiksemad tehnilised parendused, et parandada rakenduse kasutajakogemust</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
+  <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
   <string name="open_in_web_error_generic">Ei saanud veebis avada</string>
   <string name="open_in_web_error_not_supported">seda failitüüpi toetavaid rakendusi ei ole</string>
   <string name="open_in_web_error_too_early">Nõutud fail ei ole veel saadaval, palun proovige hiljem uuesti</string>
