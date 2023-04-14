@@ -27,9 +27,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.owncloud.android.R
@@ -49,23 +46,22 @@ open class FolderPickerActivity : FileActivity(),
     MainFileListFragment.FileActions {
 
     protected val mainFileListFragment: MainFileListFragment?
-       get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FOLDERS) as MainFileListFragment?
+        get() = supportFragmentManager.findFragmentByTag(TAG_LIST_OF_FOLDERS) as MainFileListFragment?
 
     private lateinit var pickerMode: PickerMode
 
-    private  lateinit var binding : FilesFolderPickerBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private lateinit var binding: FilesFolderPickerBinding
+    override fun onCreate(savedInstanceState:Bundle?) {
         Timber.d("onCreate() start")
 
         super.onCreate(savedInstanceState)
 
         binding = FilesFolderPickerBinding.inflate(layoutInflater)
-        setContentView(R.layout.files_folder_picker)
+        setContentView(binding.root)
 
         // Allow or disallow touches with other visible windows
 
-        val filesFolderPickerLayout = binding.filesFolderPickerLayout
-        filesFolderPickerLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+        binding.filesFolderPickerLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
         pickerMode = intent.getSerializableExtra(EXTRA_PICKER_MODE) as PickerMode
 
@@ -293,7 +289,8 @@ open class FolderPickerActivity : FileActivity(),
 
     private fun updateToolbar(chosenFileFromParam: OCFile?, space: OCSpace? = null) {
         val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
-        val isRootFromPersonalInCopyMode = chosenFile != null && chosenFile.remotePath == OCFile.ROOT_PATH && space?.isProject == false && pickerMode == PickerMode.COPY
+        val isRootFromPersonalInCopyMode =
+            chosenFile != null && chosenFile.remotePath == OCFile.ROOT_PATH && space?.isProject == false && pickerMode == PickerMode.COPY
         val isRootFromPersonal = chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))
         val isRootFromProject = space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH
 
