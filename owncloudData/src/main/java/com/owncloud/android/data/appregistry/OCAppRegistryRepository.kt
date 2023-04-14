@@ -2,6 +2,8 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.appregistry
 
 import com.owncloud.android.data.appregistry.datasources.LocalAppRegistryDataSource
@@ -43,5 +46,18 @@ class OCAppRegistryRepository(
             openWebEndpoint = openWebEndpoint,
             fileId = fileId,
             appName = appName,
+        )
+
+    override fun createFileWithAppProvider(
+        accountName: String,
+        createFileWithAppProviderEndpoint: String,
+        parentContainerId: String,
+        filename: String,
+    ): String =
+        remoteAppRegistryDataSource.createFileWithAppProvider(
+            accountName = accountName,
+            createFileWithAppProviderEndpoint = createFileWithAppProviderEndpoint,
+            parentContainerId = parentContainerId,
+            filename = filename,
         )
 }

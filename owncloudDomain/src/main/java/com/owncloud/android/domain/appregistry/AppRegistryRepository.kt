@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -29,4 +30,6 @@ interface AppRegistryRepository {
     fun getAppRegistryForMimeTypeAsStream(accountName: String, mimeType: String): Flow<AppRegistryMimeType?>
 
     fun getUrlToOpenInWeb(accountName: String, openWebEndpoint: String, fileId: String, appName: String): String
+
+    fun createFileWithAppProvider(accountName: String, createFileWithAppProviderEndpoint: String, parentContainerId: String, filename: String): String
 }
