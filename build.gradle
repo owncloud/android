@@ -10,7 +10,7 @@ buildscript {
         androidxLifecycle = "2.5.1"
         androidxRoom = "2.5.1"
         androidxCore = "1.9.0"
-        androidxFragment = "1.5.5"
+        androidxFragment = "1.5.6"
         androidxAppcompat = "1.5.1"
         androidxLegacy = "1.0.0"
 
