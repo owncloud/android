@@ -20,10 +20,12 @@
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  */
+
 package com.owncloud.android.lib.resources.appregistry.services
 
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.lib.resources.appregistry.CreateRemoteFileWithAppProviderOperation
 import com.owncloud.android.lib.resources.appregistry.GetRemoteAppRegistryOperation
 import com.owncloud.android.lib.resources.appregistry.GetUrlToOpenInWebRemoteOperation
 import com.owncloud.android.lib.resources.appregistry.responses.AppRegistryResponse
@@ -37,5 +39,16 @@ class OCAppRegistryService(override val client: OwnCloudClient) : AppRegistrySer
             openWithWebEndpoint = openWebEndpoint,
             fileId = fileId,
             appName = appName
+        ).execute(client)
+
+    override fun createFileWithAppProvider(
+        createFileWithAppProviderEndpoint: String,
+        parentContainerId: String,
+        filename: String
+    ): RemoteOperationResult<String> =
+        CreateRemoteFileWithAppProviderOperation(
+            createFileWithAppProviderEndpoint = createFileWithAppProviderEndpoint,
+            parentContainerId = parentContainerId,
+            filename = filename,
         ).execute(client)
 }

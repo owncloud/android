@@ -20,6 +20,7 @@
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  */
+
 package com.owncloud.android.lib.resources.appregistry.services
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
@@ -33,5 +34,11 @@ interface AppRegistryService : Service {
         openWebEndpoint: String,
         fileId: String,
         appName: String,
+    ): RemoteOperationResult<String>
+
+    fun createFileWithAppProvider(
+        createFileWithAppProviderEndpoint: String,
+        parentContainerId: String,
+        filename: String,
     ): RemoteOperationResult<String>
 }
