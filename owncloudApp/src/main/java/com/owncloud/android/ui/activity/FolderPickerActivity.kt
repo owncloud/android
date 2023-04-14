@@ -27,12 +27,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import com.owncloud.android.R
+import com.owncloud.android.databinding.FilesFolderPickerBinding
 import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
@@ -52,16 +50,18 @@ open class FolderPickerActivity : FileActivity(),
 
     private lateinit var pickerMode: PickerMode
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    private lateinit var binding: FilesFolderPickerBinding
+    override fun onCreate(savedInstanceState:Bundle?) {
         Timber.d("onCreate() start")
 
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.files_folder_picker)
+        binding = FilesFolderPickerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Allow or disallow touches with other visible windows
-        val filesFolderPickerLayout = findViewById<LinearLayout>(R.id.filesFolderPickerLayout)
-        filesFolderPickerLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
+
+        binding.filesFolderPickerLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(this)
 
         pickerMode = intent.getSerializableExtra(EXTRA_PICKER_MODE) as PickerMode
 
@@ -176,7 +176,7 @@ open class FolderPickerActivity : FileActivity(),
                 file = null
                 initAndShowListOfSpaces()
                 updateToolbar(null)
-                findViewById<TextView>(R.id.folder_picker_no_permissions_message).isVisible = false
+                binding.folderPickerNoPermissionsMessage.isVisible = false
             }
         } else {
             mainFileListFragment?.onBrowseUp()
@@ -243,7 +243,8 @@ open class FolderPickerActivity : FileActivity(),
             transaction.commit()
         }
 
-        findViewById<Button>(R.id.folder_picker_btn_choose).isVisible = true
+
+        binding.folderPickerBtnChoose.isVisible = true
     }
 
     private fun initAndShowListOfSpaces() {
@@ -251,17 +252,19 @@ open class FolderPickerActivity : FileActivity(),
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, listOfSpaces)
         transaction.commit()
-        findViewById<Button>(R.id.folder_picker_btn_choose).isVisible = false
+        binding.folderPickerBtnChoose.isVisible = false
     }
 
     /**
      * Set per-view controllers
      */
     private fun initPickerListeners() {
-        findViewById<Button>(R.id.folder_picker_btn_cancel).setOnClickListener {
+
+        binding.folderPickerBtnCancel.setOnClickListener {
             finish()
         }
-        findViewById<Button>(R.id.folder_picker_btn_choose).setOnClickListener {
+
+        binding.folderPickerBtnChoose.setOnClickListener {
             val data = Intent().apply {
                 val targetFiles = intent.getParcelableArrayListExtra<OCFile>(EXTRA_FILES)
                 putExtra(EXTRA_FOLDER, getCurrentFolder())
@@ -274,7 +277,7 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     private fun setActionButtonText() {
-        findViewById<Button>(R.id.folder_picker_btn_choose).text = getString(pickerMode.toStringRes())
+        binding.folderPickerBtnChoose.text = getString(pickerMode.toStringRes())
     }
 
     private fun getCurrentFolder(): OCFile? {
@@ -286,7 +289,8 @@ open class FolderPickerActivity : FileActivity(),
 
     private fun updateToolbar(chosenFileFromParam: OCFile?, space: OCSpace? = null) {
         val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
-        val isRootFromPersonalInCopyMode = chosenFile != null && chosenFile.remotePath == OCFile.ROOT_PATH && space?.isProject == false && pickerMode == PickerMode.COPY
+        val isRootFromPersonalInCopyMode =
+            chosenFile != null && chosenFile.remotePath == OCFile.ROOT_PATH && space?.isProject == false && pickerMode == PickerMode.COPY
         val isRootFromPersonal = chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))
         val isRootFromProject = space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH
 
@@ -315,8 +319,8 @@ open class FolderPickerActivity : FileActivity(),
 
     private fun updateButtonsVisibilityAccordingToPermissions(currentFolder: OCFile) {
         currentFolder.hasAddFilePermission.let {
-            findViewById<Button>(R.id.folder_picker_btn_choose).isVisible = it
-            findViewById<TextView>(R.id.folder_picker_no_permissions_message).isVisible = !it
+            binding.folderPickerBtnChoose.isVisible = it
+            binding.folderPickerNoPermissionsMessage.isVisible = !it
         }
     }
 
