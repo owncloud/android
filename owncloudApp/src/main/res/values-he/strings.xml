@@ -35,6 +35,7 @@
   <string name="prefs_subsection_more">יותר</string>
   <string name="prefs_subsection_security">אבטחה</string>
   <string name="prefs_subsection_whatsnew">מה חדש בגרסה העדכנית ביותר?</string>
+  <string name="prefs_subsection_more_summary">מידע על היישומון, משוב ועוד</string>
   <string name="prefs_accounts">חשבונות</string>
   <string name="prefs_manage_accounts">ניהול חשבונות</string>
   <string name="prefs_passcode">נעילת סיסמא</string>
@@ -45,13 +46,19 @@
   <string name="prefs_lock_application_entries_1minute">אחרי דקה אחת</string>
   <string name="prefs_lock_application_entries_5minutes">אחרי 5 דקות</string>
   <string name="prefs_lock_application_entries_30minutes">אחרי 30 דקות</string>
+  <string name="prefs_lock_access_from_document_provider">נעילת גישה מספק המסמך</string>
   <string name="prefs_touches_with_other_visible_windows">נוגע בחלונות גלויים אחרים</string>
   <string name="prefs_touches_with_other_visible_windows_summary">מאפשר מגע כאשר התצוגה מוסתרת על ידי חלון גלוי אחר. יש לאפשר זאת לשימוש ביישומי סינון קלים.</string>
   <string name="confirmation_touches_with_other_windows_title">האם באמת לאפשר תכונה זו?</string>
   <string name="confirmation_touches_with_other_windows_message">יש לשתמש בתכונה זו באחריותך הבלבדית, יישום זדוני יכול לנסות לגרום לך לבצע כמה פעולות, לא רצוניות, באמצעות תצוגות אחרות.</string>
+  <string name="prefs_subsection_picture_uploads">העלאת תמונות אוטומטית</string>
+  <string name="prefs_subsection_picture_uploads_summary">ניהול מיקום והתנהגות של התמונות שמועלות אוטומטית</string>
+  <string name="prefs_subsection_video_uploads">העלאת סרטונים אוטומטית</string>
+  <string name="prefs_subsection_video_uploads_summary">ניהול מיקום והתנהגות של הסרטונים שמועלים אוטומטית</string>
   <string name="prefs_camera_picture_upload">העלאת תמונות</string>
   <string name="prefs_camera_picture_upload_summary">העלאת תמונות שצולמו במצלמה באופן אוטומטי</string>
   <string name="prefs_camera_picture_upload_path_title">נתיב העלאת תמונות</string>
+  <string name="prefs_camera_picture_upload_conditions_title">תנאים לביצוע ההעלאות</string>
   <string name="prefs_camera_picture_upload_on_wifi">העלאת תמונות על בסיס חיבור wifi בלבד</string>
   <string name="prefs_camera_video_upload">העלאת סרטונים</string>
   <string name="prefs_camera_video_upload_summary">העלאת סרטונים שהוקלטו במצלמה</string>
@@ -90,6 +97,7 @@
   <string name="passcode_already_set">לא ניתן להפעיל נעילת קוד ותבנית בו זמנית, נא להשבית את הקוד תחילה</string>
   <string name="pattern_no_longer_required">לא תופיע עוד בקשה עם תבנית</string>
   <string name="pattern_configure_your_pattern_explanation">תופיע בקשה לאימות תבנית עם כל הפעלה של היישומון</string>
+  <string name="document_provider_locked">נעול</string>
   <string name="illegal_argument_exception_message">פעולה חוקית נדרשת להעברה</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">קבצים</string>
@@ -130,13 +138,16 @@
   <string name="file_list_empty_title_all_files">אין כאן קבצים</string>
   <string name="file_list_empty_title_shared_by_links">אין קישורים משותפים</string>
   <string name="file_list_empty_subtitle_all_files">יש להעלות קצת תוכן או לסנכרן עם ההתקנים שלך!</string>
+  <string name="shares_list_empty_title">אין שיתופים</string>
   <string name="file_list_empty_subtitle_shared_by_links">קבצים ותיקיות ששיתפת עם קישור יוצגו כאן</string>
   <string name="file_list_loading">בטעינה …</string>
   <string name="file_list_no_app_for_file_type">לא נמצא יישום לסוג קובץ</string>
+  <string name="file_list_no_app_for_perform_action">לא נמצא יישומון למשימה הזאת</string>
   <string name="local_file_list_empty">אין קבצים בתיקייה זו:</string>
   <string name="local_file_list_empty_just_folders">אין תיקיות משנה בתיקייה זו.</string>
   <string name="local_file_list_search_with_no_matches">אין התאמות לחיפוש זה</string>
   <string name="upload_list_empty">אין העלאות זמינות.</string>
+  <string name="upload_list_empty_subtitle">יש להעלות משהו והוא יופיע כאן</string>
   <string name="file_list_folder">תקיה</string>
   <string name="file_list_folders">תקיות</string>
   <string name="file_list_file">קובץ</string>
@@ -150,10 +161,12 @@
   <string name="filedetails_modified">מועד השינוי:</string>
   <string name="filedetails_download">הורדה</string>
   <string name="filedetails_file_image_content_description">קובץ תמונה</string>
+  <string name="filedetails_cancel_btn_content_description">כפתור ביטול הורדה</string>
   <string name="filedetails_sync_file">סנכרון</string>
   <string name="filedetails_renamed_in_upload_msg">שם הקובץ השתנה ל־ %1$s במהלך ההעלאה</string>
   <string name="list_layout">תצורת רשימה</string>
   <string name="action_share">שיתוף</string>
+  <string name="login_account_preparing">החשבון בהכנות להשקה הראשונה</string>
   <string name="common_yes">כן</string>
   <string name="common_no">לא</string>
   <string name="common_remove_upload">הסרת העלאה</string>
@@ -185,6 +198,9 @@
   <string name="uploader_upload_text_dialog_filename_error_length_max">שדה שם קובץ אינו יכול להכיל יותר מ- %d תווים</string>
   <string name="uploader_upload_text_filename_hint">שם קובץ</string>
   <string name="uploader_upload_camera_upload_files">מעלה קובצי מצלמה</string>
+  <string name="uploader_upload_picture_upload_files">%d תמונות חדשות יועלו</string>
+  <string name="uploader_upload_video_upload_files">%d סרטונים חדשים יועלו</string>
+  <string name="uploader_upload_camera_upload_source_path_error">העלאות המצלמה נכשלו</string>
   <string name="uploader_upload_available_offline_files">מעלה קבצים לא מקוונים זמינים</string>
   <string name="uploader_upload_requested_from_wifi_files">העלאה נדרשה מקובצי wifi</string>
   <string name="ssl_certificate_not_trusted">תעודת השרת אינה מהימנה</string>
@@ -192,6 +208,7 @@
   <string name="uploads_view_group_current_uploads">נוכחי</string>
   <string name="uploads_view_group_failed_uploads">נכשל (יש להקיש לניסיון נוסף)</string>
   <string name="uploads_view_group_finished_uploads">הועלה</string>
+  <string name="uploads_view_group_queued_uploads">בתור</string>
   <string name="uploads_view_group_file_count">%dקבצים</string>
   <string name="uploads_view_group_file_count_single">%dקובץ</string>
   <string name="uploads_view_upload_status_succeeded">הושלם</string>
@@ -209,6 +226,7 @@
   <string name="uploads_view_upload_status_service_interrupted">יישום הופסק</string>
   <string name="uploads_view_upload_status_unknown_fail">שגיאה בלתי ידועה</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">מחכה לחיבור WiFi</string>
+  <string name="uploads_view_upload_status_queued">בתור</string>
   <string name="uploads_view_later_waiting_to_upload">ממתין להעלאה</string>
   <string name="uploads_view_unsupported_media_type">סוג מדיה לא נתמך</string>
   <string name="downloader_download_in_progress_ticker">מוריד...</string>
@@ -237,6 +255,8 @@
   <string name="pass_code_remove_your_pass_code">יש להסיר את הקוד שלך</string>
   <string name="pass_code_mismatch">הקודים אינם זהים</string>
   <string name="pass_code_wrong">קוד שגוי</string>
+  <string name="numberkeyboard_backspace_button_content_description">כפתור מחיקה (Backspace)</string>
+  <string name="numberkeyboard_biometric_button_content_description">כפתור ביומטרי</string>
   <string name="numberkeyboard_five">5</string>
   <string name="biometric_not_enrolled">יש לרשום לפחות מנגנון ביומטרי אחד לשימוש בתכונה זו</string>
   <string name="biometric_prompt_title">התחברות ביומטרית</string>
