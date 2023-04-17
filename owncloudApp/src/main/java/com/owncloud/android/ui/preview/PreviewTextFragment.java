@@ -48,6 +48,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.PreferenceUtils;
+import io.noties.markwon.Markwon;
 import timber.log.Timber;
 
 import java.io.BufferedWriter;
@@ -180,7 +181,7 @@ public class PreviewTextFragment extends FileFragment {
 
     private void loadAndShowTextPreview() {
         mTextLoadTask = new TextLoadAsyncTask(new WeakReference<>(mTextPreview));
-        mTextLoadTask.execute(getFile().getStoragePath());
+        mTextLoadTask.execute(getFile());
     }
 
     /**
@@ -189,6 +190,7 @@ public class PreviewTextFragment extends FileFragment {
     private class TextLoadAsyncTask extends AsyncTask<Object, Void, StringWriter> {
         private final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
         private final WeakReference<TextView> mTextViewReference;
+        private String mimeType;
 
         private TextLoadAsyncTask(WeakReference<TextView> textView) {
             mTextViewReference = textView;
@@ -205,7 +207,9 @@ public class PreviewTextFragment extends FileFragment {
                 throw new IllegalArgumentException("The parameter to " + TextLoadAsyncTask.class.getName() + " must " +
                         "be (1) the file location");
             }
-            final String location = (String) params[0];
+            final OCFile file = (OCFile) params[0];
+            final String location = file.getStoragePath();
+            mimeType = file.getMimeType();
 
             FileInputStream inputStream = null;
             Scanner sc = null;
@@ -247,7 +251,13 @@ public class PreviewTextFragment extends FileFragment {
             final TextView textView = mTextViewReference.get();
 
             if (textView != null) {
-                textView.setText(new String(stringWriter.getBuffer()));
+                String text = new String(stringWriter.getBuffer());
+                if (mimeType.equals("text/markdown")) {
+                    Markwon markwon = Markwon.create(textView.getContext());
+                    markwon.setMarkdown(textView, text);
+                } else {
+                    textView.setText(text);
+                }
                 textView.setVisibility(View.VISIBLE);
             }
 
