@@ -83,7 +83,7 @@ object ViewModelExt : KoinComponent {
         coroutineDispatcher: CoroutineDispatcher,
         requiresConnection: Boolean = true,
         showLoading: Boolean = false,
-        flow: MutableStateFlow<Event<UIResult<T>>>,
+        flow: MutableStateFlow<Event<UIResult<T>>?>,
         useCase: BaseUseCaseWithResult<T, Params>,
         useCaseParams: Params,
         postSuccess: Boolean = true,
