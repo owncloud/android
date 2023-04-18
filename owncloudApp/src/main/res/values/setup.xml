@@ -86,7 +86,7 @@
     <string name="oauth2_redirect_uri_scheme">oc</string>
     <string name="oauth2_redirect_uri_path">android.owncloud.com</string>
     <string name="oauth2_openid_scope">openid offline_access email profile</string>
-    <string name="oauth2_openid_prompt">select_account</string>
+    <string name="oauth2_openid_prompt">select_account consent</string>
 
     <!-- values that should be provided by ownCloud server -->
 
