@@ -32,11 +32,13 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -374,11 +376,13 @@ class MainFileListFragment : Fragment(),
             toggleFabVisibility(true)
             if (!currentFolder.hasAddFilePermission) {
                 binding.fabUpload.isVisible = false
+                binding.fabNewfile.isVisible = false
             } else if (!currentFolder.hasAddSubdirectoriesPermission) {
                 binding.fabMkdir.isVisible = false
             }
             registerFabUploadListener()
             registerFabMkDirListener()
+            registerFabNewFileListener()
         }
     }
 
@@ -397,7 +401,17 @@ class MainFileListFragment : Fragment(),
     }
 
     /**
-     * Registers [android.view.View.OnClickListener] on the 'Create Dir' mini FAB for the linked action.
+     * Registers [android.view.View.OnClickListener] on the 'Upload' mini FAB for the linked action.
+     */
+    private fun registerFabUploadListener() {
+        binding.fabUpload.setOnClickListener {
+            openBottomSheetToUploadFiles()
+            collapseFab()
+        }
+    }
+
+    /**
+     * Registers [android.view.View.OnClickListener] on the 'New folder' mini FAB for the linked action.
      */
     private fun registerFabMkDirListener() {
         binding.fabMkdir.setOnClickListener {
@@ -408,11 +422,11 @@ class MainFileListFragment : Fragment(),
     }
 
     /**
-     * Registers [android.view.View.OnClickListener] on the 'Uplodd' mini FAB for the linked action.
+     * Registers [android.view.View.OnClickListener] on the 'New document' mini FAB for the linked action.
      */
-    private fun registerFabUploadListener() {
-        binding.fabUpload.setOnClickListener {
-            openBottomSheetToUploadFiles()
+    private fun registerFabNewFileListener() {
+        binding.fabNewfile.setOnClickListener {
+            openBottomSheetToCreateNewFile()
             collapseFab()
         }
     }
@@ -444,6 +458,26 @@ class MainFileListFragment : Fragment(),
         )
         val uploadBottomSheetBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(uploadBottomSheet.parent as View)
         dialog.setOnShowListener { uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.measuredHeight) }
+        dialog.show()
+    }
+
+    private fun openBottomSheetToCreateNewFile() {
+        val newFileBottomSheet = layoutInflater.inflate(R.layout.newfile_bottom_sheet_fragment, null)
+        val dialog = BottomSheetDialog(requireContext())
+        dialog.setContentView(newFileBottomSheet)
+        val docTypesBottomSheetLayout = newFileBottomSheet.findViewById<LinearLayout>(R.id.doc_types_bottom_sheet_layout)
+        listOf("A", "B", "C").forEach {
+            val documentTypeItemView = BottomSheetFragmentItemView(requireContext())
+            documentTypeItemView.title = it
+            documentTypeItemView.itemIcon = ResourcesCompat.getDrawable(resources, R.drawable.file, null)
+            documentTypeItemView.setOnClickListener {
+                dialog.hide()
+            }
+            docTypesBottomSheetLayout.addView(documentTypeItemView)
+        }
+
+        val newFileBottomSheetBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(newFileBottomSheet.parent as View)
+        dialog.setOnShowListener { newFileBottomSheetBehavior.setPeekHeight(newFileBottomSheet.measuredHeight) }
         dialog.show()
     }
 

@@ -19,6 +19,7 @@
     <string name="actionbar_send_file">Send</string>
     <string name="actionbar_descending">Descending</string>
     <string name="actionbar_sort_title">Sort by</string>
+    <string name="fab_new_file">New document</string>
     <string name="drawer_item_all_files">All files</string>
     <string name="drawer_item_only_available_offline">Available offline</string>
     <string name="drawer_item_shared_by_link_files">Shared by link</string>
@@ -175,6 +176,7 @@
     <string name="file_list_files">files</string>
     <string name="filedetails_select_file">Tap on a file to display additional information.</string>
     <string name="upload_to">Upload to %1$s</string>
+    <string name="pick_document_type">Pick a document type to create:</string>
     <string name="upload_files_title"> Files </string>
     <string name="filedetails_size">Size:</string>
     <string name="filedetails_type">Type:</string>
