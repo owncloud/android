@@ -21,6 +21,9 @@ buildscript {
         // Koin
         ioInsertKoin = "3.3.3"
 
+        // Markwon
+        markwon = "4.6.2"
+
         // Moshi
         comSquareupMoshi = '1.14.0'
 

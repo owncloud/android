@@ -55,7 +55,13 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer:2.16.1"
     implementation "com.google.android.material:material:1.8.0"
     implementation "com.jakewharton:disklrucache:2.0.2"
-    implementation "io.noties.markwon:core:4.6.2"
+
+    // Markdown Preview
+    implementation "io.noties.markwon:core:$markwon"
+    implementation "io.noties.markwon:ext-tables:$markwon"
+    implementation "io.noties.markwon:ext-strikethrough:$markwon"
+    implementation "io.noties.markwon:ext-tasklist:$markwon"
+    implementation "io.noties.markwon:html:$markwon"
 
     // Tests
     testImplementation project(":owncloudTestUtil")

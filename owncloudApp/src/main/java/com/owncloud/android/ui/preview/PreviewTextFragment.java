@@ -21,6 +21,7 @@
 package com.owncloud.android.ui.preview;
 
 import android.accounts.Account;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -49,6 +50,10 @@ import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.PreferenceUtils;
 import io.noties.markwon.Markwon;
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.ext.tables.TablePlugin;
+import io.noties.markwon.ext.tasklist.TaskListPlugin;
+import io.noties.markwon.html.HtmlPlugin;
 import timber.log.Timber;
 
 import java.io.BufferedWriter;
@@ -253,7 +258,14 @@ public class PreviewTextFragment extends FileFragment {
             if (textView != null) {
                 String text = new String(stringWriter.getBuffer());
                 if (mimeType.equals("text/markdown")) {
-                    Markwon markwon = Markwon.create(textView.getContext());
+                    Context context = textView.getContext();
+                    Markwon markwon = Markwon
+                            .builder(context)
+                            .usePlugin(TablePlugin.create(context))
+                            .usePlugin(StrikethroughPlugin.create())
+                            .usePlugin(TaskListPlugin.create(context))
+                            .usePlugin(HtmlPlugin.create())
+                            .build();
                     markwon.setMarkdown(textView, text);
                 } else {
                     textView.setText(text);
