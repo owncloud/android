@@ -10,6 +10,7 @@
   <string name="actionbar_upload_from_apps">Inhalt von anderen Apps</string>
   <string name="actionbar_upload_files">Dateien</string>
   <string name="actionbar_open_with">Öffnen mit</string>
+  <string name="actionbar_open_with_read_only">Schreibgeschützt öffnen mit </string>
   <string name="actionbar_mkdir">Neuer Ordner</string>
   <string name="actionbar_settings">Einstellungen</string>
   <string name="actionbar_see_details">Details</string>
@@ -71,6 +72,7 @@
   <string name="prefs_camera_video_upload_on_wifi">Videos nur über WLAN hochladen</string>
   <string name="prefs_camera_video_upload_on_charging">Videos nur hochladen, wenn Ihr Gerät geladen wird</string>
   <string name="prefs_subsection_advanced">Fortgeschritten</string>
+  <string name="prefs_subsection_notifications">Benachrichtigungen verwalten</string>
   <string name="prefs_show_hidden_files">Versteckte Dateien anzeigen</string>
   <string name="prefs_log_open_logs_list_view">Protokolle</string>
   <string name="prefs_log_no_logs_list_view">Leerer Protokoll-Ordner!</string>
@@ -450,6 +452,7 @@
   <string name="network_error_socket_timeout_exception">Der Server braucht zu lange für eine Antwort.</string>
   <string name="network_error_connect_timeout_exception">Der Server braucht zu lange zum Verbinden.</string>
   <string name="network_host_not_available">Server konnte nicht erreicht werden</string>
+  <string name="network_error_message">Ein Netzwerkfehler ist aufgetreten.</string>
   <string name="forbidden_permissions">Du hast keine Berechtigung %s</string>
   <string name="forbidden_permissions_rename">diese Datei umzubenennen</string>
   <string name="forbidden_permissions_delete">diese Datei zu löschen</string>
@@ -476,6 +479,7 @@
   <string name="folder_picker_choose_button_text">Auswählen</string>
   <string name="folder_picker_move_here_button_text">Hierher bewegen</string>
   <string name="folder_picker_copy_here_button_text">Hierher kopieren</string>
+  <string name="folder_picker_no_permissions_message_text">Keine Schreibberechtigung.</string>
   <string name="move_file_not_found">Verschieben nicht möglich. Prüfe, dass die Datei existiert</string>
   <string name="move_file_invalid_into_descendent">Es ist nicht möglich, einen Ordner in einen seiner Unterordner zu verschieben</string>
   <string name="move_file_invalid_overwrite">Die Datei ist bereits im Zielordner vorhanden</string>
@@ -511,6 +515,7 @@
   <string name="prefs_camera_upload_behaviour_dialog_title">Originale Datei wird</string>
   <string name="prefs_camera_upload_behaviour_title">Originale Datei wird</string>
   <string name="prefs_camera_upload_last_sync_title">Letzte Synchronisierung</string>
+  <string name="notifications_permission_denied">Update-Präferenzen können unter Einstellungen geändert werden.</string>
   <string name="upload_copy_files">kopiere Datei</string>
   <string name="upload_move_files">verschiebe Datei</string>
   <string name="pref_behaviour_entries_keep_file">im Originalordner behalten</string>
@@ -654,8 +659,17 @@
   <string name="release_notes_4_0_subtitle_2">Einige Tabs neu angeordnet</string>
   <string name="release_notes_4_0_title_3">Unterstützung von Lollipop endet.</string>
   <string name="release_notes_4_0_subtitle_3">Mit dieser Version wird zum letzten Mal Android Lollipop (v5.0) unterstützt.</string>
+  <string name="release_notes_4_0_title_4">WebFinger Flow aktualisiert</string>
+  <string name="release_notes_4_0_subtitle_4">Bei WebFinger-Servern wird zuerst ein Lookup-Server angefragt. Falls das fehlschlägt, wird die reguläre Authentifizierung durchgeführt.</string>
+  <string name="release_notes_4_0_title_5">Zugriffsrechte</string>
+  <string name="release_notes_4_0_subtitle_5">Wenn für bestimmte Aktionen auf eine Datei oder einen Ordner die notwendigen Zugriffsrechte fehlen, werden diese Aktionen nicht angeboten.</string>
+  <string name="release_notes_4_0_title_6">Neue Einstellung \"Benachrichtigungen verwalten\"</string>
+  <string name="release_notes_4_0_subtitle_6">In den Einstellungen wurde ein neuer Eintrag hinzugefügt, der zu den App-Benachrichtigungseinstellungen des Geräts weiterleitet.</string>
+  <string name="release_notes_4_0_title_7">Kleine Fehlerberichtigungen und Verbesserungen</string>
+  <string name="release_notes_4_0_subtitle_7">Kleine Fehler wurden behoben und geringfügige technische Verbesserungen durchgeführt, um die Benutzung der App zu erleichtern.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
+  <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
   <string name="open_in_web_error_generic">Kann im Webbrowser nicht geöffnet werden</string>
   <string name="open_in_web_error_not_supported">es gibt keine Apps die diesen Filetyp unterstützen</string>
   <string name="open_in_web_error_too_early">Die Datei ist derzeit nicht verfügbar, bitte versuchen Sie es später noch einmal.</string>

@@ -10,6 +10,7 @@
   <string name="actionbar_upload_from_apps">Diğer uygulamalardan içerik</string>
   <string name="actionbar_upload_files">Dosyalar</string>
   <string name="actionbar_open_with">Birlikte aç</string>
+  <string name="actionbar_open_with_read_only">Birlikte aç (sadece okunur)</string>
   <string name="actionbar_mkdir">Yeni klasör</string>
   <string name="actionbar_settings">Ayarlar</string>
   <string name="actionbar_see_details">Ayrıntılar</string>
