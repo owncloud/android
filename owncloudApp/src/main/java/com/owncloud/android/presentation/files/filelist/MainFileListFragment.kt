@@ -85,6 +85,7 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
+import com.owncloud.android.utils.MimetypeIconUtil
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -473,10 +474,13 @@ class MainFileListFragment : Fragment(),
         val docTypesBottomSheetLayout = newFileBottomSheet.findViewById<LinearLayout>(R.id.doc_types_bottom_sheet_layout)
         listAppRegistry.forEach {
             val documentTypeItemView = BottomSheetFragmentItemView(requireContext())
-            documentTypeItemView.title = it.name
-            documentTypeItemView.itemIcon = ResourcesCompat.getDrawable(resources, R.drawable.file, null)
-            documentTypeItemView.setOnClickListener {
-                dialog.hide()
+            documentTypeItemView.apply {
+                removeDefaultTint()
+                title = it.name
+                itemIcon = ResourcesCompat.getDrawable(resources, MimetypeIconUtil.getFileTypeIconId(it.mimeType, it.ext), null)
+                setOnClickListener {
+                    dialog.hide()
+                }
             }
             docTypesBottomSheetLayout.addView(documentTypeItemView)
         }
