@@ -40,6 +40,9 @@ class OCAppRegistryRepository(
     override fun getAppRegistryForMimeTypeAsStream(accountName: String, mimeType: String): Flow<AppRegistryMimeType?> =
         localAppRegistryDataSource.getAppRegistryForMimeTypeAsStream(accountName, mimeType)
 
+    override fun getAppRegistryWhichAllowCreation(accountName: String): Flow<List<AppRegistryMimeType>> =
+        localAppRegistryDataSource.getAppRegistryWhichAllowCreation(accountName)
+
     override fun getUrlToOpenInWeb(accountName: String, openWebEndpoint: String, fileId: String, appName: String): String =
         remoteAppRegistryDataSource.getUrlToOpenInWeb(
             accountName = accountName,

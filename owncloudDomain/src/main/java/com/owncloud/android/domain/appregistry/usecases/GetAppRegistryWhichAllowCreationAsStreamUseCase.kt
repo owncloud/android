@@ -1,7 +1,6 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
  * Copyright (C) 2023 ownCloud GmbH.
@@ -19,19 +18,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.appregistry
+package com.owncloud.android.domain.appregistry.usecases
 
+import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.appregistry.AppRegistryRepository
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import kotlinx.coroutines.flow.Flow
 
-interface AppRegistryRepository {
-    fun refreshAppRegistryForAccount(accountName: String)
+class GetAppRegistryWhichAllowCreationAsStreamUseCase(
+    private val appRegistryRepository: AppRegistryRepository,
+) : BaseUseCase<Flow<List<AppRegistryMimeType>>, GetAppRegistryWhichAllowCreationAsStreamUseCase.Params>() {
 
-    fun getAppRegistryForMimeTypeAsStream(accountName: String, mimeType: String): Flow<AppRegistryMimeType?>
+    override fun run(params: Params) =
+        appRegistryRepository.getAppRegistryWhichAllowCreation(accountName = params.accountName)
 
-    fun getAppRegistryWhichAllowCreation(accountName: String): Flow<List<AppRegistryMimeType>>
-
-    fun getUrlToOpenInWeb(accountName: String, openWebEndpoint: String, fileId: String, appName: String): String
-
-    fun createFileWithAppProvider(accountName: String, createFileWithAppProviderEndpoint: String, parentContainerId: String, filename: String): String
+    data class Params(
+        val accountName: String,
+    )
 }

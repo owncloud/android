@@ -49,6 +49,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
@@ -242,6 +243,11 @@ class MainFileListFragment : Fragment(),
                 fileActions?.onCurrentFolderUpdated(mainFileListViewModel.getFile(), currentSpace)
             }
         }
+        // Observe the list of app registries that allow creating new files
+        collectLatestLifecycleFlow(mainFileListViewModel.appRegistryToCreateFiles) { listAppRegistry ->
+            binding.fabNewfile.isVisible = listAppRegistry.isNotEmpty()
+            registerFabNewFileListener(listAppRegistry)
+        }
 
         // Observe the file list ui state
         collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
@@ -382,7 +388,6 @@ class MainFileListFragment : Fragment(),
             }
             registerFabUploadListener()
             registerFabMkDirListener()
-            registerFabNewFileListener()
         }
     }
 
@@ -424,9 +429,9 @@ class MainFileListFragment : Fragment(),
     /**
      * Registers [android.view.View.OnClickListener] on the 'New document' mini FAB for the linked action.
      */
-    private fun registerFabNewFileListener() {
+    private fun registerFabNewFileListener(listAppRegistry: List<AppRegistryMimeType>) {
         binding.fabNewfile.setOnClickListener {
-            openBottomSheetToCreateNewFile()
+            openBottomSheetToCreateNewFile(listAppRegistry)
             collapseFab()
         }
     }
@@ -461,14 +466,14 @@ class MainFileListFragment : Fragment(),
         dialog.show()
     }
 
-    private fun openBottomSheetToCreateNewFile() {
+    private fun openBottomSheetToCreateNewFile(listAppRegistry: List<AppRegistryMimeType>) {
         val newFileBottomSheet = layoutInflater.inflate(R.layout.newfile_bottom_sheet_fragment, null)
         val dialog = BottomSheetDialog(requireContext())
         dialog.setContentView(newFileBottomSheet)
         val docTypesBottomSheetLayout = newFileBottomSheet.findViewById<LinearLayout>(R.id.doc_types_bottom_sheet_layout)
-        listOf("A", "B", "C").forEach {
+        listAppRegistry.forEach {
             val documentTypeItemView = BottomSheetFragmentItemView(requireContext())
-            documentTypeItemView.title = it
+            documentTypeItemView.title = it.name
             documentTypeItemView.itemIcon = ResourcesCompat.getDrawable(resources, R.drawable.file, null)
             documentTypeItemView.setOnClickListener {
                 dialog.hide()

@@ -24,6 +24,7 @@ package com.owncloud.android.dependecyinjection
 
 import com.owncloud.android.domain.appregistry.usecases.CreateFileWithAppProviderUseCase
 import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryForMimeTypeAsStreamUseCase
+import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryWhichAllowCreationAsStreamUseCase
 import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.authentication.oauth.OIDCDiscoveryUseCase
 import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
@@ -172,6 +173,7 @@ val useCaseModule = module {
     // Open in web
     factory { GetUrlToOpenInWebUseCase(get(), get()) }
     factory { GetAppRegistryForMimeTypeAsStreamUseCase(get()) }
+    factory { GetAppRegistryWhichAllowCreationAsStreamUseCase(get()) }
     factory { CreateFileWithAppProviderUseCase(get(), get()) }
 
     // Av Offline
