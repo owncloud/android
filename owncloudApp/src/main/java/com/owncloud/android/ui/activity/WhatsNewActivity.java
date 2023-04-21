@@ -44,6 +44,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.databinding.WhatsNewActivityBinding;
+import com.owncloud.android.databinding.WhatsNewElementBinding;
 import com.owncloud.android.wizard.FeatureList;
 import com.owncloud.android.wizard.FeatureList.FeatureItem;
 import com.owncloud.android.presentation.authentication.LoginActivity;
@@ -58,13 +60,16 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     private ProgressIndicator mProgress;
     private ViewPager mPager;
 
+    private WhatsNewActivityBinding binding_activity;
+    private static WhatsNewElementBinding binding_element;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.whats_new_activity);
 
-        mProgress = findViewById(R.id.progressIndicator);
-        mPager = findViewById(R.id.contentPanel);
+        mProgress = binding_activity.progressIndicator;
+        mPager = binding_activity.contentPanel;
 
         FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
                 FeatureList.get());
@@ -73,7 +78,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mPager.setAdapter(adapter);
         mPager.addOnPageChangeListener(this);
 
-        mForwardFinishButton = findViewById(R.id.forward);
+        mForwardFinishButton = binding_activity.forward;
         mForwardFinishButton.setOnClickListener(view -> {
             if (mProgress.hasNextStep()) {
                 mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
@@ -83,7 +88,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
             }
             updateNextButtonIfNeeded();
         });
-        Button skipButton = findViewById(R.id.skip);
+        Button skipButton = binding_activity.skip;
+
         skipButton.setOnClickListener(view -> finish());
 
         updateNextButtonIfNeeded();
@@ -183,17 +189,17 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
                                  @Nullable Bundle savedInstanceState) {
             View v = inflater.inflate(R.layout.whats_new_element, container, false);
 
-            ImageView iv = v.findViewById(R.id.whatsNewImage);
+            ImageView iv = binding_element.whatsNewImage;
             if (mItem.shouldShowImage()) {
                 iv.setImageResource(mItem.getImage());
             }
 
-            TextView tv2 = v.findViewById(R.id.whatsNewTitle);
+            TextView tv2 = binding_element.whatsNewTitle;
             if (mItem.shouldShowTitleText()) {
                 tv2.setText(mItem.getTitleText());
             }
 
-            tv2 = v.findViewById(R.id.whatsNewText);
+            tv2 = binding_element.whatsNewText;
             if (mItem.shouldShowContentText()) {
                 tv2.setText(mItem.getContentText());
             }
