@@ -188,11 +188,12 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
             mItem = getArguments() != null ? (FeatureItem) getArguments().getParcelable("feature") : null;
         }
 
+
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.whats_new_element, container, false);
+
 
             ImageView iv = binding_element.whatsNewImage;
             if (mItem.shouldShowImage()) {
@@ -209,7 +210,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
                 tv2.setText(mItem.getContentText());
             }
 
-            return v;
+            return null;
         }
     }
 }
