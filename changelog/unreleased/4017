@@ -1,0 +1,6 @@
+Enhancement: Support for Markdown files
+
+Markdown files preview will now be rendered to show its content in a prettier way.
+
+https://github.com/owncloud/android/issues/3716
+https://github.com/owncloud/android/pull/4017
