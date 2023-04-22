@@ -66,7 +66,12 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.whats_new_activity);
+
+
+        binding_activity = WhatsNewActivityBinding.inflate(getLayoutInflater());
+        binding_element = WhatsNewElementBinding.inflate(getLayoutInflater());
+
+        setContentView(binding_activity.getRoot());
 
         mProgress = binding_activity.progressIndicator;
         mPager = binding_activity.contentPanel;
