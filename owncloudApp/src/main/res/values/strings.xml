@@ -385,6 +385,7 @@
     <string name="download_enqueued_msg">Download enqueued</string>
     <string name="upload_enqueued_msg">Upload enqueued</string>
     <string name="create_dir_fail_msg">Folder could not be created</string>
+    <string name="create_file_fail_msg">File could not be created</string>
     <string name="filename_forbidden_characters">Forbidden characters: / \\ &lt; &gt; : " | ? *</string>
     <string name="filename_forbidden_characters_from_server">File name contains at least one invalid character</string>
     <string name="filename_empty">File name cannot be empty</string>
