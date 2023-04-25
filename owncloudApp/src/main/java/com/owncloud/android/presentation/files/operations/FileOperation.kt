@@ -33,7 +33,7 @@ sealed interface FileOperation {
     data class SynchronizeFileOperation(val fileToSync: OCFile, val accountName: String) : FileOperation
     data class SynchronizeFolderOperation(val folderToSync: OCFile, val accountName: String) : FileOperation
     data class RefreshFolderOperation(val folderToRefresh: OCFile, val shouldSyncContents: Boolean) : FileOperation
-    data class CreateFileWithAppProviderOperation(val accountName: String, val parentContainerId: String, val filename: String): FileOperation
+    data class CreateFileWithAppProviderOperation(val accountName: String, val parentContainerId: String, val filename: String) : FileOperation
     data class SetFilesAsAvailableOffline(val filesToUpdate: List<OCFile>) : FileOperation
     data class UnsetFilesAsAvailableOffline(val filesToUpdate: List<OCFile>) : FileOperation
 }

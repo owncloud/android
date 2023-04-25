@@ -591,7 +591,7 @@ class MainFileListFragment : Fragment(),
                 if (error != null) {
                     showMessageInSnackbar(error)
                 } else {
-                    val filenameWithExtension ="$filename.$fileExtension"
+                    val filenameWithExtension = "$filename.$fileExtension"
                     fileOperationsViewModel.performOperation(
                         FileOperation.CreateFileWithAppProviderOperation(
                             currentFolder.owner,
