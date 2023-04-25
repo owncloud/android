@@ -10,6 +10,8 @@ Summary
 
 * Bugfix - Error message for protocol exception: [#3948](https://github.com/owncloud/android/issues/3948)
 * Change - Bump target SDK to 33: [#3617](https://github.com/owncloud/android/issues/3617)
+* Change - Use ViewBinding in FolderPickerActivity: [#3796](https://github.com/owncloud/android/issues/3796)
+* Enhancement - Support for Markdown files: [#3716](https://github.com/owncloud/android/issues/3716)
 * Enhancement - Support for spaces: [#3851](https://github.com/owncloud/android/pull/3851)
 * Enhancement - Update label on Camera Uploads: [#3930](https://github.com/owncloud/android/pull/3930)
 * Enhancement - Authenticated WebFinger: [#3943](https://github.com/owncloud/android/issues/3943)
@@ -17,6 +19,7 @@ Summary
 * Enhancement - Send language header in all requests: [#3980](https://github.com/owncloud/android/issues/3980)
 * Enhancement - Open in specific web provider: [#3994](https://github.com/owncloud/android/issues/3994)
 * Enhancement - Updated WebFinger flow: [#3998](https://github.com/owncloud/android/issues/3998)
+* Enhancement - Monochrome icon for the app: [#4001](https://github.com/owncloud/android/pull/4001)
 * Enhancement - Add prompt parameter to OIDC flow: [#4011](https://github.com/owncloud/android/pull/4011)
 
 Details
@@ -39,6 +42,21 @@ Details
    https://github.com/owncloud/android/issues/3617
    https://github.com/owncloud/android/pull/3972
    https://developer.android.com/about/versions/13/behavior-changes-13
+
+* Change - Use ViewBinding in FolderPickerActivity: [#3796](https://github.com/owncloud/android/issues/3796)
+
+   The use of findViewById method was replaced by using ViewBinding in the
+   FolderPickerActivity.
+
+   https://github.com/owncloud/android/issues/3796
+   https://github.com/owncloud/android/pull/4014
+
+* Enhancement - Support for Markdown files: [#3716](https://github.com/owncloud/android/issues/3716)
+
+   Markdown files preview will now be rendered to show its content in a prettier way.
+
+   https://github.com/owncloud/android/issues/3716
+   https://github.com/owncloud/android/pull/4017
 
 * Enhancement - Support for spaces: [#3851](https://github.com/owncloud/android/pull/3851)
 
@@ -105,6 +123,13 @@ Details
    https://github.com/owncloud/android/issues/3998
    https://github.com/owncloud/android/pull/4000
    https://github.com/owncloud/android-library/pull/555
+
+* Enhancement - Monochrome icon for the app: [#4001](https://github.com/owncloud/android/pull/4001)
+
+   From Android 13, if the user has enabled themed app icons in their device settings, the app will
+   be shown with a monochrome icon.
+
+   https://github.com/owncloud/android/pull/4001
 
 * Enhancement - Add prompt parameter to OIDC flow: [#4011](https://github.com/owncloud/android/pull/4011)
 
