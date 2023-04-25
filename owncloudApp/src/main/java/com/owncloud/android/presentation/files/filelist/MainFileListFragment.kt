@@ -133,6 +133,7 @@ class MainFileListFragment : Fragment(),
     var uploadActions: UploadActions? = null
 
     private var currentDefaultApplication: String? = null
+    private var browserOpened = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -146,6 +147,19 @@ class MainFileListFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         initViews()
         subscribeToViewModels()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (browserOpened) {
+            browserOpened = false
+            fileOperationsViewModel.performOperation(
+                FileOperation.RefreshFolderOperation(
+                    folderToRefresh = mainFileListViewModel.getFile(),
+                    shouldSyncContents = !isPickingAFolder(),
+                )
+            )
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -266,6 +280,7 @@ class MainFileListFragment : Fragment(),
             if (it != null) {
                 val uiResult = it.peekContent()
                 if (uiResult is UIResult.Success) {
+                    browserOpened = true
                     val builder = CustomTabsIntent.Builder().build()
                     builder.launchUrl(
                         requireActivity(),
