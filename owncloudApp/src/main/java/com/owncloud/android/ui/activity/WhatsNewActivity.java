@@ -61,7 +61,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     private ViewPager mPager;
 
     private WhatsNewActivityBinding binding_activity;
-    private static WhatsNewElementBinding binding_element;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
 
 
         binding_activity = WhatsNewActivityBinding.inflate(getLayoutInflater());
-        binding_element = WhatsNewElementBinding.inflate(getLayoutInflater());
+
 
         setContentView(binding_activity.getRoot());
 
@@ -194,6 +194,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState) {
 
+            WhatsNewElementBinding binding_element;
+            binding_element = WhatsNewElementBinding.inflate(getLayoutInflater());
 
             ImageView iv = binding_element.whatsNewImage;
             if (mItem.shouldShowImage()) {
@@ -210,7 +212,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
                 tv2.setText(mItem.getContentText());
             }
 
-            return null;
+            return binding_element.getRoot();
         }
     }
 }
