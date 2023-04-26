@@ -72,9 +72,11 @@
   <string name="prefs_camera_video_upload_on_wifi">Videoları sadece kablosuz bağlantıda (WiFi) yükle</string>
   <string name="prefs_camera_video_upload_on_charging">Videoları yalnızca şarj olurken yükleyin</string>
   <string name="prefs_subsection_advanced">Gelişmiş</string>
+  <string name="prefs_subsection_notifications">Bildirimleri yönet</string>
   <string name="prefs_show_hidden_files">Gizli dosyaları göster</string>
   <string name="prefs_log_open_logs_list_view">Günlük dosyaları</string>
   <string name="prefs_log_no_logs_list_view">Boş günlük klasörü!</string>
+  <string name="prefs_log_empty_subtitle">Günlüğe kaydetmeyi etkinleştirdiğinizde günlük dosyaları burada görünür</string>
   <string name="prefs_log_title">Günlüğü etkinleştir</string>
   <string name="prefs_log_summary">Bu, sorunları günlük dosyasına kaydetmek için kullanılır</string>
   <string name="prefs_log_title_history">Günlük geçmişi</string>
@@ -145,8 +147,11 @@
   <string name="uploader_error_message_source_file_not_copied">Dosya geçici bir klasöre kopyalanırken hata oluştu. Lütfen tekrar göndermeyi deneyin.</string>
   <string name="file_list_seconds_ago">saniyeler önce</string>
   <string name="file_list_empty_title_all_files">Burada hiç dosya yok</string>
+  <string name="spaces_list_empty_title">Alan yok</string>
+  <string name="file_list_empty_title_available_offline">Uygun çevrimdışı dosya yok</string>
   <string name="file_list_empty_title_shared_by_links">Paylaşılan bağlantı yok</string>
   <string name="file_list_empty_subtitle_all_files">Bir şeyler yükleyin veya aygıtlarınızla eşitleyin!</string>
+  <string name="shares_list_empty_title">Paylaşım yok</string>
   <string name="file_list_empty_subtitle_shared_by_links">Bağlantı ile paylaştığınız dosya ve klasörler burada gösterilecek</string>
   <string name="file_list_loading">Yükleniyor...</string>
   <string name="file_list_no_app_for_file_type">Dosya türü için hiçbir uygulama bulunamadı</string>
@@ -216,6 +221,7 @@
   <string name="uploads_view_group_current_uploads">Geçerli</string>
   <string name="uploads_view_group_failed_uploads">Başarısız (tekrar denemek için dokun)</string>
   <string name="uploads_view_group_finished_uploads">Yüklendi</string>
+  <string name="uploads_view_group_queued_uploads">Kuyruğa alınmış</string>
   <string name="uploads_view_group_file_count">%d dosya</string>
   <string name="uploads_view_group_file_count_single">%d dosya</string>
   <string name="uploads_view_upload_status_succeeded">Tamamlandı</string>
@@ -233,8 +239,13 @@
   <string name="uploads_view_upload_status_service_interrupted">Uygulama sonlandırıldı</string>
   <string name="uploads_view_upload_status_unknown_fail">Bilinmeyen hata</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Kablosuz bağlantısı bekleniyor</string>
+  <string name="uploads_view_upload_status_queued">Kuyruğa alınmış</string>
   <string name="uploads_view_later_waiting_to_upload">Yüklemek için bekliyor</string>
   <string name="uploads_view_unsupported_media_type">Desteklenmeyen ortam türü</string>
+  <string name="uploader_upload_enqueued_ticker">%1$s\'nin yüklenmesi kuyruğa alınmış</string>
+  <string name="uploader_upload_canceled_ticker">Yükleme iptal edildi</string>
+  <string name="downloader_download_canceled_ticker">İndirme iptal edildi</string>
+  <string name="downloader_download_enqueued_ticker">%1$s\'nin indirilmesi kuyruğa alınmış</string>
   <string name="downloader_download_in_progress_ticker">İndiriliyor...</string>
   <string name="downloader_download_in_progress_content">%%%1$d İndirilen: %2$s</string>
   <string name="downloader_download_succeeded_ticker">İndirme başarılı</string>
@@ -348,12 +359,16 @@
   <string name="available_offline_inherited_msg">Bu dosyayı içeren bir klasör çevrimiçi olarak mevcut</string>
   <string name="rename_local_fail_msg">Yerel kopya adlandırılamadı; farklı bir ad deneyin</string>
   <string name="rename_server_fail_msg">Yeniden  adlandırılma tamamlanamadı</string>
+  <string name="file_already_exists">dosya zaten mevcut</string>
   <string name="sync_file_fail_msg">Uzak dosya denetlenemedi</string>
   <string name="sync_file_nothing_to_do_msg">Dosya içerikleri zaten eşitlenmiş</string>
+  <string name="download_enqueued_msg">İndirme kuyruğa alınmış</string>
+  <string name="upload_enqueued_msg">Yükleme kuyruğa alınmış</string>
   <string name="create_dir_fail_msg">Klasör oluşturulamadı</string>
   <string name="filename_forbidden_characters">Yasaklı karakterler: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Dosya adı en az bir geçersiz karakter içeriyor</string>
   <string name="filename_empty">Dosya adı boş olamaz</string>
+  <string name="filename_too_long">Dosya adı bu kadar uzun olamaz</string>
   <string name="wait_a_moment">Bir süre bekleyin</string>
   <string name="wait_checking_credentials">Kayıtlı kimlik bilgileri kontrol ediliyor</string>
   <string name="filedisplay_unexpected_bad_get_content">Beklenmedik sorun; lütfen dosya seçmek için farklı bir uygulama kullanın</string>
@@ -400,6 +415,7 @@
   <string name="confirmation_disable_videos_upload_message">Bu özelliği devre dışı bırakmak istediğinizden emin misiniz? Bekleyen videolar yüklenmeyecek</string>
   <string name="proper_pics_folder_warning_camera_upload">Lütfen seçtiğiniz klasörün kameranın çektiği resimleri kaydettiği klasör olduğundan emin olun. Aksi taktirde özellik resimlerinizi algılayamaz. Resimlerin çekildikten en az 15 dakika sonra yüklendiğini aklınızda tutun.</string>
   <string name="proper_videos_folder_warning_camera_upload">Lütfen seçtiğiniz klasörün kameranın çektiği videoları kaydettiği klasör olduğundan emin olun. Aksi taktirde özellik videolarınızı algılayamaz. Videoların çekildikten en az 15 dakika sonra yüklendiğini aklınızda tutun.</string>
+  <string name="conflict_title">Çakışan dosya</string>
   <string name="conflict_description">%1$s dosyası ile ilgili çakışma var, çözmek için dokunun</string>
   <string name="conflict_message">Hangi dosyaları saklamak istiyorsunuz? Her ikisini de saklamayı seçerseniz yerel dosyanın adına bir sayı eklenecek.</string>
   <string name="conflict_keep_both">İkisini de koru</string>
@@ -570,6 +586,7 @@
   <string name="media_service_notification_channel_description">Müzik çaları gör</string>
   <string name="file_sync_notification_channel_name">Dosya eşitleme</string>
   <string name="file_sync_notification_channel_description">Dosya eşitleme sonucunu gör</string>
+  <string name="file_sync_conflict_notification_channel_name">Dosya çakışmaları</string>
   <string name="clicks_to_be_developer">Geliştirici menülerini etkinleştirmeye %1$d tık uzaktasınız</string>
   <string name="rate_dialog_title">%1$s uygulamasını oyla!</string>
   <string name="rate_dialog_description">Bu uygulamayı kullanmaktan memnunsanız oylamak için birkaç dakikanızı ayırır mısınız? Geri dönüşünüz bizim için çok önemli.</string>
@@ -623,6 +640,7 @@
   <string name="release_notes_footer">%1$s kullandığınız için teşekkürler.\n❤</string>
   <string name="release_notes_proceed">Devam et</string>
   <string name="release_notes_icon">Sürüm notu simgesi</string>
+  <string name="release_notes_4_0_title_6">Yeni \"Bildirimleri yönet\" ayarı</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Web\'te aç</string>
   <string name="open_in_web_error_generic">Web\'te açılamadı</string>
