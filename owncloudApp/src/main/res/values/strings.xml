@@ -726,6 +726,12 @@
     <string name="release_notes_4_0_subtitle_6">A new item has been added in the settings, which redirects to the app notifications settings of the device</string>
     <string name="release_notes_4_0_title_7">Minor bugfixes and improvements</string>
     <string name="release_notes_4_0_subtitle_7">Some minor bugs have been fixed, and minor technical improvements were introduced to improve the experience in the app</string>
+    <string name="release_notes_4_0_title_8">Markdown support</string>
+    <string name="release_notes_4_0_subtitle_8">Markdown files rendered and displayed with proper format</string>
+    <string name="release_notes_4_0_title_9">List of providers (oCIS)</string>
+    <string name="release_notes_4_0_subtitle_9">If your server supports app providers to open specific kind of files, all of them will be listed in Details view</string>
+    <string name="release_notes_4_0_title_10">Themed icons supported</string>
+    <string name="release_notes_4_0_subtitle_10">Android 13 feature "Themed icons" will let you set app icon in monochrome</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
