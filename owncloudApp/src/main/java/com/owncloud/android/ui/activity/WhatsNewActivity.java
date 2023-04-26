@@ -194,8 +194,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState) {
 
-            WhatsNewElementBinding binding_element;
-            binding_element = WhatsNewElementBinding.inflate(getLayoutInflater());
+            WhatsNewElementBinding binding_element = WhatsNewElementBinding.inflate(getLayoutInflater());
 
             ImageView iv = binding_element.whatsNewImage;
             if (mItem.shouldShowImage()) {
