@@ -667,6 +667,12 @@
   <string name="release_notes_4_0_subtitle_6">Seadetesse on lisatud uus valik, mis suunab rakenduse seadme teavituste seadetesse</string>
   <string name="release_notes_4_0_title_7">Väiksemad veaparandused ja parendused</string>
   <string name="release_notes_4_0_subtitle_7">Parandatud on mõned väiksemad tarkvaravead ning lisatud on väiksemad tehnilised parendused, et parandada rakenduse kasutajakogemust</string>
+  <string name="release_notes_4_0_title_8">Markdown\'i tugi</string>
+  <string name="release_notes_4_0_subtitle_8">Markdown\'i faile renderdatakse ja näidatakse õigel kujul</string>
+  <string name="release_notes_4_0_title_9">Pakkujate nimekiri (oCIS)</string>
+  <string name="release_notes_4_0_subtitle_9">Kui su server lubab eri rakenduse pakkujatel avada kindlat tüüpi faile, siis kõik need näidatakse detailivaates</string>
+  <string name="release_notes_4_0_title_10">Temaatilised ikoonid on toetatud</string>
+  <string name="release_notes_4_0_subtitle_10">Android 13 võimalus \"Temaatilised ikoonid\" lubab rakenduse ikoonid muuta mustvalgeks</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>

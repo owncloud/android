@@ -665,6 +665,12 @@
   <string name="release_notes_4_0_subtitle_6">Te rregullimet është shtuar një zë i ri, i cili ridrejton te rregullimet e njoftimeve të aplikacioneve të pajisjes</string>
   <string name="release_notes_4_0_title_7">Ndreqje të metash të vockla dhe përmirësime</string>
   <string name="release_notes_4_0_subtitle_7">Janë ndrequr disa të meta të cokla dhe u sollën për herë të parë përmirësime të vockla teknike për të përmirësuar punën te aplikacioni</string>
+  <string name="release_notes_4_0_title_8">Mbulim për Markdown</string>
+  <string name="release_notes_4_0_subtitle_8">Kartelat Markdown u formuan dhe shfaqën me formatim si duhet</string>
+  <string name="release_notes_4_0_title_9">Listë furnizuesish (oCIS)</string>
+  <string name="release_notes_4_0_subtitle_9">Nëse shërbyesi juaj mbulon furnizues apIikacionesh për hapje llojesh specifike kartelash, krejt këta do të shfaqen te pamja Hollësi</string>
+  <string name="release_notes_4_0_title_10">Mbulohen ikona temash</string>
+  <string name="release_notes_4_0_subtitle_10">Veçoria “Ikona teme” e Android 13-s do t’ju lejojë të caktoni ikona aplikacioni njëngjyrëshe</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
