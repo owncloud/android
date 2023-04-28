@@ -452,6 +452,7 @@
   <string name="network_error_socket_timeout_exception">O servidor demorou demais a responder</string>
   <string name="network_error_connect_timeout_exception">O servidor demorou muito para se conectar</string>
   <string name="network_host_not_available">Servidor não pôde ser alcançado</string>
+  <string name="network_error_message">Ocorreu um erro na rede</string>
   <string name="forbidden_permissions">Você não tem premissão %s</string>
   <string name="forbidden_permissions_rename">para renomear este arquivo</string>
   <string name="forbidden_permissions_delete">para excluir este arquivo</string>
@@ -667,8 +668,15 @@
   <string name="release_notes_4_0_subtitle_6">Um novo item foi adicionado nas configurações, que redireciona para as configurações de notificações do aplicativo do dispositivo</string>
   <string name="release_notes_4_0_title_7">Pequenas correções de bugs e melhorias</string>
   <string name="release_notes_4_0_subtitle_7">Alguns pequenos bugs foram corrigidos e pequenas melhorias técnicas foram introduzidas para melhorar a experiência no aplicativo</string>
+  <string name="release_notes_4_0_title_8">Suporte de remarcação</string>
+  <string name="release_notes_4_0_subtitle_8">Arquivos Remarcados renderizados e exibidos com o formato adequado</string>
+  <string name="release_notes_4_0_title_9">Lista de provedores (oCIS)</string>
+  <string name="release_notes_4_0_subtitle_9">Se o seu servidor oferecer suporte a provedores de aplicativos para abrir tipos específicos de arquivos, todos eles serão listados na visualização Detalhes</string>
+  <string name="release_notes_4_0_title_10">Ícones temáticos suportados</string>
+  <string name="release_notes_4_0_subtitle_10">O recurso \"Ícones temáticos\" do Android 13 permitirá que você defina o ícone do aplicativo em monocromático</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
+  <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
   <string name="open_in_web_error_generic">Não foi possível abrir na web</string>
   <string name="open_in_web_error_not_supported">Não há aplicativos que suportam este tipo de arquivo</string>
   <string name="open_in_web_error_too_early">O arquivo requisitado ainda não está disponível, por favor tente novamente mais tarde</string>
