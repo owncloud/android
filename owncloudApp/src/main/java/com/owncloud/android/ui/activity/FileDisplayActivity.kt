@@ -696,7 +696,8 @@ class FileDisplayActivity : FileActivity(),
             if (secondFragment != null) {
                 // If secondFragment was shown, we need to navigate to the parent of the displayed file
                 // Need a cleanup
-                mainFileListFragment?.navigateToFolderId(secondFragment!!.file!!.parentId!!)
+                val folderIdToDisplay = if (fileListOption == FileListOption.AV_OFFLINE) storageManager.getRootPersonalFolder()!!.id!! else secondFragment!!.file!!.parentId!!
+                mainFileListFragment?.navigateToFolderId(folderIdToDisplay)
                 cleanSecondFragment()
                 updateToolbar(mainFileListFragment?.getCurrentFile())
             } else {
