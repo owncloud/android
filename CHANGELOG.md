@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Error message for protocol exception: [#3948](https://github.com/owncloud/android/issues/3948)
+* Bugfix - Incorrect list of files in av. offline when browsing from details: [#3986](https://github.com/owncloud/android/issues/3986)
 * Change - Bump target SDK to 33: [#3617](https://github.com/owncloud/android/issues/3617)
 * Change - Use ViewBinding in FolderPickerActivity: [#3796](https://github.com/owncloud/android/issues/3796)
 * Enhancement - Support for Markdown files: [#3716](https://github.com/owncloud/android/issues/3716)
@@ -33,6 +34,15 @@ Details
    https://github.com/owncloud/android/issues/3948
    https://github.com/owncloud/android/pull/4013
    https://github.com/owncloud/android-library/pull/558
+
+* Bugfix - Incorrect list of files in av. offline when browsing from details: [#3986](https://github.com/owncloud/android/issues/3986)
+
+   When opening the details view of a file accessed from the available offline shortcut, browsing
+   back led to a incorrect list of files. Now, browsing back leads to the list of available offline
+   files again.
+
+   https://github.com/owncloud/android/issues/3986
+   https://github.com/owncloud/android/pull/4026
 
 * Change - Bump target SDK to 33: [#3617](https://github.com/owncloud/android/issues/3617)
 
