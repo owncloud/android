@@ -10,6 +10,7 @@
   <string name="actionbar_upload_from_apps">Contenido de otras aplicaciones</string>
   <string name="actionbar_upload_files">Archivos</string>
   <string name="actionbar_open_with">Abrir con</string>
+  <string name="actionbar_open_with_read_only">Abrir con (sólo lectura)</string>
   <string name="actionbar_mkdir">Nueva Carpeta</string>
   <string name="actionbar_settings">Configuración</string>
   <string name="actionbar_see_details">Detalles</string>
@@ -33,6 +34,7 @@
   <string name="prefs_subsection_logging">Registrando</string>
   <string name="prefs_subsection_more">Más</string>
   <string name="prefs_subsection_security">Seguridad</string>
+  <string name="prefs_subsection_whatsnew">¿Qué hay de nuevo en la última versión?</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Bloqueo con clave</string>
@@ -47,15 +49,20 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir clicks mientras que la vista está oscurecida por otra ventana visible. Habilítalo para utilizar aplicaciones de filtro de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">¿Estás seguro que quieres habilitar esta funcionalidad?</string>
   <string name="confirmation_touches_with_other_windows_message">Utiliza esta funcionalidad bajo tu propia responsabilidad, una aplicación maliciosa podría tratar de engañarte a realizar algunas acciones, sin que te des cuenta, utilizando otras vistas.</string>
+  <string name="prefs_subsection_video_uploads">Subir videos automáticamente</string>
   <string name="prefs_camera_picture_upload">Carga de imágenes</string>
   <string name="prefs_camera_picture_upload_summary">Cargar imágenes automáticamente tomadas desde la cámara</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de carga de la imagen</string>
+  <string name="prefs_camera_picture_upload_conditions_title">Condiciones para ejecutar cargas</string>
   <string name="prefs_camera_picture_upload_on_wifi">Cargar imágenes solamente con WiFi</string>
   <string name="prefs_camera_video_upload">Carga de videos</string>
   <string name="prefs_camera_video_upload_summary">Cargar videos automáticamente tomados desde la cámara</string>
   <string name="prefs_camera_video_upload_path_title">Ruta de carga del video</string>
   <string name="prefs_camera_video_upload_on_wifi">Cargar videos solamente con WiFi</string>
   <string name="prefs_subsection_advanced">Avanzado</string>
+  <string name="prefs_show_hidden_files">Mostrar archivos ocultos</string>
+  <string name="prefs_log_open_logs_list_view">Archivos de registro</string>
+  <string name="prefs_log_no_logs_list_view">¡Carpeta de registros vacía!</string>
   <string name="prefs_log_title">Activar bitacora</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial de la bitacora</string>
