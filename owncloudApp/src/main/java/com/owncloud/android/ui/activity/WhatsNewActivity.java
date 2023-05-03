@@ -60,7 +60,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     private ProgressIndicator mProgress;
     private ViewPager mPager;
 
-    private WhatsNewActivityBinding binding_activity;
+    private WhatsNewActivityBinding bindingActivity;
 
     static public void runIfNeeded(Context context) {
         if (context instanceof WhatsNewActivity) {
@@ -81,12 +81,12 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding_activity = WhatsNewActivityBinding.inflate(getLayoutInflater());
+        bindingActivity = WhatsNewActivityBinding.inflate(getLayoutInflater());
 
-        setContentView(binding_activity.getRoot());
+        setContentView(bindingActivity.getRoot());
 
-        mProgress = binding_activity.progressIndicator;
-        mPager = binding_activity.contentPanel;
+        mProgress = bindingActivity.progressIndicator;
+        mPager = bindingActivity.contentPanel;
 
         FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
                 FeatureList.get());
@@ -95,7 +95,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mPager.setAdapter(adapter);
         mPager.addOnPageChangeListener(this);
 
-        mForwardFinishButton = binding_activity.forward;
+        mForwardFinishButton = bindingActivity.forward;
         mForwardFinishButton.setOnClickListener(view -> {
             if (mProgress.hasNextStep()) {
                 mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
@@ -105,7 +105,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
             }
             updateNextButtonIfNeeded();
         });
-        Button skipButton = binding_activity.skip;
+        Button skipButton = bindingActivity.skip;
 
         skipButton.setOnClickListener(view -> finish());
 
@@ -151,6 +151,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     public static class FeatureFragment extends Fragment {
         private FeatureItem mItem;
 
+        private WhatsNewElementBinding bindingElement;
+
         static public FeatureFragment newInstance(FeatureItem item) {
             FeatureFragment f = new FeatureFragment();
             Bundle args = new Bundle();
@@ -170,24 +172,24 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState) {
 
-            WhatsNewElementBinding binding_element = WhatsNewElementBinding.inflate(getLayoutInflater());
+            bindingElement = WhatsNewElementBinding.inflate(getLayoutInflater());
 
-            ImageView iv = binding_element.whatsNewImage;
+            ImageView iv = bindingElement.whatsNewImage;
             if (mItem.shouldShowImage()) {
                 iv.setImageResource(mItem.getImage());
             }
 
-            TextView tv2 = binding_element.whatsNewTitle;
+            TextView tv2 = bindingElement.whatsNewTitle;
             if (mItem.shouldShowTitleText()) {
                 tv2.setText(mItem.getTitleText());
             }
 
-            tv2 = binding_element.whatsNewText;
+            tv2 = bindingElement.whatsNewText;
             if (mItem.shouldShowContentText()) {
                 tv2.setText(mItem.getContentText());
             }
 
-            return binding_element.getRoot();
+            return bindingElement.getRoot();
         }
     }
 
