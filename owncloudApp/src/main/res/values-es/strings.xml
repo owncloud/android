@@ -10,6 +10,7 @@
   <string name="actionbar_upload_from_apps">Contenido de otras aplicaciones</string>
   <string name="actionbar_upload_files">Archivos</string>
   <string name="actionbar_open_with">Abrir con</string>
+  <string name="actionbar_open_with_read_only">Abrir con (solo lectura)</string>
   <string name="actionbar_mkdir">Nueva carpeta</string>
   <string name="actionbar_settings">Configuración</string>
   <string name="actionbar_see_details">Detalles</string>
@@ -71,6 +72,7 @@
   <string name="prefs_camera_video_upload_on_wifi">Subir vídeos por wifi únicamente</string>
   <string name="prefs_camera_video_upload_on_charging">Subir vídeos solo cuando se está cargando</string>
   <string name="prefs_subsection_advanced">Avanzado</string>
+  <string name="prefs_subsection_notifications">Gestionar notificaciones</string>
   <string name="prefs_show_hidden_files">Mostrar archivos ocultos</string>
   <string name="prefs_log_open_logs_list_view">Archivos de registro</string>
   <string name="prefs_log_no_logs_list_view">¡Carpeta de registros vacía!</string>
@@ -414,6 +416,7 @@
   <string name="confirmation_disable_videos_upload_message">¿Está seguro de que desea deshabilitar esta opción ? Los videos pendientes no se subiran.</string>
   <string name="proper_pics_folder_warning_camera_upload">Asegúrese de que la carpeta seleccionada es la misma que su cámara está utilizando para guardar sus fotos. De lo contrario, la función no podrá detectarlas. Tenga en cuenta que éstas se cargarán al menos 15 minutos después de haber sido tomadas.</string>
   <string name="proper_videos_folder_warning_camera_upload">Asegúrese de que la carpeta seleccionada es la misma que su cámara está utilizando para guardar sus videos. De lo contrario, la función no podrá detectarlos. Tenga en cuenta que éstos se cargarán al menos 15 minutos después de haber sido grabados.</string>
+  <string name="conflict_title">Conflicto en archivo</string>
   <string name="conflict_description">Hay un conflicto en el archivo %1$s, pulsar para resolver</string>
   <string name="conflict_message">¿Qué archivos desea mantener? Si selecciona ambas versiones, el archivo local tendrá un número añadido a su nombre.</string>
   <string name="conflict_keep_both">Mantener ambos</string>
@@ -507,6 +510,7 @@
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>
   <string name="pref_behaviour_entries_keep_file">dejado en la carpeta original</string>
+  <string name="pref_behaviour_entries_remove_original_file">Eliminado de la carpeta originnal</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Compartir %1$s</string>
   <string name="share_with_user_section_title">Usuarios y Grupos</string>
