@@ -1,0 +1,7 @@
+Change: Use ViewBinding in WhatsNewActivity
+
+The use of findViewById method was replaced by using ViewBinding in the
+WhatsNewActivity.
+
+https://github.com/owncloud/android/issues/3796
+https://github.com/owncloud/android/pull/4021
