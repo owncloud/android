@@ -44,9 +44,11 @@ import androidx.viewpager.widget.ViewPager;
 import com.owncloud.android.BuildConfig;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.databinding.WhatsNewActivityBinding;
+import com.owncloud.android.databinding.WhatsNewElementBinding;
+import com.owncloud.android.presentation.authentication.LoginActivity;
 import com.owncloud.android.wizard.FeatureList;
 import com.owncloud.android.wizard.FeatureList.FeatureItem;
-import com.owncloud.android.presentation.authentication.LoginActivity;
 import com.owncloud.android.wizard.ProgressIndicator;
 
 /**
@@ -58,13 +60,33 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     private ProgressIndicator mProgress;
     private ViewPager mPager;
 
+    private WhatsNewActivityBinding binding_activity;
+
+    static public void runIfNeeded(Context context) {
+        if (context instanceof WhatsNewActivity) {
+            return;
+        }
+
+        if (shouldShow(context)) {
+            context.startActivity(new Intent(context, WhatsNewActivity.class));
+        }
+    }
+
+    static private boolean shouldShow(Context context) {
+        return context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG
+                && context instanceof LoginActivity; // When it is LoginActivity to start it only once
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.whats_new_activity);
 
-        mProgress = findViewById(R.id.progressIndicator);
-        mPager = findViewById(R.id.contentPanel);
+        binding_activity = WhatsNewActivityBinding.inflate(getLayoutInflater());
+
+        setContentView(binding_activity.getRoot());
+
+        mProgress = binding_activity.progressIndicator;
+        mPager = binding_activity.contentPanel;
 
         FeaturesViewAdapter adapter = new FeaturesViewAdapter(getSupportFragmentManager(),
                 FeatureList.get());
@@ -73,7 +95,7 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         mPager.setAdapter(adapter);
         mPager.addOnPageChangeListener(this);
 
-        mForwardFinishButton = findViewById(R.id.forward);
+        mForwardFinishButton = binding_activity.forward;
         mForwardFinishButton.setOnClickListener(view -> {
             if (mProgress.hasNextStep()) {
                 mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
@@ -83,7 +105,8 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
             }
             updateNextButtonIfNeeded();
         });
-        Button skipButton = findViewById(R.id.skip);
+        Button skipButton = binding_activity.skip;
+
         skipButton.setOnClickListener(view -> finish());
 
         updateNextButtonIfNeeded();
@@ -110,21 +133,6 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         }
     }
 
-    static public void runIfNeeded(Context context) {
-        if (context instanceof WhatsNewActivity) {
-            return;
-        }
-
-        if (shouldShow(context)) {
-            context.startActivity(new Intent(context, WhatsNewActivity.class));
-        }
-    }
-
-    static private boolean shouldShow(Context context) {
-        return context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG
-                && context instanceof LoginActivity; // When it is LoginActivity to start it only once
-    }
-
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
     }
@@ -138,26 +146,6 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     @Override
     public void onPageScrollStateChanged(int state) {
 
-    }
-
-    private final class FeaturesViewAdapter extends FragmentPagerAdapter {
-
-        FeatureItem[] mFeatures;
-
-        public FeaturesViewAdapter(FragmentManager fm, FeatureItem[] features) {
-            super(fm);
-            mFeatures = features;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return FeatureFragment.newInstance(mFeatures[position]);
-        }
-
-        @Override
-        public int getCount() {
-            return mFeatures.length;
-        }
     }
 
     public static class FeatureFragment extends Fragment {
@@ -181,24 +169,45 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState) {
-            View v = inflater.inflate(R.layout.whats_new_element, container, false);
 
-            ImageView iv = v.findViewById(R.id.whatsNewImage);
+            WhatsNewElementBinding binding_element = WhatsNewElementBinding.inflate(getLayoutInflater());
+
+            ImageView iv = binding_element.whatsNewImage;
             if (mItem.shouldShowImage()) {
                 iv.setImageResource(mItem.getImage());
             }
 
-            TextView tv2 = v.findViewById(R.id.whatsNewTitle);
+            TextView tv2 = binding_element.whatsNewTitle;
             if (mItem.shouldShowTitleText()) {
                 tv2.setText(mItem.getTitleText());
             }
 
-            tv2 = v.findViewById(R.id.whatsNewText);
+            tv2 = binding_element.whatsNewText;
             if (mItem.shouldShowContentText()) {
                 tv2.setText(mItem.getContentText());
             }
 
-            return v;
+            return binding_element.getRoot();
+        }
+    }
+
+    private final class FeaturesViewAdapter extends FragmentPagerAdapter {
+
+        FeatureItem[] mFeatures;
+
+        public FeaturesViewAdapter(FragmentManager fm, FeatureItem[] features) {
+            super(fm);
+            mFeatures = features;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return FeatureFragment.newInstance(mFeatures[position]);
+        }
+
+        @Override
+        public int getCount() {
+            return mFeatures.length;
         }
     }
 }
