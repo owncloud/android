@@ -46,9 +46,9 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.databinding.WhatsNewActivityBinding;
 import com.owncloud.android.databinding.WhatsNewElementBinding;
+import com.owncloud.android.presentation.authentication.LoginActivity;
 import com.owncloud.android.wizard.FeatureList;
 import com.owncloud.android.wizard.FeatureList.FeatureItem;
-import com.owncloud.android.presentation.authentication.LoginActivity;
 import com.owncloud.android.wizard.ProgressIndicator;
 
 /**
@@ -62,14 +62,26 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
 
     private WhatsNewActivityBinding binding_activity;
 
+    static public void runIfNeeded(Context context) {
+        if (context instanceof WhatsNewActivity) {
+            return;
+        }
+
+        if (shouldShow(context)) {
+            context.startActivity(new Intent(context, WhatsNewActivity.class));
+        }
+    }
+
+    static private boolean shouldShow(Context context) {
+        return context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG
+                && context instanceof LoginActivity; // When it is LoginActivity to start it only once
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         binding_activity = WhatsNewActivityBinding.inflate(getLayoutInflater());
-
 
         setContentView(binding_activity.getRoot());
 
@@ -121,21 +133,6 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
         }
     }
 
-    static public void runIfNeeded(Context context) {
-        if (context instanceof WhatsNewActivity) {
-            return;
-        }
-
-        if (shouldShow(context)) {
-            context.startActivity(new Intent(context, WhatsNewActivity.class));
-        }
-    }
-
-    static private boolean shouldShow(Context context) {
-        return context.getResources().getBoolean(R.bool.wizard_enabled) && !BuildConfig.DEBUG
-                && context instanceof LoginActivity; // When it is LoginActivity to start it only once
-    }
-
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
     }
@@ -149,26 +146,6 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
     @Override
     public void onPageScrollStateChanged(int state) {
 
-    }
-
-    private final class FeaturesViewAdapter extends FragmentPagerAdapter {
-
-        FeatureItem[] mFeatures;
-
-        public FeaturesViewAdapter(FragmentManager fm, FeatureItem[] features) {
-            super(fm);
-            mFeatures = features;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return FeatureFragment.newInstance(mFeatures[position]);
-        }
-
-        @Override
-        public int getCount() {
-            return mFeatures.length;
-        }
     }
 
     public static class FeatureFragment extends Fragment {
@@ -187,7 +164,6 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
             super.onCreate(savedInstanceState);
             mItem = getArguments() != null ? (FeatureItem) getArguments().getParcelable("feature") : null;
         }
-
 
         @Nullable
         @Override
@@ -212,6 +188,26 @@ public class WhatsNewActivity extends FragmentActivity implements ViewPager.OnPa
             }
 
             return binding_element.getRoot();
+        }
+    }
+
+    private final class FeaturesViewAdapter extends FragmentPagerAdapter {
+
+        FeatureItem[] mFeatures;
+
+        public FeaturesViewAdapter(FragmentManager fm, FeatureItem[] features) {
+            super(fm);
+            mFeatures = features;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return FeatureFragment.newInstance(mFeatures[position]);
+        }
+
+        @Override
+        public int getCount() {
+            return mFeatures.length;
         }
     }
 }
