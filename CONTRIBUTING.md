@@ -26,8 +26,15 @@ Thanks for wanting to contribute source code to ownCloud. That's great!
 Before we're able to merge your code into the ownCloud app for Android, please, check the [contribution guidelines][contribution].
 
 ### Guidelines
-* Contribute your code in a feature, fix or cleanup branch by using  ```feature/feature_name```, ```fix/fix_name``` or ```cleanup/cleanup_name``` branch names. Be sure your feature, fix or cleanup branches are updated with latest changes in official android/master, it will give us a better chance to test your code before merging it with stable code.
-* Once you are done with your code, start a pull request to merge your contribution into official android/master.
+* Contribute your code in a feature, fix, improvement or technical enhancement  branch by using  one of the following branch names:
+
+     - ```feature/feature_name``` → new features in the app
+     - ```fix/fix_name``` → fixing problems or bugs, always welcome!
+     - ```improvement/improvement_name``` → make even better an existing feature
+     - ```technical/technical_description```  → code review, DB... technical stuff improved
+
+	Please, use the mentioned prefixes because CI system is ready to match with them. Be sure your feature, fix, improvement or technical branches are updated with latest changes in official `android/master`, it will give us a better chance to test your code before merging it with stable code.
+* Once you are done with your code, start a pull request to merge your contribution into official `android/master`.
 * Keep on using pull requests for your next contributions although you own write permissions.
 
 [contribution]: https://owncloud.com/contribute/
@@ -40,7 +47,7 @@ Before we're able to merge your code into the ownCloud app for Android, please, 
 
 NOTE: You must sign the [CLA](https://cla-assistant.io/owncloud/android) before your changes can be accepted!
 
-* Create new feature, fix or cleanup branch from your master branch: ```git checkout -b feature/feature_name```
+* Create new feature, fix, improvement or technical enhancement branch from your master branch: ```git checkout -b feature/feature_name```
 * Register your changes: git add filename
 * Commit your changes locally: ```git commit -m "Brief description of the changes performed"```
 * Push your changes to your GitHub repo: ```git push origin feature/feature_name```
