@@ -36,6 +36,8 @@ class SettingsMoreViewModel(
 
     fun getSyncUrl() = contextProvider.getString(R.string.url_sync_calendar_contacts)
 
+    fun isDocProviderAppEnabled() = contextProvider.getBoolean(R.bool.access_document_provider_app_enabled)
+
     fun getDocProviderAppUrl() = contextProvider.getString(R.string.url_document_provider_app)
 
     fun isRecommendEnabled() = contextProvider.getBoolean(R.bool.recommend_enabled)

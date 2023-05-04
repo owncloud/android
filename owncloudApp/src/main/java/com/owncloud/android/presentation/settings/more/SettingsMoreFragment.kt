@@ -78,10 +78,14 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         }
 
         // Access document provider
-        prefAccessDocProvider?.setOnPreferenceClickListener {
-            val docProviderAppUrl = moreViewModel.getDocProviderAppUrl()
-            requireActivity().goToUrl(docProviderAppUrl)
-            true
+        if (moreViewModel.isDocProviderAppEnabled()) {
+            prefAccessDocProvider?.setOnPreferenceClickListener {
+                val docProviderAppUrl = moreViewModel.getDocProviderAppUrl()
+                requireActivity().goToUrl(docProviderAppUrl)
+                true
+            }
+        } else {
+            moreScreen?.removePreferenceFromScreen(prefAccessDocProvider)
         }
 
         // Recommend
