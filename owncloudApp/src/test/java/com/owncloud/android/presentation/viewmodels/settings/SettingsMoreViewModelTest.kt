@@ -3,17 +3,17 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2021 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -128,6 +128,45 @@ class SettingsMoreViewModelTest : ViewModelTest() {
 
         verify(exactly = 1) {
             contextProvider.getString(R.string.url_sync_calendar_contacts)
+        }
+    }
+
+    @Test
+    fun `is access doc provider - ok - true`() {
+        every { contextProvider.getBoolean(any()) } returns true
+
+        val accessDocProviderEnabled = moreViewModel.isDocProviderAppEnabled()
+
+        assertTrue(accessDocProviderEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.access_document_provider_app_enabled)
+        }
+    }
+
+    @Test
+    fun `is access doc provider - ok - false`() {
+        every { contextProvider.getBoolean(any()) } returns false
+
+        val accessDocProviderEnabled = moreViewModel.isDocProviderAppEnabled()
+
+        assertFalse(accessDocProviderEnabled)
+
+        verify(exactly = 1) {
+            contextProvider.getBoolean(R.bool.access_document_provider_app_enabled)
+        }
+    }
+
+    @Test
+    fun `get access doc provider url - ok`() {
+        every { contextProvider.getString(any()) } returns OC_SECURE_BASE_URL
+
+        val accessDocProviderUrl = moreViewModel.getDocProviderAppUrl()
+
+        assertEquals(OC_SECURE_BASE_URL, accessDocProviderUrl)
+
+        verify(exactly = 1) {
+            contextProvider.getString(R.string.url_document_provider_app)
         }
     }
 
