@@ -1,0 +1,7 @@
+Enhancement: New setting "Access document provider"
+
+A new setting has been added in the "More" settings section with a
+suggested app to access the document provider.
+
+https://github.com/owncloud/android/pull/4032
+https://github.com/owncloud/android/issues/4028
