@@ -12,6 +12,7 @@ Summary
 * Bugfix - Incorrect list of files in av. offline when browsing from details: [#3986](https://github.com/owncloud/android/issues/3986)
 * Change - Bump target SDK to 33: [#3617](https://github.com/owncloud/android/issues/3617)
 * Change - Use ViewBinding in FolderPickerActivity: [#3796](https://github.com/owncloud/android/issues/3796)
+* Change - Use ViewBinding in WhatsNewActivity: [#3796](https://github.com/owncloud/android/issues/3796)
 * Enhancement - Support for Markdown files: [#3716](https://github.com/owncloud/android/issues/3716)
 * Enhancement - Support for spaces: [#3851](https://github.com/owncloud/android/pull/3851)
 * Enhancement - Update label on Camera Uploads: [#3930](https://github.com/owncloud/android/pull/3930)
@@ -60,6 +61,13 @@ Details
 
    https://github.com/owncloud/android/issues/3796
    https://github.com/owncloud/android/pull/4014
+
+* Change - Use ViewBinding in WhatsNewActivity: [#3796](https://github.com/owncloud/android/issues/3796)
+
+   The use of findViewById method was replaced by using ViewBinding in the WhatsNewActivity.
+
+   https://github.com/owncloud/android/issues/3796
+   https://github.com/owncloud/android/pull/4021
 
 * Enhancement - Support for Markdown files: [#3716](https://github.com/owncloud/android/issues/3716)
 
