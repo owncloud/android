@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
-*   Copyright (C) 2022 ownCloud GmbH.
+*   Copyright (C) 2023 ownCloud GmbH.
 *
 *   Permission is hereby granted, free of charge, to any person obtaining a copy
 *   of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,7 @@
 *   THE SOFTWARE.
 *
 */
+
 package com.owncloud.android.lib.resources.appregistry
 
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -40,9 +41,9 @@ import java.net.URL
 import java.util.concurrent.TimeUnit
 
 class GetUrlToOpenInWebRemoteOperation(
-    val openWithWebEndpoint: String,
-    val fileId: String,
-    val appName: String,
+    private val openWithWebEndpoint: String,
+    private val fileId: String,
+    private val appName: String,
 ) : RemoteOperation<String>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<String> {
@@ -76,7 +77,7 @@ class GetUrlToOpenInWebRemoteOperation(
         }
     }
 
-    private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_MULTI_STATUS
+    private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK
 
     data class OpenInWebParams(
         val fileId: String,
