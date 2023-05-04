@@ -2,6 +2,8 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.data.appregistry.datasources
 
 import com.owncloud.android.domain.appregistry.model.AppRegistry
@@ -27,6 +30,10 @@ interface LocalAppRegistryDataSource {
         accountName: String,
         mimeType: String,
     ): Flow<AppRegistryMimeType?>
+
+    fun getAppRegistryWhichAllowCreation(
+        accountName: String,
+    ): Flow<List<AppRegistryMimeType>>
 
     fun saveAppRegistryForAccount(
         appRegistry: AppRegistry

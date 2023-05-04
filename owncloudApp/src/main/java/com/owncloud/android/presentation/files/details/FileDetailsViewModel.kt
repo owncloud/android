@@ -141,6 +141,7 @@ class FileDetailsViewModel(
         }
     }
 
+    // TODO: Use MainFileListViewModel's openInWeb method and remove this one
     fun openInWeb(fileId: String, appName: String) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,

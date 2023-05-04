@@ -20,6 +20,7 @@ Summary
 * Enhancement - Link in drawer menu: [#3949](https://github.com/owncloud/android/pull/3949)
 * Enhancement - Send language header in all requests: [#3980](https://github.com/owncloud/android/issues/3980)
 * Enhancement - Open in specific web provider: [#3994](https://github.com/owncloud/android/issues/3994)
+* Enhancement - Create file via web: [#3995](https://github.com/owncloud/android/issues/3995)
 * Enhancement - Updated WebFinger flow: [#3998](https://github.com/owncloud/android/issues/3998)
 * Enhancement - Monochrome icon for the app: [#4001](https://github.com/owncloud/android/pull/4001)
 * Enhancement - Add prompt parameter to OIDC flow: [#4011](https://github.com/owncloud/android/pull/4011)
@@ -131,6 +132,15 @@ Details
    https://github.com/owncloud/android/issues/3994
    https://github.com/owncloud/android/pull/3990
    https://owncloud.dev/services/app-registry/apps/#app-registry
+
+* Enhancement - Create file via web: [#3995](https://github.com/owncloud/android/issues/3995)
+
+   A new option has been added in the FAB to create new files, for those servers which support this
+   option and have available app providers that allow the creation of new files.
+
+   https://github.com/owncloud/android/issues/3995
+   https://github.com/owncloud/android/pull/4023
+   https://github.com/owncloud/android-library/pull/562
 
 * Enhancement - Updated WebFinger flow: [#3998](https://github.com/owncloud/android/issues/3998)
 

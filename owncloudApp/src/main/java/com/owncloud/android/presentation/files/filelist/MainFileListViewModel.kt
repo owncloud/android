@@ -25,6 +25,9 @@ package com.owncloud.android.presentation.files.filelist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
+import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryWhichAllowCreationAsStreamUseCase
+import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
@@ -38,6 +41,9 @@ import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStr
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
+import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.files.SortOrder
 import com.owncloud.android.presentation.files.SortOrder.Companion.PREF_FILE_LIST_SORT_ORDER
 import com.owncloud.android.presentation.files.SortType
@@ -67,6 +73,8 @@ class MainFileListViewModel(
     private val getSpaceWithSpecialsByIdForAccountUseCase: GetSpaceWithSpecialsByIdForAccountUseCase,
     private val sortFilesWithSyncInfoUseCase: SortFilesWithSyncInfoUseCase,
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
+    getAppRegistryWhichAllowCreationAsStreamUseCase: GetAppRegistryWhichAllowCreationAsStreamUseCase,
+    private val getUrlToOpenInWebUseCase: GetUrlToOpenInWebUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
     initialFolderToDisplay: OCFile,
@@ -80,6 +88,16 @@ class MainFileListViewModel(
     private val searchFilter: MutableStateFlow<String> = MutableStateFlow("")
     private val sortTypeAndOrder = MutableStateFlow(Pair(SortType.SORT_TYPE_BY_NAME, SortOrder.SORT_ORDER_ASCENDING))
     val space: MutableStateFlow<OCSpace?> = MutableStateFlow(null)
+    val appRegistryToCreateFiles: StateFlow<List<AppRegistryMimeType>> =
+        getAppRegistryWhichAllowCreationAsStreamUseCase.execute(
+            GetAppRegistryWhichAllowCreationAsStreamUseCase.Params(
+                accountName = initialFolderToDisplay.owner
+            )
+        ).stateIn(
+            viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = emptyList()
+        )
 
     /** File list ui state combines the other fields and generate a new state whenever any of them changes */
     val fileListUiState: StateFlow<FileListUiState> =
@@ -104,6 +122,9 @@ class MainFileListViewModel(
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = FileListUiState.Loading
             )
+
+    private val _openInWebFlow = MutableStateFlow<Event<UIResult<String>>?>(null)
+    val openInWebFlow: StateFlow<Event<UIResult<String>>?> = _openInWebFlow
 
     init {
         val sortTypeSelected = SortType.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_TYPE, SortType.SORT_TYPE_BY_NAME.ordinal)]
@@ -171,7 +192,7 @@ class MainFileListViewModel(
             val parentDir: OCFile?
 
             // browsing back to not shared by link or av offline should update to root
-            if (parentId != null && parentId != ROOT_PARENT_ID.toLong()) {
+            if (parentId != null && parentId != ROOT_PARENT_ID) {
                 // Browsing to parent folder. Not root
                 val fileByIdResult = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(parentId))
                 when (fileListOption.value) {
@@ -230,6 +251,25 @@ class MainFileListViewModel(
         sharedPreferencesProvider.putInt(PREF_FILE_LIST_SORT_TYPE, sortType.ordinal)
         sharedPreferencesProvider.putInt(PREF_FILE_LIST_SORT_ORDER, sortOrder.ordinal)
         sortTypeAndOrder.update { Pair(sortType, sortOrder) }
+    }
+
+    fun openInWeb(fileId: String, appName: String) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            flow = _openInWebFlow,
+            useCase = getUrlToOpenInWebUseCase,
+            useCaseParams = GetUrlToOpenInWebUseCase.Params(
+                fileId = fileId,
+                accountName = getFile().owner,
+                appName = appName,
+            ),
+            showLoading = false,
+            requiresConnection = true,
+        )
+    }
+
+    fun resetOpenInWebFlow() {
+        _openInWebFlow.value = null
     }
 
     private fun updateSpace() {

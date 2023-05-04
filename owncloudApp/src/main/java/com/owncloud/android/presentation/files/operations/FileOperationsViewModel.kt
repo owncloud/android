@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -17,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.presentation.files.operations
 
 import androidx.lifecycle.LiveData
@@ -25,6 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.appregistry.usecases.CreateFileWithAppProviderUseCase
 import com.owncloud.android.domain.availableoffline.usecases.SetFilesAsAvailableOfflineUseCase
 import com.owncloud.android.domain.availableoffline.usecases.UnsetFilesAsAvailableOfflineUseCase
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
@@ -41,6 +45,8 @@ import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -52,6 +58,7 @@ class FileOperationsViewModel(
     private val renameFileUseCase: RenameFileUseCase,
     private val synchronizeFileUseCase: SynchronizeFileUseCase,
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
+    private val createFileWithAppProviderUseCase: CreateFileWithAppProviderUseCase,
     private val setFilesAsAvailableOfflineUseCase: SetFilesAsAvailableOfflineUseCase,
     private val unsetFilesAsAvailableOfflineUseCase: UnsetFilesAsAvailableOfflineUseCase,
     private val contextProvider: ContextProvider,
@@ -82,6 +89,9 @@ class FileOperationsViewModel(
     private val _refreshFolderLiveData = MediatorLiveData<Event<UIResult<Unit>>>()
     val refreshFolderLiveData: LiveData<Event<UIResult<Unit>>> = _refreshFolderLiveData
 
+    private val _createFileWithAppProviderFlow = MutableStateFlow<Event<UIResult<String>>?>(null)
+    val createFileWithAppProviderFlow: StateFlow<Event<UIResult<String>>?> = _createFileWithAppProviderFlow
+
     fun performOperation(fileOperation: FileOperation) {
         when (fileOperation) {
             is FileOperation.MoveOperation -> moveOperation(fileOperation)
@@ -94,6 +104,7 @@ class FileOperationsViewModel(
             is FileOperation.UnsetFilesAsAvailableOffline -> unsetFileAsAvailableOffline(fileOperation)
             is FileOperation.SynchronizeFolderOperation -> syncFolderOperation(fileOperation)
             is FileOperation.RefreshFolderOperation -> refreshFolderOperation(fileOperation)
+            is FileOperation.CreateFileWithAppProviderOperation -> createFileWithAppProvider(fileOperation)
         }
     }
 
@@ -180,6 +191,21 @@ class FileOperationsViewModel(
                 spaceId = fileOperation.folderToRefresh.spaceId,
                 syncMode = if (fileOperation.shouldSyncContents) SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS else SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER
             )
+        )
+    }
+
+    private fun createFileWithAppProvider(fileOperation: FileOperation.CreateFileWithAppProviderOperation) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            flow = _createFileWithAppProviderFlow,
+            useCase = createFileWithAppProviderUseCase,
+            useCaseParams = CreateFileWithAppProviderUseCase.Params(
+                accountName = fileOperation.accountName,
+                parentContainerId = fileOperation.parentContainerId,
+                filename = fileOperation.filename,
+            ),
+            showLoading = false,
+            requiresConnection = true,
         )
     }
 

@@ -24,6 +24,7 @@ package com.owncloud.android.presentation.files.filelist
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -31,12 +32,17 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -44,9 +50,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
+import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
+import com.owncloud.android.domain.exceptions.TooEarlyException
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
@@ -57,6 +68,7 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
+import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
@@ -82,6 +94,8 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
+import com.owncloud.android.utils.MimetypeIconUtil
+import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -118,6 +132,9 @@ class MainFileListFragment : Fragment(),
     var fileActions: FileActions? = null
     var uploadActions: UploadActions? = null
 
+    private var currentDefaultApplication: String? = null
+    private var browserOpened = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -130,6 +147,19 @@ class MainFileListFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         initViews()
         subscribeToViewModels()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (browserOpened) {
+            browserOpened = false
+            fileOperationsViewModel.performOperation(
+                FileOperation.RefreshFolderOperation(
+                    folderToRefresh = mainFileListViewModel.getFile(),
+                    shouldSyncContents = !isPickingAFolder(),
+                )
+            )
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -240,6 +270,41 @@ class MainFileListFragment : Fragment(),
                 fileActions?.onCurrentFolderUpdated(mainFileListViewModel.getFile(), currentSpace)
             }
         }
+        // Observe the list of app registries that allow creating new files
+        collectLatestLifecycleFlow(mainFileListViewModel.appRegistryToCreateFiles) { listAppRegistry ->
+            binding.fabNewfile.isVisible = listAppRegistry.isNotEmpty()
+            registerFabNewFileListener(listAppRegistry)
+        }
+        // Observe the open in web action to trigger browser
+        collectLatestLifecycleFlow(mainFileListViewModel.openInWebFlow) {
+            if (it != null) {
+                val uiResult = it.peekContent()
+                if (uiResult is UIResult.Success) {
+                    browserOpened = true
+                    val builder = CustomTabsIntent.Builder().build()
+                    builder.launchUrl(
+                        requireActivity(),
+                        Uri.parse(uiResult.data)
+                    )
+                } else if (uiResult is UIResult.Error) {
+                    // Mimetypes not supported via open in web, send 500
+                    if (uiResult.error is InstanceNotConfiguredException) {
+                        val message =
+                            getString(R.string.open_in_web_error_generic) + " " + getString(R.string.error_reason) + " " + getString(R.string.open_in_web_error_not_supported)
+                        this.showMessageInSnackbar(message, Snackbar.LENGTH_LONG)
+                    } else if (uiResult.error is TooEarlyException) {
+                        this.showMessageInSnackbar(getString(R.string.open_in_web_error_too_early), Snackbar.LENGTH_LONG)
+                    } else {
+                        this.showErrorInSnackbar(
+                            R.string.open_in_web_error_generic,
+                            uiResult.error
+                        )
+                    }
+                }
+                mainFileListViewModel.resetOpenInWebFlow()
+                currentDefaultApplication = null
+            }
+        }
 
         // Observe the file list ui state
         collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
@@ -285,6 +350,23 @@ class MainFileListFragment : Fragment(),
         fileOperationsViewModel.refreshFolderLiveData.observe(viewLifecycleOwner) {
             binding.syncProgressBar.isIndeterminate = it.peekContent().isLoading
             binding.swipeRefreshMainFileList.isRefreshing = it.peekContent().isLoading
+        }
+
+        collectLatestLifecycleFlow(fileOperationsViewModel.createFileWithAppProviderFlow) {
+            val uiResult = it?.peekContent()
+            if (uiResult is UIResult.Error) {
+                val errorMessage =
+                    uiResult.error?.parseError(resources.getString(R.string.create_file_fail_msg), resources, false)
+                showMessageInSnackbar(
+                    message = errorMessage.toString()
+                )
+            } else if (uiResult is UIResult.Success) {
+                val fileId = uiResult.data
+                val appName = currentDefaultApplication
+                if (fileId != null && appName != null) {
+                    mainFileListViewModel.openInWeb(fileId, appName)
+                }
+            }
         }
     }
 
@@ -374,6 +456,7 @@ class MainFileListFragment : Fragment(),
             toggleFabVisibility(true)
             if (!currentFolder.hasAddFilePermission) {
                 binding.fabUpload.isVisible = false
+                binding.fabNewfile.isVisible = false
             } else if (!currentFolder.hasAddSubdirectoriesPermission) {
                 binding.fabMkdir.isVisible = false
             }
@@ -397,7 +480,17 @@ class MainFileListFragment : Fragment(),
     }
 
     /**
-     * Registers [android.view.View.OnClickListener] on the 'Create Dir' mini FAB for the linked action.
+     * Registers [android.view.View.OnClickListener] on the 'Upload' mini FAB for the linked action.
+     */
+    private fun registerFabUploadListener() {
+        binding.fabUpload.setOnClickListener {
+            openBottomSheetToUploadFiles()
+            collapseFab()
+        }
+    }
+
+    /**
+     * Registers [android.view.View.OnClickListener] on the 'New folder' mini FAB for the linked action.
      */
     private fun registerFabMkDirListener() {
         binding.fabMkdir.setOnClickListener {
@@ -408,11 +501,11 @@ class MainFileListFragment : Fragment(),
     }
 
     /**
-     * Registers [android.view.View.OnClickListener] on the 'Uplodd' mini FAB for the linked action.
+     * Registers [android.view.View.OnClickListener] on the 'New document' mini FAB for the linked action.
      */
-    private fun registerFabUploadListener() {
-        binding.fabUpload.setOnClickListener {
-            openBottomSheetToUploadFiles()
+    private fun registerFabNewFileListener(listAppRegistry: List<AppRegistryMimeType>) {
+        binding.fabNewfile.setOnClickListener {
+            openBottomSheetToCreateNewFile(listAppRegistry)
             collapseFab()
         }
     }
@@ -445,6 +538,76 @@ class MainFileListFragment : Fragment(),
         val uploadBottomSheetBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(uploadBottomSheet.parent as View)
         dialog.setOnShowListener { uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.measuredHeight) }
         dialog.show()
+    }
+
+    private fun openBottomSheetToCreateNewFile(listAppRegistry: List<AppRegistryMimeType>) {
+        val newFileBottomSheet = layoutInflater.inflate(R.layout.newfile_bottom_sheet_fragment, null)
+        val dialog = BottomSheetDialog(requireContext())
+        dialog.setContentView(newFileBottomSheet)
+        val docTypesBottomSheetLayout = newFileBottomSheet.findViewById<LinearLayout>(R.id.doc_types_bottom_sheet_layout)
+        listAppRegistry.forEach { appRegistry ->
+            val documentTypeItemView = BottomSheetFragmentItemView(requireContext())
+            documentTypeItemView.apply {
+                removeDefaultTint()
+                title = appRegistry.name
+                itemIcon = ResourcesCompat.getDrawable(resources, MimetypeIconUtil.getFileTypeIconId(appRegistry.mimeType, appRegistry.ext), null)
+                setOnClickListener {
+                    showFilenameTextDialog(appRegistry.ext)
+                    currentDefaultApplication = appRegistry.defaultApplication
+                    dialog.hide()
+                }
+            }
+            docTypesBottomSheetLayout.addView(documentTypeItemView)
+        }
+
+        val newFileBottomSheetBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(newFileBottomSheet.parent as View)
+        dialog.setOnShowListener { newFileBottomSheetBehavior.setPeekHeight(newFileBottomSheet.measuredHeight) }
+        dialog.show()
+    }
+
+    private fun showFilenameTextDialog(fileExtension: String?) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_upload_text, null)
+        dialogView.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(requireContext())
+
+        val input = dialogView.findViewById<TextInputEditText>(R.id.inputFileName)
+        input.requestFocus()
+
+        val builder = AlertDialog.Builder(requireContext()).apply {
+            setView(dialogView)
+            setTitle(R.string.uploader_upload_text_dialog_title)
+            setCancelable(false)
+            setPositiveButton(android.R.string.ok) { _, _ ->
+                val currentFolder = mainFileListViewModel.getFile()
+                val filename = input.text.toString()
+                var error: String? = null
+                if (filename.length > MAX_FILENAME_LENGTH) {
+                    error = getString(R.string.uploader_upload_text_dialog_filename_error_length_max, MAX_FILENAME_LENGTH)
+                } else if (filename.isEmpty() || filename.isBlank()) {
+                    error = getString(R.string.uploader_upload_text_dialog_filename_error_empty)
+                } else if (forbiddenChars.any { filename.contains(it) }) {
+                    error = getString(R.string.filename_forbidden_characters_from_server)
+                }
+
+                if (error != null) {
+                    showMessageInSnackbar(error)
+                } else {
+                    val filenameWithExtension = "$filename.$fileExtension"
+                    fileOperationsViewModel.performOperation(
+                        FileOperation.CreateFileWithAppProviderOperation(
+                            currentFolder.owner,
+                            currentFolder.remoteId!!,
+                            filenameWithExtension
+                        )
+                    )
+                }
+            }
+            setNegativeButton(android.R.string.cancel, null)
+        }
+        val alertDialog = builder.create()
+        alertDialog.apply {
+            window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+            show()
+        }
     }
 
     override fun onFolderNameSet(newFolderName: String, parentFolder: OCFile) {
@@ -824,6 +987,8 @@ class MainFileListFragment : Fragment(),
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
         val ARG_INITIAL_FOLDER_TO_DISPLAY = "${MainFileListFragment::class.java.canonicalName}.ARG_INITIAL_FOLDER_TO_DISPLAY}"
         val ARG_FILE_LIST_OPTION = "${MainFileListFragment::class.java.canonicalName}.FILE_LIST_OPTION}"
+        private const val MAX_FILENAME_LENGTH = 223
+        private val forbiddenChars = listOf('/', '\\')
 
         private const val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
 
