@@ -24,6 +24,7 @@ Summary
 * Enhancement - Updated WebFinger flow: [#3998](https://github.com/owncloud/android/issues/3998)
 * Enhancement - Monochrome icon for the app: [#4001](https://github.com/owncloud/android/pull/4001)
 * Enhancement - Add prompt parameter to OIDC flow: [#4011](https://github.com/owncloud/android/pull/4011)
+* Enhancement - New setting "Access document provider": [#4032](https://github.com/owncloud/android/pull/4032)
 
 Details
 -------
@@ -167,6 +168,14 @@ Details
    https://github.com/owncloud/android/issues/3862
    https://github.com/owncloud/android/issues/3984
    https://github.com/owncloud/android/pull/4011
+
+* Enhancement - New setting "Access document provider": [#4032](https://github.com/owncloud/android/pull/4032)
+
+   A new setting has been added in the "More" settings section with a suggested app to access the
+   document provider.
+
+   https://github.com/owncloud/android/issues/4028
+   https://github.com/owncloud/android/pull/4032
 
 Changelog for ownCloud Android Client [3.0.4] (2023-03-07)
 =======================================
