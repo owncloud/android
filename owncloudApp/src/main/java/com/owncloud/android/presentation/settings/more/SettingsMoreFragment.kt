@@ -3,17 +3,17 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2021 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -39,6 +39,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
     private var moreScreen: PreferenceScreen? = null
     private var prefHelp: Preference? = null
     private var prefSync: Preference? = null
+    private var prefAccessDocProvider: Preference? = null
     private var prefRecommend: Preference? = null
     private var prefFeedback: Preference? = null
     private var prefImprint: Preference? = null
@@ -49,6 +50,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         moreScreen = findPreference(SCREEN_MORE)
         prefHelp = findPreference(PREFERENCE_HELP)
         prefSync = findPreference(PREFERENCE_SYNC_CALENDAR_CONTACTS)
+        prefAccessDocProvider = findPreference(PREFERENCE_ACCESS_DOCUMENT_PROVIDER)
         prefRecommend = findPreference(PREFERENCE_RECOMMEND)
         prefFeedback = findPreference(PREFERENCE_FEEDBACK)
         prefImprint = findPreference(PREFERENCE_IMPRINT)
@@ -73,6 +75,13 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
             }
         } else {
             moreScreen?.removePreferenceFromScreen(prefSync)
+        }
+
+        // Access document provider
+        prefAccessDocProvider?.setOnPreferenceClickListener {
+            val docProviderAppUrl = moreViewModel.getDocProviderAppUrl()
+            requireActivity().goToUrl(docProviderAppUrl)
+            true
         }
 
         // Recommend
@@ -121,6 +130,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         private const val SCREEN_MORE = "more_screen"
         private const val PREFERENCE_HELP = "help"
         private const val PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts"
+        private const val PREFERENCE_ACCESS_DOCUMENT_PROVIDER = "accessDocumentProvider"
         private const val PREFERENCE_RECOMMEND = "recommend"
         private const val PREFERENCE_FEEDBACK = "feedback"
         private const val PREFERENCE_IMPRINT = "imprint"

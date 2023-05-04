@@ -76,6 +76,7 @@
     <string name="mail_feedback" formatted="false">"mailto:android-app@owncloud.com"</string>
     <string name="url_app_download" formatted="false">"https://play.google.com/store/apps/details?id=com.owncloud.android"</string>
     <string name="url_sync_calendar_contacts">"https://play.google.com/store/apps/details?id=at.bitfire.davdroid"</string>
+    <string name="url_document_provider_app">https://play.google.com/store/apps/details?id=com.marc.files</string>
 
     <!--Destination mail for sending log files -->
     <string name="mail_logger" formatted="false"></string>

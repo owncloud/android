@@ -29,6 +29,11 @@
         app:title="@string/prefs_sync_calendar_contacts" />
     <Preference
         app:iconSpaceReserved="false"
+        app:key="accessDocumentProvider"
+        app:summary="@string/prefs_access_document_provider_summary"
+        app:title="@string/prefs_access_document_provider" />
+    <Preference
+        app:iconSpaceReserved="false"
         app:key="feedback"
         app:title="@string/prefs_send_feedback" />
     <Preference
