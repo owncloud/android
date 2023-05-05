@@ -53,6 +53,7 @@ class SettingsMoreViewModel(
     fun shouldMoreSectionBeVisible() =
         isHelpEnabled() ||
                 isSyncEnabled() ||
+                isDocProviderAppEnabled() ||
                 isRecommendEnabled() ||
                 isFeedbackEnabled() ||
                 isImprintEnabled()
