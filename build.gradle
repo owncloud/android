@@ -28,7 +28,7 @@ buildscript {
         comSquareupMoshi = '1.14.0'
 
         // Testing
-        ioMockk = "1.13.3"
+        ioMockk = "1.13.5"
         junitVersion = "4.13.2"
         androidxTestExt = "1.1.5"
         androidxTest = "1.4.0"
