@@ -17,6 +17,7 @@
   <string name="actionbar_send_file">Enviar</string>
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Classificar por</string>
+  <string name="fab_new_file">Novo documento</string>
   <string name="drawer_item_all_files">Todos os arquivos</string>
   <string name="drawer_item_only_available_offline">Disponível externamente</string>
   <string name="drawer_item_shared_by_link_files">Compartilhado por link</string>

@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">Versturen</string>
   <string name="actionbar_descending">Aflopend</string>
   <string name="actionbar_sort_title">Sorteer op</string>
+  <string name="fab_new_file">Nieuw document</string>
   <string name="drawer_item_all_files">Alle bestanden</string>
   <string name="drawer_item_only_available_offline">Beschikbaar off-line</string>
   <string name="drawer_item_shared_by_link_files">Gedeeld via een link</string>

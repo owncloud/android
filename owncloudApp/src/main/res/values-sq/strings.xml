@@ -17,6 +17,7 @@
   <string name="actionbar_send_file">Dërgoje</string>
   <string name="actionbar_descending">Në rend zbritës</string>
   <string name="actionbar_sort_title">Renditi sipas</string>
+  <string name="fab_new_file">Dokument i ri</string>
   <string name="drawer_item_all_files">Krejt kartelat</string>
   <string name="drawer_item_only_available_offline">I passhëm jo në linjë</string>
   <string name="drawer_item_shared_by_link_files">Të ndara me lidhje</string>

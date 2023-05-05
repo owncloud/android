@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">보내기</string>
   <string name="actionbar_descending">내림차순</string>
   <string name="actionbar_sort_title">정렬 순서</string>
+  <string name="fab_new_file">새 문서</string>
   <string name="drawer_item_all_files">모든 파일</string>
   <string name="drawer_item_only_available_offline">오프라인 사용 가능</string>
   <string name="drawer_item_shared_by_link_files">링크로 공유됨</string>
