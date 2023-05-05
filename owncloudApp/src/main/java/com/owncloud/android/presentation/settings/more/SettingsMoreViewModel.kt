@@ -3,17 +3,17 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2021 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,6 +36,10 @@ class SettingsMoreViewModel(
 
     fun getSyncUrl() = contextProvider.getString(R.string.url_sync_calendar_contacts)
 
+    fun isDocProviderAppEnabled() = contextProvider.getBoolean(R.bool.access_document_provider_app_enabled)
+
+    fun getDocProviderAppUrl() = contextProvider.getString(R.string.url_document_provider_app)
+
     fun isRecommendEnabled() = contextProvider.getBoolean(R.bool.recommend_enabled)
 
     fun isFeedbackEnabled() = contextProvider.getBoolean(R.bool.feedback_enabled)
@@ -49,6 +53,7 @@ class SettingsMoreViewModel(
     fun shouldMoreSectionBeVisible() =
         isHelpEnabled() ||
                 isSyncEnabled() ||
+                isDocProviderAppEnabled() ||
                 isRecommendEnabled() ||
                 isFeedbackEnabled() ||
                 isImprintEnabled()
