@@ -737,6 +737,8 @@
     <string name="release_notes_4_0_subtitle_9">If your server supports app providers to open specific kind of files, all of them will be listed in Details view</string>
     <string name="release_notes_4_0_title_10">Themed icons supported</string>
     <string name="release_notes_4_0_subtitle_10">Android 13 feature "Themed icons" will let you set app icon in monochrome</string>
+    <string name="release_notes_4_0_title_11">Create new documents via web (oCIS)</string>
+    <string name="release_notes_4_0_subtitle_11">If oCIS server supports application providers, new documents can be created via browser and synced with oC</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
