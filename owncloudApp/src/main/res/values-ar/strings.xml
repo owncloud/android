@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">إرسال</string>
   <string name="actionbar_descending">تنازلي</string>
   <string name="actionbar_sort_title">فرز حسب</string>
+  <string name="fab_new_file">مستند جديد</string>
   <string name="drawer_item_all_files">كل الملفات</string>
   <string name="drawer_item_only_available_offline">متوفر دون اتصال بالإنترنت</string>
   <string name="drawer_item_shared_by_link_files">مشاركة بواسطة الرابط</string>
