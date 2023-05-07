@@ -16,7 +16,10 @@ dependencies {
     implementation libs.kotlinx.coroutines.core
 
     // Android X
+    implementation libs.androidx.annotation
     implementation libs.androidx.appcompat
+    implementation libs.androidx.biometric
+    implementation libs.androidx.constraintlayout
     implementation libs.androidx.core.ktx
     implementation libs.androidx.fragment.ktx
     implementation libs.androidx.legacy.support
@@ -27,31 +30,28 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel.ktx
     implementation libs.androidx.preference.ktx
     implementation libs.androidx.room.runtime
+    implementation libs.androidx.sqlite.ktx
     implementation libs.androidx.work.runtime.ktx
-    implementation "androidx.annotation:annotation:1.6.0"
-    implementation "androidx.biometric:biometric:1.1.0"
-    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
-    implementation "androidx.sqlite:sqlite-ktx:2.3.1"
-    implementation("androidx.browser:browser:1.5.0") { because "CustomTabs required for OAuth2 and OIDC" }
-    implementation("androidx.enterprise:enterprise-feedback:1.1.0") { because "MDM feedback" }
+    implementation(libs.androidx.browser) { because "CustomTabs required for OAuth2 and OIDC" }
+    implementation(libs.androidx.enterprise.feedback) { because "MDM feedback" }
 
     // Image loading
-    implementation "com.github.bumptech.glide:glide:4.15.1"
-    implementation "com.github.2coffees1team:GlideToVectorYou:v2.0.0"
+    implementation libs.glide
+    implementation libs.glide.vector
 
     // Zooming Android ImageView.
-    implementation "com.github.chrisbanes:PhotoView:2.3.0"
+    implementation libs.photoview
 
     // Koin dependency injector
     implementation libs.koin.androidx.workmanager
     implementation libs.koin.core
 
     // Miscellaneous
-    implementation "com.getbase:floatingactionbutton:1.10.1"
-    implementation "com.github.aritraroy.PatternLockView:patternlockview:a90b0d4bf0"
-    implementation "com.google.android.exoplayer:exoplayer:2.16.1"
-    implementation "com.google.android.material:material:1.8.0"
-    implementation "com.jakewharton:disklrucache:2.0.2"
+    implementation libs.disklrucache
+    implementation libs.exoplayer
+    implementation libs.floatingactionbutton
+    implementation libs.material
+    implementation libs.patternlockview
 
     // Markdown Preview
     implementation libs.bundles.markwon
@@ -65,7 +65,6 @@ dependencies {
 
     // Instrumented tests
     androidTestImplementation project(":owncloudTestUtil")
-    androidTestImplementation "com.github.tmurakami:dexopener:2.0.5"
     androidTestImplementation libs.androidx.annotation
     androidTestImplementation libs.androidx.arch.core.testing
     androidTestImplementation libs.androidx.test.core
@@ -74,12 +73,13 @@ dependencies {
     androidTestImplementation libs.androidx.test.runner
     androidTestImplementation libs.androidx.test.uiautomator
     androidTestImplementation libs.bundles.espresso
+    androidTestImplementation libs.dexopener
     androidTestImplementation(libs.mockk.android) { exclude module: "objenesis" }
 
     // Debug
-    debugImplementation "androidx.test:monitor:1.6.1"
     debugImplementation libs.androidx.fragment.testing
-    debugImplementation "com.facebook.stetho:stetho:1.6.0"
+    debugImplementation libs.androidx.test.monitor
+    debugImplementation libs.stetho
 }
 
 android {
