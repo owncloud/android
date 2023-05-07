@@ -33,16 +33,16 @@ android {
 }
 
 dependencies {
-    implementation "androidx.appcompat:appcompat:$androidxAppcompat"
+    implementation libs.androidx.appcompat
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$orgJetbrainsKotlin"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$orgJetbrainsKotlinx"
+    implementation libs.kotlin.stdlib
+    implementation libs.kotlinx.coroutines.core
 
     // Dependencies for unit tests
     testImplementation project(":owncloudTestUtil")
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "androidx.arch.core:core-testing:$androidxArchCore"
-    testImplementation "io.mockk:mockk:$ioMockk"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$orgJetbrainsKotlinx"
+    testImplementation libs.androidx.arch.core.testing
+    testImplementation libs.junit4
+    testImplementation libs.kotlinx.coroutines.test
+    testImplementation libs.mockk
 }

@@ -12,31 +12,28 @@ dependencies {
     implementation project(':owncloudData')
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$orgJetbrainsKotlin"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$orgJetbrainsKotlinx"
+    implementation libs.kotlin.stdlib
+    implementation libs.kotlinx.coroutines.core
 
     // Android X
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.legacy.support
+    implementation libs.androidx.lifecycle.common.java8
+    implementation libs.androidx.lifecycle.extensions
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.lifecycle.runtime.ktx
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.preference.ktx
+    implementation libs.androidx.room.runtime
+    implementation libs.androidx.work.runtime.ktx
     implementation "androidx.annotation:annotation:1.6.0"
-    implementation "androidx.appcompat:appcompat:$androidxAppcompat"
     implementation "androidx.biometric:biometric:1.1.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
-    implementation "androidx.legacy:legacy-support-v4:$androidxLegacy"
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidxLifecycle"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$androidxLifecycle"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidxLifecycle"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$androidxLifecycle"
-    implementation "androidx.preference:preference-ktx:1.2.0"
-    implementation "androidx.room:room-runtime:$androidxRoom"
     implementation "androidx.sqlite:sqlite-ktx:2.3.1"
-    implementation "androidx.work:work-runtime-ktx:2.8.1"
     implementation("androidx.browser:browser:1.5.0") { because "CustomTabs required for OAuth2 and OIDC" }
     implementation("androidx.enterprise:enterprise-feedback:1.1.0") { because "MDM feedback" }
-
-    // KTX extensions, see https://developer.android.com/kotlin/ktx.html
-    implementation "androidx.core:core-ktx:$androidxCore"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$androidxLifecycle"
-    implementation "androidx.fragment:fragment-ktx:$androidxFragment"
 
     // Image loading
     implementation "com.github.bumptech.glide:glide:4.15.1"
@@ -46,8 +43,8 @@ dependencies {
     implementation "com.github.chrisbanes:PhotoView:2.3.0"
 
     // Koin dependency injector
-    implementation "io.insert-koin:koin-core:$ioInsertKoin"
-    implementation "io.insert-koin:koin-androidx-workmanager:$ioInsertKoin"
+    implementation libs.koin.androidx.workmanager
+    implementation libs.koin.core
 
     // Miscellaneous
     implementation "com.getbase:floatingactionbutton:1.10.1"
@@ -57,37 +54,31 @@ dependencies {
     implementation "com.jakewharton:disklrucache:2.0.2"
 
     // Markdown Preview
-    implementation "io.noties.markwon:core:$markwon"
-    implementation "io.noties.markwon:ext-tables:$markwon"
-    implementation "io.noties.markwon:ext-strikethrough:$markwon"
-    implementation "io.noties.markwon:ext-tasklist:$markwon"
-    implementation "io.noties.markwon:html:$markwon"
+    implementation libs.bundles.markwon
 
     // Tests
     testImplementation project(":owncloudTestUtil")
-    testImplementation "androidx.arch.core:core-testing:$androidxArchCore"
-    testImplementation "io.mockk:mockk:$ioMockk"
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$orgJetbrainsKotlinx"
+    testImplementation libs.androidx.arch.core.testing
+    testImplementation libs.junit4
+    testImplementation libs.kotlinx.coroutines.test
+    testImplementation libs.mockk
 
     // Instrumented tests
     androidTestImplementation project(":owncloudTestUtil")
-    androidTestImplementation "androidx.annotation:annotation:$androidxAnnotation"
-    androidTestImplementation "androidx.arch.core:core-testing:2.2.0"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:$androidxTestEspresso"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxTestEspresso"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:$androidxTestEspresso"
-    androidTestImplementation "androidx.test.espresso:espresso-web:$androidxTestEspresso"
-    androidTestImplementation "androidx.test.ext:junit:$androidxTestExt"
-    androidTestImplementation "androidx.test.uiautomator:uiautomator:$androidxTestUiautomator"
-    androidTestImplementation "androidx.test:core:$androidxTest"
-    androidTestImplementation "androidx.test:rules:$androidxTest"
-    androidTestImplementation "androidx.test:runner:$androidxTest"
     androidTestImplementation "com.github.tmurakami:dexopener:2.0.5"
-    androidTestImplementation("io.mockk:mockk-android:$ioMockk") { exclude module: "objenesis" }
-    debugImplementation "androidx.test:monitor:1.6.1"
+    androidTestImplementation libs.androidx.annotation
+    androidTestImplementation libs.androidx.arch.core.testing
+    androidTestImplementation libs.androidx.test.core
+    androidTestImplementation libs.androidx.test.ext.junit
+    androidTestImplementation libs.androidx.test.rules
+    androidTestImplementation libs.androidx.test.runner
+    androidTestImplementation libs.androidx.test.uiautomator
+    androidTestImplementation libs.bundles.espresso
+    androidTestImplementation(libs.mockk.android) { exclude module: "objenesis" }
 
-    debugImplementation "androidx.fragment:fragment-testing:$androidxFragment"
+    // Debug
+    debugImplementation "androidx.test:monitor:1.6.1"
+    debugImplementation libs.androidx.fragment.testing
     debugImplementation "com.facebook.stetho:stetho:1.6.0"
 }
 
