@@ -4,17 +4,29 @@ androidxActivity = "1.6.1"
 androidxAnnotation = "1.6.0"
 androidxAppCompat = "1.5.1"
 androidxArch = "2.2.0"
+androidxBiometric = "1.1.0"
+androidxBrowser = "1.5.0"
+androidxContraintLayout = "2.1.4"
 androidxCore = "1.9.0"
+androidxEnterpriseFeedback = "1.1.0"
 androidxEspresso = "3.5.1"
 androidxFragment = "1.5.5"
 androidxLegacy = "1.0.0"
 androidxLifecycle = "2.5.1"
 androidxLifecycleExtensions = "2.2.0"
 androidxRoom = "2.5.1"
+androidxSqlite = "2.3.1"
 androidxTest = "1.4.0"
 androidxTestExt = "1.1.5"
+androidxTestMonitor = "1.6.1"
 androidxTestUiAutomator ="2.2.0"
 androidxWork = "2.8.1"
+dexopener = "2.0.5"
+disklrucache = "2.0.2"
+exoplayer ="2.16.1"
+floatingactionbutton = "1.10.1"
+glide = "4.15.1"
+glideToVectorYou = "v2.0.0"
 junit4 = "4.13.2"
 koin = "3.3.3"
 kotlin = "1.8.10"
@@ -22,16 +34,24 @@ kotlinxCoroutines = "1.6.4"
 ksp = "1.8.10-1.0.9"
 ktlint = "11.1.0"
 markwon = "4.6.2"
+material = "1.8.0"
 mockk = "1.13.3"
 moshi = "1.14.0"
+patternlockview = "a90b0d4bf0"
+photoView = "2.3.0"
 preference = "1.2.0"
 sonarqube = "4.0.0.2929"
+stetho = "1.6.0"
 
 [libraries]
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidxAnnotation" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
 androidx-arch-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "androidxArch" }
+androidx-biometric = { group = "androidx.biometric", name = "biometric", version.ref = "androidxBiometric" }
+androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidxContraintLayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-enterprise-feedback = { group = "androidx.enterprise", name = "enterprise-feedback", version.ref = "androidxEnterpriseFeedback" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidxFragment" }
 androidx-fragment-testing = { group = "androidx.fragment", name = "fragment-testing", version.ref = "androidxFragment" }
 androidx-legacy-support = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "androidxLegacy" }
@@ -45,16 +65,24 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidxRoom" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
 androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "androidxRoom" }
+androidx-sqlite-ktx = { group = "androidx.sqlite", name = "sqlite-ktx", version.ref = "androidxSqlite" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTest" }
 androidx-test-espresso-contrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "androidxEspresso" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
 androidx-test-espresso-intents = { group = "androidx.test.espresso", name = "espresso-intents", version.ref = "androidxEspresso" }
 androidx-test-espresso-web = { group = "androidx.test.espresso", name = "espresso-web", version.ref = "androidxEspresso" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxTestExt" }
+androidx-test-monitor = { group = "androidx.test", name = "monitor", version.ref = "androidxTestMonitor" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTest" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTest" }
 androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "androidxTestUiAutomator" }
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
+dexopener = { group = "com.github.tmurakami", name = "dexopener", version.ref = "dexopener" }
+disklrucache = { group = "com.jakewharton", name = "disklrucache", version.ref = "disklrucache" }
+exoplayer = { group = "com.google.android.exoplayer", name = "exoplayer", version.ref = "exoplayer" }
+floatingactionbutton = { group = "com.getbase", name = "floatingactionbutton", version.ref = "floatingactionbutton" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-vector = { group = "com.github.2coffees1team", name = "GlideToVectorYou", version.ref = "glideToVectorYou" }
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-androidx-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager", version.ref = "koin" }
@@ -68,10 +96,14 @@ markwon-ext-strikethrough = { group = "io.noties.markwon", name = "ext-strikethr
 markwon-ext-tables = { group = "io.noties.markwon", name = "ext-tables", version.ref = "markwon" }
 markwon-ext-tasklist = { group = "io.noties.markwon", name = "ext-tasklist", version.ref = "markwon" }
 markwon-html = { group = "io.noties.markwon", name = "html", version.ref = "markwon" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
 moshi-kotlin-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
+patternlockview = { group = "com.github.aritraroy.PatternLockView", name = "patternlockview", version.ref = "patternlockview" }
+photoview = { group = "com.github.chrisbanes", name = "PhotoView", version.ref = "photoView" }
+stetho = { group = "com.facebook.stetho", name = "stetho", version.ref = "stetho" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
