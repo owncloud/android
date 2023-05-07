@@ -22,6 +22,6 @@ dependencies {
     implementation project(':owncloudDomain')
     implementation project(':owncloud-android-library:owncloudComLibrary')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$orgJetbrainsKotlin"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$androidxLifecycle"
+    implementation libs.kotlin.stdlib
+    implementation libs.androidx.lifecycle.livedata.ktx
 }
