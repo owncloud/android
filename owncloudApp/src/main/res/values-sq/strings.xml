@@ -86,6 +86,7 @@
   <string name="prefs_help">Ndihmë</string>
   <string name="prefs_sync_calendar_contacts">Njëkohësoni kontaktet, kalendarët dhe punët tuaja</string>
   <string name="prefs_sync_calendar_contacts_summary">Instalo DAVx⁵</string>
+  <string name="prefs_access_document_provider_summary">Aplikacion i sugjeruar, për shfletim kartelash të pajisjes tuaj përmes eksploruesit të kartelave të brendshëm të vetë Android-id</string>
   <string name="prefs_recommend">Këshillojani një shoku</string>
   <string name="prefs_feedback">Përshtypje</string>
   <string name="prefs_imprint">Imprint</string>
@@ -674,6 +675,8 @@
   <string name="release_notes_4_0_subtitle_9">Nëse shërbyesi juaj mbulon furnizues apIikacionesh për hapje llojesh specifike kartelash, krejt këta do të shfaqen te pamja Hollësi</string>
   <string name="release_notes_4_0_title_10">Mbulohen ikona temash</string>
   <string name="release_notes_4_0_subtitle_10">Veçoria “Ikona teme” e Android 13-s do t’ju lejojë të caktoni ikona aplikacioni njëngjyrëshe</string>
+  <string name="release_notes_4_0_title_11">Krijoni dokumente të reja përmes web-it (oCIS)</string>
+  <string name="release_notes_4_0_subtitle_11">Nëse shërbyesi oCIS mbulon shërbime aplikacionesh, dokumentet e reja do të krijohen përmes shfletuesit dhe njëkohësohen me oC</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
