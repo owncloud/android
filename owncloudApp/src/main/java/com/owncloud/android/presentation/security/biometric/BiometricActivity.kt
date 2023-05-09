@@ -3,17 +3,18 @@
  *
  * @author David González Verdugo
  * @author Juan Carlos Garrote Gascón
- * Copyright (C) 2021 ownCloud GmbH.
- * <p>
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -21,10 +22,8 @@
 package com.owncloud.android.presentation.security.biometric
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
@@ -56,7 +55,6 @@ class BiometricActivity : AppCompatActivity() {
      *
      * @param savedInstanceState Previously saved state - irrelevant in this case
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

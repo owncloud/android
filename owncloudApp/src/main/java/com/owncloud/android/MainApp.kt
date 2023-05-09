@@ -193,9 +193,7 @@ class MainApp : Application() {
                 Timber.v("${activity.javaClass.simpleName} onStart() starting")
                 PassCodeManager.onActivityStarted(activity)
                 PatternManager.onActivityStarted(activity)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    BiometricManager.onActivityStarted(activity)
-                }
+                BiometricManager.onActivityStarted(activity)
             }
 
             override fun onActivityResumed(activity: Activity) {
@@ -210,9 +208,7 @@ class MainApp : Application() {
                 Timber.v("${activity.javaClass.simpleName} onStop() ending")
                 PassCodeManager.onActivityStopped(activity)
                 PatternManager.onActivityStopped(activity)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    BiometricManager.onActivityStopped(activity)
-                }
+                BiometricManager.onActivityStopped(activity)
             }
 
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {

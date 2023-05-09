@@ -3,29 +3,27 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2021 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.owncloud.android.presentation.security.biometric
 
-import android.os.Build
 import android.os.SystemClock
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyPermanentlyInvalidatedException
 import android.security.keystore.KeyProperties
-import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricPrompt
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
@@ -55,7 +53,6 @@ class BiometricViewModel(
      *
      * @return the cipher if it is properly initialized, null otherwise
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
     fun initCipher(): Cipher? {
         generateAndStoreKey()
 
@@ -103,7 +100,6 @@ class BiometricViewModel(
      * Generate encryption key involved in biometric authentication process and store it securely on the device using
      * the Android Keystore system
      */
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private fun generateAndStoreKey() {
         try {
             // Access Android Keystore container, used to safely store cryptographic keys on Android devices
@@ -149,9 +145,7 @@ class BiometricViewModel(
     }
 
     fun isBiometricLockAvailable(): Boolean {
-        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            false
-        } else if (!BiometricManager.isHardwareDetected()) { // Biometric not supported
+        return if (!BiometricManager.isHardwareDetected()) { // Biometric not supported
             false
         } else BiometricManager.hasEnrolledBiometric() // Biometric not enrolled
     }
