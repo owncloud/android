@@ -86,6 +86,8 @@
   <string name="prefs_help">Abiinfo</string>
   <string name="prefs_sync_calendar_contacts">Sünkroniseeri kontaktid, kalendrid ja ülesanded</string>
   <string name="prefs_sync_calendar_contacts_summary">Paigalda DAVx⁵</string>
+  <string name="prefs_access_document_provider">Ligipääs dokumendi pakkujale</string>
+  <string name="prefs_access_document_provider_summary">Soovitatud rakendus sinu seadme failide sirvimiseks läbi Androidi süsteemse failihalduri</string>
   <string name="prefs_recommend">Soovita sõbrale</string>
   <string name="prefs_feedback">Tagasiside</string>
   <string name="prefs_imprint">Impressum</string>
@@ -171,6 +173,7 @@
   <string name="file_list_files">failid</string>
   <string name="filedetails_select_file">Lisainfo vaatamiseks vajuta failile.</string>
   <string name="upload_to">Lae üles %1$s</string>
+  <string name="pick_document_type">Vali loodava dokumendi tüüp:</string>
   <string name="upload_files_title">Failid</string>
   <string name="filedetails_size">Suurus:</string>
   <string name="filedetails_type">Tüüp:</string>
@@ -372,6 +375,7 @@
   <string name="download_enqueued_msg">Allalaadimine lisati järjekorda</string>
   <string name="upload_enqueued_msg">Üleslaadimine lisati järjekorda</string>
   <string name="create_dir_fail_msg">Kataloogi ei saa tekitada</string>
+  <string name="create_file_fail_msg">Faili loomine ei õnnestunud</string>
   <string name="filename_forbidden_characters">Keelatud sümbolid:  / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Faili nimi sisaldab vähemalt üht keelatud märki</string>
   <string name="filename_empty">Faili nime lahter ei saa olla tühi</string>
@@ -674,6 +678,8 @@
   <string name="release_notes_4_0_subtitle_9">Kui su server lubab eri rakenduse pakkujatel avada kindlat tüüpi faile, siis kõik need näidatakse detailivaates</string>
   <string name="release_notes_4_0_title_10">Temaatilised ikoonid on toetatud</string>
   <string name="release_notes_4_0_subtitle_10">Android 13 võimalus \"Temaatilised ikoonid\" lubab rakenduse ikoonid muuta mustvalgeks</string>
+  <string name="release_notes_4_0_title_11">Loo uusi dokumente üle võrgu (oCIS)</string>
+  <string name="release_notes_4_0_subtitle_11">Kui oCIS server toetab rakenduste pakkujaid, siis saab uusi dokumente luua ja zoneCloudiga sünkroonida läbi brauseri</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
