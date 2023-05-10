@@ -83,6 +83,7 @@ abstract class ToolbarActivity : BaseActivity() {
                 }
                 toolbarTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search, 0)
             } else {
+                setOnClickListener(null)
                 toolbarTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             }
         }
