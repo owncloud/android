@@ -24,6 +24,8 @@ import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDa
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_FILE
+import com.owncloud.android.testutil.OC_FILE_SPACE_WEB_DAV_URL
 import com.owncloud.android.testutil.OC_FOLDER
 import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
 import com.owncloud.android.utils.createRemoteOperationResultMock
@@ -116,4 +118,86 @@ class OCRemoteFileDataSourceTest {
 
         ocRemoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME, null)
     }
+
+    @Test
+    fun returnsSamePathIfFileDoesNotExists() {
+        every {
+            clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
+                path = OC_FILE.remotePath,
+                isUserLogged = false,
+                spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+            ).data
+        } returns false
+
+        val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
+            remotePath = OC_FILE.remotePath,
+            accountName = OC_ACCOUNT_NAME,
+            spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+        )
+        assertEquals(OC_FILE.remotePath, firstCopyName)
+    }
+
+    @Test
+    fun returnsPathWithOneIfFileDoesExists() {
+        val suffix = "(1)"
+        val extension = "jpt"
+
+        every {
+            clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
+                path = any(),
+                isUserLogged = false,
+                spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+            ).data
+        } returnsMany listOf(true, false)
+
+        val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
+            remotePath = OC_FILE.remotePath,
+            accountName = OC_ACCOUNT_NAME,
+            spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+        )
+        assertEquals("${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix.$extension", firstCopyName)
+    }
+
+    @Test
+    fun returnsPathWithTwoIfFileDoesExistsAndWithOne() {
+        val suffix = "(2)"
+        val extension = "jpt"
+
+        every {
+            clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
+                path = any(),
+                isUserLogged = false,
+                spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+            ).data
+        } returnsMany listOf(true, true, false)
+
+        val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
+            remotePath = OC_FILE.remotePath,
+            accountName = OC_ACCOUNT_NAME,
+            spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+        )
+        assertEquals("${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix.$extension", firstCopyName)
+    }
+
+    @Test
+    fun returnsPathWithTwoIfFileDoesExistsWithOne() {
+        val suffix = "(1)"
+        val extension = "jpt"
+
+        every {
+            clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
+                path = any(),
+                isUserLogged = false,
+                spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+            ).data
+        } returnsMany listOf(true, false)
+
+        val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
+            remotePath = "${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix.$extension",
+            accountName = OC_ACCOUNT_NAME,
+            spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+        )
+        assertEquals("${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix $suffix.$extension", firstCopyName)
+    }
+
 }
