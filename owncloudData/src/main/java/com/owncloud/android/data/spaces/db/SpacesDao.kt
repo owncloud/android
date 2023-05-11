@@ -26,6 +26,8 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
 import com.owncloud.android.data.ProviderMeta
+import com.owncloud.android.data.spaces.db.SpaceSpecialEntity.Companion.SPACES_SPECIAL_ACCOUNT_NAME
+import com.owncloud.android.data.spaces.db.SpaceSpecialEntity.Companion.SPACES_SPECIAL_ID
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ACCOUNT_NAME
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_DRIVE_TYPE
 import com.owncloud.android.data.spaces.db.SpacesEntity.Companion.SPACES_ID
@@ -51,7 +53,18 @@ interface SpacesDao {
             deleteSpaceForAccountById(accountName = spaceToDelete.accountName, spaceId = spaceToDelete.id)
         }
 
-        // Upsert new spaces
+        // Delete specials that are not attached to the current spaces of the account anymore
+        val currentSpecials = getAllSpecialsForAccount(currentAccountName)
+
+        val specialsToDelete = currentSpecials.filterNot { oldSpecial ->
+            listOfSpecialEntities.any { it.id == oldSpecial.id }
+        }
+
+        specialsToDelete.forEach { specialToDelete ->
+            deleteSpecialForAccountById(accountName = specialToDelete.accountName, specialId = specialToDelete.id)
+        }
+
+        // Upsert new spaces and specials
         upsertSpaces(listOfSpacesEntities)
         upsertSpecials(listOfSpecialEntities)
     }
@@ -98,6 +111,11 @@ interface SpacesDao {
         accountName: String,
     ): SpacesEntity?
 
+    @Query(SELECT_ALL_SPECIALS_FOR_ACCOUNT)
+    fun getAllSpecialsForAccount(
+        accountName: String,
+    ): List<SpaceSpecialEntity>
+
     @Query(SELECT_WEB_DAV_URL_FOR_SPACE)
     fun getWebDavUrlForSpace(
         spaceId: String?,
@@ -109,6 +127,9 @@ interface SpacesDao {
 
     @Query(DELETE_SPACE_FOR_ACCOUNT_BY_ID)
     fun deleteSpaceForAccountById(accountName: String, spaceId: String)
+
+    @Query(DELETE_SPECIAL_FOR_ACCOUNT_BY_ID)
+    fun deleteSpecialForAccountById(accountName: String, specialId: String)
 
     companion object {
         private const val SELECT_SPACES_BY_DRIVE_TYPE = """
@@ -136,6 +157,12 @@ interface SpacesDao {
             WHERE $SPACES_ID = :spaceId AND $SPACES_ACCOUNT_NAME = :accountName
         """
 
+        private const val SELECT_ALL_SPECIALS_FOR_ACCOUNT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.SPACES_SPECIAL_TABLE_NAME}
+            WHERE $SPACES_SPECIAL_ACCOUNT_NAME = :accountName
+        """
+
         private const val SELECT_WEB_DAV_URL_FOR_SPACE = """
             SELECT $SPACES_ROOT_WEB_DAV_URL
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
@@ -152,6 +179,12 @@ interface SpacesDao {
             DELETE
             FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}
             WHERE $SPACES_ACCOUNT_NAME = :accountName AND $SPACES_ID LIKE :spaceId
+        """
+
+        private const val DELETE_SPECIAL_FOR_ACCOUNT_BY_ID = """
+            DELETE
+            FROM ${ProviderMeta.ProviderTableMeta.SPACES_SPECIAL_TABLE_NAME}
+            WHERE $SPACES_SPECIAL_ACCOUNT_NAME = :accountName AND $SPACES_SPECIAL_ID LIKE :specialId
         """
     }
 }
