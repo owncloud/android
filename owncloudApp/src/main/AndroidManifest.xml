@@ -209,7 +209,7 @@
             android:launchMode="singleTop"
             android:theme="@style/Theme.ownCloud"
             android:windowSoftInputMode="adjustResize"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
