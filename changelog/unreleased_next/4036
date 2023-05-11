@@ -1,0 +1,8 @@
+Change: Upgrade min SDK to Android 6 (API 23)
+
+The minimum SDK has been updated to API 23, which means that the minimum
+version of Android we'll support from now on is Android 6 Marshmallow.
+
+https://github.com/owncloud/android/issues/3245
+https://github.com/owncloud/android/pull/4036
+https://github.com/owncloud/android-library/pull/566
