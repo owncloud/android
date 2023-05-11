@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Security - Make ShareActivity not-exported: [#4038](https://github.com/owncloud/android/pull/4038)
 * Bugfix - Error message for protocol exception: [#3948](https://github.com/owncloud/android/issues/3948)
 * Bugfix - Incorrect list of files in av. offline when browsing from details: [#3986](https://github.com/owncloud/android/issues/3986)
 * Change - Bump target SDK to 33: [#3617](https://github.com/owncloud/android/issues/3617)
@@ -28,6 +29,13 @@ Summary
 
 Details
 -------
+
+* Security - Make ShareActivity not-exported: [#4038](https://github.com/owncloud/android/pull/4038)
+
+   ShareActivity was made not-exported in the manifest since this property is only needed for
+   those activities that need to be launched from other external apps, which is not the case.
+
+   https://github.com/owncloud/android/pull/4038
 
 * Bugfix - Error message for protocol exception: [#3948](https://github.com/owncloud/android/issues/3948)
 
