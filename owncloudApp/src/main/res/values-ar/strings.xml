@@ -10,6 +10,7 @@
   <string name="actionbar_upload_from_apps">محتوى من تطبيقات أخرى</string>
   <string name="actionbar_upload_files">ملفات</string>
   <string name="actionbar_open_with">فتح باستخدام</string>
+  <string name="actionbar_open_with_read_only">فتح مع (للقراءة فقط)</string>
   <string name="actionbar_mkdir">مجلد جديد</string>
   <string name="actionbar_settings">الإعدادات</string>
   <string name="actionbar_see_details">التفاصيل</string>
@@ -34,6 +35,10 @@
   <string name="prefs_subsection_logging">جارٍ التسجيل</string>
   <string name="prefs_subsection_more">المزيد</string>
   <string name="prefs_subsection_security">الأمان</string>
+  <string name="prefs_subsection_whatsnew">ما الجديد في أحدث إصدار؟</string>
+  <string name="prefs_subsection_security_summary">قم بتعيين الأقفال للوصول إلى التطبيق والسماح باللمسات مع النوافذ المرئية الأخرى</string>
+  <string name="prefs_subsection_logging_summary">تتبع السجلات الناتجة عن تنفيذ التطبيق</string>
+  <string name="prefs_subsection_more_summary">معلومات التطبيق والتعليقات وغيرها</string>
   <string name="prefs_accounts">حسابات</string>
   <string name="prefs_manage_accounts">إدارة الحسابات</string>
   <string name="prefs_passcode">قفل رمز المرور</string>
@@ -44,10 +49,14 @@
   <string name="prefs_lock_application_entries_1minute">بعد دقيقة واحدة (1)</string>
   <string name="prefs_lock_application_entries_5minutes">بعد 5 دقائق</string>
   <string name="prefs_lock_application_entries_30minutes">بعد 30 دقيقة</string>
+  <string name="prefs_lock_access_from_document_provider">تأمين الوصول من موفر المستندات</string>
+  <string name="prefs_lock_access_from_document_provider_summary">قفل الوصول من التطبيقات الأخرى إلى ملفات الحسابات في التطبيق عبر مستكشف الملفات الأصلي لنظام اندرويد.</string>
   <string name="prefs_touches_with_other_visible_windows">اللمس باستخدام نوافذ أخرى مرئية</string>
   <string name="prefs_touches_with_other_visible_windows_summary">يتيح اللمس باستخدام نافذة أخرى مرئية عندما تكون نافذة العرض مخفية. فعِّله لاستخدام تطبيقات تصفية الإضاءة.</string>
   <string name="confirmation_touches_with_other_windows_title">هل أنت متأكد أنك ترغب في تفعيل هذه الميزة؟</string>
   <string name="confirmation_touches_with_other_windows_message">استخدم هذه الميزة على مسؤوليتك فقد يحاول تطبيق ضار انتحال شخصيتك للقيام ببعض الإجراءات دون علمك باستخدام نوافذ عرض أخرى.</string>
+  <string name="prefs_subsection_picture_uploads">تحميل الصور تلقائيا</string>
+  <string name="prefs_subsection_picture_uploads_summary">إدارة موقع وسلوك الصور التي يتم تحميلها تلقائيا</string>
   <string name="prefs_camera_picture_upload">تحميلات الصور</string>
   <string name="prefs_camera_picture_upload_summary">حمِّل الصور الملتقطة بالكاميرا تلقائيًا</string>
   <string name="prefs_camera_picture_upload_path_title">مسار تحميل الصور</string>
@@ -556,4 +565,5 @@
   <!--Release Notes-->
   <string name="release_notes_proceed">متابعة</string>
   <!--Open in web-->
+  <string name="open_in_web_error_too_early">الملف المطلوب غير متوفر بعد ، برجاء المحاولة مرة أخرى لاحقا</string>
 </resources>
