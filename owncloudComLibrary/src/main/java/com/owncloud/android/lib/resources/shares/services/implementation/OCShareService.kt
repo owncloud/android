@@ -55,7 +55,6 @@ class OCShareService(override val client: OwnCloudClient) : ShareService {
         name: String,
         password: String,
         expirationDate: Long,
-        publicUpload: Boolean
     ): RemoteOperationResult<ShareResponse> =
         CreateRemoteShareOperation(
             remoteFilePath,
@@ -66,7 +65,6 @@ class OCShareService(override val client: OwnCloudClient) : ShareService {
             this.name = name
             this.password = password
             this.expirationDateInMillis = expirationDate
-            this.publicUpload = publicUpload
             this.retrieveShareDetails = true
         }.execute(client)
 
@@ -76,7 +74,6 @@ class OCShareService(override val client: OwnCloudClient) : ShareService {
         password: String?,
         expirationDate: Long,
         permissions: Int,
-        publicUpload: Boolean
     ): RemoteOperationResult<ShareResponse> =
         UpdateRemoteShareOperation(
             remoteId
@@ -85,7 +82,6 @@ class OCShareService(override val client: OwnCloudClient) : ShareService {
             this.password = password
             this.expirationDateInMillis = expirationDate
             this.permissions = permissions
-            this.publicUpload = publicUpload
             this.retrieveShareDetails = true
         }.execute(client)
 

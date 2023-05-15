@@ -89,8 +89,6 @@ class CreateRemoteShareOperation(
 
     var expirationDateInMillis: Long = INIT_EXPIRATION_DATE_IN_MILLIS // Expiration date to set for the public link
 
-    var publicUpload: Boolean = false // Upload permissions for the public link (only folders)
-
     var retrieveShareDetails = false // To retrieve more info about the just created share
 
     private fun buildRequestUri(baseUri: Uri) =
@@ -99,7 +97,7 @@ class CreateRemoteShareOperation(
             .appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT)
             .build()
 
-    private fun parseResponse(response: String): ShareResponse? {
+    private fun parseResponse(response: String): ShareResponse {
         val moshi = Moshi.Builder().build()
         val commonOcsType: Type = Types.newParameterizedType(CommonOcsResponse::class.java, ShareItem::class.java)
         val adapter: JsonAdapter<CommonOcsResponse<ShareItem>> = moshi.adapter(commonOcsType)
@@ -155,12 +153,10 @@ class CreateRemoteShareOperation(
             formBodyBuilder.add(PARAM_EXPIRATION_DATE, formattedExpirationDate)
         }
 
-        if (publicUpload) {
-            formBodyBuilder.add(PARAM_PUBLIC_UPLOAD, publicUpload.toString())
-        }
         if (password.isNotEmpty()) {
             formBodyBuilder.add(PARAM_PASSWORD, password)
         }
+
         if (RemoteShare.DEFAULT_PERMISSION != permissions) {
             formBodyBuilder.add(PARAM_PERMISSIONS, permissions.toString())
         }
@@ -207,7 +203,6 @@ class CreateRemoteShareOperation(
         private const val PARAM_SHARE_TYPE = "shareType"
         private const val PARAM_SHARE_WITH = "shareWith"
         private const val PARAM_PASSWORD = "password"
-        private const val PARAM_PUBLIC_UPLOAD = "publicUpload"
         private const val PARAM_PERMISSIONS = "permissions"
 
         //Arguments - constant values
