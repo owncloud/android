@@ -72,7 +72,6 @@ class OCShareRepository(
         name: String,
         password: String,
         expirationTimeInMillis: Long,
-        publicUpload: Boolean,
         accountName: String
     ) {
         insertShare(
@@ -82,7 +81,6 @@ class OCShareRepository(
             name = name,
             password = password,
             expirationTimeInMillis = expirationTimeInMillis,
-            publicUpload = publicUpload,
             accountName = accountName
         )
     }
@@ -93,7 +91,6 @@ class OCShareRepository(
         password: String?,
         expirationDateInMillis: Long,
         permissions: Int,
-        publicUpload: Boolean,
         accountName: String
     ) {
         return updateShare(
@@ -102,7 +99,6 @@ class OCShareRepository(
             name,
             password,
             expirationDateInMillis,
-            publicUpload,
             accountName
         )
     }
@@ -156,7 +152,6 @@ class OCShareRepository(
         name: String = "",
         password: String = "",
         expirationTimeInMillis: Long = RemoteShare.INIT_EXPIRATION_DATE_IN_MILLIS,
-        publicUpload: Boolean = false,
         accountName: String
     ) {
         remoteShareDataSource.insert(
@@ -167,7 +162,6 @@ class OCShareRepository(
             name,
             password,
             expirationTimeInMillis,
-            publicUpload,
             accountName
         ).also { remotelyInsertedShare ->
             localShareDataSource.insert(remotelyInsertedShare)
@@ -180,7 +174,6 @@ class OCShareRepository(
         name: String = "",
         password: String? = "",
         expirationDateInMillis: Long = RemoteShare.INIT_EXPIRATION_DATE_IN_MILLIS,
-        publicUpload: Boolean = false,
         accountName: String
     ) {
         remoteShareDataSource.updateShare(
@@ -189,7 +182,6 @@ class OCShareRepository(
             password,
             expirationDateInMillis,
             permissions,
-            publicUpload,
             accountName
         ).also { remotelyUpdatedShare ->
             localShareDataSource.update(remotelyUpdatedShare)

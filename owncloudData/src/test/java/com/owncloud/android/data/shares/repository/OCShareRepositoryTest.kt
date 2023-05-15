@@ -212,7 +212,6 @@ class OCShareRepositoryTest {
                 any(),
                 any(),
                 any(),
-                any(),
                 any()
             )
         } returns shares.first()
@@ -223,7 +222,6 @@ class OCShareRepositoryTest {
             "Docs link",
             "password",
             2000,
-            false,
             accountName
         )
 
@@ -236,7 +234,6 @@ class OCShareRepositoryTest {
                 "Docs link",
                 "password",
                 2000,
-                false,
                 accountName
             )
         }
@@ -255,7 +252,6 @@ class OCShareRepositoryTest {
                 any(),
                 any(),
                 any(),
-                any(),
                 any()
             )
         } throws FileNotFoundException()
@@ -266,7 +262,6 @@ class OCShareRepositoryTest {
             "Docs link",
             "password",
             2000,
-            false,
             accountName
         )
 
@@ -279,7 +274,6 @@ class OCShareRepositoryTest {
                 "Docs link",
                 "password",
                 2000,
-                false,
                 accountName
             )
         }
@@ -298,7 +292,6 @@ class OCShareRepositoryTest {
                 any(),
                 any(),
                 any(),
-                any(),
                 any()
             )
         } returns shares.first()
@@ -309,7 +302,6 @@ class OCShareRepositoryTest {
             "password",
             2000,
             -1,
-            false,
             accountName
         )
 
@@ -320,7 +312,6 @@ class OCShareRepositoryTest {
                 "password",
                 2000,
                 -1,
-                false,
                 accountName
             )
         }
@@ -337,7 +328,6 @@ class OCShareRepositoryTest {
                 any(),
                 any(),
                 any(),
-                any(),
                 any()
             )
         } throws FileNotFoundException()
@@ -348,7 +338,6 @@ class OCShareRepositoryTest {
             "password",
             2000,
             -1,
-            false,
             accountName
         )
 
@@ -359,7 +348,6 @@ class OCShareRepositoryTest {
                 "password",
                 2000,
                 -1,
-                false,
                 accountName
             )
         }
@@ -373,7 +361,6 @@ class OCShareRepositoryTest {
     fun insertPrivateShareOk() {
         every {
             remoteShareDataSource.insert(
-                any(),
                 any(),
                 any(),
                 any(),
@@ -417,7 +404,6 @@ class OCShareRepositoryTest {
                 any(),
                 any(),
                 any(),
-                any(),
                 any()
             )
         } throws FileNotFoundException()
@@ -454,7 +440,6 @@ class OCShareRepositoryTest {
                 any(),
                 any(),
                 any(),
-                any(),
                 any()
             )
         } returns shares[2]
@@ -480,7 +465,6 @@ class OCShareRepositoryTest {
     fun updatePrivateShareFileNotFoundException() {
         every {
             remoteShareDataSource.updateShare(
-                any(),
                 any(),
                 any(),
                 any(),

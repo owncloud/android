@@ -56,7 +56,6 @@ class OCRemoteShareDataSource(
         name: String,
         password: String,
         expirationDate: Long,
-        publicUpload: Boolean,
         accountName: String
     ): OCShare {
         executeRemoteOperation {
@@ -68,7 +67,6 @@ class OCRemoteShareDataSource(
                 name,
                 password,
                 expirationDate,
-                publicUpload
             )
         }.let {
             return remoteShareMapper.toModel(it.shares.first())!!.apply {
@@ -83,7 +81,6 @@ class OCRemoteShareDataSource(
         password: String?,
         expirationDateInMillis: Long,
         permissions: Int,
-        publicUpload: Boolean,
         accountName: String
     ): OCShare {
         executeRemoteOperation {
@@ -93,7 +90,6 @@ class OCRemoteShareDataSource(
                 password,
                 expirationDateInMillis,
                 permissions,
-                publicUpload
             )
         }.let {
             return remoteShareMapper.toModel(it.shares.first())!!.apply {
