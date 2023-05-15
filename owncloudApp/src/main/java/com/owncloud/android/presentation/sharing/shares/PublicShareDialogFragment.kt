@@ -282,7 +282,6 @@ class PublicShareDialogFragment : DialogFragment() {
                 publicLinkName,
                 publicLinkPassword!!,
                 publicLinkExpirationDateInMillis,
-                false,
                 account?.name!!
             )
         } else { // Updating an existing public share
@@ -298,7 +297,6 @@ class PublicShareDialogFragment : DialogFragment() {
                 publicLinkPassword,
                 publicLinkExpirationDateInMillis,
                 publicLinkPermissions,
-                publicUploadPermission,
                 account?.name!!
             )
         }
