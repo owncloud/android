@@ -34,6 +34,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.pm.PackageInfoCompat
 import com.owncloud.android.presentation.authentication.AccountUtils
@@ -130,12 +131,23 @@ class MainApp : Application() {
 
                     } else {
                         ReleaseNotesActivity.runIfNeeded(activity)
-                        if (shouldShowDialog(activity)) {
+
+                        val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
+                        val dontShowAgainDialogPref = pref.getBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, false)
+                        if (!dontShowAgainDialogPref && shouldShowDialog(activity)) {
+                            val checkboxDialog = activity.layoutInflater.inflate(R.layout.checkbox_dialog, null)
+                            val checkbox = checkboxDialog.findViewById<CheckBox>(R.id.checkbox_dialog)
+                            checkbox.setText(R.string.ocis_accounts_warning_checkbox_message)
                             val builder = AlertDialog.Builder(activity).apply {
+                                setView(checkboxDialog)
                                 setTitle(R.string.ocis_accounts_warning_title)
                                 setMessage(R.string.ocis_accounts_warning_message)
                                 setCancelable(false)
-                                setPositiveButton(R.string.ocis_accounts_warning_button, null)
+                                setPositiveButton(R.string.ocis_accounts_warning_button) { _, _ ->
+                                    if (checkbox.isChecked) {
+                                        pref.edit().putBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, true).apply()
+                                    }
+                                }
                             }
                             val alertDialog = builder.create()
                             alertDialog.show()
@@ -299,6 +311,8 @@ class MainApp : Application() {
             private set
 
         const val PREFERENCE_KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode"
+
+        const val PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG = "PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG"
 
         /**
          * Next methods give access in code to some constants that need to be defined in string resources to be referred
