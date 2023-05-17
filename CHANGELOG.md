@@ -50,6 +50,7 @@ Summary
 * Enhancement - Monochrome icon for the app: [#4001](https://github.com/owncloud/android/pull/4001)
 * Enhancement - Add prompt parameter to OIDC flow: [#4011](https://github.com/owncloud/android/pull/4011)
 * Enhancement - New setting "Access document provider": [#4032](https://github.com/owncloud/android/pull/4032)
+* Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 
 Details
 -------
@@ -208,6 +209,13 @@ Details
 
    https://github.com/owncloud/android/issues/4028
    https://github.com/owncloud/android/pull/4032
+
+* Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
+
+   File conflicts now are named with prefix starting in (1) instead of (2).
+
+   https://github.com/owncloud/android/issues/3946
+   https://github.com/owncloud/android/pull/4040
 
 Changelog for ownCloud Android Client [3.0.4] (2023-03-07)
 =======================================
