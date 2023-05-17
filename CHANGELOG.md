@@ -212,7 +212,7 @@ Details
 
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 
-   File conflicts now are named with prefix starting in (1) instead of (2).
+   File conflicts now are named with suffix starting in (1) instead of (2).
 
    https://github.com/owncloud/android/issues/3946
    https://github.com/owncloud/android/pull/4040
