@@ -25,9 +25,9 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_FILE
-import com.owncloud.android.testutil.OC_FILE_SPACE_WEB_DAV_URL
 import com.owncloud.android.testutil.OC_FOLDER
 import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
+import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
@@ -120,25 +120,25 @@ class OCRemoteFileDataSourceTest {
     }
 
     @Test
-    fun returnsSamePathIfFileDoesNotExists() {
+    fun getAvailableRemotePathReturnsSamePathIfFileDoesNotExist() {
         every {
             clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
                 path = OC_FILE.remotePath,
                 isUserLogged = false,
-                spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
             ).data
         } returns false
 
         val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
             remotePath = OC_FILE.remotePath,
             accountName = OC_ACCOUNT_NAME,
-            spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+            spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
         )
         assertEquals(OC_FILE.remotePath, firstCopyName)
     }
 
     @Test
-    fun returnsPathWithOneIfFileDoesExists() {
+    fun getAvailableRemotePathReturnsPathWithOneIfFileExists() {
         val suffix = "(1)"
         val extension = "jpt"
 
@@ -146,20 +146,20 @@ class OCRemoteFileDataSourceTest {
             clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
                 path = any(),
                 isUserLogged = false,
-                spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
             ).data
         } returnsMany listOf(true, false)
 
         val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
             remotePath = OC_FILE.remotePath,
             accountName = OC_ACCOUNT_NAME,
-            spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+            spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
         )
         assertEquals("${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix.$extension", firstCopyName)
     }
 
     @Test
-    fun returnsPathWithTwoIfFileDoesExistsAndWithOne() {
+    fun getAvailableRemotePathReturnsPathWithTwoIfFileExistsAndWithOne() {
         val suffix = "(2)"
         val extension = "jpt"
 
@@ -167,20 +167,20 @@ class OCRemoteFileDataSourceTest {
             clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
                 path = any(),
                 isUserLogged = false,
-                spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
             ).data
         } returnsMany listOf(true, true, false)
 
         val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
             remotePath = OC_FILE.remotePath,
             accountName = OC_ACCOUNT_NAME,
-            spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+            spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
         )
         assertEquals("${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix.$extension", firstCopyName)
     }
 
     @Test
-    fun returnsPathWithTwoIfFileDoesExistsWithOne() {
+    fun getAvailableRemotePathReturnsPathWithTwoOnesIfCopyingFileWithOne() {
         val suffix = "(1)"
         val extension = "jpt"
 
@@ -188,14 +188,14 @@ class OCRemoteFileDataSourceTest {
             clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
                 path = any(),
                 isUserLogged = false,
-                spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
             ).data
         } returnsMany listOf(true, false)
 
         val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
             remotePath = "${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix.$extension",
             accountName = OC_ACCOUNT_NAME,
-            spaceWebDavUrl = OC_FILE_SPACE_WEB_DAV_URL,
+            spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
         )
         assertEquals("${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix $suffix.$extension", firstCopyName)
     }
