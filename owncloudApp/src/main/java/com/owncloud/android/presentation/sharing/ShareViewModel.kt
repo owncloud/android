@@ -172,6 +172,7 @@ class ShareViewModel(
     fun insertPublicShare(
         filePath: String,
         permissions: Int,
+        spaceId: String?,
         name: String,
         password: String,
         expirationTimeInMillis: Long,
@@ -184,6 +185,7 @@ class ShareViewModel(
         useCaseParams = CreatePublicShareAsyncUseCase.Params(
             filePath,
             permissions,
+            spaceId,
             name,
             password,
             expirationTimeInMillis,

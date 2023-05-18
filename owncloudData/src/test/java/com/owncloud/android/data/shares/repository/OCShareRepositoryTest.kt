@@ -212,6 +212,7 @@ class OCShareRepositoryTest {
                 any(),
                 any(),
                 any(),
+                any(),
                 any()
             )
         } returns shares.first()
@@ -219,6 +220,7 @@ class OCShareRepositoryTest {
         ocShareRepository.insertPublicShare(
             filePath,
             -1,
+            spaceId = null,
             "Docs link",
             "password",
             2000,
@@ -231,6 +233,7 @@ class OCShareRepositoryTest {
                 ShareType.PUBLIC_LINK,
                 "",
                 -1,
+                null,
                 "Docs link",
                 "password",
                 2000,
@@ -252,6 +255,7 @@ class OCShareRepositoryTest {
                 any(),
                 any(),
                 any(),
+                any(),
                 any()
             )
         } throws FileNotFoundException()
@@ -259,6 +263,7 @@ class OCShareRepositoryTest {
         ocShareRepository.insertPublicShare(
             filePath,
             -1,
+            null,
             "Docs link",
             "password",
             2000,
@@ -271,6 +276,7 @@ class OCShareRepositoryTest {
                 ShareType.PUBLIC_LINK,
                 "",
                 -1,
+                null,
                 "Docs link",
                 "password",
                 2000,
@@ -368,16 +374,17 @@ class OCShareRepositoryTest {
                 any(),
                 any(),
                 any(),
+                any(),
                 any()
             )
         } returns shares[2]
 
         ocShareRepository.insertPrivateShare(
-            filePath,
-            ShareType.GROUP,
-            "whoever",
-            -1,
-            accountName
+            filePath = filePath,
+            shareType = ShareType.GROUP,
+            shareeName = "whoever",
+            permissions = -1,
+            accountName = accountName
         )
 
         verify(exactly = 1) {
@@ -386,6 +393,7 @@ class OCShareRepositoryTest {
                 ShareType.GROUP,
                 "whoever",
                 -1,
+                null,
                 accountName = accountName
             )
         }
@@ -404,16 +412,17 @@ class OCShareRepositoryTest {
                 any(),
                 any(),
                 any(),
+                any(),
                 any()
             )
         } throws FileNotFoundException()
 
         ocShareRepository.insertPrivateShare(
-            filePath,
-            ShareType.GROUP,
-            "whoever",
-            -1,
-            accountName
+            filePath = filePath,
+            shareType = ShareType.GROUP,
+            shareeName = "whoever",
+            permissions = -1,
+            accountName = accountName
         )
 
         verify(exactly = 1) {
@@ -422,6 +431,7 @@ class OCShareRepositoryTest {
                 ShareType.GROUP,
                 "whoever",
                 -1,
+                null,
                 accountName = accountName
             )
         }

@@ -279,6 +279,7 @@ class PublicShareDialogFragment : DialogFragment() {
             shareViewModel.insertPublicShare(
                 file?.remotePath!!,
                 publicLinkPermissions,
+                file?.spaceId,
                 publicLinkName,
                 publicLinkPassword!!,
                 publicLinkExpirationDateInMillis,

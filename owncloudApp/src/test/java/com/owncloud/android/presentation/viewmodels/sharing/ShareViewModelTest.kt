@@ -287,6 +287,7 @@ class ShareViewModelTest {
             password = "1234",
             expirationTimeInMillis = -1,
             permissions = OC_SHARE.permissions,
+            spaceId = null,
             accountName = OC_SHARE.accountOwner
         )
 

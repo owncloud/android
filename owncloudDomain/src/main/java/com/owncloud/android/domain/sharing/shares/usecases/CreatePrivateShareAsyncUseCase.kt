@@ -38,11 +38,11 @@ class CreatePrivateShareAsyncUseCase(
         }
 
         shareRepository.insertPrivateShare(
-            params.filePath,
-            params.shareType,
-            params.shareeName,
-            params.permissions,
-            params.accountName
+            filePath = params.filePath,
+            shareType = params.shareType,
+            shareeName = params.shareeName,
+            permissions = params.permissions,
+            accountName = params.accountName
         )
     }
 

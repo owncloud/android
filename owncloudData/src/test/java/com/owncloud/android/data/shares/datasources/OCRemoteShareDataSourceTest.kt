@@ -77,7 +77,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
+            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any(), any())
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
@@ -86,6 +86,7 @@ class OCRemoteShareDataSourceTest {
             shareType = ShareType.USER,
             shareWith = "user",
             permissions = 1,
+            spaceId = null,
             accountName = "user@server"
         )
 
@@ -161,7 +162,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
+            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any(), any())
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
@@ -170,6 +171,7 @@ class OCRemoteShareDataSourceTest {
             ShareType.PUBLIC_LINK,
             "",
             1,
+            spaceId = null,
             accountName = "user@server"
         )
 
@@ -332,7 +334,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
+            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any(), any())
         } returns createRemoteSharesOperationResult
 
         ocRemoteShareDataSource.insert(
@@ -340,6 +342,7 @@ class OCRemoteShareDataSourceTest {
             ShareType.PUBLIC_LINK,
             "",
             1,
+            spaceId = null,
             accountName = "user@server"
         )
     }

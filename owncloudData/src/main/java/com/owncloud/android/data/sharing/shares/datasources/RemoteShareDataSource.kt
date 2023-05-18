@@ -36,6 +36,7 @@ interface RemoteShareDataSource {
         shareType: ShareType,
         shareWith: String,
         permissions: Int,
+        spaceId: String?,
         name: String = "",
         password: String = "",
         expirationDate: Long = INIT_EXPIRATION_DATE_IN_MILLIS,

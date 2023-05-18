@@ -43,6 +43,7 @@ class OCShareRepository(
         shareType: ShareType,
         shareeName: String,     // User or group name of the target sharee.
         permissions: Int,        // See https://doc.owncloud.com/server/developer_manual/core/apis/ocs-share-api.html
+        spaceId: String?,
         accountName: String
     ) {
         insertShare(
@@ -50,6 +51,7 @@ class OCShareRepository(
             shareType = shareType,
             shareWith = shareeName,
             permissions = permissions,
+            spaceId = spaceId,
             accountName = accountName
         )
     }
@@ -69,6 +71,7 @@ class OCShareRepository(
     override fun insertPublicShare(
         filePath: String,
         permissions: Int,
+        spaceId: String?,
         name: String,
         password: String,
         expirationTimeInMillis: Long,
@@ -78,6 +81,7 @@ class OCShareRepository(
             filePath = filePath,
             shareType = ShareType.PUBLIC_LINK,
             permissions = permissions,
+            spaceId = spaceId,
             name = name,
             password = password,
             expirationTimeInMillis = expirationTimeInMillis,
@@ -149,6 +153,7 @@ class OCShareRepository(
         shareType: ShareType,
         shareWith: String = "",
         permissions: Int,
+        spaceId: String?,
         name: String = "",
         password: String = "",
         expirationTimeInMillis: Long = RemoteShare.INIT_EXPIRATION_DATE_IN_MILLIS,
@@ -159,6 +164,7 @@ class OCShareRepository(
             shareType,
             shareWith,
             permissions,
+            spaceId,
             name,
             password,
             expirationTimeInMillis,

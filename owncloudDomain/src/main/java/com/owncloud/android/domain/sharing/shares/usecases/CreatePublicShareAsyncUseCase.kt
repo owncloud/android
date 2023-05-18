@@ -30,6 +30,7 @@ class CreatePublicShareAsyncUseCase(
         shareRepository.insertPublicShare(
             params.filePath,
             params.permissions,
+            params.spaceId,
             params.name,
             params.password,
             params.expirationTimeInMillis,
@@ -39,6 +40,7 @@ class CreatePublicShareAsyncUseCase(
     data class Params(
         val filePath: String,
         val permissions: Int,
+        val spaceId: String? = null,
         val name: String,
         val password: String,
         val expirationTimeInMillis: Long,

@@ -36,6 +36,7 @@ interface ShareRepository {
         shareType: ShareType,
         shareeName: String,
         permissions: Int,
+        spaceId: String? = null,
         accountName: String
     )
 
@@ -52,6 +53,7 @@ interface ShareRepository {
     fun insertPublicShare(
         filePath: String,
         permissions: Int,
+        spaceId: String?,
         name: String,
         password: String,
         expirationTimeInMillis: Long,
