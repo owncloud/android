@@ -23,7 +23,7 @@ package com.owncloud.android.usecases.files
 import androidx.work.WorkManager
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
-import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
+import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFileSyncInfo
@@ -33,7 +33,7 @@ import com.owncloud.android.usecases.transfers.TRANSFER_TAG_DOWNLOAD
 
 class FilterFileMenuOptionsUseCase(
     private val workManager: WorkManager,
-    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
+    private val capabilityRepository: CapabilityRepository,
     private val getSpaceWithSpecialsByIdForAccountUseCase: GetSpaceWithSpecialsByIdForAccountUseCase,
 ): BaseUseCase<List<FileMenuOption>, FilterFileMenuOptionsUseCase.Params>() {
     override fun run(params: Params): List<FileMenuOption> {
@@ -45,7 +45,7 @@ class FilterFileMenuOptionsUseCase(
         }
 
         val filesSyncInfo = params.filesSyncInfo
-        val capability = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(accountName = params.accountName))
+        val capability = capabilityRepository.getStoredCapabilities(params.accountName)
         val space = getSpaceWithSpecialsByIdForAccountUseCase.execute(GetSpaceWithSpecialsByIdForAccountUseCase.Params(
             spaceId = files.first().spaceId,
             accountName = params.accountName,
