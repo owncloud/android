@@ -86,6 +86,8 @@
   <string name="prefs_help">Ajuda</string>
   <string name="prefs_sync_calendar_contacts">Sincronize seus contatos, calendários e tarefas</string>
   <string name="prefs_sync_calendar_contacts_summary">Instalar DAVx⁵</string>
+  <string name="prefs_access_document_provider">Acessar provedor de documentos</string>
+  <string name="prefs_access_document_provider_summary">Aplicativo sugerido para navegar pelos arquivos do seu dispositivo por meio do explorador de arquivos nativo do Android</string>
   <string name="prefs_recommend">Recomendar a um amigo</string>
   <string name="prefs_feedback">Feedback</string>
   <string name="prefs_imprint">Imprint</string>
@@ -171,6 +173,7 @@
   <string name="file_list_files">arquivos</string>
   <string name="filedetails_select_file">Toque em um arquivo para mostrar informações adicionais.</string>
   <string name="upload_to">Enviado para %1$s</string>
+  <string name="pick_document_type">Escolha um tipo de documento para criar:</string>
   <string name="upload_files_title">Arquivos</string>
   <string name="filedetails_size">Tamanho:</string>
   <string name="filedetails_type">Tipo:</string>
@@ -372,6 +375,7 @@
   <string name="download_enqueued_msg">Baixar em fila</string>
   <string name="upload_enqueued_msg">Enviar em fila</string>
   <string name="create_dir_fail_msg">A pasta não pode ser criada</string>
+  <string name="create_file_fail_msg">O arquivo não pôde ser criado</string>
   <string name="filename_forbidden_characters">Caracteres proibidos: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">O nome do arquivo contem pelo menos um caractere inválido  </string>
   <string name="filename_empty">O nome do arquivo não pode estar vazio</string>
@@ -675,6 +679,8 @@
   <string name="release_notes_4_0_subtitle_9">Se o seu servidor oferecer suporte a provedores de aplicativos para abrir tipos específicos de arquivos, todos eles serão listados na visualização Detalhes</string>
   <string name="release_notes_4_0_title_10">Ícones temáticos suportados</string>
   <string name="release_notes_4_0_subtitle_10">O recurso \"Ícones temáticos\" do Android 13 permitirá que você defina o ícone do aplicativo em monocromático</string>
+  <string name="release_notes_4_0_title_11">Criar novos documentos via web (oCIS)</string>
+  <string name="release_notes_4_0_subtitle_11">Se o servidor oCIS suportar provedores de aplicativos, novos documentos podem ser criados via navegador e sincronizados com</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
