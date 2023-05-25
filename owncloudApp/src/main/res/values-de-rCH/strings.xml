@@ -553,4 +553,6 @@
   <!--Release Notes-->
   <string name="release_notes_proceed">Fortfahren</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Nicht mehr anzeigen</string>
 </resources>

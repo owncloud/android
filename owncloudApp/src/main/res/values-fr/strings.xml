@@ -600,4 +600,6 @@ Téléchargez-le ici : %2$s</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Afficher dans le navigateur web</string>
   <string name="open_in_web_error_not_supported">Aucune application ne supporte ce type de fichier</string>
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Ne plus montrer</string>
 </resources>

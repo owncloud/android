@@ -648,4 +648,6 @@ Il Download del file inizierà automaticamente</string>
   <string name="release_notes_footer">Grazie di usare %1$s.\n❤</string>
   <string name="release_notes_proceed">Procedi</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Non mostrare di nuovo</string>
 </resources>

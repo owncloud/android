@@ -531,4 +531,6 @@
   <!--Release Notes-->
   <string name="release_notes_proceed">Fortsett</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Ikke vis igjen</string>
 </resources>

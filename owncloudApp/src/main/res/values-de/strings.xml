@@ -655,7 +655,6 @@
   <string name="release_notes_proceed">Fortfahren</string>
   <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
   <string name="release_notes_4_0_title_1">Unterstützung für Spaces</string>
-  <string name="release_notes_4_0_subtitle_1">Unterstützung von Spaces (oCIS) ist für neue Konten verfügbar.</string>
   <string name="release_notes_4_0_title_2">Untere Navigationsleiste</string>
   <string name="release_notes_4_0_subtitle_2">Einige Tabs neu angeordnet</string>
   <string name="release_notes_4_0_title_3">Unterstützung von Lollipop endet.</string>
@@ -678,4 +677,5 @@
   <string name="open_in_web_error_generic">Kann im Webbrowser nicht geöffnet werden</string>
   <string name="open_in_web_error_not_supported">es gibt keine Apps die diesen Filetyp unterstützen</string>
   <string name="open_in_web_error_too_early">Die Datei ist derzeit nicht verfügbar, bitte versuchen Sie es später noch einmal.</string>
+  <!--oCIS accounts warning-->
 </resources>

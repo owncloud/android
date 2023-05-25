@@ -652,7 +652,6 @@
   <string name="release_notes_proceed">Продължаване</string>
   <string name="release_notes_icon">Икона за бележка по изданието</string>
   <string name="release_notes_4_0_title_1">Поддръжка за пространства</string>
-  <string name="release_notes_4_0_subtitle_1">Въвеждане на поддръжка за функцията за пространства (oCIS). Налична само за нови профили</string>
   <string name="release_notes_4_0_title_2">Долна лента за навигация</string>
   <string name="release_notes_4_0_subtitle_2">Пренареждане на някои раздели</string>
   <string name="release_notes_4_0_title_3">Край на поддръжката на Lollipop</string>
@@ -662,4 +661,5 @@
   <string name="open_in_web_error_generic">Не може да се отвори в мрежата</string>
   <string name="open_in_web_error_not_supported">няма приложения, които да поддържат този тип файл</string>
   <string name="open_in_web_error_too_early">Поисканият файл все още не е наличен, моля опитайте отново по-късно</string>
+  <!--oCIS accounts warning-->
 </resources>

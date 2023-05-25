@@ -580,4 +580,6 @@
   <string name="release_notes_footer">感謝您使用 %1$s.\n❤</string>
   <string name="release_notes_proceed">已執行</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">不再顯示</string>
 </resources>

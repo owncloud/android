@@ -654,7 +654,6 @@
   <string name="release_notes_proceed">Devam et</string>
   <string name="release_notes_icon">Sürüm notu simgesi</string>
   <string name="release_notes_4_0_title_1">Alanlar için Destek</string>
-  <string name="release_notes_4_0_subtitle_1">Alanlar için destek özelliği (oCIS) ile tanışın. Yalnızca yeni hesaplar için kullanılabilir</string>
   <string name="release_notes_4_0_title_6">Yeni \"Bildirimleri yönet\" ayarı</string>
   <string name="release_notes_4_0_title_7">Küçük hata düzeltmeleri ve iyileştirmeler</string>
   <string name="release_notes_4_0_subtitle_7">Bazı küçük hatalar giderildi ve uygulamadaki deneyimi iyileştirmek için küçük teknik iyileştirmeler yapıldı.</string>
@@ -670,4 +669,6 @@
   <string name="open_in_web_error_generic">Web\'te açılamadı</string>
   <string name="open_in_web_error_not_supported">bu dosya türünü destekleyen hiçbir uygulama yok</string>
   <string name="open_in_web_error_too_early">İstenen dosya henüz mevcut değil, lütfen daha sonra tekrar deneyin.</string>
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Tekrar gösterme</string>
 </resources>

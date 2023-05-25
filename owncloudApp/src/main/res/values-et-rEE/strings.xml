@@ -659,7 +659,6 @@
   <string name="release_notes_proceed">Jätka</string>
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
   <string name="release_notes_4_0_title_1">Ruumide tugi</string>
-  <string name="release_notes_4_0_subtitle_1">Tutvustame tuge ruumide funktsioonile (oCIS). Saadaval ainult uutele kontodele</string>
   <string name="release_notes_4_0_title_2">Alumine navigatsiooniriba</string>
   <string name="release_notes_4_0_subtitle_2">Mõnede kaartide ümberjärjestamine</string>
   <string name="release_notes_4_0_title_3">Lollipop toe lõpp</string>
@@ -686,4 +685,6 @@
   <string name="open_in_web_error_generic">Ei saanud veebis avada</string>
   <string name="open_in_web_error_not_supported">seda failitüüpi toetavaid rakendusi ei ole</string>
   <string name="open_in_web_error_too_early">Nõutud fail ei ole veel saadaval, palun proovige hiljem uuesti</string>
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Ära enam näita</string>
 </resources>
