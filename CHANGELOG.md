@@ -1,3 +1,27 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v4.0.0...master
+
+Summary
+-------
+
+* Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
+
+Details
+-------
+
+* Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
+
+   The minimum SDK has been updated to API 23, which means that the minimum version of Android we'll
+   support from now on is Android 6 Marshmallow.
+
+   https://github.com/owncloud/android/issues/3245
+   https://github.com/owncloud/android/pull/4036
+   https://github.com/owncloud/android-library/pull/566
+
 Changelog for ownCloud Android Client [4.0.0] (2023-05-29)
 =======================================
 The following sections list the changes in ownCloud Android Client 4.0.0 relevant to
