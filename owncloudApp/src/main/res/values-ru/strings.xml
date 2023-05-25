@@ -656,7 +656,6 @@
   <string name="release_notes_proceed">Продолжить</string>
   <string name="release_notes_icon">Иконка к примечанию релиза</string>
   <string name="release_notes_4_0_title_1">Поддержка хранилищ</string>
-  <string name="release_notes_4_0_subtitle_1">Введение поддержки функции хранилищ (oCIS). Доступно только для новых аккаунтов</string>
   <string name="release_notes_4_0_title_2">Нижняя панель навигации</string>
   <string name="release_notes_4_0_subtitle_2">Переупорядочены некоторые вкладки</string>
   <string name="release_notes_4_0_title_3">Окончание поддержки Lollipop</string>
@@ -675,4 +674,6 @@
   <string name="open_in_web_error_generic">Не удалось открыть в сети</string>
   <string name="open_in_web_error_not_supported">нет приложений, которые поддерживают этот тип файла</string>
   <string name="open_in_web_error_too_early">Запрашиваемый файл в данный момент недоступен, пожалуйста, попробуйте позже </string>
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Не показывать снова</string>
 </resources>

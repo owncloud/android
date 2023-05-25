@@ -566,4 +566,5 @@
   <string name="release_notes_proceed">متابعة</string>
   <!--Open in web-->
   <string name="open_in_web_error_too_early">الملف المطلوب غير متوفر بعد ، برجاء المحاولة مرة أخرى لاحقا</string>
+  <!--oCIS accounts warning-->
 </resources>

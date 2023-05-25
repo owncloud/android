@@ -656,7 +656,6 @@
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
   <string name="release_notes_4_0_title_1">Mbulim për Hapësira</string>
-  <string name="release_notes_4_0_subtitle_1">Prezantim i mbulimi për veçorinë hapësira (oCIS). E përdorshme vetëm për llogari të reja</string>
   <string name="release_notes_4_0_title_2">Shtyllë lëvizjesh në fund</string>
   <string name="release_notes_4_0_subtitle_2">U rirenditën disa skeda</string>
   <string name="release_notes_4_0_title_3">Fund i mbulimit për Lollipop</string>
@@ -683,4 +682,6 @@
   <string name="open_in_web_error_generic">S’u hap dot në web</string>
   <string name="open_in_web_error_not_supported">s’ka aplikacione që e mbulojnë këtë lloj kartele</string>
   <string name="open_in_web_error_too_early">Kartela e kërkuar s’është ende e passhme, ju lutemi, riprovoni më vonë</string>
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Mos e shfaq më</string>
 </resources>

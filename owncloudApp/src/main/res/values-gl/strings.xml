@@ -562,4 +562,6 @@ Descárgueo de aquí: %2$s</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Proceder</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Non volver amosar</string>
 </resources>

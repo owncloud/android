@@ -558,4 +558,6 @@ Neem contact op met uw beheerder</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Ga verder</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Toon niet nogmaals</string>
 </resources>

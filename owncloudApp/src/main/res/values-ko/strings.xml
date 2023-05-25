@@ -651,7 +651,6 @@
   <string name="release_notes_footer">%1$s을(를) 사용해주셔서 감사합니다.\n❤</string>
   <string name="release_notes_proceed">진행</string>
   <string name="release_notes_4_0_title_1">스페이스 관련 도움</string>
-  <string name="release_notes_4_0_subtitle_1">스페이스 기능 관련 고객지원을 소개합니다 (oCIS). 새로 만들어진 계정에서만 이용할 수 있습니다.</string>
   <string name="release_notes_4_0_title_2">하단 내비게이션 바</string>
   <string name="release_notes_4_0_subtitle_2">일부 탭을 재정렬함</string>
   <string name="release_notes_4_0_title_3">Lollipop 지원 종료</string>
@@ -661,4 +660,6 @@
   <string name="open_in_web_error_generic">웹에서 열 수 없음</string>
   <string name="open_in_web_error_not_supported">이 파일 형식을 지원하는 앱이 없음</string>
   <string name="open_in_web_error_too_early">요청한 파일을 아직 이용할 수 없습니다. 나중에 다시 시도해 주세요.</string>
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">다시 보지 않기</string>
 </resources>
