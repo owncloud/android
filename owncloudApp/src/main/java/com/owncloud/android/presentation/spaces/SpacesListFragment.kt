@@ -120,7 +120,6 @@ class SpacesListFragment(
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.findItem(R.id.action_share_current_folder)?.itemId?.let { menu.removeItem(it) }
-        menu.findItem(R.id.action_search)?.itemId?.let { menu.removeItem(it) }
     }
 
     companion object {

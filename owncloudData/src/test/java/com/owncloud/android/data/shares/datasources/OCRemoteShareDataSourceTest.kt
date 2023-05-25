@@ -77,7 +77,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any(), any())
+            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
@@ -119,7 +119,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.updateShare(any(), any(), any(), any(), any(), any())
+            ocShareService.updateShare(any(), any(), any(), any(), any())
         } returns updateRemoteShareOperationResult
 
         // Update share on remote datasource
@@ -161,7 +161,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any(), any())
+            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
@@ -204,7 +204,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.updateShare(any(), any(), any(), any(), any(), any())
+            ocShareService.updateShare(any(), any(), any(), any(), any())
         } returns updateRemoteShareOperationResult
 
         // Update share on remote datasource
@@ -332,7 +332,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any(), any())
+            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
         } returns createRemoteSharesOperationResult
 
         ocRemoteShareDataSource.insert(
@@ -363,7 +363,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.updateShare(any(), any(), any(), any(), any(), any())
+            ocShareService.updateShare(any(), any(), any(), any(), any())
         } returns updateRemoteShareOperationResult
 
         ocRemoteShareDataSource.updateShare(

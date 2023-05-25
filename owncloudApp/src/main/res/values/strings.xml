@@ -718,7 +718,7 @@
     <string name="release_notes_icon">Release note icon</string>
 
     <string name="release_notes_4_0_title_1">Support for Spaces</string>
-    <string name="release_notes_4_0_subtitle_1">Introducing support for spaces feature (oCIS). Only available for new accounts</string>
+    <string name="release_notes_4_0_subtitle_1">Introducing support for spaces feature (oCIS). <b>Only available for newly logged-in accounts</b></string>
     <string name="release_notes_4_0_title_2">Bottom navigation bar</string>
     <string name="release_notes_4_0_subtitle_2">Reordered some tabs</string>
     <string name="release_notes_4_0_title_3">End of support Lollipop</string>
@@ -739,6 +739,8 @@
     <string name="release_notes_4_0_subtitle_10">Android 13 feature "Themed icons" will let you set app icon in monochrome</string>
     <string name="release_notes_4_0_title_11">Create new documents via web (oCIS)</string>
     <string name="release_notes_4_0_subtitle_11">If oCIS server supports application providers, new documents can be created via browser and synced with oC</string>
+    <string name="release_notes_4_0_title_12">New setting with app suggested to browse files</string>
+    <string name="release_notes_4_0_subtitle_12">A new setting was added in "More" section with a suggested app to access files via document provider</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
@@ -746,5 +748,11 @@
     <string name="open_in_web_error_generic">Couldn\'t open in web</string>
     <string name="open_in_web_error_not_supported">there are no apps that support this file type</string>
     <string name="open_in_web_error_too_early">The requested file is not yet available, please try again later</string>
+
+    <!-- oCIS accounts warning -->
+    <string name="ocis_accounts_warning_title">oCIS accounts warning</string>
+    <string name="ocis_accounts_warning_message">Please, remove the account and login again to get the spaces feature</string>
+    <string name="ocis_accounts_warning_checkbox_message">Don\'t show again</string>
+    <string name="ocis_accounts_warning_button">Understood</string>
 
 </resources>

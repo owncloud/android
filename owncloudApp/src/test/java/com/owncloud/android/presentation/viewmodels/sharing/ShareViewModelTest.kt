@@ -286,7 +286,6 @@ class ShareViewModelTest {
             name = "Photos 2 link",
             password = "1234",
             expirationTimeInMillis = -1,
-            publicUpload = false,
             permissions = OC_SHARE.permissions,
             accountName = OC_SHARE.accountOwner
         )
@@ -330,7 +329,6 @@ class ShareViewModelTest {
             name = "Photos 2 link",
             password = "1234",
             expirationDateInMillis = -1,
-            publicUpload = false,
             permissions = -1,
             accountName = "Carlos"
         )
