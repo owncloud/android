@@ -97,13 +97,13 @@ class OCRemoteFileDataSource(
                 substring(0, pos)
             }
         }
-        var count = 2
+        var count = 1
         do {
             suffix = " ($count)"
             checkExistsFile = if (pos >= 0) {
                 checkPathExistence("${remotePath.substringBeforeLast('.', "")}$suffix.$extension", false, accountName, spaceWebDavUrl)
             } else {
-                checkPathExistence(remotePath + suffix, false, accountName, spaceWebDavUrl)
+                checkPathExistence("$remotePath$suffix", false, accountName, spaceWebDavUrl)
             }
             count++
         } while (checkExistsFile)

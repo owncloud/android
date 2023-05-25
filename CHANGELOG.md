@@ -9,6 +9,7 @@ Summary
 -------
 
 * Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
+* Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 
 Details
 -------
@@ -21,6 +22,13 @@ Details
    https://github.com/owncloud/android/issues/3245
    https://github.com/owncloud/android/pull/4036
    https://github.com/owncloud/android-library/pull/566
+
+* Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
+
+   File conflicts now are named with suffix starting in (1) instead of (2).
+
+   https://github.com/owncloud/android/issues/3946
+   https://github.com/owncloud/android/pull/4040
 
 Changelog for ownCloud Android Client [4.0.0] (2023-05-29)
 =======================================
