@@ -678,4 +678,5 @@
   <string name="open_in_web_error_not_supported">es gibt keine Apps die diesen Filetyp unterstützen</string>
   <string name="open_in_web_error_too_early">Die Datei ist derzeit nicht verfügbar, bitte versuchen Sie es später noch einmal.</string>
   <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Nicht mehr anzeigen</string>
 </resources>
