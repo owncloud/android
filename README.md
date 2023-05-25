@@ -49,6 +49,6 @@ ownCloud Android Library uses OkHttp version 4.6.0, licensed under Apache Licens
 
 ### Compatibility
 
-ownCloud Android Library is valid for Android systems from version Android 5 (android:minSdkVersion="21" android:targetSdkVersion="29").
+ownCloud Android Library is valid for Android systems from version Android 6 (android:minSdkVersion="23" android:targetSdkVersion="33").
 
 ownCloud Android library supports ownCloud server from version 4.5.
