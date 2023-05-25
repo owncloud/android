@@ -1,4 +1,4 @@
-Changelog for ownCloud Android Client [4.0.0] (2023-05-24)
+Changelog for ownCloud Android Client [4.0.0] (2023-05-29)
 =======================================
 The following sections list the changes in ownCloud Android Client 4.0.0 relevant to
 ownCloud admins and users.
