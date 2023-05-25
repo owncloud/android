@@ -103,13 +103,6 @@ class UpdateRemoteShareOperation
      */
     var permissions: Int = DEFAULT_PERMISSION
 
-    /**
-     * Enable upload permissions to update in Share resource.
-     *
-     * Null results in no update applied to the upload permission.
-     */
-    var publicUpload: Boolean? = null
-
     var retrieveShareDetails = false // To retrieve more info about the just updated share
 
     private fun buildRequestUri(baseUri: Uri) =
@@ -119,7 +112,7 @@ class UpdateRemoteShareOperation
             .appendQueryParameter(PARAM_FORMAT, VALUE_FORMAT)
             .build()
 
-    private fun parseResponse(response: String): ShareResponse? {
+    private fun parseResponse(response: String): ShareResponse {
         val moshi = Moshi.Builder().build()
         val commonOcsType: Type = Types.newParameterizedType(CommonOcsResponse::class.java, ShareItem::class.java)
         val adapter: JsonAdapter<CommonOcsResponse<ShareItem>> = moshi.adapter(commonOcsType)
@@ -181,10 +174,6 @@ class UpdateRemoteShareOperation
             formBodyBuilder.add(PARAM_EXPIRATION_DATE, formattedExpirationDate)
         } // else, ignore - no update
 
-        if (publicUpload != null) {
-            formBodyBuilder.add(PARAM_PUBLIC_UPLOAD, publicUpload.toString())
-        }
-
         // IMPORTANT: permissions parameter needs to be updated after mPublicUpload parameter,
         // otherwise they would be set always as 1 (READ) in the server when mPublicUpload was updated
         if (permissions > DEFAULT_PERMISSION) {
@@ -233,7 +222,6 @@ class UpdateRemoteShareOperation
         private const val PARAM_PASSWORD = "password"
         private const val PARAM_EXPIRATION_DATE = "expireDate"
         private const val PARAM_PERMISSIONS = "permissions"
-        private const val PARAM_PUBLIC_UPLOAD = "publicUpload"
 
         //Arguments - constant values
         private const val FORMAT_EXPIRATION_DATE = "yyyy-MM-dd"
