@@ -662,4 +662,5 @@
   <string name="open_in_web_error_not_supported">няма приложения, които да поддържат този тип файл</string>
   <string name="open_in_web_error_too_early">Поисканият файл все още не е наличен, моля опитайте отново по-късно</string>
   <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Не показвай отново</string>
 </resources>
