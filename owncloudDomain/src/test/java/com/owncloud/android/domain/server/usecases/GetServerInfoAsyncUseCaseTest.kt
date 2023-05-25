@@ -20,7 +20,7 @@ package com.owncloud.android.domain.server.usecases
 
 import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase.Companion.TRAILING_SLASH
-import com.owncloud.android.testutil.OC_SERVER_INFO
+import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -32,42 +32,42 @@ class GetServerInfoAsyncUseCaseTest {
 
     private val repository: ServerInfoRepository = spyk()
     private val useCase = GetServerInfoAsyncUseCase((repository))
-    private val useCaseParams = GetServerInfoAsyncUseCase.Params(serverPath = "http://demo.owncloud.com")
+    private val useCaseParams = GetServerInfoAsyncUseCase.Params(serverPath = "http://demo.owncloud.com", false)
     private val useCaseParamsWithSlash = useCaseParams.copy(serverPath = useCaseParams.serverPath.plus(TRAILING_SLASH))
 
     @Test
     fun `get server info - ok`() {
-        every { repository.getServerInfo(useCaseParams.serverPath) } returns OC_SERVER_INFO
+        every { repository.getServerInfo(useCaseParams.serverPath, false) } returns OC_SECURE_SERVER_INFO_BASIC_AUTH
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
-        assertEquals(OC_SERVER_INFO, useCaseResult.getDataOrNull())
+        assertEquals(OC_SECURE_SERVER_INFO_BASIC_AUTH, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { repository.getServerInfo(useCaseParams.serverPath) }
+        verify(exactly = 1) { repository.getServerInfo(useCaseParams.serverPath, false) }
     }
 
     @Test
     fun `get server info - ok - slash trimmed`() {
-        every { repository.getServerInfo(useCaseParams.serverPath) } returns OC_SERVER_INFO
+        every { repository.getServerInfo(useCaseParams.serverPath, false) } returns OC_SECURE_SERVER_INFO_BASIC_AUTH
 
         val useCaseResult = useCase.execute(useCaseParamsWithSlash)
 
         assertTrue(useCaseResult.isSuccess)
-        assertEquals(OC_SERVER_INFO, useCaseResult.getDataOrNull())
+        assertEquals(OC_SECURE_SERVER_INFO_BASIC_AUTH, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { repository.getServerInfo(useCaseParams.serverPath) }
+        verify(exactly = 1) { repository.getServerInfo(useCaseParams.serverPath, false) }
     }
 
     @Test
     fun `get server info - ko`() {
-        every { repository.getServerInfo(useCaseParams.serverPath) } throws Exception()
+        every { repository.getServerInfo(useCaseParams.serverPath, false) } throws Exception()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is Exception)
 
-        verify(exactly = 1) { repository.getServerInfo(useCaseParams.serverPath) }
+        verify(exactly = 1) { repository.getServerInfo(useCaseParams.serverPath, false) }
     }
 }

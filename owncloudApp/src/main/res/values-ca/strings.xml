@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">Envia</string>
   <string name="actionbar_descending">Descendent</string>
   <string name="actionbar_sort_title">Ordena per</string>
+  <string name="fab_new_file">Document nou</string>
   <string name="drawer_item_all_files">Tots els fitxers</string>
   <string name="drawer_item_only_available_offline">Disponible fora de línia</string>
   <string name="drawer_item_shared_by_link_files">Compartit amb enllaç</string>
@@ -76,9 +77,11 @@
   <string name="illegal_argument_exception_message">Una ACCIÓ vàlida es requereix per passar a</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Arxius</string>
+  <string name="bottom_nav_personal">Personal</string>
   <string name="bottom_nav_uploads">Càrrega</string>
   <string name="bottom_nav_offline">Fora de línia </string>
   <string name="bottom_nav_links">Enllaços</string>
+  <string name="bottom_nav_shares">Compartits</string>
   <string name="recommend_subject">Proveu %1$s a un telèfon avançat!</string>
   <string name="recommend_text">Vull invitar-te a utilitzar %1$s al teu smartphone!\nDescarrega-ho aqui: %2$s</string>
   <string name="error_reason">ja que</string>
@@ -110,7 +113,9 @@
   <string name="uploader_error_message_source_file_not_found">L\' arxiu a carregar no va ser trobat en la seva ubicació. Si us plau verifica si l\'arxiu existeix.</string>
   <string name="uploader_error_message_source_file_not_copied">S\'ha produït un error mentre es copiava el fitxer a una carpeta temporal. Sisplau intenta enviar-ho una altra vegada.</string>
   <string name="file_list_seconds_ago">segons enrere</string>
+  <string name="file_list_empty_title_all_files">No hi ha arxius</string>
   <string name="file_list_empty_title_shared_by_links">no hi ha enllaços compartits</string>
+  <string name="file_list_empty_subtitle_all_files">Pugi continguts o sincronitzi els seus dispositius.</string>
   <string name="file_list_loading">Carregant...</string>
   <string name="file_list_no_app_for_file_type">No s\'ha trobat cap aplicació per a aquest tipus d\'arxiu!</string>
   <string name="local_file_list_empty">No hi ha arxius a aquesta carpeta</string>
@@ -338,7 +343,6 @@
   <string name="confirmation_disable_videos_upload_message">Estàs segur que vols desactivar aquesta funció? Les fotos pendents no es carregaran.</string>
   <string name="proper_pics_folder_warning_camera_upload">Si us plau assegura\'t de que la carpeta que has seleccionat és on la càmara que estàs fent servir guarda les fotografies fetes. En cas contrari l\'aplicació no podrà detectar les vostres imatges. Tingueu en compte que les imatges es penjarant al menys 15 minuts després de fer-les.</string>
   <string name="proper_videos_folder_warning_camera_upload">Si us plau assegura\'t de que la carpeta que has seleccionat és on la càmara que estàs fent servir guarda els videos fets. En cas contrari l\'aplicació no podrà detectar els vostres videos. Tingueu en compte que els videos es penjarant al menys 15 minuts després de fer-los.</string>
-  <string name="conflict_title">Conflicte de fitxers</string>
   <string name="conflict_description">Hi ha un conflicte en l\'arxiu 1%1$s, clicka per arreglar-ho</string>
   <string name="conflict_message">Quins fitxers vols mantenir? Si seleccioneu les dues versions, el fitxer local tindrà un número afegit al seu nom.</string>
   <string name="conflict_keep_both">Mantén-los ambdós</string>
@@ -426,7 +430,6 @@
   <string name="upload_copy_files">Copiar fitxer</string>
   <string name="upload_move_files">Moure fitxer</string>
   <string name="pref_behaviour_entries_keep_file">conserva\'t en la carpeta original</string>
-  <string name="pref_behaviour_entries_move">mogut a la carpeta de l\'aplicació</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Comparteix %1$s</string>
   <string name="share_with_user_section_title">Usuaris i Grups</string>

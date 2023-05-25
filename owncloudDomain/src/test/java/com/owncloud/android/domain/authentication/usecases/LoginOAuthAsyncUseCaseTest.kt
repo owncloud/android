@@ -24,7 +24,7 @@ import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
 import com.owncloud.android.testutil.OC_REFRESH_TOKEN
 import com.owncloud.android.testutil.OC_SCOPE
-import com.owncloud.android.testutil.OC_SERVER_INFO
+import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import io.mockk.every
 import io.mockk.spyk
@@ -38,7 +38,7 @@ class LoginOAuthAsyncUseCaseTest {
     private val repository: AuthenticationRepository = spyk()
     private val useCase = LoginOAuthAsyncUseCase(repository)
     private val useCaseParams = LoginOAuthAsyncUseCase.Params(
-        serverInfo = OC_SERVER_INFO,
+        serverInfo = OC_SECURE_SERVER_INFO_BASIC_AUTH,
         username = "test",
         authTokenType = OC_AUTH_TOKEN_TYPE,
         accessToken = OC_ACCESS_TOKEN,

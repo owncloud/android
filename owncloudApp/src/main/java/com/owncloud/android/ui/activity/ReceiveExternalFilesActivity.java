@@ -69,21 +69,21 @@ import com.owncloud.android.domain.exceptions.UnauthorizedException;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.extensions.ThrowableExtKt;
-import com.owncloud.android.interfaces.ISecurityEnforced;
-import com.owncloud.android.interfaces.LockType;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.presentation.UIResult;
-import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment;
-import com.owncloud.android.presentation.ui.files.SortOptionsView;
-import com.owncloud.android.presentation.ui.files.SortOrder;
-import com.owncloud.android.presentation.ui.files.SortType;
-import com.owncloud.android.presentation.ui.files.ViewType;
-import com.owncloud.android.presentation.ui.files.createfolder.CreateFolderDialogFragment;
-import com.owncloud.android.presentation.ui.files.operations.FileOperation;
-import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
-import com.owncloud.android.presentation.viewmodels.transfers.TransfersViewModel;
+import com.owncloud.android.presentation.common.UIResult;
+import com.owncloud.android.presentation.files.SortBottomSheetFragment;
+import com.owncloud.android.presentation.files.SortOptionsView;
+import com.owncloud.android.presentation.files.SortOrder;
+import com.owncloud.android.presentation.files.SortType;
+import com.owncloud.android.presentation.files.ViewType;
+import com.owncloud.android.presentation.files.createfolder.CreateFolderDialogFragment;
+import com.owncloud.android.presentation.files.operations.FileOperation;
+import com.owncloud.android.presentation.files.operations.FileOperationsViewModel;
+import com.owncloud.android.presentation.security.LockType;
+import com.owncloud.android.presentation.security.SecurityEnforced;
+import com.owncloud.android.presentation.transfers.TransfersViewModel;
 import com.owncloud.android.ui.ReceiveExternalFilesViewModel;
 import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
 import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
@@ -100,7 +100,6 @@ import timber.log.Timber;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,7 +122,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         SortOptionsView.CreateFolderListener,
         SearchView.OnQueryTextListener,
         ReceiveExternalFilesAdapter.OnSearchQueryUpdateListener,
-        ISecurityEnforced,
+        SecurityEnforced,
         CreateFolderDialogFragment.CreateFolderListener {
 
     private static final String FTAG_ERROR_FRAGMENT = "ERROR_FRAGMENT";
@@ -133,10 +132,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private ArrayList<Uri> mStreamsToUpload = new ArrayList<>();
     private String mUploadPath;
     private OCFile mFile;
+    private String mPersonalSpaceId;
     private SortOptionsView mSortOptionsView;
     private SearchView mSearchView;
 
-    private ConstraintLayout mEmptyListView;
+    private View mEmptyListView;
     private ImageView mEmptyListImage;
     private TextView mEmptyListTitle;
 
@@ -250,6 +250,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         super.onAccountSet(mAccountWasRestored);
         mReceiveExternalFilesViewModel = get(ReceiveExternalFilesViewModel.class);
         initTargetFolder();
+        mPersonalSpaceId = getStorageManager().getRootPersonalFolder().getSpaceId();
         updateDirectoryList();
 
         mReceiveExternalFilesViewModel.getSyncFolderLiveData().observe(this, eventUiResult -> {
@@ -363,7 +364,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         } else {
             mParents.pop();
             String full_path = generatePath(mParents);
-            startSyncFolderOperation(getStorageManager().getFileByPath(full_path));
+            startSyncFolderOperation(getStorageManager().getFileByPath(full_path, mPersonalSpaceId));
             updateDirectoryList();
         }
     }
@@ -449,7 +450,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         String full_path = generatePath(mParents);
         Timber.d("Populating view with content of : %s", full_path);
-        mFile = getStorageManager().getFileByPath(full_path);
+        mFile = getStorageManager().getFileByPath(full_path, mPersonalSpaceId);
         if (mFile != null) {
             if (mAdapter == null) {
                 mAdapter = new ReceiveExternalFilesAdapter(
@@ -460,10 +461,24 @@ public class ReceiveExternalFilesActivity extends FileActivity
             mAdapter.setNewItemVector(files);
 
             Button btnChooseFolder = findViewById(R.id.uploader_choose_folder);
-            btnChooseFolder.setOnClickListener(this);
+            TextView noPermissionsMessage = findViewById(R.id.uploader_no_permissions_message);
+            if (getCurrentFolder().getHasAddFilePermission()) {
+                btnChooseFolder.setOnClickListener(this);
+                btnChooseFolder.setVisibility(View.VISIBLE);
+                noPermissionsMessage.setVisibility(View.GONE);
+            } else {
+                btnChooseFolder.setVisibility(View.GONE);
+                noPermissionsMessage.setVisibility(View.VISIBLE);
+            }
 
-            Button btnNewFolder = findViewById(R.id.uploader_cancel);
-            btnNewFolder.setOnClickListener(this);
+            Button btnCancel = findViewById(R.id.uploader_cancel);
+            btnCancel.setOnClickListener(this);
+
+            if (getCurrentFolder().getHasAddSubdirectoriesPermission()) {
+                mSortOptionsView.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER);
+            } else {
+                mSortOptionsView.selectAdditionalView(SortOptionsView.AdditionalView.HIDDEN);
+            }
 
             updateEmptyListMessage(getString(R.string.file_list_empty_title_all_files));
         }
@@ -584,6 +599,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 mStreamsToUpload,
                 mUploadPath,
                 getAccount(),
+                mFile.getSpaceId(),
                 true, // Show waiting dialog while file is being copied from private storage
                 this  // Copy temp task listener
         );
@@ -693,14 +709,14 @@ public class ReceiveExternalFilesActivity extends FileActivity
             if (file.isFolder()) {
                 return file;
             } else if (getStorageManager() != null) {
-                return getStorageManager().getFileByPath(file.getParentRemotePath());
+                return getStorageManager().getFileByPath(file.getParentRemotePath(), mPersonalSpaceId);
             }
         }
         return null;
     }
 
     private void browseToRoot() {
-        OCFile root = getStorageManager().getFileByPath(OCFile.ROOT_PATH);
+        OCFile root = getStorageManager().getRootPersonalFolder();
         mFile = root;
         startSyncFolderOperation(root);
     }
@@ -880,7 +896,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 } else if (fileName.length() == 0) {
                     error = getString(R.string.uploader_upload_text_dialog_filename_error_empty);
                 } else if (fileName.contains("/")) {
-                   error = getString(R.string.filename_forbidden_characters);
+                    error = getString(R.string.filename_forbidden_characters);
                 } else {
                     fileName += ".txt";
                     String filePath = savePlainTextToFile(fileName);
@@ -888,7 +904,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     fileToUpload.add(filePath);
                     @NotNull Lazy<TransfersViewModel> transfersViewModelLazy = inject(TransfersViewModel.class);
                     TransfersViewModel transfersViewModel = transfersViewModelLazy.getValue();
-                    transfersViewModel.uploadFilesFromSystem(getAccount().name, fileToUpload, mUploadPath);
+                    transfersViewModel.uploadFilesFromSystem(getAccount().name, fileToUpload, mUploadPath, mPersonalSpaceId);
                     finish();
                 }
                 inputLayout.setErrorEnabled(error != null);

@@ -39,7 +39,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
-import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.presentation.authentication.AccountUtils;
 import com.owncloud.android.domain.files.model.FileListOption;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
@@ -47,8 +47,9 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
-import com.owncloud.android.presentation.ui.authentication.AuthenticatorConstants;
-import com.owncloud.android.presentation.ui.authentication.LoginActivity;
+import com.owncloud.android.presentation.authentication.AuthenticatorConstants;
+import com.owncloud.android.presentation.authentication.LoginActivity;
+import com.owncloud.android.presentation.accounts.AccountsManagementActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -271,14 +272,14 @@ public class FileActivity extends DrawerActivity
                     .setTitle(R.string.auth_failure_snackbar_action)
                     .setMessage(errorMessage)
                     .setPositiveButton(android.R.string.yes, (dialog, which) -> startActivity(
-                            new Intent(FileActivity.this, ManageAccountsActivity.class)))
+                            new Intent(FileActivity.this, AccountsManagementActivity.class)))
                     .setIcon(R.drawable.common_error_grey)
                     .setCancelable(false)
                     .show();
         } else {
             Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_INDEFINITE)
                     .setAction(R.string.auth_failure_snackbar_action, v ->
-                            startActivity(new Intent(FileActivity.this, ManageAccountsActivity.class)))
+                            startActivity(new Intent(FileActivity.this, AccountsManagementActivity.class)))
                     .show();
         }
     }
@@ -357,7 +358,7 @@ public class FileActivity extends DrawerActivity
     protected void updateFileFromDB() {
         OCFile file = getFile();
         if (file != null) {
-            file = getStorageManager().getFileByPath(file.getRemotePath());
+            file = getStorageManager().getFileByPath(file.getRemotePath(), file.getSpaceId());
             setFile(file);
         }
     }
@@ -404,6 +405,7 @@ public class FileActivity extends DrawerActivity
     public void restart() {
         Intent i = new Intent(this, FileDisplayActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.putExtra(EXTRA_FILE_LIST_OPTION, (Parcelable) FileListOption.ALL_FILES);
         startActivity(i);
     }
 
@@ -413,6 +415,12 @@ public class FileActivity extends DrawerActivity
         switch (fileListOption) {
             case ALL_FILES:
                 restart();
+                break;
+            case SPACES_LIST:
+                intent = new Intent(this, FileDisplayActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(EXTRA_FILE_LIST_OPTION, (Parcelable) FileListOption.SPACES_LIST);
+                startActivity(intent);
                 break;
             case SHARED_BY_LINK:
                 intent = new Intent(this, FileDisplayActivity.class);
@@ -436,7 +444,7 @@ public class FileActivity extends DrawerActivity
                 return file;
             } else if (getStorageManager() != null) {
                 String parentPath = file.getParentRemotePath();
-                return getStorageManager().getFileByPath(parentPath);
+                return getStorageManager().getFileByPath(parentPath, file.getSpaceId());
             }
         }
         return null;

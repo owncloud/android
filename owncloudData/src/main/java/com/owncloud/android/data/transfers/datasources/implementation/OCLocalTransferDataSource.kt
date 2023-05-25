@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,8 +20,6 @@
 
 package com.owncloud.android.data.transfers.datasources.implementation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.data.transfers.db.TransferDao
@@ -30,16 +28,18 @@ import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class OCLocalTransferDataSource(
     private val transferDao: TransferDao
 ) : LocalTransferDataSource {
-    override fun storeTransfer(transfer: OCTransfer): Long {
-        return transferDao.insert(transfer.toEntity())
+    override fun saveTransfer(transfer: OCTransfer): Long {
+        return transferDao.insertOrReplace(transfer.toEntity())
     }
 
     override fun updateTransfer(transfer: OCTransfer) {
-        transferDao.insert(transfer.toEntity())
+        transferDao.insertOrReplace(transfer.toEntity())
     }
 
     override fun updateTransferStatusToInProgressById(id: Long) {
@@ -71,11 +71,11 @@ class OCLocalTransferDataSource(
         transferDao.updateTransferStorageDirectoryInLocalPath(id, oldDirectory, newDirectory)
     }
 
-    override fun removeTransferById(id: Long) {
+    override fun deleteTransferById(id: Long) {
         transferDao.deleteTransferWithId(id)
     }
 
-    override fun removeAllTransfersFromAccount(accountName: String) {
+    override fun deleteAllTransfersFromAccount(accountName: String) {
         transferDao.deleteTransfersWithAccountName(accountName)
     }
 
@@ -89,8 +89,8 @@ class OCLocalTransferDataSource(
         }
     }
 
-    override fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>> {
-        return Transformations.map(transferDao.getAllTransfersAsLiveData()) { transferEntitiesList ->
+    override fun getAllTransfersAsStream(): Flow<List<OCTransfer>> {
+        return transferDao.getAllTransfersAsStream().map { transferEntitiesList ->
             val transfers = transferEntitiesList.map { transferEntity ->
                 transferEntity.toModel()
             }
@@ -150,12 +150,13 @@ class OCLocalTransferDataSource(
         accountName = accountName,
         fileSize = fileSize,
         status = TransferStatus.fromValue(status),
-        localBehaviour = UploadBehavior.values()[localBehaviour],
+        localBehaviour = if (localBehaviour > 1) UploadBehavior.MOVE else UploadBehavior.values()[localBehaviour],
         forceOverwrite = forceOverwrite,
         transferEndTimestamp = transferEndTimestamp,
         lastResult = lastResult?.let { TransferResult.fromValue(it) },
         createdBy = UploadEnqueuedBy.values()[createdBy],
-        transferId = transferId
+        transferId = transferId,
+        spaceId = spaceId,
     )
 
     private fun OCTransfer.toEntity() = OCTransferEntity(
@@ -169,7 +170,8 @@ class OCLocalTransferDataSource(
         transferEndTimestamp = transferEndTimestamp,
         lastResult = lastResult?.value,
         createdBy = createdBy.ordinal,
-        transferId = transferId
+        transferId = transferId,
+        spaceId = spaceId,
     ).apply { this@toEntity.id?.let { this.id = it } }
 
 }

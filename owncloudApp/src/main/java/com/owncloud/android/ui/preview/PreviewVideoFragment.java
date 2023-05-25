@@ -53,9 +53,9 @@ import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.extensions.FragmentExtKt;
 import com.owncloud.android.files.FileMenuFilter;
-import com.owncloud.android.presentation.ui.files.operations.FileOperation;
-import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
-import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment;
+import com.owncloud.android.presentation.files.operations.FileOperation;
+import com.owncloud.android.presentation.files.operations.FileOperationsViewModel;
+import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
@@ -313,7 +313,13 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                 mContainerActivity,
                 getActivity()
         );
-        mf.filter(menu, false, false, false, false);
+        mf.filter(
+                menu,
+                false,
+                false,
+                false,
+                false
+        );
 
         // additional restrictions for this fragment
 
@@ -469,7 +475,8 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
                                         getFile().getParentRemotePath(),
                                         MimeTypeConstantsKt.MIME_DIR,
                                         OCFile.ROOT_PARENT_ID,
-                                        mAccount.name
+                                        mAccount.name,
+                                        getFile().getSpaceId()
                                 );
                                 ((FileDisplayActivity) requireActivity()).startSyncFolderOperation(folder, false);
                             }
@@ -507,7 +514,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     public void onFileMetadataChanged() {
         FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
         if (storageManager != null) {
-            setFile(storageManager.getFileByPath(getFile().getRemotePath()));
+            setFile(storageManager.getFileByPath(getFile().getRemotePath(), null));
         }
         requireActivity().invalidateOptionsMenu();
     }

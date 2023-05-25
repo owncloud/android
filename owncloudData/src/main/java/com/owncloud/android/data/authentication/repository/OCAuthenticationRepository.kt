@@ -71,7 +71,7 @@ class OCAuthenticationRepository(
             )
 
         return localAuthenticationDataSource.addOAuthAccount(
-            userName = if (username.isNotBlank()) username else userInfoAndRedirectionPath.first.id,
+            userName = username.ifBlank { userInfoAndRedirectionPath.first.id },
             lastPermanentLocation = userInfoAndRedirectionPath.second,
             authTokenType = authTokenType,
             accessToken = accessToken,

@@ -1,0 +1,8 @@
+Enhancement: Add prompt parameter to OIDC flow
+
+Added prompt parameter to the authorization request in case OIDC is supported.
+By default, select_account will be sent. It can be changed via branding or MDM.
+
+https://github.com/owncloud/android/pull/4011
+https://github.com/owncloud/android/issues/3862
+https://github.com/owncloud/android/issues/3984

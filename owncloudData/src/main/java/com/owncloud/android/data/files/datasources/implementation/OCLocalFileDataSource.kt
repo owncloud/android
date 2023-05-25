@@ -26,6 +26,7 @@ import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.db.FileDao
 import com.owncloud.android.data.files.db.OCFileAndFileSync
 import com.owncloud.android.data.files.db.OCFileEntity
+import com.owncloud.android.data.spaces.datasources.implementation.OCLocalSpacesDataSource.Companion.toModel
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
@@ -52,11 +53,11 @@ class OCLocalFileDataSource(
     override fun getFileById(fileId: Long): OCFile? =
         fileDao.getFileById(fileId)?.toModel()
 
-    override fun getFileByIdAsStream(fileId: Long): Flow<OCFile?> =
-        fileDao.getFileByIdAsStream(fileId).map { it?.toModel() }
+    override fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?> =
+        fileDao.getFileByIdAsFlow(fileId).map { it?.toModel() }
 
-    override fun getFileByRemotePath(remotePath: String, owner: String): OCFile? {
-        fileDao.getFileByOwnerAndRemotePath(owner, remotePath)?.let { return it.toModel() }
+    override fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String?): OCFile? {
+        fileDao.getFileByOwnerAndRemotePath(owner, remotePath, spaceId)?.let { return it.toModel() }
 
         // If root folder do not exists, create and return it.
         if (remotePath == ROOT_PATH) {
@@ -66,7 +67,9 @@ class OCLocalFileDataSource(
                 remotePath = ROOT_PATH,
                 length = 0,
                 mimeType = MIME_DIR,
-                modificationTimestamp = 0
+                modificationTimestamp = 0,
+                spaceId = spaceId,
+                permissions = "CK",
             )
             fileDao.mergeRemoteAndLocalFile(rootFolder.toEntity()).also { return getFileById(it) }
         }
@@ -97,8 +100,8 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
-    override fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>> =
-        fileDao.getFolderContentWithSyncInfoAsStream(folderId = folderId).map { folderContent ->
+    override fun getFolderContentWithSyncInfoAsFlow(folderId: Long): Flow<List<OCFileWithSyncInfo>> =
+        fileDao.getFolderContentWithSyncInfoAsFlow(folderId = folderId).map { folderContent ->
             folderContent.map { it.toModel() }
         }
 
@@ -107,13 +110,13 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
-    override fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
-        fileDao.getFilesWithSyncInfoSharedByLinkAsStream(accountOwner = owner).map { fileList ->
+    override fun getSharedByLinkWithSyncInfoForAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>> =
+        fileDao.getFilesWithSyncInfoSharedByLinkAsFlow(accountOwner = owner).map { fileList ->
             fileList.map { it.toModel() }
         }
 
-    override fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>> =
-        fileDao.getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner).map { fileList ->
+    override fun getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>> =
+        fileDao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner).map { fileList ->
             fileList.map { it.toModel() }
         }
 
@@ -156,11 +159,11 @@ class OCLocalFileDataSource(
         fileDao.updateConflictStatusForFile(fileId, null)
     }
 
-    override fun removeFile(fileId: Long) {
-        fileDao.deleteFileWithId(fileId)
+    override fun deleteFile(fileId: Long) {
+        fileDao.deleteFileById(fileId)
     }
 
-    override fun removeFilesForAccount(accountName: String) {
+    override fun deleteFilesForAccount(accountName: String) {
         fileDao.deleteFilesForAccount(accountName)
     }
 
@@ -220,10 +223,10 @@ class OCLocalFileDataSource(
                 needsToUpdateThumbnail = needsToUpdateThumbnail,
                 fileIsDownloading = fileIsDownloading,
                 lastSyncDateForData = lastSyncDateForData,
-                lastSyncDateForProperties = lastSyncDateForProperties,
                 modifiedAtLastSyncForData = modifiedAtLastSyncForData,
                 etagInConflict = etagInConflict,
-                treeEtag = treeEtag
+                treeEtag = treeEtag,
+                spaceId = spaceId,
             )
 
         @VisibleForTesting
@@ -247,11 +250,11 @@ class OCLocalFileDataSource(
                 needsToUpdateThumbnail = needsToUpdateThumbnail,
                 fileIsDownloading = fileIsDownloading,
                 lastSyncDateForData = lastSyncDateForData,
-                lastSyncDateForProperties = lastSyncDateForProperties,
                 modifiedAtLastSyncForData = modifiedAtLastSyncForData,
                 etagInConflict = etagInConflict,
                 treeEtag = treeEtag,
-                name = fileName
+                name = fileName,
+                spaceId = spaceId,
             ).apply { this@toEntity.id?.let { modelId -> this.id = modelId } }
     }
 
@@ -262,5 +265,6 @@ class OCLocalFileDataSource(
             uploadWorkerUuid = fileSync?.uploadWorkerUuid,
             downloadWorkerUuid = fileSync?.downloadWorkerUuid,
             isSynchronizing = fileSync?.isSynchronizing == true,
+            space = space?.toModel(),
         )
 }

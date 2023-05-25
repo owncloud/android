@@ -22,17 +22,20 @@
 
 package com.owncloud.android.dependecyinjection
 
+import com.owncloud.android.data.appregistry.OCAppRegistryRepository
 import com.owncloud.android.data.authentication.repository.OCAuthenticationRepository
 import com.owncloud.android.data.capabilities.repository.OCCapabilityRepository
 import com.owncloud.android.data.files.repository.OCFileRepository
-import com.owncloud.android.data.folderbackup.FolderBackupRepositoryImpl
-import com.owncloud.android.data.oauth.OAuthRepositoryImpl
+import com.owncloud.android.data.folderbackup.OCFolderBackupRepository
+import com.owncloud.android.data.oauth.repository.OCOAuthRepository
 import com.owncloud.android.data.server.repository.OCServerInfoRepository
 import com.owncloud.android.data.sharing.sharees.repository.OCShareeRepository
 import com.owncloud.android.data.sharing.shares.repository.OCShareRepository
+import com.owncloud.android.data.spaces.repository.OCSpacesRepository
 import com.owncloud.android.data.transfers.repository.OCTransferRepository
 import com.owncloud.android.data.user.repository.OCUserRepository
-import com.owncloud.android.data.webfinger.OCWebfingerRepository
+import com.owncloud.android.data.webfinger.repository.OCWebFingerRepository
+import com.owncloud.android.domain.appregistry.AppRegistryRepository
 import com.owncloud.android.domain.authentication.AuthenticationRepository
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
 import com.owncloud.android.domain.camerauploads.FolderBackupRepository
@@ -41,22 +44,25 @@ import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.sharing.sharees.ShareeRepository
 import com.owncloud.android.domain.sharing.shares.ShareRepository
+import com.owncloud.android.domain.spaces.SpacesRepository
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.user.UserRepository
-import com.owncloud.android.domain.webfinger.WebfingerRepository
+import com.owncloud.android.domain.webfinger.WebFingerRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
+    factory<AppRegistryRepository> { OCAppRegistryRepository(get(), get()) }
     factory<AuthenticationRepository> { OCAuthenticationRepository(get(), get()) }
-    factory<CapabilityRepository> { OCCapabilityRepository(get(), get()) }
-    factory<FileRepository> { OCFileRepository(get(), get(), get()) }
-    factory<ServerInfoRepository> { OCServerInfoRepository(get()) }
+    factory<CapabilityRepository> { OCCapabilityRepository(get(), get(), get()) }
+    factory<FileRepository> { OCFileRepository(get(), get(), get(), get()) }
+    factory<ServerInfoRepository> { OCServerInfoRepository(get(), get(), get()) }
     factory<ShareRepository> { OCShareRepository(get(), get()) }
     factory<ShareeRepository> { OCShareeRepository(get()) }
+    factory<SpacesRepository> { OCSpacesRepository(get(), get()) }
     factory<UserRepository> { OCUserRepository(get(), get()) }
-    factory<OAuthRepository> { OAuthRepositoryImpl(get()) }
-    factory<FolderBackupRepository> { FolderBackupRepositoryImpl(get()) }
-    factory<WebfingerRepository> { OCWebfingerRepository(get()) }
+    factory<OAuthRepository> { OCOAuthRepository(get()) }
+    factory<FolderBackupRepository> { OCFolderBackupRepository(get()) }
+    factory<WebFingerRepository> { OCWebFingerRepository(get()) }
     factory<TransferRepository> { OCTransferRepository(get()) }
 
 }

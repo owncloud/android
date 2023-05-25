@@ -35,13 +35,13 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.presentation.ui.authentication.ACTION_UPDATE_EXPIRED_TOKEN
-import com.owncloud.android.presentation.ui.authentication.EXTRA_ACCOUNT
-import com.owncloud.android.presentation.ui.authentication.EXTRA_ACTION
-import com.owncloud.android.presentation.ui.authentication.LoginActivity
-import com.owncloud.android.presentation.ui.conflicts.ConflictsResolveActivity
-import com.owncloud.android.presentation.ui.settings.SettingsActivity
-import com.owncloud.android.presentation.ui.settings.SettingsActivity.Companion.KEY_NOTIFICATION_INTENT
+import com.owncloud.android.presentation.authentication.ACTION_UPDATE_EXPIRED_TOKEN
+import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT
+import com.owncloud.android.presentation.authentication.EXTRA_ACTION
+import com.owncloud.android.presentation.authentication.LoginActivity
+import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
+import com.owncloud.android.presentation.settings.SettingsActivity
+import com.owncloud.android.presentation.settings.SettingsActivity.Companion.KEY_NOTIFICATION_INTENT
 import com.owncloud.android.ui.activity.UploadListActivity
 import java.util.Random
 

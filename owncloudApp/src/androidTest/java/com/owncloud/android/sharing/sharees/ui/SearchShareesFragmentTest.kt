@@ -33,9 +33,9 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
-import com.owncloud.android.presentation.ui.sharing.fragments.SearchShareesFragment
-import com.owncloud.android.presentation.viewmodels.sharing.OCShareViewModel
+import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.presentation.sharing.sharees.SearchShareesFragment
+import com.owncloud.android.presentation.sharing.ShareViewModel
 import com.owncloud.android.sharing.shares.ui.TestShareFileActivity
 import com.owncloud.android.testutil.OC_SHARE
 import io.mockk.every
@@ -50,12 +50,12 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
 class SearchShareesFragmentTest {
-    private val ocShareViewModel = mockkClass(OCShareViewModel::class, relaxed = true)
+    private val shareViewModel = mockkClass(ShareViewModel::class, relaxed = true)
     private val sharesLiveData = MutableLiveData<Event<UIResult<List<OCShare>>>>()
 
     @Before
     fun init() {
-        every { ocShareViewModel.shares } returns sharesLiveData
+        every { shareViewModel.shares } returns sharesLiveData
 
         stopKoin()
 
@@ -65,7 +65,7 @@ class SearchShareesFragmentTest {
             modules(
                 module {
                     viewModel {
-                        ocShareViewModel
+                        shareViewModel
                     }
                 }
             )

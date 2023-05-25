@@ -31,7 +31,7 @@ interface RemoteShareDataSource {
         accountName: String
     ): List<OCShare>
 
-    fun insertShare(
+    fun insert(
         remoteFilePath: String,
         shareType: ShareType,
         shareWith: String,
@@ -39,7 +39,6 @@ interface RemoteShareDataSource {
         name: String = "",
         password: String = "",
         expirationDate: Long = INIT_EXPIRATION_DATE_IN_MILLIS,
-        publicUpload: Boolean = false,
         accountName: String
     ): OCShare
 
@@ -49,11 +48,11 @@ interface RemoteShareDataSource {
         password: String? = "",
         expirationDateInMillis: Long = INIT_EXPIRATION_DATE_IN_MILLIS,
         permissions: Int,
-        publicUpload: Boolean = false,
         accountName: String
     ): OCShare
 
     fun deleteShare(
-        remoteId: String
+        remoteId: String,
+        accountName: String,
     )
 }

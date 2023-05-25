@@ -1,0 +1,8 @@
+Bugfix: Incorrect list of files in av. offline when browsing from details
+
+When opening the details view of a file accessed from the available offline shortcut,
+browsing back led to a incorrect list of files. Now, browsing back leads to the
+list of available offline files again.
+
+https://github.com/owncloud/android/issues/3986
+https://github.com/owncloud/android/pull/4026

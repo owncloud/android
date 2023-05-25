@@ -12,12 +12,14 @@
     <string name="actionbar_upload_from_apps">Content from other apps</string>
     <string name="actionbar_upload_files">Files</string>
     <string name="actionbar_open_with">Open with</string>
+    <string name="actionbar_open_with_read_only">Open with (read only)</string>
     <string name="actionbar_mkdir">New folder</string>
     <string name="actionbar_settings">Settings</string>
     <string name="actionbar_see_details">Details</string>
     <string name="actionbar_send_file">Send</string>
     <string name="actionbar_descending">Descending</string>
     <string name="actionbar_sort_title">Sort by</string>
+    <string name="fab_new_file">New document</string>
     <string name="drawer_item_all_files">All files</string>
     <string name="drawer_item_only_available_offline">Available offline</string>
     <string name="drawer_item_shared_by_link_files">Shared by link</string>
@@ -73,6 +75,7 @@
     <string name="prefs_camera_video_upload_on_wifi">Upload videos via wifi only</string>
     <string name="prefs_camera_video_upload_on_charging">Upload videos only when charging</string>
     <string name="prefs_subsection_advanced">Advanced</string>
+    <string name="prefs_subsection_notifications">Manage notifications</string>
     <string name="prefs_show_hidden_files">Show hidden files</string>
     <string name="prefs_log_open_logs_list_view">Log files</string>
     <string name="prefs_log_no_logs_list_view">Empty log folder!</string>
@@ -85,6 +88,8 @@
     <string name="prefs_help">Help</string>
     <string name="prefs_sync_calendar_contacts">Sync your contacts, calendars and tasks</string>
     <string name="prefs_sync_calendar_contacts_summary">Install DAVx⁵</string>
+    <string name="prefs_access_document_provider">Access document provider</string>
+    <string name="prefs_access_document_provider_summary">Suggested app to browse the files of your device via the Android native file explorer</string>
     <string name="prefs_recommend">Recommend to a friend</string>
     <string name="prefs_feedback">Feedback</string>
     <string name="prefs_imprint">Imprint</string>
@@ -113,9 +118,11 @@
 
     <!-- Bottom navigation bar -->
     <string name="bottom_nav_files">Files</string>
+    <string name="bottom_nav_personal">Personal</string>
     <string name="bottom_nav_uploads">Uploads</string>
     <string name="bottom_nav_offline">Offline</string>
     <string name="bottom_nav_links">Links</string>
+    <string name="bottom_nav_shares">Shares</string>
 
     <string name="recommend_subject">Try %1$s on your smartphone!</string>
     <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
@@ -148,9 +155,13 @@
     <string name="uploader_error_message_source_file_not_copied">An error occurred while copying the file to a temporary folder. Please try to send again.</string>
     <string name="file_list_seconds_ago">seconds ago</string>
     <string name="file_list_empty_title_all_files">No files in here</string>
+    <string name="spaces_list_empty_title">No spaces</string>
     <string name="file_list_empty_title_available_offline">No available offline files</string>
     <string name="file_list_empty_title_shared_by_links">No shared links</string>
     <string name="file_list_empty_subtitle_all_files">Upload some content or sync with your devices!</string>
+    <string name="shares_list_empty_title">No shares</string>
+    <string name="shares_list_empty_subtitle">You are not collaborating on other people\'s resources</string>
+    <string name="spaces_list_empty_subtitle">You don\'t have access to any space!</string>
     <string name="file_list_empty_subtitle_available_offline">Files and folders you mark as available offline will show up here</string>
     <string name="file_list_empty_subtitle_shared_by_links">Files and folders you share by link will show up here</string>
     <string name="file_list_loading">Loading&#8230;</string>
@@ -167,6 +178,7 @@
     <string name="file_list_files">files</string>
     <string name="filedetails_select_file">Tap on a file to display additional information.</string>
     <string name="upload_to">Upload to %1$s</string>
+    <string name="pick_document_type">Pick a document type to create:</string>
     <string name="upload_files_title"> Files </string>
     <string name="filedetails_size">Size:</string>
     <string name="filedetails_type">Type:</string>
@@ -179,6 +191,7 @@
     <string name="filedetails_renamed_in_upload_msg">File was renamed to %1$s during upload</string>
     <string name="list_layout">List layout</string>
     <string name="action_share">Share</string>
+    <string name="login_account_preparing">Preparing account for first launch</string>
     <string name="common_yes">Yes</string>
     <string name="common_no">No</string>
     <string name="common_remove_upload">Remove upload</string>
@@ -374,6 +387,7 @@
     <string name="download_enqueued_msg">Download enqueued</string>
     <string name="upload_enqueued_msg">Upload enqueued</string>
     <string name="create_dir_fail_msg">Folder could not be created</string>
+    <string name="create_file_fail_msg">File could not be created</string>
     <string name="filename_forbidden_characters">Forbidden characters: / \\ &lt; &gt; : " | ? *</string>
     <string name="filename_forbidden_characters_from_server">File name contains at least one invalid character</string>
     <string name="filename_empty">File name cannot be empty</string>
@@ -428,12 +442,13 @@
     <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature? The pending videos will not be uploaded</string>
     <string name="proper_pics_folder_warning_camera_upload">"Please make sure the folder selected is where the camera you are using saves the pictures taken. Otherwise, the feature will not be able to detect your pictures. Keep in mind that pictures will be uploaded in at least 15 minutes after taking them."</string>
     <string name="proper_videos_folder_warning_camera_upload">"Please make sure the folder selected is where the camera you are using saves the videos recorded. Otherwise, the feature will not be able to detect your videos. Keep in mind that videos will be uploaded in at least 15 minutes after recording them."</string>
-    <string name="conflict_title">File conflict</string>
+    <string name="conflict_title">File in conflict</string>
     <string name="conflict_description">There is a conflict in file %1$s, tap to solve it</string>
     <string name="conflict_message">Which files do you want to keep? If you select both versions, the local file will have a number added to its name.</string>
     <string name="conflict_keep_both">Keep both</string>
     <string name="conflict_use_local_version">local version</string>
     <string name="conflict_use_server_version">server version</string>
+    <string name="error_conflict">An error occurred in the destination folder</string>
 
     <string name="preview_image_description">Image preview</string>
     <string name="preview_image_error_unknown_format">This image cannot be shown</string>
@@ -465,8 +480,10 @@
     <string name="network_error_socket_timeout_exception">The server took too long to respond</string>
     <string name="network_error_connect_timeout_exception">The server took too long to connect</string>
     <string name="network_host_not_available">Server could not be reached</string>
+    <string name="network_error_message">An error occurred in the network</string>
 
     <string name="forbidden_permissions">You do not have permission %s</string>
+
     <string name="forbidden_permissions_rename">to rename this file</string>
     <string name="forbidden_permissions_delete">to delete this file</string>
     <string name="share_link_forbidden_permissions">to share this file</string>
@@ -496,6 +513,7 @@
     <string name="folder_picker_choose_button_text">Choose</string>
     <string name="folder_picker_move_here_button_text">Move Here</string>
     <string name="folder_picker_copy_here_button_text">Copy Here</string>
+    <string name="folder_picker_no_permissions_message_text">You have no permissions to add content here!</string>
 
     <string name="move_file_not_found">Unable to move. Please check whether the file exists</string>
     <string name="move_file_invalid_into_descendent">It is not possible to move a folder into a descendant</string>
@@ -540,11 +558,12 @@
     <string name="prefs_camera_upload_behaviour_dialog_title">Original file will be</string>
     <string name="prefs_camera_upload_behaviour_title">Original file will be</string>
     <string name="prefs_camera_upload_last_sync_title">Last synchronization</string>
+    <string name="notifications_permission_denied">You can update your preferences in Settings</string>
     <string name="upload_copy_files">Copy file</string>
     <string name="upload_move_files">Move file</string>
 
     <string name="pref_behaviour_entries_keep_file">kept in original folder</string>
-    <string name="pref_behaviour_entries_move">moved to app folder</string>
+    <string name="pref_behaviour_entries_remove_original_file">removed from original folder</string>
 
     <string name="share_dialog_title">Share</string>
     <string name="share_file">Share %1$s</string>
@@ -667,6 +686,7 @@
     <string name="prefs_logs_summary">Logs may contain sensitive information. Sharing logs with others is sole user responsibility</string>
 
     <string name="synchronizing_account">Synchronizing account</string>
+    <string name="spaces_sync_failed">Spaces could not be refreshed</string>
 
     <!-- Scoped storage migration wizard -->
     <string name="scoped_storage_wizard_explanation">Found %1$s of data on your external storage. It will be moved to the safe storage on your device. Remaining files will be cleaned from your external storage after the migration to avoid duplicates and vulnerability.</string>
@@ -696,26 +716,43 @@
     <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
-    <string name="release_notes_2.21.2_title1">Open in web</string>
-    <string name="release_notes_2.21.2_subtitle1">Open server supported file types in web browser (only oCIS)</string>
+
+    <string name="release_notes_4_0_title_1">Support for Spaces</string>
+    <string name="release_notes_4_0_subtitle_1">Introducing support for spaces feature (oCIS). <b>Only available for newly logged-in accounts</b></string>
+    <string name="release_notes_4_0_title_2">Bottom navigation bar</string>
+    <string name="release_notes_4_0_subtitle_2">Reordered some tabs</string>
+    <string name="release_notes_4_0_title_3">End of support Lollipop</string>
+    <string name="release_notes_4_0_subtitle_3">This will be the last release with support for Android Lollipop (v5.0)</string>
+    <string name="release_notes_4_0_title_4">Updated WebFinger flow</string>
+    <string name="release_notes_4_0_subtitle_4">For WebFinger servers, lookup server will be requested first, and if not successful, regular authentication flow will be followed</string>
+    <string name="release_notes_4_0_title_5">Permission handling</string>
+    <string name="release_notes_4_0_subtitle_5">Now, when there is lack of permissions to perform some actions over a folder or a file, those actions will be hidden</string>
+    <string name="release_notes_4_0_title_6">New "Manage notifications" setting</string>
+    <string name="release_notes_4_0_subtitle_6">A new item has been added in the settings, which redirects to the app notifications settings of the device</string>
+    <string name="release_notes_4_0_title_7">Minor bugfixes and improvements</string>
+    <string name="release_notes_4_0_subtitle_7">Some minor bugs have been fixed, and minor technical improvements were introduced to improve the experience in the app</string>
+    <string name="release_notes_4_0_title_8">Markdown support</string>
+    <string name="release_notes_4_0_subtitle_8">Markdown files rendered and displayed with proper format</string>
+    <string name="release_notes_4_0_title_9">List of providers (oCIS)</string>
+    <string name="release_notes_4_0_subtitle_9">If your server supports app providers to open specific kind of files, all of them will be listed in Details view</string>
+    <string name="release_notes_4_0_title_10">Themed icons supported</string>
+    <string name="release_notes_4_0_subtitle_10">Android 13 feature "Themed icons" will let you set app icon in monochrome</string>
+    <string name="release_notes_4_0_title_11">Create new documents via web (oCIS)</string>
+    <string name="release_notes_4_0_subtitle_11">If oCIS server supports application providers, new documents can be created via browser and synced with oC</string>
+    <string name="release_notes_4_0_title_12">New setting with app suggested to browse files</string>
+    <string name="release_notes_4_0_subtitle_12">A new setting was added in "More" section with a suggested app to access files via document provider</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
+    <string name="ic_action_open_with_web">Open in %1$s (web)</string>
     <string name="open_in_web_error_generic">Couldn\'t open in web</string>
     <string name="open_in_web_error_not_supported">there are no apps that support this file type</string>
     <string name="open_in_web_error_too_early">The requested file is not yet available, please try again later</string>
 
-    <string name="release_notes_3.0_title1">New sync engine</string>
-    <string name="release_notes_3.0_subtitle1">The way in which all files are synced has been redesigned to improve it</string>
-    <string name="release_notes_3.0_title2">Automatic conflicts propagation</string>
-    <string name="release_notes_3.0_subtitle2">Conflicts are now automatically propagated (and cleaned) to parent folders</string>
-    <string name="release_notes_3.0_title3">Fix for thumbnails</string>
-    <string name="release_notes_3.0_subtitle3">Thumbnails are now shown correctly in the file list</string>
-    <string name="release_notes_3.0_title4">Empty views improved</string>
-    <string name="release_notes_3.0_subtitle4">A new and more attractive view has been added to screens with no items (files, uploads and logs)</string>
-    <string name="release_notes_3.0_title5">Several transfers running simultaneously</string>
-    <string name="release_notes_3.0_subtitle5">With the redesign of the sync engine, now several downloads and uploads can run at the same time</string>
-    <string name="release_notes_3.0_title6">Browser login improved</string>
-    <string name="release_notes_3.0_subtitle6">Only typing the URL, browser will be triggered</string>
+    <!-- oCIS accounts warning -->
+    <string name="ocis_accounts_warning_title">oCIS accounts warning</string>
+    <string name="ocis_accounts_warning_message">Please, remove the account and login again to get the spaces feature</string>
+    <string name="ocis_accounts_warning_checkbox_message">Don\'t show again</string>
+    <string name="ocis_accounts_warning_button">Understood</string>
 
 </resources>

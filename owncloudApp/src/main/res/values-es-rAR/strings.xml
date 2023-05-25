@@ -10,12 +10,14 @@
   <string name="actionbar_upload_from_apps">Contenido de otras aplicaciones</string>
   <string name="actionbar_upload_files">Archivos</string>
   <string name="actionbar_open_with">Abrir con</string>
+  <string name="actionbar_open_with_read_only">Abrir con (sólo lectura)</string>
   <string name="actionbar_mkdir">Nueva Carpeta</string>
   <string name="actionbar_settings">Configuración</string>
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Mandar</string>
   <string name="actionbar_descending">Orden Descendiente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
+  <string name="fab_new_file">Nuevo documento</string>
   <string name="drawer_item_all_files">Todos los archivos</string>
   <string name="drawer_item_only_available_offline">Disponible sin conexión</string>
   <string name="drawer_item_shared_by_link_files">Compartido por enlace</string>
@@ -33,6 +35,7 @@
   <string name="prefs_subsection_logging">Registrando</string>
   <string name="prefs_subsection_more">Más</string>
   <string name="prefs_subsection_security">Seguridad</string>
+  <string name="prefs_subsection_whatsnew">¿Qué hay de nuevo en la última versión?</string>
   <string name="prefs_accounts">Cuentas</string>
   <string name="prefs_manage_accounts">Gestionar cuentas</string>
   <string name="prefs_passcode">Bloqueo con clave</string>
@@ -47,15 +50,20 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir clicks mientras que la vista está oscurecida por otra ventana visible. Habilítalo para utilizar aplicaciones de filtro de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">¿Estás seguro que quieres habilitar esta funcionalidad?</string>
   <string name="confirmation_touches_with_other_windows_message">Utiliza esta funcionalidad bajo tu propia responsabilidad, una aplicación maliciosa podría tratar de engañarte a realizar algunas acciones, sin que te des cuenta, utilizando otras vistas.</string>
+  <string name="prefs_subsection_video_uploads">Subir videos automáticamente</string>
   <string name="prefs_camera_picture_upload">Carga de imágenes</string>
   <string name="prefs_camera_picture_upload_summary">Cargar imágenes automáticamente tomadas desde la cámara</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de carga de la imagen</string>
+  <string name="prefs_camera_picture_upload_conditions_title">Condiciones para ejecutar cargas</string>
   <string name="prefs_camera_picture_upload_on_wifi">Cargar imágenes solamente con WiFi</string>
   <string name="prefs_camera_video_upload">Carga de videos</string>
   <string name="prefs_camera_video_upload_summary">Cargar videos automáticamente tomados desde la cámara</string>
   <string name="prefs_camera_video_upload_path_title">Ruta de carga del video</string>
   <string name="prefs_camera_video_upload_on_wifi">Cargar videos solamente con WiFi</string>
   <string name="prefs_subsection_advanced">Avanzado</string>
+  <string name="prefs_show_hidden_files">Mostrar archivos ocultos</string>
+  <string name="prefs_log_open_logs_list_view">Archivos de registro</string>
+  <string name="prefs_log_no_logs_list_view">¡Carpeta de registros vacía!</string>
   <string name="prefs_log_title">Activar bitacora</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial de la bitacora</string>
@@ -85,9 +93,11 @@
   <string name="illegal_argument_exception_message">Se necesita una ACCION válida para poder pasar a</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Archivos</string>
+  <string name="bottom_nav_personal">Personal</string>
   <string name="bottom_nav_uploads">Cargas</string>
   <string name="bottom_nav_offline">Fuera de línea</string>
   <string name="bottom_nav_links">Vínculos</string>
+  <string name="bottom_nav_shares">Compartidos</string>
   <string name="recommend_subject">¡Intento %1$s en tu teléfono inteligente!</string>
   <string name="recommend_text">Quiero invitarte a usar %1$s en tu teléfono inteligente!\nDescárgalo aquí: %2$s</string>
   <string name="error_reason">porque</string>
@@ -343,7 +353,6 @@
   <string name="confirmation_disable_videos_upload_message">¿Está seguro que quiere deshabilitar esta funcionalidad? Los videos pendientes no serán subidos</string>
   <string name="proper_pics_folder_warning_camera_upload">Por favor asegurate que la carpeta seleccionada es donde la cámara que estas usando guarda las fotos sacadas. De otro modo, esta funcionalidad no será capaz de detectar tus fotos. Tené en cuenta que las fotos serán subidas al menos 15 minutos después de haber sido tomadas.</string>
   <string name="proper_videos_folder_warning_camera_upload">Por favor asegurate de que la carpeta seleccionada es donde la cámara que estas usando guardas los videos grabados. De otro modo, esta funcionalidad no será capaz de detectar tus videos. Tené en cuenta que los videos serán subidos al menos 15 minutos después de haber sido grabados.</string>
-  <string name="conflict_title">Conflicto con el archivo</string>
   <string name="conflict_description">Hay un conflicto con el archivo %1$s, presione para resolverlo</string>
   <string name="conflict_message">¿Qué archivos desea mantener? Si selecciona ambas versiones, al archivo local se le agregará un número a su nombre.</string>
   <string name="conflict_keep_both">Mantener ambas</string>
@@ -432,7 +441,6 @@
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>
   <string name="pref_behaviour_entries_keep_file">mantener en su carpeta original</string>
-  <string name="pref_behaviour_entries_move">movido a la carpeta de la aplicación</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Compartir %1$s</string>
   <string name="share_with_user_section_title">Usuarios y Grupos</string>

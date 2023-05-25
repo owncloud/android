@@ -29,7 +29,7 @@ import androidx.enterprise.feedback.KeyedAppState
 import androidx.enterprise.feedback.KeyedAppStatesReporter
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.MDM_FLAVOR
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.utils.MDMConfigurations
 import timber.log.Timber
 
@@ -38,7 +38,7 @@ class MdmProvider(
 ) {
     private val restrictionsManager = context.getSystemService(Context.RESTRICTIONS_SERVICE) as RestrictionsManager
     private val restrictions = restrictionsManager.applicationRestrictions
-    private val preferencesProvider = SharedPreferencesProviderImpl(context)
+    private val preferencesProvider = OCSharedPreferencesProvider(context)
     private val restrictionsReporter = KeyedAppStatesReporter.create(context)
 
     fun cacheStringRestriction(key: String, idMessageFeedback: Int) {
@@ -153,9 +153,4 @@ class MdmProvider(
     }
 
     private fun isMdmFlavor() = BuildConfig.FLAVOR == MDM_FLAVOR
-
-    companion object {
-        // Use this key if only interested in setup value. When all keys added to MDM, remove this
-        const val NO_MDM_RESTRICTION_YET = "NO_MDM_RESTRICTION_YET"
-    }
 }

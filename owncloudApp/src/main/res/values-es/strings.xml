@@ -10,12 +10,14 @@
   <string name="actionbar_upload_from_apps">Contenido de otras aplicaciones</string>
   <string name="actionbar_upload_files">Archivos</string>
   <string name="actionbar_open_with">Abrir con</string>
+  <string name="actionbar_open_with_read_only">Abrir con (solo lectura)</string>
   <string name="actionbar_mkdir">Nueva carpeta</string>
   <string name="actionbar_settings">Configuración</string>
   <string name="actionbar_see_details">Detalles</string>
   <string name="actionbar_send_file">Enviar</string>
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
+  <string name="fab_new_file">Nuevo documento</string>
   <string name="drawer_item_all_files">Todos los archivos</string>
   <string name="drawer_item_only_available_offline">Disponible offline</string>
   <string name="drawer_item_shared_by_link_files">Compartido por enlace</string>
@@ -71,9 +73,11 @@
   <string name="prefs_camera_video_upload_on_wifi">Subir vídeos por wifi únicamente</string>
   <string name="prefs_camera_video_upload_on_charging">Subir vídeos solo cuando se está cargando</string>
   <string name="prefs_subsection_advanced">Avanzado</string>
+  <string name="prefs_subsection_notifications">Gestionar notificaciones</string>
   <string name="prefs_show_hidden_files">Mostrar archivos ocultos</string>
   <string name="prefs_log_open_logs_list_view">Archivos de registro</string>
   <string name="prefs_log_no_logs_list_view">¡Carpeta de registros vacía!</string>
+  <string name="prefs_log_empty_subtitle">Active los registros y los archivos de registros aparecerán aquí</string>
   <string name="prefs_log_title">Habilitar registro</string>
   <string name="prefs_log_summary">Esto es usado para registrar problemas</string>
   <string name="prefs_log_title_history">Historial del registro</string>
@@ -109,9 +113,11 @@
   <string name="illegal_argument_exception_message">Se necesita una ACCIÓN válida</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Archivos</string>
+  <string name="bottom_nav_personal">Personal</string>
   <string name="bottom_nav_uploads">Subidas</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Enlaces</string>
+  <string name="bottom_nav_shares">Compartidos</string>
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
   <string name="error_reason">debido a </string>
@@ -141,8 +147,12 @@
   <string name="uploader_error_message_source_file_not_found">El archivo a subir no se localiza. Compruebe que el archivo existe.</string>
   <string name="uploader_error_message_source_file_not_copied">Ha ocurrido un error al copiar a la carpeta temporal. Por favor intentelo de nuevo.</string>
   <string name="file_list_seconds_ago">hace segundos</string>
+  <string name="file_list_empty_title_all_files">Aquí no hay archivos</string>
+  <string name="file_list_empty_title_available_offline">No hay ficheros sin conexión</string>
   <string name="file_list_empty_title_shared_by_links">No hay enlaces compartidos</string>
-  <string name="file_list_empty_subtitle_all_files">Suba contenidos o sincronice sus dispositivos.</string>
+  <string name="file_list_empty_subtitle_all_files">¡Suba algún contenido o sincronice con sus dispositivos!</string>
+  <string name="file_list_empty_subtitle_available_offline">Los ficheros y carpetas marcados como disponibles online aparecerán aquí</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Aquí aparecerán los archivos y carpetas compartidos mediante enlace</string>
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">No se han encontrado apps para ese tipo de archivos</string>
   <string name="file_list_no_app_for_perform_action">No se encuentra aplicación para esta acción</string>
@@ -150,6 +160,7 @@
   <string name="local_file_list_empty_just_folders">No hay carpetas en esta carpeta.</string>
   <string name="local_file_list_search_with_no_matches">No hay coincidencias para esta búsqueda</string>
   <string name="upload_list_empty">No hay subidas disponibles</string>
+  <string name="upload_list_empty_subtitle">Suba algo y aparecerá aquí</string>
   <string name="file_list_folder">carpeta</string>
   <string name="file_list_folders">carpetas</string>
   <string name="file_list_file">fichero</string>
@@ -211,6 +222,7 @@
   <string name="uploads_view_group_current_uploads">Actual</string>
   <string name="uploads_view_group_failed_uploads">Fallido (presiona para reintentarlo)</string>
   <string name="uploads_view_group_finished_uploads">Subidos</string>
+  <string name="uploads_view_group_queued_uploads">En cola</string>
   <string name="uploads_view_group_file_count">archivos %d</string>
   <string name="uploads_view_group_file_count_single">archivo %d</string>
   <string name="uploads_view_upload_status_succeeded">Completada</string>
@@ -228,8 +240,13 @@
   <string name="uploads_view_upload_status_service_interrupted">La aplicación se ha interrumpido</string>
   <string name="uploads_view_upload_status_unknown_fail">Error desconocido</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Esperando a la conexión wifi</string>
+  <string name="uploads_view_upload_status_queued">En cola</string>
   <string name="uploads_view_later_waiting_to_upload">Esperando para subir</string>
   <string name="uploads_view_unsupported_media_type">Tipo de archivo no soportado</string>
+  <string name="uploader_upload_enqueued_ticker">La subida de %1$s se ha puesto en cola</string>
+  <string name="uploader_upload_canceled_ticker">Subida cancelada</string>
+  <string name="downloader_download_canceled_ticker">Descarga cancelada</string>
+  <string name="downloader_download_enqueued_ticker">La descarga de %1$s se ha puesto en cola</string>
   <string name="downloader_download_in_progress_ticker">Descargando...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Descargado de %2$s</string>
   <string name="downloader_download_succeeded_ticker">Descarga completa</string>
@@ -343,12 +360,17 @@
   <string name="available_offline_inherited_msg">La carpeta que contiene este archivo está disponible offline</string>
   <string name="rename_local_fail_msg">No se pudo cambiar el nombre de la copia local, trata con un nombre differente</string>
   <string name="rename_server_fail_msg">No se pudo cambiar el nombre</string>
+  <string name="file_already_exists">fichero ya existe</string>
   <string name="sync_file_fail_msg">No se ha podido comprobar el fichero remoto</string>
   <string name="sync_file_nothing_to_do_msg">Ya está sincronizado</string>
+  <string name="new_remote_version_found_msg">Se ha encontrado una nueva versión en el servidor. Descargando...</string>
+  <string name="download_enqueued_msg">Descarga encolada</string>
+  <string name="upload_enqueued_msg">Subida encolada</string>
   <string name="create_dir_fail_msg">No se pudo crear la carpeta</string>
   <string name="filename_forbidden_characters">Carácteres ilegales: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">El nombre del archivo contiene al menos un carácter no válido</string>
   <string name="filename_empty">El nombre de archivo no puede estar vacío</string>
+  <string name="filename_too_long">El nombre del fichero no puede ser tan largo</string>
   <string name="wait_a_moment">Espere un momento</string>
   <string name="wait_checking_credentials">Comprobando las credenciales guardadas</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema inesperado; por favor, pruebe otra app para seleccionar el archivo</string>
@@ -395,7 +417,7 @@
   <string name="confirmation_disable_videos_upload_message">¿Está seguro de que desea deshabilitar esta opción ? Los videos pendientes no se subiran.</string>
   <string name="proper_pics_folder_warning_camera_upload">Asegúrese de que la carpeta seleccionada es la misma que su cámara está utilizando para guardar sus fotos. De lo contrario, la función no podrá detectarlas. Tenga en cuenta que éstas se cargarán al menos 15 minutos después de haber sido tomadas.</string>
   <string name="proper_videos_folder_warning_camera_upload">Asegúrese de que la carpeta seleccionada es la misma que su cámara está utilizando para guardar sus videos. De lo contrario, la función no podrá detectarlos. Tenga en cuenta que éstos se cargarán al menos 15 minutos después de haber sido grabados.</string>
-  <string name="conflict_title">Conflicto con archivo</string>
+  <string name="conflict_title">Conflicto en archivo</string>
   <string name="conflict_description">Hay un conflicto en el archivo %1$s, pulsar para resolver</string>
   <string name="conflict_message">¿Qué archivos desea mantener? Si selecciona ambas versiones, el archivo local tendrá un número añadido a su nombre.</string>
   <string name="conflict_keep_both">Mantener ambos</string>
@@ -489,7 +511,7 @@
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>
   <string name="pref_behaviour_entries_keep_file">dejado en la carpeta original</string>
-  <string name="pref_behaviour_entries_move">movido a la carpeta apps</string>
+  <string name="pref_behaviour_entries_remove_original_file">Eliminado de la carpeta originnal</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Compartir %1$s</string>
   <string name="share_with_user_section_title">Usuarios y Grupos</string>
@@ -566,6 +588,8 @@
   <string name="media_service_notification_channel_description">Ver reproductor de música</string>
   <string name="file_sync_notification_channel_name">Sincronizado de archivo</string>
   <string name="file_sync_notification_channel_description">Ver el resultado de sincronizado de archivo</string>
+  <string name="file_sync_conflict_notification_channel_name">Conflictos en el fichero</string>
+  <string name="file_sync_conflict_notification_channel_description">Ver los conflictos en los ficheros cuando ocurren</string>
   <string name="clicks_to_be_developer">Está %1$d clics de distancia de habilitar los menús de desarrollador</string>
   <string name="rate_dialog_title">Puntúa %1$s la aplicación!</string>
   <string name="rate_dialog_description">Si disfrutas usando esta aplicación, ¿puedes dedicar un momento a valorarla?. Tus comentarios son muy importantes para nosotros.</string>
@@ -611,7 +635,7 @@
   <string name="security_enforced_title">Por favor, seleccione una opción para bloquear la aplicación:</string>
   <string name="security_enforced_first_option">Código de bloqueo</string>
   <string name="security_enforced_second_option">Patrón de bloqueo</string>
-  <string name="folder_upload_some_content_or_sync_devices">Suba contenidos o sincronice sus dispositivos.</string>
+  <string name="folder_upload_some_content_or_sync_devices">¡Suba algún contenido o sincronice con sus dispositivos!</string>
   <!--Webfinger-->
   <string name="global_proceed">Proceder</string>
   <string name="error_webfinger_username_empty">Nombre de usuario vacío</string>
@@ -620,8 +644,6 @@
   <string name="release_notes_footer">Gracias por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Proceder</string>
   <string name="release_notes_icon">Icono notas de lanzamiento</string>
-  <string name="release_notes_2.21.2_title1">Abrir en web</string>
-  <string name="release_notes_2.21.2_subtitle1">Abrir ficheros de tipos soportados por el servidor en un navegador web (solo oCIS)</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir en web</string>
   <string name="open_in_web_error_generic">No se pudo abrir en web</string>

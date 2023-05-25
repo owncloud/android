@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">Küldés</string>
   <string name="actionbar_descending">Csökkenő</string>
   <string name="actionbar_sort_title">Rendezés elve</string>
+  <string name="fab_new_file">Új dokumentum</string>
   <string name="drawer_item_all_files">Összes fájl</string>
   <string name="drawer_item_only_available_offline">Offline elérhető</string>
   <string name="drawer_item_shared_by_link_files">Linkkel osztottam meg</string>
@@ -87,9 +88,11 @@
   <string name="illegal_argument_exception_message">Érvényes MŰVELET szükséges</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Fájlkezelő</string>
+  <string name="bottom_nav_personal">Személyes</string>
   <string name="bottom_nav_uploads">Feltöltések</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Hivatkozások</string>
+  <string name="bottom_nav_shares">Megosztások</string>
   <string name="recommend_subject">Próbálja ki a(z) %1$s appot az okostelefonján!</string>
   <string name="recommend_text">Szeretnélek meghívni, hogy használd a(z) %1$s alkalmazást az okostelefonodon!\nTöltsd le innen: %2$s</string>
   <string name="error_reason">mivel</string>
@@ -119,8 +122,10 @@
   <string name="uploader_error_message_source_file_not_found">A feltöltendő fájl nem található a helyén. Ellenőrizze, hogy létezik-e a fájl.</string>
   <string name="uploader_error_message_source_file_not_copied">Hiba történt a fájl ideiglenes mappába másolása közben. Próbálja meg újra elküldeni.</string>
   <string name="file_list_seconds_ago">másodperce</string>
+  <string name="file_list_empty_title_all_files">Itt nincsenek fájlok</string>
   <string name="file_list_empty_title_shared_by_links">Nincs megosztott link</string>
   <string name="file_list_empty_subtitle_all_files">Tölts fel néhány tartalmat, vagy szinkronizálj az eszközöddel!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Link-el megosztott fájljai itt jelennek meg</string>
   <string name="file_list_loading">Betöltés…</string>
   <string name="file_list_no_app_for_file_type">Nem található alkalmazás a fájltípushoz</string>
   <string name="local_file_list_empty">Nincs fájl ebben a mappában.</string>
@@ -356,7 +361,6 @@
   <string name="confirmation_disable_videos_upload_message">Biztos letiltja ezt a funkciót? A függőben lévő videók nem lesznek feltöltve</string>
   <string name="proper_pics_folder_warning_camera_upload">Ellenőrizze, hogy a kijelölt mappa megegyezik azzal, ahová a kamera a képeket menti. Ellenkező esetben ez a funkció nem lesz képes felismerni a képeket. Tartsa észben, hogy a képek legalább 15 perccel az elkészülés után kerülnek feltöltésre.</string>
   <string name="proper_videos_folder_warning_camera_upload">Ellenőrizze, hogy a kijelölt mappa megegyezik azzal, ahová a kamera a videókat menti. Ellenkező esetben ez a funkció nem lesz képes felismerni a videókat. Tartsa észben, hogy a videók legalább 15 perccel az elkészülés után kerülnek feltöltésre.</string>
-  <string name="conflict_title">Fájlütközés</string>
   <string name="conflict_description">A következő fájlban konfliktus található %1$s, érintsd meg, hogy megold</string>
   <string name="conflict_message">Mely fájlokat tartja meg? Ha mindkét verziót kiválasztja, akkor a helyi fájl nevéhez hozzá lesz adva egy szám.</string>
   <string name="conflict_keep_both">Mindkettő megtartása</string>
@@ -448,7 +452,6 @@
   <string name="upload_copy_files">Fájl másolása</string>
   <string name="upload_move_files">Fájl mozgatása</string>
   <string name="pref_behaviour_entries_keep_file">eredeti mappában tárolva</string>
-  <string name="pref_behaviour_entries_move">áthelyezve az alkalmazás mappájába</string>
   <string name="share_dialog_title">Megosztás</string>
   <string name="share_file">Megosztás %1$s</string>
   <string name="share_with_user_section_title">Felhasználók és csoportok</string>

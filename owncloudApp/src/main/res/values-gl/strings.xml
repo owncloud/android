@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">Enviar</string>
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Ordenar por</string>
+  <string name="fab_new_file">Novo documento</string>
   <string name="drawer_item_all_files">Todos os ficheiros</string>
   <string name="drawer_item_only_available_offline">Dispoñíbel sen conexión</string>
   <string name="drawer_item_shared_by_link_files">Compartido por ligazón</string>
@@ -87,9 +88,11 @@
   <string name="illegal_argument_exception_message">É necesaria unha ACCIÓN válida na intención pasada a</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Ficheiros</string>
+  <string name="bottom_nav_personal">Persoal</string>
   <string name="bottom_nav_uploads">Envios</string>
   <string name="bottom_nav_offline">Desconectado</string>
   <string name="bottom_nav_links">Ligazóns</string>
+  <string name="bottom_nav_shares">Comparticións</string>
   <string name="recommend_subject">Tente %1$s no seu teléfono intelixente!</string>
   <string name="recommend_text">Quero convidalo a empregar %1$s no seu teléfono intelixente!
 Descárgueo de aquí: %2$s</string>
@@ -120,7 +123,10 @@ Descárgueo de aquí: %2$s</string>
   <string name="uploader_error_message_source_file_not_found">Non se atopou o ficheiro para enviar na súa localización. Comprobe que existe o ficheiro.</string>
   <string name="uploader_error_message_source_file_not_copied">Produciuse un erro ao copiar o ficheiro a un cartafol temporal. Proba a envialo de novo.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
+  <string name="file_list_empty_title_all_files">Aquí non hai ficheiros</string>
   <string name="file_list_empty_title_shared_by_links">Non hai ligazóns compartidas</string>
+  <string name="file_list_empty_subtitle_all_files">Envíe algún contido ou sincronice cos seus dispositivos!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Os ficheiros e cartafoles que comparta por ligazón amosaranse aquí</string>
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">Non se atopou unha aplicación para este tipo de ficheiro</string>
   <string name="local_file_list_empty">Non hai ficheiros neste cartafol.</string>
@@ -353,7 +359,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="confirmation_disable_videos_upload_message">Confirma que quere desactivar esta característica? Os vídeos pendentes non van ser enviados</string>
   <string name="proper_pics_folder_warning_camera_upload">Asegúrese de que o cartafol seleccionado é onde a cámara que está a usar garda as imaxes tomadas. Se non, a función non poderá detectar as súas imaxes. Teña en conta que as imaxes serán enviadas, polo menos, 15 minutos despois de tomalas.</string>
   <string name="proper_videos_folder_warning_camera_upload">Asegúrese de que o cartafol seleccionado é onde a cámara que está a usar garda os vídeos gravados. Se non, a función non poderá detectar os seus vídeos. Teña en conta que os vídeos serán enviados, polo menos, 15 minutos despois de gravalos.</string>
-  <string name="conflict_title">Conflito de ficheiro</string>
   <string name="conflict_description">Hai un conflito no ficheiro %1$s, toque para solucionalo</string>
   <string name="conflict_message">Que ficheiros quere conservar? Se selecciona ámbalas dúas versións, engadiráselle un número ao nome do ficheiro local.</string>
   <string name="conflict_keep_both">Conxervar ambos</string>
@@ -442,7 +447,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="upload_copy_files">Copiar ficheiro</string>
   <string name="upload_move_files">Mover ficheiro</string>
   <string name="pref_behaviour_entries_keep_file">mantense no cartafol orixinal</string>
-  <string name="pref_behaviour_entries_move">movido cara ao cartafol da aplicación</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Compartir %1$s</string>
   <string name="share_with_user_section_title">Usuarios e grupos</string>
@@ -552,6 +556,7 @@ Descárgueo de aquí: %2$s</string>
   <!--Scoped storage migration wizard-->
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Código de bloqueo</string>
+  <string name="folder_upload_some_content_or_sync_devices">Envíe algún contido ou sincronice cos seus dispositivos!</string>
   <!--Webfinger-->
   <string name="global_proceed">Proceder</string>
   <!--Release Notes-->

@@ -20,18 +20,18 @@
 
 package com.owncloud.android.data.transfers.repository
 
-import androidx.lifecycle.LiveData
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
+import kotlinx.coroutines.flow.Flow
 
 class OCTransferRepository(
     private val localTransferDataSource: LocalTransferDataSource
 ) : TransferRepository {
-    override fun storeTransfer(transfer: OCTransfer) =
-        localTransferDataSource.storeTransfer(transfer = transfer)
+    override fun saveTransfer(transfer: OCTransfer) =
+        localTransferDataSource.saveTransfer(transfer = transfer)
 
     override fun updateTransfer(transfer: OCTransfer) =
         localTransferDataSource.updateTransfer(transfer = transfer)
@@ -74,11 +74,11 @@ class OCTransferRepository(
         )
     }
 
-    override fun removeTransferById(id: Long) =
-        localTransferDataSource.removeTransferById(id = id)
+    override fun deleteTransferById(id: Long) =
+        localTransferDataSource.deleteTransferById(id = id)
 
-    override fun removeAllTransfersFromAccount(accountName: String) =
-        localTransferDataSource.removeAllTransfersFromAccount(accountName = accountName)
+    override fun deleteAllTransfersFromAccount(accountName: String) =
+        localTransferDataSource.deleteAllTransfersFromAccount(accountName = accountName)
 
     override fun getTransferById(id: Long): OCTransfer? =
         localTransferDataSource.getTransferById(id = id)
@@ -86,8 +86,8 @@ class OCTransferRepository(
     override fun getAllTransfers(): List<OCTransfer> =
         localTransferDataSource.getAllTransfers()
 
-    override fun getAllTransfersAsLiveData(): LiveData<List<OCTransfer>> =
-        localTransferDataSource.getAllTransfersAsLiveData()
+    override fun getAllTransfersAsStream(): Flow<List<OCTransfer>> =
+        localTransferDataSource.getAllTransfersAsStream()
 
     override fun getLastTransferFor(remotePath: String, accountName: String) =
         localTransferDataSource.getLastTransferFor(remotePath = remotePath, accountName = accountName)

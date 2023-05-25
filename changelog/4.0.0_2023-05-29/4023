@@ -1,0 +1,9 @@
+Enhancement: Create file via web
+
+A new option has been added in the FAB to create new files, for those servers
+which support this option and have available app providers that allow the creation
+of new files.
+
+https://github.com/owncloud/android/issues/3995
+https://github.com/owncloud/android/pull/4023
+https://github.com/owncloud/android-library/pull/562

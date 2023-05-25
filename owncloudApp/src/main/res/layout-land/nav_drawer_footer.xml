@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2020 ownCloud GmbH.
+  Copyright (C) 2023 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -23,6 +23,36 @@
     android:background="@color/white"
     android:padding="@dimen/standard_padding">
 
+    <ImageView
+        android:id="@+id/drawer_link_icon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:visibility="gone"
+        android:src="@drawable/drawer_logo"
+        app:layout_constraintBottom_toTopOf="@id/account_quota_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/drawer_link_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/standard_half_margin"
+        android:singleLine="true"
+        android:textColor="@color/textColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:ellipsize="end"
+        android:text="@string/drawer_link_label"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/account_quota_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/drawer_link_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Link"
+        tools:visibility="visible" />
+
     <ProgressBar
         android:id="@+id/account_quota_bar"
         style="?android:attr/progressBarStyleHorizontal"
@@ -30,7 +60,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/drawer_link_icon"
         tools:progress="25" />
 
     <androidx.appcompat.widget.AppCompatTextView

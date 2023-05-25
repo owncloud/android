@@ -1,8 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ ownCloud Android client application
   ~
   ~ @author Fernando Sanz Velasco
-  ~ Copyright (C) 2021 ownCloud GmbH.
+  ~ @author Juan Carlos Garrote Gascón
+  ~
+  ~ Copyright (C) 2023 ownCloud GmbH.
   ~
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License version 2,
@@ -30,9 +33,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.ui.files.filelist.MainFileListFragment">
+        tools:context=".presentation.files.filelist.MainFileListFragment">
 
-        <com.owncloud.android.presentation.ui.files.SortOptionsView
+        <com.owncloud.android.presentation.files.SortOptionsView
             android:id="@+id/options_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -63,31 +66,47 @@
             android:id="@+id/swipeRefresh_main_file_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="@dimen/file_list_progress_bar_height"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/options_layout">
+            app:layout_constraintTop_toBottomOf="@id/syncProgressBar">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_main_file_list"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical"
-                tools:listitem="@layout/item_file_list" />
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/space_header"
+                    layout="@layout/space_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:visibility="visible"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_main_file_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:scrollbars="vertical"
+                    tools:listitem="@layout/item_file_list"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/space_header"/>
+
+                <include
+                    android:id="@+id/empty_data_parent"
+                    layout="@layout/item_empty_dataset"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/space_header" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <include
-            android:id="@+id/empty_data_parent"
-            layout="@layout/item_empty_dataset"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -98,7 +117,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/standard_margin"
         android:layout_marginBottom="@dimen/standard_margin"
-        android:visibility="gone"
+        android:visibility="visible"
         fab:fab_addButtonColorNormal="@color/primary_button_background_color"
         fab:fab_addButtonColorPressed="@color/owncloud_blue"
         fab:fab_addButtonPlusIconColor="@color/white"
@@ -124,6 +143,16 @@
             fab:fab_icon="@drawable/ic_action_create_dir"
             fab:fab_size="mini"
             fab:fab_title="@string/actionbar_mkdir" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_newfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/primary_button_background_color"
+            fab:fab_colorPressed="@color/owncloud_blue"
+            fab:fab_icon="@drawable/ic_action_create_file"
+            fab:fab_size="mini"
+            fab:fab_title="@string/fab_new_file" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

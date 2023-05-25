@@ -1,0 +1,5 @@
+Bugfix: Fix reauthentication prompt
+
+Potential fix to oauth error after logging in for first time that makes user to reauthenticate
+
+https://github.com/owncloud/android-library/pull/534

@@ -20,14 +20,15 @@
 
 package com.owncloud.android.data.shares.datasources
 
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCRemoteShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.mapper.RemoteShareMapper
-import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
 import com.owncloud.android.domain.exceptions.ShareForbiddenException
 import com.owncloud.android.domain.exceptions.ShareNotFoundException
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.ShareResponse
+import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
 import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
@@ -43,10 +44,13 @@ class OCRemoteShareDataSourceTest {
 
     private val ocShareService: OCShareService = mockk()
     private val remoteShareMapper = RemoteShareMapper()
+    private val clientManager: ClientManager = mockk(relaxed = true)
 
     @Before
     fun init() {
-        ocRemoteShareDataSource = OCRemoteShareDataSource(ocShareService, remoteShareMapper)
+        every { clientManager.getShareService(any()) } returns ocShareService
+
+        ocRemoteShareDataSource = OCRemoteShareDataSource(clientManager, remoteShareMapper)
     }
 
     /******************************************************************************************************
@@ -73,11 +77,11 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any(), any())
+            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
-        val privateShareAdded = ocRemoteShareDataSource.insertShare(
+        val privateShareAdded = ocRemoteShareDataSource.insert(
             remoteFilePath = "Photos/",
             shareType = ShareType.USER,
             shareWith = "user",
@@ -115,7 +119,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.updateShare(any(), any(), any(), any(), any(), any())
+            ocShareService.updateShare(any(), any(), any(), any(), any())
         } returns updateRemoteShareOperationResult
 
         // Update share on remote datasource
@@ -157,11 +161,11 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any(), any())
+            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
-        val publicShareAdded = ocRemoteShareDataSource.insertShare(
+        val publicShareAdded = ocRemoteShareDataSource.insert(
             "Photos/img1.png",
             ShareType.PUBLIC_LINK,
             "",
@@ -200,7 +204,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.updateShare(any(), any(), any(), any(), any(), any())
+            ocShareService.updateShare(any(), any(), any(), any(), any())
         } returns updateRemoteShareOperationResult
 
         // Update share on remote datasource
@@ -328,10 +332,10 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any(), any())
+            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
         } returns createRemoteSharesOperationResult
 
-        ocRemoteShareDataSource.insertShare(
+        ocRemoteShareDataSource.insert(
             "Photos/img2.png",
             ShareType.PUBLIC_LINK,
             "",
@@ -359,7 +363,7 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.updateShare(any(), any(), any(), any(), any(), any())
+            ocShareService.updateShare(any(), any(), any(), any(), any())
         } returns updateRemoteShareOperationResult
 
         ocRemoteShareDataSource.updateShare(
@@ -372,7 +376,7 @@ class OCRemoteShareDataSourceTest {
     @Test
     fun deleteShare() {
         val removeRemoteShareOperationResult = createRemoteOperationResultMock(
-            ShareResponse(arrayListOf()),
+            Unit,
             isSuccess = true
         )
 
@@ -380,7 +384,7 @@ class OCRemoteShareDataSourceTest {
             ocShareService.deleteShare(any())
         } returns removeRemoteShareOperationResult
 
-        ocRemoteShareDataSource.deleteShare("3")
+        ocRemoteShareDataSource.deleteShare(remoteId = "3", accountName = "user@server")
 
         // We check there's no exception here
     }
@@ -397,7 +401,7 @@ class OCRemoteShareDataSourceTest {
 
     private fun deleteShareOperationWithError(resultCode: RemoteOperationResult.ResultCode? = null) {
         val removeRemoteShareOperationResult = createRemoteOperationResultMock(
-            ShareResponse(arrayListOf()),
+            Unit,
             false,
             null,
             resultCode
@@ -407,6 +411,6 @@ class OCRemoteShareDataSourceTest {
             ocShareService.deleteShare(any())
         } returns removeRemoteShareOperationResult
 
-        ocRemoteShareDataSource.deleteShare("1")
+        ocRemoteShareDataSource.deleteShare(remoteId = "1", accountName = "user@server")
     }
 }

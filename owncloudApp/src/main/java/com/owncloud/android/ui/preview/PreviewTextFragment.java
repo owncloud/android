@@ -21,6 +21,7 @@
 package com.owncloud.android.ui.preview;
 
 import android.accounts.Account;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -39,16 +40,20 @@ import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ActivityExtKt;
-import com.owncloud.android.extensions.FragmentExtKt;
 import com.owncloud.android.files.FileMenuFilter;
-import com.owncloud.android.presentation.ui.files.operations.FileOperation;
-import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel;
-import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment;
+import com.owncloud.android.presentation.files.operations.FileOperation;
+import com.owncloud.android.presentation.files.operations.FileOperationsViewModel;
+import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.PreferenceUtils;
+import io.noties.markwon.Markwon;
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.ext.tables.TablePlugin;
+import io.noties.markwon.ext.tasklist.TaskListPlugin;
+import io.noties.markwon.html.HtmlPlugin;
 import timber.log.Timber;
 
 import java.io.BufferedWriter;
@@ -181,7 +186,7 @@ public class PreviewTextFragment extends FileFragment {
 
     private void loadAndShowTextPreview() {
         mTextLoadTask = new TextLoadAsyncTask(new WeakReference<>(mTextPreview));
-        mTextLoadTask.execute(getFile().getStoragePath());
+        mTextLoadTask.execute(getFile());
     }
 
     /**
@@ -190,6 +195,7 @@ public class PreviewTextFragment extends FileFragment {
     private class TextLoadAsyncTask extends AsyncTask<Object, Void, StringWriter> {
         private final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
         private final WeakReference<TextView> mTextViewReference;
+        private String mimeType;
 
         private TextLoadAsyncTask(WeakReference<TextView> textView) {
             mTextViewReference = textView;
@@ -206,7 +212,9 @@ public class PreviewTextFragment extends FileFragment {
                 throw new IllegalArgumentException("The parameter to " + TextLoadAsyncTask.class.getName() + " must " +
                         "be (1) the file location");
             }
-            final String location = (String) params[0];
+            final OCFile file = (OCFile) params[0];
+            final String location = file.getStoragePath();
+            mimeType = file.getMimeType();
 
             FileInputStream inputStream = null;
             Scanner sc = null;
@@ -248,11 +256,28 @@ public class PreviewTextFragment extends FileFragment {
             final TextView textView = mTextViewReference.get();
 
             if (textView != null) {
-                textView.setText(new String(stringWriter.getBuffer()));
+                String text = new String(stringWriter.getBuffer());
+                if (mimeType.equals("text/markdown")) {
+                    Context context = textView.getContext();
+                    Markwon markwon = Markwon
+                            .builder(context)
+                            .usePlugin(TablePlugin.create(context))
+                            .usePlugin(StrikethroughPlugin.create())
+                            .usePlugin(TaskListPlugin.create(context))
+                            .usePlugin(HtmlPlugin.create())
+                            .build();
+                    markwon.setMarkdown(textView, text);
+                } else {
+                    textView.setText(text);
+                }
                 textView.setVisibility(View.VISIBLE);
             }
 
-            dismissLoadingDialog();
+            try {
+                dismissLoadingDialog();
+            } catch (IllegalStateException illegalStateException) {
+                Timber.w(illegalStateException, "Dismissing dialog not allowed after onSaveInstanceState");
+            }
         }
 
         /**
@@ -310,7 +335,13 @@ public class PreviewTextFragment extends FileFragment {
                     mContainerActivity,
                     getActivity()
             );
-            mf.filter(menu, false, false, false, false);
+            mf.filter(
+                    menu,
+                    false,
+                    false,
+                    false,
+                    false
+            );
         }
 
         // additional restriction for this fragment
@@ -427,7 +458,7 @@ public class PreviewTextFragment extends FileFragment {
     public void onFileMetadataChanged() {
         FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
         if (storageManager != null) {
-            setFile(storageManager.getFileByPath(getFile().getRemotePath()));
+            setFile(storageManager.getFileByPath(getFile().getRemotePath(), null));
         }
         getActivity().invalidateOptionsMenu();
     }

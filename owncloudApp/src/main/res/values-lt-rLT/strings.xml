@@ -311,8 +311,7 @@
   <string name="confirmation_disable_camera_uploads_title">Patvirtinti</string>
   <string name="confirmation_disable_pictures_upload_message">Ar tikrai norite išjungti šią funkciją? Laukiančios nuotraukos nebus nusiųstos</string>
   <string name="confirmation_disable_videos_upload_message">Ar tikrai norite išjungti šią funkciją? Laukiantys video nebus nusiųsti</string>
-  <string name="conflict_title">Failų konfliktas</string>
-  <string name="conflict_message">Kuriuos failus palikti? Jei pažymėsite abi versijas, vietinis failas bus pervadintas, pridedant skaičių prie pavadinimo.</string>
+    <string name="conflict_message">Kuriuos failus palikti? Jei pažymėsite abi versijas, vietinis failas bus pervadintas, pridedant skaičių prie pavadinimo.</string>
   <string name="conflict_keep_both">Palikti abu</string>
   <string name="conflict_use_local_version">Vietinė versija</string>
   <string name="conflict_use_server_version">Versija serveryje</string>
@@ -390,8 +389,7 @@
   <string name="upload_copy_files">Kopijuoti failą</string>
   <string name="upload_move_files">Perkelti failą</string>
   <string name="pref_behaviour_entries_keep_file">paliktas pradiniame aplanke</string>
-  <string name="pref_behaviour_entries_move">perkelti į app aplanką</string>
-  <string name="share_dialog_title">Dalintis</string>
+    <string name="share_dialog_title">Dalintis</string>
   <string name="share_file">Dalintis %1$s</string>
   <string name="share_with_user_section_title">Naudotojai ir grupės</string>
   <string name="share_no_users">Su vartotojais niekuo nesidalinama</string>

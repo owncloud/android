@@ -26,12 +26,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
-import com.owncloud.android.presentation.ui.security.LockTimeout
-import com.owncloud.android.presentation.ui.security.PREFERENCE_LOCK_TIMEOUT
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
+import com.owncloud.android.presentation.security.LockTimeout
+import com.owncloud.android.presentation.security.PREFERENCE_LOCK_TIMEOUT
 import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.utils.CONFIGURATION_ALLOW_SCREENSHOTS
 import com.owncloud.android.utils.CONFIGURATION_LOCK_DELAY_TIME
+import com.owncloud.android.utils.CONFIGURATION_OAUTH2_OPEN_ID_PROMPT
+import com.owncloud.android.utils.CONFIGURATION_OAUTH2_OPEN_ID_SCOPE
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 
@@ -48,6 +50,8 @@ class SplashActivity : AppCompatActivity() {
                 cacheBooleanRestriction(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, R.string.server_url_input_visibility_configuration_feedback_ok)
                 cacheIntegerRestriction(CONFIGURATION_LOCK_DELAY_TIME, R.string.lock_delay_configuration_feedback_ok)
                 cacheBooleanRestriction(CONFIGURATION_ALLOW_SCREENSHOTS, R.string.allow_screenshots_configuration_feedback_ok)
+                cacheStringRestriction(CONFIGURATION_OAUTH2_OPEN_ID_SCOPE, R.string.oauth2_open_id_scope_configuration_feedback_ok)
+                cacheStringRestriction(CONFIGURATION_OAUTH2_OPEN_ID_PROMPT, R.string.oauth2_open_id_prompt_configuration_feedback_ok)
             }
         }
 
@@ -63,7 +67,7 @@ class SplashActivity : AppCompatActivity() {
         val lockTimeout = LockTimeout.parseFromInteger(lockDelayEnforced)
 
         if (lockTimeout != LockTimeout.DISABLED) {
-            SharedPreferencesProviderImpl(this@SplashActivity).putString(PREFERENCE_LOCK_TIMEOUT, lockTimeout.name)
+            OCSharedPreferencesProvider(this@SplashActivity).putString(PREFERENCE_LOCK_TIMEOUT, lockTimeout.name)
         }
     }
 }

@@ -28,6 +28,7 @@ import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_PRIVATE_SHARE
 import com.owncloud.android.testutil.OC_PUBLIC_SHARE
 import com.owncloud.android.testutil.OC_SHARE
@@ -203,8 +204,7 @@ class OCShareRepositoryTest {
     @Test
     fun insertPublicShareOk() {
         every {
-            remoteShareDataSource.insertShare(
-                any(),
+            remoteShareDataSource.insert(
                 any(),
                 any(),
                 any(),
@@ -222,12 +222,11 @@ class OCShareRepositoryTest {
             "Docs link",
             "password",
             2000,
-            false,
             accountName
         )
 
         verify(exactly = 1) {
-            remoteShareDataSource.insertShare(
+            remoteShareDataSource.insert(
                 filePath,
                 ShareType.PUBLIC_LINK,
                 "",
@@ -235,7 +234,6 @@ class OCShareRepositoryTest {
                 "Docs link",
                 "password",
                 2000,
-                false,
                 accountName
             )
         }
@@ -246,8 +244,7 @@ class OCShareRepositoryTest {
     @Test(expected = FileNotFoundException::class)
     fun insertPublicShareFileNotFoundException() {
         every {
-            remoteShareDataSource.insertShare(
-                any(),
+            remoteShareDataSource.insert(
                 any(),
                 any(),
                 any(),
@@ -265,12 +262,11 @@ class OCShareRepositoryTest {
             "Docs link",
             "password",
             2000,
-            false,
             accountName
         )
 
         verify(exactly = 1) {
-            remoteShareDataSource.insertShare(
+            remoteShareDataSource.insert(
                 filePath,
                 ShareType.PUBLIC_LINK,
                 "",
@@ -278,7 +274,6 @@ class OCShareRepositoryTest {
                 "Docs link",
                 "password",
                 2000,
-                false,
                 accountName
             )
         }
@@ -297,7 +292,6 @@ class OCShareRepositoryTest {
                 any(),
                 any(),
                 any(),
-                any(),
                 any()
             )
         } returns shares.first()
@@ -308,7 +302,6 @@ class OCShareRepositoryTest {
             "password",
             2000,
             -1,
-            false,
             accountName
         )
 
@@ -319,7 +312,6 @@ class OCShareRepositoryTest {
                 "password",
                 2000,
                 -1,
-                false,
                 accountName
             )
         }
@@ -336,7 +328,6 @@ class OCShareRepositoryTest {
                 any(),
                 any(),
                 any(),
-                any(),
                 any()
             )
         } throws FileNotFoundException()
@@ -347,7 +338,6 @@ class OCShareRepositoryTest {
             "password",
             2000,
             -1,
-            false,
             accountName
         )
 
@@ -358,7 +348,6 @@ class OCShareRepositoryTest {
                 "password",
                 2000,
                 -1,
-                false,
                 accountName
             )
         }
@@ -371,8 +360,7 @@ class OCShareRepositoryTest {
     @Test
     fun insertPrivateShareOk() {
         every {
-            remoteShareDataSource.insertShare(
-                any(),
+            remoteShareDataSource.insert(
                 any(),
                 any(),
                 any(),
@@ -393,7 +381,7 @@ class OCShareRepositoryTest {
         )
 
         verify(exactly = 1) {
-            remoteShareDataSource.insertShare(
+            remoteShareDataSource.insert(
                 filePath,
                 ShareType.GROUP,
                 "whoever",
@@ -408,8 +396,7 @@ class OCShareRepositoryTest {
     @Test(expected = FileNotFoundException::class)
     fun insertPrivateShareFileNotFoundException() {
         every {
-            remoteShareDataSource.insertShare(
-                any(),
+            remoteShareDataSource.insert(
                 any(),
                 any(),
                 any(),
@@ -430,7 +417,7 @@ class OCShareRepositoryTest {
         )
 
         verify(exactly = 1) {
-            remoteShareDataSource.insertShare(
+            remoteShareDataSource.insert(
                 filePath,
                 ShareType.GROUP,
                 "whoever",
@@ -448,7 +435,6 @@ class OCShareRepositoryTest {
     fun updatePrivateShareOk() {
         every {
             remoteShareDataSource.updateShare(
-                any(),
                 any(),
                 any(),
                 any(),
@@ -484,7 +470,6 @@ class OCShareRepositoryTest {
                 any(),
                 any(),
                 any(),
-                any(),
                 any()
             )
         } throws FileNotFoundException()
@@ -509,9 +494,9 @@ class OCShareRepositoryTest {
     @Test
     fun removeShare() {
         val shareId = "fjCZxtidwFrzoCl"
-        ocShareRepository.deleteShare(shareId)
+        ocShareRepository.deleteShare(shareId, OC_ACCOUNT_NAME)
 
-        verify(exactly = 1) { remoteShareDataSource.deleteShare(shareId) }
+        verify(exactly = 1) { remoteShareDataSource.deleteShare(shareId, OC_ACCOUNT_NAME) }
         verify(exactly = 1) { localShareDataSource.deleteShare(shareId) }
     }
 
@@ -520,12 +505,12 @@ class OCShareRepositoryTest {
         val shareId = "fjCZxtidwFrzoCl"
 
         every {
-            remoteShareDataSource.deleteShare(shareId)
+            remoteShareDataSource.deleteShare(shareId, OC_ACCOUNT_NAME)
         } throws FileNotFoundException()
 
-        ocShareRepository.deleteShare(shareId)
+        ocShareRepository.deleteShare(shareId, OC_ACCOUNT_NAME)
 
-        verify(exactly = 1) { remoteShareDataSource.deleteShare(shareId) }
+        verify(exactly = 1) { remoteShareDataSource.deleteShare(shareId, OC_ACCOUNT_NAME) }
         verify(exactly = 0) { localShareDataSource.deleteShare(shareId) }
     }
 }

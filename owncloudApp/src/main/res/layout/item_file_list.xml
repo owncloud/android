@@ -95,19 +95,14 @@
             app:layout_constraintTop_toBottomOf="@id/Filename"
             tools:text="Mod Date" />
 
-        <TextView
-            android:id="@+id/file_list_path"
-            android:layout_width="wrap_content"
+        <include
+            android:id="@+id/space_path_line"
+            layout="@layout/space_path_line"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ellipsize="middle"
-            android:singleLine="true"
-            android:textColor="@color/list_item_lastmod_and_filesize_text"
-            android:textSize="@dimen/two_line_secondary_text_size"
-            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/Filename"
-            app:layout_constraintTop_toBottomOf="@+id/file_list_size"
-            tools:text="/path/to/file"
-            tools:visibility="visible"/>
+            app:layout_constraintTop_toBottomOf="@+id/file_list_size" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

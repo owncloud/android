@@ -60,7 +60,7 @@ class OCCapabilityDaoTest {
             OC_CAPABILITY.copy(accountName = user2).toEntity()
         )
 
-        ocCapabilityDao.insert(entityList)
+        ocCapabilityDao.insertOrReplace(entityList)
 
         val capability = ocCapabilityDao.getCapabilitiesForAccount(user2)
         val capabilityAsLiveData = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2).getLastEmittedValue()
@@ -76,8 +76,8 @@ class OCCapabilityDaoTest {
         val entity1 = OC_CAPABILITY.copy(accountName = user1).toEntity()
         val entity2 = OC_CAPABILITY.copy(accountName = user2).toEntity()
 
-        ocCapabilityDao.insert(entity1)
-        ocCapabilityDao.insert(entity2)
+        ocCapabilityDao.insertOrReplace(entity1)
+        ocCapabilityDao.insertOrReplace(entity2)
 
         val capability = ocCapabilityDao.getCapabilitiesForAccount(user2)
         val capabilityAsLiveData = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2).getLastEmittedValue()
@@ -90,7 +90,7 @@ class OCCapabilityDaoTest {
 
     @Test
     fun getNonExistingCapabilities() {
-        ocCapabilityDao.insert(OC_CAPABILITY.copy(accountName = user1).toEntity())
+        ocCapabilityDao.insertOrReplace(OC_CAPABILITY.copy(accountName = user1).toEntity())
 
         val capability = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user2).getLastEmittedValue()
 
@@ -102,7 +102,7 @@ class OCCapabilityDaoTest {
         val entity1 = OC_CAPABILITY.copy(filesVersioning = CapabilityBooleanType.FALSE).toEntity()
         val entity2 = OC_CAPABILITY.copy(filesVersioning = CapabilityBooleanType.TRUE).toEntity()
 
-        ocCapabilityDao.insert(entity1)
+        ocCapabilityDao.insertOrReplace(entity1)
         ocCapabilityDao.replace(listOf(entity2))
 
         val capability = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(OC_CAPABILITY.accountName!!).getLastEmittedValue()
@@ -116,7 +116,7 @@ class OCCapabilityDaoTest {
         val entity1 = OC_CAPABILITY.copy(accountName = user1).toEntity()
         val entity2 = OC_CAPABILITY.copy(accountName = user2).toEntity()
 
-        ocCapabilityDao.insert(entity1)
+        ocCapabilityDao.insertOrReplace(entity1)
 
         ocCapabilityDao.replace(listOf(entity2))
 
@@ -136,13 +136,13 @@ class OCCapabilityDaoTest {
     fun deleteCapability() {
         val entity = OC_CAPABILITY.copy(accountName = user1).toEntity()
 
-        ocCapabilityDao.insert(entity)
+        ocCapabilityDao.insertOrReplace(entity)
 
         val capability1 = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user1).getLastEmittedValue()
 
         assertNotNull(capability1)
 
-        ocCapabilityDao.delete(user1)
+        ocCapabilityDao.deleteByAccountName(user1)
 
         val capability2 = ocCapabilityDao.getCapabilitiesForAccountAsLiveData(user1).getLastEmittedValue()
 

@@ -20,9 +20,10 @@
 
 package com.owncloud.android.data.capabilities.datasources
 
+import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.capabilities.datasources.implementation.OCRemoteCapabilitiesDataSource
-import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
+import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_CAPABILITY
 import com.owncloud.android.utils.createRemoteOperationResultMock
@@ -37,13 +38,16 @@ class OCRemoteCapabilitiesDataSourceTest {
     private lateinit var ocRemoteCapabilitiesDataSource: OCRemoteCapabilitiesDataSource
 
     private val ocCapabilityService: OCCapabilityService = mockk()
+    private val clientManager: ClientManager = mockk(relaxed = true)
     private val remoteCapabilityMapper = RemoteCapabilityMapper()
 
     @Before
     fun init() {
+        every { clientManager.getCapabilityService(any()) } returns ocCapabilityService
+
         ocRemoteCapabilitiesDataSource =
             OCRemoteCapabilitiesDataSource(
-                ocCapabilityService,
+                clientManager,
                 remoteCapabilityMapper
             )
     }
@@ -64,7 +68,7 @@ class OCRemoteCapabilitiesDataSourceTest {
         assertNotNull(capabilities)
 
         assertEquals(OC_CAPABILITY.accountName, capabilities.accountName)
-        assertEquals(OC_CAPABILITY.versionMayor, capabilities.versionMayor)
+        assertEquals(OC_CAPABILITY.versionMajor, capabilities.versionMajor)
         assertEquals(OC_CAPABILITY.versionMinor, capabilities.versionMinor)
         assertEquals(OC_CAPABILITY.versionMicro, capabilities.versionMicro)
     }

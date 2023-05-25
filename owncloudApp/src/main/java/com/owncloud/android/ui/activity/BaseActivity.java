@@ -35,7 +35,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.MainApp;
-import com.owncloud.android.authentication.AccountUtils;
+import com.owncloud.android.presentation.authentication.AccountUtils;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.ui.dialog.LoadingDialog;
@@ -173,7 +173,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void onAccountSet(boolean stateWasRecovered) {
         if (getAccount() != null) {
-            mStorageManager = new FileDataStorageManager(this, getAccount(), getContentResolver());
+            mStorageManager = new FileDataStorageManager(getAccount());
             Timber.d("Account set: %s", getAccount().name);
         } else {
             Timber.e("onAccountChanged was called with NULL account associated!");

@@ -55,7 +55,6 @@ interface ShareRepository {
         name: String,
         password: String,
         expirationTimeInMillis: Long,
-        publicUpload: Boolean,
         accountName: String
     )
 
@@ -65,7 +64,6 @@ interface ShareRepository {
         password: String?,
         expirationDateInMillis: Long,
         permissions: Int,
-        publicUpload: Boolean,
         accountName: String
     )
 
@@ -79,5 +77,5 @@ interface ShareRepository {
 
     fun refreshSharesFromNetwork(filePath: String, accountName: String)
 
-    fun deleteShare(remoteId: String)
+    fun deleteShare(remoteId: String, accountName: String)
 }

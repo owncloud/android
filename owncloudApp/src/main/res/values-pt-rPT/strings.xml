@@ -286,8 +286,7 @@
   <string name="placeholder_timestamp">2012/05/18 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Confirme</string>
-  <string name="conflict_title">Conflito de ficheiro</string>
-  <string name="conflict_message">Quais os ficheiros que pretende manter? Se seleccionar ambas as versões, o ficheiro local irá ter um número adicionado ao seu nome.</string>
+    <string name="conflict_message">Quais os ficheiros que pretende manter? Se seleccionar ambas as versões, o ficheiro local irá ter um número adicionado ao seu nome.</string>
   <string name="conflict_keep_both">Manter ambos</string>
   <string name="conflict_use_local_version">versão local</string>
   <string name="conflict_use_server_version">versão do servidor</string>
@@ -364,8 +363,7 @@
   <string name="upload_copy_files">Copiar ficheiro</string>
   <string name="upload_move_files">Mover ficheiro</string>
   <string name="pref_behaviour_entries_keep_file">mantido na pasta original</string>
-  <string name="pref_behaviour_entries_move">movido para pasta da aplicação</string>
-  <string name="share_dialog_title">Partilhar</string>
+    <string name="share_dialog_title">Partilhar</string>
   <string name="share_file">Partilhar %1$s</string>
   <string name="share_with_user_section_title">Utilizadores e Grupos</string>
   <string name="share_no_users">Ainda não foram partilhados os dados com os utilizadores</string>

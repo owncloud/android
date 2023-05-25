@@ -66,9 +66,11 @@
   <string name="pattern_not_same_pattern">Los patrones introducidos son diferentes</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Archivos</string>
+  <string name="bottom_nav_personal">Personal</string>
   <string name="bottom_nav_uploads">Cargas</string>
   <string name="bottom_nav_offline">Desconectado</string>
   <string name="bottom_nav_links">Enlaces</string>
+  <string name="bottom_nav_shares">Veces compartido</string>
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
   <string name="error_reason">porque</string>
@@ -320,7 +322,6 @@
   <string name="confirmation_disable_camera_uploads_title">Confirmar</string>
   <string name="confirmation_disable_pictures_upload_message">¿Seguro/a que desea deshabilitar esta función? Las imagenes pendientes no se subirán</string>
   <string name="confirmation_disable_videos_upload_message">¿Seguro/a que desea deshabilitar esta función? Los videos pendientes no se subirán</string>
-  <string name="conflict_title">Conflicto con archivo</string>
   <string name="conflict_description">Hay un conflicto en el archivo %1$s, tap para resolverlo</string>
   <string name="conflict_message">¿Cuáles archivos desea mantener? Si selecciona ambas versiones, el archivo local tendrá un número añadido a su nombre.</string>
   <string name="conflict_keep_both">Mantener ambos</string>
@@ -404,7 +405,6 @@
   <string name="upload_copy_files">Copiar archivo</string>
   <string name="upload_move_files">Mover archivo</string>
   <string name="pref_behaviour_entries_keep_file">dejado en la carpeta original</string>
-  <string name="pref_behaviour_entries_move">movido a la carpeta apps</string>
   <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Compartir %1$s</string>
   <string name="share_with_user_section_title">Usuarios y Grupos</string>

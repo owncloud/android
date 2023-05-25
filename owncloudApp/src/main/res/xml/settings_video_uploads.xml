@@ -50,7 +50,7 @@
         app:iconSpaceReserved="false"
         app:key="video_uploads_last_sync"
         app:title="@string/prefs_camera_upload_last_sync_title" />
-    <com.owncloud.android.ui.utils.LargePreferenceCategory
+    <com.owncloud.android.presentation.settings.LargePreferenceCategory
         android:title="@string/prefs_camera_picture_upload_conditions_title"
         app:iconSpaceReserved="false"
         app:summary="@string/prefs_camera_picture_upload_conditions_summary">
@@ -62,5 +62,5 @@
             app:iconSpaceReserved="false"
             app:key="video_uploads_on_charging"
             app:title="@string/prefs_camera_video_upload_on_charging" />
-    </com.owncloud.android.ui.utils.LargePreferenceCategory>
+    </com.owncloud.android.presentation.settings.LargePreferenceCategory>
 </PreferenceScreen>

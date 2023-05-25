@@ -29,9 +29,9 @@ import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.owncloud.android.R
-import com.owncloud.android.presentation.ui.files.SortBottomSheetFragment
-import com.owncloud.android.presentation.ui.files.SortOrder
-import com.owncloud.android.presentation.ui.files.SortType
+import com.owncloud.android.presentation.files.SortBottomSheetFragment
+import com.owncloud.android.presentation.files.SortOrder
+import com.owncloud.android.presentation.files.SortType
 import com.owncloud.android.utils.matchers.bsfItemWithIcon
 import com.owncloud.android.utils.matchers.bsfItemWithTitle
 import io.mockk.every

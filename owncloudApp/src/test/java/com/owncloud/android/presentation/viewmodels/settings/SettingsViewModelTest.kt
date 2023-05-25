@@ -20,6 +20,7 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
+import com.owncloud.android.presentation.settings.SettingsViewModel
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.testutil.OC_ACCOUNT

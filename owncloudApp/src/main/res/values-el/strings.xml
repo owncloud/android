@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">Αποστολή</string>
   <string name="actionbar_descending">Φθίνουσα</string>
   <string name="actionbar_sort_title">Ταξινόμηση κατά</string>
+  <string name="fab_new_file">Νέο έγγραφο</string>
   <string name="drawer_item_all_files">Όλα τα αρχεία</string>
   <string name="drawer_item_only_available_offline">Διαθέσιμο εκτός σύνδεσης</string>
   <string name="drawer_item_shared_by_link_files">Διαμοιρασμένα μέσω συνδέσμου</string>
@@ -89,9 +90,11 @@
   <string name="illegal_argument_exception_message">Μια έγκυρη ΕΝΕΡΓΕΙΑ είναι απαραίτητη για την πρόθεση να περάσει σε</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Αρχεία</string>
+  <string name="bottom_nav_personal">Προσωπικό</string>
   <string name="bottom_nav_uploads">Μεταφορτώσεις</string>
   <string name="bottom_nav_offline">Εκτός σύνδεσης</string>
   <string name="bottom_nav_links">Σύνδεσμοι</string>
+  <string name="bottom_nav_shares">Κοινόχρηστοι φάκελοι</string>
   <string name="recommend_subject">Δοκιμάστε %1$s στο κινητό σας!</string>
   <string name="recommend_text">Θα ήθελα να σε προσκαλέσω να χρησιμοποιήσεις το %1$s στο κινητό σου!\nΛήψη εδώ: %2$s</string>
   <string name="error_reason">επειδή</string>
@@ -119,8 +122,10 @@
   <string name="uploader_error_message_source_file_not_found">Το αρχείο που επρόκειτο να μεταφορτώσετε δεν βρέθηκε στην τοποθεσία του. Παρακαλούμε ελέγξτε κατά πόσο το αρχείο υπάρχει.</string>
   <string name="uploader_error_message_source_file_not_copied">Προέκυψε σφάλμα κατά τη διάρκεια αντιγραφής του αρχείου στον προσωρινό φάκελο. Παρακαλούμε προσπαθήστε να το στείλετε ξανά.</string>
   <string name="file_list_seconds_ago">δευτερόλεπτα πριν</string>
+  <string name="file_list_empty_title_all_files">Δεν υπάρχουν αρχεία εδώ</string>
   <string name="file_list_empty_title_shared_by_links">Κανένας διαμοιρασμένος σύνδεσμος</string>
   <string name="file_list_empty_subtitle_all_files">Μεταφόρτωση περιεχομένου ή συγχρονισμός με τις συσκευές σας!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Τα αρχεία και οι φάκελοι που διαμοιράζεστε μέσω συνδέσμου θα εμφανιστούνε εδώ</string>
   <string name="file_list_loading">Γίνεται φόρτωση...</string>
   <string name="file_list_no_app_for_file_type">Δεν βρέθηκε καμία εφαρμογή για τύπο αρχείου</string>
   <string name="local_file_list_empty">Δεν υπάρχουν αρχεία σε αυτό τον φάκελο.</string>
@@ -347,7 +352,6 @@
   <string name="confirmation_disable_videos_upload_message">Είστε βέβαιοι ότι θέλετε να απενεργοποιήσετε αυτήν τη λειτουργία; Τα βίντεο που εκκρεμούν δεν θα μεταφορτωθούν</string>
   <string name="proper_pics_folder_warning_camera_upload">Βεβαιωθείτε ότι ο επιλεγμένος φάκελος είναι εκεί όπου η κάμερα που χρησιμοποιείτε αποθηκεύει τις φωτογραφίες που έχετε τραβήξει. Διαφορετικά, η λειτουργία δεν θα είναι σε θέση να ανιχνεύσει τις φωτογραφίες σας. Λάβετε υπόψη ότι οι φωτογραφίες θα μεταφορτωθούν τουλάχιστον 15 λεπτά μετά τη λήψη τους.</string>
   <string name="proper_videos_folder_warning_camera_upload">Βεβαιωθείτε ότι ο επιλεγμένος φάκελος είναι εκεί όπου η κάμερα που χρησιμοποιείτε αποθηκεύει τα εγγεγραμμένα βίντεο. Διαφορετικά, η λειτουργία δεν θα είναι σε θέση να ανιχνεύσει τα βίντεό σας. Λάβετε υπόψη ότι τα βίντεο θα μεταφορτωθούν τουλάχιστον 15 λεπτά μετά την εγγραφή τους.</string>
-  <string name="conflict_title">Διένεξη αρχείου</string>
   <string name="conflict_description">Υπάρχει μια σύγκρουση στο αρχείο %1$s, πατήστε για να το λύσετε</string>
   <string name="conflict_message">Ποια αρχεία θέλετε να διατηρήσετε; Αν επιλέξετε και τις δύο εκδόσεις, το τοπικό αρχείο θα έχει έναν αριθμό που έχει προστεθεί στο όνομά του.</string>
   <string name="conflict_keep_both">Διατήρηση και των δύο</string>
@@ -438,7 +442,6 @@
   <string name="upload_copy_files">Αντιγραφή αρχείου</string>
   <string name="upload_move_files">Μετακίνηση αρχείου</string>
   <string name="pref_behaviour_entries_keep_file">διατηρήθηκε στον αρχικό φάκελο</string>
-  <string name="pref_behaviour_entries_move">μετακινήθηκε στον φάκελο εφαρμογών</string>
   <string name="share_dialog_title">Διαμοιρασμός</string>
   <string name="share_file">Διαμοιρασμός %1$s</string>
   <string name="share_with_user_section_title">Χρήστες και Ομάδες</string>

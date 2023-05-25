@@ -1,0 +1,7 @@
+Bugfix: Error messages too long in folders operation
+
+Error messages when trying to perform a non-allowed action for copying and moving folders
+have been shortened so that they are shown completely in the snackbar.
+
+https://github.com/owncloud/android/pull/3852
+https://github.com/owncloud/android/issues/3820

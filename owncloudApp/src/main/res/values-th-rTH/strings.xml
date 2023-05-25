@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">ส่ง</string>
   <string name="actionbar_descending">กำลังมากไปน้อย</string>
   <string name="actionbar_sort_title">เรียงตาม</string>
+  <string name="fab_new_file">เอกสารใหม่</string>
   <string name="drawer_item_all_files">ไฟล์ทั้งหมด</string>
   <string name="drawer_item_only_available_offline">การทำงานแบบออฟไลน์พร้อมใช้งาน</string>
   <string name="drawer_item_shared_by_link_files">แชร์โดยลิงก์</string>
@@ -105,9 +106,11 @@
   <string name="illegal_argument_exception_message">ต้องใช้การกระทำที่ถูกต้องเพื่อ</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">ไฟล์</string>
+  <string name="bottom_nav_personal">ส่วนตัว</string>
   <string name="bottom_nav_uploads">อัปโหลดไฟล์</string>
   <string name="bottom_nav_offline">ออฟไลน์</string>
   <string name="bottom_nav_links">ลิงก์</string>
+  <string name="bottom_nav_shares">แชร์</string>
   <string name="recommend_subject">ลองใช้ %1$s บนสมาร์ทโฟนของคุณ!</string>
   <string name="recommend_text">ฉันอยากจะขอเชิญให้คุณใช้ %1$s บนสมาร์ทโฟนของคุณ!\nดาวน์โหลดที่นี่: %2$s</string>
   <string name="error_reason">เพราะว่า</string>
@@ -376,7 +379,6 @@
   <string name="confirmation_disable_videos_upload_message">ต้องการปิดใช้งานคุณลักษณะนี้? วีดีโอที่ค้างอยู่จะไม่ถูกอัปโหลด</string>
   <string name="proper_pics_folder_warning_camera_upload">โปรดตรวจสอบให้แน่ใจว่าโฟลเดอร์ที่เลือกเป็นตำแหน่งที่กล้องที่คุณใช้บันทึกภาพถ่าย มิฉะนั้นคุณสมบัตินี้จะไม่สามารถตรวจจับภาพถ่ายของคุณ โปรดทราบว่าระบบจะอัปโหลดวิดีโออย่างน้อย 15 นาทีหลังจากบันทึก</string>
   <string name="proper_videos_folder_warning_camera_upload">โปรดตรวจสอบให้แน่ใจว่าโฟลเดอร์ที่เลือกเป็นตำแหน่งที่กล้องที่คุณใช้บันทึกวิดีโอ มิฉะนั้นคุณสมบัตินี้จะไม่สามารถตรวจจับวิดีโอของคุณ โปรดทราบว่าระบบจะอัปโหลดวิดีโออย่างน้อย 15 นาทีหลังจากบันทึก</string>
-  <string name="conflict_title">ไฟล์ที่มีปัญหา</string>
   <string name="conflict_description">แตะเพื่อแก้ปัญหาไฟล์ %1$s</string>
   <string name="conflict_message">ต้องการวางทับไฟล์เดิม? ถ้าเลือกเก็บทั้งหมด สำหรับไฟล์เวอร์ชันใหม่จะถูกเพิ่มตัวเลขในท้ายชื่อ</string>
   <string name="conflict_keep_both">เก็บไว้ทั้งสองอย่าง</string>
@@ -467,7 +469,6 @@
   <string name="upload_copy_files">คัดลอกไฟล์</string>
   <string name="upload_move_files">ย้ายไฟล์</string>
   <string name="pref_behaviour_entries_keep_file">เก็บไว้ในโฟลเดอร์ต้นฉบับ</string>
-  <string name="pref_behaviour_entries_move">ถูกย้ายไปยังโฟลเดอร์แอปพลิเคชัน</string>
   <string name="share_dialog_title">แชร์</string>
   <string name="share_file">แชร์ %1$s</string>
   <string name="share_with_user_section_title">ผู้ใช้และกลุ่ม</string>

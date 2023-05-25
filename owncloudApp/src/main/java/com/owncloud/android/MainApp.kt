@@ -1,4 +1,4 @@
-/*
+/**
  * ownCloud Android client application
  *
  * @author masensio
@@ -7,7 +7,8 @@
  * @author Christian Schabesberger
  * @author David Crespo Ríos
  * @author Juan Carlos Garrote Gascón
- * Copyright (C) 2022 ownCloud GmbH.
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,6 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android
 
 import android.app.Activity
@@ -32,9 +34,11 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.CheckBox
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.pm.PackageInfoCompat
-import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.dependecyinjection.commonModule
@@ -43,19 +47,24 @@ import com.owncloud.android.dependecyinjection.remoteDataSourceModule
 import com.owncloud.android.dependecyinjection.repositoryModule
 import com.owncloud.android.dependecyinjection.useCaseModule
 import com.owncloud.android.dependecyinjection.viewModelModule
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
+import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.usecases.GetPersonalSpaceForAccountUseCase
 import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.SingleSessionManager
-import com.owncloud.android.presentation.ui.migration.StorageMigrationActivity
-import com.owncloud.android.presentation.ui.releasenotes.ReleaseNotesActivity
-import com.owncloud.android.presentation.ui.security.BiometricActivity
-import com.owncloud.android.presentation.ui.security.BiometricManager
-import com.owncloud.android.presentation.ui.security.PatternActivity
-import com.owncloud.android.presentation.ui.security.PatternManager
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeManager
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
+import com.owncloud.android.presentation.migration.StorageMigrationActivity
+import com.owncloud.android.presentation.releasenotes.ReleaseNotesActivity
+import com.owncloud.android.presentation.security.biometric.BiometricActivity
+import com.owncloud.android.presentation.security.biometric.BiometricManager
+import com.owncloud.android.presentation.security.pattern.PatternActivity
+import com.owncloud.android.presentation.security.pattern.PatternManager
+import com.owncloud.android.presentation.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.security.passcode.PassCodeManager
+import com.owncloud.android.presentation.settings.logging.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.providers.MdmProvider
+import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.CONFIGURATION_ALLOW_SCREENSHOTS
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
@@ -64,6 +73,10 @@ import com.owncloud.android.utils.FILE_SYNC_CONFLICT_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.FILE_SYNC_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID
 import com.owncloud.android.utils.UPLOAD_NOTIFICATION_CHANNEL_ID
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -118,12 +131,63 @@ class MainApp : Application() {
 
                     } else {
                         ReleaseNotesActivity.runIfNeeded(activity)
+
+                        val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
+                        val dontShowAgainDialogPref = pref.getBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, false)
+                        if (!dontShowAgainDialogPref && shouldShowDialog(activity)) {
+                            val checkboxDialog = activity.layoutInflater.inflate(R.layout.checkbox_dialog, null)
+                            val checkbox = checkboxDialog.findViewById<CheckBox>(R.id.checkbox_dialog)
+                            checkbox.setText(R.string.ocis_accounts_warning_checkbox_message)
+                            val builder = AlertDialog.Builder(activity).apply {
+                                setView(checkboxDialog)
+                                setTitle(R.string.ocis_accounts_warning_title)
+                                setMessage(R.string.ocis_accounts_warning_message)
+                                setCancelable(false)
+                                setPositiveButton(R.string.ocis_accounts_warning_button) { _, _ ->
+                                    if (checkbox.isChecked) {
+                                        pref.edit().putBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, true).apply()
+                                    }
+                                }
+                            }
+                            val alertDialog = builder.create()
+                            alertDialog.show()
+                        }
                     }
                 }
 
                 PreferenceManager.migrateFingerprintToBiometricKey(applicationContext)
                 PreferenceManager.deleteOldSettingsPreferences(applicationContext)
             }
+
+            private fun shouldShowDialog(activity: Activity) =
+                runBlocking(CoroutinesDispatcherProvider().io) {
+                    if (activity !is FileDisplayActivity) return@runBlocking false
+                    val account = AccountUtils.getCurrentOwnCloudAccount(appContext) ?: return@runBlocking false
+
+                    val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
+                    val capabilities = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+                        getStoredCapabilitiesUseCase.execute(
+                            GetStoredCapabilitiesUseCase.Params(
+                                accountName = account.name
+                            )
+                        )
+                    }
+                    val spacesAllowed = capabilities != null && capabilities.isSpacesAllowed()
+
+                    var personalSpace: OCSpace? = null
+                    if (spacesAllowed) {
+                        val getPersonalSpaceForAccountUseCase: GetPersonalSpaceForAccountUseCase by inject()
+                        personalSpace = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+                            getPersonalSpaceForAccountUseCase.execute(
+                                GetPersonalSpaceForAccountUseCase.Params(
+                                    accountName = account.name
+                                )
+                            )
+                        }
+                    }
+
+                    spacesAllowed && personalSpace == null
+                }
 
             override fun onActivityStarted(activity: Activity) {
                 Timber.v("${activity.javaClass.simpleName} onStart() starting")
@@ -163,7 +227,7 @@ class MainApp : Application() {
     }
 
     private fun startLogsIfEnabled() {
-        val preferenceProvider = SharedPreferencesProviderImpl(applicationContext)
+        val preferenceProvider = OCSharedPreferencesProvider(applicationContext)
 
         if (BuildConfig.DEBUG) {
             val alreadySet = preferenceProvider.containsPreference(PREFERENCE_ENABLE_LOGGING)
@@ -247,6 +311,8 @@ class MainApp : Application() {
             private set
 
         const val PREFERENCE_KEY_LAST_SEEN_VERSION_CODE = "lastSeenVersionCode"
+
+        const val PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG = "PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG"
 
         /**
          * Next methods give access in code to some constants that need to be defined in string resources to be referred

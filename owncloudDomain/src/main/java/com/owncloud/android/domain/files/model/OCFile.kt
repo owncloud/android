@@ -3,7 +3,9 @@
  *
  * @author David González Verdugo
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,9 +25,9 @@ package com.owncloud.android.domain.files.model
 import android.os.Parcelable
 import android.webkit.MimeTypeMap
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
-import com.owncloud.android.domain.ext.isOneOf
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+import com.owncloud.android.domain.extensions.isOneOf
 import kotlinx.parcelize.Parcelize
 import java.io.File
 import java.util.Locale
@@ -46,27 +48,27 @@ data class OCFile(
     val privateLink: String? = "",
     var storagePath: String? = null,
     var treeEtag: String? = "",
-
     var availableOfflineStatus: AvailableOfflineStatus? = null,
     var lastSyncDateForData: Long? = 0,
-    var lastSyncDateForProperties: Long? = 0,
     var needsToUpdateThumbnail: Boolean = false,
     var modifiedAtLastSyncForData: Long? = 0,
     var etagInConflict: String? = null,
     val fileIsDownloading: Boolean? = false,
     var sharedWithSharee: Boolean? = false,
-    var sharedByLink: Boolean = false
+    var sharedByLink: Boolean = false,
+    val spaceId: String? = null,
 ) : Parcelable {
 
     val fileName: String
-        get() = File(remotePath).name.let { if (it.isBlank()) ROOT_PATH else it }
+        get() = File(remotePath).name.let { it.ifBlank { ROOT_PATH } }
 
     @Deprecated("Do not use this constructor. Remove it as soon as possible")
-    constructor(remotePath: String, mimeType: String, parentId: Long?, owner: String) : this(
+    constructor(remotePath: String, mimeType: String, parentId: Long?, owner: String, spaceId: String? = null) : this(
         remotePath = remotePath,
         mimeType = mimeType,
         parentId = parentId,
         owner = owner,
+        spaceId = spaceId,
         modificationTimestamp = 0,
         length = 0
     )
@@ -102,6 +104,48 @@ data class OCFile(
      */
     val isText: Boolean
         get() = isOfType(MIME_PREFIX_TEXT)
+
+    /**
+     * @return 'True' if the file has the 'W' (can write) within its group of permissions
+     */
+    val hasWritePermission: Boolean
+        get() = permissions?.contains(char = 'W', ignoreCase = true) ?: false
+
+    /**
+     * @return 'True' if the file has the 'D' (can delete) within its group of permissions
+     */
+    val hasDeletePermission: Boolean
+        get() = permissions?.contains(char = 'D', ignoreCase = true) ?: false
+
+    /**
+     * @return 'True' if the file has the 'N' (can rename) within its group of permissions
+     */
+    val hasRenamePermission: Boolean
+        get() = permissions?.contains(char = 'N', ignoreCase = true) ?: false
+
+    /**
+     * @return 'True' if the file has the 'V' (can move) within its group of permissions
+     */
+    val hasMovePermission: Boolean
+        get() = permissions?.contains(char = 'V', ignoreCase = true) ?: false
+
+    /**
+     * @return 'True' if the file has the 'C' (can add file) within its group of permissions
+     */
+    val hasAddFilePermission: Boolean
+        get() = permissions?.contains(char = 'C', ignoreCase = true) ?: false
+
+    /**
+     * @return 'True' if the file has the 'K' (can add subdirectories) within its group of permissions
+     */
+    val hasAddSubdirectoriesPermission: Boolean
+        get() = permissions?.contains(char = 'K', ignoreCase = true) ?: false
+
+    /**
+     * @return 'True' if the file has the 'R' (can reshare) within its group of permissions
+     */
+    val hasResharePermission: Boolean
+        get() = permissions?.contains(char = 'R', ignoreCase = true) ?: false
 
     /**
      * get remote path of parent file
@@ -173,7 +217,7 @@ data class OCFile(
         mimeType.startsWith(type) || getMimeTypeFromName()?.startsWith(type) ?: false
 
     fun getMimeTypeFromName(): String? {
-        val extension = remotePath.substringAfterLast('.').toLowerCase(Locale.ROOT)
+        val extension = remotePath.substringAfterLast('.').lowercase(Locale.ROOT)
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
     }
 

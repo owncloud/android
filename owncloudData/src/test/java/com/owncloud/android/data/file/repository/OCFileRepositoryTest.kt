@@ -22,6 +22,7 @@ package com.owncloud.android.data.file.repository
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.repository.OCFileRepository
+import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
@@ -41,8 +42,9 @@ class OCFileRepositoryTest {
 
     private val remoteFileDataSource = mockk<RemoteFileDataSource>(relaxed = true)
     private val localFileDataSource = mockk<LocalFileDataSource>(relaxed = true)
+    private val localSpacesDataSource = mockk<LocalSpacesDataSource>(relaxed = true)
     private val localStorageProvider = mockk<LocalStorageProvider>()
-    private val ocFileRepository: OCFileRepository = OCFileRepository(localFileDataSource, remoteFileDataSource, localStorageProvider)
+    private val ocFileRepository: OCFileRepository = OCFileRepository(localFileDataSource, remoteFileDataSource, localSpacesDataSource, localStorageProvider)
 
     private val folderToFetch = OC_FOLDER
     private val listOfFilesRetrieved = listOf(
@@ -58,13 +60,13 @@ class OCFileRepositoryTest {
 
     @Test
     fun `create folder - ok`() {
-        every { remoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME) } returns Unit
+        every { remoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME, null) } returns Unit
 
 
         ocFileRepository.createFolder(OC_FOLDER.remotePath, OC_FOLDER)
 
         verify(exactly = 1) {
-            remoteFileDataSource.createFolder(any(), false, false, OC_ACCOUNT_NAME)
+            remoteFileDataSource.createFolder(any(), false, false, OC_ACCOUNT_NAME, null)
             localFileDataSource.saveFilesInFolderAndReturnThem(any(), OC_FOLDER)
         }
     }
@@ -72,13 +74,13 @@ class OCFileRepositoryTest {
     @Test(expected = NoConnectionWithServerException::class)
     fun `create folder - ko - no connection exception`() {
         every {
-            remoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME)
+            remoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME, null)
         } throws NoConnectionWithServerException()
 
         ocFileRepository.createFolder(OC_FOLDER.remotePath, OC_FOLDER)
 
         verify(exactly = 1) {
-            remoteFileDataSource.createFolder(any(), false, false, OC_ACCOUNT_NAME)
+            remoteFileDataSource.createFolder(any(), false, false, OC_ACCOUNT_NAME, null)
         }
         verify(exactly = 0) {
             localFileDataSource.saveFilesInFolderAndReturnThem(any(), OC_FOLDER)
@@ -124,25 +126,25 @@ class OCFileRepositoryTest {
 
     @Test
     fun `get file by remote path - ok`() {
-        every { localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner) } returns OC_FOLDER
+        every { localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner, null) } returns OC_FOLDER
 
         ocFileRepository.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
 
         verify(exactly = 1) {
-            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
+            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner, null)
         }
     }
 
     @Test(expected = Exception::class)
     fun `get file by remote path - ko`() {
         every {
-            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
+            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner, null)
         } throws Exception()
 
         ocFileRepository.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
 
         verify(exactly = 1) {
-            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner)
+            localFileDataSource.getFileByRemotePath(OC_FOLDER.remotePath, OC_FOLDER.owner, null)
         }
     }
 
@@ -229,14 +231,14 @@ class OCFileRepositoryTest {
 
     @Test
     fun `remove file - ok`() {
-        every { remoteFileDataSource.removeFile(any(), any()) } returns Unit
+        every { remoteFileDataSource.deleteFile(any(), any()) } returns Unit
         every { localStorageProvider.deleteLocalFile(any()) } returns true
 
-        ocFileRepository.removeFile(listOfFilesToRemove = listOfFileToRemove, removeOnlyLocalCopy = false)
+        ocFileRepository.deleteFiles(listOfFilesToDelete = listOfFileToRemove, removeOnlyLocalCopy = false)
 
         verify(exactly = listOfFilesRetrieved.size) {
-            remoteFileDataSource.removeFile(any(), any())
-            localFileDataSource.removeFile(any())
+            remoteFileDataSource.deleteFile(any(), any())
+            localFileDataSource.deleteFile(any())
             localStorageProvider.deleteLocalFile(any())
         }
     }
@@ -245,44 +247,44 @@ class OCFileRepositoryTest {
     fun `remove file - ok - only local copy`() {
         every { localStorageProvider.deleteLocalFile(any()) } returns true
 
-        ocFileRepository.removeFile(listOfFilesToRemove = listOfFileToRemove, removeOnlyLocalCopy = true)
+        ocFileRepository.deleteFiles(listOfFilesToDelete = listOfFileToRemove, removeOnlyLocalCopy = true)
 
         verify(exactly = listOfFilesRetrieved.size) { localStorageProvider.deleteLocalFile(any()) }
         verify(exactly = listOfFilesRetrieved.size) { localFileDataSource.saveFile(any()) }
         verify(exactly = 0) {
-            remoteFileDataSource.removeFile(any(), any())
-            localFileDataSource.removeFile(any())
+            remoteFileDataSource.deleteFile(any(), any())
+            localFileDataSource.deleteFile(any())
         }
     }
 
     @Test
     fun `remove file - ok - folder recursively`() {
-        every { remoteFileDataSource.removeFile(any(), any()) } returns Unit
+        every { remoteFileDataSource.deleteFile(any(), any()) } returns Unit
         every { localFileDataSource.getFolderContent(0) } returns listOfFileToRemove
         every { localFileDataSource.getFolderContent(1) } returns listOf(OC_FILE)
         every { localStorageProvider.deleteLocalFile(any()) } returns true
 
-        ocFileRepository.removeFile(listOfFilesToRemove = listOf(OC_FOLDER.copy(id = 0)), removeOnlyLocalCopy = false)
+        ocFileRepository.deleteFiles(listOfFilesToDelete = listOf(OC_FOLDER.copy(id = 0)), removeOnlyLocalCopy = false)
 
-        verify(exactly = 1) { remoteFileDataSource.removeFile(any(), any()) }
+        verify(exactly = 1) { remoteFileDataSource.deleteFile(any(), any()) }
         verify(exactly = 2) { localFileDataSource.getFolderContent(any()) }
         // Removing initial folder + listOfFilesToRemove.size + file inside a folder in listOfFilesToRemove
         verify(exactly = listOfFileToRemove.size + 2) {
-            localFileDataSource.removeFile(any())
+            localFileDataSource.deleteFile(any())
             localStorageProvider.deleteLocalFile(any())
         }
     }
 
     @Test
     fun `remove file - ko - file not found exception`() {
-        every { remoteFileDataSource.removeFile(any(), any()) } throws FileNotFoundException()
+        every { remoteFileDataSource.deleteFile(any(), any()) } throws FileNotFoundException()
         every { localStorageProvider.deleteLocalFile(any()) } returns true
 
-        ocFileRepository.removeFile(listOfFilesToRemove = listOf(OC_FILE), removeOnlyLocalCopy = false)
+        ocFileRepository.deleteFiles(listOfFilesToDelete = listOf(OC_FILE), removeOnlyLocalCopy = false)
 
         verify(exactly = 1) {
-            remoteFileDataSource.removeFile(any(), any())
-            localFileDataSource.removeFile(any())
+            remoteFileDataSource.deleteFile(any(), any())
+            localFileDataSource.deleteFile(any())
             localStorageProvider.deleteLocalFile(any())
         }
     }
@@ -290,13 +292,13 @@ class OCFileRepositoryTest {
     @Test(expected = NoConnectionWithServerException::class)
     fun `remove file - ko - no connection exception`() {
         every {
-            remoteFileDataSource.removeFile(any(), any())
+            remoteFileDataSource.deleteFile(any(), any())
         } throws NoConnectionWithServerException()
 
-        ocFileRepository.removeFile(listOfFilesRetrieved, removeOnlyLocalCopy = false)
+        ocFileRepository.deleteFiles(listOfFilesRetrieved, removeOnlyLocalCopy = false)
 
-        verify(exactly = 1) { remoteFileDataSource.removeFile(OC_FOLDER.remotePath, any()) }
-        verify(exactly = 0) { localFileDataSource.removeFile(any()) }
+        verify(exactly = 1) { remoteFileDataSource.deleteFile(OC_FOLDER.remotePath, any()) }
+        verify(exactly = 0) { localFileDataSource.deleteFile(any()) }
     }
 
     @Test

@@ -33,12 +33,12 @@ class CreatePublicShareAsyncUseCaseTest {
 
     private val repository: ShareRepository = spyk()
     private val useCase = CreatePublicShareAsyncUseCase(repository)
-    private val useCaseParams = CreatePublicShareAsyncUseCase.Params("", 1, "", "", 100, false, "")
+    private val useCaseParams = CreatePublicShareAsyncUseCase.Params("", 1, "", "", 100,  "")
 
     @Test
     fun `create public share - ok`() {
         every {
-            repository.insertPublicShare(any(), any(), any(), any(), any(), any(), any())
+            repository.insertPublicShare(any(), any(), any(), any(), any(), any())
         } returns Unit
 
         val useCaseResult = useCase.execute(useCaseParams)
@@ -46,13 +46,13 @@ class CreatePublicShareAsyncUseCaseTest {
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { repository.insertPublicShare("", 1, "", "", 100, false, "") }
+        verify(exactly = 1) { repository.insertPublicShare("", 1, "", "", 100,  "") }
     }
 
     @Test
     fun `create public share - ko`() {
         every {
-            repository.insertPublicShare(any(), any(), any(), any(), any(), any(), any())
+            repository.insertPublicShare(any(), any(), any(), any(), any(), any())
         } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
@@ -60,13 +60,13 @@ class CreatePublicShareAsyncUseCaseTest {
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { repository.insertPublicShare("", 1, "", "", 100, false, "") }
+        verify(exactly = 1) { repository.insertPublicShare("", 1, "", "", 100, "") }
     }
 
     @Test
     fun `create public share - ko - illegal argument exception`() {
         every {
-            repository.insertPublicShare(any(), any(), any(), any(), any(), any(), any())
+            repository.insertPublicShare(any(), any(), any(), any(), any(), any())
         } throws IllegalArgumentException()
 
         val useCaseResult = useCase.execute(useCaseParams)
@@ -74,6 +74,6 @@ class CreatePublicShareAsyncUseCaseTest {
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
-        verify(exactly = 1) { repository.insertPublicShare("", 1, "", "", 100, false, "") }
+        verify(exactly = 1) { repository.insertPublicShare("", 1, "", "", 100, "") }
     }
 }

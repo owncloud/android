@@ -298,8 +298,7 @@
   <string name="confirmation_disable_camera_uploads_title">Vahvista</string>
   <string name="confirmation_disable_pictures_upload_message">Oletko varma, että haluat poistaa toiminnon käytöstä? Jonossa olevia kuvia ei lähetetä.</string>
   <string name="confirmation_disable_videos_upload_message">Oletko varma, että haluat poistaa toiminnon käytöstä? Jonossa olevia videoita ei lähetetä.</string>
-  <string name="conflict_title">Tiedoston ristiriita</string>
-  <string name="conflict_message">Mitkä tiedostot haluat säilyttää? Jos valitset kummatkin versiot, paikallisen version tiedoston nimeen lisätään numero.</string>
+    <string name="conflict_message">Mitkä tiedostot haluat säilyttää? Jos valitset kummatkin versiot, paikallisen version tiedoston nimeen lisätään numero.</string>
   <string name="conflict_keep_both">Säilytä molemmat</string>
   <string name="conflict_use_local_version">paikallinen versio</string>
   <string name="conflict_use_server_version">palvelimen versio</string>
@@ -377,8 +376,7 @@
   <string name="upload_copy_files">Kopioi tiedosto</string>
   <string name="upload_move_files">Siirrä tiedosto</string>
   <string name="pref_behaviour_entries_keep_file">pidetään alkuperäisessä kansiossa</string>
-  <string name="pref_behaviour_entries_move">siirretään sovelluskansioon</string>
-  <string name="share_dialog_title">Jaa</string>
+    <string name="share_dialog_title">Jaa</string>
   <string name="share_file">Jaa %1$s</string>
   <string name="share_with_user_section_title">Käyttäjät ja ryhmät</string>
   <string name="share_no_users">Ei dataa jaettuna käyttäjien kanssa vielä</string>

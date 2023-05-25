@@ -1,0 +1,7 @@
+Change: Use ViewBinding in FolderPickerActivity
+
+The use of findViewById method was replaced by using ViewBinding in the
+FolderPickerActivity.
+
+https://github.com/owncloud/android/issues/3796
+https://github.com/owncloud/android/pull/4014

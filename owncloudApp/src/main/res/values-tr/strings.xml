@@ -10,12 +10,14 @@
   <string name="actionbar_upload_from_apps">Diğer uygulamalardan içerik</string>
   <string name="actionbar_upload_files">Dosyalar</string>
   <string name="actionbar_open_with">Birlikte aç</string>
+  <string name="actionbar_open_with_read_only">Birlikte aç (sadece okunur)</string>
   <string name="actionbar_mkdir">Yeni klasör</string>
   <string name="actionbar_settings">Ayarlar</string>
   <string name="actionbar_see_details">Ayrıntılar</string>
   <string name="actionbar_send_file">Gönder</string>
   <string name="actionbar_descending">Azalan</string>
   <string name="actionbar_sort_title">Şuna göre sırala</string>
+  <string name="fab_new_file">Yeni belge</string>
   <string name="drawer_item_all_files">Tüm dosyalar</string>
   <string name="drawer_item_only_available_offline">Çevrimdışı kullanılabilir</string>
   <string name="drawer_item_shared_by_link_files">Bağlantı ile paylaşılmış</string>
@@ -71,9 +73,11 @@
   <string name="prefs_camera_video_upload_on_wifi">Videoları sadece kablosuz bağlantıda (WiFi) yükle</string>
   <string name="prefs_camera_video_upload_on_charging">Videoları yalnızca şarj olurken yükleyin</string>
   <string name="prefs_subsection_advanced">Gelişmiş</string>
+  <string name="prefs_subsection_notifications">Bildirimleri yönet</string>
   <string name="prefs_show_hidden_files">Gizli dosyaları göster</string>
   <string name="prefs_log_open_logs_list_view">Günlük dosyaları</string>
   <string name="prefs_log_no_logs_list_view">Boş günlük klasörü!</string>
+  <string name="prefs_log_empty_subtitle">Günlüğe kaydetmeyi etkinleştirdiğinizde günlük dosyaları burada görünür</string>
   <string name="prefs_log_title">Günlüğü etkinleştir</string>
   <string name="prefs_log_summary">Bu, sorunları günlük dosyasına kaydetmek için kullanılır</string>
   <string name="prefs_log_title_history">Günlük geçmişi</string>
@@ -109,9 +113,11 @@
   <string name="illegal_argument_exception_message">Geçilen Niyette geçerli bir EYLEM gerekli</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Dosyalar</string>
+  <string name="bottom_nav_personal">Kişisel</string>
   <string name="bottom_nav_uploads">Yüklemeler</string>
   <string name="bottom_nav_offline">Çevrimdışı</string>
   <string name="bottom_nav_links">Bağlantılar</string>
+  <string name="bottom_nav_shares">Paylaşımlar</string>
   <string name="recommend_subject">%1$s uygulamasını akıllı telefonunda dene!</string>
   <string name="recommend_text">Seni, akıllı telefonunda %1$s kullanmaya davet ediyorum!\nBuradan indirebilirsin: %2$s</string>
   <string name="error_reason">çünkü</string>
@@ -141,7 +147,16 @@
   <string name="uploader_error_message_source_file_not_found">Yüklenecek dosya belirtilen konumda bulunamadı. Lütfen dosyanın mevcut olup olmadığını kontrol edin.</string>
   <string name="uploader_error_message_source_file_not_copied">Dosya geçici bir klasöre kopyalanırken hata oluştu. Lütfen tekrar göndermeyi deneyin.</string>
   <string name="file_list_seconds_ago">saniyeler önce</string>
+  <string name="file_list_empty_title_all_files">Burada hiç dosya yok</string>
+  <string name="spaces_list_empty_title">Alan yok</string>
+  <string name="file_list_empty_title_available_offline">Uygun çevrimdışı dosya yok</string>
   <string name="file_list_empty_title_shared_by_links">Paylaşılan bağlantı yok</string>
+  <string name="file_list_empty_subtitle_all_files">Bir şeyler yükleyin veya aygıtlarınızla eşitleyin!</string>
+  <string name="shares_list_empty_title">Paylaşım yok</string>
+  <string name="shares_list_empty_subtitle">Diğer insanların kaynakları üzerinde işbirliği yapmıyorsunuz</string>
+  <string name="spaces_list_empty_subtitle">Herhangi bir alana erişiminiz yok!</string>
+  <string name="file_list_empty_subtitle_available_offline">Çevrimdışı kullanılabilir olarak işaretlediğiniz dosya ve klasörler burada görünür</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Bağlantı ile paylaştığınız dosya ve klasörler burada gösterilecek</string>
   <string name="file_list_loading">Yükleniyor...</string>
   <string name="file_list_no_app_for_file_type">Dosya türü için hiçbir uygulama bulunamadı</string>
   <string name="file_list_no_app_for_perform_action">Bu eylem için uygulama bulunamadı</string>
@@ -149,6 +164,7 @@
   <string name="local_file_list_empty_just_folders">Bu klasör içinde klasör yok.</string>
   <string name="local_file_list_search_with_no_matches">Bu arama için eşleşme yok</string>
   <string name="upload_list_empty">Uygun yükleme yok.</string>
+  <string name="upload_list_empty_subtitle">Bir şey yüklediğinizde burada görünecektir</string>
   <string name="file_list_folder">klasör</string>
   <string name="file_list_folders">klasör</string>
   <string name="file_list_file">dosya</string>
@@ -167,6 +183,7 @@
   <string name="filedetails_renamed_in_upload_msg">Dosya adı, yükleme sırasında %1$s olarak değiştirildi</string>
   <string name="list_layout">Liste yerleşimi</string>
   <string name="action_share">Paylaş</string>
+  <string name="login_account_preparing">Hesabı ilk başlatma için hazırlama</string>
   <string name="common_yes">Evet</string>
   <string name="common_no">Hayır</string>
   <string name="common_remove_upload">Yüklemeyi kaldır</string>
@@ -210,6 +227,7 @@
   <string name="uploads_view_group_current_uploads">Geçerli</string>
   <string name="uploads_view_group_failed_uploads">Başarısız (tekrar denemek için dokun)</string>
   <string name="uploads_view_group_finished_uploads">Yüklendi</string>
+  <string name="uploads_view_group_queued_uploads">Kuyruğa alınmış</string>
   <string name="uploads_view_group_file_count">%d dosya</string>
   <string name="uploads_view_group_file_count_single">%d dosya</string>
   <string name="uploads_view_upload_status_succeeded">Tamamlandı</string>
@@ -227,8 +245,13 @@
   <string name="uploads_view_upload_status_service_interrupted">Uygulama sonlandırıldı</string>
   <string name="uploads_view_upload_status_unknown_fail">Bilinmeyen hata</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Kablosuz bağlantısı bekleniyor</string>
+  <string name="uploads_view_upload_status_queued">Kuyruğa alınmış</string>
   <string name="uploads_view_later_waiting_to_upload">Yüklemek için bekliyor</string>
   <string name="uploads_view_unsupported_media_type">Desteklenmeyen ortam türü</string>
+  <string name="uploader_upload_enqueued_ticker">%1$s\'nin yüklenmesi kuyruğa alınmış</string>
+  <string name="uploader_upload_canceled_ticker">Yükleme iptal edildi</string>
+  <string name="downloader_download_canceled_ticker">İndirme iptal edildi</string>
+  <string name="downloader_download_enqueued_ticker">%1$s\'nin indirilmesi kuyruğa alınmış</string>
   <string name="downloader_download_in_progress_ticker">İndiriliyor...</string>
   <string name="downloader_download_in_progress_content">%%%1$d İndirilen: %2$s</string>
   <string name="downloader_download_succeeded_ticker">İndirme başarılı</string>
@@ -342,12 +365,17 @@
   <string name="available_offline_inherited_msg">Bu dosyayı içeren bir klasör çevrimiçi olarak mevcut</string>
   <string name="rename_local_fail_msg">Yerel kopya adlandırılamadı; farklı bir ad deneyin</string>
   <string name="rename_server_fail_msg">Yeniden  adlandırılma tamamlanamadı</string>
+  <string name="file_already_exists">dosya zaten mevcut</string>
   <string name="sync_file_fail_msg">Uzak dosya denetlenemedi</string>
   <string name="sync_file_nothing_to_do_msg">Dosya içerikleri zaten eşitlenmiş</string>
+  <string name="new_remote_version_found_msg">Sunucuda yeni bir sürüm bulundu. İndiriliyor…</string>
+  <string name="download_enqueued_msg">İndirme kuyruğa alınmış</string>
+  <string name="upload_enqueued_msg">Yükleme kuyruğa alınmış</string>
   <string name="create_dir_fail_msg">Klasör oluşturulamadı</string>
   <string name="filename_forbidden_characters">Yasaklı karakterler: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Dosya adı en az bir geçersiz karakter içeriyor</string>
   <string name="filename_empty">Dosya adı boş olamaz</string>
+  <string name="filename_too_long">Dosya adı bu kadar uzun olamaz</string>
   <string name="wait_a_moment">Bir süre bekleyin</string>
   <string name="wait_checking_credentials">Kayıtlı kimlik bilgileri kontrol ediliyor</string>
   <string name="filedisplay_unexpected_bad_get_content">Beklenmedik sorun; lütfen dosya seçmek için farklı bir uygulama kullanın</string>
@@ -394,12 +422,13 @@
   <string name="confirmation_disable_videos_upload_message">Bu özelliği devre dışı bırakmak istediğinizden emin misiniz? Bekleyen videolar yüklenmeyecek</string>
   <string name="proper_pics_folder_warning_camera_upload">Lütfen seçtiğiniz klasörün kameranın çektiği resimleri kaydettiği klasör olduğundan emin olun. Aksi taktirde özellik resimlerinizi algılayamaz. Resimlerin çekildikten en az 15 dakika sonra yüklendiğini aklınızda tutun.</string>
   <string name="proper_videos_folder_warning_camera_upload">Lütfen seçtiğiniz klasörün kameranın çektiği videoları kaydettiği klasör olduğundan emin olun. Aksi taktirde özellik videolarınızı algılayamaz. Videoların çekildikten en az 15 dakika sonra yüklendiğini aklınızda tutun.</string>
-  <string name="conflict_title">Dosya çakışması</string>
+  <string name="conflict_title">Çakışan dosya</string>
   <string name="conflict_description">%1$s dosyası ile ilgili çakışma var, çözmek için dokunun</string>
   <string name="conflict_message">Hangi dosyaları saklamak istiyorsunuz? Her ikisini de saklamayı seçerseniz yerel dosyanın adına bir sayı eklenecek.</string>
   <string name="conflict_keep_both">İkisini de koru</string>
   <string name="conflict_use_local_version">yerel sürüm</string>
   <string name="conflict_use_server_version">sunucu sürümü</string>
+  <string name="error_conflict">Hedef klasörde bir hata oluştu</string>
   <string name="preview_image_description">Resim önizleme</string>
   <string name="preview_image_error_unknown_format">Bu resim gösterilemiyor</string>
   <string name="error__upload__local_file_not_copied">%1$s, %2$s yerel klasörüne kopyalanamadı</string>
@@ -424,6 +453,7 @@
   <string name="network_error_socket_timeout_exception">Sunucu çok geç cevap veriyor</string>
   <string name="network_error_connect_timeout_exception">Sunucuya bağlanmak çok uzun sürdü</string>
   <string name="network_host_not_available">Sunucuya ulaşılamadı</string>
+  <string name="network_error_message">Ağda bir hata oluştu</string>
   <string name="forbidden_permissions">%s izniniz yok</string>
   <string name="forbidden_permissions_rename">Bu dosyayı adlandırmak için</string>
   <string name="forbidden_permissions_delete">Bu dosyayı silmek için</string>
@@ -450,6 +480,7 @@
   <string name="folder_picker_choose_button_text">Seç</string>
   <string name="folder_picker_move_here_button_text">Buraya Taşı</string>
   <string name="folder_picker_copy_here_button_text">Buraya Kopyala</string>
+  <string name="folder_picker_no_permissions_message_text">Buraya içerik ekleme izniniz yok!</string>
   <string name="move_file_not_found">Taşıma başarısız. Lütfen dosyanın mevcut olup olmadığını denetleyin</string>
   <string name="move_file_invalid_into_descendent">Klasörü, kendi alt klasörüne taşımak mümkün değil</string>
   <string name="move_file_invalid_overwrite">Dosya zaten hedef klasörde mevcut</string>
@@ -485,10 +516,11 @@
   <string name="prefs_camera_upload_behaviour_dialog_title">şu olacak</string>
   <string name="prefs_camera_upload_behaviour_title">şu olacak</string>
   <string name="prefs_camera_upload_last_sync_title">Son senkronizasyon</string>
+  <string name="notifications_permission_denied">Tercihlerinizi Ayarlar\'dan güncelleyebilirsiniz</string>
   <string name="upload_copy_files">Dosyayı kopyala</string>
   <string name="upload_move_files">Dosyayı taşı</string>
   <string name="pref_behaviour_entries_keep_file">özgün klasöründe tutuldu</string>
-  <string name="pref_behaviour_entries_move">app klasörüne taşındı</string>
+  <string name="pref_behaviour_entries_remove_original_file">orijinal klasörden kaldırıldı</string>
   <string name="share_dialog_title">Paylaş</string>
   <string name="share_file">%1$s paylaş</string>
   <string name="share_with_user_section_title">Kullanıcılar ve Gruplar</string>
@@ -566,6 +598,7 @@
   <string name="media_service_notification_channel_description">Müzik çaları gör</string>
   <string name="file_sync_notification_channel_name">Dosya eşitleme</string>
   <string name="file_sync_notification_channel_description">Dosya eşitleme sonucunu gör</string>
+  <string name="file_sync_conflict_notification_channel_name">Dosya çakışmaları</string>
   <string name="clicks_to_be_developer">Geliştirici menülerini etkinleştirmeye %1$d tık uzaktasınız</string>
   <string name="rate_dialog_title">%1$s uygulamasını oyla!</string>
   <string name="rate_dialog_description">Bu uygulamayı kullanmaktan memnunsanız oylamak için birkaç dakikanızı ayırır mısınız? Geri dönüşünüz bizim için çok önemli.</string>
@@ -595,6 +628,7 @@
   <string name="prefs_http_logs">HTTP isteklerini ve yanıtlarını günlüğe kaydet</string>
   <string name="prefs_logs_summary">Günlükler hassas bilgiler içerebilir. Günlükleri başkalarıyla paylaşmak yalnızca kullanıcı sorumluluğundadır</string>
   <string name="synchronizing_account">Hesap senkronize ediliyor</string>
+  <string name="spaces_sync_failed">Alanlar yenilenemedi</string>
   <!--Scoped storage migration wizard-->
   <string name="scoped_storage_wizard_explanation">Harici depolama alanınızda %1$s veri bulundu. Veriler, cihazınızdaki güvenli depoya taşınacaktır. Geri kalan dosyalar, yinelemeleri ve güvenlik açığını önlemek için geçişten sonra harici depolama alanınızdan temizlenecektir.</string>
   <string name="scoped_storage_wizard_intro">Uygulamanız güncellendi. Bu uygulama güncellemesi, dosyalarınızı cihazınızda daha güvenli bir konuma taşır. Bu tek seferlik veri geçişi gereklidir ve bir dakika veya daha uzun sürebilir.</string>
@@ -619,10 +653,20 @@
   <string name="release_notes_footer">%1$s kullandığınız için teşekkürler.\n❤</string>
   <string name="release_notes_proceed">Devam et</string>
   <string name="release_notes_icon">Sürüm notu simgesi</string>
-  <string name="release_notes_2.21.2_title1">Web\'te aç</string>
-  <string name="release_notes_2.21.2_subtitle1">Web tarayıcısında sunucu tarafından desteklenen dosya türlerini açın (yalnızca oCIS)</string>
+  <string name="release_notes_4_0_title_1">Alanlar için Destek</string>
+  <string name="release_notes_4_0_subtitle_1">Alanlar için destek özelliği (oCIS) ile tanışın. Yalnızca yeni hesaplar için kullanılabilir</string>
+  <string name="release_notes_4_0_title_6">Yeni \"Bildirimleri yönet\" ayarı</string>
+  <string name="release_notes_4_0_title_7">Küçük hata düzeltmeleri ve iyileştirmeler</string>
+  <string name="release_notes_4_0_subtitle_7">Bazı küçük hatalar giderildi ve uygulamadaki deneyimi iyileştirmek için küçük teknik iyileştirmeler yapıldı.</string>
+  <string name="release_notes_4_0_title_8">Markdown desteği</string>
+  <string name="release_notes_4_0_subtitle_8">Markdown dosyaları uygun formatta işlenir ve görüntülenir</string>
+  <string name="release_notes_4_0_title_9">Sağlayıcı listesi (oCIS)</string>
+  <string name="release_notes_4_0_subtitle_9">Sunucunuz, uygulama sağlayıcıların belirli türden dosyaları açmasını destekliyorsa, bunların tümü Ayrıntılar görünümünde listelenir</string>
+  <string name="release_notes_4_0_title_10">Temalı ikonlar desteklendi</string>
+  <string name="release_notes_4_0_subtitle_10">Android 13 özelliği \"Temalı ikonlar\", uygulama simgesini tek renkli olarak ayarlamanıza izin verir</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Web\'te aç</string>
+  <string name="ic_action_open_with_web">%1$s\'da aç (web)</string>
   <string name="open_in_web_error_generic">Web\'te açılamadı</string>
   <string name="open_in_web_error_not_supported">bu dosya türünü destekleyen hiçbir uygulama yok</string>
   <string name="open_in_web_error_too_early">İstenen dosya henüz mevcut değil, lütfen daha sonra tekrar deneyin.</string>

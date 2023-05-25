@@ -60,7 +60,7 @@ class OCShareDaoTest {
 
     @Test
     fun insertEmptySharesList() {
-        ocShareDao.insert(listOf())
+        ocShareDao.insertOrReplace(listOf())
 
         val shares = ocShareDao.getSharesAsLiveData(
             "/Test/",
@@ -74,7 +74,7 @@ class OCShareDaoTest {
 
     @Test
     fun insertSharesFromDifferentFilesAndRead() {
-        ocShareDao.insert(
+        ocShareDao.insertOrReplace(
             listOf(
                 OC_PUBLIC_SHARE.copy(
                     path = "/Photos/",
@@ -143,7 +143,7 @@ class OCShareDaoTest {
 
     @Test
     fun insertSharesFromDifferentAccountsAndRead() {
-        ocShareDao.insert(
+        ocShareDao.insertOrReplace(
             listOf(
                 OC_PUBLIC_SHARE.copy(
                     path = "/Documents/document1.docx",
@@ -214,7 +214,7 @@ class OCShareDaoTest {
 
     @Test
     fun testAutogenerateId() {
-        ocShareDao.insert(
+        ocShareDao.insertOrReplace(
             listOf(
                 OC_PUBLIC_SHARE.copy(
                     path = "/Documents/document1.docx",
@@ -262,7 +262,7 @@ class OCShareDaoTest {
     fun getNonExistingPrivateShare() {
         val privateShare = createDefaultPrivateShareEntity()
 
-        ocShareDao.insert(privateShare)
+        ocShareDao.insertOrReplace(privateShare)
 
         val nonExistingPrivateShare = ocShareDao.getSharesAsLiveData(
             privateShare.path,
@@ -278,7 +278,7 @@ class OCShareDaoTest {
     fun replacePrivateShareIfAlreadyExists_exists() {
         val privateShare = createDefaultPrivateShareEntity()
 
-        ocShareDao.insert(createDefaultPrivateShareEntity())
+        ocShareDao.insertOrReplace(createDefaultPrivateShareEntity())
 
         val privateShareToReplace = createDefaultPrivateShareEntity(shareWith = "userName")
 
@@ -303,7 +303,7 @@ class OCShareDaoTest {
             shareType = ShareType.GROUP
         )
 
-        ocShareDao.insert(privateShare)
+        ocShareDao.insertOrReplace(privateShare)
 
         val privateShareToReplace = createDefaultPrivateShareEntity(
             shareType = ShareType.GROUP,
@@ -341,7 +341,7 @@ class OCShareDaoTest {
     fun updatePrivateShare() {
         val privateShare = createDefaultPrivateShareEntity()
 
-        ocShareDao.insert(privateShare)
+        ocShareDao.insertOrReplace(privateShare)
 
         ocShareDao.update(
             createDefaultPrivateShareEntity(permissions = 17)
@@ -362,7 +362,7 @@ class OCShareDaoTest {
     fun deletePrivateShare() {
         val privateShare = createDefaultPrivateShareEntity()
 
-        ocShareDao.insert(createDefaultPrivateShareEntity())
+        ocShareDao.insertOrReplace(createDefaultPrivateShareEntity())
 
         ocShareDao.deleteShare(privateShare.remoteId)
 
@@ -399,7 +399,7 @@ class OCShareDaoTest {
     fun getNonExistingPublicShare() {
         val publicShare = createDefaultPublicShareEntity()
 
-        ocShareDao.insert(publicShare)
+        ocShareDao.insertOrReplace(publicShare)
 
         val nonExistingPublicShare = ocShareDao.getSharesAsLiveData(
             publicShare.path,
@@ -415,7 +415,7 @@ class OCShareDaoTest {
     fun replacePublicShareIfAlreadyExists_exists() {
         val publicShare = createDefaultPublicShareEntity()
 
-        ocShareDao.insert(publicShare)
+        ocShareDao.insertOrReplace(publicShare)
 
         val publicShareToReplace = createDefaultPublicShareEntity(name = "Text 2 link")
 
@@ -437,7 +437,7 @@ class OCShareDaoTest {
     fun replacePublicShareIfAlreadyExists_doesNotExist() {
         val publicShare = createDefaultPublicShareEntity()
 
-        ocShareDao.insert(publicShare)
+        ocShareDao.insertOrReplace(publicShare)
 
         val publicShareToReplace = createDefaultPublicShareEntity(path = "/Texts/text2.txt", name = "Text 2 link")
 
@@ -471,7 +471,7 @@ class OCShareDaoTest {
     fun updatePublicShare() {
         val publicShare = createDefaultPublicShareEntity()
 
-        ocShareDao.insert(publicShare)
+        ocShareDao.insertOrReplace(publicShare)
 
         val publicShareToUpdate = createDefaultPublicShareEntity(name = "Text 1 link updated", expirationDate = 2000)
 
@@ -493,7 +493,7 @@ class OCShareDaoTest {
     fun deletePublicShare() {
         val publicShare = createDefaultPublicShareEntity()
 
-        ocShareDao.insert(publicShare)
+        ocShareDao.insertOrReplace(publicShare)
 
         ocShareDao.deleteShare(publicShare.remoteId)
 

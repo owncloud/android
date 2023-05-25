@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">寄出</string>
   <string name="actionbar_descending">降序</string>
   <string name="actionbar_sort_title">排序依照</string>
+  <string name="fab_new_file">新文件</string>
   <string name="drawer_item_all_files">所有檔案</string>
   <string name="drawer_item_only_available_offline">離線可使用</string>
   <string name="drawer_item_shared_by_link_files">由連結分享</string>
@@ -99,9 +100,11 @@
   <string name="illegal_argument_exception_message">傳遞給的Intent中需要有效的ACTION</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">檔案</string>
+  <string name="bottom_nav_personal">個人</string>
   <string name="bottom_nav_uploads">上傳</string>
   <string name="bottom_nav_offline">下線</string>
   <string name="bottom_nav_links">連結</string>
+  <string name="bottom_nav_shares">分享</string>
   <string name="recommend_subject">在您的手機中試用%1$s!</string>
   <string name="recommend_text">我想邀起您也在智慧型手機上使用%1$s!\n下載:%2$s</string>
   <string name="error_reason">因為</string>
@@ -134,6 +137,7 @@
   <string name="file_list_empty_title_all_files">沒有任何檔案</string>
   <string name="file_list_empty_title_shared_by_links">沒有已分享的連結</string>
   <string name="file_list_empty_subtitle_all_files">在您的裝置中同步或上傳一些內容</string>
+  <string name="file_list_empty_subtitle_shared_by_links">您分享的檔案與資料夾連結將會顯示在這裡</string>
   <string name="file_list_loading">載入中…</string>
   <string name="file_list_no_app_for_file_type">找不到檔案類型的軟體</string>
   <string name="local_file_list_empty">沒有檔案在這個目錄。</string>
@@ -370,7 +374,6 @@
   <string name="confirmation_disable_videos_upload_message">您確定您要停用此功能嗎？ 待處理的視頻將不會上傳</string>
   <string name="proper_pics_folder_warning_camera_upload">請確保選擇的目錄是您正在使用的相機保存所拍攝照片的位置。 否則，該功能將無法檢測您的照片。 請記住，照片將在拍攝後至少15分鐘內上傳。</string>
   <string name="proper_videos_folder_warning_camera_upload">請確保選擇的目錄是您正在使用的相機保存錄製的視頻的位置。 否則，該功能將無法檢測您的視頻。 請記住，視頻將在錄製後至少15分鐘內上傳。</string>
-  <string name="conflict_title">檔案衝突</string>
   <string name="conflict_description">檔案%1$s中存在衝突點擊解決</string>
   <string name="conflict_message">您要保留那個檔案? 如果您同時選擇兩個版本, 本地的檔案將在檔案名稱後面會加上編號</string>
   <string name="conflict_keep_both">都保留</string>
@@ -462,7 +465,6 @@
   <string name="upload_copy_files">複製檔案</string>
   <string name="upload_move_files">移動檔案</string>
   <string name="pref_behaviour_entries_keep_file">保留在原先的資料夾</string>
-  <string name="pref_behaviour_entries_move">移動到應用程式資料夾</string>
   <string name="share_dialog_title">分享</string>
   <string name="share_file">分享 %1$s</string>
   <string name="share_with_user_section_title">使用者及群組</string>

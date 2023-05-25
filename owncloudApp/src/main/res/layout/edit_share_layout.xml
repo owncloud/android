@@ -17,7 +17,7 @@
     android:id="@+id/shareScroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="presentation.ui.sharing.fragments.EditPrivateShareFragment">
+    tools:context=".presentation.sharing.sharees.EditPrivateShareFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -25,6 +25,7 @@ interface RemoteShareeDataSource {
     fun getSharees(
         searchString: String,
         page: Int,
-        perPage: Int
+        perPage: Int,
+        accountName: String,
     ): List<OCSharee>
 }

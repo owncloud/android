@@ -10,12 +10,14 @@
   <string name="actionbar_upload_from_apps">Conteúdo de outros apps</string>
   <string name="actionbar_upload_files">Arquivos</string>
   <string name="actionbar_open_with">Abrir com</string>
+  <string name="actionbar_open_with_read_only">Abrir com (somente leitura)</string>
   <string name="actionbar_mkdir">Nova pasta</string>
   <string name="actionbar_settings">Configurações</string>
   <string name="actionbar_see_details">Detalhes</string>
   <string name="actionbar_send_file">Enviar</string>
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Classificar por</string>
+  <string name="fab_new_file">Novo documento</string>
   <string name="drawer_item_all_files">Todos os arquivos</string>
   <string name="drawer_item_only_available_offline">Disponível externamente</string>
   <string name="drawer_item_shared_by_link_files">Compartilhado por link</string>
@@ -71,9 +73,11 @@
   <string name="prefs_camera_video_upload_on_wifi">Envio de vídeos apenas por wifi</string>
   <string name="prefs_camera_video_upload_on_charging">Envie vídeos apenas durante o carregamento</string>
   <string name="prefs_subsection_advanced">Avançado</string>
+  <string name="prefs_subsection_notifications">Manage notifications</string>
   <string name="prefs_show_hidden_files">Mostrar arquivos escondidos</string>
   <string name="prefs_log_open_logs_list_view">Arquivos log</string>
   <string name="prefs_log_no_logs_list_view">Pasta de log vazia! </string>
+  <string name="prefs_log_empty_subtitle">Ative o log e os arquivos de log aparecerão aqui</string>
   <string name="prefs_log_title">Habilitar login</string>
   <string name="prefs_log_summary">Isto é usado para registrar(log) os problemas</string>
   <string name="prefs_log_title_history">História de logins</string>
@@ -109,9 +113,11 @@
   <string name="illegal_argument_exception_message">Uma AÇÃO válida é necessária no intento passado para</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Arquivos</string>
+  <string name="bottom_nav_personal">Pessoal</string>
   <string name="bottom_nav_uploads">Enviados</string>
   <string name="bottom_nav_offline">Desconectado</string>
   <string name="bottom_nav_links">Linques</string>
+  <string name="bottom_nav_shares">Compartilhamentos</string>
   <string name="recommend_subject">Tentar %1$s em seu smartfone!</string>
   <string name="recommend_text">Gostaria de convida-lo a usar %1$s em seu smartphone!\nBaixe aqui: %2$s</string>
   <string name="error_reason">porque</string>
@@ -142,8 +148,14 @@
   <string name="uploader_error_message_source_file_not_copied">Ocorreu um erro ao copiar o arquivo para uma pasta temporária. Por favor, tente enviar novamente.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty_title_all_files">Nenhum arquivo aqui</string>
+  <string name="spaces_list_empty_title">No spaces</string>
+  <string name="file_list_empty_title_available_offline">Nenhum arquivo off-line disponível</string>
   <string name="file_list_empty_title_shared_by_links">Nenhum link compartilhado</string>
   <string name="file_list_empty_subtitle_all_files">Carregue algum conteúdo ou sincronize com seus dispositivos!</string>
+  <string name="shares_list_empty_title">Sem compartilhamentos</string>
+  <string name="shares_list_empty_subtitle">You are not collaborating on other people\'s resources</string>
+  <string name="spaces_list_empty_subtitle">You don\'t have access to any space!</string>
+  <string name="file_list_empty_subtitle_available_offline">Arquivos e pastas marcados como disponíveis off-line aparecerão aqui</string>
   <string name="file_list_empty_subtitle_shared_by_links">Arquivos e pastas que você compartilha com link são mostrados aqui</string>
   <string name="file_list_loading">Carregando...</string>
   <string name="file_list_no_app_for_file_type">Nenhum aplicativo encontrado para esse tipo de arquivo</string>
@@ -152,6 +164,7 @@
   <string name="local_file_list_empty_just_folders">Não existem pastas nessa pasta.</string>
   <string name="local_file_list_search_with_no_matches">Nenhum resultado para esta pesquisa</string>
   <string name="upload_list_empty">Nenhum arquivo enviado está disponível.</string>
+  <string name="upload_list_empty_subtitle">Carregue algo e ele aparecerá aqui</string>
   <string name="file_list_folder">pasta</string>
   <string name="file_list_folders">pastas</string>
   <string name="file_list_file">arquivo</string>
@@ -170,6 +183,7 @@
   <string name="filedetails_renamed_in_upload_msg">Arquivo foi renomeado para %1$s durante o envio</string>
   <string name="list_layout">Layout da lista</string>
   <string name="action_share">Compartilhar</string>
+  <string name="login_account_preparing">Preparing account for first launch</string>
   <string name="common_yes">Sim</string>
   <string name="common_no">Não</string>
   <string name="common_remove_upload">Remover arquivo enviado</string>
@@ -213,6 +227,7 @@
   <string name="uploads_view_group_current_uploads">Atual</string>
   <string name="uploads_view_group_failed_uploads">Falha (toque para tentar novamente)</string>
   <string name="uploads_view_group_finished_uploads">Enviado</string>
+  <string name="uploads_view_group_queued_uploads">Enfileirado</string>
   <string name="uploads_view_group_file_count">%d arquivos</string>
   <string name="uploads_view_group_file_count_single">%d arquivo</string>
   <string name="uploads_view_upload_status_succeeded">Concluído</string>
@@ -230,8 +245,13 @@
   <string name="uploads_view_upload_status_service_interrupted">App foi encerrado</string>
   <string name="uploads_view_upload_status_unknown_fail">Erro desconhecido</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Aguardando conexão wi-fi</string>
+  <string name="uploads_view_upload_status_queued">Enfileirado</string>
   <string name="uploads_view_later_waiting_to_upload">Aguardando para enviar</string>
   <string name="uploads_view_unsupported_media_type">Tipo de mídia não suportada</string>
+  <string name="uploader_upload_enqueued_ticker">Enviado de %1$s foi colocado na fila</string>
+  <string name="uploader_upload_canceled_ticker">Envio cancelado</string>
+  <string name="downloader_download_canceled_ticker">Baixar cancelado</string>
+  <string name="downloader_download_enqueued_ticker">Baixar de%1$s foi colocado na fila</string>
   <string name="downloader_download_in_progress_ticker">Baixando...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Baixando %2$s</string>
   <string name="downloader_download_succeeded_ticker">Download bem sucedido</string>
@@ -345,12 +365,17 @@
   <string name="available_offline_inherited_msg">Uma pasta que contém este arquivo está disponível off-line</string>
   <string name="rename_local_fail_msg">Cópia local não pôde ser renomeada; tente outro nome</string>
   <string name="rename_server_fail_msg">Renomeação não pôde ser finalizada</string>
+  <string name="file_already_exists">O arquivo já existe</string>
   <string name="sync_file_fail_msg">Arquivo remoto não pode ser verificado</string>
   <string name="sync_file_nothing_to_do_msg">Conteúdo do arquivo já foi sincronizado</string>
+  <string name="new_remote_version_found_msg">Uma nova versão foi encontrada no servidor. Baixando…</string>
+  <string name="download_enqueued_msg">Baixar em fila</string>
+  <string name="upload_enqueued_msg">Enviar em fila</string>
   <string name="create_dir_fail_msg">A pasta não pode ser criada</string>
   <string name="filename_forbidden_characters">Caracteres proibidos: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">O nome do arquivo contem pelo menos um caractere inválido  </string>
   <string name="filename_empty">O nome do arquivo não pode estar vazio</string>
+  <string name="filename_too_long">O nome do arquivo não pode ser tão longo</string>
   <string name="wait_a_moment">Aguarde um momento</string>
   <string name="wait_checking_credentials">Verificando credenciais salvas</string>
   <string name="filedisplay_unexpected_bad_get_content">Problema inesperado; por favor, tente selecionar o arquivo com outro app</string>
@@ -397,12 +422,13 @@
   <string name="confirmation_disable_videos_upload_message">Tem certeza de que deseja desativar esse recurso? Os vídeos pendentes não serão carregadas</string>
   <string name="proper_pics_folder_warning_camera_upload">Por favor, verifique se a pasta selecionada é onde a câmera que você está usando salva as fotos tiradas. Caso contrário, o recurso não poderá detectar suas fotos. Tenha em mente que as fotos serão enviadas em pelo menos 15 minutos depois de serem tiradas.</string>
   <string name="proper_videos_folder_warning_camera_upload">Por favor, verifique se a pasta selecionada é onde a câmera que você está usando salva os vídeos gravados. Caso contrário, o recurso não poderá detectar seus vídeos. Tenha em mente que os vídeos serão enviados em pelo menos 15 minutos depois de serem gravados.</string>
-  <string name="conflict_title">Conflito de arquivo</string>
+  <string name="conflict_title">Arquivo em conflito</string>
   <string name="conflict_description">Há um conflito no arquivo %1$s, toque para resolvê-lo</string>
   <string name="conflict_message">Quais arquivos você deseja manter? Se você selecionar ambas as versões, o arquivo local terá um número adicionado ao seu nome.</string>
   <string name="conflict_keep_both">Manter ambos</string>
   <string name="conflict_use_local_version">versão local</string>
   <string name="conflict_use_server_version">versão do servidor</string>
+  <string name="error_conflict">An error occurred in the destination folder</string>
   <string name="preview_image_description">Pré-visualização da imagem</string>
   <string name="preview_image_error_unknown_format">Esta imagem não pode ser mostrada</string>
   <string name="error__upload__local_file_not_copied">%1$s não pôde ser copiado para pasta local %2$s</string>
@@ -427,6 +453,7 @@
   <string name="network_error_socket_timeout_exception">O servidor demorou demais a responder</string>
   <string name="network_error_connect_timeout_exception">O servidor demorou muito para se conectar</string>
   <string name="network_host_not_available">Servidor não pôde ser alcançado</string>
+  <string name="network_error_message">Ocorreu um erro na rede</string>
   <string name="forbidden_permissions">Você não tem premissão %s</string>
   <string name="forbidden_permissions_rename">para renomear este arquivo</string>
   <string name="forbidden_permissions_delete">para excluir este arquivo</string>
@@ -453,6 +480,7 @@
   <string name="folder_picker_choose_button_text">Escolher</string>
   <string name="folder_picker_move_here_button_text">Mover para aqui</string>
   <string name="folder_picker_copy_here_button_text">Copie aqui</string>
+  <string name="folder_picker_no_permissions_message_text">Você não tem permissão para adicionar conteúdo aqui!</string>
   <string name="move_file_not_found">Não é possível mover. Por favor verifique se o arquivo existe</string>
   <string name="move_file_invalid_into_descendent">Não é possível mover a pasta para uma descendente</string>
   <string name="move_file_invalid_overwrite">O arquivo já existe na pasta de destino</string>
@@ -488,10 +516,11 @@
   <string name="prefs_camera_upload_behaviour_dialog_title">Arquivo original será</string>
   <string name="prefs_camera_upload_behaviour_title">Arquivo original será</string>
   <string name="prefs_camera_upload_last_sync_title">Última sincronização </string>
+  <string name="notifications_permission_denied">You can update your preferences in Settings</string>
   <string name="upload_copy_files">Copiar o arquivo</string>
   <string name="upload_move_files">Mover o arquivo</string>
   <string name="pref_behaviour_entries_keep_file">mantido na pasta original</string>
-  <string name="pref_behaviour_entries_move">movido para a pasta app</string>
+  <string name="pref_behaviour_entries_remove_original_file">removido da pasta original</string>
   <string name="share_dialog_title">Compartilhar</string>
   <string name="share_file">Compartilhar %1$s</string>
   <string name="share_with_user_section_title">Usuários e Grupos</string>
@@ -569,6 +598,8 @@
   <string name="media_service_notification_channel_description">Ver reprodutor de músicas</string>
   <string name="file_sync_notification_channel_name">Sincronizar arquivo</string>
   <string name="file_sync_notification_channel_description">Ver o resultado da sincronização</string>
+  <string name="file_sync_conflict_notification_channel_name">Conflitos de arquivos</string>
+  <string name="file_sync_conflict_notification_channel_description">Veja os conflitos de arquivo quando eles ocorrerem</string>
   <string name="clicks_to_be_developer">Você clica %1$d para ativar os menus do desenvolvedor</string>
   <string name="rate_dialog_title">Avalie o aplicativo %1$s !</string>
   <string name="rate_dialog_description">Se você gosta de usar este aplicativo, você poderia ter um tempo para avaliá-lo? Seu feedback é muito importante para nós.</string>
@@ -599,6 +630,7 @@
   <string name="prefs_http_logs">Registrar solicitações e respostas HTTP</string>
   <string name="prefs_logs_summary">Os logs podem conter informações confidenciais. O compartilhamento de registros com outras pessoas é de responsabilidade exclusiva do usuário</string>
   <string name="synchronizing_account">Sincronizando conta</string>
+  <string name="spaces_sync_failed">Spaces could not be refreshed</string>
   <!--Scoped storage migration wizard-->
   <string name="scoped_storage_wizard_explanation">Encontrados %1$s de dados em seu armazenamento externo. Isto será movido para o armazenamento seguro em seu dispositivo. Arquivos remanescentes podem ser removidos de seu armazenamento externo depois da migração para evitar duplicatas e vulnerabilidades.</string>
   <string name="scoped_storage_wizard_intro">Seu aplicativo foi atualizado. Esta atualização do aplicativo migra seu arquivos para um local mais seguro em seu dispositivo. Esta aplicação de dados única é necessária e pode levar um minuto ou mais.</string>
@@ -623,9 +655,30 @@
   <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Prosseguir</string>
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
-  <string name="release_notes_2.21.2_title1">Abrir na web</string>
+  <string name="release_notes_4_0_title_1">Support for Spaces</string>
+  <string name="release_notes_4_0_subtitle_1">Introducing support for spaces feature (oCIS). Only available for new accounts</string>
+  <string name="release_notes_4_0_title_2">Bottom navigation bar</string>
+  <string name="release_notes_4_0_subtitle_2">Reordered some tabs</string>
+  <string name="release_notes_4_0_title_3">Fim do suporte Lollipop</string>
+  <string name="release_notes_4_0_subtitle_3">This will be the last release with support for Android Lollipop (v5.0)</string>
+  <string name="release_notes_4_0_title_4">Fluxo do WebFinger atualizado</string>
+  <string name="release_notes_4_0_subtitle_4">Para servidores WebFinger, o servidor de pesquisa será solicitado primeiro e, se não for bem-sucedido, o fluxo de autenticação regular será seguido</string>
+  <string name="release_notes_4_0_title_5">Manipulação de permissão</string>
+  <string name="release_notes_4_0_subtitle_5">Agora, quando houver falta de permissões para executar algumas ações em uma pasta ou arquivo, essas ações serão ocultadas</string>
+  <string name="release_notes_4_0_title_6">Nova configuração \"Gerenciar notificações\"</string>
+  <string name="release_notes_4_0_subtitle_6">Um novo item foi adicionado nas configurações, que redireciona para as configurações de notificações do aplicativo do dispositivo</string>
+  <string name="release_notes_4_0_title_7">Pequenas correções de bugs e melhorias</string>
+  <string name="release_notes_4_0_subtitle_7">Alguns pequenos bugs foram corrigidos e pequenas melhorias técnicas foram introduzidas para melhorar a experiência no aplicativo</string>
+  <string name="release_notes_4_0_title_8">Suporte de remarcação</string>
+  <string name="release_notes_4_0_subtitle_8">Arquivos Remarcados renderizados e exibidos com o formato adequado</string>
+  <string name="release_notes_4_0_title_9">Lista de provedores (oCIS)</string>
+  <string name="release_notes_4_0_subtitle_9">Se o seu servidor oferecer suporte a provedores de aplicativos para abrir tipos específicos de arquivos, todos eles serão listados na visualização Detalhes</string>
+  <string name="release_notes_4_0_title_10">Ícones temáticos suportados</string>
+  <string name="release_notes_4_0_subtitle_10">O recurso \"Ícones temáticos\" do Android 13 permitirá que você defina o ícone do aplicativo em monocromático</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
+  <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
+  <string name="open_in_web_error_generic">Não foi possível abrir na web</string>
   <string name="open_in_web_error_not_supported">Não há aplicativos que suportam este tipo de arquivo</string>
   <string name="open_in_web_error_too_early">O arquivo requisitado ainda não está disponível, por favor tente novamente mais tarde</string>
 </resources>

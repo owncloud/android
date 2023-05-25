@@ -1,0 +1,6 @@
+Enhancement: Monochrome icon for the app
+
+From Android 13, if the user has enabled themed app icons in their device settings,
+the app will be shown with a monochrome icon.
+
+https://github.com/owncloud/android/pull/4001

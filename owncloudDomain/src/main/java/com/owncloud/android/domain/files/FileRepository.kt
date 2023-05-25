@@ -30,24 +30,25 @@ import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 interface FileRepository {
-    fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
     fun createFolder(remotePath: String, parentFolder: OCFile)
     fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile)
     fun getFileById(fileId: Long): OCFile?
-    fun getFileByIdAsStream(fileId: Long): Flow<OCFile?>
-    fun getFileByRemotePath(remotePath: String, owner: String): OCFile?
+    fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?>
+    fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String? = null): OCFile?
+    fun getPersonalRootFolderForAccount(owner: String): OCFile
+    fun getSharesRootFolderForAccount(owner: String): OCFile?
     fun getSearchFolderContent(fileListOption: FileListOption, folderId: Long, search: String): List<OCFile>
     fun getFolderContent(folderId: Long): List<OCFile>
-    fun getFolderContentWithSyncInfoAsStream(folderId: Long): Flow<List<OCFileWithSyncInfo>>
+    fun getFolderContentWithSyncInfoAsFlow(folderId: Long): Flow<List<OCFileWithSyncInfo>>
     fun getFolderImages(folderId: Long): List<OCFile>
-    fun getSharedByLinkWithSyncInfoForAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
-    fun getFilesWithSyncInfoAvailableOfflineFromAccountAsStream(owner: String): Flow<List<OCFileWithSyncInfo>>
+    fun getSharedByLinkWithSyncInfoForAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>>
+    fun getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>>
     fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
     fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile)
-    fun readFile(remotePath: String, accountName: String): OCFile
-    fun refreshFolder(remotePath: String, accountName: String): List<OCFile>
-    fun removeFile(listOfFilesToRemove: List<OCFile>, removeOnlyLocalCopy: Boolean)
+    fun readFile(remotePath: String, accountName: String, spaceId: String? = null): OCFile
+    fun refreshFolder(remotePath: String, accountName: String, spaceId: String? = null): List<OCFile>
+    fun deleteFiles(listOfFilesToDelete: List<OCFile>, removeOnlyLocalCopy: Boolean)
     fun renameFile(ocFile: OCFile, newName: String)
     fun saveFile(file: OCFile)
     fun saveConflict(fileId: Long, eTagInConflict: String)

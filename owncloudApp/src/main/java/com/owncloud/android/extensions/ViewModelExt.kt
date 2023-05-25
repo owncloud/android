@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,9 +27,11 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.presentation.UIResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.ContextProvider
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -52,7 +56,7 @@ object ViewModelExt : KoinComponent {
                 liveData.postValue(Event(UIResult.Loading()))
             }
 
-            // If usecase requires connection and is not connected, it is not needed to execute use case.
+            // If use case requires connection and is not connected, it is not needed to execute use case.
             if (requiresConnection and !contextProvider.isConnected()) {
                 liveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException())))
                 Timber.w("${useCase.javaClass.simpleName} will not be executed due to lack of network connection")
@@ -75,6 +79,44 @@ object ViewModelExt : KoinComponent {
         }
     }
 
+    fun <T, Params> ViewModel.runUseCaseWithResult(
+        coroutineDispatcher: CoroutineDispatcher,
+        requiresConnection: Boolean = true,
+        showLoading: Boolean = false,
+        flow: MutableStateFlow<Event<UIResult<T>>?>,
+        useCase: BaseUseCaseWithResult<T, Params>,
+        useCaseParams: Params,
+        postSuccess: Boolean = true,
+        postSuccessWithData: Boolean = true
+    ) {
+        viewModelScope.launch(coroutineDispatcher) {
+            if (showLoading) {
+                flow.update { Event(UIResult.Loading()) }
+            }
+
+            // If use case requires connection and is not connected, it is not needed to execute use case
+            if (requiresConnection and !contextProvider.isConnected()) {
+                flow.update { Event(UIResult.Error(error = NoNetworkConnectionException())) }
+                Timber.w("${useCase.javaClass.simpleName} will not be executed due to lack of network connection")
+                return@launch
+            }
+
+            val useCaseResult = useCase.execute(useCaseParams)
+
+            Timber.d("Use case executed: ${useCase.javaClass.simpleName} with result: $useCaseResult")
+
+            if (useCaseResult.isSuccess && postSuccess) {
+                if (postSuccessWithData) {
+                    flow.update { Event(UIResult.Success(useCaseResult.getDataOrNull())) }
+                } else {
+                    flow.update { Event(UIResult.Success()) }
+                }
+            } else if (useCaseResult.isError) {
+                flow.update { Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())) }
+            }
+        }
+    }
+
     fun <T, U, Params> ViewModel.runUseCaseWithResultAndUseCachedData(
         coroutineDispatcher: CoroutineDispatcher,
         requiresConnection: Boolean = true,
@@ -86,7 +128,7 @@ object ViewModelExt : KoinComponent {
         viewModelScope.launch(coroutineDispatcher) {
             liveData.postValue(Event(UIResult.Loading(cachedData)))
 
-            // If usecase requires connection and is not connected, it is not needed to execute use case.
+            // If use case requires connection and is not connected, it is not needed to execute use case
             if (requiresConnection && !contextProvider.isConnected()) {
                 liveData.postValue(Event(UIResult.Error(error = NoNetworkConnectionException(), data = cachedData)))
                 Timber.w("${useCase.javaClass.simpleName} will not be executed due to lack of network connection")

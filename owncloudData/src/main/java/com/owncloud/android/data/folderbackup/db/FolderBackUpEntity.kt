@@ -18,7 +18,6 @@
  */
 package com.owncloud.android.data.folderbackup.db
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.owncloud.android.data.ProviderMeta
@@ -31,12 +30,8 @@ data class FolderBackUpEntity(
     val uploadPath: String,
     val wifiOnly: Boolean,
     val chargingOnly: Boolean,
-    @ColumnInfo(name = folderBackUpEntityNameField) val name: String,
+    val name: String,
     val lastSyncTimestamp: Long,
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
-
-    companion object {
-        internal const val folderBackUpEntityNameField = "name"
-    }
 }

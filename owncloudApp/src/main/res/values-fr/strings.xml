@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">Envoyer</string>
   <string name="actionbar_descending">Décroissant</string>
   <string name="actionbar_sort_title">Trier</string>
+  <string name="fab_new_file">Nouveau document</string>
   <string name="drawer_item_all_files">Tous les fichiers</string>
   <string name="drawer_item_only_available_offline">Disponible hors-ligne</string>
   <string name="drawer_item_shared_by_link_files">Partagés par lien</string>
@@ -54,13 +55,17 @@
   <string name="confirmation_touches_with_other_windows_title">Êtes-vous sûr de vouloir activer cette fonctionnalité ?</string>
   <string name="confirmation_touches_with_other_windows_message">Vous utilisez cette fonctionnalité sous votre propre responsabilité. Une application malveillante pourrait tenter de vous pousser à effectuer des actions en falsifiant l’application.</string>
   <string name="prefs_subsection_picture_uploads">Téléversement automatique des photos</string>
+  <string name="prefs_subsection_picture_uploads_summary">Gérer l\'emplacement et le comportement des images téléversées automatiquement</string>
   <string name="prefs_subsection_video_uploads">Téléversement automatique des vidéos</string>
+  <string name="prefs_subsection_video_uploads_summary">Gérer l\'emplacement et le comportement des vidéos téléversées automatiquement</string>
   <string name="prefs_camera_picture_upload">Envoi d\'images</string>
   <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les images prises par l\'appareil photo</string>
   <string name="prefs_camera_picture_upload_path_title">Chemin d\'accès au répertoire de téléversement des images</string>
   <string name="prefs_camera_picture_upload_conditions_title">Conditions d\'exécution des téléversements</string>
   <string name="prefs_camera_picture_upload_conditions_summary">Les téléversements démarreront quand toutes les options seront remplies</string>
   <string name="prefs_camera_picture_upload_on_wifi">Téléverser les images via une connexion WiFi uniquement</string>
+  <string name="prefs_camera_picture_upload_on_charging">Téléverser les images uniquement lorsque l\'appareil est en charge</string>
+  <string name="prefs_camera_upload_on_charging_summary">Veuillez activer l\'option \"Wifi uniquement\" pour activer cette option</string>
   <string name="prefs_camera_video_upload">Téléversement de vidéo</string>
   <string name="prefs_camera_video_upload_summary">Téléverser automatiquement les vidéos enregistrées par la caméra</string>
   <string name="prefs_camera_video_upload_path_title">Chemin d\'accès au répertoire de téléversement des vidéos</string>
@@ -100,9 +105,11 @@
   <string name="document_provider_locked">Verrouillé</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Fichiers</string>
+  <string name="bottom_nav_personal">Personnel</string>
   <string name="bottom_nav_uploads">Téléversements</string>
   <string name="bottom_nav_offline">Hors-ligne</string>
   <string name="bottom_nav_links">Liens</string>
+  <string name="bottom_nav_shares">Partages</string>
   <string name="recommend_subject">Essayez %1$s sur votre smartphone !</string>
   <string name="recommend_text">J\'aimerais vous inviter à utiliser %1$s sur votre smartphone !
 Téléchargez-le ici : %2$s</string>
@@ -374,7 +381,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="confirmation_disable_videos_upload_message">Êtes-vous sûr de vouloir désactiver cette fonction ? Les vidéos en suspens ne seront pas téléversées</string>
   <string name="proper_pics_folder_warning_camera_upload">Veuillez vous assurer que le dossier sélectionné est celui où l’appareil photo enregistre les photos prises. Sinon, la fonctionnalité ne sera pas capable de détecter vos photos. Gardez en tête que les photos ne seront téléversées qu’au minimum 15 minutes après avoir été prises.</string>
   <string name="proper_videos_folder_warning_camera_upload">Veuillez vous assurer que le dossier sélectionné est celui où la caméra enregistre les prises de vidéo. Sinon, la fonctionnalité ne sera pas capable de détecter vos vidéos. Gardez en tête que les vidéos ne seront téléversées qu’au minimum 15 minutes après avoir été prises.</string>
-  <string name="conflict_title">Conflit de fichiers</string>
   <string name="conflict_description">Il existe un conflit dans le fichier %1$s. Tapez pour le résoudre</string>
   <string name="conflict_message">Quel(s) fichier(s) voulez-vous conserver ? Si vous sélectionnez les deux, un chiffre sera ajouté au nom du fichier local.</string>
   <string name="conflict_keep_both">Conserver les deux versions</string>
@@ -464,7 +470,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="upload_copy_files">Copier le fichier</string>
   <string name="upload_move_files">Déplacer le fichier</string>
   <string name="pref_behaviour_entries_keep_file">gardé dans le dossier original</string>
-  <string name="pref_behaviour_entries_move">déplacé vers le dossier de l\'application</string>
   <string name="share_dialog_title">Partager</string>
   <string name="share_file">Partager %1$s</string>
   <string name="share_with_user_section_title">Utilisateurs et Groupes</string>
@@ -592,7 +597,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="release_notes_header">Nouveau dans %1$s</string>
   <string name="release_notes_footer">Merci d\'utiliser %1$s.\n❤</string>
   <string name="release_notes_proceed">Exécuter</string>
-  <string name="release_notes_2.21.2_title1">Afficher dans le navigateur web</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Afficher dans le navigateur web</string>
   <string name="open_in_web_error_not_supported">Aucune application ne supporte ce type de fichier</string>

@@ -46,8 +46,8 @@ class OCLocalCapabilitiesDataSource(
         )
     }
 
-    override fun removeCapabilitiesForAccount(accountName: String) {
-        ocCapabilityDao.delete(accountName)
+    override fun deleteCapabilitiesForAccount(accountName: String) {
+        ocCapabilityDao.deleteByAccountName(accountName)
     }
 
     companion object {
@@ -56,7 +56,7 @@ class OCLocalCapabilitiesDataSource(
             OCCapability(
                 id = id,
                 accountName = accountName,
-                versionMayor = versionMayor,
+                versionMajor = versionMajor,
                 versionMinor = versionMinor,
                 versionMicro = versionMicro,
                 versionString = versionString,
@@ -83,14 +83,15 @@ class OCLocalCapabilitiesDataSource(
                 filesUndelete = CapabilityBooleanType.fromValue(filesUndelete),
                 filesVersioning = CapabilityBooleanType.fromValue(filesVersioning),
                 filesPrivateLinks = CapabilityBooleanType.fromValue(filesPrivateLinks),
-                filesOcisProviders = ocisProvider,
+                filesAppProviders = appProviders,
+                spaces = spaces,
             )
 
         @VisibleForTesting
         fun OCCapability.toEntity(): OCCapabilityEntity =
             OCCapabilityEntity(
                 accountName = accountName,
-                versionMayor = versionMayor,
+                versionMajor = versionMajor,
                 versionMinor = versionMinor,
                 versionMicro = versionMicro,
                 versionString = versionString,
@@ -117,7 +118,8 @@ class OCLocalCapabilitiesDataSource(
                 filesUndelete = filesUndelete.value,
                 filesVersioning = filesVersioning.value,
                 filesPrivateLinks = filesPrivateLinks.value,
-                ocisProvider = filesOcisProviders,
+                appProviders = filesAppProviders,
+                spaces = spaces
             )
     }
 }

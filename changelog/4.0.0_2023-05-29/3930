@@ -1,0 +1,6 @@
+Enhancement: Update label on Camera Uploads
+
+Update label on camera uploads to avoid confusions with the behavior of original files.
+Now, it is clear that original files will be removed.
+
+https://github.com/owncloud/android/pull/3930

@@ -17,8 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.owncloud.android">
+    xmlns:tools="http://schemas.android.com/tools">
     <!--
          GET_ACCOUNTS is needed for API < 23.
         For API >= 23 results in the addition of CONTACTS group to the list of permissions that may be
@@ -40,6 +39,11 @@
         API >= 23; the app needs to handle this
     -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--
+        Notifications are off by default since API 33;
+        See note in https://developer.android.com/develop/ui/views/notifications/notification-permission
+    -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <!--
          Next permissions are always approved in installation time,
         the apps needs to do nothing special in runtime
@@ -70,11 +74,11 @@
         <meta-data android:name="android.content.APP_RESTRICTIONS"
             android:resource="@xml/managed_configurations" />
         <activity
-            android:name=".presentation.ui.releasenotes.ReleaseNotesActivity"
+            android:name=".presentation.releasenotes.ReleaseNotesActivity"
             android:exported="false" />
-        <activity android:name=".presentation.ui.settings.PrivacyPolicyActivity" />
-        <activity android:name=".presentation.ui.settings.SettingsActivity" />
-        <activity android:name=".presentation.ui.migration.StorageMigrationActivity" />
+        <activity android:name=".presentation.settings.privacypolicy.PrivacyPolicyActivity" />
+        <activity android:name=".presentation.settings.SettingsActivity" />
+        <activity android:name=".presentation.migration.StorageMigrationActivity" />
         <activity
             android:name=".ui.activity.SplashActivity"
             android:theme="@style/Theme.ownCloud.Splash"
@@ -88,7 +92,7 @@
             android:name=".ui.activity.FileDisplayActivity"
             android:theme="@style/Theme.ownCloud.Toolbar.Drawer"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ui.activity.ManageAccountsActivity" />
+        <activity android:name=".presentation.accounts.AccountsManagementActivity" />
         <activity
             android:name=".ui.activity.ReceiveExternalFilesActivity"
             android:configChanges="orientation|screenSize"
@@ -115,7 +119,7 @@
             android:theme="@style/Theme.ownCloud.Overlay" />
 
         <service
-            android:name=".authentication.AccountAuthenticatorService"
+            android:name=".presentation.authentication.AccountAuthenticatorService"
             android:exported="true">
             <intent-filter android:priority="100">
                 <action android:name="android.accounts.AccountAuthenticator" />
@@ -141,17 +145,17 @@
             android:name=".providers.FileContentProvider"
             android:authorities="@string/authority"
             android:enabled="true"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/sync_string_files"
             android:syncable="true" />
         <provider
-            android:name=".presentation.providers.sharing.UsersAndGroupsSearchProvider"
+            android:name=".presentation.sharing.sharees.UsersAndGroupsSearchProvider"
             android:authorities="@string/search_suggest_authority"
             android:enabled="true"
             android:exported="false"
             android:label="@string/search_users_and_groups_hint" />
         <provider
-            android:name=".providers.DocumentsStorageProvider"
+            android:name=".presentation.documentsprovider.DocumentsStorageProvider"
             android:authorities="@string/document_provider_authority"
             android:exported="true"
             android:grantUriPermissions="true"
@@ -177,14 +181,14 @@
         <service android:name=".media.MediaService" />
 
         <activity
-            android:name=".presentation.ui.security.passcode.PassCodeActivity"
+            android:name=".presentation.security.passcode.PassCodeActivity"
             android:theme="@style/Theme.ownCloud"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".presentation.ui.conflicts.ConflictsResolveActivity"
+            android:name=".presentation.conflicts.ConflictsResolveActivity"
             android:theme="@style/Theme.ownCloud" />
         <activity
-            android:name=".presentation.ui.logging.LogsListActivity"
+            android:name=".presentation.logging.LogsListActivity"
             android:configChanges="orientation|screenSize" />
         <activity android:name=".ui.errorhandling.ErrorShowActivity" />
         <activity
@@ -200,12 +204,12 @@
         <activity android:name=".ui.activity.FolderPickerActivity" />
         <activity android:name=".ui.activity.UploadPathActivity" />
         <activity
-            android:name=".presentation.ui.sharing.ShareActivity"
+            android:name=".presentation.sharing.ShareActivity"
             android:label="@string/share_dialog_title"
             android:launchMode="singleTop"
             android:theme="@style/Theme.ownCloud"
             android:windowSoftInputMode="adjustResize"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -223,12 +227,12 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:theme="@style/Theme.ownCloud.Fullscreen" />
         <activity
-            android:name=".presentation.ui.security.PatternActivity"
+            android:name=".presentation.security.pattern.PatternActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.ownCloud" />
-        <activity android:name=".presentation.ui.security.BiometricActivity" />
+        <activity android:name=".presentation.security.biometric.BiometricActivity" />
         <activity
-            android:name=".presentation.ui.authentication.LoginActivity"
+            android:name=".presentation.authentication.LoginActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/Theme.ownCloud.Toolbar">

@@ -94,7 +94,7 @@ class CancelUploadsRecursivelyUseCase(
 
                 localStorageProvider.deleteCacheIfNeeded(upload)
 
-                transferRepository.removeTransferById(upload.id!!)
+                transferRepository.deleteTransferById(upload.id!!)
             }
         }
     }

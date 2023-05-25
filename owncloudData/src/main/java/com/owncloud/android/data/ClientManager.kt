@@ -2,7 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,7 +21,7 @@ package com.owncloud.android.data
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.content.Context
-import android.net.Uri
+import androidx.core.net.toUri
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.lib.common.ConnectionValidator
@@ -30,10 +30,21 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentialsFactory.getAnonymousCredentials
+import com.owncloud.android.lib.resources.appregistry.services.AppRegistryService
+import com.owncloud.android.lib.resources.appregistry.services.OCAppRegistryService
 import com.owncloud.android.lib.resources.files.services.FileService
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
+import com.owncloud.android.lib.resources.shares.services.ShareService
+import com.owncloud.android.lib.resources.shares.services.ShareeService
+import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
+import com.owncloud.android.lib.resources.shares.services.implementation.OCShareeService
+import com.owncloud.android.lib.resources.spaces.services.OCSpacesService
+import com.owncloud.android.lib.resources.spaces.services.SpacesService
+import com.owncloud.android.lib.resources.status.services.CapabilityService
+import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.lib.resources.users.services.UserService
 import com.owncloud.android.lib.resources.users.services.implementation.OCUserService
+import timber.log.Timber
 
 class ClientManager(
     private val accountManager: AccountManager,
@@ -44,6 +55,9 @@ class ClientManager(
 ) {
     // This client will maintain cookies across the whole login process.
     private var ownCloudClient: OwnCloudClient? = null
+
+    // Cached client to avoid retrieving the client for each service
+    private var ownCloudClientForCurrentAccount: OwnCloudClient? = null
 
     init {
         SingleSessionManager.setConnectionValidator(connectionValidator)
@@ -60,10 +74,12 @@ class ClientManager(
         ownCloudCredentials: OwnCloudCredentials? = getAnonymousCredentials()
     ): OwnCloudClient {
         val safeClient = ownCloudClient
+        val pathUri = path.toUri()
 
-        return if (requiresNewClient || safeClient == null) {
+        return if (requiresNewClient || safeClient == null || safeClient.baseUri != pathUri) {
+            Timber.d("Creating new client for path: $pathUri. Old client path: ${safeClient?.baseUri}, requiresNewClient: $requiresNewClient")
             OwnCloudClient(
-                Uri.parse(path),
+                pathUri,
                 connectionValidator,
                 true,
                 SingleSessionManager.getDefaultSingleton(),
@@ -74,6 +90,7 @@ class ClientManager(
                 ownCloudClient = it
             }
         } else {
+            Timber.d("Reusing anonymous client for ${safeClient.baseUri}")
             safeClient
         }
     }
@@ -86,8 +103,11 @@ class ClientManager(
         } else {
             accountManager.getAccountsByType(accountType).firstOrNull { it.name == accountName }
         }
+
         val ownCloudAccount = OwnCloudAccount(account, context)
-        return SingleSessionManager.getDefaultSingleton().getClientFor(ownCloudAccount, context, connectionValidator)
+        return SingleSessionManager.getDefaultSingleton().getClientFor(ownCloudAccount, context, connectionValidator).also {
+            ownCloudClientForCurrentAccount = it
+        }
     }
 
     private fun getCurrentAccount(): Account? {
@@ -112,5 +132,30 @@ class ClientManager(
     fun getFileService(accountName: String? = ""): FileService {
         val ownCloudClient = getClientForAccount(accountName)
         return OCFileService(client = ownCloudClient)
+    }
+
+    fun getCapabilityService(accountName: String? = ""): CapabilityService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCCapabilityService(client = ownCloudClient)
+    }
+
+    fun getShareService(accountName: String? = ""): ShareService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCShareService(client = ownCloudClient)
+    }
+
+    fun getShareeService(accountName: String? = ""): ShareeService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCShareeService(client = ownCloudClient)
+    }
+
+    fun getSpacesService(accountName: String): SpacesService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCSpacesService(client = ownCloudClient)
+    }
+
+    fun getAppRegistryService(accountName: String): AppRegistryService {
+        val ownCloudClient = getClientForAccount(accountName)
+        return OCAppRegistryService(client = ownCloudClient)
     }
 }

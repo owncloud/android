@@ -4,17 +4,17 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,7 +30,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
@@ -38,7 +38,9 @@ import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUs
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetWebDavUrlForSpaceUseCase
 import com.owncloud.android.domain.transfers.TransferRepository
+import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.extensions.isContentUri
@@ -85,32 +87,38 @@ class UploadFileFromContentUriWorker(
     private lateinit var mimeType: String
     private var fileSize: Long = 0
     private var uploadIdInStorageManager: Long = -1
+    private lateinit var ocTransfer: OCTransfer
+    private var spaceWebDavUrl: String? = null
 
     private lateinit var uploadFileOperation: UploadFileFromFileSystemOperation
 
     private var lastPercent = 0
 
     private val transferRepository: TransferRepository by inject()
+    private val getWebdavUrlForSpaceUseCase: GetWebDavUrlForSpaceUseCase by inject()
 
     override suspend fun doWork(): Result {
 
         if (!areParametersValid()) return Result.failure()
 
         transferRepository.updateTransferStatusToInProgressById(uploadIdInStorageManager)
-        val ocTransfer = transferRepository.getTransferById(uploadIdInStorageManager)
+
+        spaceWebDavUrl =
+            getWebdavUrlForSpaceUseCase.execute(GetWebDavUrlForSpaceUseCase.Params(accountName = account.name, spaceId = ocTransfer.spaceId))
 
         val localStorageProvider: LocalStorageProvider by inject()
-        cachePath = localStorageProvider.getTemporalPath(account.name) + uploadPath
+        cachePath = localStorageProvider.getTemporalPath(account.name, ocTransfer.spaceId) + uploadPath
 
         return try {
-            if (ocTransfer!!.isContentUri(appContext)) {
+            if (ocTransfer.isContentUri(appContext)) {
                 checkDocumentFileExists()
                 checkPermissionsToReadDocumentAreGranted()
                 copyFileToLocalStorage()
             }
-            checkParentFolderExistence()
-            checkNameCollisionAndGetAnAvailableOneInCase()
-            uploadDocument()
+            val clientForThisUpload = getClientForThisUpload()
+            checkParentFolderExistence(clientForThisUpload)
+            checkNameCollisionAndGetAnAvailableOneInCase(clientForThisUpload)
+            uploadDocument(clientForThisUpload)
             updateUploadsDatabaseWithResult(null)
             Result.success()
         } catch (throwable: Throwable) {
@@ -135,15 +143,20 @@ class UploadFileFromContentUriWorker(
         behavior = paramBehavior?.let { UploadBehavior.fromString(it) } ?: return false
         lastModified = paramLastModified ?: return false
         uploadIdInStorageManager = paramUploadId
+        ocTransfer = retrieveUploadInfoFromDatabase() ?: return false
 
         return true
     }
 
-    private fun checkPermissionsToReadDocumentAreGranted() {
-        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
-        if (documentFile?.canRead() != true) {
-            // Permissions not granted. Throw an exception to ask for them.
-            throw Throwable("Cannot read the file")
+    private fun retrieveUploadInfoFromDatabase(): OCTransfer? {
+        return transferRepository.getTransferById(uploadIdInStorageManager).also {
+            if (it != null) {
+                Timber.d("Upload with id ($uploadIdInStorageManager) has been found in database.")
+                Timber.d("Upload info: $it")
+            } else {
+                Timber.w("Upload with id ($uploadIdInStorageManager) has not been found in database.")
+                Timber.w("$uploadPath won't be uploaded")
+            }
         }
     }
 
@@ -152,6 +165,14 @@ class UploadFileFromContentUriWorker(
         if (documentFile?.exists() != true && documentFile?.isFile != true) {
             // File does not exists anymore. Throw an exception to tell the user
             throw LocalFileNotFoundException()
+        }
+    }
+
+    private fun checkPermissionsToReadDocumentAreGranted() {
+        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
+        if (documentFile?.canRead() != true) {
+            // Permissions not granted. Throw an exception to ask for them.
+            throw Throwable("Cannot read the file")
         }
     }
 
@@ -186,30 +207,39 @@ class UploadFileFromContentUriWorker(
         documentFile?.delete()
     }
 
-    private fun checkParentFolderExistence() {
+    private fun getClientForThisUpload(): OwnCloudClient =
+        SingleSessionManager.getDefaultSingleton()
+            .getClientFor(
+                OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext),
+                appContext,
+            )
+
+    private fun checkParentFolderExistence(client: OwnCloudClient) {
         var pathToGrant: String = File(uploadPath).parent ?: ""
         pathToGrant = if (pathToGrant.endsWith(File.separator)) pathToGrant else pathToGrant + File.separator
 
-        val checkPathExistenceOperation = CheckPathExistenceRemoteOperation(pathToGrant, false)
-        val checkPathExistenceResult = checkPathExistenceOperation.execute(getClientForThisUpload())
+        val checkPathExistenceOperation = CheckPathExistenceRemoteOperation(pathToGrant, false, spaceWebDavUrl)
+        val checkPathExistenceResult = checkPathExistenceOperation.execute(client)
         if (checkPathExistenceResult.code == ResultCode.FILE_NOT_FOUND) {
-            val createRemoteFolderOperation = CreateRemoteFolderOperation(pathToGrant, true)
-            createRemoteFolderOperation.execute(getClientForThisUpload())
+            val createRemoteFolderOperation = CreateRemoteFolderOperation(
+                remotePath = pathToGrant,
+                createFullPath = true,
+                spaceWebDavUrl = spaceWebDavUrl,
+            )
+            createRemoteFolderOperation.execute(client)
         }
     }
 
-    private fun checkNameCollisionAndGetAnAvailableOneInCase() {
+    private fun checkNameCollisionAndGetAnAvailableOneInCase(client: OwnCloudClient) {
         Timber.d("Checking name collision in server")
-        val remotePath = getAvailableRemotePath(getClientForThisUpload(), uploadPath)
-        if (remotePath != null && remotePath != uploadPath) {
+        val remotePath = getAvailableRemotePath(client, uploadPath, spaceWebDavUrl)
+        if (remotePath != uploadPath) {
             uploadPath = remotePath
             Timber.d("Name collision detected, let's rename it to %s", remotePath)
         }
     }
 
-    private fun uploadDocument() {
-        val client = getClientForThisUpload()
-
+    private fun uploadDocument(client: OwnCloudClient) {
         val cacheFile = File(cachePath)
         mimeType = cacheFile.extension
         fileSize = cacheFile.length()
@@ -238,6 +268,7 @@ class UploadFileFromContentUriWorker(
             mimeType = mimeType,
             lastModifiedTimestamp = lastModified,
             requiredEtag = null,
+            spaceWebDavUrl = spaceWebDavUrl,
         ).also {
             it.addDataTransferProgressListener(this)
         }
@@ -325,10 +356,6 @@ class UploadFileFromContentUriWorker(
             timeOut = null
         )
     }
-
-    private fun getClientForThisUpload(): OwnCloudClient = SingleSessionManager.getDefaultSingleton()
-        .getClientFor(OwnCloudAccount(AccountUtils.getOwnCloudAccountByName(appContext, account.name), appContext), appContext,
-        SingleSessionManager.getConnectionValidator())
 
     override fun onTransferProgress(
         progressRate: Long,

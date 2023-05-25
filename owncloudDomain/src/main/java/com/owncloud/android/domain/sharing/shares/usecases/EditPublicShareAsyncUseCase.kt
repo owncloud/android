@@ -33,7 +33,6 @@ class EditPublicShareAsyncUseCase(
             params.password,
             params.expirationDateInMillis,
             params.permissions,
-            params.publicUpload,
             params.accountName
         )
     }
@@ -44,7 +43,6 @@ class EditPublicShareAsyncUseCase(
         val password: String?,
         val expirationDateInMillis: Long,
         val permissions: Int,
-        val publicUpload: Boolean,
         val accountName: String
     )
 }

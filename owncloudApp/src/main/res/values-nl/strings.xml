@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">Versturen</string>
   <string name="actionbar_descending">Aflopend</string>
   <string name="actionbar_sort_title">Sorteer op</string>
+  <string name="fab_new_file">Nieuw document</string>
   <string name="drawer_item_all_files">Alle bestanden</string>
   <string name="drawer_item_only_available_offline">Beschikbaar off-line</string>
   <string name="drawer_item_shared_by_link_files">Gedeeld via een link</string>
@@ -86,9 +87,11 @@
   <string name="illegal_argument_exception_message">Een geldige ACTIE is nodig in de Intentie die wordt doorgegeven aan</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Bestanden</string>
+  <string name="bottom_nav_personal">Persoonlijk</string>
   <string name="bottom_nav_uploads">Uploads</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Links</string>
+  <string name="bottom_nav_shares">Gedeeld</string>
   <string name="recommend_subject">Probeer %1$s op uw smartphone!</string>
   <string name="recommend_text">Uitnodiging om %1$s op uw smartphone uit te proberen!
 Download hier: %2$s</string>
@@ -119,8 +122,10 @@ Download hier: %2$s</string>
   <string name="uploader_error_message_source_file_not_found">Het te uploaden bestand is hier niet. Controleer of het bestand wel bestaat.</string>
   <string name="uploader_error_message_source_file_not_copied">Er trad een fout op bij het kopiëren van het bestand naar een tijdelijke map. Probeer het opnieuw te versturen.</string>
   <string name="file_list_seconds_ago">seconden geleden</string>
+  <string name="file_list_empty_title_all_files">Hier geen bestanden</string>
   <string name="file_list_empty_title_shared_by_links">Geen gedeelde links</string>
   <string name="file_list_empty_subtitle_all_files">Upload bestanden of synchroniseer met uw apparaten!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Bestanden en mappen die u via links deelt, worden hier getoond</string>
   <string name="file_list_loading">Laden...</string>
   <string name="file_list_no_app_for_file_type">Geen app gevonden voor het bestandsformaat</string>
   <string name="local_file_list_empty">Er staan geen bestanden in deze map.</string>
@@ -353,7 +358,6 @@ Download hier: %2$s</string>
   <string name="confirmation_disable_videos_upload_message">Weet u zeker dat u deze optie uit wilt schakelen? Klaarstaande video’s worden niet geuploade</string>
   <string name="proper_pics_folder_warning_camera_upload">Zorg ervoor dat de map is geselecteerd waar de camera foto\'s opslaat na het opnemen. Anders is deze functionaliteit niet in staat om de foto\'s te detecteren. Houd er rekening mee dat uploaden van video\'s tot 15 minuten kan duren.</string>
   <string name="proper_videos_folder_warning_camera_upload">Zorg ervoor dat de map is geselecteerd waar de camera video\'s opslaat na het opnemen. Anders is deze functionaliteit niet in staat om de video\'s te detecteren. Houd er rekening mee dat uploaden van video\'s tot 15 minuten kan duren.</string>
-  <string name="conflict_title">Bestandsconflict</string>
   <string name="conflict_description">Er is een conflict in bestand %1$s, klik om het op te lossen</string>
   <string name="conflict_message">Welke bestanden wilt u bewaren? Als u beide versies selecteert zal het lokale bestand een nummer aan de naam toegevoegd krijgen.</string>
   <string name="conflict_keep_both">Beide bewaren</string>
@@ -442,7 +446,6 @@ Download hier: %2$s</string>
   <string name="upload_copy_files">Kopiëren bestand</string>
   <string name="upload_move_files">Verplaatsen bestand</string>
   <string name="pref_behaviour_entries_keep_file">bewaard in originele map</string>
-  <string name="pref_behaviour_entries_move">verplaatst naar app map</string>
   <string name="share_dialog_title">Deel</string>
   <string name="share_file">Deel %1$s</string>
   <string name="share_with_user_section_title">Gebruikers en Groepen</string>

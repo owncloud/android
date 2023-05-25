@@ -32,10 +32,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.owncloud.android.R
-import com.owncloud.android.authentication.AccountUtils
-import com.owncloud.android.datamodel.FileDataStorageManager
-import com.owncloud.android.datamodel.OCFile
-import com.owncloud.android.utils.AvatarUtils
+import com.owncloud.android.presentation.accounts.AccountsManagementActivity
+import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.avatar.AvatarUtils
 
 /**
  * Base class providing toolbar registration functionality, see [.setupToolbar].
@@ -84,6 +83,7 @@ abstract class ToolbarActivity : BaseActivity() {
                 }
                 toolbarTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_search, 0)
             } else {
+                setOnClickListener(null)
                 toolbarTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             }
         }
@@ -106,7 +106,9 @@ abstract class ToolbarActivity : BaseActivity() {
             baseContext.resources.getDimension(R.dimen.toolbar_avatar_radius)
         )
         avatarView.setOnClickListener {
-            startActivity(Intent(baseContext, ManageAccountsActivity::class.java))
+            // The drawer activity will take care of checking if the account changed.
+            val manageAccountsIntent = Intent(applicationContext, AccountsManagementActivity::class.java)
+            startActivityForResult(manageAccountsIntent, DrawerActivity.ACTION_MANAGE_ACCOUNTS)
         }
     }
 
@@ -133,15 +135,4 @@ abstract class ToolbarActivity : BaseActivity() {
     private fun getRootToolbar(): ConstraintLayout = findViewById(R.id.root_toolbar)
 
     private fun getStandardToolbar(): Toolbar = findViewById(R.id.standard_toolbar)
-
-    /**
-     * checks if the given file is the root folder.
-     *
-     * @param file file to be checked if it is the root folder
-     * @return `true` if it is `null` or the root folder, else returns `false`
-     */
-    fun isRoot(file: OCFile?): Boolean {
-        return file == null ||
-                (file.isFolder && file.parentId == FileDataStorageManager.ROOT_PARENT_ID.toLong())
-    }
 }

@@ -49,9 +49,9 @@ import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.media.MediaControlView
 import com.owncloud.android.media.MediaService
 import com.owncloud.android.media.MediaServiceBinder
-import com.owncloud.android.presentation.ui.files.operations.FileOperation
-import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
-import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
+import com.owncloud.android.presentation.files.operations.FileOperation
+import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.fragment.FileFragment
@@ -245,10 +245,10 @@ class PreviewAudioFragment : FileFragment() {
             false,
             false,
             false,
-            false
+            false,
         )
 
-        // additional restriction for this fragment 
+        // additional restriction for this fragment
         // TODO allow renaming in PreviewAudioFragment
         menu.findItem(R.id.action_rename_file).apply {
             isVisible = false

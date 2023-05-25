@@ -8,7 +8,7 @@
  * @author David Crespo Rios
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -34,11 +34,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
+import com.google.common.collect.Iterables;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus;
 import com.owncloud.android.domain.capabilities.model.OCCapability;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.files.model.OCFileSyncInfo;
+import com.owncloud.android.domain.spaces.model.OCSpace;
 import com.owncloud.android.extensions.WorkManagerExtKt;
 import com.owncloud.android.ui.activity.ComponentsGetter;
 import com.owncloud.android.ui.preview.PreviewVideoFragment;
@@ -119,19 +121,31 @@ public class FileMenuFilter {
                        boolean onlyAvailableOffline, boolean sharedByLinkFiles) {
         if (mFiles == null || mFiles.size() <= 0) {
             hideAll(menu);
-
         } else {
             List<Integer> toShow = new ArrayList<>();
             List<Integer> toHide = new ArrayList<>();
 
             filter(toShow, toHide, displaySelectAll, displaySelectInverse, onlyAvailableOffline, sharedByLinkFiles);
 
+            boolean hasWritePermission;
+            if (mFiles.size() == 1) {
+                hasWritePermission = mFiles.get(0).getHasWritePermission();
+            } else {
+                hasWritePermission = false;
+            }
             MenuItem item;
             for (int i : toShow) {
                 item = menu.findItem(i);
                 if (item != null) {
                     item.setVisible(true);
                     item.setEnabled(true);
+                    if (i == R.id.action_open_file_with) {
+                        if (!hasWritePermission) {
+                            item.setTitle(R.string.actionbar_open_with_read_only);
+                        } else {
+                            item.setTitle(R.string.actionbar_open_with);
+                        }
+                    }
                 }
             }
 
@@ -200,27 +214,37 @@ public class FileMenuFilter {
         }
 
         // RENAME
-        if (!isSingleSelection() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles) {
+        boolean hasRenamePermission;
+        if (mFiles.size() == 1) {
+            hasRenamePermission = mFiles.get(0).getHasRenamePermission();
+        } else {
+            hasRenamePermission = false;
+        }
+        if (!isSingleSelection() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles || !hasRenamePermission) {
             toHide.add(R.id.action_rename_file);
-
         } else {
             toShow.add(R.id.action_rename_file);
         }
 
-        // MOVE & COPY
-        if (mFiles.isEmpty() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles) {
+        // MOVE
+        boolean hasMovePermission = Iterables.all(mFiles, OCFile::getHasMovePermission);
+        if (mFiles.isEmpty() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles || !hasMovePermission) {
             toHide.add(R.id.action_move);
-            toHide.add(R.id.action_copy);
-
         } else {
             toShow.add(R.id.action_move);
+        }
+
+        // COPY
+        if (mFiles.isEmpty() || synchronizing || videoPreviewing || onlyAvailableOffline || sharedByLinkFiles) {
+            toHide.add(R.id.action_copy);
+        } else {
             toShow.add(R.id.action_copy);
         }
 
         // REMOVE
-        if (mFiles.isEmpty() || synchronizing || onlyAvailableOffline || sharedByLinkFiles) {
+        boolean hasDeletePermission = Iterables.all(mFiles, OCFile::getHasDeletePermission);
+        if (mFiles.isEmpty() || synchronizing || onlyAvailableOffline || sharedByLinkFiles || !hasDeletePermission) {
             toHide.add(R.id.action_remove_file);
-
         } else {
             toShow.add(R.id.action_remove_file);
         }
@@ -259,8 +283,17 @@ public class FileMenuFilter {
         boolean notAllowResharing = anyFileSharedWithMe() &&
                 capability != null && capability.getFilesSharingResharing().isFalse();
 
+        OCSpace space = mComponentsGetter.getStorageManager().getSpace(mFiles.get(0).getSpaceId(), mAccount.name);
+        boolean notPersonalSpace = space != null && !space.isPersonal();
+
+        boolean hasResharePermission;
+        if (mFiles.size() == 1) {
+            hasResharePermission = mFiles.get(0).getHasResharePermission();
+        } else {
+            hasResharePermission = false;
+        }
         if ((!shareViaLinkAllowed && !shareWithUsersAllowed) || !isSingleSelection() ||
-                notAllowResharing || onlyAvailableOffline) {
+                notAllowResharing || onlyAvailableOffline || notPersonalSpace || !hasResharePermission) {
             toHide.add(R.id.action_share_file);
         } else {
             toShow.add(R.id.action_share_file);

@@ -7,7 +7,8 @@
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/standard_half_padding"
     android:paddingBottom="@dimen/standard_half_padding"
-    android:filterTouchesWhenObscured="true">
+    android:filterTouchesWhenObscured="true"
+    android:baselineAligned="false">
 
     <FrameLayout
         android:layout_width="60dp"
@@ -91,16 +92,13 @@
             android:textColor="@color/list_item_lastmod_and_filesize_text"
             android:singleLine="true"
             tools:text="@string/auth_username"
-            android:textSize="12dip" />
+            android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/upload_remote_path"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/list_item_lastmod_and_filesize_text"
-            android:ellipsize="middle"
-            android:singleLine="true"
-            android:textSize="12dip" />
+        <include
+            android:id="@+id/space_path_line"
+            layout="@layout/space_path_line"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

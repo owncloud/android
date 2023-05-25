@@ -238,8 +238,7 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="placeholder_filesize">389 Ko</string>
   <string name="placeholder_timestamp">18/05/2012 12:23</string>
   <string name="placeholder_media_time">12:23:45</string>
-  <string name="conflict_title">Conflicte de fichièrs</string>
-  <string name="conflict_message">Quin(s) fichièr(s) volètz gardar ? Se seleccionatz los dos, una chifra serà aponduda al nom del fichièr local.</string>
+    <string name="conflict_message">Quin(s) fichièr(s) volètz gardar ? Se seleccionatz los dos, una chifra serà aponduda al nom del fichièr local.</string>
   <string name="conflict_keep_both">Gardar las doas versions</string>
   <string name="conflict_use_local_version">version locala</string>
   <string name="conflict_use_server_version">version servidor</string>
@@ -311,8 +310,7 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="upload_copy_files">Copiar lo fichièr</string>
   <string name="upload_move_files">Desplaçar lo fichièr</string>
   <string name="pref_behaviour_entries_keep_file">gardat dins lo dorsièr original</string>
-  <string name="pref_behaviour_entries_move">desplaçat cap al dorsièr de l\'aplicacion</string>
-  <string name="share_dialog_title">Partejar</string>
+    <string name="share_dialog_title">Partejar</string>
   <string name="share_file">Partejar %1$s</string>
   <string name="share_no_users">Cap de donada es pas partejada amb d\'utilizaires pel moment</string>
   <string name="share_add_user_or_group">Apondre un Utilizaire o un Grop</string>

@@ -22,16 +22,24 @@ package com.owncloud.android.utils
 
 import androidx.annotation.StringDef
 
+// Use this key if only interested in setup value. When all keys added to MDM, remove this
+const val NO_MDM_RESTRICTION_YET = "NO_MDM_RESTRICTION_YET"
+
 const val CONFIGURATION_LOCK_DELAY_TIME = "lock_delay_time_configuration"
 const val CONFIGURATION_SERVER_URL = "server_url_configuration"
 const val CONFIGURATION_SERVER_URL_INPUT_VISIBILITY = "server_url_input_visibility_configuration"
 const val CONFIGURATION_ALLOW_SCREENSHOTS = "allow_screenshots_configuration"
+const val CONFIGURATION_OAUTH2_OPEN_ID_SCOPE = "oauth2_open_id_scope"
+const val CONFIGURATION_OAUTH2_OPEN_ID_PROMPT = "oauth2_open_id_prompt"
 
 @StringDef(
+    NO_MDM_RESTRICTION_YET,
     CONFIGURATION_LOCK_DELAY_TIME,
     CONFIGURATION_SERVER_URL,
     CONFIGURATION_SERVER_URL_INPUT_VISIBILITY,
     CONFIGURATION_ALLOW_SCREENSHOTS,
+    CONFIGURATION_OAUTH2_OPEN_ID_SCOPE,
+    CONFIGURATION_OAUTH2_OPEN_ID_PROMPT,
 )
 @Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.VALUE_PARAMETER)

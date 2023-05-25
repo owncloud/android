@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">Skicka</string>
   <string name="actionbar_descending">Nedåtgående</string>
   <string name="actionbar_sort_title">Sortera efter</string>
+  <string name="fab_new_file">Nytt dokument</string>
   <string name="drawer_item_all_files">Alla filer</string>
   <string name="drawer_item_only_available_offline">Tillgänglig offline</string>
   <string name="drawer_item_shared_by_link_files">Delad som länk</string>
@@ -89,9 +90,11 @@
   <string name="document_provider_locked">Låst</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Filer</string>
+  <string name="bottom_nav_personal">Personligt</string>
   <string name="bottom_nav_uploads">Uppladdningar</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Länkar</string>
+  <string name="bottom_nav_shares">Delningar</string>
   <string name="recommend_subject">Prova %1$s på din smartphone!</string>
   <string name="recommend_text">Jag skullje vilja bjuda in dig till att prova %1$s på din smartphone!\nLadda ner appen från Google Play här: %2$s</string>
   <string name="error_reason">för att</string>
@@ -120,7 +123,10 @@
   <string name="uploader_error_message_source_file_not_found">Filen som skulle laddas upp hittades inte på sin plats. Vänligen kontrollera att filen existerar.</string>
   <string name="uploader_error_message_source_file_not_copied">Ett fel uppstod när filen kopierades till en temporär mapp. Vänligen försök skicka den igen.</string>
   <string name="file_list_seconds_ago">sekunder sedan</string>
+  <string name="file_list_empty_title_all_files">Inga filer kunde hittas</string>
   <string name="file_list_empty_title_shared_by_links">Inga delade länkar</string>
+  <string name="file_list_empty_subtitle_all_files">Ladda upp innehåll eller synkronisera med dina enheter!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Filer och mappar du delar som länkar kommer visas här</string>
   <string name="file_list_loading">Laddar...</string>
   <string name="file_list_no_app_for_file_type">Ingen app hittades för filtypen</string>
   <string name="local_file_list_empty">Det finns inga filer i den här mappen.</string>
@@ -349,7 +355,6 @@
   <string name="placeholder_timestamp">2012/05/18 12:23 PM</string>
   <string name="placeholder_media_time">12:23:45</string>
   <string name="confirmation_disable_camera_uploads_title">Bekräfta</string>
-  <string name="conflict_title">Filkonflikt</string>
   <string name="conflict_description">Det är en konflikt i filen %1$s, klicka för att lösa den</string>
   <string name="conflict_message">Vilka filer vill du behålla? Om du markerar båda kommer den lokala filen få ett nummer tillagt i slutet på filnamnet.</string>
   <string name="conflict_keep_both">Behåll båda</string>
@@ -438,7 +443,6 @@
   <string name="upload_copy_files">Kopiera fil</string>
   <string name="upload_move_files">Flytta fil</string>
   <string name="pref_behaviour_entries_keep_file">behållas i orginalmapp</string>
-  <string name="pref_behaviour_entries_move">flyttas till ownCloudmapp</string>
   <string name="share_dialog_title">Dela</string>
   <string name="share_file">Dela %1$s</string>
   <string name="share_with_user_section_title">Användare och grupper</string>

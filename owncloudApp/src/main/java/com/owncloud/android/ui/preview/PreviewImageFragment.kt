@@ -52,11 +52,11 @@ import com.owncloud.android.domain.files.model.MIME_SVG
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.files.FileMenuFilter
-import com.owncloud.android.presentation.ui.files.operations.FileOperation
-import com.owncloud.android.presentation.ui.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.files.operations.FileOperation
+import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
-import com.owncloud.android.presentation.ui.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
@@ -199,7 +199,13 @@ class PreviewImageFragment : FileFragment() {
                 mContainerActivity,
                 activity
             )
-            fileMenuFilter.filter(menu, false, false, false, false)
+            fileMenuFilter.filter(
+                menu,
+                false,
+                false,
+                false,
+                false,
+            )
         }
 
         // additional restriction for this fragment
@@ -312,15 +318,24 @@ class PreviewImageFragment : FileFragment() {
     }
 
     private fun loadAndShowImage() {
+        val localStoragePath = file?.storagePath
+        if (localStoragePath == null) {
+            Timber.w("Storage path for ${file.fileName} is null, nothing to show here")
+            return
+        }
         Glide.with(requireContext())
-            .load(File(file.storagePath))
+            .load(File(localStoragePath))
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
             .listener(object : RequestListener<Drawable?> {
                 override fun onLoadFailed(
                     e: GlideException?, model: Any, target: Target<Drawable?>, isFirstResource: Boolean
                 ): Boolean {
-                    binding.errorGroup.isVisible = true
+                    try {
+                        binding.errorGroup.isVisible = true
+                    } catch (npe: NullPointerException) {
+                        Timber.e(npe)
+                    }
                     Timber.e(e, "Error loading image")
                     return false
                 }

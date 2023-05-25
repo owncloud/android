@@ -234,8 +234,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="prefs_camera_picture_upload_on_wifi">Отпремај слике само на бежичној мрежи</string>
   <string name="prefs_camera_video_upload_on_wifi">Отпремај видео само на бежичној мрежи</string>
-  <string name="conflict_title">Сукоб фајлова</string>
-  <string name="conflict_message">Које фајлове желите да задржите? Ако изаберете обе верзије, локалном фајлу ће бити додат број у назив.</string>
+    <string name="conflict_message">Које фајлове желите да задржите? Ако изаберете обе верзије, локалном фајлу ће бити додат број у назив.</string>
   <string name="conflict_keep_both">Задржи оба</string>
   <string name="conflict_use_local_version">локална верзија</string>
   <string name="conflict_use_server_version">верзија сервера</string>
@@ -308,8 +307,7 @@
   <string name="upload_copy_files">Копирај фајл</string>
   <string name="upload_move_files">Премести фајл</string>
   <string name="pref_behaviour_entries_keep_file">остављен у изворној фасцикли</string>
-  <string name="pref_behaviour_entries_move">премештен у фасциклу апликације</string>
-  <string name="share_dialog_title">Дељење</string>
+    <string name="share_dialog_title">Дељење</string>
   <string name="share_add_user_or_group">Додај корисника или групу</string>
   <string name="share_cancel_public_link_button">Откажи</string>
   <string name="share_confirm_public_link_button">Сачувај</string>

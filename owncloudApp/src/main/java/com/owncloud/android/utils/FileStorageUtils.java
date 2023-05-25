@@ -24,14 +24,10 @@
 
 package com.owncloud.android.utils;
 
-import android.accounts.Account;
 import android.annotation.SuppressLint;
 import android.webkit.MimeTypeMap;
 
-import com.owncloud.android.data.files.datasources.mapper.RemoteFileMapper;
 import com.owncloud.android.data.storage.LocalStorageProvider;
-import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.lib.resources.files.RemoteFile;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
@@ -60,26 +56,10 @@ public class FileStorageUtils {
     }
 
     /**
-     * Get local owncloud storage path for accountName.
-     */
-    public static String getSavePath(String accountName) {
-        return getLocalStorageProvider().getAccountDirectoryPath(accountName);
-    }
-
-    /**
-     * Get local path where OCFile file is to be stored after upload. That is,
-     * corresponding local path (in local owncloud storage) to remote uploaded
-     * file.
-     */
-    public static String getDefaultSavePathFor(String accountName, OCFile file) {
-        return getLocalStorageProvider().getDefaultSavePathFor(accountName, file.getRemotePath());
-    }
-
-    /**
      * Get absolute path to tmp folder inside datafolder in sd-card for given accountName.
      */
-    public static String getTemporalPath(String accountName) {
-        return getLocalStorageProvider().getTemporalPath(accountName);
+    public static String getTemporalPath(String accountName, String spaceId) {
+        return getLocalStorageProvider().getTemporalPath(accountName, spaceId);
     }
 
     /**
@@ -90,23 +70,6 @@ public class FileStorageUtils {
     @SuppressLint("UsableSpace")
     public static long getUsableSpace() {
         return getLocalStorageProvider().getUsableSpace();
-    }
-
-    public static String getParentPath(String remotePath) {
-        String parentPath = new File(remotePath).getParent();
-        parentPath = parentPath.endsWith(File.separator) ? parentPath : parentPath + File.separator;
-        return parentPath;
-    }
-
-    /**
-     * Creates and populates a new {@link OCFile} object with the data read from the server.
-     *
-     * @param remote remote file read from the server (remote file or folder).
-     * @return New OCFile instance representing the remote resource described by remote.
-     */
-    public static OCFile createOCFileFromRemoteFile(RemoteFile remote) {
-        RemoteFileMapper remoteFileMapper = new RemoteFileMapper();
-        return remoteFileMapper.toModel(remote);
     }
 
     /**
@@ -141,12 +104,5 @@ public class FileStorageUtils {
         }
 
         return dir.delete();
-    }
-
-    /**
-     * Cleans up unused files, such as deprecated user directories
-     */
-    public static void deleteUnusedUserDirs(Account[] remainingAccounts) {
-        getLocalStorageProvider().deleteUnusedUserDirs(remainingAccounts);
     }
 }

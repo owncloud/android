@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">Send</string>
   <string name="actionbar_descending">Synkende</string>
   <string name="actionbar_sort_title">Sorter etter</string>
+  <string name="fab_new_file">Nytt dokument</string>
   <string name="drawer_item_all_files">Alle filer</string>
   <string name="drawer_item_only_available_offline">Tilgjengelig frakoblet</string>
   <string name="drawer_item_shared_by_link_files">Delt med lenke</string>
@@ -79,9 +80,11 @@
   <string name="illegal_argument_exception_message">En gyldig ACTION må være med i intent sendt til</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Filer</string>
+  <string name="bottom_nav_personal">Personlig</string>
   <string name="bottom_nav_uploads">Last opp</string>
   <string name="bottom_nav_offline">Frakoblet</string>
   <string name="bottom_nav_links">Lenker</string>
+  <string name="bottom_nav_shares">Delinger</string>
   <string name="recommend_subject">Prøv %1$s på smarttelefonen din!</string>
   <string name="recommend_text">Jeg ønsker å invitere deg til å bruke %1$s på smarttelefonen din!\nLast ned her: %2$s</string>
   <string name="error_reason">fordi</string>
@@ -340,7 +343,6 @@
   <string name="confirmation_disable_videos_upload_message">Er du sikker på at du vil deaktivere denne funksjonen? De ventende videoene vil ikke bli lastet opp</string>
   <string name="proper_pics_folder_warning_camera_upload">Sørg for å velge mappen som kameraet ditt lagrer bildene i. Hvis ikke vil programmet ikke være i stand til å detektere bildene dine. Vær obs på at når du tar bilder vil det ta minst 15 minutter før de blir lastet opp.</string>
   <string name="proper_videos_folder_warning_camera_upload">Sørg for å velge mappen som kameraet ditt lagrer videoene dine i. Hvis ikke vil programmet ikke være i stand til å detektere videoene. Vær obs på at når du er ferdig å ta opp en video vil det ta minst 15 minutter før de blir lastet opp.</string>
-  <string name="conflict_title">Filkonflikt</string>
   <string name="conflict_description">Det er en konflikt i fil %1$s, trykk for å løse den</string>
   <string name="conflict_message">Hvilke filer ønsker du å beholder? Hvis du velger begge versjonene, får den lokale filen lagt til et tall i navnet.</string>
   <string name="conflict_keep_both">Behold begge</string>
@@ -425,7 +427,6 @@
   <string name="upload_copy_files">Kopier fil</string>
   <string name="upload_move_files">Flytt fil</string>
   <string name="pref_behaviour_entries_keep_file">beholdt i opprinnelig mappe</string>
-  <string name="pref_behaviour_entries_move">flyttet til app-mappe</string>
   <string name="share_dialog_title">Delt ressurs</string>
   <string name="share_file">Del %1$s</string>
   <string name="share_with_user_section_title">Brukere og grupper</string>

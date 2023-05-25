@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -52,7 +52,8 @@ data class OCTransferEntity(
     val transferEndTimestamp: Long? = null,
     val lastResult: Int? = null,
     val createdBy: Int,
-    val transferId: String? = null
+    val transferId: String? = null,
+    val spaceId: String? = null,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
@@ -60,6 +61,8 @@ data class OCTransferEntity(
     companion object {
         private const val LEGACY_UPLOAD_IN_PROGRESS = 0
         private const val LEGACY_UPLOAD_FAILED = 1
+        private const val LEGACY_LOCAL_BEHAVIOUR_MOVE = 1
+        private const val LEGACY_LOCAL_BEHAVIOUR_FORGET = 2
 
         fun fromCursor(cursor: Cursor): OCTransferEntity {
             val newStatus = when (cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_STATUS))) {
@@ -67,13 +70,17 @@ data class OCTransferEntity(
                 LEGACY_UPLOAD_FAILED -> TransferStatus.TRANSFER_FAILED.value
                 else -> TransferStatus.TRANSFER_SUCCEEDED.value
             }
+            val newLocalBehaviour = cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_LOCAL_BEHAVIOUR)).let {
+                if (it == LEGACY_LOCAL_BEHAVIOUR_FORGET) LEGACY_LOCAL_BEHAVIOUR_MOVE
+                else it
+            }
             return OCTransferEntity(
                 localPath = cursor.getString(cursor.getColumnIndexOrThrow(UPLOAD_LOCAL_PATH)),
                 remotePath = cursor.getString(cursor.getColumnIndexOrThrow(UPLOAD_REMOTE_PATH)),
                 accountName = cursor.getString(cursor.getColumnIndexOrThrow(UPLOAD_ACCOUNT_NAME)),
                 fileSize = cursor.getLong(cursor.getColumnIndexOrThrow(UPLOAD_FILE_SIZE)),
                 status = newStatus,
-                localBehaviour = cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_LOCAL_BEHAVIOUR)),
+                localBehaviour = newLocalBehaviour,
                 forceOverwrite = cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_FORCE_OVERWRITE)) == 1,
                 transferEndTimestamp = cursor.getLong(cursor.getColumnIndexOrThrow(UPLOAD_UPLOAD_END_TIMESTAMP)),
                 lastResult = cursor.getInt(cursor.getColumnIndexOrThrow(UPLOAD_LAST_RESULT)),

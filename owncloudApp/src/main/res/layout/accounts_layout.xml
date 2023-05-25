@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2021 ownCloud GmbH.
+  Copyright (C) 2022 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -24,12 +24,10 @@
     <include
         layout="@layout/owncloud_toolbar" />
 
-    <ListView
-        android:id="@+id/account_list"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/account_list_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@color/list_divider_background"
-        android:dividerHeight="1dip">
-    </ListView>
+        android:layout_height="match_parent"/>
+
 
 </LinearLayout>

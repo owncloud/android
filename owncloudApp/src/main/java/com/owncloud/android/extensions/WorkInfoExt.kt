@@ -20,7 +20,7 @@
 package com.owncloud.android.extensions
 
 import androidx.work.WorkInfo
-import com.owncloud.android.domain.ext.isOneOf
+import com.owncloud.android.domain.extensions.isOneOf
 import com.owncloud.android.workers.DownloadFileWorker
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
 import com.owncloud.android.workers.UploadFileFromFileSystemWorker

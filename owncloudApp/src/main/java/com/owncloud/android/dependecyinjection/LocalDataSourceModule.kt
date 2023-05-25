@@ -26,6 +26,8 @@ import android.accounts.AccountManager
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.MainApp.Companion.dataFolder
 import com.owncloud.android.data.OwncloudDatabase
+import com.owncloud.android.data.appregistry.datasources.LocalAppRegistryDataSource
+import com.owncloud.android.data.appregistry.datasources.implementation.OCLocalAppRegistryDataSource
 import com.owncloud.android.data.authentication.datasources.LocalAuthenticationDataSource
 import com.owncloud.android.data.authentication.datasources.implementation.OCLocalAuthenticationDataSource
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
@@ -33,11 +35,13 @@ import com.owncloud.android.data.capabilities.datasources.implementation.OCLocal
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource
 import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataSource
-import com.owncloud.android.data.folderbackup.datasources.implementation.FolderBackupLocalDataSourceImpl
+import com.owncloud.android.data.folderbackup.datasources.implementation.OCFolderBackupLocalDataSource
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.datasources.implementation.OCLocalShareDataSource
+import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
+import com.owncloud.android.data.spaces.datasources.implementation.OCLocalSpacesDataSource
 import com.owncloud.android.data.storage.LocalStorageProvider
 import com.owncloud.android.data.storage.ScopedStorageProvider
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
@@ -50,21 +54,25 @@ import org.koin.dsl.module
 val localDataSourceModule = module {
     single { AccountManager.get(androidContext()) }
 
+    single { OwncloudDatabase.getDatabase(androidContext()).appRegistryDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).capabilityDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).fileDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).userDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).folderBackUpDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).transferDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).spacesDao() }
 
-    single<SharedPreferencesProvider> { SharedPreferencesProviderImpl(get()) }
+    single<SharedPreferencesProvider> { OCSharedPreferencesProvider(get()) }
     single<LocalStorageProvider> { ScopedStorageProvider(dataFolder, androidContext()) }
 
+    factory<LocalAppRegistryDataSource> { OCLocalAppRegistryDataSource(get()) }
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factory<LocalCapabilitiesDataSource> { OCLocalCapabilitiesDataSource(get()) }
     factory<LocalFileDataSource> { OCLocalFileDataSource(get()) }
     factory<LocalShareDataSource> { OCLocalShareDataSource(get()) }
     factory<LocalUserDataSource> { OCLocalUserDataSource(get()) }
-    factory<FolderBackupLocalDataSource> { FolderBackupLocalDataSourceImpl(get()) }
+    factory<FolderBackupLocalDataSource> { OCFolderBackupLocalDataSource(get()) }
     factory<LocalTransferDataSource> { OCLocalTransferDataSource(get()) }
+    factory<LocalSpacesDataSource> { OCLocalSpacesDataSource(get()) }
 }

@@ -22,10 +22,11 @@ package com.owncloud.android.presentation.viewmodels.settings
 
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.enums.LockEnforcedType
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
-import com.owncloud.android.presentation.ui.security.PatternActivity
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment
+import com.owncloud.android.presentation.security.LockEnforcedType
+import com.owncloud.android.presentation.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.security.pattern.PatternActivity
+import com.owncloud.android.presentation.settings.security.SettingsSecurityViewModel
+import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.MdmProvider
 import io.mockk.every

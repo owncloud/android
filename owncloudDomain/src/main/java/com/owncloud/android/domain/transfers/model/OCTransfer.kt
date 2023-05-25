@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -38,7 +38,8 @@ data class OCTransfer(
     val transferEndTimestamp: Long? = null,
     val lastResult: TransferResult? = null,
     val createdBy: UploadEnqueuedBy,
-    val transferId: String? = null
+    val transferId: String? = null,
+    val spaceId: String? = null,
 ) : Parcelable {
     init {
         if (!remotePath.startsWith(File.separator)) throw IllegalArgumentException("Remote path must be an absolute path in the local file system")

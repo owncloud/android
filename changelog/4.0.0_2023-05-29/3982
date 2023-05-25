@@ -1,0 +1,7 @@
+Enhancement: Send language header in all requests
+
+Added Accept-Language header to all requests so the android App can receive translated content.
+
+https://github.com/owncloud/android/issues/3980
+https://github.com/owncloud/android/pull/3982
+https://github.com/owncloud/android-library/pull/551

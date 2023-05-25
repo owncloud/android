@@ -25,6 +25,7 @@ import android.content.ActivityNotFoundException
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
@@ -38,25 +39,24 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.implementation.SharedPreferencesProviderImpl
+import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.enums.LockEnforcedType
-import com.owncloud.android.enums.LockEnforcedType.Companion.parseFromInteger
-import com.owncloud.android.interfaces.BiometricStatus
-import com.owncloud.android.interfaces.IEnableBiometrics
-import com.owncloud.android.interfaces.ISecurityEnforced
-import com.owncloud.android.interfaces.LockType
 import com.owncloud.android.lib.common.network.WebdavUtils
-import com.owncloud.android.presentation.ui.security.BiometricActivity
-import com.owncloud.android.presentation.ui.security.PatternActivity
-import com.owncloud.android.presentation.ui.security.passcode.PassCodeActivity
-import com.owncloud.android.presentation.ui.settings.PrivacyPolicyActivity
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
+import com.owncloud.android.presentation.common.ShareSheetHelper
+import com.owncloud.android.presentation.security.LockEnforcedType
+import com.owncloud.android.presentation.security.LockEnforcedType.Companion.parseFromInteger
+import com.owncloud.android.presentation.security.LockType
+import com.owncloud.android.presentation.security.SecurityEnforced
+import com.owncloud.android.presentation.security.biometric.BiometricActivity
+import com.owncloud.android.presentation.security.biometric.BiometricStatus
+import com.owncloud.android.presentation.security.biometric.EnableBiometrics
+import com.owncloud.android.presentation.security.passcode.PassCodeActivity
+import com.owncloud.android.presentation.security.pattern.PatternActivity
+import com.owncloud.android.presentation.settings.privacypolicy.PrivacyPolicyActivity
+import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.ALL_FILES_SAF_REGEX
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
-import com.owncloud.android.ui.helpers.ShareSheetHelper
 import com.owncloud.android.utils.MimetypeIconUtil
-import com.owncloud.android.utils.UriUtilsKt
 import com.owncloud.android.utils.UriUtilsKt.getExposedFileUriForOCFile
 import timber.log.Timber
 import java.io.File
@@ -282,8 +282,8 @@ fun Activity.hideSoftKeyboard() {
     }
 }
 
-fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
-    val sharedPreferencesProvider = SharedPreferencesProviderImpl(this)
+fun Activity.checkPasscodeEnforced(securityEnforced: SecurityEnforced) {
+    val sharedPreferencesProvider = OCSharedPreferencesProvider(this)
 
     val lockEnforced: Int = this.resources.getInteger(R.integer.lock_enforced)
     val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
@@ -325,7 +325,7 @@ fun Activity.checkPasscodeEnforced(securityEnforced: ISecurityEnforced) {
 
 fun Activity.manageOptionLockSelected(type: LockType) {
 
-    SharedPreferencesProviderImpl(this).let {
+    OCSharedPreferencesProvider(this).let {
         // Remove passcode
         it.removePreference(PassCodeActivity.PREFERENCE_PASSCODE)
         it.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
@@ -341,16 +341,18 @@ fun Activity.manageOptionLockSelected(type: LockType) {
     when (type) {
         LockType.PASSCODE -> startActivity(Intent(this, PassCodeActivity::class.java).apply {
             action = PassCodeActivity.ACTION_CREATE
+            flags = FLAG_ACTIVITY_NO_HISTORY
             putExtra(EXTRAS_LOCK_ENFORCED, true)
         })
         LockType.PATTERN -> startActivity(Intent(this, PatternActivity::class.java).apply {
             action = PatternActivity.ACTION_REQUEST_WITH_RESULT
+            flags = FLAG_ACTIVITY_NO_HISTORY
             putExtra(EXTRAS_LOCK_ENFORCED, true)
         })
     }
 }
 
-fun Activity.showBiometricDialog(iEnableBiometrics: IEnableBiometrics) {
+fun Activity.showBiometricDialog(iEnableBiometrics: EnableBiometrics) {
     AlertDialog.Builder(this)
         .setCancelable(false)
         .setTitle(getString(R.string.biometric_dialog_title))
@@ -371,10 +373,10 @@ fun FragmentActivity.sendDownloadedFilesByShareSheet(ocFiles: List<OCFile>) {
     val sendIntent = if (ocFiles.size == 1) {
         Intent(Intent.ACTION_SEND).apply {
             type = ocFiles.first().mimeType
-            putExtra(Intent.EXTRA_STREAM, UriUtilsKt.getExposedFileUriForOCFile(this@sendDownloadedFilesByShareSheet, ocFiles.first()))
+            putExtra(Intent.EXTRA_STREAM, getExposedFileUriForOCFile(this@sendDownloadedFilesByShareSheet, ocFiles.first()))
         }
     } else {
-        val fileUris = ocFiles.map { UriUtilsKt.getExposedFileUriForOCFile(this@sendDownloadedFilesByShareSheet, it) }
+        val fileUris = ocFiles.map { getExposedFileUriForOCFile(this@sendDownloadedFilesByShareSheet, it) }
         Intent(Intent.ACTION_SEND_MULTIPLE).apply {
             type = ALL_FILES_SAF_REGEX
             putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(fileUris))
@@ -399,7 +401,10 @@ fun FragmentActivity.sendDownloadedFilesByShareSheet(ocFiles: List<OCFile>) {
 fun Activity.openOCFile(ocFile: OCFile) {
     val intentForSavedMimeType = Intent(Intent.ACTION_VIEW).apply {
         setDataAndType(getExposedFileUriForOCFile(this@openOCFile, ocFile), ocFile.mimeType)
-        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+        if (ocFile.hasWritePermission) {
+            flags = flags or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        }
     }
 
     try {

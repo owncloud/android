@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">Senden</string>
   <string name="actionbar_descending">Absteigend</string>
   <string name="actionbar_sort_title">Sortieren nach</string>
+  <string name="fab_new_file">Neues Dokument</string>
   <string name="drawer_item_all_files">Alle Dateien</string>
   <string name="drawer_item_only_available_offline">Offline verfügbar</string>
   <string name="drawer_item_shared_by_link_files">Über einen Link geteilt</string>
@@ -59,7 +60,7 @@
   <string name="prefs_show_hidden_files">Versteckte Dateien anzeigen</string>
   <string name="prefs_log_title">Protokollierung aktivieren</string>
   <string name="prefs_log_summary">Dies wird zur Protokollierung von Problemen genutzt</string>
-  <string name="prefs_log_title_history">Log Historie</string>
+  <string name="prefs_log_title_history">Protokollverlauf</string>
   <string name="prefs_log_summary_history">Gespeicherten Protokolle ansehen</string>
   <string name="prefs_log_delete_history_button">Verlauf löschen</string>
   <string name="prefs_help">Hilfe</string>
@@ -86,9 +87,11 @@
   <string name="illegal_argument_exception_message">Eine gültige AKTION wird zur Weitergabe benötigt</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Dateien</string>
+  <string name="bottom_nav_personal">Persönlich</string>
   <string name="bottom_nav_uploads">Hochgeladen</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Links</string>
+  <string name="bottom_nav_shares">Freigaben</string>
   <string name="recommend_subject">Probiere %1$s auf Deinem Smartphone!</string>
   <string name="recommend_text">Kennst Du schon %1$s? Ich benutze die App um auch mobil Zugriff auf meinen eigenen Cloud-Server zu haben. \nHier kommst Du direkt zum Download: %2$s</string>
   <string name="error_reason">weil</string>
@@ -350,7 +353,6 @@
   <string name="confirmation_disable_videos_upload_message">Bist du dir sicher, dass du dieses Feature deaktivieren möchtest? Alle Videos in der Warteschlange werden nicht hochgeladen</string>
   <string name="proper_pics_folder_warning_camera_upload">Bitte stelle sicher, dass sich der ausgewählte Ordner an der Stelle befindet, an der die von Ihnen verwendete Kamera die aufgenommenen Bilder speichert. Andernfalls kann die Funktion Ihre Bilder nicht erkennen. Beachte, dass die Bilder innerhalb von mindestens 15 Minuten nach der Aufnahme hochgeladen werden.</string>
   <string name="proper_videos_folder_warning_camera_upload">Bitte stelle sicher, dass sich der ausgewählte Ordner an der Stelle befindet, an der die von Ihnen verwendete Kamera die aufgenommenen Videos speichert. Andernfalls kann die Funktion Ihre Videos nicht erkennen. Beachte, dass Videos innerhalb von mindestens 15 Minuten nach der Aufnahme hochgeladen werden.</string>
-  <string name="conflict_title">Dateikonfilikt</string>
   <string name="conflict_description">Ein Konflikt ist in der Datei %1$s aufgetreten, hier tippen um dies zu lösen</string>
   <string name="conflict_message">Welche Datei möchtest du behalten? Wenn du beide Versionen auswählst, wird der lokalen Datei eine Zahl am Ende Ihres Dateiname angehangen.</string>
   <string name="conflict_keep_both">Beide behalten</string>
@@ -439,7 +441,6 @@
   <string name="upload_copy_files">kopiere Datei</string>
   <string name="upload_move_files">verschiebe Datei</string>
   <string name="pref_behaviour_entries_keep_file">im Originalordner behalten</string>
-  <string name="pref_behaviour_entries_move">in den App-Ordner verschoben</string>
   <string name="share_dialog_title">Teilen</string>
   <string name="share_file">Teile %1$s</string>
   <string name="share_with_user_section_title">Nutzer und Gruppen</string>

@@ -5,9 +5,10 @@
  * @author Christian Schabesberger
  * @author David González Verdugo
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2012 Bartek Przybylski
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,16 +26,18 @@
 package com.owncloud.android.datamodel
 
 import android.accounts.Account
-import android.content.ContentProviderClient
-import android.content.ContentResolver
-import android.content.Context
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
+import com.owncloud.android.domain.files.usecases.GetPersonalRootFolderForAccountUseCase
+import com.owncloud.android.domain.files.usecases.GetSharesRootFolderForAccount
+import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
@@ -42,35 +45,41 @@ import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class FileDataStorageManager : KoinComponent {
+class FileDataStorageManager(
+    val account: Account,
+) : KoinComponent {
 
-    private var contentResolver: ContentResolver? = null
-    private var contentProviderClient: ContentProviderClient? = null
-    var account: Account
-    private var mContext: Context? = null
+    fun getFileByPath(remotePath: String, spaceId: String? = null): OCFile? =
+        if (remotePath == ROOT_PATH && spaceId == null) {
+            getRootPersonalFolder()
+        } else {
+            getFileByPathAndAccount(remotePath, account.name, spaceId)
+        }
 
-    constructor(activity: Context, account: Account, cr: ContentResolver) {
-        contentProviderClient = null
-        contentResolver = cr
-        this.account = account
-        mContext = activity
-    }
-
-    constructor(activity: Context, account: Account, cp: ContentProviderClient) {
-        contentProviderClient = cp
-        contentResolver = null
-        this.account = account
-        mContext = activity
-    }
-
-    fun getFileByPath(remotePath: String): OCFile? = getFileByPathAndAccount(remotePath, account.name)
-
-    private fun getFileByPathAndAccount(remotePath: String, accountName: String): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
+    private fun getFileByPathAndAccount(remotePath: String, accountName: String, spaceId: String? = null): OCFile? = runBlocking(CoroutinesDispatcherProvider().io) {
         val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, remotePath))
+            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, remotePath, spaceId))
         }.getDataOrNull()
+        result
+    }
+
+    fun getRootPersonalFolder() = runBlocking(CoroutinesDispatcherProvider().io) {
+        val getPersonalRootFolderForAccountUseCase: GetPersonalRootFolderForAccountUseCase by inject()
+
+        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+            getPersonalRootFolderForAccountUseCase.execute(GetPersonalRootFolderForAccountUseCase.Params(account.name))
+        }
+        result
+    }
+
+    fun getRootSharesFolder() = runBlocking(CoroutinesDispatcherProvider().io) {
+        val getSharesRootFolderForAccount: GetSharesRootFolderForAccount by inject()
+
+        val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+            getSharesRootFolderForAccount.execute(GetSharesRootFolderForAccount.Params(account.name))
+        }
         result
     }
 
@@ -125,7 +134,16 @@ class FileDataStorageManager : KoinComponent {
         capability
     }
 
-    companion object {
-        const val ROOT_PARENT_ID = 0
+    fun getSpace(spaceId: String?, accountName: String): OCSpace? = runBlocking(CoroutinesDispatcherProvider().io) {
+        if (spaceId == null) return@runBlocking null
+        val getSpaceWithSpecialsByIdForAccountUseCase: GetSpaceWithSpecialsByIdForAccountUseCase by inject()
+
+        val space = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
+            getSpaceWithSpecialsByIdForAccountUseCase.execute(GetSpaceWithSpecialsByIdForAccountUseCase.Params(
+                spaceId = spaceId,
+                accountName = accountName,
+            ))
+        }
+        return@runBlocking space
     }
 }

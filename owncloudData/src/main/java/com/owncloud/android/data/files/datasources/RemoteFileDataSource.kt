@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -26,14 +28,15 @@ interface RemoteFileDataSource {
         path: String,
         checkUserCredentials: Boolean,
         accountName: String,
+        spaceWebDavUrl: String?,
     ): Boolean
-
-    fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String): String
 
     fun copyFile(
         sourceRemotePath: String,
         targetRemotePath: String,
         accountName: String,
+        sourceSpaceWebDavUrl: String?,
+        targetSpaceWebDavUrl: String?,
     ): String
 
     fun createFolder(
@@ -41,32 +44,38 @@ interface RemoteFileDataSource {
         createFullPath: Boolean,
         isChunksFolder: Boolean,
         accountName: String,
+        spaceWebDavUrl: String?,
     )
 
     fun getAvailableRemotePath(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String?,
     ): String
 
     fun moveFile(
         sourceRemotePath: String,
         targetRemotePath: String,
         accountName: String,
+        spaceWebDavUrl: String?,
     )
 
     fun readFile(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String? = null,
     ): OCFile
 
     fun refreshFolder(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String? = null,
     ): List<OCFile>
 
-    fun removeFile(
+    fun deleteFile(
         remotePath: String,
         accountName: String,
+        spaceWebDavUrl: String? = null,
     )
 
     fun renameFile(
@@ -75,5 +84,6 @@ interface RemoteFileDataSource {
         newName: String,
         isFolder: Boolean,
         accountName: String,
+        spaceWebDavUrl: String? = null,
     )
 }

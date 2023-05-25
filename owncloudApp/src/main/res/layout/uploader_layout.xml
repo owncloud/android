@@ -38,7 +38,7 @@
             android:layout_gravity="top"
             android:layout_weight="1">
 
-            <com.owncloud.android.presentation.ui.files.SortOptionsView
+            <com.owncloud.android.presentation.files.SortOptionsView
                 android:id="@+id/options_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -74,6 +74,17 @@
 
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/uploader_no_permissions_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/standard_padding"
+            android:paddingVertical="@dimen/standard_half_padding"
+            android:background="@color/warning_background_color"
+            android:visibility="gone"
+            android:text="@string/folder_picker_no_permissions_message_text"
+            tools:visibility="visible"/>
 
         <ImageView
             android:layout_width="match_parent"

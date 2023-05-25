@@ -22,7 +22,7 @@ package com.owncloud.android.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsSecurityFragment;
+import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment;
 
 public class PreferenceUtils {
     public static boolean shouldDisallowTouchesWithOtherVisibleWindows(Context context) {

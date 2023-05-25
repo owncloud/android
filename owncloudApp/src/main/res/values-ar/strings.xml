@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">إرسال</string>
   <string name="actionbar_descending">تنازلي</string>
   <string name="actionbar_sort_title">فرز حسب</string>
+  <string name="fab_new_file">مستند جديد</string>
   <string name="drawer_item_all_files">كل الملفات</string>
   <string name="drawer_item_only_available_offline">متوفر دون اتصال بالإنترنت</string>
   <string name="drawer_item_shared_by_link_files">مشاركة بواسطة الرابط</string>
@@ -86,9 +87,11 @@
   <string name="illegal_argument_exception_message">هناك حاجة إلى إجراء صحيح في الهدف الممرر إلى</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">ملفات</string>
+  <string name="bottom_nav_personal">شخصي</string>
   <string name="bottom_nav_uploads">التحميلات</string>
   <string name="bottom_nav_offline">غير متصل</string>
   <string name="bottom_nav_links">روابط</string>
+  <string name="bottom_nav_shares">المشاركات</string>
   <string name="recommend_subject">جرب %1$s على هاتفك الذكي!</string>
   <string name="recommend_text">أود أن أدعوك إلى استخدام %1$s على هاتفك الذكي!\nتنزيل من هنا:%2$s</string>
   <string name="error_reason">بسبب</string>
@@ -349,7 +352,6 @@
   <string name="confirmation_disable_videos_upload_message">هل أنت متأكد أنك ترغب في تعطيل هذه الميزة؟ لن يتم تحميل مقاطع الفيديو المعلقة</string>
   <string name="proper_pics_folder_warning_camera_upload">يُرجى التأكد من أن المجلد المحدد هو المكان الذي تحفظ فيه الكاميرا التي تستخدمها الصور الملتقطة. وإلا لن تتمكن الميزة من العثور على صورك. يُرجى مراعاة أن عملية تحميل الصور ستتم في غضون 15 دقيقة على الأقل من التقاطها.</string>
   <string name="proper_videos_folder_warning_camera_upload">يُرجى التأكد من أن المجلد المحدد هو المكان الذي تحفظ فيه الكاميرا التي تستخدمها مقاطع الفيديو المسجلة. وإلا لن تتمكن الميزة من العثور على مقاطع الفيديو. يُرجى مراعاة أن عملية تحميل مقاطع الفيديو ستتم في غضون 15 دقيقة على الأقل من تسجيلها.</string>
-  <string name="conflict_title">تعارض الملفات</string>
   <string name="conflict_description">حدث تعارض في ملف %1$s، انقر لحل هذه المشكلة</string>
   <string name="conflict_message">ما الملفات التي ترغب في حفظها؟ إن حددت كلا الإصدارَين، فستتم إضافة رقم إلى اسم الملف المحلي.</string>
   <string name="conflict_keep_both">احتفظ بالإصدارين</string>
@@ -437,7 +439,6 @@
   <string name="upload_copy_files">نسخ الملف</string>
   <string name="upload_move_files">نقل الملف</string>
   <string name="pref_behaviour_entries_keep_file">سيظل في المجلد الأصلي</string>
-  <string name="pref_behaviour_entries_move">نُقِل إلى مجلد التطبيق</string>
   <string name="share_dialog_title">مشاركة</string>
   <string name="share_file">مشاركة %1$s</string>
   <string name="share_with_user_section_title">المستخدمون والمجموعات</string>

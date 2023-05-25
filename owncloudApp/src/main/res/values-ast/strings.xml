@@ -251,8 +251,7 @@
   <string name="placeholder_media_time">12:23:45</string>
   <string name="prefs_camera_picture_upload_on_wifi">Xubir semeyes namái per WiFi</string>
   <string name="prefs_camera_video_upload_on_wifi">Xubir vídeos namái per WIFI</string>
-  <string name="conflict_title">Conflictu nel ficheru</string>
-  <string name="conflict_message">¿Qué ficheros quies caltener? Si seleiciones dambes versiones, el ficheru llocal va tener un númberu amestáu al so nome</string>
+    <string name="conflict_message">¿Qué ficheros quies caltener? Si seleiciones dambes versiones, el ficheru llocal va tener un númberu amestáu al so nome</string>
   <string name="conflict_keep_both">Caltener dambos</string>
   <string name="conflict_use_local_version">Versión llocal</string>
   <string name="conflict_use_server_version">Versión de sirvidor</string>
@@ -328,8 +327,7 @@
   <string name="upload_copy_files">Copiar ficheru</string>
   <string name="upload_move_files">Mover ficheru</string>
   <string name="pref_behaviour_entries_keep_file">guardáu en carpeta orixinal</string>
-  <string name="pref_behaviour_entries_move">movíu a la carpeta d\'aplicaciones</string>
-  <string name="share_dialog_title">Compartir</string>
+    <string name="share_dialog_title">Compartir</string>
   <string name="share_file">Compartir %1$s</string>
   <string name="share_no_users">Entá nun se compartieron datos con usuarios</string>
   <string name="share_add_user_or_group">Amestar usuariu o grupu</string>

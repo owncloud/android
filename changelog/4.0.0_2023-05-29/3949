@@ -1,0 +1,7 @@
+Enhancement: Link in drawer menu
+
+Customers will be able now to set a personalized label and link that will
+appear in the drawer menu, together with the drawer logo as an icon.
+
+https://github.com/owncloud/android/pull/3949
+https://github.com/owncloud/android/issues/3907

@@ -39,14 +39,13 @@ class EditPublicShareAsyncUseCaseTest {
         "",
         OC_SHARE.expirationDate,
         OC_SHARE.permissions,
-        false,
         OC_SHARE.accountOwner
     )
 
     @Test
     fun `edit public share - ok`() {
         every {
-            repository.updatePublicShare(any(), any(), any(), any(), any(), any(), any())
+            repository.updatePublicShare(any(), any(), any(), any(), any(), any())
         } returns Unit
 
         val useCaseResult = useCase.execute(useCaseParams)
@@ -61,7 +60,6 @@ class EditPublicShareAsyncUseCaseTest {
                 password = "",
                 expirationDateInMillis = OC_SHARE.expirationDate,
                 permissions = OC_SHARE.permissions,
-                publicUpload = false,
                 accountName = OC_SHARE.accountOwner
             )
         }
@@ -70,7 +68,7 @@ class EditPublicShareAsyncUseCaseTest {
     @Test
     fun `edit public share - ko`() {
         every {
-            repository.updatePublicShare(any(), any(), any(), any(), any(), any(), any())
+            repository.updatePublicShare(any(), any(), any(), any(), any(), any())
         } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
@@ -85,7 +83,6 @@ class EditPublicShareAsyncUseCaseTest {
                 password = "",
                 expirationDateInMillis = OC_SHARE.expirationDate,
                 permissions = OC_SHARE.permissions,
-                publicUpload = false,
                 accountName = OC_SHARE.accountOwner
             )
         }

@@ -51,7 +51,7 @@ class OCRemoteAuthenticationDataSource(
         val rawBaseUrl = executeRemoteOperation { getBaseUrlRemoteOperation.execute(client) }
 
         val userBaseUri = rawBaseUrl?.replace(WEBDAV_FILES_PATH_4_0, "")
-                ?: client.baseUri.toString()
+            ?: client.baseUri.toString()
 
         // Get user info. It is needed to save the account into the account manager
         lateinit var userInfo: UserInfo

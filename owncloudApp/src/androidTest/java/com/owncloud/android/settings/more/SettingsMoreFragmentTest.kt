@@ -3,17 +3,17 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2021 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -40,8 +40,8 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
-import com.owncloud.android.presentation.ui.settings.fragments.SettingsMoreFragment
-import com.owncloud.android.presentation.viewmodels.settings.SettingsMoreViewModel
+import com.owncloud.android.presentation.settings.more.SettingsMoreFragment
+import com.owncloud.android.presentation.settings.more.SettingsMoreViewModel
 import com.owncloud.android.utils.matchers.verifyPreference
 import com.owncloud.android.utils.mockIntent
 import io.mockk.every
@@ -64,6 +64,7 @@ class SettingsMoreFragmentTest {
 
     private var prefHelp: Preference? = null
     private var prefSync: Preference? = null
+    private var prefAccessDocProvider: Preference? = null
     private var prefRecommend: Preference? = null
     private var prefFeedback: Preference? = null
     private var prefImprint: Preference? = null
@@ -110,12 +111,14 @@ class SettingsMoreFragmentTest {
     private fun launchTest(
         helpEnabled: Boolean = true,
         syncEnabled: Boolean = true,
+        docProviderAppEnabled: Boolean = true,
         recommendEnabled: Boolean = true,
         feedbackEnabled: Boolean = true,
         imprintEnabled: Boolean = true
     ) {
         every { moreViewModel.isHelpEnabled() } returns helpEnabled
         every { moreViewModel.isSyncEnabled() } returns syncEnabled
+        every { moreViewModel.isDocProviderAppEnabled() } returns docProviderAppEnabled
         every { moreViewModel.isRecommendEnabled() } returns recommendEnabled
         every { moreViewModel.isFeedbackEnabled() } returns feedbackEnabled
         every { moreViewModel.isImprintEnabled() } returns imprintEnabled
@@ -142,6 +145,16 @@ class SettingsMoreFragmentTest {
             keyPref = PREFERENCE_SYNC_CALENDAR_CONTACTS,
             titlePref = context.getString(R.string.prefs_sync_calendar_contacts),
             summaryPref = context.getString(R.string.prefs_sync_calendar_contacts_summary),
+            visible = true,
+            enabled = true
+        )
+
+        prefAccessDocProvider = getPreference(PREFERENCE_ACCESS_DOCUMENT_PROVIDER)
+        assertNotNull(prefAccessDocProvider)
+        prefAccessDocProvider?.verifyPreference(
+            keyPref = PREFERENCE_ACCESS_DOCUMENT_PROVIDER,
+            titlePref = context.getString(R.string.prefs_access_document_provider),
+            summaryPref = context.getString(R.string.prefs_access_document_provider_summary),
             visible = true,
             enabled = true
         )
@@ -191,6 +204,14 @@ class SettingsMoreFragmentTest {
     }
 
     @Test
+    fun accessDocumentProviderNotEnabledView() {
+        launchTest(docProviderAppEnabled = false)
+        prefAccessDocProvider = getPreference(PREFERENCE_ACCESS_DOCUMENT_PROVIDER)
+
+        assertNull(prefAccessDocProvider)
+    }
+
+    @Test
     fun recommendNotEnabledView() {
         launchTest(recommendEnabled = false)
         prefRecommend = getPreference(PREFERENCE_RECOMMEND)
@@ -236,6 +257,18 @@ class SettingsMoreFragmentTest {
         onView(withText(R.string.prefs_sync_calendar_contacts)).perform(click())
 
         intended(hasData(context.getString(R.string.url_sync_calendar_contacts)))
+    }
+
+    @Test
+    fun accessDocumentProviderOpensNotEmptyUrl() {
+        every { moreViewModel.getDocProviderAppUrl() } returns context.getString(R.string.url_document_provider_app)
+
+        launchTest()
+
+        mockIntent(action = Intent.ACTION_VIEW)
+        onView(withText(R.string.prefs_access_document_provider)).perform(click())
+
+        intended(hasData(context.getString(R.string.url_document_provider_app)))
     }
 
     @Test
@@ -307,6 +340,7 @@ class SettingsMoreFragmentTest {
     companion object {
         private const val PREFERENCE_HELP = "help"
         private const val PREFERENCE_SYNC_CALENDAR_CONTACTS = "syncCalendarContacts"
+        private const val PREFERENCE_ACCESS_DOCUMENT_PROVIDER = "accessDocumentProvider"
         private const val PREFERENCE_RECOMMEND = "recommend"
         private const val PREFERENCE_FEEDBACK = "feedback"
         private const val PREFERENCE_IMPRINT = "imprint"

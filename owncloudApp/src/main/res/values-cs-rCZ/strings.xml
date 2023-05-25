@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">Odeslat</string>
   <string name="actionbar_descending">Klesající</string>
   <string name="actionbar_sort_title">Seřadit podle</string>
+  <string name="fab_new_file">Nový dokument</string>
   <string name="drawer_item_all_files">Všechny soubory</string>
   <string name="drawer_item_only_available_offline">Dostupné offline</string>
   <string name="drawer_item_shared_by_link_files">Sdíleno pomocí odkazu</string>
@@ -33,6 +34,7 @@
   <string name="prefs_subsection_logging">Logování</string>
   <string name="prefs_subsection_more">Více</string>
   <string name="prefs_subsection_security">Zabezpečení</string>
+  <string name="prefs_subsection_whatsnew">Co je nového v této verzi?</string>
   <string name="prefs_subsection_security_summary">Nastavení zámků aplikace a povolení doteku s jinými aplikacemi</string>
   <string name="prefs_subsection_logging_summary">Detailní nastavení možností logování aplikace</string>
   <string name="prefs_subsection_more_summary">Informace, zpětná vazba a další</string>
@@ -42,6 +44,7 @@
   <string name="prefs_biometric">Biometrický zámek</string>
   <string name="prefs_biometric_summary">Nutné povolit bezpečnostní kód nebo gesto k povolení této možnosti</string>
   <string name="prefs_lock_application">Uzamknout aplikaci</string>
+  <string name="prefs_lock_application_entries_immediately">Okamžitě</string>
   <string name="prefs_lock_application_entries_1minute">Za 1 minutu</string>
   <string name="prefs_lock_application_entries_5minutes">Za 5 minut</string>
   <string name="prefs_lock_application_entries_30minutes">Za 30 minut</string>
@@ -56,13 +59,18 @@
   <string name="prefs_camera_picture_upload">Nahrání obrázku</string>
   <string name="prefs_camera_picture_upload_summary">Automaticky nahrát obrázky snímané kamerou</string>
   <string name="prefs_camera_picture_upload_path_title">Cesta k nahrání obrázku</string>
+  <string name="prefs_camera_picture_upload_conditions_title">Podmínky k nahrávání souborů</string>
+  <string name="prefs_camera_picture_upload_conditions_summary">Nahrání bude provedeno po splnění všech vybraných podmínek</string>
   <string name="prefs_camera_picture_upload_on_wifi">Nahrávat obrázky pouze přes wifi</string>
+  <string name="prefs_camera_picture_upload_on_charging">Nahrávat obrázky pouze při nabíjení</string>
   <string name="prefs_camera_video_upload">Nahrání videa</string>
   <string name="prefs_camera_video_upload_summary">Automaticky nahrát video snímané kamerou</string>
   <string name="prefs_camera_video_upload_path_title">Cesta k nahrání videa</string>
   <string name="prefs_camera_video_upload_on_wifi">Odesílat videa pouze přes wifi</string>
+  <string name="prefs_camera_video_upload_on_charging">Nahrávat videa pouze při nabíjení</string>
   <string name="prefs_subsection_advanced">Pokročilé</string>
   <string name="prefs_show_hidden_files">Zobrazit skryté soubory</string>
+  <string name="prefs_log_no_logs_list_view">Vymazat koš!</string>
   <string name="prefs_log_title">Povolit logování</string>
   <string name="prefs_log_summary">Použito k zaznamenávání problémů</string>
   <string name="prefs_log_title_history">Historie logování</string>
@@ -96,9 +104,11 @@
   <string name="pattern_configure_your_pattern_explanation">Gesto bude vyžadováno při každém startu aplikace</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Soubory</string>
+  <string name="bottom_nav_personal">Osobní</string>
   <string name="bottom_nav_uploads">Nahrání</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Odkazy</string>
+  <string name="bottom_nav_shares">Sdílení</string>
   <string name="recommend_subject">Zkuste %1$s na svém chytrém telefonu!</string>
   <string name="recommend_text">Chtěl bych vás pozvat k používání %1$s na vašem chytrém telefonu!\nKe stažení zde: %2$s</string>
   <string name="error_reason">protože</string>
@@ -128,7 +138,10 @@
   <string name="uploader_error_message_source_file_not_found">Soubor k nahrání nebyl v tomto umístění nalezen. Zkontrolujte prosím zda soubor existuje.</string>
   <string name="uploader_error_message_source_file_not_copied">Došlo k chybě při kopírování souboru do dočasného adresáře. Zkuste prosím zopakovat odeslání.</string>
   <string name="file_list_seconds_ago">před pár sekundami</string>
+  <string name="file_list_empty_title_all_files">Žádné soubory</string>
   <string name="file_list_empty_title_shared_by_links">Žádné sdílené odkazy</string>
+  <string name="file_list_empty_subtitle_all_files">Nahrajte nějaký obsah nebo synchronizujte se svými přístroji!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Zde budou zobrazeny soubory a adresáře, které sdílíte jako webové odkazy</string>
   <string name="file_list_loading">Načítání...</string>
   <string name="file_list_no_app_for_file_type">Pro typ souboru nebyla nalezena aplikace</string>
   <string name="local_file_list_empty">V tomto adresáři nejsou žádné soubory.</string>
@@ -194,6 +207,7 @@
   <string name="uploads_view_group_current_uploads">Aktuální</string>
   <string name="uploads_view_group_failed_uploads">Selhalo (dotykem opakovat)</string>
   <string name="uploads_view_group_finished_uploads">Odesláno</string>
+  <string name="uploads_view_group_queued_uploads">Ve frontě</string>
   <string name="uploads_view_group_file_count">%d souborů</string>
   <string name="uploads_view_group_file_count_single">%d souboru</string>
   <string name="uploads_view_upload_status_succeeded">Dokončeno</string>
@@ -211,13 +225,19 @@
   <string name="uploads_view_upload_status_service_interrupted">Aplikace byla ukončena</string>
   <string name="uploads_view_upload_status_unknown_fail">Neznámá chyba</string>
   <string name="uploads_view_upload_status_waiting_for_wifi">Čekání na wifi připojení</string>
+  <string name="uploads_view_upload_status_queued">Ve frontě</string>
   <string name="uploads_view_later_waiting_to_upload">Čekání na nahrávání</string>
   <string name="uploads_view_unsupported_media_type">Nepodporovaný typ média</string>
+  <string name="uploader_upload_enqueued_ticker">Nahrávání %1$s bylo přidáno do fronty</string>
+  <string name="uploader_upload_canceled_ticker">Odesílání zrušeno</string>
+  <string name="downloader_download_canceled_ticker">Stahování zrušeno</string>
+  <string name="downloader_download_enqueued_ticker">Stahování %1$s bylo přidáno do fronty</string>
   <string name="downloader_download_in_progress_ticker">Stahuji...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Stahuji %2$s</string>
   <string name="downloader_download_succeeded_ticker">Stažení úspěšné</string>
   <string name="downloader_download_succeeded_content">%1$s staženo</string>
   <string name="downloader_download_failed_ticker">Stažení selhalo</string>
+  <string name="downloader_preview_failed_ticker">Nepodařilo se zobrazit soubor</string>
   <string name="downloader_download_failed_content">Stažení %1$s nemohlo být dokončeno</string>
   <string name="downloader_not_downloaded_yet">Ještě nestaženo</string>
   <string name="downloader_download_failed_credentials_error">Stažení selhalo, je třeba se znovu přihlásit</string>
@@ -248,6 +268,10 @@
   <string name="numberkeyboard_four">4</string>
   <string name="numberkeyboard_five">5</string>
   <string name="numberkeyboard_six">6</string>
+  <string name="numberkeyboard_seven">7</string>
+  <string name="numberkeyboard_eight">8</string>
+  <string name="numberkeyboard_nine">9</string>
+  <string name="lock_time_try_again">Prosím, zkuste znovu za %1$s</string>
   <string name="biometric_not_enrolled">Povolte alespoň jeden biometrický způsob ověření k používání této specialitky</string>
   <string name="biometric_prompt_title">Biometrické přihlášení</string>
   <string name="biometric_prompt_subtitle">Přihlásit se s použitím biometrických přihlašovacích údajů</string>
@@ -316,12 +340,15 @@
   <string name="available_offline_inherited_msg">Složka obsahující tento soubor je dostupná offline</string>
   <string name="rename_local_fail_msg">Místní kopii nelze přejmenovat, zkuste jiný nový název</string>
   <string name="rename_server_fail_msg">Přejmenování nelze dokončit</string>
+  <string name="file_already_exists">soubor již existuje</string>
   <string name="sync_file_fail_msg">Vzdálený soubor nemohl být zkontrolován</string>
   <string name="sync_file_nothing_to_do_msg">Obsah souboru je již synchronizován</string>
+  <string name="new_remote_version_found_msg">Novější verze byla nalezena na serveru. Stahuji...</string>
   <string name="create_dir_fail_msg">Adresář nemohl být vytvořen</string>
   <string name="filename_forbidden_characters">Zakázané znaky: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Jméno souboru obsahuje alespoň jeden neplatný znak</string>
   <string name="filename_empty">Název nemůže být prázdný</string>
+  <string name="filename_too_long">Název souboru nemůže být tak dlouhý</string>
   <string name="wait_a_moment">Počkejte chvíli</string>
   <string name="wait_checking_credentials">Ověřování uložených přihlašovacích údajů</string>
   <string name="filedisplay_unexpected_bad_get_content">Neočekávaný problém - zkuste zvolit soubor jinou aplikací</string>
@@ -368,7 +395,6 @@
   <string name="confirmation_disable_videos_upload_message">Opravdu chcete tuto funkci deaktivovat? Nevyřízená videa nebudou nahrána</string>
   <string name="proper_pics_folder_warning_camera_upload">Prosím ujistěte se, že vybraná složka obsahuje fotografie pořízené fotoaparátem. Jinak aplikace nebude schopna rozpoznat vaše fotografie. Mějte na paměti, že budou nahrány nejdříve 15 minut po jejich pořízení.</string>
   <string name="proper_videos_folder_warning_camera_upload">Prosím ujistěte se, že vybraná složka obsahuje videa pořízená fotoaparátem. Jinak aplikace nebude schopna rozpoznat vaše videa. Mějte na paměti, že budou nahrána nejdříve 15 minut po jejich pořízení.</string>
-  <string name="conflict_title">Konflikt souboru</string>
   <string name="conflict_description">Soubor %1$s obsahuje konflikt, kliknutím na tlačítko jej vyřešíte</string>
   <string name="conflict_message">Které soubory chcete ponechat? Pokud zvolíte obě verze, zkopírovaný soubor bude mít název doplněný o číslo.</string>
   <string name="conflict_keep_both">Ponechat oba</string>
@@ -422,6 +448,8 @@ správce systému.</string>
   <string name="actionbar_move">Přesunout</string>
   <string name="file_list_empty_moving">Zde nic není. Můžete přidat adresář!</string>
   <string name="folder_picker_choose_button_text">Vybrat</string>
+  <string name="folder_picker_move_here_button_text">Přesunout sem</string>
+  <string name="folder_picker_copy_here_button_text">Zkopírovat sem</string>
   <string name="move_file_not_found">Nelze přesunout. Zkontrolujte prosím že soubor existuje</string>
   <string name="move_file_invalid_into_descendent">Není možné adresář přesunout do vlastního podadresáře</string>
   <string name="move_file_invalid_overwrite">Soubor již v cílovém adresáři existuje</string>
@@ -460,7 +488,6 @@ správce systému.</string>
   <string name="upload_copy_files">Zkopírovat soubor</string>
   <string name="upload_move_files">Přesunout soubor</string>
   <string name="pref_behaviour_entries_keep_file">ponechán ve výchozím adresáři</string>
-  <string name="pref_behaviour_entries_move">přesunut do adresáře aplikace</string>
   <string name="share_dialog_title">Sdílet</string>
   <string name="share_file">Sdílet %1$s</string>
   <string name="share_with_user_section_title">Uživatelé a skupiny</string>
@@ -569,12 +596,19 @@ správce systému.</string>
   <string name="prefs_logs_summary">Log může obsahovat citlivé informace. Sdílení je pouze na vaší zodpovědnosti.</string>
   <string name="synchronizing_account">Synchronizuji účet</string>
   <!--Scoped storage migration wizard-->
+  <string name="scoped_storage_wizard_intro_button">Začněme</string>
+  <string name="scoped_storage_wizard_migration_in_progress_button">Pracuji... Chvíli strpení</string>
   <!--Security Enforced-->
   <string name="security_enforced_first_option">Zámek bezpečnostního kódu</string>
   <string name="folder_upload_some_content_or_sync_devices">Nahrajte nějaký obsah nebo synchronizujte se svými přístroji!</string>
   <!--Webfinger-->
   <string name="global_proceed">Pokračovat</string>
+  <string name="error_webfinger_username_empty">Uživatelské jméno je prázdné</string>
   <!--Release Notes-->
+  <string name="release_notes_header">Novinka v %1$s</string>
+  <string name="release_notes_footer">Děkujeme, že využíváte %1$s.\n❤</string>
   <string name="release_notes_proceed">Pokračovat</string>
   <!--Open in web-->
+  <string name="ic_action_open_in_web">Otevřít na webu</string>
+  <string name="open_in_web_error_generic">Nepodařilo se otevřít na webu</string>
 </resources>

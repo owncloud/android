@@ -10,12 +10,14 @@
   <string name="actionbar_upload_from_apps">来自其它应用的内容</string>
   <string name="actionbar_upload_files">文件</string>
   <string name="actionbar_open_with">打开方式</string>
+  <string name="actionbar_open_with_read_only">打开方式（只读）</string>
   <string name="actionbar_mkdir">新建文件夹</string>
   <string name="actionbar_settings">设置</string>
   <string name="actionbar_see_details">详细信息</string>
   <string name="actionbar_send_file">发送</string>
   <string name="actionbar_descending">逆序</string>
   <string name="actionbar_sort_title">排序方式</string>
+  <string name="fab_new_file">新建文档</string>
   <string name="drawer_item_all_files">全部文件</string>
   <string name="drawer_item_only_available_offline">离线可用</string>
   <string name="drawer_item_shared_by_link_files">分享链接的文件</string>
@@ -109,9 +111,11 @@
   <string name="illegal_argument_exception_message">需要一个有效的 ACTION 传递意图</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">文件</string>
+  <string name="bottom_nav_personal">个人</string>
   <string name="bottom_nav_uploads">上传</string>
   <string name="bottom_nav_offline">离线</string>
   <string name="bottom_nav_links">链接</string>
+  <string name="bottom_nav_shares">共享</string>
   <string name="recommend_subject">在您的智能手机上试用 %1$s！</string>
   <string name="recommend_text">我邀请你在智能手机上使用 %1$s\n下载路径：%2$s</string>
   <string name="error_reason">因为</string>
@@ -141,7 +145,10 @@
   <string name="uploader_error_message_source_file_not_found">没有在指定位置找到要上传的文件。请检查文件是否存在。</string>
   <string name="uploader_error_message_source_file_not_copied">将文件复制到临时目录时出现错误。请尝试重新发送。</string>
   <string name="file_list_seconds_ago">几秒前</string>
+  <string name="file_list_empty_title_all_files">无文件</string>
   <string name="file_list_empty_title_shared_by_links">无分享链接</string>
+  <string name="file_list_empty_subtitle_all_files">上传一些内容或者与设备同步!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">您通过链接共享的文件和文件夹将显示在这里</string>
   <string name="file_list_loading">加载中...</string>
   <string name="file_list_no_app_for_file_type">没有支持此文件的应用</string>
   <string name="file_list_no_app_for_perform_action">未找到此操作的应用</string>
@@ -393,7 +400,6 @@
   <string name="confirmation_disable_videos_upload_message">你确定要禁用这项功能吗？未上传的视频将不会被上传</string>
   <string name="proper_pics_folder_warning_camera_upload">请确保选择的文件夹是你使用的相机保存相片的位置，否则，该功能将无法检测到你的相片。请记住相片拍摄后15分钟会被上传。</string>
   <string name="proper_videos_folder_warning_camera_upload">请确保选择的文件夹是你使用的相机保存录制视频的位置，否则，该功能将无法检测到你拍摄的视频。请记住视频拍摄后15分钟会被上传。</string>
-  <string name="conflict_title">文件冲突</string>
   <string name="conflict_description">冲突文件 %1$s，点击解决</string>
   <string name="conflict_message">您想要保留哪个文件？如果您同时选中了两个版本，本地的文件的文件名将被加上一个数字</string>
   <string name="conflict_keep_both">保留两者</string>
@@ -486,7 +492,6 @@
   <string name="upload_copy_files">复制文件</string>
   <string name="upload_move_files">移动文件</string>
   <string name="pref_behaviour_entries_keep_file">保留在原始文件夹</string>
-  <string name="pref_behaviour_entries_move">移动到应用文件夹</string>
   <string name="share_dialog_title">共享</string>
   <string name="share_file">分享 %1$s</string>
   <string name="share_with_user_section_title">用户和组</string>

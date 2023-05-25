@@ -313,8 +313,7 @@
   <string name="confirmation_disable_camera_uploads_title">確認</string>
   <string name="proper_pics_folder_warning_camera_upload">あなたが撮った写真の保存先が、選択されたフォルダーであることを確認してください。そうでないと、あなたの写真を特定することができません。また写真は撮ってから少なくとも15分後にアップロードされます。</string>
   <string name="proper_videos_folder_warning_camera_upload">あなたが撮った動画の保存先が、選択されたフォルダーであることを確認してください。そうでないと、あなたの動画を特定することができません。また動画は撮ってから少なくとも15分後にアップロードされます。</string>
-  <string name="conflict_title">ファイルが競合</string>
-  <string name="conflict_message">どちらのファイルを保存したいですか？両方のバージョンを選択した場合は、ファイル名の後ろに数字を追加したファイルのコピーを作成します。</string>
+    <string name="conflict_message">どちらのファイルを保存したいですか？両方のバージョンを選択した場合は、ファイル名の後ろに数字を追加したファイルのコピーを作成します。</string>
   <string name="conflict_keep_both">両方を保持</string>
   <string name="conflict_use_local_version">ローカルのもの</string>
   <string name="conflict_use_server_version">サーバーのもの</string>
@@ -394,8 +393,7 @@
   <string name="upload_copy_files">ファイルをコピー</string>
   <string name="upload_move_files">ファイルを移動</string>
   <string name="pref_behaviour_entries_keep_file">元のフォルダーに保持</string>
-  <string name="pref_behaviour_entries_move">アプリフォルダーに移動</string>
-  <string name="share_dialog_title">共有</string>
+    <string name="share_dialog_title">共有</string>
   <string name="share_file">%1$s を共有</string>
   <string name="share_with_user_section_title">ユーザーとグループ</string>
   <string name="share_no_users">ユーザーと共有されているデータはありません</string>

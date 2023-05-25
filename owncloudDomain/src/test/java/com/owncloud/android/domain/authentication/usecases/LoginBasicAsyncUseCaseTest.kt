@@ -20,7 +20,7 @@ package com.owncloud.android.domain.authentication.usecases
 
 import com.owncloud.android.domain.authentication.AuthenticationRepository
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
-import com.owncloud.android.testutil.OC_SERVER_INFO
+import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
@@ -33,7 +33,7 @@ class LoginBasicAsyncUseCaseTest {
     private val repository: AuthenticationRepository = spyk()
     private val useCase = LoginBasicAsyncUseCase(repository)
     private val useCaseParams = LoginBasicAsyncUseCase.Params(
-        serverInfo = OC_SERVER_INFO,
+        serverInfo = OC_SECURE_SERVER_INFO_BASIC_AUTH,
         username = "test",
         password = "test",
         updateAccountWithUsername = null

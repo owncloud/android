@@ -1,0 +1,7 @@
+Security: Make ShareActivity not-exported
+
+ShareActivity was made not-exported in the manifest since this property is only
+needed for those activities that need to be launched from other external apps, which
+is not the case.
+
+https://github.com/owncloud/android/pull/4038

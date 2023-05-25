@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion sdkCompileVersion
@@ -11,11 +11,11 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        // Room Database Tests
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
-            }
+        // The schemas directory contains a schema file for each version of the Room database.
+        // This is required to enable Room auto migrations.
+        // See https://developer.android.com/reference/kotlin/androidx/room/AutoMigration.
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
     }
 
@@ -41,36 +41,46 @@ android {
         // Room Database Tests
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
+
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
+
+    namespace "com.owncloud.android.data"
 }
 
 dependencies {
-    implementation project(':owncloudDomain')
+    implementation project(":owncloudDomain")
 
     // Owncloud Android Library
-    api project(':owncloud-android-library:owncloudComLibrary')
+    api project(":owncloud-android-library:owncloudComLibrary")
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$orgJetbrainsKotlin"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$orgJetbrainsKotlinx"
 
     // Room
-    implementation "androidx.room:room-ktx:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-ktx:$androidxRoom"
+    ksp "androidx.room:room-compiler:$androidxRoom"
+
+    implementation("com.squareup.moshi:moshi-kotlin:$comSquareupMoshi")
+    ksp "com.squareup.moshi:moshi-kotlin-codegen:$comSquareupMoshi"
 
     // Dependencies for unit tests
-    testImplementation project(':owncloudTestUtil')
+    testImplementation project(":owncloudTestUtil")
     testImplementation "junit:junit:$junitVersion"
-    testImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
-    testImplementation "io.mockk:mockk:$mockkVersion"
+    testImplementation "androidx.arch.core:core-testing:$androidxArchCore"
+    testImplementation "io.mockk:mockk:$ioMockk"
 
     // Dependencies for instrumented tests
-    androidTestImplementation project(':owncloudTestUtil')
-    androidTestImplementation "androidx.test:runner:$androidTestVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoTestVersion"
-    androidTestImplementation "androidx.test.ext:junit:$extJunitVersion"
-    androidTestImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
-    androidTestImplementation "androidx.room:room-testing:$roomVersion"
-    androidTestImplementation ("io.mockk:mockk-android:$mockkVersion") {
-        exclude module: 'objenesis'
+    androidTestImplementation project(":owncloudTestUtil")
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$orgJetbrainsKotlinx"
+    androidTestImplementation "androidx.test:runner:$androidxTest"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxTestEspresso"
+    androidTestImplementation "androidx.test.ext:junit:$androidxTestExt"
+    androidTestImplementation "androidx.arch.core:core-testing:$androidxArchCore"
+    androidTestImplementation "androidx.room:room-testing:$androidxRoom"
+    androidTestImplementation("io.mockk:mockk-android:$ioMockk") {
+        exclude module: "objenesis"
     }
 }

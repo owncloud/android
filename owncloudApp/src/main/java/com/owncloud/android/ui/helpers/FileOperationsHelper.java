@@ -37,7 +37,8 @@ import com.owncloud.android.R;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.OCShare;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.presentation.ui.sharing.ShareActivity;
+import com.owncloud.android.presentation.common.ShareSheetHelper;
+import com.owncloud.android.presentation.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.dialog.ShareLinkToDialog;
@@ -63,23 +64,31 @@ public class FileOperationsHelper {
         mFileActivity = fileActivity;
     }
 
-    private Intent getIntentForSavedMimeType(Uri data, String type) {
+    private Intent getIntentForSavedMimeType(Uri data, String type, boolean hasWritePermission) {
         Intent intentForSavedMimeType = new Intent(Intent.ACTION_VIEW);
         intentForSavedMimeType.setDataAndType(data, type);
-        intentForSavedMimeType.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        int flags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+        if (hasWritePermission) {
+            flags = flags | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+        }
+        intentForSavedMimeType.setFlags(flags);
         return intentForSavedMimeType;
     }
 
-    private Intent getIntentForGuessedMimeType(String storagePath, String type, Uri data) {
+    private Intent getIntentForGuessedMimeType(String storagePath, String type, Uri data, boolean hasWritePermission) {
         Intent intentForGuessedMimeType = null;
 
-        if (storagePath.lastIndexOf('.') >= 0) {
+        if (storagePath != null && storagePath.lastIndexOf('.') >= 0) {
             String guessedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(storagePath.substring(storagePath.lastIndexOf('.') + 1));
 
             if (guessedMimeType != null && !guessedMimeType.equals(type)) {
                 intentForGuessedMimeType = new Intent(Intent.ACTION_VIEW);
                 intentForGuessedMimeType.setDataAndType(data, guessedMimeType);
-                intentForGuessedMimeType.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                int flags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                if (hasWritePermission) {
+                    flags = flags | Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+                }
+                intentForGuessedMimeType.setFlags(flags);
             }
         }
         return intentForGuessedMimeType;
@@ -88,10 +97,10 @@ public class FileOperationsHelper {
     public void openFile(OCFile ocFile) {
         if (ocFile != null) {
             Intent intentForSavedMimeType = getIntentForSavedMimeType(UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, ocFile),
-                    ocFile.getMimeType());
+                    ocFile.getMimeType(), ocFile.getHasWritePermission());
 
             Intent intentForGuessedMimeType = getIntentForGuessedMimeType(ocFile.getStoragePath(), ocFile.getMimeType(),
-                    UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, ocFile));
+                    UriUtilsKt.INSTANCE.getExposedFileUriForOCFile(mFileActivity, ocFile), ocFile.getHasWritePermission());
 
             openFileWithIntent(intentForSavedMimeType, intentForGuessedMimeType);
 
@@ -189,6 +198,7 @@ public class FileOperationsHelper {
                     new SynchronizeFolderUseCase.Params(
                             file.getRemotePath(),
                             file.getOwner(),
+                            file.getSpaceId(),
                             SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY)
             );
         }

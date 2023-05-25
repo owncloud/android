@@ -36,47 +36,47 @@ class RemoveFileUseCaseTest {
 
     @Test
     fun `remove file - ok`() {
-        every { repository.removeFile(any(), any()) } returns Unit
+        every { repository.deleteFiles(any(), any()) } returns Unit
 
         val useCaseResult = useCase.execute(useCaseParams.copy(removeOnlyLocalCopy = false))
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { repository.removeFile(any(), removeOnlyLocalCopy = false) }
+        verify(exactly = 1) { repository.deleteFiles(any(), removeOnlyLocalCopy = false) }
     }
 
     @Test
     fun `remove file - ok - remove local only`() {
-        every { repository.removeFile(any(), any()) } returns Unit
+        every { repository.deleteFiles(any(), any()) } returns Unit
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { repository.removeFile(any(), removeOnlyLocalCopy = true) }
+        verify(exactly = 1) { repository.deleteFiles(any(), removeOnlyLocalCopy = true) }
     }
 
     @Test
     fun `remove file - ko - empty list`() {
-        val useCaseResult = useCase.execute(useCaseParams.copy(listOfFilesToRemove = listOf()))
+        val useCaseResult = useCase.execute(useCaseParams.copy(listOfFilesToDelete = listOf()))
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
-        verify(exactly = 0) { repository.removeFile(any(), removeOnlyLocalCopy = true) }
+        verify(exactly = 0) { repository.deleteFiles(any(), removeOnlyLocalCopy = true) }
     }
 
     @Test
     fun `remove file - ko - other exception`() {
-        every { repository.removeFile(any(), any()) } throws UnauthorizedException()
+        every { repository.deleteFiles(any(), any()) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { repository.removeFile(any(), any()) }
+        verify(exactly = 1) { repository.deleteFiles(any(), any()) }
     }
 }

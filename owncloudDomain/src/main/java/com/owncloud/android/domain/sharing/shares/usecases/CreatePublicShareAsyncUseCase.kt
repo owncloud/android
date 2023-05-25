@@ -33,7 +33,6 @@ class CreatePublicShareAsyncUseCase(
             params.name,
             params.password,
             params.expirationTimeInMillis,
-            params.publicUpload,
             params.accountName
         )
 
@@ -43,7 +42,6 @@ class CreatePublicShareAsyncUseCase(
         val name: String,
         val password: String,
         val expirationTimeInMillis: Long,
-        val publicUpload: Boolean,
         val accountName: String
     )
 }

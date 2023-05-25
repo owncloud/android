@@ -38,7 +38,7 @@ import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfig
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
-import com.owncloud.android.presentation.ui.settings.SettingsActivity
+import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
 import com.owncloud.android.usecases.transfers.uploads.UploadFileFromContentUriUseCase
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -75,7 +75,7 @@ class CameraUploadsWorker(
     private val transferRepository: TransferRepository by inject()
 
     override suspend fun doWork(): Result {
-
+        Timber.i("Starting CameraUploadsWorker with UUID ${this.id}")
         when (val useCaseResult = getCameraUploadsConfigurationUseCase.execute(Unit)) {
             is UseCaseResult.Success -> {
                 val cameraUploadsConfiguration = useCaseResult.data
@@ -106,6 +106,7 @@ class CameraUploadsWorker(
                 Timber.e(useCaseResult.throwable, "Worker ${useCaseResult.throwable}")
             }
         }
+        Timber.i("Finishing CameraUploadsWorker with UUID ${this.id}")
         return Result.success()
     }
 
@@ -301,7 +302,7 @@ class CameraUploadsWorker(
             createdBy = createdByWorker
         )
 
-        return transferRepository.storeTransfer(ocTransfer)
+        return transferRepository.saveTransfer(ocTransfer)
     }
 
     companion object {

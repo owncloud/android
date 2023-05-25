@@ -1,0 +1,10 @@
+Enhancement: Open in specific web provider
+
+We've added the specific web app providers instead of opening the file with the default web provider.
+
+The user can open their files with any of the available specific web app providers from the server.
+Previously, file was opened with the default one.
+
+https://github.com/owncloud/android/issues/3994
+https://github.com/owncloud/android/pull/3990
+https://owncloud.dev/services/app-registry/apps/#app-registry

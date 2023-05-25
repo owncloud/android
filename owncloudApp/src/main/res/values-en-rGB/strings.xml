@@ -16,6 +16,7 @@
   <string name="actionbar_send_file">Send</string>
   <string name="actionbar_descending">Descending</string>
   <string name="actionbar_sort_title">Sort by</string>
+  <string name="fab_new_file">New document</string>
   <string name="drawer_item_all_files">All files</string>
   <string name="drawer_item_only_available_offline">Available offline</string>
   <string name="drawer_item_shared_by_link_files">Shared by link</string>
@@ -39,6 +40,7 @@
   <string name="prefs_biometric">Biometric lock</string>
   <string name="prefs_biometric_summary">Enable passcode or pattern lock to enable this option</string>
   <string name="prefs_lock_application">Lock application</string>
+  <string name="prefs_lock_application_entries_immediately">Immediately</string>
   <string name="prefs_lock_application_entries_1minute">After 1 minute</string>
   <string name="prefs_lock_application_entries_5minutes">After 5 minutes</string>
   <string name="prefs_lock_application_entries_30minutes">After 30 minutes</string>
@@ -85,9 +87,11 @@
   <string name="illegal_argument_exception_message">A valid ACTION is needed in the Intent passed to</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Files</string>
+  <string name="bottom_nav_personal">Personal</string>
   <string name="bottom_nav_uploads">Uploads</string>
   <string name="bottom_nav_offline">Offline</string>
   <string name="bottom_nav_links">Links</string>
+  <string name="bottom_nav_shares">Shares</string>
   <string name="recommend_subject">Try %1$s on your smartphone!</string>
   <string name="recommend_text">I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s</string>
   <string name="error_reason">because</string>
@@ -117,7 +121,10 @@
   <string name="uploader_error_message_source_file_not_found">File to upload was not found in its location. Please check whether the file exists.</string>
   <string name="uploader_error_message_source_file_not_copied">An error occurred whilst copying the file to a temporary folder. Please try to send again.</string>
   <string name="file_list_seconds_ago">seconds ago</string>
+  <string name="file_list_empty_title_all_files">No files in here</string>
   <string name="file_list_empty_title_shared_by_links">No shared links</string>
+  <string name="file_list_empty_subtitle_all_files">Upload some content or sync with your devices!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Files and folders you share by link will show up here</string>
   <string name="file_list_loading">Loading…</string>
   <string name="file_list_no_app_for_file_type">No app found for file type</string>
   <string name="local_file_list_empty">There are no files in this folder.</string>
@@ -346,7 +353,6 @@
   <string name="confirmation_disable_videos_upload_message">Are you sure you want to disable this feature? The pending videos will not be uploaded</string>
   <string name="proper_pics_folder_warning_camera_upload">Please make sure the folder selected is where the camera you are using saves the pictures taken. Otherwise, the feature will not be able to detect your pictures. Keep in mind that pictures will be uploaded in at least 15 minutes after taking them.</string>
   <string name="proper_videos_folder_warning_camera_upload">Please make sure the folder selected is where the camera you are using saves the videos recorded. Otherwise, the feature will not be able to detect your videos. Keep in mind that videos will be uploaded in at least 15 minutes after recording them.</string>
-  <string name="conflict_title">File conflict</string>
   <string name="conflict_description">There is a conflict in file %1$s, tap to solve it</string>
   <string name="conflict_message">Which files do you want to keep? If you select both versions, the local file will have a number added to its name.</string>
   <string name="conflict_keep_both">Keep both</string>
@@ -435,7 +441,6 @@
   <string name="upload_copy_files">Copy file</string>
   <string name="upload_move_files">Move file</string>
   <string name="pref_behaviour_entries_keep_file">kept in original folder</string>
-  <string name="pref_behaviour_entries_move">moved to app folder</string>
   <string name="share_dialog_title">Share</string>
   <string name="share_file">Share %1$s</string>
   <string name="share_with_user_section_title">Users and Groups</string>
