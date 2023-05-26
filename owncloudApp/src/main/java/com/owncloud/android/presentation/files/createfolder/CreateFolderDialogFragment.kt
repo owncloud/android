@@ -27,6 +27,7 @@ import android.view.WindowManager
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
@@ -71,7 +72,23 @@ class CreateFolderDialogFragment : DialogFragment() {
             }
             .setNegativeButton(android.R.string.cancel, null)
             .setTitle(R.string.uploader_info_dirname)
-        val alertDialog: Dialog = builder.create()
+        val alertDialog = builder.create()
+
+        // When the dialog is shown for the first time we disable the button
+        // There's a listener listening to change in the input field ->
+        // first  it trims
+        // when field has some text -> button enabled
+        // when field is empty -> button disabled
+        alertDialog.setOnShowListener{
+            val button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            button.isEnabled = false
+            inputText.addTextChangedListener {
+                if (it != null) {
+                    button.isEnabled = it.trim().isNotEmpty()
+                }
+            }
+        }
+
         alertDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         return alertDialog
     }
