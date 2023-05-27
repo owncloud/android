@@ -659,6 +659,7 @@
   <string name="release_notes_proceed">Jätka</string>
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
   <string name="release_notes_4_0_title_1">Ruumide tugi</string>
+  <string name="release_notes_4_0_subtitle_1">Spaces toe lisamine (oCIS). <b>Saadaval vaid uutele kontodele</b></string>
   <string name="release_notes_4_0_title_2">Alumine navigatsiooniriba</string>
   <string name="release_notes_4_0_subtitle_2">Mõnede kaartide ümberjärjestamine</string>
   <string name="release_notes_4_0_title_3">Lollipop toe lõpp</string>
@@ -679,6 +680,8 @@
   <string name="release_notes_4_0_subtitle_10">Android 13 võimalus \"Temaatilised ikoonid\" lubab rakenduse ikoonid muuta mustvalgeks</string>
   <string name="release_notes_4_0_title_11">Loo uusi dokumente üle võrgu (oCIS)</string>
   <string name="release_notes_4_0_subtitle_11">Kui oCIS server toetab rakenduste pakkujaid, siis saab uusi dokumente luua ja zoneCloudiga sünkroonida läbi brauseri</string>
+  <string name="release_notes_4_0_title_12">Uus seadistus failisirvija soovitusega</string>
+  <string name="release_notes_4_0_subtitle_12">Lisatud on uus seadistus \"More\" alajaotuses, kus soovitatakse rakendust ligipääsuks failidele läbi dokumendi pakkuja</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -686,5 +689,8 @@
   <string name="open_in_web_error_not_supported">seda failitüüpi toetavaid rakendusi ei ole</string>
   <string name="open_in_web_error_too_early">Nõutud fail ei ole veel saadaval, palun proovige hiljem uuesti</string>
   <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_title">oCIS kontode hoiatus</string>
+  <string name="ocis_accounts_warning_message">Spaces võimaluse kasutamiseks eemalda, palun, konto ja logi uuesti sisse</string>
   <string name="ocis_accounts_warning_checkbox_message">Ära enam näita</string>
+  <string name="ocis_accounts_warning_button">Loetud</string>
 </resources>
