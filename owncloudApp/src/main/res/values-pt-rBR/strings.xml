@@ -660,6 +660,7 @@
   <string name="release_notes_proceed">Prosseguir</string>
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
   <string name="release_notes_4_0_title_1">Support for Spaces</string>
+  <string name="release_notes_4_0_subtitle_1">Apresentando o suporte para o recurso de espaços (oCIS). <b>Disponível apenas para contas recém-logadas</b></string>
   <string name="release_notes_4_0_title_2">Bottom navigation bar</string>
   <string name="release_notes_4_0_subtitle_2">Reordered some tabs</string>
   <string name="release_notes_4_0_title_3">Fim do suporte Lollipop</string>
@@ -680,6 +681,8 @@
   <string name="release_notes_4_0_subtitle_10">O recurso \"Ícones temáticos\" do Android 13 permitirá que você defina o ícone do aplicativo em monocromático</string>
   <string name="release_notes_4_0_title_11">Criar novos documentos via web (oCIS)</string>
   <string name="release_notes_4_0_subtitle_11">Se o servidor oCIS suportar provedores de aplicativos, novos documentos podem ser criados via navegador e sincronizados com</string>
+  <string name="release_notes_4_0_title_12">Nova configuração com aplicativo sugerido para procurar arquivos</string>
+  <string name="release_notes_4_0_subtitle_12">Uma nova configuração foi adicionada na seção \"Mais\" com um aplicativo sugerido para acessar arquivos via provedor de documentos</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
@@ -687,5 +690,8 @@
   <string name="open_in_web_error_not_supported">Não há aplicativos que suportam este tipo de arquivo</string>
   <string name="open_in_web_error_too_early">O arquivo requisitado ainda não está disponível, por favor tente novamente mais tarde</string>
   <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_title">Aviso de contas oCIS</string>
+  <string name="ocis_accounts_warning_message">Por favor, remova a conta e faça o login novamente para obter o recurso de espaços</string>
   <string name="ocis_accounts_warning_checkbox_message">Não mostrar novamente</string>
+  <string name="ocis_accounts_warning_button">Entendido</string>
 </resources>
