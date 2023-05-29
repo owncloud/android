@@ -30,9 +30,11 @@ import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryWhichAllow
 import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
 import com.owncloud.android.domain.files.model.FileListOption
+import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
+import com.owncloud.android.domain.files.model.OCFileSyncInfo
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
@@ -50,6 +52,7 @@ import com.owncloud.android.presentation.files.SortType
 import com.owncloud.android.presentation.files.SortType.Companion.PREF_FILE_LIST_SORT_TYPE
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS
 import kotlinx.coroutines.flow.Flow
@@ -75,6 +78,7 @@ class MainFileListViewModel(
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
     getAppRegistryWhichAllowCreationAsStreamUseCase: GetAppRegistryWhichAllowCreationAsStreamUseCase,
     private val getUrlToOpenInWebUseCase: GetUrlToOpenInWebUseCase,
+    private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
     initialFolderToDisplay: OCFile,
@@ -125,6 +129,9 @@ class MainFileListViewModel(
 
     private val _openInWebFlow = MutableStateFlow<Event<UIResult<String>>?>(null)
     val openInWebFlow: StateFlow<Event<UIResult<String>>?> = _openInWebFlow
+
+    private val _menuOptions: MutableStateFlow<List<FileMenuOption>> = MutableStateFlow(emptyList())
+    val menuOptions: StateFlow<List<FileMenuOption>> = _menuOptions
 
     init {
         val sortTypeSelected = SortType.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_TYPE, SortType.SORT_TYPE_BY_NAME.ordinal)]
@@ -270,6 +277,26 @@ class MainFileListViewModel(
 
     fun resetOpenInWebFlow() {
         _openInWebFlow.value = null
+    }
+
+    fun filterMenuOptions(files: List<OCFile>, filesSyncInfo: List<OCFileSyncInfo>, isAnyFileVideoPreviewing: Boolean,
+        displaySelectAll: Boolean, shareViaLinkAllowed: Boolean, shareWithUsersAllowed: Boolean, sendAllowed: Boolean) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val result = filterFileMenuOptionsUseCase.execute(FilterFileMenuOptionsUseCase.Params(
+                files = files,
+                filesSyncInfo = filesSyncInfo,
+                accountName = currentFolderDisplayed.value.owner,
+                isAnyFileVideoPreviewing = isAnyFileVideoPreviewing,
+                displaySelectAll = displaySelectAll,
+                displaySelectInverse = true,
+                onlyAvailableOfflineFiles = fileListOption.value.isAvailableOffline(),
+                onlySharedByLinkFiles = fileListOption.value.isSharedByLink(),
+                shareViaLinkAllowed = shareViaLinkAllowed,
+                shareWithUsersAllowed = shareWithUsersAllowed,
+                sendAllowed = sendAllowed,
+            ))
+            _menuOptions.update { result }
+        }
     }
 
     private fun updateSpace() {
