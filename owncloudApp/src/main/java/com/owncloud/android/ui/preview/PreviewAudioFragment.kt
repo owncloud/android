@@ -6,23 +6,23 @@
  * @author David González Verdugo
  * @author Abel García de Prada
  * @author Shashvat Kedia
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
  *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.ui.preview
 
 import android.accounts.Account
@@ -44,28 +44,29 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.extensions.collectLatestLifecycleFlow
+import com.owncloud.android.extensions.filterMenuOptions
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
-import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.media.MediaControlView
 import com.owncloud.android.media.MediaService
 import com.owncloud.android.media.MediaServiceBinder
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
+import com.owncloud.android.presentation.previews.PreviewAudioViewModel
 import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 /**
  * This fragment shows a preview of a downloaded audio.
  *
- *
  * Trying to get an instance with NULL [OCFile] or ownCloud [Account] values will
  * produce an [IllegalStateException].
- *
  *
  * If the [OCFile] passed is not downloaded, an [IllegalStateException] is
  * generated on instantiation too.
@@ -85,8 +86,9 @@ class PreviewAudioFragment : FileFragment() {
     private var mediaServiceConnection: MediaServiceConnection? = null
     private var autoplay = true
     private var progressBar: ProgressBar? = null
-    var progressController: TransferProgressController? = null
+    private var progressController: TransferProgressController? = null
 
+    private val previewAudioViewModel by viewModel<PreviewAudioViewModel>()
     private val fileOperationsViewModel: FileOperationsViewModel by inject()
 
     /**
@@ -234,44 +236,22 @@ class PreviewAudioFragment : FileFragment() {
      */
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        val fileMenuFilter = FileMenuFilter(
-            file,
-            account,
-            mContainerActivity,
-            activity
-        )
-        fileMenuFilter.filter(
-            menu,
-            false,
-            false,
-            false,
-            false,
-        )
+        val safeFile = file
+        val accountName = account!!.name
+        val secondFragment = requireActivity().supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
+        val isAnyFileVideoPreviewing = (secondFragment is PreviewVideoFragment) && (secondFragment.file == safeFile)
+        val shareViaLinkAllowed = resources.getBoolean(R.bool.share_via_link_feature)
+        val shareWithUsersAllowed = resources.getBoolean(R.bool.share_with_users_feature)
+        val sendAllowed = resources.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
+        previewAudioViewModel.filterMenuOptions(safeFile, accountName, isAnyFileVideoPreviewing, shareViaLinkAllowed,
+            shareWithUsersAllowed, sendAllowed)
 
-        // additional restriction for this fragment
-        // TODO allow renaming in PreviewAudioFragment
-        menu.findItem(R.id.action_rename_file).apply {
-            isVisible = false
-            isEnabled = false
-        }
-
-        // additional restriction for this fragment
-        menu.findItem(R.id.action_move).apply {
-            isVisible = false
-            isEnabled = false
-        }
-
-        // additional restriction for this fragment
-        menu.findItem(R.id.action_copy).apply {
-            isVisible = false
-            isEnabled = false
+        collectLatestLifecycleFlow(previewAudioViewModel.menuOptions) { menuOptions ->
+            val hasWritePermission = safeFile.hasWritePermission
+            filterMenuOptions(menu, menuOptions, hasWritePermission)
         }
 
         menu.findItem(R.id.action_search)?.apply {
-            isVisible = false
-            isEnabled = false
-        }
-        menu.findItem(R.id.action_sync_file)?.apply {
             isVisible = false
             isEnabled = false
         }
@@ -430,6 +410,8 @@ class PreviewAudioFragment : FileFragment() {
         const val EXTRA_ACCOUNT = "ACCOUNT"
         private const val EXTRA_PLAY_POSITION = "PLAY_POSITION"
         private const val EXTRA_PLAYING = "PLAYING"
+
+        private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 
         /**
          * Public factory method to create new PreviewAudioFragment instances.
