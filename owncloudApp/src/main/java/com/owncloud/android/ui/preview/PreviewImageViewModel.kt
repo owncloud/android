@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.ui.preview
 
 import android.accounts.Account
@@ -24,20 +27,29 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
+import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PreviewImageViewModel(
     private val getFileByIdUseCase: GetFileByIdUseCase,
     private val getLiveDataForFinishedDownloadsFromAccountUseCase: GetLiveDataForFinishedDownloadsFromAccountUseCase,
+    private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
     private val _downloads = MediatorLiveData<List<Pair<OCFile, WorkInfo>>>()
     val downloads: LiveData<List<Pair<OCFile, WorkInfo>>> = _downloads
+
+    private val _menuOptions: MutableStateFlow<List<FileMenuOption>> = MutableStateFlow(emptyList())
+    val menuOptions: StateFlow<List<FileMenuOption>> = _menuOptions
 
     fun startListeningToDownloadsFromAccount(account: Account) {
         _downloads.addSource(
@@ -47,6 +59,35 @@ class PreviewImageViewModel(
                 val finalList = getListOfPairs(listOfWorkInfo)
                 _downloads.postValue(finalList)
             }
+        }
+    }
+
+    fun filterMenuOptions(
+        file: OCFile, accountName: String, isAnyFileVideoPreviewing: Boolean, shareViaLinkAllowed: Boolean,
+        shareWithUsersAllowed: Boolean, sendAllowed: Boolean
+    ) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val result = filterFileMenuOptionsUseCase.execute(
+                FilterFileMenuOptionsUseCase.Params(
+                    files = listOf(file),
+                    accountName = accountName,
+                    isAnyFileVideoPreviewing = isAnyFileVideoPreviewing,
+                    displaySelectAll = false,
+                    displaySelectInverse = false,
+                    onlyAvailableOfflineFiles = false,
+                    onlySharedByLinkFiles = false,
+                    shareViaLinkAllowed = shareViaLinkAllowed,
+                    shareWithUsersAllowed = shareWithUsersAllowed,
+                    sendAllowed = sendAllowed,
+                )
+            )
+            result.apply {
+                remove(FileMenuOption.RENAME)
+                remove(FileMenuOption.MOVE)
+                remove(FileMenuOption.COPY)
+                remove(FileMenuOption.SYNC)
+            }
+            _menuOptions.update { result }
         }
     }
 
