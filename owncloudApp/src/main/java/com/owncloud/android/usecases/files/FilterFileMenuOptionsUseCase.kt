@@ -35,13 +35,13 @@ class FilterFileMenuOptionsUseCase(
     private val workManager: WorkManager,
     private val capabilityRepository: CapabilityRepository,
     private val getSpaceWithSpecialsByIdForAccountUseCase: GetSpaceWithSpecialsByIdForAccountUseCase,
-): BaseUseCase<List<FileMenuOption>, FilterFileMenuOptionsUseCase.Params>() {
-    override fun run(params: Params): List<FileMenuOption> {
+): BaseUseCase<MutableList<FileMenuOption>, FilterFileMenuOptionsUseCase.Params>() {
+    override fun run(params: Params): MutableList<FileMenuOption> {
         val optionsToShow = mutableListOf<FileMenuOption>()
         val files = params.files
 
         if (files.isEmpty()) {
-            return emptyList()
+            return mutableListOf()
         }
 
         val filesSyncInfo = params.filesSyncInfo
@@ -191,7 +191,7 @@ class FilterFileMenuOptionsUseCase(
 
     data class Params(
         val files: List<OCFile>,
-        val filesSyncInfo: List<OCFileSyncInfo>,
+        val filesSyncInfo: List<OCFileSyncInfo> = emptyList(),
         val accountName: String,
         val isAnyFileVideoPreviewing: Boolean,
         val displaySelectAll: Boolean,
