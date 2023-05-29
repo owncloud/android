@@ -93,7 +93,7 @@ val viewModelModule = module {
     viewModel { ReleaseNotesViewModel(get(), get()) }
     viewModel { FileDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 
-    viewModel { PreviewImageViewModel(get(), get(), get()) }
+    viewModel { PreviewImageViewModel(get(), get(), get(), get()) }
     viewModel { PreviewAudioViewModel(get(), get()) }
     viewModel { FileOperationsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { (initialFolderToDisplay: OCFile, fileListOption: FileListOption) ->
