@@ -66,6 +66,7 @@ import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
+import com.owncloud.android.extensions.filterMenuOptions
 import com.owncloud.android.extensions.parseError
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
@@ -73,8 +74,6 @@ import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
-import com.owncloud.android.files.FileMenuFilter
-import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.common.BottomSheetFragmentItemView
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.files.SortBottomSheetFragment
@@ -94,6 +93,7 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
+import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -903,21 +903,30 @@ class MainFileListFragment : Fragment(),
                 )
             }
 
-            val fileMenuFilter = FileMenuFilter(
-                checkedFiles,
-                AccountUtils.getCurrentOwnCloudAccount(requireContext()),
-                requireActivity() as FileActivity,
-                activity,
-                checkedFilesSync
-            )
+            val secondFragment = requireActivity().supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
+            val isAnyFileVideoPreviewing = if (secondFragment is PreviewVideoFragment) {
+                checkedFiles.any { secondFragment.file == it }
+            } else {
+                false
+            }
+            val displaySelectAll = checkedCount != fileListAdapter.itemCount - 1 // -1 because one of them is the footer :S
+            val shareViaLinkAllowed = resources.getBoolean(R.bool.share_via_link_feature)
+            val shareWithUsersAllowed = resources.getBoolean(R.bool.share_with_users_feature)
+            val sendAllowed = resources.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
+            mainFileListViewModel.filterMenuOptions(checkedFiles, checkedFilesSync, isAnyFileVideoPreviewing, displaySelectAll,
+                shareViaLinkAllowed, shareWithUsersAllowed, sendAllowed)
 
-            fileMenuFilter.filter(
-                menu,
-                checkedCount != fileListAdapter.itemCount - 1, // -1 because one of them is the footer :S
-                true,
-                mainFileListViewModel.fileListOption.value.isAvailableOffline(),
-                mainFileListViewModel.fileListOption.value.isSharedByLink(),
-            )
+            collectLatestLifecycleFlow(mainFileListViewModel.menuOptions) { menuOptions ->
+                val hasWritePermission = if (checkedFiles.size == 1) {
+                    checkedFiles.first().hasWritePermission
+                } else {
+                    false
+                }
+                menu?.let {
+                    filterMenuOptions(it, menuOptions, hasWritePermission)
+                }
+
+            }
 
             return true
         }
@@ -991,6 +1000,8 @@ class MainFileListFragment : Fragment(),
         private val forbiddenChars = listOf('/', '\\')
 
         private const val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
+
+        private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 
         @JvmStatic
         fun newInstance(
