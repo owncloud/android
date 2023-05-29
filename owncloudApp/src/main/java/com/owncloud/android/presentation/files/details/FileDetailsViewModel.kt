@@ -1,21 +1,24 @@
-/*
+/**
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2022 ownCloud GmbH.
- * <p>
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.presentation.files.details
 
 import android.accounts.Account
@@ -33,6 +36,7 @@ import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryForMimeTyp
 import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.extensions.isOneOf
+import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
 import com.owncloud.android.domain.utils.Event
@@ -45,6 +49,7 @@ import com.owncloud.android.presentation.files.details.FileDetailsViewModel.Acti
 import com.owncloud.android.presentation.files.details.FileDetailsViewModel.ActionsInDetailsView.SYNC_AND_OPEN
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelUploadForFileUseCase
 import com.owncloud.android.workers.DownloadFileWorker
@@ -64,6 +69,7 @@ class FileDetailsViewModel(
     private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
     getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
     private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
+    private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val workManager: WorkManager,
     account: Account,
@@ -107,6 +113,9 @@ class FileDetailsViewModel(
     private val _actionsInDetailsView: MutableStateFlow<ActionsInDetailsView> = MutableStateFlow(if (shouldSyncFile) SYNC_AND_OPEN else NONE)
     val actionsInDetailsView: StateFlow<ActionsInDetailsView> = _actionsInDetailsView
 
+    private val _menuOptions: MutableStateFlow<List<FileMenuOption>> = MutableStateFlow(emptyList())
+    val menuOptions: StateFlow<List<FileMenuOption>> = _menuOptions
+
     fun getCurrentFile(): OCFile? = currentFile.value
     fun getAccount() = account.value
 
@@ -141,7 +150,6 @@ class FileDetailsViewModel(
         }
     }
 
-    // TODO: Use MainFileListViewModel's openInWeb method and remove this one
     fun openInWeb(fileId: String, appName: String) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
@@ -155,6 +163,30 @@ class FileDetailsViewModel(
             showLoading = false,
             requiresConnection = true,
         )
+    }
+
+    fun filterMenuOptions(file: OCFile, isAnyFileVideoPreviewing: Boolean, shareViaLinkAllowed: Boolean,
+        shareWithUsersAllowed: Boolean, sendAllowed: Boolean) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val result = filterFileMenuOptionsUseCase.execute(FilterFileMenuOptionsUseCase.Params(
+                files = listOf(file),
+                accountName = getAccount().name,
+                isAnyFileVideoPreviewing = isAnyFileVideoPreviewing,
+                displaySelectAll = false,
+                displaySelectInverse = false,
+                onlyAvailableOfflineFiles = false,
+                onlySharedByLinkFiles = false,
+                shareViaLinkAllowed = shareViaLinkAllowed,
+                shareWithUsersAllowed = shareWithUsersAllowed,
+                sendAllowed = sendAllowed,
+            ))
+            result.apply {
+                remove(FileMenuOption.DETAILS)
+                remove(FileMenuOption.MOVE)
+                remove(FileMenuOption.COPY)
+            }
+            _menuOptions.update { result }
+        }
     }
 
     enum class ActionsInDetailsView {

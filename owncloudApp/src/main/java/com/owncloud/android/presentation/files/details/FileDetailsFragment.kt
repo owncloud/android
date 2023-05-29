@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -17,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.presentation.files.details
 
 import android.accounts.Account
@@ -43,12 +45,12 @@ import com.owncloud.android.domain.exceptions.TooEarlyException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
+import com.owncloud.android.extensions.filterMenuOptions
 import com.owncloud.android.extensions.isDownload
 import com.owncloud.android.extensions.openOCFile
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.files.FileMenuFilter
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.files.details.FileDetailsViewModel.ActionsInDetailsView.NONE
@@ -197,33 +199,16 @@ class FileDetailsFragment : FileFragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         val safeFile = fileDetailsViewModel.getCurrentFile() ?: return
-        val fileMenuFilter = FileMenuFilter(
-            safeFile,
-            fileDetailsViewModel.getAccount(),
-            mContainerActivity,
-            activity
-        )
-        fileMenuFilter.filter(
-            menu,
-            false,
-            false,
-            false,
-            false,
-        )
+        val secondFragment = requireActivity().supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
+        val isAnyFileVideoPreviewing = (secondFragment is PreviewVideoFragment) && (secondFragment.file == safeFile)
+        val shareViaLinkAllowed = resources.getBoolean(R.bool.share_via_link_feature)
+        val shareWithUsersAllowed = resources.getBoolean(R.bool.share_with_users_feature)
+        val sendAllowed = resources.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
+        fileDetailsViewModel.filterMenuOptions(safeFile, isAnyFileVideoPreviewing, shareViaLinkAllowed, shareWithUsersAllowed, sendAllowed)
 
-        menu.findItem(R.id.action_see_details)?.apply {
-            isVisible = false
-            isEnabled = false
-        }
-
-        menu.findItem(R.id.action_move)?.apply {
-            isVisible = false
-            isEnabled = false
-        }
-
-        menu.findItem(R.id.action_copy)?.apply {
-            isVisible = false
-            isEnabled = false
+        collectLatestLifecycleFlow(fileDetailsViewModel.menuOptions) { menuOptions ->
+            val hasWritePermission = safeFile.hasWritePermission
+            filterMenuOptions(menu, menuOptions, hasWritePermission)
         }
 
         menu.findItem(R.id.action_search)?.apply {
@@ -511,6 +496,8 @@ class FileDetailsFragment : FileFragment() {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
         private const val ARG_SYNC_FILE_AT_OPEN = "SYNC_FILE_AT_OPEN"
+
+        private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 
         /**
          * Public factory method to create new FileDetailsFragment instances.

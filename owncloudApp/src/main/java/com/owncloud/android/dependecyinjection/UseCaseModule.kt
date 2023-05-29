@@ -102,6 +102,7 @@ import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsync
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
+import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
@@ -170,6 +171,7 @@ val useCaseModule = module {
     factory { CleanConflictUseCase(get()) }
     factory { SaveDownloadWorkerUUIDUseCase(get()) }
     factory { CleanWorkersUUIDUseCase(get()) }
+    factory { FilterFileMenuOptionsUseCase(get(), get(), get()) }
 
     // Open in web
     factory { GetUrlToOpenInWebUseCase(get(), get()) }
