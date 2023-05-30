@@ -199,12 +199,10 @@ class FileDetailsFragment : FileFragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         val safeFile = fileDetailsViewModel.getCurrentFile() ?: return
-        val secondFragment = requireActivity().supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
-        val isAnyFileVideoPreviewing = (secondFragment is PreviewVideoFragment) && (secondFragment.file == safeFile)
         val shareViaLinkAllowed = resources.getBoolean(R.bool.share_via_link_feature)
         val shareWithUsersAllowed = resources.getBoolean(R.bool.share_with_users_feature)
         val sendAllowed = resources.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
-        fileDetailsViewModel.filterMenuOptions(safeFile, isAnyFileVideoPreviewing, shareViaLinkAllowed, shareWithUsersAllowed, sendAllowed)
+        fileDetailsViewModel.filterMenuOptions(safeFile, shareViaLinkAllowed, shareWithUsersAllowed, sendAllowed)
 
         collectLatestLifecycleFlow(fileDetailsViewModel.menuOptions) { menuOptions ->
             val hasWritePermission = safeFile.hasWritePermission
@@ -496,8 +494,6 @@ class FileDetailsFragment : FileFragment() {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
         private const val ARG_SYNC_FILE_AT_OPEN = "SYNC_FILE_AT_OPEN"
-
-        private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 
         /**
          * Public factory method to create new FileDetailsFragment instances.
