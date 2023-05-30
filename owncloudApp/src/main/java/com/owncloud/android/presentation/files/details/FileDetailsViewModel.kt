@@ -31,6 +31,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.owncloud.android.R
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryForMimeTypeAsStreamUseCase
 import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
@@ -65,11 +66,11 @@ class FileDetailsViewModel(
     private val openInWebUseCase: GetUrlToOpenInWebUseCase,
     refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
     getAppRegistryForMimeTypeAsStreamUseCase: GetAppRegistryForMimeTypeAsStreamUseCase,
-    val contextProvider: ContextProvider,
     private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
     getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
     private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
     private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
+    val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val workManager: WorkManager,
     account: Account,
@@ -165,8 +166,10 @@ class FileDetailsViewModel(
         )
     }
 
-    fun filterMenuOptions(file: OCFile, shareViaLinkAllowed: Boolean, shareWithUsersAllowed: Boolean,
-        sendAllowed: Boolean) {
+    fun filterMenuOptions(file: OCFile) {
+        val shareViaLinkAllowed = contextProvider.getBoolean(R.bool.share_via_link_feature)
+        val shareWithUsersAllowed = contextProvider.getBoolean(R.bool.share_with_users_feature)
+        val sendAllowed = contextProvider.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val result = filterFileMenuOptionsUseCase.execute(FilterFileMenuOptionsUseCase.Params(
                 files = listOf(file),

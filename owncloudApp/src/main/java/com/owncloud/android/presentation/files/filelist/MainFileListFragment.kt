@@ -910,11 +910,7 @@ class MainFileListFragment : Fragment(),
                 false
             }
             val displaySelectAll = checkedCount != fileListAdapter.itemCount - 1 // -1 because one of them is the footer :S
-            val shareViaLinkAllowed = resources.getBoolean(R.bool.share_via_link_feature)
-            val shareWithUsersAllowed = resources.getBoolean(R.bool.share_with_users_feature)
-            val sendAllowed = resources.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
-            mainFileListViewModel.filterMenuOptions(checkedFiles, checkedFilesSync, isAnyFileVideoPreviewing, displaySelectAll,
-                shareViaLinkAllowed, shareWithUsersAllowed, sendAllowed)
+            mainFileListViewModel.filterMenuOptions(checkedFiles, checkedFilesSync, isAnyFileVideoPreviewing, displaySelectAll)
 
             collectLatestLifecycleFlow(mainFileListViewModel.menuOptions) { menuOptions ->
                 val hasWritePermission = if (checkedFiles.size == 1) {

@@ -238,11 +238,7 @@ class PreviewAudioFragment : FileFragment() {
         super.onPrepareOptionsMenu(menu)
         val safeFile = file
         val accountName = account!!.name
-        val shareViaLinkAllowed = resources.getBoolean(R.bool.share_via_link_feature)
-        val shareWithUsersAllowed = resources.getBoolean(R.bool.share_with_users_feature)
-        val sendAllowed = resources.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
-        previewAudioViewModel.filterMenuOptions(safeFile, accountName, shareViaLinkAllowed, shareWithUsersAllowed,
-            sendAllowed)
+        previewAudioViewModel.filterMenuOptions(safeFile, accountName)
 
         collectLatestLifecycleFlow(previewAudioViewModel.menuOptions) { menuOptions ->
             val hasWritePermission = safeFile.hasWritePermission

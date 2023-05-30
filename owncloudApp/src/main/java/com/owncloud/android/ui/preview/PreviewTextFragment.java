@@ -337,11 +337,7 @@ public class PreviewTextFragment extends FileFragment {
         if (mContainerActivity.getStorageManager() != null) {
             OCFile safeFile = getFile();
             String accountName = mContainerActivity.getStorageManager().getAccount().name;
-            boolean shareViaLinkAllowed = getResources().getBoolean(R.bool.share_via_link_feature);
-            boolean shareWithUsersAllowed = getResources().getBoolean(R.bool.share_with_users_feature);
-            boolean sendAllowed = getResources().getString(R.string.send_files_to_other_apps).equalsIgnoreCase("on");
-            previewTextViewModel.filterMenuOptions(safeFile, accountName, shareViaLinkAllowed,
-                    shareWithUsersAllowed, sendAllowed);
+            previewTextViewModel.filterMenuOptions(safeFile, accountName);
 
             FragmentExtKt.collectLatestLifecycleFlow(this, previewTextViewModel.getMenuOptions(), Lifecycle.State.CREATED,
                     (menuOptions, continuation) -> {

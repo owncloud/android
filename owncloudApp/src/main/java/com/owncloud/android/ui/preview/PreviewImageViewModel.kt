@@ -27,9 +27,11 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
+import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
@@ -42,6 +44,7 @@ class PreviewImageViewModel(
     private val getFileByIdUseCase: GetFileByIdUseCase,
     private val getLiveDataForFinishedDownloadsFromAccountUseCase: GetLiveDataForFinishedDownloadsFromAccountUseCase,
     private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
+    private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -62,10 +65,10 @@ class PreviewImageViewModel(
         }
     }
 
-    fun filterMenuOptions(
-        file: OCFile, accountName: String, shareViaLinkAllowed: Boolean, shareWithUsersAllowed: Boolean,
-        sendAllowed: Boolean
-    ) {
+    fun filterMenuOptions(file: OCFile, accountName: String) {
+        val shareViaLinkAllowed = contextProvider.getBoolean(R.bool.share_via_link_feature)
+        val shareWithUsersAllowed = contextProvider.getBoolean(R.bool.share_with_users_feature)
+        val sendAllowed = contextProvider.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val result = filterFileMenuOptionsUseCase.execute(
                 FilterFileMenuOptionsUseCase.Params(
