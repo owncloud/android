@@ -1,0 +1,7 @@
+Change: Move file menu options filter to use case
+
+The old class where the menu options for a file or group or files were filtered
+has been replaced by a new use case which fits in the architecture of the app.
+
+https://github.com/owncloud/android/issues/4009
+https://github.com/owncloud/android/pull/4039
