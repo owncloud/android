@@ -40,6 +40,7 @@ import com.owncloud.android.presentation.files.operations.FileOperationsViewMode
 import com.owncloud.android.presentation.logging.LogListViewModel
 import com.owncloud.android.presentation.migration.MigrationViewModel
 import com.owncloud.android.presentation.previews.PreviewAudioViewModel
+import com.owncloud.android.presentation.previews.PreviewTextViewModel
 import com.owncloud.android.presentation.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.presentation.security.biometric.BiometricViewModel
 import com.owncloud.android.presentation.security.passcode.PassCodeViewModel
@@ -95,6 +96,7 @@ val viewModelModule = module {
 
     viewModel { PreviewImageViewModel(get(), get(), get(), get()) }
     viewModel { PreviewAudioViewModel(get(), get()) }
+    viewModel { PreviewTextViewModel(get(), get()) }
     viewModel { FileOperationsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { (initialFolderToDisplay: OCFile, fileListOption: FileListOption) ->
         MainFileListViewModel(
