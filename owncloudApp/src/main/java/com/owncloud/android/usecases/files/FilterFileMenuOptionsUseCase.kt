@@ -35,7 +35,7 @@ class FilterFileMenuOptionsUseCase(
     private val workManager: WorkManager,
     private val capabilityRepository: CapabilityRepository,
     private val getSpaceWithSpecialsByIdForAccountUseCase: GetSpaceWithSpecialsByIdForAccountUseCase,
-): BaseUseCase<MutableList<FileMenuOption>, FilterFileMenuOptionsUseCase.Params>() {
+) : BaseUseCase<MutableList<FileMenuOption>, FilterFileMenuOptionsUseCase.Params>() {
     override fun run(params: Params): MutableList<FileMenuOption> {
         val optionsToShow = mutableListOf<FileMenuOption>()
         val files = params.files
@@ -89,18 +89,18 @@ class FilterFileMenuOptionsUseCase(
             optionsToShow.add(FileMenuOption.SELECT_INVERSE)
         }
         // Download
-        if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles
-            && !anyFolder(files) && !anyFileDownloaded(files)) {
+        if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
+            !anyFolder(files) && !anyFileDownloaded(files)) {
             optionsToShow.add(FileMenuOption.DOWNLOAD)
         }
         // Rename
-        if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles
-            && hasRenamePermission) {
+        if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
+            hasRenamePermission) {
             optionsToShow.add(FileMenuOption.RENAME)
         }
         // Move
-        if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles
-            && hasMovePermission) {
+        if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
+            hasMovePermission) {
             optionsToShow.add(FileMenuOption.MOVE)
         }
         // Copy
@@ -116,8 +116,8 @@ class FilterFileMenuOptionsUseCase(
             optionsToShow.add(FileMenuOption.OPEN_WITH)
         }
         // Synchronize
-        if (!isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles
-            && (anyFileDownloaded(files) || anyFolder(files))) {
+        if (!isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
+            (anyFileDownloaded(files) || anyFolder(files))) {
             optionsToShow.add(FileMenuOption.SYNC)
         }
         // Cancel sync
@@ -125,8 +125,8 @@ class FilterFileMenuOptionsUseCase(
             optionsToShow.add(FileMenuOption.CANCEL_SYNC)
         }
         // Share
-        if (!onlyAvailableOfflineFiles && (shareViaLinkAllowed || shareWithUsersAllowed) && resharingAllowed
-            && isPersonalSpace && hasResharePermission) {
+        if (!onlyAvailableOfflineFiles && (shareViaLinkAllowed || shareWithUsersAllowed) && resharingAllowed &&
+            isPersonalSpace && hasResharePermission) {
             optionsToShow.add(FileMenuOption.SHARE)
         }
         // Details
@@ -134,8 +134,8 @@ class FilterFileMenuOptionsUseCase(
             optionsToShow.add(FileMenuOption.DETAILS)
         }
         // Send
-        if (!isAnyFileSynchronizing && !isAnyFileVideoStreaming && !onlyAvailableOfflineFiles && !anyFolder(files)
-            && (allFilesDownloaded(files) || isSingleFile(files)) && sendAllowed) {
+        if (!isAnyFileSynchronizing && !isAnyFileVideoStreaming && !onlyAvailableOfflineFiles && !anyFolder(files) &&
+            (allFilesDownloaded(files) || isSingleFile(files)) && sendAllowed) {
             optionsToShow.add(FileMenuOption.SEND)
         }
         // Set as available offline
