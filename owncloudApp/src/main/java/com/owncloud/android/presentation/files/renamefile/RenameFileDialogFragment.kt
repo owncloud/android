@@ -28,6 +28,7 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
@@ -84,6 +85,16 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
         }.create().apply {
             window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
             avoidScreenshotsIfNeeded()
+
+            setOnShowListener {
+                val button = getButton(AlertDialog.BUTTON_POSITIVE)
+                button.isEnabled = true
+                inputText.addTextChangedListener {
+                    if (it != null) {
+                        button.isEnabled = it.trim().isNotEmpty()
+                    }
+                }
+            }
         }
     }
 
