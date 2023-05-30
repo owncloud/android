@@ -24,6 +24,7 @@ package com.owncloud.android.presentation.files.filelist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryWhichAllowCreationAsStreamUseCase
@@ -51,6 +52,7 @@ import com.owncloud.android.presentation.files.SortOrder.Companion.PREF_FILE_LIS
 import com.owncloud.android.presentation.files.SortType
 import com.owncloud.android.presentation.files.SortType.Companion.PREF_FILE_LIST_SORT_TYPE
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
@@ -79,6 +81,7 @@ class MainFileListViewModel(
     getAppRegistryWhichAllowCreationAsStreamUseCase: GetAppRegistryWhichAllowCreationAsStreamUseCase,
     private val getUrlToOpenInWebUseCase: GetUrlToOpenInWebUseCase,
     private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
+    private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
     initialFolderToDisplay: OCFile,
@@ -280,7 +283,10 @@ class MainFileListViewModel(
     }
 
     fun filterMenuOptions(files: List<OCFile>, filesSyncInfo: List<OCFileSyncInfo>, isAnyFileVideoPreviewing: Boolean,
-        displaySelectAll: Boolean, shareViaLinkAllowed: Boolean, shareWithUsersAllowed: Boolean, sendAllowed: Boolean) {
+        displaySelectAll: Boolean) {
+        val shareViaLinkAllowed = contextProvider.getBoolean(R.bool.share_via_link_feature)
+        val shareWithUsersAllowed = contextProvider.getBoolean(R.bool.share_with_users_feature)
+        val sendAllowed = contextProvider.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val result = filterFileMenuOptionsUseCase.execute(FilterFileMenuOptionsUseCase.Params(
                 files = files,
