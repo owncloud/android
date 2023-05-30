@@ -40,7 +40,6 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -85,7 +84,6 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
     public static final String EXTRA_FILE = "FILE";
     public static final String EXTRA_ACCOUNT = "ACCOUNT";
-    private static final String TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT";
 
     /**
      * Key to receive a flag signaling if the video should be started immediately
@@ -316,12 +314,10 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
 
         OCFile safeFile = getFile();
         String accountName = mAccount.name;
-        Fragment secondFragment = requireActivity().getSupportFragmentManager().findFragmentByTag(TAG_SECOND_FRAGMENT);
-        boolean isAnyFileVideoPreviewing = (secondFragment instanceof PreviewVideoFragment) && (((PreviewVideoFragment) secondFragment).getFile().equals(safeFile));
         boolean shareViaLinkAllowed = getResources().getBoolean(R.bool.share_via_link_feature);
         boolean shareWithUsersAllowed = getResources().getBoolean(R.bool.share_with_users_feature);
         boolean sendAllowed = getResources().getString(R.string.send_files_to_other_apps).equalsIgnoreCase("on");
-        previewVideoViewModel.filterMenuOptions(safeFile, accountName, isAnyFileVideoPreviewing, shareViaLinkAllowed,
+        previewVideoViewModel.filterMenuOptions(safeFile, accountName, shareViaLinkAllowed,
                 shareWithUsersAllowed, sendAllowed);
 
         FragmentExtKt.collectLatestLifecycleFlow(this, previewVideoViewModel.getMenuOptions(), Lifecycle.State.CREATED,

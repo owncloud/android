@@ -63,15 +63,15 @@ class PreviewImageViewModel(
     }
 
     fun filterMenuOptions(
-        file: OCFile, accountName: String, isAnyFileVideoPreviewing: Boolean, shareViaLinkAllowed: Boolean,
-        shareWithUsersAllowed: Boolean, sendAllowed: Boolean
+        file: OCFile, accountName: String, shareViaLinkAllowed: Boolean, shareWithUsersAllowed: Boolean,
+        sendAllowed: Boolean
     ) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val result = filterFileMenuOptionsUseCase.execute(
                 FilterFileMenuOptionsUseCase.Params(
                     files = listOf(file),
                     accountName = accountName,
-                    isAnyFileVideoPreviewing = isAnyFileVideoPreviewing,
+                    isAnyFileVideoPreviewing = false,
                     displaySelectAll = false,
                     displaySelectInverse = false,
                     onlyAvailableOfflineFiles = false,

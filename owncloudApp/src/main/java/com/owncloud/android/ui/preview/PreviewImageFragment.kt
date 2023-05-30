@@ -196,13 +196,11 @@ class PreviewImageFragment : FileFragment() {
         // Update the file
         file = mContainerActivity.storageManager.getFileById(file.id ?: -1)
         val accountName = mContainerActivity.storageManager.account.name
-        val secondFragment = requireActivity().supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
-        val isAnyFileVideoPreviewing = (secondFragment is PreviewVideoFragment) && (secondFragment.file == safeFile)
         val shareViaLinkAllowed = resources.getBoolean(R.bool.share_via_link_feature)
         val shareWithUsersAllowed = resources.getBoolean(R.bool.share_with_users_feature)
         val sendAllowed = resources.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
-        previewImageViewModel.filterMenuOptions(safeFile, accountName, isAnyFileVideoPreviewing, shareViaLinkAllowed,
-            shareWithUsersAllowed, sendAllowed)
+        previewImageViewModel.filterMenuOptions(safeFile, accountName, shareViaLinkAllowed, shareWithUsersAllowed,
+            sendAllowed)
 
         collectLatestLifecycleFlow(previewImageViewModel.menuOptions) { menuOptions ->
             val hasWritePermission = safeFile.hasWritePermission
@@ -347,8 +345,6 @@ class PreviewImageFragment : FileFragment() {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
         private const val ARG_IGNORE_FIRST = "IGNORE_FIRST"
-
-        private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 
         /**
          * Public factory method to create a new fragment that previews an image.

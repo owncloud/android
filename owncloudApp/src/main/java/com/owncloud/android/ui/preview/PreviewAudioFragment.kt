@@ -238,13 +238,11 @@ class PreviewAudioFragment : FileFragment() {
         super.onPrepareOptionsMenu(menu)
         val safeFile = file
         val accountName = account!!.name
-        val secondFragment = requireActivity().supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
-        val isAnyFileVideoPreviewing = (secondFragment is PreviewVideoFragment) && (secondFragment.file == safeFile)
         val shareViaLinkAllowed = resources.getBoolean(R.bool.share_via_link_feature)
         val shareWithUsersAllowed = resources.getBoolean(R.bool.share_with_users_feature)
         val sendAllowed = resources.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
-        previewAudioViewModel.filterMenuOptions(safeFile, accountName, isAnyFileVideoPreviewing, shareViaLinkAllowed,
-            shareWithUsersAllowed, sendAllowed)
+        previewAudioViewModel.filterMenuOptions(safeFile, accountName, shareViaLinkAllowed, shareWithUsersAllowed,
+            sendAllowed)
 
         collectLatestLifecycleFlow(previewAudioViewModel.menuOptions) { menuOptions ->
             val hasWritePermission = safeFile.hasWritePermission
@@ -410,8 +408,6 @@ class PreviewAudioFragment : FileFragment() {
         const val EXTRA_ACCOUNT = "ACCOUNT"
         private const val EXTRA_PLAY_POSITION = "PLAY_POSITION"
         private const val EXTRA_PLAYING = "PLAYING"
-
-        private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
 
         /**
          * Public factory method to create new PreviewAudioFragment instances.
