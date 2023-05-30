@@ -27,7 +27,7 @@ import android.view.WindowManager
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
@@ -42,8 +42,13 @@ import com.owncloud.android.utils.PreferenceUtils
 class CreateFolderDialogFragment : DialogFragment() {
     private lateinit var parentFolder: OCFile
     private lateinit var createFolderListener: CreateFolderListener
+    private var isButtonEnabled: Boolean = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
+        if (savedInstanceState != null) {
+            isButtonEnabled = savedInstanceState.getBoolean(IS_BUTTON_ENABLED_FLAG_KEY)
+        }
 
         // Inflate the layout for the dialog
         val inflater = requireActivity().layoutInflater
@@ -74,23 +79,25 @@ class CreateFolderDialogFragment : DialogFragment() {
             .setTitle(R.string.uploader_info_dirname)
         val alertDialog = builder.create()
 
-        // When the dialog is shown for the first time we disable the button
-        // There's a listener listening to change in the input field ->
-        // first  it trims
-        // when field has some text -> button enabled
-        // when field is empty -> button disabled
-        alertDialog.setOnShowListener{
-            val button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
-            button.isEnabled = false
-            inputText.addTextChangedListener {
-                if (it != null) {
-                    button.isEnabled = it.trim().isNotEmpty()
-                }
-            }
+        alertDialog.setOnShowListener {
+            val okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            okButton.isEnabled = isButtonEnabled
         }
+
+        inputText.doOnTextChanged { text, _, _, _ ->
+            val okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            isButtonEnabled = !text.isNullOrBlank()
+            okButton.isEnabled = isButtonEnabled
+        }
+
 
         alertDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         return alertDialog
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(IS_BUTTON_ENABLED_FLAG_KEY, isButtonEnabled)
     }
 
     interface CreateFolderListener {
@@ -99,6 +106,7 @@ class CreateFolderDialogFragment : DialogFragment() {
 
     companion object {
         const val CREATE_FOLDER_FRAGMENT = "CREATE_FOLDER_FRAGMENT"
+        private const val IS_BUTTON_ENABLED_FLAG_KEY = "IS_BUTTON_ENABLED_FLAG_KEY"
 
         /**
          * Public factory method to create new CreateFolderDialogFragment instances.

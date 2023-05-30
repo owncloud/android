@@ -28,7 +28,7 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
@@ -44,12 +44,18 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
  *
  * Triggers the rename operation when name is confirmed.
  */
+
 class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
 
     private var targetFile: OCFile? = null
     private val filesViewModel: FileOperationsViewModel by sharedViewModel()
+    private var isButtonEnabled = true
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        if (savedInstanceState != null) {
+            isButtonEnabled = savedInstanceState.getBoolean(IS_BUTTON_ENABLED_FLAG_KEY)
+        }
+
         targetFile = requireArguments().getParcelable(ARG_TARGET_FILE)
 
         // Inflate the layout for the dialog
@@ -87,15 +93,23 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
             avoidScreenshotsIfNeeded()
 
             setOnShowListener {
-                val button = getButton(AlertDialog.BUTTON_POSITIVE)
-                button.isEnabled = true
-                inputText.addTextChangedListener {
-                    if (it != null) {
-                        button.isEnabled = it.trim().isNotEmpty()
-                    }
-                }
+                val okButton = getButton(AlertDialog.BUTTON_POSITIVE)
+                okButton.isEnabled = isButtonEnabled
+
+            }
+
+            inputText.doOnTextChanged { text, _, _, _ ->
+                val okButton = getButton(AlertDialog.BUTTON_POSITIVE)
+                isButtonEnabled = !text.isNullOrBlank()
+                okButton.isEnabled = isButtonEnabled
+
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(IS_BUTTON_ENABLED_FLAG_KEY, isButtonEnabled)
     }
 
     override fun onClick(dialog: DialogInterface, which: Int) {
@@ -120,6 +134,7 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
     companion object {
         const val FRAGMENT_TAG_RENAME_FILE = "RENAME_FILE_FRAGMENT"
         private const val ARG_TARGET_FILE = "TARGET_FILE"
+        private const val IS_BUTTON_ENABLED_FLAG_KEY = "IS_BUTTON_ENABLED_FLAG_KEY"
 
         /**
          * Public factory method to create new RenameFileDialogFragment instances.
