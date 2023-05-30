@@ -9,6 +9,7 @@ Summary
 -------
 
 * Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
+* Change - Move file menu options filter to use case: [#4009](https://github.com/owncloud/android/issues/4009)
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 
 Details
@@ -22,6 +23,14 @@ Details
    https://github.com/owncloud/android/issues/3245
    https://github.com/owncloud/android/pull/4036
    https://github.com/owncloud/android-library/pull/566
+
+* Change - Move file menu options filter to use case: [#4009](https://github.com/owncloud/android/issues/4009)
+
+   The old class where the menu options for a file or group or files were filtered has been replaced
+   by a new use case which fits in the architecture of the app.
+
+   https://github.com/owncloud/android/issues/4009
+   https://github.com/owncloud/android/pull/4039
 
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 
