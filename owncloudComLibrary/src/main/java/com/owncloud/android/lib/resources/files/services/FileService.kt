@@ -39,7 +39,8 @@ interface FileService : Service {
         targetRemotePath: String,
         sourceSpaceWebDavUrl: String?,
         targetSpaceWebDavUrl: String?,
-    ): RemoteOperationResult<String>
+        replace: Boolean,
+    ): RemoteOperationResult<String?>
 
     fun createFolder(
         remotePath: String,

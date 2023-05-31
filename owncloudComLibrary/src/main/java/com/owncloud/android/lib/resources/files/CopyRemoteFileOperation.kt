@@ -54,6 +54,7 @@ class CopyRemoteFileOperation(
     private val targetRemotePath: String,
     private val sourceSpaceWebDavUrl: String? = null,
     private val targetSpaceWebDavUrl: String? = null,
+    private val forceOverride: Boolean = false,
 ) : RemoteOperation<String>() {
 
     /**
@@ -74,8 +75,9 @@ class CopyRemoteFileOperation(
         var result: RemoteOperationResult<String>
         try {
             val copyMethod = CopyMethod(
-                URL((sourceSpaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(sourceRemotePath)),
-                (targetSpaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(targetRemotePath),
+                url = URL((sourceSpaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(sourceRemotePath)),
+                destinationUrl = (targetSpaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(targetRemotePath),
+                forceOverride = forceOverride,
             ).apply {
                 setReadTimeout(COPY_READ_TIMEOUT, TimeUnit.SECONDS)
                 setConnectionTimeout(COPY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
@@ -87,6 +89,7 @@ class CopyRemoteFileOperation(
                     result = RemoteOperationResult(ResultCode.OK)
                     result.setData(fileRemoteId)
                 }
+
                 isPreconditionFailed(status) -> {
                     result = RemoteOperationResult(ResultCode.INVALID_OVERWRITE)
                     client.exhaustResponse(copyMethod.getResponseBodyAsStream())
@@ -94,6 +97,7 @@ class CopyRemoteFileOperation(
                     /// for other errors that could be explicitly handled, check first:
                     /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
                 }
+
                 else -> {
                     result = RemoteOperationResult(copyMethod)
                     client.exhaustResponse(copyMethod.getResponseBodyAsStream())
