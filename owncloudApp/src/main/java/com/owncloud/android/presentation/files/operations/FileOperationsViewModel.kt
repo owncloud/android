@@ -68,8 +68,8 @@ class FileOperationsViewModel(
     private val _createFolder = MediatorLiveData<Event<UIResult<Unit>>>()
     val createFolder: LiveData<Event<UIResult<Unit>>> = _createFolder
 
-    private val _copyFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
-    val copyFileLiveData: LiveData<Event<UIResult<OCFile>>> = _copyFileLiveData
+    private val _copyFileLiveData = MediatorLiveData<Event<UIResult<List<OCFile>>>>()
+    val copyFileLiveData: LiveData<Event<UIResult<List<OCFile>>>> = _copyFileLiveData
 
     private val _moveFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
     val moveFileLiveData: LiveData<Event<UIResult<OCFile>>> = _moveFileLiveData
@@ -118,11 +118,13 @@ class FileOperationsViewModel(
     }
 
     private fun copyOperation(fileOperation: FileOperation.CopyOperation) {
-        runOperation(
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
             liveData = _copyFileLiveData,
             useCase = copyFileUseCase,
-            useCaseParams = CopyFileUseCase.Params(fileOperation.listOfFilesToCopy, fileOperation.targetFolder),
-            postValue = fileOperation.targetFolder
+            useCaseParams = CopyFileUseCase.Params(fileOperation.listOfFilesToCopy, fileOperation.targetFolder, fileOperation.replace),
+            requiresConnection = true,
+            showLoading = true,
         )
     }
 
@@ -245,6 +247,7 @@ class FileOperationsViewModel(
                 is UseCaseResult.Success -> {
                     liveData.postValue(Event(UIResult.Success(postValue)))
                 }
+
                 is UseCaseResult.Error -> {
                     liveData.postValue(Event(UIResult.Error(error = useCaseResult.throwable)))
                 }

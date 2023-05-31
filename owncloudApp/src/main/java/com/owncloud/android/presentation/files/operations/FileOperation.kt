@@ -25,7 +25,7 @@ package com.owncloud.android.presentation.files.operations
 import com.owncloud.android.domain.files.model.OCFile
 
 sealed interface FileOperation {
-    data class CopyOperation(val listOfFilesToCopy: List<OCFile>, val targetFolder: OCFile) : FileOperation
+    data class CopyOperation(val listOfFilesToCopy: List<OCFile>, val targetFolder: OCFile, val replace: List<Boolean?> = emptyList()) : FileOperation
     data class CreateFolder(val folderName: String, val parentFile: OCFile) : FileOperation
     data class MoveOperation(val listOfFilesToMove: List<OCFile>, val targetFolder: OCFile) : FileOperation
     data class RemoveOperation(val listOfFilesToRemove: List<OCFile>, val removeOnlyLocalCopy: Boolean) : FileOperation
