@@ -27,6 +27,7 @@ import android.view.WindowManager
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
@@ -41,8 +42,13 @@ import com.owncloud.android.utils.PreferenceUtils
 class CreateFolderDialogFragment : DialogFragment() {
     private lateinit var parentFolder: OCFile
     private lateinit var createFolderListener: CreateFolderListener
+    private var isButtonEnabled: Boolean = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
+        if (savedInstanceState != null) {
+            isButtonEnabled = savedInstanceState.getBoolean(IS_BUTTON_ENABLED_FLAG_KEY)
+        }
 
         // Inflate the layout for the dialog
         val inflater = requireActivity().layoutInflater
@@ -71,9 +77,27 @@ class CreateFolderDialogFragment : DialogFragment() {
             }
             .setNegativeButton(android.R.string.cancel, null)
             .setTitle(R.string.uploader_info_dirname)
-        val alertDialog: Dialog = builder.create()
+        val alertDialog = builder.create()
+
+        alertDialog.setOnShowListener {
+            val okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            okButton.isEnabled = isButtonEnabled
+        }
+
+        inputText.doOnTextChanged { text, _, _, _ ->
+            val okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            isButtonEnabled = !text.isNullOrBlank()
+            okButton.isEnabled = isButtonEnabled
+        }
+
+
         alertDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         return alertDialog
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(IS_BUTTON_ENABLED_FLAG_KEY, isButtonEnabled)
     }
 
     interface CreateFolderListener {
@@ -82,6 +106,7 @@ class CreateFolderDialogFragment : DialogFragment() {
 
     companion object {
         const val CREATE_FOLDER_FRAGMENT = "CREATE_FOLDER_FRAGMENT"
+        private const val IS_BUTTON_ENABLED_FLAG_KEY = "IS_BUTTON_ENABLED_FLAG_KEY"
 
         /**
          * Public factory method to create new CreateFolderDialogFragment instances.
