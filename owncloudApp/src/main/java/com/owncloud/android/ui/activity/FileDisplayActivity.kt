@@ -29,6 +29,7 @@ package com.owncloud.android.ui.activity
 
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.accounts.Account
+import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -438,6 +439,7 @@ class FileDisplayActivity : FileActivity(),
                     autoplay
                 )
             }
+
             PreviewVideoFragment.canBePreviewed(file) -> {
                 val startPlaybackPosition = intent.getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0)
                 val autoplay = intent.getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true)
@@ -448,12 +450,14 @@ class FileDisplayActivity : FileActivity(),
                     autoplay
                 )
             }
+
             PreviewTextFragment.canBePreviewed(file) -> {
                 PreviewTextFragment.newInstance(
                     file,
                     account
                 )
             }
+
             else -> {
                 FileDetailsFragment.newInstance(file, account)
             }
@@ -696,7 +700,8 @@ class FileDisplayActivity : FileActivity(),
             if (secondFragment != null) {
                 // If secondFragment was shown, we need to navigate to the parent of the displayed file
                 // Need a cleanup
-                val folderIdToDisplay = if (fileListOption == FileListOption.AV_OFFLINE) storageManager.getRootPersonalFolder()!!.id!! else secondFragment!!.file!!.parentId!!
+                val folderIdToDisplay =
+                    if (fileListOption == FileListOption.AV_OFFLINE) storageManager.getRootPersonalFolder()!!.id!! else secondFragment!!.file!!.parentId!!
                 mainFileListFragment?.navigateToFolderId(folderIdToDisplay)
                 cleanSecondFragment()
                 updateToolbar(mainFileListFragment?.getCurrentFile())
@@ -914,6 +919,7 @@ class FileDisplayActivity : FileActivity(),
                     } else {
                         getString(R.string.bottom_nav_links)
                     }
+
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
                     FileListOption.SPACES_LIST -> getString(R.string.bottom_nav_spaces)
                 }
@@ -937,6 +943,7 @@ class FileDisplayActivity : FileActivity(),
             is UIResult.Loading -> {
                 // Not blocking the UI
             }
+
             is UIResult.Success -> {
                 val listOfFilesRemoved = uiResult.data ?: return
                 val lastRemovedFile = listOfFilesRemoved.last()
@@ -953,6 +960,7 @@ class FileDisplayActivity : FileActivity(),
                         is PreviewAudioFragment -> {
                             secondFragment.stopPreview()
                         }
+
                         is PreviewVideoFragment -> {
                             secondFragment.releasePlayer()
                         }
@@ -962,6 +970,7 @@ class FileDisplayActivity : FileActivity(),
                 }
                 invalidateOptionsMenu()
             }
+
             is UIResult.Error -> {
                 showErrorInSnackbar(R.string.remove_fail_msg, uiResult.getThrowableOrNull())
 
@@ -983,9 +992,11 @@ class FileDisplayActivity : FileActivity(),
             is UIResult.Loading -> {
                 showLoadingDialog(R.string.wait_a_moment)
             }
+
             is UIResult.Success -> {
                 dismissLoadingDialog()
             }
+
             is UIResult.Error -> {
                 dismissLoadingDialog()
 
@@ -1005,15 +1016,23 @@ class FileDisplayActivity : FileActivity(),
      * @param uiResult - UIResult wrapping the target folder where files were copied
      */
     private fun onCopyFileOperationFinish(
-        uiResult: UIResult<OCFile>
+        uiResult: UIResult<List<OCFile>>
     ) {
         when (uiResult) {
             is UIResult.Loading -> {
                 showLoadingDialog(R.string.wait_a_moment)
             }
+
             is UIResult.Success -> {
+                val replace = mutableListOf<Boolean?>()
                 dismissLoadingDialog()
+                uiResult.data?.let {
+                    showConflictDecisionDialog(uiResult = uiResult, data = it, replace = replace) { data, replace ->
+                        launchCopyFile(data, replace)
+                    }
+                }
             }
+
             is UIResult.Error -> {
                 dismissLoadingDialog()
 
@@ -1024,6 +1043,52 @@ class FileDisplayActivity : FileActivity(),
                 }
             }
         }
+    }
+
+    private fun showConflictDecisionDialog(
+        uiResult: UIResult.Success<List<OCFile>>,
+        data: List<OCFile>,
+        replace: MutableList<Boolean?>,
+        launchAction: (List<OCFile>, List<Boolean?>) -> Unit,
+    ) {
+        val context = this@FileDisplayActivity
+        if (!uiResult.data.isNullOrEmpty()) {
+            data.forEachIndexed { pos, file ->
+                AlertDialog.Builder(context)
+                    .setTitle(R.string.file_already_exists)
+                    .setMessage(String.format(context.getString(R.string.conflict_description), file.fileName))
+                    .setPositiveButton(R.string.welcome_feature_skip_button) { _, _ ->
+                        replace.add(null)
+                        if (pos == data.size - 1) {
+                            launchAction(uiResult.data, replace)
+                        }
+                    }
+                    .setNegativeButton(R.string.conflict_replace) { _, _ ->
+                        replace.add(true)
+                        if (pos == data.size - 1) {
+                            launchAction(uiResult.data, replace)
+                        }
+                    }
+                    .setNeutralButton(R.string.conflict_keep_both) { _, _ ->
+                        replace.add(false)
+                        if (pos == data.size - 1) {
+                            launchAction(uiResult.data, replace)
+                        }
+                    }
+                    .show()
+
+            }
+        }
+    }
+
+    private fun launchCopyFile(files: List<OCFile>, replace: List<Boolean?>) {
+        fileOperationsViewModel.performOperation(
+            FileOperation.CopyOperation(
+                listOfFilesToCopy = files,
+                targetFolder = currentDir,
+                replace = replace,
+            )
+        )
     }
 
     /**
@@ -1039,6 +1104,7 @@ class FileDisplayActivity : FileActivity(),
             is UIResult.Loading -> {
                 showLoadingDialog(R.string.wait_a_moment)
             }
+
             is UIResult.Success -> {
                 dismissLoadingDialog()
 
@@ -1052,6 +1118,7 @@ class FileDisplayActivity : FileActivity(),
                     }
                 }
             }
+
             is UIResult.Error -> {
                 dismissLoadingDialog()
 
@@ -1078,11 +1145,13 @@ class FileDisplayActivity : FileActivity(),
                             showSnackMessage(getString(R.string.sync_file_nothing_to_do_msg))
                         }
                     }
+
                     is SynchronizeFileUseCase.SyncType.ConflictDetected -> {
                         val showConflictActivityIntent = Intent(this, ConflictsResolveActivity::class.java)
                         showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, file)
                         startActivity(showConflictActivityIntent)
                     }
+
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
                         fileWaitingToPreview?.let {
                             showSnackMessage(getString(R.string.new_remote_version_found_msg))
@@ -1090,13 +1159,16 @@ class FileDisplayActivity : FileActivity(),
                             fileWaitingToPreview = null
                         } ?: showSnackMessage(getString(R.string.download_enqueued_msg))
                     }
+
                     SynchronizeFileUseCase.SyncType.FileNotFound -> {
                         /** Nothing to do atm. If we are in details view, go back to file list */
                     }
+
                     is SynchronizeFileUseCase.SyncType.UploadEnqueued -> showSnackMessage(getString(R.string.upload_enqueued_msg))
                     null -> TODO()
                 }
             }
+
             is UIResult.Error -> {
                 if (fileWaitingToPreview != null) {
                     startPreview(fileWaitingToPreview)
@@ -1116,14 +1188,17 @@ class FileDisplayActivity : FileActivity(),
                             }
                         }
                     }
+
                     is CertificateCombinedException -> {
                         showUntrustedCertDialogForThrowable(uiResult.error)
                     }
+
                     else -> {
                         showSnackMessage(getString(R.string.sync_fail_ticker))
                     }
                 }
             }
+
             is UIResult.Loading -> {
                 /** Not needed at the moment, we may need it later */
             }
@@ -1137,6 +1212,7 @@ class FileDisplayActivity : FileActivity(),
             is UIResult.Success -> {
                 // Nothing to handle when synchronizing a folder succeeds
             }
+
             is UIResult.Error -> {
                 when (uiResult.error) {
                     is UnauthorizedException -> {
@@ -1152,14 +1228,17 @@ class FileDisplayActivity : FileActivity(),
                             }
                         }
                     }
+
                     is CertificateCombinedException -> {
                         showUntrustedCertDialogForThrowable(uiResult.error)
                     }
+
                     else -> {
                         showSnackMessage(getString(R.string.sync_fail_ticker))
                     }
                 }
             }
+
             is UIResult.Loading -> {
                 /** Not needed at the moment, we may need it later */
             }
@@ -1367,6 +1446,7 @@ class FileDisplayActivity : FileActivity(),
                 PreviewTextFragment.canBePreviewed(file) -> {
                     startTextPreview(file)
                 }
+
                 PreviewAudioFragment.canBePreviewed(file) -> {
                     startAudioPreview(file, 0)
                 }
@@ -1411,6 +1491,7 @@ class FileDisplayActivity : FileActivity(),
                     browseToRoot()
                 }
             }
+
             FileListOption.SPACES_LIST -> {
                 if (previousFileListOption != newFileListOption || initialState) {
                     file = null
@@ -1418,6 +1499,7 @@ class FileDisplayActivity : FileActivity(),
                     updateToolbar(null)
                 }
             }
+
             FileListOption.SHARED_BY_LINK -> {
                 if (previousFileListOption != newFileListOption || initialState) {
                     val rootFolderForShares = storageManager.getRootSharesFolder()
@@ -1434,6 +1516,7 @@ class FileDisplayActivity : FileActivity(),
                     }
                 }
             }
+
             FileListOption.AV_OFFLINE -> {
                 if (previousFileListOption != newFileListOption || initialState) {
                     file = storageManager.getRootPersonalFolder()
@@ -1495,16 +1578,19 @@ class FileDisplayActivity : FileActivity(),
                 // preview image - it handles the sync, if needed
                 startImagePreview(file)
             }
+
             PreviewTextFragment.canBePreviewed(file) -> {
                 setFile(file)
                 fileWaitingToPreview = file
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
             }
+
             PreviewAudioFragment.canBePreviewed(file) -> {
                 setFile(file)
                 fileWaitingToPreview = file
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
             }
+
             PreviewVideoFragment.canBePreviewed(file) && !WorkManager.getInstance(this).isDownloadPending(account, file) -> {
                 // Available offline but not downloaded yet, don't initialize streaming
                 if (!file.isAvailableLocally && file.isAvailableOffline) {
@@ -1521,6 +1607,7 @@ class FileDisplayActivity : FileActivity(),
                     fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
                 }
             }
+
             else -> {
                 startSyncThenOpen(file)
             }

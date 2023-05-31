@@ -389,7 +389,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         copyFileUseCase.execute(
             CopyFileUseCase.Params(
-                listOfFilesToCopy = listOf(sourceFile), targetFolder = targetParentFile
+                listOfFilesToCopy = listOf(sourceFile), targetFolder = targetParentFile, replace = listOf(false)
             )
         ).also { result ->
             syncRequired = false
@@ -468,7 +468,11 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val newFile = File(tempDir, displayName)
         newFile.parentFile?.mkdirs()
         fileToUpload = OCFile(
-            remotePath = parentDocument.remotePath + displayName, mimeType = mimeType, parentId = parentDocument.id, owner = parentDocument.owner, spaceId = parentDocument.spaceId
+            remotePath = parentDocument.remotePath + displayName,
+            mimeType = mimeType,
+            parentId = parentDocument.id,
+            owner = parentDocument.owner,
+            spaceId = parentDocument.spaceId
         ).apply {
             storagePath = newFile.path
         }

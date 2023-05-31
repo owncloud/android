@@ -31,7 +31,11 @@ import java.util.UUID
 
 interface FileRepository {
     fun createFolder(remotePath: String, parentFolder: OCFile)
-    fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile)
+
+    /**
+     * returns conflict files
+     */
+    fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?> = emptyList()): MutableList<OCFile>
     fun getFileById(fileId: Long): OCFile?
     fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?>
     fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String? = null): OCFile?
@@ -60,4 +64,5 @@ interface FileRepository {
     fun disableThumbnailsForFile(fileId: Long)
     fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
     fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
+
 }
