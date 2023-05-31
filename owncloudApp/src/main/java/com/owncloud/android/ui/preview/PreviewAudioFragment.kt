@@ -242,7 +242,7 @@ class PreviewAudioFragment : FileFragment() {
 
         collectLatestLifecycleFlow(previewAudioViewModel.menuOptions) { menuOptions ->
             val hasWritePermission = safeFile.hasWritePermission
-            filterMenuOptions(menu, menuOptions, hasWritePermission)
+            menu.filterMenuOptions(menuOptions, hasWritePermission)
         }
 
         menu.findItem(R.id.action_search)?.apply {

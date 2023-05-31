@@ -918,9 +918,7 @@ class MainFileListFragment : Fragment(),
                 } else {
                     false
                 }
-                menu?.let {
-                    filterMenuOptions(it, menuOptions, hasWritePermission)
-                }
+                menu?.filterMenuOptions(menuOptions, hasWritePermission)
 
             }
 
