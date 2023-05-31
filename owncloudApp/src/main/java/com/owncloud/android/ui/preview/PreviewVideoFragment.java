@@ -56,6 +56,7 @@ import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.extensions.FragmentExtKt;
+import com.owncloud.android.extensions.MenuExtKt;
 import com.owncloud.android.presentation.files.operations.FileOperation;
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel;
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment;
@@ -319,7 +320,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         FragmentExtKt.collectLatestLifecycleFlow(this, previewVideoViewModel.getMenuOptions(), Lifecycle.State.CREATED,
                 (menuOptions, continuation) -> {
                     boolean hasWritePermission = safeFile.getHasWritePermission();
-                    FragmentExtKt.filterMenuOptions(this, menu, menuOptions, hasWritePermission);
+                    MenuExtKt.filterMenuOptions(menu, menuOptions, hasWritePermission);
                     return null;
                 }
         );

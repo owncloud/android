@@ -200,7 +200,7 @@ class PreviewImageFragment : FileFragment() {
 
         collectLatestLifecycleFlow(previewImageViewModel.menuOptions) { menuOptions ->
             val hasWritePermission = safeFile.hasWritePermission
-            filterMenuOptions(menu, menuOptions, hasWritePermission)
+            menu.filterMenuOptions(menuOptions, hasWritePermission)
         }
     }
 
