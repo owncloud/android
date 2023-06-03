@@ -10,6 +10,7 @@
   <string name="actionbar_upload_from_apps">Más alkalmazásokból származó tartalom</string>
   <string name="actionbar_upload_files">Fájlok</string>
   <string name="actionbar_open_with">Megnyitás a következővel</string>
+  <string name="actionbar_open_with_read_only">Megnyitás (csak olvasható)</string>
   <string name="actionbar_mkdir">Új mappa</string>
   <string name="actionbar_settings">Beállítások</string>
   <string name="actionbar_see_details">Részletek</string>
@@ -34,12 +35,17 @@
   <string name="prefs_subsection_logging">Logolás</string>
   <string name="prefs_subsection_more">Több</string>
   <string name="prefs_subsection_security">Biztonság</string>
+  <string name="prefs_subsection_whatsnew">Mi az újdonság a legújabb verzióban?</string>
+  <string name="prefs_subsection_security_summary">Zárak beállítása az alkalmazáshoz való hozzáféréshez és az érintések engedélyezése más látható ablakoknál</string>
+  <string name="prefs_subsection_logging_summary">Az alkalmazás végrehajtása során keletkező naplófájlok nyomon követése</string>
   <string name="prefs_subsection_more_summary">Applikáció információk, visszajelzés, egyéb</string>
   <string name="prefs_accounts">Fiókok</string>
   <string name="prefs_manage_accounts">Fiókok kezelése</string>
   <string name="prefs_passcode">Jelszavas zár</string>
   <string name="prefs_biometric">Biometrikus azonosítás</string>
   <string name="prefs_biometric_summary">Adjon meg zárolási jelszót vagy mintát a beállítás engedélyezéséhez</string>
+  <string name="prefs_lock_application">Alkalmazás lezárása</string>
+  <string name="prefs_lock_application_entries_immediately">Azonnal</string>
   <string name="prefs_touches_with_other_visible_windows">Érintkezik más látható ablakkal</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Engedélyezze az érintéseket, amikor a kép takarásban van egy másik ablak által.</string>
   <string name="confirmation_touches_with_other_windows_title">Biztos, hogy engedélyezi ezt a funkciót?</string>
