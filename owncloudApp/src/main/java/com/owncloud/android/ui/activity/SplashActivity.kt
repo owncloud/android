@@ -49,7 +49,7 @@ class SplashActivity : AppCompatActivity() {
 
         val mdmProvider = MdmProvider(this)
 
-        if (BuildConfig.FLAVOR == MainApp.MDM_FLAVOR) {
+        if (mdmProvider.isMdmFlavor()) {
             with(mdmProvider) {
                 cacheStringRestriction(CONFIGURATION_SERVER_URL, R.string.server_url_configuration_feedback_ok)
                 cacheBooleanRestriction(CONFIGURATION_SERVER_URL_INPUT_VISIBILITY, R.string.server_url_input_visibility_configuration_feedback_ok)
