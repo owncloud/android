@@ -79,6 +79,7 @@ class CopyRemoteFileOperation(
                 destinationUrl = (targetSpaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(targetRemotePath),
                 forceOverride = forceOverride,
             ).apply {
+                addRequestHeaders(this)
                 setReadTimeout(COPY_READ_TIMEOUT, TimeUnit.SECONDS)
                 setConnectionTimeout(COPY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
             }
@@ -111,6 +112,13 @@ class CopyRemoteFileOperation(
         return result
     }
 
+    private fun addRequestHeaders(copyMethod: CopyMethod) {
+        //Adding this because the library has an error whit override
+        if (copyMethod.forceOverride) {
+            copyMethod.setRequestHeader(OVERWRITE, TRUE)
+        }
+    }
+
     private fun isSuccess(status: Int) = status.isOneOf(HttpConstants.HTTP_CREATED, HttpConstants.HTTP_NO_CONTENT)
 
     private fun isPreconditionFailed(status: Int) = status == HttpConstants.HTTP_PRECONDITION_FAILED
@@ -118,5 +126,7 @@ class CopyRemoteFileOperation(
     companion object {
         private const val COPY_READ_TIMEOUT = 10L
         private const val COPY_CONNECTION_TIMEOUT = 6L
+        private const val OVERWRITE = "overwrite"
+        private const val TRUE = "T"
     }
 }

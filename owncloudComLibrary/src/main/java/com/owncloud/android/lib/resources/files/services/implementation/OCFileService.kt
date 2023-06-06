@@ -90,11 +90,13 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
         sourceRemotePath: String,
         targetRemotePath: String,
         spaceWebDavUrl: String?,
+        replace: Boolean,
     ): RemoteOperationResult<Unit> =
         MoveRemoteFileOperation(
             sourceRemotePath = sourceRemotePath,
             targetRemotePath = targetRemotePath,
             spaceWebDavUrl = spaceWebDavUrl,
+            forceOverride = replace,
         ).execute(client)
 
     override fun readFile(
