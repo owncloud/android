@@ -25,6 +25,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.view.Menu
+import android.view.MenuItem.SHOW_AS_ACTION_NEVER
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -103,6 +104,7 @@ fun Fragment.addOpenInWebMenuOptions(
     }
     appRegistryProviders?.forEachIndexed { index, appRegistryProvider ->
         menu.add(Menu.NONE, index, 0, getString(R.string.ic_action_open_with_web, appRegistryProvider.name)).also {
+            it.setShowAsAction(SHOW_AS_ACTION_NEVER)
             newOpenInWebProviders[appRegistryProvider.name] = it.itemId
         }
     }
