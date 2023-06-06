@@ -39,7 +39,7 @@ class CopyFileUseCaseTest {
 
     @Test
     fun `copy file - ok`() {
-        every { repository.copyFile(any(), any()) } returns Unit
+        every { repository.copyFile(any(), any()) } returns emptyList()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -52,7 +52,7 @@ class CopyFileUseCaseTest {
     fun `copy file - ok - single copy into same folder`() {
         val useCaseParams = CopyFileUseCase.Params(
             listOfFilesToCopy = listOf(element = OC_FOLDER.copy(remotePath = "/Photos/", parentId = 100)),
-            targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/", id = 100)
+            targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/", id = 100),
         )
         val useCaseResult = useCase.execute(useCaseParams)
 

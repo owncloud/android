@@ -63,6 +63,6 @@ class MoveFileUseCase(
     data class Params(
         val listOfFilesToMove: List<OCFile>,
         val targetFolder: OCFile,
-        val replace:List<Boolean?>,
+        val replace:List<Boolean?> = emptyList(),
     )
 }
