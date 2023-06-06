@@ -70,7 +70,7 @@ class FilterFileMenuOptionsUseCase(
         } else {
             false
         }
-        val isPersonalSpace = space?.isPersonal ?: false
+        val isPersonalSpace = space?.isPersonal ?: true
         val resharingAllowed = capability?.let { !anyFileSharedWithMe(files) || it.filesSharingResharing.isTrue } ?: false
         val displaySelectAll = params.displaySelectAll
         val displaySelectInverse = params.displaySelectInverse
