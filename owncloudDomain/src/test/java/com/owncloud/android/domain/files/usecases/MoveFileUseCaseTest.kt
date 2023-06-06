@@ -35,12 +35,12 @@ class MoveFileUseCaseTest {
     private val useCase = MoveFileUseCase(repository)
     private val useCaseParams = MoveFileUseCase.Params(
         listOfFilesToMove = listOf(OC_FILE.copy(remotePath = "/video.mp4", parentId = 123)),
-        targetFolder = OC_FOLDER.copy(id = 100)
+        targetFolder = OC_FOLDER.copy(id = 100),
     )
 
     @Test
     fun `move file - ok`() {
-        every { repository.moveFile(any(), any()) } returns Unit
+        every { repository.moveFile(any(), any()) } returns emptyList()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -62,8 +62,8 @@ class MoveFileUseCaseTest {
     @Test
     fun `move file - ko - single move into descendant`() {
         val useCaseParams = MoveFileUseCase.Params(
-            listOf(OC_FOLDER.copy(remotePath = "/Directory")),
-            OC_FOLDER.copy(remotePath = "/Directory/Descendant/")
+            listOfFilesToMove = listOf(OC_FOLDER.copy(remotePath = "/Directory")),
+            targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/"),
         )
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -76,8 +76,11 @@ class MoveFileUseCaseTest {
     @Test
     fun `move file - ko - multiple move into descendant`() {
         val useCaseParams = MoveFileUseCase.Params(
-            listOfFilesToMove = listOf(OC_FOLDER.copy(remotePath = "/Directory", parentId = 1), OC_FILE.copy(remotePath = "/Document.pdf", parentId = 1)),
-            targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/", id = 100)
+            listOfFilesToMove = listOf(
+                OC_FOLDER.copy(remotePath = "/Directory", parentId = 1),
+                OC_FILE.copy(remotePath = "/Document.pdf", parentId = 1),
+            ),
+            targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/", id = 100),
         )
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -90,7 +93,7 @@ class MoveFileUseCaseTest {
     fun `move file - ko - single move into same folder`() {
         val useCaseParams = MoveFileUseCase.Params(
             listOfFilesToMove = listOf(element = OC_FOLDER.copy(remotePath = "/Photos/", parentId = 100)),
-            targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/", id = 100)
+            targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/", id = 100),
         )
         val useCaseResult = useCase.execute(useCaseParams)
 
