@@ -65,6 +65,7 @@ import com.owncloud.android.domain.files.model.OCFileSyncInfo
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.addOpenInWebMenuOptions
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.filterMenuOptions
 import com.owncloud.android.extensions.parseError
@@ -134,6 +135,8 @@ class MainFileListFragment : Fragment(),
 
     private var currentDefaultApplication: String? = null
     private var browserOpened = false
+
+    private var openInWebProviders: Map<String, Int> = hashMapOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -685,6 +688,14 @@ class MainFileListFragment : Fragment(),
         } else if (checkedFilesWithSyncInfo.size == 1) {
             /// action only possible on a single file
             val singleFile = checkedFilesWithSyncInfo.first().file
+
+            openInWebProviders.forEach { (openInWebProviderName, menuItemId) ->
+                if (menuItemId == menuId) {
+                    mainFileListViewModel.openInWeb(singleFile.remoteId!!, openInWebProviderName)
+                    return true
+                }
+            }
+
             when (menuId) {
                 R.id.action_share_file -> {
                     fileActions?.onShareFileClicked(singleFile)
@@ -919,7 +930,23 @@ class MainFileListFragment : Fragment(),
                     false
                 }
                 menu?.filterMenuOptions(menuOptions, hasWritePermission)
+            }
 
+            if (checkedFiles.size == 1) {
+                mainFileListViewModel.getAppRegistryForMimeType(checkedFiles.first().mimeType)
+                collectLatestLifecycleFlow(mainFileListViewModel.appRegistryMimeType) { appRegistryMimeType ->
+                        val appProviders = appRegistryMimeType?.appProviders
+                        menu?.let {
+                            openInWebProviders = addOpenInWebMenuOptions(menu, openInWebProviders, appProviders)
+                        }
+                }
+            } else {
+                menu?.let {
+                    openInWebProviders.forEach { (_, menuItemId) ->
+                        it.removeItem(menuItemId)
+                    }
+                    openInWebProviders = emptyMap()
+                }
             }
 
             return true
