@@ -10,6 +10,7 @@ Summary
 
 * Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
 * Change - Move file menu options filter to use case: [#4009](https://github.com/owncloud/android/issues/4009)
+* Enhancement - Added "Open in web" options to main file list: [#3860](https://github.com/owncloud/android/issues/3860)
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 
 Details
@@ -31,6 +32,14 @@ Details
 
    https://github.com/owncloud/android/issues/4009
    https://github.com/owncloud/android/pull/4039
+
+* Enhancement - Added "Open in web" options to main file list: [#3860](https://github.com/owncloud/android/issues/3860)
+
+   "Open in web" dynamic options (depending on the providers available) are now shown in the main
+   file list as well, when selecting one single file which has providers to open it in web.
+
+   https://github.com/owncloud/android/issues/3860
+   https://github.com/owncloud/android/pull/4058
 
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 
