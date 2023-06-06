@@ -986,7 +986,7 @@ class FileDisplayActivity : FileActivity(),
      * file.
      */
     private fun onMoveFileOperationFinish(
-        uiResult: UIResult<OCFile>
+        uiResult: UIResult<List<OCFile>>
     ) {
         when (uiResult) {
             is UIResult.Loading -> {
@@ -995,6 +995,12 @@ class FileDisplayActivity : FileActivity(),
 
             is UIResult.Success -> {
                 dismissLoadingDialog()
+                val replace = mutableListOf<Boolean?>()
+                uiResult.data?.let {
+                    showConflictDecisionDialog(uiResult = uiResult, data = it, replace = replace) { data, replace ->
+                        launchMoveFile(data, replace)
+                    }
+                }
             }
 
             is UIResult.Error -> {
@@ -1024,8 +1030,8 @@ class FileDisplayActivity : FileActivity(),
             }
 
             is UIResult.Success -> {
-                val replace = mutableListOf<Boolean?>()
                 dismissLoadingDialog()
+                val replace = mutableListOf<Boolean?>()
                 uiResult.data?.let {
                     showConflictDecisionDialog(uiResult = uiResult, data = it, replace = replace) { data, replace ->
                         launchCopyFile(data, replace)
@@ -1085,7 +1091,17 @@ class FileDisplayActivity : FileActivity(),
         fileOperationsViewModel.performOperation(
             FileOperation.CopyOperation(
                 listOfFilesToCopy = files,
-                targetFolder = currentDir,
+                targetFolder = null,
+                replace = replace,
+            )
+        )
+    }
+
+    private fun launchMoveFile(files: List<OCFile>, replace: List<Boolean?>) {
+        fileOperationsViewModel.performOperation(
+            FileOperation.MoveOperation(
+                listOfFilesToMove = files,
+                targetFolder = null,
                 replace = replace,
             )
         )
