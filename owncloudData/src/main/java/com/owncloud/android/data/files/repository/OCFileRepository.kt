@@ -90,34 +90,16 @@ class OCFileRepository(
             // 1. Get the final remote path for this file.
             val expectedRemotePath: String = targetFolder.remotePath + ocFile.fileName
 
-            val finalRemotePath: String? = if (replace.isEmpty()) {
-                val pathExists = remoteFileDataSource.checkPathExistence(
-                    path = expectedRemotePath,
-                    checkUserCredentials = false,
-                    accountName = targetFolder.owner,
-                    spaceWebDavUrl = targetSpaceWebDavUrl,
+            val finalRemotePath: String? =
+                getFinalRemotePath(
+                    replace = replace,
+                    expectedRemotePath = expectedRemotePath,
+                    targetFolder = targetFolder,
+                    targetSpaceWebDavUrl = targetSpaceWebDavUrl,
+                    filesNeedsAction = filesNeedsAction,
+                    ocFile = ocFile,
+                    position = position,
                 )
-                if (pathExists) {
-                    filesNeedsAction.add(ocFile)
-                    null
-                } else {
-                    if (ocFile.isFolder) expectedRemotePath.plus(File.separator) else expectedRemotePath
-                }
-            } else {
-                if (replace[position] == true) {
-                    if (ocFile.isFolder) expectedRemotePath.plus(File.separator) else expectedRemotePath
-                } else if (replace[position] == false) {
-                    remoteFileDataSource.getAvailableRemotePath(
-                        expectedRemotePath,
-                        targetFolder.owner,
-                        targetSpaceWebDavUrl,
-                    ).let {
-                        if (ocFile.isFolder) it.plus(File.separator) else it
-                    }
-                } else {
-                    null
-                }
-            }
             if (finalRemotePath != null && (replace.isEmpty() || replace[position] != null)) {
                 // 2. Try to copy files in server
                 val remoteId = try {
@@ -229,38 +211,17 @@ class OCFileRepository(
 
             // 1. Get the final remote path for this file.
             val expectedRemotePath: String = targetFolder.remotePath + ocFile.fileName
-            val finalRemotePath: String? = if (replace.isEmpty()) {
-                val pathExists = remoteFileDataSource.checkPathExistence(
-                    path = expectedRemotePath,
-                    checkUserCredentials = false,
-                    accountName = targetFolder.owner,
-                    spaceWebDavUrl = targetSpaceWebDavUrl,
+            val finalRemotePath: String? =
+                getFinalRemotePath(
+                    replace = replace,
+                    expectedRemotePath = expectedRemotePath,
+                    targetFolder = targetFolder,
+                    targetSpaceWebDavUrl = targetSpaceWebDavUrl,
+                    filesNeedsAction = filesNeedsAction,
+                    ocFile = ocFile,
+                    position = position,
                 )
-                if (pathExists) {
-                    filesNeedsAction.add(ocFile)
-                    null
-                } else {
-                    if (ocFile.isFolder) expectedRemotePath.plus(File.separator) else expectedRemotePath
-                }
-            } else {
-                if (replace[position] == true) {
-                    if (ocFile.isFolder) expectedRemotePath.plus(File.separator) else expectedRemotePath
-                } else if (replace[position] == false) {
-                    remoteFileDataSource.getAvailableRemotePath(
-                        expectedRemotePath,
-                        targetFolder.owner,
-                        targetSpaceWebDavUrl,
-                    ).let {
-                        if (ocFile.isFolder) it.plus(File.separator) else it
-                    }
-                } else {
-                    null
-                }
-            }
 
-            //            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath, targetFile.owner, spaceWebDavUrl).let {
-            //                if (ocFile.isFolder) it.plus(File.separator) else it
-            //            }
             if (finalRemotePath != null && (replace.isEmpty() || replace[position] != null)) {
                 val finalStoragePath: String = localStorageProvider.getDefaultSavePathFor(targetFolder.owner, finalRemotePath, targetFolder.spaceId)
 
@@ -317,6 +278,43 @@ class OCFileRepository(
             }
         }
         return filesNeedsAction
+    }
+
+    private fun getFinalRemotePath(
+        replace: List<Boolean?>,
+        expectedRemotePath: String,
+        targetFolder: OCFile,
+        targetSpaceWebDavUrl: String?,
+        filesNeedsAction: MutableList<OCFile>,
+        ocFile: OCFile,
+        position: Int
+    ) = if (replace.isEmpty()) {
+        val pathExists = remoteFileDataSource.checkPathExistence(
+            path = expectedRemotePath,
+            checkUserCredentials = false,
+            accountName = targetFolder.owner,
+            spaceWebDavUrl = targetSpaceWebDavUrl,
+        )
+        if (pathExists) {
+            filesNeedsAction.add(ocFile)
+            null
+        } else {
+            if (ocFile.isFolder) expectedRemotePath.plus(File.separator) else expectedRemotePath
+        }
+    } else {
+        if (replace[position] == true) {
+            if (ocFile.isFolder) expectedRemotePath.plus(File.separator) else expectedRemotePath
+        } else if (replace[position] == false) {
+            remoteFileDataSource.getAvailableRemotePath(
+                expectedRemotePath,
+                targetFolder.owner,
+                targetSpaceWebDavUrl,
+            ).let {
+                if (ocFile.isFolder) it.plus(File.separator) else it
+            }
+        } else {
+            null
+        }
     }
 
     override fun readFile(remotePath: String, accountName: String, spaceId: String?): OCFile {
