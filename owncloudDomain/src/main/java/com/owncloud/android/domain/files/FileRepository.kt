@@ -4,6 +4,7 @@
  * @author Abel García de Prada
  * @author Christian Schabesberger
  * @author Juan Carlos Garrote Gascón
+ * @author Manuel Plazas Palacio
  *
  * Copyright (C) 2022 ownCloud GmbH.
  *
@@ -49,7 +50,7 @@ interface FileRepository {
     fun getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>>
     fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
-    fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile)
+    fun moveFile(listOfFilesToMove: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?> = emptyList()): MutableList<OCFile>
     fun readFile(remotePath: String, accountName: String, spaceId: String? = null): OCFile
     fun refreshFolder(remotePath: String, accountName: String, spaceId: String? = null): List<OCFile>
     fun deleteFiles(listOfFilesToDelete: List<OCFile>, removeOnlyLocalCopy: Boolean)

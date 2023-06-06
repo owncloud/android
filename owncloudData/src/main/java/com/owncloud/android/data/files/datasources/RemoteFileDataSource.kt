@@ -59,6 +59,7 @@ interface RemoteFileDataSource {
         targetRemotePath: String,
         accountName: String,
         spaceWebDavUrl: String?,
+        replace: Boolean,
     )
 
     fun readFile(

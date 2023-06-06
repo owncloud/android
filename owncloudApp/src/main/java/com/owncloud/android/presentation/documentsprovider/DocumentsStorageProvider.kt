@@ -416,7 +416,9 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         moveFileUseCase.execute(
             MoveFileUseCase.Params(
-                listOfFilesToMove = listOf(sourceFile), targetFolder = targetParentFile
+                listOfFilesToMove = listOf(sourceFile),
+                targetFolder = targetParentFile,
+                replace = listOf(false),
             )
         ).also { result ->
             syncRequired = false
