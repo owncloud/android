@@ -1,4 +1,4 @@
-[FEATURE REQUEST] Copy/move conflict solved by users
+Enhancement: Copy/move conflict solved by users
 
 Displaying a pop-up in case there is a name conflict with the files been moved or copied.
 The pop-up has the options to Skip, Replace and Keep both.
