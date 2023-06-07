@@ -21,11 +21,13 @@ package com.owncloud.android.domain.files.usecases
 import com.owncloud.android.domain.exceptions.CopyIntoDescendantException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -44,6 +46,7 @@ class CopyFileUseCaseTest {
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
+        assertEquals(useCaseResult.getDataOrNull(), emptyList<OCFile>())
 
         verify(exactly = 1) { repository.copyFile(any(), any()) }
     }
@@ -109,4 +112,30 @@ class CopyFileUseCaseTest {
 
         verify(exactly = 1) { repository.copyFile(any(), any()) }
     }
+
+    @Test
+    fun `should return list of files when repository returns it`() {
+        val filesList = listOf(OC_FILE, OC_FILE)
+        every { repository.copyFile(any(), any()) } returns filesList
+
+        val useCaseResult = useCase.execute(useCaseParams)
+
+        assertTrue(useCaseResult.isSuccess)
+        assertEquals(filesList, useCaseResult.getDataOrNull())
+
+        verify(exactly = 1) { repository.copyFile(any(), any()) }
+    }
+
+    @Test
+    fun `should call repository with replace list pass in the params`() {
+        val replace = listOf(true, false)
+        every { repository.copyFile(any(), any(), replace) } returns emptyList()
+
+        val useCaseResult = useCase.execute(useCaseParams.copy(replace = replace))
+
+        assertTrue(useCaseResult.isSuccess)
+
+        verify(exactly = 1) { repository.copyFile(any(), any(), replace) }
+    }
+
 }
