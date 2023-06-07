@@ -12,7 +12,7 @@
 |master (Unit tests and data instrumented tests)| ![](https://app.bitrise.io/app/7c4fbbdb2c1c0a20/status.svg?token=t2kBlsAf8d8yZftuohQnTw&branch=master)|
 | :----- | :------ |
 |**master (UI tests)**| ![](https://app.bitrise.io/app/a2a0b888408d15d8/status.svg?token=6Fz1YAJL944eJLwmmbkQ9A&branch=master)|
-|**stable**| ![](https://app.bitrise.io/app/a2a0b888408d15d8/status.svg?token=6Fz1YAJL944eJLwmmbkQ9A&branch=stable)|
+
 
 **Start contributing:** Make sure you read [SETUP.md](https://github.com/owncloud/android/blob/master/SETUP.md) when you start working on this project. Basically: Fork this repository and contribute back using pull requests to the master branch.
 Easy starting points are also reviewing [pull requests](https://github.com/owncloud/android/pulls) and working on [contributions are welcome](https://github.com/owncloud/android/issues?q=is%3Aopen+is%3Aissue+label%3A%22Contributions+are+welcome%22).
