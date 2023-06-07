@@ -27,6 +27,7 @@ import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
+import org.junit.Assert
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -114,4 +115,30 @@ class MoveFileUseCaseTest {
 
         verify(exactly = 1) { repository.moveFile(any(), any()) }
     }
+
+    @Test
+    fun `should return list of files when repository returns it`() {
+        val filesList = listOf(OC_FILE, OC_FILE)
+        every { repository.moveFile(any(), any()) } returns filesList
+
+        val useCaseResult = useCase.execute(useCaseParams)
+
+        assertTrue(useCaseResult.isSuccess)
+        Assert.assertEquals(filesList, useCaseResult.getDataOrNull())
+
+        verify(exactly = 1) { repository.moveFile(any(), any()) }
+    }
+
+    @Test
+    fun `should call repository with replace list pass in the params`() {
+        val replace = listOf(true, false)
+        every { repository.moveFile(any(), any(), replace) } returns emptyList()
+
+        val useCaseResult = useCase.execute(useCaseParams.copy(replace = replace))
+
+        assertTrue(useCaseResult.isSuccess)
+
+        verify(exactly = 1) { repository.moveFile(any(), any(), replace) }
+    }
+
 }
