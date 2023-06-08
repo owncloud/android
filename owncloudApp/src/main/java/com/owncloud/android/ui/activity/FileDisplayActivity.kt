@@ -1062,8 +1062,8 @@ class FileDisplayActivity : FileActivity(),
             data.forEachIndexed { pos, file ->
                 AlertDialog.Builder(context)
                     .setTitle(R.string.file_already_exists)
-                    .setMessage(String.format(context.getString(R.string.conflict_description), file.fileName))
-                    .setPositiveButton(R.string.welcome_feature_skip_button) { _, _ ->
+                    .setMessage(String.format(context.getString(R.string.file_already_exists_description), file.fileName))
+                    .setNeutralButton(R.string.welcome_feature_skip_button) { _, _ ->
                         replace.add(null)
                         if (pos == data.size - 1) {
                             launchAction(uiResult.data, replace)
@@ -1075,7 +1075,7 @@ class FileDisplayActivity : FileActivity(),
                             launchAction(uiResult.data, replace)
                         }
                     }
-                    .setNeutralButton(R.string.conflict_keep_both) { _, _ ->
+                    .setPositiveButton(R.string.conflict_keep_both) { _, _ ->
                         replace.add(false)
                         if (pos == data.size - 1) {
                             launchAction(uiResult.data, replace)

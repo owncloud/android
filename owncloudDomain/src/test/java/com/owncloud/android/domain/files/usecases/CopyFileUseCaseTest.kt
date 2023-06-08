@@ -114,7 +114,7 @@ class CopyFileUseCaseTest {
     }
 
     @Test
-    fun `should return list of files when repository returns it`() {
+    fun `copy file - ok - return list files`() {
         val filesList = listOf(OC_FILE, OC_FILE)
         every { repository.copyFile(any(), any()) } returns filesList
 
@@ -127,7 +127,7 @@ class CopyFileUseCaseTest {
     }
 
     @Test
-    fun `should call repository with replace list pass in the params`() {
+    fun `copy file - ok - passing replace`() {
         val replace = listOf(true, false)
         every { repository.copyFile(any(), any(), replace) } returns emptyList()
 
