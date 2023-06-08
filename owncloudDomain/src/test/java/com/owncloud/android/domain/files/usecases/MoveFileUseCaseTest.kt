@@ -117,7 +117,7 @@ class MoveFileUseCaseTest {
     }
 
     @Test
-    fun `should return list of files when repository returns it`() {
+    fun ` move file - ok - return list files`() {
         val filesList = listOf(OC_FILE, OC_FILE)
         every { repository.moveFile(any(), any()) } returns filesList
 
@@ -130,7 +130,7 @@ class MoveFileUseCaseTest {
     }
 
     @Test
-    fun `should call repository with replace list pass in the params`() {
+    fun `mov file - ok - passing replace`() {
         val replace = listOf(true, false)
         every { repository.moveFile(any(), any(), replace) } returns emptyList()
 
