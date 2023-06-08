@@ -130,7 +130,7 @@ open class MoveRemoteFileOperation(
      * In case new headers are needed, override this method
      */
     open fun addRequestHeaders(moveMethod: MoveMethod) {
-        //Adding this because the library has an error whit override
+        //Adding this because the library has an error with override
         if (moveMethod.forceOverride) {
             moveMethod.setRequestHeader(OVERWRITE, TRUE)
         }

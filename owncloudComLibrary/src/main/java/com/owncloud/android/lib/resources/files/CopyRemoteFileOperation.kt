@@ -45,6 +45,7 @@ import java.util.concurrent.TimeUnit
  * @author Christian Schabesberger
  * @author David González V.
  * @author Juan Carlos Garrote Gascón
+ * @author Manuel Plazas Palacio
  *
  * @param sourceRemotePath    Remote path of the file/folder to copy.
  * @param targetRemotePath Remote path desired for the file/folder to copy it.
@@ -113,7 +114,7 @@ class CopyRemoteFileOperation(
     }
 
     private fun addRequestHeaders(copyMethod: CopyMethod) {
-        //Adding this because the library has an error whit override
+        //Adding this because the library has an error with override
         if (copyMethod.forceOverride) {
             copyMethod.setRequestHeader(OVERWRITE, TRUE)
         }
