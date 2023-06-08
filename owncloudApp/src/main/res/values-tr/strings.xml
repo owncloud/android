@@ -86,6 +86,8 @@
   <string name="prefs_help">Yardım</string>
   <string name="prefs_sync_calendar_contacts">Kişilerinizi, takviminizi ve görevlerinizi eşitleyin</string>
   <string name="prefs_sync_calendar_contacts_summary">DAVx⁵ yükle</string>
+  <string name="prefs_access_document_provider">Doküman sağlayıcıya eriş</string>
+  <string name="prefs_access_document_provider_summary">Android yerel dosya gezgini aracılığıyla cihazınızın dosyalarına göz atmak için önerilen uygulama</string>
   <string name="prefs_recommend">Bir arkadaşa öner</string>
   <string name="prefs_feedback">Geribildirim</string>
   <string name="prefs_imprint">İzlenim</string>
@@ -171,6 +173,7 @@
   <string name="file_list_files">dosya</string>
   <string name="filedetails_select_file">Ek bilgileri görmek için dosyaya dokunun.</string>
   <string name="upload_to">%1$s konumuna yükle</string>
+  <string name="pick_document_type">Oluşturmak için bir doküman türü seçin:</string>
   <string name="upload_files_title">Dosyalar</string>
   <string name="filedetails_size">Boyut:</string>
   <string name="filedetails_type">Tür:</string>
@@ -372,6 +375,7 @@
   <string name="download_enqueued_msg">İndirme kuyruğa alınmış</string>
   <string name="upload_enqueued_msg">Yükleme kuyruğa alınmış</string>
   <string name="create_dir_fail_msg">Klasör oluşturulamadı</string>
+  <string name="create_file_fail_msg">Dosya oluşturulamadı</string>
   <string name="filename_forbidden_characters">Yasaklı karakterler: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Dosya adı en az bir geçersiz karakter içeriyor</string>
   <string name="filename_empty">Dosya adı boş olamaz</string>
@@ -599,6 +603,7 @@
   <string name="file_sync_notification_channel_name">Dosya eşitleme</string>
   <string name="file_sync_notification_channel_description">Dosya eşitleme sonucunu gör</string>
   <string name="file_sync_conflict_notification_channel_name">Dosya çakışmaları</string>
+  <string name="file_sync_conflict_notification_channel_description">Oluştuklarında dosya çakışmalarını görün</string>
   <string name="clicks_to_be_developer">Geliştirici menülerini etkinleştirmeye %1$d tık uzaktasınız</string>
   <string name="rate_dialog_title">%1$s uygulamasını oyla!</string>
   <string name="rate_dialog_description">Bu uygulamayı kullanmaktan memnunsanız oylamak için birkaç dakikanızı ayırır mısınız? Geri dönüşünüz bizim için çok önemli.</string>
@@ -663,6 +668,7 @@
   <string name="release_notes_4_0_subtitle_9">Sunucunuz, uygulama sağlayıcıların belirli türden dosyaları açmasını destekliyorsa, bunların tümü Ayrıntılar görünümünde listelenir</string>
   <string name="release_notes_4_0_title_10">Temalı ikonlar desteklendi</string>
   <string name="release_notes_4_0_subtitle_10">Android 13 özelliği \"Temalı ikonlar\", uygulama simgesini tek renkli olarak ayarlamanıza izin verir</string>
+  <string name="release_notes_4_0_title_11">Web (oCIS) aracılığıyla yeni dokümanlar oluştur</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Web\'te aç</string>
   <string name="ic_action_open_with_web">%1$s\'da aç (web)</string>
@@ -670,5 +676,8 @@
   <string name="open_in_web_error_not_supported">bu dosya türünü destekleyen hiçbir uygulama yok</string>
   <string name="open_in_web_error_too_early">İstenen dosya henüz mevcut değil, lütfen daha sonra tekrar deneyin.</string>
   <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_title">oCIS hesaplar uyarısı</string>
+  <string name="ocis_accounts_warning_message">Boşluk özelliğini almak için lütfen hesabı kaldırın ve tekrar giriş yapın</string>
   <string name="ocis_accounts_warning_checkbox_message">Tekrar gösterme</string>
+  <string name="ocis_accounts_warning_button">Anlaşıldı</string>
 </resources>
