@@ -1,5 +1,5 @@
 [versions]
-androidGradlePlugin = "7.4.1"
+androidGradlePlugin = "7.4.2"
 androidxActivity = "1.6.1"
 androidxAnnotation = "1.6.0"
 androidxAppCompat = "1.5.1"
@@ -116,8 +116,6 @@ espresso = ["androidx-test-espresso-contrib", "androidx-test-espresso-core", "an
 markwon = ["markwon-core", "markwon-ext-tables", "markwon-ext-strikethrough", "markwon-ext-tasklist", "markwon-html"]
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
-android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
