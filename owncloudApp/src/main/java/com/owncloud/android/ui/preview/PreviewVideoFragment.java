@@ -5,20 +5,23 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Shashvat Kedia
- * Copyright (C) 2021 ownCloud GmbH.
- * <p>
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.ui.preview;
 
 import android.accounts.Account;
@@ -37,6 +40,7 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.Lifecycle;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -52,10 +56,11 @@ import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.extensions.FragmentExtKt;
-import com.owncloud.android.files.FileMenuFilter;
+import com.owncloud.android.extensions.MenuExtKt;
 import com.owncloud.android.presentation.files.operations.FileOperation;
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel;
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment;
+import com.owncloud.android.presentation.previews.PreviewVideoViewModel;
 import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
@@ -106,6 +111,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     private boolean mAutoplay;
     private long mPlaybackPosition;
 
+    PreviewVideoViewModel previewVideoViewModel = get(PreviewVideoViewModel.class);
     FileOperationsViewModel fileOperationsViewModel = get(FileOperationsViewModel.class);
 
     /**
@@ -307,18 +313,16 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        FileMenuFilter mf = new FileMenuFilter(
-                getFile(),
-                mAccount,
-                mContainerActivity,
-                getActivity()
-        );
-        mf.filter(
-                menu,
-                false,
-                false,
-                false,
-                false
+        OCFile safeFile = getFile();
+        String accountName = mAccount.name;
+        previewVideoViewModel.filterMenuOptions(safeFile, accountName);
+
+        FragmentExtKt.collectLatestLifecycleFlow(this, previewVideoViewModel.getMenuOptions(), Lifecycle.State.CREATED,
+                (menuOptions, continuation) -> {
+                    boolean hasWritePermission = safeFile.getHasWritePermission();
+                    MenuExtKt.filterMenuOptions(menu, menuOptions, hasWritePermission);
+                    return null;
+                }
         );
 
         // additional restrictions for this fragment

@@ -3,17 +3,19 @@
  *
  * @author Christian Schabesberger
  * @author Shashvat Kedia
- * Copyright (C) 2020 ownCloud GmbH.
- * <p>
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,14 +38,17 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.extensions.ActivityExtKt;
-import com.owncloud.android.files.FileMenuFilter;
+import com.owncloud.android.extensions.FragmentExtKt;
+import com.owncloud.android.extensions.MenuExtKt;
 import com.owncloud.android.presentation.files.operations.FileOperation;
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel;
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment;
+import com.owncloud.android.presentation.previews.PreviewTextViewModel;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
@@ -72,6 +77,7 @@ import static org.koin.java.KoinJavaComponent.get;
 public class PreviewTextFragment extends FileFragment {
     private static final String EXTRA_FILE = "FILE";
     private static final String EXTRA_ACCOUNT = "ACCOUNT";
+    private static final String TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT";
 
     private Account mAccount;
     private ProgressBar mProgressBar;
@@ -79,6 +85,7 @@ public class PreviewTextFragment extends FileFragment {
     private TextView mTextPreview;
     private TextLoadAsyncTask mTextLoadTask;
 
+    PreviewTextViewModel previewTextViewModel = get(PreviewTextViewModel.class);
     FileOperationsViewModel fileOperationsViewModel = get(FileOperationsViewModel.class);
 
     /**
@@ -329,55 +336,20 @@ public class PreviewTextFragment extends FileFragment {
         super.onPrepareOptionsMenu(menu);
 
         if (mContainerActivity.getStorageManager() != null) {
-            FileMenuFilter mf = new FileMenuFilter(
-                    getFile(),
-                    mContainerActivity.getStorageManager().getAccount(),
-                    mContainerActivity,
-                    getActivity()
-            );
-            mf.filter(
-                    menu,
-                    false,
-                    false,
-                    false,
-                    false
+            OCFile safeFile = getFile();
+            String accountName = mContainerActivity.getStorageManager().getAccount().name;
+            previewTextViewModel.filterMenuOptions(safeFile, accountName);
+
+            FragmentExtKt.collectLatestLifecycleFlow(this, previewTextViewModel.getMenuOptions(), Lifecycle.State.CREATED,
+                    (menuOptions, continuation) -> {
+                        boolean hasWritePermission = safeFile.getHasWritePermission();
+                        MenuExtKt.filterMenuOptions(menu, menuOptions, hasWritePermission);
+                        return null;
+                    }
             );
         }
 
-        // additional restriction for this fragment
-        MenuItem item = menu.findItem(R.id.action_rename_file);
-        if (item != null) {
-            item.setVisible(false);
-            item.setEnabled(false);
-        }
-
-        // additional restriction for this fragment
-        item = menu.findItem(R.id.action_move);
-        if (item != null) {
-            item.setVisible(false);
-            item.setEnabled(false);
-        }
-
-        item = menu.findItem(R.id.action_copy);
-        if (item != null) {
-            item.setVisible(false);
-            item.setEnabled(false);
-        }
-
-        // this one doesn't make sense since the file has to be down in order to be previewed
-        item = menu.findItem(R.id.action_download_file);
-        if (item != null) {
-            item.setVisible(false);
-            item.setEnabled(false);
-        }
-
-        item = menu.findItem(R.id.action_sync_file);
-        if (item != null) {
-            item.setVisible(false);
-            item.setEnabled(false);
-        }
-
-        item = menu.findItem(R.id.action_search);
+        MenuItem item = menu.findItem(R.id.action_search);
         if (item != null) {
             item.setVisible(false);
             item.setEnabled(false);
