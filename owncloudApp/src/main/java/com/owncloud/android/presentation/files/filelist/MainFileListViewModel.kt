@@ -27,6 +27,7 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.R
 import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
+import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryForMimeTypeAsStreamUseCase
 import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryWhichAllowCreationAsStreamUseCase
 import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
@@ -79,6 +80,7 @@ class MainFileListViewModel(
     private val sortFilesWithSyncInfoUseCase: SortFilesWithSyncInfoUseCase,
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
     getAppRegistryWhichAllowCreationAsStreamUseCase: GetAppRegistryWhichAllowCreationAsStreamUseCase,
+    private val getAppRegistryForMimeTypeAsStreamUseCase: GetAppRegistryForMimeTypeAsStreamUseCase,
     private val getUrlToOpenInWebUseCase: GetUrlToOpenInWebUseCase,
     private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
     private val contextProvider: ContextProvider,
@@ -105,6 +107,7 @@ class MainFileListViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = emptyList()
         )
+    var appRegistryMimeType: StateFlow<AppRegistryMimeType?> = MutableStateFlow(null)
 
     /** File list ui state combines the other fields and generate a new state whenever any of them changes */
     val fileListUiState: StateFlow<FileListUiState> =
@@ -302,6 +305,18 @@ class MainFileListViewModel(
                 sendAllowed = sendAllowed,
             ))
             _menuOptions.update { result }
+        }
+    }
+
+    fun getAppRegistryForMimeType(mimeType: String) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            appRegistryMimeType = getAppRegistryForMimeTypeAsStreamUseCase.execute(
+                GetAppRegistryForMimeTypeAsStreamUseCase.Params(accountName = getFile().owner, mimeType))
+                .stateIn(
+                    viewModelScope,
+                    started = SharingStarted.WhileSubscribed(5_000),
+                    initialValue = null
+                )
         }
     }
 
