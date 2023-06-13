@@ -360,7 +360,7 @@
   <string name="available_offline_inherited_msg">La carpeta que contiene este archivo está disponible offline</string>
   <string name="rename_local_fail_msg">No se pudo cambiar el nombre de la copia local, trata con un nombre differente</string>
   <string name="rename_server_fail_msg">No se pudo cambiar el nombre</string>
-  <string name="file_already_exists">Fichero ya existe</string>
+  <string name="file_already_exists">fichero ya existe</string>
   <string name="sync_file_fail_msg">No se ha podido comprobar el fichero remoto</string>
   <string name="sync_file_nothing_to_do_msg">Ya está sincronizado</string>
   <string name="new_remote_version_found_msg">Se ha encontrado una nueva versión en el servidor. Descargando...</string>

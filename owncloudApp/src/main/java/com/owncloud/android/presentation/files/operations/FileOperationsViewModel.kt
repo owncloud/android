@@ -92,6 +92,7 @@ class FileOperationsViewModel(
     private val _createFileWithAppProviderFlow = MutableStateFlow<Event<UIResult<String>>?>(null)
     val createFileWithAppProviderFlow: StateFlow<Event<UIResult<String>>?> = _createFileWithAppProviderFlow
 
+    // Used to save the last operation folder
     private var lastTargetFolder: OCFile? = null
 
     fun performOperation(fileOperation: FileOperation) {

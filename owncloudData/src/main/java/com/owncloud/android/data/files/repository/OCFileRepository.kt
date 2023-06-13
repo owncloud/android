@@ -83,7 +83,7 @@ class OCFileRepository(
     override fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?>): List<OCFile> {
         val sourceSpaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(listOfFilesToCopy[0].spaceId, listOfFilesToCopy[0].owner)
         val targetSpaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(targetFolder.spaceId, targetFolder.owner)
-        val filesNeedsAction = mutableListOf<OCFile>()
+        val filesNeedAction = mutableListOf<OCFile>()
 
         listOfFilesToCopy.forEachIndexed forEach@{ position, ocFile ->
 
@@ -96,7 +96,7 @@ class OCFileRepository(
                     expectedRemotePath = expectedRemotePath,
                     targetFolder = targetFolder,
                     targetSpaceWebDavUrl = targetSpaceWebDavUrl,
-                    filesNeedsAction = filesNeedsAction,
+                    filesNeedsAction = filesNeedAction,
                     ocFile = ocFile,
                     position = position,
                 )
@@ -143,7 +143,7 @@ class OCFileRepository(
                 }
             }
         }
-        return filesNeedsAction
+        return filesNeedAction
     }
 
     override fun getFileById(fileId: Long): OCFile? =
@@ -288,34 +288,35 @@ class OCFileRepository(
         filesNeedsAction: MutableList<OCFile>,
         ocFile: OCFile,
         position: Int
-    ) = if (replace.isEmpty()) {
-        val pathExists = remoteFileDataSource.checkPathExistence(
-            path = expectedRemotePath,
-            checkUserCredentials = false,
-            accountName = targetFolder.owner,
-            spaceWebDavUrl = targetSpaceWebDavUrl,
-        )
-        if (pathExists) {
-            filesNeedsAction.add(ocFile)
-            null
-        } else {
-            if (ocFile.isFolder) expectedRemotePath.plus(File.separator) else expectedRemotePath
-        }
-    } else {
-        if (replace[position] == true) {
-            if (ocFile.isFolder) expectedRemotePath.plus(File.separator) else expectedRemotePath
-        } else if (replace[position] == false) {
-            remoteFileDataSource.getAvailableRemotePath(
-                expectedRemotePath,
-                targetFolder.owner,
-                targetSpaceWebDavUrl,
-            ).let {
-                if (ocFile.isFolder) it.plus(File.separator) else it
+    ) =
+        if (replace.isEmpty()) {
+            val pathExists = remoteFileDataSource.checkPathExistence(
+                path = expectedRemotePath,
+                checkUserCredentials = false,
+                accountName = targetFolder.owner,
+                spaceWebDavUrl = targetSpaceWebDavUrl,
+            )
+            if (pathExists) {
+                filesNeedsAction.add(ocFile)
+                null
+            } else {
+                if (ocFile.isFolder) expectedRemotePath.plus(File.separator) else expectedRemotePath
             }
         } else {
-            null
+            if (replace[position] == true) {
+                if (ocFile.isFolder) expectedRemotePath.plus(File.separator) else expectedRemotePath
+            } else if (replace[position] == false) {
+                remoteFileDataSource.getAvailableRemotePath(
+                    expectedRemotePath,
+                    targetFolder.owner,
+                    targetSpaceWebDavUrl,
+                ).let {
+                    if (ocFile.isFolder) it.plus(File.separator) else it
+                }
+            } else {
+                null
+            }
         }
-    }
 
     override fun readFile(remotePath: String, accountName: String, spaceId: String?): OCFile {
         val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(spaceId, accountName)
