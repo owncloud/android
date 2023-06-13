@@ -4,37 +4,6 @@ buildscript {
         sdkCompileVersion = 33
         sdkMinVersion = 23
         sdkTargetVersion = 33
-
-        // Android jetpack
-        androidxArchCore = "2.2.0"
-        androidxLifecycle = "2.5.1"
-        androidxRoom = "2.5.1"
-        androidxCore = "1.9.0"
-        androidxFragment = "1.5.5"
-        androidxAppcompat = "1.5.1"
-        androidxLegacy = "1.0.0"
-
-        // Kotlin
-        orgJetbrainsKotlin = "1.8.10"
-        orgJetbrainsKotlinx = "1.6.4"
-
-        // Koin
-        ioInsertKoin = "3.3.3"
-
-        // Markwon
-        markwon = "4.6.2"
-
-        // Moshi
-        comSquareupMoshi = '1.14.0'
-
-        // Testing
-        ioMockk = "1.13.3"
-        junitVersion = "4.13.2"
-        androidxTestExt = "1.1.5"
-        androidxTest = "1.4.0"
-        androidxTestEspresso = "3.5.1"
-        androidxTestUiautomator = "2.2.0"
-        androidxAnnotation = "1.6.0"
     }
 
     repositories {
@@ -43,15 +12,15 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:7.4.2"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$orgJetbrainsKotlin"
-        classpath "org.jlleitschuh.gradle:ktlint-gradle:11.1.0"
+        classpath libs.android.gradlePlugin
+        classpath libs.kotlin.gradlePlugin
+        classpath libs.ktlint.gradlePlugin
     }
 }
 
 plugins {
-    id "org.sonarqube" version "4.0.0.2929"
-    id 'com.google.devtools.ksp' version '1.8.10-1.0.9' apply false
+    alias libs.plugins.sonarqube
+    alias libs.plugins.ksp apply false
 }
 
 allprojects {
