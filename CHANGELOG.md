@@ -13,7 +13,6 @@ Summary
 * Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
 * Change - Move file menu options filter to use case: [#4009](https://github.com/owncloud/android/issues/4009)
 * Change - Gradle Version Catalog: [#4035](https://github.com/owncloud/android/pull/4035)
-* Change - Remove "ignore" from the debug flavour Android manifest: [#4064](https://github.com/owncloud/android/pull/4064)
 * Enhancement - Added "Open in web" options to main file list: [#3860](https://github.com/owncloud/android/issues/3860)
 * Enhancement - Copy/move conflict solved by users: [#3935](https://github.com/owncloud/android/issues/3935)
 * Enhancement - Improve grid mode: [#4027](https://github.com/owncloud/android/issues/4027)
@@ -61,13 +60,6 @@ Details
    the dependencies are declared inside toml file.
 
    https://github.com/owncloud/android/pull/4035
-
-* Change - Remove "ignore" from the debug flavour Android manifest: [#4064](https://github.com/owncloud/android/pull/4064)
-
-   A `tools:ignore` property from the Android manifest specific for the debug flavour was
-   removed as it is not needed anymore.
-
-   https://github.com/owncloud/android/pull/4064
 
 * Enhancement - Added "Open in web" options to main file list: [#3860](https://github.com/owncloud/android/issues/3860)
 
