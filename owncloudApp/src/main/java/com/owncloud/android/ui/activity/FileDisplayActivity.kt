@@ -1059,25 +1059,45 @@ class FileDisplayActivity : FileActivity(),
     ) {
         val context = this@FileDisplayActivity
         if (!uiResult.data.isNullOrEmpty()) {
-            data.forEachIndexed { pos, file ->
+            var pos = 0
+            data.asReversed().forEach { file ->
                 AlertDialog.Builder(context)
-                    .setTitle(R.string.file_already_exists)
-                    .setMessage(String.format(context.getString(R.string.file_already_exists_description), file.fileName))
+                    .setTitle(
+                        if (file.isFolder) {
+                            R.string.folder_already_exists
+                        } else {
+                            R.string.file_already_exists
+                        }
+                    )
+                    .setMessage(
+                        String.format(
+                            context.getString(
+                                if (file.isFolder) {
+                                    R.string.folder_already_exists_description
+                                } else {
+                                    R.string.file_already_exists_description
+                                }
+                            ), file.fileName
+                        )
+                    )
                     .setNeutralButton(R.string.welcome_feature_skip_button) { _, _ ->
                         replace.add(null)
-                        if (pos == data.size - 1) {
+                        pos++
+                        if (pos == data.size) {
                             launchAction(uiResult.data, replace)
                         }
                     }
                     .setNegativeButton(R.string.conflict_replace) { _, _ ->
                         replace.add(true)
-                        if (pos == data.size - 1) {
+                        pos++
+                        if (pos == data.size) {
                             launchAction(uiResult.data, replace)
                         }
                     }
                     .setPositiveButton(R.string.conflict_keep_both) { _, _ ->
                         replace.add(false)
-                        if (pos == data.size - 1) {
+                        pos++
+                        if (pos == data.size) {
                             launchAction(uiResult.data, replace)
                         }
                     }

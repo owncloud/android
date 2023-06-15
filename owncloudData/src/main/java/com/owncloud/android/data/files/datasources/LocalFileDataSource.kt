@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 interface LocalFileDataSource {
-    fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String)
+    fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String, replace: Boolean?)
     fun getFileById(fileId: Long): OCFile?
     fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?>
     fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String?): OCFile?
