@@ -139,6 +139,11 @@ class OCFileRepository(
                         targetFolder = targetFolder,
                         finalRemotePath = finalRemotePath,
                         remoteId = it,
+                        replace = if (replace.isEmpty()) {
+                            null
+                        } else {
+                            replace[position]
+                        },
                     )
                 }
             }
