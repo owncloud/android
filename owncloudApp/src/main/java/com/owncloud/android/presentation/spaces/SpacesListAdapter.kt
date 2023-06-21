@@ -27,8 +27,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import coil.memory.MemoryCache
-import coil.request.CachePolicy
 import com.owncloud.android.R
 import com.owncloud.android.databinding.SpacesListItemBinding
 import com.owncloud.android.domain.spaces.model.OCSpace
@@ -71,8 +69,8 @@ class SpacesListAdapter(
                         ThumbnailsRequester.getPreviewUriForSpaceSpecial(spaceSpecialImage),
                         ThumbnailsRequester.getCoilImageLoader()
                     ) {
-                        memoryCachePolicy(CachePolicy.ENABLED)
-                        memoryCacheKey(MemoryCache.Key(spaceSpecialImage.id))
+                        placeholder(R.drawable.ic_spaces)
+                        error(R.drawable.ic_spaces)
                     }
                 } else {
                     spacesListItemImage.apply {
