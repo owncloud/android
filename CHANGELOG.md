@@ -13,6 +13,7 @@ Summary
 * Change - Gradle Version Catalog: [#4035](https://github.com/owncloud/android/pull/4035)
 * Change - Remove "ignore" from the debug flavour Android manifest: [#4064](https://github.com/owncloud/android/pull/4064)
 * Enhancement - Added "Open in web" options to main file list: [#3860](https://github.com/owncloud/android/issues/3860)
+* Enhancement - Copy/move conflict solved by users: [#3935](https://github.com/owncloud/android/issues/3935)
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 
 Details
@@ -56,6 +57,14 @@ Details
 
    https://github.com/owncloud/android/issues/3860
    https://github.com/owncloud/android/pull/4058
+
+* Enhancement - Copy/move conflict solved by users: [#3935](https://github.com/owncloud/android/issues/3935)
+
+   A pop-up is displayed in case there is a name conflict with the files been moved or copied. The
+   pop-up has the options to Skip, Replace and Keep both, to be consistent with the web client.
+
+   https://github.com/owncloud/android/issues/3935
+   https://github.com/owncloud/android/pull/4062
 
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 

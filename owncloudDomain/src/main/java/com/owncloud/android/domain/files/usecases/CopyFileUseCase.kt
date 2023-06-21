@@ -33,14 +33,15 @@ import com.owncloud.android.domain.files.model.OCFile
  */
 class CopyFileUseCase(
     private val fileRepository: FileRepository
-) : BaseUseCaseWithResult<Unit, CopyFileUseCase.Params>() {
+) : BaseUseCaseWithResult<List<OCFile>, CopyFileUseCase.Params>() {
 
-    override fun run(params: Params) {
+    override fun run(params: Params): List<OCFile> {
         validateOrThrowException(params.listOfFilesToCopy, params.targetFolder)
 
         return fileRepository.copyFile(
             listOfFilesToCopy = params.listOfFilesToCopy,
-            targetFolder = params.targetFolder
+            targetFolder = params.targetFolder,
+            replace = params.replace,
         )
     }
 
@@ -55,6 +56,7 @@ class CopyFileUseCase(
 
     data class Params(
         val listOfFilesToCopy: List<OCFile>,
-        val targetFolder: OCFile
+        val targetFolder: OCFile,
+        val replace: List<Boolean?> = emptyList(),
     )
 }

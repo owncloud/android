@@ -21,11 +21,13 @@ package com.owncloud.android.domain.files.usecases
 import com.owncloud.android.domain.exceptions.CopyIntoDescendantException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -39,11 +41,12 @@ class CopyFileUseCaseTest {
 
     @Test
     fun `copy file - ok`() {
-        every { repository.copyFile(any(), any()) } returns Unit
+        every { repository.copyFile(any(), any()) } returns emptyList()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
+        assertEquals(useCaseResult.getDataOrNull(), emptyList<OCFile>())
 
         verify(exactly = 1) { repository.copyFile(any(), any()) }
     }
@@ -52,7 +55,7 @@ class CopyFileUseCaseTest {
     fun `copy file - ok - single copy into same folder`() {
         val useCaseParams = CopyFileUseCase.Params(
             listOfFilesToCopy = listOf(element = OC_FOLDER.copy(remotePath = "/Photos/", parentId = 100)),
-            targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/", id = 100)
+            targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/", id = 100),
         )
         val useCaseResult = useCase.execute(useCaseParams)
 
@@ -109,4 +112,30 @@ class CopyFileUseCaseTest {
 
         verify(exactly = 1) { repository.copyFile(any(), any()) }
     }
+
+    @Test
+    fun `copy file - ok - return list files`() {
+        val filesList = listOf(OC_FILE, OC_FILE)
+        every { repository.copyFile(any(), any()) } returns filesList
+
+        val useCaseResult = useCase.execute(useCaseParams)
+
+        assertTrue(useCaseResult.isSuccess)
+        assertEquals(filesList, useCaseResult.getDataOrNull())
+
+        verify(exactly = 1) { repository.copyFile(any(), any()) }
+    }
+
+    @Test
+    fun `copy file - ok - passing replace`() {
+        val replace = listOf(true, false)
+        every { repository.copyFile(any(), any(), replace) } returns emptyList()
+
+        val useCaseResult = useCase.execute(useCaseParams.copy(replace = replace))
+
+        assertTrue(useCaseResult.isSuccess)
+
+        verify(exactly = 1) { repository.copyFile(any(), any(), replace) }
+    }
+
 }

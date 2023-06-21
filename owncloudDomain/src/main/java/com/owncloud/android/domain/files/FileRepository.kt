@@ -4,6 +4,7 @@
  * @author Abel García de Prada
  * @author Christian Schabesberger
  * @author Juan Carlos Garrote Gascón
+ * @author Manuel Plazas Palacio
  *
  * Copyright (C) 2022 ownCloud GmbH.
  *
@@ -31,7 +32,9 @@ import java.util.UUID
 
 interface FileRepository {
     fun createFolder(remotePath: String, parentFolder: OCFile)
-    fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile)
+
+    // Returns files in conflict
+    fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?> = emptyList()): List<OCFile>
     fun getFileById(fileId: Long): OCFile?
     fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?>
     fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String? = null): OCFile?
@@ -45,7 +48,9 @@ interface FileRepository {
     fun getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>>
     fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
-    fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile)
+
+    // Returns files in conflict
+    fun moveFile(listOfFilesToMove: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?> = emptyList()): List<OCFile>
     fun readFile(remotePath: String, accountName: String, spaceId: String? = null): OCFile
     fun refreshFolder(remotePath: String, accountName: String, spaceId: String? = null): List<OCFile>
     fun deleteFiles(listOfFilesToDelete: List<OCFile>, removeOnlyLocalCopy: Boolean)
@@ -60,4 +65,5 @@ interface FileRepository {
     fun disableThumbnailsForFile(fileId: Long)
     fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
     fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
+
 }

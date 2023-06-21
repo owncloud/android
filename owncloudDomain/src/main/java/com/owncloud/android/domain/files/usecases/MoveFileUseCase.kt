@@ -36,18 +36,24 @@ import com.owncloud.android.domain.files.model.OCFile
  */
 class MoveFileUseCase(
     private val fileRepository: FileRepository
-) : BaseUseCaseWithResult<Unit, MoveFileUseCase.Params>() {
+) : BaseUseCaseWithResult<List<OCFile>, MoveFileUseCase.Params>() {
 
-    override fun run(params: Params) {
+    override fun run(params: Params): List<OCFile> {
         validateOrThrowException(params.listOfFilesToMove, params.targetFolder)
 
         return fileRepository.moveFile(
             listOfFilesToMove = params.listOfFilesToMove,
-            targetFile = params.targetFolder
+            targetFolder = params.targetFolder,
+            replace = params.replace,
         )
     }
 
-    @Throws(IllegalArgumentException::class, MoveIntoSameFolderException::class, MoveIntoDescendantException::class, MoveIntoAnotherSpaceException::class)
+    @Throws(
+        IllegalArgumentException::class,
+        MoveIntoSameFolderException::class,
+        MoveIntoDescendantException::class,
+        MoveIntoAnotherSpaceException::class
+    )
     fun validateOrThrowException(listOfFilesToMove: List<OCFile>, targetFolder: OCFile) {
         require(listOfFilesToMove.isNotEmpty())
         if (listOfFilesToMove[0].spaceId != targetFolder.spaceId) {
@@ -61,6 +67,7 @@ class MoveFileUseCase(
 
     data class Params(
         val listOfFilesToMove: List<OCFile>,
-        val targetFolder: OCFile
+        val targetFolder: OCFile,
+        val replace: List<Boolean?> = emptyList(),
     )
 }

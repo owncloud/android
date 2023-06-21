@@ -68,11 +68,11 @@ class FileOperationsViewModel(
     private val _createFolder = MediatorLiveData<Event<UIResult<Unit>>>()
     val createFolder: LiveData<Event<UIResult<Unit>>> = _createFolder
 
-    private val _copyFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
-    val copyFileLiveData: LiveData<Event<UIResult<OCFile>>> = _copyFileLiveData
+    private val _copyFileLiveData = MediatorLiveData<Event<UIResult<List<OCFile>>>>()
+    val copyFileLiveData: LiveData<Event<UIResult<List<OCFile>>>> = _copyFileLiveData
 
-    private val _moveFileLiveData = MediatorLiveData<Event<UIResult<OCFile>>>()
-    val moveFileLiveData: LiveData<Event<UIResult<OCFile>>> = _moveFileLiveData
+    private val _moveFileLiveData = MediatorLiveData<Event<UIResult<List<OCFile>>>>()
+    val moveFileLiveData: LiveData<Event<UIResult<List<OCFile>>>> = _moveFileLiveData
 
     private val _removeFileLiveData = MediatorLiveData<Event<UIResult<List<OCFile>>>>()
     val removeFileLiveData: LiveData<Event<UIResult<List<OCFile>>>> = _removeFileLiveData
@@ -91,6 +91,9 @@ class FileOperationsViewModel(
 
     private val _createFileWithAppProviderFlow = MutableStateFlow<Event<UIResult<String>>?>(null)
     val createFileWithAppProviderFlow: StateFlow<Event<UIResult<String>>?> = _createFileWithAppProviderFlow
+
+    // Used to save the last operation folder
+    private var lastTargetFolder: OCFile? = null
 
     fun performOperation(fileOperation: FileOperation) {
         when (fileOperation) {
@@ -118,21 +121,43 @@ class FileOperationsViewModel(
     }
 
     private fun copyOperation(fileOperation: FileOperation.CopyOperation) {
-        runOperation(
-            liveData = _copyFileLiveData,
-            useCase = copyFileUseCase,
-            useCaseParams = CopyFileUseCase.Params(fileOperation.listOfFilesToCopy, fileOperation.targetFolder),
-            postValue = fileOperation.targetFolder
-        )
+        val targetFolder = if (fileOperation.targetFolder != null) {
+            lastTargetFolder = fileOperation.targetFolder
+            fileOperation.targetFolder
+        } else {
+            lastTargetFolder
+        }
+        targetFolder?.let { folder ->
+            runUseCaseWithResult(
+                coroutineDispatcher = coroutinesDispatcherProvider.io,
+                liveData = _copyFileLiveData,
+                useCase = copyFileUseCase,
+                useCaseParams = CopyFileUseCase.Params(fileOperation.listOfFilesToCopy, folder, fileOperation.replace),
+                showLoading = true,
+            )
+        }
     }
 
     private fun moveOperation(fileOperation: FileOperation.MoveOperation) {
-        runOperation(
-            liveData = _moveFileLiveData,
-            useCase = moveFileUseCase,
-            useCaseParams = MoveFileUseCase.Params(fileOperation.listOfFilesToMove, fileOperation.targetFolder),
-            postValue = fileOperation.targetFolder
-        )
+        val targetFolder = if (fileOperation.targetFolder != null) {
+            lastTargetFolder = fileOperation.targetFolder
+            fileOperation.targetFolder
+        } else {
+            lastTargetFolder
+        }
+        targetFolder?.let { folder ->
+            runUseCaseWithResult(
+                coroutineDispatcher = coroutinesDispatcherProvider.io,
+                liveData = _moveFileLiveData,
+                useCase = moveFileUseCase,
+                useCaseParams = MoveFileUseCase.Params(
+                    fileOperation.listOfFilesToMove,
+                    folder,
+                    fileOperation.replace
+                ),
+                showLoading = true,
+            )
+        }
     }
 
     private fun removeOperation(fileOperation: FileOperation.RemoveOperation) {
@@ -245,6 +270,7 @@ class FileOperationsViewModel(
                 is UseCaseResult.Success -> {
                     liveData.postValue(Event(UIResult.Success(postValue)))
                 }
+
                 is UseCaseResult.Error -> {
                     liveData.postValue(Event(UIResult.Error(error = useCaseResult.throwable)))
                 }

@@ -3,6 +3,7 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Manuel Plazas Palacio
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -47,12 +48,14 @@ class OCRemoteFileDataSource(
         accountName: String,
         sourceSpaceWebDavUrl: String?,
         targetSpaceWebDavUrl: String?,
-    ): String = executeRemoteOperation {
+        replace: Boolean,
+    ): String? = executeRemoteOperation {
         clientManager.getFileService(accountName).copyFile(
             sourceRemotePath = sourceRemotePath,
             targetRemotePath = targetRemotePath,
             sourceSpaceWebDavUrl = sourceSpaceWebDavUrl,
             targetSpaceWebDavUrl = targetSpaceWebDavUrl,
+            replace = replace,
         )
     }
 
@@ -119,11 +122,13 @@ class OCRemoteFileDataSource(
         targetRemotePath: String,
         accountName: String,
         spaceWebDavUrl: String?,
+        replace: Boolean,
     ) = executeRemoteOperation {
         clientManager.getFileService(accountName).moveFile(
             sourceRemotePath = sourceRemotePath,
             targetRemotePath = targetRemotePath,
             spaceWebDavUrl = spaceWebDavUrl,
+            replace = replace,
         )
     }
 

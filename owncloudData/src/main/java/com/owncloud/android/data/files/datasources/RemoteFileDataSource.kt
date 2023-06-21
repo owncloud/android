@@ -37,7 +37,8 @@ interface RemoteFileDataSource {
         accountName: String,
         sourceSpaceWebDavUrl: String?,
         targetSpaceWebDavUrl: String?,
-    ): String
+        replace: Boolean,
+    ): String?
 
     fun createFolder(
         remotePath: String,
@@ -58,6 +59,7 @@ interface RemoteFileDataSource {
         targetRemotePath: String,
         accountName: String,
         spaceWebDavUrl: String?,
+        replace: Boolean,
     )
 
     fun readFile(

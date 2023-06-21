@@ -380,7 +380,10 @@
     <string name="available_offline_inherited_msg">A folder that containing this file is available offline</string>
     <string name="rename_local_fail_msg">"Local copy could not be renamed; try a different name"</string>
     <string name="rename_server_fail_msg">"Rename could not be completed"</string>
-    <string name="file_already_exists">file already exists</string>
+    <string name="file_already_exists">File already exists</string>
+    <string name="folder_already_exists">Folder already exists</string>
+    <string name="file_already_exists_description">File with name %1$s already exists.</string>
+    <string name="folder_already_exists_description">Folder with name %1$s already exists.</string>
     <string name="sync_file_fail_msg">Remote file could not be checked</string>
     <string name="sync_file_nothing_to_do_msg">File contents already synchronized</string>
     <string name="new_remote_version_found_msg">A new version was found in server. Downloading…</string>
@@ -449,6 +452,7 @@
     <string name="conflict_use_local_version">local version</string>
     <string name="conflict_use_server_version">server version</string>
     <string name="error_conflict">An error occurred in the destination folder</string>
+    <string name="conflict_replace">Replace</string>
 
     <string name="preview_image_description">Image preview</string>
     <string name="preview_image_error_unknown_format">This image cannot be shown</string>

@@ -41,12 +41,13 @@ import java.util.UUID
 class OCLocalFileDataSource(
     private val fileDao: FileDao,
 ) : LocalFileDataSource {
-    override fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String) {
+    override fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String, replace: Boolean?) {
         fileDao.copy(
             sourceFile = sourceFile.toEntity(),
             targetFolder = targetFolder.toEntity(),
             finalRemotePath = finalRemotePath,
-            remoteId = remoteId
+            remoteId = remoteId,
+            replace = replace,
         )
     }
 

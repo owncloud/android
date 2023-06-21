@@ -4,6 +4,7 @@
  * @author Abel García de Prada
  * @author Christian Schabesberger
  * @author Juan Carlos Garrote Gascón
+ * @author Manuel Plazas Palacio
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -79,60 +80,75 @@ class OCFileRepository(
         }
     }
 
-    override fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile) {
+    override fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?>): List<OCFile> {
         val sourceSpaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(listOfFilesToCopy[0].spaceId, listOfFilesToCopy[0].owner)
         val targetSpaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(targetFolder.spaceId, targetFolder.owner)
+        val filesNeedAction = mutableListOf<OCFile>()
 
-        listOfFilesToCopy.forEach { ocFile ->
+        listOfFilesToCopy.forEachIndexed forEach@{ position, ocFile ->
 
             // 1. Get the final remote path for this file.
             val expectedRemotePath: String = targetFolder.remotePath + ocFile.fileName
-            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(
-                expectedRemotePath,
-                targetFolder.owner,
-                targetSpaceWebDavUrl,
-            ).let {
-                if (ocFile.isFolder) it.plus(File.separator) else it
-            }
 
-            // 2. Try to copy files in server
-            val remoteId = try {
-                remoteFileDataSource.copyFile(
-                    sourceRemotePath = ocFile.remotePath,
-                    targetRemotePath = finalRemotePath,
-                    accountName = ocFile.owner,
-                    sourceSpaceWebDavUrl = sourceSpaceWebDavUrl,
+            val finalRemotePath: String? =
+                getFinalRemotePath(
+                    replace = replace,
+                    expectedRemotePath = expectedRemotePath,
+                    targetFolder = targetFolder,
                     targetSpaceWebDavUrl = targetSpaceWebDavUrl,
+                    filesNeedsAction = filesNeedAction,
+                    ocFile = ocFile,
+                    position = position,
                 )
-            } catch (targetNodeDoesNotExist: ConflictException) {
-                // Target node does not exist anymore. Remove target folder from database and local storage and return
-                deleteLocalFolderRecursively(ocFile = targetFolder, onlyFromLocalStorage = false)
-                throw targetNodeDoesNotExist
-            } catch (sourceFileDoesNotExist: FileNotFoundException) {
-                // Source file does not exist anymore. Remove file from database and local storage and continue
-                if (ocFile.isFolder) {
-                    deleteLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
-                } else {
-                    deleteLocalFile(
-                        ocFile = ocFile,
-                        onlyFromLocalStorage = false
+            if (finalRemotePath != null && (replace.isEmpty() || replace[position] != null)) {
+                // 2. Try to copy files in server
+                val remoteId = try {
+                    remoteFileDataSource.copyFile(
+                        sourceRemotePath = ocFile.remotePath,
+                        targetRemotePath = finalRemotePath,
+                        accountName = ocFile.owner,
+                        sourceSpaceWebDavUrl = sourceSpaceWebDavUrl,
+                        targetSpaceWebDavUrl = targetSpaceWebDavUrl,
+                        replace = if (replace.isEmpty()) false else replace[position]!!,
+                    )
+                } catch (targetNodeDoesNotExist: ConflictException) {
+                    // Target node does not exist anymore. Remove target folder from database and local storage and return
+                    deleteLocalFolderRecursively(ocFile = targetFolder, onlyFromLocalStorage = false)
+                    throw targetNodeDoesNotExist
+                } catch (sourceFileDoesNotExist: FileNotFoundException) {
+                    // Source file does not exist anymore. Remove file from database and local storage and continue
+                    if (ocFile.isFolder) {
+                        deleteLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
+                    } else {
+                        deleteLocalFile(
+                            ocFile = ocFile,
+                            onlyFromLocalStorage = false
+                        )
+                    }
+                    if (listOfFilesToCopy.size == 1) {
+                        throw sourceFileDoesNotExist
+                    } else {
+                        return@forEach
+                    }
+                }
+
+                // 3. Update database with latest changes
+                remoteId?.let {
+                    localFileDataSource.copyFile(
+                        sourceFile = ocFile,
+                        targetFolder = targetFolder,
+                        finalRemotePath = finalRemotePath,
+                        remoteId = it,
+                        replace = if (replace.isEmpty()) {
+                            null
+                        } else {
+                            replace[position]
+                        },
                     )
                 }
-                if (listOfFilesToCopy.size == 1) {
-                    throw sourceFileDoesNotExist
-                } else {
-                    return@forEach
-                }
             }
-
-            // 3. Update database with latest changes
-            localFileDataSource.copyFile(
-                sourceFile = ocFile,
-                targetFolder = targetFolder,
-                finalRemotePath = finalRemotePath,
-                remoteId = remoteId
-            )
         }
+        return filesNeedAction
     }
 
     override fun getFileById(fileId: Long): OCFile? =
@@ -191,69 +207,121 @@ class OCFileRepository(
     override fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile> =
         localFileDataSource.getFilesAvailableOfflineFromEveryAccount()
 
-    override fun moveFile(listOfFilesToMove: List<OCFile>, targetFile: OCFile) {
-        val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(targetFile.spaceId, targetFile.owner)
+    override fun moveFile(listOfFilesToMove: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?>): List<OCFile> {
+        val targetSpaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(targetFolder.spaceId, targetFolder.owner)
+        val filesNeedsAction = mutableListOf<OCFile>()
 
-        listOfFilesToMove.forEach { ocFile ->
+
+        listOfFilesToMove.forEachIndexed forEach@{ position, ocFile ->
 
             // 1. Get the final remote path for this file.
-            val expectedRemotePath: String = targetFile.remotePath + ocFile.fileName
-            val finalRemotePath: String = remoteFileDataSource.getAvailableRemotePath(expectedRemotePath, targetFile.owner, spaceWebDavUrl).let {
-                if (ocFile.isFolder) it.plus(File.separator) else it
-            }
-            val finalStoragePath: String = localStorageProvider.getDefaultSavePathFor(targetFile.owner, finalRemotePath, targetFile.spaceId)
-
-            // 2. Try to move files in server
-            try {
-                remoteFileDataSource.moveFile(
-                    sourceRemotePath = ocFile.remotePath,
-                    targetRemotePath = finalRemotePath,
-                    accountName = ocFile.owner,
-                    spaceWebDavUrl = spaceWebDavUrl,
+            val expectedRemotePath: String = targetFolder.remotePath + ocFile.fileName
+            val finalRemotePath: String? =
+                getFinalRemotePath(
+                    replace = replace,
+                    expectedRemotePath = expectedRemotePath,
+                    targetFolder = targetFolder,
+                    targetSpaceWebDavUrl = targetSpaceWebDavUrl,
+                    filesNeedsAction = filesNeedsAction,
+                    ocFile = ocFile,
+                    position = position,
                 )
-            } catch (targetNodeDoesNotExist: ConflictException) {
-                // Target node does not exist anymore. Remove target folder from database and local storage and return
-                deleteLocalFolderRecursively(ocFile = targetFile, onlyFromLocalStorage = false)
-                throw targetNodeDoesNotExist
-            } catch (sourceFileDoesNotExist: FileNotFoundException) {
-                // Source file does not exist anymore. Remove file from database and local storage and continue
-                if (ocFile.isFolder) {
-                    deleteLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
-                } else {
-                    deleteLocalFile(
-                        ocFile = ocFile,
-                        onlyFromLocalStorage = false
+
+            if (finalRemotePath != null && (replace.isEmpty() || replace[position] != null)) {
+                val finalStoragePath: String = localStorageProvider.getDefaultSavePathFor(targetFolder.owner, finalRemotePath, targetFolder.spaceId)
+
+                // 2. Try to move files in server
+                try {
+                    remoteFileDataSource.moveFile(
+                        sourceRemotePath = ocFile.remotePath,
+                        targetRemotePath = finalRemotePath,
+                        accountName = ocFile.owner,
+                        spaceWebDavUrl = targetSpaceWebDavUrl,
+                        replace = if (replace.isEmpty()) false else replace[position]!!,
                     )
+                } catch (targetNodeDoesNotExist: ConflictException) {
+                    // Target node does not exist anymore. Remove target folder from database and local storage and return
+                    deleteLocalFolderRecursively(ocFile = targetFolder, onlyFromLocalStorage = false)
+                    throw targetNodeDoesNotExist
+                } catch (sourceFileDoesNotExist: FileNotFoundException) {
+                    // Source file does not exist anymore. Remove file from database and local storage and continue
+                    if (ocFile.isFolder) {
+                        deleteLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = false)
+                    } else {
+                        deleteLocalFile(
+                            ocFile = ocFile,
+                            onlyFromLocalStorage = false
+                        )
+                    }
+                    if (listOfFilesToMove.size == 1) {
+                        throw sourceFileDoesNotExist
+                    } else {
+                        return@forEach
+                    }
                 }
-                if (listOfFilesToMove.size == 1) {
-                    throw sourceFileDoesNotExist
-                } else {
-                    return@forEach
+
+                // 3. Clean conflict in old location if there was a conflict
+                ocFile.etagInConflict?.let {
+                    localFileDataSource.cleanConflict(ocFile.id!!)
                 }
+
+                // 4. Update database with latest changes
+                localFileDataSource.moveFile(
+                    sourceFile = ocFile,
+                    targetFolder = targetFolder,
+                    finalRemotePath = finalRemotePath,
+                    finalStoragePath = finalStoragePath
+                )
+
+                // 5. Save conflict in new location if there was conflict
+                ocFile.etagInConflict?.let {
+                    localFileDataSource.saveConflict(ocFile.id!!, it)
+                }
+
+                // 6. Update local storage
+                localStorageProvider.moveLocalFile(ocFile, finalStoragePath)
             }
-
-            // 3. Clean conflict in old location if there was a conflict
-            ocFile.etagInConflict?.let {
-                localFileDataSource.cleanConflict(ocFile.id!!)
-            }
-
-            // 4. Update database with latest changes
-            localFileDataSource.moveFile(
-                sourceFile = ocFile,
-                targetFolder = targetFile,
-                finalRemotePath = finalRemotePath,
-                finalStoragePath = finalStoragePath
-            )
-
-            // 5. Save conflict in new location if there was conflict
-            ocFile.etagInConflict?.let {
-                localFileDataSource.saveConflict(ocFile.id!!, it)
-            }
-
-            // 6. Update local storage
-            localStorageProvider.moveLocalFile(ocFile, finalStoragePath)
         }
+        return filesNeedsAction
     }
+
+    private fun getFinalRemotePath(
+        replace: List<Boolean?>,
+        expectedRemotePath: String,
+        targetFolder: OCFile,
+        targetSpaceWebDavUrl: String?,
+        filesNeedsAction: MutableList<OCFile>,
+        ocFile: OCFile,
+        position: Int
+    ) =
+        if (replace.isEmpty()) {
+            val pathExists = remoteFileDataSource.checkPathExistence(
+                path = expectedRemotePath,
+                checkUserCredentials = false,
+                accountName = targetFolder.owner,
+                spaceWebDavUrl = targetSpaceWebDavUrl,
+            )
+            if (pathExists) {
+                filesNeedsAction.add(ocFile)
+                null
+            } else {
+                if (ocFile.isFolder) expectedRemotePath.plus(File.separator) else expectedRemotePath
+            }
+        } else {
+            if (replace[position] == true) {
+                if (ocFile.isFolder) expectedRemotePath.plus(File.separator) else expectedRemotePath
+            } else if (replace[position] == false) {
+                remoteFileDataSource.getAvailableRemotePath(
+                    expectedRemotePath,
+                    targetFolder.owner,
+                    targetSpaceWebDavUrl,
+                ).let {
+                    if (ocFile.isFolder) it.plus(File.separator) else it
+                }
+            } else {
+                null
+            }
+        }
 
     override fun readFile(remotePath: String, accountName: String, spaceId: String?): OCFile {
         val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(spaceId, accountName)
