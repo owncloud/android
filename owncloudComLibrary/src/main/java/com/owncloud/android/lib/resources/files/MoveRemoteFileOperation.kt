@@ -46,6 +46,7 @@ import java.util.concurrent.TimeUnit
  * @author David González Verdugo
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Manuel Plazas Palacio
  *
  * @param sourceRemotePath  Remote path of the file/folder to copy.
  * @param targetRemotePath  Remote path desired for the file/folder to copy it.
@@ -54,6 +55,7 @@ open class MoveRemoteFileOperation(
     private val sourceRemotePath: String,
     private val targetRemotePath: String,
     private val spaceWebDavUrl: String? = null,
+    private val forceOverride: Boolean = false,
 ) : RemoteOperation<Unit>() {
 
     /**
@@ -80,6 +82,7 @@ open class MoveRemoteFileOperation(
             val moveMethod = MoveMethod(
                 url = URL((spaceWebDavUrl ?: srcWebDavUri.toString()) + WebdavUtils.encodePath(sourceRemotePath)),
                 destinationUrl = (spaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(targetRemotePath),
+                forceOverride = forceOverride,
             ).apply {
                 addRequestHeaders(this)
                 setReadTimeout(MOVE_READ_TIMEOUT, TimeUnit.SECONDS)
@@ -92,6 +95,7 @@ open class MoveRemoteFileOperation(
                 isSuccess(status) -> {
                     result = RemoteOperationResult<Unit>(ResultCode.OK)
                 }
+
                 isPreconditionFailed(status) -> {
                     result = RemoteOperationResult<Unit>(ResultCode.INVALID_OVERWRITE)
                     client.exhaustResponse(moveMethod.getResponseBodyAsStream())
@@ -99,6 +103,7 @@ open class MoveRemoteFileOperation(
                     /// for other errors that could be explicitly handled, check first:
                     /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
                 }
+
                 else -> {
                     result = RemoteOperationResult<Unit>(moveMethod)
                     client.exhaustResponse(moveMethod.getResponseBodyAsStream())
@@ -125,6 +130,10 @@ open class MoveRemoteFileOperation(
      * In case new headers are needed, override this method
      */
     open fun addRequestHeaders(moveMethod: MoveMethod) {
+        //Adding this because the library has an error with override
+        if (moveMethod.forceOverride) {
+            moveMethod.setRequestHeader(OVERWRITE, TRUE)
+        }
     }
 
     private fun isSuccess(status: Int) = status.isOneOf(HttpConstants.HTTP_CREATED, HttpConstants.HTTP_NO_CONTENT)
@@ -134,5 +143,7 @@ open class MoveRemoteFileOperation(
     companion object {
         private const val MOVE_READ_TIMEOUT = 10L
         private const val MOVE_CONNECTION_TIMEOUT = 6L
+        private const val OVERWRITE = "overwrite"
+        private const val TRUE = "T"
     }
 }

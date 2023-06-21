@@ -45,6 +45,7 @@ import java.util.concurrent.TimeUnit
  * @author Christian Schabesberger
  * @author David González V.
  * @author Juan Carlos Garrote Gascón
+ * @author Manuel Plazas Palacio
  *
  * @param sourceRemotePath    Remote path of the file/folder to copy.
  * @param targetRemotePath Remote path desired for the file/folder to copy it.
@@ -54,6 +55,7 @@ class CopyRemoteFileOperation(
     private val targetRemotePath: String,
     private val sourceSpaceWebDavUrl: String? = null,
     private val targetSpaceWebDavUrl: String? = null,
+    private val forceOverride: Boolean = false,
 ) : RemoteOperation<String>() {
 
     /**
@@ -74,9 +76,11 @@ class CopyRemoteFileOperation(
         var result: RemoteOperationResult<String>
         try {
             val copyMethod = CopyMethod(
-                URL((sourceSpaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(sourceRemotePath)),
-                (targetSpaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(targetRemotePath),
+                url = URL((sourceSpaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(sourceRemotePath)),
+                destinationUrl = (targetSpaceWebDavUrl ?: client.userFilesWebDavUri.toString()) + WebdavUtils.encodePath(targetRemotePath),
+                forceOverride = forceOverride,
             ).apply {
+                addRequestHeaders(this)
                 setReadTimeout(COPY_READ_TIMEOUT, TimeUnit.SECONDS)
                 setConnectionTimeout(COPY_CONNECTION_TIMEOUT, TimeUnit.SECONDS)
             }
@@ -87,6 +91,7 @@ class CopyRemoteFileOperation(
                     result = RemoteOperationResult(ResultCode.OK)
                     result.setData(fileRemoteId)
                 }
+
                 isPreconditionFailed(status) -> {
                     result = RemoteOperationResult(ResultCode.INVALID_OVERWRITE)
                     client.exhaustResponse(copyMethod.getResponseBodyAsStream())
@@ -94,6 +99,7 @@ class CopyRemoteFileOperation(
                     /// for other errors that could be explicitly handled, check first:
                     /// http://www.webdav.org/specs/rfc4918.html#rfc.section.9.9.4
                 }
+
                 else -> {
                     result = RemoteOperationResult(copyMethod)
                     client.exhaustResponse(copyMethod.getResponseBodyAsStream())
@@ -107,6 +113,13 @@ class CopyRemoteFileOperation(
         return result
     }
 
+    private fun addRequestHeaders(copyMethod: CopyMethod) {
+        //Adding this because the library has an error with override
+        if (copyMethod.forceOverride) {
+            copyMethod.setRequestHeader(OVERWRITE, TRUE)
+        }
+    }
+
     private fun isSuccess(status: Int) = status.isOneOf(HttpConstants.HTTP_CREATED, HttpConstants.HTTP_NO_CONTENT)
 
     private fun isPreconditionFailed(status: Int) = status == HttpConstants.HTTP_PRECONDITION_FAILED
@@ -114,5 +127,7 @@ class CopyRemoteFileOperation(
     companion object {
         private const val COPY_READ_TIMEOUT = 10L
         private const val COPY_CONNECTION_TIMEOUT = 6L
+        private const val OVERWRITE = "overwrite"
+        private const val TRUE = "T"
     }
 }

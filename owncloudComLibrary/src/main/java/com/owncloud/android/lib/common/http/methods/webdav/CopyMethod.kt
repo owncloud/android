@@ -36,7 +36,7 @@ import java.net.URL
 class CopyMethod(
     val url: URL,
     private val destinationUrl: String,
-    private val forceOverride: Boolean = false
+    val forceOverride: Boolean = false
 ) : DavMethod(url) {
     @Throws(Exception::class)
     public override fun onDavExecute(davResource: DavOCResource): Int {
