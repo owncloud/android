@@ -33,7 +33,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -49,15 +48,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import coil.load
-import coil.memory.MemoryCache
-import coil.request.CachePolicy
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
-import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.TooEarlyException
@@ -339,8 +335,8 @@ class MainFileListFragment : Fragment(),
                         ThumbnailsRequester.getPreviewUriForSpaceSpecial(spaceSpecialImage),
                         ThumbnailsRequester.getCoilImageLoader()
                     ) {
-                        memoryCachePolicy(CachePolicy.ENABLED)
-                        memoryCacheKey(MemoryCache.Key(spaceSpecialImage.id))
+                        placeholder(R.drawable.ic_folder)
+                        error(R.drawable.ic_folder)
                     }
                 }
                 binding.spaceHeader.spaceHeaderName.text = it.name

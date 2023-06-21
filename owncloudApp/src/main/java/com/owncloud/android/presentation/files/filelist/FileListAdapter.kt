@@ -36,13 +36,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import coil.load
-import coil.memory.MemoryCache
-import coil.request.CachePolicy
 import com.owncloud.android.R
 import com.owncloud.android.databinding.GridItemBinding
 import com.owncloud.android.databinding.ItemFileListBinding
 import com.owncloud.android.databinding.ListFooterBinding
-import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
@@ -97,6 +94,7 @@ class FileListAdapter(
                 }
                 ListViewHolder(binding)
             }
+
             ViewType.GRID_IMAGE.ordinal -> {
                 val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 binding.root.apply {
@@ -105,6 +103,7 @@ class FileListAdapter(
                 }
                 GridImageViewHolder(binding)
             }
+
             ViewType.GRID_ITEM.ordinal -> {
                 val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 binding.root.apply {
@@ -113,6 +112,7 @@ class FileListAdapter(
                 }
                 GridViewHolder(binding)
             }
+
             else -> {
                 val binding = ListFooterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 binding.root.apply {
@@ -139,9 +139,11 @@ class FileListAdapter(
                 layoutManager.spanCount == 1 -> {
                     ViewType.LIST_ITEM.ordinal
                 }
+
                 (files[position] as OCFileWithSyncInfo).file.isImage -> {
                     ViewType.GRID_IMAGE.ordinal
                 }
+
                 else -> {
                     ViewType.GRID_ITEM.ordinal
                 }
@@ -232,6 +234,7 @@ class FileListAdapter(
                         }
                     }
                 }
+
                 ViewType.GRID_ITEM.ordinal -> {
                     // Filename
                     val view = holder as GridViewHolder
@@ -277,22 +280,23 @@ class FileListAdapter(
 
             if (file.isFolder) {
                 // Folder
-                fileIcon.setImageResource(
+                fileIcon.load(
                     MimetypeIconUtil.getFolderTypeIconId(
                         file.isSharedWithMe || file.sharedWithSharee == true,
                         file.sharedByLink
                     )
                 )
             } else {
+                val mimeIcon=MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName)
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
-                fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
+                fileIcon.load(mimeIcon)
                 if (file.remoteId != null) {
                     fileIcon.load(
                         ThumbnailsRequester.getPreviewUriForFile(fileWithSyncInfo, account!!),
-                        ThumbnailsRequester.getCoilImageLoader()
+                        ThumbnailsRequester.getCoilImageLoader(),
                     ) {
-                        memoryCachePolicy(CachePolicy.ENABLED)
-                        memoryCacheKey(MemoryCache.Key(file.remoteId!!))
+                        placeholder(mimeIcon)
+                        error(mimeIcon)
                     }
 
                     if (file.mimeType == "image/png") {
@@ -358,35 +362,43 @@ class FileListAdapter(
                     foldersCount <= 0 -> {
                         ""
                     }
+
                     foldersCount == 1 -> {
                         context.getString(R.string.file_list__footer__folder)
                     }
+
                     else -> { // foldersCount > 1
                         context.getString(R.string.file_list__footer__folders, foldersCount)
                     }
                 }
             }
+
             filesCount == 1 -> {
                 return when {
                     foldersCount <= 0 -> {
                         context.getString(R.string.file_list__footer__file)
                     }
+
                     foldersCount == 1 -> {
                         context.getString(R.string.file_list__footer__file_and_folder)
                     }
+
                     else -> { // foldersCount > 1
                         context.getString(R.string.file_list__footer__file_and_folders, foldersCount)
                     }
                 }
             }
+
             else -> {    // filesCount > 1
                 return when {
                     foldersCount <= 0 -> {
                         context.getString(R.string.file_list__footer__files, filesCount)
                     }
+
                     foldersCount == 1 -> {
                         context.getString(R.string.file_list__footer__files_and_folder, filesCount)
                     }
+
                     else -> { // foldersCount > 1
                         context.getString(
                             R.string.file_list__footer__files_and_folders, filesCount, foldersCount
