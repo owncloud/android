@@ -40,4 +40,6 @@ fun FileMenuOption.toResId() =
         FileMenuOption.SEND -> R.id.action_send_file
         FileMenuOption.SET_AV_OFFLINE -> R.id.action_set_available_offline
         FileMenuOption.UNSET_AV_OFFLINE -> R.id.action_unset_available_offline
+        FileMenuOption.SHOW_ASCII -> R.id.action_show_ascii
+        FileMenuOption.SHOW_MARKDOWN -> R.id.action_show_markdown
     }

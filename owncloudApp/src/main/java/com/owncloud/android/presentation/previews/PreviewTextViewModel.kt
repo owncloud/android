@@ -42,6 +42,9 @@ class PreviewTextViewModel(
     private val _menuOptions: MutableStateFlow<List<FileMenuOption>> = MutableStateFlow(emptyList())
     val menuOptions: StateFlow<List<FileMenuOption>> = _menuOptions
 
+    var isTypeMarkdown: Boolean = false
+    var isAscii: Boolean = false
+
     fun filterMenuOptions(file: OCFile, accountName: String) {
         val shareViaLinkAllowed = contextProvider.getBoolean(R.bool.share_via_link_feature)
         val shareWithUsersAllowed = contextProvider.getBoolean(R.bool.share_with_users_feature)
@@ -66,6 +69,15 @@ class PreviewTextViewModel(
                 remove(FileMenuOption.MOVE)
                 remove(FileMenuOption.COPY)
                 remove(FileMenuOption.SYNC)
+
+               if(isTypeMarkdown){
+                   if(isAscii){
+                       add(FileMenuOption.SHOW_ASCII)
+                   } else {
+                       add(FileMenuOption.SHOW_MARKDOWN)
+                   }
+               }
+
             }
             _menuOptions.update { result }
         }

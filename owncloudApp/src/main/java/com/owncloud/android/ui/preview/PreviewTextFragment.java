@@ -4,18 +4,18 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
- *
+ * <p>
  * Copyright (C) 2023 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -35,6 +35,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -203,6 +204,7 @@ public class PreviewTextFragment extends FileFragment {
         private final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
         private final WeakReference<TextView> mTextViewReference;
         private String mimeType;
+        private String sourceString;
 
         private TextLoadAsyncTask(WeakReference<TextView> textView) {
             mTextViewReference = textView;
@@ -263,19 +265,13 @@ public class PreviewTextFragment extends FileFragment {
             final TextView textView = mTextViewReference.get();
 
             if (textView != null) {
-                String text = new String(stringWriter.getBuffer());
+                sourceString = new String(stringWriter.getBuffer());
                 if (mimeType.equals("text/markdown")) {
-                    Context context = textView.getContext();
-                    Markwon markwon = Markwon
-                            .builder(context)
-                            .usePlugin(TablePlugin.create(context))
-                            .usePlugin(StrikethroughPlugin.create())
-                            .usePlugin(TaskListPlugin.create(context))
-                            .usePlugin(HtmlPlugin.create())
-                            .build();
-                    markwon.setMarkdown(textView, text);
+                    previewTextViewModel.setTypeMarkdown(true);
+                    previewTextViewModel.setAscii(true);
+                    showMarkDown(textView, sourceString);
                 } else {
-                    textView.setText(text);
+                    textView.setText(sourceString);
                 }
                 textView.setVisibility(View.VISIBLE);
             }
@@ -399,6 +395,20 @@ public class PreviewTextFragment extends FileFragment {
                 fileOperationsViewModel.performOperation(new FileOperation.UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline));
                 return true;
             }
+            case R.id.action_show_ascii: {
+                // implement showing ascii version
+                mTextPreview.setText(mTextLoadTask.sourceString);
+                previewTextViewModel.setAscii(false);
+                requireActivity().invalidateOptionsMenu();
+                return true;
+            }
+            case R.id.action_show_markdown: {
+                // implement showing markdown
+                showMarkDown(mTextPreview, mTextLoadTask.sourceString);
+                previewTextViewModel.setAscii(true);
+                requireActivity().invalidateOptionsMenu();
+                return true;
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -484,5 +494,17 @@ public class PreviewTextFragment extends FileFragment {
      */
     private void finish() {
         getActivity().onBackPressed();
+    }
+
+    private void showMarkDown(TextView textView, String sourceString) {
+        Context context = textView.getContext();
+        Markwon markwon = Markwon
+                .builder(context)
+                .usePlugin(TablePlugin.create(context))
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(TaskListPlugin.create(context))
+                .usePlugin(HtmlPlugin.create())
+                .build();
+        markwon.setMarkdown(textView, sourceString);
     }
 }

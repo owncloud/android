@@ -113,4 +113,17 @@
         app:showAsAction="ifRoom"
         android:orderInCategory="1" />
 
+    <item
+        android:id="@+id/action_show_ascii"
+        android:title="@string/show_ascii"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="1" />
+
+  <item
+        android:id="@+id/action_show_markdown"
+        android:title="@string/show_markdown"
+        app:showAsAction="ifRoom"
+        android:orderInCategory="1" />
+
+
 </menu>
