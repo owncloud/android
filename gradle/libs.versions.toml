@@ -42,6 +42,7 @@ photoView = "2.3.0"
 preference = "1.2.0"
 sonarqube = "4.0.0.2929"
 stetho = "1.6.0"
+coil = "2.2.2"
 
 [libraries]
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidxAnnotation" }
@@ -83,6 +84,7 @@ exoplayer = { group = "com.google.android.exoplayer", name = "exoplayer", versio
 floatingactionbutton = { group = "com.getbase", name = "floatingactionbutton", version.ref = "floatingactionbutton" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-vector = { group = "com.github.2coffees1team", name = "GlideToVectorYou", version.ref = "glideToVectorYou" }
+coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-androidx-workmanager = { group = "io.insert-koin", name = "koin-androidx-workmanager", version.ref = "koin" }
