@@ -288,7 +288,7 @@ class FileListAdapter(
                     )
                 )
             } else {
-                val mimeIcon=MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName)
+                val mimeIcon = MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName)
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
                 fileIcon.load(mimeIcon)
                 if (file.remoteId != null) {
