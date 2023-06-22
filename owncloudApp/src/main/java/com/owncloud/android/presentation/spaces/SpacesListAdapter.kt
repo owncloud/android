@@ -22,7 +22,6 @@ package com.owncloud.android.presentation.spaces
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -69,13 +68,12 @@ class SpacesListAdapter(
                         ThumbnailsRequester.getPreviewUriForSpaceSpecial(spaceSpecialImage),
                         ThumbnailsRequester.getCoilImageLoader()
                     ) {
-                        placeholder(R.drawable.ic_spaces)
-                        error(R.drawable.ic_spaces)
+                        placeholder(R.drawable.ic_spaces_placeholder)
+                        error(R.drawable.ic_spaces_placeholder)
                     }
                 } else {
                     spacesListItemImage.apply {
-                        setImageResource(R.drawable.ic_spaces)
-                        scaleType = ImageView.ScaleType.CENTER
+                        setImageResource(R.drawable.ic_spaces_placeholder)
                         setBackgroundColor(ContextCompat.getColor(spacesViewHolder.itemView.context, R.color.spaces_card_background_color))
                     }
                 }
