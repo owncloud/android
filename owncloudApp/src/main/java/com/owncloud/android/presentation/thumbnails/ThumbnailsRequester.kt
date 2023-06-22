@@ -10,7 +10,6 @@ import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.R
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
-import com.owncloud.android.domain.files.usecases.GetWebDavUrlForSpaceUseCase
 import com.owncloud.android.domain.spaces.model.SpaceSpecial
 import com.owncloud.android.lib.common.SingleSessionManager
 import com.owncloud.android.lib.common.http.HttpConstants.ACCEPT_ENCODING_HEADER
