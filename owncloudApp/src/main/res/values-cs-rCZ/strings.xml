@@ -340,7 +340,6 @@
   <string name="available_offline_inherited_msg">Složka obsahující tento soubor je dostupná offline</string>
   <string name="rename_local_fail_msg">Místní kopii nelze přejmenovat, zkuste jiný nový název</string>
   <string name="rename_server_fail_msg">Přejmenování nelze dokončit</string>
-  <string name="file_already_exists">soubor již existuje</string>
   <string name="sync_file_fail_msg">Vzdálený soubor nemohl být zkontrolován</string>
   <string name="sync_file_nothing_to_do_msg">Obsah souboru je již synchronizován</string>
   <string name="new_remote_version_found_msg">Novější verze byla nalezena na serveru. Stahuji...</string>

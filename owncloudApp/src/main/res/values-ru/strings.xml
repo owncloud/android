@@ -365,7 +365,6 @@
   <string name="available_offline_inherited_msg">Каталог, содержащий этот файл, доступен автономно</string>
   <string name="rename_local_fail_msg">Локальная копия не может быть переименована; попробуйте другое имя</string>
   <string name="rename_server_fail_msg">Переименование не может быть завершено</string>
-  <string name="file_already_exists">файл уже существует</string>
   <string name="sync_file_fail_msg">Удаленный файл не может быть проверен</string>
   <string name="sync_file_nothing_to_do_msg">Содержимое файла уже синхронизировано</string>
   <string name="new_remote_version_found_msg">Найдена новая версия на сервере. Загрузка...</string>
