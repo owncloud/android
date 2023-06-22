@@ -3,6 +3,7 @@
  *
  * @author Fernando Sanz Velasco
  * @author Juan Carlos Garrote Gascón
+ * @author Manuel Plazas Palacio
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
