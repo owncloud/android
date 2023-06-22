@@ -368,7 +368,6 @@
   <string name="available_offline_inherited_msg">Uma pasta que contém este arquivo está disponível off-line</string>
   <string name="rename_local_fail_msg">Cópia local não pôde ser renomeada; tente outro nome</string>
   <string name="rename_server_fail_msg">Renomeação não pôde ser finalizada</string>
-  <string name="file_already_exists">O arquivo já existe</string>
   <string name="sync_file_fail_msg">Arquivo remoto não pode ser verificado</string>
   <string name="sync_file_nothing_to_do_msg">Conteúdo do arquivo já foi sincronizado</string>
   <string name="new_remote_version_found_msg">Uma nova versão foi encontrada no servidor. Baixando…</string>
@@ -433,6 +432,7 @@
   <string name="conflict_use_local_version">versão local</string>
   <string name="conflict_use_server_version">versão do servidor</string>
   <string name="error_conflict">An error occurred in the destination folder</string>
+  <string name="conflict_replace">Substituir </string>
   <string name="preview_image_description">Pré-visualização da imagem</string>
   <string name="preview_image_error_unknown_format">Esta imagem não pode ser mostrada</string>
   <string name="error__upload__local_file_not_copied">%1$s não pôde ser copiado para pasta local %2$s</string>

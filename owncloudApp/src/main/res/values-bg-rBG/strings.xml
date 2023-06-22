@@ -364,7 +364,6 @@
   <string name="available_offline_inherited_msg">Папката, която съдържа този файл е налична офлайн</string>
   <string name="rename_local_fail_msg">Локалното копие не може да бъде преименувано; опитайте с друго име</string>
   <string name="rename_server_fail_msg">Преименуването не можe да бъде завършено</string>
-  <string name="file_already_exists">файлът вече съществува</string>
   <string name="sync_file_fail_msg">Неуспешна проверка на отдалечения файл</string>
   <string name="sync_file_nothing_to_do_msg">Съдържанието на файла вече е синхронизирано</string>
   <string name="new_remote_version_found_msg">В сървъра е открита нова версия. Изтегляне...</string>
@@ -428,6 +427,7 @@
   <string name="conflict_use_local_version">Локална версия</string>
   <string name="conflict_use_server_version">Сървърна версия</string>
   <string name="error_conflict">Възникна грешка в целевата папка</string>
+  <string name="conflict_replace">Замяна</string>
   <string name="preview_image_description">Преглед на изображението</string>
   <string name="preview_image_error_unknown_format">Изображението не може да бъде показано</string>
   <string name="error__upload__local_file_not_copied">%1$s не може да бъде копиран в локалната папка %2$s</string>

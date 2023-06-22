@@ -364,7 +364,6 @@
   <string name="available_offline_inherited_msg">이 파일을 포함한 폴더를 오프라인에서 사용할 수 있음</string>
   <string name="rename_local_fail_msg">로컬 파일의 이름을 변경할 수 없습니다. 다른 이름을 입력하십시오</string>
   <string name="rename_server_fail_msg">이름을 변경할 수 없음</string>
-  <string name="file_already_exists">파일이 이미 존재함</string>
   <string name="sync_file_fail_msg">원격 파일을 확인할 수 없음</string>
   <string name="sync_file_nothing_to_do_msg">파일 내용이 이미 동기화됨</string>
   <string name="new_remote_version_found_msg">새 버전을 서버 내에서 찾았습니다. 다운로드 중…</string>
@@ -428,6 +427,7 @@
   <string name="conflict_use_local_version">로컬 버전</string>
   <string name="conflict_use_server_version">서버 버전</string>
   <string name="error_conflict">대상 폴더에서 오류 발생</string>
+  <string name="conflict_replace">바꾸기</string>
   <string name="preview_image_description">사진 미리 보기</string>
   <string name="preview_image_error_unknown_format">이 사진을 미리 볼 수 없음</string>
   <string name="error__upload__local_file_not_copied">%1$s을(를) 로컬 폴더 %2$s(으)로 복사할 수 없습니다</string>

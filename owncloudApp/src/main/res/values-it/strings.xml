@@ -366,7 +366,6 @@
   <string name="available_offline_inherited_msg">Una cartella che contiene questo file è disponibile non in linea</string>
   <string name="rename_local_fail_msg">La copia locale non può essere rinominata; prova un nome diverso</string>
   <string name="rename_server_fail_msg">La rinomina non può essere completata</string>
-  <string name="file_already_exists">File già esistente</string>
   <string name="sync_file_fail_msg">Il file remoto non può essere controllato</string>
   <string name="sync_file_nothing_to_do_msg">Contenuti del file già sincronizzati</string>
   <string name="new_remote_version_found_msg">È stata trovata una nuova versione sul server. Scaricamento...</string>

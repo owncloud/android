@@ -386,6 +386,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="conflict_keep_both">Conserver les deux versions</string>
   <string name="conflict_use_local_version">version locale</string>
   <string name="conflict_use_server_version">version serveur</string>
+  <string name="conflict_replace">Remplacer</string>
   <string name="preview_image_description">Prévisualisation de l\'image</string>
   <string name="preview_image_error_unknown_format">Cette image ne peut pas être affichée</string>
   <string name="error__upload__local_file_not_copied">%1$s n\'a pas pu être copié dans le dossier local %2$s</string>

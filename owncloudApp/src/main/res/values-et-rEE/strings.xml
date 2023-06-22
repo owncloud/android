@@ -368,7 +368,6 @@
   <string name="available_offline_inherited_msg">Kaust, mis sisaldab seda faili, on saadaval võrguühenduseta</string>
   <string name="rename_local_fail_msg">Kohalikku faili ei saa ümber nimetada; proovi teist uut nime</string>
   <string name="rename_server_fail_msg">Ümbernimetamine ebaõnnestus</string>
-  <string name="file_already_exists">fail on juba olemas</string>
   <string name="sync_file_fail_msg">Mujaloleva faili kontrollimine ebaõnnestus</string>
   <string name="sync_file_nothing_to_do_msg">Faili sisu on juba sünkroniseeritud</string>
   <string name="new_remote_version_found_msg">Serveris leidus uus versioon. Laen alla…</string>

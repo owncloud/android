@@ -360,7 +360,6 @@
   <string name="available_offline_inherited_msg">La carpeta que contiene este archivo está disponible offline</string>
   <string name="rename_local_fail_msg">No se pudo cambiar el nombre de la copia local, trata con un nombre differente</string>
   <string name="rename_server_fail_msg">No se pudo cambiar el nombre</string>
-  <string name="file_already_exists">fichero ya existe</string>
   <string name="sync_file_fail_msg">No se ha podido comprobar el fichero remoto</string>
   <string name="sync_file_nothing_to_do_msg">Ya está sincronizado</string>
   <string name="new_remote_version_found_msg">Se ha encontrado una nueva versión en el servidor. Descargando...</string>
@@ -423,6 +422,7 @@
   <string name="conflict_keep_both">Mantener ambos</string>
   <string name="conflict_use_local_version">versión local</string>
   <string name="conflict_use_server_version">versión del servidor</string>
+  <string name="conflict_replace">Reemplazar</string>
   <string name="preview_image_description">Previsualización de imagen</string>
   <string name="preview_image_error_unknown_format">No se puede mostrar la imagen</string>
   <string name="error__upload__local_file_not_copied">%1$s se pudo copiar a la carpeta local %2$s</string>

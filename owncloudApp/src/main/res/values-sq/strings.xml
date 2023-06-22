@@ -366,7 +366,6 @@
   <string name="available_offline_inherited_msg">Një dosje që përmban këtë kartelë është gati “offline”</string>
   <string name="rename_local_fail_msg">Kopja vendore s\’u riemërtua dot; provoni një emër tjetër</string>
   <string name="rename_server_fail_msg">Riemërtimi s\’u plotësua dot</string>
-  <string name="file_already_exists">ka tashmë një kartelë të tillë</string>
   <string name="sync_file_fail_msg">S\’u kap dot kartela e largët</string>
   <string name="sync_file_nothing_to_do_msg">Lëndë kartele tashmë e njëkohësuar</string>
   <string name="new_remote_version_found_msg">U gjet një version i ri në shërbyes. Po shkarkohet…</string>
@@ -431,6 +430,7 @@
   <string name="conflict_use_local_version">versionin vendor</string>
   <string name="conflict_use_server_version">versionin e shërbyesit</string>
   <string name="error_conflict">Ndodhi një gabim te dosja vendmbërritje</string>
+  <string name="conflict_replace">Zëvendësoje</string>
   <string name="preview_image_description">Paraparje figure</string>
   <string name="preview_image_error_unknown_format">Kjo figurë nuk mund të shfaqet</string>
   <string name="error__upload__local_file_not_copied">%1$s s\’u kopjua dot te dosja vendore %2$s</string>
