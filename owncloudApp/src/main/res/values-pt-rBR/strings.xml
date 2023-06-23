@@ -368,6 +368,10 @@
   <string name="available_offline_inherited_msg">Uma pasta que contém este arquivo está disponível off-line</string>
   <string name="rename_local_fail_msg">Cópia local não pôde ser renomeada; tente outro nome</string>
   <string name="rename_server_fail_msg">Renomeação não pôde ser finalizada</string>
+  <string name="file_already_exists">O arquivo já existe</string>
+  <string name="folder_already_exists">Folder already exists</string>
+  <string name="file_already_exists_description">File with name %1$s already exists.</string>
+  <string name="folder_already_exists_description">Folder with name %1$s already exists.</string>
   <string name="sync_file_fail_msg">Arquivo remoto não pode ser verificado</string>
   <string name="sync_file_nothing_to_do_msg">Conteúdo do arquivo já foi sincronizado</string>
   <string name="new_remote_version_found_msg">Uma nova versão foi encontrada no servidor. Baixando…</string>
