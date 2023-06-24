@@ -4,6 +4,7 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
+ * @author Parneet Singh
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -39,6 +40,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
+import com.google.android.material.tabs.TabLayout;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
@@ -78,13 +80,16 @@ public class PreviewTextFragment extends FileFragment {
     private static final String EXTRA_FILE = "FILE";
     private static final String EXTRA_ACCOUNT = "ACCOUNT";
     private static final String TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT";
+    private static final String EXTRA_PREVIOUS_TAB_POSITION = "EXTRA_PREVIOUS_TAB_POSITION";
 
+    private int previousSelectedTabPosition;
+    private boolean areTabItemsCreated;
     private Account mAccount;
     private ProgressBar mProgressBar;
     private TransferProgressController mProgressController;
     private TextView mTextPreview;
     private TextLoadAsyncTask mTextLoadTask;
-
+    private TabLayout mTabLayout;
     PreviewTextViewModel previewTextViewModel = get(PreviewTextViewModel.class);
     FileOperationsViewModel fileOperationsViewModel = get(FileOperationsViewModel.class);
 
@@ -137,7 +142,7 @@ public class PreviewTextFragment extends FileFragment {
 
         mProgressBar = ret.findViewById(R.id.syncProgressBar);
         mTextPreview = ret.findViewById(R.id.text_preview);
-
+        mTabLayout = ret.findViewById(R.id.tab_layout);
         return ret;
     }
 
@@ -152,6 +157,7 @@ public class PreviewTextFragment extends FileFragment {
             Bundle args = getArguments();
             file = args.getParcelable(EXTRA_FILE);
             mAccount = args.getParcelable(EXTRA_ACCOUNT);
+            previousSelectedTabPosition = PreviewTextViewModel.NO_POSITION;
             if (file == null) {
                 throw new IllegalStateException("Instanced with a NULL OCFile");
             }
@@ -161,6 +167,7 @@ public class PreviewTextFragment extends FileFragment {
         } else {
             file = savedInstanceState.getParcelable(EXTRA_FILE);
             mAccount = savedInstanceState.getParcelable(EXTRA_ACCOUNT);
+            previousSelectedTabPosition = savedInstanceState.getInt(EXTRA_PREVIOUS_TAB_POSITION);
         }
         setFile(file);
         setHasOptionsMenu(true);
@@ -181,6 +188,7 @@ public class PreviewTextFragment extends FileFragment {
         super.onSaveInstanceState(outState);
         outState.putParcelable(EXTRA_FILE, getFile());
         outState.putParcelable(EXTRA_ACCOUNT, mAccount);
+        outState.putInt(EXTRA_PREVIOUS_TAB_POSITION, previousSelectedTabPosition);
     }
 
     @Override
@@ -203,6 +211,7 @@ public class PreviewTextFragment extends FileFragment {
         private final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
         private final WeakReference<TextView> mTextViewReference;
         private String mimeType;
+        private String sourceText;
 
         private TextLoadAsyncTask(WeakReference<TextView> textView) {
             mTextViewReference = textView;
@@ -263,19 +272,11 @@ public class PreviewTextFragment extends FileFragment {
             final TextView textView = mTextViewReference.get();
 
             if (textView != null) {
-                String text = new String(stringWriter.getBuffer());
+                sourceText = new String(stringWriter.getBuffer());
                 if (mimeType.equals("text/markdown")) {
-                    Context context = textView.getContext();
-                    Markwon markwon = Markwon
-                            .builder(context)
-                            .usePlugin(TablePlugin.create(context))
-                            .usePlugin(StrikethroughPlugin.create())
-                            .usePlugin(TaskListPlugin.create(context))
-                            .usePlugin(HtmlPlugin.create())
-                            .build();
-                    markwon.setMarkdown(textView, text);
+                    setupTabLayout();
                 } else {
-                    textView.setText(text);
+                    showText(textView);
                 }
                 textView.setVisibility(View.VISIBLE);
             }
@@ -317,6 +318,69 @@ public class PreviewTextFragment extends FileFragment {
                 loading.dismiss();
             }
         }
+
+        void showMarkdownText(TextView textView) {
+            Context context = textView.getContext();
+            Markwon markwon = Markwon
+                    .builder(context)
+                    .usePlugin(TablePlugin.create(context))
+                    .usePlugin(StrikethroughPlugin.create())
+                    .usePlugin(TaskListPlugin.create(context))
+                    .usePlugin(HtmlPlugin.create())
+                    .build();
+            markwon.setMarkdown(textView, sourceText);
+        }
+
+        void showText(TextView textView) {
+            textView.setText(sourceText);
+        }
+
+        private void setupTabLayout() {
+
+            if (!areTabItemsCreated) {
+                setupTabClickListener();
+                mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_label_markdown), false);
+                mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tab_label_ascii));
+                mTabLayout.setVisibility(View.VISIBLE);
+                areTabItemsCreated = true;
+            }
+            if (previousSelectedTabPosition == PreviewTextViewModel.NO_POSITION) {
+                mTabLayout.selectTab(mTabLayout.getTabAt(PreviewTextViewModel.TAB_MARKDOWN_POSITION));
+            } else {
+                mTabLayout.selectTab(mTabLayout.getTabAt(previousSelectedTabPosition));
+            }
+        }
+
+        private void setupTabClickListener() {
+            mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    int position = tab.getPosition();
+                    switch (position) {
+                        case (PreviewTextViewModel.TAB_MARKDOWN_POSITION):
+                            previousSelectedTabPosition = PreviewTextViewModel.TAB_MARKDOWN_POSITION;
+                            showMarkdownText(mTextPreview);
+                            break;
+                        case (PreviewTextViewModel.TAB_TEXT_POSITION):
+                            previousSelectedTabPosition = PreviewTextViewModel.TAB_TEXT_POSITION;
+                            showText(mTextPreview);
+                            break;
+                    }
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+
+            });
+        }
+
     }
 
     /**

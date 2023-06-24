@@ -16,32 +16,37 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/top"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    tools:context=".ui.preview.PreviewAudioFragment"
     android:filterTouchesWhenObscured="true"
-    >
+    android:gravity="center"
+    tools:context=".ui.preview.PreviewAudioFragment">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:visibility="gone" />
 
     <ScrollView
+        android:id="@+id/preview_text_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:fillViewport="true"
-        >
+        android:layout_below="@+id/tab_layout"
+        android:fillViewport="true">
 
         <TextView
             android:id="@+id/text_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/standard_margin"
-            android:layout_marginLeft="@dimen/standard_margin"
-            android:layout_marginRight="@dimen/standard_margin"
             android:layout_marginStart="@dimen/standard_margin"
+            android:layout_marginLeft="@dimen/standard_margin"
+            android:layout_marginEnd="@dimen/standard_margin"
+            android:layout_marginRight="@dimen/standard_margin"
             android:visibility="gone" />
     </ScrollView>
 
