@@ -288,16 +288,16 @@ class FileListAdapter(
                     )
                 )
             } else {
-                val mimeIcon = MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName)
+                val mimetypeIcon = MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName)
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
-                fileIcon.load(mimeIcon)
+                fileIcon.load(mimetypeIcon)
                 if (file.remoteId != null) {
                     fileIcon.load(
                         ThumbnailsRequester.getPreviewUriForFile(fileWithSyncInfo, account!!),
                         ThumbnailsRequester.getCoilImageLoader(),
                     ) {
-                        placeholder(mimeIcon)
-                        error(mimeIcon)
+                        placeholder(mimetypeIcon)
+                        error(mimetypeIcon)
                     }
 
                     if (file.mimeType == "image/png") {
