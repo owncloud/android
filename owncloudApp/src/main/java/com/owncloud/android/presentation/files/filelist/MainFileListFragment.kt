@@ -336,8 +336,8 @@ class MainFileListFragment : Fragment(),
                         ThumbnailsRequester.getPreviewUriForSpaceSpecial(spaceSpecialImage),
                         ThumbnailsRequester.getCoilImageLoader()
                     ) {
-                        placeholder(R.drawable.ic_folder)
-                        error(R.drawable.ic_folder)
+                        placeholder(R.drawable.ic_spaces)
+                        error(R.drawable.ic_spaces)
                     }
                 }
                 binding.spaceHeader.spaceHeaderName.text = it.name
@@ -700,12 +700,14 @@ class MainFileListFragment : Fragment(),
                     updateActionModeAfterTogglingSelected()
                     return true
                 }
+
                 R.id.action_open_file_with -> {
                     fileActions?.openFile(singleFile)
                     fileListAdapter.clearSelection()
                     updateActionModeAfterTogglingSelected()
                     return true
                 }
+
                 R.id.action_rename_file -> {
                     val dialog = RenameFileDialogFragment.newInstance(singleFile)
                     dialog.show(requireActivity().supportFragmentManager, FRAGMENT_TAG_RENAME_FILE)
@@ -713,16 +715,19 @@ class MainFileListFragment : Fragment(),
                     updateActionModeAfterTogglingSelected()
                     return true
                 }
+
                 R.id.action_see_details -> {
                     fileListAdapter.clearSelection()
                     updateActionModeAfterTogglingSelected()
                     fileActions?.showDetails(singleFile)
                     return true
                 }
+
                 R.id.action_sync_file -> {
                     syncFiles(listOf(singleFile))
                     return true
                 }
+
                 R.id.action_send_file -> {
                     //Obtain the file
                     if (!singleFile.isAvailableLocally) { // Download the file
@@ -733,6 +738,7 @@ class MainFileListFragment : Fragment(),
                     }
                     return true
                 }
+
                 R.id.action_set_available_offline -> {
                     fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(singleFile)))
                     if (singleFile.isFolder) {
@@ -742,6 +748,7 @@ class MainFileListFragment : Fragment(),
                     }
                     return true
                 }
+
                 R.id.action_unset_available_offline -> {
                     fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(singleFile)))
                 }
@@ -756,11 +763,13 @@ class MainFileListFragment : Fragment(),
                 updateActionModeAfterTogglingSelected()
                 return true
             }
+
             R.id.action_select_inverse -> {
                 fileListAdapter.selectInverse()
                 updateActionModeAfterTogglingSelected()
                 return true
             }
+
             R.id.action_remove_file -> {
                 val dialog = RemoveFilesDialogFragment.newInstance(checkedFiles)
                 dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
@@ -768,15 +777,18 @@ class MainFileListFragment : Fragment(),
                 updateActionModeAfterTogglingSelected()
                 return true
             }
+
             R.id.action_download_file,
             R.id.action_sync_file -> {
                 syncFiles(checkedFiles)
                 return true
             }
+
             R.id.action_cancel_sync -> {
                 fileActions?.cancelFileTransference(checkedFiles)
                 return true
             }
+
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(checkedFiles))
                 checkedFiles.forEach { ocFile ->
@@ -788,13 +800,16 @@ class MainFileListFragment : Fragment(),
                 }
                 return true
             }
+
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(checkedFiles))
                 return true
             }
+
             R.id.action_send_file -> {
                 requireActivity().sendDownloadedFilesByShareSheet(checkedFiles)
             }
+
             R.id.action_move -> {
                 val action = Intent(activity, FolderPickerActivity::class.java)
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
@@ -804,6 +819,7 @@ class MainFileListFragment : Fragment(),
                 updateActionModeAfterTogglingSelected()
                 return true
             }
+
             R.id.action_copy -> {
                 val action = Intent(activity, FolderPickerActivity::class.java)
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
@@ -932,10 +948,10 @@ class MainFileListFragment : Fragment(),
             if (checkedFiles.size == 1) {
                 mainFileListViewModel.getAppRegistryForMimeType(checkedFiles.first().mimeType)
                 collectLatestLifecycleFlow(mainFileListViewModel.appRegistryMimeType) { appRegistryMimeType ->
-                        val appProviders = appRegistryMimeType?.appProviders
-                        menu?.let {
-                            openInWebProviders = addOpenInWebMenuOptions(menu, openInWebProviders, appProviders)
-                        }
+                    val appProviders = appRegistryMimeType?.appProviders
+                    menu?.let {
+                        openInWebProviders = addOpenInWebMenuOptions(menu, openInWebProviders, appProviders)
+                    }
                 }
             } else {
                 menu?.let {
