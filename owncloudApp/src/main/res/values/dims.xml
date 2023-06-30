@@ -49,8 +49,10 @@
     <dimen name="file_indicator_pin_size">12dp</dimen>
     <dimen name="file_indicator_pin_size_grid">18dp</dimen>
     <dimen name="file_icon_size">32dp</dimen>
+    <dimen name="file_icon_size_bottom_sheet">48dp</dimen>
     <dimen name="file_icon_size_grid">128dp</dimen>
     <dimen name="file_avatar_size">128dp</dimen>
+    <dimen name="max_height_bottom_sheet">400dp</dimen>
 
     <dimen name="two_line_primary_text_size">16sp</dimen>
     <dimen name="two_line_secondary_text_size">14sp</dimen>

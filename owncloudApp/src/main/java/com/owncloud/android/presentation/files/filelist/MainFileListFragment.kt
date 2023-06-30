@@ -76,6 +76,7 @@ import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.common.BottomSheetFragmentItemView
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.files.SortBottomSheetFragment
@@ -97,6 +98,7 @@ import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.preview.PreviewVideoFragment
+import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -345,11 +347,54 @@ class MainFileListFragment : Fragment(),
                 val fileOptionsBottomSheetSingleFile = layoutInflater.inflate(R.layout.file_options_bottom_sheet_fragment, null)
                 val dialog = BottomSheetDialog(requireContext())
                 dialog.setContentView(fileOptionsBottomSheetSingleFile)
+
                 val fileOptionsBottomSheetSingleFileBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(fileOptionsBottomSheetSingleFile.parent as View)
                 val closeBottomSheetButton = fileOptionsBottomSheetSingleFile.findViewById<ImageView>(R.id.close_bottom_sheet)
                 closeBottomSheetButton.setOnClickListener {
                     fileOptionsBottomSheetSingleFileBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 }
+
+                val thumbnailBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<ImageView>(R.id.thumbnail_bottom_sheet)
+                if (it.isFolder) {
+                    // Folder
+                    thumbnailBottomSheet.setImageResource(R.drawable.ic_menu_archive)
+                } else {
+                    // Set file icon depending on its mimetype. Ask for thumbnail later.
+                    thumbnailBottomSheet.setImageResource(MimetypeIconUtil.getFileTypeIconId(it.mimeType, it.fileName))
+                    if (it.remoteId != null) {
+                        val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(it.remoteId)
+                        if (thumbnail != null) {
+                            thumbnailBottomSheet.setImageBitmap(thumbnail)
+                        }
+                        if (it.needsToUpdateThumbnail) {
+                            // generate new Thumbnail
+                            if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(it, thumbnailBottomSheet)) {
+                                val task = ThumbnailsCacheManager.ThumbnailGenerationTask(thumbnailBottomSheet, AccountUtils.getCurrentOwnCloudAccount(requireContext()))
+                                val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(resources, thumbnail, task)
+
+                                // If drawable is not visible, do not update it.
+                                if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
+                                    thumbnailBottomSheet.setImageDrawable(asyncDrawable)
+                                }
+                                task.execute(it)
+                            }
+                        }
+
+                        if (it.mimeType == "image/png") {
+                            thumbnailBottomSheet.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background_color))
+                        }
+                    }
+                }
+
+                val fileNameBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_name_bottom_sheet)
+                fileNameBottomSheet.text = it.fileName
+
+                val fileSizeBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_size_bottom_sheet)
+                fileSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(it.length, requireContext())
+
+                val fileLastModBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_last_mod_bottom_sheet)
+                fileLastModBottomSheet.text = DisplayUtils.getRelativeTimestamp(requireContext(), it.modificationTimestamp)
+
                 fileOptionsBottomSheetSingleFileLayout = fileOptionsBottomSheetSingleFile.findViewById(R.id.file_options_bottom_sheet_layout)
                 menuOptions.forEach { menuOption ->
                     val fileOptionItemView = BottomSheetFragmentItemView(requireContext())

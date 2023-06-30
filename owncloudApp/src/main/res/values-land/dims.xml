@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="max_height_bottom_sheet">300dp</dimen>
+</resources>
