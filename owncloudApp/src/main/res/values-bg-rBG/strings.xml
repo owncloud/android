@@ -10,6 +10,7 @@
   <string name="actionbar_upload_from_apps">Съдържание от други приложения</string>
   <string name="actionbar_upload_files">Файлове</string>
   <string name="actionbar_open_with">Отваряне с</string>
+  <string name="actionbar_open_with_read_only">Отваряне с (само за четене)</string>
   <string name="actionbar_mkdir">Нова папка</string>
   <string name="actionbar_settings">Настройки</string>
   <string name="actionbar_see_details">Подробности</string>
@@ -364,6 +365,7 @@
   <string name="available_offline_inherited_msg">Папката, която съдържа този файл е налична офлайн</string>
   <string name="rename_local_fail_msg">Локалното копие не може да бъде преименувано; опитайте с друго име</string>
   <string name="rename_server_fail_msg">Преименуването не можe да бъде завършено</string>
+  <string name="file_already_exists">Файлът вече съществува</string>
   <string name="sync_file_fail_msg">Неуспешна проверка на отдалечения файл</string>
   <string name="sync_file_nothing_to_do_msg">Съдържанието на файла вече е синхронизирано</string>
   <string name="new_remote_version_found_msg">В сървъра е открита нова версия. Изтегляне...</string>
@@ -478,6 +480,7 @@
   <string name="folder_picker_choose_button_text">Избор</string>
   <string name="folder_picker_move_here_button_text">Преместване тук</string>
   <string name="folder_picker_copy_here_button_text">Копиране тук</string>
+  <string name="folder_picker_no_permissions_message_text">Нямате необходимите права за добавяне на съдържание тук!</string>
   <string name="move_file_not_found">Неуспешно преместване. Моля, проверете дали файлът съществува</string>
   <string name="move_file_invalid_into_descendent">Не е възможно да преместите папка в нейна подпапка</string>
   <string name="move_file_invalid_overwrite">Файлът вече съществува в отдалечената папка.</string>
@@ -652,6 +655,7 @@
   <string name="release_notes_proceed">Продължаване</string>
   <string name="release_notes_icon">Икона за бележка по изданието</string>
   <string name="release_notes_4_0_title_1">Поддръжка за пространства</string>
+  <string name="release_notes_4_0_subtitle_1">Въвеждане на поддръжка за функцията за пространства (oCIS). <b>Налична само за нови регистрирани профили</b></string>
   <string name="release_notes_4_0_title_2">Долна лента за навигация</string>
   <string name="release_notes_4_0_subtitle_2">Пренареждане на някои раздели</string>
   <string name="release_notes_4_0_title_3">Край на поддръжката на Lollipop</string>
