@@ -31,10 +31,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.view.setMargins
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.R
 import com.owncloud.android.databinding.GridItemBinding
 import com.owncloud.android.databinding.ItemFileListBinding
@@ -235,9 +235,8 @@ class FileListAdapter(
                 }
                 ViewType.GRID_IMAGE.ordinal -> {
                     val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
-                    val resources = appContext.resources
-                    val marginImage = resources.getDimensionPixelSize(R.dimen.standard_quarter_margin)
-                    layoutParams.setMargins(marginImage, marginImage, marginImage, marginImage)
+                    val marginImage = 4
+                    layoutParams.setMargins(marginImage)
                     layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
                     layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
                 }
