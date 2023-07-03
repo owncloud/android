@@ -34,6 +34,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.R
 import com.owncloud.android.databinding.GridItemBinding
 import com.owncloud.android.databinding.ItemFileListBinding
@@ -231,6 +232,14 @@ class FileListAdapter(
                     // Filename
                     val view = holder as GridViewHolder
                     view.binding.Filename.text = file.fileName
+                }
+                ViewType.GRID_IMAGE.ordinal -> {
+                    val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
+                    val resources = appContext.resources
+                    val marginImage = resources.getDimensionPixelSize(R.dimen.standard_quarter_margin)
+                    layoutParams.setMargins(marginImage, marginImage, marginImage, marginImage)
+                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
                 }
             }
 
