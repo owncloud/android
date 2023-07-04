@@ -15,6 +15,7 @@ Summary
 * Change - Remove "ignore" from the debug flavour Android manifest: [#4064](https://github.com/owncloud/android/pull/4064)
 * Enhancement - Added "Open in web" options to main file list: [#3860](https://github.com/owncloud/android/issues/3860)
 * Enhancement - Copy/move conflict solved by users: [#3935](https://github.com/owncloud/android/issues/3935)
+* Enhancement - Improve grid mode: [#4027](https://github.com/owncloud/android/issues/4027)
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 
 Details
@@ -75,6 +76,13 @@ Details
 
    https://github.com/owncloud/android/issues/3935
    https://github.com/owncloud/android/pull/4062
+
+* Enhancement - Improve grid mode: [#4027](https://github.com/owncloud/android/issues/4027)
+
+   Grid mode has been improved to show bigger thumbnails in images files.
+
+   https://github.com/owncloud/android/issues/4027
+   https://github.com/owncloud/android/pull/4089
 
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 
