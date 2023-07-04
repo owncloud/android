@@ -36,15 +36,13 @@ import io.noties.markwon.ext.tasklist.TaskListPlugin
 import io.noties.markwon.html.HtmlPlugin
 
 class PreviewFormatTextFragmentStateAdapter(
-    fragment: Fragment, private val text: String, private val mimeType: String
+    fragment: Fragment,
+    private val text: String,
+    private val mimeType: String
 ) : FragmentStateAdapter(fragment) {
-    companion object {
-        const val TYPE_PLAIN = "text/plain"
-        private const val TYPE_MARKDOWN = "text/markdown"
-    }
 
     val formatTypes =
-        mapOf(TYPE_MARKDOWN to "Markdown", TYPE_PLAIN to "Text")
+        mapOf(TYPE_MARKDOWN to fragment.getString(R.string.tab_label_markdown), TYPE_PLAIN to fragment.getString(R.string.tab_label_ascii))
 
     override fun getItemCount(): Int = 2
 
@@ -100,4 +98,10 @@ class PreviewFormatTextFragmentStateAdapter(
 
         }
     }
+
+    companion object {
+        const val TYPE_PLAIN = "text/plain"
+        private const val TYPE_MARKDOWN = "text/markdown"
+    }
 }
+
