@@ -74,6 +74,9 @@ import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
+import com.owncloud.android.extensions.toDrawableResId
+import com.owncloud.android.extensions.toResId
+import com.owncloud.android.extensions.toStringResId
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
 import com.owncloud.android.presentation.authentication.AccountUtils
@@ -343,7 +346,6 @@ class MainFileListFragment : Fragment(),
         // Observe the menu filtered options for a single file
         collectLatestLifecycleFlow(mainFileListViewModel.menuOptionsSingleFile) { menuOptions ->
             fileSingleFile?.let {
-                val hasWritePermission = it.hasWritePermission
                 val fileOptionsBottomSheetSingleFile = layoutInflater.inflate(R.layout.file_options_bottom_sheet_fragment, null)
                 val dialog = BottomSheetDialog(requireContext())
                 dialog.setContentView(fileOptionsBottomSheetSingleFile)
@@ -399,8 +401,12 @@ class MainFileListFragment : Fragment(),
                 menuOptions.forEach { menuOption ->
                     val fileOptionItemView = BottomSheetFragmentItemView(requireContext())
                     fileOptionItemView.apply {
-                        title = menuOption.name
-                        itemIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_spaces, null)
+                        title = if (menuOption.toResId() == R.id.action_open_file_with && !it.hasWritePermission) {
+                            getString(R.string.actionbar_open_with_read_only)
+                        } else {
+                            getString(menuOption.toStringResId())
+                        }
+                        itemIcon = ResourcesCompat.getDrawable(resources, menuOption.toDrawableResId(), null)
                         setOnClickListener {
 
                         }
