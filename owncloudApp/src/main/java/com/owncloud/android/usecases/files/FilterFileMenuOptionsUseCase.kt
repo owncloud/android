@@ -107,10 +107,6 @@ class FilterFileMenuOptionsUseCase(
         if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles) {
             optionsToShow.add(FileMenuOption.COPY)
         }
-        // Remove
-        if (!isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles && hasRemovePermission) {
-            optionsToShow.add(FileMenuOption.REMOVE)
-        }
         // Open with (different to preview!)
         if (!isAnyFileSynchronizing && isSingleFile(files)) {
             optionsToShow.add(FileMenuOption.OPEN_WITH)
@@ -145,6 +141,10 @@ class FilterFileMenuOptionsUseCase(
         // Unset as available offline
         if (anyAvailableOfflineFile(files) && !isAnyFileVideoStreaming) {
             optionsToShow.add(FileMenuOption.UNSET_AV_OFFLINE)
+        }
+        // Remove
+        if (!isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles && hasRemovePermission) {
+            optionsToShow.add(FileMenuOption.REMOVE)
         }
 
         return optionsToShow
