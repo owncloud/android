@@ -31,6 +31,7 @@ const val CONFIGURATION_SERVER_URL_INPUT_VISIBILITY = "server_url_input_visibili
 const val CONFIGURATION_ALLOW_SCREENSHOTS = "allow_screenshots_configuration"
 const val CONFIGURATION_OAUTH2_OPEN_ID_SCOPE = "oauth2_open_id_scope"
 const val CONFIGURATION_OAUTH2_OPEN_ID_PROMPT = "oauth2_open_id_prompt"
+const val CONFIGURATION_DEVICE_PROTECTION = "device_protection"
 
 @StringDef(
     NO_MDM_RESTRICTION_YET,
@@ -40,6 +41,7 @@ const val CONFIGURATION_OAUTH2_OPEN_ID_PROMPT = "oauth2_open_id_prompt"
     CONFIGURATION_ALLOW_SCREENSHOTS,
     CONFIGURATION_OAUTH2_OPEN_ID_SCOPE,
     CONFIGURATION_OAUTH2_OPEN_ID_PROMPT,
+    CONFIGURATION_DEVICE_PROTECTION,
 )
 @Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.VALUE_PARAMETER)

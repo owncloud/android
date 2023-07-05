@@ -118,6 +118,7 @@
     <integer name="passcode_digits">4</integer>
 
     <!--Security enforced -->
+    <bool name="device_protection">false</bool>
     <integer name="lock_enforced">0</integer>
     <integer name="lock_delay_enforced">0</integer>
 

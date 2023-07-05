@@ -27,9 +27,11 @@ import com.owncloud.android.presentation.security.LockEnforcedType
 import com.owncloud.android.presentation.security.LockEnforcedType.Companion.parseFromInteger
 import com.owncloud.android.presentation.security.LockTimeout
 import com.owncloud.android.presentation.security.biometric.BiometricActivity
+import com.owncloud.android.presentation.security.isDeviceSecure
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.security.pattern.PatternActivity
 import com.owncloud.android.providers.MdmProvider
+import com.owncloud.android.utils.CONFIGURATION_DEVICE_PROTECTION
 import com.owncloud.android.utils.CONFIGURATION_LOCK_DELAY_TIME
 import com.owncloud.android.utils.NO_MDM_RESTRICTION_YET
 
@@ -51,7 +53,8 @@ class SettingsSecurityViewModel(
     fun getBiometricsState(): Boolean = preferencesProvider.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false)
 
     fun isSecurityEnforcedEnabled() =
-        parseFromInteger(mdmProvider.getBrandingInteger(NO_MDM_RESTRICTION_YET, R.integer.lock_enforced)) != LockEnforcedType.DISABLED
+        (!mdmProvider.getBrandingBoolean(CONFIGURATION_DEVICE_PROTECTION, R.bool.device_protection) || !isDeviceSecure()) &&
+                parseFromInteger(mdmProvider.getBrandingInteger(NO_MDM_RESTRICTION_YET, R.integer.lock_enforced)) != LockEnforcedType.DISABLED
 
     fun isLockDelayEnforcedEnabled() = LockTimeout.parseFromInteger(
         mdmProvider.getBrandingInteger(

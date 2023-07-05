@@ -23,6 +23,7 @@ package com.owncloud.android.presentation.viewmodels.settings
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.presentation.security.LockEnforcedType
+import com.owncloud.android.presentation.security.isDeviceSecure
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.security.pattern.PatternActivity
 import com.owncloud.android.presentation.settings.security.SettingsSecurityViewModel
@@ -31,6 +32,7 @@ import com.owncloud.android.presentation.viewmodels.ViewModelTest
 import com.owncloud.android.providers.MdmProvider
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertFalse
@@ -49,6 +51,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         preferencesProvider = mockk(relaxUnitFun = true)
         mdmProvider = mockk(relaxUnitFun = true)
         securityViewModel = SettingsSecurityViewModel(preferencesProvider, mdmProvider)
+        mockkStatic(::isDeviceSecure)
     }
 
     @Test
@@ -140,20 +143,84 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
     }
 
     @Test
-    fun `is security enforced enabled - ok - true`() {
+    fun `is security enforced enabled device protection device secure - ok - false`() {
+        every { isDeviceSecure() } returns true
+        every { mdmProvider.getBrandingBoolean(any(), R.bool.device_protection) } returns true
         every { mdmProvider.getBrandingInteger(any(), R.integer.lock_enforced) } returns LockEnforcedType.EITHER_ENFORCED.ordinal
 
         val result = securityViewModel.isSecurityEnforcedEnabled()
-        assertTrue(result)
+        assertFalse(result)
 
     }
 
     @Test
-    fun `is security enforced enabled - ok - false`() {
+    fun `is security enforced disabled device protection device no secure - ok - false`() {
+        every { isDeviceSecure() } returns false
+        every { mdmProvider.getBrandingBoolean(any(), R.bool.device_protection) } returns true
         every { mdmProvider.getBrandingInteger(any(), R.integer.lock_enforced) } returns LockEnforcedType.DISABLED.ordinal
 
         val result = securityViewModel.isSecurityEnforcedEnabled()
         assertFalse(result)
+    }
+
+    @Test
+    fun `is security enforced enabled no device protection device no secure - ok - true`() {
+        every { isDeviceSecure() } returns false
+        every { mdmProvider.getBrandingBoolean(any(), R.bool.device_protection) } returns false
+        every { mdmProvider.getBrandingInteger(any(), R.integer.lock_enforced) } returns LockEnforcedType.EITHER_ENFORCED.ordinal
+
+        val result = securityViewModel.isSecurityEnforcedEnabled()
+        assertTrue(result)
+    }
+
+    @Test
+    fun `is security enforced enabled no device protection device secure - ok - true`() {
+        every { isDeviceSecure() } returns true
+        every { mdmProvider.getBrandingBoolean(any(), R.bool.device_protection) } returns false
+        every { mdmProvider.getBrandingInteger(any(), R.integer.lock_enforced) } returns LockEnforcedType.EITHER_ENFORCED.ordinal
+
+        val result = securityViewModel.isSecurityEnforcedEnabled()
+        assertTrue(result)
+    }
+
+    @Test
+    fun `is security enforced disabled no device protection device no secure - ok - false`() {
+        every { isDeviceSecure() } returns false
+        every { mdmProvider.getBrandingBoolean(any(), R.bool.device_protection) } returns false
+        every { mdmProvider.getBrandingInteger(any(), R.integer.lock_enforced) } returns LockEnforcedType.DISABLED.ordinal
+
+        val result = securityViewModel.isSecurityEnforcedEnabled()
+        assertFalse(result)
+    }
+
+    @Test
+    fun `is security enforced disabled no device protection device secure - ok - false`() {
+        every { isDeviceSecure() } returns true
+        every { mdmProvider.getBrandingBoolean(any(), R.bool.device_protection) } returns false
+        every { mdmProvider.getBrandingInteger(any(), R.integer.lock_enforced) } returns LockEnforcedType.DISABLED.ordinal
+
+        val result = securityViewModel.isSecurityEnforcedEnabled()
+        assertFalse(result)
+    }
+
+    @Test
+    fun `is security enforced disabled device protection device secure - ok - false`() {
+        every { isDeviceSecure() } returns true
+        every { mdmProvider.getBrandingBoolean(any(), R.bool.device_protection) } returns true
+        every { mdmProvider.getBrandingInteger(any(), R.integer.lock_enforced) } returns LockEnforcedType.DISABLED.ordinal
+
+        val result = securityViewModel.isSecurityEnforcedEnabled()
+        assertFalse(result)
+    }
+
+    @Test
+    fun `is security enforced enabled device protection device no secure - ok - true`() {
+        every { isDeviceSecure() } returns false
+        every { mdmProvider.getBrandingBoolean(any(), R.bool.device_protection) } returns true
+        every { mdmProvider.getBrandingInteger(any(), R.integer.lock_enforced) } returns LockEnforcedType.EITHER_ENFORCED.ordinal
+
+        val result = securityViewModel.isSecurityEnforcedEnabled()
+        assertTrue(result)
     }
 
     @Test
