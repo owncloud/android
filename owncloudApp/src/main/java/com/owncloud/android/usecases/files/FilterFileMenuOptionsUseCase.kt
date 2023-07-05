@@ -88,10 +88,23 @@ class FilterFileMenuOptionsUseCase(
         if (displaySelectInverse) {
             optionsToShow.add(FileMenuOption.SELECT_INVERSE)
         }
+        // Details
+        if (isSingleFile(files)) {
+            optionsToShow.add(FileMenuOption.DETAILS)
+        }
         // Download
         if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
             !anyFolder(files) && !anyFileDownloaded(files)) {
             optionsToShow.add(FileMenuOption.DOWNLOAD)
+        }
+        // Synchronize
+        if (!isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
+            (anyFileDownloaded(files) || anyFolder(files))) {
+            optionsToShow.add(FileMenuOption.SYNC)
+        }
+        // Cancel sync
+        if (isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles && !anyAvailableOfflineFile(files)) {
+            optionsToShow.add(FileMenuOption.CANCEL_SYNC)
         }
         // Rename
         if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
@@ -111,23 +124,10 @@ class FilterFileMenuOptionsUseCase(
         if (!isAnyFileSynchronizing && isSingleFile(files)) {
             optionsToShow.add(FileMenuOption.OPEN_WITH)
         }
-        // Synchronize
-        if (!isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
-            (anyFileDownloaded(files) || anyFolder(files))) {
-            optionsToShow.add(FileMenuOption.SYNC)
-        }
-        // Cancel sync
-        if (isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles && !anyAvailableOfflineFile(files)) {
-            optionsToShow.add(FileMenuOption.CANCEL_SYNC)
-        }
         // Share
         if (!onlyAvailableOfflineFiles && (shareViaLinkAllowed || shareWithUsersAllowed) && resharingAllowed &&
             isPersonalSpace && hasResharePermission) {
             optionsToShow.add(FileMenuOption.SHARE)
-        }
-        // Details
-        if (isSingleFile(files)) {
-            optionsToShow.add(FileMenuOption.DETAILS)
         }
         // Send
         if (!isAnyFileSynchronizing && !isAnyFileVideoStreaming && !onlyAvailableOfflineFiles && !anyFolder(files) &&
