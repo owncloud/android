@@ -50,6 +50,7 @@ import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.security.biometric.BiometricActivity
 import com.owncloud.android.presentation.security.biometric.BiometricStatus
 import com.owncloud.android.presentation.security.biometric.EnableBiometrics
+import com.owncloud.android.presentation.security.isDeviceSecure
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.security.pattern.PatternActivity
 import com.owncloud.android.presentation.settings.privacypolicy.PrivacyPolicyActivity
@@ -285,39 +286,44 @@ fun Activity.hideSoftKeyboard() {
 fun Activity.checkPasscodeEnforced(securityEnforced: SecurityEnforced) {
     val sharedPreferencesProvider = OCSharedPreferencesProvider(this)
 
+    val deviceProtection: Boolean = !this.resources.getBoolean(R.bool.device_protection) && !isDeviceSecure()
     val lockEnforced: Int = this.resources.getInteger(R.integer.lock_enforced)
     val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
 
-    when (parseFromInteger(lockEnforced)) {
-        LockEnforcedType.DISABLED -> {}
-        LockEnforcedType.EITHER_ENFORCED -> {
-            if (!passcodeConfigured && !patternConfigured) {
-                val options = arrayOf(getString(R.string.security_enforced_first_option), getString(R.string.security_enforced_second_option))
-                var optionSelected = 0
+    if (deviceProtection) {
+        when (parseFromInteger(lockEnforced)) {
+            LockEnforcedType.DISABLED -> {}
+            LockEnforcedType.EITHER_ENFORCED -> {
+                if (!passcodeConfigured && !patternConfigured) {
+                    val options = arrayOf(getString(R.string.security_enforced_first_option), getString(R.string.security_enforced_second_option))
+                    var optionSelected = 0
 
-                AlertDialog.Builder(this)
-                    .setCancelable(false)
-                    .setTitle(getString(R.string.security_enforced_title))
-                    .setSingleChoiceItems(options, LockType.PASSCODE.ordinal) { _, which -> optionSelected = which }
-                    .setPositiveButton(android.R.string.ok) { dialog, _ ->
-                        when (LockType.parseFromInteger(optionSelected)) {
-                            LockType.PASSCODE -> securityEnforced.optionLockSelected(LockType.PASSCODE)
-                            LockType.PATTERN -> securityEnforced.optionLockSelected(LockType.PATTERN)
+                    AlertDialog.Builder(this)
+                        .setCancelable(false)
+                        .setTitle(getString(R.string.security_enforced_title))
+                        .setSingleChoiceItems(options, LockType.PASSCODE.ordinal) { _, which -> optionSelected = which }
+                        .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                            when (LockType.parseFromInteger(optionSelected)) {
+                                LockType.PASSCODE -> securityEnforced.optionLockSelected(LockType.PASSCODE)
+                                LockType.PATTERN -> securityEnforced.optionLockSelected(LockType.PATTERN)
+                            }
+                            dialog.dismiss()
                         }
-                        dialog.dismiss()
-                    }
-                    .show()
+                        .show()
+                }
             }
-        }
-        LockEnforcedType.PASSCODE_ENFORCED -> {
-            if (!passcodeConfigured) {
-                manageOptionLockSelected(LockType.PASSCODE)
+
+            LockEnforcedType.PASSCODE_ENFORCED -> {
+                if (!passcodeConfigured) {
+                    manageOptionLockSelected(LockType.PASSCODE)
+                }
             }
-        }
-        LockEnforcedType.PATTERN_ENFORCED -> {
-            if (!patternConfigured) {
-                manageOptionLockSelected(LockType.PATTERN)
+
+            LockEnforcedType.PATTERN_ENFORCED -> {
+                if (!patternConfigured) {
+                    manageOptionLockSelected(LockType.PATTERN)
+                }
             }
         }
     }
@@ -344,6 +350,7 @@ fun Activity.manageOptionLockSelected(type: LockType) {
             flags = FLAG_ACTIVITY_NO_HISTORY
             putExtra(EXTRAS_LOCK_ENFORCED, true)
         })
+
         LockType.PATTERN -> startActivity(Intent(this, PatternActivity::class.java).apply {
             action = PatternActivity.ACTION_REQUEST_WITH_RESULT
             flags = FLAG_ACTIVITY_NO_HISTORY

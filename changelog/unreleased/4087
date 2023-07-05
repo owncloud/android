@@ -1,0 +1,6 @@
+Enhancement: Force security if not protected
+
+A new branding parameter was created to enforce security protection in the app if device protection is not enabled.
+
+https://github.com/owncloud/android/issues/4061
+https://github.com/owncloud/android/pull/4087
