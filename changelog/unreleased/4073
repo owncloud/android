@@ -1,0 +1,6 @@
+Change: Added test to ScopedStorageProviderTest and OCSharedPreferencesProviderTest
+
+Implementation of all functions within those classes.
+
+https://github.com/owncloud/android/issues/4073
+https://github.com/owncloud/android/pull/4091
