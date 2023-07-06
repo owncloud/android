@@ -60,6 +60,7 @@ import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.TooEarlyException
 import com.owncloud.android.domain.files.model.FileListOption
+import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.model.OCFileSyncInfo
@@ -345,7 +346,7 @@ class MainFileListFragment : Fragment(),
 
         // Observe the menu filtered options for a single file
         collectLatestLifecycleFlow(mainFileListViewModel.menuOptionsSingleFile) { menuOptions ->
-            fileSingleFile?.let {
+            fileSingleFile?.let { file ->
                 val fileOptionsBottomSheetSingleFile = layoutInflater.inflate(R.layout.file_options_bottom_sheet_fragment, null)
                 val dialog = BottomSheetDialog(requireContext())
                 dialog.setContentView(fileOptionsBottomSheetSingleFile)
@@ -353,24 +354,24 @@ class MainFileListFragment : Fragment(),
                 val fileOptionsBottomSheetSingleFileBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(fileOptionsBottomSheetSingleFile.parent as View)
                 val closeBottomSheetButton = fileOptionsBottomSheetSingleFile.findViewById<ImageView>(R.id.close_bottom_sheet)
                 closeBottomSheetButton.setOnClickListener {
-                    fileOptionsBottomSheetSingleFileBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    dialog.hide()
                 }
 
                 val thumbnailBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<ImageView>(R.id.thumbnail_bottom_sheet)
-                if (it.isFolder) {
+                if (file.isFolder) {
                     // Folder
                     thumbnailBottomSheet.setImageResource(R.drawable.ic_menu_archive)
                 } else {
                     // Set file icon depending on its mimetype. Ask for thumbnail later.
-                    thumbnailBottomSheet.setImageResource(MimetypeIconUtil.getFileTypeIconId(it.mimeType, it.fileName))
-                    if (it.remoteId != null) {
-                        val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(it.remoteId)
+                    thumbnailBottomSheet.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
+                    if (file.remoteId != null) {
+                        val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
                         if (thumbnail != null) {
                             thumbnailBottomSheet.setImageBitmap(thumbnail)
                         }
-                        if (it.needsToUpdateThumbnail) {
+                        if (file.needsToUpdateThumbnail) {
                             // generate new Thumbnail
-                            if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(it, thumbnailBottomSheet)) {
+                            if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, thumbnailBottomSheet)) {
                                 val task = ThumbnailsCacheManager.ThumbnailGenerationTask(thumbnailBottomSheet, AccountUtils.getCurrentOwnCloudAccount(requireContext()))
                                 val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(resources, thumbnail, task)
 
@@ -378,37 +379,99 @@ class MainFileListFragment : Fragment(),
                                 if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
                                     thumbnailBottomSheet.setImageDrawable(asyncDrawable)
                                 }
-                                task.execute(it)
+                                task.execute(file)
                             }
                         }
 
-                        if (it.mimeType == "image/png") {
+                        if (file.mimeType == "image/png") {
                             thumbnailBottomSheet.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background_color))
                         }
                     }
                 }
 
                 val fileNameBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_name_bottom_sheet)
-                fileNameBottomSheet.text = it.fileName
+                fileNameBottomSheet.text = file.fileName
 
                 val fileSizeBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_size_bottom_sheet)
-                fileSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(it.length, requireContext())
+                fileSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(file.length, requireContext())
 
                 val fileLastModBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_last_mod_bottom_sheet)
-                fileLastModBottomSheet.text = DisplayUtils.getRelativeTimestamp(requireContext(), it.modificationTimestamp)
+                fileLastModBottomSheet.text = DisplayUtils.getRelativeTimestamp(requireContext(), file.modificationTimestamp)
 
                 fileOptionsBottomSheetSingleFileLayout = fileOptionsBottomSheetSingleFile.findViewById(R.id.file_options_bottom_sheet_layout)
                 menuOptions.forEach { menuOption ->
                     val fileOptionItemView = BottomSheetFragmentItemView(requireContext())
                     fileOptionItemView.apply {
-                        title = if (menuOption.toResId() == R.id.action_open_file_with && !it.hasWritePermission) {
+                        title = if (menuOption.toResId() == R.id.action_open_file_with && !file.hasWritePermission) {
                             getString(R.string.actionbar_open_with_read_only)
                         } else {
                             getString(menuOption.toStringResId())
                         }
                         itemIcon = ResourcesCompat.getDrawable(resources, menuOption.toDrawableResId(), null)
                         setOnClickListener {
-
+                            when (menuOption) {
+                                FileMenuOption.SELECT_ALL -> {
+                                    // Not applicable here
+                                }
+                                FileMenuOption.SELECT_INVERSE -> {
+                                    // Not applicable here
+                                }
+                                FileMenuOption.DOWNLOAD, FileMenuOption.SYNC -> {
+                                    syncFiles(listOf(file))
+                                }
+                                FileMenuOption.RENAME -> {
+                                    val dialogRename = RenameFileDialogFragment.newInstance(file)
+                                    dialogRename.show(requireActivity().supportFragmentManager, FRAGMENT_TAG_RENAME_FILE)
+                                }
+                                FileMenuOption.MOVE -> {
+                                    val action = Intent(activity, FolderPickerActivity::class.java)
+                                    action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, arrayListOf(file))
+                                    action.putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.MOVE)
+                                    requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES)
+                                }
+                                FileMenuOption.COPY -> {
+                                    val action = Intent(activity, FolderPickerActivity::class.java)
+                                    action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, arrayListOf(file))
+                                    action.putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.COPY)
+                                    requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES)
+                                }
+                                FileMenuOption.REMOVE -> {
+                                    val dialogRemove = RemoveFilesDialogFragment.newInstance(file)
+                                    dialogRemove.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+                                }
+                                FileMenuOption.OPEN_WITH -> {
+                                    fileActions?.openFile(file)
+                                }
+                                FileMenuOption.CANCEL_SYNC -> {
+                                    fileActions?.cancelFileTransference(arrayListOf(file))
+                                }
+                                FileMenuOption.SHARE -> {
+                                    fileActions?.onShareFileClicked(file)
+                                }
+                                FileMenuOption.DETAILS -> {
+                                    fileActions?.showDetails(file)
+                                }
+                                FileMenuOption.SEND -> {
+                                    if (!file.isAvailableLocally) { // Download the file
+                                        Timber.d("${file.remotePath} : File must be downloaded")
+                                        fileActions?.initDownloadForSending(file)
+                                    } else {
+                                        fileActions?.sendDownloadedFile(file)
+                                    }
+                                }
+                                FileMenuOption.SET_AV_OFFLINE -> {
+                                    fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
+                                    if (file.isFolder) {
+                                        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFolderOperation(file, file.owner))
+                                    } else {
+                                        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, file.owner))
+                                    }
+                                }
+                                FileMenuOption.UNSET_AV_OFFLINE -> {
+                                    fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
+                                }
+                            }
+                            dialog.hide()
                         }
                     }
                     fileOptionsBottomSheetSingleFileLayout!!.addView(fileOptionItemView)
@@ -425,7 +488,7 @@ class MainFileListFragment : Fragment(),
                 })
                 dialog.setOnShowListener { fileOptionsBottomSheetSingleFileBehavior.peekHeight = fileOptionsBottomSheetSingleFile.measuredHeight }
                 dialog.show()
-                mainFileListViewModel.getAppRegistryForMimeType(it.mimeType, isMultiselection = false)
+                mainFileListViewModel.getAppRegistryForMimeType(file.mimeType, isMultiselection = false)
             }
         }
 
@@ -437,12 +500,12 @@ class MainFileListFragment : Fragment(),
                     val appProviderItemView = BottomSheetFragmentItemView(requireContext())
                     appProviderItemView.apply {
                         title = getString(R.string.ic_action_open_with_web, appRegistryProvider.name)
-                        itemIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_spaces, null)
+                        itemIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_open_in_web, null)
                         setOnClickListener {
                             mainFileListViewModel.openInWeb(file.remoteId!!, appRegistryProvider.name)
                         }
                     }
-                    fileOptionsBottomSheetSingleFileLayout!!.addView(appProviderItemView)
+                    fileOptionsBottomSheetSingleFileLayout!!.addView(appProviderItemView, 1)
                 }
             }
             fileSingleFile = null
