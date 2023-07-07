@@ -174,7 +174,7 @@ class FilterFileMenuOptionsUseCase(
         files.any { it.isFolder }
 
     private fun anyAvailableOfflineFile(files: List<OCFile>) =
-        files.any { it.isAvailableOffline }
+        files.any { it.availableOfflineStatus == AvailableOfflineStatus.AVAILABLE_OFFLINE }
 
     private fun anyNotAvailableOfflineFile(files: List<OCFile>) =
         files.any { it.availableOfflineStatus == AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE }
