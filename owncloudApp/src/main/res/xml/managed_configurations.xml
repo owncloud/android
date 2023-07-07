@@ -34,7 +34,7 @@
     <restriction
         android:key="device_protection"
         android:restrictionType="bool"
-        android:title="@string/oauth2_open_id_scope_configuration_title"
-        android:description="@string/oauth2_open_id_scope_configuration_description"
+        android:title="@string/device_protection_configuration_title"
+        android:description="@string/device_protection_configuration_description"
         android:defaultValue="false" />
 </restrictions>

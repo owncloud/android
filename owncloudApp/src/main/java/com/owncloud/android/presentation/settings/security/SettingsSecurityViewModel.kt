@@ -52,6 +52,16 @@ class SettingsSecurityViewModel(
 
     fun getBiometricsState(): Boolean = preferencesProvider.getBoolean(BiometricActivity.PREFERENCE_SET_BIOMETRIC, false)
 
+    // If boolean device protection is false, check the lock_enforce.
+    // device_protection    deviceSecure   lock_enforced    result
+    // true                 true            true            false
+    // true                 true            false           false
+    // true                 false           true            true
+    // true                 false           false           false
+    // false                true            true            true
+    // false                true            false           false
+    // false                false           true            true
+    // false                false           false           false
     fun isSecurityEnforcedEnabled() =
         (!mdmProvider.getBrandingBoolean(CONFIGURATION_DEVICE_PROTECTION, R.bool.device_protection) || !isDeviceSecure()) &&
                 parseFromInteger(mdmProvider.getBrandingInteger(NO_MDM_RESTRICTION_YET, R.integer.lock_enforced)) != LockEnforcedType.DISABLED
