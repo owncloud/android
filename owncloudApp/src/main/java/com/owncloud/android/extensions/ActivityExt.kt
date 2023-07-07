@@ -286,7 +286,13 @@ fun Activity.hideSoftKeyboard() {
 fun Activity.checkPasscodeEnforced(securityEnforced: SecurityEnforced) {
     val sharedPreferencesProvider = OCSharedPreferencesProvider(this)
 
-    val deviceProtection: Boolean = !this.resources.getBoolean(R.bool.device_protection) && !isDeviceSecure()
+    // If boolean device protection is false, launch the previous behaviour.
+    // device_protection    deviceSecure    result
+    // true                 true            false
+    // true                 false           true
+    // false                true            true
+    // true                 false           true
+    val deviceProtection: Boolean = !this.resources.getBoolean(R.bool.device_protection) || !isDeviceSecure()
     val lockEnforced: Int = this.resources.getInteger(R.integer.lock_enforced)
     val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
