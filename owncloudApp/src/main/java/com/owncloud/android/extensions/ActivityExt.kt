@@ -55,10 +55,13 @@ import com.owncloud.android.presentation.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.security.pattern.PatternActivity
 import com.owncloud.android.presentation.settings.privacypolicy.PrivacyPolicyActivity
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
+import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.ALL_FILES_SAF_REGEX
 import com.owncloud.android.ui.dialog.ShareLinkToDialog
+import com.owncloud.android.utils.CONFIGURATION_DEVICE_PROTECTION
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.UriUtilsKt.getExposedFileUriForOCFile
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
 
@@ -285,10 +288,11 @@ fun Activity.hideSoftKeyboard() {
 
 fun Activity.checkPasscodeEnforced(securityEnforced: SecurityEnforced) {
     val sharedPreferencesProvider = OCSharedPreferencesProvider(this)
+    val mdmProvider by inject<MdmProvider>()
 
     // If device protection is false, launch the previous behaviour (check the lockEnforced).
     // If device protection is true, check the lockEnforced only if device is not secure.
-    val deviceProtection: Boolean = !this.resources.getBoolean(R.bool.device_protection) || !isDeviceSecure()
+    val deviceProtection: Boolean = !mdmProvider.getBrandingBoolean(CONFIGURATION_DEVICE_PROTECTION, R.bool.device_protection) || !isDeviceSecure()
     val lockEnforced: Int = this.resources.getInteger(R.integer.lock_enforced)
     val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
