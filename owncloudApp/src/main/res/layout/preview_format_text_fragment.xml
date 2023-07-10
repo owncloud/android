@@ -20,13 +20,14 @@
     android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_alignParentTop="true"
     android:fillViewport="true">
 
     <TextView
         android:id="@+id/text_preview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="@dimen/standard_half_margin"
+        android:paddingBottom="@dimen/standard_half_margin"
         android:layout_marginStart="@dimen/standard_margin"
         android:layout_marginLeft="@dimen/standard_margin"
         android:layout_marginEnd="@dimen/standard_margin"
