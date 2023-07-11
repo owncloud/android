@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/file_list_constraint_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/file_list_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/item_file_list_min_height">
@@ -22,6 +22,7 @@
             android:id="@+id/thumbnail"
             android:layout_width="@dimen/file_icon_size"
             android:layout_height="@dimen/file_icon_size"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_menu_archive"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,8 +45,8 @@
         android:id="@+id/info_constraint_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/standard_quarter_margin"
         android:layout_marginTop="@dimen/standard_quarter_margin"
+        android:layout_marginBottom="@dimen/standard_quarter_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/options_constraint_layout"
         app:layout_constraintStart_toEndOf="@+id/icon_constraint_layout"
@@ -109,8 +110,8 @@
         android:id="@+id/options_constraint_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/standard_padding"
         android:layout_marginStart="@dimen/standard_padding"
+        android:layout_marginEnd="@dimen/standard_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/info_constraint_layout"
@@ -122,11 +123,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="8dp"
-            tools:src="@drawable/ic_shared_by_link"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/custom_checkbox"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_shared_by_link" />
 
         <ImageView
             android:id="@+id/custom_checkbox"

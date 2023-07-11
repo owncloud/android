@@ -22,9 +22,9 @@
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
     android:background="@drawable/list_selector"
+    android:filterTouchesWhenObscured="true"
     android:gravity="center"
-    android:orientation="vertical"
-    android:filterTouchesWhenObscured="true">
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -38,14 +38,15 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_menu_archive" />
 
         <ImageView
             android:id="@+id/sharedIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp"
             android:layout_gravity="top|end"
+            android:layout_margin="4dp"
             tools:src="@drawable/ic_shared_by_link" />
 
         <ImageView
@@ -53,8 +54,8 @@
             android:layout_width="@dimen/file_indicator_pin_size_grid"
             android:layout_height="@dimen/file_indicator_pin_size_grid"
             android:layout_gravity="bottom|end"
-            android:layout_marginBottom="2dp"
             android:layout_marginRight="12dp"
+            android:layout_marginBottom="2dp"
             android:src="@drawable/sync_pin" />
 
         <ImageView
@@ -64,8 +65,8 @@
             android:layout_gravity="center_vertical|top"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
-            android:src="@android:drawable/checkbox_off_background"
-            android:elevation="30dp" />
+            android:elevation="30dp"
+            android:src="@android:drawable/checkbox_off_background" />
 
     </FrameLayout>
 
@@ -80,6 +81,6 @@
         android:singleLine="true"
         android:textColor="@color/textColor"
         android:textSize="16dip"
-        tools:text="TextView"/>
+        tools:text="TextView" />
 
 </com.owncloud.android.ui.SquareLinearLayout>
