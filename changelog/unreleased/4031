@@ -1,0 +1,6 @@
+Enhancement: Improve UX of creation dialog
+
+Improve UX of creation dialog when forbidden characters are typed
+
+https://github.com/owncloud/android/pull/4097
+https://github.com/owncloud/android/issues/4031
