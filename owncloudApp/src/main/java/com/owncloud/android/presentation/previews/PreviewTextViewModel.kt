@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Parneet Singh
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -69,5 +70,10 @@ class PreviewTextViewModel(
             }
             _menuOptions.update { result }
         }
+    }
+    companion object {
+        const val NO_POSITION: Int = -1
+        const val TAB_MARKDOWN_POSITION: Int = 0
+        const val TAB_TEXT_POSITION: Int = 1
     }
 }

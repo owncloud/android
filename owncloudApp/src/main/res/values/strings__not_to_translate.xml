@@ -41,4 +41,6 @@
     <!-- Spaces -->
     <string name="bottom_nav_spaces">Spaces</string>
 
+    <string name="tab_label_markdown">Markdown</string>
+
 </resources>

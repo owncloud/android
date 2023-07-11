@@ -4,6 +4,7 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
+ * @author Parneet Singh
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -23,7 +24,6 @@
 package com.owncloud.android.ui.preview;
 
 import android.accounts.Account;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,12 +33,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
+import androidx.viewpager2.widget.ViewPager2;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.OCFile;
@@ -54,11 +60,6 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.fragment.FileFragment;
 import com.owncloud.android.utils.PreferenceUtils;
-import io.noties.markwon.Markwon;
-import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.ext.tables.TablePlugin;
-import io.noties.markwon.ext.tasklist.TaskListPlugin;
-import io.noties.markwon.html.HtmlPlugin;
 import timber.log.Timber;
 
 import java.io.BufferedWriter;
@@ -83,8 +84,11 @@ public class PreviewTextFragment extends FileFragment {
     private ProgressBar mProgressBar;
     private TransferProgressController mProgressController;
     private TextView mTextPreview;
+    private View mTextLayout;
+    private TabLayout mTabLayout;
+    private ViewPager2 mViewPager2;
+    private RelativeLayout rootView;
     private TextLoadAsyncTask mTextLoadTask;
-
     PreviewTextViewModel previewTextViewModel = get(PreviewTextViewModel.class);
     FileOperationsViewModel fileOperationsViewModel = get(FileOperationsViewModel.class);
 
@@ -135,9 +139,13 @@ public class PreviewTextFragment extends FileFragment {
                 PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
         );
 
+        rootView = ret.findViewById(R.id.top);
         mProgressBar = ret.findViewById(R.id.syncProgressBar);
+        mTabLayout = ret.findViewById(R.id.tab_layout);
+        mViewPager2 = ret.findViewById(R.id.view_pager);
         mTextPreview = ret.findViewById(R.id.text_preview);
 
+        mTextLayout = ret.findViewById(R.id.text_layout);
         return ret;
     }
 
@@ -173,6 +181,12 @@ public class PreviewTextFragment extends FileFragment {
         mProgressController.setProgressBar(mProgressBar);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        loadAndShowTextPreview();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -183,16 +197,11 @@ public class PreviewTextFragment extends FileFragment {
         outState.putParcelable(EXTRA_ACCOUNT, mAccount);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        Timber.v("onStart");
-
-        loadAndShowTextPreview();
-    }
-
     private void loadAndShowTextPreview() {
-        mTextLoadTask = new TextLoadAsyncTask(new WeakReference<>(mTextPreview));
+        mTextLoadTask = new TextLoadAsyncTask(new WeakReference<TextView>(mTextPreview),
+                new WeakReference<RelativeLayout>(rootView), new WeakReference<View>(mTextLayout),
+                new WeakReference<TabLayout>(mTabLayout),
+                new WeakReference<ViewPager2>(mViewPager2));
         mTextLoadTask.execute(getFile());
     }
 
@@ -202,10 +211,20 @@ public class PreviewTextFragment extends FileFragment {
     private class TextLoadAsyncTask extends AsyncTask<Object, Void, StringWriter> {
         private final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
         private final WeakReference<TextView> mTextViewReference;
+        private final WeakReference<RelativeLayout> mRootView;
+        private final WeakReference<View> mTextLayout;
+        private final WeakReference<TabLayout> mTabLayout;
+        private final WeakReference<ViewPager2> mViewPager;
         private String mimeType;
 
-        private TextLoadAsyncTask(WeakReference<TextView> textView) {
+        private TextLoadAsyncTask(WeakReference<TextView> textView, WeakReference<RelativeLayout> rootView,
+                                  WeakReference<View> textLayout,
+                                  WeakReference<TabLayout> tabLayout, WeakReference<ViewPager2> viewPager) {
             mTextViewReference = textView;
+            mRootView = rootView;
+            mTextLayout = textLayout;
+            mTabLayout = tabLayout;
+            mViewPager = viewPager;
         }
 
         @Override
@@ -261,23 +280,14 @@ public class PreviewTextFragment extends FileFragment {
         @Override
         protected void onPostExecute(final StringWriter stringWriter) {
             final TextView textView = mTextViewReference.get();
+            final RelativeLayout rootView = mRootView.get();
+            final View textLayout = mTextLayout.get();
+            final TabLayout tabLayout = mTabLayout.get();
+            final ViewPager2 viewPager = mViewPager.get();
 
-            if (textView != null) {
-                String text = new String(stringWriter.getBuffer());
-                if (mimeType.equals("text/markdown")) {
-                    Context context = textView.getContext();
-                    Markwon markwon = Markwon
-                            .builder(context)
-                            .usePlugin(TablePlugin.create(context))
-                            .usePlugin(StrikethroughPlugin.create())
-                            .usePlugin(TaskListPlugin.create(context))
-                            .usePlugin(HtmlPlugin.create())
-                            .build();
-                    markwon.setMarkdown(textView, text);
-                } else {
-                    textView.setText(text);
-                }
-                textView.setVisibility(View.VISIBLE);
+            String text = new String(stringWriter.getBuffer());
+            if (textView != null && rootView != null && textLayout != null && tabLayout != null && viewPager != null) {
+                showPreviewText(text, mimeType, rootView, textView, textLayout, tabLayout, viewPager);
             }
 
             try {
@@ -317,6 +327,36 @@ public class PreviewTextFragment extends FileFragment {
                 loading.dismiss();
             }
         }
+
+        private void showPreviewText(String text, String mimeType, RelativeLayout rootView, TextView textView,
+                                     View textLayout,
+                                     TabLayout tabLayout, ViewPager2 viewPager) {
+            if (mimeType.equals("text/markdown")) {
+                rootView.removeView(textLayout);
+                showFormatType(text, mimeType, tabLayout, viewPager);
+                tabLayout.setVisibility(View.VISIBLE);
+                viewPager.setVisibility(View.VISIBLE);
+            } else {
+                rootView.removeView(tabLayout);
+                rootView.removeView(viewPager);
+                textView.setText(text);
+                textLayout.setVisibility(View.VISIBLE);
+            }
+        }
+
+        private void showFormatType(String text, String mimeType, TabLayout tabLayout, ViewPager2 viewPager) {
+            PreviewFormatTextFragmentStateAdapter adapter =
+                    new PreviewFormatTextFragmentStateAdapter(PreviewTextFragment.this, text, mimeType);
+            viewPager.setAdapter(adapter);
+            new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+                if (position == 0) {
+                    tab.setText(adapter.getFormatTypes().get(mimeType));
+                } else {
+                    tab.setText(adapter.getFormatTypes().get(PreviewFormatTextFragmentStateAdapter.TYPE_PLAIN));
+                }
+            }).attach();
+        }
+
     }
 
     /**
@@ -340,7 +380,8 @@ public class PreviewTextFragment extends FileFragment {
             String accountName = mContainerActivity.getStorageManager().getAccount().name;
             previewTextViewModel.filterMenuOptions(safeFile, accountName);
 
-            FragmentExtKt.collectLatestLifecycleFlow(this, previewTextViewModel.getMenuOptions(), Lifecycle.State.CREATED,
+            FragmentExtKt.collectLatestLifecycleFlow(this, previewTextViewModel.getMenuOptions(),
+                    Lifecycle.State.CREATED,
                     (menuOptions, continuation) -> {
                         boolean hasWritePermission = safeFile.getHasWritePermission();
                         MenuExtKt.filterMenuOptions(menu, menuOptions, hasWritePermission);
@@ -384,7 +425,8 @@ public class PreviewTextFragment extends FileFragment {
                 return true;
             }
             case R.id.action_sync_file: {
-                fileOperationsViewModel.performOperation(new FileOperation.SynchronizeFileOperation(getFile(), mAccount.name));
+                fileOperationsViewModel.performOperation(new FileOperation.SynchronizeFileOperation(getFile(),
+                        mAccount.name));
                 return true;
             }
             case R.id.action_set_available_offline: {
@@ -409,9 +451,8 @@ public class PreviewTextFragment extends FileFragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        Timber.v("onStop");
+    public void onDestroyView() {
+        super.onDestroyView();
         if (mTextLoadTask != null) {
             mTextLoadTask.cancel(Boolean.TRUE);
             mTextLoadTask.dismissLoadingDialog();
