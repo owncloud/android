@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Menu option unset av. offline shown when shouldn't: [#4077](https://github.com/owncloud/android/issues/4077)
 * Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
 * Change - Move file menu options filter to use case: [#4009](https://github.com/owncloud/android/issues/4009)
 * Change - Gradle Version Catalog: [#4035](https://github.com/owncloud/android/pull/4035)
@@ -18,6 +19,15 @@ Summary
 
 Details
 -------
+
+* Bugfix - Menu option unset av. offline shown when shouldn't: [#4077](https://github.com/owncloud/android/issues/4077)
+
+   Unset available offline menu option is not shown in files inside an available offline folder
+   anymore, because content inside an available offline folder cannot be changed its status,
+   only if the folder changes it.
+
+   https://github.com/owncloud/android/issues/4077
+   https://github.com/owncloud/android/pull/4093
 
 * Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
 
