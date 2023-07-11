@@ -23,12 +23,15 @@ package com.owncloud.android.presentation.files.createfolder
 
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.WindowManager
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.textfield.TextInputLayout
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.utils.PreferenceUtils
@@ -43,6 +46,8 @@ class CreateFolderDialogFragment : DialogFragment() {
     private lateinit var parentFolder: OCFile
     private lateinit var createFolderListener: CreateFolderListener
     private var isButtonEnabled: Boolean = false
+    private val MAX_FILENAME_LENGTH = 223
+    private val pattern = "[/\\\\]".toRegex()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -63,7 +68,17 @@ class CreateFolderDialogFragment : DialogFragment() {
 
         // Request focus
         val inputText: EditText = view.findViewById(R.id.user_input)
+        val inputLayout: TextInputLayout = view.findViewById(R.id.user_input_text_layout)
         inputText.requestFocus()
+
+        inputText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun afterTextChanged(editable: Editable) {
+                inputLayout.error = null
+                inputLayout.isErrorEnabled = false
+            }
+        })
 
         // Build the dialog
         val builder = AlertDialog.Builder(requireActivity())
@@ -82,6 +97,30 @@ class CreateFolderDialogFragment : DialogFragment() {
         alertDialog.setOnShowListener {
             val okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             okButton.isEnabled = isButtonEnabled
+
+            okButton.setOnClickListener {
+                var fileName: String = inputText.text.toString()
+                var error: String? = null
+                if (fileName.length > MAX_FILENAME_LENGTH) {
+                    error = String.format(
+                        getString(R.string.uploader_upload_text_dialog_filename_error_length_max),
+                        MAX_FILENAME_LENGTH
+                    )
+                } else if (fileName.isEmpty()) {
+                    error = getString(R.string.uploader_upload_text_dialog_filename_error_empty)
+                } else if (pattern.containsMatchIn(fileName)) {
+                    error = getString(R.string.filename_forbidden_characters)
+                }
+                else { null }
+
+                if (error != null) {
+                    inputLayout.isErrorEnabled = true
+                    inputLayout.error = error
+                } else {
+                    createFolderListener.onFolderNameSet(fileName, parentFolder)
+                    dialog?.dismiss()
+                }
+            }
         }
 
         inputText.doOnTextChanged { text, _, _, _ ->
