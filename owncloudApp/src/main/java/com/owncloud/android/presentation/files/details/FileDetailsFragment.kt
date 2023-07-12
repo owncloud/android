@@ -32,6 +32,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.view.isVisible
 import androidx.work.WorkInfo
@@ -160,6 +161,7 @@ class FileDetailsFragment : FileFragment() {
                     fileDetailsViewModel.updateActionInDetailsView(NONE)
                     requireActivity().invalidateOptionsMenu()
                 }
+
                 is UIResult.Loading -> {}
                 is UIResult.Success -> when (uiResult.data) {
                     SynchronizeFileUseCase.SyncType.AlreadySynchronized -> showMessageInSnackbar(getString(R.string.sync_file_nothing_to_do_msg))
@@ -168,9 +170,12 @@ class FileDetailsFragment : FileFragment() {
                         showConflictActivityIntent.putExtra(ConflictsResolveActivity.EXTRA_FILE, file)
                         startActivity(showConflictActivityIntent)
                     }
+
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
+                        setIconSyncPinAccordingToFilesLocalState()
                         fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
                     }
+
                     SynchronizeFileUseCase.SyncType.FileNotFound -> showMessageInSnackbar("FILE NOT FOUND")
                     is SynchronizeFileUseCase.SyncType.UploadEnqueued -> fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
                     null -> showMessageInSnackbar("NULL")
@@ -190,6 +195,11 @@ class FileDetailsFragment : FileFragment() {
         }
         startListeningToOngoingTransfers()
         fileDetailsViewModel.checkOnGoingTransfersWhenOpening()
+    }
+
+    private fun setIconSyncPinAccordingToFilesLocalState() {
+        binding.localFileIndicator.setImageResource(R.drawable.sync_pin)
+        binding.localFileIndicator.visibility = View.VISIBLE
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -232,6 +242,7 @@ class FileDetailsFragment : FileFragment() {
                 mContainerActivity.fileOperationsHelper.showShareFile(fileDetailsViewModel.getCurrentFile())
                 true
             }
+
             R.id.action_open_file_with -> {
                 if (!safeFile.isAvailableLocally) {  // Download the file
                     Timber.d("%s : File must be downloaded before opening it", safeFile.remotePath)
@@ -241,24 +252,29 @@ class FileDetailsFragment : FileFragment() {
                 }
                 true
             }
+
             R.id.action_remove_file -> {
                 val dialog = RemoveFilesDialogFragment.newInstance(safeFile)
                 dialog.show(parentFragmentManager, FRAGMENT_TAG_CONFIRMATION)
                 true
             }
+
             R.id.action_rename_file -> {
                 val dialog = RenameFileDialogFragment.newInstance(safeFile)
                 dialog.show(parentFragmentManager, FRAGMENT_TAG_RENAME_FILE)
                 true
             }
+
             R.id.action_cancel_sync -> {
                 fileDetailsViewModel.cancelCurrentTransfer()
                 true
             }
+
             R.id.action_download_file, R.id.action_sync_file -> {
                 fileDetailsViewModel.updateActionInDetailsView(SYNC)
                 true
             }
+
             R.id.action_send_file -> {
                 if (!safeFile.isAvailableLocally) {  // Download the file
                     Timber.d("%s : File must be downloaded before sending it", safeFile.remotePath)
@@ -268,25 +284,50 @@ class FileDetailsFragment : FileFragment() {
                 }
                 true
             }
+
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(SetFilesAsAvailableOffline(listOf(safeFile)))
                 fileOperationsViewModel.performOperation(SynchronizeFileOperation(safeFile, safeFile.owner))
                 true
             }
+
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(UnsetFilesAsAvailableOffline(listOf(safeFile)))
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun updateDetails(ocFile: OCFile) {
-        binding.fdFilename.text = ocFile.fileName
+        binding.fdname.text = ocFile.fileName
         binding.fdSize.text = DisplayUtils.bytesToHumanReadable(ocFile.length, requireContext())
         binding.fdModified.text = DisplayUtils.unixTimeToHumanReadable(ocFile.modificationTimestamp)
+        binding.fdCreated.text = DisplayUtils.unixTimeToHumanReadable(ocFile.creationTimestamp!!)
+        binding.fdLastSync.text = DisplayUtils.unixTimeToHumanReadable(ocFile.lastSyncDateForData!!)
+        binding.fdPath.text = ocFile.remotePath
+        setIconPinAccordingToFilesLocalState(binding.localFileIndicator, ocFile)
         setMimeType(ocFile)
         requireActivity().invalidateOptionsMenu()
+    }
+
+    private fun setIconPinAccordingToFilesLocalState(thumbnailImageView: ImageView, ocFile: OCFile) {
+        // local state
+        thumbnailImageView.bringToFront()
+        thumbnailImageView.isVisible = false
+
+        if (file.etagInConflict != null) {
+            // conflict
+            thumbnailImageView.setImageResource(R.drawable.error_pin)
+            thumbnailImageView.visibility = View.VISIBLE
+        } else if (file.isAvailableOffline) {
+            thumbnailImageView.setImageResource(R.drawable.offline_available_pin)
+            thumbnailImageView.visibility = View.VISIBLE
+        } else if (file.isAvailableLocally) {
+            thumbnailImageView.setImageResource(R.drawable.downloaded_pin)
+            thumbnailImageView.visibility = View.VISIBLE
+        }
     }
 
     private fun setMimeType(ocFile: OCFile) {
@@ -385,14 +426,17 @@ class FileDetailsFragment : FileFragment() {
                 SYNC -> {
                     fileDetailsViewModel.updateActionInDetailsView(NONE)
                 }
+
                 SYNC_AND_OPEN -> {
                     navigateToPreviewOrOpenFile(file)
                     fileDetailsViewModel.updateActionInDetailsView(NONE)
                 }
+
                 SYNC_AND_OPEN_WITH -> {
                     requireActivity().openOCFile(safeFile)
                     fileDetailsViewModel.updateActionInDetailsView(NONE)
                 }
+
                 SYNC_AND_SEND -> {
                     requireActivity().sendDownloadedFilesByShareSheet(listOf(safeFile))
                     fileDetailsViewModel.updateActionInDetailsView(NONE)
@@ -446,15 +490,19 @@ class FileDetailsFragment : FileFragment() {
             PreviewImageFragment.canBePreviewed(fileWaitingToPreview) -> {
                 fileDisplayActivity.startImagePreview(fileWaitingToPreview)
             }
+
             PreviewAudioFragment.canBePreviewed(fileWaitingToPreview) -> {
                 fileDisplayActivity.startAudioPreview(fileWaitingToPreview, 0)
             }
+
             PreviewVideoFragment.canBePreviewed(fileWaitingToPreview) -> {
                 fileDisplayActivity.startVideoPreview(fileWaitingToPreview, 0)
             }
+
             PreviewTextFragment.canBePreviewed(fileWaitingToPreview) -> {
                 fileDisplayActivity.startTextPreview(fileWaitingToPreview)
             }
+
             else -> fileDisplayActivity.openOCFile(fileWaitingToPreview)
         }
     }
