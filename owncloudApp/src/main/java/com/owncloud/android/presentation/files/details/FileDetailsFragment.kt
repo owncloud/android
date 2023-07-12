@@ -305,11 +305,19 @@ class FileDetailsFragment : FileFragment() {
         binding.fdSize.text = DisplayUtils.bytesToHumanReadable(ocFile.length, requireContext())
         binding.fdModified.text = DisplayUtils.unixTimeToHumanReadable(ocFile.modificationTimestamp)
         binding.fdCreated.text = DisplayUtils.unixTimeToHumanReadable(ocFile.creationTimestamp!!)
-        binding.fdLastSync.text = DisplayUtils.unixTimeToHumanReadable(ocFile.lastSyncDateForData!!)
         binding.fdPath.text = ocFile.remotePath
+        setLastSync(ocFile)
         setIconPinAccordingToFilesLocalState(binding.localFileIndicator, ocFile)
         setMimeType(ocFile)
         requireActivity().invalidateOptionsMenu()
+    }
+
+    private fun setLastSync(ocFile: OCFile){
+        if(ocFile.lastSyncDateForData!! > ZERO_MILLISECOND_TIME) {
+            binding.fdLastSync.visibility = View.VISIBLE
+            binding.fdLastSyncLabel.visibility = View.VISIBLE
+            binding.fdLastSync.text = DisplayUtils.unixTimeToHumanReadable(ocFile.lastSyncDateForData!!)
+        }
     }
 
     private fun setIconPinAccordingToFilesLocalState(thumbnailImageView: ImageView, ocFile: OCFile) {
@@ -531,6 +539,7 @@ class FileDetailsFragment : FileFragment() {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
         private const val ARG_SYNC_FILE_AT_OPEN = "SYNC_FILE_AT_OPEN"
+        private const val ZERO_MILLISECOND_TIME = 0
 
         /**
          * Public factory method to create new FileDetailsFragment instances.
