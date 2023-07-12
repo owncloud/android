@@ -52,7 +52,7 @@ object ThumbnailsRequester : KoinComponent {
     private val clientManager: ClientManager by inject()
 
     private const val SPACE_SPECIAL_PREVIEW_URI = "%s?scalingup=0&a=1&x=%d&y=%d&c=%s&preview=1"
-    private const val FILE_PREVIEW_URI = "%s%s?x=%d&y=%d&c=%s&preview=1"
+    private const val FILE_PREVIEW_URI = "%s%s?x=%d&y=%d&c=%s&preview=1&id=%s"
 
     private const val DISK_CACHE_SIZE: Long = 1024 * 1024 * 10 // 10MB
 
@@ -115,7 +115,8 @@ object ThumbnailsRequester : KoinComponent {
             Uri.encode(ocFile.file.remotePath, "/"),
             fileThumbnailSize,
             fileThumbnailSize,
-            ocFile.file.etag
+            ocFile.file.etag,
+            "${ocFile.file.remoteId}${ocFile.file.modificationTimestamp}",
         )
     }
 
