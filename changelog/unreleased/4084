@@ -1,0 +1,6 @@
+Bugfix: Spaces' thumbnails not loaded the first time
+
+Changing  our own lazy image loading with coil library in spaces and file list.
+
+https://github.com/owncloud/android/issues/3959
+https://github.com/owncloud/android/pull/4084

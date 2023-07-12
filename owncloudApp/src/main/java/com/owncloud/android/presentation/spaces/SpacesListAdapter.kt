@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Manuel Plazas Palacio
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -22,15 +23,14 @@ package com.owncloud.android.presentation.spaces
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.owncloud.android.R
 import com.owncloud.android.databinding.SpacesListItemBinding
-import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
 import com.owncloud.android.utils.PreferenceUtils
 
 class SpacesListAdapter(
@@ -65,34 +65,16 @@ class SpacesListAdapter(
                 val spaceSpecialImage = space.getSpaceSpecialImage()
 
                 if (spaceSpecialImage != null) {
-                    val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(spaceSpecialImage.id)
-                    if (thumbnail != null) {
-                        spacesListItemImage.run {
-                            setImageBitmap(thumbnail)
-                            scaleType = ImageView.ScaleType.CENTER_CROP
-                        }
-                    }
-                    if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(spaceSpecialImage, spacesListItemImage)) {
-                        val account = AccountUtils.getOwnCloudAccountByName(spacesViewHolder.itemView.context, space.accountName)
-                        val task = ThumbnailsCacheManager.ThumbnailGenerationTask(spacesListItemImage, account)
-                        val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(spacesViewHolder.itemView.resources, thumbnail, task)
-
-                        // If drawable is not visible, do not update it.
-                        if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
-                            spacesListItemImage.run {
-                                spacesListItemImage.setImageDrawable(asyncDrawable)
-                                scaleType = ImageView.ScaleType.CENTER_CROP
-                            }
-                        }
-                        task.execute(spaceSpecialImage)
-                    }
-                    if (spaceSpecialImage.file.mimeType == "image/png") {
-                        spacesListItemImage.setBackgroundColor(ContextCompat.getColor(spacesViewHolder.itemView.context, R.color.background_color))
+                    spacesListItemImage.load(
+                        ThumbnailsRequester.getPreviewUriForSpaceSpecial(spaceSpecialImage),
+                        ThumbnailsRequester.getCoilImageLoader()
+                    ) {
+                        placeholder(R.drawable.ic_spaces_placeholder)
+                        error(R.drawable.ic_spaces_placeholder)
                     }
                 } else {
                     spacesListItemImage.apply {
-                        setImageResource(R.drawable.ic_spaces)
-                        scaleType = ImageView.ScaleType.CENTER
+                        setImageResource(R.drawable.ic_spaces_placeholder)
                         setBackgroundColor(ContextCompat.getColor(spacesViewHolder.itemView.context, R.color.spaces_card_background_color))
                     }
                 }

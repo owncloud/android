@@ -4,6 +4,7 @@
  * @author Fernando Sanz Velasco
  * @author Jose Antonio Barros Ramos
  * @author Juan Carlos Garrote Gascón
+ * @author Manuel Plazas Palacio
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -33,7 +34,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -48,13 +48,13 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import coil.load
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
-import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.TooEarlyException
@@ -90,6 +90,7 @@ import com.owncloud.android.presentation.files.operations.FileOperationsViewMode
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
+import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
@@ -331,16 +332,12 @@ class MainFileListFragment : Fragment(),
 
                 val spaceSpecialImage = it.getSpaceSpecialImage()
                 if (spaceSpecialImage != null) {
-                    binding.spaceHeader.spaceHeaderImage.tag = spaceSpecialImage.id
-                    val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(spaceSpecialImage.id)
-                    if (thumbnail != null) {
-                        binding.spaceHeader.spaceHeaderImage.run {
-                            setImageBitmap(thumbnail)
-                            scaleType = ImageView.ScaleType.CENTER_CROP
-                        }
-                        if (spaceSpecialImage.file.mimeType == "image/png") {
-                            binding.spaceHeader.spaceHeaderImage.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.background_color))
-                        }
+                    binding.spaceHeader.spaceHeaderImage.load(
+                        ThumbnailsRequester.getPreviewUriForSpaceSpecial(spaceSpecialImage),
+                        ThumbnailsRequester.getCoilImageLoader()
+                    ) {
+                        placeholder(R.drawable.ic_spaces)
+                        error(R.drawable.ic_spaces)
                     }
                 }
                 binding.spaceHeader.spaceHeaderName.text = it.name
@@ -703,12 +700,14 @@ class MainFileListFragment : Fragment(),
                     updateActionModeAfterTogglingSelected()
                     return true
                 }
+
                 R.id.action_open_file_with -> {
                     fileActions?.openFile(singleFile)
                     fileListAdapter.clearSelection()
                     updateActionModeAfterTogglingSelected()
                     return true
                 }
+
                 R.id.action_rename_file -> {
                     val dialog = RenameFileDialogFragment.newInstance(singleFile)
                     dialog.show(requireActivity().supportFragmentManager, FRAGMENT_TAG_RENAME_FILE)
@@ -716,16 +715,19 @@ class MainFileListFragment : Fragment(),
                     updateActionModeAfterTogglingSelected()
                     return true
                 }
+
                 R.id.action_see_details -> {
                     fileListAdapter.clearSelection()
                     updateActionModeAfterTogglingSelected()
                     fileActions?.showDetails(singleFile)
                     return true
                 }
+
                 R.id.action_sync_file -> {
                     syncFiles(listOf(singleFile))
                     return true
                 }
+
                 R.id.action_send_file -> {
                     //Obtain the file
                     if (!singleFile.isAvailableLocally) { // Download the file
@@ -736,6 +738,7 @@ class MainFileListFragment : Fragment(),
                     }
                     return true
                 }
+
                 R.id.action_set_available_offline -> {
                     fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(singleFile)))
                     if (singleFile.isFolder) {
@@ -745,6 +748,7 @@ class MainFileListFragment : Fragment(),
                     }
                     return true
                 }
+
                 R.id.action_unset_available_offline -> {
                     fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(singleFile)))
                 }
@@ -759,11 +763,13 @@ class MainFileListFragment : Fragment(),
                 updateActionModeAfterTogglingSelected()
                 return true
             }
+
             R.id.action_select_inverse -> {
                 fileListAdapter.selectInverse()
                 updateActionModeAfterTogglingSelected()
                 return true
             }
+
             R.id.action_remove_file -> {
                 val dialog = RemoveFilesDialogFragment.newInstance(checkedFiles)
                 dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
@@ -771,15 +777,18 @@ class MainFileListFragment : Fragment(),
                 updateActionModeAfterTogglingSelected()
                 return true
             }
+
             R.id.action_download_file,
             R.id.action_sync_file -> {
                 syncFiles(checkedFiles)
                 return true
             }
+
             R.id.action_cancel_sync -> {
                 fileActions?.cancelFileTransference(checkedFiles)
                 return true
             }
+
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(checkedFiles))
                 checkedFiles.forEach { ocFile ->
@@ -791,13 +800,16 @@ class MainFileListFragment : Fragment(),
                 }
                 return true
             }
+
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(checkedFiles))
                 return true
             }
+
             R.id.action_send_file -> {
                 requireActivity().sendDownloadedFilesByShareSheet(checkedFiles)
             }
+
             R.id.action_move -> {
                 val action = Intent(activity, FolderPickerActivity::class.java)
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
@@ -807,6 +819,7 @@ class MainFileListFragment : Fragment(),
                 updateActionModeAfterTogglingSelected()
                 return true
             }
+
             R.id.action_copy -> {
                 val action = Intent(activity, FolderPickerActivity::class.java)
                 action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, checkedFiles)
@@ -935,10 +948,10 @@ class MainFileListFragment : Fragment(),
             if (checkedFiles.size == 1) {
                 mainFileListViewModel.getAppRegistryForMimeType(checkedFiles.first().mimeType)
                 collectLatestLifecycleFlow(mainFileListViewModel.appRegistryMimeType) { appRegistryMimeType ->
-                        val appProviders = appRegistryMimeType?.appProviders
-                        menu?.let {
-                            openInWebProviders = addOpenInWebMenuOptions(menu, openInWebProviders, appProviders)
-                        }
+                    val appProviders = appRegistryMimeType?.appProviders
+                    menu?.let {
+                        openInWebProviders = addOpenInWebMenuOptions(menu, openInWebProviders, appProviders)
+                    }
                 }
             } else {
                 menu?.let {

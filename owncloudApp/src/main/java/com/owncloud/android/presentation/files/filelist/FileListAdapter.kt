@@ -3,6 +3,7 @@
  *
  * @author Fernando Sanz Velasco
  * @author Juan Carlos Garrote Gascón
+ * @author Manuel Plazas Palacio
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -35,15 +36,16 @@ import androidx.core.view.setMargins
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import coil.load
 import com.owncloud.android.R
 import com.owncloud.android.databinding.GridItemBinding
 import com.owncloud.android.databinding.ItemFileListBinding
 import com.owncloud.android.databinding.ListFooterBinding
-import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
 import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
@@ -93,6 +95,7 @@ class FileListAdapter(
                 }
                 ListViewHolder(binding)
             }
+
             ViewType.GRID_IMAGE.ordinal -> {
                 val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 binding.root.apply {
@@ -101,6 +104,7 @@ class FileListAdapter(
                 }
                 GridImageViewHolder(binding)
             }
+
             ViewType.GRID_ITEM.ordinal -> {
                 val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 binding.root.apply {
@@ -109,6 +113,7 @@ class FileListAdapter(
                 }
                 GridViewHolder(binding)
             }
+
             else -> {
                 val binding = ListFooterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 binding.root.apply {
@@ -135,9 +140,11 @@ class FileListAdapter(
                 layoutManager.spanCount == 1 -> {
                     ViewType.LIST_ITEM.ordinal
                 }
+
                 (files[position] as OCFileWithSyncInfo).file.isImage -> {
                     ViewType.GRID_IMAGE.ordinal
                 }
+
                 else -> {
                     ViewType.GRID_ITEM.ordinal
                 }
@@ -228,6 +235,7 @@ class FileListAdapter(
                         }
                     }
                 }
+
                 ViewType.GRID_ITEM.ordinal -> {
                     // Filename
                     val view = holder as GridViewHolder
@@ -273,32 +281,23 @@ class FileListAdapter(
 
             if (file.isFolder) {
                 // Folder
-                fileIcon.setImageResource(
+                fileIcon.load(
                     MimetypeIconUtil.getFolderTypeIconId(
                         file.isSharedWithMe || file.sharedWithSharee == true,
                         file.sharedByLink
                     )
                 )
             } else {
+                val mimetypeIcon = MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName)
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
-                fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
+                fileIcon.load(mimetypeIcon)
                 if (file.remoteId != null) {
-                    val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
-                    if (thumbnail != null) {
-                        fileIcon.setImageBitmap(thumbnail)
-                    }
-                    if (file.needsToUpdateThumbnail) {
-                        // generate new Thumbnail
-                        if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
-                            val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
-                            val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
-
-                            // If drawable is not visible, do not update it.
-                            if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
-                                fileIcon.setImageDrawable(asyncDrawable)
-                            }
-                            task.execute(file)
-                        }
+                    fileIcon.load(
+                        ThumbnailsRequester.getPreviewUriForFile(fileWithSyncInfo, account!!),
+                        ThumbnailsRequester.getCoilImageLoader(),
+                    ) {
+                        placeholder(mimetypeIcon)
+                        error(mimetypeIcon)
                     }
 
                     if (file.mimeType == "image/png") {
@@ -364,35 +363,43 @@ class FileListAdapter(
                     foldersCount <= 0 -> {
                         ""
                     }
+
                     foldersCount == 1 -> {
                         context.getString(R.string.file_list__footer__folder)
                     }
+
                     else -> { // foldersCount > 1
                         context.getString(R.string.file_list__footer__folders, foldersCount)
                     }
                 }
             }
+
             filesCount == 1 -> {
                 return when {
                     foldersCount <= 0 -> {
                         context.getString(R.string.file_list__footer__file)
                     }
+
                     foldersCount == 1 -> {
                         context.getString(R.string.file_list__footer__file_and_folder)
                     }
+
                     else -> { // foldersCount > 1
                         context.getString(R.string.file_list__footer__file_and_folders, foldersCount)
                     }
                 }
             }
+
             else -> {    // filesCount > 1
                 return when {
                     foldersCount <= 0 -> {
                         context.getString(R.string.file_list__footer__files, filesCount)
                     }
+
                     foldersCount == 1 -> {
                         context.getString(R.string.file_list__footer__files_and_folder, filesCount)
                     }
+
                     else -> { // foldersCount > 1
                         context.getString(
                             R.string.file_list__footer__files_and_folders, filesCount, foldersCount

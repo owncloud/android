@@ -124,6 +124,8 @@ class ClientManager(
         return ocAccounts.firstOrNull()
     }
 
+    fun getClientForCoilThumbnails(accountName: String) = getClientForAccount(accountName = accountName)
+
     fun getUserService(accountName: String? = ""): UserService {
         val ownCloudClient = getClientForAccount(accountName)
         return OCUserService(client = ownCloudClient)

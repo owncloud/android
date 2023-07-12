@@ -8,6 +8,7 @@ ownCloud admins and users.
 Summary
 -------
 
+* Bugfix - Spaces' thumbnails not loaded the first time: [#3959](https://github.com/owncloud/android/issues/3959)
 * Bugfix - Menu option unset av. offline shown when shouldn't: [#4077](https://github.com/owncloud/android/issues/4077)
 * Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
 * Change - Move file menu options filter to use case: [#4009](https://github.com/owncloud/android/issues/4009)
@@ -20,6 +21,13 @@ Summary
 
 Details
 -------
+
+* Bugfix - Spaces' thumbnails not loaded the first time: [#3959](https://github.com/owncloud/android/issues/3959)
+
+   Changing our own lazy image loading with coil library in spaces and file list.
+
+   https://github.com/owncloud/android/issues/3959
+   https://github.com/owncloud/android/pull/4084
 
 * Bugfix - Menu option unset av. offline shown when shouldn't: [#4077](https://github.com/owncloud/android/issues/4077)
 
