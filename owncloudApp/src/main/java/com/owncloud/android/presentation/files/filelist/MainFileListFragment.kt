@@ -34,6 +34,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -138,6 +139,11 @@ class MainFileListFragment : Fragment(),
     private var browserOpened = false
 
     private var openInWebProviders: Map<String, Int> = hashMapOf()
+
+    private var menu: Menu? = null
+    private var checkedFiles: List<OCFile> = emptyList()
+    private var fileSingleFile: OCFile? = null
+    private var fileOptionsBottomSheetSingleFileLayout: LinearLayout? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -246,6 +252,7 @@ class MainFileListFragment : Fragment(),
     }
 
     private fun subscribeToViewModels() {
+        /* MainFileListViewModel observables */
         // Observe the current folder displayed
         collectLatestLifecycleFlow(mainFileListViewModel.currentFolderDisplayed) { currentFolderDisplayed: OCFile ->
             fileActions?.onCurrentFolderUpdated(currentFolderDisplayed, mainFileListViewModel.getSpace())
@@ -267,18 +274,21 @@ class MainFileListFragment : Fragment(),
                 setViewTypeSelector(SortOptionsView.AdditionalView.HIDDEN)
             }
         }
-        // Observe the current space to update the toolbar.
-        // We cant rely exclusively on the [currentFolderDisplayed] because sometimes retrieving the space takes more time
+
+        // Observe the current space to update the toolbar
+        // We can't rely exclusively on the [currentFolderDisplayed] because sometimes retrieving the space takes more time
         collectLatestLifecycleFlow(mainFileListViewModel.space) { currentSpace: OCSpace? ->
             currentSpace?.let {
                 fileActions?.onCurrentFolderUpdated(mainFileListViewModel.getFile(), currentSpace)
             }
         }
+
         // Observe the list of app registries that allow creating new files
         collectLatestLifecycleFlow(mainFileListViewModel.appRegistryToCreateFiles) { listAppRegistry ->
             binding.fabNewfile.isVisible = listAppRegistry.isNotEmpty()
             registerFabNewFileListener(listAppRegistry)
         }
+
         // Observe the open in web action to trigger browser
         collectLatestLifecycleFlow(mainFileListViewModel.openInWebFlow) {
             if (it != null) {
@@ -308,6 +318,83 @@ class MainFileListFragment : Fragment(),
                 mainFileListViewModel.resetOpenInWebFlow()
                 currentDefaultApplication = null
             }
+        }
+
+        // Observe the menu filtered options in multiselection
+        collectLatestLifecycleFlow(mainFileListViewModel.menuOptions) { menuOptions ->
+            val hasWritePermission = if (checkedFiles.size == 1) {
+                checkedFiles.first().hasWritePermission
+            } else {
+                false
+            }
+            menu?.filterMenuOptions(menuOptions, hasWritePermission)
+        }
+
+        // Observe the app registry in multiselection
+        collectLatestLifecycleFlow(mainFileListViewModel.appRegistryMimeType) { appRegistryMimeType ->
+            val appProviders = appRegistryMimeType?.appProviders
+            menu?.let {
+                openInWebProviders = addOpenInWebMenuOptions(it, openInWebProviders, appProviders)
+            }
+        }
+
+        // Observe the menu filtered options for a single file
+        collectLatestLifecycleFlow(mainFileListViewModel.menuOptionsSingleFile) { menuOptions ->
+            fileSingleFile?.let {
+                val hasWritePermission = it.hasWritePermission
+                val fileOptionsBottomSheetSingleFile = layoutInflater.inflate(R.layout.file_options_bottom_sheet_fragment, null)
+                val dialog = BottomSheetDialog(requireContext())
+                dialog.setContentView(fileOptionsBottomSheetSingleFile)
+                val fileOptionsBottomSheetSingleFileBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(fileOptionsBottomSheetSingleFile.parent as View)
+                val closeBottomSheetButton = fileOptionsBottomSheetSingleFile.findViewById<ImageView>(R.id.close_bottom_sheet)
+                closeBottomSheetButton.setOnClickListener {
+                    fileOptionsBottomSheetSingleFileBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                }
+                fileOptionsBottomSheetSingleFileLayout = fileOptionsBottomSheetSingleFile.findViewById(R.id.file_options_bottom_sheet_layout)
+                menuOptions.forEach { menuOption ->
+                    val fileOptionItemView = BottomSheetFragmentItemView(requireContext())
+                    fileOptionItemView.apply {
+                        title = menuOption.name
+                        itemIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_spaces, null)
+                        setOnClickListener {
+
+                        }
+                    }
+                    fileOptionsBottomSheetSingleFileLayout!!.addView(fileOptionItemView)
+                }
+                // Disable drag gesture
+                fileOptionsBottomSheetSingleFileBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                    override fun onStateChanged(bottomSheet: View, newState: Int) {
+                        if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                            fileOptionsBottomSheetSingleFileBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                        }
+                    }
+
+                    override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+                })
+                dialog.setOnShowListener { fileOptionsBottomSheetSingleFileBehavior.peekHeight = fileOptionsBottomSheetSingleFile.measuredHeight }
+                dialog.show()
+                mainFileListViewModel.getAppRegistryForMimeType(it.mimeType, isMultiselection = false)
+            }
+        }
+
+        // Observe the app registry for a single file
+        collectLatestLifecycleFlow(mainFileListViewModel.appRegistryMimeTypeSingleFile) { appRegistryMimeType ->
+            fileSingleFile?.let { file ->
+                val appProviders = appRegistryMimeType?.appProviders
+                appProviders?.forEach { appRegistryProvider ->
+                    val appProviderItemView = BottomSheetFragmentItemView(requireContext())
+                    appProviderItemView.apply {
+                        title = getString(R.string.ic_action_open_with_web, appRegistryProvider.name)
+                        itemIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_spaces, null)
+                        setOnClickListener {
+                            mainFileListViewModel.openInWeb(file.remoteId!!, appRegistryProvider.name)
+                        }
+                    }
+                    fileOptionsBottomSheetSingleFileLayout!!.addView(appProviderItemView)
+                }
+            }
+            fileSingleFile = null
         }
 
         // Observe the file list ui state
@@ -347,11 +434,14 @@ class MainFileListFragment : Fragment(),
             actionMode?.invalidate()
         }
 
+        /* FileOperationsViewModel observables */
+        // Observe the refresh folder operation
         fileOperationsViewModel.refreshFolderLiveData.observe(viewLifecycleOwner) {
             binding.syncProgressBar.isIndeterminate = it.peekContent().isLoading
             binding.swipeRefreshMainFileList.isRefreshing = it.peekContent().isLoading
         }
 
+        // Observe the create file with app provider operation
         collectLatestLifecycleFlow(fileOperationsViewModel.createFileWithAppProviderFlow) {
             val uiResult = it?.peekContent()
             if (uiResult is UIResult.Error) {
@@ -879,6 +969,27 @@ class MainFileListFragment : Fragment(),
         return true
     }
 
+    override fun onThreeDotButtonClick(fileWithSyncInfo: OCFileWithSyncInfo) {
+        val file = fileWithSyncInfo.file
+        fileSingleFile = file
+        val fileSync = OCFileSyncInfo(
+            fileId = fileWithSyncInfo.file.id!!,
+            uploadWorkerUuid = fileWithSyncInfo.uploadWorkerUuid,
+            downloadWorkerUuid = fileWithSyncInfo.downloadWorkerUuid,
+            isSynchronizing = fileWithSyncInfo.isSynchronizing
+        )
+
+        val secondFragment = requireActivity().supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
+        val isAnyFileVideoPreviewing = if (secondFragment is PreviewVideoFragment) {
+            secondFragment.file == file
+        } else {
+            false
+        }
+
+        mainFileListViewModel.filterMenuOptions(listOf(file), listOf(fileSync), isAnyFileVideoPreviewing,
+            displaySelectAll = false, isMultiselection = false)
+    }
+
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
 
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -887,6 +998,8 @@ class MainFileListFragment : Fragment(),
 
             val inflater = requireActivity().menuInflater
             inflater.inflate(R.menu.file_actions_menu, menu)
+            this@MainFileListFragment.menu = menu
+
             mode?.invalidate()
 
             // Set gray color
@@ -916,7 +1029,7 @@ class MainFileListFragment : Fragment(),
             )
             mode?.title = title
 
-            val checkedFiles = checkedFilesWithSyncInfo.map { it.file }
+            checkedFiles = checkedFilesWithSyncInfo.map { it.file }
 
             val checkedFilesSync = checkedFilesWithSyncInfo.map {
                 OCFileSyncInfo(
@@ -934,25 +1047,11 @@ class MainFileListFragment : Fragment(),
                 false
             }
             val displaySelectAll = checkedCount != fileListAdapter.itemCount - 1 // -1 because one of them is the footer :S
-            mainFileListViewModel.filterMenuOptions(checkedFiles, checkedFilesSync, isAnyFileVideoPreviewing, displaySelectAll)
-
-            collectLatestLifecycleFlow(mainFileListViewModel.menuOptions) { menuOptions ->
-                val hasWritePermission = if (checkedFiles.size == 1) {
-                    checkedFiles.first().hasWritePermission
-                } else {
-                    false
-                }
-                menu?.filterMenuOptions(menuOptions, hasWritePermission)
-            }
+            mainFileListViewModel.filterMenuOptions(checkedFiles, checkedFilesSync, isAnyFileVideoPreviewing,
+                displaySelectAll, isMultiselection = true)
 
             if (checkedFiles.size == 1) {
-                mainFileListViewModel.getAppRegistryForMimeType(checkedFiles.first().mimeType)
-                collectLatestLifecycleFlow(mainFileListViewModel.appRegistryMimeType) { appRegistryMimeType ->
-                    val appProviders = appRegistryMimeType?.appProviders
-                    menu?.let {
-                        openInWebProviders = addOpenInWebMenuOptions(menu, openInWebProviders, appProviders)
-                    }
-                }
+                mainFileListViewModel.getAppRegistryForMimeType(checkedFiles.first().mimeType, isMultiselection = true)
             } else {
                 menu?.let {
                     openInWebProviders.forEach { (_, menuItemId) ->

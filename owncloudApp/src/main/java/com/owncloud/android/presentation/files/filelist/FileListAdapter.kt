@@ -231,6 +231,9 @@ class FileListAdapter(
                             it.spacePathLine.spaceIcon.isVisible = false
                             it.spacePathLine.spaceName.isVisible = false
                         }
+                        it.threeDotMenu.setOnClickListener {
+                            listener.onThreeDotButtonClick(fileWithSyncInfo = fileWithSyncInfo)
+                        }
                     }
                 }
 
@@ -406,6 +409,7 @@ class FileListAdapter(
     interface FileListAdapterListener {
         fun onItemClick(ocFileWithSyncInfo: OCFileWithSyncInfo, position: Int)
         fun onLongItemClick(position: Int): Boolean = true
+        fun onThreeDotButtonClick(fileWithSyncInfo: OCFileWithSyncInfo)
     }
 
     inner class GridViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root)
