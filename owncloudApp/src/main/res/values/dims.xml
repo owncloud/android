@@ -80,4 +80,7 @@
     <!-- Spaces -->
     <dimen name="spaces_thumbnail_height">156dp</dimen>
     <dimen name="spaces_header_card_height">80dp</dimen>
+
+    <!-- Accessibility dims -->
+    <dimen name="icon_button_size">48dp</dimen>
 </resources>
