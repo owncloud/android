@@ -278,12 +278,8 @@ class FileListAdapter(
 
             if (file.isFolder) {
                 // Folder
-                fileIcon.load(
-                    MimetypeIconUtil.getFolderTypeIconId(
-                        file.isSharedWithMe || file.sharedWithSharee == true,
-                        file.sharedByLink
-                    )
-                )
+                fileIcon.load(R.drawable.ic_menu_archive)
+
             } else {
                 val mimetypeIcon = MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName)
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
