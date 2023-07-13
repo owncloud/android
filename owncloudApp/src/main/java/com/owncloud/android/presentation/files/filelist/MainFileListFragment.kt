@@ -56,6 +56,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
+import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.TooEarlyException
@@ -351,10 +352,12 @@ class MainFileListFragment : Fragment(),
                 val dialog = BottomSheetDialog(requireContext())
                 dialog.setContentView(fileOptionsBottomSheetSingleFile)
 
-                val fileOptionsBottomSheetSingleFileBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(fileOptionsBottomSheetSingleFile.parent as View)
+                val fileOptionsBottomSheetSingleFileBehavior: BottomSheetBehavior<*> =
+                    BottomSheetBehavior.from(fileOptionsBottomSheetSingleFile.parent as View)
                 val closeBottomSheetButton = fileOptionsBottomSheetSingleFile.findViewById<ImageView>(R.id.close_bottom_sheet)
                 closeBottomSheetButton.setOnClickListener {
                     dialog.hide()
+                    dialog.dismiss()
                 }
 
                 val thumbnailBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<ImageView>(R.id.thumbnail_bottom_sheet)
@@ -372,7 +375,10 @@ class MainFileListFragment : Fragment(),
                         if (file.needsToUpdateThumbnail) {
                             // generate new Thumbnail
                             if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, thumbnailBottomSheet)) {
-                                val task = ThumbnailsCacheManager.ThumbnailGenerationTask(thumbnailBottomSheet, AccountUtils.getCurrentOwnCloudAccount(requireContext()))
+                                val task = ThumbnailsCacheManager.ThumbnailGenerationTask(
+                                    thumbnailBottomSheet,
+                                    AccountUtils.getCurrentOwnCloudAccount(requireContext())
+                                )
                                 val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(resources, thumbnail, task)
 
                                 // If drawable is not visible, do not update it.
@@ -413,44 +419,55 @@ class MainFileListFragment : Fragment(),
                                 FileMenuOption.SELECT_ALL -> {
                                     // Not applicable here
                                 }
+
                                 FileMenuOption.SELECT_INVERSE -> {
                                     // Not applicable here
                                 }
+
                                 FileMenuOption.DOWNLOAD, FileMenuOption.SYNC -> {
                                     syncFiles(listOf(file))
                                 }
+
                                 FileMenuOption.RENAME -> {
                                     val dialogRename = RenameFileDialogFragment.newInstance(file)
                                     dialogRename.show(requireActivity().supportFragmentManager, FRAGMENT_TAG_RENAME_FILE)
                                 }
+
                                 FileMenuOption.MOVE -> {
                                     val action = Intent(activity, FolderPickerActivity::class.java)
                                     action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, arrayListOf(file))
                                     action.putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.MOVE)
                                     requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__MOVE_FILES)
                                 }
+
                                 FileMenuOption.COPY -> {
                                     val action = Intent(activity, FolderPickerActivity::class.java)
                                     action.putParcelableArrayListExtra(FolderPickerActivity.EXTRA_FILES, arrayListOf(file))
                                     action.putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.COPY)
                                     requireActivity().startActivityForResult(action, FileDisplayActivity.REQUEST_CODE__COPY_FILES)
                                 }
+
                                 FileMenuOption.REMOVE -> {
                                     val dialogRemove = RemoveFilesDialogFragment.newInstance(file)
                                     dialogRemove.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
                                 }
+
                                 FileMenuOption.OPEN_WITH -> {
                                     fileActions?.openFile(file)
                                 }
+
                                 FileMenuOption.CANCEL_SYNC -> {
                                     fileActions?.cancelFileTransference(arrayListOf(file))
                                 }
+
                                 FileMenuOption.SHARE -> {
                                     fileActions?.onShareFileClicked(file)
                                 }
+
                                 FileMenuOption.DETAILS -> {
                                     fileActions?.showDetails(file)
                                 }
+
                                 FileMenuOption.SEND -> {
                                     if (!file.isAvailableLocally) { // Download the file
                                         Timber.d("${file.remotePath} : File must be downloaded")
@@ -459,6 +476,7 @@ class MainFileListFragment : Fragment(),
                                         fileActions?.sendDownloadedFile(file)
                                     }
                                 }
+
                                 FileMenuOption.SET_AV_OFFLINE -> {
                                     fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
                                     if (file.isFolder) {
@@ -467,11 +485,13 @@ class MainFileListFragment : Fragment(),
                                         fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, file.owner))
                                     }
                                 }
+
                                 FileMenuOption.UNSET_AV_OFFLINE -> {
                                     fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
                                 }
                             }
                             dialog.hide()
+                            dialog.dismiss()
                         }
                     }
                     fileOptionsBottomSheetSingleFileLayout!!.addView(fileOptionItemView)
@@ -1100,8 +1120,10 @@ class MainFileListFragment : Fragment(),
             false
         }
 
-        mainFileListViewModel.filterMenuOptions(listOf(file), listOf(fileSync), isAnyFileVideoPreviewing,
-            displaySelectAll = false, isMultiselection = false)
+        mainFileListViewModel.filterMenuOptions(
+            listOf(file), listOf(fileSync), isAnyFileVideoPreviewing,
+            displaySelectAll = false, isMultiselection = false
+        )
     }
 
     private val actionModeCallback: ActionMode.Callback = object : ActionMode.Callback {
@@ -1161,8 +1183,10 @@ class MainFileListFragment : Fragment(),
                 false
             }
             val displaySelectAll = checkedCount != fileListAdapter.itemCount - 1 // -1 because one of them is the footer :S
-            mainFileListViewModel.filterMenuOptions(checkedFiles, checkedFilesSync, isAnyFileVideoPreviewing,
-                displaySelectAll, isMultiselection = true)
+            mainFileListViewModel.filterMenuOptions(
+                checkedFiles, checkedFilesSync, isAnyFileVideoPreviewing,
+                displaySelectAll, isMultiselection = true
+            )
 
             if (checkedFiles.size == 1) {
                 mainFileListViewModel.getAppRegistryForMimeType(checkedFiles.first().mimeType, isMultiselection = true)

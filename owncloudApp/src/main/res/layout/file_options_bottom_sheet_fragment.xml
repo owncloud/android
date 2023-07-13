@@ -20,7 +20,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/standard_half_margin"
-        android:ellipsize="middle"
+        android:ellipsize="end"
         android:maxLines="3"
         android:textColor="@color/textColor"
         android:textSize="@dimen/two_line_primary_text_size"
