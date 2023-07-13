@@ -111,7 +111,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/standard_padding"
-        android:layout_marginEnd="@dimen/standard_padding"
+        android:layout_marginEnd="@dimen/standard_quarter_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/info_constraint_layout"
@@ -135,7 +135,23 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_toEndOf="@id/sharedIcon"
+            android:layout_marginEnd="@dimen/standard_margin"
             android:src="@drawable/ic_checkbox_blank_outline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/three_dot_menu"
+            android:layout_width="@dimen/icon_button_size"
+            android:layout_height="@dimen/icon_button_size"
+            android:layout_gravity="center_vertical"
+            android:scaleType="center"
+            android:src="@drawable/ic_three_dot_menu"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -264,11 +264,15 @@ class FileListAdapter(
                     position = position
                 )
             }
+            holder.itemView.setBackgroundColor(Color.WHITE)
 
             val checkBoxV = holder.itemView.findViewById<ImageView>(R.id.custom_checkbox).apply {
-                isVisible = false
+                isVisible = getCheckedItems().isNotEmpty()
             }
-            holder.itemView.setBackgroundColor(Color.WHITE)
+
+            val threeDotMenu = holder.itemView.findViewById<ImageView>(R.id.three_dot_menu).apply {
+                isVisible = getCheckedItems().isEmpty()
+            }
 
             if (isSelected(position)) {
                 holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.selected_item_background))
@@ -277,7 +281,6 @@ class FileListAdapter(
                 holder.itemView.setBackgroundColor(Color.WHITE)
                 checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline)
             }
-            checkBoxV.isVisible = getCheckedItems().isNotEmpty()
 
             if (file.isFolder) {
                 // Folder
