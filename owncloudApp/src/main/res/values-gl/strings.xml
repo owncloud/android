@@ -564,4 +564,5 @@ Descárgueo de aquí: %2$s</string>
   <!--Open in web-->
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">Non volver amosar</string>
+  <string name="tab_label_ascii">Texto</string>
 </resources>

@@ -552,4 +552,5 @@
   <string name="release_notes_proceed">Prosiga</string>
   <!--Open in web-->
   <!--oCIS accounts warning-->
+  <string name="tab_label_ascii">Texto</string>
 </resources>

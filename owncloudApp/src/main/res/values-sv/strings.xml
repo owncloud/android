@@ -559,4 +559,5 @@
   <!--Open in web-->
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">Visa inte igen</string>
+  <string name="tab_label_ascii">Text</string>
 </resources>

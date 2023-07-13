@@ -612,4 +612,5 @@ správce systému.</string>
   <string name="open_in_web_error_generic">Nepodařilo se otevřít na webu</string>
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">Znovu neukazovat</string>
+  <string name="tab_label_ascii">Text</string>
 </resources>

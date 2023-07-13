@@ -698,4 +698,5 @@
   <string name="ocis_accounts_warning_message">Por favor, remova a conta e faça o login novamente para obter o recurso de espaços</string>
   <string name="ocis_accounts_warning_checkbox_message">Não mostrar novamente</string>
   <string name="ocis_accounts_warning_button">Entendido</string>
+  <string name="tab_label_ascii">Texto</string>
 </resources>

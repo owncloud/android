@@ -556,4 +556,5 @@
   <!--Open in web-->
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">Μην εμφανιστεί ξανά</string>
+  <string name="tab_label_ascii">Κείμενο</string>
 </resources>

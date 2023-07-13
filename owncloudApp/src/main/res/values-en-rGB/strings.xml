@@ -697,4 +697,5 @@
   <string name="ocis_accounts_warning_message">Please, remove the account and login again to get the spaces feature</string>
   <string name="ocis_accounts_warning_checkbox_message">Don\'t show again</string>
   <string name="ocis_accounts_warning_button">Understood</string>
+  <string name="tab_label_ascii">Text</string>
 </resources>

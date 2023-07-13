@@ -680,4 +680,5 @@
   <string name="ocis_accounts_warning_message">Boşluk özelliğini almak için lütfen hesabı kaldırın ve tekrar giriş yapın</string>
   <string name="ocis_accounts_warning_checkbox_message">Tekrar gösterme</string>
   <string name="ocis_accounts_warning_button">Anlaşıldı</string>
+  <string name="tab_label_ascii">Metin</string>
 </resources>

@@ -603,4 +603,5 @@ Téléchargez-le ici : %2$s</string>
   <string name="open_in_web_error_not_supported">Aucune application ne supporte ce type de fichier</string>
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">Ne plus montrer</string>
+  <string name="tab_label_ascii">Texte</string>
 </resources>
