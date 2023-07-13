@@ -59,10 +59,13 @@ import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -107,7 +110,12 @@ class MainFileListViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = emptyList()
         )
-    var appRegistryMimeType: StateFlow<AppRegistryMimeType?> = MutableStateFlow(null)
+
+    private val _appRegistryMimeType: MutableSharedFlow<AppRegistryMimeType?> = MutableSharedFlow()
+    val appRegistryMimeType: SharedFlow<AppRegistryMimeType?> = _appRegistryMimeType
+
+    private val _appRegistryMimeTypeSingleFile: MutableSharedFlow<AppRegistryMimeType?> = MutableSharedFlow()
+    val appRegistryMimeTypeSingleFile: SharedFlow<AppRegistryMimeType?> = _appRegistryMimeTypeSingleFile
 
     /** File list ui state combines the other fields and generate a new state whenever any of them changes */
     val fileListUiState: StateFlow<FileListUiState> =
@@ -136,8 +144,11 @@ class MainFileListViewModel(
     private val _openInWebFlow = MutableStateFlow<Event<UIResult<String>>?>(null)
     val openInWebFlow: StateFlow<Event<UIResult<String>>?> = _openInWebFlow
 
-    private val _menuOptions: MutableStateFlow<List<FileMenuOption>> = MutableStateFlow(emptyList())
-    val menuOptions: StateFlow<List<FileMenuOption>> = _menuOptions
+    private val _menuOptions: MutableSharedFlow<List<FileMenuOption>> = MutableSharedFlow()
+    val menuOptions: SharedFlow<List<FileMenuOption>> = _menuOptions
+
+    private val _menuOptionsSingleFile: MutableSharedFlow<List<FileMenuOption>> = MutableSharedFlow()
+    val menuOptionsSingleFile: SharedFlow<List<FileMenuOption>> = _menuOptionsSingleFile
 
     init {
         val sortTypeSelected = SortType.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_TYPE, SortType.SORT_TYPE_BY_NAME.ordinal)]
@@ -286,7 +297,7 @@ class MainFileListViewModel(
     }
 
     fun filterMenuOptions(files: List<OCFile>, filesSyncInfo: List<OCFileSyncInfo>, isAnyFileVideoPreviewing: Boolean,
-        displaySelectAll: Boolean) {
+        displaySelectAll: Boolean, isMultiselection: Boolean) {
         val shareViaLinkAllowed = contextProvider.getBoolean(R.bool.share_via_link_feature)
         val shareWithUsersAllowed = contextProvider.getBoolean(R.bool.share_with_users_feature)
         val sendAllowed = contextProvider.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
@@ -297,26 +308,30 @@ class MainFileListViewModel(
                 accountName = currentFolderDisplayed.value.owner,
                 isAnyFileVideoPreviewing = isAnyFileVideoPreviewing,
                 displaySelectAll = displaySelectAll,
-                displaySelectInverse = true,
+                displaySelectInverse = isMultiselection,
                 onlyAvailableOfflineFiles = fileListOption.value.isAvailableOffline(),
                 onlySharedByLinkFiles = fileListOption.value.isSharedByLink(),
                 shareViaLinkAllowed = shareViaLinkAllowed,
                 shareWithUsersAllowed = shareWithUsersAllowed,
                 sendAllowed = sendAllowed,
             ))
-            _menuOptions.update { result }
+            if (isMultiselection) {
+                _menuOptions.emit(result)
+            } else {
+                _menuOptionsSingleFile.emit(result)
+            }
         }
     }
 
-    fun getAppRegistryForMimeType(mimeType: String) {
+    fun getAppRegistryForMimeType(mimeType: String, isMultiselection: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            appRegistryMimeType = getAppRegistryForMimeTypeAsStreamUseCase.execute(
+            val result = getAppRegistryForMimeTypeAsStreamUseCase.execute(
                 GetAppRegistryForMimeTypeAsStreamUseCase.Params(accountName = getFile().owner, mimeType))
-                .stateIn(
-                    viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5_000),
-                    initialValue = null
-                )
+            if (isMultiselection) {
+                _appRegistryMimeType.emit(result.firstOrNull())
+            } else {
+                _appRegistryMimeTypeSingleFile.emit(result.firstOrNull())
+            }
         }
     }
 
