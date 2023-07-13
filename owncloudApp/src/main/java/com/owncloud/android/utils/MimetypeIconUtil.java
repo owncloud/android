@@ -86,23 +86,6 @@ public class MimetypeIconUtil {
     }
 
     /**
-     * Returns the resource identifier of an image to use as icon associated to a type of folder.
-     *
-     * @param isSharedViaUsers flag if the folder is shared via the users system
-     * @param isSharedViaLink flag if the folder is publicly shared via link
-     * @return Identifier of an image resource.
-     */
-    public static int getFolderTypeIconId(boolean isSharedViaUsers, boolean isSharedViaLink) {
-        if (isSharedViaLink) {
-            return R.drawable.folder_public;
-        } else if (isSharedViaUsers) {
-            return R.drawable.shared_with_me_folder;
-        }
-
-        return R.drawable.ic_menu_archive;
-    }
-
-    /**
      * Returns a single MIME type of all the possible, by inspection of the file extension, and taking
      * into account the MIME types known by ownCloud first.
      *
