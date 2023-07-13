@@ -573,4 +573,5 @@
   <string name="release_notes_proceed">Végrehajtás</string>
   <!--Open in web-->
   <!--oCIS accounts warning-->
+  <string name="tab_label_ascii">szöveg</string>
 </resources>

@@ -662,4 +662,5 @@
   <string name="open_in_web_error_too_early">요청한 파일을 아직 이용할 수 없습니다. 나중에 다시 시도해 주세요.</string>
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">다시 보지 않기</string>
+  <string name="tab_label_ascii">텍스트</string>
 </resources>

@@ -694,4 +694,5 @@
   <string name="ocis_accounts_warning_message">Ju lutemi, që të merret veçoria e hapësirave, hiqeni llogarinë dhe ribëni hyrjen</string>
   <string name="ocis_accounts_warning_checkbox_message">Mos e shfaq më</string>
   <string name="ocis_accounts_warning_button">E kuptova</string>
+  <string name="tab_label_ascii">Tekst</string>
 </resources>

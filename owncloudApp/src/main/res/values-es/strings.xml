@@ -651,4 +651,5 @@
   <string name="open_in_web_error_too_early">El fichero solicitado no está disponible aún. Por favor, inténtelo más tarde</string>
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">No mostrar de nuevo</string>
+  <string name="tab_label_ascii">Texto</string>
 </resources>

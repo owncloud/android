@@ -649,4 +649,5 @@ Il Download del file inizierà automaticamente</string>
   <!--Open in web-->
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">Non mostrare di nuovo</string>
+  <string name="tab_label_ascii">Testo</string>
 </resources>

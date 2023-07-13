@@ -679,4 +679,5 @@
   <string name="open_in_web_error_too_early">Die Datei ist derzeit nicht verfügbar, bitte versuchen Sie es später noch einmal.</string>
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">Nicht mehr anzeigen</string>
+  <string name="tab_label_ascii">Text</string>
 </resources>

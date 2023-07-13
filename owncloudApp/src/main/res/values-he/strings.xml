@@ -585,4 +585,5 @@
   <!--Open in web-->
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">אל תציג שוב</string>
+  <string name="tab_label_ascii">טקסט</string>
 </resources>

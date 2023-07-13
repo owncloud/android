@@ -697,4 +697,5 @@
   <string name="ocis_accounts_warning_message">Spaces võimaluse kasutamiseks eemalda, palun, konto ja logi uuesti sisse</string>
   <string name="ocis_accounts_warning_checkbox_message">Ära enam näita</string>
   <string name="ocis_accounts_warning_button">Loetud</string>
+  <string name="tab_label_ascii">Tekst</string>
 </resources>
