@@ -196,14 +196,11 @@ class FileListAdapter(
                 filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
             }
 
-            holder.itemView.findViewById<ImageView>(R.id.sharedIcon).apply {
-                isVisible = file.sharedByLink || file.sharedWithSharee == true || file.isSharedWithMe
-                if (file.sharedByLink) {
-                    setImageResource(R.drawable.ic_shared_by_link)
-                } else if (file.sharedWithSharee == true || file.isSharedWithMe) {
-                    setImageResource(R.drawable.shared_via_users)
-                }
-            }
+            holder.itemView.findViewById<LinearLayout>(R.id.share_icons_layout).isVisible =
+                file.sharedByLink || file.sharedWithSharee == true || file.isSharedWithMe
+            holder.itemView.findViewById<ImageView>(R.id.shared_by_link_icon).isVisible = file.sharedByLink
+            holder.itemView.findViewById<ImageView>(R.id.shared_via_users_icon).isVisible =
+                file.sharedWithSharee == true || file.isSharedWithMe
 
             when (viewType) {
                 ViewType.LIST_ITEM.ordinal -> {
@@ -213,6 +210,7 @@ class FileListAdapter(
                         it.Filename.text = file.fileName
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
+                        it.threeDotMenu.isVisible = getCheckedItems().isEmpty()
                         if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileWithSyncInfo.space == null)) {
                             it.spacePathLine.path.apply {
                                 text = file.getParentRemotePath()
@@ -268,10 +266,6 @@ class FileListAdapter(
 
             val checkBoxV = holder.itemView.findViewById<ImageView>(R.id.custom_checkbox).apply {
                 isVisible = getCheckedItems().isNotEmpty()
-            }
-
-            val threeDotMenu = holder.itemView.findViewById<ImageView>(R.id.three_dot_menu).apply {
-                isVisible = getCheckedItems().isEmpty()
             }
 
             if (isSelected(position)) {

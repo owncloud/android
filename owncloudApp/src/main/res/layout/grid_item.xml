@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!--
   ownCloud Android client application
-  Copyright (C) 2020 ownCloud GmbH.
+  Copyright (C) 2023 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -41,13 +41,33 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_menu_archive" />
 
-        <ImageView
-            android:id="@+id/sharedIcon"
+        <LinearLayout
+            android:id="@+id/share_icons_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/standard_quarter_margin"
             android:layout_gravity="top|end"
-            android:layout_margin="4dp"
-            tools:src="@drawable/ic_shared_by_link" />
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/shared_via_users_icon"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginEnd="2dp"
+                android:src="@drawable/ic_shared_via_users"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/shared_by_link_icon"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_shared_by_link"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/localFileIndicator"
