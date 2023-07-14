@@ -110,8 +110,7 @@ class CreateFolderDialogFragment : DialogFragment() {
                     error = getString(R.string.uploader_upload_text_dialog_filename_error_empty)
                 } else if (pattern.containsMatchIn(fileName)) {
                     error = getString(R.string.filename_forbidden_characters)
-                }
-                else { null }
+                } else { null }
 
                 if (error != null) {
                     inputLayout.isErrorEnabled = true
