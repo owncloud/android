@@ -289,7 +289,7 @@ class ScopedStorageProviderTest {
         val finalStoragePath: String = "file.txt"
         mockkStatic(Uri::class)
         every { Uri.encode(any(), any()) } returns uriEncoded
-        scopedStorageProvider.moveLocalFile(ocFile,finalStoragePath)
+        scopedStorageProvider.moveLocalFile(ocFile, finalStoragePath)
         verify(exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
             filesDir.absolutePath
