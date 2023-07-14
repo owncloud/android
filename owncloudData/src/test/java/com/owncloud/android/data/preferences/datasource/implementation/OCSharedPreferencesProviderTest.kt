@@ -9,7 +9,6 @@ import android.preference.PreferenceManager
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
