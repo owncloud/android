@@ -312,8 +312,8 @@ class FileDetailsFragment : FileFragment() {
         requireActivity().invalidateOptionsMenu()
     }
 
-    private fun setLastSync(ocFile: OCFile){
-        if(ocFile.lastSyncDateForData!! > ZERO_MILLISECOND_TIME) {
+    private fun setLastSync(ocFile: OCFile) {
+        if (ocFile.lastSyncDateForData!! > ZERO_MILLISECOND_TIME) {
             binding.fdLastSync.visibility = View.VISIBLE
             binding.fdLastSyncLabel.visibility = View.VISIBLE
             binding.fdLastSync.text = DisplayUtils.unixTimeToHumanReadable(ocFile.lastSyncDateForData!!)
