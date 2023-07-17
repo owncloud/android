@@ -305,7 +305,7 @@ class FileDetailsFragment : FileFragment() {
         binding.fdSize.text = DisplayUtils.bytesToHumanReadable(ocFile.length, requireContext())
         binding.fdModified.text = DisplayUtils.unixTimeToHumanReadable(ocFile.modificationTimestamp)
         binding.fdCreated.text = DisplayUtils.unixTimeToHumanReadable(ocFile.creationTimestamp!!)
-        binding.fdPath.text = ocFile.remotePath
+        binding.fdPath.text = ocFile.getParentRemotePath()
         setLastSync(ocFile)
         setIconPinAccordingToFilesLocalState(binding.localFileIndicator, ocFile)
         setMimeType(ocFile)

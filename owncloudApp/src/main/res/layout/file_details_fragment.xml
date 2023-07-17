@@ -22,10 +22,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                app:cardElevation="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:elevation="10dp"
+                app:cardBackgroundColor="@color/background_color"
                 app:cardCornerRadius="8dp">
 
                 <ImageView
@@ -38,17 +41,19 @@
                     android:src="@drawable/file"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/localFileIndicator"
-                    android:layout_width="@dimen/file_indicator_pin_size_grid"
-                    android:layout_height="@dimen/file_indicator_pin_size_grid"
-                    android:layout_gravity="bottom|end"
-                    android:src="@drawable/sync_pin"
-                    app:layout_constraintBottom_toBottomOf="@id/fdIcon"
-                    app:layout_constraintEnd_toEndOf="@id/fdIcon" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
             </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/localFileIndicator"
+                android:layout_width="@dimen/file_indicator_pin_size_grid"
+                android:layout_height="@dimen/file_indicator_pin_size_grid"
+                android:src="@drawable/sync_pin"
+                android:translationX="-8dp"
+                android:translationY="-8dp"
+                app:layout_constraintStart_toEndOf="@+id/cardView"
+                app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -182,7 +187,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintBottom_toBottomOf="@id/fdModified"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/fdModified" />
+            app:layout_constraintTop_toTopOf="@id/fdModified"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/fdModified"
@@ -259,7 +265,7 @@
             android:id="@+id/fdPathLabel"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:text="@string/filedetails_path"
+            android:text="@string/ssl_validator_label_L"
             android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintBottom_toBottomOf="@id/fdPath"
             app:layout_constraintStart_toStartOf="parent"
