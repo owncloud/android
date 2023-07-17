@@ -196,8 +196,8 @@ class ScopedStorageProviderTest {
             scopedStorageProvider.getRootFolderPath() + File.separator + "tmp" + File.separator + uriEncoded
 
         val expectedValue = temporalPathWithoutSpace + File.separator + spaceId
-        val actuaValue = scopedStorageProvider.getTemporalPath(accountName, spaceId)
-        assertEquals(expectedValue, actuaValue)
+        val actualValue = scopedStorageProvider.getTemporalPath(accountName, spaceId)
+        assertEquals(expectedValue, actualValue)
     }
 
     @Test
@@ -209,19 +209,19 @@ class ScopedStorageProviderTest {
 
         val expectedValue =
             scopedStorageProvider.getRootFolderPath() + File.separator + TEMPORAL_FOLDER_NAME + File.separator + uriEncoded
-        val actuaValue = scopedStorageProvider.getTemporalPath(accountName, spaceId)
-        assertEquals(expectedValue, actuaValue)
+        val actualValue = scopedStorageProvider.getTemporalPath(accountName, spaceId)
+        assertEquals(expectedValue, actualValue)
     }
 
     @Test
     fun `get log path - ok - String`() {
         val expectedValue =
             scopedStorageProvider.getRootFolderPath() + File.separator + LOGS_FOLDER_NAME + File.separator
-        val actuaValue = scopedStorageProvider.getLogsPath()
+        val actualValue = scopedStorageProvider.getLogsPath()
 
-        assertEquals(expectedValue, actuaValue)
+        assertEquals(expectedValue, actualValue)
 
-        verify(exactly = 1) {
+        verify(exactly = 2) {
             scopedStorageProvider.getPrimaryStorageDirectory()
             filesDir.absolutePath
         }
