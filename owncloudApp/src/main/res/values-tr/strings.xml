@@ -368,6 +368,8 @@
   <string name="available_offline_inherited_msg">Bu dosyayı içeren bir klasör çevrimiçi olarak mevcut</string>
   <string name="rename_local_fail_msg">Yerel kopya adlandırılamadı; farklı bir ad deneyin</string>
   <string name="rename_server_fail_msg">Yeniden  adlandırılma tamamlanamadı</string>
+  <string name="file_already_exists">Dosya zaten mevcut</string>
+  <string name="folder_already_exists">Klasör zaten mevcut</string>
   <string name="sync_file_fail_msg">Uzak dosya denetlenemedi</string>
   <string name="sync_file_nothing_to_do_msg">Dosya içerikleri zaten eşitlenmiş</string>
   <string name="new_remote_version_found_msg">Sunucuda yeni bir sürüm bulundu. İndiriliyor…</string>
