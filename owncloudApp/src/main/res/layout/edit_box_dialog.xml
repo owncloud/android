@@ -19,7 +19,7 @@
 -->
 <com.google.android.material.textfield.TextInputLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/user_input_text_layout"
+    android:id="@+id/edit_box_input_text_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="clip_horizontal"

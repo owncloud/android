@@ -45,6 +45,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -54,6 +55,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
@@ -794,6 +796,7 @@ class MainFileListFragment : Fragment(),
         dialogView.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(requireContext())
 
         val input = dialogView.findViewById<TextInputEditText>(R.id.inputFileName)
+        val inputLayout: TextInputLayout = dialogView.findViewById(R.id.inputTextLayout)
         input.requestFocus()
 
         val builder = AlertDialog.Builder(requireContext()).apply {
@@ -804,14 +807,10 @@ class MainFileListFragment : Fragment(),
                 val currentFolder = mainFileListViewModel.getFile()
                 val filename = input.text.toString()
                 var error: String? = null
-                if (filename.length > MAX_FILENAME_LENGTH) {
-                    error = getString(R.string.uploader_upload_text_dialog_filename_error_length_max, MAX_FILENAME_LENGTH)
-                } else if (filename.isEmpty() || filename.isBlank()) {
-                    error = getString(R.string.uploader_upload_text_dialog_filename_error_empty)
-                } else if (forbiddenChars.any { filename.contains(it) }) {
-                    error = getString(R.string.filename_forbidden_characters_from_server)
-                }
 
+                if (filename.isEmpty() || filename.isBlank()) {
+                    error = getString(R.string.uploader_upload_text_dialog_filename_error_empty)
+                }
                 if (error != null) {
                     showMessageInSnackbar(error)
                 } else {
@@ -828,6 +827,34 @@ class MainFileListFragment : Fragment(),
             setNegativeButton(android.R.string.cancel, null)
         }
         val alertDialog = builder.create()
+
+        input.doOnTextChanged { text, _, _, _ ->
+            val okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            var error: String? = null
+            if (text.isNullOrBlank()) {
+                okButton.isEnabled = false
+            } else if (text.length > MAX_FILENAME_LENGTH) {
+                error = String.format(
+                    getString(R.string.uploader_upload_text_dialog_filename_error_length_max),
+                    MAX_FILENAME_LENGTH
+                )
+            } else if (forbiddenChars.any { text.contains(it) }) {
+                error = getString(R.string.filename_forbidden_characters)
+            } else {
+                okButton.isEnabled = true
+                error = null
+                inputLayout.error = null
+                inputLayout.isErrorEnabled = false
+            }
+
+            if (error != null) {
+                okButton.isEnabled = false
+                inputLayout.isErrorEnabled = true
+                inputLayout.error = error
+            }
+        }
+
+
         alertDialog.apply {
             window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
             show()
