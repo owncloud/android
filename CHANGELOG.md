@@ -20,8 +20,8 @@ Summary
 * Enhancement - Added "Open in web" options to main file list: [#3860](https://github.com/owncloud/android/issues/3860)
 * Enhancement - Copy/move conflict solved by users: [#3935](https://github.com/owncloud/android/issues/3935)
 * Enhancement - Improve grid mode: [#4027](https://github.com/owncloud/android/issues/4027)
+* Enhancement - Improve UX of creation dialog: [#4031](https://github.com/owncloud/android/issues/4031)
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
-* Enhancement - Improve UX of creation dialog: [#4097](https://github.com/owncloud/android/pull/4097)
 
 Details
 -------
@@ -122,19 +122,20 @@ Details
    https://github.com/owncloud/android/issues/4027
    https://github.com/owncloud/android/pull/4089
 
+* Enhancement - Improve UX of creation dialog: [#4031](https://github.com/owncloud/android/issues/4031)
+
+   Creation dialog now shows an error message and disables the confirmation button when
+   forbidden characters are typed
+
+   https://github.com/owncloud/android/issues/4031
+   https://github.com/owncloud/android/pull/4097
+
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 
    File conflicts now are named with suffix starting in (1) instead of (2).
 
    https://github.com/owncloud/android/issues/3946
    https://github.com/owncloud/android/pull/4040
-
-* Enhancement - Improve UX of creation dialog: [#4097](https://github.com/owncloud/android/pull/4097)
-
-   Improve UX of creation dialog when forbidden characters are typed
-
-   https://github.com/owncloud/android/issues/4031
-   https://github.com/owncloud/android/pull/4097
 
 Changelog for ownCloud Android Client [4.0.0] (2023-05-29)
 =======================================
