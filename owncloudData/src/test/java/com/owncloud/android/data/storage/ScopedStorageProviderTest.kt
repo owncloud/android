@@ -125,6 +125,18 @@ class ScopedStorageProviderTest {
     }
 
     @Test
+    fun `get expected remote path with parent variable with separator in the end and no folder - ok - should return String expected remote path`() {
+
+        val isFolder = false
+        val parent = "$separator storage$separator emulated$separator 0$separator owncloud$separator".replace(" ", "")
+
+        val expectedPath = conditionsExpectedRemotePath(parent, newName, isFolder)
+        val actualPath = scopedStorageProvider.getExpectedRemotePath(remotePath, newName, isFolder)
+
+        assertEquals(expectedPath, actualPath)
+    }
+
+    @Test
     fun `get expected remote path with parent variable without separator - ok - should return String expected remote path`() {
 
         val isFolder = true
@@ -280,6 +292,35 @@ class ScopedStorageProviderTest {
 
         }
     }
+
+    @Test
+    fun `deleteCacheIfNeeded - should delete cache file`() {
+        val transfer : OCTransfer = mockk()
+        val accountName = "testAccount"
+        val localPath = "/file.txt"
+
+        mockkStatic(Uri::class)
+        every { Uri.encode(any(), any()) } returns uriEncoded
+        every { transfer.accountName } returns accountName
+        every { transfer.localPath } returns localPath
+
+        scopedStorageProvider.deleteCacheIfNeeded(transfer)
+
+        verify(exactly = 1) {
+            scopedStorageProvider.getPrimaryStorageDirectory()
+        }
+    }
+
+    private fun conditionsExpectedRemotePath(parent: String, newName: String, isFolder: Boolean): String {
+        every { filesDir.parent } returns parent
+        val parent = if (parent.endsWith(File.separator)) parent else parent + File.separator
+        var newRemotePath = parent + newName
+        if (isFolder) {
+            newRemotePath += File.separator
+        }
+        return newRemotePath
+    }
+
 
     companion object {
         private const val LOGS_FOLDER_NAME = "logs"
