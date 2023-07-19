@@ -9,20 +9,17 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
+import java.io.File
 import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 class ScopedStorageProviderTest {
     private lateinit var scopedStorageProvider: ScopedStorageProvider
 
     private lateinit var context: Context
-    private lateinit var rootFolderName: String
     private lateinit var file: File
     private lateinit var directory: File
-    private lateinit var accountDirectoryPath: String
-    private lateinit var rootFolderPath: String
     private lateinit var filesDir: File
 
     private val absolutePath = "/storage/emulated/0/owncloud"
@@ -31,22 +28,22 @@ class ScopedStorageProviderTest {
     private val accountName = "owncloud"
     private val newName = "owncloudNewName.txt"
     private val uriEncoded = "/path/to/remote/?x=%D1%88%D0%B5%D0%BB%D0%BB%D1%8B"
-    private val expectedValue: Long = 100
+    private val rootFolderName = "root_folder"
+    private val rootFolderPath = absolutePath + File.separator + rootFolderName
+    private val expectedSizeOfDirectoryValue: Long = 100
     private val separator = File.separator
+    private val accountDirectoryPath = absolutePath + File.separator + rootFolderName + File.separator + uriEncoded
 
     @Before
     fun setUp() {
         context = mockk()
         filesDir = mockk()
-        rootFolderName = "root_folder"
         scopedStorageProvider = ScopedStorageProvider(rootFolderName, context)
-        accountDirectoryPath = absolutePath + File.separator + rootFolderName + File.separator + uriEncoded
 
-        rootFolderPath = absolutePath + File.separator + rootFolderName
         file = mockk<File>().apply {
             every { exists() } returns true
             every { isDirectory } returns false
-            every { length() } returns expectedValue
+            every { length() } returns expectedSizeOfDirectoryValue
         }
 
         directory = mockk<File>().apply {
@@ -64,7 +61,7 @@ class ScopedStorageProviderTest {
         val result = scopedStorageProvider.getPrimaryStorageDirectory()
         assertEquals(filesDir, result)
 
-        verify(exactly = 1) {
+        verify (exactly = 1) {
             context.filesDir
         }
     }
@@ -74,7 +71,7 @@ class ScopedStorageProviderTest {
         val actualPath = scopedStorageProvider.getRootFolderPath()
         assertEquals(rootFolderPath, actualPath)
 
-        verify (exactly = 1)  {
+        verify (exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
 
@@ -90,7 +87,7 @@ class ScopedStorageProviderTest {
 
         assertEquals(expectedPath, actualPath)
 
-        verify(exactly = 1) {
+        verify (exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
     }
@@ -107,7 +104,7 @@ class ScopedStorageProviderTest {
 
         assertEquals(expectedPath, actualPath)
 
-        verify(exactly = 1) {
+        verify (exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
     }
@@ -193,6 +190,10 @@ class ScopedStorageProviderTest {
         val expectedValue = rootFolderPath + File.separator + TEMPORAL_FOLDER_NAME + File.separator + uriEncoded
         val actualValue = scopedStorageProvider.getTemporalPath(accountName, spaceId)
         assertEquals(expectedValue, actualValue)
+
+        verify (exactly = 1) {
+            scopedStorageProvider.getPrimaryStorageDirectory()
+        }
     }
 
     @Test
@@ -202,7 +203,7 @@ class ScopedStorageProviderTest {
 
         assertEquals(expectedValue, actualValue)
 
-        verify(exactly = 1) {
+        verify (exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
     }
@@ -217,7 +218,7 @@ class ScopedStorageProviderTest {
 
         assertEquals(expectedUsableSpace, actualUsableSpace)
 
-        verify(exactly = 1) {
+        verify (exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
             filesDir.usableSpace
         }
@@ -230,9 +231,9 @@ class ScopedStorageProviderTest {
 
         val actualValue = scopedStorageProvider.sizeOfDirectory(filesDir)
 
-        assertEquals(expectedValue, actualValue)
+        assertEquals(expectedSizeOfDirectoryValue, actualValue)
 
-        verify(exactly = 1) {
+        verify (exactly = 1) {
             filesDir.exists()
             filesDir.listFiles()
         }
@@ -245,9 +246,9 @@ class ScopedStorageProviderTest {
         every { fileSizeDirectory.listFiles() } returns arrayOf(file)
 
         val actualValue = scopedStorageProvider.sizeOfDirectory(fileSizeDirectory)
-        assertEquals(expectedValue, actualValue)
+        assertEquals(expectedSizeOfDirectoryValue, actualValue)
 
-        verify(exactly = 1) {
+        verify (exactly = 1) {
             fileSizeDirectory.exists()
             fileSizeDirectory.listFiles()
         }
@@ -263,7 +264,7 @@ class ScopedStorageProviderTest {
 
         assertEquals(expectedSizeOfDirectoryValue, actualValue)
 
-        verify(exactly = 1) {
+        verify (exactly = 1) {
             filesDir.exists()
         }
     }
@@ -274,8 +275,8 @@ class ScopedStorageProviderTest {
         every { Uri.encode(any(), any()) } returns uriEncoded
         scopedStorageProvider.deleteLocalFile(OC_FILE)
 
-        verify(exactly = 1) {
-                scopedStorageProvider.getPrimaryStorageDirectory()
+        verify (exactly = 1) {
+            scopedStorageProvider.getPrimaryStorageDirectory()
         }
     }
 
@@ -287,7 +288,7 @@ class ScopedStorageProviderTest {
         every { Uri.encode(any(), any()) } returns uriEncoded
         scopedStorageProvider.moveLocalFile(OC_FILE, finalStoragePath)
 
-        verify(exactly = 1) {
+        verify (exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
 
         }
@@ -295,7 +296,7 @@ class ScopedStorageProviderTest {
 
     @Test
     fun `deleteCacheIfNeeded - should delete cache file`() {
-        val transfer : OCTransfer = mockk()
+        val transfer: OCTransfer = mockk()
         val accountName = "testAccount"
         val localPath = "/file.txt"
 
@@ -306,7 +307,7 @@ class ScopedStorageProviderTest {
 
         scopedStorageProvider.deleteCacheIfNeeded(transfer)
 
-        verify(exactly = 1) {
+        verify (exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
     }
@@ -320,7 +321,6 @@ class ScopedStorageProviderTest {
         }
         return newRemotePath
     }
-
 
     companion object {
         private const val LOGS_FOLDER_NAME = "logs"
