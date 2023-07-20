@@ -34,7 +34,7 @@ class OCSharedPreferencesProviderTest {
     }
 
     @Test
-    fun `put String - ok`() {
+    fun `putString put a String in sharedPreferences`() {
         val value = "test_value"
         ocSharedPreferencesProvider.putString(key, value)
 
@@ -44,7 +44,7 @@ class OCSharedPreferencesProviderTest {
     }
 
     @Test
-    fun `get String - ok`() {
+    fun `getString returns a String from sharedPreferences`() {
         val defaultValue = "default_value"
         val savedValue = "saved_value"
 
@@ -59,7 +59,7 @@ class OCSharedPreferencesProviderTest {
     }
 
     @Test
-    fun `put Int - ok`() {
+    fun `putInt put a Int in sharedPreferences`() {
         val value = 12
         ocSharedPreferencesProvider.putInt(key, value)
 
@@ -69,7 +69,7 @@ class OCSharedPreferencesProviderTest {
     }
 
     @Test
-    fun `get Int - ok`() {
+    fun `getInt returns a Int from sharedPreferences`() {
         val defaultValue = 111
         val savedValue = 233
 
@@ -84,7 +84,7 @@ class OCSharedPreferencesProviderTest {
     }
 
     @Test
-    fun `put Long - ok`() {
+    fun `putLong put a Long in sharedPreferences`() {
         val value = 12L
         ocSharedPreferencesProvider.putLong(key, value)
 
@@ -94,7 +94,7 @@ class OCSharedPreferencesProviderTest {
     }
 
     @Test
-    fun `get Long - ok`() {
+    fun `getLong returns a Long from sharedPreferences`() {
         val defaultValue = 1411L
         val savedValue = 73L
 
@@ -109,7 +109,7 @@ class OCSharedPreferencesProviderTest {
     }
 
     @Test
-    fun `put Boolean - ok`() {
+    fun `putBoolean put a Boolean in sharedPreferences`() {
         val value = true
         ocSharedPreferencesProvider.putBoolean(key, value)
 
@@ -119,7 +119,7 @@ class OCSharedPreferencesProviderTest {
     }
 
     @Test
-    fun `get Boolean - ok`() {
+    fun `getBoolean returns a Boolean from sharedPreferences`() {
         val defaultValue = false
         val savedValue = true
 
@@ -134,7 +134,7 @@ class OCSharedPreferencesProviderTest {
     }
 
     @Test
-    fun `contains preference - ok`() {
+    fun `containsPreference verify if the value with the key is contained in sharedPreferences`() {
         every { sharedPreferences.contains(key) } returns true
 
         val result = ocSharedPreferencesProvider.containsPreference(key)
@@ -146,7 +146,7 @@ class OCSharedPreferencesProviderTest {
     }
 
     @Test
-    fun `remove preferences - ok`() {
+    fun `removePreferences remove a preference by key`() {
         ocSharedPreferencesProvider.removePreference(key)
 
         verify (exactly = 1) {
