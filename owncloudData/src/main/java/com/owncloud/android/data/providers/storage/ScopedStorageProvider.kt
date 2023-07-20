@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.storage
+package com.owncloud.android.data.providers.storage
 
 import android.content.Context
 import java.io.File

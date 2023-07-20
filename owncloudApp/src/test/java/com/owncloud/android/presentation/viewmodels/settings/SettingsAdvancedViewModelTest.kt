@@ -19,7 +19,7 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedViewModel
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
 import io.mockk.every

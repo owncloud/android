@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.preferences.datasources
+package com.owncloud.android.data.providers.datasources
 
 interface SharedPreferencesProvider {
 
