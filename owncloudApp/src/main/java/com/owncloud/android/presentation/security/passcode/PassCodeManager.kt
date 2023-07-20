@@ -26,7 +26,7 @@ import android.content.Intent
 import android.os.PowerManager
 import android.os.SystemClock
 import com.owncloud.android.MainApp.Companion.appContext
-import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
+import com.owncloud.android.data.providers.datasources.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.presentation.security.LockTimeout
 import com.owncloud.android.presentation.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.security.PREFERENCE_LOCK_TIMEOUT

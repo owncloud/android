@@ -23,7 +23,7 @@ import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.repository.OCFileRepository
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
-import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.data.providers.storage.LocalStorageProvider
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME

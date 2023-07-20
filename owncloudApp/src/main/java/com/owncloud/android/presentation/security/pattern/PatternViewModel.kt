@@ -21,7 +21,7 @@
 package com.owncloud.android.presentation.security.pattern
 
 import androidx.lifecycle.ViewModel
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.datasources.SharedPreferencesProvider
 import com.owncloud.android.presentation.security.biometric.BiometricActivity
 
 class PatternViewModel(

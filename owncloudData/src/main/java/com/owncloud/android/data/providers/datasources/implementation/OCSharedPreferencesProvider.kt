@@ -17,12 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.preferences.datasources.implementation
+package com.owncloud.android.data.providers.datasources.implementation
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.datasources.SharedPreferencesProvider
 
 class OCSharedPreferencesProvider(
     context: Context
