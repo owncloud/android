@@ -90,18 +90,8 @@ class CreateFolderDialogFragment : DialogFragment() {
 
             okButton.setOnClickListener {
                 var fileName: String = inputText.text.toString()
-                if (fileName.isEmpty()) {
-                    error = getString(R.string.uploader_upload_text_dialog_filename_error_empty)
-                } else {
-                    null
-                }
-                if (error != null) {
-                    inputLayout.isErrorEnabled = true
-                    inputLayout.error = error
-                } else {
-                    createFolderListener.onFolderNameSet(fileName, parentFolder)
-                    dialog?.dismiss()
-                }
+                createFolderListener.onFolderNameSet(fileName, parentFolder)
+                dialog?.dismiss()
             }
         }
 
@@ -110,6 +100,7 @@ class CreateFolderDialogFragment : DialogFragment() {
 
             if (text.isNullOrBlank()) {
                 okButton.isEnabled = false
+                error = getString(R.string.uploader_upload_text_dialog_filename_error_empty)
             } else if (text.length > MAX_FILENAME_LENGTH) {
                 error = String.format(
                     getString(R.string.uploader_upload_text_dialog_filename_error_length_max),
@@ -120,13 +111,11 @@ class CreateFolderDialogFragment : DialogFragment() {
             } else {
                 okButton.isEnabled = true
                 error = null
-                inputLayout.error = null
-                inputLayout.isErrorEnabled = false
+                inputLayout.error = error
             }
 
             if (error != null) {
                 okButton.isEnabled = false
-                inputLayout.isErrorEnabled = true
                 inputLayout.error = error
             }
         }
