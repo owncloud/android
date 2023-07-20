@@ -38,7 +38,7 @@ class OCSharedPreferencesProviderTest {
         val value = "test_value"
         ocSharedPreferencesProvider.putString(key, value)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             editor.putString(key, value).apply()
         }
     }
@@ -53,7 +53,7 @@ class OCSharedPreferencesProviderTest {
         val result = ocSharedPreferencesProvider.getString(key, defaultValue)
         assertEquals(savedValue, result)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             sharedPreferences.getString(key, defaultValue)
         }
     }
@@ -63,7 +63,7 @@ class OCSharedPreferencesProviderTest {
         val value = 12
         ocSharedPreferencesProvider.putInt(key, value)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             editor.putInt(key, value).apply()
         }
     }
@@ -78,7 +78,7 @@ class OCSharedPreferencesProviderTest {
         val result = ocSharedPreferencesProvider.getInt(key, defaultValue)
         assertEquals(savedValue, result)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             sharedPreferences.getInt(key, defaultValue)
         }
     }
@@ -88,7 +88,7 @@ class OCSharedPreferencesProviderTest {
         val value = 12L
         ocSharedPreferencesProvider.putLong(key, value)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             editor.putLong(key, value).apply()
         }
     }
@@ -103,7 +103,7 @@ class OCSharedPreferencesProviderTest {
         val result = ocSharedPreferencesProvider.getLong(key, defaultValue)
         assertEquals(savedValue, result)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             sharedPreferences.getLong(key, defaultValue)
         }
     }
@@ -113,7 +113,7 @@ class OCSharedPreferencesProviderTest {
         val value = true
         ocSharedPreferencesProvider.putBoolean(key, value)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             editor.putBoolean(key, value).apply()
         }
     }
@@ -128,7 +128,7 @@ class OCSharedPreferencesProviderTest {
         val result = ocSharedPreferencesProvider.getBoolean(key, defaultValue)
         assertTrue(result)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             sharedPreferences.getBoolean(key, defaultValue)
         }
     }
@@ -140,7 +140,7 @@ class OCSharedPreferencesProviderTest {
         val result = ocSharedPreferencesProvider.containsPreference(key)
         assertTrue(result)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             sharedPreferences.contains(key)
         }
     }
@@ -149,7 +149,7 @@ class OCSharedPreferencesProviderTest {
     fun `removePreferences remove a preference by key`() {
         ocSharedPreferencesProvider.removePreference(key)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             editor.remove(key).apply()
         }
     }
