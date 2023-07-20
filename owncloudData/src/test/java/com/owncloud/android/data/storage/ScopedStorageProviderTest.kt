@@ -57,7 +57,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `get primary storage directory - ok - should return the filesDir`() {
+    fun `getPrimaryStorageDirectory returns filesDir`() {
         val result = scopedStorageProvider.getPrimaryStorageDirectory()
         assertEquals(filesDir, result)
 
@@ -67,7 +67,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `get root folder path - ok - String`() {
+    fun `getRootFolderPath returns the root folder path String`() {
         val actualPath = scopedStorageProvider.getRootFolderPath()
         assertEquals(rootFolderPath, actualPath)
 
@@ -78,7 +78,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `get default save path if there are space - ok - should return the String with spaces`() {
+    fun `getDefaultSavePathFor returns the path with spaces when there is a space`() {
         mockkStatic(Uri::class)
         every { Uri.encode(accountName, "@") } returns uriEncoded
 
@@ -93,7 +93,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `get default save path if there are not space - ok - should return the String without spaces`() {
+    fun `getDefaultSavePathFor returns the path without spaces when there is not space`() {
         val spaceId = null
 
         mockkStatic(Uri::class)
@@ -110,7 +110,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `get expected remote path with parent variable with separator in the end - ok - should return String expected remote path`() {
+    fun `getExpectedRemotePath returns expected remote path with separator in the end when there is a folder and separator`() {
 
         val isFolder = true
         val parent = "$separator storage$separator emulated$separator 0$separator owncloud$separator".replace(" ", "")
@@ -122,7 +122,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `get expected remote path with parent variable with separator in the end and no folder - ok - should return String expected remote path`() {
+    fun `getExpectedRemotePath returns expected remote path with separator in the end when there is separator and no folder`() {
 
         val isFolder = false
         val parent = "$separator storage$separator emulated$separator 0$separator owncloud$separator".replace(" ", "")
@@ -134,7 +134,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `get expected remote path with parent variable without separator - ok - should return String expected remote path`() {
+    fun `getExpectedRemotePath returns expected remote path with separator in the end when there is no separator and folder is true`() {
 
         val isFolder = true
         val parent = "$separator storage$separator emulated$separator 0$separator owncloud".replace(" ", "")
@@ -146,7 +146,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `get expected remote path with parent variable without separator and it is not a folder - ok - should return String expected remote path`() {
+    fun `getExpectedRemotePath returns expected remote path with separator in the end when there is no separator and folder is false`() {
         val isFolder = false
         val parent = "$separator storage$separator emulated$separator 0$separator owncloud".replace(" ", "")
 
@@ -157,7 +157,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun `test get expected remote path throws illegalArgumentException - ko - IllegalArgumentException`() {
+    fun `getExpectedRemotePath returns a illegalArgumentException when there is not file`() {
         val isFolder = false
         val remotePath = ""
 
@@ -165,7 +165,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `get temporal path if there are a Space - ok - String`() {
+    fun `getTemporalPath returns expected temporal path with separator and space when there is a space`() {
         mockkStatic(Uri::class)
         every { Uri.encode(accountName, "@") } returns uriEncoded
 
@@ -181,7 +181,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `get temporal path if there are not a Space - ok - String`() {
+    fun `getTemporalPath returns expected temporal path neither with separator not space when there is not a space`() {
         val spaceId = null
 
         mockkStatic(Uri::class)
@@ -197,7 +197,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `get log path - ok - String`() {
+    fun `getLogsPath returns logs path`() {
         val expectedValue = rootFolderPath + File.separator + LOGS_FOLDER_NAME + File.separator
         val actualValue = scopedStorageProvider.getLogsPath()
 
@@ -209,7 +209,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `get usable space  - ok -  Long`() {
+    fun `getUsableSpace returns a usable space from the storage directory`() {
         val expectedUsableSpace: Long = 1000000
 
         every { filesDir.usableSpace } returns expectedUsableSpace
@@ -225,7 +225,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `test sizeOfDirectory when isDirectory is true - ok - Long`() {
+    fun `sizeOfDirectory returns the sum the file size in bytes (Long) when isDirectory is true doing a recursive call if it's a directory`() {
         every { filesDir.exists() } returns true
         every { filesDir.listFiles() } returns arrayOf(directory)
 
@@ -240,7 +240,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `test sizeOfDirectory when isDirectory is false - ok - return Long`() {
+    fun `sizeOfDirectory returns the sum the file size in bytes (Long) when isDirectory is false without doing a recursive call`() {
         val fileSizeDirectory: File = mockk()
         every { fileSizeDirectory.exists() } returns true
         every { fileSizeDirectory.listFiles() } returns arrayOf(file)
@@ -255,7 +255,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `size of directory if dir not exists - ok - return a Long`() {
+    fun `sizeOfDirectory returns zero value when directory not exists`() {
         val expectedSizeOfDirectoryValue: Long = 0
 
         every { filesDir.exists() } returns false
@@ -270,7 +270,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `delete local file - ok `() {
+    fun `deleteLocalFile calls getPrimaryStorageDirectory()`() {
         mockkStatic(Uri::class)
         every { Uri.encode(any(), any()) } returns uriEncoded
         scopedStorageProvider.deleteLocalFile(OC_FILE)
@@ -281,7 +281,7 @@ class ScopedStorageProviderTest {
     }
 
     @Test
-    fun `move local file - ok `() {
+    fun `moveLocalFile calls getPrimaryStorageDirectory()`() {
         val finalStoragePath: String = "file.txt"
         mockkStatic(Uri::class)
 
@@ -290,12 +290,11 @@ class ScopedStorageProviderTest {
 
         verify (exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
-
         }
     }
 
     @Test
-    fun `deleteCacheIfNeeded - should delete cache file`() {
+    fun `deleteCacheIfNeeded delete cache file when  transfer local path start with cacheDir`() {
         val transfer: OCTransfer = mockk()
         val accountName = "testAccount"
         val localPath = "/file.txt"
