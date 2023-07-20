@@ -808,9 +808,6 @@ class MainFileListFragment : Fragment(),
                 val filename = input.text.toString()
                 var error: String? = null
 
-                if (filename.isEmpty() || filename.isBlank()) {
-                    error = getString(R.string.uploader_upload_text_dialog_filename_error_empty)
-                }
                 if (error != null) {
                     showMessageInSnackbar(error)
                 } else {
@@ -833,6 +830,7 @@ class MainFileListFragment : Fragment(),
             var error: String? = null
             if (text.isNullOrBlank()) {
                 okButton.isEnabled = false
+                error = getString(R.string.uploader_upload_text_dialog_filename_error_empty)
             } else if (text.length > MAX_FILENAME_LENGTH) {
                 error = String.format(
                     getString(R.string.uploader_upload_text_dialog_filename_error_length_max),
@@ -843,13 +841,11 @@ class MainFileListFragment : Fragment(),
             } else {
                 okButton.isEnabled = true
                 error = null
-                inputLayout.error = null
-                inputLayout.isErrorEnabled = false
+                inputLayout.error = error
             }
 
             if (error != null) {
                 okButton.isEnabled = false
-                inputLayout.isErrorEnabled = true
                 inputLayout.error = error
             }
         }

@@ -876,18 +876,15 @@ public class ReceiveExternalFilesActivity extends FileActivity
             button.setOnClickListener(view -> {
                 String fileName = input.getText().toString();
                 String error = null;
-                if (fileName.length() == 0) {
-                    error = getString(R.string.uploader_upload_text_dialog_filename_error_empty);
-                } else {
-                    fileName += ".txt";
-                    String filePath = savePlainTextToFile(fileName);
-                    ArrayList<String> fileToUpload = new ArrayList<>();
-                    fileToUpload.add(filePath);
-                    @NotNull Lazy<TransfersViewModel> transfersViewModelLazy = inject(TransfersViewModel.class);
-                    TransfersViewModel transfersViewModel = transfersViewModelLazy.getValue();
-                    transfersViewModel.uploadFilesFromSystem(getAccount().name, fileToUpload, mUploadPath, mPersonalSpaceId);
-                    finish();
-                }
+                fileName += ".txt";
+                String filePath = savePlainTextToFile(fileName);
+                ArrayList<String> fileToUpload = new ArrayList<>();
+                fileToUpload.add(filePath);
+                @NotNull Lazy<TransfersViewModel> transfersViewModelLazy = inject(TransfersViewModel.class);
+                TransfersViewModel transfersViewModel = transfersViewModelLazy.getValue();
+                transfersViewModel.uploadFilesFromSystem(getAccount().name, fileToUpload, mUploadPath, mPersonalSpaceId);
+                finish();
+
                 inputLayout.setErrorEnabled(error != null);
                 inputLayout.setError(error);
             });
@@ -907,6 +904,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 Matcher matcher = pattern.matcher(fileName);
                 if (charSequence == null || charSequence.toString().trim().isEmpty()) {
                     okButton.setEnabled(false);
+                    error = getString(R.string.uploader_upload_text_dialog_filename_error_empty);
                 } else if (charSequence.length() > MAX_FILENAME_LENGTH) {
                     error = String.format(getString(R.string.uploader_upload_text_dialog_filename_error_length_max),
                             MAX_FILENAME_LENGTH);
@@ -915,13 +913,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 } else {
                     okButton.setEnabled(true);
                     error = null;
-                    inputLayout.setError(null);
-                    inputLayout.setErrorEnabled(false);
+                    inputLayout.setError(error);
                 }
 
                 if (error != null) {
                     okButton.setEnabled(false);
-                    inputLayout.setErrorEnabled(true);
                     inputLayout.setError(error);
                 }
             }
