@@ -62,7 +62,7 @@ class ScopedStorageProviderTest {
         val result = scopedStorageProvider.getPrimaryStorageDirectory()
         assertEquals(filesDir, result)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             context.filesDir
         }
     }
@@ -72,7 +72,7 @@ class ScopedStorageProviderTest {
         val actualPath = scopedStorageProvider.getRootFolderPath()
         assertEquals(rootFolderPath, actualPath)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
 
@@ -88,7 +88,7 @@ class ScopedStorageProviderTest {
 
         assertEquals(expectedPath, actualPath)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
     }
@@ -105,7 +105,7 @@ class ScopedStorageProviderTest {
 
         assertEquals(expectedPath, actualPath)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
     }
@@ -176,7 +176,7 @@ class ScopedStorageProviderTest {
         val actualValue = scopedStorageProvider.getTemporalPath(accountName, spaceId)
         assertEquals(expectedValue, actualValue)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
     }
@@ -192,7 +192,7 @@ class ScopedStorageProviderTest {
         val actualValue = scopedStorageProvider.getTemporalPath(accountName, spaceId)
         assertEquals(expectedValue, actualValue)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
     }
@@ -204,7 +204,7 @@ class ScopedStorageProviderTest {
 
         assertEquals(expectedValue, actualValue)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
     }
@@ -219,7 +219,7 @@ class ScopedStorageProviderTest {
 
         assertEquals(expectedUsableSpace, actualUsableSpace)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
             filesDir.usableSpace
         }
@@ -234,7 +234,7 @@ class ScopedStorageProviderTest {
 
         assertEquals(expectedSizeOfDirectoryValue, actualValue)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             filesDir.exists()
             filesDir.listFiles()
         }
@@ -249,7 +249,7 @@ class ScopedStorageProviderTest {
         val actualValue = scopedStorageProvider.sizeOfDirectory(fileSizeDirectory)
         assertEquals(expectedSizeOfDirectoryValue, actualValue)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             fileSizeDirectory.exists()
             fileSizeDirectory.listFiles()
         }
@@ -265,7 +265,7 @@ class ScopedStorageProviderTest {
 
         assertEquals(expectedSizeOfDirectoryValue, actualValue)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             filesDir.exists()
         }
     }
@@ -276,7 +276,7 @@ class ScopedStorageProviderTest {
         every { Uri.encode(any(), any()) } returns uriEncoded
         scopedStorageProvider.deleteLocalFile(OC_FILE)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
     }
@@ -289,7 +289,7 @@ class ScopedStorageProviderTest {
         every { Uri.encode(any(), any()) } returns uriEncoded
         scopedStorageProvider.moveLocalFile(OC_FILE, finalStoragePath)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
     }
@@ -307,7 +307,7 @@ class ScopedStorageProviderTest {
 
         scopedStorageProvider.deleteCacheIfNeeded(transfer)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             scopedStorageProvider.getPrimaryStorageDirectory()
         }
     }
