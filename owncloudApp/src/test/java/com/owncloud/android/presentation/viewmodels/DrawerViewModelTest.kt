@@ -18,7 +18,7 @@
  */
 package com.owncloud.android.presentation.viewmodels
 
-import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.data.providers.storage.LocalStorageProvider
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase

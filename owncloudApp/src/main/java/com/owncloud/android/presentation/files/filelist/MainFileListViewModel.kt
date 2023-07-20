@@ -25,7 +25,7 @@ package com.owncloud.android.presentation.files.filelist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.datasources.SharedPreferencesProvider
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryForMimeTypeAsStreamUseCase
 import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryWhichAllowCreationAsStreamUseCase

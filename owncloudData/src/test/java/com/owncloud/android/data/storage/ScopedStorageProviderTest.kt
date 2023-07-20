@@ -2,6 +2,7 @@ package com.owncloud.android.data.storage
 
 import android.content.Context
 import android.net.Uri
+import com.owncloud.android.data.providers.storage.ScopedStorageProvider
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
