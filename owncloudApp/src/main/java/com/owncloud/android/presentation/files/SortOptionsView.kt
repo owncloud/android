@@ -24,8 +24,8 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.owncloud.android.R
-import com.owncloud.android.data.providers.datasources.SharedPreferencesProvider
-import com.owncloud.android.data.providers.datasources.implementation.OCSharedPreferencesProvider
+import com.owncloud.android.data.providers.SharedPreferencesProvider
+import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.databinding.SortOptionsLayoutBinding
 import com.owncloud.android.presentation.files.SortOrder.Companion.PREF_FILE_LIST_SORT_ORDER
 import com.owncloud.android.presentation.files.SortType.Companion.PREF_FILE_LIST_SORT_TYPE

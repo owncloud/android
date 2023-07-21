@@ -23,7 +23,7 @@ import android.accounts.AccountManager
 import android.content.Context
 import androidx.core.net.toUri
 import com.owncloud.android.data.authentication.SELECTED_ACCOUNT
-import com.owncloud.android.data.providers.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.lib.common.ConnectionValidator
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.lib.common.OwnCloudClient

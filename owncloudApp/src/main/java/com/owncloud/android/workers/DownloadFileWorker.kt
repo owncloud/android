@@ -31,7 +31,7 @@ import androidx.work.workDataOf
 import at.bitfire.dav4jvm.exception.UnauthorizedException
 import com.owncloud.android.R
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.data.providers.storage.LocalStorageProvider
+import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.domain.exceptions.CancelledException
 import com.owncloud.android.domain.exceptions.LocalStorageNotMovedException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException

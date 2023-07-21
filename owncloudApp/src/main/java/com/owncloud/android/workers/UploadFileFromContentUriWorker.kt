@@ -32,7 +32,7 @@ import androidx.work.workDataOf
 import com.owncloud.android.R
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.data.providers.storage.LocalStorageProvider
+import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
