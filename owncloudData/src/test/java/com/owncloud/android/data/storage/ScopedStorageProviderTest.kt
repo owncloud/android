@@ -114,7 +114,7 @@ class ScopedStorageProviderTest {
     fun `getExpectedRemotePath returns expected remote path with separator in the end when there isSeparator and isFolderTrue`() {
 
         val isFolder = true
-        val parent = "${separator}storage${separator}emulated${separator}0${separator}owncloud${separator}"
+        val parent = separator + "storage" + separator + "emulated" + separator + "0" + separator + "owncloud" + separator
         val expectedPath = conditionsExpectedRemotePath(parent, newName, isFolder)
         val actualPath = scopedStorageProvider.getExpectedRemotePath(remotePath, newName, isFolder)
 
@@ -125,7 +125,7 @@ class ScopedStorageProviderTest {
     fun `getExpectedRemotePath returns expected remote path with separator in the end when isSeparator and isFolderFalse`() {
 
         val isFolder = false
-        val parent = "${separator}storage${separator}emulated${separator}0${separator}owncloud${separator}"
+        val parent = separator + "storage" + separator + "emulated" + separator + "0" + separator + "owncloud" + separator
 
         val expectedPath = conditionsExpectedRemotePath(parent, newName, isFolder)
         val actualPath = scopedStorageProvider.getExpectedRemotePath(remotePath, newName, isFolder)
@@ -137,7 +137,8 @@ class ScopedStorageProviderTest {
     fun `getExpectedRemotePath returns expected remote path with separator in the end when isNotSeparator and isFolderTrue`() {
 
         val isFolder = true
-        val parent = "${separator}storage${separator}emulated${separator}0${separator}owncloud"
+        val parent = separator + "storage" + separator + "emulated" + separator + "0" + separator + "owncloud"
+
 
         val expectedPath = conditionsExpectedRemotePath(parent, newName, isFolder)
         val actualPath = scopedStorageProvider.getExpectedRemotePath(remotePath, newName, isFolder)
@@ -148,7 +149,7 @@ class ScopedStorageProviderTest {
     @Test
     fun `getExpectedRemotePath returns expected remote path with separator in the end when isNotSeparator and isFolderFalse`() {
         val isFolder = false
-        val parent = "${separator}storage${separator}emulated${separator}0${separator}owncloud"
+        val parent = separator + "storage" + separator + "emulated" + separator + "0" + separator + "owncloud"
 
         val expectedPath = conditionsExpectedRemotePath(parent, newName, isFolder)
         val actualPath = scopedStorageProvider.getExpectedRemotePath(remotePath, newName, isFolder)
