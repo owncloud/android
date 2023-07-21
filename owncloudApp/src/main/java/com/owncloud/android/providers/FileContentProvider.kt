@@ -58,8 +58,8 @@ import com.owncloud.android.data.files.db.OCFileEntity
 import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataSource
 import com.owncloud.android.data.folderbackup.datasources.implementation.OCFolderBackupLocalDataSource
 import com.owncloud.android.data.migrations.CameraUploadsMigrationToRoom
-import com.owncloud.android.data.providers.datasources.SharedPreferencesProvider
-import com.owncloud.android.data.providers.datasources.implementation.OCSharedPreferencesProvider
+import com.owncloud.android.data.providers.SharedPreferencesProvider
+import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior

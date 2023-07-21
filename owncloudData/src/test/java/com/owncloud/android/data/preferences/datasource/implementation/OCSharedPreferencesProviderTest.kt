@@ -3,7 +3,7 @@ package com.owncloud.android.data.preferences.datasource.implementation
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.owncloud.android.data.providers.datasources.implementation.OCSharedPreferencesProvider
+import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
