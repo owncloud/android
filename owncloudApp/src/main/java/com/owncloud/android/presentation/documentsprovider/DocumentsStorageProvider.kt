@@ -38,7 +38,7 @@ import android.provider.DocumentsContract
 import android.provider.DocumentsProvider
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.data.providers.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
