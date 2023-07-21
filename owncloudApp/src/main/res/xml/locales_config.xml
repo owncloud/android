@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="en"/> <!-- English (United Kingdom) -->
+    <locale android:name="de"/> <!-- German (Germany) -->
+    <locale android:name="es"/> <!-- Spanish (Spain) -->
     <locale android:name="af"/> <!-- Afrikaans (South Africa) -->
     <locale android:name="am"/> <!-- Amharic (Ethiopia) -->
     <locale android:name="ar"/> <!-- Arabic (Arab World) -->
@@ -19,7 +22,6 @@
     <locale android:name="cs"/> <!-- Czech (Czech Republic) -->
     <locale android:name="cy"/> <!-- Welsh (Wales) -->
     <locale android:name="da"/> <!-- Danish (Denmark) -->
-    <locale android:name="de"/> <!-- German (Germany) -->
     <locale android:name="de-AT"/> <!-- German (Austria) -->
     <locale android:name="de-CH"/> <!-- German (Switzerland) -->
     <locale android:name="de-LI"/> <!-- German (Liechtenstein) -->
@@ -30,7 +32,6 @@
     <locale android:name="en-GB"/> <!-- English (United Kingdom) -->
     <locale android:name="en-US"/> <!-- English (United States) -->
     <locale android:name="eo"/> <!-- Esperanto (Worldwide) -->
-    <locale android:name="es"/> <!-- Spanish (Spain) -->
     <locale android:name="es-419"/> <!-- Spanish (Latin America) -->
     <locale android:name="et"/> <!-- Estonian (Estonia) -->
     <locale android:name="eu"/> <!-- Basque (Basque Country) -->
