@@ -1,0 +1,8 @@
+Enhancement: Show "More" button for every file list item
+
+A 3-dot button has been added to every file, where the options that we have
+in the 3-dot menu in multiselection for that single file have been added for a
+quicker access to them. Also, some options have been reordered.
+
+https://github.com/owncloud/android/issues/2885
+https://github.com/owncloud/android/pull/4076

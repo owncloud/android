@@ -88,10 +88,28 @@ class FilterFileMenuOptionsUseCase(
         if (displaySelectInverse) {
             optionsToShow.add(FileMenuOption.SELECT_INVERSE)
         }
+        // Share
+        if (!onlyAvailableOfflineFiles && (shareViaLinkAllowed || shareWithUsersAllowed) && resharingAllowed &&
+            isPersonalSpace && hasResharePermission) {
+            optionsToShow.add(FileMenuOption.SHARE)
+        }
+        // Open with (different to preview!)
+        if (!isAnyFileSynchronizing && isSingleFile(files)) {
+            optionsToShow.add(FileMenuOption.OPEN_WITH)
+        }
         // Download
         if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
             !anyFolder(files) && !anyFileDownloaded(files)) {
             optionsToShow.add(FileMenuOption.DOWNLOAD)
+        }
+        // Synchronize
+        if (!isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
+            (anyFileDownloaded(files) || anyFolder(files))) {
+            optionsToShow.add(FileMenuOption.SYNC)
+        }
+        // Cancel sync
+        if (isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles && !anyAvailableOfflineFile(files)) {
+            optionsToShow.add(FileMenuOption.CANCEL_SYNC)
         }
         // Rename
         if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
@@ -107,32 +125,6 @@ class FilterFileMenuOptionsUseCase(
         if (!isAnyFileSynchronizing && !isAnyFileVideoPreviewing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles) {
             optionsToShow.add(FileMenuOption.COPY)
         }
-        // Remove
-        if (!isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles && hasRemovePermission) {
-            optionsToShow.add(FileMenuOption.REMOVE)
-        }
-        // Open with (different to preview!)
-        if (!isAnyFileSynchronizing && isSingleFile(files)) {
-            optionsToShow.add(FileMenuOption.OPEN_WITH)
-        }
-        // Synchronize
-        if (!isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles &&
-            (anyFileDownloaded(files) || anyFolder(files))) {
-            optionsToShow.add(FileMenuOption.SYNC)
-        }
-        // Cancel sync
-        if (isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles && !anyAvailableOfflineFile(files)) {
-            optionsToShow.add(FileMenuOption.CANCEL_SYNC)
-        }
-        // Share
-        if (!onlyAvailableOfflineFiles && (shareViaLinkAllowed || shareWithUsersAllowed) && resharingAllowed &&
-            isPersonalSpace && hasResharePermission) {
-            optionsToShow.add(FileMenuOption.SHARE)
-        }
-        // Details
-        if (isSingleFile(files)) {
-            optionsToShow.add(FileMenuOption.DETAILS)
-        }
         // Send
         if (!isAnyFileSynchronizing && !isAnyFileVideoStreaming && !onlyAvailableOfflineFiles && !anyFolder(files) &&
             (allFilesDownloaded(files) || isSingleFile(files)) && sendAllowed) {
@@ -145,6 +137,14 @@ class FilterFileMenuOptionsUseCase(
         // Unset as available offline
         if (anyAvailableOfflineFile(files) && !isAnyFileVideoStreaming) {
             optionsToShow.add(FileMenuOption.UNSET_AV_OFFLINE)
+        }
+        // Details
+        if (isSingleFile(files)) {
+            optionsToShow.add(FileMenuOption.DETAILS)
+        }
+        // Remove
+        if (!isAnyFileSynchronizing && !onlyAvailableOfflineFiles && !onlySharedByLinkFiles && hasRemovePermission) {
+            optionsToShow.add(FileMenuOption.REMOVE)
         }
 
         return optionsToShow
