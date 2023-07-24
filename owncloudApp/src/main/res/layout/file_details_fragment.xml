@@ -225,7 +225,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fdCreatedLabel"
             app:layout_constraintTop_toBottomOf="@id/fdModified"
-            tools:text="@tools:sample/lorem[6]" />
+            tools:text="@tools:sample/lorem[6]"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/fdLastSyncLabel"
@@ -236,7 +237,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintBottom_toBottomOf="@id/fdLastSync"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/fdLastSync" />
+            app:layout_constraintTop_toTopOf="@id/fdLastSync"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/fdLastSync"
@@ -250,7 +252,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fdLastSyncLabel"
             app:layout_constraintTop_toBottomOf="@id/fdCreated"
-            tools:text="@tools:sample/lorem[6]" />
+            tools:text="@tools:sample/lorem[6]"
+            tools:visibility="visible"/>
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider3"
@@ -269,7 +272,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintBottom_toBottomOf="@id/fdPath"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/fdPath" />
+            app:layout_constraintTop_toTopOf="@id/fdPath"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/fdPath"
@@ -283,7 +287,50 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fdPathLabel"
             app:layout_constraintTop_toBottomOf="@id/divider3"
-            tools:text="@tools:sample/lorem[6]" />
+            tools:text="@tools:sample/lorem[6]"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/fdSpaceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/space_label"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            app:layout_constraintBottom_toBottomOf="@id/fdSpace"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/fdSpace"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/fdSpace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="end"
+            android:paddingRight="5dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fdIconSpace"
+            app:layout_constraintStart_toEndOf="@id/fdSpaceLabel"
+            app:layout_constraintTop_toBottomOf="@id/fdPath"
+            tools:text="asasa"
+            tools:visibility="visible"/>
+
+        <ImageButton
+            android:id="@+id/fdIconSpace"
+            android:layout_width="@dimen/file_indicator_pin_size_grid"
+            android:layout_height="@dimen/file_indicator_pin_size_grid"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/filedetails_cancel_btn_content_description"
+            android:src="@drawable/ic_spaces"
+            android:scaleType="fitCenter"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@id/fdSpace"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fdSpace"
+            app:layout_constraintTop_toTopOf="@id/fdSpace"
+            tools:visibility="visible"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

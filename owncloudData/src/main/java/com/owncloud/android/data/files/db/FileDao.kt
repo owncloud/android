@@ -46,16 +46,22 @@ interface FileDao {
         id: Long
     ): OCFileEntity?
 
+    @Query(SELECT_FILE_WITH_ID)
+    fun getFileByIdAsFlow(
+        id: Long
+    ): Flow<OCFileEntity?>
+
     @Transaction
     @Query(SELECT_FILE_WITH_ID)
     fun getFileWithSyncInfoById(
         id: Long
     ): OCFileAndFileSync?
 
+    @Transaction
     @Query(SELECT_FILE_WITH_ID)
-    fun getFileByIdAsFlow(
+    fun getFileWithSyncInfoByIdAsFlow(
         id: Long
-    ): Flow<OCFileEntity?>
+    ): Flow<OCFileAndFileSync?>
 
     @Query(SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH)
     fun getFileByOwnerAndRemotePath(

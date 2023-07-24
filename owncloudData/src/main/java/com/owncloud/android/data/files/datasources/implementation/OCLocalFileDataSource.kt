@@ -57,6 +57,12 @@ class OCLocalFileDataSource(
     override fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?> =
         fileDao.getFileByIdAsFlow(fileId).map { it?.toModel() }
 
+    override fun getFileWithSyncInfoByIdAsFlow(id: Long): Flow<OCFileWithSyncInfo?> =
+        fileDao.getFileWithSyncInfoByIdAsFlow(id).map{
+            it?.toModel()
+        }
+
+
     override fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String?): OCFile? {
         fileDao.getFileByOwnerAndRemotePath(owner, remotePath, spaceId)?.let { return it.toModel() }
 
