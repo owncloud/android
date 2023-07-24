@@ -37,6 +37,7 @@ interface FileRepository {
     fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?> = emptyList()): List<OCFile>
     fun getFileById(fileId: Long): OCFile?
     fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?>
+    fun getFileWithSyncInfoByIdAsFlow(fileId: Long): Flow<OCFileWithSyncInfo?>
     fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String? = null): OCFile?
     fun getPersonalRootFolderForAccount(owner: String): OCFile
     fun getSharesRootFolderForAccount(owner: String): OCFile?

@@ -44,6 +44,7 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.TooEarlyException
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.addOpenInWebMenuOptions
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
@@ -114,10 +115,10 @@ class FileDetailsFragment : FileFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        collectLatestLifecycleFlow(fileDetailsViewModel.currentFile) { ocFile: OCFile? ->
-            if (ocFile != null) {
-                file = ocFile
-                updateDetails(ocFile)
+        collectLatestLifecycleFlow(fileDetailsViewModel.currentFile) { ocFileWithSyncInfo: OCFileWithSyncInfo? ->
+            if (ocFileWithSyncInfo != null) {
+                file = ocFileWithSyncInfo.file
+                updateDetails(ocFileWithSyncInfo)
             } else {
                 requireActivity().onBackPressed()
             }
@@ -188,7 +189,7 @@ class FileDetailsFragment : FileFragment() {
             if (actions.requiresSync() && safeFile != null)
                 fileOperationsViewModel.performOperation(
                     SynchronizeFileOperation(
-                        fileToSync = safeFile,
+                        fileToSync = safeFile.file,
                         accountName = fileDetailsViewModel.getAccount().name
                     )
                 )
@@ -210,10 +211,10 @@ class FileDetailsFragment : FileFragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         val safeFile = fileDetailsViewModel.getCurrentFile() ?: return
-        fileDetailsViewModel.filterMenuOptions(safeFile)
+        fileDetailsViewModel.filterMenuOptions(safeFile.file)
 
         collectLatestLifecycleFlow(fileDetailsViewModel.menuOptions) { menuOptions ->
-            val hasWritePermission = safeFile.hasWritePermission
+            val hasWritePermission = safeFile.file.hasWritePermission
             menu.filterMenuOptions(menuOptions, hasWritePermission)
         }
 
@@ -232,35 +233,35 @@ class FileDetailsFragment : FileFragment() {
         // Let's match the ones that are dynamic first.
         openInWebProviders.forEach { (openInWebProviderName, menuItemId) ->
             if (menuItemId == item.itemId) {
-                fileDetailsViewModel.openInWeb(safeFile.remoteId!!, openInWebProviderName)
+                fileDetailsViewModel.openInWeb(safeFile.file.remoteId!!, openInWebProviderName)
                 return true
             }
         }
 
         return when (item.itemId) {
             R.id.action_share_file -> {
-                mContainerActivity.fileOperationsHelper.showShareFile(fileDetailsViewModel.getCurrentFile())
+                mContainerActivity.fileOperationsHelper.showShareFile(safeFile.file)
                 true
             }
 
             R.id.action_open_file_with -> {
-                if (!safeFile.isAvailableLocally) {  // Download the file
-                    Timber.d("%s : File must be downloaded before opening it", safeFile.remotePath)
+                if (!safeFile.file.isAvailableLocally) {  // Download the file
+                    Timber.d("%s : File must be downloaded before opening it", safeFile.file.remotePath)
                     fileDetailsViewModel.updateActionInDetailsView(SYNC_AND_OPEN_WITH)
                 } else { // Already downloaded -> Open it
-                    requireActivity().openOCFile(safeFile)
+                    requireActivity().openOCFile(safeFile.file)
                 }
                 true
             }
 
             R.id.action_remove_file -> {
-                val dialog = RemoveFilesDialogFragment.newInstance(safeFile)
+                val dialog = RemoveFilesDialogFragment.newInstance(safeFile.file)
                 dialog.show(parentFragmentManager, FRAGMENT_TAG_CONFIRMATION)
                 true
             }
 
             R.id.action_rename_file -> {
-                val dialog = RenameFileDialogFragment.newInstance(safeFile)
+                val dialog = RenameFileDialogFragment.newInstance(safeFile.file)
                 dialog.show(parentFragmentManager, FRAGMENT_TAG_RENAME_FILE)
                 true
             }
@@ -276,23 +277,23 @@ class FileDetailsFragment : FileFragment() {
             }
 
             R.id.action_send_file -> {
-                if (!safeFile.isAvailableLocally) {  // Download the file
-                    Timber.d("%s : File must be downloaded before sending it", safeFile.remotePath)
+                if (!safeFile.file.isAvailableLocally) {  // Download the file
+                    Timber.d("%s : File must be downloaded before sending it", safeFile.file.remotePath)
                     fileDetailsViewModel.updateActionInDetailsView(SYNC_AND_SEND)
                 } else { // Already downloaded -> Send it
-                    requireActivity().sendDownloadedFilesByShareSheet(listOf(safeFile))
+                    requireActivity().sendDownloadedFilesByShareSheet(listOf(safeFile.file))
                 }
                 true
             }
 
             R.id.action_set_available_offline -> {
-                fileOperationsViewModel.performOperation(SetFilesAsAvailableOffline(listOf(safeFile)))
-                fileOperationsViewModel.performOperation(SynchronizeFileOperation(safeFile, safeFile.owner))
+                fileOperationsViewModel.performOperation(SetFilesAsAvailableOffline(listOf(safeFile.file)))
+                fileOperationsViewModel.performOperation(SynchronizeFileOperation(safeFile.file, safeFile.file.owner))
                 true
             }
 
             R.id.action_unset_available_offline -> {
-                fileOperationsViewModel.performOperation(UnsetFilesAsAvailableOffline(listOf(safeFile)))
+                fileOperationsViewModel.performOperation(UnsetFilesAsAvailableOffline(listOf(safeFile.file)))
                 true
             }
 
@@ -300,15 +301,16 @@ class FileDetailsFragment : FileFragment() {
         }
     }
 
-    private fun updateDetails(ocFile: OCFile) {
-        binding.fdname.text = ocFile.fileName
-        binding.fdSize.text = DisplayUtils.bytesToHumanReadable(ocFile.length, requireContext())
-        binding.fdModified.text = DisplayUtils.unixTimeToHumanReadable(ocFile.modificationTimestamp)
-        binding.fdCreated.text = DisplayUtils.unixTimeToHumanReadable(ocFile.creationTimestamp!!)
-        binding.fdPath.text = ocFile.getParentRemotePath()
-        setLastSync(ocFile)
-        setIconPinAccordingToFilesLocalState(binding.localFileIndicator, ocFile)
-        setMimeType(ocFile)
+    private fun updateDetails(ocFileWithSyncInfo: OCFileWithSyncInfo) {
+        binding.fdname.text = ocFileWithSyncInfo.file.fileName
+        binding.fdSize.text = DisplayUtils.bytesToHumanReadable(ocFileWithSyncInfo.file.length, requireContext())
+        binding.fdModified.text = DisplayUtils.unixTimeToHumanReadable(ocFileWithSyncInfo.file.modificationTimestamp)
+        binding.fdCreated.text = DisplayUtils.unixTimeToHumanReadable(ocFileWithSyncInfo.file.creationTimestamp!!)
+        binding.fdPath.text = ocFileWithSyncInfo.file.getParentRemotePath()
+        setLastSync(ocFileWithSyncInfo.file)
+        setIconPinAccordingToFilesLocalState(binding.localFileIndicator)
+        setMimeType(ocFileWithSyncInfo.file)
+        setSpaceName(ocFileWithSyncInfo)
         requireActivity().invalidateOptionsMenu()
     }
 
@@ -320,7 +322,21 @@ class FileDetailsFragment : FileFragment() {
         }
     }
 
-    private fun setIconPinAccordingToFilesLocalState(thumbnailImageView: ImageView, ocFile: OCFile) {
+    private fun setSpaceName(ocFileWithSyncInfo: OCFileWithSyncInfo) {
+        val space = ocFileWithSyncInfo.space
+        if (space != null) {
+            binding.fdSpace.visibility = View.VISIBLE
+            binding.fdSpaceLabel.visibility = View.VISIBLE
+            binding.fdIconSpace.visibility = View.VISIBLE
+            if (space.isPersonal) {
+                binding.fdSpace.text = getString(R.string.bottom_nav_personal)
+            } else {
+                binding.fdSpace.text = space.name
+            }
+        }
+    }
+
+    private fun setIconPinAccordingToFilesLocalState(thumbnailImageView: ImageView) {
         // local state
         thumbnailImageView.bringToFront()
         thumbnailImageView.isVisible = false
@@ -397,9 +413,9 @@ class FileDetailsFragment : FileFragment() {
 
         showProgressView(isTransferGoingOn = true)
         binding.fdProgressText.text = if (workInfo.isDownload()) {
-            getString(R.string.downloader_download_enqueued_ticker, safeFile.fileName)
+            getString(R.string.downloader_download_enqueued_ticker, safeFile.file.fileName)
         } else { // Transfer is upload (?)
-            getString(R.string.uploader_upload_enqueued_ticker, safeFile.fileName)
+            getString(R.string.uploader_upload_enqueued_ticker, safeFile.file.fileName)
         }
         binding.fdProgressBar.apply {
             progress = 0
@@ -441,12 +457,12 @@ class FileDetailsFragment : FileFragment() {
                 }
 
                 SYNC_AND_OPEN_WITH -> {
-                    requireActivity().openOCFile(safeFile)
+                    requireActivity().openOCFile(safeFile.file)
                     fileDetailsViewModel.updateActionInDetailsView(NONE)
                 }
 
                 SYNC_AND_SEND -> {
-                    requireActivity().sendDownloadedFilesByShareSheet(listOf(safeFile))
+                    requireActivity().sendDownloadedFilesByShareSheet(listOf(safeFile.file))
                     fileDetailsViewModel.updateActionInDetailsView(NONE)
                 }
             }

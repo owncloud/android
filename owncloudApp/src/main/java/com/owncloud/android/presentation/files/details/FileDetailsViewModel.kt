@@ -39,7 +39,9 @@ import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFrom
 import com.owncloud.android.domain.extensions.isOneOf
 import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
+import com.owncloud.android.domain.files.usecases.GetFileWithSyncInfoByIdUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.extensions.getRunningWorkInfosByTags
@@ -70,6 +72,7 @@ class FileDetailsViewModel(
     getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
     private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
     private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
+    private val getFileWithSyncInfoByIdUseCase: GetFileWithSyncInfoByIdUseCase,
     val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val workManager: WorkManager,
@@ -91,12 +94,20 @@ class FileDetailsViewModel(
         )
 
     private val account: StateFlow<Account> = MutableStateFlow(account)
-    val currentFile: StateFlow<OCFile?> =
-        getFileByIdAsStreamUseCase.execute(GetFileByIdAsStreamUseCase.Params(ocFile.id!!))
+    private val ocFileWithSyncInfo = OCFileWithSyncInfo(
+        file = ocFile,
+        uploadWorkerUuid = UUID.randomUUID(),
+        downloadWorkerUuid = UUID.randomUUID(),
+        isSynchronizing = true,
+        space = null
+    )
+
+    val currentFile: StateFlow<OCFileWithSyncInfo?> =
+        getFileWithSyncInfoByIdUseCase.execute(GetFileWithSyncInfoByIdUseCase.Params(ocFile.id!!))
             .stateIn(
                 viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = ocFile
+                initialValue = ocFileWithSyncInfo
             )
 
     private val _ongoingTransferUUID = MutableLiveData<UUID>()
@@ -117,7 +128,7 @@ class FileDetailsViewModel(
     private val _menuOptions: MutableStateFlow<List<FileMenuOption>> = MutableStateFlow(emptyList())
     val menuOptions: StateFlow<List<FileMenuOption>> = _menuOptions
 
-    fun getCurrentFile(): OCFile? = currentFile.value
+    fun getCurrentFile(): OCFileWithSyncInfo? = currentFile.value
     fun getAccount() = account.value
 
     fun updateActionInDetailsView(actionsInDetailsView: ActionsInDetailsView) {
@@ -133,7 +144,7 @@ class FileDetailsViewModel(
     fun checkOnGoingTransfersWhenOpening() {
         val safeFile = currentFile.value ?: return
         val listOfWorkers =
-            workManager.getRunningWorkInfosByTags(listOf(safeFile.id!!.toString(), getAccount().name, DownloadFileWorker::class.java.name))
+            workManager.getRunningWorkInfosByTags(listOf(safeFile.file.id!!.toString(), getAccount().name, DownloadFileWorker::class.java.name))
         listOfWorkers.firstOrNull()?.let { workInfo ->
             _ongoingTransferUUID.postValue(workInfo.id)
         }
@@ -144,9 +155,9 @@ class FileDetailsViewModel(
             val currentTransfer = ongoingTransfer.value?.peekContent() ?: return@launch
             val safeFile = currentFile.value ?: return@launch
             if (currentTransfer.isUpload()) {
-                cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(safeFile))
+                cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(safeFile.file))
             } else if (currentTransfer.isDownload()) {
-                cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(safeFile))
+                cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(safeFile.file))
             }
         }
     }
