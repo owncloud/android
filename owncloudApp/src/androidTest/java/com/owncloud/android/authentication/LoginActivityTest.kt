@@ -220,7 +220,7 @@ class LoginActivityTest {
             showEmbeddedCheckServerButton = false
         )
 
-        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true) }
+        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl) }
     }
 
     @Test
@@ -233,7 +233,7 @@ class LoginActivityTest {
         R.id.centeredRefreshButton.isDisplayed(true)
         R.id.centeredRefreshButton.scrollAndClick()
 
-        verify(exactly = 2) { authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true) }
+        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true) }
         serverInfoLiveData.postValue(Event(UIResult.Success(SECURE_SERVER_INFO_BASIC)))
 
         R.id.centeredRefreshButton.isDisplayed(false)
