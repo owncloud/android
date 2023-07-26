@@ -14,15 +14,12 @@ Summary
 * Change - Move file menu options filter to use case: [#4009](https://github.com/owncloud/android/issues/4009)
 * Change - Gradle Version Catalog: [#4035](https://github.com/owncloud/android/pull/4035)
 * Change - Remove "ignore" from the debug flavour Android manifest: [#4064](https://github.com/owncloud/android/pull/4064)
-* Change - Not opening browser automatically in login: [#4067](https://github.com/owncloud/android/issues/4067)
-* Change - Added new unit tests for providers: [#4073](https://github.com/owncloud/android/issues/4073)
 * Enhancement - Show "More" button for every file list item: [#2885](https://github.com/owncloud/android/issues/2885)
 * Enhancement - Added "Open in web" options to main file list: [#3860](https://github.com/owncloud/android/issues/3860)
 * Enhancement - Copy/move conflict solved by users: [#3935](https://github.com/owncloud/android/issues/3935)
 * Enhancement - Improve grid mode: [#4027](https://github.com/owncloud/android/issues/4027)
-* Enhancement - Improve UX of creation dialog: [#4031](https://github.com/owncloud/android/issues/4031)
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
-* Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
+* Enhancement - Prevent http traffic with branding options: [#4066](https://github.com/owncloud/android/issues/4066)
 
 Details
 -------
@@ -74,23 +71,6 @@ Details
 
    https://github.com/owncloud/android/pull/4064
 
-* Change - Not opening browser automatically in login: [#4067](https://github.com/owncloud/android/issues/4067)
-
-   When there is a fixed bearer auth server URL via a branded parameter, the login screen won't
-   redirect automatically to the browser so that some problems in the authentication flow are
-   solved.
-
-   https://github.com/owncloud/android/issues/4067
-   https://github.com/owncloud/android/pull/4106
-
-* Change - Added new unit tests for providers: [#4073](https://github.com/owncloud/android/issues/4073)
-
-   Implementation of tests for the functions within ScopedStorageProvider and
-   OCSharedPreferencesProvider.
-
-   https://github.com/owncloud/android/issues/4073
-   https://github.com/owncloud/android/pull/4091
-
 * Enhancement - Show "More" button for every file list item: [#2885](https://github.com/owncloud/android/issues/2885)
 
    A 3-dot button has been added to every file, where the options that we have in the 3-dot menu in
@@ -123,14 +103,6 @@ Details
    https://github.com/owncloud/android/issues/4027
    https://github.com/owncloud/android/pull/4089
 
-* Enhancement - Improve UX of creation dialog: [#4031](https://github.com/owncloud/android/issues/4031)
-
-   Creation dialog now shows an error message and disables the confirmation button when
-   forbidden characters are typed
-
-   https://github.com/owncloud/android/issues/4031
-   https://github.com/owncloud/android/pull/4097
-
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 
    File conflicts now are named with suffix starting in (1) instead of (2).
@@ -138,13 +110,12 @@ Details
    https://github.com/owncloud/android/issues/3946
    https://github.com/owncloud/android/pull/4040
 
-* Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
+* Enhancement - Prevent http traffic with branding options: [#4066](https://github.com/owncloud/android/issues/4066)
 
-   The locales_config.xml file has been created for the application to detect the language that
-   the user wishes to choose.
+   Adding branding option for prevent http traffic.
 
-   https://github.com/owncloud/android/issues/4082
-   https://github.com/owncloud/android/pull/4099
+   https://github.com/owncloud/android/issues/4066
+   https://github.com/owncloud/android/pull/4110
 
 Changelog for ownCloud Android Client [4.0.0] (2023-05-29)
 =======================================
