@@ -50,6 +50,7 @@ import com.owncloud.android.domain.authentication.oauth.model.ResponseType
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
+import com.owncloud.android.domain.exceptions.SSLErrorException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.exceptions.StateMismatchException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
@@ -272,6 +273,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 text = getString(R.string.error_no_network_connection)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
             }
+
             else -> binding.webfingerStatusText.run {
                 text = uiResult.getThrowableOrNull()?.parseError("", resources, true)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
@@ -355,6 +357,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         performGetAuthorizationCodeRequest(oidcServerConfiguration.authorizationEndpoint.toUri())
                     }
                 }
+
                 else -> {
                     binding.serverStatusText.run {
                         text = getString(R.string.auth_unsupported_auth_method)
@@ -379,14 +382,22 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         when (uiResult.error) {
             is CertificateCombinedException ->
                 showUntrustedCertDialog(uiResult.error)
+
             is OwncloudVersionNotSupportedException -> binding.serverStatusText.run {
                 text = getString(R.string.server_not_supported)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             }
+
             is NoNetworkConnectionException -> binding.serverStatusText.run {
                 text = getString(R.string.error_no_network_connection)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
             }
+
+            is SSLErrorException -> binding.serverStatusText.run {
+                text = getString(R.string.ssl_connection_not_secure)
+                setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
+            }
+
             else -> binding.serverStatusText.run {
                 text = uiResult.error?.parseError("", resources, true)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
@@ -430,6 +441,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 }
                 showOrHideBasicAuthFields(shouldBeVisible = false)
             }
+
             else -> {
                 binding.serverStatusText.isVisible = false
                 binding.authStatusText.run {
@@ -461,6 +473,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         )
                     }
                 }
+
                 is UIResult.Error -> {
                     Timber.e(uiResult.error, "Client registration failed.")
                     performGetAuthorizationCodeRequest(authorizationEndpoint)
@@ -585,6 +598,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         clientRegistrationInfo = clientRegistrationInfo
                     )
                 }
+
                 is UIResult.Error -> {
                     Timber.e(uiResult.error, "OAuth request to exchange authorization code for tokens failed")
                     updateOAuthStatusIconAndText(uiResult.error)

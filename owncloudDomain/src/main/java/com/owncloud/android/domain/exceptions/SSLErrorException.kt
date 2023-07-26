@@ -21,4 +21,4 @@ package com.owncloud.android.domain.exceptions
 
 import java.lang.Exception
 
-class SSLErrorException : Exception()
+class SSLErrorException(override val message: String? = null) : Exception(message)

@@ -129,4 +129,8 @@
 
     <!-- Webfinger -->
     <string name="webfinger_lookup_server"></string>
+
+    <!-- Secure connection -->
+    <bool name="enforce_secure_connection">false</bool>
+
 </resources>
