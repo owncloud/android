@@ -69,7 +69,9 @@
   <string name="prefs_camera_video_upload_on_wifi">Odesílat videa pouze přes wifi</string>
   <string name="prefs_camera_video_upload_on_charging">Nahrávat videa pouze při nabíjení</string>
   <string name="prefs_subsection_advanced">Pokročilé</string>
+  <string name="prefs_subsection_notifications">Spravovat oznámení</string>
   <string name="prefs_show_hidden_files">Zobrazit skryté soubory</string>
+  <string name="prefs_log_open_logs_list_view">Soubory logu</string>
   <string name="prefs_log_no_logs_list_view">Vymazat koš!</string>
   <string name="prefs_log_title">Povolit logování</string>
   <string name="prefs_log_summary">Použito k zaznamenávání problémů</string>
@@ -102,6 +104,7 @@
   <string name="passcode_already_set">Gesto a bezpečnostní kód nemohou být povoleny současně, nejprve zakažte bezpečnostní kód</string>
   <string name="pattern_no_longer_required">Gesto již nebude vyžadováno</string>
   <string name="pattern_configure_your_pattern_explanation">Gesto bude vyžadováno při každém startu aplikace</string>
+  <string name="document_provider_locked">Uzamčeno</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Soubory</string>
   <string name="bottom_nav_personal">Osobní</string>
@@ -139,8 +142,10 @@
   <string name="uploader_error_message_source_file_not_copied">Došlo k chybě při kopírování souboru do dočasného adresáře. Zkuste prosím zopakovat odeslání.</string>
   <string name="file_list_seconds_ago">před pár sekundami</string>
   <string name="file_list_empty_title_all_files">Žádné soubory</string>
+  <string name="file_list_empty_title_available_offline">Žádné dostupné soubory offline</string>
   <string name="file_list_empty_title_shared_by_links">Žádné sdílené odkazy</string>
   <string name="file_list_empty_subtitle_all_files">Nahrajte nějaký obsah nebo synchronizujte se svými přístroji!</string>
+  <string name="file_list_empty_subtitle_available_offline">Zde uvidíte offline soubory</string>
   <string name="file_list_empty_subtitle_shared_by_links">Zde budou zobrazeny soubory a adresáře, které sdílíte jako webové odkazy</string>
   <string name="file_list_loading">Načítání...</string>
   <string name="file_list_no_app_for_file_type">Pro typ souboru nebyla nalezena aplikace</string>
@@ -148,6 +153,7 @@
   <string name="local_file_list_empty_just_folders">V tomto adresáři nejsou žádné podadresáře.</string>
   <string name="local_file_list_search_with_no_matches">Nebyly nalezeny žádné výsledky odpovídající zadání</string>
   <string name="upload_list_empty">Nahraná data nejsou dostupná.</string>
+  <string name="upload_list_empty_subtitle">Nahrané data se zobrazí zde</string>
   <string name="file_list_folder">adresář</string>
   <string name="file_list_folders">adresářů</string>
   <string name="file_list_file">soubor</string>
