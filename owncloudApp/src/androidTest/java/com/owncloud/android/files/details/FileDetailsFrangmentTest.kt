@@ -94,6 +94,8 @@ class FileDetailsFragmentTest {
 
         R.id.fdSpace.withText(R.string.bottom_nav_personal)
         R.id.fdSpaceLabel.withText(R.string.space_label)
+        onView(withId(R.id.fdIconSpace))
+            .check(matches(withDrawable(R.drawable.ic_spaces)))
     }
 
     @Test
@@ -111,10 +113,12 @@ class FileDetailsFragmentTest {
 
         R.id.fdSpace.assertVisibility(ViewMatchers.Visibility.VISIBLE)
         R.id.fdSpaceLabel.assertVisibility(ViewMatchers.Visibility.VISIBLE)
-
+        R.id.fdIconSpace.assertVisibility(ViewMatchers.Visibility.VISIBLE)
 
         R.id.fdSpace.withText(currentFileWithoutPersonalSpace.value?.space?.name.toString())
         R.id.fdSpaceLabel.withText(R.string.space_label)
+        onView(withId(R.id.fdIconSpace))
+            .check(matches(withDrawable(R.drawable.ic_spaces)))
     }
 
     @Test
@@ -153,8 +157,8 @@ class FileDetailsFragmentTest {
     fun thumbnail_available_offline_in_image_is_not_viewed_when_file_does_not_change_state() {
         every { fileDetailsViewModel.currentFile } returns currentFileAvailableOffline
 
-        R.id.thumbnail_detail_file.assertVisibility(ViewMatchers.Visibility.VISIBLE)
-        onView(withId(R.id.thumbnail_detail_file))
+        R.id.thumbnailDetailFile.assertVisibility(ViewMatchers.Visibility.VISIBLE)
+        onView(withId(R.id.thumbnailDetailFile))
             .check(matches(withDrawable(R.drawable.offline_available_pin)))
 
     }
@@ -163,8 +167,8 @@ class FileDetailsFragmentTest {
     fun show_thumbnail_isAvailableLocally_in_image_when_file_change_state() {
         currentFile.value?.file?.etagInConflict = "error"
 
-        R.id.thumbnail_detail_file.assertVisibility(ViewMatchers.Visibility.VISIBLE)
-        onView(withId(R.id.thumbnail_detail_file))
+        R.id.thumbnailDetailFile.assertVisibility(ViewMatchers.Visibility.VISIBLE)
+        onView(withId(R.id.thumbnailDetailFile))
             .check(matches(withDrawable(R.drawable.error_pin)))
     }
 
@@ -188,7 +192,7 @@ class FileDetailsFragmentTest {
         showFdPathLabel: Boolean = true,
         showFdPath: Boolean = true
     ) {
-        R.id.fdIcon.isDisplayed(displayed = showImage)
+        R.id.fdImageDetailFile.isDisplayed(displayed = showImage)
         R.id.fdname.isDisplayed(displayed = showFdName)
         R.id.fdProgressText.isDisplayed(displayed = showFdProgressText)
         R.id.fdProgressBar.isDisplayed(displayed = showFdProgressBar)
