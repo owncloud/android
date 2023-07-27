@@ -53,7 +53,8 @@
         android:requestLegacyExternalStorage="true"
         android:resizeableActivity="true"
         android:supportsPictureInPicture="false"
-        android:theme="@style/Theme.ownCloud.Toolbar">
+        android:theme="@style/Theme.ownCloud.Toolbar"
+        android:localeConfig="@xml/locales_config">
 
         <meta-data android:name="android.content.APP_RESTRICTIONS"
             android:resource="@xml/managed_configurations" />
