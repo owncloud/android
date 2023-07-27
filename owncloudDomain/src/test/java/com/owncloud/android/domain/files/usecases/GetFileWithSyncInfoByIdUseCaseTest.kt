@@ -23,7 +23,7 @@ class GetFileWithSyncInfoByIdUseCaseTest {
 
         val useCaseResult = useCase.execute(useCaseParams)
 
-        useCaseResult.collect {result ->
+        useCaseResult.collect { result ->
             Assert.assertEquals(OC_FILE_WITH_SYNC_INFO_AND_SPACE, result)
         }
 
@@ -40,10 +40,9 @@ class GetFileWithSyncInfoByIdUseCaseTest {
         verify(exactly = 1) { repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) }
     }
 
-
     @Test(expected = Exception::class)
-    fun `get file with sync by id returns an exception`()  = runBlocking {
-        every {  repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) }  throws Exception()
+    fun `get file with sync by id returns an exception`() = runBlocking {
+        every { repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) } throws Exception()
 
         useCase.execute(useCaseParams)
 
