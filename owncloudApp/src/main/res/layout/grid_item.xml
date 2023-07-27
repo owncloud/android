@@ -55,7 +55,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginEnd="2dp"
-                android:src="@drawable/ic_shared_via_users"
+                android:src="@drawable/ic_share_generic_black"
                 android:visibility="gone"
                 tools:visibility="visible" />
 

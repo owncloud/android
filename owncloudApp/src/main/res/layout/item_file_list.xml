@@ -82,7 +82,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginEnd="2dp"
-                android:src="@drawable/ic_shared_via_users"
+                android:src="@drawable/ic_share_generic"
                 android:visibility="gone"
                 app:tint="@color/list_item_lastmod_and_filesize_text"
                 tools:visibility="visible" />

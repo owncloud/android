@@ -73,7 +73,7 @@ fun FileMenuOption.toDrawableResId() =
         FileMenuOption.OPEN_WITH -> R.drawable.ic_open_in_app
         FileMenuOption.SYNC -> R.drawable.ic_action_refresh
         FileMenuOption.CANCEL_SYNC -> R.drawable.ic_action_cancel_white
-        FileMenuOption.SHARE -> R.drawable.ic_action_share
+        FileMenuOption.SHARE -> R.drawable.ic_share_generic_white
         FileMenuOption.DETAILS -> R.drawable.ic_info_white
         FileMenuOption.SEND -> R.drawable.ic_send_white
         FileMenuOption.SET_AV_OFFLINE -> R.drawable.ic_action_set_available_offline
