@@ -58,7 +58,7 @@ class OCLocalFileDataSource(
         fileDao.getFileByIdAsFlow(fileId).map { it?.toModel() }
 
     override fun getFileWithSyncInfoByIdAsFlow(id: Long): Flow<OCFileWithSyncInfo?> =
-        fileDao.getFileWithSyncInfoByIdAsFlow(id).map{
+        fileDao.getFileWithSyncInfoByIdAsFlow(id).map {
             it?.toModel()
         }
 
