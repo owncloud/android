@@ -32,7 +32,7 @@
                 app:cardCornerRadius="8dp">
 
                 <ImageView
-                    android:id="@+id/fdIcon"
+                    android:id="@+id/fdImageDetailFile"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/white"
@@ -46,10 +46,11 @@
             </androidx.cardview.widget.CardView>
 
             <ImageView
-                android:id="@+id/localFileIndicator"
+                android:id="@+id/thumbnailDetailFile"
                 android:layout_width="@dimen/file_indicator_pin_size_grid"
                 android:layout_height="@dimen/file_indicator_pin_size_grid"
                 android:src="@drawable/sync_pin"
+                android:visibility="gone"
                 android:translationX="-8dp"
                 android:translationY="-8dp"
                 app:layout_constraintStart_toEndOf="@+id/cardView"
@@ -64,7 +65,6 @@
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:layout_marginBottom="30dp"
             android:gravity="center"
-            android:text="app.owncloud.img24239293283982982323233232389298328939"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/action_mode_status_bar_background"
             app:layout_constraintEnd_toEndOf="parent"
@@ -281,7 +281,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:gravity="end"
-            android:text=""
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textColor="@color/action_mode_status_bar_background"
             app:layout_constraintEnd_toEndOf="parent"
@@ -296,6 +295,7 @@
             android:layout_height="0dp"
             android:text="@string/space_label"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/fdSpace"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/fdSpace"
@@ -308,6 +308,7 @@
             android:layout_marginTop="12dp"
             android:gravity="end"
             android:paddingRight="5dp"
+            android:visibility="gone"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintEnd_toStartOf="@id/fdIconSpace"
@@ -321,10 +322,9 @@
             android:layout_width="@dimen/file_indicator_pin_size_grid"
             android:layout_height="@dimen/file_indicator_pin_size_grid"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/filedetails_cancel_btn_content_description"
             android:src="@drawable/ic_spaces"
             android:scaleType="fitCenter"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/fdSpace"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fdSpace"

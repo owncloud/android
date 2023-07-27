@@ -199,8 +199,8 @@ class FileDetailsFragment : FileFragment() {
     }
 
     private fun setIconSyncPinAccordingToFilesLocalState() {
-        binding.localFileIndicator.setImageResource(R.drawable.sync_pin)
-        binding.localFileIndicator.visibility = View.VISIBLE
+        binding.thumbnailDetailFile.setImageResource(R.drawable.sync_pin)
+        binding.thumbnailDetailFile.visibility = View.VISIBLE
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -308,7 +308,7 @@ class FileDetailsFragment : FileFragment() {
         binding.fdCreated.text = DisplayUtils.unixTimeToHumanReadable(ocFileWithSyncInfo.file.creationTimestamp!!)
         binding.fdPath.text = ocFileWithSyncInfo.file.getParentRemotePath()
         setLastSync(ocFileWithSyncInfo.file)
-        setIconPinAccordingToFilesLocalState(binding.localFileIndicator)
+        setIconPinAccordingToFilesLocalState(binding.thumbnailDetailFile)
         setMimeType(ocFileWithSyncInfo.file)
         setSpaceName(ocFileWithSyncInfo)
         requireActivity().invalidateOptionsMenu()
@@ -357,7 +357,7 @@ class FileDetailsFragment : FileFragment() {
     private fun setMimeType(ocFile: OCFile) {
         binding.fdType.text = DisplayUtils.convertMIMEtoPrettyPrint(ocFile.mimeType)
 
-        binding.fdIcon.let { imageView ->
+        binding.fdImageDetailFile.let { imageView ->
             imageView.apply {
                 tag = ocFile.id
                 setOnClickListener {
