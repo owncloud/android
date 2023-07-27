@@ -26,9 +26,12 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.presentation.sharing.ShareFragmentListener
+import com.owncloud.android.services.OperationsService
 import com.owncloud.android.testing.SingleFragmentActivity
+import com.owncloud.android.ui.fragment.FileFragment.ContainerActivity
+import com.owncloud.android.ui.helpers.FileOperationsHelper
 
-class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
+class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener, ContainerActivity {
     fun startFragment(fragment: Fragment) {
         supportFragmentManager.commit(allowStateLoss = true) {
             add(R.id.container, fragment, TEST_FRAGMENT_TAG)
@@ -69,5 +72,16 @@ class TestShareFileActivity : SingleFragmentActivity(), ShareFragmentListener {
 
     companion object {
         private const val TEST_FRAGMENT_TAG = "TEST FRAGMENT"
+    }
+
+    override fun getOperationsServiceBinder(): OperationsService.OperationsServiceBinder {
+        TODO("Not yet implemented")
+    }
+
+    override fun getFileOperationsHelper(): FileOperationsHelper {
+        TODO("Not yet implemented")
+    }
+
+    override fun showDetails(file: OCFile?) {
     }
 }
