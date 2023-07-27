@@ -14,6 +14,7 @@ Summary
 * Change - Move file menu options filter to use case: [#4009](https://github.com/owncloud/android/issues/4009)
 * Change - Gradle Version Catalog: [#4035](https://github.com/owncloud/android/pull/4035)
 * Change - Remove "ignore" from the debug flavour Android manifest: [#4064](https://github.com/owncloud/android/pull/4064)
+* Change - Added new unit tests for providers: [#4073](https://github.com/owncloud/android/issues/4073)
 * Enhancement - Show "More" button for every file list item: [#2885](https://github.com/owncloud/android/issues/2885)
 * Enhancement - Added "Open in web" options to main file list: [#3860](https://github.com/owncloud/android/issues/3860)
 * Enhancement - Copy/move conflict solved by users: [#3935](https://github.com/owncloud/android/issues/3935)
@@ -69,6 +70,14 @@ Details
    removed as it is not needed anymore.
 
    https://github.com/owncloud/android/pull/4064
+
+* Change - Added new unit tests for providers: [#4073](https://github.com/owncloud/android/issues/4073)
+
+   Implementation of tests for the functions within ScopedStorageProvider and
+   OCSharedPreferencesProvider.
+
+   https://github.com/owncloud/android/issues/4073
+   https://github.com/owncloud/android/pull/4091
 
 * Enhancement - Show "More" button for every file list item: [#2885](https://github.com/owncloud/android/issues/2885)
 

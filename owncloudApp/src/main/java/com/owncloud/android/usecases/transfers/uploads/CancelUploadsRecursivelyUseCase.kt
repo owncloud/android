@@ -22,7 +22,7 @@ package com.owncloud.android.usecases.transfers.uploads
 
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase

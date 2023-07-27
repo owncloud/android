@@ -21,7 +21,7 @@
 package com.owncloud.android.presentation.viewmodels.security
 
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.presentation.security.biometric.BiometricViewModel
 import com.owncloud.android.presentation.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity

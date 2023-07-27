@@ -26,8 +26,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
-import com.owncloud.android.data.storage.LegacyStorageProvider
+import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
+import com.owncloud.android.data.providers.LegacyStorageProvider
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File

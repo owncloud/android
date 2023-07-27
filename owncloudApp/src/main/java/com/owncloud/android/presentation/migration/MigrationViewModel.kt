@@ -28,9 +28,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
-import com.owncloud.android.data.storage.LegacyStorageProvider
-import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.data.providers.SharedPreferencesProvider
+import com.owncloud.android.data.providers.LegacyStorageProvider
+import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
 import com.owncloud.android.domain.transfers.usecases.GetAllTransfersUseCase
 import com.owncloud.android.domain.transfers.usecases.UpdatePendingUploadsPathUseCase

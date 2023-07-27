@@ -22,7 +22,7 @@ package com.owncloud.android.presentation.settings.security
 
 import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.presentation.security.LockEnforcedType
 import com.owncloud.android.presentation.security.LockEnforcedType.Companion.parseFromInteger
 import com.owncloud.android.presentation.security.LockTimeout

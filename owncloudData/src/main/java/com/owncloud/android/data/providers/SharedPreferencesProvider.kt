@@ -2,8 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- *
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -13,19 +12,30 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.storage
 
-import android.os.Environment
-import java.io.File
+package com.owncloud.android.data.providers
 
-@Deprecated("Do not use this anymore. We have moved to Scoped Storage")
-class LegacyStorageProvider(
-    rootFolderName: String
-) : LocalStorageProvider(rootFolderName) {
+interface SharedPreferencesProvider {
 
-    override fun getPrimaryStorageDirectory(): File = Environment.getExternalStorageDirectory()
+    fun putString(key: String, value: String)
+    fun getString(key: String, defaultValue: String?): String?
+
+    fun putInt(key: String, value: Int)
+    fun getInt(key: String, defaultValue: Int): Int
+
+    fun putLong(key: String, value: Long)
+    fun getLong(key: String, defaultValue: Long): Long
+
+    fun putBoolean(key: String, value: Boolean)
+    fun getBoolean(key: String, defaultValue: Boolean): Boolean
+
+    fun containsPreference(key: String): Boolean
+
+    fun removePreference(key: String)
+
+    fun contains(key: String): Boolean
 }

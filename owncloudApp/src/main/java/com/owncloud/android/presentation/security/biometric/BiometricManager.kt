@@ -28,7 +28,7 @@ import android.os.SystemClock
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import com.owncloud.android.MainApp.Companion.appContext
-import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
+import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.presentation.security.LockTimeout
 import com.owncloud.android.presentation.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
 import com.owncloud.android.presentation.security.PREFERENCE_LOCK_TIMEOUT

@@ -23,7 +23,7 @@ import androidx.lifecycle.ViewModel
 import com.owncloud.android.MainApp
 import com.owncloud.android.MainApp.Companion.versionCode
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.providers.ContextProvider
 
 class ReleaseNotesViewModel(

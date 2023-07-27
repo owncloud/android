@@ -53,7 +53,7 @@ import com.owncloud.android.AppRater
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.model.OCCapability

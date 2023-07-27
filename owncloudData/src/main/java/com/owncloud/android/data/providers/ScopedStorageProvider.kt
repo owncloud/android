@@ -1,7 +1,8 @@
-/*
+/**
  * ownCloud Android client application
  *
- * @author Fernando Sanz Velasco
+ * @author Abel García de Prada
+ *
  * Copyright (C) 2021 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -12,28 +13,19 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
+package com.owncloud.android.data.providers
 
-package com.owncloud.android.presentation.logging
-
-import androidx.lifecycle.ViewModel
-import com.owncloud.android.data.providers.LocalStorageProvider
+import android.content.Context
 import java.io.File
 
-class LogListViewModel(
-    private val localStorageProvider: LocalStorageProvider
-) : ViewModel() {
+class ScopedStorageProvider(
+    rootFolderName: String,
+    private val context: Context
+) : LocalStorageProvider(rootFolderName) {
 
-    private fun getLogsDirectory(): File {
-        val logsPath = localStorageProvider.getLogsPath()
-        return File(logsPath)
-    }
-
-    fun getLogsFiles(): List<File> {
-        return getLogsDirectory().listFiles()?.toList()?.sortedBy { it.name } ?: listOf()
-    }
+    override fun getPrimaryStorageDirectory(): File = context.filesDir
 }

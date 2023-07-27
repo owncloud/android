@@ -20,7 +20,7 @@
 
 package com.owncloud.android.presentation.viewmodels.security
 
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.presentation.security.pattern.PatternActivity
 import com.owncloud.android.presentation.security.pattern.PatternViewModel
 import com.owncloud.android.presentation.viewmodels.ViewModelTest

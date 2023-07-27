@@ -1,0 +1,6 @@
+Change: Added new unit tests for providers
+
+Implementation of tests for the functions within ScopedStorageProvider and OCSharedPreferencesProvider.
+
+https://github.com/owncloud/android/issues/4073
+https://github.com/owncloud/android/pull/4091

@@ -37,7 +37,7 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import androidx.work.WorkInfo
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID

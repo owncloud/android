@@ -29,7 +29,7 @@ import androidx.enterprise.feedback.KeyedAppState
 import androidx.enterprise.feedback.KeyedAppStatesReporter
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp.Companion.MDM_FLAVOR
-import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
+import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.utils.MDMConfigurations
 import timber.log.Timber
 

@@ -17,15 +17,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.storage
+package com.owncloud.android.data.providers
 
-import android.content.Context
+import android.os.Environment
 import java.io.File
 
-class ScopedStorageProvider(
-    rootFolderName: String,
-    private val context: Context
+@Deprecated("Do not use this anymore. We have moved to Scoped Storage")
+class LegacyStorageProvider(
+    rootFolderName: String
 ) : LocalStorageProvider(rootFolderName) {
 
-    override fun getPrimaryStorageDirectory(): File = context.filesDir
+    override fun getPrimaryStorageDirectory(): File = Environment.getExternalStorageDirectory()
 }

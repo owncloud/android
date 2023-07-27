@@ -21,7 +21,7 @@ package com.owncloud.android.workers
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.data.providers.LocalStorageProvider
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber

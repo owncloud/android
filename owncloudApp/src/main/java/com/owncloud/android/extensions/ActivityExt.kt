@@ -39,7 +39,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
+import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.presentation.common.ShareSheetHelper
