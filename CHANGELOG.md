@@ -22,6 +22,7 @@ Summary
 * Enhancement - Improve grid mode: [#4027](https://github.com/owncloud/android/issues/4027)
 * Enhancement - Improve UX of creation dialog: [#4031](https://github.com/owncloud/android/issues/4031)
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
+* Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
 
 Details
 -------
@@ -136,6 +137,14 @@ Details
 
    https://github.com/owncloud/android/issues/3946
    https://github.com/owncloud/android/pull/4040
+
+* Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
+
+   The locales_config.xml file has been created for the application to detect the language that
+   the user wishes to choose.
+
+   https://github.com/owncloud/android/issues/4082
+   https://github.com/owncloud/android/pull/4099
 
 Changelog for ownCloud Android Client [4.0.0] (2023-05-29)
 =======================================
