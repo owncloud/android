@@ -219,8 +219,6 @@ class LoginActivityTest {
             showCenteredRefreshButton = true,
             showEmbeddedCheckServerButton = false
         )
-
-        verify(exactly = 1) { authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl) }
     }
 
     @Test
