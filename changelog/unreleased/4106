@@ -1,0 +1,7 @@
+Change: Not opening browser automatically in login
+
+When there is a fixed bearer auth server URL via a branded parameter, the login screen won't redirect
+automatically to the browser so that some problems in the authentication flow are solved.
+
+https://github.com/owncloud/android/issues/4067
+https://github.com/owncloud/android/pull/4106

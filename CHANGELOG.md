@@ -14,6 +14,7 @@ Summary
 * Change - Move file menu options filter to use case: [#4009](https://github.com/owncloud/android/issues/4009)
 * Change - Gradle Version Catalog: [#4035](https://github.com/owncloud/android/pull/4035)
 * Change - Remove "ignore" from the debug flavour Android manifest: [#4064](https://github.com/owncloud/android/pull/4064)
+* Change - Not opening browser automatically in login: [#4067](https://github.com/owncloud/android/issues/4067)
 * Change - Added new unit tests for providers: [#4073](https://github.com/owncloud/android/issues/4073)
 * Enhancement - Show "More" button for every file list item: [#2885](https://github.com/owncloud/android/issues/2885)
 * Enhancement - Added "Open in web" options to main file list: [#3860](https://github.com/owncloud/android/issues/3860)
@@ -71,6 +72,15 @@ Details
    removed as it is not needed anymore.
 
    https://github.com/owncloud/android/pull/4064
+
+* Change - Not opening browser automatically in login: [#4067](https://github.com/owncloud/android/issues/4067)
+
+   When there is a fixed bearer auth server URL via a branded parameter, the login screen won't
+   redirect automatically to the browser so that some problems in the authentication flow are
+   solved.
+
+   https://github.com/owncloud/android/issues/4067
+   https://github.com/owncloud/android/pull/4106
 
 * Change - Added new unit tests for providers: [#4073](https://github.com/owncloud/android/issues/4073)
 

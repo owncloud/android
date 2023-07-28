@@ -703,7 +703,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val url = mdmProvider.getBrandingString(mdmKey = CONFIGURATION_SERVER_URL, stringKey = R.string.server_url)
         if (url.isNotEmpty()) {
             binding.hostUrlInput.setText(url)
-            checkOcServer()
         }
 
         binding.loginLayout.run {
