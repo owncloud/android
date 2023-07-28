@@ -35,7 +35,6 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.showMessageInSnackbar
-import com.owncloud.android.presentation.files.createfolder.CreateFolderDialogFragment
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.utils.PreferenceUtils
@@ -158,6 +157,7 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
         private const val ARG_TARGET_FILE = "TARGET_FILE"
         private const val IS_BUTTON_ENABLED_FLAG_KEY = "IS_BUTTON_ENABLED_FLAG_KEY"
         private val forbiddenChars = listOf('/', '\\')
+
         /**
          * Public factory method to create new RenameFileDialogFragment instances.
          *
