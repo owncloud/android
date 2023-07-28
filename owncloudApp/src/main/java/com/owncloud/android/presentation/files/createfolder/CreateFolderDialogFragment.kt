@@ -107,7 +107,7 @@ class CreateFolderDialogFragment : DialogFragment() {
                     MAX_FILENAME_LENGTH
                 )
             } else if (forbiddenChars.any { text.contains(it) }) {
-                error = getString(R.string.filename_forbidden_characters_from_server)
+                error = getString(R.string.filename_forbidden_characters)
             } else {
                 okButton.isEnabled = true
                 error = null
