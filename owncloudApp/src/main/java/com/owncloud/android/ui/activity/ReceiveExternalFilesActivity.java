@@ -909,7 +909,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     error = String.format(getString(R.string.uploader_upload_text_dialog_filename_error_length_max),
                             MAX_FILENAME_LENGTH);
                 } else if (matcher.find()) {
-                    error = getString(R.string.filename_forbidden_characters_from_server);
+                    error = getString(R.string.filename_forbidden_characters);
                 } else {
                     okButton.setEnabled(true);
                     error = null;
