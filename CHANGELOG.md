@@ -158,7 +158,7 @@ Details
 * Enhancement - Align Sharing icons with other platforms: [#4101](https://github.com/owncloud/android/issues/4101)
 
    The share icon has been changed on the screens where it appears to be synchronized with other
-   platforms
+   platforms.
 
    https://github.com/owncloud/android/issues/4101
    https://github.com/owncloud/android/pull/4112
