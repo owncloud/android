@@ -171,6 +171,7 @@
   <string name="file_list_files">Dateien</string>
   <string name="filedetails_select_file">Klicken Sie auf eine Datei für weitere Informationen.</string>
   <string name="upload_to">Hochgeladen nach %1$s</string>
+  <string name="pick_document_type">Wähle den zu erzeugenden Dokumenten Typ:</string>
   <string name="upload_files_title">Dateien</string>
   <string name="filedetails_size">Größe:</string>
   <string name="filedetails_type">Art:</string>
@@ -365,12 +366,17 @@
   <string name="available_offline_inherited_msg">Ein Ordner, der diese Datei beinhaltet, ist offline verfügbar.</string>
   <string name="rename_local_fail_msg">Die lokale Kopie konnte nicht umbenannt werden. Versuchen Sie es mit einem anderen Namen.</string>
   <string name="rename_server_fail_msg">Die Umbenennung konnte nicht abgeschlossen werden.</string>
+  <string name="file_already_exists">Datei existiert bereits</string>
+  <string name="folder_already_exists">Ordner existiert bereits</string>
+  <string name="file_already_exists_description">Datei mit dem Namen %1$s existiert bereits.</string>
+  <string name="folder_already_exists_description">Ordner mit dem Namen %1$s existiert bereits.</string>
   <string name="sync_file_fail_msg">Die entfernte Datei konnte nicht überprüft werden.</string>
   <string name="sync_file_nothing_to_do_msg">Dateiinhalte wurden bereits synchronisiert.</string>
   <string name="new_remote_version_found_msg">Eine neue Version befindet sich auf dem Server. Lade herunter ...</string>
   <string name="download_enqueued_msg">Herunterladen in Warteschlange eingereiht</string>
   <string name="upload_enqueued_msg">Hochladen in Warteschlange eingereiht</string>
   <string name="create_dir_fail_msg">Das Verzeichnis konnte nicht erstellt werden.</string>
+  <string name="create_file_fail_msg">Die Datei konnte nicht erstellt werden</string>
   <string name="filename_forbidden_characters">Verbotene Zeichen sind: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Der Dateiname enthält mindestens ein ungültiges Zeichen.</string>
   <string name="filename_empty">Der Dateiname darf nicht leer sein.</string>
@@ -655,6 +661,7 @@
   <string name="release_notes_proceed">Fortfahren</string>
   <string name="release_notes_icon">Symbol für Veröffentlichungsnotizen</string>
   <string name="release_notes_4_0_title_1">Unterstützung für Spaces</string>
+  <string name="release_notes_4_0_subtitle_1">Unterstützung von Spaces (oCIS)<b>Nur verfügbar für neu eingeloggte Konten</b></string>
   <string name="release_notes_4_0_title_2">Untere Navigationsleiste</string>
   <string name="release_notes_4_0_subtitle_2">Einige Tabs neu angeordnet</string>
   <string name="release_notes_4_0_title_3">Unterstützung von Lollipop endet.</string>
@@ -667,6 +674,10 @@
   <string name="release_notes_4_0_subtitle_6">In den Einstellungen wurde ein neuer Eintrag hinzugefügt, der zu den App-Benachrichtigungseinstellungen des Geräts weiterleitet.</string>
   <string name="release_notes_4_0_title_7">Kleine Fehlerberichtigungen und Verbesserungen</string>
   <string name="release_notes_4_0_subtitle_7">Kleine Fehler wurden behoben und geringfügige technische Verbesserungen durchgeführt, um die Benutzung der App zu erleichtern.</string>
+  <string name="release_notes_4_0_title_8">Markdown-Unterstützung</string>
+  <string name="release_notes_4_0_subtitle_8">Markdown-Dateien werden gerendert und im entsprechenden Format dargestellt.</string>
+  <string name="release_notes_4_0_title_9">Liste der Provider (Infinite Scale)</string>
+  <string name="release_notes_4_0_subtitle_9">Wenn der Server zum Öffnen spezifischer Dateiarten App-Provider unterstützt, werden alle in der Detail-Ansicht angezeigt.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
@@ -675,5 +686,6 @@
   <string name="open_in_web_error_too_early">Die Datei ist derzeit nicht verfügbar, bitte versuchen Sie es später noch einmal.</string>
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">Nicht mehr anzeigen</string>
+  <string name="ocis_accounts_warning_button">Verstanden</string>
   <string name="tab_label_ascii">Text</string>
 </resources>
