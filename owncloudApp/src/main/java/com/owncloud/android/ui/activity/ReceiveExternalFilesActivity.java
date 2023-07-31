@@ -106,6 +106,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.koin.java.KoinJavaComponent.get;
 import static org.koin.java.KoinJavaComponent.inject;
@@ -160,6 +162,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private final static String KEY_ACCOUNT_SELECTION_SHOWING = "ACCOUNT_SELECTION_SHOWING";
 
     private static final String DIALOG_WAIT_COPY_FILE = "DIALOG_WAIT_COPY_FILE";
+
+    Pattern pattern = Pattern.compile("[/\\\\]");
 
     private ReceiveExternalFilesViewModel mReceiveExternalFilesViewModel;
 
@@ -865,6 +869,27 @@ public class ReceiveExternalFilesActivity extends FileActivity
         final TextInputEditText input = dialogView.findViewById(R.id.inputFileName);
         final TextInputLayout inputLayout = dialogView.findViewById(R.id.inputTextLayout);
 
+        final AlertDialog alertDialog = builder.create();
+        setFileNameFromIntent(alertDialog, input);
+        alertDialog.setOnShowListener(dialog -> {
+            Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setOnClickListener(view -> {
+                String fileName = input.getText().toString();
+                String error = null;
+                fileName += ".txt";
+                String filePath = savePlainTextToFile(fileName);
+                ArrayList<String> fileToUpload = new ArrayList<>();
+                fileToUpload.add(filePath);
+                @NotNull Lazy<TransfersViewModel> transfersViewModelLazy = inject(TransfersViewModel.class);
+                TransfersViewModel transfersViewModel = transfersViewModelLazy.getValue();
+                transfersViewModel.uploadFilesFromSystem(getAccount().name, fileToUpload, mUploadPath, mPersonalSpaceId);
+                finish();
+
+                inputLayout.setErrorEnabled(error != null);
+                inputLayout.setError(error);
+            });
+        });
+
         input.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -873,44 +898,35 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Button okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                String fileName = input.getText().toString();
+                String error = null;
+                Matcher matcher = pattern.matcher(fileName);
+                if (charSequence == null || charSequence.toString().trim().isEmpty()) {
+                    okButton.setEnabled(false);
+                    error = getString(R.string.uploader_upload_text_dialog_filename_error_empty);
+                } else if (charSequence.length() > MAX_FILENAME_LENGTH) {
+                    error = String.format(getString(R.string.uploader_upload_text_dialog_filename_error_length_max),
+                            MAX_FILENAME_LENGTH);
+                } else if (matcher.find()) {
+                    error = getString(R.string.filename_forbidden_characters);
+                } else {
+                    okButton.setEnabled(true);
+                    error = null;
+                    inputLayout.setError(error);
+                }
 
+                if (error != null) {
+                    okButton.setEnabled(false);
+                    inputLayout.setError(error);
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                inputLayout.setError(null);
-                inputLayout.setErrorEnabled(false);
             }
         });
 
-        final AlertDialog alertDialog = builder.create();
-        setFileNameFromIntent(alertDialog, input);
-        alertDialog.setOnShowListener(dialog -> {
-            Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            button.setOnClickListener(view -> {
-                String fileName = input.getText().toString();
-                String error = null;
-                if (fileName.length() > MAX_FILENAME_LENGTH) {
-                    error = String.format(getString(R.string.uploader_upload_text_dialog_filename_error_length_max),
-                            MAX_FILENAME_LENGTH);
-                } else if (fileName.length() == 0) {
-                    error = getString(R.string.uploader_upload_text_dialog_filename_error_empty);
-                } else if (fileName.contains("/")) {
-                    error = getString(R.string.filename_forbidden_characters);
-                } else {
-                    fileName += ".txt";
-                    String filePath = savePlainTextToFile(fileName);
-                    ArrayList<String> fileToUpload = new ArrayList<>();
-                    fileToUpload.add(filePath);
-                    @NotNull Lazy<TransfersViewModel> transfersViewModelLazy = inject(TransfersViewModel.class);
-                    TransfersViewModel transfersViewModel = transfersViewModelLazy.getValue();
-                    transfersViewModel.uploadFilesFromSystem(getAccount().name, fileToUpload, mUploadPath, mPersonalSpaceId);
-                    finish();
-                }
-                inputLayout.setErrorEnabled(error != null);
-                inputLayout.setError(error);
-            });
-        });
         alertDialog.show();
     }
 

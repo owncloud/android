@@ -1,0 +1,6 @@
+Enhancement: Improve UX of creation dialog
+
+Creation dialog now shows an error message and disables the confirmation button when forbidden characters are typed
+
+https://github.com/owncloud/android/issues/4031
+https://github.com/owncloud/android/pull/4097
