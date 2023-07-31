@@ -28,7 +28,7 @@ import com.owncloud.android.lib.resources.Service
 import com.owncloud.android.lib.resources.appregistry.responses.AppRegistryResponse
 
 interface AppRegistryService : Service {
-    fun getAppRegistry(): RemoteOperationResult<AppRegistryResponse>
+    fun getAppRegistry(appUrl: String?): RemoteOperationResult<AppRegistryResponse>
 
     fun getUrlToOpenInWeb(
         openWebEndpoint: String,

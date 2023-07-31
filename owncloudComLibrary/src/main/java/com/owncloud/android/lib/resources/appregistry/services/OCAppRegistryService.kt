@@ -31,8 +31,8 @@ import com.owncloud.android.lib.resources.appregistry.GetUrlToOpenInWebRemoteOpe
 import com.owncloud.android.lib.resources.appregistry.responses.AppRegistryResponse
 
 class OCAppRegistryService(override val client: OwnCloudClient) : AppRegistryService {
-    override fun getAppRegistry(): RemoteOperationResult<AppRegistryResponse> =
-        GetRemoteAppRegistryOperation().execute(client)
+    override fun getAppRegistry(appUrl: String?): RemoteOperationResult<AppRegistryResponse> =
+        GetRemoteAppRegistryOperation(appUrl).execute(client)
 
     override fun getUrlToOpenInWeb(openWebEndpoint: String, fileId: String, appName: String): RemoteOperationResult<String> =
         GetUrlToOpenInWebRemoteOperation(

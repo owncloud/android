@@ -37,14 +37,14 @@ import com.squareup.moshi.Moshi
 import timber.log.Timber
 import java.net.URL
 
-class GetRemoteAppRegistryOperation : RemoteOperation<AppRegistryResponse>() {
+class GetRemoteAppRegistryOperation(private val appUrl: String?) : RemoteOperation<AppRegistryResponse>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<AppRegistryResponse> {
         var result: RemoteOperationResult<AppRegistryResponse>
 
         try {
             val uriBuilder = client.baseUri.buildUpon().apply {
-                appendEncodedPath(APP_REGISTRY_ENDPOINT)
+                appendEncodedPath(appUrl)
             }
             val getMethod = GetMethod(URL(uriBuilder.build().toString()))
             val status = client.executeHttpMethod(getMethod)
@@ -74,9 +74,5 @@ class GetRemoteAppRegistryOperation : RemoteOperation<AppRegistryResponse>() {
         }
 
         return result
-    }
-
-    companion object {
-        private const val APP_REGISTRY_ENDPOINT = "app/list"
     }
 }
