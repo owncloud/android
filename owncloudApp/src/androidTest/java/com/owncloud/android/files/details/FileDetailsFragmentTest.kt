@@ -82,7 +82,7 @@ class FileDetailsFragmentTest {
     }
 
     @Test
-    fun initial_status_components() {
+    fun display_visibility_of_detail_view_when_it_is_displayed() {
         assertViewsDisplayed()
     }
 

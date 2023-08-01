@@ -84,7 +84,7 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getFileWithSyncInfoByIdAsFlow returns flow OCFileWithSyncInfo`() = runBlocking {
+    fun `getFileWithSyncInfoByIdAsFlow returns a flow of OCFileWithSyncInfo object`() = runBlocking {
         val ocFileAndFileSync = OCFileAndFileSync(OC_FILE.toEntity(), OCFileSyncEntity(
             fileId = OC_FILE.id!!,
             uploadWorkerUuid = null,
@@ -104,7 +104,7 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getFileWithSyncInfoByIdAsFlow returns null`() = runBlocking {
+    fun `getFileWithSyncInfoByIdAsFlow returns null when DAO is null`() = runBlocking {
 
         every { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(null)
 
@@ -118,7 +118,7 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test(expected = Exception::class)
-    fun `getFileWithSyncInfoByIdAsFlow returns expection`() = runBlocking {
+    fun `getFileWithSyncInfoByIdAsFlow returns a Expection when DAO receive a Exception`() = runBlocking {
 
         every { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } throws Exception()
 
