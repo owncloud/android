@@ -24,6 +24,7 @@ Summary
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 * Enhancement - Prevent http traffic with branding options: [#4066](https://github.com/owncloud/android/issues/4066)
 * Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
+* Enhancement - Align Sharing icons with other platforms: [#4101](https://github.com/owncloud/android/issues/4101)
 
 Details
 -------
@@ -153,6 +154,14 @@ Details
 
    https://github.com/owncloud/android/issues/4082
    https://github.com/owncloud/android/pull/4099
+
+* Enhancement - Align Sharing icons with other platforms: [#4101](https://github.com/owncloud/android/issues/4101)
+
+   The share icon has been changed on the screens where it appears to be synchronized with other
+   platforms.
+
+   https://github.com/owncloud/android/issues/4101
+   https://github.com/owncloud/android/pull/4112
 
 Changelog for ownCloud Android Client [4.0.0] (2023-05-29)
 =======================================
