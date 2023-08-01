@@ -23,6 +23,7 @@ package com.owncloud.android.data.appregistry
 
 import com.owncloud.android.data.appregistry.datasources.LocalAppRegistryDataSource
 import com.owncloud.android.data.appregistry.datasources.RemoteAppRegistryDataSource
+import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.domain.appregistry.AppRegistryRepository
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import kotlinx.coroutines.flow.Flow
@@ -30,9 +31,12 @@ import kotlinx.coroutines.flow.Flow
 class OCAppRegistryRepository(
     private val localAppRegistryDataSource: LocalAppRegistryDataSource,
     private val remoteAppRegistryDataSource: RemoteAppRegistryDataSource,
+    private val localCapabilitiesDataSource: LocalCapabilitiesDataSource
 ) : AppRegistryRepository {
     override fun refreshAppRegistryForAccount(accountName: String) {
-        remoteAppRegistryDataSource.getAppRegistryForAccount(accountName).also {
+        val capabilities =  localCapabilitiesDataSource.getCapabilityForAccount(accountName)//remoteAppRegistryDataSource.getCapabilities(accountName)
+        val appUrl =  capabilities?.filesAppProviders?.appsUrl?.substring(1)
+        remoteAppRegistryDataSource.getAppRegistryForAccount(accountName, appUrl).also {
             localAppRegistryDataSource.saveAppRegistryForAccount(it)
         }
     }
