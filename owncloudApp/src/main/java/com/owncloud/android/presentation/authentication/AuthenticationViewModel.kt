@@ -25,6 +25,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.MainApp
+import com.owncloud.android.R
 import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
 import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationInfo
@@ -45,6 +46,7 @@ import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAu
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.authentication.oauth.OAuthUtils
 import com.owncloud.android.presentation.common.UIResult
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
 import kotlinx.coroutines.launch
@@ -65,6 +67,7 @@ class AuthenticationViewModel(
     private val requestTokenUseCase: RequestTokenUseCase,
     private val registerClientUseCase: RegisterClientUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    private val contextProvider: ContextProvider,
 ) : ViewModel() {
 
     val codeVerifier: String = OAuthUtils().generateRandomCodeVerifier()
@@ -99,7 +102,11 @@ class AuthenticationViewModel(
             showLoading = true,
             liveData = _serverInfo,
             useCase = getServerInfoAsyncUseCase,
-            useCaseParams = GetServerInfoAsyncUseCase.Params(serverPath = serverUrl, creatingAccount = creatingAccount)
+            useCaseParams = GetServerInfoAsyncUseCase.Params(
+                serverPath = serverUrl,
+                creatingAccount = creatingAccount,
+                secureConnectionEnforced = contextProvider.getBoolean(R.bool.enforce_secure_connection),
+            )
         )
     }
 

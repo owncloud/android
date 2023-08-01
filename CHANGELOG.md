@@ -22,6 +22,7 @@ Summary
 * Enhancement - Improve grid mode: [#4027](https://github.com/owncloud/android/issues/4027)
 * Enhancement - Improve UX of creation dialog: [#4031](https://github.com/owncloud/android/issues/4031)
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
+* Enhancement - Prevent http traffic with branding options: [#4066](https://github.com/owncloud/android/issues/4066)
 * Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
 
 Details
@@ -137,6 +138,13 @@ Details
 
    https://github.com/owncloud/android/issues/3946
    https://github.com/owncloud/android/pull/4040
+
+* Enhancement - Prevent http traffic with branding options: [#4066](https://github.com/owncloud/android/issues/4066)
+
+   Adding branding option for prevent http traffic.
+
+   https://github.com/owncloud/android/issues/4066
+   https://github.com/owncloud/android/pull/4110
 
 * Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
 

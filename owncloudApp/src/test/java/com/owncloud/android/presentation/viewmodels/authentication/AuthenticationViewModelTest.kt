@@ -21,6 +21,7 @@
 
 package com.owncloud.android.presentation.viewmodels.authentication
 
+import com.owncloud.android.R
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.authentication.oauth.RegisterClientUseCase
 import com.owncloud.android.domain.authentication.oauth.RequestTokenUseCase
@@ -125,6 +126,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
         every { anyConstructed<OAuthUtils>().generateRandomCodeVerifier() } returns "CODE VERIFIER"
         every { anyConstructed<OAuthUtils>().generateCodeChallenge(any()) } returns "CODE CHALLENGE"
         every { anyConstructed<OAuthUtils>().generateRandomState() } returns "STATE"
+        every { contextProvider.getBoolean(R.bool.enforce_secure_connection) } returns false
 
         testCoroutineDispatcher.pauseDispatcher()
 
@@ -142,7 +144,8 @@ class AuthenticationViewModelTest : ViewModelTest() {
             requestTokenUseCase = requestTokenUseCase,
             registerClientUseCase = registerClientUseCase,
             workManagerProvider = workManagerProvider,
-            coroutinesDispatcherProvider = coroutineDispatcherProvider
+            coroutinesDispatcherProvider = coroutineDispatcherProvider,
+            contextProvider = contextProvider,
         )
     }
 
