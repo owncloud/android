@@ -377,7 +377,6 @@
   <string name="upload_enqueued_msg">Yükleme kuyruğa alınmış</string>
   <string name="create_dir_fail_msg">Klasör oluşturulamadı</string>
   <string name="create_file_fail_msg">Dosya oluşturulamadı</string>
-  <string name="filename_forbidden_characters">Yasaklı karakterler: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Dosya adı en az bir geçersiz karakter içeriyor</string>
   <string name="filename_empty">Dosya adı boş olamaz</string>
   <string name="filename_too_long">Dosya adı bu kadar uzun olamaz</string>

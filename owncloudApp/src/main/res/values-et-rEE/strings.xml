@@ -379,7 +379,6 @@
   <string name="upload_enqueued_msg">Üleslaadimine lisati järjekorda</string>
   <string name="create_dir_fail_msg">Kataloogi ei saa tekitada</string>
   <string name="create_file_fail_msg">Faili loomine ei õnnestunud</string>
-  <string name="filename_forbidden_characters">Keelatud sümbolid:  / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Faili nimi sisaldab vähemalt üht keelatud märki</string>
   <string name="filename_empty">Faili nime lahter ei saa olla tühi</string>
   <string name="filename_too_long">Faili nimi ei saa olla nii pikk</string>

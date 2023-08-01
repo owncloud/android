@@ -373,7 +373,6 @@
   <string name="upload_enqueued_msg">Caricamento in coda</string>
   <string name="create_dir_fail_msg">La cartella non può essere creata</string>
   <string name="create_file_fail_msg">Il file non può essere creato</string>
-  <string name="filename_forbidden_characters">Caratteri proibiti: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Il nome del file contiene almeno un carattere non valido</string>
   <string name="filename_empty">Il nome del file non può essere vuoto</string>
   <string name="filename_too_long">Il nome del file non può essere così lungo</string>

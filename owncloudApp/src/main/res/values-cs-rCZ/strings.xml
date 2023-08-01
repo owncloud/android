@@ -350,7 +350,6 @@
   <string name="sync_file_nothing_to_do_msg">Obsah souboru je již synchronizován</string>
   <string name="new_remote_version_found_msg">Novější verze byla nalezena na serveru. Stahuji...</string>
   <string name="create_dir_fail_msg">Adresář nemohl být vytvořen</string>
-  <string name="filename_forbidden_characters">Zakázané znaky: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Jméno souboru obsahuje alespoň jeden neplatný znak</string>
   <string name="filename_empty">Název nemůže být prázdný</string>
   <string name="filename_too_long">Název souboru nemůže být tak dlouhý</string>

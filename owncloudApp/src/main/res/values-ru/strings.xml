@@ -371,7 +371,6 @@
   <string name="download_enqueued_msg">Скачивание в очереди</string>
   <string name="upload_enqueued_msg">Загрузка в очереди</string>
   <string name="create_dir_fail_msg">Не удалось создать каталог</string>
-  <string name="filename_forbidden_characters">Недопустимые символы: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Имя файла содержит по крайней мере один некорректный символ</string>
   <string name="filename_empty">Имя файла не может быть пустым</string>
   <string name="filename_too_long">Неверная длина имени файла</string>

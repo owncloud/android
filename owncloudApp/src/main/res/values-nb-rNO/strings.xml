@@ -294,7 +294,6 @@
   <string name="sync_file_fail_msg">Eksterne filer kunne ikke sjekkes</string>
   <string name="sync_file_nothing_to_do_msg">filinnhold er allerede synkronisert</string>
   <string name="create_dir_fail_msg">Mappe kunne ikke opprettes</string>
-  <string name="filename_forbidden_characters">Forbudte tegn: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Filnavnet inneholder minst ett ulovlig tegn</string>
   <string name="filename_empty">Filnavn kan ikke være tomt</string>
   <string name="wait_a_moment">Vent et øyeblikk</string>

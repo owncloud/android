@@ -379,7 +379,6 @@
   <string name="upload_enqueued_msg">Subida encolada</string>
   <string name="create_dir_fail_msg">No se pudo crear la carpeta</string>
   <string name="create_file_fail_msg">No se ha podido crear el archivo</string>
-  <string name="filename_forbidden_characters">Carácteres ilegales: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">El nombre del archivo contiene al menos un carácter no válido</string>
   <string name="filename_empty">El nombre de archivo no puede estar vacío</string>
   <string name="filename_too_long">El nombre del fichero no puede ser tan largo</string>

@@ -327,7 +327,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="sync_file_fail_msg">Le fichier distant ne peut pas être vérifié</string>
   <string name="sync_file_nothing_to_do_msg">Le contenu du fichier est déjà synchronisé</string>
   <string name="create_dir_fail_msg">Echec de la création du dossier</string>
-  <string name="filename_forbidden_characters">Caractères non autorisés :  / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Le nom de fichier contient au moins un caractère invalide</string>
   <string name="filename_empty">Le nom de fichier ne peut pas être vide</string>
   <string name="wait_a_moment">Merci de patienter</string>

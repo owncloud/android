@@ -370,7 +370,6 @@
   <string name="download_enqueued_msg">다운로드 대기 중</string>
   <string name="upload_enqueued_msg">업로드 대기 중</string>
   <string name="create_dir_fail_msg">폴더를 만들 수 없음</string>
-  <string name="filename_forbidden_characters">사용할 수 없는 문자: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">파일 이름에 하나 이상의 사용할 수 없는 문자가 포함되어 있음</string>
   <string name="filename_empty">파일 이름이 비어 있을 수 없음</string>
   <string name="filename_too_long">파일 이름이 너무 긺</string>

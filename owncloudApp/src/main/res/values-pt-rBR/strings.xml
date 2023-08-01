@@ -379,7 +379,6 @@
   <string name="upload_enqueued_msg">Enviar em fila</string>
   <string name="create_dir_fail_msg">A pasta não pode ser criada</string>
   <string name="create_file_fail_msg">O arquivo não pôde ser criado</string>
-  <string name="filename_forbidden_characters">Caracteres proibidos: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">O nome do arquivo contem pelo menos um caractere inválido  </string>
   <string name="filename_empty">O nome do arquivo não pode estar vazio</string>
   <string name="filename_too_long">O nome do arquivo não pode ser tão longo</string>
