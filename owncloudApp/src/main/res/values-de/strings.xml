@@ -377,7 +377,6 @@
   <string name="upload_enqueued_msg">Hochladen in Warteschlange eingereiht</string>
   <string name="create_dir_fail_msg">Das Verzeichnis konnte nicht erstellt werden</string>
   <string name="create_file_fail_msg">Die Datei konnte nicht erstellt werden.</string>
-  <string name="filename_forbidden_characters">Verbotene Zeichen sind: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Der Dateiname enthält mindestens ein ungültiges Zeichen</string>
   <string name="filename_empty">Der Dateiname darf nicht leer sein</string>
   <string name="filename_too_long">Der Dateiname darf nicht so lang sein.</string>

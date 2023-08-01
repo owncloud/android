@@ -377,7 +377,6 @@
   <string name="upload_enqueued_msg">Ngarkimi u vu në radhë</string>
   <string name="create_dir_fail_msg">S\’u krijua dot dosja</string>
   <string name="create_file_fail_msg">Kartela s’u krijua dot</string>
-  <string name="filename_forbidden_characters">Shenja të ndaluara: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Emri i kartelës përmban të paktën një shenjë të pavlefshme</string>
   <string name="filename_empty">Emri i kartelës s\’mund të jetë i zbrazët</string>
   <string name="filename_too_long">Emri i kartelës s’mund të jetë aq i gjatë</string>

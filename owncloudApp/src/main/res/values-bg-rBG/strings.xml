@@ -375,7 +375,6 @@
   <string name="download_enqueued_msg">Изтеглянето е поставено в опашка</string>
   <string name="upload_enqueued_msg">Качването е поставено в опашка</string>
   <string name="create_dir_fail_msg">Папката не може да бъде създадена</string>
-  <string name="filename_forbidden_characters">Забранени символи: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Името на файла съдържа поне един невалиден символ</string>
   <string name="filename_empty">Името на файла не може да бъде празно</string>
   <string name="filename_too_long">Името на файла не може да бъде толкова дълго</string>
