@@ -32,9 +32,9 @@ import com.owncloud.android.lib.resources.appregistry.responses.AppRegistryRespo
 class OCRemoteAppRegistryDataSource(
     private val clientManager: ClientManager
 ) : RemoteAppRegistryDataSource {
-    override fun getAppRegistryForAccount(accountName: String): AppRegistry =
+    override fun getAppRegistryForAccount(accountName: String, appUrl: String?): AppRegistry =
         executeRemoteOperation {
-            clientManager.getAppRegistryService(accountName).getAppRegistry()
+            clientManager.getAppRegistryService(accountName).getAppRegistry(appUrl)
         }.toModel(accountName)
 
     override fun getUrlToOpenInWeb(

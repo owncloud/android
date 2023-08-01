@@ -22,7 +22,7 @@ Summary
 * Enhancement - Improve grid mode: [#4027](https://github.com/owncloud/android/issues/4027)
 * Enhancement - Improve UX of creation dialog: [#4031](https://github.com/owncloud/android/issues/4031)
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
-* Enhancement - Prevent http traffic with branding options: [#4066](https://github.com/owncloud/android/issues/4066)
+* Enhancement - Respect app_providers_appsUrl value from capabilities: [#4075](https://github.com/owncloud/android/issues/4075)
 * Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
 * Enhancement - Align Sharing icons with other platforms: [#4101](https://github.com/owncloud/android/issues/4101)
 
@@ -140,12 +140,13 @@ Details
    https://github.com/owncloud/android/issues/3946
    https://github.com/owncloud/android/pull/4040
 
-* Enhancement - Prevent http traffic with branding options: [#4066](https://github.com/owncloud/android/issues/4066)
+* Enhancement - Respect app_providers_appsUrl value from capabilities: [#4075](https://github.com/owncloud/android/issues/4075)
 
-   Adding branding option for prevent http traffic.
+   Now, the app receives the app_providers_appsUrl from the local database. Before of this
+   issue, the value was hardcoded.
 
-   https://github.com/owncloud/android/issues/4066
-   https://github.com/owncloud/android/pull/4110
+   https://github.com/owncloud/android/issues/4075
+   https://github.com/owncloud/android/pull/4113
 
 * Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
 

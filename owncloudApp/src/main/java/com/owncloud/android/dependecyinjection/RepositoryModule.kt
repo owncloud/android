@@ -51,7 +51,7 @@ import com.owncloud.android.domain.webfinger.WebFingerRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    factory<AppRegistryRepository> { OCAppRegistryRepository(get(), get()) }
+    factory<AppRegistryRepository> { OCAppRegistryRepository(get(), get(), get()) }
     factory<AuthenticationRepository> { OCAuthenticationRepository(get(), get()) }
     factory<CapabilityRepository> { OCCapabilityRepository(get(), get(), get()) }
     factory<FileRepository> { OCFileRepository(get(), get(), get(), get()) }
