@@ -40,7 +40,6 @@ import com.owncloud.android.domain.extensions.isOneOf
 import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
-import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFileWithSyncInfoByIdUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
@@ -69,10 +68,9 @@ class FileDetailsViewModel(
     refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase,
     getAppRegistryForMimeTypeAsStreamUseCase: GetAppRegistryForMimeTypeAsStreamUseCase,
     private val cancelDownloadForFileUseCase: CancelDownloadForFileUseCase,
-    getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
     private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
     private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
-    private val getFileWithSyncInfoByIdUseCase: GetFileWithSyncInfoByIdUseCase,
+    getFileWithSyncInfoByIdUseCase: GetFileWithSyncInfoByIdUseCase,
     val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val workManager: WorkManager,
