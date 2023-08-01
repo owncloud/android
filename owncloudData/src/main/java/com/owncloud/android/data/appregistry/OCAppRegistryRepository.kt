@@ -31,10 +31,10 @@ import kotlinx.coroutines.flow.Flow
 class OCAppRegistryRepository(
     private val localAppRegistryDataSource: LocalAppRegistryDataSource,
     private val remoteAppRegistryDataSource: RemoteAppRegistryDataSource,
-    private val localCapabilitiesDataSource: LocalCapabilitiesDataSource
+    private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
 ) : AppRegistryRepository {
     override fun refreshAppRegistryForAccount(accountName: String) {
-        val capabilities =  localCapabilitiesDataSource.getCapabilityForAccount(accountName)//remoteAppRegistryDataSource.getCapabilities(accountName)
+        val capabilities =  localCapabilitiesDataSource.getCapabilityForAccount(accountName)
         val appUrl =  capabilities?.filesAppProviders?.appsUrl?.substring(1)
         remoteAppRegistryDataSource.getAppRegistryForAccount(accountName, appUrl).also {
             localAppRegistryDataSource.saveAppRegistryForAccount(it)

@@ -26,7 +26,7 @@ import com.owncloud.android.domain.appregistry.model.AppRegistry
 interface RemoteAppRegistryDataSource {
     fun getAppRegistryForAccount(
         accountName: String,
-        appUrl: String?
+        appUrl: String?,
     ): AppRegistry
 
     fun getUrlToOpenInWeb(
