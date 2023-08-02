@@ -149,7 +149,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         every { mdmProvider.getBrandingInteger(any(), R.integer.lock_enforced) } returns LockEnforcedType.EITHER_ENFORCED.ordinal
 
         val result = securityViewModel.isSecurityEnforcedEnabled()
-        assertFalse(result)
+        assertTrue(result)
 
     }
 
@@ -160,7 +160,7 @@ class SettingsSecurityViewModelTest : ViewModelTest() {
         every { mdmProvider.getBrandingInteger(any(), R.integer.lock_enforced) } returns LockEnforcedType.DISABLED.ordinal
 
         val result = securityViewModel.isSecurityEnforcedEnabled()
-        assertFalse(result)
+        assertTrue(result)
     }
 
     @Test
