@@ -173,7 +173,6 @@ class FileDetailsFragment : FileFragment() {
                     }
 
                     is SynchronizeFileUseCase.SyncType.DownloadEnqueued -> {
-                        setIconSyncPinAccordingToFilesLocalState()
                         fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
                     }
 
@@ -196,11 +195,6 @@ class FileDetailsFragment : FileFragment() {
         }
         startListeningToOngoingTransfers()
         fileDetailsViewModel.checkOnGoingTransfersWhenOpening()
-    }
-
-    private fun setIconSyncPinAccordingToFilesLocalState() {
-        binding.thumbnailDetailFile.setImageResource(R.drawable.sync_pin)
-        binding.thumbnailDetailFile.visibility = View.VISIBLE
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -304,11 +298,11 @@ class FileDetailsFragment : FileFragment() {
     private fun updateDetails(ocFileWithSyncInfo: OCFileWithSyncInfo) {
         binding.fdname.text = ocFileWithSyncInfo.file.fileName
         binding.fdSize.text = DisplayUtils.bytesToHumanReadable(ocFileWithSyncInfo.file.length, requireContext())
-        binding.fdModified.text = DisplayUtils.unixTimeToHumanReadable(ocFileWithSyncInfo.file.modificationTimestamp)
-        binding.fdCreated.text = DisplayUtils.unixTimeToHumanReadable(ocFileWithSyncInfo.file.creationTimestamp!!)
         binding.fdPath.text = ocFileWithSyncInfo.file.getParentRemotePath()
         setLastSync(ocFileWithSyncInfo.file)
-        setIconPinAccordingToFilesLocalState(binding.thumbnailDetailFile)
+        setModified(ocFileWithSyncInfo.file)
+        setCreated(ocFileWithSyncInfo.file)
+        setIconPinAccordingToFilesLocalState(binding.badgeDetailFile, ocFileWithSyncInfo)
         setMimeType(ocFileWithSyncInfo.file)
         setSpaceName(ocFileWithSyncInfo)
         requireActivity().invalidateOptionsMenu()
@@ -319,6 +313,22 @@ class FileDetailsFragment : FileFragment() {
             binding.fdLastSync.visibility = View.VISIBLE
             binding.fdLastSyncLabel.visibility = View.VISIBLE
             binding.fdLastSync.text = DisplayUtils.unixTimeToHumanReadable(ocFile.lastSyncDateForData!!)
+        }
+    }
+
+    private fun setModified(ocFile: OCFile) {
+        if (ocFile.modificationTimestamp!! > ZERO_MILLISECOND_TIME) {
+            binding.fdModified.visibility = View.VISIBLE
+            binding.fdModifiedLabel.visibility = View.VISIBLE
+            binding.fdModified.text = DisplayUtils.unixTimeToHumanReadable(ocFile.modificationTimestamp!!)
+        }
+    }
+
+    private fun setCreated(ocFile: OCFile) {
+        if (ocFile.creationTimestamp!! > ZERO_MILLISECOND_TIME) {
+            binding.fdCreated.visibility = View.VISIBLE
+            binding.fdCreatedLabel.visibility = View.VISIBLE
+            binding.fdCreated.text = DisplayUtils.unixTimeToHumanReadable(ocFile.creationTimestamp!!)
         }
     }
 
@@ -336,12 +346,16 @@ class FileDetailsFragment : FileFragment() {
         }
     }
 
-    private fun setIconPinAccordingToFilesLocalState(thumbnailImageView: ImageView) {
+    private fun setIconPinAccordingToFilesLocalState(thumbnailImageView: ImageView, ocFileWithSyncInfo: OCFileWithSyncInfo) {
         // local state
         thumbnailImageView.bringToFront()
         thumbnailImageView.isVisible = false
 
-        if (file.etagInConflict != null) {
+        val file =  ocFileWithSyncInfo.file
+        if (ocFileWithSyncInfo.isSynchronizing) {
+            thumbnailImageView.setImageResource(R.drawable.sync_pin)
+            thumbnailImageView.visibility = View.VISIBLE
+        } else if (file.etagInConflict != null) {
             // conflict
             thumbnailImageView.setImageResource(R.drawable.error_pin)
             thumbnailImageView.visibility = View.VISIBLE
