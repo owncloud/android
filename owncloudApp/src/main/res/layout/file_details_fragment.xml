@@ -41,12 +41,11 @@
                     android:src="@drawable/file"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.cardview.widget.CardView>
 
             <ImageView
-                android:id="@+id/thumbnailDetailFile"
+                android:id="@+id/badgeDetailFile"
                 android:layout_width="@dimen/file_indicator_pin_size_grid"
                 android:layout_height="@dimen/file_indicator_pin_size_grid"
                 android:src="@drawable/sync_pin"
@@ -183,12 +182,14 @@
             android:id="@+id/fdModifiedLabel"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:visibility="gone"
             android:text="@string/filedetails_modified"
             android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintBottom_toBottomOf="@id/fdModified"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/fdModified"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="1.0"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/fdModified"
@@ -196,23 +197,27 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:gravity="end"
+            android:visibility="gone"
             android:text=""
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textColor="@color/action_mode_status_bar_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fdModifiedLabel"
             app:layout_constraintTop_toBottomOf="@id/divider2"
-            tools:text="@tools:sample/lorem[6]" />
+            tools:text="@tools:sample/lorem[6]"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/fdCreatedLabel"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:visibility="gone"
             android:text="@string/filedetails_created"
             android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintBottom_toBottomOf="@id/fdCreated"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/fdCreated" />
+            app:layout_constraintTop_toTopOf="@id/fdCreated"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/fdCreated"
@@ -220,6 +225,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:gravity="end"
+            android:visibility="gone"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:textColor="@color/action_mode_status_bar_background"
             app:layout_constraintEnd_toEndOf="parent"
