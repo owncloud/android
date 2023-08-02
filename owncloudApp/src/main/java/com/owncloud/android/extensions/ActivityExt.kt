@@ -291,33 +291,19 @@ fun Activity.checkPasscodeEnforced(securityEnforced: SecurityEnforced) {
     val mdmProvider by inject<MdmProvider>()
 
     // If device protection is false, launch the previous behaviour (check the lockEnforced).
-    // If device protection is true, check the lockEnforced only if device is not secure.
-    val deviceProtection: Boolean = !mdmProvider.getBrandingBoolean(CONFIGURATION_DEVICE_PROTECTION, R.bool.device_protection) || !isDeviceSecure()
+    // If device protection is true, ask for security only if device is not secure.
+    val showDeviceProtectionForced: Boolean =
+        mdmProvider.getBrandingBoolean(CONFIGURATION_DEVICE_PROTECTION, R.bool.device_protection) && !isDeviceSecure()
     val lockEnforced: Int = this.resources.getInteger(R.integer.lock_enforced)
     val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
-
-    if (deviceProtection) {
+    if (showDeviceProtectionForced) {
+        showSelectSecurityDialog(passcodeConfigured, patternConfigured, securityEnforced)
+    } else {
         when (parseFromInteger(lockEnforced)) {
             LockEnforcedType.DISABLED -> {}
             LockEnforcedType.EITHER_ENFORCED -> {
-                if (!passcodeConfigured && !patternConfigured) {
-                    val options = arrayOf(getString(R.string.security_enforced_first_option), getString(R.string.security_enforced_second_option))
-                    var optionSelected = 0
-
-                    AlertDialog.Builder(this)
-                        .setCancelable(false)
-                        .setTitle(getString(R.string.security_enforced_title))
-                        .setSingleChoiceItems(options, LockType.PASSCODE.ordinal) { _, which -> optionSelected = which }
-                        .setPositiveButton(android.R.string.ok) { dialog, _ ->
-                            when (LockType.parseFromInteger(optionSelected)) {
-                                LockType.PASSCODE -> securityEnforced.optionLockSelected(LockType.PASSCODE)
-                                LockType.PATTERN -> securityEnforced.optionLockSelected(LockType.PATTERN)
-                            }
-                            dialog.dismiss()
-                        }
-                        .show()
-                }
+                showSelectSecurityDialog(passcodeConfigured, patternConfigured, securityEnforced)
             }
 
             LockEnforcedType.PASSCODE_ENFORCED -> {
@@ -332,6 +318,30 @@ fun Activity.checkPasscodeEnforced(securityEnforced: SecurityEnforced) {
                 }
             }
         }
+    }
+}
+
+private fun Activity.showSelectSecurityDialog(
+    passcodeConfigured: Boolean,
+    patternConfigured: Boolean,
+    securityEnforced: SecurityEnforced
+) {
+    if (!passcodeConfigured && !patternConfigured) {
+        val options = arrayOf(getString(R.string.security_enforced_first_option), getString(R.string.security_enforced_second_option))
+        var optionSelected = 0
+
+        AlertDialog.Builder(this)
+            .setCancelable(false)
+            .setTitle(getString(R.string.security_enforced_title))
+            .setSingleChoiceItems(options, LockType.PASSCODE.ordinal) { _, which -> optionSelected = which }
+            .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                when (LockType.parseFromInteger(optionSelected)) {
+                    LockType.PASSCODE -> securityEnforced.optionLockSelected(LockType.PASSCODE)
+                    LockType.PATTERN -> securityEnforced.optionLockSelected(LockType.PATTERN)
+                }
+                dialog.dismiss()
+            }
+            .show()
     }
 }
 
