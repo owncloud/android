@@ -154,21 +154,21 @@ class FileDetailsFragmentTest {
     }
 
     @Test
-    fun thumbnail_available_offline_in_image_is_not_viewed_when_file_does_not_change_state() {
+    fun badge_available_offline_in_image_is_not_viewed_when_file_does_not_change_state() {
         every { fileDetailsViewModel.currentFile } returns currentFileAvailableOffline
 
-        R.id.thumbnailDetailFile.assertVisibility(ViewMatchers.Visibility.VISIBLE)
-        onView(withId(R.id.thumbnailDetailFile))
+        R.id.badgeDetailFile.assertVisibility(ViewMatchers.Visibility.VISIBLE)
+        onView(withId(R.id.badgeDetailFile))
             .check(matches(withDrawable(R.drawable.offline_available_pin)))
 
     }
 
     @Test
-    fun show_thumbnail_isAvailableLocally_in_image_when_file_change_state() {
+    fun show_badge_isAvailableLocally_in_image_when_file_change_state() {
         currentFile.value?.file?.etagInConflict = "error"
 
-        R.id.thumbnailDetailFile.assertVisibility(ViewMatchers.Visibility.VISIBLE)
-        onView(withId(R.id.thumbnailDetailFile))
+        R.id.badgeDetailFile.assertVisibility(ViewMatchers.Visibility.VISIBLE)
+        onView(withId(R.id.badgeDetailFile))
             .check(matches(withDrawable(R.drawable.error_pin)))
     }
 
