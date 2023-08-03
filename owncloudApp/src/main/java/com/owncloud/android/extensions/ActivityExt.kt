@@ -297,25 +297,26 @@ fun Activity.checkPasscodeEnforced(securityEnforced: SecurityEnforced) {
     val lockEnforced: Int = this.resources.getInteger(R.integer.lock_enforced)
     val passcodeConfigured = sharedPreferencesProvider.getBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
     val patternConfigured = sharedPreferencesProvider.getBoolean(PatternActivity.PREFERENCE_SET_PATTERN, false)
-    if (showDeviceProtectionForced) {
-        showSelectSecurityDialog(passcodeConfigured, patternConfigured, securityEnforced)
-    } else {
-        when (parseFromInteger(lockEnforced)) {
-            LockEnforcedType.DISABLED -> {}
-            LockEnforcedType.EITHER_ENFORCED -> {
+
+    when (parseFromInteger(lockEnforced)) {
+        LockEnforcedType.DISABLED -> {
+            if (showDeviceProtectionForced) {
                 showSelectSecurityDialog(passcodeConfigured, patternConfigured, securityEnforced)
             }
+        }
+        LockEnforcedType.EITHER_ENFORCED -> {
+            showSelectSecurityDialog(passcodeConfigured, patternConfigured, securityEnforced)
+        }
 
-            LockEnforcedType.PASSCODE_ENFORCED -> {
-                if (!passcodeConfigured) {
-                    manageOptionLockSelected(LockType.PASSCODE)
-                }
+        LockEnforcedType.PASSCODE_ENFORCED -> {
+            if (!passcodeConfigured) {
+                manageOptionLockSelected(LockType.PASSCODE)
             }
+        }
 
-            LockEnforcedType.PATTERN_ENFORCED -> {
-                if (!patternConfigured) {
-                    manageOptionLockSelected(LockType.PATTERN)
-                }
+        LockEnforcedType.PATTERN_ENFORCED -> {
+            if (!patternConfigured) {
+                manageOptionLockSelected(LockType.PATTERN)
             }
         }
     }
