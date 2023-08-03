@@ -377,6 +377,7 @@
   <string name="upload_enqueued_msg">Ngarkimi u vu në radhë</string>
   <string name="create_dir_fail_msg">S\’u krijua dot dosja</string>
   <string name="create_file_fail_msg">Kartela s’u krijua dot</string>
+  <string name="filename_forbidden_characters">Shenja të ndaluara: / \\</string>
   <string name="filename_forbidden_characters_from_server">Emri i kartelës përmban të paktën një shenjë të pavlefshme</string>
   <string name="filename_empty">Emri i kartelës s\’mund të jetë i zbrazët</string>
   <string name="filename_too_long">Emri i kartelës s’mund të jetë aq i gjatë</string>
@@ -388,6 +389,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Po kopjohet kartelë nga depo private</string>
   <string name="oauth_check_onoff">Hyrje me oAuth2</string>
   <string name="oauth_login_connection">Po lidhet te shërbyesi OAuth2…</string>
+  <string name="ssl_connection_not_secure">Lidhja s’është e sigurt, trafiku http nuk lejohet.</string>
   <string name="ssl_validator_header">Identiteti i sajtit s\’u verifikua dot</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Dëshmia e shërbyesit s\’është e besuar</string>
   <string name="ssl_validator_reason_cert_expired">- Dëshmia e shërbyesit skadoi</string>
