@@ -22,15 +22,22 @@ package com.owncloud.android.data.file.datasources
 import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource.Companion.toEntity
 import com.owncloud.android.data.files.db.FileDao
+import com.owncloud.android.data.files.db.OCFileAndFileSync
 import com.owncloud.android.data.files.db.OCFileEntity
+import com.owncloud.android.data.files.db.OCFileSyncEntity
+import com.owncloud.android.data.spaces.datasources.implementation.OCLocalSpacesDataSource.Companion.toEntity
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.MIME_PREFIX_IMAGE
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.testutil.OC_FILE
+import com.owncloud.android.testutil.OC_FILE_WITH_SYNC_INFO_AND_SPACE
+import com.owncloud.android.testutil.OC_SPACE_PERSONAL
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -74,6 +81,54 @@ class OCLocalFileDataSourceTest {
         every { dao.getFileById(any()) } throws Exception()
 
         localDataSource.getFileById(DUMMY_FILE_ENTITY.id)
+    }
+
+    @Test
+    fun `getFileWithSyncInfoByIdAsFlow returns a flow of OCFileWithSyncInfo object`() = runBlocking {
+        val ocFileAndFileSync = OCFileAndFileSync(OC_FILE.toEntity(), OCFileSyncEntity(
+            fileId = OC_FILE.id!!,
+            uploadWorkerUuid = null,
+            downloadWorkerUuid = null,
+            isSynchronizing = false
+        ), OC_SPACE_PERSONAL.toEntity())
+
+        every { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(ocFileAndFileSync)
+
+        val result = localDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
+
+        result.collect { emittedFileWithSyncInfo ->
+            assertEquals(OC_FILE_WITH_SYNC_INFO_AND_SPACE, emittedFileWithSyncInfo)
+        }
+
+        verify { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }
+    }
+
+    @Test
+    fun `getFileWithSyncInfoByIdAsFlow returns null when DAO is null`() = runBlocking {
+
+        every { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(null)
+
+        val result = localDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
+
+        result.collect { emittedFileWithSyncInfo ->
+            assertNull(emittedFileWithSyncInfo)
+        }
+
+        verify { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }
+    }
+
+    @Test(expected = Exception::class)
+    fun `getFileWithSyncInfoByIdAsFlow returns a Expection when DAO receive a Exception`() = runBlocking {
+
+        every { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } throws Exception()
+
+        val result = localDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
+
+        result.collect { emittedFileWithSyncInfo ->
+            assertEquals(OC_FILE_WITH_SYNC_INFO_AND_SPACE, emittedFileWithSyncInfo)
+        }
+
+        verify { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }
     }
 
     @Test

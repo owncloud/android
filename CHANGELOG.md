@@ -16,6 +16,7 @@ Summary
 * Change - Remove "ignore" from the debug flavour Android manifest: [#4064](https://github.com/owncloud/android/pull/4064)
 * Change - Not opening browser automatically in login: [#4067](https://github.com/owncloud/android/issues/4067)
 * Change - Added new unit tests for providers: [#4073](https://github.com/owncloud/android/issues/4073)
+* Change - New detail screen file design: [#4098](https://github.com/owncloud/android/pull/4098)
 * Enhancement - Show "More" button for every file list item: [#2885](https://github.com/owncloud/android/issues/2885)
 * Enhancement - Added "Open in web" options to main file list: [#3860](https://github.com/owncloud/android/issues/3860)
 * Enhancement - Copy/move conflict solved by users: [#3935](https://github.com/owncloud/android/issues/3935)
@@ -93,6 +94,14 @@ Details
 
    https://github.com/owncloud/android/issues/4073
    https://github.com/owncloud/android/pull/4091
+
+* Change - New detail screen file design: [#4098](https://github.com/owncloud/android/pull/4098)
+
+   The detail view ha been improved. It added new properties like last sync, status icon on
+   thumbnail, path and creation date
+
+   https://github.com/owncloud/android/issues/4092
+   https://github.com/owncloud/android/pull/4098
 
 * Enhancement - Show "More" button for every file list item: [#2885](https://github.com/owncloud/android/issues/2885)
 

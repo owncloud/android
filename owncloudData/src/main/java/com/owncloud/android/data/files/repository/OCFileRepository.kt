@@ -154,6 +154,9 @@ class OCFileRepository(
     override fun getFileById(fileId: Long): OCFile? =
         localFileDataSource.getFileById(fileId)
 
+    override fun getFileWithSyncInfoByIdAsFlow(fileId: Long): Flow<OCFileWithSyncInfo?> =
+        localFileDataSource.getFileWithSyncInfoByIdAsFlow(fileId)
+
     override fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?> =
         localFileDataSource.getFileByIdAsFlow(fileId)
 

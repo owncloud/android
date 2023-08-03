@@ -73,6 +73,7 @@ import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
+import com.owncloud.android.domain.files.usecases.GetFileWithSyncInfoByIdUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -172,6 +173,7 @@ val useCaseModule = module {
     factory { SaveDownloadWorkerUUIDUseCase(get()) }
     factory { CleanWorkersUUIDUseCase(get()) }
     factory { FilterFileMenuOptionsUseCase(get(), get(), get()) }
+    factory { GetFileWithSyncInfoByIdUseCase(get()) }
 
     // Open in web
     factory { GetUrlToOpenInWebUseCase(get(), get()) }
