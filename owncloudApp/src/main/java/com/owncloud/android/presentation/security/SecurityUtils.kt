@@ -20,6 +20,8 @@
 
 package com.owncloud.android.presentation.security
 
+import android.app.KeyguardManager
+import android.content.Context
 import android.os.SystemClock
 import com.owncloud.android.MainApp
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
@@ -68,3 +70,5 @@ fun bayPassUnlockOnce() {
         preferencesProvider.putLong(PREFERENCE_LAST_UNLOCK_TIMESTAMP, newLastUnlockTimestamp)
     }
 }
+
+fun isDeviceSecure() = (MainApp.appContext.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager).isDeviceSecure
