@@ -134,6 +134,7 @@
   <string name="filedetails_size">Størrelse:</string>
   <string name="filedetails_type">Type:</string>
   <string name="filedetails_created">Opprettet:</string>
+  <string name="filedetails_last_sync">Siste synkronisering:</string>
   <string name="filedetails_modified">Endret:</string>
   <string name="filedetails_download">Last ned</string>
   <string name="filedetails_sync_file">Synkroniser</string>

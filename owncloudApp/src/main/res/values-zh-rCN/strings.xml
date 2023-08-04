@@ -166,6 +166,7 @@
   <string name="filedetails_size">大小：</string>
   <string name="filedetails_type">类型：</string>
   <string name="filedetails_created">创建于：</string>
+  <string name="filedetails_last_sync">最后同步：</string>
   <string name="filedetails_modified">修改于：</string>
   <string name="filedetails_download">下载</string>
   <string name="filedetails_file_image_content_description">文件图片</string>

@@ -178,6 +178,7 @@
   <string name="filedetails_size">Tamaño:</string>
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Creado:</string>
+  <string name="filedetails_last_sync">Última sincronización:</string>
   <string name="filedetails_modified">Modificado:</string>
   <string name="filedetails_download">Descargar</string>
   <string name="filedetails_file_image_content_description">Imagen de archivo</string>

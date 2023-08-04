@@ -175,6 +175,7 @@
   <string name="filedetails_size">Размер:</string>
   <string name="filedetails_type">Тип:</string>
   <string name="filedetails_created">Създаден на:</string>
+  <string name="filedetails_last_sync">Последно синхронизиране:</string>
   <string name="filedetails_modified">Променен на:</string>
   <string name="filedetails_download">Изтегляне</string>
   <string name="filedetails_file_image_content_description">Файл с изображение</string>

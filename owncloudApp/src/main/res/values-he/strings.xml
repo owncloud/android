@@ -159,6 +159,7 @@
   <string name="filedetails_size">גודל:</string>
   <string name="filedetails_type">סוג:</string>
   <string name="filedetails_created">מועד היצירה:</string>
+  <string name="filedetails_last_sync">סנכרון אחרון:</string>
   <string name="filedetails_modified">מועד השינוי:</string>
   <string name="filedetails_download">הורדה</string>
   <string name="filedetails_file_image_content_description">קובץ תמונה</string>

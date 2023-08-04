@@ -142,6 +142,7 @@
   <string name="filedetails_size">Μέγεθος:</string>
   <string name="filedetails_type">Τύπος:</string>
   <string name="filedetails_created">Δημιουργήθηκε:</string>
+  <string name="filedetails_last_sync">Τελευταίος συγχρονισμός:</string>
   <string name="filedetails_modified">Τροποποιήθηκε:</string>
   <string name="filedetails_download">Λήψη</string>
   <string name="filedetails_sync_file">Συγχρονισμός</string>

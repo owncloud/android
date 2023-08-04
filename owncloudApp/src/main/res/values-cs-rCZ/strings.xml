@@ -164,6 +164,7 @@
   <string name="filedetails_size">Velikost:</string>
   <string name="filedetails_type">Typ:</string>
   <string name="filedetails_created">Vytvořen:</string>
+  <string name="filedetails_last_sync">Poslední synchronizace:</string>
   <string name="filedetails_modified">Upraven:</string>
   <string name="filedetails_download">Stáhnout</string>
   <string name="filedetails_sync_file">Synchronizovat</string>

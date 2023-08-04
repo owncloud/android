@@ -141,6 +141,7 @@
   <string name="filedetails_size">Grösse:</string>
   <string name="filedetails_type">Art:</string>
   <string name="filedetails_created">Erstellt:</string>
+  <string name="filedetails_last_sync">Letzte Synchronisation:</string>
   <string name="filedetails_modified">Geändert:</string>
   <string name="filedetails_download">Herunterladen</string>
   <string name="filedetails_sync_file">Synchronisation</string>
