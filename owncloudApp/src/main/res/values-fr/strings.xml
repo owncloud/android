@@ -161,6 +161,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="filedetails_size">Taille :</string>
   <string name="filedetails_type">Type :</string>
   <string name="filedetails_created">Créé le :</string>
+  <string name="filedetails_last_sync">Dernière synchronisation :</string>
   <string name="filedetails_modified">Modifié le :</string>
   <string name="filedetails_download">Télécharger</string>
   <string name="filedetails_cancel_btn_content_description">Bouton d\'annulation de téléchargement</string>

@@ -139,6 +139,7 @@
   <string name="filedetails_size">Ukuran:</string>
   <string name="filedetails_type">Tipe:</string>
   <string name="filedetails_created">Dibuat:</string>
+  <string name="filedetails_last_sync">Sinkronisasi terakhir:</string>
   <string name="filedetails_modified">Diubah:</string>
   <string name="filedetails_download">Unduh</string>
   <string name="filedetails_sync_file">Sinkronisasi</string>

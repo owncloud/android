@@ -148,6 +148,7 @@
   <string name="filedetails_size">Méret:</string>
   <string name="filedetails_type">Típus:</string>
   <string name="filedetails_created">Létrehozva:</string>
+  <string name="filedetails_last_sync">Utoljára szinkronizálva:</string>
   <string name="filedetails_modified">Módosítva:</string>
   <string name="filedetails_download">Letöltés</string>
   <string name="filedetails_sync_file">Szinkronizálás</string>

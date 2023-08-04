@@ -160,6 +160,7 @@
   <string name="filedetails_size">ขนาด:</string>
   <string name="filedetails_type">ชนิด:</string>
   <string name="filedetails_created">สร้างเมื่อ:</string>
+  <string name="filedetails_last_sync">การประสานข้อมูลล่าสุด:</string>
   <string name="filedetails_modified">แก้ไขเมื่อ:</string>
   <string name="filedetails_download">ดาวน์โหลด</string>
   <string name="filedetails_sync_file">ประสานข้อมูล</string>

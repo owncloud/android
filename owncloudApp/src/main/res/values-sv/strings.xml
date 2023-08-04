@@ -143,6 +143,7 @@
   <string name="filedetails_size">Storlek:</string>
   <string name="filedetails_type">Typ:</string>
   <string name="filedetails_created">Skapad:</string>
+  <string name="filedetails_last_sync">Senaste synk:</string>
   <string name="filedetails_modified">Ändrad:</string>
   <string name="filedetails_download">Ladda ner</string>
   <string name="filedetails_file_image_content_description">Fil bild</string>

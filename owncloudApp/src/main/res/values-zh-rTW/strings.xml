@@ -154,6 +154,7 @@
   <string name="filedetails_size">容量:</string>
   <string name="filedetails_type">類型:</string>
   <string name="filedetails_created">建立:</string>
+  <string name="filedetails_last_sync">最後同步:</string>
   <string name="filedetails_modified">修改:</string>
   <string name="filedetails_download">下載</string>
   <string name="filedetails_sync_file">同步</string>

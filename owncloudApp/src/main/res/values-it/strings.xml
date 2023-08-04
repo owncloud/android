@@ -176,6 +176,7 @@
   <string name="filedetails_size">Dimensione:</string>
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Creato:</string>
+  <string name="filedetails_last_sync">Ultima sincronizzazione:</string>
   <string name="filedetails_modified">Modificato:</string>
   <string name="filedetails_download">Scarica</string>
   <string name="filedetails_file_image_content_description">File immagine</string>

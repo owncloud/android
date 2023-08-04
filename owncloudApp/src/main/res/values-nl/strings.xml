@@ -142,6 +142,7 @@ Download hier: %2$s</string>
   <string name="filedetails_size">Grootte:</string>
   <string name="filedetails_type">Type:</string>
   <string name="filedetails_created">Aangemaakt:</string>
+  <string name="filedetails_last_sync">Laatste sync:</string>
   <string name="filedetails_modified">Aangepast:</string>
   <string name="filedetails_download">Download</string>
   <string name="filedetails_sync_file">Synchroniseren</string>

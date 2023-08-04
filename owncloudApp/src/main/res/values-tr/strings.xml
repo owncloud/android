@@ -178,6 +178,7 @@
   <string name="filedetails_size">Boyut:</string>
   <string name="filedetails_type">Tür:</string>
   <string name="filedetails_created">Oluşturulma:</string>
+  <string name="filedetails_last_sync">Son eşitleme:</string>
   <string name="filedetails_modified">Değiştirilme:</string>
   <string name="filedetails_download">İndir</string>
   <string name="filedetails_file_image_content_description">Dosya Resmi</string>
@@ -370,6 +371,8 @@
   <string name="rename_server_fail_msg">Yeniden  adlandırılma tamamlanamadı</string>
   <string name="file_already_exists">Dosya zaten mevcut</string>
   <string name="folder_already_exists">Klasör zaten mevcut</string>
+  <string name="file_already_exists_description">%1$s adlı dosya zaten mevcut.</string>
+  <string name="folder_already_exists_description">%1$s adlı klasör zaten mevcut. </string>
   <string name="sync_file_fail_msg">Uzak dosya denetlenemedi</string>
   <string name="sync_file_nothing_to_do_msg">Dosya içerikleri zaten eşitlenmiş</string>
   <string name="new_remote_version_found_msg">Sunucuda yeni bir sürüm bulundu. İndiriliyor…</string>
@@ -377,6 +380,7 @@
   <string name="upload_enqueued_msg">Yükleme kuyruğa alınmış</string>
   <string name="create_dir_fail_msg">Klasör oluşturulamadı</string>
   <string name="create_file_fail_msg">Dosya oluşturulamadı</string>
+  <string name="filename_forbidden_characters">Yasaklı Karakterler: / \\</string>
   <string name="filename_forbidden_characters_from_server">Dosya adı en az bir geçersiz karakter içeriyor</string>
   <string name="filename_empty">Dosya adı boş olamaz</string>
   <string name="filename_too_long">Dosya adı bu kadar uzun olamaz</string>
@@ -388,6 +392,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Dosya özel depolamadan kopyalanıyor</string>
   <string name="oauth_check_onoff">oAuth2 ile oturum aç</string>
   <string name="oauth_login_connection">OAuth2 sunucusuna bağlanıyor...</string>
+  <string name="ssl_connection_not_secure">Bağlantı güvenli değil, http trafiğine izin verilmedi.</string>
   <string name="ssl_validator_header">Sunucunun kimliği doğrulanamadı. </string>
   <string name="ssl_validator_reason_cert_not_trusted">- Sunucu sertifikasına güvenilmiyor</string>
   <string name="ssl_validator_reason_cert_expired">- Sunucu sertifikasının süresi dolmuş</string>
@@ -660,7 +665,17 @@
   <string name="release_notes_proceed">Devam et</string>
   <string name="release_notes_icon">Sürüm notu simgesi</string>
   <string name="release_notes_4_0_title_1">Alanlar için Destek</string>
+  <string name="release_notes_4_0_subtitle_1">Alanlar için destek özelliği (oCIS) ile tanışın. <b>Yalnızca yeni oturum açmış hesaplar için kullanılabilir</b></string>
+  <string name="release_notes_4_0_title_2">Alt gezinme çubuğu</string>
+  <string name="release_notes_4_0_subtitle_2">Bazı sekmeleri yeniden sıraladı</string>
+  <string name="release_notes_4_0_title_3">Lollipop desteğinin sonu</string>
+  <string name="release_notes_4_0_subtitle_3">Bu, Android Lollipop (v5.0) destekli son sürüm olacak</string>
+  <string name="release_notes_4_0_title_4">WebFinger akışı güncellendi</string>
+  <string name="release_notes_4_0_subtitle_4">WebFinger sunucuları için önce arama sunucusu istenir ve başarılı olmazsa normal kimlik doğrulama akışı izlenir</string>
+  <string name="release_notes_4_0_title_5">İzin işleniyor</string>
+  <string name="release_notes_4_0_subtitle_5">Artık, bir klasör veya dosya üzerinde bazı eylemleri gerçekleştirme izni olmadığında, bu işlemler gizlenecek</string>
   <string name="release_notes_4_0_title_6">Yeni \"Bildirimleri yönet\" ayarı</string>
+  <string name="release_notes_4_0_subtitle_6">Ayarlara, cihazın uygulama bildirimleri ayarlarına yönlendiren yeni bir öge eklendi</string>
   <string name="release_notes_4_0_title_7">Küçük hata düzeltmeleri ve iyileştirmeler</string>
   <string name="release_notes_4_0_subtitle_7">Bazı küçük hatalar giderildi ve uygulamadaki deneyimi iyileştirmek için küçük teknik iyileştirmeler yapıldı.</string>
   <string name="release_notes_4_0_title_8">Markdown desteği</string>
@@ -670,6 +685,9 @@
   <string name="release_notes_4_0_title_10">Temalı ikonlar desteklendi</string>
   <string name="release_notes_4_0_subtitle_10">Android 13 özelliği \"Temalı ikonlar\", uygulama simgesini tek renkli olarak ayarlamanıza izin verir</string>
   <string name="release_notes_4_0_title_11">Web (oCIS) aracılığıyla yeni dokümanlar oluştur</string>
+  <string name="release_notes_4_0_subtitle_11">oCIS sunucusu uygulama sağlayıcıları destekliyorsa, tarayıcı aracılığıyla yeni belgeler oluşturulabilir ve oC ile senkronize edilebilir</string>
+  <string name="release_notes_4_0_title_12">Dosyalara göz atmak için önerilen uygulamayla yeni ayar</string>
+  <string name="release_notes_4_0_subtitle_12">Dosyalara belge sağlayıcı aracılığıyla erişmek için önerilen bir uygulama ile \"Diğer\" bölümüne yeni bir ayar eklendi</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Web\'te aç</string>
   <string name="ic_action_open_with_web">%1$s\'da aç (web)</string>

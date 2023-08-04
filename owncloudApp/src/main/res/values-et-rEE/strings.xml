@@ -178,6 +178,7 @@
   <string name="filedetails_size">Suurus:</string>
   <string name="filedetails_type">Tüüp:</string>
   <string name="filedetails_created">Loodud:</string>
+  <string name="filedetails_last_sync">Viimane sünkroniseerimine:</string>
   <string name="filedetails_modified">Muudetud:</string>
   <string name="filedetails_download">Lae alla</string>
   <string name="filedetails_file_image_content_description">Faili tõmmis</string>

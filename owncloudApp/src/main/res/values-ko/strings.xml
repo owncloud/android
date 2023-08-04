@@ -174,6 +174,7 @@
   <string name="filedetails_size">크기:</string>
   <string name="filedetails_type">종류:</string>
   <string name="filedetails_created">만든 날짜:</string>
+  <string name="filedetails_last_sync">마지막 동기화:</string>
   <string name="filedetails_modified">수정한 날짜:</string>
   <string name="filedetails_download">다운로드</string>
   <string name="filedetails_file_image_content_description">파일 이미지</string>

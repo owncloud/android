@@ -132,6 +132,7 @@
   <string name="filedetails_size">Mida:</string>
   <string name="filedetails_type">Tipus:</string>
   <string name="filedetails_created">Creat:</string>
+  <string name="filedetails_last_sync">Última sincronització:</string>
   <string name="filedetails_modified">Modificat:</string>
   <string name="filedetails_download">Baixa</string>
   <string name="filedetails_sync_file">Sincronitza</string>
