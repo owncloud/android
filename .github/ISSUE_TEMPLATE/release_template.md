@@ -24,19 +24,20 @@ For OEM releases, keep the OEM Release template and remove the Open Release one
  - [ ] [DIS] Update screenshots, if needed, in README.md
  - [ ] [DIS] Add ReleaseNotes replacing `emptyList` with `listOf` and adding inside `ReleaseNote()` with String resources
  - [ ] [QA] Design Test plan
- - [ ] [QA] Regression Test plan
+ - [ ] [QA] Regression Test execution
  - [ ] [GIT] Create and sign tag `oc-android-M.m.p` in HEAD commit of release branch, in owncloud/android
  - [ ] [GIT] Create and sign tag `x.y.z` in HEAD commit of release branch, in owncloud/android-library
  - [ ] [DIS] Generate final bundle from signed commit in owncloud/android
- - [ ] [GIT] Merge branch `release/M.m.p` in owncloud/android, into master
  - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
  - [ ] [DIS] Update screenshots and store listing, if needed, in Play Store
- - [ ] [GIT] Publish a new release in owncloud/android
+ - [ ] [GIT] Publish a new release in [owncloud/android](https://github.com/owncloud/android/releases)
  - [ ] [DIS] Create post in central.owncloud.org ([`Category:News + Tag:android`](https://central.owncloud.org/tags/c/news/5/android))
  - [ ] [COM] Inform `#updates` and `#marketing` in internal chat
  - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
- - [ ] [GIT] Merge master branch into stable, in owncloud/android-library
- - [ ] [GIT] Merge master branch into stable, in owncloud/android
+ - [ ] [GIT] Merge `release/M.m.p` branch into `stable`, in owncloud/android-library
+ - [ ] [GIT] Merge `release/M.m.p` branch into `stable`, in owncloud/android
+ - [ ] [GIT] Merge `release/M.m.p` branch into `master`, in owncloud/android-library
+ - [ ] [GIT] Merge `release/M.m.p` branch into `master`, in owncloud/android
  - [ ] [DOC] Update documentation with new stuff by creating [issue](https://github.com/owncloud/docs-client-android/issues)
 
 
