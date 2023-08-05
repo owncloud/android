@@ -151,6 +151,7 @@
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty_title_all_files">Nenhum arquivo aqui</string>
   <string name="spaces_list_empty_title">No spaces</string>
+  <string name="space_label">Espaço:</string>
   <string name="file_list_empty_title_available_offline">Nenhum arquivo off-line disponível</string>
   <string name="file_list_empty_title_shared_by_links">Nenhum link compartilhado</string>
   <string name="file_list_empty_subtitle_all_files">Carregue algum conteúdo ou sincronize com seus dispositivos!</string>
@@ -179,6 +180,7 @@
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Criado:</string>
   <string name="filedetails_last_sync">Última sincronização:</string>
+  <string name="filedetails_path">Caminho:</string>
   <string name="filedetails_modified">Modificado:</string>
   <string name="filedetails_download">Baixar</string>
   <string name="filedetails_file_image_content_description">Imagem do Arquivo</string>
