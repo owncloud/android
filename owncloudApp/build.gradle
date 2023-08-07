@@ -92,7 +92,7 @@ android {
 
         testInstrumentationRunner "com.owncloud.android.utils.OCTestAndroidJUnitRunner"
 
-        versionCode = 41000000
+        versionCode = 40000001
         versionName = "4.1.0-beta.1"
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
