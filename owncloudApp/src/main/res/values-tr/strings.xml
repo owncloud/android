@@ -151,6 +151,7 @@
   <string name="file_list_seconds_ago">saniyeler önce</string>
   <string name="file_list_empty_title_all_files">Burada hiç dosya yok</string>
   <string name="spaces_list_empty_title">Alan yok</string>
+  <string name="space_label">Alan:</string>
   <string name="file_list_empty_title_available_offline">Uygun çevrimdışı dosya yok</string>
   <string name="file_list_empty_title_shared_by_links">Paylaşılan bağlantı yok</string>
   <string name="file_list_empty_subtitle_all_files">Bir şeyler yükleyin veya aygıtlarınızla eşitleyin!</string>
@@ -179,6 +180,7 @@
   <string name="filedetails_type">Tür:</string>
   <string name="filedetails_created">Oluşturulma:</string>
   <string name="filedetails_last_sync">Son eşitleme:</string>
+  <string name="filedetails_path">Yol:</string>
   <string name="filedetails_modified">Değiştirilme:</string>
   <string name="filedetails_download">İndir</string>
   <string name="filedetails_file_image_content_description">Dosya Resmi</string>
