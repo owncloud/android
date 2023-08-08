@@ -750,6 +750,21 @@
     <string name="release_notes_4_0_title_12">New setting with app suggested to browse files</string>
     <string name="release_notes_4_0_subtitle_12">A new setting was added in "More" section with a suggested app to access files via document provider</string>
 
+    <string name="release_notes_4_1_title_1">Added 3 dot button to all list item</string>
+    <string name="release_notes_4_1_subtitle_1">Added button to all list element to show a menu with all the options of the item</string>
+    <string name="release_notes_4_1_title_2">Improve details view</string>
+    <string name="release_notes_4_1_subtitle_2">Redesign of the details view</string>
+    <string name="release_notes_4_1_title_3">Support for new language change</string>
+    <string name="release_notes_4_1_subtitle_3">Added support for the new language change on Android 13+</string>
+    <string name="release_notes_4_1_title_4">Bug fixed about loading space images</string>
+    <string name="release_notes_4_1_subtitle_4">Loading the spaces images the first time we show it and improving the loading of the images of the items</string>
+    <string name="release_notes_4_1_title_5">Open markdown files in ASCII mode</string>
+    <string name="release_notes_4_1_subtitle_5">Added a new mode to open markdown files to show the ASCII code</string>
+    <string name="release_notes_4_1_title_6">Showing pop up on copy/move conflict</string>
+    <string name="release_notes_4_1_subtitle_6">Showing a 3 option pop up when having a naming conflict on copy or move action</string>
+    <string name="release_notes_4_1_title_7">Minor bugfixes and improvements</string>
+    <string name="release_notes_4_1_subtitle_7">Some minor bugs have been fixed, and minor technical improvements were introduced to improve the experience in the app</string>
+
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
     <string name="ic_action_open_with_web">Open in %1$s (web)</string>
