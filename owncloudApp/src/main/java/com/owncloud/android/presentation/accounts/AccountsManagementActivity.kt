@@ -80,6 +80,11 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
             displayShowTitleEnabled = true
         )
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         val accountList = accountsManagementViewModel.getLoggedAccounts()
         originalAccounts = toAccountNameSet(accountList)
         originalCurrentAccount = accountsManagementViewModel.getCurrentAccount()?.name.toString()
@@ -88,6 +93,7 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
 
         account = accountsManagementViewModel.getCurrentAccount()
         onAccountSet(false)
+
     }
 
     /**
