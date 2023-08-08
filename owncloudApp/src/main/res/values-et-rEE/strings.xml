@@ -151,6 +151,7 @@
   <string name="file_list_seconds_ago">sekundit tagasi</string>
   <string name="file_list_empty_title_all_files">Siin ei ole faile</string>
   <string name="spaces_list_empty_title">Ruume ei ole</string>
+  <string name="space_label">Ruum:</string>
   <string name="file_list_empty_title_available_offline">Võrguühenduseta saadavalolevaid faile ei ole</string>
   <string name="file_list_empty_title_shared_by_links">Jagatud linke pole</string>
   <string name="file_list_empty_subtitle_all_files">Laadi sisu üles või süngi oma seadmetega!</string>
@@ -179,6 +180,7 @@
   <string name="filedetails_type">Tüüp:</string>
   <string name="filedetails_created">Loodud:</string>
   <string name="filedetails_last_sync">Viimane sünkroniseerimine:</string>
+  <string name="filedetails_path">Rada:</string>
   <string name="filedetails_modified">Muudetud:</string>
   <string name="filedetails_download">Lae alla</string>
   <string name="filedetails_file_image_content_description">Faili tõmmis</string>
@@ -380,6 +382,7 @@
   <string name="upload_enqueued_msg">Üleslaadimine lisati järjekorda</string>
   <string name="create_dir_fail_msg">Kataloogi ei saa tekitada</string>
   <string name="create_file_fail_msg">Faili loomine ei õnnestunud</string>
+  <string name="filename_forbidden_characters">Keelatud märgid: / \\</string>
   <string name="filename_forbidden_characters_from_server">Faili nimi sisaldab vähemalt üht keelatud märki</string>
   <string name="filename_empty">Faili nime lahter ei saa olla tühi</string>
   <string name="filename_too_long">Faili nimi ei saa olla nii pikk</string>
@@ -391,6 +394,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Faili kopeerimine privaatsest salvestusalast</string>
   <string name="oauth_check_onoff">Logi sisse oAuth2-ga</string>
   <string name="oauth_login_connection">oAuth2 serveriga ühendumine...</string>
+  <string name="ssl_connection_not_secure">Ühendus on ebaturvaline, http liiklus ei ole lubatud.</string>
   <string name="ssl_validator_header">Serveri identiteeti ei suudetud kinnitada</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Serveri sertifikaat pole usaldusväärne</string>
   <string name="ssl_validator_reason_cert_expired">- Serveri sertifikaat on aegunud</string>
