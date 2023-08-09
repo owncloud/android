@@ -672,6 +672,8 @@
   <string name="release_notes_4_0_subtitle_6">В настройките е добавен нов елемент, който пренасочва към настройките за известия на приложението на устройството.</string>
   <string name="release_notes_4_0_title_7">Незначителни поправки на грешки и подобрения</string>
   <string name="release_notes_4_0_subtitle_7">Отстранени са някои дребни грешки и са въведени незначителни технически подобрения, за да се подобри работата с приложението.</string>
+  <string name="release_notes_4_1_title_7">Незначителни поправки на грешки и подобрения</string>
+  <string name="release_notes_4_1_subtitle_7">Отстранени са някои дребни грешки и са въведени незначителни технически подобрения, за да се подобри работата с приложението.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Отваряне в мрежата</string>
   <string name="ic_action_open_with_web">Отваряне в %1$s (уеб)</string>

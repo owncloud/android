@@ -667,6 +667,8 @@
   <string name="release_notes_4_0_subtitle_6">В настройках добавлен новый пункт, который перенаправляет в настройки уведомлений приложений устройства</string>
   <string name="release_notes_4_0_title_7">Мелкие исправления и улучшения</string>
   <string name="release_notes_4_0_subtitle_7">Были исправлены некоторые незначительные ошибки, а также были внесены незначительные технические улучшения для улучшения работы приложения.</string>
+  <string name="release_notes_4_1_title_7">Мелкие исправления и улучшения</string>
+  <string name="release_notes_4_1_subtitle_7">Были исправлены некоторые незначительные ошибки, а также были внесены незначительные технические улучшения для улучшения работы приложения.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Открыть в браузере</string>
   <string name="ic_action_open_with_web">Открыть в %1$s (веб)</string>

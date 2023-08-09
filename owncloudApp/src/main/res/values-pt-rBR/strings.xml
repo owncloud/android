@@ -691,6 +691,8 @@
   <string name="release_notes_4_0_subtitle_11">Se o servidor oCIS suportar provedores de aplicativos, novos documentos podem ser criados via navegador e sincronizados com</string>
   <string name="release_notes_4_0_title_12">Nova configuração com aplicativo sugerido para procurar arquivos</string>
   <string name="release_notes_4_0_subtitle_12">Uma nova configuração foi adicionada na seção \"Mais\" com um aplicativo sugerido para acessar arquivos via provedor de documentos</string>
+  <string name="release_notes_4_1_title_7">Pequenas correções de bugs e melhorias</string>
+  <string name="release_notes_4_1_subtitle_7">Alguns pequenos bugs foram corrigidos e pequenas melhorias técnicas foram introduzidas para melhorar a experiência no aplicativo</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>

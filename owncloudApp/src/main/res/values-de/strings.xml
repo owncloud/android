@@ -678,6 +678,8 @@
   <string name="release_notes_4_0_subtitle_8">Markdown-Dateien werden gerendert und im entsprechenden Format dargestellt.</string>
   <string name="release_notes_4_0_title_9">Liste der Provider (Infinite Scale)</string>
   <string name="release_notes_4_0_subtitle_9">Wenn der Server zum Öffnen spezifischer Dateiarten App-Provider unterstützt, werden alle in der Detail-Ansicht angezeigt.</string>
+  <string name="release_notes_4_1_title_7">Kleine Fehlerberichtigungen und Verbesserungen</string>
+  <string name="release_notes_4_1_subtitle_7">Kleine Fehler wurden behoben und geringfügige technische Verbesserungen durchgeführt, um die Benutzung der App zu erleichtern.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
