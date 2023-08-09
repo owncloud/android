@@ -685,6 +685,8 @@
   <string name="release_notes_4_0_subtitle_11">Nëse shërbyesi oCIS mbulon shërbime aplikacionesh, dokumentet e reja do të krijohen përmes shfletuesit dhe njëkohësohen me oC</string>
   <string name="release_notes_4_0_title_12">Rregullime të reja me aplikacionin sugjeruan shfletim kartelash</string>
   <string name="release_notes_4_0_subtitle_12">Te ndarja “Më tepër” u shtua një rregullim i ri, me një aplikacion të sugjeruar për hyrje në kartela përmes furnizuesi dokumentesh</string>
+  <string name="release_notes_4_1_title_7">Ndreqje të metash të vockla dhe përmirësime</string>
+  <string name="release_notes_4_1_subtitle_7">Janë ndrequr disa të meta të cokla dhe u sollën për herë të parë përmirësime të vockla teknike për të përmirësuar punën te aplikacioni</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>

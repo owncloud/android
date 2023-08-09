@@ -690,6 +690,8 @@
   <string name="release_notes_4_0_subtitle_11">oCIS sunucusu uygulama sağlayıcıları destekliyorsa, tarayıcı aracılığıyla yeni belgeler oluşturulabilir ve oC ile senkronize edilebilir</string>
   <string name="release_notes_4_0_title_12">Dosyalara göz atmak için önerilen uygulamayla yeni ayar</string>
   <string name="release_notes_4_0_subtitle_12">Dosyalara belge sağlayıcı aracılığıyla erişmek için önerilen bir uygulama ile \"Diğer\" bölümüne yeni bir ayar eklendi</string>
+  <string name="release_notes_4_1_title_7">Küçük hata düzeltmeleri ve iyileştirmeler</string>
+  <string name="release_notes_4_1_subtitle_7">Bazı küçük hatalar giderildi ve uygulamadaki deneyimi iyileştirmek için küçük teknik iyileştirmeler yapıldı.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Web\'te aç</string>
   <string name="ic_action_open_with_web">%1$s\'da aç (web)</string>

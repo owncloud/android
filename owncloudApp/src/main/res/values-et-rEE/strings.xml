@@ -690,6 +690,8 @@
   <string name="release_notes_4_0_subtitle_11">Kui oCIS server toetab rakenduste pakkujaid, siis saab uusi dokumente luua ja zoneCloudiga sünkroonida läbi brauseri</string>
   <string name="release_notes_4_0_title_12">Uus seadistus failisirvija soovitusega</string>
   <string name="release_notes_4_0_subtitle_12">Lisatud on uus seadistus \"More\" alajaotuses, kus soovitatakse rakendust ligipääsuks failidele läbi dokumendi pakkuja</string>
+  <string name="release_notes_4_1_title_7">Väiksemad veaparandused ja parendused</string>
+  <string name="release_notes_4_1_subtitle_7">Parandatud on mõned väiksemad tarkvaravead ning lisatud on väiksemad tehnilised parendused, et parandada rakenduse kasutajakogemust</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
