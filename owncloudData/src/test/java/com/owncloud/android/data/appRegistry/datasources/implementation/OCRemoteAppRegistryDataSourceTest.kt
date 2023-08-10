@@ -23,7 +23,8 @@ class OCRemoteAppRegistryDataSourceTest {
     private val ocAppRegistryService: OCAppRegistryService = mockk()
     private val appResgitryResponse = AppRegistryResponse(value = mockk(relaxed = true))
     private val openWebEndpoint = "https://example.com"
-
+    private val expectedFileUrl = "https://example.com/files/testFile.txt"
+    private val expectedUrl = "https://example.com/file123/TestApp"
     private val appName = "TestApp"
 
     @Before
@@ -69,21 +70,20 @@ class OCRemoteAppRegistryDataSourceTest {
 
     @Test
     fun `getUrlToOpenInWeb returns an url to open in website`() {
-        val expectedUrl = "https://example.com/file123/TestApp"
         val getUrlToOpenInWebResult: RemoteOperationResult<String> = createRemoteOperationResultMock(data = expectedUrl, isSuccess = true)
 
         every {
             ocAppRegistryService.getUrlToOpenInWeb(
                 openWebEndpoint = openWebEndpoint,
                 fileId = OC_FILE.remoteId.toString(),
-                appName = appName
+                appName = appName,
             )
         } returns getUrlToOpenInWebResult
 
         val result = ocAppRegistryService.getUrlToOpenInWeb(
             openWebEndpoint = openWebEndpoint,
             fileId = OC_FILE.remoteId.toString(),
-            appName = appName
+            appName = appName,
         )
 
         assertEquals(expectedUrl, result.data)
@@ -92,7 +92,7 @@ class OCRemoteAppRegistryDataSourceTest {
             ocAppRegistryService.getUrlToOpenInWeb(
                 openWebEndpoint = openWebEndpoint,
                 fileId = OC_FILE.remoteId.toString(),
-                appName = appName
+                appName = appName,
             )
         }
     }
@@ -104,35 +104,34 @@ class OCRemoteAppRegistryDataSourceTest {
             ocAppRegistryService.getUrlToOpenInWeb(
                 openWebEndpoint = openWebEndpoint,
                 fileId = OC_FILE.remoteId.toString(),
-                appName = appName
+                appName = appName,
             )
         } throws Exception()
 
         ocAppRegistryService.getUrlToOpenInWeb(
             openWebEndpoint = openWebEndpoint,
             fileId = OC_FILE.remoteId.toString(),
-            appName = appName
+            appName = appName,
         )
     }
 
     @Test
     fun `createFileWithAppProvider returns the url to open in web`() {
 
-        val expectedFileUrl = "https://example.com/files/testFile.txt"
         val createFileWithAppProviderResult: RemoteOperationResult<String> = createRemoteOperationResultMock(data = expectedFileUrl, isSuccess = true)
 
         every {
             ocAppRegistryService.createFileWithAppProvider(
                 createFileWithAppProviderEndpoint = openWebEndpoint,
                 parentContainerId = OC_FILE.remoteId.toString(),
-                filename = OC_FILE.fileName
+                filename = OC_FILE.fileName,
             )
         } returns createFileWithAppProviderResult
 
         val result = ocAppRegistryService.createFileWithAppProvider(
             createFileWithAppProviderEndpoint = openWebEndpoint,
             parentContainerId = OC_FILE.remoteId.toString(),
-            filename = OC_FILE.fileName
+            filename = OC_FILE.fileName,
         )
 
         assertEquals(expectedFileUrl, result.data)
@@ -141,7 +140,7 @@ class OCRemoteAppRegistryDataSourceTest {
             ocAppRegistryService.createFileWithAppProvider(
                 createFileWithAppProviderEndpoint = openWebEndpoint,
                 parentContainerId = OC_FILE.remoteId.toString(),
-                filename = OC_FILE.fileName
+                filename = OC_FILE.fileName,
             )
         }
     }
@@ -153,14 +152,14 @@ class OCRemoteAppRegistryDataSourceTest {
             ocAppRegistryService.createFileWithAppProvider(
                 createFileWithAppProviderEndpoint = openWebEndpoint,
                 parentContainerId = OC_FILE.remoteId.toString(),
-                filename = OC_FILE.fileName
+                filename = OC_FILE.fileName,
             )
         } throws Exception()
 
         ocAppRegistryService.createFileWithAppProvider(
             createFileWithAppProviderEndpoint = openWebEndpoint,
             parentContainerId = OC_FILE.remoteId.toString(),
-            filename = OC_FILE.fileName
+            filename = OC_FILE.fileName,
         )
     }
 }

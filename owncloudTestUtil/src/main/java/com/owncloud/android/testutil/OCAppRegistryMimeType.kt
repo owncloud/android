@@ -10,4 +10,4 @@ val OC_APP_REGISTRY_MIMETYPE = AppRegistryMimeType(
     icon = "appRegistryMimeTypes.icon",
     description= "appRegistryMimeTypes.description",
     allowCreation=true,
-    defaultApplication= "appRegistryMimeTypes.defaultApplication")
+    defaultApplication= "appRegistryMimeTypes.defaultApplication",)
