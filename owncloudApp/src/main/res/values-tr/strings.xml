@@ -690,6 +690,18 @@
   <string name="release_notes_4_0_subtitle_11">oCIS sunucusu uygulama sağlayıcıları destekliyorsa, tarayıcı aracılığıyla yeni belgeler oluşturulabilir ve oC ile senkronize edilebilir</string>
   <string name="release_notes_4_0_title_12">Dosyalara göz atmak için önerilen uygulamayla yeni ayar</string>
   <string name="release_notes_4_0_subtitle_12">Dosyalara belge sağlayıcı aracılığıyla erişmek için önerilen bir uygulama ile \"Diğer\" bölümüne yeni bir ayar eklendi</string>
+  <string name="release_notes_4_1_title_1">Tüm liste ögelerine 3 nokta düğmesi eklendi</string>
+  <string name="release_notes_4_1_subtitle_1">Ögenin tüm seçeneklerini içeren bir menüyü göstermek için tüm liste elementlerine buton eklendi</string>
+  <string name="release_notes_4_1_title_2">Detaylar görünümünü iyileştir</string>
+  <string name="release_notes_4_1_subtitle_2">Detaylar görünümünü yeniden tasarla</string>
+  <string name="release_notes_4_1_title_3">Yeni dil değişikliği desteği</string>
+  <string name="release_notes_4_1_subtitle_3">Android 13+\'de yeni dil değişikliği için destek eklendi</string>
+  <string name="release_notes_4_1_title_4">Alan resimlerinin yüklenmesiyle ilgili hata düzeltildi</string>
+  <string name="release_notes_4_1_subtitle_4">Alan resimlerini ilk gösterdiğimizde yüklemek ve ögelerin resimlerinin yüklenmesini iyileştirmek</string>
+  <string name="release_notes_4_1_title_5">Markdown dosyalarını ASCII modunda aç</string>
+  <string name="release_notes_4_1_subtitle_5">Markdown dosyalarını ASCII kodunu göstererek açmak için yeni bir mod eklendi</string>
+  <string name="release_notes_4_1_title_6">Kopyalama/taşıma çakışmasında açılır pencere gösteriliyor</string>
+  <string name="release_notes_4_1_subtitle_6">Kopyalama veya taşıma eyleminde bir adlandırma çakışması olduğunda 3 seçenek gösterilir</string>
   <string name="release_notes_4_1_title_7">Küçük hata düzeltmeleri ve iyileştirmeler</string>
   <string name="release_notes_4_1_subtitle_7">Bazı küçük hatalar giderildi ve uygulamadaki deneyimi iyileştirmek için küçük teknik iyileştirmeler yapıldı.</string>
   <!--Open in web-->

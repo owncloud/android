@@ -150,6 +150,7 @@
   <string name="file_list_seconds_ago">sekonda më parë</string>
   <string name="file_list_empty_title_all_files">S’ka kartela këtu</string>
   <string name="spaces_list_empty_title">Pa hapësira</string>
+  <string name="space_label">Hapësirë:</string>
   <string name="file_list_empty_title_available_offline">S’ka kartela “offline” të passhme</string>
   <string name="file_list_empty_title_shared_by_links">Pa lidhje ndarjesh</string>
   <string name="file_list_empty_subtitle_all_files">Ngarkoni ca lëndë ose bëni njëkohësim me pajisjet tuaja!</string>
@@ -178,6 +179,7 @@
   <string name="filedetails_type">Lloj:</string>
   <string name="filedetails_created">Krijuar më:</string>
   <string name="filedetails_last_sync">Njëkohësimi i fundit:</string>
+  <string name="filedetails_path">Shteg:</string>
   <string name="filedetails_modified">Ndryshuar më:</string>
   <string name="filedetails_download">Shkarkoje</string>
   <string name="filedetails_file_image_content_description">Pamje Kartele</string>
@@ -685,6 +687,7 @@
   <string name="release_notes_4_0_subtitle_11">Nëse shërbyesi oCIS mbulon shërbime aplikacionesh, dokumentet e reja do të krijohen përmes shfletuesit dhe njëkohësohen me oC</string>
   <string name="release_notes_4_0_title_12">Rregullime të reja me aplikacionin sugjeruan shfletim kartelash</string>
   <string name="release_notes_4_0_subtitle_12">Te ndarja “Më tepër” u shtua një rregullim i ri, me një aplikacion të sugjeruar për hyrje në kartela përmes furnizuesi dokumentesh</string>
+  <string name="release_notes_4_1_title_1">U shtua buton me 3 pika te krejt objektet e listës</string>
   <string name="release_notes_4_1_title_7">Ndreqje të metash të vockla dhe përmirësime</string>
   <string name="release_notes_4_1_subtitle_7">Janë ndrequr disa të meta të cokla dhe u sollën për herë të parë përmirësime të vockla teknike për të përmirësuar punën te aplikacioni</string>
   <!--Open in web-->
