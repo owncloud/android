@@ -1,0 +1,6 @@
+Enhancement: Unit tests for datasources classes - Part 2
+
+Unit tests of the OCLocalFileDataSource and OCRemoteFileDataSource classes have been done.
+
+https://github.com/owncloud/android/issues/4071
+https://github.com/owncloud/android/pull/4123
