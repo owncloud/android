@@ -26,6 +26,7 @@ Summary
 * Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
 * Enhancement - Force security if not protected: [#4061](https://github.com/owncloud/android/issues/4061)
 * Enhancement - Prevent http traffic with branding options: [#4066](https://github.com/owncloud/android/issues/4066)
+* Enhancement - Unit tests for datasources classes - Part 2: [#4071](https://github.com/owncloud/android/issues/4071)
 * Enhancement - Respect app_providers_appsUrl value from capabilities: [#4075](https://github.com/owncloud/android/issues/4075)
 * Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
 * Enhancement - Align Sharing icons with other platforms: [#4101](https://github.com/owncloud/android/issues/4101)
@@ -173,6 +174,13 @@ Details
 
    https://github.com/owncloud/android/issues/4066
    https://github.com/owncloud/android/pull/4110
+
+* Enhancement - Unit tests for datasources classes - Part 2: [#4071](https://github.com/owncloud/android/issues/4071)
+
+   Unit tests of the OCLocalFileDataSource and OCRemoteFileDataSource classes have been done.
+
+   https://github.com/owncloud/android/issues/4071
+   https://github.com/owncloud/android/pull/4123
 
 * Enhancement - Respect app_providers_appsUrl value from capabilities: [#4075](https://github.com/owncloud/android/issues/4075)
 
