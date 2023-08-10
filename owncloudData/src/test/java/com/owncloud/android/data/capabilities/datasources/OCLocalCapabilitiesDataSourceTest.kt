@@ -59,7 +59,7 @@ class OCLocalCapabilitiesDataSourceTest {
     }
 
     @Test
-    fun `getCapabilitiesForAccountAsLiveData returns a livedata`() {
+    fun `getCapabilitiesForAccountAsLiveData returns a livedata of OCCapability`() {
         val capabilitiesLiveData = MutableLiveData<OCCapabilityEntity>()
         every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns capabilitiesLiveData
 
