@@ -690,6 +690,18 @@
   <string name="release_notes_4_0_subtitle_11">Kui oCIS server toetab rakenduste pakkujaid, siis saab uusi dokumente luua ja zoneCloudiga sünkroonida läbi brauseri</string>
   <string name="release_notes_4_0_title_12">Uus seadistus failisirvija soovitusega</string>
   <string name="release_notes_4_0_subtitle_12">Lisatud on uus seadistus \"More\" alajaotuses, kus soovitatakse rakendust ligipääsuks failidele läbi dokumendi pakkuja</string>
+  <string name="release_notes_4_1_title_1">Lisatud on 3 punktiga nupp kõikide üksuste kuvamiseks</string>
+  <string name="release_notes_4_1_subtitle_1">Lisatud on nupp näitamaks menüüd koos üksuse kõigi sätetega</string>
+  <string name="release_notes_4_1_title_2">Detailivaate parendused</string>
+  <string name="release_notes_4_1_subtitle_2">Detailivaate uus kujundus</string>
+  <string name="release_notes_4_1_title_3">Tugi keelevahetuseks</string>
+  <string name="release_notes_4_1_subtitle_3">Lisatud tugi uueks keelevahetuseks Android versioonil 13 ja üle</string>
+  <string name="release_notes_4_1_title_4">Parandatud viga ruumi piltide laadimisel</string>
+  <string name="release_notes_4_1_subtitle_4">Ruumi piltide esmakordsel laadimisel neid näidatakse ja parandatakse üksuste piltide laadimist</string>
+  <string name="release_notes_4_1_title_5">Markdown failid avatakse ASCII-režiimis</string>
+  <string name="release_notes_4_1_subtitle_5">Lisatud uus režiim markdown-failide avamiseks, mis näitab ASCII-koode</string>
+  <string name="release_notes_4_1_title_6">Näidatakse pop-up\'i kopeerimise/teisaldamise konflikti korral</string>
+  <string name="release_notes_4_1_subtitle_6">Näidatakse 3 valikuga pop-up\'i kui kopeerimise või teisaldamise ajal tekib nimekonflikt</string>
   <string name="release_notes_4_1_title_7">Väiksemad veaparandused ja parendused</string>
   <string name="release_notes_4_1_subtitle_7">Parandatud on mõned väiksemad tarkvaravead ning lisatud on väiksemad tehnilised parendused, et parandada rakenduse kasutajakogemust</string>
   <!--Open in web-->
