@@ -223,7 +223,7 @@
     <string name="uploader_upload_failed_ssl_certificate_not_trusted">Server certificate is not trusted</string>
     <string name="uploader_upload_text_dialog_title">Insert a name for the new file</string>
     <string name="uploader_upload_text_dialog_filename_error_empty">Filename must not be empty</string>
-    <string name="uploader_upload_text_dialog_filename_error_length_max">Filename must not be more than %d characters</string>
+    <string name="uploader_upload_text_dialog_filename_error_length_max">Filename must not be longer than %d characters</string>
     <string name="uploader_upload_text_filename_hint">Filename</string>
     <string name="uploader_upload_camera_upload_files">Uploading camera upload files</string>
     <string name="uploader_upload_picture_upload_files">%d new pictures will be uploaded</string>
