@@ -218,7 +218,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Sunucu sertifikasına güvenilmiyor</string>
   <string name="uploader_upload_text_dialog_title">Yeni dosya için bir isim giriniz</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Dosya adı boş bırakılamaz</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Dosya adı %d karakterden daha uzun olmamalı</string>
   <string name="uploader_upload_text_filename_hint">Dosya adı</string>
   <string name="uploader_upload_camera_upload_files">Kamera yükleme dosyaları yükleniyor</string>
   <string name="uploader_upload_picture_upload_files">%d yeni fotoğraf yüklenecek</string>

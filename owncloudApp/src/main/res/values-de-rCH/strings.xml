@@ -176,7 +176,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Das Zertifikat des Servers ist nicht vertrauenswürdig</string>
   <string name="uploader_upload_text_dialog_title">Einen Namen für die neue Datei eingeben</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Der Dateiname muss angegeben werden</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Der Dateiname darf nicht mehr als %d Zeichen haben</string>
   <string name="uploader_upload_text_filename_hint">Dateiname</string>
   <string name="uploader_upload_camera_upload_files">Hochladen von Hochladedateien der Kamera</string>
   <string name="uploader_upload_available_offline_files">Hochladen von verfügbaren Offline-Dateien</string>

@@ -197,7 +197,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">תעודת שרת אינה מהימנה</string>
   <string name="uploader_upload_text_dialog_title">יש להכניס שם לקובץ החדש</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">שדה שם קובץ אינו יכול להיות ריק</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">שדה שם קובץ אינו יכול להכיל יותר מ- %d תווים</string>
   <string name="uploader_upload_text_filename_hint">שם קובץ</string>
   <string name="uploader_upload_camera_upload_files">מעלה קובצי מצלמה</string>
   <string name="uploader_upload_picture_upload_files">%d תמונות חדשות יועלו</string>

@@ -216,7 +216,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">El certificado del servidor no es de confianza</string>
   <string name="uploader_upload_text_dialog_title">Introduzca el nombre para el nuevo archivo</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">El nombre del archivo no debe estar vacio</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">El nombre del archivo no debe tener mas de %d caracteres.</string>
   <string name="uploader_upload_text_filename_hint">Nombre</string>
   <string name="uploader_upload_camera_upload_files">Subiendo archivos de la cámara</string>
   <string name="uploader_upload_picture_upload_files">Se cargarán %d imágenes nuevas</string>

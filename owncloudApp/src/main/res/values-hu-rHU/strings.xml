@@ -183,7 +183,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">A kiszolgáló tanúsítványa nem megbízható</string>
   <string name="uploader_upload_text_dialog_title">Adja meg az új fájlt nevét</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">A fájlnév nem lehet üres</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">A fájlnév legfeljebb %d karakter hosszú lehet</string>
   <string name="uploader_upload_text_filename_hint">Fájlnév</string>
   <string name="uploader_upload_camera_upload_files">Fényképezőgép feltöltési fájlok feltöltése</string>
   <string name="uploader_upload_picture_upload_files">%dúj kép kerül feltöltésre</string>

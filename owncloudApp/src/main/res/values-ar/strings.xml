@@ -184,7 +184,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">شهادة الخادم غير موثوق بها</string>
   <string name="uploader_upload_text_dialog_title">أدخل اسمًا للملف الجديد</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">يجب ألا يكون اسم الملف فارغًا</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">يجب ألا يزيد عدد أحرف اسم الملف عن %d</string>
   <string name="uploader_upload_text_filename_hint">اسم الملف</string>
   <string name="uploader_upload_camera_upload_files">تحميل ملفات تحميل الكاميرا</string>
   <string name="uploader_upload_available_offline_files">تحميل الملفات المتوفرة دون اتصال بالإنترنت</string>

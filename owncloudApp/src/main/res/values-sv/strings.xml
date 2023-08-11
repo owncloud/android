@@ -180,7 +180,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Litar inte på servercertifikat</string>
   <string name="uploader_upload_text_dialog_title">Välj ett namn för den nya filen</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Filnamnet får inte vara tomt</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Filnamnet får inte ha fler än %d tecken</string>
   <string name="uploader_upload_text_filename_hint">Filnamn</string>
   <string name="uploader_upload_picture_upload_files">%d nya bilder kommer att laddas upp</string>
   <string name="uploader_upload_video_upload_files">%d nya videor kommer att laddas upp</string>

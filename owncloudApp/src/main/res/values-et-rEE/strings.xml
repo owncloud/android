@@ -218,7 +218,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Serveri sertifikaat pole usaldusväärne</string>
   <string name="uploader_upload_text_dialog_title">Sisesta uuele failile nimi</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Failinimi ei tohi olla tühi</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Failinimi ei tohi olla pikem kui %d märki</string>
   <string name="uploader_upload_text_filename_hint">Failinimi</string>
   <string name="uploader_upload_camera_upload_files">Kaamera üleslaetavate falide üleslaadimine</string>
   <string name="uploader_upload_picture_upload_files">%d uut pilti laetakse üles </string>

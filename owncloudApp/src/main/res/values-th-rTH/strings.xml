@@ -195,7 +195,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
   <string name="uploader_upload_text_dialog_title">กรอกชื่อไฟล์ใหม่</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">ชื่อไฟล์ต้องไม่ว่างเปล่า</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">ชื่อไฟล์ต้องมีอักขระไม่เกิน %d ตัว</string>
   <string name="uploader_upload_text_filename_hint">ชื่อไฟล์</string>
   <string name="uploader_upload_camera_upload_files">กำลังอัปโหลดไฟล์รูปภาพ</string>
   <string name="uploader_upload_picture_upload_files">%d รูปภาพใหม่ถูกอัปโหลดแล้ว</string>

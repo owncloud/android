@@ -213,7 +213,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
   <string name="uploader_upload_text_dialog_title">Укажите имя для нового файла</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Имя файла не должно быть пустым</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Имя файла должно быть не длиннее %d символов</string>
   <string name="uploader_upload_text_filename_hint">Имя файла</string>
   <string name="uploader_upload_camera_upload_files">Загрузка файлов, загруженных из камеры</string>
   <string name="uploader_upload_picture_upload_files">Будет загружено %d новых изображений</string>
