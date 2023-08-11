@@ -177,7 +177,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Το πιστοποιητικό του διακομιστή είναι αναξιόπιστο</string>
   <string name="uploader_upload_text_dialog_title">Εισάγετε ένα όνομα για το καινούριο αρχείο</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Το όνομα αρχείου δεν πρέπει να είναι κενό</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Το όνομα αρχείου δεν θα πρέπει να έχει περισσότερους από %d χαρακτήρες</string>
   <string name="uploader_upload_text_filename_hint">Όνομα αρχείου</string>
   <string name="uploader_upload_camera_upload_files">Γίνεται μεταφόρτωση αρχείων από την κάμερα</string>
   <string name="uploader_upload_camera_upload_source_path_error">Αποτυχία μεταφορτώσεων κάμερας</string>

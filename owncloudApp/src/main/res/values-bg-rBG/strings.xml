@@ -213,7 +213,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Сертификатът на сървъра не е надежден</string>
   <string name="uploader_upload_text_dialog_title">Въведете име на новия файл</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Името на файла не може да е празно</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Името на файла не трябва да бъде повече от %d знака</string>
   <string name="uploader_upload_text_filename_hint">Име на файла</string>
   <string name="uploader_upload_camera_upload_files">Качване на файлове от камерата</string>
   <string name="uploader_upload_picture_upload_files">%d нови изображения бяха качени</string>

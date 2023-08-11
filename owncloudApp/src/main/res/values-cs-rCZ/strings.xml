@@ -199,7 +199,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Certifikát serveru není důvěryhodný</string>
   <string name="uploader_upload_text_dialog_title">Vložte název nového souboru</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Název souboru nesmí být prázdný</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Název souboru nesmí být delší než %d znaků</string>
   <string name="uploader_upload_text_filename_hint">Jméno souboru</string>
   <string name="uploader_upload_camera_upload_files">Nahrávám soubory z fotoparátu</string>
   <string name="uploader_upload_picture_upload_files">%d nových obrázků bude odesláno</string>

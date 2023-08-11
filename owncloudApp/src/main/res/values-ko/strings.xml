@@ -212,7 +212,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">서버의 인증서를 신뢰할 수 없습니다.</string>
   <string name="uploader_upload_text_dialog_title">새 파일 이름을 입력하십시오</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">파일 이름을 비워둘 수 없습니다.</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">파일 이름은 %d글자를 초과하면 안 됩니다.</string>
   <string name="uploader_upload_text_filename_hint">파일 이름</string>
   <string name="uploader_upload_camera_upload_files">카메라 파일을 업로드 중</string>
   <string name="uploader_upload_picture_upload_files">새 사진 %d개가 곧 업로드됨</string>

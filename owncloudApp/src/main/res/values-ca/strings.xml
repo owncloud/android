@@ -167,7 +167,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">El certificat del servidor no és de confiança</string>
   <string name="uploader_upload_text_dialog_title">Introdueix un nom pel fitxer</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">EL nom no es pot deixar en blanc</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">El nom no pot ser més llarg de %d caràcters</string>
   <string name="uploader_upload_text_filename_hint">Nom del fitxer</string>
   <string name="uploader_upload_camera_upload_files">Pujant arxius pujats desde càmera</string>
   <string name="uploader_upload_available_offline_files">Pujant arxius disponibles offline</string>

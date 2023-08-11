@@ -203,7 +203,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">服务器证书不被信任</string>
   <string name="uploader_upload_text_dialog_title">输入新文件的名称</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">文件名不能为空</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">文件名不能超过 %d 个字符</string>
   <string name="uploader_upload_text_filename_hint">文件名</string>
   <string name="uploader_upload_camera_upload_files">使用相机上传文件</string>
   <string name="uploader_upload_picture_upload_files">%d将上传新图片</string>

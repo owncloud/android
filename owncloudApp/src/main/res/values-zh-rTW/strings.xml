@@ -189,7 +189,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">伺服器憑證不是可信的</string>
   <string name="uploader_upload_text_dialog_title">插入新檔案的名稱</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">檔名不能為空</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">檔名不能超過%d個字元</string>
   <string name="uploader_upload_text_filename_hint">檔案名稱</string>
   <string name="uploader_upload_camera_upload_files">上傳相機上傳文件</string>
   <string name="uploader_upload_picture_upload_files">%d將上傳新圖片</string>

@@ -191,7 +191,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Le certificat du serveur n\'est pas sûr</string>
   <string name="uploader_upload_text_dialog_title">Saisissez le nom du nouveau fichier</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Le nom de fichier ne doit pas être vide</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Le nom de fichier ne doit pas contenir plus de %d caractères</string>
   <string name="uploader_upload_text_filename_hint">Nom du fichier</string>
   <string name="uploader_upload_camera_upload_files">Téléversement des fichiers de l\'appareil photo </string>
   <string name="uploader_upload_picture_upload_files">%d nouvelles images seront téléversées</string>

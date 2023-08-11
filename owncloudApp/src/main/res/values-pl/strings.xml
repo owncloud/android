@@ -202,7 +202,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Certyfikat serwera jest niezaufany</string>
   <string name="uploader_upload_text_dialog_title">Wprowadź nazwę nowego pliku</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Nazwa pliku nie może być pusta</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Nazwa pliku nie może być dłuższa niż %d znaków</string>
   <string name="uploader_upload_text_filename_hint">Nazwa pliku</string>
   <string name="uploader_upload_camera_upload_files">Wgrywanie plików zdjęć</string>
   <string name="uploader_upload_picture_upload_files">%d nowych plików zostanie wysłanych</string>

@@ -177,7 +177,6 @@ Download hier: %2$s</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Het servercertificaat is niet vertrouwd</string>
   <string name="uploader_upload_text_dialog_title">Voer de naam in van het nieuwe bestand</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Bestandsnaam mag niet leeg zijn</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">De bestandsnaam mag niet langer zijn dan %d tekens</string>
   <string name="uploader_upload_text_filename_hint">Bestandsnaam</string>
   <string name="uploader_upload_camera_upload_files">Camera bestanden worden geupload</string>
   <string name="uploader_upload_available_offline_files">Uploaden van beschikbare offline bestanden</string>
