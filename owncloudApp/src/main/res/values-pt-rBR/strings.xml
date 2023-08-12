@@ -218,6 +218,7 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">O certificado de servidor não é confiável</string>
   <string name="uploader_upload_text_dialog_title">Insira um nome para o novo arquivo</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">O nome do arquivo não pode estar em branco</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">O nome do arquivo não deve ser maior que %d caracteres</string>
   <string name="uploader_upload_text_filename_hint">Nome do Arquivo</string>
   <string name="uploader_upload_camera_upload_files">Enviando arquivos de envio da camera</string>
   <string name="uploader_upload_picture_upload_files">%d novas fotos serão carregadas </string>
@@ -690,6 +691,18 @@
   <string name="release_notes_4_0_subtitle_11">Se o servidor oCIS suportar provedores de aplicativos, novos documentos podem ser criados via navegador e sincronizados com</string>
   <string name="release_notes_4_0_title_12">Nova configuração com aplicativo sugerido para procurar arquivos</string>
   <string name="release_notes_4_0_subtitle_12">Uma nova configuração foi adicionada na seção \"Mais\" com um aplicativo sugerido para acessar arquivos via provedor de documentos</string>
+  <string name="release_notes_4_1_title_1">Adicionado botão de 3 pontos a todos os itens da lista</string>
+  <string name="release_notes_4_1_subtitle_1">Adicionado botão a todos os elementos da lista para mostrar um menu com todas as opções do item</string>
+  <string name="release_notes_4_1_title_2">Melhorar visualização de detalhes</string>
+  <string name="release_notes_4_1_subtitle_2">Redesenho da visualização de detalhes</string>
+  <string name="release_notes_4_1_title_3">Suporte para nova mudança de idioma</string>
+  <string name="release_notes_4_1_subtitle_3">Adicionado suporte para a nova alteração de idioma no Android 13+</string>
+  <string name="release_notes_4_1_title_4">Bug corrigido sobre o carregamento de imagens do espaço</string>
+  <string name="release_notes_4_1_subtitle_4">Carregando as imagens dos espaços na primeira vez que mostramos e melhorando o carregamento das imagens dos itens</string>
+  <string name="release_notes_4_1_title_5">Abrir arquivos markdown no modo ASCII</string>
+  <string name="release_notes_4_1_subtitle_5">Adicionado um novo modo para abrir arquivos markdown para mostrar o código ASCII</string>
+  <string name="release_notes_4_1_title_6">Mostrando pop-up no conflito de copiar/mover</string>
+  <string name="release_notes_4_1_subtitle_6">Mostrando um pop-up de 3 opções ao ter um conflito de nomenclatura na ação de copiar ou mover</string>
   <string name="release_notes_4_1_title_7">Pequenas correções de bugs e melhorias</string>
   <string name="release_notes_4_1_subtitle_7">Alguns pequenos bugs foram corrigidos e pequenas melhorias técnicas foram introduzidas para melhorar a experiência no aplicativo</string>
   <!--Open in web-->
