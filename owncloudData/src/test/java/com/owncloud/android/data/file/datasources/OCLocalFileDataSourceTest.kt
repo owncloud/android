@@ -51,12 +51,16 @@ import java.util.UUID
 class OCLocalFileDataSourceTest {
     private lateinit var localDataSource: OCLocalFileDataSource
     private lateinit var dao: FileDao
-    private val ocFileAndFileSync = OCFileAndFileSync(DUMMY_FILE_ENTITY, OCFileSyncEntity(
-        fileId = OC_FILE.id!!,
-        uploadWorkerUuid = null,
-        downloadWorkerUuid = null,
-        isSynchronizing = false
-    ), OC_SPACE_PERSONAL.toEntity())
+    private val ocFileAndFileSync = OCFileAndFileSync(
+        DUMMY_FILE_ENTITY,
+        OCFileSyncEntity(
+            fileId = OC_FILE.id!!,
+            uploadWorkerUuid = null,
+            downloadWorkerUuid = null,
+            isSynchronizing = false,
+        ),
+        OC_SPACE_PERSONAL.toEntity(),
+    )
 
     @Before
     fun init() {
@@ -65,25 +69,25 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getFileById returns ok`() {
+    fun `getFileById returns the same result as the localDataSource getFileById called in this method`() {
         every { dao.getFileById(any()) } returns DUMMY_FILE_ENTITY
 
         val result = localDataSource.getFileById(OC_FILE.id!!)
 
         assertEquals(OC_FILE, result)
 
-        verify (exactly = 1) { dao.getFileById(OC_FILE.id!!) }
+        verify(exactly = 1) { dao.getFileById(OC_FILE.id!!) }
     }
 
     @Test
-    fun `getFileById returns null`() {
+    fun `getFileById returns null when dao is null`() {
         every { dao.getFileById(any()) } returns null
 
         val result = localDataSource.getFileById(DUMMY_FILE_ENTITY.id)
 
         assertNull(result)
 
-        verify (exactly = 1) { dao.getFileById(DUMMY_FILE_ENTITY.id) }
+        verify(exactly = 1) { dao.getFileById(DUMMY_FILE_ENTITY.id) }
     }
 
     @Test(expected = Exception::class)
@@ -94,29 +98,29 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getFileByIdAsFlow returns ok`() =  runBlocking {
+    fun `getFileByIdAsFlow returns a flow of OCFile`() = runBlocking {
         every { dao.getFileByIdAsFlow(any()) } returns flowOf(DUMMY_FILE_ENTITY)
 
         val result = localDataSource.getFileByIdAsFlow(OC_FILE.id!!)
 
-        result.collect{ result ->
+        result.collect { result ->
             assertEquals(OC_FILE, result)
         }
 
-        verify (exactly = 1) { dao.getFileByIdAsFlow(OC_FILE.id!!) }
+        verify(exactly = 1) { dao.getFileByIdAsFlow(OC_FILE.id!!) }
     }
 
     @Test
-    fun `getFileByIdAsFlow returns null`() =  runBlocking {
+    fun `getFileByIdAsFlow returns null`() = runBlocking {
         every { dao.getFileByIdAsFlow(any()) } returns flowOf(null)
 
         val result = localDataSource.getFileByIdAsFlow(DUMMY_FILE_ENTITY.id)
 
-        result.collect { result->
+        result.collect { result ->
             assertNull(result)
         }
 
-        verify (exactly = 1) { dao.getFileByIdAsFlow(DUMMY_FILE_ENTITY.id) }
+        verify(exactly = 1) { dao.getFileByIdAsFlow(DUMMY_FILE_ENTITY.id) }
     }
 
     @Test(expected = Exception::class)
@@ -137,7 +141,7 @@ class OCLocalFileDataSourceTest {
             assertEquals(OC_FILE_WITH_SYNC_INFO_AND_SPACE, emittedFileWithSyncInfo)
         }
 
-        verify (exactly = 1) { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }
+        verify(exactly = 1) { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }
     }
 
     @Test
@@ -151,7 +155,7 @@ class OCLocalFileDataSourceTest {
             assertNull(emittedFileWithSyncInfo)
         }
 
-        verify (exactly = 1) { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }
+        verify(exactly = 1) { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }
     }
 
     @Test(expected = Exception::class)
@@ -165,7 +169,7 @@ class OCLocalFileDataSourceTest {
             assertEquals(OC_FILE_WITH_SYNC_INFO_AND_SPACE, emittedFileWithSyncInfo)
         }
 
-        verify (exactly = 1) { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }
+        verify(exactly = 1) { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }
     }
 
     @Test
@@ -176,7 +180,7 @@ class OCLocalFileDataSourceTest {
 
         assertEquals(OC_FILE, result)
 
-        verify (exactly = 1) { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, OC_FILE.remotePath, OC_FILE.spaceId) }
+        verify(exactly = 1) { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, OC_FILE.remotePath, OC_FILE.spaceId) }
     }
 
     @Test
@@ -187,7 +191,7 @@ class OCLocalFileDataSourceTest {
 
         assertNull(result)
 
-        verify (exactly = 1) { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, OC_FILE.remotePath, OC_FILE.spaceId) }
+        verify(exactly = 1) { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, OC_FILE.remotePath, OC_FILE.spaceId) }
     }
 
     @Test
@@ -208,7 +212,7 @@ class OCLocalFileDataSourceTest {
         assertEquals(MIME_DIR, result.mimeType)
         assertEquals(ROOT_PATH, result.remotePath)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.getFileByOwnerAndRemotePath(OC_FILE.owner, ROOT_PATH, null)
             dao.mergeRemoteAndLocalFile(any())
             dao.getFileById(1234)
@@ -221,7 +225,7 @@ class OCLocalFileDataSourceTest {
 
         localDataSource.getFileByRemotePath(OC_FILE.remotePath, OC_FILE.owner, null)
 
-        verify (exactly = 1) { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, OC_FILE.remotePath, null) }
+        verify(exactly = 1) { dao.getFileByOwnerAndRemotePath(OC_FILE.owner, OC_FILE.remotePath, null) }
     }
 
     @Test
@@ -232,7 +236,7 @@ class OCLocalFileDataSourceTest {
 
         assertEquals(OC_FILE, result)
 
-        verify (exactly = 1) { dao.getFileByRemoteId(DUMMY_FILE_ENTITY.remoteId.toString()) }
+        verify(exactly = 1) { dao.getFileByRemoteId(DUMMY_FILE_ENTITY.remoteId.toString()) }
     }
 
     @Test
@@ -243,9 +247,8 @@ class OCLocalFileDataSourceTest {
 
         assertEquals(null, result)
 
-        verify (exactly = 1) { dao.getFileByRemoteId(DUMMY_FILE_ENTITY.remoteId.toString()) }
+        verify(exactly = 1) { dao.getFileByRemoteId(DUMMY_FILE_ENTITY.remoteId.toString()) }
     }
-
 
     @Test(expected = Exception::class)
     fun `getFileByRemoteId returns an exception when getFileByRemoteId receive an exception`() {
@@ -254,7 +257,6 @@ class OCLocalFileDataSourceTest {
         localDataSource.getFileByRemoteId(DUMMY_FILE_ENTITY.remoteId.toString())
 
     }
-
 
     @Test
     fun `getFolderContent returns a list of OCFile`() {
@@ -281,9 +283,9 @@ class OCLocalFileDataSourceTest {
 
         val result = localDataSource.getSearchFolderContent(OC_FILE.id!!, "test")
 
-        assertEquals(listOf(OC_FILE) , result)
+        assertEquals(listOf(OC_FILE), result)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.getSearchFolderContent(DUMMY_FILE_ENTITY.id, "test")
         }
     }
@@ -302,9 +304,9 @@ class OCLocalFileDataSourceTest {
 
         val result = localDataSource.getSearchAvailableOfflineFolderContent(OC_FILE.id!!, "test")
 
-        assertEquals(listOf(OC_FILE) , result)
+        assertEquals(listOf(OC_FILE), result)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.getSearchAvailableOfflineFolderContent(DUMMY_FILE_ENTITY.id, "test")
         }
     }
@@ -324,9 +326,9 @@ class OCLocalFileDataSourceTest {
 
         val result = localDataSource.getSearchSharedByLinkFolderContent(OC_FILE.id!!, "test")
 
-        assertEquals(listOf(OC_FILE) , result)
+        assertEquals(listOf(OC_FILE), result)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.getSearchSharedByLinkFolderContent(DUMMY_FILE_ENTITY.id, "test")
         }
     }
@@ -334,7 +336,7 @@ class OCLocalFileDataSourceTest {
     @Test(expected = Exception::class)
     fun `getSearchSharedByLinkFolderContent returns an exception when getSearchSharedByLinkFolderContent receive an exception`() {
 
-        every { dao.getSearchSharedByLinkFolderContent(any(), any()) }  throws Exception()
+        every { dao.getSearchSharedByLinkFolderContent(any(), any()) } throws Exception()
 
         localDataSource.getSearchSharedByLinkFolderContent(OC_FILE.id!!, "test")
 
@@ -347,11 +349,11 @@ class OCLocalFileDataSourceTest {
 
         val result = localDataSource.getFolderContentWithSyncInfoAsFlow(OC_FILE.id!!)
 
-        result.collect { result->
-            assertEquals(listOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE) , result)
+        result.collect { result ->
+            assertEquals(listOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE), result)
         }
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.getFolderContentWithSyncInfoAsFlow(OC_FILE.id!!)
         }
     }
@@ -373,7 +375,7 @@ class OCLocalFileDataSourceTest {
 
         assertEquals(listOf(OC_FILE), result)
 
-        verify (exactly = 1) { dao.getFolderByMimeType(DUMMY_FILE_ENTITY.id, MIME_PREFIX_IMAGE) }
+        verify(exactly = 1) { dao.getFolderByMimeType(DUMMY_FILE_ENTITY.id, MIME_PREFIX_IMAGE) }
     }
 
     @Test(expected = Exception::class)
@@ -382,7 +384,7 @@ class OCLocalFileDataSourceTest {
 
         localDataSource.getFolderImages(DUMMY_FILE_ENTITY.id)
 
-        verify (exactly = 1) { dao.getFolderByMimeType(DUMMY_FILE_ENTITY.id, MIME_PREFIX_IMAGE) }
+        verify(exactly = 1) { dao.getFolderByMimeType(DUMMY_FILE_ENTITY.id, MIME_PREFIX_IMAGE) }
     }
 
     @Test
@@ -395,7 +397,7 @@ class OCLocalFileDataSourceTest {
             assertEquals(listOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE), result)
         }
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.getFilesWithSyncInfoSharedByLinkAsFlow(DUMMY_FILE_ENTITY.owner)
         }
     }
@@ -419,16 +421,16 @@ class OCLocalFileDataSourceTest {
             assertEquals(listOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE), result)
         }
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(DUMMY_FILE_ENTITY.owner)
         }
     }
 
     @Test(expected = Exception::class)
-    fun `getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow returns an Exception when getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow receive an exception`()  {
+    fun `getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow returns an Exception when getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow receive an exception`() {
         every { dao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(any()) } throws Exception()
 
-       localDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(DUMMY_FILE_ENTITY.owner)
+        localDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(DUMMY_FILE_ENTITY.owner)
 
     }
 
@@ -440,7 +442,7 @@ class OCLocalFileDataSourceTest {
 
         assertEquals(listOf(OC_FILE), result)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.getFilesAvailableOfflineFromAccount(DUMMY_FILE_ENTITY.owner)
         }
     }
@@ -461,7 +463,7 @@ class OCLocalFileDataSourceTest {
 
         assertEquals(listOf(OC_FILE), result)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.getFilesAvailableOfflineFromEveryAccount()
         }
     }
@@ -475,14 +477,14 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `moveFile returns list of OCFile`() {
+    fun `moveFile should move a file from source to target folder when filedao movefile returns ok`() {
         val finalRemotePath = "/final/path"
         val finalStoragePath = "final_storage"
         every { dao.moveFile(any(), any(), finalRemotePath, finalStoragePath) } returns Unit
 
-        localDataSource.moveFile(OC_FILE, OC_FILE_AVAILABLE_OFFLINE,finalRemotePath, finalStoragePath)
+        localDataSource.moveFile(OC_FILE, OC_FILE_AVAILABLE_OFFLINE, finalRemotePath, finalStoragePath)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.moveFile(DUMMY_FILE_ENTITY, OC_FILE_AVAILABLE_OFFLINE.toEntity(), finalRemotePath, finalStoragePath)
         }
     }
@@ -494,19 +496,19 @@ class OCLocalFileDataSourceTest {
 
         every { dao.moveFile(any(), any(), finalRemotePath, finalStoragePath) } throws Exception()
 
-        localDataSource.moveFile(OC_FILE, OC_FILE_AVAILABLE_OFFLINE,finalRemotePath, finalStoragePath)
+        localDataSource.moveFile(OC_FILE, OC_FILE_AVAILABLE_OFFLINE, finalRemotePath, finalStoragePath)
     }
 
     @Test
-    fun `saveFilesInFolderAndReturnThem returns list of OCFile`() {
+    fun `saveFilesInFolderAndReturnThem should save a list of OCFile in a folder and return them`() {
 
-        every { dao.insertFilesInFolderAndReturnThem(any(), any() ) } returns listOf(DUMMY_FILE_ENTITY)
+        every { dao.insertFilesInFolderAndReturnThem(any(), any()) } returns listOf(DUMMY_FILE_ENTITY)
 
         val result = localDataSource.saveFilesInFolderAndReturnThem(listOf(OC_FILE), OC_FILE)
 
         assertEquals(listOf(OC_FILE), result)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.insertFilesInFolderAndReturnThem(DUMMY_FILE_ENTITY, listOf(DUMMY_FILE_ENTITY))
         }
     }
@@ -514,20 +516,20 @@ class OCLocalFileDataSourceTest {
     @Test(expected = Exception::class)
     fun `saveFilesInFolderAndReturnThem returns exception when saveFilesInFolderAndReturnThem receive an exception`() {
 
-        every { dao.insertFilesInFolderAndReturnThem(any(), any() ) } throws Exception()
+        every { dao.insertFilesInFolderAndReturnThem(any(), any()) } throws Exception()
 
         localDataSource.saveFilesInFolderAndReturnThem(listOf(OC_FILE), OC_FILE)
 
     }
 
     @Test
-    fun `saveFile returns unit`() {
+    fun `saveFile should save a single file and returns unit`() {
 
         every { dao.upsert(any()) } returns Unit
 
         localDataSource.saveFile(OC_FILE)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.upsert(DUMMY_FILE_ENTITY)
         }
     }
@@ -542,7 +544,7 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `saveConflict returns unit`() {
+    fun `saveConflict should save conflict status for a file and returns unit`() {
 
         val etagInConflict = "error"
 
@@ -550,13 +552,13 @@ class OCLocalFileDataSourceTest {
 
         localDataSource.saveConflict(OC_FILE.id!!, etagInConflict)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.updateConflictStatusForFile(OC_FILE.id!!, etagInConflict)
         }
     }
 
     @Test(expected = Exception::class)
-    fun `saveConflict returns exception`() {
+    fun `saveConflict returns exception when dao receive an exception`() {
 
         every { dao.updateConflictStatusForFile(any(), any()) } throws Exception()
 
@@ -565,19 +567,19 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `cleanConflict returns unit`() {
+    fun `cleanConflict  should remove conflict status for a file and returns unit`() {
 
         every { dao.updateConflictStatusForFile(any(), null) } returns Unit
 
         localDataSource.cleanConflict(OC_FILE.id!!)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             dao.updateConflictStatusForFile(OC_FILE.id!!, null)
         }
     }
 
     @Test(expected = Exception::class)
-    fun `cleanConflict returns exception`() {
+    fun `cleanConflict returns exception when dao receive an exception`() {
 
         every { dao.updateConflictStatusForFile(any(), null) } throws Exception()
 
@@ -586,86 +588,86 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `deleteFile returns unit`() {
+    fun `deleteFile should delete a file by its ID and returns unit`() {
         every { dao.deleteFileById(any()) } returns Unit
 
         localDataSource.deleteFile(DUMMY_FILE_ENTITY.id)
 
-        verify (exactly = 1) { dao.deleteFileById(DUMMY_FILE_ENTITY.id) }
+        verify(exactly = 1) { dao.deleteFileById(DUMMY_FILE_ENTITY.id) }
     }
 
     @Test(expected = Exception::class)
-    fun `deleteFile returns exception`() {
+    fun `deleteFile returns exception when dao receive an exception`() {
         every { dao.deleteFileById(any()) } throws Exception()
 
         localDataSource.deleteFile(DUMMY_FILE_ENTITY.id)
     }
 
     @Test
-    fun `deleteFilesForAccount returns unit`() {
+    fun `deleteFilesForAccount should delete files for a specific account and returns unit`() {
         every { dao.deleteFilesForAccount(any()) } returns Unit
 
         localDataSource.deleteFilesForAccount(DUMMY_FILE_ENTITY.name!!)
 
-        verify (exactly = 1) { dao.deleteFilesForAccount(DUMMY_FILE_ENTITY.name!!) }
+        verify(exactly = 1) { dao.deleteFilesForAccount(DUMMY_FILE_ENTITY.name!!) }
     }
 
     @Test(expected = Exception::class)
-    fun `deleteFilesForAccount returns exception`() {
+    fun `deleteFilesForAccount returns exception when dao receive an exception`() {
         every { dao.deleteFilesForAccount(any()) } throws Exception()
 
         localDataSource.deleteFilesForAccount(DUMMY_FILE_ENTITY.name!!)
     }
 
     @Test
-    fun `disableThumbnailsForFile returns unit`() {
+    fun `disableThumbnailsForFile should disable thumbnails for a specific file and returns unit`() {
         every { dao.disableThumbnailsForFile(any()) } returns Unit
 
         localDataSource.disableThumbnailsForFile(DUMMY_FILE_ENTITY.id)
 
-        verify (exactly = 1) { dao.disableThumbnailsForFile(DUMMY_FILE_ENTITY.id) }
+        verify(exactly = 1) { dao.disableThumbnailsForFile(DUMMY_FILE_ENTITY.id) }
     }
 
     @Test(expected = Exception::class)
-    fun `disableThumbnailsForFile returns exception`() {
+    fun `disableThumbnailsForFile returns exception when dao receive an exception`() {
         every { dao.disableThumbnailsForFile(any()) } throws Exception()
 
         localDataSource.disableThumbnailsForFile(DUMMY_FILE_ENTITY.id)
     }
 
     @Test
-    fun `updateAvailableOfflineStatusForFile returns unit`() {
+    fun `updateAvailableOfflineStatusForFile should update available offline status for a file and returns unit`() {
         val newAvailableOfflineStatus: AvailableOfflineStatus = mockk(relaxed = true)
 
         every { dao.updateAvailableOfflineStatusForFile(any(), any()) } returns Unit
 
         localDataSource.updateAvailableOfflineStatusForFile(OC_FILE, newAvailableOfflineStatus)
 
-        verify (exactly = 1) { dao.updateAvailableOfflineStatusForFile(OC_FILE, newAvailableOfflineStatus.ordinal) }
+        verify(exactly = 1) { dao.updateAvailableOfflineStatusForFile(OC_FILE, newAvailableOfflineStatus.ordinal) }
     }
 
     @Test(expected = Exception::class)
-    fun `updateAvailableOfflineStatusForFile returns exception`() {
+    fun `updateAvailableOfflineStatusForFile returns exception when dao receive an exception`() {
         val newAvailableOfflineStatus: AvailableOfflineStatus = mockk(relaxed = true)
 
         every { dao.updateAvailableOfflineStatusForFile(any(), any()) } throws Exception()
 
         localDataSource.updateAvailableOfflineStatusForFile(OC_FILE, newAvailableOfflineStatus)
-     }
+    }
 
     @Test
-    fun `saveDownloadWorkerUuid returns unit`() {
+    fun `saveDownloadWorkerUuid should save the worker UUID for a file and returns unit`() {
         val workerUuid: UUID = mockk(relaxed = true)
 
         every { dao.updateSyncStatusForFile(any(), any()) } returns Unit
 
         localDataSource.saveDownloadWorkerUuid(OC_FILE.id!!, workerUuid)
 
-        verify (exactly = 1) { dao.updateSyncStatusForFile(OC_FILE.id!!, workerUuid) }
+        verify(exactly = 1) { dao.updateSyncStatusForFile(OC_FILE.id!!, workerUuid) }
     }
 
     @Test(expected = Exception::class)
-    fun `saveDownloadWorkerUuid returns exception`() {
+    fun `saveDownloadWorkerUuid returns exception when dao receive an exception`() {
         val workerUuid: UUID = mockk(relaxed = true)
 
         every { dao.updateSyncStatusForFile(any(), any()) } throws Exception()
@@ -674,23 +676,23 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `cleanWorkersUuid returns unit`() {
+    fun `cleanWorkersUuid should clean the worker UUID for a file and returns unit`() {
 
         every { dao.updateSyncStatusForFile(any(), null) } returns Unit
 
         localDataSource.cleanWorkersUuid(OC_FILE.id!!)
 
-        verify (exactly = 1) { dao.updateSyncStatusForFile(OC_FILE.id!!, null) }
+        verify(exactly = 1) { dao.updateSyncStatusForFile(OC_FILE.id!!, null) }
     }
 
     @Test(expected = Exception::class)
-    fun `cleanWorkersUuid returns an exception`() {
+    fun `cleanWorkersUuid returns an exception whe dao receive an exception`() {
 
         every { dao.updateSyncStatusForFile(any(), null) } throws Exception()
 
         localDataSource.cleanWorkersUuid(OC_FILE.id!!)
 
-     }
+    }
 
     companion object {
         private val DUMMY_FILE_ENTITY: OCFileEntity = OC_FILE.toEntity()
