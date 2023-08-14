@@ -77,7 +77,7 @@ class OCLocalCapabilitiesDataSourceTest {
     }
 
     @Test
-    fun `getCapabilitiesForAccountAsLiveData returns null`() {
+    fun `getCapabilitiesForAccountAsLiveData returns null when dao is null`() {
         val capabilitiesLiveData = MutableLiveData<OCCapabilityEntity>()
         every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns capabilitiesLiveData
 
@@ -106,7 +106,7 @@ class OCLocalCapabilitiesDataSourceTest {
     }
 
     @Test
-    fun `getCapabilityForAccount returns null`() {
+    fun `getCapabilityForAccount returns null when dao is null`() {
         every { ocCapabilityDao.getCapabilitiesForAccount(any()) } returns null
 
         val capabilityEmitted =
@@ -129,7 +129,7 @@ class OCLocalCapabilitiesDataSourceTest {
     }
 
     @Test
-    fun deleteCapabilitiesForAccount() {
+    fun `deleteCapabilitiesForAccount return unit dao is ok`() {
         every { ocCapabilityDao.deleteByAccountName(OC_ACCOUNT_NAME) } returns Unit
 
         ocLocalCapabilitiesDataSource.deleteCapabilitiesForAccount(OC_ACCOUNT_NAME)
