@@ -65,7 +65,7 @@ class OCLocalAppRegistryDataSourceTest {
             Assert.assertEquals(OC_APP_REGISTRY_MIMETYPE, appRegistryEmitted)
         }
 
-        verify (exactly = 1) { appRegistryDao.getAppRegistryForMimeType(OC_ACCOUNT_NAME, mimetype) }
+        verify(exactly = 1) { appRegistryDao.getAppRegistryForMimeType(OC_ACCOUNT_NAME, mimetype) }
     }
 
     @Test
@@ -78,7 +78,7 @@ class OCLocalAppRegistryDataSourceTest {
         appRegistry.collect { appRegistryEmitted ->
             Assert.assertNull(appRegistryEmitted)
         }
-        verify (exactly = 1) { appRegistryDao.getAppRegistryForMimeType(OC_ACCOUNT_NAME, mimetype) }
+        verify(exactly = 1) { appRegistryDao.getAppRegistryForMimeType(OC_ACCOUNT_NAME, mimetype) }
     }
 
     @Test(expected = Exception::class)
@@ -91,7 +91,7 @@ class OCLocalAppRegistryDataSourceTest {
         appRegistry.collect { appRegistryEmitted ->
             Assert.assertNull(appRegistryEmitted)
         }
-        verify (exactly = 1) { appRegistryDao.getAppRegistryForMimeType(OC_ACCOUNT_NAME, mimetype) }
+        verify(exactly = 1) { appRegistryDao.getAppRegistryForMimeType(OC_ACCOUNT_NAME, mimetype) }
     }
 
     @Test
@@ -105,7 +105,7 @@ class OCLocalAppRegistryDataSourceTest {
             Assert.assertEquals(listOf(OC_APP_REGISTRY_MIMETYPE), appRegistryEmitted)
         }
 
-        verify (exactly = 1) { appRegistryDao.getAppRegistryWhichAllowCreation(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { appRegistryDao.getAppRegistryWhichAllowCreation(OC_ACCOUNT_NAME) }
     }
 
     @Test
@@ -115,11 +115,11 @@ class OCLocalAppRegistryDataSourceTest {
 
         val appRegistry = ocLocalAppRegistryDataSource.getAppRegistryWhichAllowCreation(OC_ACCOUNT_NAME)
 
-        appRegistry.collect {listEmitted ->
+        appRegistry.collect { listEmitted ->
             Assert.assertEquals(emptyList<AppRegistryEntity>(), listEmitted)
         }
 
-        verify (exactly = 1) { appRegistryDao.getAppRegistryWhichAllowCreation(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { appRegistryDao.getAppRegistryWhichAllowCreation(OC_ACCOUNT_NAME) }
     }
 
     @Test
@@ -136,8 +136,8 @@ class OCLocalAppRegistryDataSourceTest {
 
         ocLocalAppRegistryDataSource.saveAppRegistryForAccount(appRegistry)
 
-        verify (exactly = 1) { appRegistryDao.deleteAppRegistryForAccount(appRegistry.accountName) }
-        verify (exactly = 1) { appRegistryDao.upsertAppRegistries(any()) }
+        verify(exactly = 1) { appRegistryDao.deleteAppRegistryForAccount(appRegistry.accountName) }
+        verify(exactly = 1) { appRegistryDao.upsertAppRegistries(any()) }
     }
 
     @Test(expected = Exception::class)
@@ -154,8 +154,8 @@ class OCLocalAppRegistryDataSourceTest {
 
         ocLocalAppRegistryDataSource.saveAppRegistryForAccount(appRegistry)
 
-        verify (exactly = 1) { appRegistryDao.deleteAppRegistryForAccount(appRegistry.accountName) }
-        verify (exactly = 1) { appRegistryDao.upsertAppRegistries(any()) }
+        verify(exactly = 1) { appRegistryDao.deleteAppRegistryForAccount(appRegistry.accountName) }
+        verify(exactly = 1) { appRegistryDao.upsertAppRegistries(any()) }
     }
 
     @Test
@@ -165,7 +165,7 @@ class OCLocalAppRegistryDataSourceTest {
 
         ocLocalAppRegistryDataSource.deleteAppRegistryForAccount(OC_ACCOUNT_NAME)
 
-        verify (exactly = 1) { appRegistryDao.deleteAppRegistryForAccount(any()) }
+        verify(exactly = 1) { appRegistryDao.deleteAppRegistryForAccount(any()) }
     }
 
 }
