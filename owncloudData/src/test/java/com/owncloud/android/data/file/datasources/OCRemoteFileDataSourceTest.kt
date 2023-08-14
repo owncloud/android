@@ -61,7 +61,7 @@ class OCRemoteFileDataSourceTest {
             privateLink = OC_FILE.privateLink,
             owner = OC_FILE.owner,
             sharedByLink = OC_FILE.sharedByLink,
-            sharedWithSharee = OC_FILE.sharedWithSharee!!
+            sharedWithSharee = OC_FILE.sharedWithSharee!!,
         )
     )
 
@@ -78,7 +78,7 @@ class OCRemoteFileDataSourceTest {
             privateLink = OC_FILE.privateLink,
             owner = OC_FILE.owner,
             sharedByLink = OC_FILE.sharedByLink,
-            sharedWithSharee = OC_FILE.sharedWithSharee!!
+            sharedWithSharee = OC_FILE.sharedWithSharee!!,
         )
 
     @Before
@@ -102,7 +102,7 @@ class OCRemoteFileDataSourceTest {
         assertNotNull(checkPathExistence)
         assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
 
-        verify (exactly = 1) { ocFileService.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true) }
+        verify(exactly = 1) { ocFileService.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true) }
     }
 
     @Test
@@ -119,7 +119,7 @@ class OCRemoteFileDataSourceTest {
         assertNotNull(checkPathExistence)
         assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
 
-        verify (exactly = 1) { ocFileService.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true) }
+        verify(exactly = 1) { ocFileService.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true) }
     }
 
     @Test(expected = Exception::class)
@@ -143,7 +143,7 @@ class OCRemoteFileDataSourceTest {
         assertNotNull(createFolderResult)
         assertEquals(remoteResult.data, createFolderResult)
 
-        verify (exactly = 1) { ocFileService.createFolder(any(), any(), any()) }
+        verify(exactly = 1) { ocFileService.createFolder(any(), any(), any()) }
     }
 
     @Test(expected = Exception::class)
@@ -172,7 +172,7 @@ class OCRemoteFileDataSourceTest {
         )
         assertEquals(OC_FILE.remotePath, firstCopyName)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
                 path = OC_FILE.remotePath,
                 isUserLogged = false,
@@ -243,7 +243,7 @@ class OCRemoteFileDataSourceTest {
         )
         assertEquals("${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix $suffix.$extension", firstCopyName)
 
-        verify (exactly = 2) {
+        verify(exactly = 2) {
             clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
                 path = any(),
                 isUserLogged = false,
@@ -260,7 +260,7 @@ class OCRemoteFileDataSourceTest {
                 sourceRemotePath = any(),
                 targetRemotePath = OC_FILE.remotePath,
                 spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-                replace = true
+                replace = true,
             )
         } returns remoteResult
 
@@ -272,12 +272,12 @@ class OCRemoteFileDataSourceTest {
             true,
         )
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             ocFileService.moveFile(
                 sourceRemotePath = any(),
                 targetRemotePath = OC_FILE.remotePath,
                 spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-                replace = true
+                replace = true,
             )
         }
 
@@ -287,14 +287,17 @@ class OCRemoteFileDataSourceTest {
     fun `moveFile returns unit when replace is false`() {
 
         every {
-            ocFileService.moveFile(  any(),  OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl, false)
+            ocFileService.moveFile(any(), OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl, false)
         } returns remoteResult
 
-        ocRemoteFileDataSource.moveFile( sourceRemotePath, OC_FILE.remotePath, OC_ACCOUNT_NAME,
-            OC_SPACE_PROJECT_WITH_IMAGE.webUrl, false)
+        ocRemoteFileDataSource.moveFile(
+            sourceRemotePath, OC_FILE.remotePath, OC_ACCOUNT_NAME,
+            OC_SPACE_PROJECT_WITH_IMAGE.webUrl, false
+        )
 
-        verify (exactly = 1) {
-            ocFileService.moveFile( any(), OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl, false
+        verify(exactly = 1) {
+            ocFileService.moveFile(
+                any(), OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl, false
             )
         }
     }
@@ -322,7 +325,7 @@ class OCRemoteFileDataSourceTest {
     }
 
     @Test
-    fun `readFile returns OCFile`() {
+    fun `readFile should call readFile and convert to model and returns OCFile object`() {
         val expectedOCFile = OC_FILE.copy(id = null, parentId = null, availableOfflineStatus = null) // Eliminar id y parentId
 
         val fileServiceMock = mockk<FileService>(relaxed = true)
@@ -335,32 +338,33 @@ class OCRemoteFileDataSourceTest {
         every {
             fileServiceMock.readFile(
                 remotePath = OC_FILE.remotePath,
-                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl
+                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
             )
         } returns remoteResult
 
         every { clientManagerMock.getFileService(OC_ACCOUNT_NAME) } returns fileServiceMock
 
         val ocRemoteFileDataSource = OCRemoteFileDataSource(clientManagerMock)
-        val result = ocRemoteFileDataSource.readFile( OC_FILE.remotePath, OC_ACCOUNT_NAME,  OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+        val result = ocRemoteFileDataSource.readFile(OC_FILE.remotePath, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
 
         assertEquals(expectedOCFile, result)
 
         verify(exactly = 1) {
-            fileServiceMock.readFile( OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl
+            fileServiceMock.readFile(
+                OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl
             )
         }
     }
 
     @Test
-    fun `refreshFolder returns a list of OCFile`() {
-        val expectedFile = arrayListOf( OC_FILE.copy(id = null, parentId = null, availableOfflineStatus = null)) // Eliminar id y parentId
+    fun `refreshFolder call refreshFolder, convert to model and  returns a list of OCFile`() {
+        val expectedFile = arrayListOf(OC_FILE.copy(id = null, parentId = null, availableOfflineStatus = null)) // Eliminar id y parentId
 
-        val remoteResult: RemoteOperationResult<ArrayList<RemoteFile>>         =
-            createRemoteOperationResultMock(data = remoteFileList , isSuccess = true)
+        val remoteResult: RemoteOperationResult<ArrayList<RemoteFile>> =
+            createRemoteOperationResultMock(data = remoteFileList, isSuccess = true)
 
         every {
-            ocFileService.refreshFolder( OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+            ocFileService.refreshFolder(OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
         } returns remoteResult
 
         val result = ocRemoteFileDataSource.refreshFolder(
@@ -370,7 +374,7 @@ class OCRemoteFileDataSourceTest {
         )
         assertEquals(expectedFile, result)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             ocFileService.refreshFolder(OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
         }
     }
@@ -378,24 +382,25 @@ class OCRemoteFileDataSourceTest {
     @Test
     fun `deleteFile returns Unit when deleteFile is ok`() {
         every {
-            ocFileService.removeFile( OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+            ocFileService.removeFile(OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
         } returns remoteResult
 
-        ocRemoteFileDataSource.deleteFile( OC_FILE.remotePath, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
+        ocRemoteFileDataSource.deleteFile(
+            OC_FILE.remotePath, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
         )
 
-        verify (exactly = 1) {
-            ocFileService.removeFile( OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+        verify(exactly = 1) {
+            ocFileService.removeFile(OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
         }
     }
 
     @Test(expected = Exception::class)
     fun `deleteFile returns an exception when deleteFile receive an exception`() {
         every {
-            ocFileService.removeFile( OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+            ocFileService.removeFile(OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
         } throws Exception()
 
-        ocRemoteFileDataSource.deleteFile( OC_FILE.remotePath, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+        ocRemoteFileDataSource.deleteFile(OC_FILE.remotePath, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
     }
 
     @Test
@@ -404,12 +409,12 @@ class OCRemoteFileDataSourceTest {
         val oldRemotePath = "oldRemotePath"
         val newName = "newName"
         every {
-            ocFileService.renameFile( oldName, oldRemotePath, newName, true, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+            ocFileService.renameFile(oldName, oldRemotePath, newName, true, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
         } returns remoteResult
 
-        ocRemoteFileDataSource.renameFile( oldName, oldRemotePath, newName, true, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl,)
+        ocRemoteFileDataSource.renameFile(oldName, oldRemotePath, newName, true, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             ocFileService.renameFile(oldName, oldRemotePath, newName, true, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
         }
     }
@@ -420,10 +425,10 @@ class OCRemoteFileDataSourceTest {
         val oldRemotePath = "oldRemotePath"
         val newName = "newName"
         every {
-            ocFileService.renameFile( oldName, oldRemotePath, newName, true, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+            ocFileService.renameFile(oldName, oldRemotePath, newName, true, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
         } throws Exception()
 
-        ocRemoteFileDataSource.renameFile( oldName, oldRemotePath, newName, true, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl,)
+        ocRemoteFileDataSource.renameFile(oldName, oldRemotePath, newName, true, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
 
     }
 }
