@@ -73,7 +73,7 @@ class OCRemoteCapabilitiesDataSourceTest {
         assertEquals(OC_CAPABILITY.versionMinor, capabilities.versionMinor)
         assertEquals(OC_CAPABILITY.versionMicro, capabilities.versionMicro)
 
-        verify (exactly = 1) {
+        verify(exactly = 1) {
             ocCapabilityService.getCapabilities()
         }
     }

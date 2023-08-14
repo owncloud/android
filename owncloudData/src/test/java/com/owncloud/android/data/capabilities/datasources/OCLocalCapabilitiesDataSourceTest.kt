@@ -134,6 +134,6 @@ class OCLocalCapabilitiesDataSourceTest {
 
         ocLocalCapabilitiesDataSource.deleteCapabilitiesForAccount(OC_ACCOUNT_NAME)
 
-        verify (exactly = 1) { ocCapabilityDao.deleteByAccountName(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { ocCapabilityDao.deleteByAccountName(OC_ACCOUNT_NAME) }
     }
 }
