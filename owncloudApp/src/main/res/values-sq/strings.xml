@@ -217,6 +217,7 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Dëshmia e shërbyesit s\’është e besuar</string>
   <string name="uploader_upload_text_dialog_title">Jepni një emër për kartelën e re</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Emri i kartelës s\’duhet të jetë i zbrazët</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">Emri i kartelës s’duhet të jetë më i gjatë se %d shenja</string>
   <string name="uploader_upload_text_filename_hint">Emër kartele</string>
   <string name="uploader_upload_camera_upload_files">Po ngarkohen kartela ngarkimi nga kamera</string>
   <string name="uploader_upload_picture_upload_files">Do të ngarkohen %d foto të reja</string>
@@ -687,6 +688,17 @@
   <string name="release_notes_4_0_title_12">Rregullime të reja me aplikacionin sugjeruan shfletim kartelash</string>
   <string name="release_notes_4_0_subtitle_12">Te ndarja “Më tepër” u shtua një rregullim i ri, me një aplikacion të sugjeruar për hyrje në kartela përmes furnizuesi dokumentesh</string>
   <string name="release_notes_4_1_title_1">U shtua buton me 3 pika te krejt objektet e listës</string>
+  <string name="release_notes_4_1_subtitle_1">U shtua buton te krejt elementët e listës, për të shfaqur një menu me krejt mundësitë për elementin</string>
+  <string name="release_notes_4_1_title_2">Përmirësim parjeje hollësish</string>
+  <string name="release_notes_4_1_subtitle_2">Rihartim i parjes së hollësive</string>
+  <string name="release_notes_4_1_title_3">Mbulim për ndryshim gjuhe të re</string>
+  <string name="release_notes_4_1_subtitle_3">U shtua mbulim për ndryshim gjuhe të re në Android 13+</string>
+  <string name="release_notes_4_1_title_4">U ndreq e metë e lidhur me ngarkim figurash hapësire</string>
+  <string name="release_notes_4_1_subtitle_4">Ngarkim i figurave të hapësirës herën e parë që e shfaqim dhe përmirësim i ngarkimit të figurave të elementëve</string>
+  <string name="release_notes_4_1_title_5">Hapje kartelash Markdown nën mënyrën ASCII</string>
+  <string name="release_notes_4_1_subtitle_5">U shtua një mënyrë e re për hapje kartelash Markdown për të shfaqur kodin ASCII</string>
+  <string name="release_notes_4_1_title_6">Shfaqje dritare flluskë në rast përplasjeje veprimesh kopjimi/lëvizjeje</string>
+  <string name="release_notes_4_1_subtitle_6">Shfaqje e një dritareje flluskë me 3 mundësi, kur kihet përplasje emri gjatë veprimi kopjimi, ose lëvizjeje</string>
   <string name="release_notes_4_1_title_7">Ndreqje të metash të vockla dhe përmirësime</string>
   <string name="release_notes_4_1_subtitle_7">Janë ndrequr disa të meta të cokla dhe u sollën për herë të parë përmirësime të vockla teknike për të përmirësuar punën te aplikacioni</string>
   <!--Open in web-->
