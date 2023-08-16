@@ -22,7 +22,6 @@
 
 package com.owncloud.android.presentation.files.filelist
 
-import android.accounts.Account
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -36,6 +35,7 @@ import androidx.core.view.setMargins
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import coil.ImageLoader
 import coil.load
 import com.owncloud.android.R
 import com.owncloud.android.databinding.GridItemBinding
@@ -44,8 +44,6 @@ import com.owncloud.android.databinding.ListFooterBinding
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
-import com.owncloud.android.presentation.authentication.AccountUtils
-import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
@@ -58,13 +56,15 @@ class FileListAdapter(
 ) : SelectableAdapter<RecyclerView.ViewHolder>() {
 
     var files = mutableListOf<Any>()
-    private var account: Account? = AccountUtils.getCurrentOwnCloudAccount(context)
     private var fileListOption: FileListOption = FileListOption.ALL_FILES
 
-    fun updateFileList(filesToAdd: List<OCFileWithSyncInfo>, fileListOption: FileListOption) {
+    private lateinit var imageLoaderAdapter: ImageLoader
+    fun updateFileList(filesToAdd: List<OCFileWithSyncInfo>, fileListOption: FileListOption, imageLoader: ImageLoader) {
 
         val listWithFooter = mutableListOf<Any>()
         listWithFooter.addAll(filesToAdd)
+
+        imageLoaderAdapter = imageLoader
 
         if (listWithFooter.isNotEmpty()) {
             listWithFooter.add(OCFooterFile(manageListOfFilesAndGenerateText(filesToAdd)))
@@ -289,8 +289,8 @@ class FileListAdapter(
                 fileIcon.load(mimetypeIcon)
                 if (file.remoteId != null) {
                     fileIcon.load(
-                        ThumbnailsRequester.getPreviewUriForFile(fileWithSyncInfo, account!!),
-                        ThumbnailsRequester.getCoilImageLoader(),
+                        file.previousUri,
+                        imageLoaderAdapter,
                     ) {
                         placeholder(mimetypeIcon)
                         error(mimetypeIcon)
