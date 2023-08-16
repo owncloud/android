@@ -19,6 +19,7 @@ For OEM releases, keep the OEM Release template and remove the Open Release one
  - [ ] [DOC] Ping in #documentation-internal about the new release
  - [ ] [GIT] Create branch `release/M.m.p` in owncloud/android from master
  - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
+ - [ ] [DEV] Update [SBOM](https://cloud.owncloud.com/f/6072870)
  - [ ] [DIS] Create a folder for the new version like `M.m.p_YYYY-MM-DD` inside the `changelog` folder
  - [ ] [DIS] Move all changelog files from the unreleased folder to the new version folder
  - [ ] [DIS] Update screenshots, if needed, in README.md
