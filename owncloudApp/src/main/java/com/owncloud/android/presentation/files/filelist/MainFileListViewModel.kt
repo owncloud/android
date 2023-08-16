@@ -22,8 +22,10 @@
 
 package com.owncloud.android.presentation.files.filelist
 
+import android.accounts.Account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.ImageLoader
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
@@ -53,6 +55,7 @@ import com.owncloud.android.presentation.files.SortOrder.Companion.PREF_FILE_LIS
 import com.owncloud.android.presentation.files.SortType
 import com.owncloud.android.presentation.files.SortType.Companion.PREF_FILE_LIST_SORT_TYPE
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
+import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
@@ -333,6 +336,14 @@ class MainFileListViewModel(
                 _appRegistryMimeTypeSingleFile.emit(result.firstOrNull())
             }
         }
+    }
+
+    fun getPreviewUriForFile(fileWithSyncInfo: OCFileWithSyncInfo, account : Account): String {
+        return ThumbnailsRequester.getPreviewUriForFile(fileWithSyncInfo, account)
+    }
+
+    fun getCoilImageLoader(): ImageLoader {
+        return ThumbnailsRequester.getCoilImageLoader()
     }
 
     private fun updateSpace() {

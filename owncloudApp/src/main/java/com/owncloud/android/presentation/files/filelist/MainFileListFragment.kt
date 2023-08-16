@@ -23,6 +23,7 @@
 
 package com.owncloud.android.presentation.files.filelist
 
+import android.accounts.Account
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
@@ -108,6 +109,9 @@ import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -537,12 +541,24 @@ class MainFileListFragment : Fragment(),
         collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
             if (fileListUiState !is MainFileListViewModel.FileListUiState.Success) return@collectLatestLifecycleFlow
 
-            fileListAdapter.updateFileList(
-                filesToAdd = fileListUiState.folderContent,
-                fileListOption = fileListUiState.fileListOption,
-            )
-            showOrHideEmptyView(fileListUiState)
+            val account: Account? = AccountUtils.getCurrentOwnCloudAccount(context)
+            val newFolderContentList = mutableListOf<OCFileWithSyncInfo>()
 
+            CoroutineScope(Dispatchers.IO).launch {
+                for (folderContent in fileListUiState.folderContent) {
+                    val newFile = folderContent.file.copy(previousUri = account?.let { mainFileListViewModel.getPreviewUriForFile(folderContent, it) })
+                    val newFolderContent = folderContent.copy(file = newFile)
+                    newFolderContentList.add(newFolderContent)
+                }
+                CoroutineScope(Dispatchers.Main).launch {
+                    fileListAdapter.updateFileList(
+                        filesToAdd = newFolderContentList,
+                        fileListOption = fileListUiState.fileListOption,
+                        imageLoader = mainFileListViewModel.getCoilImageLoader()
+                    )
+                    showOrHideEmptyView(fileListUiState)
+                }
+            }
             fileListUiState.space?.let {
                 binding.spaceHeader.root.apply {
                     if (fileListUiState.space.isProject && fileListUiState.folderToDisplay?.remotePath == ROOT_PATH) {
