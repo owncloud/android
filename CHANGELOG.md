@@ -9,6 +9,7 @@ Summary
 -------
 
 * Bugfix - Spaces' thumbnails not loaded the first time: [#3959](https://github.com/owncloud/android/issues/3959)
+* Bugfix - Bad error message when copying/moving with server down: [#4044](https://github.com/owncloud/android/issues/4044)
 * Bugfix - Menu option unset av. offline shown when shouldn't: [#4077](https://github.com/owncloud/android/issues/4077)
 * Bugfix - List of accounts empty after removing all accounts and adding new ones: [#4114](https://github.com/owncloud/android/issues/4114)
 * Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
@@ -40,6 +41,14 @@ Details
 
    https://github.com/owncloud/android/issues/3959
    https://github.com/owncloud/android/pull/4084
+
+* Bugfix - Bad error message when copying/moving with server down: [#4044](https://github.com/owncloud/android/issues/4044)
+
+   Right now, when we are trying to copy a file to another folder and the server is downwe receive a
+   correct message. Before the issue the message shown code from the application.
+
+   https://github.com/owncloud/android/issues/4044
+   https://github.com/owncloud/android/pull/4127
 
 * Bugfix - Menu option unset av. offline shown when shouldn't: [#4077](https://github.com/owncloud/android/issues/4077)
 
