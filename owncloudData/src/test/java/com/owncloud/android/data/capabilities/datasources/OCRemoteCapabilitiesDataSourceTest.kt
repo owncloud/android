@@ -29,6 +29,7 @@ import com.owncloud.android.testutil.OC_CAPABILITY
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -71,5 +72,9 @@ class OCRemoteCapabilitiesDataSourceTest {
         assertEquals(OC_CAPABILITY.versionMajor, capabilities.versionMajor)
         assertEquals(OC_CAPABILITY.versionMinor, capabilities.versionMinor)
         assertEquals(OC_CAPABILITY.versionMicro, capabilities.versionMicro)
+
+        verify(exactly = 1) {
+            ocCapabilityService.getCapabilities()
+        }
     }
 }

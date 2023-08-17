@@ -223,18 +223,21 @@ class MainFileListViewModel(
                     FileListOption.ALL_FILES -> {
                         parentDir = fileByIdResult.getDataOrNull()
                     }
+
                     FileListOption.SHARED_BY_LINK -> {
                         val fileById = fileByIdResult.getDataOrNull()!!
                         parentDir = if ((!fileById.sharedByLink || fileById.sharedWithSharee != true) && fileById.spaceId == null) {
                             getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
                         } else fileById
                     }
+
                     FileListOption.AV_OFFLINE -> {
                         val fileById = fileByIdResult.getDataOrNull()!!
                         parentDir = if (!fileById.isAvailableOffline) {
                             getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
                         } else fileById
                     }
+
                     FileListOption.SPACES_LIST -> {
                         parentDir = TODO("Move it to usecase if possible")
                     }
@@ -296,25 +299,29 @@ class MainFileListViewModel(
         _openInWebFlow.value = null
     }
 
-    fun filterMenuOptions(files: List<OCFile>, filesSyncInfo: List<OCFileSyncInfo>, isAnyFileVideoPreviewing: Boolean,
-        displaySelectAll: Boolean, isMultiselection: Boolean) {
+    fun filterMenuOptions(
+        files: List<OCFile>, filesSyncInfo: List<OCFileSyncInfo>, isAnyFileVideoPreviewing: Boolean,
+        displaySelectAll: Boolean, isMultiselection: Boolean
+    ) {
         val shareViaLinkAllowed = contextProvider.getBoolean(R.bool.share_via_link_feature)
         val shareWithUsersAllowed = contextProvider.getBoolean(R.bool.share_with_users_feature)
         val sendAllowed = contextProvider.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val result = filterFileMenuOptionsUseCase.execute(FilterFileMenuOptionsUseCase.Params(
-                files = files,
-                filesSyncInfo = filesSyncInfo,
-                accountName = currentFolderDisplayed.value.owner,
-                isAnyFileVideoPreviewing = isAnyFileVideoPreviewing,
-                displaySelectAll = displaySelectAll,
-                displaySelectInverse = isMultiselection,
-                onlyAvailableOfflineFiles = fileListOption.value.isAvailableOffline(),
-                onlySharedByLinkFiles = fileListOption.value.isSharedByLink(),
-                shareViaLinkAllowed = shareViaLinkAllowed,
-                shareWithUsersAllowed = shareWithUsersAllowed,
-                sendAllowed = sendAllowed,
-            ))
+            val result = filterFileMenuOptionsUseCase.execute(
+                FilterFileMenuOptionsUseCase.Params(
+                    files = files,
+                    filesSyncInfo = filesSyncInfo,
+                    accountName = currentFolderDisplayed.value.owner,
+                    isAnyFileVideoPreviewing = isAnyFileVideoPreviewing,
+                    displaySelectAll = displaySelectAll,
+                    displaySelectInverse = isMultiselection,
+                    onlyAvailableOfflineFiles = fileListOption.value.isAvailableOffline(),
+                    onlySharedByLinkFiles = fileListOption.value.isSharedByLink(),
+                    shareViaLinkAllowed = shareViaLinkAllowed,
+                    shareWithUsersAllowed = shareWithUsersAllowed,
+                    sendAllowed = sendAllowed,
+                )
+            )
             if (isMultiselection) {
                 _menuOptions.emit(result)
             } else {
@@ -326,7 +333,8 @@ class MainFileListViewModel(
     fun getAppRegistryForMimeType(mimeType: String, isMultiselection: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val result = getAppRegistryForMimeTypeAsStreamUseCase.execute(
-                GetAppRegistryForMimeTypeAsStreamUseCase.Params(accountName = getFile().owner, mimeType))
+                GetAppRegistryForMimeTypeAsStreamUseCase.Params(accountName = getFile().owner, mimeType)
+            )
             if (isMultiselection) {
                 _appRegistryMimeType.emit(result.firstOrNull())
             } else {
