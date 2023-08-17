@@ -29,6 +29,7 @@ Summary
 * Enhancement - Prevent http traffic with branding options: [#4066](https://github.com/owncloud/android/issues/4066)
 * Enhancement - Unit tests for datasources classes - Part 2: [#4071](https://github.com/owncloud/android/issues/4071)
 * Enhancement - Respect app_providers_appsUrl value from capabilities: [#4075](https://github.com/owncloud/android/issues/4075)
+* Enhancement - Apply (1) to uploads' name conflicts: [#4079](https://github.com/owncloud/android/issues/4079)
 * Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
 * Enhancement - Align Sharing icons with other platforms: [#4101](https://github.com/owncloud/android/issues/4101)
 
@@ -198,6 +199,16 @@ Details
 
    https://github.com/owncloud/android/issues/4075
    https://github.com/owncloud/android/pull/4113
+
+* Enhancement - Apply (1) to uploads' name conflicts: [#4079](https://github.com/owncloud/android/issues/4079)
+
+   When new files were uploaded manually to pC, shared from a 3rd party app or text shared with oC
+   name conflict happens, (2) was added to the file name instead of (1).
+
+   Right now if we upload a file with a repeated name, the new file name will end with (1).
+
+   https://github.com/owncloud/android/issues/4079
+   https://github.com/owncloud/android/pull/4129
 
 * Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
 
