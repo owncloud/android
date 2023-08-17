@@ -289,7 +289,7 @@ class FileListAdapter(
                 fileIcon.load(mimetypeIcon)
                 if (file.remoteId != null) {
                     fileIcon.load(
-                        file.previousUri,
+                        file.thumbnailUri,
                         imageLoaderAdapter,
                     ) {
                         placeholder(mimetypeIcon)
