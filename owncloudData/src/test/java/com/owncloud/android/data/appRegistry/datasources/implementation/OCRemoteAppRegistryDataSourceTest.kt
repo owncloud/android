@@ -25,6 +25,7 @@ class OCRemoteAppRegistryDataSourceTest {
     private val openWebEndpoint = "https://example.com"
     private val expectedFileUrl = "https://example.com/files/testFile.txt"
     private val expectedUrl = "https://example.com/file123/TestApp"
+    private val appUrl = "storage/file123/TestApp"
     private val appName = "TestApp"
 
     @Before
@@ -41,13 +42,13 @@ class OCRemoteAppRegistryDataSourceTest {
 
         val appResgitryMock = AppRegistry(accountName = OC_ACCOUNT_NAME, mimetypes = emptyList())
 
-        every { ocAppRegistryService.getAppRegistry() } returns getAppRegistryResult
+        every { ocAppRegistryService.getAppRegistry(any()) } returns getAppRegistryResult
 
-        val appRegistry = ocRemoteAppRegistryDataSource.getAppRegistryForAccount(OC_ACCOUNT_NAME)
+        val appRegistry = ocRemoteAppRegistryDataSource.getAppRegistryForAccount(OC_ACCOUNT_NAME, appUrl)
 
         assertEquals(appResgitryMock, appRegistry)
 
-        verify(exactly = 1) { ocAppRegistryService.getAppRegistry() }
+        verify(exactly = 1) { ocAppRegistryService.getAppRegistry(appUrl) }
     }
 
     @Test(expected = Exception::class)
@@ -55,17 +56,17 @@ class OCRemoteAppRegistryDataSourceTest {
         val getAppRegistryResult: RemoteOperationResult<AppRegistryResponse> =
             createRemoteOperationResultMock(data = appResgitryResponse, isSuccess = false)
 
-        every { ocAppRegistryService.getAppRegistry() } returns getAppRegistryResult
+        every { ocAppRegistryService.getAppRegistry(any()) } returns getAppRegistryResult
 
-        ocRemoteAppRegistryDataSource.getAppRegistryForAccount(OC_ACCOUNT_NAME)
+        ocRemoteAppRegistryDataSource.getAppRegistryForAccount(OC_ACCOUNT_NAME, appUrl)
 
     }
 
     @Test(expected = Exception::class)
     fun `getAppRegistryForAccount returns an Exception when getAppRegistry() has an error controlled by an Exception`() {
-        every { ocAppRegistryService.getAppRegistry() } throws Exception()
+        every { ocAppRegistryService.getAppRegistry(any()) } throws Exception()
 
-        ocRemoteAppRegistryDataSource.getAppRegistryForAccount(OC_ACCOUNT_NAME)
+        ocRemoteAppRegistryDataSource.getAppRegistryForAccount(OC_ACCOUNT_NAME, appUrl)
     }
 
     @Test
