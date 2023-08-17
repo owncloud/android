@@ -546,7 +546,8 @@ class MainFileListFragment : Fragment(),
 
             CoroutineScope(Dispatchers.IO).launch {
                 for (folderContent in fileListUiState.folderContent) {
-                    val newFile = folderContent.file.copy(previousUri = account?.let { mainFileListViewModel.getPreviewUriForFile(folderContent, it) })
+                    val newFile =
+                        folderContent.file.copy(thumbnailUri = account?.let { mainFileListViewModel.getPreviewUriForFile(folderContent, it) })
                     val newFolderContent = folderContent.copy(file = newFile)
                     newFolderContentList.add(newFolderContent)
                 }
@@ -554,7 +555,7 @@ class MainFileListFragment : Fragment(),
                     fileListAdapter.updateFileList(
                         filesToAdd = newFolderContentList,
                         fileListOption = fileListUiState.fileListOption,
-                        imageLoader = mainFileListViewModel.getCoilImageLoader()
+                        imageLoader = mainFileListViewModel.getCoilImageLoader(),
                     )
                     showOrHideEmptyView(fileListUiState)
                 }
