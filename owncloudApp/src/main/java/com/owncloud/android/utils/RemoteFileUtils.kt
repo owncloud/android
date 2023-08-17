@@ -52,7 +52,7 @@ class RemoteFileUtils {
                     substring(0, pos)
                 }
             }
-            var count = 2
+            var count = 1
             do {
                 suffix = " ($count)"
                 checkExistsFile = if (pos >= 0) {
