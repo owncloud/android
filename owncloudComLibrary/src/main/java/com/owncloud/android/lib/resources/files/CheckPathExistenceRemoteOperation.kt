@@ -27,7 +27,6 @@ import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.webdav.DavUtils.allPropSet
 import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod
-import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
@@ -55,11 +54,10 @@ class CheckPathExistenceRemoteOperation(
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Boolean> {
         val baseStringUrl = spaceWebDavUrl ?: if (isUserLoggedIn) client.baseFilesWebDavUri.toString()
-            else client.userFilesWebDavUri.toString()
-        val stringUrl = baseStringUrl + WebdavUtils.encodePath(remotePath)
+        else client.userFilesWebDavUri.toString()
 
         return try {
-            val propFindMethod = PropfindMethod(URL(stringUrl), 0, allPropSet).apply {
+            val propFindMethod = PropfindMethod(URL(baseStringUrl), 0, allPropSet).apply {
                 setReadTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
                 setConnectionTimeout(TIMEOUT.toLong(), TimeUnit.SECONDS)
             }
@@ -70,7 +68,7 @@ class CheckPathExistenceRemoteOperation(
              * 207 MULTI_STATUS: path exists.
              */
             Timber.d(
-                "Existence check for $stringUrl finished with HTTP status $status${if (!isSuccess(status)) "(FAIL)" else ""}"
+                "Existence check for $baseStringUrl finished with HTTP status $status${if (!isSuccess(status)) "(FAIL)" else ""}"
             )
             if (isSuccess(status)) RemoteOperationResult<Boolean>(ResultCode.OK).apply { data = true }
             else RemoteOperationResult<Boolean>(propFindMethod).apply { data = false }
@@ -79,7 +77,7 @@ class CheckPathExistenceRemoteOperation(
             val result = RemoteOperationResult<Boolean>(e)
             Timber.e(
                 e,
-                "Existence check for $stringUrl : ${result.logMessage}"
+                "Existence check for $baseStringUrl : ${result.logMessage}"
             )
             result
         }
