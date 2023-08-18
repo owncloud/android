@@ -1,0 +1,12 @@
+
+Welcome to Gradle 7.5!
+
+Here are the highlights of this release:
+ - Support for Java 18
+ - Support for building with Groovy 4
+ - Much more responsive continuous builds
+ - Improved diagnostics for dependency resolution
+
+For more details see https://docs.gradle.org/7.5/release-notes.html
+
+Starting a Gradle Daemon (subsequent builds will be faster)
