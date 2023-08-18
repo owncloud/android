@@ -1,0 +1,10 @@
+Enhancement: Apply (1) to uploads' name conflicts
+
+When new files were uploaded manually to pC, shared from a 3rd party app or text shared with oC
+name conflict happens, (2) was added to the file name instead of (1).
+
+Right now if we upload a file with a repeated name, the new file name will end with (1).
+
+
+https://github.com/owncloud/android/issues/4079
+https://github.com/owncloud/android/pull/4129
