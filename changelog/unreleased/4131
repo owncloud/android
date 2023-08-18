@@ -1,0 +1,7 @@
+Bugfix: unnecessary or wrong call
+
+Removed added path when checking path existence.
+
+https://github.com/owncloud/android/issues/4074
+https://github.com/owncloud/android/pull/4131
+https://github.com/owncloud/android-library/pull/578
