@@ -12,13 +12,15 @@ import com.owncloud.android.testutil.OC_APP_REGISTRY_MIMETYPE
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class OCLocalAppRegistryDataSourceTest {
     private lateinit var ocLocalAppRegistryDataSource: OCLocalAppRegistryDataSource
     private val appRegistryDao = mockkClass(AppRegistryDao::class)
@@ -55,7 +57,7 @@ class OCLocalAppRegistryDataSourceTest {
     }
 
     @Test
-    fun `getAppRegistryForMimeTypeAsStream returns a flow with AppRegistryMimeType object`() = runBlocking {
+    fun `getAppRegistryForMimeTypeAsStream returns a flow with AppRegistryMimeType object`() = runTest {
 
         every { appRegistryDao.getAppRegistryForMimeType(any(), any()) } returns flowOf(ocAppRegistryEntity)
 
@@ -69,7 +71,7 @@ class OCLocalAppRegistryDataSourceTest {
     }
 
     @Test
-    fun `getAppRegistryForMimeTypeAsStream returns null when DAO no receive values from db`() = runBlocking {
+    fun `getAppRegistryForMimeTypeAsStream returns null when DAO no receive values from db`() = runTest {
 
         every { appRegistryDao.getAppRegistryForMimeType(any(), any()) } returns flowOf(null)
 
@@ -82,7 +84,7 @@ class OCLocalAppRegistryDataSourceTest {
     }
 
     @Test(expected = Exception::class)
-    fun `getAppRegistryForMimeTypeAsStream returns an Exception when DAO return an Exception`() = runBlocking {
+    fun `getAppRegistryForMimeTypeAsStream returns an Exception when DAO return an Exception`() = runTest {
 
         every { appRegistryDao.getAppRegistryForMimeType(any(), any()) } throws Exception()
 
@@ -95,7 +97,7 @@ class OCLocalAppRegistryDataSourceTest {
     }
 
     @Test
-    fun `getAppRegistryWhichAllowCreation returns a flow with a list of AppRegistryMimeType object`() = runBlocking {
+    fun `getAppRegistryWhichAllowCreation returns a flow with a list of AppRegistryMimeType object`() = runTest {
 
         every { appRegistryDao.getAppRegistryWhichAllowCreation(any()) } returns flowOf(listOf(ocAppRegistryEntity))
 
@@ -109,7 +111,7 @@ class OCLocalAppRegistryDataSourceTest {
     }
 
     @Test
-    fun `getAppRegistryWhichAllowCreation returns empty list when DAO return empty list`() = runBlocking {
+    fun `getAppRegistryWhichAllowCreation returns empty list when DAO return empty list`() = runTest {
 
         every { appRegistryDao.getAppRegistryWhichAllowCreation(any()) } returns flowOf(emptyList<AppRegistryEntity>())
 
@@ -123,7 +125,7 @@ class OCLocalAppRegistryDataSourceTest {
     }
 
     @Test
-    fun `saveAppRegistryForAccount should save the AppRegistry entities`() = runBlocking {
+    fun `saveAppRegistryForAccount should save the AppRegistry entities`() = runTest {
         val appRegistry = AppRegistry(
             OC_ACCOUNT_NAME, mutableListOf(
                 AppRegistryMimeType("mime_type_1", "ext_1", emptyList(), "name_1", "icon_1", "description_1", true, "default_app_1"),
@@ -141,7 +143,7 @@ class OCLocalAppRegistryDataSourceTest {
     }
 
     @Test(expected = Exception::class)
-    fun `saveAppRegistryForAccount should returns an Exception`() = runBlocking {
+    fun `saveAppRegistryForAccount should returns an Exception`() = runTest {
         val appRegistry = AppRegistry(
             OC_ACCOUNT_NAME, mutableListOf(
                 AppRegistryMimeType("mime_type_1", "ext_1", emptyList(), "name_1", "icon_1", "description_1", true, "default_app_1"),
@@ -159,7 +161,7 @@ class OCLocalAppRegistryDataSourceTest {
     }
 
     @Test
-    fun `deleteAppRegistryForAccount should delete appRegistry`() = runBlocking {
+    fun `deleteAppRegistryForAccount should delete appRegistry`() = runTest {
 
         every { appRegistryDao.deleteAppRegistryForAccount(OC_ACCOUNT_NAME) } returns Unit
 
