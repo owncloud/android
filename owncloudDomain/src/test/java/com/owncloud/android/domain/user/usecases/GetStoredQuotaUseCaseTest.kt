@@ -39,7 +39,7 @@ class GetStoredQuotaUseCaseTest {
     fun `get stored quota - ok`() {
         every { repository.getStoredUserQuota(OC_ACCOUNT_NAME) } returns OC_USER_QUOTA
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(OC_USER_QUOTA, useCaseResult.getDataOrNull())
@@ -51,7 +51,7 @@ class GetStoredQuotaUseCaseTest {
     fun `get stored quota - ko`() {
         every { repository.getStoredUserQuota(OC_ACCOUNT_NAME) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

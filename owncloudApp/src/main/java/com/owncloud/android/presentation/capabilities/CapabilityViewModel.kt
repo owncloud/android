@@ -44,7 +44,7 @@ class CapabilityViewModel(
     private val _capabilities = MediatorLiveData<Event<UIResult<OCCapability>>>()
     val capabilities: LiveData<Event<UIResult<OCCapability>>> = _capabilities
 
-    private var capabilitiesLiveData: LiveData<OCCapability?> = getCapabilitiesAsLiveDataUseCase.execute(
+    private var capabilitiesLiveData: LiveData<OCCapability?> = getCapabilitiesAsLiveDataUseCase(
         GetCapabilitiesAsLiveDataUseCase.Params(
             accountName = accountName
         )

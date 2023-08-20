@@ -37,7 +37,7 @@ class RequestTokenUseCaseTest {
     fun `test request token use case - ok`() {
         every { repository.performTokenRequest(useCaseParams.tokenRequest) } returns OC_TOKEN_RESPONSE
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertEquals(OC_TOKEN_RESPONSE, useCaseResult.getDataOrNull())
@@ -49,7 +49,7 @@ class RequestTokenUseCaseTest {
     fun `test request token use case - ko`() {
         every { repository.performTokenRequest(useCaseParams.tokenRequest) } throws ServerNotReachableException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isError)
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is ServerNotReachableException)

@@ -147,7 +147,7 @@ class PreviewImageActivity : FileActivity(),
         val sortType = sharedPreferencesProvider.getInt(SortType.PREF_FILE_LIST_SORT_TYPE, SortType.SORT_TYPE_BY_NAME.ordinal)
         val sortOrder = sharedPreferencesProvider.getInt(SortOrder.PREF_FILE_LIST_SORT_ORDER, SortOrder.SORT_ORDER_ASCENDING.ordinal)
         val sortFilesUseCase: SortFilesUseCase by inject()
-        val imageFiles = sortFilesUseCase.execute(
+        val imageFiles = sortFilesUseCase(
             SortFilesUseCase.Params(
                 listOfFiles = storageManager.getFolderImages(parentFolder),
                 sortType = com.owncloud.android.domain.files.usecases.SortType.fromPreferences(sortType),

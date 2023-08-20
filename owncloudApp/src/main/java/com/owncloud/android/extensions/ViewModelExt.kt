@@ -63,7 +63,7 @@ object ViewModelExt : KoinComponent {
                 return@launch
             }
 
-            val useCaseResult = useCase.execute(useCaseParams)
+            val useCaseResult = useCase(useCaseParams)
 
             Timber.d("Use case executed: ${useCase.javaClass.simpleName} with result: $useCaseResult")
 
@@ -101,7 +101,7 @@ object ViewModelExt : KoinComponent {
                 return@launch
             }
 
-            val useCaseResult = useCase.execute(useCaseParams)
+            val useCaseResult = useCase(useCaseParams)
 
             Timber.d("Use case executed: ${useCase.javaClass.simpleName} with result: $useCaseResult")
 
@@ -135,7 +135,7 @@ object ViewModelExt : KoinComponent {
                 return@launch
             }
 
-            val useCaseResult = useCase.execute(useCaseParams)
+            val useCaseResult = useCase(useCaseParams)
 
             Timber.d("Use case executed: ${useCase.javaClass.simpleName} with result: $useCaseResult")
 

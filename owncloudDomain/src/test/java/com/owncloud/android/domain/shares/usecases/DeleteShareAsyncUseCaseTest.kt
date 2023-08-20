@@ -40,7 +40,7 @@ class DeleteShareAsyncUseCaseTest {
     fun `delete share - ok`() {
         every { repository.deleteShare(any(), any()) } returns Unit
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
@@ -52,7 +52,7 @@ class DeleteShareAsyncUseCaseTest {
     fun `delete share - ko`() {
         every { repository.deleteShare(any(), any()) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

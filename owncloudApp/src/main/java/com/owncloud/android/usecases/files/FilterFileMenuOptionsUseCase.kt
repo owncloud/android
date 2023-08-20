@@ -46,7 +46,7 @@ class FilterFileMenuOptionsUseCase(
 
         val filesSyncInfo = params.filesSyncInfo
         val capability = capabilityRepository.getStoredCapabilities(params.accountName)
-        val space = getSpaceWithSpecialsByIdForAccountUseCase.execute(GetSpaceWithSpecialsByIdForAccountUseCase.Params(
+        val space = getSpaceWithSpecialsByIdForAccountUseCase(GetSpaceWithSpecialsByIdForAccountUseCase.Params(
             spaceId = files.first().spaceId,
             accountName = params.accountName,
         ))

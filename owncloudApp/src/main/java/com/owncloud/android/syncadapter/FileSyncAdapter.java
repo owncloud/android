@@ -154,7 +154,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
                         inject(GetPersonalRootFolderForAccountUseCase.class);
                 GetPersonalRootFolderForAccountUseCase.Params params = new GetPersonalRootFolderForAccountUseCase.Params(account.name);
 
-                OCFile rootFolder = getRootFolderPersonalUseCaseLazy.getValue().execute(params);
+                OCFile rootFolder = getRootFolderPersonalUseCaseLazy.getValue().invoke(params);
                 if (rootFolder != null) {
                     synchronizeFolder(rootFolder);
                 }
@@ -204,7 +204,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         @NotNull Lazy<RefreshCapabilitiesFromServerAsyncUseCase> refreshCapabilitiesFromServerAsyncUseCase =
                 inject(RefreshCapabilitiesFromServerAsyncUseCase.class);
         RefreshCapabilitiesFromServerAsyncUseCase.Params params = new RefreshCapabilitiesFromServerAsyncUseCase.Params(getAccount().name);
-        UseCaseResult<Unit> useCaseResult = refreshCapabilitiesFromServerAsyncUseCase.getValue().execute(params);
+        UseCaseResult<Unit> useCaseResult = refreshCapabilitiesFromServerAsyncUseCase.getValue().invoke(params);
 
         if (useCaseResult.isError()) {
             mLastFailedThrowable = useCaseResult.getThrowableOrNull();
@@ -234,7 +234,7 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
                 SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER_RECURSIVELY);
         UseCaseResult<Unit> useCaseResult;
 
-        useCaseResult = synchronizeFolderUseCase.getValue().execute(params);
+        useCaseResult = synchronizeFolderUseCase.getValue().invoke(params);
 
         // in failures, the statistics for the global result are updated
         if (useCaseResult.getThrowableOrNull() != null) {

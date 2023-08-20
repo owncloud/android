@@ -51,25 +51,25 @@ class LoginOAuthAsyncUseCaseTest {
     @Test
     fun `login oauth - ko - invalid params`() {
         var invalidLoginOAuthUseCaseParams = useCaseParams.copy(serverInfo = null)
-        var loginOAuthUseCaseResult = useCase.execute(invalidLoginOAuthUseCaseParams)
+        var loginOAuthUseCaseResult = useCase(invalidLoginOAuthUseCaseParams)
 
         assertTrue(loginOAuthUseCaseResult.isError)
         assertTrue(loginOAuthUseCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
         invalidLoginOAuthUseCaseParams = useCaseParams.copy(authTokenType = "")
-        loginOAuthUseCaseResult = useCase.execute(invalidLoginOAuthUseCaseParams)
+        loginOAuthUseCaseResult = useCase(invalidLoginOAuthUseCaseParams)
 
         assertTrue(loginOAuthUseCaseResult.isError)
         assertTrue(loginOAuthUseCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
         invalidLoginOAuthUseCaseParams = useCaseParams.copy(accessToken = "")
-        loginOAuthUseCaseResult = useCase.execute(invalidLoginOAuthUseCaseParams)
+        loginOAuthUseCaseResult = useCase(invalidLoginOAuthUseCaseParams)
 
         assertTrue(loginOAuthUseCaseResult.isError)
         assertTrue(loginOAuthUseCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
         invalidLoginOAuthUseCaseParams = useCaseParams.copy(refreshToken = "")
-        loginOAuthUseCaseResult = useCase.execute(invalidLoginOAuthUseCaseParams)
+        loginOAuthUseCaseResult = useCase(invalidLoginOAuthUseCaseParams)
 
         assertTrue(loginOAuthUseCaseResult.isError)
         assertTrue(loginOAuthUseCaseResult.getThrowableOrNull() is IllegalArgumentException)
@@ -81,7 +81,7 @@ class LoginOAuthAsyncUseCaseTest {
     fun `login oauth - ok`() {
         every { repository.loginOAuth(any(), any(), any(), any(), any(), any(), any(), any()) } returns OC_ACCOUNT_NAME
 
-        val loginOAuthUseCaseResult = useCase.execute(useCaseParams)
+        val loginOAuthUseCaseResult = useCase(useCaseParams)
 
         assertTrue(loginOAuthUseCaseResult.isSuccess)
         assertEquals(OC_ACCOUNT_NAME, loginOAuthUseCaseResult.getDataOrNull())
@@ -93,7 +93,7 @@ class LoginOAuthAsyncUseCaseTest {
     fun `login oauth - ko - another exception`() {
         every { repository.loginOAuth(any(), any(), any(), any(), any(), any(), any(), any()) } throws Exception()
 
-        val loginOAuthUseCaseResult = useCase.execute(useCaseParams)
+        val loginOAuthUseCaseResult = useCase(useCaseParams)
 
         assertTrue(loginOAuthUseCaseResult.isError)
         assertTrue(loginOAuthUseCaseResult.getThrowableOrNull() is Exception)
