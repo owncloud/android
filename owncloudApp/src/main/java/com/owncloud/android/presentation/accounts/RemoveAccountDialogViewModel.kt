@@ -40,7 +40,7 @@ class RemoveAccountDialogViewModel(
 
     private fun initCameraUploadsConfiguration() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            cameraUploadsConfiguration = getCameraUploadsConfigurationUseCase.execute(Unit).getDataOrNull()
+            cameraUploadsConfiguration = getCameraUploadsConfigurationUseCase(Unit).getDataOrNull()
         }
     }
 

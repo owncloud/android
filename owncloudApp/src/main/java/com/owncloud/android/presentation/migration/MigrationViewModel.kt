@@ -83,13 +83,13 @@ class MigrationViewModel(
     }
 
     private fun updatePendingUploadsPath() {
-        updatePendingUploadsPathUseCase.execute(
+        updatePendingUploadsPathUseCase(
             UpdatePendingUploadsPathUseCase.Params(
                 oldDirectory = legacyStorageDirectoryPath,
                 newDirectory = localStorageProvider.getRootFolderPath()
             )
         )
-        val uploads = getAllTransfersUseCase.execute(Unit)
+        val uploads = getAllTransfersUseCase(Unit)
         val accountsNames = mutableListOf<String>()
         accountProvider.getLoggedAccounts().forEach { account ->
             accountsNames.add(localStorageProvider.getTemporalPath(account.name))
@@ -98,7 +98,7 @@ class MigrationViewModel(
     }
 
     private fun updateAlreadyDownloadedFilesPath() {
-        updateAlreadyDownloadedFilesPathUseCase.execute(
+        updateAlreadyDownloadedFilesPathUseCase(
             UpdateAlreadyDownloadedFilesPathUseCase.Params(
                 oldDirectory = legacyStorageDirectoryPath,
                 newDirectory = localStorageProvider.getRootFolderPath()

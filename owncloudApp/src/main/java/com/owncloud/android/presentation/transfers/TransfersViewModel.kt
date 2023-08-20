@@ -76,8 +76,8 @@ class TransfersViewModel(
         get() = _workInfosListLiveData
 
     val transfersWithSpaceStateFlow: StateFlow<List<Pair<OCTransfer, OCSpace?>>> = combine(
-        getAllTransfersAsStreamUseCase.execute(Unit),
-        getSpacesFromEveryAccountUseCaseAsStream.execute(Unit)
+        getAllTransfersAsStreamUseCase(Unit),
+        getSpacesFromEveryAccountUseCaseAsStream(Unit)
     ) { transfers: List<OCTransfer>, spaces: List<OCSpace> ->
         transfers.map { transfer ->
             val spaceForTransfer = spaces.firstOrNull { space -> transfer.spaceId == space.id && transfer.accountName == space.accountName }
@@ -104,7 +104,7 @@ class TransfersViewModel(
         spaceId: String?
     ) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            uploadFilesFromContentUriUseCase.execute(
+            uploadFilesFromContentUriUseCase(
                 UploadFilesFromContentUriUseCase.Params(
                     accountName = accountName,
                     listOfContentUris = listOfContentUris,
@@ -122,7 +122,7 @@ class TransfersViewModel(
         spaceId: String?,
     ) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            uploadFilesFromSystemUseCase.execute(
+            uploadFilesFromSystemUseCase(
                 UploadFilesFromSystemUseCase.Params(
                     accountName = accountName,
                     listOfLocalPaths = listOfLocalPaths,
@@ -135,7 +135,7 @@ class TransfersViewModel(
 
     fun cancelUpload(upload: OCTransfer) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            cancelUploadUseCase.execute(
+            cancelUploadUseCase(
                 CancelUploadUseCase.Params(upload = upload)
             )
         }
@@ -143,23 +143,23 @@ class TransfersViewModel(
 
     fun cancelTransfersForFile(ocFile: OCFile) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(ocFile))
-            cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(ocFile))
+            cancelUploadForFileUseCase(CancelUploadForFileUseCase.Params(ocFile))
+            cancelDownloadForFileUseCase(CancelDownloadForFileUseCase.Params(ocFile))
         }
     }
 
     fun cancelTransfersRecursively(ocFiles: List<OCFile>, accountName: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            cancelDownloadsRecursivelyUseCase.execute(CancelDownloadsRecursivelyUseCase.Params(ocFiles, accountName))
+            cancelDownloadsRecursivelyUseCase(CancelDownloadsRecursivelyUseCase.Params(ocFiles, accountName))
         }
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            cancelUploadsRecursivelyUseCase.execute(CancelUploadsRecursivelyUseCase.Params(ocFiles, accountName))
+            cancelUploadsRecursivelyUseCase(CancelUploadsRecursivelyUseCase.Params(ocFiles, accountName))
         }
     }
 
     fun retryUploadFromSystem(id: Long) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            retryUploadFromSystemUseCase.execute(
+            retryUploadFromSystemUseCase(
                 RetryUploadFromSystemUseCase.Params(uploadIdInStorageManager = id)
             )
         }
@@ -167,7 +167,7 @@ class TransfersViewModel(
 
     fun retryUploadFromContentUri(id: Long) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            retryUploadFromContentUriUseCase.execute(
+            retryUploadFromContentUriUseCase(
                 RetryUploadFromContentUriUseCase.Params(uploadIdInStorageManager = id)
             )
         }
@@ -175,25 +175,25 @@ class TransfersViewModel(
 
     fun retryUploadsForAccount(accountName: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            retryFailedUploadsForAccountUseCase.execute(RetryFailedUploadsForAccountUseCase.Params(accountName))
+            retryFailedUploadsForAccountUseCase(RetryFailedUploadsForAccountUseCase.Params(accountName))
         }
     }
 
     fun clearFailedTransfers() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            clearFailedTransfersUseCase.execute(Unit)
+            clearFailedTransfersUseCase(Unit)
         }
     }
 
     fun retryFailedTransfers() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            retryFailedUploadsUseCase.execute(Unit)
+            retryFailedUploadsUseCase(Unit)
         }
     }
 
     fun clearSuccessfulTransfers() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            clearSuccessfulTransfersUseCase.execute(Unit)
+            clearSuccessfulTransfersUseCase(Unit)
         }
     }
 }

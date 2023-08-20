@@ -157,7 +157,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
 
     @Test
     fun getServerInfoOk() {
-        every { getServerInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_SECURE_SERVER_INFO_BASIC_AUTH)
+        every { getServerInfoAsyncUseCase(any()) } returns UseCaseResult.Success(OC_SECURE_SERVER_INFO_BASIC_AUTH)
         authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
         assertEmittedValues(
@@ -171,7 +171,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
 
     @Test
     fun getServerInfoException() {
-        every { getServerInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+        every { getServerInfoAsyncUseCase(any()) } returns UseCaseResult.Error(commonException)
         authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
         assertEmittedValues(
@@ -185,7 +185,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
 
     @Test
     fun loginBasicOk() {
-        every { loginBasicAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
+        every { loginBasicAsyncUseCase(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
         authenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, OC_ACCOUNT_NAME)
 
         assertEmittedValues(
@@ -199,7 +199,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
 
     @Test
     fun loginBasicException() {
-        every { loginBasicAsyncUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+        every { loginBasicAsyncUseCase(any()) } returns UseCaseResult.Error(commonException)
         authenticationViewModel.loginBasic(OC_BASIC_USERNAME, OC_BASIC_PASSWORD, null)
 
         assertEmittedValues(
@@ -213,11 +213,11 @@ class AuthenticationViewModelTest : ViewModelTest() {
 
     @Test
     fun loginOAuthWebFingerInstancesOk() {
-        every { getServerInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_SECURE_SERVER_INFO_BEARER_AUTH)
+        every { getServerInfoAsyncUseCase(any()) } returns UseCaseResult.Success(OC_SECURE_SERVER_INFO_BEARER_AUTH)
         authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BEARER_AUTH.baseUrl)
 
-        every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
-        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(any()) } returns UseCaseResult.Success(listOf(OC_WEBFINGER_INSTANCE_URL))
+        every { loginOAuthAsyncUseCase(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
+        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase(any()) } returns UseCaseResult.Success(listOf(OC_WEBFINGER_INSTANCE_URL))
 
         authenticationViewModel.loginOAuth(
             serverBaseUrl = OC_SECURE_BASE_URL,
@@ -238,7 +238,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
         )
 
         verify(exactly = 1) {
-            loginOAuthAsyncUseCase.execute(
+            loginOAuthAsyncUseCase(
                 params = LoginOAuthAsyncUseCase.Params(
                     serverInfo = OC_SECURE_SERVER_INFO_BEARER_AUTH_WEBFINGER_INSTANCE,
                     username = OC_BASIC_USERNAME,
@@ -255,11 +255,11 @@ class AuthenticationViewModelTest : ViewModelTest() {
 
     @Test
     fun loginOAuthOk() {
-        every { getServerInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_SECURE_SERVER_INFO_BEARER_AUTH)
+        every { getServerInfoAsyncUseCase(any()) } returns UseCaseResult.Success(OC_SECURE_SERVER_INFO_BEARER_AUTH)
         authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BEARER_AUTH.baseUrl)
 
-        every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
-        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+        every { loginOAuthAsyncUseCase(any()) } returns UseCaseResult.Success(OC_BASIC_USERNAME)
+        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase(any()) } returns UseCaseResult.Error(commonException)
 
         authenticationViewModel.loginOAuth(
             serverBaseUrl = OC_SECURE_BASE_URL,
@@ -280,7 +280,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
         )
 
         verify(exactly = 1) {
-            loginOAuthAsyncUseCase.execute(
+            loginOAuthAsyncUseCase(
                 params = LoginOAuthAsyncUseCase.Params(
                     serverInfo = OC_SECURE_SERVER_INFO_BEARER_AUTH,
                     username = OC_BASIC_USERNAME,
@@ -297,11 +297,11 @@ class AuthenticationViewModelTest : ViewModelTest() {
 
     @Test
     fun loginOAuthException() {
-        every { getServerInfoAsyncUseCase.execute(any()) } returns UseCaseResult.Success(OC_SECURE_SERVER_INFO_BEARER_AUTH)
+        every { getServerInfoAsyncUseCase(any()) } returns UseCaseResult.Success(OC_SECURE_SERVER_INFO_BEARER_AUTH)
         authenticationViewModel.getServerInfo(OC_SECURE_SERVER_INFO_BEARER_AUTH.baseUrl)
 
-        every { loginOAuthAsyncUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
-        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+        every { loginOAuthAsyncUseCase(any()) } returns UseCaseResult.Error(commonException)
+        every { getOwnCloudInstancesFromAuthenticatedWebFingerUseCase(any()) } returns UseCaseResult.Error(commonException)
 
         authenticationViewModel.loginOAuth(
             serverBaseUrl = OC_SECURE_BASE_URL,
@@ -324,7 +324,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
 
     @Test
     fun supportsOAuthOk() {
-        every { supportsOAuth2UseCase.execute(any()) } returns UseCaseResult.Success(true)
+        every { supportsOAuth2UseCase(any()) } returns UseCaseResult.Success(true)
         authenticationViewModel.supportsOAuth2(OC_BASIC_USERNAME)
 
         assertEmittedValues(
@@ -335,7 +335,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
 
     @Test
     fun supportsOAuthException() {
-        every { supportsOAuth2UseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+        every { supportsOAuth2UseCase(any()) } returns UseCaseResult.Error(commonException)
         authenticationViewModel.supportsOAuth2(OC_BASIC_USERNAME)
 
         assertEmittedValues(
@@ -346,7 +346,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
 
     @Test
     fun getBaseUrlOk() {
-        every { getBaseUrlUseCase.execute(any()) } returns UseCaseResult.Success(OC_SECURE_BASE_URL)
+        every { getBaseUrlUseCase(any()) } returns UseCaseResult.Success(OC_SECURE_BASE_URL)
         authenticationViewModel.getBaseUrl(OC_BASIC_USERNAME)
 
         assertEmittedValues(
@@ -357,7 +357,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
 
     @Test
     fun getBaseUrlException() {
-        every { getBaseUrlUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+        every { getBaseUrlUseCase(any()) } returns UseCaseResult.Error(commonException)
         authenticationViewModel.getBaseUrl(OC_BASIC_USERNAME)
 
         assertEmittedValues(

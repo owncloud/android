@@ -51,7 +51,7 @@ class SyncProfileOperation(
         try {
             CoroutineScope(Dispatchers.IO).launch {
                 val getUserInfoAsyncUseCase: GetUserInfoAsyncUseCase by inject()
-                val userInfoResult = getUserInfoAsyncUseCase.execute(GetUserInfoAsyncUseCase.Params(account.name))
+                val userInfoResult = getUserInfoAsyncUseCase(GetUserInfoAsyncUseCase.Params(account.name))
                 userInfoResult.getDataOrNull()?.let { userInfo ->
                     Timber.d("User info synchronized for account ${account.name}")
 
@@ -62,7 +62,7 @@ class SyncProfileOperation(
 
                     val refreshUserQuotaFromServerAsyncUseCase: RefreshUserQuotaFromServerAsyncUseCase by inject()
                     val userQuotaResult =
-                        refreshUserQuotaFromServerAsyncUseCase.execute(
+                        refreshUserQuotaFromServerAsyncUseCase(
                             RefreshUserQuotaFromServerAsyncUseCase.Params(
                                 account.name
                             )
@@ -72,12 +72,12 @@ class SyncProfileOperation(
 
                         val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
 
-                        val storedCapabilities = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(account.name))
+                        val storedCapabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(account.name))
                         val shouldFetchAvatar = storedCapabilities?.isFetchingAvatarAllowed() ?: true
 
                         if (shouldFetchAvatar) {
                             val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
-                            val userAvatarResult = getUserAvatarAsyncUseCase.execute(GetUserAvatarAsyncUseCase.Params(account.name))
+                            val userAvatarResult = getUserAvatarAsyncUseCase(GetUserAvatarAsyncUseCase.Params(account.name))
                             AvatarManager().handleAvatarUseCaseResult(account, userAvatarResult)
                             if (userAvatarResult.isSuccess) {
                                 Timber.d("Avatar synchronized for account ${account.name}")
