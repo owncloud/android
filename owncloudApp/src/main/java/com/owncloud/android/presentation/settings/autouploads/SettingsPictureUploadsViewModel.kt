@@ -61,7 +61,7 @@ class SettingsPictureUploadsViewModel(
 
     private fun initPictureUploads() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getPictureUploadsConfigurationStreamUseCase.execute(Unit).collect { pictureUploadsConfiguration ->
+            getPictureUploadsConfigurationStreamUseCase(Unit).collect { pictureUploadsConfiguration ->
                 _pictureUploads.update { pictureUploadsConfiguration }
             }
         }
@@ -71,7 +71,7 @@ class SettingsPictureUploadsViewModel(
         // Use current account as default. It should never be null. If no accounts are attached, picture uploads are hidden
         accountProvider.getCurrentOwnCloudAccount()?.name?.let { name ->
             viewModelScope.launch(coroutinesDispatcherProvider.io) {
-                savePictureUploadsConfigurationUseCase.execute(
+                savePictureUploadsConfigurationUseCase(
                     SavePictureUploadsConfigurationUseCase.Params(composePictureUploadsConfiguration(accountName = name))
                 )
             }
@@ -80,13 +80,13 @@ class SettingsPictureUploadsViewModel(
 
     fun disablePictureUploads() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            resetPictureUploadsUseCase.execute(Unit)
+            resetPictureUploadsUseCase(Unit)
         }
     }
 
     fun useWifiOnly(wifiOnly: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            savePictureUploadsConfigurationUseCase.execute(
+            savePictureUploadsConfigurationUseCase(
                 SavePictureUploadsConfigurationUseCase.Params(composePictureUploadsConfiguration(wifiOnly = wifiOnly))
             )
         }
@@ -94,7 +94,7 @@ class SettingsPictureUploadsViewModel(
 
     fun useChargingOnly(chargingOnly: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            savePictureUploadsConfigurationUseCase.execute(
+            savePictureUploadsConfigurationUseCase(
                 SavePictureUploadsConfigurationUseCase.Params(
                     composePictureUploadsConfiguration(chargingOnly = chargingOnly)
                 )
@@ -114,7 +114,7 @@ class SettingsPictureUploadsViewModel(
         val folderToUpload = data?.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER)
         folderToUpload?.remotePath?.let {
             viewModelScope.launch(coroutinesDispatcherProvider.io) {
-                savePictureUploadsConfigurationUseCase.execute(
+                savePictureUploadsConfigurationUseCase(
                     SavePictureUploadsConfigurationUseCase.Params(composePictureUploadsConfiguration(uploadPath = it))
                 )
             }
@@ -123,7 +123,7 @@ class SettingsPictureUploadsViewModel(
 
     fun handleSelectAccount(accountName: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            savePictureUploadsConfigurationUseCase.execute(
+            savePictureUploadsConfigurationUseCase(
                 SavePictureUploadsConfigurationUseCase.Params(composePictureUploadsConfiguration(accountName = accountName))
             )
         }
@@ -133,7 +133,7 @@ class SettingsPictureUploadsViewModel(
         val behavior = UploadBehavior.fromString(behaviorString)
 
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            savePictureUploadsConfigurationUseCase.execute(
+            savePictureUploadsConfigurationUseCase(
                 SavePictureUploadsConfigurationUseCase.Params(composePictureUploadsConfiguration(behavior = behavior))
             )
         }
@@ -144,7 +144,7 @@ class SettingsPictureUploadsViewModel(
         val previousSourcePath = _pictureUploads.value?.sourcePath?.trimEnd(File.separatorChar)
 
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            savePictureUploadsConfigurationUseCase.execute(
+            savePictureUploadsConfigurationUseCase(
                 SavePictureUploadsConfigurationUseCase.Params(
                     composePictureUploadsConfiguration(
                         sourcePath = contentUriForTree.toString(),

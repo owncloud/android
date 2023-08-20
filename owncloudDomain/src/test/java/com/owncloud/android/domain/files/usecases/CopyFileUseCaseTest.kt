@@ -44,7 +44,7 @@ class CopyFileUseCaseTest {
     fun `copy file - ok`() {
         every { repository.copyFile(any(), any(), any(), any()) } returns emptyList()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(useCaseResult.getDataOrNull(), emptyList<OCFile>())
@@ -59,7 +59,7 @@ class CopyFileUseCaseTest {
             targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/", id = 100),
             isUserLogged = true,
         )
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
 
@@ -68,7 +68,7 @@ class CopyFileUseCaseTest {
 
     @Test
     fun `copy file - ko - empty list`() {
-        val useCaseResult = useCase.execute(useCaseParams.copy(listOfFilesToCopy = listOf(), targetFolder = OC_FOLDER))
+        val useCaseResult = useCase(useCaseParams.copy(listOfFilesToCopy = listOf(), targetFolder = OC_FOLDER))
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
@@ -83,7 +83,7 @@ class CopyFileUseCaseTest {
             targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/"),
             isUserLogged = true
         )
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is CopyIntoDescendantException)
@@ -98,7 +98,7 @@ class CopyFileUseCaseTest {
             targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/"),
             isUserLogged = true
         )
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
 
@@ -109,7 +109,7 @@ class CopyFileUseCaseTest {
     fun `copy file - ko - other exception`() {
         every { repository.copyFile(any(), any(), any(), any()) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
@@ -122,7 +122,7 @@ class CopyFileUseCaseTest {
         val filesList = listOf(OC_FILE, OC_FILE)
         every { repository.copyFile(any(), any(), any(), any()) } returns filesList
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(filesList, useCaseResult.getDataOrNull())
@@ -135,7 +135,7 @@ class CopyFileUseCaseTest {
         val replace = listOf(true, false)
         every { repository.copyFile(any(), any(), replace, any()) } returns emptyList()
 
-        val useCaseResult = useCase.execute(useCaseParams.copy(replace = replace))
+        val useCaseResult = useCase(useCaseParams.copy(replace = replace))
 
         assertTrue(useCaseResult.isSuccess)
 

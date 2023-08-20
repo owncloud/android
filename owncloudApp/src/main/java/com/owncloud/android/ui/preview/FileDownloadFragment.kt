@@ -216,7 +216,7 @@ class FileDownloadFragment : FileFragment() {
         val getLiveDataForDownloadingFileUseCase: GetLiveDataForDownloadingFileUseCase by inject()
         account?.let {
             liveData =
-                getLiveDataForDownloadingFileUseCase.execute(GetLiveDataForDownloadingFileUseCase.Params(it.name, file))
+                getLiveDataForDownloadingFileUseCase(GetLiveDataForDownloadingFileUseCase.Params(it.name, file))
             liveData?.observeWorkerTillItFinishes(
                 owner = this,
                 onWorkEnqueued = { progressBar?.isIndeterminate = true },

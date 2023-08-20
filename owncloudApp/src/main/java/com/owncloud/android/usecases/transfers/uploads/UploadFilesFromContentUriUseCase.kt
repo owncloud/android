@@ -110,7 +110,7 @@ class UploadFilesFromContentUriUseCase(
             wifiOnly = false,
             chargingOnly = false
         )
-        uploadFileFromContentUriUseCase.execute(uploadFileParams)
+        uploadFileFromContentUriUseCase(uploadFileParams)
     }
 
     data class Params(

@@ -105,7 +105,7 @@ class OAuthViewModelTest : ViewModelTest() {
 
     @Test
     fun `get oidc server configuration - ok`() {
-        every { getOIDCDiscoveryUseCase.execute(any()) } returns UseCaseResult.Success(OC_OIDC_SERVER_CONFIGURATION)
+        every { getOIDCDiscoveryUseCase(any()) } returns UseCaseResult.Success(OC_OIDC_SERVER_CONFIGURATION)
         oAuthViewModel.getOIDCServerConfiguration(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
         assertEmittedValues(
@@ -122,7 +122,7 @@ class OAuthViewModelTest : ViewModelTest() {
 
     @Test
     fun `get oidc server configuration - ko - exception`() {
-        every { getOIDCDiscoveryUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+        every { getOIDCDiscoveryUseCase(any()) } returns UseCaseResult.Error(commonException)
         oAuthViewModel.getOIDCServerConfiguration(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
 
         assertEmittedValues(
@@ -133,7 +133,7 @@ class OAuthViewModelTest : ViewModelTest() {
 
     @Test
     fun `request token - ok - refresh token`() {
-        every { requestTokenUseCase.execute(any()) } returns UseCaseResult.Success(OC_TOKEN_RESPONSE)
+        every { requestTokenUseCase(any()) } returns UseCaseResult.Success(OC_TOKEN_RESPONSE)
         oAuthViewModel.requestToken(OC_TOKEN_REQUEST_REFRESH)
 
         assertEmittedValues(
@@ -144,7 +144,7 @@ class OAuthViewModelTest : ViewModelTest() {
 
     @Test
     fun `request token - ko - refresh token`() {
-        every { requestTokenUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+        every { requestTokenUseCase(any()) } returns UseCaseResult.Error(commonException)
         oAuthViewModel.requestToken(OC_TOKEN_REQUEST_REFRESH)
 
         assertEmittedValues(
@@ -155,7 +155,7 @@ class OAuthViewModelTest : ViewModelTest() {
 
     @Test
     fun `request token - ok - access token`() {
-        every { requestTokenUseCase.execute(any()) } returns UseCaseResult.Success(OC_TOKEN_RESPONSE)
+        every { requestTokenUseCase(any()) } returns UseCaseResult.Success(OC_TOKEN_RESPONSE)
         oAuthViewModel.requestToken(OC_TOKEN_REQUEST_ACCESS)
 
         assertEmittedValues(
@@ -166,7 +166,7 @@ class OAuthViewModelTest : ViewModelTest() {
 
     @Test
     fun `request token - ko - access token`() {
-        every { requestTokenUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+        every { requestTokenUseCase(any()) } returns UseCaseResult.Error(commonException)
         oAuthViewModel.requestToken(OC_TOKEN_REQUEST_ACCESS)
 
         assertEmittedValues(

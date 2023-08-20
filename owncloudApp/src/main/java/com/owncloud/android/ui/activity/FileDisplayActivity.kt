@@ -1421,7 +1421,7 @@ class FileDisplayActivity : FileActivity(),
     private fun requestForDownload(file: OCFile) {
         val downloadFileUseCase: DownloadFileUseCase by inject()
 
-        val uuid = downloadFileUseCase.execute(DownloadFileUseCase.Params(account.name, file)) ?: return
+        val uuid = downloadFileUseCase(DownloadFileUseCase.Params(account.name, file)) ?: return
 
         WorkManager.getInstance(applicationContext).getWorkInfoByIdLiveData(uuid).observeWorkerTillItFinishes(
             owner = this,

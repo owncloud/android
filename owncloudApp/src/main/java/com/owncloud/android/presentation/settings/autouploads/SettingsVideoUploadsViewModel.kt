@@ -60,7 +60,7 @@ class SettingsVideoUploadsViewModel(
 
     private fun initVideoUploads() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            getVideoUploadsConfigurationStreamUseCase.execute(Unit).collect { videoUploadsConfiguration ->
+            getVideoUploadsConfigurationStreamUseCase(Unit).collect { videoUploadsConfiguration ->
                 _videoUploads.update { videoUploadsConfiguration }
             }
         }
@@ -70,7 +70,7 @@ class SettingsVideoUploadsViewModel(
         // Use current account as default. It should never be null. If no accounts are attached, video uploads are hidden
         accountProvider.getCurrentOwnCloudAccount()?.name?.let { name ->
             viewModelScope.launch(coroutinesDispatcherProvider.io) {
-                saveVideoUploadsConfigurationUseCase.execute(
+                saveVideoUploadsConfigurationUseCase(
                     SaveVideoUploadsConfigurationUseCase.Params(composeVideoUploadsConfiguration(accountName = name))
                 )
             }
@@ -79,13 +79,13 @@ class SettingsVideoUploadsViewModel(
 
     fun disableVideoUploads() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            resetVideoUploadsUseCase.execute(Unit)
+            resetVideoUploadsUseCase(Unit)
         }
     }
 
     fun useWifiOnly(wifiOnly: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            saveVideoUploadsConfigurationUseCase.execute(
+            saveVideoUploadsConfigurationUseCase(
                 SaveVideoUploadsConfigurationUseCase.Params(composeVideoUploadsConfiguration(wifiOnly = wifiOnly))
             )
         }
@@ -93,7 +93,7 @@ class SettingsVideoUploadsViewModel(
 
     fun useChargingOnly(chargingOnly: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            saveVideoUploadsConfigurationUseCase.execute(
+            saveVideoUploadsConfigurationUseCase(
                 SaveVideoUploadsConfigurationUseCase.Params(
                     composeVideoUploadsConfiguration(chargingOnly = chargingOnly)
                 )
@@ -113,7 +113,7 @@ class SettingsVideoUploadsViewModel(
         val folderToUpload = data?.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER)
         folderToUpload?.remotePath?.let {
             viewModelScope.launch(coroutinesDispatcherProvider.io) {
-                saveVideoUploadsConfigurationUseCase.execute(
+                saveVideoUploadsConfigurationUseCase(
                     SaveVideoUploadsConfigurationUseCase.Params(composeVideoUploadsConfiguration(uploadPath = it))
                 )
             }
@@ -122,7 +122,7 @@ class SettingsVideoUploadsViewModel(
 
     fun handleSelectAccount(accountName: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            saveVideoUploadsConfigurationUseCase.execute(
+            saveVideoUploadsConfigurationUseCase(
                 SaveVideoUploadsConfigurationUseCase.Params(composeVideoUploadsConfiguration(accountName = accountName))
             )
         }
@@ -132,7 +132,7 @@ class SettingsVideoUploadsViewModel(
         val behavior = UploadBehavior.fromString(behaviorString)
 
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            saveVideoUploadsConfigurationUseCase.execute(
+            saveVideoUploadsConfigurationUseCase(
                 SaveVideoUploadsConfigurationUseCase.Params(composeVideoUploadsConfiguration(behavior = behavior))
             )
         }
@@ -143,7 +143,7 @@ class SettingsVideoUploadsViewModel(
         val previousSourcePath = _videoUploads.value?.sourcePath?.trimEnd(File.separatorChar)
 
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            saveVideoUploadsConfigurationUseCase.execute(
+            saveVideoUploadsConfigurationUseCase(
                 SaveVideoUploadsConfigurationUseCase.Params(
                     composeVideoUploadsConfiguration(
                         sourcePath = contentUriForTree.toString(),

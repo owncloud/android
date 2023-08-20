@@ -95,7 +95,7 @@ class DrawerViewModelTest : ViewModelTest() {
 
     @Test
     fun getStoredQuotaOk() {
-        every { getStoredQuotaUseCase.execute(any()) } returns UseCaseResult.Success(OC_USER_QUOTA)
+        every { getStoredQuotaUseCase(any()) } returns UseCaseResult.Success(OC_USER_QUOTA)
         drawerViewModel.getStoredQuota(OC_ACCOUNT_NAME)
 
         assertEmittedValues(
@@ -108,7 +108,7 @@ class DrawerViewModelTest : ViewModelTest() {
 
     @Test
     fun getStoredQuotaException() {
-        every { getStoredQuotaUseCase.execute(any()) } returns UseCaseResult.Error(commonException)
+        every { getStoredQuotaUseCase(any()) } returns UseCaseResult.Error(commonException)
         drawerViewModel.getStoredQuota(OC_ACCOUNT_NAME)
 
         assertEmittedValues(

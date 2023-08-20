@@ -105,7 +105,7 @@ class UploadFileFromFileSystemWorker(
         transferRepository.updateTransferStatusToInProgressById(uploadIdInStorageManager)
 
         spaceWebDavUrl =
-            getWebdavUrlForSpaceUseCase.execute(GetWebDavUrlForSpaceUseCase.Params(accountName = account.name, spaceId = ocTransfer.spaceId))
+            getWebdavUrlForSpaceUseCase(GetWebDavUrlForSpaceUseCase.Params(accountName = account.name, spaceId = ocTransfer.spaceId))
 
         return try {
             checkPermissionsToReadDocumentAreGranted()
@@ -192,7 +192,7 @@ class UploadFileFromFileSystemWorker(
         if (ocTransfer.forceOverwrite) {
 
             val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
-            val useCaseResult = getFileByRemotePathUseCase.execute(
+            val useCaseResult = getFileByRemotePathUseCase(
                 GetFileByRemotePathUseCase.Params(
                     ocTransfer.accountName,
                     ocTransfer.remotePath,
@@ -221,7 +221,7 @@ class UploadFileFromFileSystemWorker(
 
     private fun uploadDocument(client: OwnCloudClient) {
         val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
-        val capabilitiesForAccount = getStoredCapabilitiesUseCase.execute(
+        val capabilitiesForAccount = getStoredCapabilitiesUseCase(
             GetStoredCapabilitiesUseCase.Params(
                 accountName = account.name
             )
@@ -325,7 +325,7 @@ class UploadFileFromFileSystemWorker(
     private fun updateFilesDatabaseWithLatestDetails() {
         val currentTime = System.currentTimeMillis()
         val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
-        val file = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(account.name, ocTransfer.remotePath, ocTransfer.spaceId))
+        val file = getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(account.name, ocTransfer.remotePath, ocTransfer.spaceId))
         file.getDataOrNull()?.let { ocFile ->
             val fileWithNewDetails =
                 if (ocTransfer.forceOverwrite) {
@@ -342,8 +342,8 @@ class UploadFileFromFileSystemWorker(
                         storagePath = null,
                     )
                 }
-            saveFileOrFolderUseCase.execute(SaveFileOrFolderUseCase.Params(fileWithNewDetails))
-            cleanConflictUseCase.execute(
+            saveFileOrFolderUseCase(SaveFileOrFolderUseCase.Params(fileWithNewDetails))
+            cleanConflictUseCase(
                 CleanConflictUseCase.Params(
                     fileId = ocFile.id!!
                 )

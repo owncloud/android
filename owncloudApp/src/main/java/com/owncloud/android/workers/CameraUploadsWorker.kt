@@ -76,7 +76,7 @@ class CameraUploadsWorker(
 
     override suspend fun doWork(): Result {
         Timber.i("Starting CameraUploadsWorker with UUID ${this.id}")
-        when (val useCaseResult = getCameraUploadsConfigurationUseCase.execute(Unit)) {
+        when (val useCaseResult = getCameraUploadsConfigurationUseCase(Unit)) {
             is UseCaseResult.Success -> {
                 val cameraUploadsConfiguration = useCaseResult.data
                 if (cameraUploadsConfiguration == null || cameraUploadsConfiguration.areCameraUploadsDisabled()) {
@@ -221,13 +221,13 @@ class CameraUploadsWorker(
         when (syncType) {
             SyncType.PICTURE_UPLOADS -> {
                 val savePictureUploadsConfigurationUseCase: SavePictureUploadsConfigurationUseCase by inject()
-                savePictureUploadsConfigurationUseCase.execute(
+                savePictureUploadsConfigurationUseCase(
                     SavePictureUploadsConfigurationUseCase.Params(folderBackUpConfiguration.copy(lastSyncTimestamp = currentTimestamp))
                 )
             }
             SyncType.VIDEO_UPLOADS -> {
                 val saveVideoUploadsConfigurationUseCase: SaveVideoUploadsConfigurationUseCase by inject()
-                saveVideoUploadsConfigurationUseCase.execute(
+                saveVideoUploadsConfigurationUseCase(
                     SaveVideoUploadsConfigurationUseCase.Params(folderBackUpConfiguration.copy(lastSyncTimestamp = currentTimestamp))
                 )
             }
@@ -270,7 +270,7 @@ class CameraUploadsWorker(
     ) {
         val lastModifiedInSeconds = (lastModified / 1000L).toString()
 
-        UploadFileFromContentUriUseCase(WorkManager.getInstance(appContext)).execute(
+        UploadFileFromContentUriUseCase(WorkManager.getInstance(appContext))(
             UploadFileFromContentUriUseCase.Params(
                 accountName = accountName,
                 contentUri = contentUri,

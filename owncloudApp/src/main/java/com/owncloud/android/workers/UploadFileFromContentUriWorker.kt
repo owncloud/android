@@ -104,7 +104,7 @@ class UploadFileFromContentUriWorker(
         transferRepository.updateTransferStatusToInProgressById(uploadIdInStorageManager)
 
         spaceWebDavUrl =
-            getWebdavUrlForSpaceUseCase.execute(GetWebDavUrlForSpaceUseCase.Params(accountName = account.name, spaceId = ocTransfer.spaceId))
+            getWebdavUrlForSpaceUseCase(GetWebDavUrlForSpaceUseCase.Params(accountName = account.name, spaceId = ocTransfer.spaceId))
 
         val localStorageProvider: LocalStorageProvider by inject()
         cachePath = localStorageProvider.getTemporalPath(account.name, ocTransfer.spaceId) + uploadPath
@@ -255,7 +255,7 @@ class UploadFileFromContentUriWorker(
         fileSize = cacheFile.length()
 
         val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
-        val capabilitiesForAccount = getStoredCapabilitiesUseCase.execute(
+        val capabilitiesForAccount = getStoredCapabilitiesUseCase(
             GetStoredCapabilitiesUseCase.Params(
                 accountName = account.name
             )

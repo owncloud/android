@@ -47,7 +47,7 @@ class PreviewAudioViewModel(
         val shareWithUsersAllowed = contextProvider.getBoolean(R.bool.share_with_users_feature)
         val sendAllowed = contextProvider.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val result = filterFileMenuOptionsUseCase.execute(
+            val result = filterFileMenuOptionsUseCase(
                 FilterFileMenuOptionsUseCase.Params(
                     files = listOf(file),
                     accountName = accountName,

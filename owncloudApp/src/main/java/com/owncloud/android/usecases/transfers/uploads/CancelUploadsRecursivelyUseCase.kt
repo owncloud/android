@@ -73,7 +73,7 @@ class CancelUploadsRecursivelyUseCase(
 
     private fun cancelRecursively(file: OCFile) {
         if (file.isFolder) {
-            val result = getFolderContentUseCase.execute(GetFolderContentUseCase.Params(file.id!!))
+            val result = getFolderContentUseCase(GetFolderContentUseCase.Params(file.id!!))
             val files = result.getDataOrNull()
             files?.forEach { fileInFolder ->
                 cancelRecursively(fileInFolder)

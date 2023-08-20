@@ -27,5 +27,5 @@ abstract class BaseUseCase<out Type, in Params> {
 
     protected abstract fun run(params: Params): Type
 
-    fun execute(params: Params): Type = run(params)
+    operator fun invoke(params: Params): Type = run(params)
 }
