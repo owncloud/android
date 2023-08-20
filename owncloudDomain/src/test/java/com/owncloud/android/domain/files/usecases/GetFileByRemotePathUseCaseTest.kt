@@ -38,7 +38,7 @@ class GetFileByRemotePathUseCaseTest {
     fun `get file by remote path - ok`() {
         every { repository.getFileByRemotePath(useCaseParams.remotePath, useCaseParams.owner) } returns OC_FOLDER
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
 
@@ -51,7 +51,7 @@ class GetFileByRemotePathUseCaseTest {
     fun `get file by remote path - ok - null`() {
         every { repository.getFileByRemotePath(useCaseParams.remotePath, useCaseParams.owner) } returns null
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertEquals(null, useCaseResult.getDataOrNull())
@@ -65,7 +65,7 @@ class GetFileByRemotePathUseCaseTest {
             repository.getFileByRemotePath(useCaseParams.remotePath, useCaseParams.owner)
         } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isError)
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

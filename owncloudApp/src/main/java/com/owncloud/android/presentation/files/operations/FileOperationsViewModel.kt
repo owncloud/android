@@ -242,13 +242,13 @@ class FileOperationsViewModel(
 
     private fun setFileAsAvailableOffline(fileOperation: FileOperation.SetFilesAsAvailableOffline) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            setFilesAsAvailableOfflineUseCase.execute(SetFilesAsAvailableOfflineUseCase.Params(fileOperation.filesToUpdate))
+            setFilesAsAvailableOfflineUseCase(SetFilesAsAvailableOfflineUseCase.Params(fileOperation.filesToUpdate))
         }
     }
 
     private fun unsetFileAsAvailableOffline(fileOperation: FileOperation.UnsetFilesAsAvailableOffline) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            unsetFilesAsAvailableOfflineUseCase.execute(UnsetFilesAsAvailableOfflineUseCase.Params(fileOperation.filesToUpdate))
+            unsetFilesAsAvailableOfflineUseCase(UnsetFilesAsAvailableOfflineUseCase.Params(fileOperation.filesToUpdate))
         }
     }
 
@@ -268,7 +268,7 @@ class FileOperationsViewModel(
                 return@launch
             }
 
-            val useCaseResult = useCase.execute(useCaseParams).also {
+            val useCaseResult = useCase(useCaseParams).also {
                 Timber.d("Use case executed: ${useCase.javaClass.simpleName} with result: $it")
             }
 

@@ -66,7 +66,7 @@ class AvatarManager : KoinComponent {
 
         val shouldFetchAvatar = try {
             val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
-            val storedCapabilities = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(account.name))
+            val storedCapabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(account.name))
             storedCapabilities?.isFetchingAvatarAllowed() ?: true
         } catch (instanceCreationException: InstanceCreationException) {
             Timber.e(instanceCreationException, "Koin may not be initialized at this point")
@@ -78,7 +78,7 @@ class AvatarManager : KoinComponent {
             Timber.i("Avatar with imageKey $imageKey is not available in cache. Fetching from server...")
             val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
             val useCaseResult =
-                getUserAvatarAsyncUseCase.execute(GetUserAvatarAsyncUseCase.Params(accountName = account.name))
+                getUserAvatarAsyncUseCase(GetUserAvatarAsyncUseCase.Params(accountName = account.name))
             handleAvatarUseCaseResult(account, useCaseResult)?.let { return it }
         }
 

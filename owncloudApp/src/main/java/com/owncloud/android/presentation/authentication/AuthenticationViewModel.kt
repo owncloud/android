@@ -147,7 +147,7 @@ class AuthenticationViewModel(
 
             // Authenticated WebFinger needed only for account creations. Logged accounts already know their instances.
             if (updateAccountWithUsername == null) {
-                val ownCloudInstancesAvailable = getOwnCloudInstancesFromAuthenticatedWebFingerUseCase.execute(
+                val ownCloudInstancesAvailable = getOwnCloudInstancesFromAuthenticatedWebFingerUseCase(
                     GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase.Params(
                         server = serverBaseUrl,
                         username = username,
@@ -164,7 +164,7 @@ class AuthenticationViewModel(
                 }
             }
 
-            val useCaseResult = loginOAuthAsyncUseCase.execute(
+            val useCaseResult = loginOAuthAsyncUseCase(
                 LoginOAuthAsyncUseCase.Params(
                     serverInfo = serverInfo,
                     username = username,
@@ -260,14 +260,14 @@ class AuthenticationViewModel(
         _accountDiscovery.postValue(Event(UIResult.Loading()))
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             // 1. Refresh capabilities for account
-            refreshCapabilitiesFromServerAsyncUseCase.execute(RefreshCapabilitiesFromServerAsyncUseCase.Params(accountName))
-            val capabilities = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(accountName))
+            refreshCapabilitiesFromServerAsyncUseCase(RefreshCapabilitiesFromServerAsyncUseCase.Params(accountName))
+            val capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
 
             val spacesAvailableForAccount = capabilities?.isSpacesAllowed() == true
 
             // 2 If Account does not support spaces we can skip this
             if (spacesAvailableForAccount) {
-                refreshSpacesFromServerAsyncUseCase.execute(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
+                refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
             }
             _accountDiscovery.postValue(Event(UIResult.Success()))
         }
