@@ -166,7 +166,7 @@ class MainApp : Application() {
 
                     val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
                     val capabilities = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-                        getStoredCapabilitiesUseCase.execute(
+                        getStoredCapabilitiesUseCase(
                             GetStoredCapabilitiesUseCase.Params(
                                 accountName = account.name
                             )
@@ -178,7 +178,7 @@ class MainApp : Application() {
                     if (spacesAllowed) {
                         val getPersonalSpaceForAccountUseCase: GetPersonalSpaceForAccountUseCase by inject()
                         personalSpace = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-                            getPersonalSpaceForAccountUseCase.execute(
+                            getPersonalSpaceForAccountUseCase(
                                 GetPersonalSpaceForAccountUseCase.Params(
                                     accountName = account.name
                                 )

@@ -37,7 +37,7 @@ class RefreshCapabilitiesFromServerAsyncUseCaseTest {
     fun `refresh capabilities from server - ok`() {
         every { repository.refreshCapabilitiesForAccount(any()) } returns Unit
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertEquals(Unit, useCaseResult.getDataOrNull())
@@ -49,7 +49,7 @@ class RefreshCapabilitiesFromServerAsyncUseCaseTest {
     fun `refresh capabilities from server - ko`() {
         every { repository.refreshCapabilitiesForAccount(any()) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isError)
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

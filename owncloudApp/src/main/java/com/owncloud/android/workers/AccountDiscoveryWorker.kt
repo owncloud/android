@@ -60,14 +60,14 @@ class AccountDiscoveryWorker(
         if (accountName.isNullOrBlank() || account == null) return Result.failure()
 
         // 1. Refresh capabilities for account
-        refreshCapabilitiesFromServerAsyncUseCase.execute(RefreshCapabilitiesFromServerAsyncUseCase.Params(accountName))
-        val capabilities = getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(accountName))
+        refreshCapabilitiesFromServerAsyncUseCase(RefreshCapabilitiesFromServerAsyncUseCase.Params(accountName))
+        val capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
 
         val spacesAvailableForAccount = AccountUtils.isSpacesFeatureAllowedForAccount(appContext, account, capabilities)
 
         // 2.1 Account does not support spaces
         if (!spacesAvailableForAccount) {
-            val rootLegacyFolder = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, ROOT_PATH, null)).getDataOrNull()
+            val rootLegacyFolder = getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(accountName, ROOT_PATH, null)).getDataOrNull()
             rootLegacyFolder?.let {
                 discoverRootFolder(it)
             }
@@ -75,14 +75,14 @@ class AccountDiscoveryWorker(
             val spacesRootFoldersToDiscover = mutableListOf<OCFile>()
 
             // 2.2 Account does support spaces
-            refreshSpacesFromServerAsyncUseCase.execute(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
-            val spaces = getPersonalAndProjectSpacesForAccountUseCase.execute(GetPersonalAndProjectSpacesForAccountUseCase.Params(accountName))
+            refreshSpacesFromServerAsyncUseCase(RefreshSpacesFromServerAsyncUseCase.Params(accountName))
+            val spaces = getPersonalAndProjectSpacesForAccountUseCase(GetPersonalAndProjectSpacesForAccountUseCase.Params(accountName))
 
             // First we discover the root of the personal space since it is the first thing seen after login
             val personalSpace = spaces.firstOrNull { it.isPersonal }
             personalSpace?.let { space ->
                 val rootFolderForSpace =
-                    getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, ROOT_PATH, space.root.id)).getDataOrNull()
+                    getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(accountName, ROOT_PATH, space.root.id)).getDataOrNull()
                 rootFolderForSpace?.let {
                     discoverRootFolder(it)
                 }
@@ -93,7 +93,7 @@ class AccountDiscoveryWorker(
             spacesWithoutPersonal.forEach { space ->
                 // Create the root file for each space
                 val rootFolderForSpace =
-                    getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, ROOT_PATH, space.root.id)).getDataOrNull()
+                    getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(accountName, ROOT_PATH, space.root.id)).getDataOrNull()
                 rootFolderForSpace?.let {
                     spacesRootFoldersToDiscover.add(it)
                 }
@@ -107,7 +107,7 @@ class AccountDiscoveryWorker(
     }
 
     private fun discoverRootFolder(folder: OCFile) {
-        synchronizeFolderUseCase.execute(
+        synchronizeFolderUseCase(
             SynchronizeFolderUseCase.Params(
                 accountName = folder.owner,
                 remotePath = folder.remotePath,

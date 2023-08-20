@@ -39,7 +39,7 @@ class GetUserInfoAsyncUseCaseTest {
     fun `get user info - ok`() {
         every { repository.getUserInfo(OC_ACCOUNT_NAME) } returns OC_USER_INFO
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(OC_USER_INFO, useCaseResult.getDataOrNull())
@@ -51,7 +51,7 @@ class GetUserInfoAsyncUseCaseTest {
     fun `get user info - ko`() {
         every { repository.getUserInfo(OC_ACCOUNT_NAME) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

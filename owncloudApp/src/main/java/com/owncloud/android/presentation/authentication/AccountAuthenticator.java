@@ -338,7 +338,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         @NotNull Lazy<OIDCDiscoveryUseCase> oidcDiscoveryUseCase = inject(OIDCDiscoveryUseCase.class);
         OIDCDiscoveryUseCase.Params oidcDiscoveryUseCaseParams = new OIDCDiscoveryUseCase.Params(baseUrl);
         UseCaseResult<OIDCServerConfiguration> oidcServerConfigurationUseCaseResult =
-                oidcDiscoveryUseCase.getValue().execute(oidcDiscoveryUseCaseParams);
+                oidcDiscoveryUseCase.getValue().invoke(oidcDiscoveryUseCaseParams);
 
         String tokenEndpoint;
 
@@ -380,7 +380,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         // Token exchange
         @NotNull Lazy<RequestTokenUseCase> requestTokenUseCase = inject(RequestTokenUseCase.class);
         RequestTokenUseCase.Params requestTokenParams = new RequestTokenUseCase.Params(oauthTokenRequest);
-        UseCaseResult<TokenResponse> tokenResponseResult = requestTokenUseCase.getValue().execute(requestTokenParams);
+        UseCaseResult<TokenResponse> tokenResponseResult = requestTokenUseCase.getValue().invoke(requestTokenParams);
 
         TokenResponse safeTokenResponse = tokenResponseResult.getDataOrNull();
         if (safeTokenResponse != null) {

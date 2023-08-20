@@ -38,7 +38,7 @@ class RemoveFileUseCaseTest {
     fun `remove file - ok`() {
         every { repository.deleteFiles(any(), any()) } returns Unit
 
-        val useCaseResult = useCase.execute(useCaseParams.copy(removeOnlyLocalCopy = false))
+        val useCaseResult = useCase(useCaseParams.copy(removeOnlyLocalCopy = false))
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
@@ -50,7 +50,7 @@ class RemoveFileUseCaseTest {
     fun `remove file - ok - remove local only`() {
         every { repository.deleteFiles(any(), any()) } returns Unit
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
@@ -60,7 +60,7 @@ class RemoveFileUseCaseTest {
 
     @Test
     fun `remove file - ko - empty list`() {
-        val useCaseResult = useCase.execute(useCaseParams.copy(listOfFilesToDelete = listOf()))
+        val useCaseResult = useCase(useCaseParams.copy(listOfFilesToDelete = listOf()))
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
@@ -72,7 +72,7 @@ class RemoveFileUseCaseTest {
     fun `remove file - ko - other exception`() {
         every { repository.deleteFiles(any(), any()) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

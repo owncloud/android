@@ -37,7 +37,7 @@ class OIDCDiscoveryUseCaseTest {
     fun `test perform oidc discovery - ok`() {
         every { repository.performOIDCDiscovery(useCaseParams.baseUrl) } returns OC_OIDC_SERVER_CONFIGURATION
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertEquals(OC_OIDC_SERVER_CONFIGURATION, useCaseResult.getDataOrNull())
@@ -49,7 +49,7 @@ class OIDCDiscoveryUseCaseTest {
     fun `test perform oidc discovery - ko`() {
         every { repository.performOIDCDiscovery(useCaseParams.baseUrl) } throws ServerNotReachableException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isError)
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is ServerNotReachableException)
