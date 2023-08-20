@@ -6,11 +6,13 @@ import com.owncloud.android.testutil.OC_FILE_WITH_SYNC_INFO_AND_SPACE
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class GetFileWithSyncInfoByIdUseCaseTest {
 
     private val repository: FileRepository = spyk()
@@ -18,7 +20,7 @@ class GetFileWithSyncInfoByIdUseCaseTest {
     private val useCaseParams = GetFileWithSyncInfoByIdUseCase.Params(OC_FILE.id!!)
 
     @Test
-    fun `get file with sync by id returns OCFileWithSyncInfo when no error`() = runBlocking {
+    fun `get file with sync by id returns OCFileWithSyncInfo when no error`() = runTest {
         every { repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) } returns flowOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE)
 
         val useCaseResult = useCase.execute(useCaseParams)
@@ -31,7 +33,7 @@ class GetFileWithSyncInfoByIdUseCaseTest {
     }
 
     @Test
-    fun `get file with sync by id returns true when repository is null`() = runBlocking {
+    fun `get file with sync by id returns true when repository is null`() = runTest {
         val useCaseResult = useCase.execute(useCaseParams)
 
         every { repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) } returns flowOf(null)
@@ -41,7 +43,7 @@ class GetFileWithSyncInfoByIdUseCaseTest {
     }
 
     @Test(expected = Exception::class)
-    fun `get file with sync by id returns an exception`() = runBlocking {
+    fun `get file with sync by id returns an exception`() = runTest {
         every { repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) } throws Exception()
 
         useCase.execute(useCaseParams)

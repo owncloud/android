@@ -33,14 +33,16 @@ import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Ignore
 import org.junit.Test
 
 @Ignore("Ignore temporary, pretty dependant on implementation... Will be reworked when finished")
+@ExperimentalCoroutinesApi
 class OCFileRepositoryTest {
 
     private val remoteFileDataSource = mockk<RemoteFileDataSource>(relaxed = true)
@@ -104,7 +106,7 @@ class OCFileRepositoryTest {
     }
 
     @Test
-    fun `getFileWithSyncInfoByIdAsFlow returns OCFileWithSyncInfo`()  = runBlocking {
+    fun `getFileWithSyncInfoByIdAsFlow returns OCFileWithSyncInfo`()  = runTest {
         every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE)
 
         val ocFile = ocFileRepository.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
@@ -119,7 +121,7 @@ class OCFileRepositoryTest {
     }
 
     @Test
-    fun `getFileWithSyncInfoByIdAsFlow returns null`()  = runBlocking {
+    fun `getFileWithSyncInfoByIdAsFlow returns null`()  = runTest {
         every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(null)
 
         val ocFile = ocFileRepository.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
@@ -135,7 +137,7 @@ class OCFileRepositoryTest {
 
 
     @Test(expected = Exception::class)
-    fun `getFileWithSyncInfoByIdAsFlow returns an exception`()  = runBlocking {
+    fun `getFileWithSyncInfoByIdAsFlow returns an exception`()  = runTest {
         every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }  throws Exception()
 
         ocFileRepository.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
