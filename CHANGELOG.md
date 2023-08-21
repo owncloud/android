@@ -12,6 +12,7 @@ Summary
 * Bugfix - Bad error message when copying/moving with server down: [#4044](https://github.com/owncloud/android/issues/4044)
 * Bugfix - Menu option unset av. offline shown when shouldn't: [#4077](https://github.com/owncloud/android/issues/4077)
 * Bugfix - List of accounts empty after removing all accounts and adding new ones: [#4114](https://github.com/owncloud/android/issues/4114)
+* Bugfix - Crash when the token is expired: [#4116](https://github.com/owncloud/android/issues/4116)
 * Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
 * Change - Move file menu options filter to use case: [#4009](https://github.com/owncloud/android/issues/4009)
 * Change - Gradle Version Catalog: [#4035](https://github.com/owncloud/android/pull/4035)
@@ -66,6 +67,14 @@ Details
 
    https://github.com/owncloud/android/issues/4114
    https://github.com/owncloud/android/pull/4122
+
+* Bugfix - Crash when the token is expired: [#4116](https://github.com/owncloud/android/issues/4116)
+
+   Now when the token expires and we switch from grid to list mode on the main screen the app doesn't
+   crash.
+
+   https://github.com/owncloud/android/issues/4116
+   https://github.com/owncloud/android/pull/4132
 
 * Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
 
