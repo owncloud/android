@@ -1,0 +1,8 @@
+Bugfix: Crash when the token is expired
+
+
+Now when the token expires and we switch
+from grid to list mode on the main screen the app doesn't crash.
+
+https://github.com/owncloud/android/issues/4116
+https://github.com/owncloud/android/pull/4132

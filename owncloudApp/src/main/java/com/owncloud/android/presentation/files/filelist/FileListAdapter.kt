@@ -41,11 +41,11 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.GridItemBinding
 import com.owncloud.android.databinding.ItemFileListBinding
 import com.owncloud.android.databinding.ListFooterBinding
+import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
 import com.owncloud.android.presentation.authentication.AccountUtils
-import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
@@ -284,16 +284,25 @@ class FileListAdapter(
                 fileIcon.load(R.drawable.ic_menu_archive)
 
             } else {
-                val mimetypeIcon = MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName)
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
-                fileIcon.load(mimetypeIcon)
+                fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
                 if (file.remoteId != null) {
-                    fileIcon.load(
-                        ThumbnailsRequester.getPreviewUriForFile(fileWithSyncInfo, account!!),
-                        ThumbnailsRequester.getCoilImageLoader(),
-                    ) {
-                        placeholder(mimetypeIcon)
-                        error(mimetypeIcon)
+                    val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
+                    if (thumbnail != null) {
+                        fileIcon.setImageBitmap(thumbnail)
+                    }
+                    if (file.needsToUpdateThumbnail) {
+                        // generate new Thumbnail
+                        if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
+                            val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
+                            val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
+
+                            // If drawable is not visible, do not update it.
+                            if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
+                                fileIcon.setImageDrawable(asyncDrawable)
+                            }
+                            task.execute(file)
+                        }
                     }
 
                     if (file.mimeType == "image/png") {
