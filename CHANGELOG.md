@@ -28,6 +28,7 @@ Summary
 * Enhancement - Prevent http traffic with branding options: [#4066](https://github.com/owncloud/android/issues/4066)
 * Enhancement - Unit tests for datasources classes - Part 2: [#4071](https://github.com/owncloud/android/issues/4071)
 * Enhancement - Respect app_providers_appsUrl value from capabilities: [#4075](https://github.com/owncloud/android/issues/4075)
+* Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
 * Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
 * Enhancement - Align Sharing icons with other platforms: [#4101](https://github.com/owncloud/android/issues/4101)
 
@@ -189,6 +190,14 @@ Details
 
    https://github.com/owncloud/android/issues/4075
    https://github.com/owncloud/android/pull/4113
+
+* Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
+
+   A new dialog has been created where a checkbox has been added to be able to select all the folders
+   or files that have conflicts.
+
+   https://github.com/owncloud/android/issues/4078
+   https://github.com/owncloud/android/pull/4138
 
 * Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
 
