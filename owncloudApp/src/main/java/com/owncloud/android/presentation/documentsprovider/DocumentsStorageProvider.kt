@@ -389,7 +389,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         copyFileUseCase.execute(
             CopyFileUseCase.Params(
-                listOfFilesToCopy = listOf(sourceFile), targetFolder = targetParentFile, replace = listOf(false)
+                listOfFilesToCopy = listOf(sourceFile),
+                targetFolder = targetParentFile,
+                replace = listOf(false),
+                isUserLogged = AccountUtils.getCurrentOwnCloudAccount(context) != null,
             )
         ).also { result ->
             syncRequired = false
@@ -419,6 +422,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
                 listOfFilesToMove = listOf(sourceFile),
                 targetFolder = targetParentFile,
                 replace = listOf(false),
+                isUserLogged = AccountUtils.getCurrentOwnCloudAccount(context) != null,
             )
         ).also { result ->
             syncRequired = false

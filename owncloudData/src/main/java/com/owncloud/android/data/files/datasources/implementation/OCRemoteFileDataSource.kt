@@ -33,12 +33,12 @@ class OCRemoteFileDataSource(
 ) : RemoteFileDataSource {
     override fun checkPathExistence(
         path: String,
-        checkUserCredentials: Boolean,
+        isUserLogged: Boolean,
         accountName: String,
         spaceWebDavUrl: String?,
     ): Boolean = clientManager.getFileService(accountName).checkPathExistence(
         path = path,
-        isUserLogged = checkUserCredentials,
+        isUserLogged = isUserLogged,
         spaceWebDavUrl = spaceWebDavUrl,
     ).data
 
@@ -85,8 +85,14 @@ class OCRemoteFileDataSource(
         remotePath: String,
         accountName: String,
         spaceWebDavUrl: String?,
+        isUserLogged: Boolean,
     ): String {
-        var checkExistsFile = checkPathExistence(remotePath, false, accountName, spaceWebDavUrl)
+        var checkExistsFile = checkPathExistence(
+            path = remotePath,
+            isUserLogged = isUserLogged,
+            accountName = accountName,
+            spaceWebDavUrl = spaceWebDavUrl,
+        )
         if (!checkExistsFile) {
             return remotePath
         }
@@ -104,9 +110,19 @@ class OCRemoteFileDataSource(
         do {
             suffix = " ($count)"
             checkExistsFile = if (pos >= 0) {
-                checkPathExistence("${remotePath.substringBeforeLast('.', "")}$suffix.$extension", false, accountName, spaceWebDavUrl)
+                checkPathExistence(
+                    path = "${remotePath.substringBeforeLast('.', "")}$suffix.$extension",
+                    isUserLogged = isUserLogged,
+                    accountName = accountName,
+                    spaceWebDavUrl = spaceWebDavUrl,
+                )
             } else {
-                checkPathExistence("$remotePath$suffix", false, accountName, spaceWebDavUrl)
+                checkPathExistence(
+                    path = "$remotePath$suffix",
+                    isUserLogged = isUserLogged,
+                    accountName = accountName,
+                    spaceWebDavUrl = spaceWebDavUrl,
+                )
             }
             count++
         } while (checkExistsFile)
