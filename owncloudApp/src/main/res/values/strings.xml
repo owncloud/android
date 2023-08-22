@@ -744,5 +744,6 @@
     <string name="ocis_accounts_warning_button">Understood</string>
 
     <string name="tab_label_ascii">Text</string>
+    <string name="apply_to_all_conflicts">Apply to all %1$s conflicts</string>
 
 </resources>
