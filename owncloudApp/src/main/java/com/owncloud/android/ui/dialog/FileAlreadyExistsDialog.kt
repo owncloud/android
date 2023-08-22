@@ -1,7 +1,6 @@
 package com.owncloud.android.ui.dialog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,7 @@ class FileAlreadyExistsDialog private constructor(
 
     private lateinit var binding: DialogFileAlreadyExistsBinding
     internal var isCheckBoxChecked: Boolean = false
-    internal var checkboxVisible: Boolean = true
+    internal var checkboxVisible: Boolean = false
 
     interface DialogButtonClickListener {
         fun onKeepBothButtonClick()
