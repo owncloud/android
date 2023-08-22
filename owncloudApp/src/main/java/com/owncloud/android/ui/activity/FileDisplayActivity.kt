@@ -29,7 +29,6 @@ package com.owncloud.android.ui.activity
 
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.accounts.Account
-import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -97,6 +96,7 @@ import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.REQ
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.syncadapter.FileSyncAdapter
+import com.owncloud.android.ui.dialog.FileAlreadyExistsDialog
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.fragment.TaskRetainerFragment
 import com.owncloud.android.ui.helpers.FilesUploadHelper
@@ -172,6 +172,8 @@ class FileDisplayActivity : FileActivity(),
     private val transfersViewModel: TransfersViewModel by viewModel()
 
     private val sharedPreferences: SharedPreferencesProvider by inject()
+
+    private val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
 
     var filesUploadHelper: FilesUploadHelper? = null
         internal set
@@ -1072,51 +1074,113 @@ class FileDisplayActivity : FileActivity(),
         val context = this@FileDisplayActivity
         if (!uiResult.data.isNullOrEmpty()) {
             var pos = 0
-            data.asReversed().forEach { file ->
-                AlertDialog.Builder(context)
+            val fragmentManager = supportFragmentManager
+            data.asReversed().forEachIndexed { index, file ->
+                val countDownValue = index + 1
+
+                val customDialog = FileAlreadyExistsDialog.Builder()
                     .setTitle(
-                        if (file.isFolder) {
-                            R.string.folder_already_exists
-                        } else {
-                            R.string.file_already_exists
-                        }
-                    )
-                    .setMessage(
-                        String.format(
-                            context.getString(
-                                if (file.isFolder) {
-                                    R.string.folder_already_exists_description
-                                } else {
-                                    R.string.file_already_exists_description
-                                }
-                            ), file.fileName
+                        this.getString(
+                            if (file.isFolder) {
+                                R.string.folder_already_exists
+                            } else {
+                                R.string.file_already_exists
+                            }
                         )
                     )
-                    .setNeutralButton(R.string.welcome_feature_skip_button) { _, _ ->
-                        replace.add(null)
-                        pos++
-                        if (pos == data.size) {
-                            launchAction(uiResult.data, replace)
-                        }
-                    }
-                    .setNegativeButton(R.string.conflict_replace) { _, _ ->
-                        replace.add(true)
-                        pos++
-                        if (pos == data.size) {
-                            launchAction(uiResult.data, replace)
-                        }
-                    }
-                    .setPositiveButton(R.string.conflict_keep_both) { _, _ ->
-                        replace.add(false)
-                        pos++
-                        if (pos == data.size) {
-                            launchAction(uiResult.data, replace)
-                        }
-                    }
-                    .show()
+                    .setDescription(
+                        this.getString(
+                            if (file.isFolder) {
+                                R.string.folder_already_exists_description
+                            } else {
+                                R.string.folder_already_exists_description
+                            }, file.fileName
+                        )
+                    )
+                    .setCheckboxText(this.getString(R.string.apply_to_all_conflicts, countDownValue.toString()))
+                    .build()
 
+
+                if (countDownValue > 1) {
+                    customDialog.checkboxVisible = true
+                }
+
+                customDialog.show(fragmentManager!!, "customdialog")
+
+                openDialogs.add(customDialog)
+
+                customDialog.setDialogButtonClickListener(object : FileAlreadyExistsDialog.DialogButtonClickListener {
+
+                    override fun onKeepBothButtonClick() {
+                        if (customDialog.isCheckBoxChecked) {
+                            repeat(data.asReversed().size) {
+                                replace.add(false)
+                                pos++
+                                if (pos == data.size) {
+                                    launchAction(uiResult.data, replace)
+                                }
+                            }
+                            dismissAllOpenDialogs()
+                        } else {
+                            replace.add(false)
+                            pos++
+                            if (pos == data.size) {
+                                launchAction(uiResult.data!!, replace)
+                            }
+                            customDialog.dismiss()
+                        }
+                    }
+
+                    override fun onSkipButtonClick() {
+                        if (customDialog.isCheckBoxChecked) {
+                            repeat(data.asReversed().size) {
+                                replace.add(null)
+                                pos++
+                                if (pos == data.size) {
+                                    launchAction(uiResult.data!!, replace)
+                                }
+                            }
+                            dismissAllOpenDialogs()
+                        } else {
+                            replace.add(null)
+                            pos++
+                            if (pos == data.size) {
+                                launchAction(uiResult.data!!, replace)
+                            }
+                            customDialog.dismiss()
+                        }
+                    }
+
+                    override fun onReplaceButtonClick() {
+                        if (customDialog.isCheckBoxChecked) {
+                            repeat(data.asReversed().size) {
+                                replace.add(true)
+                                pos++
+                                if (pos == data.size) {
+                                    launchAction(uiResult.data!!, replace)
+                                }
+                            }
+                            dismissAllOpenDialogs()
+                        } else {
+                            replace.add(true)
+                            pos++
+                            if (pos == data.size) {
+                                launchAction(uiResult.data!!, replace)
+                            }
+                            customDialog.dismiss()
+                        }
+                    }
+                }
+                )
             }
         }
+    }
+
+    private fun dismissAllOpenDialogs() {
+        openDialogs.forEach { dialog ->
+            dialog.dismiss()
+        }
+        openDialogs.clear()
     }
 
     private fun launchCopyFile(files: List<OCFile>, replace: List<Boolean?>) {
