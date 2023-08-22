@@ -661,7 +661,11 @@ class FileDisplayActivity : FileActivity(),
     private fun requestMoveOperation(data: Intent) {
         val folderToMoveAt = data.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER) ?: return
         val files = data.getParcelableArrayListExtra<OCFile>(FolderPickerActivity.EXTRA_FILES) ?: return
-        val moveOperation = FileOperation.MoveOperation(listOfFilesToMove = files.toList(), targetFolder = folderToMoveAt)
+        val moveOperation = FileOperation.MoveOperation(
+            listOfFilesToMove = files.toList(),
+            targetFolder = folderToMoveAt,
+            isUserLogged = com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(this) != null,
+        )
         fileOperationsViewModel.performOperation(moveOperation)
     }
 
@@ -673,7 +677,11 @@ class FileDisplayActivity : FileActivity(),
     private fun requestCopyOperation(data: Intent) {
         val folderToCopyAt = data.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER) ?: return
         val files = data.getParcelableArrayListExtra<OCFile>(FolderPickerActivity.EXTRA_FILES) ?: return
-        val copyOperation = FileOperation.CopyOperation(listOfFilesToCopy = files.toList(), targetFolder = folderToCopyAt)
+        val copyOperation = FileOperation.CopyOperation(
+            listOfFilesToCopy = files.toList(),
+            targetFolder = folderToCopyAt,
+            isUserLogged = com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(this) != null,
+        )
         fileOperationsViewModel.performOperation(copyOperation)
     }
 
@@ -1108,6 +1116,7 @@ class FileDisplayActivity : FileActivity(),
                 listOfFilesToCopy = files,
                 targetFolder = null,
                 replace = replace,
+                isUserLogged = com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(this) != null,
             )
         )
     }
@@ -1118,6 +1127,7 @@ class FileDisplayActivity : FileActivity(),
                 listOfFilesToMove = files,
                 targetFolder = null,
                 replace = replace,
+                isUserLogged = com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(this) != null,
             )
         )
     }

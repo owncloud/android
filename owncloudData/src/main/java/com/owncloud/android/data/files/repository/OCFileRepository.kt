@@ -48,7 +48,7 @@ class OCFileRepository(
     private val localFileDataSource: LocalFileDataSource,
     private val remoteFileDataSource: RemoteFileDataSource,
     private val localSpacesDataSource: LocalSpacesDataSource,
-    private val localStorageProvider: LocalStorageProvider
+    private val localStorageProvider: LocalStorageProvider,
 ) : FileRepository {
     override fun createFolder(
         remotePath: String,
@@ -80,7 +80,7 @@ class OCFileRepository(
         }
     }
 
-    override fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?>): List<OCFile> {
+    override fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?>, isUserLogged: Boolean): List<OCFile> {
         val sourceSpaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(listOfFilesToCopy[0].spaceId, listOfFilesToCopy[0].owner)
         val targetSpaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(targetFolder.spaceId, targetFolder.owner)
         val filesNeedAction = mutableListOf<OCFile>()
@@ -99,6 +99,7 @@ class OCFileRepository(
                     filesNeedsAction = filesNeedAction,
                     ocFile = ocFile,
                     position = position,
+                    isUserLogged = isUserLogged,
                 )
             if (finalRemotePath != null && (replace.isEmpty() || replace[position] != null)) {
                 // 2. Try to copy files in server
@@ -210,7 +211,7 @@ class OCFileRepository(
     override fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile> =
         localFileDataSource.getFilesAvailableOfflineFromEveryAccount()
 
-    override fun moveFile(listOfFilesToMove: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?>): List<OCFile> {
+    override fun moveFile(listOfFilesToMove: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?>, isUserLogged: Boolean): List<OCFile> {
         val targetSpaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(targetFolder.spaceId, targetFolder.owner)
         val filesNeedsAction = mutableListOf<OCFile>()
 
@@ -228,6 +229,7 @@ class OCFileRepository(
                     filesNeedsAction = filesNeedsAction,
                     ocFile = ocFile,
                     position = position,
+                    isUserLogged = isUserLogged,
                 )
 
             if (finalRemotePath != null && (replace.isEmpty() || replace[position] != null)) {
@@ -295,12 +297,13 @@ class OCFileRepository(
         targetSpaceWebDavUrl: String?,
         filesNeedsAction: MutableList<OCFile>,
         ocFile: OCFile,
-        position: Int
+        position: Int,
+        isUserLogged: Boolean,
     ) =
         if (replace.isEmpty()) {
             val pathExists = remoteFileDataSource.checkPathExistence(
                 path = expectedRemotePath,
-                checkUserCredentials = false,
+                isUserLogged = isUserLogged,
                 accountName = targetFolder.owner,
                 spaceWebDavUrl = targetSpaceWebDavUrl,
             )
@@ -315,9 +318,10 @@ class OCFileRepository(
                 if (ocFile.isFolder) expectedRemotePath.plus(File.separator) else expectedRemotePath
             } else if (replace[position] == false) {
                 remoteFileDataSource.getAvailableRemotePath(
-                    expectedRemotePath,
-                    targetFolder.owner,
-                    targetSpaceWebDavUrl,
+                    remotePath = expectedRemotePath,
+                    accountName = targetFolder.owner,
+                    spaceWebDavUrl = targetSpaceWebDavUrl,
+                    isUserLogged = isUserLogged,
                 ).let {
                     if (ocFile.isFolder) it.plus(File.separator) else it
                 }
