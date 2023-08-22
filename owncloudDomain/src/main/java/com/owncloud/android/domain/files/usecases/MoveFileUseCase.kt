@@ -45,6 +45,7 @@ class MoveFileUseCase(
             listOfFilesToMove = params.listOfFilesToMove,
             targetFolder = params.targetFolder,
             replace = params.replace,
+            isUserLogged = params.isUserLogged,
         )
     }
 
@@ -69,5 +70,6 @@ class MoveFileUseCase(
         val listOfFilesToMove: List<OCFile>,
         val targetFolder: OCFile,
         val replace: List<Boolean?> = emptyList(),
+        val isUserLogged: Boolean,
     )
 }

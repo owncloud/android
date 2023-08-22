@@ -32,16 +32,16 @@ import com.owncloud.android.domain.files.model.OCFile
  * Copying files to a descendant or copying files to the same directory will throw an exception.
  */
 class CopyFileUseCase(
-    private val fileRepository: FileRepository
+    private val fileRepository: FileRepository,
 ) : BaseUseCaseWithResult<List<OCFile>, CopyFileUseCase.Params>() {
 
     override fun run(params: Params): List<OCFile> {
         validateOrThrowException(params.listOfFilesToCopy, params.targetFolder)
-
         return fileRepository.copyFile(
             listOfFilesToCopy = params.listOfFilesToCopy,
             targetFolder = params.targetFolder,
             replace = params.replace,
+            isUserLogged = params.isUserLogged,
         )
     }
 
@@ -58,5 +58,6 @@ class CopyFileUseCase(
         val listOfFilesToCopy: List<OCFile>,
         val targetFolder: OCFile,
         val replace: List<Boolean?> = emptyList(),
+        val isUserLogged: Boolean,
     )
 }

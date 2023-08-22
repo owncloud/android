@@ -132,7 +132,12 @@ class FileOperationsViewModel(
                 coroutineDispatcher = coroutinesDispatcherProvider.io,
                 liveData = _copyFileLiveData,
                 useCase = copyFileUseCase,
-                useCaseParams = CopyFileUseCase.Params(fileOperation.listOfFilesToCopy, folder, fileOperation.replace),
+                useCaseParams = CopyFileUseCase.Params(
+                    listOfFilesToCopy = fileOperation.listOfFilesToCopy,
+                    targetFolder = folder,
+                    replace = fileOperation.replace,
+                    isUserLogged = fileOperation.isUserLogged,
+                ),
                 showLoading = true,
             )
         }
@@ -151,9 +156,10 @@ class FileOperationsViewModel(
                 liveData = _moveFileLiveData,
                 useCase = moveFileUseCase,
                 useCaseParams = MoveFileUseCase.Params(
-                    fileOperation.listOfFilesToMove,
-                    folder,
-                    fileOperation.replace
+                    listOfFilesToMove = fileOperation.listOfFilesToMove,
+                    targetFolder = folder,
+                    replace = fileOperation.replace,
+                    isUserLogged = fileOperation.isUserLogged,
                 ),
                 showLoading = true,
             )
