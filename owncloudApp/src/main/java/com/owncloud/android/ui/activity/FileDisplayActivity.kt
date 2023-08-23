@@ -1049,7 +1049,12 @@ class FileDisplayActivity : FileActivity(),
 
             is UIResult.Error -> {
                 dismissLoadingDialog()
-                showMessageInSnackbar(message = getString(R.string.copy_file_error))
+
+                uiResult.error?.let {
+                    showMessageInSnackbar(
+                        message = it.parseError(getString(R.string.copy_file_error), resources, true)
+                    )
+                }
             }
         }
     }
