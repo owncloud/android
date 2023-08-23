@@ -10,6 +10,7 @@ Summary
 
 * Bugfix - Spaces' thumbnails not loaded the first time: [#3959](https://github.com/owncloud/android/issues/3959)
 * Bugfix - Bad error message when copying/moving with server down: [#4044](https://github.com/owncloud/android/issues/4044)
+* Bugfix - Unnecessary or wrong call: [#4074](https://github.com/owncloud/android/issues/4074)
 * Bugfix - Menu option unset av. offline shown when shouldn't: [#4077](https://github.com/owncloud/android/issues/4077)
 * Bugfix - List of accounts empty after removing all accounts and adding new ones: [#4114](https://github.com/owncloud/android/issues/4114)
 * Bugfix - Crash when the token is expired: [#4116](https://github.com/owncloud/android/issues/4116)
@@ -51,6 +52,14 @@ Details
 
    https://github.com/owncloud/android/issues/4044
    https://github.com/owncloud/android/pull/4127
+
+* Bugfix - Unnecessary or wrong call: [#4074](https://github.com/owncloud/android/issues/4074)
+
+   Removed added path when checking path existence.
+
+   https://github.com/owncloud/android/issues/4074
+   https://github.com/owncloud/android/pull/4131
+   https://github.com/owncloud/android-library/pull/578
 
 * Bugfix - Menu option unset av. offline shown when shouldn't: [#4077](https://github.com/owncloud/android/issues/4077)
 
