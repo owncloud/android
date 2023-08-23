@@ -1,9 +1,9 @@
-Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+Changelog for ownCloud Android Client [4.1.0] (2023-08-23)
 =======================================
-The following sections list the changes in ownCloud Android Client unreleased relevant to
+The following sections list the changes in ownCloud Android Client 4.1.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/android/compare/v4.0.0...master
+[4.1.0]: https://github.com/owncloud/android/compare/v4.0.0...v4.1.0
 
 Summary
 -------
