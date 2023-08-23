@@ -169,6 +169,7 @@ class OCRemoteFileDataSourceTest {
             remotePath = OC_FILE.remotePath,
             accountName = OC_ACCOUNT_NAME,
             spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
+            isUserLogged = false,
         )
         assertEquals(OC_FILE.remotePath, firstCopyName)
 
@@ -189,7 +190,7 @@ class OCRemoteFileDataSourceTest {
         every {
             clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
                 path = any(),
-                isUserLogged = false,
+                isUserLogged = true,
                 spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
             ).data
         } returnsMany listOf(true, false)
@@ -198,6 +199,7 @@ class OCRemoteFileDataSourceTest {
             remotePath = OC_FILE.remotePath,
             accountName = OC_ACCOUNT_NAME,
             spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
+            isUserLogged = true,
         )
         assertEquals("${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix.$extension", firstCopyName)
     }
@@ -210,7 +212,7 @@ class OCRemoteFileDataSourceTest {
         every {
             clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
                 path = any(),
-                isUserLogged = false,
+                isUserLogged = true,
                 spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
             ).data
         } returnsMany listOf(true, true, false)
@@ -219,6 +221,7 @@ class OCRemoteFileDataSourceTest {
             remotePath = OC_FILE.remotePath,
             accountName = OC_ACCOUNT_NAME,
             spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
+            isUserLogged = true,
         )
         assertEquals("${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix.$extension", firstCopyName)
     }
@@ -240,6 +243,7 @@ class OCRemoteFileDataSourceTest {
             remotePath = "${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix.$extension",
             accountName = OC_ACCOUNT_NAME,
             spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
+            isUserLogged = false,
         )
         assertEquals("${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix $suffix.$extension", firstCopyName)
 
