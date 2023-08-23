@@ -37,17 +37,18 @@ class MoveFileUseCaseTest {
     private val useCaseParams = MoveFileUseCase.Params(
         listOfFilesToMove = listOf(OC_FILE.copy(remotePath = "/video.mp4", parentId = 123)),
         targetFolder = OC_FOLDER.copy(id = 100),
+        isUserLogged = true,
     )
 
     @Test
     fun `move file - ok`() {
-        every { repository.moveFile(any(), any()) } returns emptyList()
+        every { repository.moveFile(any(), any(), any(), any()) } returns emptyList()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
 
-        verify(exactly = 1) { repository.moveFile(any(), any()) }
+        verify(exactly = 1) { repository.moveFile(any(), any(), any(), any()) }
     }
 
     @Test
@@ -57,7 +58,7 @@ class MoveFileUseCaseTest {
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is IllegalArgumentException)
 
-        verify(exactly = 0) { repository.moveFile(any(), any()) }
+        verify(exactly = 0) { repository.moveFile(any(), any(), any(), any()) }
     }
 
     @Test
@@ -65,13 +66,14 @@ class MoveFileUseCaseTest {
         val useCaseParams = MoveFileUseCase.Params(
             listOfFilesToMove = listOf(OC_FOLDER.copy(remotePath = "/Directory")),
             targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/"),
+            isUserLogged = true,
         )
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is MoveIntoDescendantException)
 
-        verify(exactly = 0) { repository.moveFile(any(), any()) }
+        verify(exactly = 0) { repository.moveFile(any(), any(), any(), any()) }
     }
 
     @Test
@@ -82,12 +84,13 @@ class MoveFileUseCaseTest {
                 OC_FILE.copy(remotePath = "/Document.pdf", parentId = 1),
             ),
             targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/", id = 100),
+            isUserLogged = true,
         )
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isError)
 
-        verify(exactly = 0) { repository.moveFile(any(), any()) }
+        verify(exactly = 0) { repository.moveFile(any(), any(), any(), any()) }
     }
 
     @Test
@@ -95,50 +98,51 @@ class MoveFileUseCaseTest {
         val useCaseParams = MoveFileUseCase.Params(
             listOfFilesToMove = listOf(element = OC_FOLDER.copy(remotePath = "/Photos/", parentId = 100)),
             targetFolder = OC_FOLDER.copy(remotePath = "/Directory/Descendant/", id = 100),
+            isUserLogged = true,
         )
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is MoveIntoSameFolderException)
 
-        verify(exactly = 0) { repository.moveFile(any(), any()) }
+        verify(exactly = 0) { repository.moveFile(any(), any(), any(), any()) }
     }
 
     @Test
     fun `move file - ko - other exception`() {
-        every { repository.moveFile(any(), any()) } throws UnauthorizedException()
+        every { repository.moveFile(any(), any(), any(), any()) } throws UnauthorizedException()
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
 
-        verify(exactly = 1) { repository.moveFile(any(), any()) }
+        verify(exactly = 1) { repository.moveFile(any(), any(), any(), any()) }
     }
 
     @Test
     fun ` move file - ok - return list files`() {
         val filesList = listOf(OC_FILE, OC_FILE)
-        every { repository.moveFile(any(), any()) } returns filesList
+        every { repository.moveFile(any(), any(), any(), any()) } returns filesList
 
         val useCaseResult = useCase.execute(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         Assert.assertEquals(filesList, useCaseResult.getDataOrNull())
 
-        verify(exactly = 1) { repository.moveFile(any(), any()) }
+        verify(exactly = 1) { repository.moveFile(any(), any(), any(), any()) }
     }
 
     @Test
     fun `mov file - ok - passing replace`() {
         val replace = listOf(true, false)
-        every { repository.moveFile(any(), any(), replace) } returns emptyList()
+        every { repository.moveFile(any(), any(), replace, any()) } returns emptyList()
 
         val useCaseResult = useCase.execute(useCaseParams.copy(replace = replace))
 
         assertTrue(useCaseResult.isSuccess)
 
-        verify(exactly = 1) { repository.moveFile(any(), any(), replace) }
+        verify(exactly = 1) { repository.moveFile(any(), any(), replace, any()) }
     }
 
 }
