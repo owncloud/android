@@ -34,7 +34,7 @@ interface FileRepository {
     fun createFolder(remotePath: String, parentFolder: OCFile)
 
     // Returns files in conflict
-    fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?> = emptyList()): List<OCFile>
+    fun copyFile(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?> = emptyList(), isUserLogged: Boolean): List<OCFile>
     fun getFileById(fileId: Long): OCFile?
     fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?>
     fun getFileWithSyncInfoByIdAsFlow(fileId: Long): Flow<OCFileWithSyncInfo?>
@@ -51,7 +51,7 @@ interface FileRepository {
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
 
     // Returns files in conflict
-    fun moveFile(listOfFilesToMove: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?> = emptyList()): List<OCFile>
+    fun moveFile(listOfFilesToMove: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?> = emptyList(), isUserLogged: Boolean): List<OCFile>
     fun readFile(remotePath: String, accountName: String, spaceId: String? = null): OCFile
     fun refreshFolder(remotePath: String, accountName: String, spaceId: String? = null): List<OCFile>
     fun deleteFiles(listOfFilesToDelete: List<OCFile>, removeOnlyLocalCopy: Boolean)
