@@ -54,9 +54,9 @@ class CheckPathExistenceRemoteOperation(
 ) : RemoteOperation<Boolean>() {
 
     override fun run(client: OwnCloudClient): RemoteOperationResult<Boolean> {
-        val baseStringUrl = spaceWebDavUrl ?: if (isUserLoggedIn) client.baseFilesWebDavUri.toString()
-            else client.userFilesWebDavUri.toString()
-        val stringUrl = baseStringUrl + WebdavUtils.encodePath(remotePath)
+        val baseStringUrl = spaceWebDavUrl ?: if (isUserLoggedIn) client.baseFilesWebDavUri.toString() + WebdavUtils.encodePath(remotePath)
+        else client.userFilesWebDavUri.toString()
+        val stringUrl = if (isUserLoggedIn) baseStringUrl + WebdavUtils.encodePath(remotePath) else baseStringUrl
 
         return try {
             val propFindMethod = PropfindMethod(URL(stringUrl), 0, allPropSet).apply {
