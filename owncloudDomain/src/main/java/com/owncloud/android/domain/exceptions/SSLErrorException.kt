@@ -21,4 +21,6 @@ package com.owncloud.android.domain.exceptions
 
 import java.lang.Exception
 
-class SSLErrorException(override val message: String? = null) : Exception(message)
+class SSLErrorException(override val message: String? = null, val code: SSLErrorCode = SSLErrorCode.GENERIC) : Exception(message)
+
+enum class SSLErrorCode { GENERIC, NOT_HTTP_ALLOWED }
