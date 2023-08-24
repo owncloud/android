@@ -106,7 +106,7 @@ class RenameRemoteFileOperation(
      * @return 'True' if the target path is already used by an existing file.
      */
     private fun targetPathIsUsed(client: OwnCloudClient): Boolean {
-        val checkPathExistenceRemoteOperation = CheckPathExistenceRemoteOperation(newRemotePath, false)
+        val checkPathExistenceRemoteOperation = CheckPathExistenceRemoteOperation(newRemotePath, true)
         val exists = checkPathExistenceRemoteOperation.execute(client)
         return exists.isSuccess
     }
