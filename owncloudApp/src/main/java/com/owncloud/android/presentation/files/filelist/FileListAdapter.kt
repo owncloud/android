@@ -36,7 +36,6 @@ import androidx.core.view.setMargins
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import coil.load
 import com.owncloud.android.R
 import com.owncloud.android.databinding.GridItemBinding
 import com.owncloud.android.databinding.ItemFileListBinding
@@ -281,8 +280,7 @@ class FileListAdapter(
 
             if (file.isFolder) {
                 // Folder
-                fileIcon.load(R.drawable.ic_menu_archive)
-
+                fileIcon.setImageResource(R.drawable.ic_menu_archive)
             } else {
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
                 fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
