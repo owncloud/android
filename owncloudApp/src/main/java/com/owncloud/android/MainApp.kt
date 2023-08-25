@@ -33,6 +33,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.HandlerThread
 import android.view.WindowManager
 import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
@@ -90,14 +91,16 @@ import timber.log.Timber
  * classes
  */
 class MainApp : Application() {
-
+    private val handlerThreadTag ="OucHandlerThread"
+    lateinit var handlerThread: HandlerThread
+        private set
     override fun onCreate() {
         super.onCreate()
 
         appContext = applicationContext
 
         startLogsIfEnabled()
-
+        handlerThread= HandlerThread(handlerThreadTag).apply { start() }
         DebugInjector.injectDebugTools(appContext)
 
         createNotificationChannels()
