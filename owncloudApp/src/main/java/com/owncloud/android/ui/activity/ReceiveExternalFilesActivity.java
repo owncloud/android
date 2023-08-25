@@ -31,11 +31,10 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -51,6 +50,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -71,7 +71,6 @@ import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.extensions.ThrowableExtKt;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
-import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.presentation.common.UIResult;
 import com.owncloud.android.presentation.files.SortBottomSheetFragment;
 import com.owncloud.android.presentation.files.SortOptionsView;
@@ -86,24 +85,28 @@ import com.owncloud.android.presentation.security.SecurityEnforced;
 import com.owncloud.android.presentation.transfers.TransfersViewModel;
 import com.owncloud.android.ui.ReceiveExternalFilesViewModel;
 import com.owncloud.android.ui.adapter.ReceiveExternalFilesAdapter;
-import com.owncloud.android.ui.asynctasks.CopyAndUploadContentUrisTask;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.fragment.TaskRetainerFragment;
 import com.owncloud.android.ui.helpers.UriUploader;
+import com.owncloud.android.ui.helpers.UriUploaderRe;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.FileStorageUtils;
 import com.owncloud.android.utils.SortFilesUtils;
+import com.owncloud.android.utils.UriUtils;
 import kotlin.Lazy;
 import kotlin.Unit;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Stack;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -118,7 +121,8 @@ import static org.koin.java.KoinJavaComponent.inject;
 public class ReceiveExternalFilesActivity extends FileActivity
         implements OnItemClickListener,
         android.view.View.OnClickListener,
-        CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener,
+
+       // CopyAndUploadContentUrisTask.OnCopyTmpFilesTaskListener,
         SortOptionsView.SortOptionsListener,
         SortBottomSheetFragment.SortDialogListener,
         SortOptionsView.CreateFolderListener,
@@ -141,6 +145,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private View mEmptyListView;
     private ImageView mEmptyListImage;
     private TextView mEmptyListTitle;
+    private Looper handlerThreadLooper;
 
     // this is inited lazily, when an account is selected. If no account is selected but an instance of this would
     // be crated it would result in an null pointer exception.
@@ -186,7 +191,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
         }
 
         super.onCreate(savedInstanceState);
+        MainApp application = (MainApp) this.getApplication();
 
+        handlerThreadLooper=application.getHandlerThread().getLooper();
         if (mAccountSelected) {
             setAccount(savedInstanceState.getParcelable(FileActivity.EXTRA_ACCOUNT));
         }
@@ -307,20 +314,13 @@ public class ReceiveExternalFilesActivity extends FileActivity
                         getString(R.string.uploader_wrn_no_account_text),
                         getString(R.string.app_name)));
                 builder.setCancelable(false);
-                builder.setPositiveButton(R.string.uploader_wrn_no_account_setup_btn_text, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(android.provider.Settings.ACTION_ADD_ACCOUNT);
-                        intent.putExtra("authorities", new String[]{MainApp.Companion.getAuthTokenType()});
-                        startActivityForResult(intent, REQUEST_CODE__SETUP_ACCOUNT);
-                    }
+                builder.setPositiveButton(R.string.uploader_wrn_no_account_setup_btn_text, (dialog, which) -> {
+                    Intent intent = new Intent(android.provider.Settings.ACTION_ADD_ACCOUNT);
+                    intent.putExtra("authorities", new String[]{MainApp.Companion.getAuthTokenType()});
+                    startActivityForResult(intent, REQUEST_CODE__SETUP_ACCOUNT);
                 });
-                builder.setNegativeButton(R.string.uploader_wrn_no_account_quit_btn_text, new OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
+                builder.setNegativeButton(R.string.uploader_wrn_no_account_quit_btn_text,
+                        (dialog, which) -> finish());
                 return builder.create();
             case DIALOG_MULTIPLE_ACCOUNT:
                 Account[] accounts = mAccountManager.getAccountsByType(MainApp.Companion.getAccountType());
@@ -598,25 +598,34 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     public void uploadFiles() {
 
-        UriUploader uploader = new UriUploader(
-                this,
-                mStreamsToUpload,
-                mUploadPath,
-                getAccount(),
-                mFile.getSpaceId(),
-                true, // Show waiting dialog while file is being copied from private storage
-                this  // Copy temp task listener
-        );
+        /* UriUploader uploader = new UriUploader(
+                 this,
+                 mStreamsToUpload,
+                 mUploadPath,
+                 getAccount(),
+                 mFile.getSpaceId(),
+                 true, // Show waiting dialog while file is being copied from private storage
+                 this  // Copy temp task listener
+         );*/
 
-        UriUploader.UriUploaderResultCode resultCode = uploader.uploadUris();
+        UriUploaderRe remake = new UriUploaderRe(mStreamsToUpload, getAccount(),
+                Objects.requireNonNull(mFile.getSpaceId()),
+                mUploadPath, true,
+                handlerThreadLooper);
+
+        // UriUploader.UriUploaderResultCode resultCode = uploader.uploadUris();
+        UriUploader.UriUploaderResultCode resultCode= remake.uploadUris((uri->UriUtils.getDisplayNameForUri(uri,this)),
+                ( ()->{showLoadingDialog(R.string.wait_for_tmp_copy_from_private_storage);
+                return null;}),(this::getInputStreamFromUri));
 
         // Save the path to shared preferences; even if upload is not possible, user chose the folder
         PreferenceManager.setLastUploadPath(mUploadPath, this);
 
         if (resultCode == UriUploader.UriUploaderResultCode.OK) {
+            Timber.d("UriUploader %s","result ok");
             finish();
         } else if (resultCode != UriUploader.UriUploaderResultCode.COPY_THEN_UPLOAD) {
-
+            Timber.d("UriUploader %s","copy then upload not");
             int messageResTitle = R.string.uploader_error_title_file_cannot_be_uploaded;
             int messageResId = R.string.common_error_unknown;
 
@@ -631,9 +640,21 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     messageResId,
                     messageResTitle
             );
+        }else{
+            Toast.makeText(this,"File uploaded successfully!",Toast.LENGTH_LONG).show();
+            dismissLoadingDialog();
+            finish();
         }
     }
 
+    private InputStream getInputStreamFromUri(Uri uri){
+        try {
+           return getContentResolver().openInputStream(uri);
+        }catch (FileNotFoundException ex){
+            Timber.e(ex,"The file with the following uri was not found %s", uri);
+            return null;
+        }
+    }
     /**
      * Loads the target folder initialize shown to the user.
      * <p/>
@@ -647,6 +668,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         String lastPath = PreferenceManager.getLastUploadPath(this);
         // "/" equals root-directory
+
         if (lastPath.equals("/")) {
             mParents.add("");
         } else {
@@ -753,7 +775,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     @Override
     public void onCreateFolderListener() {
-        CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile, this::onFolderNameSet);
+        CreateFolderDialogFragment dialog = CreateFolderDialogFragment.newInstance(mFile,
+                (newFolderName, parentFolder) -> onFolderNameSet(newFolderName, parentFolder));
         dialog.show(getSupportFragmentManager(), CreateFolderDialogFragment.CREATE_FOLDER_FRAGMENT);
     }
 
@@ -805,7 +828,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     /**
      * Process the result of CopyAndUploadContentUrisTask
-     */
+     *
     @Override
     public void onTmpFilesCopied(ResultCode result) {
         try {
@@ -814,7 +837,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             Timber.e(illegalStateException);
         }
         finish();
-    }
+    }*/
 
     /**
      * Show an error dialog, forcing the user to click a single button to exit the activity
