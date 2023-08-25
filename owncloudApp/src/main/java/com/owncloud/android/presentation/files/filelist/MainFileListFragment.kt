@@ -25,6 +25,7 @@ package com.owncloud.android.presentation.files.filelist
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -43,6 +44,7 @@ import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ConfigurationHelper
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -137,6 +139,9 @@ class MainFileListFragment : Fragment(),
     private lateinit var viewType: ViewType
 
     var actionMode: ActionMode? = null
+    private var uploadFromFilesItemView: BottomSheetFragmentItemView ?=null
+    private var uploadFromCameraItemView: BottomSheetFragmentItemView ?=null
+    private var uploadToTextView:TextView ?=null
 
     private var statusBarColorActionMode: Int? = null
     private var statusBarColor: Int? = null
@@ -153,6 +158,8 @@ class MainFileListFragment : Fragment(),
     private var checkedFiles: List<OCFile> = emptyList()
     private var fileSingleFile: OCFile? = null
     private var fileOptionsBottomSheetSingleFileLayout: LinearLayout? = null
+    private var dialog:BottomSheetDialog?=null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -206,6 +213,22 @@ class MainFileListFragment : Fragment(),
     private fun initViews() {
         setHasOptionsMenu(true)
         statusBarColorActionMode = ContextCompat.getColor(requireContext(), R.color.action_mode_status_bar_background)
+        dialog=BottomSheetDialog(requireContext())
+        val uploadBottomSheet = layoutInflater.inflate(R.layout.upload_bottom_sheet_fragment,
+            null)
+        dialog!!.setContentView(uploadBottomSheet)
+
+        uploadFromFilesItemView = uploadBottomSheet.findViewById(R.id.upload_from_files_item_view)
+        uploadFromCameraItemView =uploadBottomSheet.findViewById(R.id.upload_from_camera_item_view)
+        uploadToTextView = uploadBottomSheet.findViewById(R.id.upload_to_text_view)
+
+        val uploadBottomSheetBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(uploadBottomSheet.parent as View)
+        dialog!!.setOnShowListener { uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.measuredHeight) }
+
+        uploadToTextView?.text = String.format(
+            resources.getString(R.string.upload_to),
+            resources.getString(R.string.app_name)
+        )
 
         // Set view and footer correctly
         if (mainFileListViewModel.isGridModeSetAsPreferred()) {
@@ -743,31 +766,24 @@ class MainFileListFragment : Fragment(),
     fun isFabExpanded() = binding.fabMain.isExpanded
 
     private fun openBottomSheetToUploadFiles() {
-        val uploadBottomSheet = layoutInflater.inflate(R.layout.upload_bottom_sheet_fragment, null)
-        val dialog = BottomSheetDialog(requireContext())
-        dialog.setContentView(uploadBottomSheet)
-        val uploadFromFilesItemView: BottomSheetFragmentItemView = uploadBottomSheet.findViewById(R.id.upload_from_files_item_view)
-        val uploadFromCameraItemView: BottomSheetFragmentItemView = uploadBottomSheet.findViewById(R.id.upload_from_camera_item_view)
-        val uploadToTextView = uploadBottomSheet.findViewById<TextView>(R.id.upload_to_text_view)
-        uploadFromFilesItemView.setOnClickListener {
+        dialog?.show()
+
+        uploadFromFilesItemView?.setOnClickListener {
             uploadActions?.uploadFromFileSystem()
-            dialog.hide()
+            dialog?.hide()
         }
-        uploadFromCameraItemView.setOnClickListener {
+
+        uploadFromCameraItemView?.setOnClickListener {
             uploadActions?.uploadFromCamera()
-            dialog.hide()
+            dialog?.hide()
         }
-        uploadToTextView.text = String.format(
-            resources.getString(R.string.upload_to),
-            resources.getString(R.string.app_name)
-        )
-        val uploadBottomSheetBehavior: BottomSheetBehavior<*> = BottomSheetBehavior.from(uploadBottomSheet.parent as View)
-        dialog.setOnShowListener { uploadBottomSheetBehavior.setPeekHeight(uploadBottomSheet.measuredHeight) }
-        dialog.show()
+
     }
 
     private fun openBottomSheetToCreateNewFile(listAppRegistry: List<AppRegistryMimeType>) {
-        val newFileBottomSheet = layoutInflater.inflate(R.layout.newfile_bottom_sheet_fragment, null)
+
+        val newFileBottomSheet = layoutInflater.inflate(R.layout.newfile_bottom_sheet_fragment,
+            binding.coordinatorLayout)
         val dialog = BottomSheetDialog(requireContext())
         dialog.setContentView(newFileBottomSheet)
         val docTypesBottomSheetLayout = newFileBottomSheet.findViewById<LinearLayout>(R.id.doc_types_bottom_sheet_layout)
