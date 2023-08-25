@@ -11,7 +11,7 @@ class FileAlreadyExistsDialog private constructor(
     private val titleText: String?,
     private val descriptionText: String?,
     private val checkboxText: String?,
-    private var dialogClickListener: DialogButtonClickListener? = null
+    private var dialogClickListener: DialogButtonClickListener? = null,
 ) : DialogFragment() {
 
     private lateinit var binding: DialogFileAlreadyExistsBinding
@@ -34,7 +34,11 @@ class FileAlreadyExistsDialog private constructor(
         fun setTitle(titleText: String) = apply { this.titleText = titleText }
         fun setDescription(descriptionText: String) = apply { this.descriptionText = descriptionText }
         fun setCheckboxText(checkboxText: String) = apply { this.checkboxText = checkboxText }
-        fun build() = FileAlreadyExistsDialog(titleText, descriptionText, checkboxText)
+        fun build() = FileAlreadyExistsDialog(
+            titleText = titleText,
+            descriptionText = descriptionText,
+            checkboxText = checkboxText,
+        )
     }
 
     fun setDialogButtonClickListener(listener: DialogButtonClickListener) = apply { dialogClickListener = listener }
@@ -42,7 +46,7 @@ class FileAlreadyExistsDialog private constructor(
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         binding = DialogFileAlreadyExistsBinding.inflate(inflater, container, false)
 
@@ -55,15 +59,17 @@ class FileAlreadyExistsDialog private constructor(
         binding.dialogFileAlreadyExistsTitle.text = titleText
         binding.dialogFileAlreadyExistsInformation.text = descriptionText
         binding.dialogFileAlreadyExistsCheckbox.text = checkboxText
-        binding.dialogFileAlreadyExistsKeepBoth.setOnClickListener { dialogClickListener!!.onKeepBothButtonClick() }
+        binding.dialogFileAlreadyExistsKeepBoth.setOnClickListener { dialogClickListener?.onKeepBothButtonClick() }
         binding.dialogFileAlreadyExistsCheckbox.setOnCheckedChangeListener { _, isChecked ->
             isCheckBoxChecked = isChecked
         }
-        binding.dialogFileAlreadyExistsReplace.setOnClickListener { dialogClickListener!!.onReplaceButtonClick() }
-        binding.dialogFileAlreadyExistsSkip.setOnClickListener { dialogClickListener!!.onSkipButtonClick() }
+        binding.dialogFileAlreadyExistsReplace.setOnClickListener { dialogClickListener?.onReplaceButtonClick() }
+        binding.dialogFileAlreadyExistsSkip.setOnClickListener { dialogClickListener?.onSkipButtonClick() }
 
         if (!checkboxVisible) {
             binding.dialogFileAlreadyExistsCheckbox.visibility = View.GONE
+        } else {
+            binding.dialogFileAlreadyExistsCheckbox.visibility = View.VISIBLE
         }
     }
 

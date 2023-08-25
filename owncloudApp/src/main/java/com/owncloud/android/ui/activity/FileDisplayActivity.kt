@@ -1105,7 +1105,9 @@ class FileDisplayActivity : FileActivity(),
                     customDialog.checkboxVisible = true
                 }
 
-                customDialog.show(fragmentManager!!, "customdialog")
+                fragmentManager?.let {
+                    customDialog.show(it, CUSTOM_DIALOG_TAG)
+                }
 
                 openDialogs.add(customDialog)
 
@@ -1125,7 +1127,7 @@ class FileDisplayActivity : FileActivity(),
                             replace.add(false)
                             pos++
                             if (pos == data.size) {
-                                launchAction(uiResult.data!!, replace)
+                                launchAction(uiResult.data, replace)
                             }
                             customDialog.dismiss()
                         }
@@ -1137,7 +1139,7 @@ class FileDisplayActivity : FileActivity(),
                                 replace.add(null)
                                 pos++
                                 if (pos == data.size) {
-                                    launchAction(uiResult.data!!, replace)
+                                    launchAction(uiResult.data, replace)
                                 }
                             }
                             dismissAllOpenDialogs()
@@ -1145,7 +1147,7 @@ class FileDisplayActivity : FileActivity(),
                             replace.add(null)
                             pos++
                             if (pos == data.size) {
-                                launchAction(uiResult.data!!, replace)
+                                launchAction(uiResult.data, replace)
                             }
                             customDialog.dismiss()
                         }
@@ -1157,7 +1159,7 @@ class FileDisplayActivity : FileActivity(),
                                 replace.add(true)
                                 pos++
                                 if (pos == data.size) {
-                                    launchAction(uiResult.data!!, replace)
+                                    launchAction(uiResult.data, replace)
                                 }
                             }
                             dismissAllOpenDialogs()
@@ -1165,7 +1167,7 @@ class FileDisplayActivity : FileActivity(),
                             replace.add(true)
                             pos++
                             if (pos == data.size) {
-                                launchAction(uiResult.data!!, replace)
+                                launchAction(uiResult.data, replace)
                             }
                             customDialog.dismiss()
                         }
@@ -1769,6 +1771,8 @@ class FileDisplayActivity : FileActivity(),
         private const val KEY_WAITING_TO_SEND = "WAITING_TO_SEND"
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
+
+        private const val CUSTOM_DIALOG_TAG = "CUSTOM_DIALOG"
 
         private const val PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED = "PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED"
         const val ALL_FILES_SAF_REGEX = "*/*"
