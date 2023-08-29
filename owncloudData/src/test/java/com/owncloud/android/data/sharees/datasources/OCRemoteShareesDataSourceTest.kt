@@ -33,6 +33,7 @@ import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -74,6 +75,10 @@ class OCRemoteShareesDataSourceTest {
     fun `OCSharees List - ok - contains sharees entered as remote sharees`() {
         assertNotNull(sharees)
         assertEquals(5, sharees.size)
+
+        verify(exactly = 1) {
+            ocShareeService.getSharees("user", 1, 30,)
+        }
     }
 
     @Test
@@ -84,6 +89,10 @@ class OCRemoteShareesDataSourceTest {
         assertEquals(sharee.shareWith, "user")
         assertEquals(sharee.additionalInfo, "user@exact.com")
         assertTrue(sharee.isExactMatch)
+
+        verify(exactly = 1) {
+            ocShareeService.getSharees("user", 1, 30,)
+        }
     }
 
     @Test
@@ -94,6 +103,10 @@ class OCRemoteShareesDataSourceTest {
         assertEquals("user1", sharee.shareWith)
         assertEquals("user1@mail.com", sharee.additionalInfo)
         assertFalse(sharee.isExactMatch)
+
+        verify(exactly = 1) {
+            ocShareeService.getSharees("user", 1, 30,)
+        }
     }
 
     @Test
@@ -104,6 +117,10 @@ class OCRemoteShareesDataSourceTest {
         assertEquals("user2", sharee.shareWith)
         assertEquals("", sharee.additionalInfo)
         assertFalse(sharee.isExactMatch)
+
+        verify(exactly = 1) {
+            ocShareeService.getSharees("user", 1, 30,)
+        }
     }
 
     @Test
@@ -114,6 +131,10 @@ class OCRemoteShareesDataSourceTest {
         assertEquals("remoteuser1", sharee.shareWith)
         assertEquals("user1@remote.com", sharee.additionalInfo)
         assertFalse(sharee.isExactMatch)
+
+        verify(exactly = 1) {
+            ocShareeService.getSharees("user", 1, 30,)
+        }
     }
 
     @Test
@@ -124,6 +145,10 @@ class OCRemoteShareesDataSourceTest {
         assertEquals("group1", sharee.shareWith)
         assertEquals("group@group.com", sharee.additionalInfo)
         assertFalse(sharee.isExactMatch)
+
+        verify(exactly = 1) {
+            ocShareeService.getSharees("user", 1, 30,)
+        }
     }
 
     @Test
@@ -146,6 +171,10 @@ class OCRemoteShareesDataSourceTest {
         )
 
         assertTrue(emptySharees.isEmpty())
+
+        verify(exactly = 2) {
+            ocShareeService.getSharees("user", 1, 30,)
+        }
     }
 
     companion object {
