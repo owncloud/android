@@ -41,6 +41,7 @@ import com.owncloud.android.testutil.oauth.OC_TOKEN_RESPONSE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -77,6 +78,11 @@ class RemoteOAuthDataSourceTest {
 
         assertNotNull(oidcDiscovery)
         assertEquals(OC_OIDC_SERVER_CONFIGURATION, oidcDiscovery)
+
+        verify(exactly = 1) {
+            clientManager.getClientForAnonymousCredentials(OC_SECURE_BASE_URL, false)
+            oidcService.getOIDCServerDiscovery(ocClientMocked)
+        }
     }
 
     @Test(expected = Exception::class)
@@ -101,6 +107,11 @@ class RemoteOAuthDataSourceTest {
 
         assertNotNull(tokenResponse)
         assertEquals(OC_TOKEN_RESPONSE, tokenResponse)
+
+        verify(exactly = 1) {
+            clientManager.getClientForAnonymousCredentials(OC_SECURE_BASE_URL, false)
+            oidcService.performTokenRequest(ocClientMocked, any())
+        }
     }
 
     @Test(expected = Exception::class)
@@ -125,6 +136,11 @@ class RemoteOAuthDataSourceTest {
 
         assertNotNull(clientRegistrationInfo)
         assertEquals(OC_CLIENT_REGISTRATION, clientRegistrationInfo)
+
+        verify(exactly = 1) {
+            clientManager.getClientForAnonymousCredentials(any(), false)
+            oidcService.registerClientWithRegistrationEndpoint(ocClientMocked, any())
+        }
     }
 
     @Test(expected = Exception::class)
