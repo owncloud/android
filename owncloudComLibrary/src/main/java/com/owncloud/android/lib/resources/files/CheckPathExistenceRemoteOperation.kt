@@ -80,6 +80,7 @@ class CheckPathExistenceRemoteOperation(
                 e,
                 "Existence check for $stringUrl : ${result.logMessage}"
             )
+            result.data = false
             result
         }
     }
