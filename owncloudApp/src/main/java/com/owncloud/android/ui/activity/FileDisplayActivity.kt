@@ -1052,7 +1052,11 @@ class FileDisplayActivity : FileActivity(),
 
                 uiResult.error?.let {
                     showMessageInSnackbar(
-                        message = it.parseError(getString(R.string.copy_file_error), resources, true)
+                        message = it.parseError(
+                            genericErrorMessage = getString(R.string.copy_file_error),
+                            resources = resources,
+                            showJustReason = true,
+                            )
                     )
                 }
             }
