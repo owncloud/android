@@ -33,6 +33,7 @@ import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertEquals
@@ -58,7 +59,7 @@ class OCRemoteShareDataSourceTest {
      ******************************************************************************************************/
 
     @Test
-    fun insertPrivateShare() {
+    fun `insert private share returns OCShare`() {
         val createRemoteShareOperationResult = createRemoteOperationResultMock(
             ShareResponse(
                 listOf(
@@ -96,10 +97,14 @@ class OCRemoteShareDataSourceTest {
         assertEquals("user", privateShareAdded.shareWith)
         assertEquals("User", privateShareAdded.sharedWithDisplayName)
         assertEquals(1, privateShareAdded.permissions)
+
+        verify(exactly = 1) {
+            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
+        }
     }
 
     @Test
-    fun updatePrivateShare() {
+    fun `updateShare update a private share returns OCShare`() {
         val updateRemoteShareOperationResult = createRemoteOperationResultMock(
             ShareResponse(
                 listOf(
@@ -136,6 +141,10 @@ class OCRemoteShareDataSourceTest {
         assertEquals("User", privateShareUpdated.sharedWithDisplayName)
         assertEquals(17, privateShareUpdated.permissions)
         assertEquals(false, privateShareUpdated.isFolder)
+
+        verify(exactly = 1) {
+            ocShareService.updateShare(any(), any(), any(), any(), any())
+        }
     }
 
     /******************************************************************************************************
@@ -143,7 +152,7 @@ class OCRemoteShareDataSourceTest {
      ******************************************************************************************************/
 
     @Test
-    fun insertPublicShare() {
+    fun `insert public share returns OCShare`() {
         val createRemoteShareOperationResult = createRemoteOperationResultMock(
             ShareResponse(
                 listOf(
@@ -181,10 +190,14 @@ class OCRemoteShareDataSourceTest {
         assertEquals("Photos/img1.png", publicShareAdded.path)
         assertEquals(false, publicShareAdded.isFolder)
         assertEquals("http://server:port/s/112ejbhdasyd1", publicShareAdded.shareLink)
+
+        verify(exactly = 1) {
+            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
+        }
     }
 
     @Test
-    fun updatePublicShare() {
+    fun `updateShare update a public share returns OCShare`() {
         val updateRemoteShareOperationResult = createRemoteOperationResultMock(
             ShareResponse(
                 listOf(
@@ -222,6 +235,10 @@ class OCRemoteShareDataSourceTest {
         assertEquals(2000, publicShareUpdated.expirationDate)
         assertEquals(1, publicShareUpdated.permissions)
         assertEquals("http://server:port/s/1275farv", publicShareUpdated.shareLink)
+
+        verify(exactly = 1) {
+            ocShareService.updateShare(any(), any(), any(), any(), any())
+        }
     }
 
     /******************************************************************************************************
@@ -229,7 +246,7 @@ class OCRemoteShareDataSourceTest {
      ******************************************************************************************************/
 
     @Test
-    fun readRemoteShares() {
+    fun `getShares returns a list of OCShare`() {
         val remoteShares = listOf(
             remoteShareMapper.toRemote(
                 OC_SHARE.copy(
@@ -311,15 +328,23 @@ class OCRemoteShareDataSourceTest {
         assertEquals(false, groupShare.isFolder)
         assertEquals("family", groupShare.shareWith)
         assertEquals("My family", groupShare.sharedWithDisplayName)
+
+        verify(exactly = 1) {
+            ocShareService.getShares(
+                remoteFilePath = "/Documents/doc",
+                reshares = true,
+                subfiles = true,
+            )
+        }
     }
 
     @Test(expected = ShareNotFoundException::class)
-    fun insertShareFileNotFound() {
+    fun `insert share file not found`() {
         createShareOperationWithError(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND)
     }
 
     @Test(expected = ShareForbiddenException::class)
-    fun insertShareForbidden() {
+    fun `insert share forbidden`() {
         createShareOperationWithError(RemoteOperationResult.ResultCode.SHARE_FORBIDDEN)
     }
 
@@ -345,12 +370,12 @@ class OCRemoteShareDataSourceTest {
     }
 
     @Test(expected = ShareNotFoundException::class)
-    fun updateShareFileNotFound() {
+    fun `update share file not found`() {
         updateShareOperationWithError(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND)
     }
 
     @Test(expected = ShareForbiddenException::class)
-    fun updateShareForbidden() {
+    fun `update share forbidden`() {
         updateShareOperationWithError(RemoteOperationResult.ResultCode.SHARE_FORBIDDEN)
     }
 
@@ -374,7 +399,7 @@ class OCRemoteShareDataSourceTest {
     }
 
     @Test
-    fun deleteShare() {
+    fun `deleteShare delete a share returns unit`() {
         val removeRemoteShareOperationResult = createRemoteOperationResultMock(
             Unit,
             isSuccess = true
@@ -386,16 +411,18 @@ class OCRemoteShareDataSourceTest {
 
         ocRemoteShareDataSource.deleteShare(remoteId = "3", accountName = "user@server")
 
-        // We check there's no exception here
+        verify(exactly = 1) {
+            ocShareService.deleteShare(any())
+        }
     }
 
     @Test(expected = ShareNotFoundException::class)
-    fun removeShareFileNotFound() {
+    fun `remove share file not found`() {
         deleteShareOperationWithError(RemoteOperationResult.ResultCode.SHARE_NOT_FOUND)
     }
 
     @Test(expected = ShareForbiddenException::class)
-    fun removeShareForbidden() {
+    fun `remove share forbidden`() {
         deleteShareOperationWithError(RemoteOperationResult.ResultCode.SHARE_FORBIDDEN)
     }
 
