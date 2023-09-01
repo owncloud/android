@@ -18,6 +18,7 @@
  */
 package com.owncloud.android.data.spaces.datasources.implementation
 
+import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
@@ -43,7 +44,11 @@ class OCRemoteSpacesDataSource(
         return spacesResponse.map { it.toModel(accountName) }
     }
 
-    private fun SpaceResponse.toModel(accountName: String): OCSpace =
+    companion object {
+
+
+    @VisibleForTesting
+    fun SpaceResponse.toModel(accountName: String): OCSpace =
         OCSpace(
             accountName = accountName,
             driveAlias = driveAlias,
@@ -87,4 +92,5 @@ class OCRemoteSpacesDataSource(
                 )
             }
         )
+    }
 }
