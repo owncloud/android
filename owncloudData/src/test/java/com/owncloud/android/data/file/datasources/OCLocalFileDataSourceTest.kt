@@ -39,8 +39,9 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -48,6 +49,7 @@ import org.junit.Before
 import org.junit.Test
 import java.util.UUID
 
+@ExperimentalCoroutinesApi
 class OCLocalFileDataSourceTest {
     private lateinit var localDataSource: OCLocalFileDataSource
     private lateinit var dao: FileDao
@@ -98,7 +100,7 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getFileByIdAsFlow returns a flow of OCFile`() = runBlocking {
+    fun `getFileByIdAsFlow returns a flow of OCFile`() = runTest {
         every { dao.getFileByIdAsFlow(any()) } returns flowOf(DUMMY_FILE_ENTITY)
 
         val result = localDataSource.getFileByIdAsFlow(OC_FILE.id!!)
@@ -111,7 +113,7 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getFileByIdAsFlow returns null`() = runBlocking {
+    fun `getFileByIdAsFlow returns null`() = runTest {
         every { dao.getFileByIdAsFlow(any()) } returns flowOf(null)
 
         val result = localDataSource.getFileByIdAsFlow(DUMMY_FILE_ENTITY.id)
@@ -131,7 +133,7 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getFileWithSyncInfoByIdAsFlow returns a flow of OCFileWithSyncInfo object`() = runBlocking {
+    fun `getFileWithSyncInfoByIdAsFlow returns a flow of OCFileWithSyncInfo object`() = runTest {
 
         every { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(ocFileAndFileSync)
 
@@ -145,7 +147,7 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getFileWithSyncInfoByIdAsFlow returns null when DAO is null`() = runBlocking {
+    fun `getFileWithSyncInfoByIdAsFlow returns null when DAO is null`() = runTest {
 
         every { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(null)
 
@@ -159,7 +161,7 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test(expected = Exception::class)
-    fun `getFileWithSyncInfoByIdAsFlow returns an exception when DAO receive a Exception`() = runBlocking {
+    fun `getFileWithSyncInfoByIdAsFlow returns an exception when DAO receive a Exception`() = runTest {
 
         every { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } throws Exception()
 
@@ -343,7 +345,7 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getFolderContentWithSyncInfoAsFlow returns a flow of list OcFileAndFileSync`() = runBlocking {
+    fun `getFolderContentWithSyncInfoAsFlow returns a flow of list OcFileAndFileSync`() = runTest {
 
         every { dao.getFolderContentWithSyncInfoAsFlow(any()) } returns flowOf(listOf(ocFileAndFileSync))
 
@@ -388,7 +390,7 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getSharedByLinkWithSyncInfoForAccountAsFlow returns a flow of list of OCFileWithSyncInfo`() = runBlocking {
+    fun `getSharedByLinkWithSyncInfoForAccountAsFlow returns a flow of list of OCFileWithSyncInfo`() = runTest {
         every { dao.getFilesWithSyncInfoSharedByLinkAsFlow(any()) } returns flowOf(listOf(ocFileAndFileSync))
 
         val result = localDataSource.getSharedByLinkWithSyncInfoForAccountAsFlow(DUMMY_FILE_ENTITY.owner)
@@ -412,7 +414,7 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow returns a flow of list of OCFileWithSyncInfo`() = runBlocking {
+    fun `getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow returns a flow of list of OCFileWithSyncInfo`() = runTest {
         every { dao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(any()) } returns flowOf(listOf(ocFileAndFileSync))
 
         val result = localDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(DUMMY_FILE_ENTITY.owner)
