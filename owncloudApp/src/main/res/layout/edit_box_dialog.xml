@@ -17,8 +17,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout
+<com.google.android.material.textfield.TextInputLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/edit_box_input_text_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="clip_horizontal"
@@ -33,4 +34,4 @@
         android:text=""
         android:inputType="textNoSuggestions|textCapSentences" />
 
-</LinearLayout>
+</com.google.android.material.textfield.TextInputLayout>

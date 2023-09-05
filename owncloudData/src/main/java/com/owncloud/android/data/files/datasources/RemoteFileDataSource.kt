@@ -26,7 +26,7 @@ import com.owncloud.android.domain.files.model.OCFile
 interface RemoteFileDataSource {
     fun checkPathExistence(
         path: String,
-        checkUserCredentials: Boolean,
+        isUserLogged: Boolean,
         accountName: String,
         spaceWebDavUrl: String?,
     ): Boolean
@@ -37,7 +37,8 @@ interface RemoteFileDataSource {
         accountName: String,
         sourceSpaceWebDavUrl: String?,
         targetSpaceWebDavUrl: String?,
-    ): String
+        replace: Boolean,
+    ): String?
 
     fun createFolder(
         remotePath: String,
@@ -51,6 +52,7 @@ interface RemoteFileDataSource {
         remotePath: String,
         accountName: String,
         spaceWebDavUrl: String?,
+        isUserLogged: Boolean,
     ): String
 
     fun moveFile(
@@ -58,6 +60,7 @@ interface RemoteFileDataSource {
         targetRemotePath: String,
         accountName: String,
         spaceWebDavUrl: String?,
+        replace: Boolean,
     )
 
     fun readFile(

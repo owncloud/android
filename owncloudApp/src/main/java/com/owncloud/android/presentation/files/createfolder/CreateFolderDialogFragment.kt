@@ -27,7 +27,9 @@ import android.view.WindowManager
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.textfield.TextInputLayout
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.utils.PreferenceUtils
@@ -41,8 +43,14 @@ import com.owncloud.android.utils.PreferenceUtils
 class CreateFolderDialogFragment : DialogFragment() {
     private lateinit var parentFolder: OCFile
     private lateinit var createFolderListener: CreateFolderListener
+    private var isButtonEnabled: Boolean = false
+    private val MAX_FILENAME_LENGTH = 223
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
+        if (savedInstanceState != null) {
+            isButtonEnabled = savedInstanceState.getBoolean(IS_BUTTON_ENABLED_FLAG_KEY)
+        }
 
         // Inflate the layout for the dialog
         val inflater = requireActivity().layoutInflater
@@ -57,6 +65,9 @@ class CreateFolderDialogFragment : DialogFragment() {
 
         // Request focus
         val inputText: EditText = view.findViewById(R.id.user_input)
+        val inputLayout: TextInputLayout = view.findViewById(R.id.edit_box_input_text_layout)
+        var error: String? = null
+
         inputText.requestFocus()
 
         // Build the dialog
@@ -71,9 +82,52 @@ class CreateFolderDialogFragment : DialogFragment() {
             }
             .setNegativeButton(android.R.string.cancel, null)
             .setTitle(R.string.uploader_info_dirname)
-        val alertDialog: Dialog = builder.create()
+        val alertDialog = builder.create()
+
+        alertDialog.setOnShowListener {
+            val okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            okButton.isEnabled = isButtonEnabled
+
+            okButton.setOnClickListener {
+                var fileName: String = inputText.text.toString()
+                createFolderListener.onFolderNameSet(fileName, parentFolder)
+                dialog?.dismiss()
+            }
+        }
+
+        inputText.doOnTextChanged { text, _, _, _ ->
+            val okButton = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+
+            if (text.isNullOrBlank()) {
+                okButton.isEnabled = false
+                error = getString(R.string.uploader_upload_text_dialog_filename_error_empty)
+            } else if (text.length > MAX_FILENAME_LENGTH) {
+                error = String.format(
+                    getString(R.string.uploader_upload_text_dialog_filename_error_length_max),
+                    MAX_FILENAME_LENGTH
+                )
+            } else if (forbiddenChars.any { text.contains(it) }) {
+                error = getString(R.string.filename_forbidden_characters)
+            } else {
+                okButton.isEnabled = true
+                error = null
+                inputLayout.error = error
+            }
+
+            if (error != null) {
+                okButton.isEnabled = false
+                inputLayout.error = error
+            }
+        }
+
+
         alertDialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
         return alertDialog
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(IS_BUTTON_ENABLED_FLAG_KEY, isButtonEnabled)
     }
 
     interface CreateFolderListener {
@@ -82,6 +136,8 @@ class CreateFolderDialogFragment : DialogFragment() {
 
     companion object {
         const val CREATE_FOLDER_FRAGMENT = "CREATE_FOLDER_FRAGMENT"
+        private const val IS_BUTTON_ENABLED_FLAG_KEY = "IS_BUTTON_ENABLED_FLAG_KEY"
+        private val forbiddenChars = listOf('/', '\\')
 
         /**
          * Public factory method to create new CreateFolderDialogFragment instances.

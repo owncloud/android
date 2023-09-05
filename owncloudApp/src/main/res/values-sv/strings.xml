@@ -143,6 +143,7 @@
   <string name="filedetails_size">Storlek:</string>
   <string name="filedetails_type">Typ:</string>
   <string name="filedetails_created">Skapad:</string>
+  <string name="filedetails_last_sync">Senaste synk:</string>
   <string name="filedetails_modified">Ändrad:</string>
   <string name="filedetails_download">Ladda ner</string>
   <string name="filedetails_file_image_content_description">Fil bild</string>
@@ -179,7 +180,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Litar inte på servercertifikat</string>
   <string name="uploader_upload_text_dialog_title">Välj ett namn för den nya filen</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Filnamnet får inte vara tomt</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Filnamnet får inte ha fler än %d tecken</string>
   <string name="uploader_upload_text_filename_hint">Filnamn</string>
   <string name="uploader_upload_picture_upload_files">%d nya bilder kommer att laddas upp</string>
   <string name="uploader_upload_video_upload_files">%d nya videor kommer att laddas upp</string>
@@ -310,7 +310,6 @@
   <string name="sync_file_fail_msg">Fjärrfilen kunde inte kontrolleras</string>
   <string name="sync_file_nothing_to_do_msg">Filinnehåll redan synkroniserat</string>
   <string name="create_dir_fail_msg">Mapp kunde inte skapas</string>
-  <string name="filename_forbidden_characters">Förbjudna tecken är: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Filnamnet innehåller minst ett ogiltigt tecken</string>
   <string name="filename_empty">Filnamnet får inte lämnas blankt</string>
   <string name="wait_a_moment">Var god vänta</string>
@@ -557,4 +556,7 @@
   <!--Release Notes-->
   <string name="release_notes_proceed">Fortsätt</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Visa inte igen</string>
+  <string name="tab_label_ascii">Text</string>
 </resources>

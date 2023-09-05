@@ -1,0 +1,7 @@
+Bugfix: Bad error message when copying/moving with server down
+
+Right now, when we are trying to copy a file to another folder and the server is downwe receive a correct message.
+Before the issue the message shown code from the application.
+
+https://github.com/owncloud/android/issues/4044
+https://github.com/owncloud/android/pull/4127

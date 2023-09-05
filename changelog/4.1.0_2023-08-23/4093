@@ -1,0 +1,8 @@
+Bugfix: Menu option unset av. offline shown when shouldn't
+
+Unset available offline menu option is not shown in files inside an available
+offline folder anymore, because content inside an available offline folder
+cannot be changed its status, only if the folder changes it.
+
+https://github.com/owncloud/android/issues/4077
+https://github.com/owncloud/android/pull/4093

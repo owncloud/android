@@ -20,7 +20,7 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.presentation.settings.logging.SettingsLogsViewModel
 import com.owncloud.android.presentation.settings.logging.SettingsLogsFragment
 import com.owncloud.android.presentation.viewmodels.ViewModelTest

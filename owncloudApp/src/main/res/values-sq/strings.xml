@@ -150,6 +150,7 @@
   <string name="file_list_seconds_ago">sekonda më parë</string>
   <string name="file_list_empty_title_all_files">S’ka kartela këtu</string>
   <string name="spaces_list_empty_title">Pa hapësira</string>
+  <string name="space_label">Hapësirë:</string>
   <string name="file_list_empty_title_available_offline">S’ka kartela “offline” të passhme</string>
   <string name="file_list_empty_title_shared_by_links">Pa lidhje ndarjesh</string>
   <string name="file_list_empty_subtitle_all_files">Ngarkoni ca lëndë ose bëni njëkohësim me pajisjet tuaja!</string>
@@ -177,6 +178,8 @@
   <string name="filedetails_size">Madhësi:</string>
   <string name="filedetails_type">Lloj:</string>
   <string name="filedetails_created">Krijuar më:</string>
+  <string name="filedetails_last_sync">Njëkohësimi i fundit:</string>
+  <string name="filedetails_path">Shteg:</string>
   <string name="filedetails_modified">Ndryshuar më:</string>
   <string name="filedetails_download">Shkarkoje</string>
   <string name="filedetails_file_image_content_description">Pamje Kartele</string>
@@ -214,7 +217,7 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Dëshmia e shërbyesit s\’është e besuar</string>
   <string name="uploader_upload_text_dialog_title">Jepni një emër për kartelën e re</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Emri i kartelës s\’duhet të jetë i zbrazët</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Emri i kartelës s\’duhet të jetë më shumë se %d shenja</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">Emri i kartelës s’duhet të jetë më i gjatë se %d shenja</string>
   <string name="uploader_upload_text_filename_hint">Emër kartele</string>
   <string name="uploader_upload_camera_upload_files">Po ngarkohen kartela ngarkimi nga kamera</string>
   <string name="uploader_upload_picture_upload_files">Do të ngarkohen %d foto të reja</string>
@@ -366,7 +369,10 @@
   <string name="available_offline_inherited_msg">Një dosje që përmban këtë kartelë është gati “offline”</string>
   <string name="rename_local_fail_msg">Kopja vendore s\’u riemërtua dot; provoni një emër tjetër</string>
   <string name="rename_server_fail_msg">Riemërtimi s\’u plotësua dot</string>
-  <string name="file_already_exists">ka tashmë një kartelë të tillë</string>
+  <string name="file_already_exists">Ka tashmë një kartelë të tillë</string>
+  <string name="folder_already_exists">Ka tashmë një dosje të tillë</string>
+  <string name="file_already_exists_description">Ka tashmë një kartelë me emrin %1$s.</string>
+  <string name="folder_already_exists_description">Ka tashmë një dosje me emrin %1$s.</string>
   <string name="sync_file_fail_msg">S\’u kap dot kartela e largët</string>
   <string name="sync_file_nothing_to_do_msg">Lëndë kartele tashmë e njëkohësuar</string>
   <string name="new_remote_version_found_msg">U gjet një version i ri në shërbyes. Po shkarkohet…</string>
@@ -374,7 +380,7 @@
   <string name="upload_enqueued_msg">Ngarkimi u vu në radhë</string>
   <string name="create_dir_fail_msg">S\’u krijua dot dosja</string>
   <string name="create_file_fail_msg">Kartela s’u krijua dot</string>
-  <string name="filename_forbidden_characters">Shenja të ndaluara: / \\ &lt; &gt; : \" | ? *</string>
+  <string name="filename_forbidden_characters">Shenja të ndaluara: / \\</string>
   <string name="filename_forbidden_characters_from_server">Emri i kartelës përmban të paktën një shenjë të pavlefshme</string>
   <string name="filename_empty">Emri i kartelës s\’mund të jetë i zbrazët</string>
   <string name="filename_too_long">Emri i kartelës s’mund të jetë aq i gjatë</string>
@@ -386,6 +392,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Po kopjohet kartelë nga depo private</string>
   <string name="oauth_check_onoff">Hyrje me oAuth2</string>
   <string name="oauth_login_connection">Po lidhet te shërbyesi OAuth2…</string>
+  <string name="ssl_connection_not_secure">Lidhja s’është e sigurt, trafiku http nuk lejohet.</string>
   <string name="ssl_validator_header">Identiteti i sajtit s\’u verifikua dot</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Dëshmia e shërbyesit s\’është e besuar</string>
   <string name="ssl_validator_reason_cert_expired">- Dëshmia e shërbyesit skadoi</string>
@@ -431,6 +438,7 @@
   <string name="conflict_use_local_version">versionin vendor</string>
   <string name="conflict_use_server_version">versionin e shërbyesit</string>
   <string name="error_conflict">Ndodhi një gabim te dosja vendmbërritje</string>
+  <string name="conflict_replace">Zëvendësoje</string>
   <string name="preview_image_description">Paraparje figure</string>
   <string name="preview_image_error_unknown_format">Kjo figurë nuk mund të shfaqet</string>
   <string name="error__upload__local_file_not_copied">%1$s s\’u kopjua dot te dosja vendore %2$s</string>
@@ -656,7 +664,7 @@
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
   <string name="release_notes_4_0_title_1">Mbulim për Hapësira</string>
-  <string name="release_notes_4_0_subtitle_1">Prezantim i mbulimi për veçorinë hapësira (oCIS). E përdorshme vetëm për llogari të reja</string>
+  <string name="release_notes_4_0_subtitle_1">Prezantim mbulimi për veçorinë hapësira (oCIS). <b>E përdorshme vetëm për llogari me hyrje të re</b></string>
   <string name="release_notes_4_0_title_2">Shtyllë lëvizjesh në fund</string>
   <string name="release_notes_4_0_subtitle_2">U rirenditën disa skeda</string>
   <string name="release_notes_4_0_title_3">Fund i mbulimit për Lollipop</string>
@@ -677,10 +685,32 @@
   <string name="release_notes_4_0_subtitle_10">Veçoria “Ikona teme” e Android 13-s do t’ju lejojë të caktoni ikona aplikacioni njëngjyrëshe</string>
   <string name="release_notes_4_0_title_11">Krijoni dokumente të reja përmes web-it (oCIS)</string>
   <string name="release_notes_4_0_subtitle_11">Nëse shërbyesi oCIS mbulon shërbime aplikacionesh, dokumentet e reja do të krijohen përmes shfletuesit dhe njëkohësohen me oC</string>
+  <string name="release_notes_4_0_title_12">Rregullime të reja me aplikacionin sugjeruan shfletim kartelash</string>
+  <string name="release_notes_4_0_subtitle_12">Te ndarja “Më tepër” u shtua një rregullim i ri, me një aplikacion të sugjeruar për hyrje në kartela përmes furnizuesi dokumentesh</string>
+  <string name="release_notes_4_1_title_1">U shtua buton me 3 pika te krejt objektet e listës</string>
+  <string name="release_notes_4_1_subtitle_1">U shtua buton te krejt elementët e listës, për të shfaqur një menu me krejt mundësitë për elementin</string>
+  <string name="release_notes_4_1_title_2">Përmirësim parjeje hollësish</string>
+  <string name="release_notes_4_1_subtitle_2">Rihartim i parjes së hollësive</string>
+  <string name="release_notes_4_1_title_3">Mbulim për ndryshim gjuhe të re</string>
+  <string name="release_notes_4_1_subtitle_3">U shtua mbulim për ndryshim gjuhe të re në Android 13+</string>
+  <string name="release_notes_4_1_title_4">U ndreq e metë e lidhur me ngarkim figurash hapësire</string>
+  <string name="release_notes_4_1_subtitle_4">Ngarkim i figurave të hapësirës herën e parë që e shfaqim dhe përmirësim i ngarkimit të figurave të elementëve</string>
+  <string name="release_notes_4_1_title_5">Hapje kartelash Markdown nën mënyrën ASCII</string>
+  <string name="release_notes_4_1_subtitle_5">U shtua një mënyrë e re për hapje kartelash Markdown për të shfaqur kodin ASCII</string>
+  <string name="release_notes_4_1_title_6">Shfaqje dritare flluskë në rast përplasjeje veprimesh kopjimi/lëvizjeje</string>
+  <string name="release_notes_4_1_subtitle_6">Shfaqje e një dritareje flluskë me 3 mundësi, kur kihet përplasje emri gjatë veprimi kopjimi, ose lëvizjeje</string>
+  <string name="release_notes_4_1_title_7">Ndreqje të metash të vockla dhe përmirësime</string>
+  <string name="release_notes_4_1_subtitle_7">Janë ndrequr disa të meta të cokla dhe u sollën për herë të parë përmirësime të vockla teknike për të përmirësuar punën te aplikacioni</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
   <string name="open_in_web_error_generic">S’u hap dot në web</string>
   <string name="open_in_web_error_not_supported">s’ka aplikacione që e mbulojnë këtë lloj kartele</string>
   <string name="open_in_web_error_too_early">Kartela e kërkuar s’është ende e passhme, ju lutemi, riprovoni më vonë</string>
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_title">Sinjalizim për llogari oCIS</string>
+  <string name="ocis_accounts_warning_message">Ju lutemi, që të merret veçoria e hapësirave, hiqeni llogarinë dhe ribëni hyrjen</string>
+  <string name="ocis_accounts_warning_checkbox_message">Mos e shfaq më</string>
+  <string name="ocis_accounts_warning_button">E kuptova</string>
+  <string name="tab_label_ascii">Tekst</string>
 </resources>

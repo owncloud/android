@@ -1,0 +1,6 @@
+Enhancement: Support "per app" language change on Android 13+
+
+The locales_config.xml file has been created for the application to detect the language that the user wishes to choose.
+
+https://github.com/owncloud/android/issues/4082
+https://github.com/owncloud/android/pull/4099

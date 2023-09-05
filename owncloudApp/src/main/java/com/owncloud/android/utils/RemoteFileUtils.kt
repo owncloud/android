@@ -37,9 +37,15 @@ class RemoteFileUtils {
         fun getAvailableRemotePath(
             ownCloudClient: OwnCloudClient,
             remotePath: String,
-            spaceWebDavUrl: String? = null
+            spaceWebDavUrl: String? = null,
+            isUserLogged: Boolean,
         ): String {
-            var checkExistsFile = existsFile(ownCloudClient, remotePath, spaceWebDavUrl)
+            var checkExistsFile = existsFile(
+                ownCloudClient = ownCloudClient,
+                remotePath = remotePath,
+                spaceWebDavUrl = spaceWebDavUrl,
+                isUserLogged = isUserLogged,
+            )
             if (!checkExistsFile) {
                 return remotePath
             }
@@ -52,13 +58,23 @@ class RemoteFileUtils {
                     substring(0, pos)
                 }
             }
-            var count = 2
+            var count = 1
             do {
                 suffix = " ($count)"
                 checkExistsFile = if (pos >= 0) {
-                    existsFile(ownCloudClient, "${remotePath.substringBeforeLast('.', "")}$suffix.$extension", spaceWebDavUrl)
+                    existsFile(
+                        ownCloudClient = ownCloudClient,
+                        remotePath = "${remotePath.substringBeforeLast('.', "")}$suffix.$extension",
+                        spaceWebDavUrl = spaceWebDavUrl,
+                        isUserLogged = isUserLogged,
+                    )
                 } else {
-                    existsFile(ownCloudClient, remotePath + suffix, spaceWebDavUrl)
+                    existsFile(
+                        ownCloudClient = ownCloudClient,
+                        remotePath = remotePath + suffix,
+                        spaceWebDavUrl = spaceWebDavUrl,
+                        isUserLogged = isUserLogged,
+                    )
                 }
                 count++
             } while (checkExistsFile)
@@ -73,11 +89,12 @@ class RemoteFileUtils {
             ownCloudClient: OwnCloudClient,
             remotePath: String,
             spaceWebDavUrl: String?,
+            isUserLogged: Boolean,
         ): Boolean {
             val existsOperation =
                 CheckPathExistenceRemoteOperation(
                     remotePath = remotePath,
-                    isUserLoggedIn = false,
+                    isUserLoggedIn = isUserLogged,
                     spaceWebDavUrl = spaceWebDavUrl,
                 )
             return existsOperation.execute(ownCloudClient).isSuccess

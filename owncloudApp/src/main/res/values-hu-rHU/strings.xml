@@ -10,6 +10,7 @@
   <string name="actionbar_upload_from_apps">Más alkalmazásokból származó tartalom</string>
   <string name="actionbar_upload_files">Fájlok</string>
   <string name="actionbar_open_with">Megnyitás a következővel</string>
+  <string name="actionbar_open_with_read_only">Megnyitás (csak olvasható)</string>
   <string name="actionbar_mkdir">Új mappa</string>
   <string name="actionbar_settings">Beállítások</string>
   <string name="actionbar_see_details">Részletek</string>
@@ -34,12 +35,17 @@
   <string name="prefs_subsection_logging">Logolás</string>
   <string name="prefs_subsection_more">Több</string>
   <string name="prefs_subsection_security">Biztonság</string>
+  <string name="prefs_subsection_whatsnew">Mi az újdonság a legújabb verzióban?</string>
+  <string name="prefs_subsection_security_summary">Zárak beállítása az alkalmazáshoz való hozzáféréshez és az érintések engedélyezése más látható ablakoknál</string>
+  <string name="prefs_subsection_logging_summary">Az alkalmazás végrehajtása során keletkező naplófájlok nyomon követése</string>
   <string name="prefs_subsection_more_summary">Applikáció információk, visszajelzés, egyéb</string>
   <string name="prefs_accounts">Fiókok</string>
   <string name="prefs_manage_accounts">Fiókok kezelése</string>
   <string name="prefs_passcode">Jelszavas zár</string>
   <string name="prefs_biometric">Biometrikus azonosítás</string>
   <string name="prefs_biometric_summary">Adjon meg zárolási jelszót vagy mintát a beállítás engedélyezéséhez</string>
+  <string name="prefs_lock_application">Alkalmazás lezárása</string>
+  <string name="prefs_lock_application_entries_immediately">Azonnal</string>
   <string name="prefs_touches_with_other_visible_windows">Érintkezik más látható ablakkal</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Engedélyezze az érintéseket, amikor a kép takarásban van egy másik ablak által.</string>
   <string name="confirmation_touches_with_other_windows_title">Biztos, hogy engedélyezi ezt a funkciót?</string>
@@ -142,6 +148,7 @@
   <string name="filedetails_size">Méret:</string>
   <string name="filedetails_type">Típus:</string>
   <string name="filedetails_created">Létrehozva:</string>
+  <string name="filedetails_last_sync">Utoljára szinkronizálva:</string>
   <string name="filedetails_modified">Módosítva:</string>
   <string name="filedetails_download">Letöltés</string>
   <string name="filedetails_sync_file">Szinkronizálás</string>
@@ -176,7 +183,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">A kiszolgáló tanúsítványa nem megbízható</string>
   <string name="uploader_upload_text_dialog_title">Adja meg az új fájlt nevét</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">A fájlnév nem lehet üres</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">A fájlnév legfeljebb %d karakter hosszú lehet</string>
   <string name="uploader_upload_text_filename_hint">Fájlnév</string>
   <string name="uploader_upload_camera_upload_files">Fényképezőgép feltöltési fájlok feltöltése</string>
   <string name="uploader_upload_picture_upload_files">%dúj kép kerül feltöltésre</string>
@@ -312,7 +318,6 @@
   <string name="sync_file_fail_msg">A távoli fájl nem volt ellenőrizhető</string>
   <string name="sync_file_nothing_to_do_msg">Az állományok már szinkronizáltak</string>
   <string name="create_dir_fail_msg">A mappát nem lehet létrehozni</string>
-  <string name="filename_forbidden_characters">Tiltott karakterek: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">A fájlnév legalább egy érvénytelen karaktert tartalmaz</string>
   <string name="filename_empty">A fájlnév nem lehet üres</string>
   <string name="wait_a_moment">Egy pillanat…</string>
@@ -566,4 +571,6 @@
   <!--Release Notes-->
   <string name="release_notes_proceed">Végrehajtás</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="tab_label_ascii">szöveg</string>
 </resources>

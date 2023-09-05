@@ -1,0 +1,7 @@
+Enhancement: Copy/move conflict solved by users
+
+A pop-up is displayed in case there is a name conflict with the files been moved or copied.
+The pop-up has the options to Skip, Replace and Keep both, to be consistent with the web client.
+
+https://github.com/owncloud/android/issues/3935
+https://github.com/owncloud/android/pull/4062

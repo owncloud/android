@@ -24,15 +24,19 @@ package com.owncloud.android.presentation.files.filelist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.R
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
+import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryForMimeTypeAsStreamUseCase
 import com.owncloud.android.domain.appregistry.usecases.GetAppRegistryWhichAllowCreationAsStreamUseCase
 import com.owncloud.android.domain.appregistry.usecases.GetUrlToOpenInWebUseCase
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromAccountAsStreamUseCase
 import com.owncloud.android.domain.files.model.FileListOption
+import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
+import com.owncloud.android.domain.files.model.OCFileSyncInfo
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
@@ -49,14 +53,19 @@ import com.owncloud.android.presentation.files.SortOrder.Companion.PREF_FILE_LIS
 import com.owncloud.android.presentation.files.SortType
 import com.owncloud.android.presentation.files.SortType.Companion.PREF_FILE_LIST_SORT_TYPE
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase.SyncFolderMode.SYNC_CONTENTS
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -74,7 +83,10 @@ class MainFileListViewModel(
     private val sortFilesWithSyncInfoUseCase: SortFilesWithSyncInfoUseCase,
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
     getAppRegistryWhichAllowCreationAsStreamUseCase: GetAppRegistryWhichAllowCreationAsStreamUseCase,
+    private val getAppRegistryForMimeTypeAsStreamUseCase: GetAppRegistryForMimeTypeAsStreamUseCase,
     private val getUrlToOpenInWebUseCase: GetUrlToOpenInWebUseCase,
+    private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
+    private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val sharedPreferencesProvider: SharedPreferencesProvider,
     initialFolderToDisplay: OCFile,
@@ -98,6 +110,12 @@ class MainFileListViewModel(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = emptyList()
         )
+
+    private val _appRegistryMimeType: MutableSharedFlow<AppRegistryMimeType?> = MutableSharedFlow()
+    val appRegistryMimeType: SharedFlow<AppRegistryMimeType?> = _appRegistryMimeType
+
+    private val _appRegistryMimeTypeSingleFile: MutableSharedFlow<AppRegistryMimeType?> = MutableSharedFlow()
+    val appRegistryMimeTypeSingleFile: SharedFlow<AppRegistryMimeType?> = _appRegistryMimeTypeSingleFile
 
     /** File list ui state combines the other fields and generate a new state whenever any of them changes */
     val fileListUiState: StateFlow<FileListUiState> =
@@ -125,6 +143,12 @@ class MainFileListViewModel(
 
     private val _openInWebFlow = MutableStateFlow<Event<UIResult<String>>?>(null)
     val openInWebFlow: StateFlow<Event<UIResult<String>>?> = _openInWebFlow
+
+    private val _menuOptions: MutableSharedFlow<List<FileMenuOption>> = MutableSharedFlow()
+    val menuOptions: SharedFlow<List<FileMenuOption>> = _menuOptions
+
+    private val _menuOptionsSingleFile: MutableSharedFlow<List<FileMenuOption>> = MutableSharedFlow()
+    val menuOptionsSingleFile: SharedFlow<List<FileMenuOption>> = _menuOptionsSingleFile
 
     init {
         val sortTypeSelected = SortType.values()[sharedPreferencesProvider.getInt(PREF_FILE_LIST_SORT_TYPE, SortType.SORT_TYPE_BY_NAME.ordinal)]
@@ -199,18 +223,21 @@ class MainFileListViewModel(
                     FileListOption.ALL_FILES -> {
                         parentDir = fileByIdResult.getDataOrNull()
                     }
+
                     FileListOption.SHARED_BY_LINK -> {
                         val fileById = fileByIdResult.getDataOrNull()!!
                         parentDir = if ((!fileById.sharedByLink || fileById.sharedWithSharee != true) && fileById.spaceId == null) {
                             getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
                         } else fileById
                     }
+
                     FileListOption.AV_OFFLINE -> {
                         val fileById = fileByIdResult.getDataOrNull()!!
                         parentDir = if (!fileById.isAvailableOffline) {
                             getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
                         } else fileById
                     }
+
                     FileListOption.SPACES_LIST -> {
                         parentDir = TODO("Move it to usecase if possible")
                     }
@@ -270,6 +297,50 @@ class MainFileListViewModel(
 
     fun resetOpenInWebFlow() {
         _openInWebFlow.value = null
+    }
+
+    fun filterMenuOptions(
+        files: List<OCFile>, filesSyncInfo: List<OCFileSyncInfo>, isAnyFileVideoPreviewing: Boolean,
+        displaySelectAll: Boolean, isMultiselection: Boolean
+    ) {
+        val shareViaLinkAllowed = contextProvider.getBoolean(R.bool.share_via_link_feature)
+        val shareWithUsersAllowed = contextProvider.getBoolean(R.bool.share_with_users_feature)
+        val sendAllowed = contextProvider.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val result = filterFileMenuOptionsUseCase.execute(
+                FilterFileMenuOptionsUseCase.Params(
+                    files = files,
+                    filesSyncInfo = filesSyncInfo,
+                    accountName = currentFolderDisplayed.value.owner,
+                    isAnyFileVideoPreviewing = isAnyFileVideoPreviewing,
+                    displaySelectAll = displaySelectAll,
+                    displaySelectInverse = isMultiselection,
+                    onlyAvailableOfflineFiles = fileListOption.value.isAvailableOffline(),
+                    onlySharedByLinkFiles = fileListOption.value.isSharedByLink(),
+                    shareViaLinkAllowed = shareViaLinkAllowed,
+                    shareWithUsersAllowed = shareWithUsersAllowed,
+                    sendAllowed = sendAllowed,
+                )
+            )
+            if (isMultiselection) {
+                _menuOptions.emit(result)
+            } else {
+                _menuOptionsSingleFile.emit(result)
+            }
+        }
+    }
+
+    fun getAppRegistryForMimeType(mimeType: String, isMultiselection: Boolean) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            val result = getAppRegistryForMimeTypeAsStreamUseCase.execute(
+                GetAppRegistryForMimeTypeAsStreamUseCase.Params(accountName = getFile().owner, mimeType)
+            )
+            if (isMultiselection) {
+                _appRegistryMimeType.emit(result.firstOrNull())
+            } else {
+                _appRegistryMimeTypeSingleFile.emit(result.firstOrNull())
+            }
+        }
     }
 
     private fun updateSpace() {

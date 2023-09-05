@@ -38,7 +38,7 @@ import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.pm.PackageInfoCompat
 import com.owncloud.android.presentation.authentication.AccountUtils
-import com.owncloud.android.data.preferences.datasources.implementation.OCSharedPreferencesProvider
+import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
 import com.owncloud.android.dependecyinjection.commonModule
@@ -193,9 +193,7 @@ class MainApp : Application() {
                 Timber.v("${activity.javaClass.simpleName} onStart() starting")
                 PassCodeManager.onActivityStarted(activity)
                 PatternManager.onActivityStarted(activity)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    BiometricManager.onActivityStarted(activity)
-                }
+                BiometricManager.onActivityStarted(activity)
             }
 
             override fun onActivityResumed(activity: Activity) {
@@ -210,9 +208,7 @@ class MainApp : Application() {
                 Timber.v("${activity.javaClass.simpleName} onStop() ending")
                 PassCodeManager.onActivityStopped(activity)
                 PatternManager.onActivityStopped(activity)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    BiometricManager.onActivityStopped(activity)
-                }
+                BiometricManager.onActivityStopped(activity)
             }
 
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {

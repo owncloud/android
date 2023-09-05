@@ -2,7 +2,7 @@
   ownCloud Android client application
 
   Copyright (C) 2012  Bartek Przybylski
-  Copyright (C) 2016 ownCloud GmbH.
+  Copyright (C) 2023 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -19,23 +19,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
     <!--
-         GET_ACCOUNTS is needed for API < 23.
-        For API >= 23 results in the addition of CONTACTS group to the list of permissions that may be
-        dynamically disabled or enabled by the user after installation; but it is not important,
-        since GET_ACCOUNTS is an special case, the permission is not really needed to access accounts
-        owned by the app, our use case.
-        See note in http://developer.android.com/intl/es/reference/android/Manifest.permission.html#GET_ACCOUNTS
-    -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <!--
-         USE_CREDENTIALS, MANAGE_ACCOUNTS and AUTHENTICATE_ACCOUNTS are needed for API < 23.
-        In API >= 23 the do not exist anymore
-    -->
-    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <!--
-         WRITE_EXTERNAL_STORAGE may be enabled or disabled by the user after installation in
+        WRITE_EXTERNAL_STORAGE may be enabled or disabled by the user after installation in
         API >= 23; the app needs to handle this
     -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -45,7 +29,7 @@
     -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <!--
-         Next permissions are always approved in installation time,
+        Next permissions are always approved in installation time,
         the apps needs to do nothing special in runtime
     -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -69,7 +53,8 @@
         android:requestLegacyExternalStorage="true"
         android:resizeableActivity="true"
         android:supportsPictureInPicture="false"
-        android:theme="@style/Theme.ownCloud.Toolbar">
+        android:theme="@style/Theme.ownCloud.Toolbar"
+        android:localeConfig="@xml/locales_config">
 
         <meta-data android:name="android.content.APP_RESTRICTIONS"
             android:resource="@xml/managed_configurations" />

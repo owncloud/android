@@ -26,8 +26,6 @@
 package com.owncloud.android.datamodel
 
 import android.accounts.Account
-import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
@@ -36,8 +34,6 @@ import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
 import com.owncloud.android.domain.files.usecases.GetPersonalRootFolderForAccountUseCase
 import com.owncloud.android.domain.files.usecases.GetSharesRootFolderForAccount
-import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.domain.spaces.usecases.GetSpaceWithSpecialsByIdForAccountUseCase
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking
@@ -123,27 +119,5 @@ class FileDataStorageManager(
             getFolderContentUseCase.execute(GetFolderContentUseCase.Params(parentId))
         }.getDataOrNull()
         result ?: listOf()
-    }
-
-    fun getCapability(accountName: String): OCCapability? = runBlocking(CoroutinesDispatcherProvider().io) {
-        val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
-
-        val capability = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getStoredCapabilitiesUseCase.execute(GetStoredCapabilitiesUseCase.Params(accountName))
-        }
-        capability
-    }
-
-    fun getSpace(spaceId: String?, accountName: String): OCSpace? = runBlocking(CoroutinesDispatcherProvider().io) {
-        if (spaceId == null) return@runBlocking null
-        val getSpaceWithSpecialsByIdForAccountUseCase: GetSpaceWithSpecialsByIdForAccountUseCase by inject()
-
-        val space = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getSpaceWithSpecialsByIdForAccountUseCase.execute(GetSpaceWithSpecialsByIdForAccountUseCase.Params(
-                spaceId = spaceId,
-                accountName = accountName,
-            ))
-        }
-        return@runBlocking space
     }
 }

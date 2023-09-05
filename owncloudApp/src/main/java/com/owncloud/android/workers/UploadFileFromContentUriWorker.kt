@@ -32,7 +32,7 @@ import androidx.work.workDataOf
 import com.owncloud.android.R
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
@@ -218,7 +218,12 @@ class UploadFileFromContentUriWorker(
         var pathToGrant: String = File(uploadPath).parent ?: ""
         pathToGrant = if (pathToGrant.endsWith(File.separator)) pathToGrant else pathToGrant + File.separator
 
-        val checkPathExistenceOperation = CheckPathExistenceRemoteOperation(pathToGrant, false, spaceWebDavUrl)
+        val checkPathExistenceOperation =
+            CheckPathExistenceRemoteOperation(
+                remotePath = pathToGrant,
+                isUserLoggedIn = AccountUtils.getCurrentOwnCloudAccount(appContext) != null,
+                spaceWebDavUrl = spaceWebDavUrl,
+            )
         val checkPathExistenceResult = checkPathExistenceOperation.execute(client)
         if (checkPathExistenceResult.code == ResultCode.FILE_NOT_FOUND) {
             val createRemoteFolderOperation = CreateRemoteFolderOperation(
@@ -232,7 +237,12 @@ class UploadFileFromContentUriWorker(
 
     private fun checkNameCollisionAndGetAnAvailableOneInCase(client: OwnCloudClient) {
         Timber.d("Checking name collision in server")
-        val remotePath = getAvailableRemotePath(client, uploadPath, spaceWebDavUrl)
+        val remotePath = getAvailableRemotePath(
+            ownCloudClient = client,
+            remotePath = uploadPath,
+            spaceWebDavUrl = spaceWebDavUrl,
+            isUserLogged = AccountUtils.getCurrentOwnCloudAccount(appContext) != null,
+        )
         if (remotePath != uploadPath) {
             uploadPath = remotePath
             Timber.d("Name collision detected, let's rename it to %s", remotePath)

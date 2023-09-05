@@ -176,6 +176,7 @@
   <string name="filedetails_size">Dimensione:</string>
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Creato:</string>
+  <string name="filedetails_last_sync">Ultima sincronizzazione:</string>
   <string name="filedetails_modified">Modificato:</string>
   <string name="filedetails_download">Scarica</string>
   <string name="filedetails_file_image_content_description">File immagine</string>
@@ -213,7 +214,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Il certificato del server non è affidabile</string>
   <string name="uploader_upload_text_dialog_title">Inserisci un nome per il nuovo file</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Il nome del file non può essere vuoto</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Il nome del file non può contenere piu\' di %d caratteri</string>
   <string name="uploader_upload_text_filename_hint">Nome del file</string>
   <string name="uploader_upload_camera_upload_files">Caricamento dei file della fotocamera</string>
   <string name="uploader_upload_picture_upload_files">%d nuove foto saranno caricate</string>
@@ -366,7 +366,6 @@
   <string name="available_offline_inherited_msg">Una cartella che contiene questo file è disponibile non in linea</string>
   <string name="rename_local_fail_msg">La copia locale non può essere rinominata; prova un nome diverso</string>
   <string name="rename_server_fail_msg">La rinomina non può essere completata</string>
-  <string name="file_already_exists">File già esistente</string>
   <string name="sync_file_fail_msg">Il file remoto non può essere controllato</string>
   <string name="sync_file_nothing_to_do_msg">Contenuti del file già sincronizzati</string>
   <string name="new_remote_version_found_msg">È stata trovata una nuova versione sul server. Scaricamento...</string>
@@ -374,7 +373,6 @@
   <string name="upload_enqueued_msg">Caricamento in coda</string>
   <string name="create_dir_fail_msg">La cartella non può essere creata</string>
   <string name="create_file_fail_msg">Il file non può essere creato</string>
-  <string name="filename_forbidden_characters">Caratteri proibiti: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Il nome del file contiene almeno un carattere non valido</string>
   <string name="filename_empty">Il nome del file non può essere vuoto</string>
   <string name="filename_too_long">Il nome del file non può essere così lungo</string>
@@ -648,4 +646,7 @@ Il Download del file inizierà automaticamente</string>
   <string name="release_notes_footer">Grazie di usare %1$s.\n❤</string>
   <string name="release_notes_proceed">Procedi</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Non mostrare di nuovo</string>
+  <string name="tab_label_ascii">Testo</string>
 </resources>

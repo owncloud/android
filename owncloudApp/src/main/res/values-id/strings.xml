@@ -139,6 +139,7 @@
   <string name="filedetails_size">Ukuran:</string>
   <string name="filedetails_type">Tipe:</string>
   <string name="filedetails_created">Dibuat:</string>
+  <string name="filedetails_last_sync">Sinkronisasi terakhir:</string>
   <string name="filedetails_modified">Diubah:</string>
   <string name="filedetails_download">Unduh</string>
   <string name="filedetails_sync_file">Sinkronisasi</string>
@@ -299,7 +300,6 @@
   <string name="sync_file_fail_msg">Berkas jauh tidak dapat diperiksa</string>
   <string name="sync_file_nothing_to_do_msg">Isi berkas sudah diselaraskan</string>
   <string name="create_dir_fail_msg">Folder tidak dapat dibuat</string>
-  <string name="filename_forbidden_characters">Karakter yang dilarang: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Nama berkas berisi setidaknya satu karakter yang tidak sah</string>
   <string name="filename_empty">Nama berkas tidak boleh kosong</string>
   <string name="wait_a_moment">Tunggu sebentar</string>
@@ -536,4 +536,6 @@
   <!--Release Notes-->
   <string name="release_notes_proceed">Melanjutkan</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="tab_label_ascii">Teks</string>
 </resources>

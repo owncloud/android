@@ -143,6 +143,7 @@
   <string name="filedetails_size">Tamaño:</string>
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Creado:</string>
+  <string name="filedetails_last_sync">Ultima sincronización:</string>
   <string name="filedetails_modified">Modificado:</string>
   <string name="filedetails_download">Descargar</string>
   <string name="filedetails_sync_file">Sincronizar</string>
@@ -177,7 +178,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">El certificado del servidor no es confiable</string>
   <string name="uploader_upload_text_dialog_title">Inserte un nombre para el archivo nuevo</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">El nombre de archivo no debe quedar vacío</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">El nombre de archivo no debe ser mayor a %d caracteres</string>
   <string name="uploader_upload_text_filename_hint">Nombre de archivo</string>
   <string name="uploader_upload_camera_upload_files">Subiendo archivos de la cámara marcados como subir</string>
   <string name="uploader_upload_available_offline_files">Subiendo archivos disponibles sin conexión</string>
@@ -304,7 +304,6 @@
   <string name="sync_file_fail_msg">No pudo comprobarse el archivo remoto</string>
   <string name="sync_file_nothing_to_do_msg">Ya está sincronizado</string>
   <string name="create_dir_fail_msg">La carpeta puede no haber sido creada</string>
-  <string name="filename_forbidden_characters">Caracteres prohibidos: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">El nombre del archivo contiene algún caracter inválido</string>
   <string name="filename_empty">El nombre de archivo no puede estar vacío</string>
   <string name="wait_a_moment">Esperá un momento</string>
@@ -551,4 +550,6 @@
   <!--Release Notes-->
   <string name="release_notes_proceed">Prosiga</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="tab_label_ascii">Texto</string>
 </resources>

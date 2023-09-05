@@ -28,7 +28,9 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.textfield.TextInputLayout
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
@@ -43,12 +45,18 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
  *
  * Triggers the rename operation when name is confirmed.
  */
+
 class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
 
     private var targetFile: OCFile? = null
     private val filesViewModel: FileOperationsViewModel by sharedViewModel()
-
+    private var isButtonEnabled = true
+    private val MAX_FILENAME_LENGTH = 223
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        if (savedInstanceState != null) {
+            isButtonEnabled = savedInstanceState.getBoolean(IS_BUTTON_ENABLED_FLAG_KEY)
+        }
+
         targetFile = requireArguments().getParcelable(ARG_TARGET_FILE)
 
         // Inflate the layout for the dialog
@@ -61,6 +69,8 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
 
         // Setup layout
         val currentName = targetFile!!.fileName
+        var error: String? = null
+        val inputLayout: TextInputLayout = view.findViewById(R.id.edit_box_input_text_layout)
         val inputText = view.findViewById<EditText>(R.id.user_input)
         inputText.setText(currentName)
         val selectionStart = 0
@@ -84,7 +94,43 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
         }.create().apply {
             window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
             avoidScreenshotsIfNeeded()
+
+            setOnShowListener {
+                val okButton = getButton(AlertDialog.BUTTON_POSITIVE)
+                okButton.isEnabled = isButtonEnabled
+
+            }
+
+            inputText.doOnTextChanged { text, _, _, _ ->
+                val okButton = getButton(AlertDialog.BUTTON_POSITIVE)
+                if (text.isNullOrBlank()) {
+                    okButton.isEnabled = false
+                    error = getString(R.string.uploader_upload_text_dialog_filename_error_empty)
+                } else if (text.length > MAX_FILENAME_LENGTH) {
+                    error = String.format(
+                        getString(R.string.uploader_upload_text_dialog_filename_error_length_max),
+                        MAX_FILENAME_LENGTH
+                    )
+                } else if (forbiddenChars.any { text.contains(it) }) {
+                    error = getString(R.string.filename_forbidden_characters)
+                } else {
+                    okButton.isEnabled = true
+                    error = null
+                    inputLayout.error = error
+                }
+
+                if (error != null) {
+                    okButton.isEnabled = false
+                    inputLayout.error = error
+                }
+
+            }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(IS_BUTTON_ENABLED_FLAG_KEY, isButtonEnabled)
     }
 
     override fun onClick(dialog: DialogInterface, which: Int) {
@@ -109,6 +155,8 @@ class RenameFileDialogFragment : DialogFragment(), DialogInterface.OnClickListen
     companion object {
         const val FRAGMENT_TAG_RENAME_FILE = "RENAME_FILE_FRAGMENT"
         private const val ARG_TARGET_FILE = "TARGET_FILE"
+        private const val IS_BUTTON_ENABLED_FLAG_KEY = "IS_BUTTON_ENABLED_FLAG_KEY"
+        private val forbiddenChars = listOf('/', '\\')
 
         /**
          * Public factory method to create new RenameFileDialogFragment instances.

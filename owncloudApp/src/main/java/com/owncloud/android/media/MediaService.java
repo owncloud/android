@@ -583,7 +583,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         mNotificationBuilder.setContentIntent(PendingIntent.getActivity(getApplicationContext(),
                 (int) System.currentTimeMillis(),
                 showDetailsIntent,
-                NotificationUtils.INSTANCE.getPendingIntentFlags()));
+                NotificationUtils.pendingIntentFlags));
         mNotificationBuilder.setWhen(System.currentTimeMillis());
         mNotificationBuilder.setTicker(ticker);
         mNotificationBuilder.setContentTitle(ticker);
@@ -618,7 +618,7 @@ public class MediaService extends Service implements OnCompletionListener, OnPre
         mNotificationBuilder.setContentIntent(PendingIntent.getActivity(getApplicationContext(),
                 (int) System.currentTimeMillis(),
                 showDetailsIntent,
-                NotificationUtils.INSTANCE.getPendingIntentFlags()));
+                NotificationUtils.pendingIntentFlags));
         mNotificationBuilder.setContentTitle(ticker);
         mNotificationBuilder.setContentText(content);
         mNotificationBuilder.setChannelId(MEDIA_SERVICE_NOTIFICATION_CHANNEL_ID);

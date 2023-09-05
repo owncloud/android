@@ -3,6 +3,7 @@
  *
  * @author Fernando Sanz Velasco
  * @author Juan Carlos Garrote Gascón
+ * @author Manuel Plazas Palacio
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -31,6 +32,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.view.setMargins
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -92,6 +94,7 @@ class FileListAdapter(
                 }
                 ListViewHolder(binding)
             }
+
             ViewType.GRID_IMAGE.ordinal -> {
                 val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 binding.root.apply {
@@ -100,6 +103,7 @@ class FileListAdapter(
                 }
                 GridImageViewHolder(binding)
             }
+
             ViewType.GRID_ITEM.ordinal -> {
                 val binding = GridItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 binding.root.apply {
@@ -108,6 +112,7 @@ class FileListAdapter(
                 }
                 GridViewHolder(binding)
             }
+
             else -> {
                 val binding = ListFooterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
                 binding.root.apply {
@@ -134,9 +139,11 @@ class FileListAdapter(
                 layoutManager.spanCount == 1 -> {
                     ViewType.LIST_ITEM.ordinal
                 }
+
                 (files[position] as OCFileWithSyncInfo).file.isImage -> {
                     ViewType.GRID_IMAGE.ordinal
                 }
+
                 else -> {
                     ViewType.GRID_ITEM.ordinal
                 }
@@ -188,14 +195,11 @@ class FileListAdapter(
                 filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
             }
 
-            holder.itemView.findViewById<ImageView>(R.id.sharedIcon).apply {
-                isVisible = file.sharedByLink || file.sharedWithSharee == true || file.isSharedWithMe
-                if (file.sharedByLink) {
-                    setImageResource(R.drawable.ic_shared_by_link)
-                } else if (file.sharedWithSharee == true || file.isSharedWithMe) {
-                    setImageResource(R.drawable.shared_via_users)
-                }
-            }
+            holder.itemView.findViewById<LinearLayout>(R.id.share_icons_layout).isVisible =
+                file.sharedByLink || file.sharedWithSharee == true || file.isSharedWithMe
+            holder.itemView.findViewById<ImageView>(R.id.shared_by_link_icon).isVisible = file.sharedByLink
+            holder.itemView.findViewById<ImageView>(R.id.shared_via_users_icon).isVisible =
+                file.sharedWithSharee == true || file.isSharedWithMe
 
             when (viewType) {
                 ViewType.LIST_ITEM.ordinal -> {
@@ -205,6 +209,7 @@ class FileListAdapter(
                         it.Filename.text = file.fileName
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
+                        it.threeDotMenu.isVisible = getCheckedItems().isEmpty()
                         if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileWithSyncInfo.space == null)) {
                             it.spacePathLine.path.apply {
                                 text = file.getParentRemotePath()
@@ -225,12 +230,23 @@ class FileListAdapter(
                             it.spacePathLine.spaceIcon.isVisible = false
                             it.spacePathLine.spaceName.isVisible = false
                         }
+                        it.threeDotMenu.setOnClickListener {
+                            listener.onThreeDotButtonClick(fileWithSyncInfo = fileWithSyncInfo)
+                        }
                     }
                 }
+
                 ViewType.GRID_ITEM.ordinal -> {
                     // Filename
                     val view = holder as GridViewHolder
                     view.binding.Filename.text = file.fileName
+                }
+                ViewType.GRID_IMAGE.ordinal -> {
+                    val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
+                    val marginImage = 4
+                    layoutParams.setMargins(marginImage)
+                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
                 }
             }
 
@@ -248,11 +264,11 @@ class FileListAdapter(
                     position = position
                 )
             }
+            holder.itemView.setBackgroundColor(Color.WHITE)
 
             val checkBoxV = holder.itemView.findViewById<ImageView>(R.id.custom_checkbox).apply {
-                isVisible = false
+                isVisible = getCheckedItems().isNotEmpty()
             }
-            holder.itemView.setBackgroundColor(Color.WHITE)
 
             if (isSelected(position)) {
                 holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.selected_item_background))
@@ -261,16 +277,10 @@ class FileListAdapter(
                 holder.itemView.setBackgroundColor(Color.WHITE)
                 checkBoxV.setImageResource(R.drawable.ic_checkbox_blank_outline)
             }
-            checkBoxV.isVisible = getCheckedItems().isNotEmpty()
 
             if (file.isFolder) {
                 // Folder
-                fileIcon.setImageResource(
-                    MimetypeIconUtil.getFolderTypeIconId(
-                        file.isSharedWithMe || file.sharedWithSharee == true,
-                        file.sharedByLink
-                    )
-                )
+                fileIcon.setImageResource(R.drawable.ic_menu_archive)
             } else {
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
                 fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
@@ -356,35 +366,43 @@ class FileListAdapter(
                     foldersCount <= 0 -> {
                         ""
                     }
+
                     foldersCount == 1 -> {
                         context.getString(R.string.file_list__footer__folder)
                     }
+
                     else -> { // foldersCount > 1
                         context.getString(R.string.file_list__footer__folders, foldersCount)
                     }
                 }
             }
+
             filesCount == 1 -> {
                 return when {
                     foldersCount <= 0 -> {
                         context.getString(R.string.file_list__footer__file)
                     }
+
                     foldersCount == 1 -> {
                         context.getString(R.string.file_list__footer__file_and_folder)
                     }
+
                     else -> { // foldersCount > 1
                         context.getString(R.string.file_list__footer__file_and_folders, foldersCount)
                     }
                 }
             }
+
             else -> {    // filesCount > 1
                 return when {
                     foldersCount <= 0 -> {
                         context.getString(R.string.file_list__footer__files, filesCount)
                     }
+
                     foldersCount == 1 -> {
                         context.getString(R.string.file_list__footer__files_and_folder, filesCount)
                     }
+
                     else -> { // foldersCount > 1
                         context.getString(
                             R.string.file_list__footer__files_and_folders, filesCount, foldersCount
@@ -398,6 +416,7 @@ class FileListAdapter(
     interface FileListAdapterListener {
         fun onItemClick(ocFileWithSyncInfo: OCFileWithSyncInfo, position: Int)
         fun onLongItemClick(position: Int): Boolean = true
+        fun onThreeDotButtonClick(fileWithSyncInfo: OCFileWithSyncInfo)
     }
 
     inner class GridViewHolder(val binding: GridItemBinding) : RecyclerView.ViewHolder(binding.root)

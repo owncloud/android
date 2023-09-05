@@ -26,19 +26,23 @@
         android:title="@string/actionbar_select_all"
         app:showAsAction="never"
         tools:ignore="AppCompatResource" />
-
     <item
         android:id="@+id/action_select_inverse"
         android:title="@string/actionbar_select_inverse"
         android:visible="true"
         app:showAsAction="never"
         tools:ignore="AppCompatResource" />
-
     <item
         android:id="@+id/action_share_file"
         android:title="@string/action_share"
-        android:icon="@drawable/ic_action_share"
+        android:icon="@drawable/ic_share_generic_white"
         app:showAsAction="ifRoom"
+        android:orderInCategory="1" />
+    <item
+        android:id="@+id/action_open_file_with"
+        android:title="@string/actionbar_open_with"
+        android:icon="@drawable/ic_open_in_app"
+        app:showAsAction="never"
         android:orderInCategory="1" />
     <item
         android:id="@+id/action_download_file"
@@ -59,27 +63,9 @@
         app:showAsAction="ifRoom"
         android:orderInCategory="1" />
     <item
-        android:id="@+id/action_set_available_offline"
-        android:title="@string/set_available_offline"
-        app:showAsAction="never"
-        android:icon="@drawable/ic_action_set_available_offline"
-        android:orderInCategory="1" />
-    <item
-        android:id="@+id/action_unset_available_offline"
-        android:title="@string/unset_available_offline"
-        app:showAsAction="never"
-        android:icon="@drawable/ic_action_unset_available_offline"
-        android:orderInCategory="1" />
-    <item
-        android:id="@+id/action_open_file_with"
-        android:title="@string/actionbar_open_with"
-        android:icon="@drawable/ic_open_in_app"
-        app:showAsAction="never"
-        android:orderInCategory="1" />
-    <item
-        android:id="@+id/action_send_file"
-        android:title="@string/actionbar_send_file"
-        android:icon="@drawable/ic_send_white"
+        android:id="@+id/action_rename_file"
+        android:title="@string/common_rename"
+        android:icon="@drawable/ic_pencil"
         app:showAsAction="never"
         android:orderInCategory="1" />
     <item
@@ -95,10 +81,22 @@
         app:showAsAction="never"
         android:orderInCategory="1" />
     <item
-        android:id="@+id/action_rename_file"
-        android:title="@string/common_rename"
-        android:icon="@drawable/ic_pencil"
+        android:id="@+id/action_send_file"
+        android:title="@string/actionbar_send_file"
+        android:icon="@drawable/ic_send_white"
         app:showAsAction="never"
+        android:orderInCategory="1" />
+    <item
+        android:id="@+id/action_set_available_offline"
+        android:title="@string/set_available_offline"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_action_set_available_offline"
+        android:orderInCategory="1" />
+    <item
+        android:id="@+id/action_unset_available_offline"
+        android:title="@string/unset_available_offline"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_action_unset_available_offline"
         android:orderInCategory="1" />
     <item
         android:id="@+id/action_see_details"

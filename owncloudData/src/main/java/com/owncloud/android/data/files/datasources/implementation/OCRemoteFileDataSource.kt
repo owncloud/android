@@ -3,6 +3,7 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Manuel Plazas Palacio
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -32,12 +33,12 @@ class OCRemoteFileDataSource(
 ) : RemoteFileDataSource {
     override fun checkPathExistence(
         path: String,
-        checkUserCredentials: Boolean,
+        isUserLogged: Boolean,
         accountName: String,
         spaceWebDavUrl: String?,
     ): Boolean = clientManager.getFileService(accountName).checkPathExistence(
         path = path,
-        isUserLogged = checkUserCredentials,
+        isUserLogged = isUserLogged,
         spaceWebDavUrl = spaceWebDavUrl,
     ).data
 
@@ -47,12 +48,14 @@ class OCRemoteFileDataSource(
         accountName: String,
         sourceSpaceWebDavUrl: String?,
         targetSpaceWebDavUrl: String?,
-    ): String = executeRemoteOperation {
+        replace: Boolean,
+    ): String? = executeRemoteOperation {
         clientManager.getFileService(accountName).copyFile(
             sourceRemotePath = sourceRemotePath,
             targetRemotePath = targetRemotePath,
             sourceSpaceWebDavUrl = sourceSpaceWebDavUrl,
             targetSpaceWebDavUrl = targetSpaceWebDavUrl,
+            replace = replace,
         )
     }
 
@@ -82,8 +85,14 @@ class OCRemoteFileDataSource(
         remotePath: String,
         accountName: String,
         spaceWebDavUrl: String?,
+        isUserLogged: Boolean,
     ): String {
-        var checkExistsFile = checkPathExistence(remotePath, false, accountName, spaceWebDavUrl)
+        var checkExistsFile = checkPathExistence(
+            path = remotePath,
+            isUserLogged = isUserLogged,
+            accountName = accountName,
+            spaceWebDavUrl = spaceWebDavUrl,
+        )
         if (!checkExistsFile) {
             return remotePath
         }
@@ -97,13 +106,23 @@ class OCRemoteFileDataSource(
                 substring(0, pos)
             }
         }
-        var count = 2
+        var count = 1
         do {
             suffix = " ($count)"
             checkExistsFile = if (pos >= 0) {
-                checkPathExistence("${remotePath.substringBeforeLast('.', "")}$suffix.$extension", false, accountName, spaceWebDavUrl)
+                checkPathExistence(
+                    path = "${remotePath.substringBeforeLast('.', "")}$suffix.$extension",
+                    isUserLogged = isUserLogged,
+                    accountName = accountName,
+                    spaceWebDavUrl = spaceWebDavUrl,
+                )
             } else {
-                checkPathExistence(remotePath + suffix, false, accountName, spaceWebDavUrl)
+                checkPathExistence(
+                    path = "$remotePath$suffix",
+                    isUserLogged = isUserLogged,
+                    accountName = accountName,
+                    spaceWebDavUrl = spaceWebDavUrl,
+                )
             }
             count++
         } while (checkExistsFile)
@@ -119,11 +138,13 @@ class OCRemoteFileDataSource(
         targetRemotePath: String,
         accountName: String,
         spaceWebDavUrl: String?,
+        replace: Boolean,
     ) = executeRemoteOperation {
         clientManager.getFileService(accountName).moveFile(
             sourceRemotePath = sourceRemotePath,
             targetRemotePath = targetRemotePath,
             spaceWebDavUrl = spaceWebDavUrl,
+            replace = replace,
         )
     }
 

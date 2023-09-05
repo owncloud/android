@@ -154,6 +154,7 @@
   <string name="filedetails_size">容量:</string>
   <string name="filedetails_type">類型:</string>
   <string name="filedetails_created">建立:</string>
+  <string name="filedetails_last_sync">最後同步:</string>
   <string name="filedetails_modified">修改:</string>
   <string name="filedetails_download">下載</string>
   <string name="filedetails_sync_file">同步</string>
@@ -188,7 +189,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">伺服器憑證不是可信的</string>
   <string name="uploader_upload_text_dialog_title">插入新檔案的名稱</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">檔名不能為空</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">檔名不能超過%d個字元</string>
   <string name="uploader_upload_text_filename_hint">檔案名稱</string>
   <string name="uploader_upload_camera_upload_files">上傳相機上傳文件</string>
   <string name="uploader_upload_picture_upload_files">%d將上傳新圖片</string>
@@ -325,7 +325,6 @@
   <string name="sync_file_fail_msg">無法檢查遠端的檔案</string>
   <string name="sync_file_nothing_to_do_msg">檔案與同步</string>
   <string name="create_dir_fail_msg">資料夾無法建立</string>
-  <string name="filename_forbidden_characters">禁止使用字符: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">檔案名稱含有不合法的字元</string>
   <string name="filename_empty">檔名不能為空的</string>
   <string name="wait_a_moment">請稍後</string>
@@ -580,4 +579,7 @@
   <string name="release_notes_footer">感謝您使用 %1$s.\n❤</string>
   <string name="release_notes_proceed">已執行</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">不再顯示</string>
+  <string name="tab_label_ascii">文字</string>
 </resources>

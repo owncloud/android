@@ -156,6 +156,7 @@
     <string name="file_list_seconds_ago">seconds ago</string>
     <string name="file_list_empty_title_all_files">No files in here</string>
     <string name="spaces_list_empty_title">No spaces</string>
+    <string name="space_label">Space:</string>
     <string name="file_list_empty_title_available_offline">No available offline files</string>
     <string name="file_list_empty_title_shared_by_links">No shared links</string>
     <string name="file_list_empty_subtitle_all_files">Upload some content or sync with your devices!</string>
@@ -183,6 +184,8 @@
     <string name="filedetails_size">Size:</string>
     <string name="filedetails_type">Type:</string>
     <string name="filedetails_created">Created:</string>
+    <string name="filedetails_last_sync">Last sync:</string>
+    <string name="filedetails_path">Path:</string>
     <string name="filedetails_modified">Modified:</string>
     <string name="filedetails_download">Download</string>
     <string name="filedetails_file_image_content_description">File Image</string>
@@ -220,7 +223,7 @@
     <string name="uploader_upload_failed_ssl_certificate_not_trusted">Server certificate is not trusted</string>
     <string name="uploader_upload_text_dialog_title">Insert a name for the new file</string>
     <string name="uploader_upload_text_dialog_filename_error_empty">Filename must not be empty</string>
-    <string name="uploader_upload_text_dialog_filename_error_length_max">Filename must not be more than %d characters</string>
+    <string name="uploader_upload_text_dialog_filename_error_length_max">Filename must not be longer than %d characters</string>
     <string name="uploader_upload_text_filename_hint">Filename</string>
     <string name="uploader_upload_camera_upload_files">Uploading camera upload files</string>
     <string name="uploader_upload_picture_upload_files">%d new pictures will be uploaded</string>
@@ -380,7 +383,10 @@
     <string name="available_offline_inherited_msg">A folder that containing this file is available offline</string>
     <string name="rename_local_fail_msg">"Local copy could not be renamed; try a different name"</string>
     <string name="rename_server_fail_msg">"Rename could not be completed"</string>
-    <string name="file_already_exists">file already exists</string>
+    <string name="file_already_exists">File already exists</string>
+    <string name="folder_already_exists">Folder already exists</string>
+    <string name="file_already_exists_description">File with name %1$s already exists.</string>
+    <string name="folder_already_exists_description">Folder with name %1$s already exists.</string>
     <string name="sync_file_fail_msg">Remote file could not be checked</string>
     <string name="sync_file_nothing_to_do_msg">File contents already synchronized</string>
     <string name="new_remote_version_found_msg">A new version was found in server. Downloading…</string>
@@ -388,7 +394,7 @@
     <string name="upload_enqueued_msg">Upload enqueued</string>
     <string name="create_dir_fail_msg">Folder could not be created</string>
     <string name="create_file_fail_msg">File could not be created</string>
-    <string name="filename_forbidden_characters">Forbidden characters: / \\ &lt; &gt; : " | ? *</string>
+    <string name="filename_forbidden_characters">Forbidden characters: / \\</string>
     <string name="filename_forbidden_characters_from_server">File name contains at least one invalid character</string>
     <string name="filename_empty">File name cannot be empty</string>
     <string name="filename_too_long">File name cannot be that long</string>
@@ -402,6 +408,7 @@
     <string name="oauth_check_onoff">Login with oAuth2</string>
     <string name="oauth_login_connection">Connecting to OAuth2 server…</string>
 
+    <string name="ssl_connection_not_secure">Connection is not secure, http traffic is not allowed.</string>
     <string name="ssl_validator_header">The identity of the server could not be verified</string>
     <string name="ssl_validator_reason_cert_not_trusted">- The server certificate is not trusted</string>
     <string name="ssl_validator_reason_cert_expired">- The server certificate expired</string>
@@ -449,6 +456,7 @@
     <string name="conflict_use_local_version">local version</string>
     <string name="conflict_use_server_version">server version</string>
     <string name="error_conflict">An error occurred in the destination folder</string>
+    <string name="conflict_replace">Replace</string>
 
     <string name="preview_image_description">Image preview</string>
     <string name="preview_image_error_unknown_format">This image cannot be shown</string>
@@ -742,6 +750,21 @@
     <string name="release_notes_4_0_title_12">New setting with app suggested to browse files</string>
     <string name="release_notes_4_0_subtitle_12">A new setting was added in "More" section with a suggested app to access files via document provider</string>
 
+    <string name="release_notes_4_1_title_1">Added 3 dot button to all list item</string>
+    <string name="release_notes_4_1_subtitle_1">Added button to all list element to show a menu with all the options of the item</string>
+    <string name="release_notes_4_1_title_2">Improve details view</string>
+    <string name="release_notes_4_1_subtitle_2">Redesign of the details view</string>
+    <string name="release_notes_4_1_title_3">Support for new language change</string>
+    <string name="release_notes_4_1_subtitle_3">Added support for the new language change on Android 13+</string>
+    <string name="release_notes_4_1_title_4">Bug fixed about loading space images</string>
+    <string name="release_notes_4_1_subtitle_4">Loading the spaces images the first time we show it and improving the loading of the images of the items</string>
+    <string name="release_notes_4_1_title_5">Open markdown files in ASCII mode</string>
+    <string name="release_notes_4_1_subtitle_5">Added a new mode to open markdown files to show the ASCII code</string>
+    <string name="release_notes_4_1_title_6">Showing pop up on copy/move conflict</string>
+    <string name="release_notes_4_1_subtitle_6">Showing a 3 option pop up when having a naming conflict on copy or move action</string>
+    <string name="release_notes_4_1_title_7">Minor bugfixes and improvements</string>
+    <string name="release_notes_4_1_subtitle_7">Some minor bugs have been fixed, and minor technical improvements were introduced to improve the experience in the app</string>
+
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
     <string name="ic_action_open_with_web">Open in %1$s (web)</string>
@@ -754,5 +777,7 @@
     <string name="ocis_accounts_warning_message">Please, remove the account and login again to get the spaces feature</string>
     <string name="ocis_accounts_warning_checkbox_message">Don\'t show again</string>
     <string name="ocis_accounts_warning_button">Understood</string>
+
+    <string name="tab_label_ascii">Text</string>
 
 </resources>

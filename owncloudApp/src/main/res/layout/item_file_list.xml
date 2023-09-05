@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/file_list_constraint_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/file_list_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/item_file_list_min_height">
@@ -22,6 +22,7 @@
             android:id="@+id/thumbnail"
             android:layout_width="@dimen/file_icon_size"
             android:layout_height="@dimen/file_icon_size"
+            android:scaleType="centerCrop"
             android:src="@drawable/ic_menu_archive"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,8 +45,8 @@
         android:id="@+id/info_constraint_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/standard_quarter_margin"
         android:layout_marginTop="@dimen/standard_quarter_margin"
+        android:layout_marginBottom="@dimen/standard_quarter_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/options_constraint_layout"
         app:layout_constraintStart_toEndOf="@+id/icon_constraint_layout"
@@ -64,14 +65,48 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="File name" />
 
+        <LinearLayout
+            android:id="@+id/share_icons_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/standard_half_margin"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/Filename"
+            app:layout_constraintTop_toBottomOf="@id/Filename"
+            app:layout_constraintEnd_toStartOf="@id/file_list_size"
+            app:layout_constraintBottom_toTopOf="@id/space_path_line"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/shared_via_users_icon"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginEnd="2dp"
+                android:src="@drawable/ic_share_generic"
+                android:visibility="gone"
+                app:tint="@color/list_item_lastmod_and_filesize_text"
+                tools:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/shared_by_link_icon"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_shared_by_link"
+                android:visibility="gone"
+                app:tint="@color/list_item_lastmod_and_filesize_text"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+
         <TextView
             android:id="@+id/file_list_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/list_item_lastmod_and_filesize_text"
             android:textSize="@dimen/two_line_secondary_text_size"
-            app:layout_constraintStart_toStartOf="@+id/Filename"
+            app:layout_constraintStart_toEndOf="@+id/share_icons_layout"
             app:layout_constraintTop_toBottomOf="@+id/Filename"
+            app:layout_constraintEnd_toStartOf="@id/file_list_separator"
             tools:text="Size MB" />
 
         <TextView
@@ -109,32 +144,35 @@
         android:id="@+id/options_constraint_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/standard_padding"
         android:layout_marginStart="@dimen/standard_padding"
+        android:layout_marginEnd="@dimen/standard_quarter_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/info_constraint_layout"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/sharedIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="8dp"
-            tools:src="@drawable/ic_shared_by_link"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/custom_checkbox"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
             android:id="@+id/custom_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_toEndOf="@id/sharedIcon"
+            android:layout_marginEnd="@dimen/standard_margin"
             android:src="@drawable/ic_checkbox_blank_outline"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/three_dot_menu"
+            android:layout_width="@dimen/icon_button_size"
+            android:layout_height="@dimen/icon_button_size"
+            android:layout_gravity="center_vertical"
+            android:scaleType="center"
+            android:src="@drawable/ic_three_dot_menu"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

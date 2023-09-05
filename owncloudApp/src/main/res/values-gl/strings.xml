@@ -143,6 +143,7 @@ Descárgueo de aquí: %2$s</string>
   <string name="filedetails_size">Tamaño:</string>
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Creado:</string>
+  <string name="filedetails_last_sync">Última sincronización:</string>
   <string name="filedetails_modified">Modificado:</string>
   <string name="filedetails_download">Descargar</string>
   <string name="filedetails_sync_file">Sincronizar</string>
@@ -177,7 +178,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">O certificado do servidor non é de confianza</string>
   <string name="uploader_upload_text_dialog_title">Introduza o nome do novo ficheiro</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">O nome de ficheiro non debe estar baleiro</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">O nome do ficheiro non debe ter máis de %d caracteres</string>
   <string name="uploader_upload_text_filename_hint">Nome de ficheiro</string>
   <string name="uploader_upload_camera_upload_files">Enviando ficheiros pendentes de envío da cámara</string>
   <string name="uploader_upload_available_offline_files">Enviando ficheiros dispoñíbeis sen conexión</string>
@@ -310,7 +310,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="sync_file_fail_msg">Non foi posíbel comprobar o ficheiro remoto</string>
   <string name="sync_file_nothing_to_do_msg">Os contidos do ficheiro xa están sincronizados</string>
   <string name="create_dir_fail_msg">Non foi posíbel crear o cartafol</string>
-  <string name="filename_forbidden_characters">Caracteres non permitidos: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">O nome de ficheiro contén algún carácter incorrecto</string>
   <string name="filename_empty">O nome de ficheiro non pode estar baleiro</string>
   <string name="wait_a_moment">Agarde un chisco</string>
@@ -562,4 +561,7 @@ Descárgueo de aquí: %2$s</string>
   <!--Release Notes-->
   <string name="release_notes_proceed">Proceder</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Non volver amosar</string>
+  <string name="tab_label_ascii">Texto</string>
 </resources>

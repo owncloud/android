@@ -39,6 +39,9 @@ import com.owncloud.android.presentation.files.filelist.MainFileListViewModel
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.logging.LogListViewModel
 import com.owncloud.android.presentation.migration.MigrationViewModel
+import com.owncloud.android.presentation.previews.PreviewAudioViewModel
+import com.owncloud.android.presentation.previews.PreviewTextViewModel
+import com.owncloud.android.presentation.previews.PreviewVideoViewModel
 import com.owncloud.android.presentation.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.presentation.security.biometric.BiometricViewModel
 import com.owncloud.android.presentation.security.passcode.PassCodeViewModel
@@ -75,7 +78,7 @@ val viewModelModule = module {
         PassCodeViewModel(get(), get(), action)
     }
 
-    viewModel { AuthenticationViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { AuthenticationViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { OAuthViewModel(get(), get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { SettingsSecurityViewModel(get(), get()) }
@@ -90,12 +93,18 @@ val viewModelModule = module {
     viewModel { PatternViewModel(get()) }
     viewModel { BiometricViewModel(get(), get()) }
     viewModel { ReleaseNotesViewModel(get(), get()) }
-    viewModel { FileDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { FileDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 
-    viewModel { PreviewImageViewModel(get(), get(), get()) }
+    viewModel { PreviewImageViewModel(get(), get(), get(), get(), get()) }
+    viewModel { PreviewAudioViewModel(get(), get(), get()) }
+    viewModel { PreviewTextViewModel(get(), get(), get()) }
+    viewModel { PreviewVideoViewModel(get(), get(), get()) }
     viewModel { FileOperationsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { (initialFolderToDisplay: OCFile, fileListOption: FileListOption) ->
         MainFileListViewModel(
+            get(),
+            get(),
+            get(),
             get(),
             get(),
             get(),

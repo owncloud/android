@@ -38,7 +38,7 @@ import android.provider.DocumentsContract
 import android.provider.DocumentsProvider
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
-import com.owncloud.android.data.preferences.datasources.SharedPreferencesProvider
+import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.domain.UseCaseResult
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
@@ -389,7 +389,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         copyFileUseCase.execute(
             CopyFileUseCase.Params(
-                listOfFilesToCopy = listOf(sourceFile), targetFolder = targetParentFile
+                listOfFilesToCopy = listOf(sourceFile),
+                targetFolder = targetParentFile,
+                replace = listOf(false),
+                isUserLogged = AccountUtils.getCurrentOwnCloudAccount(context) != null,
             )
         ).also { result ->
             syncRequired = false
@@ -416,7 +419,10 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         moveFileUseCase.execute(
             MoveFileUseCase.Params(
-                listOfFilesToMove = listOf(sourceFile), targetFolder = targetParentFile
+                listOfFilesToMove = listOf(sourceFile),
+                targetFolder = targetParentFile,
+                replace = listOf(false),
+                isUserLogged = AccountUtils.getCurrentOwnCloudAccount(context) != null,
             )
         ).also { result ->
             syncRequired = false
@@ -468,7 +474,11 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val newFile = File(tempDir, displayName)
         newFile.parentFile?.mkdirs()
         fileToUpload = OCFile(
-            remotePath = parentDocument.remotePath + displayName, mimeType = mimeType, parentId = parentDocument.id, owner = parentDocument.owner, spaceId = parentDocument.spaceId
+            remotePath = parentDocument.remotePath + displayName,
+            mimeType = mimeType,
+            parentId = parentDocument.id,
+            owner = parentDocument.owner,
+            spaceId = parentDocument.spaceId
         ).apply {
             storagePath = newFile.path
         }

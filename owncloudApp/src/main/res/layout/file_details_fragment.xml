@@ -1,27 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ownCloud Android client application
-
-  Copyright (C) 2012  Bartek Przybylski
-  Copyright (C) 2020 ownCloud GmbH.
-
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 2,
-  as published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fdScrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:fillViewport="true"
     android:filterTouchesWhenObscured="true">
 
@@ -33,38 +15,111 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/lytName"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/fdIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/filedetails_file_image_content_description"
-                android:src="@drawable/file"
-                app:layout_constraintBottom_toBottomOf="@id/fdFilename"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/fdFilename" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                app:cardElevation="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:elevation="10dp"
+                app:cardBackgroundColor="@color/background_color"
+                app:cardCornerRadius="8dp">
 
-            <TextView
-                android:id="@+id/fdFilename"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:paddingStart="@dimen/standard_margin"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/fdIcon"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="@tools:sample/lorem[40]" />
+                <ImageView
+                    android:id="@+id/fdImageDetailFile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:contentDescription="@string/filedetails_file_image_content_description"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/file"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/badgeDetailFile"
+                android:layout_width="@dimen/file_indicator_pin_size_grid"
+                android:layout_height="@dimen/file_indicator_pin_size_grid"
+                android:src="@drawable/sync_pin"
+                android:visibility="gone"
+                android:translationX="-8dp"
+                android:translationY="-8dp"
+                app:layout_constraintStart_toEndOf="@+id/cardView"
+                app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/fdname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="30dp"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/action_mode_status_bar_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lytName" />
+
+        <TextView
+            android:id="@+id/fdProgressText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="@string/downloader_download_in_progress_ticker"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/fdname"
+            tools:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/fdProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/standard_margin"
+            android:layout_marginEnd="@dimen/standard_margin"
+            android:layout_marginBottom="@dimen/standard_margin"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/fdCancelBtn"
+            app:layout_constraintEnd_toStartOf="@id/fdCancelBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/fdCancelBtn"
+            tools:visibility="visible" />
+
+        <ImageButton
+            android:id="@+id/fdCancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/standard_margin"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/filedetails_cancel_btn_content_description"
+            android:src="@drawable/ic_action_cancel_grey"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/fdProgressBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fdProgressText"
+            tools:visibility="visible" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            app:dividerColor="@color/list_divider_background"
+            app:layout_constraintBottom_toTopOf="@id/fdTypeLabel"
+            app:layout_constraintStart_toStartOf="@id/fdProgressBar"
+            app:layout_constraintTop_toBottomOf="@id/fdProgressBar" />
 
         <TextView
             android:id="@+id/fdTypeLabel"
@@ -84,9 +139,10 @@
             android:gravity="end"
             android:text=""
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textColor="@color/action_mode_status_bar_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fdTypeLabel"
-            app:layout_constraintTop_toBottomOf="@id/lytName"
+            app:layout_constraintTop_toBottomOf="@id/divider"
             tools:text="@tools:sample/lorem[8]" />
 
         <TextView
@@ -107,20 +163,33 @@
             android:gravity="end"
             android:text=""
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textColor="@color/action_mode_status_bar_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fdSizeLabel"
             app:layout_constraintTop_toBottomOf="@id/fdType"
             tools:text="@tools:sample/lorem[6]" />
 
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dividerColor="@color/list_divider_background"
+            app:layout_constraintBottom_toTopOf="@id/fdSize"
+            app:layout_constraintStart_toStartOf="@id/fdModified"
+            app:layout_constraintTop_toBottomOf="@id/fdModified" />
+
         <TextView
             android:id="@+id/fdModifiedLabel"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:visibility="gone"
             android:text="@string/filedetails_modified"
             android:textAppearance="?android:attr/textAppearanceMedium"
             app:layout_constraintBottom_toBottomOf="@id/fdModified"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/fdModified" />
+            app:layout_constraintTop_toTopOf="@id/fdModified"
+            app:layout_constraintVertical_bias="1.0"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/fdModified"
@@ -128,49 +197,147 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:gravity="end"
+            android:visibility="gone"
             android:text=""
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textColor="@color/action_mode_status_bar_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fdModifiedLabel"
-            app:layout_constraintTop_toBottomOf="@id/fdSize"
-            tools:text="@tools:sample/lorem[6]" />
+            app:layout_constraintTop_toBottomOf="@id/divider2"
+            tools:text="@tools:sample/lorem[6]"
+            tools:visibility="visible"/>
 
         <TextView
-            android:id="@+id/fdProgressText"
+            android:id="@+id/fdCreatedLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            android:text="@string/filedetails_created"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            app:layout_constraintBottom_toBottomOf="@id/fdCreated"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/fdCreated"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/fdCreated"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="end"
+            android:visibility="gone"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textColor="@color/action_mode_status_bar_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fdCreatedLabel"
+            app:layout_constraintTop_toBottomOf="@id/fdModified"
+            tools:text="@tools:sample/lorem[6]"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/fdLastSyncLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/filedetails_last_sync"
+            android:visibility="gone"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            app:layout_constraintBottom_toBottomOf="@id/fdLastSync"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/fdLastSync"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/fdLastSync"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="end"
+            android:visibility="gone"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textColor="@color/action_mode_status_bar_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fdLastSyncLabel"
+            app:layout_constraintTop_toBottomOf="@id/fdCreated"
+            tools:text="@tools:sample/lorem[6]"
+            tools:visibility="visible"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/downloader_download_in_progress_ticker"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/fdModified"
-            tools:visibility="visible" />
+            app:dividerColor="@color/list_divider_background"
+            app:layout_constraintStart_toStartOf="@id/fdLastSync"
+            app:layout_constraintTop_toBottomOf="@id/fdLastSync" />
 
-        <ProgressBar
-            android:id="@+id/fdProgressBar"
-            style="?android:attr/progressBarStyleHorizontal"
+        <TextView
+            android:id="@+id/fdPathLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/ssl_validator_label_L"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            app:layout_constraintBottom_toBottomOf="@id/fdPath"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/fdPath"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/fdPath"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/standard_margin"
+            android:layout_marginTop="12dp"
+            android:gravity="end"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textColor="@color/action_mode_status_bar_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fdPathLabel"
+            app:layout_constraintTop_toBottomOf="@id/divider3"
+            tools:text="@tools:sample/lorem[6]"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/fdSpaceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/space_label"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/fdCancelBtn"
-            app:layout_constraintEnd_toStartOf="@id/fdCancelBtn"
+            app:layout_constraintBottom_toBottomOf="@id/fdSpace"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/fdCancelBtn"
-            tools:visibility="visible" />
+            app:layout_constraintTop_toTopOf="@id/fdSpace"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/fdSpace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="end"
+            android:paddingRight="5dp"
+            android:visibility="gone"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fdIconSpace"
+            app:layout_constraintStart_toEndOf="@id/fdSpaceLabel"
+            app:layout_constraintTop_toBottomOf="@id/fdPath"
+            tools:text="asasa"
+            tools:visibility="visible"/>
 
         <ImageButton
-            android:id="@+id/fdCancelBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/fdIconSpace"
+            android:layout_width="@dimen/file_indicator_pin_size_grid"
+            android:layout_height="@dimen/file_indicator_pin_size_grid"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/filedetails_cancel_btn_content_description"
-            android:src="@drawable/ic_action_cancel_grey"
+            android:src="@drawable/ic_spaces"
+            android:scaleType="fitCenter"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/fdProgressBar"
+            app:layout_constraintBottom_toBottomOf="@id/fdSpace"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fdProgressText"
-            tools:visibility="visible" />
+            app:layout_constraintStart_toEndOf="@id/fdSpace"
+            app:layout_constraintTop_toTopOf="@id/fdSpace"
+            tools:visibility="visible"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

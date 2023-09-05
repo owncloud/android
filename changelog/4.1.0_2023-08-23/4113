@@ -1,0 +1,6 @@
+Enhancement: Respect app_providers_appsUrl value from capabilities
+
+Now, the app receives the app_providers_appsUrl from the local database. Before of this issue, the value was hardcoded.
+
+https://github.com/owncloud/android/issues/4075
+https://github.com/owncloud/android/pull/4113

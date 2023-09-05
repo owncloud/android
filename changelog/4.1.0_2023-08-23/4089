@@ -1,0 +1,6 @@
+Enhancement: Improve grid mode
+
+Grid mode has been improved to show bigger thumbnails in images files.
+
+https://github.com/owncloud/android/issues/4027
+https://github.com/owncloud/android/pull/4089

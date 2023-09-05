@@ -36,6 +36,7 @@ Before we're able to merge your code into the ownCloud app for Android, please, 
 	Please, use the mentioned prefixes because CI system is ready to match with them. Be sure your feature, fix, improvement or technical branches are updated with latest changes in official `android/master`, it will give us a better chance to test your code before merging it with stable code.
 * Once you are done with your code, start a pull request to merge your contribution into official `android/master`.
 * Keep on using pull requests for your next contributions although you own write permissions.
+* Important to mention that ownCloud Android team uses [GitFlow](https://datasift.github.io/gitflow/IntroducingGitFlow.html) as branching model. Please take a look to the link to understand better what it is and how it works. It's something as useful as easy.
 
 [contribution]: https://owncloud.com/contribute/
 

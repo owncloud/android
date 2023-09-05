@@ -1,0 +1,8 @@
+Enhancement: Added "Open in web" options to main file list
+
+"Open in web" dynamic options (depending on the providers available) are now shown
+in the main file list as well, when selecting one single file which has providers
+to open it in web.
+
+https://github.com/owncloud/android/issues/3860
+https://github.com/owncloud/android/pull/4058

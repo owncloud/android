@@ -192,7 +192,13 @@ class UploadFileFromFileSystemWorker(
         if (ocTransfer.forceOverwrite) {
 
             val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
-            val useCaseResult = getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(ocTransfer.accountName, ocTransfer.remotePath, ocTransfer.spaceId))
+            val useCaseResult = getFileByRemotePathUseCase.execute(
+                GetFileByRemotePathUseCase.Params(
+                    ocTransfer.accountName,
+                    ocTransfer.remotePath,
+                    ocTransfer.spaceId
+                )
+            )
 
             eTagInConflict = useCaseResult.getDataOrNull()?.etagInConflict.orEmpty()
 
@@ -200,7 +206,12 @@ class UploadFileFromFileSystemWorker(
         } else {
 
             Timber.d("Checking name collision in server")
-            val remotePath = getAvailableRemotePath(client, uploadPath, spaceWebDavUrl)
+            val remotePath = getAvailableRemotePath(
+                ownCloudClient = client,
+                remotePath = uploadPath,
+                spaceWebDavUrl = spaceWebDavUrl,
+                isUserLogged = AccountUtils.getCurrentOwnCloudAccount(appContext) != null,
+            )
             if (remotePath != uploadPath) {
                 uploadPath = remotePath
                 Timber.d("Name collision detected, let's rename it to $remotePath")

@@ -1,3 +1,249 @@
+Changelog for ownCloud Android Client [4.1.0] (2023-08-23)
+=======================================
+The following sections list the changes in ownCloud Android Client 4.1.0 relevant to
+ownCloud admins and users.
+
+[4.1.0]: https://github.com/owncloud/android/compare/v4.0.0...v4.1.0
+
+Summary
+-------
+
+* Bugfix - Spaces' thumbnails not loaded the first time: [#3959](https://github.com/owncloud/android/issues/3959)
+* Bugfix - Bad error message when copying/moving with server down: [#4044](https://github.com/owncloud/android/issues/4044)
+* Bugfix - Unnecessary or wrong call: [#4074](https://github.com/owncloud/android/issues/4074)
+* Bugfix - Menu option unset av. offline shown when shouldn't: [#4077](https://github.com/owncloud/android/issues/4077)
+* Bugfix - List of accounts empty after removing all accounts and adding new ones: [#4114](https://github.com/owncloud/android/issues/4114)
+* Bugfix - Crash when the token is expired: [#4116](https://github.com/owncloud/android/issues/4116)
+* Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
+* Change - Move file menu options filter to use case: [#4009](https://github.com/owncloud/android/issues/4009)
+* Change - Gradle Version Catalog: [#4035](https://github.com/owncloud/android/pull/4035)
+* Change - Remove "ignore" from the debug flavour Android manifest: [#4064](https://github.com/owncloud/android/pull/4064)
+* Change - Not opening browser automatically in login: [#4067](https://github.com/owncloud/android/issues/4067)
+* Change - Added new unit tests for providers: [#4073](https://github.com/owncloud/android/issues/4073)
+* Change - New detail screen file design: [#4098](https://github.com/owncloud/android/pull/4098)
+* Enhancement - Show "More" button for every file list item: [#2885](https://github.com/owncloud/android/issues/2885)
+* Enhancement - Added "Open in web" options to main file list: [#3860](https://github.com/owncloud/android/issues/3860)
+* Enhancement - Copy/move conflict solved by users: [#3935](https://github.com/owncloud/android/issues/3935)
+* Enhancement - Improve grid mode: [#4027](https://github.com/owncloud/android/issues/4027)
+* Enhancement - Improve UX of creation dialog: [#4031](https://github.com/owncloud/android/issues/4031)
+* Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
+* Enhancement - Force security if not protected: [#4061](https://github.com/owncloud/android/issues/4061)
+* Enhancement - Prevent http traffic with branding options: [#4066](https://github.com/owncloud/android/issues/4066)
+* Enhancement - Unit tests for datasources classes - Part 2: [#4071](https://github.com/owncloud/android/issues/4071)
+* Enhancement - Respect app_providers_appsUrl value from capabilities: [#4075](https://github.com/owncloud/android/issues/4075)
+* Enhancement - Apply (1) to uploads' name conflicts: [#4079](https://github.com/owncloud/android/issues/4079)
+* Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
+* Enhancement - Align Sharing icons with other platforms: [#4101](https://github.com/owncloud/android/issues/4101)
+
+Details
+-------
+
+* Bugfix - Spaces' thumbnails not loaded the first time: [#3959](https://github.com/owncloud/android/issues/3959)
+
+   Changing our own lazy image loading with coil library in spaces and file list.
+
+   https://github.com/owncloud/android/issues/3959
+   https://github.com/owncloud/android/pull/4084
+
+* Bugfix - Bad error message when copying/moving with server down: [#4044](https://github.com/owncloud/android/issues/4044)
+
+   Right now, when we are trying to copy a file to another folder and the server is downwe receive a
+   correct message. Before the issue the message shown code from the application.
+
+   https://github.com/owncloud/android/issues/4044
+   https://github.com/owncloud/android/pull/4127
+
+* Bugfix - Unnecessary or wrong call: [#4074](https://github.com/owncloud/android/issues/4074)
+
+   Removed added path when checking path existence.
+
+   https://github.com/owncloud/android/issues/4074
+   https://github.com/owncloud/android/pull/4131
+   https://github.com/owncloud/android-library/pull/578
+
+* Bugfix - Menu option unset av. offline shown when shouldn't: [#4077](https://github.com/owncloud/android/issues/4077)
+
+   Unset available offline menu option is not shown in files inside an available offline folder
+   anymore, because content inside an available offline folder cannot be changed its status,
+   only if the folder changes it.
+
+   https://github.com/owncloud/android/issues/4077
+   https://github.com/owncloud/android/pull/4093
+
+* Bugfix - List of accounts empty after removing all accounts and adding new ones: [#4114](https://github.com/owncloud/android/issues/4114)
+
+   Now, the account list is shown when User opens the app and was added a new account.
+
+   https://github.com/owncloud/android/issues/4114
+   https://github.com/owncloud/android/pull/4122
+
+* Bugfix - Crash when the token is expired: [#4116](https://github.com/owncloud/android/issues/4116)
+
+   Now when the token expires and we switch from grid to list mode on the main screen the app doesn't
+   crash.
+
+   https://github.com/owncloud/android/issues/4116
+   https://github.com/owncloud/android/pull/4132
+
+* Change - Upgrade min SDK to Android 6 (API 23): [#3245](https://github.com/owncloud/android/issues/3245)
+
+   The minimum SDK has been updated to API 23, which means that the minimum version of Android we'll
+   support from now on is Android 6 Marshmallow.
+
+   https://github.com/owncloud/android/issues/3245
+   https://github.com/owncloud/android/pull/4036
+   https://github.com/owncloud/android-library/pull/566
+
+* Change - Move file menu options filter to use case: [#4009](https://github.com/owncloud/android/issues/4009)
+
+   The old class where the menu options for a file or group or files were filtered has been replaced
+   by a new use case which fits in the architecture of the app.
+
+   https://github.com/owncloud/android/issues/4009
+   https://github.com/owncloud/android/pull/4039
+
+* Change - Gradle Version Catalog: [#4035](https://github.com/owncloud/android/pull/4035)
+
+   Introduces the Gradle Version Catalog to manage the dependencies in a scalable way. Now, all
+   the dependencies are declared inside toml file.
+
+   https://github.com/owncloud/android/pull/4035
+
+* Change - Remove "ignore" from the debug flavour Android manifest: [#4064](https://github.com/owncloud/android/pull/4064)
+
+   A `tools:ignore` property from the Android manifest specific for the debug flavour was
+   removed as it is not needed anymore.
+
+   https://github.com/owncloud/android/pull/4064
+
+* Change - Not opening browser automatically in login: [#4067](https://github.com/owncloud/android/issues/4067)
+
+   When there is a fixed bearer auth server URL via a branded parameter, the login screen won't
+   redirect automatically to the browser so that some problems in the authentication flow are
+   solved.
+
+   https://github.com/owncloud/android/issues/4067
+   https://github.com/owncloud/android/pull/4106
+
+* Change - Added new unit tests for providers: [#4073](https://github.com/owncloud/android/issues/4073)
+
+   Implementation of tests for the functions within ScopedStorageProvider and
+   OCSharedPreferencesProvider.
+
+   https://github.com/owncloud/android/issues/4073
+   https://github.com/owncloud/android/pull/4091
+
+* Change - New detail screen file design: [#4098](https://github.com/owncloud/android/pull/4098)
+
+   The detail view ha been improved. It added new properties like last sync, status icon on
+   thumbnail, path and creation date
+
+   https://github.com/owncloud/android/issues/4092
+   https://github.com/owncloud/android/pull/4098
+
+* Enhancement - Show "More" button for every file list item: [#2885](https://github.com/owncloud/android/issues/2885)
+
+   A 3-dot button has been added to every file, where the options that we have in the 3-dot menu in
+   multiselection for that single file have been added for a quicker access to them. Also, some
+   options have been reordered.
+
+   https://github.com/owncloud/android/issues/2885
+   https://github.com/owncloud/android/pull/4076
+
+* Enhancement - Added "Open in web" options to main file list: [#3860](https://github.com/owncloud/android/issues/3860)
+
+   "Open in web" dynamic options (depending on the providers available) are now shown in the main
+   file list as well, when selecting one single file which has providers to open it in web.
+
+   https://github.com/owncloud/android/issues/3860
+   https://github.com/owncloud/android/pull/4058
+
+* Enhancement - Copy/move conflict solved by users: [#3935](https://github.com/owncloud/android/issues/3935)
+
+   A pop-up is displayed in case there is a name conflict with the files been moved or copied. The
+   pop-up has the options to Skip, Replace and Keep both, to be consistent with the web client.
+
+   https://github.com/owncloud/android/issues/3935
+   https://github.com/owncloud/android/pull/4062
+
+* Enhancement - Improve grid mode: [#4027](https://github.com/owncloud/android/issues/4027)
+
+   Grid mode has been improved to show bigger thumbnails in images files.
+
+   https://github.com/owncloud/android/issues/4027
+   https://github.com/owncloud/android/pull/4089
+
+* Enhancement - Improve UX of creation dialog: [#4031](https://github.com/owncloud/android/issues/4031)
+
+   Creation dialog now shows an error message and disables the confirmation button when
+   forbidden characters are typed
+
+   https://github.com/owncloud/android/issues/4031
+   https://github.com/owncloud/android/pull/4097
+
+* Enhancement - File name conflict starting by (1): [#4040](https://github.com/owncloud/android/pull/4040)
+
+   File conflicts now are named with suffix starting in (1) instead of (2).
+
+   https://github.com/owncloud/android/issues/3946
+   https://github.com/owncloud/android/pull/4040
+
+* Enhancement - Force security if not protected: [#4061](https://github.com/owncloud/android/issues/4061)
+
+   A new branding parameter was created to enforce security protection in the app if device
+   protection is not enabled.
+
+   https://github.com/owncloud/android/issues/4061
+   https://github.com/owncloud/android/pull/4087
+
+* Enhancement - Prevent http traffic with branding options: [#4066](https://github.com/owncloud/android/issues/4066)
+
+   Adding branding option for prevent http traffic.
+
+   https://github.com/owncloud/android/issues/4066
+   https://github.com/owncloud/android/pull/4110
+
+* Enhancement - Unit tests for datasources classes - Part 2: [#4071](https://github.com/owncloud/android/issues/4071)
+
+   Unit tests of the OCLocalFileDataSource and OCRemoteFileDataSource classes have been done.
+
+   https://github.com/owncloud/android/issues/4071
+   https://github.com/owncloud/android/pull/4123
+
+* Enhancement - Respect app_providers_appsUrl value from capabilities: [#4075](https://github.com/owncloud/android/issues/4075)
+
+   Now, the app receives the app_providers_appsUrl from the local database. Before of this
+   issue, the value was hardcoded.
+
+   https://github.com/owncloud/android/issues/4075
+   https://github.com/owncloud/android/pull/4113
+
+* Enhancement - Apply (1) to uploads' name conflicts: [#4079](https://github.com/owncloud/android/issues/4079)
+
+   When new files were uploaded manually to pC, shared from a 3rd party app or text shared with oC
+   name conflict happens, (2) was added to the file name instead of (1).
+
+   Right now if we upload a file with a repeated name, the new file name will end with (1).
+
+   https://github.com/owncloud/android/issues/4079
+   https://github.com/owncloud/android/pull/4129
+
+* Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
+
+   The locales_config.xml file has been created for the application to detect the language that
+   the user wishes to choose.
+
+   https://github.com/owncloud/android/issues/4082
+   https://github.com/owncloud/android/pull/4099
+
+* Enhancement - Align Sharing icons with other platforms: [#4101](https://github.com/owncloud/android/issues/4101)
+
+   The share icon has been changed on the screens where it appears to be synchronized with other
+   platforms.
+
+   https://github.com/owncloud/android/issues/4101
+   https://github.com/owncloud/android/pull/4112
+
 Changelog for ownCloud Android Client [4.0.0] (2023-05-29)
 =======================================
 The following sections list the changes in ownCloud Android Client 4.0.0 relevant to

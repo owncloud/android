@@ -86,6 +86,8 @@
   <string name="prefs_help">Ajuda</string>
   <string name="prefs_sync_calendar_contacts">Sincronize seus contatos, calendários e tarefas</string>
   <string name="prefs_sync_calendar_contacts_summary">Instalar DAVx⁵</string>
+  <string name="prefs_access_document_provider">Acessar provedor de documentos</string>
+  <string name="prefs_access_document_provider_summary">Aplicativo sugerido para navegar pelos arquivos do seu dispositivo por meio do explorador de arquivos nativo do Android</string>
   <string name="prefs_recommend">Recomendar a um amigo</string>
   <string name="prefs_feedback">Feedback</string>
   <string name="prefs_imprint">Imprint</string>
@@ -149,6 +151,7 @@
   <string name="file_list_seconds_ago">segundos atrás</string>
   <string name="file_list_empty_title_all_files">Nenhum arquivo aqui</string>
   <string name="spaces_list_empty_title">No spaces</string>
+  <string name="space_label">Espaço:</string>
   <string name="file_list_empty_title_available_offline">Nenhum arquivo off-line disponível</string>
   <string name="file_list_empty_title_shared_by_links">Nenhum link compartilhado</string>
   <string name="file_list_empty_subtitle_all_files">Carregue algum conteúdo ou sincronize com seus dispositivos!</string>
@@ -171,10 +174,13 @@
   <string name="file_list_files">arquivos</string>
   <string name="filedetails_select_file">Toque em um arquivo para mostrar informações adicionais.</string>
   <string name="upload_to">Enviado para %1$s</string>
+  <string name="pick_document_type">Escolha um tipo de documento para criar:</string>
   <string name="upload_files_title">Arquivos</string>
   <string name="filedetails_size">Tamanho:</string>
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Criado:</string>
+  <string name="filedetails_last_sync">Última sincronização:</string>
+  <string name="filedetails_path">Caminho:</string>
   <string name="filedetails_modified">Modificado:</string>
   <string name="filedetails_download">Baixar</string>
   <string name="filedetails_file_image_content_description">Imagem do Arquivo</string>
@@ -212,7 +218,7 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">O certificado de servidor não é confiável</string>
   <string name="uploader_upload_text_dialog_title">Insira um nome para o novo arquivo</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">O nome do arquivo não pode estar em branco</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">O nome de arquivo deve ter mais de %d caracteres</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">O nome do arquivo não deve ser maior que %d caracteres</string>
   <string name="uploader_upload_text_filename_hint">Nome do Arquivo</string>
   <string name="uploader_upload_camera_upload_files">Enviando arquivos de envio da camera</string>
   <string name="uploader_upload_picture_upload_files">%d novas fotos serão carregadas </string>
@@ -366,13 +372,17 @@
   <string name="rename_local_fail_msg">Cópia local não pôde ser renomeada; tente outro nome</string>
   <string name="rename_server_fail_msg">Renomeação não pôde ser finalizada</string>
   <string name="file_already_exists">O arquivo já existe</string>
+  <string name="folder_already_exists">Folder already exists</string>
+  <string name="file_already_exists_description">File with name %1$s already exists.</string>
+  <string name="folder_already_exists_description">Folder with name %1$s already exists.</string>
   <string name="sync_file_fail_msg">Arquivo remoto não pode ser verificado</string>
   <string name="sync_file_nothing_to_do_msg">Conteúdo do arquivo já foi sincronizado</string>
   <string name="new_remote_version_found_msg">Uma nova versão foi encontrada no servidor. Baixando…</string>
   <string name="download_enqueued_msg">Baixar em fila</string>
   <string name="upload_enqueued_msg">Enviar em fila</string>
   <string name="create_dir_fail_msg">A pasta não pode ser criada</string>
-  <string name="filename_forbidden_characters">Caracteres proibidos: / \\ &lt; &gt; : \" | ? *</string>
+  <string name="create_file_fail_msg">O arquivo não pôde ser criado</string>
+  <string name="filename_forbidden_characters">Caracteres proibidos: / \\</string>
   <string name="filename_forbidden_characters_from_server">O nome do arquivo contem pelo menos um caractere inválido  </string>
   <string name="filename_empty">O nome do arquivo não pode estar vazio</string>
   <string name="filename_too_long">O nome do arquivo não pode ser tão longo</string>
@@ -384,6 +394,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Copiando o arquivo de armazenagem privada</string>
   <string name="oauth_check_onoff">Login com oAuth2</string>
   <string name="oauth_login_connection">Conectando ao servidor OAuth2…</string>
+  <string name="ssl_connection_not_secure">A conexão não é segura, o tráfego http não é permitido.</string>
   <string name="ssl_validator_header">A identidade do servidor não pôde ser verificada</string>
   <string name="ssl_validator_reason_cert_not_trusted">- O certificado do servidor não é confiável</string>
   <string name="ssl_validator_reason_cert_expired">- O certificado do servidor expirou</string>
@@ -429,6 +440,7 @@
   <string name="conflict_use_local_version">versão local</string>
   <string name="conflict_use_server_version">versão do servidor</string>
   <string name="error_conflict">An error occurred in the destination folder</string>
+  <string name="conflict_replace">Substituir </string>
   <string name="preview_image_description">Pré-visualização da imagem</string>
   <string name="preview_image_error_unknown_format">Esta imagem não pode ser mostrada</string>
   <string name="error__upload__local_file_not_copied">%1$s não pôde ser copiado para pasta local %2$s</string>
@@ -656,7 +668,7 @@
   <string name="release_notes_proceed">Prosseguir</string>
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
   <string name="release_notes_4_0_title_1">Support for Spaces</string>
-  <string name="release_notes_4_0_subtitle_1">Introducing support for spaces feature (oCIS). Only available for new accounts</string>
+  <string name="release_notes_4_0_subtitle_1">Apresentando o suporte para o recurso de espaços (oCIS). <b>Disponível apenas para contas recém-logadas</b></string>
   <string name="release_notes_4_0_title_2">Bottom navigation bar</string>
   <string name="release_notes_4_0_subtitle_2">Reordered some tabs</string>
   <string name="release_notes_4_0_title_3">Fim do suporte Lollipop</string>
@@ -675,10 +687,34 @@
   <string name="release_notes_4_0_subtitle_9">Se o seu servidor oferecer suporte a provedores de aplicativos para abrir tipos específicos de arquivos, todos eles serão listados na visualização Detalhes</string>
   <string name="release_notes_4_0_title_10">Ícones temáticos suportados</string>
   <string name="release_notes_4_0_subtitle_10">O recurso \"Ícones temáticos\" do Android 13 permitirá que você defina o ícone do aplicativo em monocromático</string>
+  <string name="release_notes_4_0_title_11">Criar novos documentos via web (oCIS)</string>
+  <string name="release_notes_4_0_subtitle_11">Se o servidor oCIS suportar provedores de aplicativos, novos documentos podem ser criados via navegador e sincronizados com</string>
+  <string name="release_notes_4_0_title_12">Nova configuração com aplicativo sugerido para procurar arquivos</string>
+  <string name="release_notes_4_0_subtitle_12">Uma nova configuração foi adicionada na seção \"Mais\" com um aplicativo sugerido para acessar arquivos via provedor de documentos</string>
+  <string name="release_notes_4_1_title_1">Adicionado botão de 3 pontos a todos os itens da lista</string>
+  <string name="release_notes_4_1_subtitle_1">Adicionado botão a todos os elementos da lista para mostrar um menu com todas as opções do item</string>
+  <string name="release_notes_4_1_title_2">Melhorar visualização de detalhes</string>
+  <string name="release_notes_4_1_subtitle_2">Redesenho da visualização de detalhes</string>
+  <string name="release_notes_4_1_title_3">Suporte para nova mudança de idioma</string>
+  <string name="release_notes_4_1_subtitle_3">Adicionado suporte para a nova alteração de idioma no Android 13+</string>
+  <string name="release_notes_4_1_title_4">Bug corrigido sobre o carregamento de imagens do espaço</string>
+  <string name="release_notes_4_1_subtitle_4">Carregando as imagens dos espaços na primeira vez que mostramos e melhorando o carregamento das imagens dos itens</string>
+  <string name="release_notes_4_1_title_5">Abrir arquivos markdown no modo ASCII</string>
+  <string name="release_notes_4_1_subtitle_5">Adicionado um novo modo para abrir arquivos markdown para mostrar o código ASCII</string>
+  <string name="release_notes_4_1_title_6">Mostrando pop-up no conflito de copiar/mover</string>
+  <string name="release_notes_4_1_subtitle_6">Mostrando um pop-up de 3 opções ao ter um conflito de nomenclatura na ação de copiar ou mover</string>
+  <string name="release_notes_4_1_title_7">Pequenas correções de bugs e melhorias</string>
+  <string name="release_notes_4_1_subtitle_7">Alguns pequenos bugs foram corrigidos e pequenas melhorias técnicas foram introduzidas para melhorar a experiência no aplicativo</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
   <string name="open_in_web_error_generic">Não foi possível abrir na web</string>
   <string name="open_in_web_error_not_supported">Não há aplicativos que suportam este tipo de arquivo</string>
   <string name="open_in_web_error_too_early">O arquivo requisitado ainda não está disponível, por favor tente novamente mais tarde</string>
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_title">Aviso de contas oCIS</string>
+  <string name="ocis_accounts_warning_message">Por favor, remova a conta e faça o login novamente para obter o recurso de espaços</string>
+  <string name="ocis_accounts_warning_checkbox_message">Não mostrar novamente</string>
+  <string name="ocis_accounts_warning_button">Entendido</string>
+  <string name="tab_label_ascii">Texto</string>
 </resources>

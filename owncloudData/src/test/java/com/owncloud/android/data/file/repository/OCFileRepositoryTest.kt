@@ -23,15 +23,18 @@ import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.data.files.repository.OCFileRepository
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
-import com.owncloud.android.data.storage.LocalStorageProvider
+import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_FILE
+import com.owncloud.android.testutil.OC_FILE_WITH_SYNC_INFO_AND_SPACE
 import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Ignore
@@ -100,6 +103,47 @@ class OCFileRepositoryTest {
         }
     }
 
+    @Test
+    fun `getFileWithSyncInfoByIdAsFlow returns OCFileWithSyncInfo`()  = runBlocking {
+        every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE)
+
+        val ocFile = ocFileRepository.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
+
+        ocFile.collect { result ->
+            assertEquals(OC_FILE_WITH_SYNC_INFO_AND_SPACE, result)
+        }
+
+        verify(exactly = 1) {
+            localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
+        }
+    }
+
+    @Test
+    fun `getFileWithSyncInfoByIdAsFlow returns null`()  = runBlocking {
+        every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(null)
+
+        val ocFile = ocFileRepository.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
+
+        ocFile.collect { result ->
+            assertNull(result)
+        }
+
+        verify(exactly = 1) {
+            localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
+        }
+    }
+
+
+    @Test(expected = Exception::class)
+    fun `getFileWithSyncInfoByIdAsFlow returns an exception`()  = runBlocking {
+        every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }  throws Exception()
+
+        ocFileRepository.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
+        }
+    }
     @Test
     fun `get file by id - ok - null`() {
         every { localFileDataSource.getFileById(OC_FOLDER.id!!) } returns null

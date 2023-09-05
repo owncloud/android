@@ -1,0 +1,6 @@
+Change: Gradle Version Catalog
+
+Introduces the Gradle Version Catalog to manage the dependencies in a scalable way.
+Now, all the dependencies are declared inside toml file.
+
+https://github.com/owncloud/android/pull/4035

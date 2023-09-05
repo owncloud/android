@@ -175,6 +175,7 @@
   <string name="filedetails_size">Размер:</string>
   <string name="filedetails_type">Тип:</string>
   <string name="filedetails_created">Создан:</string>
+  <string name="filedetails_last_sync">Последняя синхронизация:</string>
   <string name="filedetails_modified">Изменён:</string>
   <string name="filedetails_download">Скачать</string>
   <string name="filedetails_file_image_content_description">Файл изображения</string>
@@ -212,7 +213,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
   <string name="uploader_upload_text_dialog_title">Укажите имя для нового файла</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Имя файла не должно быть пустым</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Имя файла должно быть не длиннее %d символов</string>
   <string name="uploader_upload_text_filename_hint">Имя файла</string>
   <string name="uploader_upload_camera_upload_files">Загрузка файлов, загруженных из камеры</string>
   <string name="uploader_upload_picture_upload_files">Будет загружено %d новых изображений</string>
@@ -365,14 +365,12 @@
   <string name="available_offline_inherited_msg">Каталог, содержащий этот файл, доступен автономно</string>
   <string name="rename_local_fail_msg">Локальная копия не может быть переименована; попробуйте другое имя</string>
   <string name="rename_server_fail_msg">Переименование не может быть завершено</string>
-  <string name="file_already_exists">файл уже существует</string>
   <string name="sync_file_fail_msg">Удаленный файл не может быть проверен</string>
   <string name="sync_file_nothing_to_do_msg">Содержимое файла уже синхронизировано</string>
   <string name="new_remote_version_found_msg">Найдена новая версия на сервере. Загрузка...</string>
   <string name="download_enqueued_msg">Скачивание в очереди</string>
   <string name="upload_enqueued_msg">Загрузка в очереди</string>
   <string name="create_dir_fail_msg">Не удалось создать каталог</string>
-  <string name="filename_forbidden_characters">Недопустимые символы: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Имя файла содержит по крайней мере один некорректный символ</string>
   <string name="filename_empty">Имя файла не может быть пустым</string>
   <string name="filename_too_long">Неверная длина имени файла</string>
@@ -656,7 +654,6 @@
   <string name="release_notes_proceed">Продолжить</string>
   <string name="release_notes_icon">Иконка к примечанию релиза</string>
   <string name="release_notes_4_0_title_1">Поддержка хранилищ</string>
-  <string name="release_notes_4_0_subtitle_1">Введение поддержки функции хранилищ (oCIS). Доступно только для новых аккаунтов</string>
   <string name="release_notes_4_0_title_2">Нижняя панель навигации</string>
   <string name="release_notes_4_0_subtitle_2">Переупорядочены некоторые вкладки</string>
   <string name="release_notes_4_0_title_3">Окончание поддержки Lollipop</string>
@@ -669,10 +666,15 @@
   <string name="release_notes_4_0_subtitle_6">В настройках добавлен новый пункт, который перенаправляет в настройки уведомлений приложений устройства</string>
   <string name="release_notes_4_0_title_7">Мелкие исправления и улучшения</string>
   <string name="release_notes_4_0_subtitle_7">Были исправлены некоторые незначительные ошибки, а также были внесены незначительные технические улучшения для улучшения работы приложения.</string>
+  <string name="release_notes_4_1_title_7">Мелкие исправления и улучшения</string>
+  <string name="release_notes_4_1_subtitle_7">Были исправлены некоторые незначительные ошибки, а также были внесены незначительные технические улучшения для улучшения работы приложения.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Открыть в браузере</string>
   <string name="ic_action_open_with_web">Открыть в %1$s (веб)</string>
   <string name="open_in_web_error_generic">Не удалось открыть в сети</string>
   <string name="open_in_web_error_not_supported">нет приложений, которые поддерживают этот тип файла</string>
   <string name="open_in_web_error_too_early">Запрашиваемый файл в данный момент недоступен, пожалуйста, попробуйте позже </string>
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Не показывать снова</string>
+  <string name="tab_label_ascii">Текст</string>
 </resources>

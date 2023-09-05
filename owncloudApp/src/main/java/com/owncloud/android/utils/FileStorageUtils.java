@@ -27,7 +27,7 @@ package com.owncloud.android.utils;
 import android.annotation.SuppressLint;
 import android.webkit.MimeTypeMap;
 
-import com.owncloud.android.data.storage.LocalStorageProvider;
+import com.owncloud.android.data.providers.LocalStorageProvider;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;

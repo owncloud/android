@@ -48,7 +48,7 @@ val OC_FILE = OCFile(
     permissions = "RDNVCK",
     remoteId = "00000003oci9p7er2how",
     privateLink = "http://server.url/f/4",
-    creationTimestamp = 0,
+    creationTimestamp = 1593510589000,
     modificationTimestamp = 1593510589000,
     etag = "5efb0c13c688f",
     mimeType = "image/jpeg",
@@ -56,11 +56,51 @@ val OC_FILE = OCFile(
     availableOfflineStatus = AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE,
 )
 
+val OC_FILE_AVAILABLE_OFFLINE = OCFile(
+    id = 124,
+    parentId = 122,
+    remotePath = "/Photos/image.jpt",
+    owner = OC_ACCOUNT_NAME,
+    permissions = "RDNVCK",
+    remoteId = "00000003oci9p7er2how",
+    privateLink = "http://server.url/f/4",
+    creationTimestamp = 1593510589000,
+    modificationTimestamp = 1593510589000,
+    etag = "5efb0c13c688f",
+    mimeType = "image/jpeg",
+    length = 3000000,
+    availableOfflineStatus = AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
+)
+
 val OC_FILE_WITH_SYNC_INFO = OCFileWithSyncInfo(
     file = OC_FILE,
     uploadWorkerUuid = null,
     downloadWorkerUuid = null,
     isSynchronizing = false,
+)
+
+val OC_FILE_WITH_SYNC_INFO_AND_SPACE = OCFileWithSyncInfo(
+    file = OC_FILE,
+    uploadWorkerUuid = null,
+    downloadWorkerUuid = null,
+    isSynchronizing = false,
+    space = OC_SPACE_PERSONAL
+)
+
+val OC_FILE_WITH_SYNC_INFO_AND_WITHOUT_PERSONAL_SPACE = OCFileWithSyncInfo(
+    file = OC_FILE,
+    uploadWorkerUuid = null,
+    downloadWorkerUuid = null,
+    isSynchronizing = false,
+    space = OC_SPACE_PROJECT_WITH_IMAGE
+)
+
+val OC_FILE_OC_AVAILABLE_OFFLINE_FILE = OCFileWithSyncInfo(
+    file = OC_FILE_AVAILABLE_OFFLINE,
+    uploadWorkerUuid = null,
+    downloadWorkerUuid = null,
+    isSynchronizing = false,
+    space = OC_SPACE_PROJECT_WITH_IMAGE
 )
 
 val OC_AVAILABLE_OFFLINE_FILE = OCFile(

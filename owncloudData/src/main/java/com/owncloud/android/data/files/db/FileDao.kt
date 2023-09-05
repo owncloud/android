@@ -46,16 +46,22 @@ interface FileDao {
         id: Long
     ): OCFileEntity?
 
+    @Query(SELECT_FILE_WITH_ID)
+    fun getFileByIdAsFlow(
+        id: Long
+    ): Flow<OCFileEntity?>
+
     @Transaction
     @Query(SELECT_FILE_WITH_ID)
     fun getFileWithSyncInfoById(
         id: Long
     ): OCFileAndFileSync?
 
+    @Transaction
     @Query(SELECT_FILE_WITH_ID)
-    fun getFileByIdAsFlow(
+    fun getFileWithSyncInfoByIdAsFlow(
         id: Long
-    ): Flow<OCFileEntity?>
+    ): Flow<OCFileAndFileSync?>
 
     @Query(SELECT_FILE_FROM_OWNER_WITH_REMOTE_PATH)
     fun getFileByOwnerAndRemotePath(
@@ -242,7 +248,8 @@ interface FileDao {
         sourceFile: OCFileEntity,
         targetFolder: OCFileEntity,
         finalRemotePath: String,
-        remoteId: String?
+        remoteId: String?,
+        replace: Boolean?,
     ) {
         // 1. Update target size
         upsert(
@@ -250,6 +257,10 @@ interface FileDao {
                 length = targetFolder.length + sourceFile.length
             ).apply { id = targetFolder.id }
         )
+
+        if (replace == true) {
+            remoteId?.let { deleteFileByRemoteId(it) }
+        }
 
         // 2. Insert a new file with common attributes and retrieved remote id
         upsert(
@@ -308,6 +319,9 @@ interface FileDao {
 
     @Query(DELETE_FILE_WITH_ID)
     fun deleteFileById(id: Long)
+
+    @Query(DELETE_FILE_WITH_REMOTE_ID)
+    fun deleteFileByRemoteId(remoteId: String)
 
     @Query(UPDATE_FILES_STORAGE_DIRECTORY)
     fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
@@ -478,6 +492,11 @@ interface FileDao {
             DELETE
             FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
             WHERE id = :id
+        """
+        private const val DELETE_FILE_WITH_REMOTE_ID = """
+            DELETE
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE remoteId = :remoteId
         """
 
         private const val SELECT_FOLDER_CONTENT = """

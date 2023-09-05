@@ -141,6 +141,7 @@
   <string name="filedetails_size">Grösse:</string>
   <string name="filedetails_type">Art:</string>
   <string name="filedetails_created">Erstellt:</string>
+  <string name="filedetails_last_sync">Letzte Synchronisation:</string>
   <string name="filedetails_modified">Geändert:</string>
   <string name="filedetails_download">Herunterladen</string>
   <string name="filedetails_sync_file">Synchronisation</string>
@@ -175,7 +176,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Das Zertifikat des Servers ist nicht vertrauenswürdig</string>
   <string name="uploader_upload_text_dialog_title">Einen Namen für die neue Datei eingeben</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Der Dateiname muss angegeben werden</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Der Dateiname darf nicht mehr als %d Zeichen haben</string>
   <string name="uploader_upload_text_filename_hint">Dateiname</string>
   <string name="uploader_upload_camera_upload_files">Hochladen von Hochladedateien der Kamera</string>
   <string name="uploader_upload_available_offline_files">Hochladen von verfügbaren Offline-Dateien</string>
@@ -304,7 +304,6 @@
   <string name="sync_file_fail_msg">Die entfernte Datei konnte nicht überprüft werden</string>
   <string name="sync_file_nothing_to_do_msg">Dateiinhalte wurden bereits synchronisiert</string>
   <string name="create_dir_fail_msg">Das Verzeichnis konnte nicht erstellt werden</string>
-  <string name="filename_forbidden_characters">Verbotene Zeichen sind: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Der Dateiname enthält mindestens ein ungültiges Zeichen</string>
   <string name="filename_empty">Der Dateiname darf nicht leer sein</string>
   <string name="wait_a_moment">Bitte warte einen Moment.</string>
@@ -553,4 +552,7 @@
   <!--Release Notes-->
   <string name="release_notes_proceed">Fortfahren</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Nicht mehr anzeigen</string>
+  <string name="tab_label_ascii">Text</string>
 </resources>

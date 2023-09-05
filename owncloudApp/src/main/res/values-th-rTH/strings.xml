@@ -160,6 +160,7 @@
   <string name="filedetails_size">ขนาด:</string>
   <string name="filedetails_type">ชนิด:</string>
   <string name="filedetails_created">สร้างเมื่อ:</string>
+  <string name="filedetails_last_sync">การประสานข้อมูลล่าสุด:</string>
   <string name="filedetails_modified">แก้ไขเมื่อ:</string>
   <string name="filedetails_download">ดาวน์โหลด</string>
   <string name="filedetails_sync_file">ประสานข้อมูล</string>
@@ -194,7 +195,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">ใบรับรองของเซิร์ฟเวอร์ไม่น่าเชื่อถือ</string>
   <string name="uploader_upload_text_dialog_title">กรอกชื่อไฟล์ใหม่</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">ชื่อไฟล์ต้องไม่ว่างเปล่า</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">ชื่อไฟล์ต้องมีอักขระไม่เกิน %d ตัว</string>
   <string name="uploader_upload_text_filename_hint">ชื่อไฟล์</string>
   <string name="uploader_upload_camera_upload_files">กำลังอัปโหลดไฟล์รูปภาพ</string>
   <string name="uploader_upload_picture_upload_files">%d รูปภาพใหม่ถูกอัปโหลดแล้ว</string>
@@ -330,7 +330,6 @@
   <string name="sync_file_fail_msg">ไม่สามารถตรวจสอบไฟล์รีโมทได้</string>
   <string name="sync_file_nothing_to_do_msg">เนื้อหาของไฟล์ถูกประสานข้อมูลอยู่แล้ว</string>
   <string name="create_dir_fail_msg">ไม่สามารถสร้างโฟลเดอร์</string>
-  <string name="filename_forbidden_characters">ห้ามใช้ตัวอักษรดังนี้: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">มีชื่อแฟ้มอย่างน้อยหนึ่งตัวอักษรที่ไม่ถูกต้อง</string>
   <string name="filename_empty">จำเป็นต้องตั้งชื่อไฟล์</string>
   <string name="wait_a_moment">กรุณารอสักครู่</string>
@@ -384,6 +383,7 @@
   <string name="conflict_keep_both">เก็บไว้ทั้งสองอย่าง</string>
   <string name="conflict_use_local_version">เวอร์ชันปัจจุบัน</string>
   <string name="conflict_use_server_version">เวอร์ชันเซิร์ฟเวอร์</string>
+  <string name="conflict_replace">แทนที่</string>
   <string name="preview_image_description">แสดงรูปภาพตัวอย่าง</string>
   <string name="preview_image_error_unknown_format">ไม่สามารถแสดงรูปภาพนี้ได้</string>
   <string name="error__upload__local_file_not_copied">%1$s ไม่สามารถคัดลอกไปยังโฟลเดอร์ %2$s ในเครื่อง</string>
@@ -592,4 +592,7 @@
   <!--Release Notes-->
   <string name="release_notes_proceed">ดำเนินการ</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">ไม่ต้องแสดงอีกครั้ง</string>
+  <string name="tab_label_ascii">ข้อความ</string>
 </resources>

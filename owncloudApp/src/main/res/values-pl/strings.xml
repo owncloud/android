@@ -165,6 +165,7 @@
   <string name="filedetails_size">Rozmiar:</string>
   <string name="filedetails_type">Typ:</string>
   <string name="filedetails_created">Utworzono:</string>
+  <string name="filedetails_last_sync">Ostatni sync:</string>
   <string name="filedetails_modified">Zmodyfikowano:</string>
   <string name="filedetails_download">Pobierz</string>
   <string name="filedetails_file_image_content_description">Plik Obraz</string>
@@ -201,7 +202,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Certyfikat serwera jest niezaufany</string>
   <string name="uploader_upload_text_dialog_title">Wprowadź nazwę nowego pliku</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Nazwa pliku nie może być pusta</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Nazwa pliku nie może być dłuższa niż %d znaków</string>
   <string name="uploader_upload_text_filename_hint">Nazwa pliku</string>
   <string name="uploader_upload_camera_upload_files">Wgrywanie plików zdjęć</string>
   <string name="uploader_upload_picture_upload_files">%d nowych plików zostanie wysłanych</string>
@@ -351,7 +351,6 @@
   <string name="sync_file_fail_msg">Nie można sprawdzić zdalnego pliku</string>
   <string name="sync_file_nothing_to_do_msg">Zawartość pliku została już synchronizowana</string>
   <string name="create_dir_fail_msg">Folder nie może zostać utworzony</string>
-  <string name="filename_forbidden_characters">Znaki zabronione: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Nazwa pliku zawiera co najmniej jeden nieprawidłowy znak</string>
   <string name="filename_empty">Nazwa pliku nie może być pusta.</string>
   <string name="wait_a_moment">Poczekaj chwilę</string>
@@ -625,4 +624,5 @@
   <string name="release_notes_proceed">Wykonaj</string>
   <string name="release_notes_icon">Ikona</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
 </resources>

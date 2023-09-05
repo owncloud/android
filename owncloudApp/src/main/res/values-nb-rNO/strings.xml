@@ -134,6 +134,7 @@
   <string name="filedetails_size">Størrelse:</string>
   <string name="filedetails_type">Type:</string>
   <string name="filedetails_created">Opprettet:</string>
+  <string name="filedetails_last_sync">Siste synkronisering:</string>
   <string name="filedetails_modified">Endret:</string>
   <string name="filedetails_download">Last ned</string>
   <string name="filedetails_sync_file">Synkroniser</string>
@@ -294,7 +295,6 @@
   <string name="sync_file_fail_msg">Eksterne filer kunne ikke sjekkes</string>
   <string name="sync_file_nothing_to_do_msg">filinnhold er allerede synkronisert</string>
   <string name="create_dir_fail_msg">Mappe kunne ikke opprettes</string>
-  <string name="filename_forbidden_characters">Forbudte tegn: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Filnavnet inneholder minst ett ulovlig tegn</string>
   <string name="filename_empty">Filnavn kan ikke være tomt</string>
   <string name="wait_a_moment">Vent et øyeblikk</string>
@@ -531,4 +531,7 @@
   <!--Release Notes-->
   <string name="release_notes_proceed">Fortsett</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Ikke vis igjen</string>
+  <string name="tab_label_ascii">Tekst</string>
 </resources>

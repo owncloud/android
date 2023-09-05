@@ -26,6 +26,7 @@ import com.owncloud.android.data.capabilities.datasources.implementation.OCLocal
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toEntity
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_CAPABILITY
 import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import io.mockk.every
@@ -58,7 +59,7 @@ class OCLocalCapabilitiesDataSourceTest {
     }
 
     @Test
-    fun getCapabilitiesForAccountAsLiveData() {
+    fun `getCapabilitiesForAccountAsLiveData returns a livedata of OCCapability`() {
         val capabilitiesLiveData = MutableLiveData<OCCapabilityEntity>()
         every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns capabilitiesLiveData
 
@@ -69,10 +70,14 @@ class OCLocalCapabilitiesDataSourceTest {
                 .getLastEmittedValue()
 
         assertEquals(ocCapability, capabilityEmitted)
+
+        verify(exactly = 1) {
+            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(ocCapability.accountName!!)
+        }
     }
 
     @Test
-    fun getCapabilitiesForAccountAsLiveDataNull() {
+    fun `getCapabilitiesForAccountAsLiveData returns null when dao is null`() {
         val capabilitiesLiveData = MutableLiveData<OCCapabilityEntity>()
         every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns capabilitiesLiveData
 
@@ -81,34 +86,54 @@ class OCLocalCapabilitiesDataSourceTest {
                 .getLastEmittedValue()
 
         assertNull(capabilityEmitted)
+
+        verify(exactly = 1) {
+            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(ocCapability.accountName!!)
+        }
     }
 
     @Test
-    fun getCapabilitiesForAccount() {
+    fun `getCapabilitiesForAccount returns a ocCapabilities`() {
         every { ocCapabilityDao.getCapabilitiesForAccount(any()) } returns ocCapabilityEntity
 
         val capabilityEmitted = ocLocalCapabilitiesDataSource.getCapabilityForAccount(ocCapability.accountName!!)
 
         assertEquals(ocCapability, capabilityEmitted)
+
+        verify(exactly = 1) {
+            ocCapabilityDao.getCapabilitiesForAccount(ocCapability.accountName!!)
+        }
     }
 
     @Test
-    fun getCapabilitiesForAccountNull() {
-        every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns MutableLiveData()
+    fun `getCapabilityForAccount returns null when dao is null`() {
+        every { ocCapabilityDao.getCapabilitiesForAccount(any()) } returns null
 
         val capabilityEmitted =
-            ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(ocCapability.accountName!!)
-                .getLastEmittedValue()
+            ocLocalCapabilitiesDataSource.getCapabilityForAccount(ocCapability.accountName!!)
 
         assertNull(capabilityEmitted)
+
+        verify(exactly = 1) {
+            ocCapabilityDao.getCapabilitiesForAccount(ocCapability.accountName!!)
+        }
     }
 
     @Test
-    fun insertCapabilities() {
+    fun `insertCapabilities returns a list of OCCapability`() {
         every { ocCapabilityDao.replace(any()) } returns Unit
 
         ocLocalCapabilitiesDataSource.insert(listOf(ocCapability))
 
         verify(exactly = 1) { ocCapabilityDao.replace(listOf(ocCapabilityEntity)) }
+    }
+
+    @Test
+    fun `deleteCapabilitiesForAccount return unit dao is ok`() {
+        every { ocCapabilityDao.deleteByAccountName(OC_ACCOUNT_NAME) } returns Unit
+
+        ocLocalCapabilitiesDataSource.deleteCapabilitiesForAccount(OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) { ocCapabilityDao.deleteByAccountName(OC_ACCOUNT_NAME) }
     }
 }

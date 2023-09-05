@@ -159,6 +159,7 @@
   <string name="filedetails_size">גודל:</string>
   <string name="filedetails_type">סוג:</string>
   <string name="filedetails_created">מועד היצירה:</string>
+  <string name="filedetails_last_sync">סנכרון אחרון:</string>
   <string name="filedetails_modified">מועד השינוי:</string>
   <string name="filedetails_download">הורדה</string>
   <string name="filedetails_file_image_content_description">קובץ תמונה</string>
@@ -196,7 +197,6 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">תעודת שרת אינה מהימנה</string>
   <string name="uploader_upload_text_dialog_title">יש להכניס שם לקובץ החדש</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">שדה שם קובץ אינו יכול להיות ריק</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">שדה שם קובץ אינו יכול להכיל יותר מ- %d תווים</string>
   <string name="uploader_upload_text_filename_hint">שם קובץ</string>
   <string name="uploader_upload_camera_upload_files">מעלה קובצי מצלמה</string>
   <string name="uploader_upload_picture_upload_files">%d תמונות חדשות יועלו</string>
@@ -330,7 +330,6 @@
   <string name="sync_file_fail_msg">לא ניתן לבדוק את הקובץ המרוחק </string>
   <string name="sync_file_nothing_to_do_msg">תוכן הקובץ כבר מסונכרן</string>
   <string name="create_dir_fail_msg">לא ניתן ליצור תיקייה</string>
-  <string name="filename_forbidden_characters">תווים אסורים: / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">שם קובץ כולל לפחות תו אחד לא חוקי</string>
   <string name="filename_empty">שם קובץ לא יכול להיות ריק</string>
   <string name="wait_a_moment">נא להמתין רגע</string>
@@ -583,4 +582,7 @@
   <!--Release Notes-->
   <string name="release_notes_proceed">להמשך</string>
   <!--Open in web-->
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">אל תציג שוב</string>
+  <string name="tab_label_ascii">טקסט</string>
 </resources>

@@ -161,6 +161,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="filedetails_size">Taille :</string>
   <string name="filedetails_type">Type :</string>
   <string name="filedetails_created">Créé le :</string>
+  <string name="filedetails_last_sync">Dernière synchronisation :</string>
   <string name="filedetails_modified">Modifié le :</string>
   <string name="filedetails_download">Télécharger</string>
   <string name="filedetails_cancel_btn_content_description">Bouton d\'annulation de téléchargement</string>
@@ -196,7 +197,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Le certificat du serveur n\'est pas sûr</string>
   <string name="uploader_upload_text_dialog_title">Saisissez le nom du nouveau fichier</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Le nom de fichier ne doit pas être vide</string>
-  <string name="uploader_upload_text_dialog_filename_error_length_max">Le nom de fichier ne doit pas contenir plus de %d caractères</string>
   <string name="uploader_upload_text_filename_hint">Nom du fichier</string>
   <string name="uploader_upload_picture_upload_files">%d de nouvelles images vont être téléversées</string>
   <string name="uploader_upload_video_upload_files">%d de nouvelles vidéos vont être téléversées</string>
@@ -332,7 +332,6 @@ Téléchargez-le ici : %2$s</string>
   <string name="sync_file_fail_msg">Le fichier distant n\'a pu être vérifié</string>
   <string name="sync_file_nothing_to_do_msg">Le contenu du fichier est déjà synchronisé</string>
   <string name="create_dir_fail_msg">Le dossier n\'a pas pu être créé</string>
-  <string name="filename_forbidden_characters">Caractères interdits : / \\ &lt; &gt; : \" | ? *</string>
   <string name="filename_forbidden_characters_from_server">Le nom de fichier contient au moins un caractère non valide</string>
   <string name="filename_empty">Le nom du fichier ne peut pas être vide</string>
   <string name="wait_a_moment">Veuillez patienter</string>
@@ -386,6 +385,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="conflict_keep_both">Conserver les deux versions</string>
   <string name="conflict_use_local_version">version locale</string>
   <string name="conflict_use_server_version">version serveur</string>
+  <string name="conflict_replace">Remplacer</string>
   <string name="preview_image_description">Prévisualisation de l\'image</string>
   <string name="preview_image_error_unknown_format">Cette image ne peut pas être affichée</string>
   <string name="error__upload__local_file_not_copied">%1$s n\'a pas pu être copié dans le dossier local %2$s</string>
@@ -600,4 +600,7 @@ Téléchargez-le ici : %2$s</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Afficher dans le navigateur web</string>
   <string name="open_in_web_error_not_supported">Aucune application ne supporte ce type de fichier</string>
+  <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_checkbox_message">Ne plus montrer</string>
+  <string name="tab_label_ascii">Texte</string>
 </resources>
