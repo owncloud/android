@@ -109,6 +109,6 @@ class ReleaseNotesActivityTest {
 
     @Test
     fun test_childCount() {
-        R.id.releaseNotes.assertChildCount(3)
+        R.id.releaseNotes.assertChildCount(releaseNotesList.size)
     }
 }
