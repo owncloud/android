@@ -173,8 +173,6 @@ class FileDisplayActivity : FileActivity(),
 
     private val sharedPreferences: SharedPreferencesProvider by inject()
 
-    private val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
-
     var filesUploadHelper: FilesUploadHelper? = null
         internal set
 
@@ -744,6 +742,7 @@ class FileDisplayActivity : FileActivity(),
         // responsibility of restore is preferred in onCreate() before than in
         // onRestoreInstanceState when there are Fragments involved
         Timber.v("onSaveInstanceState() start")
+
         super.onSaveInstanceState(outState)
         outState.putParcelable(KEY_WAITING_TO_PREVIEW, fileWaitingToPreview)
         outState.putBoolean(KEY_SYNC_IN_PROGRESS, syncInProgress)
@@ -779,6 +778,7 @@ class FileDisplayActivity : FileActivity(),
         syncBroadcastReceiver = SyncBroadcastReceiver()
         localBroadcastManager!!.registerReceiver(syncBroadcastReceiver!!, syncIntentFilter)
 
+        showDialogs()
         Timber.v("onResume() end")
     }
 
@@ -790,6 +790,7 @@ class FileDisplayActivity : FileActivity(),
         }
 
         super.onPause()
+        dismissDialogs()
         Timber.v("onPause() end")
     }
 
@@ -1071,50 +1072,40 @@ class FileDisplayActivity : FileActivity(),
         replace: MutableList<Boolean?>,
         launchAction: (List<OCFile>, List<Boolean?>) -> Unit,
     ) {
-        val context = this@FileDisplayActivity
         if (!uiResult.data.isNullOrEmpty()) {
             var pos = 0
-            val fragmentManager = supportFragmentManager
+            var posDialog = data.lastIndex
             data.asReversed().forEachIndexed { index, file ->
                 val countDownValue = index + 1
 
-                val customDialog = FileAlreadyExistsDialog.Builder()
-                    .setTitle(
-                        this.getString(
-                            if (file.isFolder) {
-                                R.string.folder_already_exists
-                            } else {
-                                R.string.file_already_exists
-                            }
-                        )
-                    )
-                    .setDescription(
-                        this.getString(
-                            if (file.isFolder) {
-                                R.string.folder_already_exists_description
-                            } else {
-                                R.string.folder_already_exists_description
-                            }, file.fileName
-                        )
-                    )
-                    .setCheckboxText(this.getString(R.string.apply_to_all_conflicts, countDownValue.toString()))
-                    .build()
+                val customDialog = FileAlreadyExistsDialog.newInstance(
+                    this.getString(
+                        if (file.isFolder) {
+                            R.string.folder_already_exists
+                        } else {
+                            R.string.file_already_exists
+                        }
+                    ),
+                    this.getString(
+                        if (file.isFolder) {
+                            R.string.folder_already_exists_description
+                        } else {
+                            R.string.file_already_exists_description
+                        }, file.fileName
+                    ),
+                    this.getString(R.string.apply_to_all_conflicts, countDownValue.toString()),
+                    countDownValue > 1
+                )
+                customDialog.isCancelable = false
+                customDialog.show(this.supportFragmentManager, CUSTOM_DIALOG_TAG)
 
+                fileOperationsViewModel.openDialogs.add(customDialog)
 
-                if (countDownValue > 1) {
-                    customDialog.checkboxVisible = true
-                }
-
-                fragmentManager?.let {
-                    customDialog.show(it, CUSTOM_DIALOG_TAG)
-                }
-
-                openDialogs.add(customDialog)
 
                 customDialog.setDialogButtonClickListener(object : FileAlreadyExistsDialog.DialogButtonClickListener {
 
                     override fun onKeepBothButtonClick() {
-                        if (customDialog.isCheckBoxChecked) {
+                        if (fileOperationsViewModel.openDialogs[posDialog].isCheckBoxChecked) {
                             repeat(data.asReversed().size) {
                                 replace.add(false)
                                 pos++
@@ -1129,12 +1120,18 @@ class FileDisplayActivity : FileActivity(),
                             if (pos == data.size) {
                                 launchAction(uiResult.data, replace)
                             }
-                            customDialog.dismiss()
+                            fileOperationsViewModel.openDialogs[posDialog].dismiss()
+                            fileOperationsViewModel.openDialogs.removeAt(posDialog)
+                            if (posDialog == 0) {
+                                fileOperationsViewModel.openDialogs.clear()
+                            } else {
+                                posDialog--
+                            }
                         }
                     }
 
                     override fun onSkipButtonClick() {
-                        if (customDialog.isCheckBoxChecked) {
+                        if (fileOperationsViewModel.openDialogs[posDialog].isCheckBoxChecked) {
                             repeat(data.asReversed().size) {
                                 replace.add(null)
                                 pos++
@@ -1149,12 +1146,19 @@ class FileDisplayActivity : FileActivity(),
                             if (pos == data.size) {
                                 launchAction(uiResult.data, replace)
                             }
-                            customDialog.dismiss()
+
+                            fileOperationsViewModel.openDialogs[posDialog].dismiss()
+                            fileOperationsViewModel.openDialogs.removeAt(posDialog)
+                            if (posDialog == 0) {
+                                fileOperationsViewModel.openDialogs.clear()
+                            } else {
+                                posDialog--
+                            }
                         }
                     }
 
                     override fun onReplaceButtonClick() {
-                        if (customDialog.isCheckBoxChecked) {
+                        if (fileOperationsViewModel.openDialogs[posDialog].isCheckBoxChecked) {
                             repeat(data.asReversed().size) {
                                 replace.add(true)
                                 pos++
@@ -1169,7 +1173,13 @@ class FileDisplayActivity : FileActivity(),
                             if (pos == data.size) {
                                 launchAction(uiResult.data, replace)
                             }
-                            customDialog.dismiss()
+                            fileOperationsViewModel.openDialogs[posDialog].dismiss()
+                            fileOperationsViewModel.openDialogs.removeAt(posDialog)
+                            if (posDialog == 0) {
+                                fileOperationsViewModel.openDialogs.clear()
+                            } else {
+                                posDialog--
+                            }
                         }
                     }
                 }
@@ -1179,12 +1189,23 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun dismissAllOpenDialogs() {
-        openDialogs.forEach { dialog ->
+        fileOperationsViewModel.openDialogs.forEach { dialog ->
             dialog.dismiss()
         }
-        openDialogs.clear()
+        fileOperationsViewModel.openDialogs.clear()
     }
 
+
+    private fun showDialogs() {
+        fileOperationsViewModel.openDialogs.forEach { dialog ->
+            dialog.show(this.supportFragmentManager, CUSTOM_DIALOG_TAG)
+        }
+    }
+    private fun dismissDialogs() {
+        fileOperationsViewModel.openDialogs.forEach { dialog ->
+            dialog.dismiss()
+        }
+    }
     private fun launchCopyFile(files: List<OCFile>, replace: List<Boolean?>) {
         fileOperationsViewModel.performOperation(
             FileOperation.CopyOperation(
