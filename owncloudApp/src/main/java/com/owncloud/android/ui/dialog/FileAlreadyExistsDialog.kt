@@ -27,10 +27,11 @@ class FileAlreadyExistsDialog : DialogFragment() {
         private const val CHECKBOX_VISIBLE = "checkboxVisible"
 
         fun newInstance(
-            titleText: String?, descriptionText: String?, checkboxText: String?,
+            titleText: String?,
+            descriptionText: String?,
+            checkboxText: String?,
             checkboxVisible: Boolean,
             dialogClickListener: DialogButtonClickListener? = null,
-
             ): FileAlreadyExistsDialog {
             val fragment = FileAlreadyExistsDialog()
             val args = Bundle()
@@ -75,11 +76,7 @@ class FileAlreadyExistsDialog : DialogFragment() {
         binding.dialogFileAlreadyExistsReplace.setOnClickListener { mListener?.onReplaceButtonClick() }
         binding.dialogFileAlreadyExistsSkip.setOnClickListener { mListener?.onSkipButtonClick() }
 
-        if (!checkboxVisible!!) {
-            binding.dialogFileAlreadyExistsCheckbox.visibility = View.GONE
-        } else {
-            binding.dialogFileAlreadyExistsCheckbox.visibility = View.VISIBLE
-        }
+        binding.dialogFileAlreadyExistsCheckbox.visibility = if (checkboxVisible == true) { View.VISIBLE } else { View.GONE }
     }
 
 }
