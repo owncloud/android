@@ -66,7 +66,7 @@ class RemoteOAuthDataSourceTest {
     }
 
     @Test
-    fun `perform oidc discovery - ok`() {
+    fun `performOIDCDiscovery returns a object of OIDCServerConfiguration`() {
         val oidcDiscoveryResult: RemoteOperationResult<OIDCDiscoveryResponse> =
             createRemoteOperationResultMock(data = OC_REMOTE_OIDC_DISCOVERY_RESPONSE, isSuccess = true)
 
@@ -86,7 +86,7 @@ class RemoteOAuthDataSourceTest {
     }
 
     @Test(expected = Exception::class)
-    fun `perform oidc discovery - ko`() {
+    fun `performOIDCDiscovery returns an exception when service receive an exception`() {
         every {
             oidcService.getOIDCServerDiscovery(ocClientMocked)
         } throws Exception()
@@ -95,7 +95,7 @@ class RemoteOAuthDataSourceTest {
     }
 
     @Test
-    fun `perform token request - ok`() {
+    fun `performTokenRequest returns a TokenResponse`() {
         val tokenResponseResult: RemoteOperationResult<TokenResponse> =
             createRemoteOperationResultMock(data = OC_REMOTE_TOKEN_RESPONSE, isSuccess = true)
 
@@ -115,7 +115,7 @@ class RemoteOAuthDataSourceTest {
     }
 
     @Test(expected = Exception::class)
-    fun `perform token request - ko`() {
+    fun `performTokenRequest returns an exception when service receive an exception`() {
         every {
             oidcService.performTokenRequest(ocClientMocked, OC_REMOTE_TOKEN_REQUEST_PARAMS_ACCESS)
         } throws Exception()
@@ -124,7 +124,7 @@ class RemoteOAuthDataSourceTest {
     }
 
     @Test
-    fun `register client - ok`() {
+    fun `registerClient returns a ClientRegistrationInfo object`() {
         val clientRegistrationResponse: RemoteOperationResult<ClientRegistrationResponse> =
             createRemoteOperationResultMock(data = OC_REMOTE_CLIENT_REGISTRATION_RESPONSE, isSuccess = true)
 
@@ -144,7 +144,7 @@ class RemoteOAuthDataSourceTest {
     }
 
     @Test(expected = Exception::class)
-    fun `register client - ko`() {
+    fun `registerClient returns an exception when service receive an exception`() {
         every {
             oidcService.registerClientWithRegistrationEndpoint(ocClientMocked, OC_REMOTE_CLIENT_REGISTRATION_PARAMS)
         } throws Exception()
