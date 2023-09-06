@@ -51,29 +51,73 @@ class OCLocalUserDataSourceTest {
     }
 
     @Test
-    fun getQuotaForAccount() {
+    fun `saveQuotaForAccount return Unit`() {
+        every { ocUserQuotaDao.insertOrReplace(any()) } returns Unit
+
+        ocLocalUserDataSource.saveQuotaForAccount(OC_ACCOUNT_NAME, OC_USER_QUOTA)
+
+        verify(exactly = 1) {
+            ocUserQuotaDao.insertOrReplace(userQuotaEntity)
+        }
+    }
+
+    @Test(expected = Exception::class)
+    fun `saveQuotaForAccount returns an exception when dao receive an exception`() {
+        every { ocUserQuotaDao.insertOrReplace(any()) } throws Exception()
+        ocLocalUserDataSource.saveQuotaForAccount(OC_ACCOUNT_NAME, OC_USER_QUOTA)
+
+    }
+
+    @Test
+    fun `getQuotaForAccount returns a UserQuota`() {
         every { ocUserQuotaDao.getQuotaForAccount(any()) } returns userQuotaEntity
 
         val userQuota = ocLocalUserDataSource.getQuotaForAccount(OC_ACCOUNT_NAME)
 
         assertEquals(OC_USER_QUOTA, userQuota)
+
+        verify(exactly = 1) {
+            ocUserQuotaDao.getQuotaForAccount(OC_ACCOUNT_NAME)
+        }
     }
 
     @Test
-    fun getQuotaForAccountNull() {
+    fun `getQuotaForAccount return null when dao receive null`() {
         every { ocUserQuotaDao.getQuotaForAccount(any()) } returns null
 
         val quotaEntity = ocLocalUserDataSource.getQuotaForAccount(OC_ACCOUNT_NAME)
 
         assertNull(quotaEntity)
+
+        verify(exactly = 1) {
+            ocUserQuotaDao.getQuotaForAccount(OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test(expected = Exception::class)
+    fun `getQuotaForAccount returns an exception when dao receive an exception`() {
+        every { ocUserQuotaDao.getQuotaForAccount(any()) } throws Exception()
+
+        ocLocalUserDataSource.getQuotaForAccount(OC_ACCOUNT_NAME)
+
     }
 
     @Test
-    fun insertQuota() {
-        every { ocUserQuotaDao.insertOrReplace(any()) } returns Unit
+    fun `deleteQuotaForAccount returns unit`() {
+        every { ocUserQuotaDao.deleteQuotaForAccount(any()) } returns Unit
 
-        ocLocalUserDataSource.saveQuotaForAccount(OC_ACCOUNT_NAME, OC_USER_QUOTA)
+        ocLocalUserDataSource.deleteQuotaForAccount(OC_ACCOUNT_NAME)
 
-        verify(exactly = 1) { ocUserQuotaDao.insertOrReplace(userQuotaEntity) }
+        verify(exactly = 1) {
+            ocUserQuotaDao.deleteQuotaForAccount(OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test(expected = Exception::class)
+    fun `deleteQuotaForAccount returns an exception when dao receive an exception`() {
+        every { ocUserQuotaDao.deleteQuotaForAccount(any()) } throws Exception()
+
+        ocLocalUserDataSource.deleteQuotaForAccount(OC_ACCOUNT_NAME)
+
     }
 }

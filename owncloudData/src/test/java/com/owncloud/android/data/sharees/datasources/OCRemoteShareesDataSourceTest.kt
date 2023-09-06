@@ -72,7 +72,7 @@ class OCRemoteShareesDataSourceTest {
     }
 
     @Test
-    fun `OCSharees List - ok - contains sharees entered as remote sharees`() {
+    fun `getSharees contains sharees entered as remote sharees returns a list of OCSharee`() {
         assertNotNull(sharees)
         assertEquals(5, sharees.size)
 
@@ -82,7 +82,7 @@ class OCRemoteShareesDataSourceTest {
     }
 
     @Test
-    fun `OCSharees List - ok - contains exact user match`() {
+    fun `getSharees contains exact user match returns a list of OCSharee`() {
         val sharee = sharees[0]
         assertEquals(sharee.label, "User")
         assertEquals(sharee.shareType, ShareType.USER)
@@ -96,7 +96,7 @@ class OCRemoteShareesDataSourceTest {
     }
 
     @Test
-    fun `OCSharees List - ok - contains one user not exactly matched`() {
+    fun `getSharees contains one user not exactly matched returns a list of OCSharee`() {
         val sharee = sharees[1]
         assertEquals("User 1", sharee.label)
         assertEquals(ShareType.USER, sharee.shareType)
@@ -110,7 +110,7 @@ class OCRemoteShareesDataSourceTest {
     }
 
     @Test
-    fun `OCShares List - ok - contains one user without additional info`() {
+    fun `getSharees contains one user without additional info returns a list of OCSharee`() {
         val sharee = sharees[2]
         assertEquals("User 2", sharee.label)
         assertEquals(ShareType.USER, sharee.shareType)
@@ -124,7 +124,7 @@ class OCRemoteShareesDataSourceTest {
     }
 
     @Test
-    fun `OCShares List - ok - contains one remote user`() {
+    fun `getSharees contains one remote user returns a list of OCSharee`() {
         val sharee = sharees[3]
         assertEquals("Remoteuser 1", sharee.label)
         assertEquals(ShareType.FEDERATED, sharee.shareType)
@@ -138,7 +138,7 @@ class OCRemoteShareesDataSourceTest {
     }
 
     @Test
-    fun `OCShares List - ok - contains one group`() {
+    fun `getSharees contains one group returns a list of OCSharee`() {
         val sharee = sharees[4]
         assertEquals("Group 1", sharee.label)
         assertEquals(ShareType.GROUP, sharee.shareType)
@@ -152,7 +152,7 @@ class OCRemoteShareesDataSourceTest {
     }
 
     @Test
-    fun `OCShares List - ok - handle empty response`() {
+    fun `getSharees handle empty response returns a list of OCSharee`() {
         val getRemoteShareesOperationResult = createRemoteOperationResultMock(
             EMPTY_REMOTE_SHAREES,
             true
@@ -172,6 +172,23 @@ class OCRemoteShareesDataSourceTest {
 
         assertTrue(emptySharees.isEmpty())
 
+        verify(exactly = 2) {
+            ocShareeService.getSharees("user", 1, 30,)
+        }
+    }
+
+    @Test(expected = Exception::class)
+    fun `getSharees returns an exception when service receive an exception`() {
+        every {
+            ocShareeService.getSharees("user", 1, 30)
+        } throws Exception()
+
+        ocRemoteShareesDataSource.getSharees(
+            "user",
+            1,
+            30,
+            OC_ACCOUNT_NAME,
+        )
         verify(exactly = 2) {
             ocShareeService.getSharees("user", 1, 30,)
         }

@@ -18,6 +18,7 @@
  */
 package com.owncloud.android.data.folderbackup.datasources.implementation
 
+import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataSource
 import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
 import com.owncloud.android.data.folderbackup.db.FolderBackupDao
@@ -59,17 +60,22 @@ class OCFolderBackupLocalDataSource(
     /**************************************************************************************************************
      ************************************************* Mappers ****************************************************
      **************************************************************************************************************/
-    private fun FolderBackUpEntity.toModel() =
-        FolderBackUpConfiguration(
-            accountName = accountName,
-            behavior = UploadBehavior.fromString(behavior),
-            sourcePath = sourcePath,
-            uploadPath = uploadPath,
-            wifiOnly = wifiOnly,
-            chargingOnly = chargingOnly,
-            lastSyncTimestamp = lastSyncTimestamp,
-            name = name
-        )
+
+    companion object {
+        @VisibleForTesting
+        fun FolderBackUpEntity.toModel() =
+            FolderBackUpConfiguration(
+                accountName = accountName,
+                behavior = UploadBehavior.fromString(behavior),
+                sourcePath = sourcePath,
+                uploadPath = uploadPath,
+                wifiOnly = wifiOnly,
+                chargingOnly = chargingOnly,
+                lastSyncTimestamp = lastSyncTimestamp,
+                name = name
+            )
+    }
+
 
     private fun FolderBackUpConfiguration.toEntity(): FolderBackUpEntity =
         FolderBackUpEntity(

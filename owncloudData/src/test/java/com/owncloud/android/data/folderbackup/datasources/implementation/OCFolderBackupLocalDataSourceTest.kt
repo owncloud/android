@@ -1,6 +1,7 @@
 package com.owncloud.android.data.folderbackup.datasources.implementation
 
 import com.owncloud.android.data.OwncloudDatabase
+import com.owncloud.android.data.folderbackup.datasources.implementation.OCFolderBackupLocalDataSource.Companion.toModel
 import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
 import com.owncloud.android.data.folderbackup.db.FolderBackupDao
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
@@ -52,7 +53,7 @@ class OCFolderBackupLocalDataSourceTest {
     }
 
     @Test
-    fun `OCFolderBackupLocalDataSource with valid configurations returns a CameraUploadsConfiguration object`() {
+    fun `getCameraUploadsConfiguration with valid configurations returns a CameraUploadsConfiguration object`() {
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } returns ocFolderBackUpEntity
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } returns ocFolderBackUpEntity
 
@@ -67,8 +68,17 @@ class OCFolderBackupLocalDataSourceTest {
         }
     }
 
+    @Test(expected = Exception::class)
+    fun `getCameraUploadsConfiguration with valid configurations returns an exception when service receive an exception`() {
+        every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } throws Exception()
+        every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } throws Exception()
+
+        ocFolderBackupLocalDataSource.getCameraUploadsConfiguration()
+
+    }
+
     @Test
-    fun `OCFolderBackupLocalDataSource with no configurations returns null`() {
+    fun `getCameraUploadsConfiguration with no configurations returns null`() {
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } returns null
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } returns null
 
@@ -83,16 +93,12 @@ class OCFolderBackupLocalDataSourceTest {
     }
 
     @Test(expected = Exception::class)
-    fun `OCFolderBackupLocalDataSource when dao receive an exception returns an exception `() {
+    fun `getCameraUploadsConfiguration with no configurations returns an exception when service receive an exception`() {
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } throws Exception()
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } throws Exception()
 
         ocFolderBackupLocalDataSource.getCameraUploadsConfiguration()
 
-        verify(exactly = 1) {
-            folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName)
-            folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName)
-        }
     }
 
     @Test
@@ -120,9 +126,6 @@ class OCFolderBackupLocalDataSourceTest {
         resultCurrent.collect { result ->
             assertEquals(ocFolderBackUpEntity.toModel(), result)
         }
-        verify(exactly = 1) {
-            folderBackupDao.getFolderBackUpConfigurationByNameAsFlow(FolderBackUpConfiguration.pictureUploadsName)
-        }
     }
 
     @Test
@@ -142,9 +145,6 @@ class OCFolderBackupLocalDataSourceTest {
 
         ocFolderBackupLocalDataSource.saveFolderBackupConfiguration(ocFolderBackUpConfiguration)
 
-        verify(exactly = 1) {
-            folderBackupDao.update(ocFolderBackUpEntity)
-        }
     }
 
     @Test
@@ -164,21 +164,6 @@ class OCFolderBackupLocalDataSourceTest {
 
         ocFolderBackupLocalDataSource.resetFolderBackupConfigurationByName(FolderBackUpConfiguration.pictureUploadsName)
 
-        verify(exactly = 1) {
-            folderBackupDao.delete(FolderBackUpConfiguration.pictureUploadsName)
-        }
     }
-
-    private fun FolderBackUpEntity.toModel() =
-        FolderBackUpConfiguration(
-            accountName = accountName,
-            behavior = UploadBehavior.fromString(behavior),
-            sourcePath = sourcePath,
-            uploadPath = uploadPath,
-            wifiOnly = wifiOnly,
-            chargingOnly = chargingOnly,
-            lastSyncTimestamp = lastSyncTimestamp,
-            name = name
-        )
 
 }

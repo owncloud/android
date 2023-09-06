@@ -75,4 +75,12 @@ class OCRemoteSpacesDataSourceTest {
         }
     }
 
+    @Test(expected = Exception::class)
+    fun `refreshSpacesForAccount returns an exception when service receive an exception`() {
+
+        every { ocSpaceService.getSpaces() } throws Exception()
+
+        ocRemoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME)
+    }
+
 }

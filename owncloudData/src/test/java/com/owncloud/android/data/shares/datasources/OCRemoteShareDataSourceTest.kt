@@ -103,6 +103,22 @@ class OCRemoteShareDataSourceTest {
         }
     }
 
+    @Test(expected = Exception::class)
+    fun `insert private share returns an exception when service receive an exception`() {
+
+        every {
+            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
+        } throws Exception()
+
+        ocRemoteShareDataSource.insert(
+            remoteFilePath = "Photos/",
+            shareType = ShareType.USER,
+            shareWith = "user",
+            permissions = 1,
+            accountName = "user@server"
+        )
+    }
+
     @Test
     fun `updateShare update a private share returns OCShare`() {
         val updateRemoteShareOperationResult = createRemoteOperationResultMock(
@@ -145,6 +161,20 @@ class OCRemoteShareDataSourceTest {
         verify(exactly = 1) {
             ocShareService.updateShare(any(), any(), any(), any(), any())
         }
+    }
+
+    @Test(expected = Exception::class)
+    fun `updateShare update a private share returns an exception when service receive an exception`() {
+
+        every {
+            ocShareService.updateShare(any(), any(), any(), any(), any())
+        } throws Exception()
+
+        ocRemoteShareDataSource.updateShare(
+            remoteId = "3",
+            permissions = 17,
+            accountName = "user@server"
+        )
     }
 
     /******************************************************************************************************
@@ -196,6 +226,21 @@ class OCRemoteShareDataSourceTest {
         }
     }
 
+    @Test(expected = Exception::class)
+    fun `insert public share returns an exception when service receive an exception`() {
+        every {
+            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
+        } throws Exception()
+
+        ocRemoteShareDataSource.insert(
+            "Photos/img1.png",
+            ShareType.PUBLIC_LINK,
+            "",
+            1,
+            accountName = "user@server"
+        )
+    }
+
     @Test
     fun `updateShare update a public share returns OCShare`() {
         val updateRemoteShareOperationResult = createRemoteOperationResultMock(
@@ -239,6 +284,21 @@ class OCRemoteShareDataSourceTest {
         verify(exactly = 1) {
             ocShareService.updateShare(any(), any(), any(), any(), any())
         }
+    }
+
+    @Test(expected = Exception::class)
+    fun `updateShare update a public share returns an exception when service receive an exception`() {
+
+        every {
+            ocShareService.updateShare(any(), any(), any(), any(), any())
+        } throws Exception()
+
+        ocRemoteShareDataSource.updateShare(
+            remoteId = "3",
+            permissions = 17,
+            accountName = "user@server"
+        )
+
     }
 
     /******************************************************************************************************
@@ -336,6 +396,23 @@ class OCRemoteShareDataSourceTest {
                 subfiles = true,
             )
         }
+    }
+
+    @Test(expected = Exception::class)
+    fun `getShares returns an exception when service receive an exception`() {
+
+        every {
+            ocShareService.getShares(any(), any(), any())
+        } throws Exception()
+
+        // Get shares from remote datasource
+        ocRemoteShareDataSource.getShares(
+            remoteFilePath = "/Documents/doc",
+            reshares = true,
+            subfiles = true,
+            accountName = "user@server"
+        )
+
     }
 
     @Test(expected = ShareNotFoundException::class)
