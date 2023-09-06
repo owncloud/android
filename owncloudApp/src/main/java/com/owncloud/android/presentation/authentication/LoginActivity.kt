@@ -50,6 +50,7 @@ import com.owncloud.android.domain.authentication.oauth.model.ResponseType
 import com.owncloud.android.domain.authentication.oauth.model.TokenRequest
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
+import com.owncloud.android.domain.exceptions.SSLErrorCode
 import com.owncloud.android.domain.exceptions.SSLErrorException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
 import com.owncloud.android.domain.exceptions.StateMismatchException
@@ -379,21 +380,21 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
 
     private fun getServerInfoIsError(uiResult: UIResult.Error<ServerInfo>) {
         updateCenteredRefreshButtonVisibility(shouldBeVisible = true)
-        when (uiResult.error) {
-            is CertificateCombinedException ->
+        when {
+            uiResult.error is CertificateCombinedException ->
                 showUntrustedCertDialog(uiResult.error)
 
-            is OwncloudVersionNotSupportedException -> binding.serverStatusText.run {
+            uiResult.error is OwncloudVersionNotSupportedException -> binding.serverStatusText.run {
                 text = getString(R.string.server_not_supported)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             }
 
-            is NoNetworkConnectionException -> binding.serverStatusText.run {
+            uiResult.error is NoNetworkConnectionException -> binding.serverStatusText.run {
                 text = getString(R.string.error_no_network_connection)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.no_network, 0, 0, 0)
             }
 
-            is SSLErrorException -> binding.serverStatusText.run {
+            uiResult.error is SSLErrorException && uiResult.error.code == SSLErrorCode.NOT_HTTP_ALLOWED -> binding.serverStatusText.run {
                 text = getString(R.string.ssl_connection_not_secure)
                 setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
             }

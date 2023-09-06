@@ -102,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:src="@drawable/ic_share_generic"
+            android:src="@drawable/ic_share_grey"
             app:layout_constraintRight_toLeftOf="@id/imageView_delete_activity_logs_list"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />

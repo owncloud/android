@@ -1,0 +1,6 @@
+Change: Remove "ignore" from the debug flavour Android manifest
+
+A `tools:ignore` property from the Android manifest specific for the debug flavour
+was removed as it is not needed anymore.
+
+https://github.com/owncloud/android/pull/4064

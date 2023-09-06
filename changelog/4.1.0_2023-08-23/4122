@@ -1,0 +1,6 @@
+Bugfix: List of accounts empty after removing all accounts and adding new ones
+
+Now, the account list is shown when User opens the app and was added a new account.
+
+https://github.com/owncloud/android/issues/4114
+https://github.com/owncloud/android/pull/4122

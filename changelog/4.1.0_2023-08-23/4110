@@ -1,0 +1,6 @@
+Enhancement: Prevent http traffic with branding options
+
+Adding branding option for prevent http traffic.
+
+https://github.com/owncloud/android/issues/4066
+https://github.com/owncloud/android/pull/4110

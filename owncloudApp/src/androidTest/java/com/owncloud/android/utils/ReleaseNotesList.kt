@@ -25,18 +25,38 @@ import com.owncloud.android.presentation.releasenotes.ReleaseNoteType
 
 val releaseNotesList = listOf(
     ReleaseNote(
-        title = R.string.release_notes_header,
-        subtitle = R.string.release_notes_footer,
-        type = ReleaseNoteType.BUGFIX
+        title = R.string.release_notes_4_1_title_1,
+        subtitle = R.string.release_notes_4_1_subtitle_1,
+        type = ReleaseNoteType.ENHANCEMENT,
     ),
     ReleaseNote(
-        title = R.string.release_notes_header,
-        subtitle = R.string.release_notes_footer,
-        type = ReleaseNoteType.BUGFIX
+        title = R.string.release_notes_4_1_title_2,
+        subtitle = R.string.release_notes_4_1_subtitle_2,
+        type = ReleaseNoteType.ENHANCEMENT,
     ),
     ReleaseNote(
-        title = R.string.release_notes_header,
-        subtitle = R.string.release_notes_footer,
-        type = ReleaseNoteType.ENHANCEMENT
-    )
+        title = R.string.release_notes_4_1_title_3,
+        subtitle = R.string.release_notes_4_1_subtitle_3,
+        type = ReleaseNoteType.ENHANCEMENT,
+    ),
+    ReleaseNote(
+        title = R.string.release_notes_4_1_title_4,
+        subtitle = R.string.release_notes_4_1_subtitle_4,
+        type = ReleaseNoteType.BUGFIX,
+    ),
+    ReleaseNote(
+        title = R.string.release_notes_4_1_title_5,
+        subtitle = R.string.release_notes_4_1_subtitle_5,
+        type = ReleaseNoteType.ENHANCEMENT,
+    ),
+    ReleaseNote(
+        title = R.string.release_notes_4_1_title_6,
+        subtitle = R.string.release_notes_4_1_subtitle_6,
+        type = ReleaseNoteType.ENHANCEMENT,
+    ),
+    ReleaseNote(
+        title = R.string.release_notes_4_1_title_7,
+        subtitle = R.string.release_notes_4_1_subtitle_7,
+        type = ReleaseNoteType.BUGFIX,
+    ),
 )

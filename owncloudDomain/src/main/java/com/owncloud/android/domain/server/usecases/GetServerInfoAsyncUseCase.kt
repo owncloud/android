@@ -20,6 +20,8 @@
 package com.owncloud.android.domain.server.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.exceptions.NOT_HTTP_ALLOWED_MESSAGE
+import com.owncloud.android.domain.exceptions.SSLErrorCode
 import com.owncloud.android.domain.exceptions.SSLErrorException
 import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.server.model.ServerInfo
@@ -34,7 +36,7 @@ class GetServerInfoAsyncUseCase(
         val normalizedServerUrl = normalizeProtocolPrefix(params.serverPath).trimEnd(TRAILING_SLASH)
         val serverInfo = serverInfoRepository.getServerInfo(normalizedServerUrl, params.creatingAccount)
         if (!serverInfo.isSecureConnection && params.secureConnectionEnforced) {
-            throw SSLErrorException("Connection is not secure, http traffic is not allowed.")
+            throw SSLErrorException(NOT_HTTP_ALLOWED_MESSAGE, SSLErrorCode.NOT_HTTP_ALLOWED)
         }
         return serverInfo
     }

@@ -1,0 +1,6 @@
+Change: New detail screen file design
+
+the detail view ha been improved. It added new properties like last sync, status icon on thumbnail, path and creation date
+
+https://github.com/owncloud/android/pull/4098
+https://github.com/owncloud/android/issues/4092
