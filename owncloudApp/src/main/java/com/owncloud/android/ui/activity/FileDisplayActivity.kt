@@ -1073,28 +1073,28 @@ class FileDisplayActivity : FileActivity(),
         launchAction: (List<OCFile>, List<Boolean?>) -> Unit,
     ) {
         if (!uiResult.data.isNullOrEmpty()) {
-            var pos = 0
-            var posDialog = data.lastIndex
+            val posArray = intArrayOf(0)
+            var posDialog = intArrayOf(data.lastIndex)
             data.asReversed().forEachIndexed { index, file ->
                 val countDownValue = index + 1
 
                 val customDialog = FileAlreadyExistsDialog.newInstance(
-                    this.getString(
+                    titleText = this.getString(
                         if (file.isFolder) {
                             R.string.folder_already_exists
                         } else {
                             R.string.file_already_exists
                         }
                     ),
-                    this.getString(
+                    descriptionText = this.getString(
                         if (file.isFolder) {
                             R.string.folder_already_exists_description
                         } else {
                             R.string.file_already_exists_description
                         }, file.fileName
                     ),
-                    this.getString(R.string.apply_to_all_conflicts, countDownValue.toString()),
-                    countDownValue > 1
+                    checkboxText = this.getString(R.string.apply_to_all_conflicts, countDownValue.toString()),
+                    checkboxVisible = countDownValue > 1
                 )
                 customDialog.isCancelable = false
                 customDialog.show(this.supportFragmentManager, CUSTOM_DIALOG_TAG)
@@ -1105,85 +1105,75 @@ class FileDisplayActivity : FileActivity(),
                 customDialog.setDialogButtonClickListener(object : FileAlreadyExistsDialog.DialogButtonClickListener {
 
                     override fun onKeepBothButtonClick() {
-                        if (fileOperationsViewModel.openDialogs[posDialog].isCheckBoxChecked) {
-                            repeat(data.asReversed().size) {
-                                replace.add(false)
-                                pos++
-                                if (pos == data.size) {
-                                    launchAction(uiResult.data, replace)
-                                }
-                            }
-                            dismissAllOpenDialogs()
-                        } else {
-                            replace.add(false)
-                            pos++
-                            if (pos == data.size) {
-                                launchAction(uiResult.data, replace)
-                            }
-                            fileOperationsViewModel.openDialogs[posDialog].dismiss()
-                            fileOperationsViewModel.openDialogs.removeAt(posDialog)
-                            if (posDialog == 0) {
-                                fileOperationsViewModel.openDialogs.clear()
-                            } else {
-                                posDialog--
-                            }
-                        }
+                        applyAction(
+                            posDialog = posDialog,
+                            data = data ,
+                            replace = replace ,
+                            pos = posArray ,
+                            launchAction = launchAction,
+                            uiResult= uiResult,
+                            action = false)
                     }
 
                     override fun onSkipButtonClick() {
-                        if (fileOperationsViewModel.openDialogs[posDialog].isCheckBoxChecked) {
-                            repeat(data.asReversed().size) {
-                                replace.add(null)
-                                pos++
-                                if (pos == data.size) {
-                                    launchAction(uiResult.data, replace)
-                                }
-                            }
-                            dismissAllOpenDialogs()
-                        } else {
-                            replace.add(null)
-                            pos++
-                            if (pos == data.size) {
-                                launchAction(uiResult.data, replace)
-                            }
-
-                            fileOperationsViewModel.openDialogs[posDialog].dismiss()
-                            fileOperationsViewModel.openDialogs.removeAt(posDialog)
-                            if (posDialog == 0) {
-                                fileOperationsViewModel.openDialogs.clear()
-                            } else {
-                                posDialog--
-                            }
-                        }
+                        applyAction(
+                            posDialog = posDialog,
+                            data = data ,
+                            replace = replace ,
+                            pos = posArray ,
+                            launchAction = launchAction,
+                            uiResult= uiResult,
+                            action = null)
                     }
 
                     override fun onReplaceButtonClick() {
-                        if (fileOperationsViewModel.openDialogs[posDialog].isCheckBoxChecked) {
-                            repeat(data.asReversed().size) {
-                                replace.add(true)
-                                pos++
-                                if (pos == data.size) {
-                                    launchAction(uiResult.data, replace)
-                                }
-                            }
-                            dismissAllOpenDialogs()
-                        } else {
-                            replace.add(true)
-                            pos++
-                            if (pos == data.size) {
-                                launchAction(uiResult.data, replace)
-                            }
-                            fileOperationsViewModel.openDialogs[posDialog].dismiss()
-                            fileOperationsViewModel.openDialogs.removeAt(posDialog)
-                            if (posDialog == 0) {
-                                fileOperationsViewModel.openDialogs.clear()
-                            } else {
-                                posDialog--
-                            }
-                        }
+                        applyAction(
+                            posDialog = posDialog,
+                            data = data ,
+                            replace = replace ,
+                            pos = posArray ,
+                            launchAction = launchAction,
+                            uiResult= uiResult,
+                            action = true)
                     }
                 }
                 )
+            }
+        }
+    }
+
+    private fun applyAction(
+        posDialog: IntArray,
+        data: List<OCFile>,
+        replace: MutableList<Boolean?>,
+        pos: IntArray,
+        launchAction: (List<OCFile>, List<Boolean?>) -> Unit,
+        uiResult: UIResult.Success<List<OCFile>>,
+        action: Boolean?
+    ) {
+        var posDialog1 = posDialog
+        var pos1 = pos
+        if (fileOperationsViewModel.openDialogs[posDialog1[0]].isCheckBoxChecked) {
+            repeat(data.asReversed().size) {
+                replace.add(action)
+                pos1[0]++
+                if (pos1[0] == data.size) {
+                    launchAction(uiResult.data!!, replace)
+                }
+            }
+            dismissAllOpenDialogs()
+        } else {
+            replace.add(action)
+            pos1[0]++
+            if (pos1[0] == data.size) {
+                launchAction(uiResult.data!!, replace)
+            }
+            fileOperationsViewModel.openDialogs[posDialog1[0]].dismiss()
+            fileOperationsViewModel.openDialogs.removeAt(posDialog1[0])
+            if (posDialog1[0] == 0) {
+                fileOperationsViewModel.openDialogs.clear()
+            } else {
+                posDialog1[0]--
             }
         }
     }
