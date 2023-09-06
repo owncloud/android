@@ -119,6 +119,21 @@ class OCLocalShareDataSourceTest {
         }
     }
 
+    @Test(expected = Exception::class)
+    fun `getSharesAsLiveData read local private shares returns an exception when dao receive an exception`() {
+        every {
+            ocSharesDao.getSharesAsLiveData(
+                "/Docs/doc1.doc",
+                "admin@server",
+                privateShareTypes.map { it.value })
+        } throws Exception()
+
+        ocLocalSharesDataSource.getSharesAsLiveData(
+                "/Docs/doc1.doc", "admin@server", privateShareTypes
+        ).getLastEmittedValue()!!
+
+    }
+
     @Test
     fun `getSharesAsLiveData read local private share returns a OCShare`() {
         val privateShareAsLiveData: MutableLiveData<OCShareEntity> = MutableLiveData()
@@ -134,6 +149,15 @@ class OCLocalShareDataSourceTest {
         assertEquals("Sophie", share.sharedWithDisplayName)
 
         verify(exactly = 1) { ocSharesDao.getShareAsLiveData(OC_SHARE.remoteId) }
+    }
+
+    @Test(expected = Exception::class)
+    fun `getSharesAsLiveData read local private share returns an exception when dao receive an exception`() {
+
+        every { ocSharesDao.getShareAsLiveData(OC_SHARE.remoteId) } throws Exception()
+
+        ocLocalSharesDataSource.getShareAsLiveData(OC_SHARE.remoteId).getLastEmittedValue()!!
+
     }
 
     @Test
@@ -152,6 +176,20 @@ class OCLocalShareDataSourceTest {
         verify(exactly = 1) { ocSharesDao.insertOrReplace(privateShares[0]) }
     }
 
+    @Test(expected = Exception::class)
+    fun `insert private OCShare into repository returns an exception when dao receive an exception`() {
+        every { ocSharesDao.insertOrReplace(privateShares[0]) } throws Exception()
+
+        ocLocalSharesDataSource.insert(
+            OC_PRIVATE_SHARE.copy(
+                path = "/Docs/doc1.doc",
+                shareWith = "username",
+                sharedWithDisplayName = "Sophie"
+            )
+        )
+    }
+
+
     @Test
     fun `insert list of private OCShares into repository returns a list of long`() {
 
@@ -165,6 +203,16 @@ class OCLocalShareDataSourceTest {
         assertEquals(expectedValues, insertedSharesid)
 
         verify(exactly = 1) { ocSharesDao.insertOrReplace(privateShares) }
+    }
+
+    @Test(expected = Exception::class)
+    fun `insert list of private OCShares into repository returns an exception when dao receive an exception`() {
+
+        every { ocSharesDao.insertOrReplace(privateShares) } throws Exception()
+
+        ocLocalSharesDataSource.insert(
+            privateShares.map { it.toModel() }
+        )
     }
 
     @Test
@@ -181,6 +229,19 @@ class OCLocalShareDataSourceTest {
         assertEquals(3, updatedShareId)
 
         verify(exactly = 1) { ocSharesDao.update(privateShares[1]) }
+    }
+
+    @Test(expected = Exception::class)
+    fun `update private OCShare and returns returns an exception when dao receive an exception`() {
+        every { ocSharesDao.update(privateShares[1]) } throws Exception()
+
+        ocLocalSharesDataSource.update(
+            OC_PRIVATE_SHARE.copy(
+                path = "/Docs/doc1.doc",
+                shareWith = "user.name",
+                sharedWithDisplayName = "Nicole"
+            )
+        )
     }
 
     /******************************************************************************************************
@@ -241,6 +302,23 @@ class OCLocalShareDataSourceTest {
         }
     }
 
+    @Test(expected = Exception::class)
+    fun `getSharesAsLiveData read local public shares returns an exception when dao receive an exception`() {
+        every {
+            ocSharesDao.getSharesAsLiveData(
+                "/Photos/",
+                "admin@server",
+                listOf(ShareType.PUBLIC_LINK.value)
+            )
+        } throws Exception()
+
+        ocLocalSharesDataSource.getSharesAsLiveData(
+            "/Photos/",
+            "admin@server",
+            listOf(ShareType.PUBLIC_LINK)
+        ).getLastEmittedValue()!!
+    }
+
     @Test
     fun `insert public OCShare into repository returns a long`() {
         every { ocSharesDao.insertOrReplace(publicShares[0]) } returns 7
@@ -258,6 +336,20 @@ class OCLocalShareDataSourceTest {
         verify(exactly = 1) { ocSharesDao.insertOrReplace(publicShares[0]) }
     }
 
+    @Test(expected = Exception::class)
+    fun `insert public OCShare into repository returns an exception when dao receive an exception`() {
+        every { ocSharesDao.insertOrReplace(publicShares[0]) } throws Exception()
+
+        ocLocalSharesDataSource.insert(
+            OC_PUBLIC_SHARE.copy(
+                path = "/Photos/",
+                isFolder = true,
+                name = "Photos link",
+                shareLink = "http://server:port/s/1"
+            )
+        )
+    }
+
     @Test
     fun `insert list of public OCShares into repository returns a list of long`() {
         val expectedValues = listOf<Long>(1, 2)
@@ -270,6 +362,16 @@ class OCLocalShareDataSourceTest {
         assertEquals(expectedValues, retrievedValues)
 
         verify(exactly = 1) { ocSharesDao.insertOrReplace(publicShares) }
+    }
+
+    @Test(expected = Exception::class)
+    fun `insert list of public OCShares into repository returns an exception when dao receive an exception`() {
+
+        every { ocSharesDao.insertOrReplace(publicShares) } throws Exception()
+
+        ocLocalSharesDataSource.insert(
+            publicShares.map { it.toModel() }
+        )
     }
 
     @Test
@@ -287,6 +389,20 @@ class OCLocalShareDataSourceTest {
         assertEquals(8, updatedShareId)
 
         verify(exactly = 1) { ocSharesDao.update(publicShares[1]) }
+    }
+
+    @Test(expected = Exception::class)
+    fun `update public OCShare and returns an exception when dao receive an exception`() {
+        every { ocSharesDao.update(publicShares[1]) } throws Exception()
+
+       ocLocalSharesDataSource.update(
+            OC_PUBLIC_SHARE.copy(
+                path = "/Photos/",
+                isFolder = true,
+                name = "Photos link 2",
+                shareLink = "http://server:port/s/2"
+            )
+        )
     }
 
     /**************************************************************************************************************
@@ -307,13 +423,30 @@ class OCLocalShareDataSourceTest {
         verify(exactly = 1) { ocSharesDao.replaceShares(publicShares) }
     }
 
+    @Test(expected = Exception::class)
+    fun `replaceShares returns returns an exception when dao receive an exception`() {
+
+        every { ocSharesDao.replaceShares(publicShares) } throws Exception()
+
+        ocLocalSharesDataSource.replaceShares(
+            publicShares.map { it.toModel() }
+        )
+    }
+
     @Test
-    fun deleteSharesForFile() {
+    fun `deleteSharesForFile returns Unit`() {
         every { ocSharesDao.deleteSharesForFile("file", OC_ACCOUNT_NAME) } returns Unit
         ocLocalSharesDataSource.deleteSharesForFile("file", OC_ACCOUNT_NAME)
 
         verify(exactly = 1)  { ocSharesDao.deleteSharesForFile("file", OC_ACCOUNT_NAME) }
     }
+
+    @Test(expected = Exception::class)
+    fun `deleteSharesForFile returns an exception when dao receive an exception`() {
+        every { ocSharesDao.deleteSharesForFile("file", OC_ACCOUNT_NAME) } throws Exception()
+        ocLocalSharesDataSource.deleteSharesForFile("file", OC_ACCOUNT_NAME)
+    }
+
 
     @Test
     fun `deleteShare OCShare by remoteId and returns a Int`() {
@@ -326,6 +459,13 @@ class OCLocalShareDataSourceTest {
         verify(exactly = 1) { ocSharesDao.deleteShare(OC_SHARE.remoteId) }
     }
 
+    @Test(expected = Exception::class)
+    fun `deleteShare OCShare by remoteId returns an exception when dao receive an exception`() {
+        every { ocSharesDao.deleteShare(OC_SHARE.remoteId) } throws Exception()
+
+        ocLocalSharesDataSource.deleteShare(OC_SHARE.remoteId)
+    }
+
     @Test
     fun `deleteSharesForAccount by account returns unit`() {
         every { ocSharesDao.deleteSharesForAccount(OC_SHARE.accountOwner) } returns Unit
@@ -333,5 +473,12 @@ class OCLocalShareDataSourceTest {
         ocLocalSharesDataSource.deleteSharesForAccount(OC_SHARE.accountOwner)
 
         verify(exactly = 1) { ocSharesDao.deleteSharesForAccount(OC_SHARE.accountOwner) }
+    }
+
+    @Test(expected = Exception::class)
+    fun `deleteSharesForAccount by account returns an exception when dao receive an exception`() {
+        every { ocSharesDao.deleteSharesForAccount(OC_SHARE.accountOwner) } throws Exception()
+
+        ocLocalSharesDataSource.deleteSharesForAccount(OC_SHARE.accountOwner)
     }
 }

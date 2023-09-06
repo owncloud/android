@@ -141,6 +141,25 @@ class OCLocalSpacesDataSourceTest {
         }
     }
 
+    @Test(expected = Exception::class)
+    fun `saveSpacesForAccount inserts spaces and special spaces returns an exception when dao receive an exception`() {
+        val spaceEntities = mutableListOf<SpacesEntity>()
+        val spaceSpecialEntities = mutableListOf<SpaceSpecialEntity>()
+
+        listSpaceSpecial.forEach { spaceModel ->
+            spaceEntities.add(spaceModel.toEntity())
+            spaceModel.special?.let { listOfSpacesSpecials ->
+                spaceSpecialEntities.addAll(listOfSpacesSpecials.map { it.toEntity(spaceModel.accountName, spaceModel.id) })
+            }
+        }
+
+        every {
+            spacesDao.insertOrDeleteSpaces(any(), any())
+        } throws Exception()
+
+        ocLocalSpacesDataSource.saveSpacesForAccount(listSpaceSpecial)
+    }
+
     @Test
     fun `getPersonalSpaceForAccount by drive type returns a OCSpace`() {
         every {
@@ -156,6 +175,16 @@ class OCLocalSpacesDataSourceTest {
         }
     }
 
+    @Test(expected = Exception::class)
+    fun `getPersonalSpaceForAccount by drive type returns an exception when dao receive an exception`() {
+        every {
+            spacesDao.getSpacesByDriveTypeForAccount(any(), any())
+        } throws Exception()
+
+        ocLocalSpacesDataSource.getPersonalSpaceForAccount(OC_ACCOUNT_NAME)
+    }
+
+
     @Test
     fun `getSharesSpaceForAccount returns a OCSpace`() {
         every {
@@ -169,6 +198,15 @@ class OCLocalSpacesDataSourceTest {
         verify(exactly = 1) {
             spacesDao.getSpaceByIdForAccount(SPACE_ID_SHARES, OC_ACCOUNT_NAME)
         }
+    }
+
+    @Test(expected = Exception::class)
+    fun `getSharesSpaceForAccount returns an exception when dao receive an exception`() {
+        every {
+            spacesDao.getSpaceByIdForAccount(SPACE_ID_SHARES, OC_ACCOUNT_NAME)
+        } throws Exception()
+
+        ocLocalSpacesDataSource.getSharesSpaceForAccount(OC_ACCOUNT_NAME)
     }
 
     @Test
@@ -197,6 +235,21 @@ class OCLocalSpacesDataSourceTest {
                 )
             )
         }
+    }
+
+    @Test(expected = Exception::class)
+    fun `getSpacesFromEveryAccountAsStream returns an exception when dao receive an exception`() {
+
+        every {
+            spacesDao.getSpacesByDriveTypeFromEveryAccountAsStream(
+                setOf(
+                    OCSpace.DRIVE_TYPE_PERSONAL,
+                    OCSpace.DRIVE_TYPE_PROJECT
+                )
+            )
+        } throws Exception()
+
+        ocLocalSpacesDataSource.getSpacesFromEveryAccountAsStream()
     }
 
     @Test
@@ -234,6 +287,26 @@ class OCLocalSpacesDataSourceTest {
         }
     }
 
+    @Test(expected = Exception::class)
+    fun `getSpacesByDriveTypeWithSpecialsForAccountAsFlow returns an exception when dao receive an exception`() {
+
+        every {
+            spacesDao.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
+                OC_ACCOUNT_NAME,
+                setOf(
+                    OCSpace.DRIVE_TYPE_PERSONAL,
+                    OCSpace.DRIVE_TYPE_PROJECT
+                )
+            )
+        } throws Exception()
+
+        ocLocalSpacesDataSource.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
+            OC_ACCOUNT_NAME, setOf(
+                OCSpace.DRIVE_TYPE_PERSONAL,
+                OCSpace.DRIVE_TYPE_PROJECT
+            )
+        )
+    }
     @Test
     fun `getPersonalAndProjectSpacesForAccount returns a list of OCSpace`() {
 
@@ -263,6 +336,21 @@ class OCLocalSpacesDataSourceTest {
         }
     }
 
+    @Test(expected = Exception::class)
+    fun `getPersonalAndProjectSpacesForAccount returns an exception when dao receive an exception`() {
+
+        every {
+            spacesDao.getSpacesByDriveTypeForAccount(
+                OC_ACCOUNT_NAME,
+                setOf(
+                    OCSpace.DRIVE_TYPE_PERSONAL,
+                    OCSpace.DRIVE_TYPE_PROJECT
+                )
+            )
+        } throws Exception()
+
+        ocLocalSpacesDataSource.getPersonalAndProjectSpacesForAccount(OC_ACCOUNT_NAME)
+    }
     @Test
     fun `getSpaceWithSpecialsByIdForAccount returns a OCSpace`() {
 
@@ -279,6 +367,16 @@ class OCLocalSpacesDataSourceTest {
                 OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME
             )
         }
+    }
+
+    @Test(expected = Exception::class)
+    fun `getSpaceWithSpecialsByIdForAccount returns an exception when dao receive an exception`() {
+
+        every {
+            spacesDao.getSpaceWithSpecialsByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
+        } throws Exception()
+
+        ocLocalSpacesDataSource.getSpaceWithSpecialsByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
     }
 
     @Test
@@ -299,6 +397,17 @@ class OCLocalSpacesDataSourceTest {
         }
     }
 
+    @Test(expected = Exception::class)
+    fun `getWebDavUrlForSpace returns an exception when dao receive an exception`() {
+
+        every {
+            spacesDao.getWebDavUrlForSpace(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
+        } throws Exception()
+
+        ocLocalSpacesDataSource.getWebDavUrlForSpace(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
+
+    }
+
     @Test
     fun `deleteSpacesForAccount delete the space by account returns Unit`() {
 
@@ -311,5 +420,16 @@ class OCLocalSpacesDataSourceTest {
         verify(exactly = 1) {
             spacesDao.deleteSpacesForAccount(OC_ACCOUNT_NAME)
         }
+    }
+
+    @Test(expected = Exception::class)
+    fun `deleteSpacesForAccount delete the space by account returns an exception when dao receive an exception`() {
+
+        every {
+            spacesDao.deleteSpacesForAccount(OC_ACCOUNT_NAME)
+        } throws Exception()
+
+        ocLocalSpacesDataSource.deleteSpacesForAccount(OC_ACCOUNT_NAME)
+
     }
 }
