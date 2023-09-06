@@ -117,6 +117,7 @@ Summary
 * Enhancement - Force security if not protected: [#4061](https://github.com/owncloud/android/issues/4061)
 * Enhancement - Prevent http traffic with branding options: [#4066](https://github.com/owncloud/android/issues/4066)
 * Enhancement - Unit tests for datasources classes - Part 2: [#4071](https://github.com/owncloud/android/issues/4071)
+* Enhancement - Unit tests for datasources classes - Part 3: [#4072](https://github.com/owncloud/android/issues/4072)
 * Enhancement - Respect app_providers_appsUrl value from capabilities: [#4075](https://github.com/owncloud/android/issues/4075)
 * Enhancement - Apply (1) to uploads' name conflicts: [#4079](https://github.com/owncloud/android/issues/4079)
 * Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
@@ -296,6 +297,17 @@ Details
 
    https://github.com/owncloud/android/issues/4071
    https://github.com/owncloud/android/pull/4123
+
+* Enhancement - Unit tests for datasources classes - Part 3: [#4072](https://github.com/owncloud/android/issues/4072)
+
+   Unit tests of the OCFolderBackupLocalDataSource, OCRemoteOAuthDataSource,
+   OCRemoteShareeDataSource, OCLocalShareDataSource, OCRemoteShareDataSource,
+   OCLocalSpacesDataSource, OCRemoteSpacesDataSource, OCLocalTransferDataSource,
+   OCLocalUserDataSource, OCRemoteUserDataSource, OCRemoteWebFingerDatasource classes
+   have been done and completed.
+
+   https://github.com/owncloud/android/issues/4072
+   https://github.com/owncloud/android/pull/4143
 
 * Enhancement - Respect app_providers_appsUrl value from capabilities: [#4075](https://github.com/owncloud/android/issues/4075)
 
