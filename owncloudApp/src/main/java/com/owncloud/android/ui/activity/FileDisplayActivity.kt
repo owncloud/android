@@ -1158,7 +1158,10 @@ class FileDisplayActivity : FileActivity(),
                 replace.add(action)
                 pos1[0]++
                 if (pos1[0] == data.size) {
-                    launchAction(uiResult.data!!, replace)
+                    launchAction(
+                        uiResult.data!!,
+                        replace,
+                        )
                 }
             }
             dismissAllOpenDialogs()
@@ -1166,7 +1169,10 @@ class FileDisplayActivity : FileActivity(),
             replace.add(action)
             pos1[0]++
             if (pos1[0] == data.size) {
-                launchAction(uiResult.data!!, replace)
+                launchAction(
+                    uiResult.data!!,
+                    replace,
+                    )
             }
             fileOperationsViewModel.openDialogs[posDialog1[0]].dismiss()
             fileOperationsViewModel.openDialogs.removeAt(posDialog1[0])
