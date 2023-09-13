@@ -25,8 +25,6 @@
 package com.owncloud.android.ui.preview;
 
 import android.accounts.Account;
-import android.app.Activity;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -35,21 +33,29 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.view.Window;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.OptIn;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.lifecycle.Lifecycle;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.ui.PlayerView;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.DefaultLoadControl;
+import androidx.media3.exoplayer.ExoPlaybackException;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.exoplayer.trackselection.AdaptiveTrackSelection;
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector;
+import androidx.media3.ui.PlayerView;
+import com.google.android.material.appbar.AppBarLayout;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
@@ -61,7 +67,6 @@ import com.owncloud.android.presentation.files.operations.FileOperation;
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel;
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment;
 import com.owncloud.android.presentation.previews.PreviewVideoViewModel;
-import com.owncloud.android.ui.activity.FileActivity;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -80,7 +85,8 @@ import static org.koin.java.KoinJavaComponent.get;
  * Trying to get an instance with NULL {@link OCFile} or ownCloud {@link Account} values will
  * produce an {@link IllegalStateException}.
  */
-public class PreviewVideoFragment extends FileFragment implements View.OnClickListener,
+@OptIn(markerClass = UnstableApi.class)
+public class PreviewVideoFragment extends FileFragment implements
         Player.Listener, PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener {
 
     public static final String EXTRA_FILE = "FILE";
@@ -105,12 +111,13 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     private ExoPlayer player;
     private DefaultTrackSelector trackSelector;
 
-    private ImageButton fullScreenButton;
+    //    private ImageButton fullScreenButton;
 
     private boolean mExoPlayerBooted = false;
     private boolean mAutoplay;
     private long mPlaybackPosition;
-
+    private WindowInsetsControllerCompat windowInsetsController;
+    private AppBarLayout mAppBarLayout;
     PreviewVideoViewModel previewVideoViewModel = get(PreviewVideoViewModel.class);
     FileOperationsViewModel fileOperationsViewModel = get(FileOperationsViewModel.class);
 
@@ -179,10 +186,21 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         mProgressBar.setVisibility(View.GONE);
 
         exoPlayerView = view.findViewById(R.id.video_player);
+        initWindowInsetsController();
+        initActionBar();
 
-        fullScreenButton = view.findViewById(R.id.fullscreen_button);
+        exoPlayerView.setFullscreenButtonClickListener(isFullScreen -> {
+            if (isFullScreen) {
+                // go immersive
+                enterImmersiveMode();
+            } else {
+                // exit immersive mode
+                exitImmersiveMode();
+            }
+        });
 
-        fullScreenButton.setOnClickListener(this);
+        //                fullScreenButton = view.findViewById(R.id.fullscreen_button);
+        //
 
         return view;
     }
@@ -255,34 +273,56 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Timber.v("onActivityResult %s", this);
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            mAutoplay = data.getExtras().getBoolean(PreviewVideoActivity.EXTRA_AUTOPLAY);
-            mPlaybackPosition = data.getExtras().getLong(PreviewVideoActivity.EXTRA_START_POSITION);
-            mExoPlayerBooted = false;
-        }
-    }
+    //    @Override
+    //    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    //        Timber.v("onActivityResult %s", this);
+    //        super.onActivityResult(requestCode, resultCode, data);
+    //        if (resultCode == Activity.RESULT_OK) {
+    //            mAutoplay = data.getExtras().getBoolean(PreviewVideoActivity.EXTRA_AUTOPLAY);
+    //            mPlaybackPosition = data.getExtras().getLong(PreviewVideoActivity.EXTRA_START_POSITION);
+    //            mExoPlayerBooted = false;
+    //        }
+    //    }
 
     // OnClickListener methods
 
-    public void onClick(View view) {
-        if (view == fullScreenButton) {
-            releasePlayer();
-            startFullScreenVideo();
-        }
+    //    public void onClick(View view) {
+    //        if (view == fullScreenButton) {
+    //            releasePlayer();
+    //            startFullScreenVideo();
+    //        }
+    //    }
+
+    //    private void startFullScreenVideo() {
+    //
+    ////        Intent i = new Intent(getActivity(), PreviewVideoActivity.class);
+    ////        i.putExtra(EXTRA_AUTOPLAY, player.getPlayWhenReady());
+    ////        i.putExtra(EXTRA_PLAY_POSITION, player.getCurrentPosition());
+    ////        i.putExtra(FileActivity.EXTRA_FILE, getFile());
+    ////
+    ////        startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
+    //    }
+
+    private void initWindowInsetsController() {
+        Window window = requireActivity().getWindow();
+        windowInsetsController = WindowCompat.getInsetsController(window, window.getDecorView());
+        windowInsetsController.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
     }
 
-    private void startFullScreenVideo() {
+    private void initActionBar() {
+       mAppBarLayout = requireActivity().findViewById(R.id.app_bar_layout);
 
-        Intent i = new Intent(getActivity(), PreviewVideoActivity.class);
-        i.putExtra(EXTRA_AUTOPLAY, player.getPlayWhenReady());
-        i.putExtra(EXTRA_PLAY_POSITION, player.getCurrentPosition());
-        i.putExtra(FileActivity.EXTRA_FILE, getFile());
+    }
 
-        startActivityForResult(i, FileActivity.REQUEST_CODE__LAST_SHARED + 1);
+    private void enterImmersiveMode() {
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
+        mAppBarLayout.setVisibility(View.GONE);
+
+    }
+
+    private void exitImmersiveMode() {
+        windowInsetsController.show(WindowInsetsCompat.Type.systemBars());
+        mAppBarLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -493,7 +533,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         // If player is already, show full screen button
         if (playbackState == ExoPlayer.STATE_READY) {
-            fullScreenButton.setVisibility(View.VISIBLE);
+            //            fullScreenButton.setVisibility(View.VISIBLE);
             if (player != null && !mExoPlayerBooted) {
                 mExoPlayerBooted = true;
                 player.seekTo(mPlaybackPosition);
@@ -501,7 +541,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
             }
 
         } else if (playbackState == ExoPlayer.STATE_ENDED) {
-            fullScreenButton.setVisibility(View.GONE);
+            //            fullScreenButton.setVisibility(View.GONE);
         }
     }
 
