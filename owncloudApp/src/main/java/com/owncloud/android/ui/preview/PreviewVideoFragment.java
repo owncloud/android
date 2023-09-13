@@ -44,12 +44,12 @@ import androidx.lifecycle.Lifecycle;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.Player;
+import androidx.media3.common.PlaybackException;
+import androidx.media3.common.Player;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
@@ -100,7 +100,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     private ProgressBar mProgressBar;
     private TransferProgressController mProgressController;
 
-    private StyledPlayerView exoPlayerView;
+    private PlayerView exoPlayerView;
 
     private ExoPlayer player;
     private DefaultTrackSelector trackSelector;

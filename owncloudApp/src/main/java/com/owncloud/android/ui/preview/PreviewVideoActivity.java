@@ -29,16 +29,16 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import com.google.android.exoplayer2.C;
+import androidx.media3.common.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.Player;
+import androidx.media3.common.PlaybackException;
+import androidx.media3.common.Player;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.owncloud.android.R;
 import com.owncloud.android.ui.activity.FileActivity;
 import timber.log.Timber;
@@ -59,7 +59,7 @@ public class PreviewVideoActivity extends FileActivity implements Player.Listene
      */
     public static final String EXTRA_START_POSITION = "START_POSITION";
 
-    private StyledPlayerView exoPlayerView;
+    private PlayerView exoPlayerView;
 
     private boolean mExoPlayerBooted = false;
     private ExoPlayer player;
