@@ -29,7 +29,6 @@ package com.owncloud.android.ui.activity
 
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.accounts.Account
-import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -97,6 +96,7 @@ import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.REQ
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.syncadapter.FileSyncAdapter
+import com.owncloud.android.ui.dialog.FileAlreadyExistsDialog
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.fragment.TaskRetainerFragment
 import com.owncloud.android.ui.helpers.FilesUploadHelper
@@ -742,6 +742,7 @@ class FileDisplayActivity : FileActivity(),
         // responsibility of restore is preferred in onCreate() before than in
         // onRestoreInstanceState when there are Fragments involved
         Timber.v("onSaveInstanceState() start")
+
         super.onSaveInstanceState(outState)
         outState.putParcelable(KEY_WAITING_TO_PREVIEW, fileWaitingToPreview)
         outState.putBoolean(KEY_SYNC_IN_PROGRESS, syncInProgress)
@@ -777,6 +778,7 @@ class FileDisplayActivity : FileActivity(),
         syncBroadcastReceiver = SyncBroadcastReceiver()
         localBroadcastManager!!.registerReceiver(syncBroadcastReceiver!!, syncIntentFilter)
 
+        showDialogs()
         Timber.v("onResume() end")
     }
 
@@ -788,6 +790,7 @@ class FileDisplayActivity : FileActivity(),
         }
 
         super.onPause()
+        dismissDialogs()
         Timber.v("onPause() end")
     }
 
@@ -1056,7 +1059,7 @@ class FileDisplayActivity : FileActivity(),
                             genericErrorMessage = getString(R.string.copy_file_error),
                             resources = resources,
                             showJustReason = true,
-                            )
+                        )
                     )
                 }
             }
@@ -1069,53 +1072,137 @@ class FileDisplayActivity : FileActivity(),
         replace: MutableList<Boolean?>,
         launchAction: (List<OCFile>, List<Boolean?>) -> Unit,
     ) {
-        val context = this@FileDisplayActivity
         if (!uiResult.data.isNullOrEmpty()) {
-            var pos = 0
-            data.asReversed().forEach { file ->
-                AlertDialog.Builder(context)
-                    .setTitle(
+            val posArray = intArrayOf(0)
+            var posDialog = intArrayOf(data.lastIndex)
+            data.asReversed().forEachIndexed { index, file ->
+                val countDownValue = index + 1
+
+                val customDialog = FileAlreadyExistsDialog.newInstance(
+                    titleText = this.getString(
                         if (file.isFolder) {
                             R.string.folder_already_exists
                         } else {
                             R.string.file_already_exists
                         }
-                    )
-                    .setMessage(
-                        String.format(
-                            context.getString(
-                                if (file.isFolder) {
-                                    R.string.folder_already_exists_description
-                                } else {
-                                    R.string.file_already_exists_description
-                                }
-                            ), file.fileName
-                        )
-                    )
-                    .setNeutralButton(R.string.welcome_feature_skip_button) { _, _ ->
-                        replace.add(null)
-                        pos++
-                        if (pos == data.size) {
-                            launchAction(uiResult.data, replace)
-                        }
-                    }
-                    .setNegativeButton(R.string.conflict_replace) { _, _ ->
-                        replace.add(true)
-                        pos++
-                        if (pos == data.size) {
-                            launchAction(uiResult.data, replace)
-                        }
-                    }
-                    .setPositiveButton(R.string.conflict_keep_both) { _, _ ->
-                        replace.add(false)
-                        pos++
-                        if (pos == data.size) {
-                            launchAction(uiResult.data, replace)
-                        }
-                    }
-                    .show()
+                    ),
+                    descriptionText = this.getString(
+                        if (file.isFolder) {
+                            R.string.folder_already_exists_description
+                        } else {
+                            R.string.file_already_exists_description
+                        }, file.fileName
+                    ),
+                    checkboxText = this.getString(R.string.apply_to_all_conflicts, countDownValue.toString()),
+                    checkboxVisible = countDownValue > 1
+                )
+                customDialog.isCancelable = false
+                customDialog.show(this.supportFragmentManager, CUSTOM_DIALOG_TAG)
 
+                fileOperationsViewModel.openDialogs.add(customDialog)
+
+
+                customDialog.setDialogButtonClickListener(object : FileAlreadyExistsDialog.DialogButtonClickListener {
+
+                    override fun onKeepBothButtonClick() {
+                        applyAction(
+                            posDialog = posDialog,
+                            data = data,
+                            replace = replace,
+                            pos = posArray,
+                            launchAction = launchAction,
+                            uiResult = uiResult,
+                            action = false
+                        )
+                    }
+
+                    override fun onSkipButtonClick() {
+                        applyAction(
+                            posDialog = posDialog,
+                            data = data,
+                            replace = replace,
+                            pos = posArray,
+                            launchAction = launchAction,
+                            uiResult = uiResult,
+                            action = null
+                        )
+                    }
+
+                    override fun onReplaceButtonClick() {
+                        applyAction(
+                            posDialog = posDialog,
+                            data = data,
+                            replace = replace,
+                            pos = posArray,
+                            launchAction = launchAction,
+                            uiResult = uiResult,
+                            action = true
+                        )
+                    }
+                }
+                )
             }
+        }
+    }
+
+    private fun applyAction(
+        posDialog: IntArray,
+        data: List<OCFile>,
+        replace: MutableList<Boolean?>,
+        pos: IntArray,
+        launchAction: (List<OCFile>, List<Boolean?>) -> Unit,
+        uiResult: UIResult.Success<List<OCFile>>,
+        action: Boolean?
+    ) {
+        var posDialog1 = posDialog
+        var pos1 = pos
+        if (fileOperationsViewModel.openDialogs[posDialog1[0]].isCheckBoxChecked) {
+            repeat(data.asReversed().size) {
+                replace.add(action)
+                pos1[0]++
+                if (pos1[0] == data.size) {
+                    launchAction(
+                        uiResult.data!!,
+                        replace,
+                    )
+                }
+            }
+            dismissAllOpenDialogs()
+        } else {
+            replace.add(action)
+            pos1[0]++
+            if (pos1[0] == data.size) {
+                launchAction(
+                    uiResult.data!!,
+                    replace,
+                )
+            }
+            fileOperationsViewModel.openDialogs[posDialog1[0]].dismiss()
+            fileOperationsViewModel.openDialogs.removeAt(posDialog1[0])
+            if (posDialog1[0] == 0) {
+                fileOperationsViewModel.openDialogs.clear()
+            } else {
+                posDialog1[0]--
+            }
+        }
+    }
+
+    private fun dismissAllOpenDialogs() {
+        fileOperationsViewModel.openDialogs.forEach { dialog ->
+            dialog.dismiss()
+        }
+        fileOperationsViewModel.openDialogs.clear()
+    }
+
+    private fun showDialogs() {
+        fileOperationsViewModel.openDialogs.forEach { dialog ->
+            dialog.show(this.supportFragmentManager, CUSTOM_DIALOG_TAG)
+        }
+    }
+
+    private fun dismissDialogs() {
+        fileOperationsViewModel.openDialogs.forEach { dialog ->
+            dialog.dismiss()
         }
     }
 
@@ -1705,6 +1792,8 @@ class FileDisplayActivity : FileActivity(),
         private const val KEY_WAITING_TO_SEND = "WAITING_TO_SEND"
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
+
+        private const val CUSTOM_DIALOG_TAG = "CUSTOM_DIALOG"
 
         private const val PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED = "PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED"
         const val ALL_FILES_SAF_REGEX = "*/*"

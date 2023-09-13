@@ -1,0 +1,6 @@
+Enhancement: "Apply to all" when many name conflicts arise
+
+A new dialog has been created where a checkbox has been added to be able to select all the folders or files that have conflicts.
+
+https://github.com/owncloud/android/issues/4078
+https://github.com/owncloud/android/pull/4138
