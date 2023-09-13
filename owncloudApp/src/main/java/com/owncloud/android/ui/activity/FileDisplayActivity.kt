@@ -1059,7 +1059,7 @@ class FileDisplayActivity : FileActivity(),
                             genericErrorMessage = getString(R.string.copy_file_error),
                             resources = resources,
                             showJustReason = true,
-                            )
+                        )
                     )
                 }
             }
@@ -1107,34 +1107,37 @@ class FileDisplayActivity : FileActivity(),
                     override fun onKeepBothButtonClick() {
                         applyAction(
                             posDialog = posDialog,
-                            data = data ,
-                            replace = replace ,
-                            pos = posArray ,
+                            data = data,
+                            replace = replace,
+                            pos = posArray,
                             launchAction = launchAction,
-                            uiResult= uiResult,
-                            action = false)
+                            uiResult = uiResult,
+                            action = false
+                        )
                     }
 
                     override fun onSkipButtonClick() {
                         applyAction(
                             posDialog = posDialog,
-                            data = data ,
-                            replace = replace ,
-                            pos = posArray ,
+                            data = data,
+                            replace = replace,
+                            pos = posArray,
                             launchAction = launchAction,
-                            uiResult= uiResult,
-                            action = null)
+                            uiResult = uiResult,
+                            action = null
+                        )
                     }
 
                     override fun onReplaceButtonClick() {
                         applyAction(
                             posDialog = posDialog,
-                            data = data ,
-                            replace = replace ,
-                            pos = posArray ,
+                            data = data,
+                            replace = replace,
+                            pos = posArray,
                             launchAction = launchAction,
-                            uiResult= uiResult,
-                            action = true)
+                            uiResult = uiResult,
+                            action = true
+                        )
                     }
                 }
                 )
@@ -1161,7 +1164,7 @@ class FileDisplayActivity : FileActivity(),
                     launchAction(
                         uiResult.data!!,
                         replace,
-                        )
+                    )
                 }
             }
             dismissAllOpenDialogs()
@@ -1172,7 +1175,7 @@ class FileDisplayActivity : FileActivity(),
                 launchAction(
                     uiResult.data!!,
                     replace,
-                    )
+                )
             }
             fileOperationsViewModel.openDialogs[posDialog1[0]].dismiss()
             fileOperationsViewModel.openDialogs.removeAt(posDialog1[0])
@@ -1191,17 +1194,18 @@ class FileDisplayActivity : FileActivity(),
         fileOperationsViewModel.openDialogs.clear()
     }
 
-
     private fun showDialogs() {
         fileOperationsViewModel.openDialogs.forEach { dialog ->
             dialog.show(this.supportFragmentManager, CUSTOM_DIALOG_TAG)
         }
     }
+
     private fun dismissDialogs() {
         fileOperationsViewModel.openDialogs.forEach { dialog ->
             dialog.dismiss()
         }
     }
+
     private fun launchCopyFile(files: List<OCFile>, replace: List<Boolean?>) {
         fileOperationsViewModel.performOperation(
             FileOperation.CopyOperation(
