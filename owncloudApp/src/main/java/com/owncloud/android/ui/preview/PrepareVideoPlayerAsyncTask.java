@@ -1,21 +1,20 @@
 /**
  * ownCloud Android client application
- *
+ * <p>
  * Copyright (C) 2022 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 
 package com.owncloud.android.ui.preview;
 
@@ -27,14 +26,17 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Base64;
 
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
+import androidx.annotation.OptIn;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.datasource.DefaultDataSourceFactory;
+import androidx.media3.datasource.DefaultHttpDataSource;
+import androidx.media3.datasource.HttpDataSource;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.exoplayer.source.ProgressiveMediaSource;
+import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter;
+import androidx.media3.extractor.DefaultExtractorsFactory;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
@@ -52,6 +54,7 @@ import java.util.Map;
 /**
  * Task for prepare video player asynchronously
  */
+@OptIn(markerClass = UnstableApi.class)
 public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSource> {
 
     private final Context mContext;
@@ -59,13 +62,18 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
     private final OCFile mFile;
     private final Account mAccount;
 
-    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+    private static DefaultBandwidthMeter BANDWIDTH_METER;
 
     public PrepareVideoPlayerAsyncTask(Context context, OnPrepareVideoPlayerTaskListener listener, OCFile file, Account account) {
         mContext = context;
         mListener = new WeakReference<>(listener);
         mFile = file;
         mAccount = account;
+        BANDWIDTH_METER = new DefaultBandwidthMeter.Builder(mContext).build();
+    }
+
+    private void method() {
+
     }
 
     @Override
@@ -78,8 +86,7 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
         try {
             // If the file is already downloaded, reproduce it locally, if not, do streaming
             uri = mFile.isAvailableLocally() ? UriUtilsKt.INSTANCE.getStorageUriForFile(mFile) :
-                    Uri.parse(AccountUtils.getWebDavUrlForAccount(mContext, mAccount) +
-                            Uri.encode(mFile.getRemotePath(), "/"));
+                    Uri.parse(AccountUtils.getWebDavUrlForAccount(mContext, mAccount) + Uri.encode(mFile.getRemotePath(), "/"));
 
             boolean useBandwidthMeter = true;
 
@@ -120,10 +127,7 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
      *                       DataSource factory.
      * @return A new HttpDataSource factory.
      */
-    private HttpDataSource.Factory buildHttpDataSourceFactory(
-            DefaultBandwidthMeter bandwidthMeter,
-            OCFile file,
-            Account account) {
+    private HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter, OCFile file, Account account) {
 
         if (file.isAvailableLocally()) {
 
@@ -149,8 +153,7 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
                     params.put("Authorization", auth);
                 }
 
-                return new CustomHttpDataSourceFactory(MainApp.Companion.getUserAgent(),
-                        bandwidthMeter, params);
+                return new CustomHttpDataSourceFactory(MainApp.Companion.getUserAgent(), bandwidthMeter, params);
 
             } catch (AuthenticatorException | IOException | OperationCanceledException e) {
                 Timber.e(e);
