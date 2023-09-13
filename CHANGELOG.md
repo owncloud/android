@@ -1,3 +1,26 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v4.1.0...master
+
+Summary
+-------
+
+* Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
+
+Details
+-------
+
+* Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
+
+   A new dialog has been created where a checkbox has been added to be able to select all the folders
+   or files that have conflicts.
+
+   https://github.com/owncloud/android/issues/4078
+   https://github.com/owncloud/android/pull/4138
+
 Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
 =======================================
 The following sections list the changes in ownCloud Android Client 4.1.1 relevant to
