@@ -6,18 +6,18 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
- *
+ * <p>
  * Copyright (C) 2023 ownCloud GmbH.
- *
+ * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -49,7 +49,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.domain.files.model.MimeTypeConstantsKt;
@@ -100,7 +100,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     private ProgressBar mProgressBar;
     private TransferProgressController mProgressController;
 
-    private PlayerView exoPlayerView;
+    private StyledPlayerView exoPlayerView;
 
     private ExoPlayer player;
     private DefaultTrackSelector trackSelector;
@@ -402,7 +402,7 @@ public class PreviewVideoFragment extends FileFragment implements View.OnClickLi
     private void preparePlayer() {
 
         AdaptiveTrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
-        trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+        trackSelector = new DefaultTrackSelector(requireContext(), videoTrackSelectionFactory);
 
         // Video streaming is only supported at Jelly Bean or higher Android versions (>= API 16)
 
