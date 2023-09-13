@@ -20,18 +20,19 @@ package com.owncloud.android.ui.preview;
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
-import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
-import com.google.android.exoplayer2.upstream.HttpDataSource.Factory;
-import com.google.android.exoplayer2.upstream.TransferListener;
+import androidx.annotation.OptIn;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.datasource.DefaultHttpDataSource;
+import androidx.media3.datasource.HttpDataSource;
+import androidx.media3.datasource.TransferListener;
 
 import java.util.Map;
 
 /**
  * A {@link Factory} that produces {@link CustomHttpDataSourceFactory} instances.
  */
-public final class CustomHttpDataSourceFactory extends BaseFactory {
+@OptIn(markerClass = UnstableApi.class)
+public final class CustomHttpDataSourceFactory extends HttpDataSource.BaseFactory {
 
     private final String userAgent;
     private final TransferListener listener;
