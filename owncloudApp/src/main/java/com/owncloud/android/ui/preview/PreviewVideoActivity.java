@@ -35,13 +35,10 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.owncloud.android.R;
 import com.owncloud.android.ui.activity.FileActivity;
 import timber.log.Timber;
@@ -62,7 +59,7 @@ public class PreviewVideoActivity extends FileActivity implements Player.Listene
      */
     public static final String EXTRA_START_POSITION = "START_POSITION";
 
-    private PlayerView exoPlayerView;
+    private StyledPlayerView exoPlayerView;
 
     private boolean mExoPlayerBooted = false;
     private ExoPlayer player;
@@ -151,7 +148,7 @@ public class PreviewVideoActivity extends FileActivity implements Player.Listene
     private void preparePlayer() {
         // Create a default TrackSelector
         AdaptiveTrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
-        trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+        trackSelector = new DefaultTrackSelector(this, videoTrackSelectionFactory);
         player = new ExoPlayer.Builder(this).setTrackSelector(trackSelector).setLoadControl(new DefaultLoadControl()).build();
         player.addListener(this);
         exoPlayerView.setPlayer(player);
@@ -229,11 +226,6 @@ public class PreviewVideoActivity extends FileActivity implements Player.Listene
                 player.setPlayWhenReady(mAutoplay);
             }
         }
-    }
-
-    @Override
-    public void onTracksChanged(@NonNull TrackGroupArray trackGroups, @NonNull TrackSelectionArray trackSelections) {
-        // Do nothing
     }
 
     // Back button behaviour
