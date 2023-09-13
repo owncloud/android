@@ -50,6 +50,8 @@ dependencies {
     // Miscellaneous
     implementation libs.disklrucache
     implementation libs.exoplayer
+    implementation libs.media3.exoplayer
+    implementation libs.media3.ui
     implementation libs.floatingactionbutton
     implementation libs.material
     implementation libs.patternlockview
