@@ -678,4 +678,5 @@
   <string name="ocis_accounts_warning_checkbox_message">Tekrar gösterme</string>
   <string name="ocis_accounts_warning_button">Anlaşıldı</string>
   <string name="tab_label_ascii">Metin</string>
+  <string name="apply_to_all_conflicts">Tüm %1$s çakışma için uygula</string>
 </resources>
