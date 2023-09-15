@@ -678,4 +678,5 @@
   <string name="ocis_accounts_warning_checkbox_message">Ära enam näita</string>
   <string name="ocis_accounts_warning_button">Loetud</string>
   <string name="tab_label_ascii">Tekst</string>
+  <string name="apply_to_all_conflicts">Rakenda kõigile %1$s-le konfliktile</string>
 </resources>
