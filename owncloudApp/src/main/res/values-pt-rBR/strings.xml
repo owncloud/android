@@ -679,4 +679,5 @@
   <string name="ocis_accounts_warning_checkbox_message">Não mostrar novamente</string>
   <string name="ocis_accounts_warning_button">Entendido</string>
   <string name="tab_label_ascii">Texto</string>
+  <string name="apply_to_all_conflicts">Aplicar para todos os %1$s conflitos</string>
 </resources>
