@@ -32,59 +32,53 @@
 
         <include layout="@layout/owncloud_toolbar" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.owncloud.android.presentation.files.SortOptionsView
+            android:id="@+id/options_layout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="top"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <com.owncloud.android.presentation.files.SortOptionsView
-                android:id="@+id/options_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <include
+            android:id="@+id/empty_list_view"
+            layout="@layout/item_empty_dataset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center_vertical|center_horizontal"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-            <FrameLayout
-                android:id="@+id/upload_list"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/options_layout">
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:visibility="visible"
+            app:layout_anchor="@+id/upload_files_layout"
+            app:layout_anchorGravity="center" />
 
-                <include
-                    android:id="@+id/empty_list_view"
-                    layout="@layout/item_empty_dataset"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:visibility="visible" />
-
-                <ListView
-                    android:id="@android:id/list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:divider="@color/list_divider_background"
-                    android:dividerHeight="1dip"
-                    tools:listitem="@layout/uploader_list_item_layout" />
-
-            </FrameLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:divider="@color/list_divider_background"
+            android:dividerHeight="1dip"
+            android:visibility="gone"
+            tools:listitem="@layout/uploader_list_item_layout" />
 
         <TextView
             android:id="@+id/uploader_no_permissions_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/warning_background_color"
             android:paddingHorizontal="@dimen/standard_padding"
             android:paddingVertical="@dimen/standard_half_padding"
-            android:background="@color/warning_background_color"
-            android:visibility="gone"
             android:text="@string/folder_picker_no_permissions_message_text"
-            tools:visibility="visible"/>
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <ImageView
             android:layout_width="match_parent"

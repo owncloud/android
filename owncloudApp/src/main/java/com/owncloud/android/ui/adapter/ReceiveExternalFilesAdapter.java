@@ -59,14 +59,18 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
     private LayoutInflater mInflater;
     private OnSearchQueryUpdateListener mOnSearchQueryUpdateListener;
 
+    private Boolean mShowHiddenFiles;
+
     public ReceiveExternalFilesAdapter(Context context,
                                        FileDataStorageManager storageManager,
-                                       Account account) {
+                                       Account account,
+                                       boolean showHiddenFiles) {
         mStorageManager = storageManager;
         mContext = context;
         mInflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mAccount = account;
+        mShowHiddenFiles = showHiddenFiles;
         if (mContext instanceof OnSearchQueryUpdateListener) {
             mOnSearchQueryUpdateListener = (OnSearchQueryUpdateListener) mContext;
         }
@@ -87,8 +91,18 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
     }
 
     public void setNewItemVector(Vector<OCFile> newItemVector) {
-        mFiles = newItemVector;
-        mImmutableFilesList = (Vector<OCFile>) mFiles.clone();
+        mFiles.clear();
+        for (OCFile file : newItemVector) {
+            if (!mShowHiddenFiles) {
+                if (!file.getFileName().startsWith(".")) {
+                    mFiles.add(file);
+                }
+            } else {
+                mFiles.add(file);
+            }
+        }
+        mImmutableFilesList.clear();
+        mImmutableFilesList.addAll(mFiles);
         notifyDataSetChanged();
     }
 
