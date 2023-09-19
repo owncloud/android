@@ -1,0 +1,6 @@
+Enhancement: OCIS: "Share to" allows only upload to personal "space"
+
+With this improvement, it is possible to choose between different spaces to share something from outside the application to inside.
+
+https://github.com/owncloud/android/issues/4088
+https://github.com/owncloud/android/pull/4160
