@@ -9,6 +9,7 @@ Summary
 -------
 
 * Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
+* Enhancement - OCIS: "Share to" allows only upload to personal "space": [#4088](https://github.com/owncloud/android/issues/4088)
 
 Details
 -------
@@ -20,6 +21,14 @@ Details
 
    https://github.com/owncloud/android/issues/4078
    https://github.com/owncloud/android/pull/4138
+
+* Enhancement - OCIS: "Share to" allows only upload to personal "space": [#4088](https://github.com/owncloud/android/issues/4088)
+
+   With this improvement, it is possible to choose between different spaces to share something
+   from outside the application to inside.
+
+   https://github.com/owncloud/android/issues/4088
+   https://github.com/owncloud/android/pull/4160
 
 Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
 =======================================
