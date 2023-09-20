@@ -764,6 +764,9 @@
     <string name="release_notes_4_1_subtitle_6">Showing a 3 option pop up when having a naming conflict on copy or move action</string>
     <string name="release_notes_4_1_title_7">Minor bugfixes and improvements</string>
     <string name="release_notes_4_1_subtitle_7">Some minor bugs have been fixed, and minor technical improvements were introduced to improve the experience in the app</string>
+    <string name="release_notes_4_1_title_8">Http traffic banned</string>
+    <string name="release_notes_4_1_subtitle_8">New accounts over servers running on http will not be longer allowed. Only https allowed</string>
+
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
