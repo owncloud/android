@@ -20,7 +20,6 @@
 
 package com.owncloud.android.presentation.spaces
 
-import android.accounts.Account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.UseCaseResult
@@ -43,7 +42,7 @@ class SpacesListViewModel(
     private val getProjectSpacesWithSpecialsForAccountAsStreamUseCase: GetProjectSpacesWithSpecialsForAccountAsStreamUseCase,
     private val getFileByRemotePathUseCase: GetFileByRemotePathUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
-    private val account: Account,
+    private val accountName: String,
     private val showPersonalSpace: Boolean,
 ) : ViewModel() {
 
@@ -55,9 +54,9 @@ class SpacesListViewModel(
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             refreshSpacesFromServer()
             val spacesListFlow = if (showPersonalSpace) getPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase.execute(
-                GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase.Params(accountName = account.name)
+                GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase.Params(accountName = accountName)
             ) else getProjectSpacesWithSpecialsForAccountAsStreamUseCase.execute(
-                GetProjectSpacesWithSpecialsForAccountAsStreamUseCase.Params(accountName = account.name)
+                GetProjectSpacesWithSpecialsForAccountAsStreamUseCase.Params(accountName = accountName)
             )
             spacesListFlow.collect { spaces ->
                 _spacesList.update { it.copy(spaces = spaces) }
@@ -68,7 +67,7 @@ class SpacesListViewModel(
     fun refreshSpacesFromServer() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             _spacesList.update { it.copy(refreshing = true) }
-            when (val result = refreshSpacesFromServerAsyncUseCase.execute(RefreshSpacesFromServerAsyncUseCase.Params(account.name))) {
+            when (val result = refreshSpacesFromServerAsyncUseCase.execute(RefreshSpacesFromServerAsyncUseCase.Params(accountName))) {
                 is UseCaseResult.Success -> _spacesList.update { it.copy(refreshing = false, error = null) }
                 is UseCaseResult.Error -> _spacesList.update { it.copy(refreshing = false, error = result.throwable) }
             }
