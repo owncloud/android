@@ -149,6 +149,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private FrameLayout fragmentContainer;
     private Button uploaderButton;
     private Button cancelButton;
+    private TextView noPermissionsMessage;
     private String currentSpace;
 
     // this is inited lazily, when an account is selected. If no account is selected but an instance of this would
@@ -220,7 +221,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         root = storageManager.getRootPersonalFolder();
         if (root.getSpaceId() != null) {
             initAndShowListOfSpaces();
-            updateToolbar();
+            updateToolbar(getString(R.string.app_name));
             getSupportFragmentManager().setFragmentResultListener(SpacesListFragment.REQUEST_KEY_CLICK_SPACE, this, (requestKey, bundle) -> {
                 OCFile rootSpaceFolder = bundle.getParcelable(SpacesListFragment.BUNDLE_KEY_CLICK_SPACE);
                 mFile = rootSpaceFolder;
@@ -265,7 +266,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     private void initAndShowListOfSpaces() {
-        SpacesListFragment listOfSpaces = new SpacesListFragment(true);
+        SpacesListFragment listOfSpaces = new SpacesListFragment(true, getAccount().name);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, listOfSpaces);
         transaction.commit();
@@ -314,6 +315,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         initTargetFolder();
         if (root.getSpaceId() == null) {
             updateDirectoryList();
+            updateToolbar(getString(R.string.uploader_top_message));
         }
 
         mReceiveExternalFilesViewModel.getSyncFolderLiveData().observe(this, eventUiResult -> {
@@ -335,8 +337,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     }
                 } else if (uiResult instanceof UIResult.Success) {
                     mSyncInProgress = false;
-                    if (root.getSpaceId() == null) {
-                        updateDirectoryList();
+                    updateDirectoryList();
+                    if (mParents.size() == 1 && root.getSpaceId() == null) {
+                        updateToolbar(getString(R.string.uploader_top_message));
                     }
                 }
             }
@@ -402,6 +405,33 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     setAccount(mAccountManager.getAccountsByType(MainApp.Companion.getAccountType())[which]);
                     onAccountSet(mAccountWasRestored);
                     dialog.dismiss();
+                    PreferenceManager.setLastUploadPath("/", this);
+                    root = getStorageManager().getRootPersonalFolder();
+                    if (root.getSpaceId() == null) {
+                        showFilesview();
+                        showRetainerFragment();
+                        updateDirectoryList();
+                        if (mParents.size() == 1) {
+                            updateToolbar(getString(R.string.uploader_top_message));
+                        }
+
+                    } else {
+                        mListView = findViewById(android.R.id.list);
+                        fragmentContainer = findViewById(R.id.fragment_container);
+                        mListView.setVisibility(View.GONE);
+                        fragmentContainer.setVisibility(View.VISIBLE);
+                        initAndShowListOfSpaces();
+                        updateToolbar(getString(R.string.app_name));
+                        getSupportFragmentManager().setFragmentResultListener(SpacesListFragment.REQUEST_KEY_CLICK_SPACE, this, (requestKey,
+                                                                                                                                 bundle) -> {
+                            OCFile rootSpaceFolder = bundle.getParcelable(SpacesListFragment.BUNDLE_KEY_CLICK_SPACE);
+                            mFile = rootSpaceFolder;
+                            currentSpace = mFile.getSpaceId();
+                            showFilesview();
+                            updateDirectoryList();
+                            showRetainerFragment();
+                        });
+                    }
                     mAccountSelected = true;
                     mAccountSelectionShowing = false;
                 });
@@ -426,6 +456,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
             String full_path = generatePath(mParents);
             startSyncFolderOperation(getStorageManager().getFileByPath(full_path, currentSpace));
             updateDirectoryList();
+            if (mParents.size() <= 1 && root.getSpaceId() == null) {
+                updateToolbar(getString(R.string.uploader_top_message));
+            }
         }
     }
 
@@ -522,7 +555,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         }
 
         Button btnChooseFolder = findViewById(R.id.uploader_choose_folder);
-        TextView noPermissionsMessage = findViewById(R.id.uploader_no_permissions_message);
+        noPermissionsMessage = findViewById(R.id.uploader_no_permissions_message);
         if (getCurrentFolder().getHasAddFilePermission()) {
             btnChooseFolder.setOnClickListener(this);
             btnChooseFolder.setVisibility(View.VISIBLE);
@@ -570,8 +603,8 @@ public class ReceiveExternalFilesActivity extends FileActivity
         }
     }
 
-    private void updateToolbar() {
-        updateStandardToolbar("ownCloud",
+    private void updateToolbar(String toolbarName) {
+        updateStandardToolbar(toolbarName,
                 false,
                 false
         );
@@ -746,9 +779,10 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 } else {
                     mFile = null;
                     initAndShowListOfSpaces();
-                    updateToolbar();
+                    updateToolbar(getString(R.string.app_name));
                     fragmentContainer.setVisibility(View.VISIBLE);
                     mListView.setVisibility(View.GONE);
+                    noPermissionsMessage.setVisibility(View.GONE);
                 }
                 break;
             default:
