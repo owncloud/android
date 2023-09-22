@@ -67,10 +67,10 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider;
-import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.db.PreferenceManager;
 import com.owncloud.android.domain.exceptions.UnauthorizedException;
 import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.domain.spaces.model.OCSpace;
 import com.owncloud.android.extensions.ActivityExtKt;
 import com.owncloud.android.extensions.ThrowableExtKt;
 import com.owncloud.android.lib.common.OwnCloudAccount;
@@ -150,7 +150,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private Button uploaderButton;
     private Button cancelButton;
     private TextView noPermissionsMessage;
-    private String currentSpace;
+    private String currentSpaceId;
+
+    private Boolean haveMultiAccount = false;
 
     // this is inited lazily, when an account is selected. If no account is selected but an instance of this would
     // be crated it would result in an null pointer exception.
@@ -175,8 +177,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private boolean showHiddenFiles;
     private OCSharedPreferencesProvider sharedPreferencesProvider;
-    private FileDataStorageManager storageManager;
-    private OCFile root;
+    private OCSpace spacePersonal;
 
     Pattern pattern = Pattern.compile("[/\\\\]");
 
@@ -217,28 +218,68 @@ public class ReceiveExternalFilesActivity extends FileActivity
         }
         mSortOptionsView.setVisibility(View.GONE);
 
-        storageManager = new FileDataStorageManager(getAccount());
-        root = storageManager.getRootPersonalFolder();
-        if (root.getSpaceId() != null) {
-            initAndShowListOfSpaces();
-            updateToolbar(getString(R.string.app_name));
-            getSupportFragmentManager().setFragmentResultListener(SpacesListFragment.REQUEST_KEY_CLICK_SPACE, this, (requestKey, bundle) -> {
-                OCFile rootSpaceFolder = bundle.getParcelable(SpacesListFragment.BUNDLE_KEY_CLICK_SPACE);
-                mFile = rootSpaceFolder;
-                currentSpace = mFile.getSpaceId();
-                showFilesview();
-                updateDirectoryList();
-                showRetainerFragment();
-            });
-        } else {
-            showFilesview();
-            showRetainerFragment();
-        }
+        mReceiveExternalFilesViewModel = get(ReceiveExternalFilesViewModel.class);
+        mReceiveExternalFilesViewModel.getPersonalSpaceforAcount(getAccount().name);
+
         initPickerListener();
 
     }
 
-    private void showFilesview() {
+    private void suscribeViewModel() {
+        mReceiveExternalFilesViewModel.getPersonalSpaceLiveData().observe(this, ocSpace -> {
+                    spacePersonal = ocSpace;
+
+                    if (haveMultiAccount) {
+                        if (spacePersonal == null) {
+                            showListFiles();
+                            showRetainerFragment();
+                            updateDirectoryList();
+                            if (mParents.size() == 1) {
+                                updateToolbar(getString(R.string.uploader_top_message));
+                            }
+
+                        } else {
+                            mListView = findViewById(android.R.id.list);
+                            fragmentContainer = findViewById(R.id.fragment_container);
+                            mListView.setVisibility(View.GONE);
+                            fragmentContainer.setVisibility(View.VISIBLE);
+                            initAndShowListOfSpaces();
+                            updateToolbar(getString(R.string.choose_upload_space));
+                            getSupportFragmentManager().setFragmentResultListener(SpacesListFragment.REQUEST_KEY_CLICK_SPACE, this, (requestKey,
+                                                                                                                                     bundle) -> {
+                                OCFile rootSpaceFolder = bundle.getParcelable(SpacesListFragment.BUNDLE_KEY_CLICK_SPACE);
+                                mFile = rootSpaceFolder;
+                                currentSpaceId = mFile.getSpaceId();
+                                showListFiles();
+                                updateDirectoryList();
+                                showRetainerFragment();
+                            });
+                        }
+                    } else { //Sin multicuenta
+                        if (spacePersonal != null) {
+                            initAndShowListOfSpaces();
+                            updateToolbar(getString(R.string.choose_upload_space));
+                            getSupportFragmentManager().setFragmentResultListener(SpacesListFragment.REQUEST_KEY_CLICK_SPACE, this, (requestKey,
+                                                                                                                                     bundle) -> {
+                                OCFile rootSpaceFolder = bundle.getParcelable(SpacesListFragment.BUNDLE_KEY_CLICK_SPACE);
+                                mFile = rootSpaceFolder;
+                                currentSpaceId = mFile.getSpaceId();
+                                showListFiles();
+                                updateDirectoryList();
+                                showRetainerFragment();
+                            });
+                        } else {
+                            showListFiles();
+                            showRetainerFragment();
+                            updateDirectoryList();
+                            updateToolbar(getString(R.string.uploader_top_message));
+                        }
+                    }
+                }
+        );
+    }
+
+    private void showListFiles() {
         fragmentContainer = findViewById(R.id.fragment_container);
         mListView = findViewById(android.R.id.list);
         fragmentContainer.setVisibility(View.GONE);
@@ -276,9 +317,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private void initPickerListener() {
         cancelButton = findViewById(R.id.uploader_cancel);
-        cancelButton.setOnClickListener(view -> {
-            finish();
-        });
+        cancelButton.setOnClickListener(view -> finish());
     }
 
     @Override
@@ -311,12 +350,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
     @Override
     protected void onAccountSet(boolean stateWasRecovered) {
         super.onAccountSet(mAccountWasRestored);
-        mReceiveExternalFilesViewModel = get(ReceiveExternalFilesViewModel.class);
+        suscribeViewModel();
+        mReceiveExternalFilesViewModel.getPersonalSpaceforAcount(getAccount().name);
         initTargetFolder();
-        if (root.getSpaceId() == null) {
-            updateDirectoryList();
-            updateToolbar(getString(R.string.uploader_top_message));
-        }
 
         mReceiveExternalFilesViewModel.getSyncFolderLiveData().observe(this, eventUiResult -> {
             UIResult<Unit> uiResult = eventUiResult.getContentIfNotHandled();
@@ -338,7 +374,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 } else if (uiResult instanceof UIResult.Success) {
                     mSyncInProgress = false;
                     updateDirectoryList();
-                    if (mParents.size() == 1 && root.getSpaceId() == null) {
+                    if (mParents.size() == 1 && spacePersonal == null) {
                         updateToolbar(getString(R.string.uploader_top_message));
                     }
                 }
@@ -385,6 +421,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 Account[] accounts = mAccountManager.getAccountsByType(MainApp.Companion.getAccountType());
                 CharSequence[] dialogItems = new CharSequence[accounts.length];
                 OwnCloudAccount oca;
+                haveMultiAccount = true;
                 for (int i = 0; i < dialogItems.length; ++i) {
                     try {
                         oca = new OwnCloudAccount(accounts[i], this);
@@ -406,32 +443,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     onAccountSet(mAccountWasRestored);
                     dialog.dismiss();
                     PreferenceManager.setLastUploadPath("/", this);
-                    root = getStorageManager().getRootPersonalFolder();
-                    if (root.getSpaceId() == null) {
-                        showFilesview();
-                        showRetainerFragment();
-                        updateDirectoryList();
-                        if (mParents.size() == 1) {
-                            updateToolbar(getString(R.string.uploader_top_message));
-                        }
-
-                    } else {
-                        mListView = findViewById(android.R.id.list);
-                        fragmentContainer = findViewById(R.id.fragment_container);
-                        mListView.setVisibility(View.GONE);
-                        fragmentContainer.setVisibility(View.VISIBLE);
-                        initAndShowListOfSpaces();
-                        updateToolbar(getString(R.string.app_name));
-                        getSupportFragmentManager().setFragmentResultListener(SpacesListFragment.REQUEST_KEY_CLICK_SPACE, this, (requestKey,
-                                                                                                                                 bundle) -> {
-                            OCFile rootSpaceFolder = bundle.getParcelable(SpacesListFragment.BUNDLE_KEY_CLICK_SPACE);
-                            mFile = rootSpaceFolder;
-                            currentSpace = mFile.getSpaceId();
-                            showFilesview();
-                            updateDirectoryList();
-                            showRetainerFragment();
-                        });
-                    }
+                    mReceiveExternalFilesViewModel.getPersonalSpaceforAcount(getAccount().name);
                     mAccountSelected = true;
                     mAccountSelectionShowing = false;
                 });
@@ -454,9 +466,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
         } else {
             mParents.pop();
             String full_path = generatePath(mParents);
-            startSyncFolderOperation(getStorageManager().getFileByPath(full_path, currentSpace));
+            startSyncFolderOperation(getStorageManager().getFileByPath(full_path, currentSpaceId));
             updateDirectoryList();
-            if (mParents.size() <= 1 && root.getSpaceId() == null) {
+            if (mParents.size() <= 1 && spacePersonal == null) {
                 updateToolbar(getString(R.string.uploader_top_message));
             }
         }
@@ -542,7 +554,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         sharedPreferencesProvider = new OCSharedPreferencesProvider(getApplicationContext());
         showHiddenFiles = sharedPreferencesProvider.getBoolean(PREF_SHOW_HIDDEN_FILES, false);
-        mFile = getStorageManager().getFileByPath(full_path, currentSpace);
+        mFile = getStorageManager().getFileByPath(full_path, currentSpaceId);
 
         if (mFile != null) {
             if (mAdapter == null) {
@@ -697,7 +709,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 mStreamsToUpload,
                 mUploadPath,
                 getAccount(),
-                currentSpace,
+                currentSpaceId,
                 true, // Show waiting dialog while file is being copied from private storage
                 this  // Copy temp task listener
         );
@@ -779,7 +791,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 } else {
                     mFile = null;
                     initAndShowListOfSpaces();
-                    updateToolbar(getString(R.string.app_name));
+                    updateToolbar(getString(R.string.choose_upload_space));
                     fragmentContainer.setVisibility(View.VISIBLE);
                     mListView.setVisibility(View.GONE);
                     noPermissionsMessage.setVisibility(View.GONE);
@@ -814,7 +826,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             if (file.isFolder()) {
                 return file;
             } else if (getStorageManager() != null) {
-                return getStorageManager().getFileByPath(file.getParentRemotePath(), currentSpace);
+                return getStorageManager().getFileByPath(file.getParentRemotePath(), currentSpaceId);
             }
         }
         return null;
@@ -985,7 +997,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 fileToUpload.add(filePath);
                 @NotNull Lazy<TransfersViewModel> transfersViewModelLazy = inject(TransfersViewModel.class);
                 TransfersViewModel transfersViewModel = transfersViewModelLazy.getValue();
-                transfersViewModel.uploadFilesFromSystem(getAccount().name, fileToUpload, mUploadPath, currentSpace);
+                transfersViewModel.uploadFilesFromSystem(getAccount().name, fileToUpload, mUploadPath, currentSpaceId);
                 finish();
 
                 inputLayout.setErrorEnabled(error != null);
