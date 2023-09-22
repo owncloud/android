@@ -100,4 +100,9 @@ val viewModelModule = module {
     viewModel { FileOperationsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get(), get()) }
     viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { ReceiveExternalFilesViewModel(get(), get(), get()) }
+    viewModel { AccountsManagementViewModel(get()) }
+    viewModel { (accountName: String, showPersonalSpace: Boolean) ->
+        SpacesListViewModel(get(), get(), get(), get(), get(), accountName, showPersonalSpace)
+    }
 }
