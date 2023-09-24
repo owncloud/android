@@ -704,6 +704,8 @@
   <string name="release_notes_4_1_subtitle_6">Kopyalama veya taşıma eyleminde bir adlandırma çakışması olduğunda 3 seçenek gösterilir</string>
   <string name="release_notes_4_1_title_7">Küçük hata düzeltmeleri ve iyileştirmeler</string>
   <string name="release_notes_4_1_subtitle_7">Bazı küçük hatalar giderildi ve uygulamadaki deneyimi iyileştirmek için küçük teknik iyileştirmeler yapıldı.</string>
+  <string name="release_notes_4_1_title_8">Http trafiği engellendi</string>
+  <string name="release_notes_4_1_subtitle_8">http üzerinde çalışan sunucular üzerinden yeni hesaplara artık izin verilmeyecektir. Yalnızca https\'ye izin veriliyor</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Web\'te aç</string>
   <string name="ic_action_open_with_web">%1$s\'da aç (web)</string>

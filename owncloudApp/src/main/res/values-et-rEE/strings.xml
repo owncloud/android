@@ -704,6 +704,8 @@
   <string name="release_notes_4_1_subtitle_6">Näidatakse 3 valikuga pop-up\'i kui kopeerimise või teisaldamise ajal tekib nimekonflikt</string>
   <string name="release_notes_4_1_title_7">Väiksemad veaparandused ja parendused</string>
   <string name="release_notes_4_1_subtitle_7">Parandatud on mõned väiksemad tarkvaravead ning lisatud on väiksemad tehnilised parendused, et parandada rakenduse kasutajakogemust</string>
+  <string name="release_notes_4_1_title_8">Http liiklus on keelatud</string>
+  <string name="release_notes_4_1_subtitle_8">Uute kontode loomine http-d kasutatavates serverites ei ole enam lubatud. Ainult https on lubatud</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>

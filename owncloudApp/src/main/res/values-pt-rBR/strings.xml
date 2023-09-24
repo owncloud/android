@@ -705,6 +705,8 @@
   <string name="release_notes_4_1_subtitle_6">Mostrando um pop-up de 3 opções ao ter um conflito de nomenclatura na ação de copiar ou mover</string>
   <string name="release_notes_4_1_title_7">Pequenas correções de bugs e melhorias</string>
   <string name="release_notes_4_1_subtitle_7">Alguns pequenos bugs foram corrigidos e pequenas melhorias técnicas foram introduzidas para melhorar a experiência no aplicativo</string>
+  <string name="release_notes_4_1_title_8">Tráfego HTTP banido</string>
+  <string name="release_notes_4_1_subtitle_8">Novas contas em servidores executados em http não serão mais permitidas. Apenas https permitido</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>

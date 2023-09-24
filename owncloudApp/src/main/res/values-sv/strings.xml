@@ -10,6 +10,7 @@
   <string name="actionbar_upload_from_apps">Innehåll från andra program</string>
   <string name="actionbar_upload_files">Filer</string>
   <string name="actionbar_open_with">Öppna med</string>
+  <string name="actionbar_open_with_read_only">Öppna med (endast läsning)</string>
   <string name="actionbar_mkdir">Ny mapp</string>
   <string name="actionbar_settings">Inställningar</string>
   <string name="actionbar_see_details">Detaljer</string>
@@ -34,6 +35,8 @@
   <string name="prefs_subsection_logging">Loggande</string>
   <string name="prefs_subsection_more">Mer</string>
   <string name="prefs_subsection_security">Säkerhet</string>
+  <string name="prefs_subsection_whatsnew">Vad är nytt i den senaste versionen?</string>
+  <string name="prefs_subsection_logging_summary">Håll koll på loggar producerade av exekveringen av appen</string>
   <string name="prefs_subsection_more_summary">Appinformation, respons och annat</string>
   <string name="prefs_accounts">Konton</string>
   <string name="prefs_manage_accounts">Hantera konton</string>
@@ -51,11 +54,13 @@
   <string name="prefs_camera_picture_upload">Bilduppladdningar</string>
   <string name="prefs_camera_picture_upload_summary">Ladda upp bilder tagna av kameran automatiskt </string>
   <string name="prefs_camera_picture_upload_on_wifi">Ladda upp bilder endast via wifi</string>
+  <string name="prefs_camera_picture_upload_on_charging">Ladda upp bilder endast vid laddning</string>
   <string name="prefs_camera_video_upload">Videouppladdningar</string>
   <string name="prefs_camera_video_upload_summary">Ladda upp videor filmade av kameran automatiskt </string>
   <string name="prefs_camera_video_upload_on_wifi">Ladda upp videor endast via wifi</string>
   <string name="prefs_camera_video_upload_on_charging">Ladda endast upp videor under laddning</string>
   <string name="prefs_subsection_advanced">Avancerad</string>
+  <string name="prefs_subsection_notifications">Hantera notifikationer</string>
   <string name="prefs_show_hidden_files">Visa dolda filer</string>
   <string name="prefs_log_open_logs_list_view">Logfiler</string>
   <string name="prefs_log_no_logs_list_view">Tom logmapp!</string>
@@ -126,6 +131,7 @@
   <string name="file_list_empty_title_all_files">Inga filer kunde hittas</string>
   <string name="file_list_empty_title_shared_by_links">Inga delade länkar</string>
   <string name="file_list_empty_subtitle_all_files">Ladda upp innehåll eller synkronisera med dina enheter!</string>
+  <string name="shares_list_empty_title">Inga delningar</string>
   <string name="file_list_empty_subtitle_shared_by_links">Filer och mappar du delar som länkar kommer visas här</string>
   <string name="file_list_loading">Laddar...</string>
   <string name="file_list_no_app_for_file_type">Ingen app hittades för filtypen</string>
@@ -139,6 +145,7 @@
   <string name="file_list_files">fil</string>
   <string name="filedetails_select_file">Peka på en fil för att visa mer information.</string>
   <string name="upload_to">Ladda upp till %1$s</string>
+  <string name="pick_document_type">Välj en dokumenttyp att skapa:</string>
   <string name="upload_files_title">Filer</string>
   <string name="filedetails_size">Storlek:</string>
   <string name="filedetails_type">Typ:</string>
@@ -180,10 +187,12 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Litar inte på servercertifikat</string>
   <string name="uploader_upload_text_dialog_title">Välj ett namn för den nya filen</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Filnamnet får inte vara tomt</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">Filnamn får inte vara längre än %d karaktärer</string>
   <string name="uploader_upload_text_filename_hint">Filnamn</string>
   <string name="uploader_upload_picture_upload_files">%d nya bilder kommer att laddas upp</string>
   <string name="uploader_upload_video_upload_files">%d nya videor kommer att laddas upp</string>
   <string name="uploader_upload_camera_upload_source_path_error">Kamerauppladdning misslyckades</string>
+  <string name="uploader_upload_available_offline_files">Laddar upp tillgängliga offlinefiler</string>
   <string name="ssl_certificate_not_trusted">Litar inte på servercertifikat</string>
   <string name="uploads_view_title">Uppladdningar</string>
   <string name="uploads_view_group_current_uploads">Nuvarande</string>
@@ -208,6 +217,8 @@
   <string name="uploads_view_upload_status_waiting_for_wifi">Väntar på anslutning till trådlöst nätverk</string>
   <string name="uploads_view_later_waiting_to_upload">Väntar på att ladda upp</string>
   <string name="uploads_view_unsupported_media_type">Saknar stöd för denna mediatyp</string>
+  <string name="uploader_upload_canceled_ticker">Uppladdning avbryten</string>
+  <string name="downloader_download_canceled_ticker">Nedladdning avbruten</string>
   <string name="downloader_download_in_progress_ticker">Laddar ner...</string>
   <string name="downloader_download_in_progress_content">%1$d%% Laddar ner %2$s</string>
   <string name="downloader_download_succeeded_ticker">Nedladdning klar</string>

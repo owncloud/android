@@ -701,6 +701,8 @@
   <string name="release_notes_4_1_subtitle_6">Shfaqje e një dritareje flluskë me 3 mundësi, kur kihet përplasje emri gjatë veprimi kopjimi, ose lëvizjeje</string>
   <string name="release_notes_4_1_title_7">Ndreqje të metash të vockla dhe përmirësime</string>
   <string name="release_notes_4_1_subtitle_7">Janë ndrequr disa të meta të cokla dhe u sollën për herë të parë përmirësime të vockla teknike për të përmirësuar punën te aplikacioni</string>
+  <string name="release_notes_4_1_title_8">Trafik http i ndaluar</string>
+  <string name="release_notes_4_1_subtitle_8">Nuk do të lejohen më llogari të reja përmes shërbyesish që xhirojnë nën http. Lejohet vetëm https</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
