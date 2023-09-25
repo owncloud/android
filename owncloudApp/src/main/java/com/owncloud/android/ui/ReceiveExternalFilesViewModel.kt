@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 class ReceiveExternalFilesViewModel(
     private val synchronizeFolderUseCase: SynchronizeFolderUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
-    private val getPersonalSpaceForAccountUseCase : GetPersonalSpaceForAccountUseCase,
+    private val getPersonalSpaceForAccountUseCase: GetPersonalSpaceForAccountUseCase,
 ) : ViewModel() {
 
     private val _syncFolderLiveData = MediatorLiveData<Event<UIResult<Unit>>>()
@@ -60,7 +60,7 @@ class ReceiveExternalFilesViewModel(
         )
     )
 
-    fun getPersonalSpaceforAcount(accountName: String) {
+    fun getPersonalSpaceForAccount(accountName: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             val result = getPersonalSpaceForAccountUseCase.execute(
                GetPersonalSpaceForAccountUseCase.Params(
