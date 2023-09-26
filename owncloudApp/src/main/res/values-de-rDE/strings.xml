@@ -86,6 +86,8 @@
   <string name="prefs_help">Hilfe</string>
   <string name="prefs_sync_calendar_contacts">Synchronisieren Sie Kontakte, Kalender und Aufgaben</string>
   <string name="prefs_sync_calendar_contacts_summary">DAVx⁵ installieren</string>
+  <string name="prefs_access_document_provider">Auf Dokumenten-Provider zugreifen</string>
+  <string name="prefs_access_document_provider_summary">Vorgeschlagene App für das Durchstöbern der Dateien auf dem Gerät mit dem Android eigenen Dateimanager.</string>
   <string name="prefs_recommend">Weiterempfehlen</string>
   <string name="prefs_feedback">Rückmeldungen</string>
   <string name="prefs_imprint">Impressum</string>
@@ -149,6 +151,7 @@
   <string name="file_list_seconds_ago">Gerade eben</string>
   <string name="file_list_empty_title_all_files">Keine Dateien vorhanden</string>
   <string name="spaces_list_empty_title">Keine Spaces</string>
+  <string name="space_label">Space:</string>
   <string name="file_list_empty_title_available_offline">Keine Offline-Dateien vorhanden</string>
   <string name="file_list_empty_title_shared_by_links">Keine geteilten Links</string>
   <string name="file_list_empty_subtitle_all_files">Laden Sie Inhalte hoch oder synchronisieren Sie mit Ihren Geräten.</string>
@@ -171,12 +174,13 @@
   <string name="file_list_files">Dateien</string>
   <string name="filedetails_select_file">Klicken Sie auf eine Datei für weitere Informationen.</string>
   <string name="upload_to">Hochgeladen nach %1$s</string>
-  <string name="pick_document_type">Wähle den zu erzeugenden Dokumenten Typ:</string>
+  <string name="pick_document_type">Wähle den zu erzeugenden Dokumenten-Typ:</string>
   <string name="upload_files_title">Dateien</string>
   <string name="filedetails_size">Größe:</string>
   <string name="filedetails_type">Art:</string>
   <string name="filedetails_created">Erstellt:</string>
   <string name="filedetails_last_sync">Letzte Synchronisation:</string>
+  <string name="filedetails_path">Pfad:</string>
   <string name="filedetails_modified">Geändert:</string>
   <string name="filedetails_download">Herunterladen</string>
   <string name="filedetails_file_image_content_description">Datei-Abbild</string>
@@ -214,6 +218,7 @@
   <string name="uploader_upload_failed_ssl_certificate_not_trusted">Das Zertifikat des Servers ist nicht vertrauenswürdig.</string>
   <string name="uploader_upload_text_dialog_title">Einen Namen für die neue Datei eingeben</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Der Dateiname muss angegeben werden.</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">Dateiname darf nicht länger als  %d Zeichen sein.</string>
   <string name="uploader_upload_text_filename_hint">Dateiname</string>
   <string name="uploader_upload_camera_upload_files">Fotos werden übertragen.</string>
   <string name="uploader_upload_picture_upload_files">%d neue Bilder werden hochgeladen.</string>
@@ -367,7 +372,7 @@
   <string name="rename_local_fail_msg">Die lokale Kopie konnte nicht umbenannt werden. Versuchen Sie es mit einem anderen Namen.</string>
   <string name="rename_server_fail_msg">Die Umbenennung konnte nicht abgeschlossen werden.</string>
   <string name="file_already_exists">Datei existiert bereits</string>
-  <string name="folder_already_exists">Ordner existiert bereits</string>
+  <string name="folder_already_exists">Ordner existiert bereits.</string>
   <string name="file_already_exists_description">Datei mit dem Namen %1$s existiert bereits.</string>
   <string name="folder_already_exists_description">Ordner mit dem Namen %1$s existiert bereits.</string>
   <string name="sync_file_fail_msg">Die entfernte Datei konnte nicht überprüft werden.</string>
@@ -376,7 +381,8 @@
   <string name="download_enqueued_msg">Herunterladen in Warteschlange eingereiht</string>
   <string name="upload_enqueued_msg">Hochladen in Warteschlange eingereiht</string>
   <string name="create_dir_fail_msg">Das Verzeichnis konnte nicht erstellt werden.</string>
-  <string name="create_file_fail_msg">Die Datei konnte nicht erstellt werden</string>
+  <string name="create_file_fail_msg">Die Datei konnte nicht erstellt werden.</string>
+  <string name="filename_forbidden_characters">Verbotene Zeichen: / \\</string>
   <string name="filename_forbidden_characters_from_server">Der Dateiname enthält mindestens ein ungültiges Zeichen.</string>
   <string name="filename_empty">Der Dateiname darf nicht leer sein.</string>
   <string name="filename_too_long">Der Dateiname darf nicht so lang sein.</string>
@@ -388,6 +394,7 @@
   <string name="wait_for_tmp_copy_from_private_storage">Kopiere Datei vom privatem Speicher</string>
   <string name="oauth_check_onoff">Anmelden mit OAuth2</string>
   <string name="oauth_login_connection">Verbinde mit dem OAuth2-Server...</string>
+  <string name="ssl_connection_not_secure">Verbindung ist nicht sicher, Datenverkehr über HTTP nicht erlaubt.</string>
   <string name="ssl_validator_header">Die Identität des Servers konnte nicht verifiziert werden.</string>
   <string name="ssl_validator_reason_cert_not_trusted">- Das Zertifikat des Servers ist nicht vertrauenswürdig.</string>
   <string name="ssl_validator_reason_cert_expired">- Das Zertifikat des Servers ist abgelaufen.</string>
@@ -666,7 +673,10 @@
   <string name="open_in_web_error_not_supported">es gibt keine Apps die diesen Filetyp unterstützen</string>
   <string name="open_in_web_error_too_early">Die Datei ist derzeit nicht verfügbar, bitte versuchen Sie es später noch einmal.</string>
   <!--oCIS accounts warning-->
+  <string name="ocis_accounts_warning_title">Infinite Scale Kontenwarnung</string>
+  <string name="ocis_accounts_warning_message">Bitte das Konto entfernen und neu einloggen, um die Spaces-Funktion zu nutzen.</string>
   <string name="ocis_accounts_warning_checkbox_message">Nicht mehr anzeigen</string>
   <string name="ocis_accounts_warning_button">Verstanden</string>
   <string name="tab_label_ascii">Text</string>
+  <string name="apply_to_all_conflicts">Auf alle %1$s Konflikte anwenden</string>
 </resources>
