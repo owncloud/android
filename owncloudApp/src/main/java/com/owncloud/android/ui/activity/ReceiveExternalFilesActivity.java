@@ -233,14 +233,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 showListOfFiles();
                 showRetainerFragment();
                 updateDirectoryList();
-                if (haveMultiAccount) { // Multi account
-                    if (mParents.size() == 1) {
-                        updateToolbar(getString(R.string.uploader_top_message));
-                    }
-                } else { // Just one account
-                    updateToolbar(getString(R.string.uploader_top_message));
-                }
-
+                updateToolbar(getString(R.string.uploader_top_message));
             } else { // OCIS Server
 
                 if (haveMultiAccount) { // Multi account
@@ -335,7 +328,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
     @Override
     protected void onAccountSet(boolean stateWasRecovered) {
         super.onAccountSet(mAccountWasRestored);
-      //  subscribeToViewModels();
         mReceiveExternalFilesViewModel.getPersonalSpaceForAccount(getAccount().name);
         initTargetFolder();
 
