@@ -233,7 +233,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 showListOfFiles();
                 showRetainerFragment();
                 updateDirectoryList();
-                updateToolbar(getString(R.string.uploader_top_message));
+                if (mParents.size() == 1) {
+                    updateToolbar(getString(R.string.uploader_top_message));
+                }
             } else { // OCIS Server
 
                 if (haveMultiAccount) { // Multi account
@@ -356,6 +358,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     }
                     if(fragmentContainer.getVisibility() == View.VISIBLE) {
                         updateToolbar(getString(R.string.choose_upload_space));
+                        mListView.setVisibility(View.GONE);
                     }
                 }
             }
@@ -557,8 +560,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             noPermissionsMessage.setVisibility(View.VISIBLE);
         }
 
-        Button btnCancel = findViewById(R.id.uploader_cancel);
-        btnCancel.setOnClickListener(this);
+        initPickerListener();
 
         if (getCurrentFolder().getHasAddSubdirectoriesPermission()) {
             mSortOptionsView.selectAdditionalView(SortOptionsView.AdditionalView.CREATE_FOLDER);
@@ -773,6 +775,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     initAndShowListOfSpaces();
                     updateToolbar(getString(R.string.choose_upload_space));
                     fragmentContainer.setVisibility(View.VISIBLE);
+                    mEmptyListView.setVisibility(View.GONE);
                     mListView.setVisibility(View.GONE);
                     noPermissionsMessage.setVisibility(View.GONE);
                 }
@@ -867,8 +870,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public void updateEmptyListMessage(String updateTxt) {
         if (mAdapter.getFiles().isEmpty()) {
             mEmptyListView.setVisibility(View.VISIBLE);
+            mListView = findViewById(android.R.id.list);
+            mListView.setVisibility(View.GONE);
         } else {
             mEmptyListView.setVisibility(View.GONE);
+            mListView.setVisibility(View.VISIBLE);
         }
         mEmptyListTitle.setText(updateTxt);
     }
