@@ -44,8 +44,9 @@
             android:id="@+id/empty_list_view"
             layout="@layout/item_empty_dataset"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dip"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:gravity="center_vertical|center_horizontal"
             android:visibility="gone"
             tools:visibility="visible" />
