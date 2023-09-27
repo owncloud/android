@@ -38,6 +38,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -178,6 +179,8 @@ class FileDisplayActivity : FileActivity(),
 
     private lateinit var binding: ActivityMainBinding
 
+    private var isAlreadyHandledDeepLink = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.v("onCreate() start")
 
@@ -213,6 +216,14 @@ class FileDisplayActivity : FileActivity(),
                 if (account == null) "" else account.name
             )
         }
+        Log.d("INTENT", "intent: ${intent.extras} data: ${intent.data}")
+
+
+            val dataIntent: Uri? = intent.data
+            dataIntent?.let {
+                Log.d("URI INTENT", "uri: $it")
+                handleDeepLink(dataIntent)
+            }
 
         /// USER INTERFACE
 
@@ -1780,6 +1791,52 @@ class FileDisplayActivity : FileActivity(),
             Intent.createChooser(action, getString(R.string.upload_chooser_title)),
             REQUEST_CODE__SELECT_CONTENT_FROM_APPS
         )
+    }
+
+    private fun handleDeepLink(uri: Uri?) {
+        if (uri != null && com.owncloud.android.presentation.authentication.AccountUtils.getAccounts(applicationContext).isEmpty()) {
+            showMessageInSnackbar(message = getString(R.string.no_account_configured))
+        } else if (uri != null && com.owncloud.android.presentation.authentication.AccountUtils.getAccounts(applicationContext).size == 1) {
+            getFileDiscovered(uri).let { oCFile ->
+                if (oCFile != null) {
+                    manageItem(oCFile)
+                } else {
+                    showMessageInSnackbar(message = getString(R.string.no_file_found))
+                }
+            }
+        }
+    }
+
+    private fun getFileDiscovered(uri: Uri?): OCFile? {
+        fileOperationsViewModel.getFileMetadata(
+            uri!!.pathSegments[uri.pathSegments.size].toString(),
+            com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(applicationContext).name,
+        )
+        return null
+//        return if (storageManager != null) {
+//            storageManager.getFileByPrivateLink(uri.toString())
+//        } else {
+//            null
+//        }
+    }
+
+    private fun manageItem(file: OCFile) {
+//        onBrowsedDownTo(file)
+        setFile(file)
+        account = com.owncloud.android.presentation.authentication.AccountUtils.getOwnCloudAccountByName(this, file.owner)
+
+        if (file.isFolder) {
+            refreshListOfFilesFragment()
+            return
+        }
+
+        if (PreviewImageFragment.canBePreviewed(file)) {
+            showDetails(file)
+        } else {
+            initFragmentsWithFile()
+        }
+
+        isAlreadyHandledDeepLink = true
     }
 
     companion object {

@@ -89,4 +89,7 @@ interface RemoteFileDataSource {
         accountName: String,
         spaceWebDavUrl: String? = null,
     )
+
+    fun getFileMetadata(fileId: String, accountName: String): String
+
 }

@@ -27,7 +27,7 @@
         Notifications are off by default since API 33;
         See note in https://developer.android.com/develop/ui/views/notifications/notification-permission
     -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!--
         Next permissions are always approved in installation time,
         the apps needs to do nothing special in runtime
@@ -57,8 +57,10 @@
         android:taskAffinity=""
         android:theme="@style/Theme.ownCloud.Toolbar">
 
-        <meta-data android:name="android.content.APP_RESTRICTIONS"
+        <meta-data
+            android:name="android.content.APP_RESTRICTIONS"
             android:resource="@xml/managed_configurations" />
+
         <activity
             android:name=".presentation.releasenotes.ReleaseNotesActivity"
             android:exported="false" />
@@ -67,11 +69,21 @@
         <activity android:name=".presentation.migration.StorageMigrationActivity" />
         <activity
             android:name=".ui.activity.SplashActivity"
-            android:theme="@style/Theme.ownCloud.Splash"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.ownCloud.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="@string/oauth2_redirect_uri_path"
+                    android:scheme="@string/oauth2_redirect_uri_scheme" />
             </intent-filter>
         </activity>
         <activity
@@ -83,8 +95,8 @@
             android:name=".ui.activity.ReceiveExternalFilesActivity"
             android:configChanges="orientation|screenSize"
             android:excludeFromRecents="true"
-            android:taskAffinity=""
-            android:exported="true">
+            android:exported="true"
+            android:taskAffinity="">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -168,8 +180,8 @@
 
         <activity
             android:name=".presentation.security.passcode.PassCodeActivity"
-            android:theme="@style/Theme.ownCloud"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ownCloud" />
         <activity
             android:name=".presentation.conflicts.ConflictsResolveActivity"
             android:theme="@style/Theme.ownCloud" />
@@ -191,11 +203,11 @@
         <activity android:name=".ui.activity.UploadPathActivity" />
         <activity
             android:name=".presentation.sharing.ShareActivity"
+            android:exported="false"
             android:label="@string/share_dialog_title"
             android:launchMode="singleTop"
             android:theme="@style/Theme.ownCloud"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -221,17 +233,6 @@
             android:name=".presentation.authentication.LoginActivity"
             android:exported="true"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.ownCloud.Toolbar">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="@string/oauth2_redirect_uri_path"
-                    android:scheme="@string/oauth2_redirect_uri_scheme" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/Theme.ownCloud.Toolbar" />
     </application>
 </manifest>

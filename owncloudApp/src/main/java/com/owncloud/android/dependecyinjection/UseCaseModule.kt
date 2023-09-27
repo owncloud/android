@@ -56,6 +56,7 @@ import com.owncloud.android.domain.files.usecases.DisableThumbnailsForFileUseCas
 import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
+import com.owncloud.android.domain.files.usecases.GetFileMetadataUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
@@ -174,6 +175,7 @@ val useCaseModule = module {
     factory { CleanWorkersUUIDUseCase(get()) }
     factory { FilterFileMenuOptionsUseCase(get(), get(), get()) }
     factory { GetFileWithSyncInfoByIdUseCase(get()) }
+    factory { GetFileMetadataUseCase(get()) }
 
     // Open in web
     factory { GetUrlToOpenInWebUseCase(get(), get()) }

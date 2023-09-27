@@ -22,6 +22,7 @@
 
 package com.owncloud.android.presentation.files.operations
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -35,11 +36,13 @@ import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
+import com.owncloud.android.domain.files.usecases.GetFileMetadataUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
@@ -63,7 +66,8 @@ class FileOperationsViewModel(
     private val setFilesAsAvailableOfflineUseCase: SetFilesAsAvailableOfflineUseCase,
     private val unsetFilesAsAvailableOfflineUseCase: UnsetFilesAsAvailableOfflineUseCase,
     private val contextProvider: ContextProvider,
-    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    private val getFileMetadataUseCase: GetFileMetadataUseCase,
 ) : ViewModel() {
 
     private val _createFolder = MediatorLiveData<Event<UIResult<Unit>>>()
@@ -113,6 +117,11 @@ class FileOperationsViewModel(
             is FileOperation.RefreshFolderOperation -> refreshFolderOperation(fileOperation)
             is FileOperation.CreateFileWithAppProviderOperation -> createFileWithAppProvider(fileOperation)
         }
+    }
+
+    fun getFileMetadata(fileId: String, accountName: String) {
+        val result = getFileMetadataUseCase.execute(GetFileMetadataUseCase.Params(fileId, accountName))
+        Log.i("TEST METADATA", "metadata returned ${result.getDataOrNull()}")
     }
 
     private fun createFolderOperation(fileOperation: FileOperation.CreateFolder) {

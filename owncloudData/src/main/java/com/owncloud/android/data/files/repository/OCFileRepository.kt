@@ -525,6 +525,8 @@ class OCFileRepository(
         localFileDataSource.updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory, newDirectory)
     }
 
+    override fun getFileMetadata(fileId: String, accountName: String) = remoteFileDataSource.getFileMetadata(fileId, accountName)
+
     override fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID) {
         TODO("Not yet implemented")
     }

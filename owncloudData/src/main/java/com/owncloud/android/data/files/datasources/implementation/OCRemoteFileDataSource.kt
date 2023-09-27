@@ -202,6 +202,9 @@ class OCRemoteFileDataSource(
         )
     }
 
+    override fun getFileMetadata(fileId: String, accountName: String): String =
+        executeRemoteOperation { clientManager.getFileService(accountName).fileMetaInfo(fileId) }
+
     private fun RemoteFile.toModel(): OCFile =
         OCFile(
             owner = owner,

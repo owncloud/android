@@ -59,7 +59,9 @@ class SplashActivity : AppCompatActivity() {
 
         checkLockDelayEnforced(mdmProvider)
 
-        startActivity(Intent(this, FileDisplayActivity::class.java))
+        val newIntent = Intent(this, FileDisplayActivity::class.java)
+        newIntent.data = intent.data
+        startActivity(newIntent)
         finish()
     }
 

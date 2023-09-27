@@ -280,6 +280,10 @@ class MainFileListViewModel(
         sortTypeAndOrder.update { Pair(sortType, sortOrder) }
     }
 
+    fun getFileByLink(link:String){
+//       val file= getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
+    }
+
     fun openInWeb(fileId: String, appName: String) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
