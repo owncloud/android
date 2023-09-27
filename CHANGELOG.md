@@ -1,3 +1,26 @@
+Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+=======================================
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v4.1.0...master
+
+Summary
+-------
+
+* Bugfix - Null pointer exception have been avoided: [#4158](https://github.com/owncloud/android/issues/4158)
+
+Details
+-------
+
+* Bugfix - Null pointer exception have been avoided: [#4158](https://github.com/owncloud/android/issues/4158)
+
+   In the detail screen as elsewhere the app has been prevented from crashing when a null is found.
+
+   https://github.com/owncloud/android/issues/4158
+   https://github.com/owncloud/android/pull/4170
+
+
 Changelog for ownCloud Android Client [4.1.0] (2023-08-23)
 =======================================
 The following sections list the changes in ownCloud Android Client 4.1.0 relevant to
