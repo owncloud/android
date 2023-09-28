@@ -8,14 +8,15 @@ ownCloud admins and users.
 Summary
 -------
 
-* Bugfix - Null pointer exception have been avoided: [#4158](https://github.com/owncloud/android/issues/4158)
+* Bugfix - Some Null Pointer Exceptions avoided: [#4158](https://github.com/owncloud/android/issues/4158)
 
 Details
 -------
 
-* Bugfix - Null pointer exception have been avoided: [#4158](https://github.com/owncloud/android/issues/4158)
+* Bugfix - Some Null Pointer Exceptions avoided: [#4158](https://github.com/owncloud/android/issues/4158)
 
-   In the detail screen as elsewhere the app has been prevented from crashing when a null is found.
+   In the detail screen, in the main file list ViewModel and in the OCFile repository the app has
+   been prevented from crashing when a null is found.
 
    https://github.com/owncloud/android/issues/4158
    https://github.com/owncloud/android/pull/4170
