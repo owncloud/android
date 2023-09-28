@@ -248,7 +248,7 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     private fun initAndShowListOfSpaces() {
-        val listOfSpaces = SpacesListFragment(showPersonalSpace = true, accountName = account.name)
+        val listOfSpaces = SpacesListFragment(showPersonalSpace = true)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, listOfSpaces)
         transaction.commit()
