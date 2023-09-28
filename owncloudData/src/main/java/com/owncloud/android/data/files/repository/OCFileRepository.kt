@@ -168,10 +168,14 @@ class OCFileRepository(
         val personalSpace = localSpacesDataSource.getPersonalSpaceForAccount(owner)
         if (personalSpace == null) {
             val legacyRootFolder = localFileDataSource.getFileByRemotePath(remotePath = ROOT_PATH, owner = owner, spaceId = null)
-            return legacyRootFolder ?: throw IllegalStateException("LegacyRootFolder not found")
+            try {
+                return legacyRootFolder ?: throw IllegalStateException("LegacyRootFolder not found")
+            } catch (e: IllegalStateException) {
+                Timber.i("There was an error: $e")
+            }
         }
         // TODO: Retrieving the root folders should return a non nullable. If they don't exist yet, they are created and returned. Remove nullability
-        val personalRootFolder = localFileDataSource.getFileByRemotePath(remotePath = ROOT_PATH, owner = owner, spaceId = personalSpace.root.id)
+        val personalRootFolder = localFileDataSource.getFileByRemotePath(remotePath = ROOT_PATH, owner = owner, spaceId = personalSpace?.root?.id)
         return personalRootFolder!!
     }
 
