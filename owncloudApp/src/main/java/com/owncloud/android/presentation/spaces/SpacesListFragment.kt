@@ -46,13 +46,17 @@ import org.koin.core.parameter.parametersOf
 
 class SpacesListFragment(
     val showPersonalSpace: Boolean = false,
+    var account: String = ""
 ) : SpacesListAdapter.SpacesListAdapterListener, Fragment() {
     private var _binding: SpacesListFragmentBinding? = null
     private val binding get() = _binding!!
 
     private val spacesListViewModel: SpacesListViewModel by viewModel {
+        if(account == "") {
+            account =  AccountUtils.getCurrentOwnCloudAccount(context).name
+        }
         parametersOf(
-            AccountUtils.getCurrentOwnCloudAccount(context),
+            account,
             showPersonalSpace
         )
     }
@@ -69,6 +73,7 @@ class SpacesListFragment(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         initViews()
         subscribeToViewModels()
     }
