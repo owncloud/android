@@ -5,7 +5,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -60,22 +60,22 @@ val localDataSourceModule = module {
     single { OwncloudDatabase.getDatabase(androidContext()).appRegistryDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).capabilityDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).fileDao() }
-    single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }
-    single { OwncloudDatabase.getDatabase(androidContext()).userDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).folderBackUpDao() }
-    single { OwncloudDatabase.getDatabase(androidContext()).transferDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).shareDao() }
     single { OwncloudDatabase.getDatabase(androidContext()).spacesDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).transferDao() }
+    single { OwncloudDatabase.getDatabase(androidContext()).userDao() }
 
     singleOf(::OCSharedPreferencesProvider) bind SharedPreferencesProvider::class
     single<LocalStorageProvider> { ScopedStorageProvider(dataFolder, androidContext()) }
 
-    factory<LocalAppRegistryDataSource> { OCLocalAppRegistryDataSource(get()) }
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
     factoryOf(::OCFolderBackupLocalDataSource) bind FolderBackupLocalDataSource::class
+    factoryOf(::OCLocalAppRegistryDataSource) bind LocalAppRegistryDataSource::class
     factoryOf(::OCLocalCapabilitiesDataSource) bind LocalCapabilitiesDataSource::class
     factoryOf(::OCLocalFileDataSource) bind LocalFileDataSource::class
     factoryOf(::OCLocalShareDataSource) bind LocalShareDataSource::class
+    factoryOf(::OCLocalSpacesDataSource) bind LocalSpacesDataSource::class
     factoryOf(::OCLocalTransferDataSource) bind LocalTransferDataSource::class
     factoryOf(::OCLocalUserDataSource) bind LocalUserDataSource::class
-    factoryOf(::OCLocalSpacesDataSource) bind LocalSpacesDataSource::class
 }
