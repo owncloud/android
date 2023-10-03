@@ -1811,7 +1811,11 @@ class FileDisplayActivity : FileActivity(),
         fileOperationsViewModel.getFileMetadata(
             uri.pathSegments[uri.pathSegments.size - 1].toString(),
             com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(applicationContext).name,
-        ) { ocFile -> manageItem(ocFile) }
+        ) { ocFile ->
+            runOnUiThread {
+                manageItem(ocFile)
+            }
+        }
     }
 
     private fun manageItem(file: OCFile) {
