@@ -286,7 +286,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     private void initAndShowListOfSpaces() {
-        SpacesListFragment listOfSpaces = new SpacesListFragment(true, getAccount().name);
+        SpacesListFragment listOfSpaces = SpacesListFragment.Companion.newInstance(true, getAccount().name);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, listOfSpaces);
         transaction.commit();

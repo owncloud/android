@@ -40,28 +40,32 @@ import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.toDrawableRes
 import com.owncloud.android.extensions.toSubtitleStringRes
 import com.owncloud.android.extensions.toTitleStringRes
-import com.owncloud.android.presentation.authentication.AccountUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class SpacesListFragment(
-    val showPersonalSpace: Boolean = false,
-    var account: String = ""
-) : SpacesListAdapter.SpacesListAdapterListener, Fragment() {
+class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment() {
     private var _binding: SpacesListFragmentBinding? = null
     private val binding get() = _binding!!
 
+    private var accountName: String? = null
+    private var showPersonalSpace: Boolean? = null
+
     private val spacesListViewModel: SpacesListViewModel by viewModel {
-        if(account == "") {
-            account =  AccountUtils.getCurrentOwnCloudAccount(context).name
-        }
         parametersOf(
-            account,
-            showPersonalSpace
+                requireArguments().getString(BUNDLE_ACCOUNT_NAME),
+                requireArguments().getBoolean(BUNDLE_SHOW_PERSONAL_SPACE),
         )
     }
 
     private lateinit var spacesListAdapter: SpacesListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            accountName = it.getString(BUNDLE_ACCOUNT_NAME)
+            showPersonalSpace = it.getBoolean(BUNDLE_SHOW_PERSONAL_SPACE)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -130,5 +134,17 @@ class SpacesListFragment(
     companion object {
         const val REQUEST_KEY_CLICK_SPACE = "REQUEST_KEY_CLICK_SPACE"
         const val BUNDLE_KEY_CLICK_SPACE = "BUNDLE_KEY_CLICK_SPACE"
+        const val BUNDLE_SHOW_PERSONAL_SPACE = "showPersonalSpace"
+        const val BUNDLE_ACCOUNT_NAME = "accountName"
+        fun newInstance(
+            showPersonalSpace: Boolean,
+            accountName: String
+        ): SpacesListFragment {
+            val args = Bundle().apply {
+                putBoolean(BUNDLE_SHOW_PERSONAL_SPACE, showPersonalSpace)
+                putString(BUNDLE_ACCOUNT_NAME, accountName)
+            }
+            return SpacesListFragment().apply { arguments = args }
+        }
     }
 }
