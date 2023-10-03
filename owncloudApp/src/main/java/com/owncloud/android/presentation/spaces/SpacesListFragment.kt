@@ -47,8 +47,6 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
     private var _binding: SpacesListFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private var accountName: String? = null
-    private var showPersonalSpace: Boolean? = null
 
     private val spacesListViewModel: SpacesListViewModel by viewModel {
         parametersOf(
@@ -59,13 +57,6 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
 
     private lateinit var spacesListAdapter: SpacesListAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            accountName = it.getString(BUNDLE_ACCOUNT_NAME)
-            showPersonalSpace = it.getBoolean(BUNDLE_SHOW_PERSONAL_SPACE)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,7 +68,6 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         initViews()
         subscribeToViewModels()
     }
