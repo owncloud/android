@@ -105,7 +105,6 @@ import com.owncloud.android.ui.preview.PreviewImageActivity
 import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
-import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.utils.PreferenceUtils
@@ -430,20 +429,9 @@ class FileDisplayActivity : FileActivity(),
         // Otherwise, decide which fragment should be shown.
         return when {
             PreviewAudioFragment.canBePreviewed(file) -> {
-                val startPlaybackPosition = intent.getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0)
+                val startPlaybackPosition = intent.getIntExtra(PreviewVideoActivity.EXTRA_PLAY_POSITION, 0)
                 val autoplay = intent.getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true)
                 PreviewAudioFragment.newInstance(
-                    file,
-                    account,
-                    startPlaybackPosition,
-                    autoplay
-                )
-            }
-
-            PreviewVideoFragment.canBePreviewed(file) -> {
-                val startPlaybackPosition = intent.getIntExtra(PreviewVideoActivity.EXTRA_START_POSITION, 0)
-                val autoplay = intent.getBooleanExtra(PreviewVideoActivity.EXTRA_AUTOPLAY, true)
-                PreviewVideoFragment.newInstance(
                     file,
                     account,
                     startPlaybackPosition,
@@ -970,10 +958,6 @@ class FileDisplayActivity : FileActivity(),
                     when (secondFragment) {
                         is PreviewAudioFragment -> {
                             secondFragment.stopPreview()
-                        }
-
-                        is PreviewVideoFragment -> {
-                            secondFragment.releasePlayer()
                         }
                     }
                     file = storageManager.getFileById(lastRemovedFile.parentId!!)
@@ -1546,15 +1530,11 @@ class FileDisplayActivity : FileActivity(),
      * in milliseconds.
      */
     fun startVideoPreview(file: OCFile, startPlaybackPosition: Int) {
-        val mediaFragment = PreviewVideoFragment.newInstance(
-            file,
-            account,
-            startPlaybackPosition,
-            true
-        )
-        setSecondFragment(mediaFragment)
-        updateToolbar(file)
-        setFile(file)
+        val videoActivityIntent = Intent(this, PreviewVideoActivity::class.java)
+        videoActivityIntent.putExtra(PreviewVideoActivity.EXTRA_FILE, file)
+        videoActivityIntent.putExtra(PreviewVideoActivity.EXTRA_ACCOUNT, account)
+        videoActivityIntent.putExtra(PreviewVideoActivity.EXTRA_PLAY_POSITION, startPlaybackPosition)
+        startActivity(videoActivityIntent)
     }
 
     /**
@@ -1728,7 +1708,7 @@ class FileDisplayActivity : FileActivity(),
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
             }
 
-            PreviewVideoFragment.canBePreviewed(file) && !WorkManager.getInstance(this).isDownloadPending(account, file) -> {
+            PreviewVideoActivity.canBePreviewed(file) && !WorkManager.getInstance(this).isDownloadPending(account, file) -> {
                 // Available offline but not downloaded yet, don't initialize streaming
                 if (!file.isAvailableLocally && file.isAvailableOffline) {
                     // sync file content, then open with external apps
