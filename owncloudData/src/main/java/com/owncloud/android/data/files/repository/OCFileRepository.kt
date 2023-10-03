@@ -25,8 +25,8 @@ package com.owncloud.android.data.files.repository
 
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
-import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.providers.LocalStorageProvider
+import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
@@ -525,7 +525,11 @@ class OCFileRepository(
         localFileDataSource.updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory, newDirectory)
     }
 
-    override fun getFileMetadata(fileId: String, accountName: String) = remoteFileDataSource.getFileMetadata(fileId, accountName)
+    override fun getFileMetadata(fileId: String, accountName: String): List<OCFile> {
+        val result = remoteFileDataSource.getFileMetadata(fileId, accountName)
+        val folder = refreshFolder(result, accountName, fileId.split("!")[0])
+        return folder
+    }
 
     override fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID) {
         TODO("Not yet implemented")

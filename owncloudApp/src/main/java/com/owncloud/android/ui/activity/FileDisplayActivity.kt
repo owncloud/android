@@ -218,12 +218,11 @@ class FileDisplayActivity : FileActivity(),
         }
         Log.d("INTENT", "intent: ${intent.extras} data: ${intent.data}")
 
-
-            val dataIntent: Uri? = intent.data
-            dataIntent?.let {
-                Log.d("URI INTENT", "uri: $it")
-                handleDeepLink(dataIntent)
-            }
+        val dataIntent: Uri? = intent.data
+        dataIntent?.let {
+            Log.d("URI INTENT", "uri: $it")
+            handleDeepLink(dataIntent)
+        }
 
         /// USER INTERFACE
 
@@ -1797,32 +1796,27 @@ class FileDisplayActivity : FileActivity(),
         if (uri != null && com.owncloud.android.presentation.authentication.AccountUtils.getAccounts(applicationContext).isEmpty()) {
             showMessageInSnackbar(message = getString(R.string.no_account_configured))
         } else if (uri != null && com.owncloud.android.presentation.authentication.AccountUtils.getAccounts(applicationContext).size == 1) {
-            getFileDiscovered(uri).let { oCFile ->
-                if (oCFile != null) {
-                    manageItem(oCFile)
-                } else {
-                    showMessageInSnackbar(message = getString(R.string.no_file_found))
-                }
-            }
+            getFileDiscovered(uri)
+//                .let { oCFile ->
+//                if (oCFile != null) {
+//                    manageItem(oCFile)
+//                } else {
+//                    showMessageInSnackbar(message = getString(R.string.no_file_found))
+//                }
+//            }
         }
     }
 
-    private fun getFileDiscovered(uri: Uri?): OCFile? {
+    private fun getFileDiscovered(uri: Uri) {
         fileOperationsViewModel.getFileMetadata(
-            uri!!.pathSegments[uri.pathSegments.size].toString(),
+            uri.pathSegments[uri.pathSegments.size - 1].toString(),
             com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(applicationContext).name,
-        )
-        return null
-//        return if (storageManager != null) {
-//            storageManager.getFileByPrivateLink(uri.toString())
-//        } else {
-//            null
-//        }
+        ) { ocFile -> manageItem(ocFile) }
     }
 
     private fun manageItem(file: OCFile) {
 //        onBrowsedDownTo(file)
-        setFile(file)
+//        setFile(file)
         account = com.owncloud.android.presentation.authentication.AccountUtils.getOwnCloudAccountByName(this, file.owner)
 
         if (file.isFolder) {

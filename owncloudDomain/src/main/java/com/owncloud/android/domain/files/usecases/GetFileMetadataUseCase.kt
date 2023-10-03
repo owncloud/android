@@ -2,10 +2,11 @@ package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
+import com.owncloud.android.domain.files.model.OCFile
 
-class GetFileMetadataUseCase(private val fileRepository: FileRepository) : BaseUseCaseWithResult<String?, GetFileMetadataUseCase.Params>() {
+class GetFileMetadataUseCase(private val fileRepository: FileRepository) : BaseUseCaseWithResult<List<OCFile>, GetFileMetadataUseCase.Params>() {
 
-    override fun run(params: Params): String? {
+    override fun run(params: Params): List<OCFile> {
         return fileRepository.getFileMetadata(params.id, params.accountName)
     }
 

@@ -42,13 +42,13 @@ import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
-import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.ui.dialog.FileAlreadyExistsDialog
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -99,7 +99,6 @@ class FileOperationsViewModel(
 
     val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
 
-
     // Used to save the last operation folder
     private var lastTargetFolder: OCFile? = null
 
@@ -119,9 +118,12 @@ class FileOperationsViewModel(
         }
     }
 
-    fun getFileMetadata(fileId: String, accountName: String) {
-        val result = getFileMetadataUseCase.execute(GetFileMetadataUseCase.Params(fileId, accountName))
-        Log.i("TEST METADATA", "metadata returned ${result.getDataOrNull()}")
+    fun getFileMetadata(fileId: String, accountName: String, onGetOCFile: (OCFile) -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = getFileMetadataUseCase.execute(GetFileMetadataUseCase.Params(fileId, accountName))
+            Log.i("TEST METADATA", "metadata returned ${result.getDataOrNull()}")
+            result.getDataOrNull()?.let { files -> onGetOCFile(files[0]) }
+        }
     }
 
     private fun createFolderOperation(fileOperation: FileOperation.CreateFolder) {
