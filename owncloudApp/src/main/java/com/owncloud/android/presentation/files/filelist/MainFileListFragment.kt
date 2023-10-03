@@ -104,7 +104,6 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
-import com.owncloud.android.ui.preview.PreviewVideoFragment
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
@@ -1135,16 +1134,8 @@ class MainFileListFragment : Fragment(),
             downloadWorkerUuid = fileWithSyncInfo.downloadWorkerUuid,
             isSynchronizing = fileWithSyncInfo.isSynchronizing
         )
-
-        val secondFragment = requireActivity().supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
-        val isAnyFileVideoPreviewing = if (secondFragment is PreviewVideoFragment) {
-            secondFragment.file == file
-        } else {
-            false
-        }
-
         mainFileListViewModel.filterMenuOptions(
-            listOf(file), listOf(fileSync), isAnyFileVideoPreviewing,
+            listOf(file), listOf(fileSync), isAnyFileVideoPreviewing = false,
             displaySelectAll = false, isMultiselection = false
         )
     }
@@ -1199,15 +1190,9 @@ class MainFileListFragment : Fragment(),
                 )
             }
 
-            val secondFragment = requireActivity().supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT)
-            val isAnyFileVideoPreviewing = if (secondFragment is PreviewVideoFragment) {
-                checkedFiles.any { secondFragment.file == it }
-            } else {
-                false
-            }
             val displaySelectAll = checkedCount != fileListAdapter.itemCount - 1 // -1 because one of them is the footer :S
             mainFileListViewModel.filterMenuOptions(
-                checkedFiles, checkedFilesSync, isAnyFileVideoPreviewing,
+                checkedFiles, checkedFilesSync, isAnyFileVideoPreviewing = false,
                 displaySelectAll, isMultiselection = true
             )
 

@@ -74,7 +74,7 @@ import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.preview.PreviewAudioFragment
 import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
-import com.owncloud.android.ui.preview.PreviewVideoFragment
+import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -533,7 +533,7 @@ class FileDetailsFragment : FileFragment() {
                 fileDisplayActivity.startAudioPreview(fileWaitingToPreview, 0)
             }
 
-            PreviewVideoFragment.canBePreviewed(fileWaitingToPreview) -> {
+            PreviewVideoActivity.canBePreviewed(fileWaitingToPreview) -> {
                 fileDisplayActivity.startVideoPreview(fileWaitingToPreview, 0)
             }
 
