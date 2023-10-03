@@ -35,6 +35,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.spaces.SpacesListFragment
 import com.owncloud.android.ui.fragment.FileFragment
@@ -248,7 +249,7 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     private fun initAndShowListOfSpaces() {
-        val listOfSpaces = SpacesListFragment(showPersonalSpace = true)
+        val listOfSpaces = SpacesListFragment.newInstance(showPersonalSpace = true, accountName = AccountUtils.getCurrentOwnCloudAccount(applicationContext).name)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, listOfSpaces)
         transaction.commit()
