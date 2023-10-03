@@ -36,6 +36,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View.INVISIBLE
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
@@ -105,6 +106,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     // For handling AbstractAccountAuthenticator responses
     private var accountAuthenticatorResponse: AccountAuthenticatorResponse? = null
     private var resultBundle: Bundle? = null
+
+    private val customTabsLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            // Nothing to receive as result from Custom tabs
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -489,8 +495,8 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     ) {
         Timber.d("A browser should be opened now to authenticate this user.")
 
-        val customTabsBuilder: CustomTabsIntent.Builder = CustomTabsIntent.Builder()
-        val customTabsIntent: CustomTabsIntent = customTabsBuilder.build()
+        val customTabsBuilder = CustomTabsIntent.Builder().setInitialActivityHeightPx(1000)
+        val customTabsIntent = customTabsBuilder.build()
 
         val authorizationEndpointUri = OAuthUtils.buildAuthorizationRequest(
             authorizationEndpoint = authorizationEndpoint,
@@ -504,11 +510,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             username = username,
         )
 
+        customTabsIntent.intent.data = authorizationEndpointUri
+
         try {
-            customTabsIntent.launchUrl(
-                this,
-                authorizationEndpointUri
-            )
+            customTabsLauncher.launch(customTabsIntent.intent)
         } catch (e: ActivityNotFoundException) {
             binding.serverStatusText.visibility = INVISIBLE
             showMessageInSnackbar(message = this.getString(R.string.file_list_no_app_for_perform_action))
