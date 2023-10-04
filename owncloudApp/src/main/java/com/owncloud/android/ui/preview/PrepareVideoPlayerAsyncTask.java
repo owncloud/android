@@ -72,10 +72,6 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
         BANDWIDTH_METER = new DefaultBandwidthMeter.Builder(mContext).build();
     }
 
-    private void method() {
-
-    }
-
     @Override
     protected MediaSource doInBackground(Object... params) {
 
