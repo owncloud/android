@@ -34,7 +34,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
-import android.view.WindowManager
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuProvider
@@ -100,11 +99,6 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
         setContentView(binding.root)
         addMenuProvider(this)
 
-        // set layoutInDisplayCutoutMode to NEVER so that it never renders content in the cutout area (with devices having notches)
-        // necessary if going in and out immersive mode
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER;
-        }
 
         @Suppress("DEPRECATION")
         if (savedInstanceState == null) {
