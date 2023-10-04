@@ -122,7 +122,7 @@ class FileOperationsViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val result = getFileMetadataUseCase.execute(GetFileMetadataUseCase.Params(fileId, accountName))
             Log.i("TEST METADATA", "metadata returned ${result.getDataOrNull()}")
-            result.getDataOrNull()?.let { files -> onGetOCFile(files[0]) }
+            result.getDataOrNull()?.let { onGetOCFile(it) }
         }
     }
 

@@ -525,18 +525,26 @@ class OCFileRepository(
         localFileDataSource.updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory, newDirectory)
     }
 
-    override fun getFileMetadata(fileId: String, accountName: String): List<OCFile> {
+    override fun getFileMetadata(fileId: String, accountName: String): OCFile? {
         val result = remoteFileDataSource.getFileMetadata(fileId, accountName)
         val splitPath = result.split("/")
+        val spaceId = fileId.split("!")[0]
+        var containerFolder = listOf<OCFile>()
         for (i in 1..splitPath.size - 2) {
             var path = splitPath[0]
             for (j in 1..i) {
                 path += "/${splitPath[j]}"
             }
-            refreshFolder(path, accountName, fileId.split("!")[0])
+            containerFolder = refreshFolder(path, accountName, spaceId)
         }
-        val folder = refreshFolder(result, accountName, fileId.split("!")[0])
-        return folder
+        refreshFolder(result, accountName, spaceId)
+        return containerFolder.find { file ->
+            if (file.isFolder) {
+                file.remotePath.dropLast(1)
+            } else {
+                file.remotePath
+            } == result
+        }
     }
 
     override fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID) {

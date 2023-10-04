@@ -1796,14 +1796,8 @@ class FileDisplayActivity : FileActivity(),
         if (uri != null && com.owncloud.android.presentation.authentication.AccountUtils.getAccounts(applicationContext).isEmpty()) {
             showMessageInSnackbar(message = getString(R.string.no_account_configured))
         } else if (uri != null && com.owncloud.android.presentation.authentication.AccountUtils.getAccounts(applicationContext).size == 1) {
+            showLoadingDialog(R.string.getting_file)
             getFileDiscovered(uri)
-//                .let { oCFile ->
-//                if (oCFile != null) {
-//                    manageItem(oCFile)
-//                } else {
-//                    showMessageInSnackbar(message = getString(R.string.no_file_found))
-//                }
-//            }
         }
     }
 
@@ -1814,13 +1808,13 @@ class FileDisplayActivity : FileActivity(),
         ) { ocFile ->
             runOnUiThread {
                 manageItem(ocFile)
+                dismissLoadingDialog()
             }
         }
     }
 
     private fun manageItem(file: OCFile) {
-//        onBrowsedDownTo(file)
-//        setFile(file)
+        setFile(file)
         account = com.owncloud.android.presentation.authentication.AccountUtils.getOwnCloudAccountByName(this, file.owner)
 
         if (file.isFolder) {
