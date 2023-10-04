@@ -1,0 +1,6 @@
+Enhancement: "Share to" in oCIS accounts allows upload to any space
+
+With this improvement, shared stuff from other apps can be uploaded to any space and not only the personal one in oCIS accounts.
+
+https://github.com/owncloud/android/issues/4088
+https://github.com/owncloud/android/pull/4160
