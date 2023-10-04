@@ -101,7 +101,6 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
         addMenuProvider(this)
 
 
-        @Suppress("DEPRECATION")
         if (savedInstanceState == null) {
             val launchingIntent = intent
             if (Build.VERSION.SDK_INT >= 33) { // getParcelableExtra(String!): T? starting from Android Build.VERSION_CODES.TIRAMISU.
