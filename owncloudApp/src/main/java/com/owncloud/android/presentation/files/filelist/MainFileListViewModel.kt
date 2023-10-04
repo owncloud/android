@@ -300,7 +300,7 @@ class MainFileListViewModel(
     }
 
     fun filterMenuOptions(
-        files: List<OCFile>, filesSyncInfo: List<OCFileSyncInfo>, isAnyFileVideoPreviewing: Boolean,
+        files: List<OCFile>, filesSyncInfo: List<OCFileSyncInfo>,
         displaySelectAll: Boolean, isMultiselection: Boolean
     ) {
         val shareViaLinkAllowed = contextProvider.getBoolean(R.bool.share_via_link_feature)
@@ -312,7 +312,7 @@ class MainFileListViewModel(
                     files = files,
                     filesSyncInfo = filesSyncInfo,
                     accountName = currentFolderDisplayed.value.owner,
-                    isAnyFileVideoPreviewing = isAnyFileVideoPreviewing,
+                    isAnyFileVideoPreviewing = false,
                     displaySelectAll = displaySelectAll,
                     displaySelectInverse = isMultiselection,
                     onlyAvailableOfflineFiles = fileListOption.value.isAvailableOffline(),

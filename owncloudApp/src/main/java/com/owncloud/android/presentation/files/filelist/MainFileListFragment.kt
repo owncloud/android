@@ -1135,7 +1135,7 @@ class MainFileListFragment : Fragment(),
             isSynchronizing = fileWithSyncInfo.isSynchronizing
         )
         mainFileListViewModel.filterMenuOptions(
-            listOf(file), listOf(fileSync), isAnyFileVideoPreviewing = false,
+            listOf(file), listOf(fileSync),
             displaySelectAll = false, isMultiselection = false
         )
     }
@@ -1192,7 +1192,7 @@ class MainFileListFragment : Fragment(),
 
             val displaySelectAll = checkedCount != fileListAdapter.itemCount - 1 // -1 because one of them is the footer :S
             mainFileListViewModel.filterMenuOptions(
-                checkedFiles, checkedFilesSync, isAnyFileVideoPreviewing = false,
+                checkedFiles, checkedFilesSync,
                 displaySelectAll, isMultiselection = true
             )
 
