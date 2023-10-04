@@ -23,7 +23,7 @@
 
 package com.owncloud.android.dependecyinjection
 
-import android.accounts.Account
+
 import com.owncloud.android.MainApp
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
@@ -85,7 +85,6 @@ val viewModelModule = module {
     viewModelOf(::SettingsVideoUploadsViewModel)
     viewModelOf(::SettingsViewModel)
 
-    viewModel { (account: Account, showPersonalSpace: Boolean) -> SpacesListViewModel(get(), get(), get(), get(), get(), account, showPersonalSpace) }
     viewModel { (accountName: String) -> CapabilityViewModel(accountName, get(), get(), get()) }
     viewModel { (action: PasscodeAction) -> PassCodeViewModel(get(), get(), action) }
     viewModel { (filePath: String, accountName: String) ->
