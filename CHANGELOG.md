@@ -21,7 +21,6 @@ Details
    https://github.com/owncloud/android/issues/4158
    https://github.com/owncloud/android/pull/4170
 
-
 Changelog for ownCloud Android Client [4.1.0] (2023-08-23)
 =======================================
 The following sections list the changes in ownCloud Android Client 4.1.0 relevant to
