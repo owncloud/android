@@ -80,13 +80,13 @@ import timber.log.Timber
 
 @OptIn(UnstableApi::class)
 class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlayerTaskListener, FileFragment.ContainerActivity, MenuProvider {
-    private var mAccount: Account? = null
+    private var account: Account? = null
 
     private lateinit var playerView: PlayerView
     private var player: ExoPlayer? = null
     private lateinit var trackSelector: DefaultTrackSelector
-    private var mAutoplay = true
-    private var mPlaybackPosition: Long = 0
+    private var playWhenReady = true
+    private var playbackPosition: Long = 0
     private var windowInsetsController: WindowInsetsControllerCompat? = null
     private val previewVideoViewModel: PreviewVideoViewModel by viewModel()
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
@@ -105,27 +105,27 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
         if (savedInstanceState == null) {
             val launchingIntent = intent
             if (Build.VERSION.SDK_INT >= 33) { // getParcelableExtra(String!): T? starting from Android Build.VERSION_CODES.TIRAMISU.
-                mAccount = launchingIntent.getParcelableExtra(EXTRA_ACCOUNT, Account::class.java)
+                account = launchingIntent.getParcelableExtra(EXTRA_ACCOUNT, Account::class.java)
                 file = launchingIntent.getParcelableExtra(EXTRA_FILE, OCFile::class.java)
             } else {
-                mAccount = launchingIntent.getParcelableExtra(EXTRA_ACCOUNT)
+                account = launchingIntent.getParcelableExtra(EXTRA_ACCOUNT)
                 file = launchingIntent.getParcelableExtra(EXTRA_FILE)
             }
-            mPlaybackPosition = launchingIntent.getLongExtra(EXTRA_PLAY_POSITION, 0)
+            playbackPosition = launchingIntent.getLongExtra(EXTRA_PLAY_POSITION, 0)
         } else {
             if (Build.VERSION.SDK_INT >= 33) { // getParcelableExtra(String!): T? starting from Android Build.VERSION_CODES.TIRAMISU.
-                mAccount = savedInstanceState.getParcelable(EXTRA_ACCOUNT, Account::class.java)
+                account = savedInstanceState.getParcelable(EXTRA_ACCOUNT, Account::class.java)
                 file = savedInstanceState.getParcelable(EXTRA_FILE, OCFile::class.java)
             } else {
-                mAccount = savedInstanceState.getParcelable(EXTRA_ACCOUNT)
+                account = savedInstanceState.getParcelable(EXTRA_ACCOUNT)
                 file = savedInstanceState.getParcelable(EXTRA_FILE)
             }
-            mAutoplay = savedInstanceState.getBoolean(EXTRA_AUTOPLAY, true)
-            mPlaybackPosition = savedInstanceState.getLong(EXTRA_PLAY_POSITION, 0)
+            playWhenReady = savedInstanceState.getBoolean(EXTRA_AUTOPLAY, true)
+            playbackPosition = savedInstanceState.getLong(EXTRA_PLAY_POSITION, 0)
         }
 
         checkNotNull(file) { "Instanced with a NULL OCFile" }
-        checkNotNull(mAccount) { "Instanced with a NULL ownCloud Account" }
+        checkNotNull(account) { "Instanced with a NULL ownCloud Account" }
         check(file.isVideo) { "Not a video file" }
 
         supportActionBar?.run {
@@ -194,13 +194,13 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
         player?.addListener(this)
         playerView.player = player
 
-        PrepareVideoPlayerAsyncTask(this, this, file, mAccount).execute()
+        PrepareVideoPlayerAsyncTask(this, this, file, account).execute()
     }
 
     private fun releasePlayer() {
         player?.let { exoPlayer ->
-            mAutoplay = exoPlayer.playWhenReady
-            mPlaybackPosition = exoPlayer.currentPosition
+            playWhenReady = exoPlayer.playWhenReady
+            playbackPosition = exoPlayer.currentPosition
             exoPlayer.removeListener(this)
             exoPlayer.release()
         }
@@ -217,8 +217,8 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
         if (mediaSource != null) {
             player?.let { exoPlayer ->
                 exoPlayer.addMediaSource(mediaSource)
-                exoPlayer.playWhenReady = mAutoplay
-                exoPlayer.seekTo(mPlaybackPosition)
+                exoPlayer.playWhenReady = playWhenReady
+                exoPlayer.seekTo(playbackPosition)
                 exoPlayer.prepare()
             }
         }
@@ -250,9 +250,9 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
         super.onSaveInstanceState(outState)
 
         outState.putParcelable(EXTRA_FILE, file)
-        outState.putParcelable(EXTRA_ACCOUNT, mAccount)
+        outState.putParcelable(EXTRA_ACCOUNT, account)
         if (player != null) {
-            outState.putBoolean(EXTRA_AUTOPLAY, mAutoplay)
+            outState.putBoolean(EXTRA_AUTOPLAY, playWhenReady)
             outState.putLong(EXTRA_PLAY_POSITION, player?.currentPosition ?: 0L)
         }
     }
@@ -315,7 +315,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
 
     override fun onPrepareMenu(menu: Menu) {
         val safeFile = file
-        val accountName = mAccount!!.name
+        val accountName = account!!.name
         previewVideoViewModel.filterMenuOptions(safeFile, accountName)
 
         collectLatestLifecycleFlow(
@@ -390,7 +390,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
             R.id.action_cancel_sync -> {
                 val fileList = ArrayList<OCFile>()
                 fileList.add(file)
-                transfersViewModel.cancelTransfersRecursively(fileList, mAccount?.name.orEmpty())
+                transfersViewModel.cancelTransfersRecursively(fileList, account?.name.orEmpty())
                 true
             }
 
