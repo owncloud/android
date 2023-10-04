@@ -160,6 +160,11 @@ android {
     }
 
     testOptions {
+        packagingOptions {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
         unitTests.returnDefaultValues = true
         animationsDisabled = true
     }
