@@ -157,7 +157,8 @@
             <intent-filter>
                 <action android:name="android.content.action.DOCUMENTS_PROVIDER" />
             </intent-filter>
-        </provider> <!-- new provider used to generate URIs without file:// scheme (forbidden from Android 7) -->
+        </provider>
+        <!-- new provider used to generate URIs without file:// scheme (forbidden from Android 7) -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="@string/file_provider_authority"
