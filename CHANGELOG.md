@@ -9,6 +9,7 @@ Summary
 -------
 
 * Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
+* Enhancement - "Share to" in oCIS accounts allows upload to any space: [#4088](https://github.com/owncloud/android/issues/4088)
 
 Details
 -------
@@ -20,6 +21,14 @@ Details
 
    https://github.com/owncloud/android/issues/4078
    https://github.com/owncloud/android/pull/4138
+
+* Enhancement - "Share to" in oCIS accounts allows upload to any space: [#4088](https://github.com/owncloud/android/issues/4088)
+
+   With this improvement, shared stuff from other apps can be uploaded to any space and not only the
+   personal one in oCIS accounts.
+
+   https://github.com/owncloud/android/issues/4088
+   https://github.com/owncloud/android/pull/4160
 
 Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
 =======================================
