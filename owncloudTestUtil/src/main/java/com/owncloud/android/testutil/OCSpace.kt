@@ -20,6 +20,10 @@
 
 package com.owncloud.android.testutil
 
+import com.owncloud.android.data.spaces.db.SpaceRootEntity
+import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
+import com.owncloud.android.data.spaces.db.SpacesEntity
+import com.owncloud.android.data.spaces.db.SpacesWithSpecials
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.SpaceDeleted
 import com.owncloud.android.domain.spaces.model.SpaceFile
@@ -29,6 +33,13 @@ import com.owncloud.android.domain.spaces.model.SpaceRoot
 import com.owncloud.android.domain.spaces.model.SpaceSpecial
 import com.owncloud.android.domain.spaces.model.SpaceSpecialFolder
 import com.owncloud.android.domain.spaces.model.SpaceUser
+import com.owncloud.android.lib.resources.spaces.responses.QuotaResponse
+import com.owncloud.android.lib.resources.spaces.responses.RootResponse
+import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
+
+private val WEB_DAV_URL = "https://server.url/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f3805bca744-d89f-4e9c-a990-25a0d7f03fe9"
+
+
 
 val OC_SPACE_SPECIAL_README = SpaceSpecial(
     eTag = "71f78349c3598c9e431a67de5a283fc0",
@@ -130,3 +141,64 @@ val OC_SPACE_PROJECT_DISABLED = OC_SPACE_PROJECT_WITH_IMAGE.copy(
     ),
     special = null
 )
+
+val SPACE_WITH_SPECIALS = SpacesWithSpecials(
+    SpacesEntity(
+        accountName = OC_ACCOUNT_NAME,
+        driveAlias = "driveAlias",
+        driveType = "driveType",
+        id = OC_ACCOUNT_ID,
+        ownerId = OC_CLIENT_ID,
+        lastModifiedDateTime = "lastModifiedDateTime",
+        name = "name",
+        quota = null,
+        root = SpaceRootEntity(
+            eTag = "eTag",
+            id = "id",
+            webDavUrl = WEB_DAV_URL,
+            deleteState = "state"
+        ),
+        webUrl = "webUrl",
+        description = "description"
+    ),
+    listOf(
+        SpaceSpecialEntity(
+            accountName = OC_ACCOUNT_NAME,
+            eTag = "eTag",
+            fileMimeType = "fileMimeType",
+            id = OC_ACCOUNT_ID,
+            spaceId = OC_SPACE_PERSONAL.id,
+            lastModifiedDateTime = "lastModifiedDateTime",
+            name = "name",
+            webDavUrl = WEB_DAV_URL,
+            size = 100,
+            specialFolderName = OC_SPACE_SPECIAL_IMAGE.name
+        )
+    )
+)
+
+val SPACE_RESPONSE =
+    SpaceResponse(
+        driveAlias = "driveAlias",
+        driveType = "driveType",
+        id = OC_ACCOUNT_ID,
+        lastModifiedDateTime = "lastModifiedDateTime",
+        name = "name",
+        webUrl = "webUrl",
+        description = "description",
+        owner = null,
+        root = RootResponse(
+            eTag = "eTag",
+            id = OC_ACCOUNT_ID,
+            webDavUrl = "https://server.url/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f3805bca744-d89f-4e9c-a990-25a0d7f03fe9",
+            deleted = null
+        ),
+        quota = QuotaResponse(
+            remaining = 1,
+            state = "state",
+            total = 10,
+            used = 1
+        ),
+        special = null,
+
+        )

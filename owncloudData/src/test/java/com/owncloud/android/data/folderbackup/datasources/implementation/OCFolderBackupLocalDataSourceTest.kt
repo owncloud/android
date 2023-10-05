@@ -1,17 +1,36 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.data.folderbackup.datasources.implementation
 
-import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.folderbackup.datasources.implementation.OCFolderBackupLocalDataSource.Companion.toModel
-import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
 import com.owncloud.android.data.folderbackup.db.FolderBackupDao
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
-import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_BACKUP
+import com.owncloud.android.testutil.OC_BACKUP_ENTITY
 import io.mockk.every
-import io.mockk.mockkClass
+import io.mockk.mockk
 import io.mockk.verify
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -20,47 +39,22 @@ import org.junit.Test
 class OCFolderBackupLocalDataSourceTest {
 
     private lateinit var ocFolderBackupLocalDataSource: OCFolderBackupLocalDataSource
-    private val folderBackupDao = mockkClass(FolderBackupDao::class)
-    private val db = mockkClass(OwncloudDatabase::class)
-
-    private val ocFolderBackUpEntity = FolderBackUpEntity(
-        accountName = OC_ACCOUNT_NAME,
-        behavior = UploadBehavior.COPY.name,
-        sourcePath = "/Photos",
-        uploadPath = "/Photos",
-        wifiOnly = true,
-        chargingOnly = true,
-        lastSyncTimestamp = 1542628397,
-        name = ""
-    )
-    private val ocFolderBackUpConfiguration = FolderBackUpConfiguration(
-        accountName = OC_ACCOUNT_NAME,
-        behavior = UploadBehavior.COPY,
-        sourcePath = "/Photos",
-        uploadPath = "/Photos",
-        wifiOnly = true,
-        chargingOnly = true,
-        lastSyncTimestamp = 1542628397,
-        name = ""
-    )
+    private val folderBackupDao = mockk<FolderBackupDao>(relaxed = true)
 
     @Before
-    fun init() {
-
-        every { db.folderBackUpDao() } returns folderBackupDao
-
+    fun setUp() {
         ocFolderBackupLocalDataSource = OCFolderBackupLocalDataSource(folderBackupDao)
     }
 
     @Test
-    fun `getCameraUploadsConfiguration with valid configurations returns a CameraUploadsConfiguration object`() {
-        every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } returns ocFolderBackUpEntity
-        every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } returns ocFolderBackUpEntity
+    fun `getCameraUploadsConfiguration returns a CameraUploadsConfiguration when having valid configurations`() {
+        every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } returns OC_BACKUP_ENTITY
+        every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } returns OC_BACKUP_ENTITY
 
         val resultCurrent = ocFolderBackupLocalDataSource.getCameraUploadsConfiguration()
 
-        assertEquals(ocFolderBackUpEntity.toModel(), resultCurrent?.pictureUploadsConfiguration)
-        assertEquals(ocFolderBackUpEntity.toModel(), resultCurrent?.videoUploadsConfiguration)
+        assertEquals(OC_BACKUP_ENTITY.toModel(), resultCurrent?.pictureUploadsConfiguration)
+        assertEquals(OC_BACKUP_ENTITY.toModel(), resultCurrent?.videoUploadsConfiguration)
 
         verify(exactly = 1) {
             folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName)
@@ -68,17 +62,8 @@ class OCFolderBackupLocalDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `getCameraUploadsConfiguration with valid configurations returns an exception when service receive an exception`() {
-        every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } throws Exception()
-        every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } throws Exception()
-
-        ocFolderBackupLocalDataSource.getCameraUploadsConfiguration()
-
-    }
-
     @Test
-    fun `getCameraUploadsConfiguration with no configurations returns null`() {
+    fun `getCameraUploadsConfiguration returns null when there are not configurations `() {
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } returns null
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } returns null
 
@@ -92,78 +77,37 @@ class OCFolderBackupLocalDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `getCameraUploadsConfiguration with no configurations returns an exception when service receive an exception`() {
-        every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } throws Exception()
-        every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } throws Exception()
-
-        ocFolderBackupLocalDataSource.getCameraUploadsConfiguration()
-
-    }
-
     @Test
-    fun `getFolderBackupConfigurationByNameAsFlow with valid configurations returns a flow of CameraUploadsConfiguration`() = runBlocking {
+    fun `getFolderBackupConfigurationByNameAsFlow returns a flow of CameraUploadsConfiguration when having valid configurations `() = runBlocking {
         every { folderBackupDao.getFolderBackUpConfigurationByNameAsFlow(FolderBackUpConfiguration.pictureUploadsName) } returns flowOf(
-            ocFolderBackUpEntity
+            OC_BACKUP_ENTITY
         )
 
         val resultCurrent = ocFolderBackupLocalDataSource.getFolderBackupConfigurationByNameAsFlow(FolderBackUpConfiguration.pictureUploadsName)
 
-        resultCurrent.collect { result ->
-            assertEquals(ocFolderBackUpEntity.toModel(), result)
-        }
+        val result = resultCurrent.first()
+        assertEquals(OC_BACKUP_ENTITY.toModel(), result)
+
         verify(exactly = 1) {
             folderBackupDao.getFolderBackUpConfigurationByNameAsFlow(FolderBackUpConfiguration.pictureUploadsName)
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `getFolderBackupConfigurationByNameAsFlow when dao receive an exception returns an exception`() = runBlocking {
-        every { folderBackupDao.getFolderBackUpConfigurationByNameAsFlow(FolderBackUpConfiguration.pictureUploadsName) } throws Exception()
-
-        val resultCurrent = ocFolderBackupLocalDataSource.getFolderBackupConfigurationByNameAsFlow(FolderBackUpConfiguration.pictureUploadsName)
-
-        resultCurrent.collect { result ->
-            assertEquals(ocFolderBackUpEntity.toModel(), result)
-        }
-    }
-
     @Test
-    fun `saveFolderBackupConfiguration with valid configurations returns unit and save the information`() {
-        every { folderBackupDao.update(ocFolderBackUpEntity) } returns 1
-
-        ocFolderBackupLocalDataSource.saveFolderBackupConfiguration(ocFolderBackUpConfiguration)
+    fun `saveFolderBackupConfiguration with valid configurations save the information`() {
+        ocFolderBackupLocalDataSource.saveFolderBackupConfiguration(OC_BACKUP)
 
         verify(exactly = 1) {
-            folderBackupDao.update(ocFolderBackUpEntity)
+            folderBackupDao.update(OC_BACKUP_ENTITY)
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `saveFolderBackupConfiguration when dao receive an exception returns an exception`() {
-        every { folderBackupDao.update(ocFolderBackUpEntity) } throws Exception()
-
-        ocFolderBackupLocalDataSource.saveFolderBackupConfiguration(ocFolderBackUpConfiguration)
-
-    }
-
     @Test
-    fun `resetFolderBackupConfigurationByName when folder backup configuration is reset by name returns unit `() {
-        every { folderBackupDao.delete(FolderBackUpConfiguration.pictureUploadsName) } returns 1
-
+    fun `resetFolderBackupConfigurationByName when folder backup configuration is reset by name`() {
         ocFolderBackupLocalDataSource.resetFolderBackupConfigurationByName(FolderBackUpConfiguration.pictureUploadsName)
 
         verify(exactly = 1) {
             folderBackupDao.delete(FolderBackUpConfiguration.pictureUploadsName)
         }
     }
-
-    @Test(expected = Exception::class)
-    fun `resetFolderBackupConfigurationByName when dao receive an exception returns an exception `() {
-        every { folderBackupDao.delete(any()) } throws Exception()
-
-        ocFolderBackupLocalDataSource.resetFolderBackupConfigurationByName(FolderBackUpConfiguration.pictureUploadsName)
-
-    }
-
 }
