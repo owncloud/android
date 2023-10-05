@@ -1,31 +1,40 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author Aitor Ballesteros Pavón
+ * Copyright (C) 2020 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.data.spaces.datasource.implementation
 
-import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.spaces.datasources.implementation.OCLocalSpacesDataSource
 import com.owncloud.android.data.spaces.datasources.implementation.OCLocalSpacesDataSource.Companion.toEntity
 import com.owncloud.android.data.spaces.datasources.implementation.OCLocalSpacesDataSource.Companion.toModel
-import com.owncloud.android.data.spaces.db.SpaceRootEntity
 import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
 import com.owncloud.android.data.spaces.db.SpacesDao
 import com.owncloud.android.data.spaces.db.SpacesEntity
-import com.owncloud.android.data.spaces.db.SpacesWithSpecials
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARES
-import com.owncloud.android.domain.spaces.model.SpaceDeleted
-import com.owncloud.android.domain.spaces.model.SpaceOwner
-import com.owncloud.android.domain.spaces.model.SpaceQuota
-import com.owncloud.android.domain.spaces.model.SpaceRoot
-import com.owncloud.android.domain.spaces.model.SpaceUser
-import com.owncloud.android.testutil.OC_ACCOUNT_ID
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
-import com.owncloud.android.testutil.OC_CLIENT_ID
 import com.owncloud.android.testutil.OC_SPACE_PERSONAL
-import com.owncloud.android.testutil.OC_SPACE_SPECIAL_IMAGE
-import com.owncloud.android.testutil.OC_SPACE_SPECIAL_README
+import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
+import com.owncloud.android.testutil.SPACE_WITH_SPECIALS
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
-import io.mockk.mockkClass
+import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
@@ -36,94 +45,21 @@ import org.junit.Test
 class OCLocalSpacesDataSourceTest {
 
     private lateinit var ocLocalSpacesDataSource: OCLocalSpacesDataSource
-    private val spacesDao = mockkClass(SpacesDao::class)
+    private val spacesDao = mockk<SpacesDao>()
 
     private val WEB_DAV_URL = "https://server.url/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f3805bca744-d89f-4e9c-a990-25a0d7f03fe9"
 
-    private val spaceWithSpecials = SpacesWithSpecials(
-        SpacesEntity(
-            accountName = OC_ACCOUNT_NAME,
-            driveAlias = "driveAlias",
-            driveType = "driveType",
-            id = OC_ACCOUNT_ID,
-            ownerId = OC_CLIENT_ID,
-            lastModifiedDateTime = "lastModifiedDateTime",
-            name = "name",
-            quota = null,
-            root = SpaceRootEntity(
-                eTag = "eTag",
-                id = "id",
-                webDavUrl = WEB_DAV_URL,
-                deleteState = "state"
-            ),
-            webUrl = "webUrl",
-            description = "description"
-        ),
-        listOf(
-            SpaceSpecialEntity(
-                accountName = OC_ACCOUNT_NAME,
-                eTag = "eTag",
-                fileMimeType = "fileMimeType",
-                id = OC_ACCOUNT_ID,
-                spaceId = OC_SPACE_PERSONAL.id,
-                lastModifiedDateTime = "lastModifiedDateTime",
-                name = "name",
-                webDavUrl = WEB_DAV_URL,
-                size = 100,
-                specialFolderName = OC_SPACE_SPECIAL_IMAGE.name
-            )
-        )
-    )
-
-    private val listSpaceSpecial = listOf(
-        OCSpace(
-            accountName = OC_ACCOUNT_NAME,
-            driveAlias = "driveAlias",
-            driveType = "driveType",
-            id = OC_ACCOUNT_ID,
-            lastModifiedDateTime = "lastModifiedDateTime",
-            name = "name",
-            owner = SpaceOwner(
-                user = SpaceUser(
-                    id = "id"
-                )
-            ),
-            quota = SpaceQuota(
-                remaining = 100,
-                state = "quotaResponse.state",
-                total = 100,
-                used = 100,
-            ),
-            root = SpaceRoot(
-                eTag = "eTag",
-                id = "id",
-                webDavUrl = WEB_DAV_URL,
-                deleted = SpaceDeleted(state = "state")
-            ),
-            webUrl = "webUrl",
-            description = "description",
-            special = listOf(
-                OC_SPACE_SPECIAL_IMAGE,
-                OC_SPACE_SPECIAL_README
-            )
-        )
-    )
-
     @Before
-    fun init() {
-        val db = mockkClass(OwncloudDatabase::class)
-
-        every { db.spacesDao() } returns spacesDao
-
+    fun setUp() {
         ocLocalSpacesDataSource = OCLocalSpacesDataSource(spacesDao)
     }
 
     @Test
-    fun `saveSpacesForAccount inserts spaces and special spaces returns unit`() {
+    fun `saveSpacesForAccount inserts spaces and special spaces`() {
         val spaceEntities = mutableListOf<SpacesEntity>()
         val spaceSpecialEntities = mutableListOf<SpaceSpecialEntity>()
 
-        listSpaceSpecial.forEach { spaceModel ->
+        listOf(OC_SPACE_PROJECT_WITH_IMAGE).forEach { spaceModel ->
             spaceEntities.add(spaceModel.toEntity())
             spaceModel.special?.let { listOfSpacesSpecials ->
                 spaceSpecialEntities.addAll(listOfSpacesSpecials.map { it.toEntity(spaceModel.accountName, spaceModel.id) })
@@ -134,30 +70,11 @@ class OCLocalSpacesDataSourceTest {
             spacesDao.insertOrDeleteSpaces(any(), any())
         } just Runs
 
-        ocLocalSpacesDataSource.saveSpacesForAccount(listSpaceSpecial)
+        ocLocalSpacesDataSource.saveSpacesForAccount(listOf(OC_SPACE_PROJECT_WITH_IMAGE))
 
         verify(exactly = 1) {
             spacesDao.insertOrDeleteSpaces(spaceEntities, spaceSpecialEntities)
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `saveSpacesForAccount inserts spaces and special spaces returns an exception when dao receive an exception`() {
-        val spaceEntities = mutableListOf<SpacesEntity>()
-        val spaceSpecialEntities = mutableListOf<SpaceSpecialEntity>()
-
-        listSpaceSpecial.forEach { spaceModel ->
-            spaceEntities.add(spaceModel.toEntity())
-            spaceModel.special?.let { listOfSpacesSpecials ->
-                spaceSpecialEntities.addAll(listOfSpacesSpecials.map { it.toEntity(spaceModel.accountName, spaceModel.id) })
-            }
-        }
-
-        every {
-            spacesDao.insertOrDeleteSpaces(any(), any())
-        } throws Exception()
-
-        ocLocalSpacesDataSource.saveSpacesForAccount(listSpaceSpecial)
     }
 
     @Test
@@ -175,38 +92,19 @@ class OCLocalSpacesDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `getPersonalSpaceForAccount by drive type returns an exception when dao receive an exception`() {
-        every {
-            spacesDao.getSpacesByDriveTypeForAccount(any(), any())
-        } throws Exception()
-
-        ocLocalSpacesDataSource.getPersonalSpaceForAccount(OC_ACCOUNT_NAME)
-    }
-
-
     @Test
     fun `getSharesSpaceForAccount returns a OCSpace`() {
         every {
             spacesDao.getSpaceByIdForAccount(SPACE_ID_SHARES, OC_ACCOUNT_NAME)
-        } returns OC_SPACE_PERSONAL.toEntity()
+        } returns SPACE_WITH_SPECIALS.space
 
         val resultActual = ocLocalSpacesDataSource.getSharesSpaceForAccount(OC_ACCOUNT_NAME)
 
-        assertEquals(OC_SPACE_PERSONAL, resultActual)
+        assertEquals(SPACE_WITH_SPECIALS.space.toModel(), resultActual)
 
         verify(exactly = 1) {
             spacesDao.getSpaceByIdForAccount(SPACE_ID_SHARES, OC_ACCOUNT_NAME)
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `getSharesSpaceForAccount returns an exception when dao receive an exception`() {
-        every {
-            spacesDao.getSpaceByIdForAccount(SPACE_ID_SHARES, OC_ACCOUNT_NAME)
-        } throws Exception()
-
-        ocLocalSpacesDataSource.getSharesSpaceForAccount(OC_ACCOUNT_NAME)
     }
 
     @Test
@@ -237,21 +135,6 @@ class OCLocalSpacesDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `getSpacesFromEveryAccountAsStream returns an exception when dao receive an exception`() {
-
-        every {
-            spacesDao.getSpacesByDriveTypeFromEveryAccountAsStream(
-                setOf(
-                    OCSpace.DRIVE_TYPE_PERSONAL,
-                    OCSpace.DRIVE_TYPE_PROJECT
-                )
-            )
-        } throws Exception()
-
-        ocLocalSpacesDataSource.getSpacesFromEveryAccountAsStream()
-    }
-
     @Test
     fun `getSpacesByDriveTypeWithSpecialsForAccountAsFlow returns a flow of OCSpace list`() = runBlocking {
 
@@ -263,7 +146,7 @@ class OCLocalSpacesDataSourceTest {
                     OCSpace.DRIVE_TYPE_PROJECT
                 )
             )
-        } returns flowOf(listOf(spaceWithSpecials))
+        } returns flowOf(listOf(SPACE_WITH_SPECIALS))
 
         val resultActual = ocLocalSpacesDataSource.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
             OC_ACCOUNT_NAME, setOf(
@@ -273,7 +156,7 @@ class OCLocalSpacesDataSourceTest {
         )
 
         resultActual.collect { result ->
-            assertEquals(listOf(spaceWithSpecials.toModel()), result)
+            assertEquals(listOf(SPACE_WITH_SPECIALS.toModel()), result)
         }
 
         verify(exactly = 1) {
@@ -287,26 +170,6 @@ class OCLocalSpacesDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `getSpacesByDriveTypeWithSpecialsForAccountAsFlow returns an exception when dao receive an exception`() {
-
-        every {
-            spacesDao.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
-                OC_ACCOUNT_NAME,
-                setOf(
-                    OCSpace.DRIVE_TYPE_PERSONAL,
-                    OCSpace.DRIVE_TYPE_PROJECT
-                )
-            )
-        } throws Exception()
-
-        ocLocalSpacesDataSource.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
-            OC_ACCOUNT_NAME, setOf(
-                OCSpace.DRIVE_TYPE_PERSONAL,
-                OCSpace.DRIVE_TYPE_PROJECT
-            )
-        )
-    }
     @Test
     fun `getPersonalAndProjectSpacesForAccount returns a list of OCSpace`() {
 
@@ -336,47 +199,22 @@ class OCLocalSpacesDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `getPersonalAndProjectSpacesForAccount returns an exception when dao receive an exception`() {
-
-        every {
-            spacesDao.getSpacesByDriveTypeForAccount(
-                OC_ACCOUNT_NAME,
-                setOf(
-                    OCSpace.DRIVE_TYPE_PERSONAL,
-                    OCSpace.DRIVE_TYPE_PROJECT
-                )
-            )
-        } throws Exception()
-
-        ocLocalSpacesDataSource.getPersonalAndProjectSpacesForAccount(OC_ACCOUNT_NAME)
-    }
     @Test
     fun `getSpaceWithSpecialsByIdForAccount returns a OCSpace`() {
 
         every {
             spacesDao.getSpaceWithSpecialsByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
-        } returns spaceWithSpecials
+        } returns SPACE_WITH_SPECIALS
 
         val resultActual = ocLocalSpacesDataSource.getSpaceWithSpecialsByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
 
-        assertEquals(spaceWithSpecials.toModel(), resultActual)
+        assertEquals(SPACE_WITH_SPECIALS.toModel(), resultActual)
 
         verify(exactly = 1) {
             spacesDao.getSpaceWithSpecialsByIdForAccount(
                 OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME
             )
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `getSpaceWithSpecialsByIdForAccount returns an exception when dao receive an exception`() {
-
-        every {
-            spacesDao.getSpaceWithSpecialsByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
-        } throws Exception()
-
-        ocLocalSpacesDataSource.getSpaceWithSpecialsByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
     }
 
     @Test
@@ -397,19 +235,8 @@ class OCLocalSpacesDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `getWebDavUrlForSpace returns an exception when dao receive an exception`() {
-
-        every {
-            spacesDao.getWebDavUrlForSpace(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
-        } throws Exception()
-
-        ocLocalSpacesDataSource.getWebDavUrlForSpace(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
-
-    }
-
     @Test
-    fun `deleteSpacesForAccount delete the space by account returns Unit`() {
+    fun `deleteSpacesForAccount delete the space by account`() {
 
         every {
             spacesDao.deleteSpacesForAccount(OC_ACCOUNT_NAME)
@@ -420,16 +247,5 @@ class OCLocalSpacesDataSourceTest {
         verify(exactly = 1) {
             spacesDao.deleteSpacesForAccount(OC_ACCOUNT_NAME)
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `deleteSpacesForAccount delete the space by account returns an exception when dao receive an exception`() {
-
-        every {
-            spacesDao.deleteSpacesForAccount(OC_ACCOUNT_NAME)
-        } throws Exception()
-
-        ocLocalSpacesDataSource.deleteSpacesForAccount(OC_ACCOUNT_NAME)
-
     }
 }

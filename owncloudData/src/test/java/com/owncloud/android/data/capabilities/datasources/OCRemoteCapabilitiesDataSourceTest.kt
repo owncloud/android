@@ -3,6 +3,7 @@
  *
  * @author David González Verdugo
  * @author Jesús Recio
+ * @author Aitor Ballesteros Pavón
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -43,7 +44,7 @@ class OCRemoteCapabilitiesDataSourceTest {
     private val remoteCapabilityMapper = RemoteCapabilityMapper()
 
     @Before
-    fun init() {
+    fun setUp() {
         every { clientManager.getCapabilityService(any()) } returns ocCapabilityService
 
         ocRemoteCapabilitiesDataSource =

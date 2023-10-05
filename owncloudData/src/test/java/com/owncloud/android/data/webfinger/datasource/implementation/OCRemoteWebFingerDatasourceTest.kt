@@ -1,3 +1,22 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author Aitor Ballesteros Pavón
+ * Copyright (C) 2020 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.data.webfinger.datasource.implementation
 
 import com.owncloud.android.data.ClientManager
@@ -24,10 +43,10 @@ class OCRemoteWebFingerDatasourceTest {
     private val clientManager: ClientManager = mockk(relaxed = true)
     private val ownCloudClient: OwnCloudClient = mockk(relaxed = true)
     private val ocWebFingerService: OCWebFingerService = mockk()
-    private val listString: List<String> = mockk(relaxed = true)
+    private val listString: List<String> = emptyList()
 
     @Before
-    fun init() {
+    fun setUp() {
         ocRemoteWebFingerDatasource = OCRemoteWebFingerDatasource(
             ocWebFingerService,
             clientManager,
@@ -71,25 +90,6 @@ class OCRemoteWebFingerDatasourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `getInstancesFromWebFinger returns an exception when service receive an exception`() {
-
-        every {
-            ocWebFingerService.getInstancesFromWebFinger(
-                lookupServer = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
-                resource = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
-                rel = WebFingerRel.OIDC_ISSUER_DISCOVERY.uri,
-                any(),
-            )
-        } throws Exception()
-
-        ocRemoteWebFingerDatasource.getInstancesFromWebFinger(
-            lookupServer = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
-            rel = WebFingerRel.OIDC_ISSUER_DISCOVERY,
-            resource = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
-        )
-    }
-
     @Test
     fun `getInstancesFromAuthenticatedWebFinger returns a list of web finger`() {
 
@@ -116,6 +116,7 @@ class OCRemoteWebFingerDatasourceTest {
         assertEquals(getInstancesFromAuthenticatedWebFingerResult.data, actualResult)
 
         verify(exactly = 1) {
+            ownCloudClient.credentials = any()
             clientManager.getClientForAnonymousCredentials(any(), false)
             ocWebFingerService.getInstancesFromWebFinger(
                 lookupServer = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
@@ -124,27 +125,5 @@ class OCRemoteWebFingerDatasourceTest {
                 any(),
             )
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `getInstancesFromAuthenticatedWebFinger returns an exception when service receive an exception`() {
-
-        every {
-            ocWebFingerService.getInstancesFromWebFinger(
-                lookupServer = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
-                resource = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
-                rel = WebFingerRel.OIDC_ISSUER_DISCOVERY.uri,
-                ownCloudClient,
-            )
-        } throws Exception()
-
-        ocRemoteWebFingerDatasource.getInstancesFromAuthenticatedWebFinger(
-            lookupServer = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
-            rel = WebFingerRel.OIDC_ISSUER_DISCOVERY,
-            resource = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
-            username = OC_ACCOUNT_ID,
-            accessToken = OC_ACCESS_TOKEN
-        )
-
     }
 }

@@ -65,7 +65,7 @@ class OCRemoteUserDataSourceTest {
     )
 
     @Before
-    fun init() {
+    fun setUp() {
         every { clientManager.getUserService(any()) } returns ocUserService
 
         ocRemoteUserDataSource = OCRemoteUserDataSource(

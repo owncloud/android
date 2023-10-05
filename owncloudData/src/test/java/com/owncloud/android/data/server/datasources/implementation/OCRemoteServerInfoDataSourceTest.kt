@@ -67,7 +67,7 @@ class OCRemoteServerInfoDataSourceTest {
     private val authHeaderBearer = listOf(basicAuthHeader, bearerHeader)
 
     @Before
-    fun init() {
+    fun setUp() {
         ocRemoteServerInfoDatasource = OCRemoteServerInfoDataSource(ocServerInfoService, clientManager)
         every { clientManager.getClientForAnonymousCredentials(any(), any()) } returns ocClientMocked
     }

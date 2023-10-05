@@ -77,7 +77,7 @@ class OCLocalAuthenticationDataSourceTest {
     private val preferencesProvider = spyk<SharedPreferencesProvider>()
 
     @Before
-    fun init() {
+    fun setUp() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
 
         ocLocalAuthenticationDataSource = OCLocalAuthenticationDataSource(

@@ -3,6 +3,7 @@
  *
  * @author David González Verdugo
  * @author Abel García de Prada
+ * @author Aitor Ballesteros Pavón
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -51,7 +52,7 @@ class OCLocalCapabilitiesDataSourceTest {
     var rule: TestRule = InstantTaskExecutorRule()
 
     @Before
-    fun init() {
+    fun setUp() {
         ocLocalCapabilitiesDataSource =
             OCLocalCapabilitiesDataSource(
                 ocCapabilityDao,

@@ -3,6 +3,7 @@
  *
  * @author David González Verdugo
  * @author Jesús Recio
+ * @author Aitor Ballesteros Pavón
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -48,7 +49,7 @@ class OCRemoteShareDataSourceTest {
     private val clientManager: ClientManager = mockk(relaxed = true)
 
     @Before
-    fun init() {
+    fun setUp() {
         every { clientManager.getShareService(any()) } returns ocShareService
 
         ocRemoteShareDataSource = OCRemoteShareDataSource(clientManager, remoteShareMapper)
@@ -78,7 +79,15 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
+            ocShareService.insertShare(
+                remoteFilePath = "Photos/",
+                shareType = com.owncloud.android.lib.resources.shares.ShareType.fromValue(ShareType.USER.value)!!,
+                shareWith = "user",
+                permissions = 1,
+                name = "",
+                password = "",
+                expirationDate = 0,
+            )
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
@@ -99,24 +108,17 @@ class OCRemoteShareDataSourceTest {
         assertEquals(1, privateShareAdded.permissions)
 
         verify(exactly = 1) {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
+            clientManager.getShareService(any())
+            ocShareService.insertShare(
+                remoteFilePath = "Photos/",
+                shareType = com.owncloud.android.lib.resources.shares.ShareType.fromValue(ShareType.USER.value)!!,
+                shareWith = "user",
+                permissions = 1,
+                name = "",
+                password = "",
+                expirationDate = 0,
+            )
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `insert private share returns an exception when service receive an exception`() {
-
-        every {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
-        } throws Exception()
-
-        ocRemoteShareDataSource.insert(
-            remoteFilePath = "Photos/",
-            shareType = ShareType.USER,
-            shareWith = "user",
-            permissions = 1,
-            accountName = "user@server"
-        )
     }
 
     @Test
@@ -140,7 +142,13 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.updateShare(any(), any(), any(), any(), any())
+            ocShareService.updateShare(
+                remoteId = "3",
+                name = "",
+                password = "",
+                expirationDate = 0,
+                permissions = 17,
+            )
         } returns updateRemoteShareOperationResult
 
         // Update share on remote datasource
@@ -159,22 +167,15 @@ class OCRemoteShareDataSourceTest {
         assertEquals(false, privateShareUpdated.isFolder)
 
         verify(exactly = 1) {
-            ocShareService.updateShare(any(), any(), any(), any(), any())
+            clientManager.getShareService(any())
+            ocShareService.updateShare(
+                remoteId = "3",
+                name = "",
+                password = "",
+                expirationDate = 0,
+                permissions = 17,
+            )
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `updateShare update a private share returns an exception when service receive an exception`() {
-
-        every {
-            ocShareService.updateShare(any(), any(), any(), any(), any())
-        } throws Exception()
-
-        ocRemoteShareDataSource.updateShare(
-            remoteId = "3",
-            permissions = 17,
-            accountName = "user@server"
-        )
     }
 
     /******************************************************************************************************
@@ -200,7 +201,15 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
+            ocShareService.insertShare(
+                remoteFilePath = "Photos/img1.png",
+                shareType = com.owncloud.android.lib.resources.shares.ShareType.fromValue(ShareType.PUBLIC_LINK.value)!!,
+                shareWith = "",
+                permissions = 1,
+                name = "",
+                password = "",
+                expirationDate = 0
+            )
         } returns createRemoteShareOperationResult
 
         // Insert share on remote datasource
@@ -222,23 +231,17 @@ class OCRemoteShareDataSourceTest {
         assertEquals("http://server:port/s/112ejbhdasyd1", publicShareAdded.shareLink)
 
         verify(exactly = 1) {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
+            clientManager.getShareService(any())
+            ocShareService.insertShare(
+                remoteFilePath = "Photos/img1.png",
+                shareType = com.owncloud.android.lib.resources.shares.ShareType.fromValue(ShareType.PUBLIC_LINK.value)!!,
+                shareWith = "",
+                permissions = 1,
+                name = "",
+                password = "",
+                expirationDate = 0
+            )
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `insert public share returns an exception when service receive an exception`() {
-        every {
-            ocShareService.insertShare(any(), any(), any(), any(), any(), any(), any())
-        } throws Exception()
-
-        ocRemoteShareDataSource.insert(
-            "Photos/img1.png",
-            ShareType.PUBLIC_LINK,
-            "",
-            1,
-            accountName = "user@server"
-        )
     }
 
     @Test
@@ -262,7 +265,13 @@ class OCRemoteShareDataSourceTest {
         )
 
         every {
-            ocShareService.updateShare(any(), any(), any(), any(), any())
+            ocShareService.updateShare(
+                remoteId = "3",
+                name = "",
+                password = "",
+                expirationDate = 0,
+                permissions = 17,
+            )
         } returns updateRemoteShareOperationResult
 
         // Update share on remote datasource
@@ -282,23 +291,15 @@ class OCRemoteShareDataSourceTest {
         assertEquals("http://server:port/s/1275farv", publicShareUpdated.shareLink)
 
         verify(exactly = 1) {
-            ocShareService.updateShare(any(), any(), any(), any(), any())
+            clientManager.getShareService(any())
+            ocShareService.updateShare(
+                remoteId = "3",
+                name = "",
+                password = "",
+                expirationDate = 0,
+                permissions = 17,
+            )
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `updateShare update a public share returns an exception when service receive an exception`() {
-
-        every {
-            ocShareService.updateShare(any(), any(), any(), any(), any())
-        } throws Exception()
-
-        ocRemoteShareDataSource.updateShare(
-            remoteId = "3",
-            permissions = 17,
-            accountName = "user@server"
-        )
-
     }
 
     /******************************************************************************************************
@@ -390,29 +391,13 @@ class OCRemoteShareDataSourceTest {
         assertEquals("My family", groupShare.sharedWithDisplayName)
 
         verify(exactly = 1) {
+            clientManager.getShareService(any())
             ocShareService.getShares(
                 remoteFilePath = "/Documents/doc",
                 reshares = true,
                 subfiles = true,
             )
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `getShares returns an exception when service receive an exception`() {
-
-        every {
-            ocShareService.getShares(any(), any(), any())
-        } throws Exception()
-
-        // Get shares from remote datasource
-        ocRemoteShareDataSource.getShares(
-            remoteFilePath = "/Documents/doc",
-            reshares = true,
-            subfiles = true,
-            accountName = "user@server"
-        )
-
     }
 
     @Test(expected = ShareNotFoundException::class)

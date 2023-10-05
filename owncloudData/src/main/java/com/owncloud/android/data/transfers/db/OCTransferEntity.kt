@@ -46,7 +46,7 @@ data class OCTransferEntity(
     val remotePath: String,
     val accountName: String,
     val fileSize: Long,
-    val status: Int,
+    var status: Int,
     val localBehaviour: Int,
     val forceOverwrite: Boolean,
     val transferEndTimestamp: Long? = null,

@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Aitor Ballesteros Pavón
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -82,7 +83,7 @@ class OCRemoteFileDataSourceTest {
         )
 
     @Before
-    fun init() {
+    fun setUp() {
         every { clientManager.getFileService(any()) } returns ocFileService
 
         ocRemoteFileDataSource = OCRemoteFileDataSource(clientManager)

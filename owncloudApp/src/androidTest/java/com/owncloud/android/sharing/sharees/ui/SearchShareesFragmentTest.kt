@@ -54,7 +54,7 @@ class SearchShareesFragmentTest {
     private val sharesLiveData = MutableLiveData<Event<UIResult<List<OCShare>>>>()
 
     @Before
-    fun init() {
+    fun setUp() {
         every { shareViewModel.shares } returns sharesLiveData
 
         stopKoin()
