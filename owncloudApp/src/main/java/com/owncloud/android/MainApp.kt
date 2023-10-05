@@ -91,16 +91,18 @@ import timber.log.Timber
  * classes
  */
 class MainApp : Application() {
-    private val handlerThreadTag ="OucHandlerThread"
+    private val handlerThreadTag
+        get() = appContext.resources.getString(R.string.ouc_thread_handler_tag)
     lateinit var handlerThread: HandlerThread
         private set
+
     override fun onCreate() {
         super.onCreate()
 
         appContext = applicationContext
 
         startLogsIfEnabled()
-        handlerThread= HandlerThread(handlerThreadTag).apply { start() }
+        handlerThread = HandlerThread(handlerThreadTag).apply { start() }
         DebugInjector.injectDebugTools(appContext)
 
         createNotificationChannels()
