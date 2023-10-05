@@ -80,7 +80,7 @@ class UriUploaderRemake(
         return uriUploaderResultCode
     }
 
-    //UriUtils.getDisplayNameForUri(uri,activity)}
+ 
     private fun getFullTemporaryPath(displayNameForUri: String): String {
         val currentRemotePath = "$uploadPath${displayNameForUri}"
         return FileStorageUtils.getTemporalPath(
