@@ -24,57 +24,67 @@ import kotlin.io.path.createFile
 import kotlin.io.path.createTempDirectory
 import kotlin.io.path.pathString
 
-class CopyAndUploadContentUrisRemake constructor(
+class CopyAndUploadContentUrisRemake(
     private val account: Account,
-    private val spaceId:String,
-    private val uploadPath:String,
+    private val spaceId: String,
+    private val uploadPath: String,
 ) {
 
     private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase by inject(UploadFileFromSystemUseCase::class.java)
-    fun uploadFile(temporaryFilePaths:List<String>,
-        temporaryFilePathInputStreams:List<InputStream>):ResultCode{
-        val filesToUpload= arrayListOf<String>()
+    fun uploadFile(
+        temporaryFilePaths: List<String>,
+        temporaryFilePathInputStreams: List<InputStream>
+    ): ResultCode {
+        val filesToUpload = arrayListOf<String>()
         return try {
             for (it in temporaryFilePaths.zip(temporaryFilePathInputStreams)) {
-                val (filePathInString,filePathInputStream) = it
-                val createdTempFilePath=createTempFileFromContentUrisInputStream(filePathInputStream,
-                    filePathInString)
-                if (createdTempFilePath==null){
+                val (filePathInString, filePathInputStream) = it
+                val createdTempFilePath = createTempFileFromContentUrisInputStream(
+                    filePathInputStream,
+                    filePathInString
+                )
+                if (createdTempFilePath == null) {
                     ResultCode.FILE_NOT_FOUND
-                }else{
+                } else {
                     filesToUpload.add(createdTempFilePath)
                 }
             }
-            val uploadParams=UploadFilesFromSystemUseCase.Params(account.name,
+            val uploadParams = UploadFilesFromSystemUseCase.Params(
+                account.name,
                 filesToUpload,
-                uploadPath,spaceId)
+                uploadPath, spaceId
+            )
             uploadFilesFromSystemUseCase.execute(uploadParams)
             filesToUpload.clear()
             ResultCode.OK
-        }catch (exception:Exception){
-          Timber.e(exception,"Exception while copying files from given input streams")
-          ResultCode.LOCAL_STORAGE_NOT_COPIED
+        } catch (exception: Exception) {
+            Timber.e(exception, "Exception while copying files from given input streams")
+            ResultCode.LOCAL_STORAGE_NOT_COPIED
         }
     }
+
     private fun createTempFileFromContentUrisInputStream(
         inputStream: InputStream,
-        temporaryFilePathInString:String):String?{
-        val temporaryFilePath=  File(temporaryFilePathInString)
-        val cacheFileTemporaryDir= createTempDirectory(temporaryFilePath.parentFile?.absolutePath)
-        val cacheFileTemporaryFile=kotlin.io.path.createTempFile(directory =cacheFileTemporaryDir,
-            prefix = temporaryFilePath.absolutePath)
+        temporaryFilePathInString: String
+    ): String? {
+        val temporaryFilePath = File(temporaryFilePathInString)
+        val cacheFileTemporaryDir = createTempDirectory(temporaryFilePath.parentFile?.absolutePath)
+        val cacheFileTemporaryFile = kotlin.io.path.createTempFile(
+            directory = cacheFileTemporaryDir,
+            prefix = temporaryFilePath.absolutePath
+        )
         return try {
-            cacheFileTemporaryFile.bufferedWriter().use {writer->
+            cacheFileTemporaryFile.bufferedWriter().use { writer ->
                 val buffer = CharArray(4096)
-                inputStream.bufferedReader().use {reader->
+                inputStream.bufferedReader().use { reader ->
                     val count = reader.read(buffer)
-                    while (count>0){
+                    while (count > 0) {
                         writer.write(count)
                     }
                 }
             }
             return cacheFileTemporaryFile.pathString
-        }catch (ex:IOException){
+        } catch (ex: IOException) {
             Timber.e("Error While Creating Temp File $ex")
             null
         }
