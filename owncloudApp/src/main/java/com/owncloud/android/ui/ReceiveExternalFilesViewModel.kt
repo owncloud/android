@@ -62,7 +62,7 @@ class ReceiveExternalFilesViewModel(
 
     fun getPersonalSpaceForAccount(accountName: String) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val result = getPersonalSpaceForAccountUseCase.execute(
+            val result = getPersonalSpaceForAccountUseCase(
                GetPersonalSpaceForAccountUseCase.Params(
                     accountName = accountName
                 )
