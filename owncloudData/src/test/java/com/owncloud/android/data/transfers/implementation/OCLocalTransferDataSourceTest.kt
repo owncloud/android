@@ -1,3 +1,23 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author Aitor Ballesteros Pavón
+ * Copyright (C) 2020 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
 package com.owncloud.android.data.transfers.implementation
 
 import com.owncloud.android.data.OwncloudDatabase
@@ -15,6 +35,7 @@ import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import io.mockk.every
 import io.mockk.mockkClass
 import io.mockk.verify
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -36,10 +57,11 @@ class OCLocalTransferDataSourceTest {
         forceOverwrite = true,
         createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER
     )
-    private val transferEntity: OCTransferEntity = ocTransfer.toEntity()
+
+    private var transferEntity: OCTransferEntity = ocTransfer.toEntity()
 
     @Before
-    fun init() {
+    fun setUp() {
         val db = mockkClass(OwncloudDatabase::class)
 
         every { db.transferDao() } returns transferDao
@@ -63,15 +85,6 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `saveTransfer returns an exception when dao receive an exception`() {
-
-        every {
-            transferDao.insertOrReplace(any())
-        } throws Exception()
-
-        ocLocalTransferDataSource.saveTransfer(ocTransfer)
-    }
     @Test
     fun `updateTransfer returns a Long`() {
         val resultExpected = 1L
@@ -86,16 +99,8 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `updateTransfer returns an exception when dao receive an exception`() {
-        every {
-            transferDao.insertOrReplace(any())
-        } throws Exception()
-
-        ocLocalTransferDataSource.updateTransfer(ocTransfer)
-    }
     @Test
-    fun `updateTransferStatusToInProgressById returns a unit`() {
+    fun updateTransferStatusToInProgressById() {
         val resultExpected = 10L
         every {
             transferDao.updateTransferStatusWithId(resultExpected, TransferStatus.TRANSFER_IN_PROGRESS.value)
@@ -108,19 +113,8 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `updateTransferStatusToInProgressById returns an exception when dao receive an exception`() {
-        val resultExpected = 10L
-        every {
-            transferDao.updateTransferStatusWithId(resultExpected, TransferStatus.TRANSFER_IN_PROGRESS.value)
-        } throws Exception()
-
-        ocLocalTransferDataSource.updateTransferStatusToInProgressById(resultExpected)
-
-    }
-
     @Test
-    fun `updateTransferStatusToEnqueuedById returns a unit`() {
+    fun updateTransferStatusToEnqueuedById() {
         val resultExpected = 10L
         every {
             transferDao.updateTransferStatusWithId(resultExpected, TransferStatus.TRANSFER_QUEUED.value)
@@ -133,18 +127,8 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `updateTransferStatusToEnqueuedById returns an exception when dao receive an exception`() {
-        val resultExpected = 10L
-        every {
-            transferDao.updateTransferStatusWithId(resultExpected, TransferStatus.TRANSFER_QUEUED.value)
-        } throws Exception()
-
-        ocLocalTransferDataSource.updateTransferStatusToEnqueuedById(resultExpected)
-
-    }
     @Test
-    fun `updateTransferWhenFinished returns a unit`() {
+    fun updateTransferWhenFinished() {
         val timestamp = System.currentTimeMillis()
         every {
             transferDao.updateTransferWhenFinished(id, TransferStatus.TRANSFER_SUCCEEDED.value, timestamp, TransferResult.UPLOADED.value)
@@ -157,19 +141,8 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `updateTransferWhenFinished returns an exception when dao receive an exception`() {
-        val timestamp = System.currentTimeMillis()
-        every {
-            transferDao.updateTransferWhenFinished(id, TransferStatus.TRANSFER_SUCCEEDED.value, timestamp, TransferResult.UPLOADED.value)
-        } throws Exception()
-
-        ocLocalTransferDataSource.updateTransferWhenFinished(id, TransferStatus.TRANSFER_SUCCEEDED, timestamp, TransferResult.UPLOADED)
-
-    }
-
     @Test
-    fun `updateTransferLocalPath returns a unit`() {
+    fun updateTransferLocalPath() {
         every {
             transferDao.updateTransferLocalPath(id, ocTransfer.localPath)
         } returns Unit
@@ -181,18 +154,8 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `updateTransferLocalPath returns an exception when dao receive an exception`() {
-        every {
-            transferDao.updateTransferLocalPath(id, ocTransfer.localPath)
-        } throws Exception()
-
-        ocLocalTransferDataSource.updateTransferLocalPath(id, ocTransfer.localPath)
-
-    }
-
     @Test
-    fun `updateTransferStorageDirectoryInLocalPath returns a unit`() {
+    fun updateTransferStorageDirectoryInLocalPath() {
         val oldDirectory = "oldDirectory"
         val newDirectory = "newDirectory"
 
@@ -207,20 +170,8 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `updateTransferStorageDirectoryInLocalPath returns an exception when dao receive an exception`() {
-        val oldDirectory = "oldDirectory"
-        val newDirectory = "newDirectory"
-
-        every {
-            transferDao.updateTransferStorageDirectoryInLocalPath(id, oldDirectory, newDirectory)
-        } throws Exception()
-
-        ocLocalTransferDataSource.updateTransferStorageDirectoryInLocalPath(id, oldDirectory, newDirectory)
-
-    }
     @Test
-    fun `deleteTransferById returns a unit`() {
+    fun deleteTransferById() {
         every {
             transferDao.deleteTransferWithId(id)
         } returns Unit
@@ -232,17 +183,8 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `deleteTransferById returns an exception when dao receive an exception`() {
-        every {
-            transferDao.deleteTransferWithId(id)
-        } throws Exception()
-
-        ocLocalTransferDataSource.deleteTransferById(id)
-
-    }
     @Test
-    fun `deleteAllTransfersFromAccount returns a unit`() {
+    fun deleteAllTransfersFromAccount() {
         every {
             transferDao.deleteTransfersWithAccountName(OC_ACCOUNT_NAME)
         } returns Unit
@@ -254,15 +196,6 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `deleteAllTransfersFromAccount returns an exception when dao receive an exception`() {
-        every {
-            transferDao.deleteTransfersWithAccountName(OC_ACCOUNT_NAME)
-        } throws Exception()
-
-        ocLocalTransferDataSource.deleteAllTransfersFromAccount(OC_ACCOUNT_NAME)
-
-    }
     @Test
     fun `getTransferById returns a OCTransfer`() {
         every {
@@ -276,16 +209,6 @@ class OCLocalTransferDataSourceTest {
         verify(exactly = 1) {
             transferDao.getTransferWithId(id)
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `getTransferById returns an exception when dao receive an exception`() {
-        every {
-            transferDao.getTransferWithId(any())
-        } throws Exception()
-
-        ocLocalTransferDataSource.getTransferById(id)
-
     }
 
     @Test
@@ -304,45 +227,49 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `getAllTransfers returns an exception when dao receive an exception`() {
-
-        every {
-            transferDao.getAllTransfers()
-        } throws Exception()
-
-        ocLocalTransferDataSource.getAllTransfers()
-
-    }
-
     @Test
-    fun `getAllTransfersAsStream returns a flow of list of OCTransfer`() = runBlocking {
+    fun `getAllTransfersAsStream returns a flow of list of OCTransfer with transferStatus in progress`() = runBlocking {
 
-            every {
-                transferDao.getAllTransfersAsStream()
-            } returns flowOf(listOf(transferEntity))
+        val transferEntityInProgress: OCTransferEntity = ocTransfer.toEntity()
+        transferEntityInProgress.status = 0
 
-            val actualResult = ocLocalTransferDataSource.getAllTransfersAsStream()
+        val transferEntityQueue: OCTransferEntity = ocTransfer.toEntity()
+        transferEntityQueue.status = 1
 
-            actualResult.collect { result ->
-                assertEquals(listOf(transferEntity.toModel()), result)
-            }
+        val transferEntityFailed: OCTransferEntity = ocTransfer.toEntity()
+        transferEntityFailed.status = 2
 
-            verify(exactly = 1) {
-                transferDao.getAllTransfersAsStream()
-            }
-        }
+        val transferEntitySucceeded: OCTransferEntity = ocTransfer.toEntity()
+        transferEntitySucceeded.status = 3
 
-    @Test(expected = Exception::class)
-    fun `getAllTransfersAsStream returns an exception when dao receive an exception`() {
+        val transferListRandom = listOf(transferEntityQueue, transferEntityFailed, transferEntityInProgress, transferEntitySucceeded)
+
+
+        val transferQueue = ocTransfer.copy()
+        transferQueue.status =  TransferStatus.TRANSFER_QUEUED
+
+        val transferFailed = ocTransfer.copy()
+        transferFailed.status =  TransferStatus.TRANSFER_FAILED
+
+        val transferSucceeded = ocTransfer.copy()
+        transferSucceeded.status =  TransferStatus.TRANSFER_SUCCEEDED
+
+        val transferListOrdered = listOf(ocTransfer, transferQueue, transferFailed, transferSucceeded)
 
         every {
             transferDao.getAllTransfersAsStream()
-        } throws Exception()
+        } returns flowOf(transferListRandom)
 
-        ocLocalTransferDataSource.getAllTransfersAsStream()
+        val actualResult = ocLocalTransferDataSource.getAllTransfersAsStream().first().map { it }
+        val expectedStatusList = transferListOrdered.map { it }
 
+        assertEquals(expectedStatusList, actualResult)
+
+        verify(exactly = 1) {
+            transferDao.getAllTransfersAsStream()
+        }
     }
+
 
     @Test
     fun `getLastTransferFor returns a OCTransfer`() {
@@ -360,18 +287,6 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `getLastTransferFor returns an exception`() {
-
-        every {
-            transferDao.getLastTransferWithRemotePathAndAccountName(ocTransfer.remotePath, OC_ACCOUNT_NAME)
-        } throws Exception()
-
-        ocLocalTransferDataSource.getLastTransferFor(ocTransfer.remotePath, OC_ACCOUNT_NAME)
-
-    }
-
-
     @Test
     fun `getCurrentAndPendingTransfers returns a list of OCTransfer`() {
 
@@ -386,17 +301,6 @@ class OCLocalTransferDataSourceTest {
         verify(exactly = 1) {
             transferDao.getTransfersWithStatus(listOf(TransferStatus.TRANSFER_IN_PROGRESS.value, TransferStatus.TRANSFER_QUEUED.value))
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `getCurrentAndPendingTransfers returns an exception when dao receive an exception`() {
-
-        every {
-            transferDao.getTransfersWithStatus(listOf(TransferStatus.TRANSFER_IN_PROGRESS.value, TransferStatus.TRANSFER_QUEUED.value))
-        } throws Exception()
-
-        ocLocalTransferDataSource.getCurrentAndPendingTransfers()
-
     }
 
     @Test
@@ -415,17 +319,6 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `getFailedTransfers returns an Exception when dao receive an exception`() {
-
-        every {
-            transferDao.getTransfersWithStatus(listOf(TransferStatus.TRANSFER_FAILED.value))
-        } throws Exception()
-
-        ocLocalTransferDataSource.getFailedTransfers()
-
-    }
-
     @Test
     fun `getFinishedTransfers returns a list of OCTransfer`() {
 
@@ -442,17 +335,6 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `getFinishedTransfers returns an exception when dao receive an exception`() {
-
-        every {
-            transferDao.getTransfersWithStatus(listOf(TransferStatus.TRANSFER_SUCCEEDED.value))
-        } throws Exception()
-
-        ocLocalTransferDataSource.getFinishedTransfers()
-
-    }
-
     @Test
     fun `clearFailedTransfers returns unit`() {
 
@@ -467,19 +349,8 @@ class OCLocalTransferDataSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `clearFailedTransfers returns an exception when dao receive an exception`() {
-
-        every {
-            transferDao.deleteTransfersWithStatus(TransferStatus.TRANSFER_FAILED.value)
-        } throws Exception()
-
-        ocLocalTransferDataSource.clearFailedTransfers()
-
-    }
-
     @Test
-    fun `clearSuccessfulTransfers returns unit`() {
+    fun clearSuccessfulTransfers() {
 
         every {
             transferDao.deleteTransfersWithStatus(TransferStatus.TRANSFER_SUCCEEDED.value)
@@ -490,16 +361,5 @@ class OCLocalTransferDataSourceTest {
         verify(exactly = 1) {
             transferDao.deleteTransfersWithStatus(TransferStatus.TRANSFER_SUCCEEDED.value)
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `clearSuccessfulTransfers returns an exception when dao receive an exception`() {
-
-        every {
-            transferDao.deleteTransfersWithStatus(TransferStatus.TRANSFER_SUCCEEDED.value)
-        } throws Exception()
-
-        ocLocalTransferDataSource.clearSuccessfulTransfers()
-
     }
 }

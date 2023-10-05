@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Aitor Ballesteros Pavón
  * Copyright (C) 2020 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -40,6 +41,7 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -65,7 +67,7 @@ class OCLocalFileDataSourceTest {
     )
 
     @Before
-    fun init() {
+    fun setUp() {
         dao = spyk()
         localDataSource = OCLocalFileDataSource(dao)
     }
@@ -103,11 +105,9 @@ class OCLocalFileDataSourceTest {
     fun `getFileByIdAsFlow returns a flow of OCFile`() = runTest {
         every { dao.getFileByIdAsFlow(any()) } returns flowOf(DUMMY_FILE_ENTITY)
 
-        val result = localDataSource.getFileByIdAsFlow(OC_FILE.id!!)
+        val resultActual = localDataSource.getFileByIdAsFlow(OC_FILE.id!!).first()
 
-        result.collect { result ->
-            assertEquals(OC_FILE, result)
-        }
+        assertEquals(OC_FILE, resultActual)
 
         verify(exactly = 1) { dao.getFileByIdAsFlow(OC_FILE.id!!) }
     }
@@ -116,11 +116,9 @@ class OCLocalFileDataSourceTest {
     fun `getFileByIdAsFlow returns null`() = runTest {
         every { dao.getFileByIdAsFlow(any()) } returns flowOf(null)
 
-        val result = localDataSource.getFileByIdAsFlow(DUMMY_FILE_ENTITY.id)
+        val result = localDataSource.getFileByIdAsFlow(DUMMY_FILE_ENTITY.id).first()
 
-        result.collect { result ->
-            assertNull(result)
-        }
+        assertNull(result)
 
         verify(exactly = 1) { dao.getFileByIdAsFlow(DUMMY_FILE_ENTITY.id) }
     }
@@ -137,11 +135,9 @@ class OCLocalFileDataSourceTest {
 
         every { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(ocFileAndFileSync)
 
-        val result = localDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
+        val result = localDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!).first()
 
-        result.collect { emittedFileWithSyncInfo ->
-            assertEquals(OC_FILE_WITH_SYNC_INFO_AND_SPACE, emittedFileWithSyncInfo)
-        }
+        assertEquals(OC_FILE_WITH_SYNC_INFO_AND_SPACE, result)
 
         verify(exactly = 1) { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }
     }
@@ -151,11 +147,9 @@ class OCLocalFileDataSourceTest {
 
         every { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(null)
 
-        val result = localDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
+        val result = localDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!).first()
 
-        result.collect { emittedFileWithSyncInfo ->
-            assertNull(emittedFileWithSyncInfo)
-        }
+        assertNull(result)
 
         verify(exactly = 1) { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }
     }
@@ -165,11 +159,9 @@ class OCLocalFileDataSourceTest {
 
         every { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } throws Exception()
 
-        val result = localDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
+        val result = localDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!).first()
 
-        result.collect { emittedFileWithSyncInfo ->
-            assertEquals(OC_FILE_WITH_SYNC_INFO_AND_SPACE, emittedFileWithSyncInfo)
-        }
+        assertEquals(OC_FILE_WITH_SYNC_INFO_AND_SPACE, result)
 
         verify(exactly = 1) { dao.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }
     }
@@ -349,11 +341,9 @@ class OCLocalFileDataSourceTest {
 
         every { dao.getFolderContentWithSyncInfoAsFlow(any()) } returns flowOf(listOf(ocFileAndFileSync))
 
-        val result = localDataSource.getFolderContentWithSyncInfoAsFlow(OC_FILE.id!!)
+        val result = localDataSource.getFolderContentWithSyncInfoAsFlow(OC_FILE.id!!).first()
 
-        result.collect { result ->
-            assertEquals(listOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE), result)
-        }
+        assertEquals(listOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE), result)
 
         verify(exactly = 1) {
             dao.getFolderContentWithSyncInfoAsFlow(OC_FILE.id!!)
@@ -393,11 +383,9 @@ class OCLocalFileDataSourceTest {
     fun `getSharedByLinkWithSyncInfoForAccountAsFlow returns a flow of list of OCFileWithSyncInfo`() = runTest {
         every { dao.getFilesWithSyncInfoSharedByLinkAsFlow(any()) } returns flowOf(listOf(ocFileAndFileSync))
 
-        val result = localDataSource.getSharedByLinkWithSyncInfoForAccountAsFlow(DUMMY_FILE_ENTITY.owner)
+        val result = localDataSource.getSharedByLinkWithSyncInfoForAccountAsFlow(DUMMY_FILE_ENTITY.owner).first()
 
-        result.collect { result ->
-            assertEquals(listOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE), result)
-        }
+        assertEquals(listOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE), result)
 
         verify(exactly = 1) {
             dao.getFilesWithSyncInfoSharedByLinkAsFlow(DUMMY_FILE_ENTITY.owner)
@@ -417,11 +405,9 @@ class OCLocalFileDataSourceTest {
     fun `getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow returns a flow of list of OCFileWithSyncInfo`() = runTest {
         every { dao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(any()) } returns flowOf(listOf(ocFileAndFileSync))
 
-        val result = localDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(DUMMY_FILE_ENTITY.owner)
+        val result = localDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(DUMMY_FILE_ENTITY.owner).first()
 
-        result.collect { result ->
-            assertEquals(listOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE), result)
-        }
+        assertEquals(listOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE), result)
 
         verify(exactly = 1) {
             dao.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(DUMMY_FILE_ENTITY.owner)
