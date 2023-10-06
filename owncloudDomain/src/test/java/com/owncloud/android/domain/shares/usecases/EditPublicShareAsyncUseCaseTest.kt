@@ -48,7 +48,7 @@ class EditPublicShareAsyncUseCaseTest {
             repository.updatePublicShare(any(), any(), any(), any(), any(), any())
         } returns Unit
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
@@ -71,7 +71,7 @@ class EditPublicShareAsyncUseCaseTest {
             repository.updatePublicShare(any(), any(), any(), any(), any(), any())
         } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

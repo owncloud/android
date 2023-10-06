@@ -23,7 +23,7 @@ class GetFileWithSyncInfoByIdUseCaseTest {
     fun `get file with sync by id returns OCFileWithSyncInfo when no error`() = runTest {
         every { repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) } returns flowOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE)
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         useCaseResult.collect { result ->
             Assert.assertEquals(OC_FILE_WITH_SYNC_INFO_AND_SPACE, result)
@@ -34,7 +34,7 @@ class GetFileWithSyncInfoByIdUseCaseTest {
 
     @Test
     fun `get file with sync by id returns true when repository is null`() = runTest {
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         every { repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) } returns flowOf(null)
         Assert.assertEquals(null, useCaseResult)
@@ -46,7 +46,7 @@ class GetFileWithSyncInfoByIdUseCaseTest {
     fun `get file with sync by id returns an exception`() = runTest {
         every { repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) } throws Exception()
 
-        useCase.execute(useCaseParams)
+        useCase(useCaseParams)
 
         verify(exactly = 1) {
             repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId)

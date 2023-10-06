@@ -110,7 +110,7 @@ class UploadFilesFromSystemUseCase(
             uploadPath = uploadPath,
             uploadIdInStorageManager = uploadIdInStorageManager
         )
-        uploadFileFromSystemUseCase.execute(uploadFileParams)
+        uploadFileFromSystemUseCase(uploadFileParams)
     }
 
     data class Params(

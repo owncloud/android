@@ -52,16 +52,16 @@ class RemoveAccountUseCase(
 
     override fun run(params: Params) {
         // Reset camera uploads if they were enabled for the removed account
-        val cameraUploadsConfiguration = getCameraUploadsConfigurationUseCase.execute(Unit)
+        val cameraUploadsConfiguration = getCameraUploadsConfigurationUseCase(Unit)
         if (params.accountName == cameraUploadsConfiguration.getDataOrNull()?.pictureUploadsConfiguration?.accountName) {
-            resetPictureUploadsUseCase.execute(Unit)
+            resetPictureUploadsUseCase(Unit)
         }
         if (params.accountName == cameraUploadsConfiguration.getDataOrNull()?.videoUploadsConfiguration?.accountName) {
-            resetVideoUploadsUseCase.execute(Unit)
+            resetVideoUploadsUseCase(Unit)
         }
 
         // Cancel transfers of the removed account
-        cancelTransfersFromAccountUseCase.execute(
+        cancelTransfersFromAccountUseCase(
             CancelTransfersFromAccountUseCase.Params(accountName = params.accountName)
         )
 

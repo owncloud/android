@@ -1057,7 +1057,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                                 ) {
                                     val localFile = File(upload.localPath)
                                     val uploadFileFromSystemUseCase = UploadFileFromSystemUseCase(WorkManager.getInstance(context!!))
-                                    uploadFileFromSystemUseCase.execute(
+                                    uploadFileFromSystemUseCase(
                                         UploadFileFromSystemUseCase.Params(
                                             accountName = upload.accountName,
                                             localPath = upload.localPath,

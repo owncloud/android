@@ -264,7 +264,7 @@ public class ThumbnailsCacheManager {
 
             if (ocFile.getSpaceId() != null) {
                 Lazy<GetWebDavUrlForSpaceUseCase> getWebDavUrlForSpaceUseCaseLazy = inject(GetWebDavUrlForSpaceUseCase.class);
-                baseUrl = getWebDavUrlForSpaceUseCaseLazy.getValue().execute(
+                baseUrl = getWebDavUrlForSpaceUseCaseLazy.getValue().invoke(
                         new GetWebDavUrlForSpaceUseCase.Params(ocFile.getOwner(), ocFile.getSpaceId())
                 );
 
@@ -318,7 +318,7 @@ public class ThumbnailsCacheManager {
                         }
                         if (status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_NOT_FOUND) {
                             @NotNull Lazy<DisableThumbnailsForFileUseCase> disableThumbnailsForFileUseCaseLazy = inject(DisableThumbnailsForFileUseCase.class);
-                            disableThumbnailsForFileUseCaseLazy.getValue().execute(new DisableThumbnailsForFileUseCase.Params(file.getId()));
+                            disableThumbnailsForFileUseCaseLazy.getValue().invoke(new DisableThumbnailsForFileUseCase.Params(file.getId()));
                         }
                     } catch (Exception e) {
                         Timber.e(e);
