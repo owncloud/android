@@ -137,6 +137,7 @@
   <string name="setup_btn_login">Logi sisse</string>
   <string name="uploader_btn_upload_text">Lae üles</string>
   <string name="uploader_top_message">Vali üleslaadimiste kaust</string>
+  <string name="choose_upload_space">Vali üleslaadimise ruum</string>
   <string name="uploader_wrn_no_account_title">Kontot ei leitud</string>
   <string name="uploader_wrn_no_account_text">Sellel seadmel ei ole %1$s kontosid. Palun loo alustuseks konto.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Seadista</string>
