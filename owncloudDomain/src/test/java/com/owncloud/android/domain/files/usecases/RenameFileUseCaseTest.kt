@@ -37,7 +37,7 @@ class RenameFileUseCaseTest {
     fun `rename file - ok`() {
         every { repository.renameFile(any(), any()) } returns Unit
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
@@ -49,7 +49,7 @@ class RenameFileUseCaseTest {
     fun `rename file - ko - other exception`() {
         every { repository.renameFile(any(), any()) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

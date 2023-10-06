@@ -46,7 +46,7 @@ class GetSharedByLinkForAccountAsStreamUseCaseTest {
     fun `get files shared by link - ok`() = runTest {
         every { repository.getSharedByLinkWithSyncInfoForAccountAsFlow(useCaseParams.owner) } returns flowOf(OC_FILES_WITH_SYNC_INFO)
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
         val listEmittedByFlow: List<OCFileWithSyncInfo> = useCaseResult.first()
 
         Assert.assertTrue(listEmittedByFlow.containsAll(OC_FILES_WITH_SYNC_INFO))
@@ -58,7 +58,7 @@ class GetSharedByLinkForAccountAsStreamUseCaseTest {
     fun `get files shared by link - ok - empty list`() = runTest {
         every { repository.getSharedByLinkWithSyncInfoForAccountAsFlow(useCaseParams.owner) } returns flowOf(OC_FILES_WITH_SYNC_INFO_EMPTY)
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
         val listEmittedByFlow: List<OCFileWithSyncInfo> = useCaseResult.first()
 
         Assert.assertTrue(listEmittedByFlow.isEmpty())

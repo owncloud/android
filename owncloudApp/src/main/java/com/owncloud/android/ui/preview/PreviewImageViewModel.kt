@@ -56,7 +56,7 @@ class PreviewImageViewModel(
 
     fun startListeningToDownloadsFromAccount(account: Account) {
         _downloads.addSource(
-            getLiveDataForFinishedDownloadsFromAccountUseCase.execute(GetLiveDataForFinishedDownloadsFromAccountUseCase.Params(account))
+            getLiveDataForFinishedDownloadsFromAccountUseCase(GetLiveDataForFinishedDownloadsFromAccountUseCase.Params(account))
         ) { listOfWorkInfo ->
             viewModelScope.launch(coroutinesDispatcherProvider.io) {
                 val finalList = getListOfPairs(listOfWorkInfo)
@@ -70,7 +70,7 @@ class PreviewImageViewModel(
         val shareWithUsersAllowed = contextProvider.getBoolean(R.bool.share_with_users_feature)
         val sendAllowed = contextProvider.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val result = filterFileMenuOptionsUseCase.execute(
+            val result = filterFileMenuOptionsUseCase(
                 FilterFileMenuOptionsUseCase.Params(
                     files = listOf(file),
                     accountName = accountName,
@@ -105,7 +105,7 @@ class PreviewImageViewModel(
 
         listOfWorkInfo.forEach { workInfo ->
             val id: Long = workInfo.tags.first { it.toLongOrNull() != null }.toLong()
-            val useCaseResult = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId = id))
+            val useCaseResult = getFileByIdUseCase(GetFileByIdUseCase.Params(fileId = id))
             val file = useCaseResult.getDataOrNull()
             if (file != null) {
                 finalList.add(Pair(file, workInfo))

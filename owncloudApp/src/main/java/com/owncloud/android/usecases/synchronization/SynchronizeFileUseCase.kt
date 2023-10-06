@@ -82,7 +82,7 @@ class SynchronizeFileUseCase(
                 // 5.1 File has changed locally and remotely. We got a conflict, save the conflict.
                 Timber.i("File ${fileToSynchronize.fileName} has changed locally and remotely. We got a conflict with etag: ${serverFile.etag}")
                 if (fileToSynchronize.etagInConflict == null) {
-                    saveConflictUseCase.execute(
+                    saveConflictUseCase(
                         SaveConflictUseCase.Params(
                             fileId = fileToSynchronize.id!!,
                             eTagInConflict = serverFile.etag!!
@@ -109,7 +109,7 @@ class SynchronizeFileUseCase(
     }
 
     private fun requestForDownload(accountName: String, ocFile: OCFile): UUID? {
-        return downloadFileUseCase.execute(
+        return downloadFileUseCase(
             DownloadFileUseCase.Params(
                 accountName = accountName,
                 file = ocFile
@@ -118,7 +118,7 @@ class SynchronizeFileUseCase(
     }
 
     private fun requestForUpload(accountName: String, ocFile: OCFile, etagInConflict: String): UUID? {
-        return uploadFileInConflictUseCase.execute(
+        return uploadFileInConflictUseCase(
             UploadFileInConflictUseCase.Params(
                 accountName = accountName,
                 localPath = ocFile.storagePath!!,
