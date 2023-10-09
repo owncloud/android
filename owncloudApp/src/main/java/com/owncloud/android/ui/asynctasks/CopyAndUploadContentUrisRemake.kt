@@ -1,36 +1,22 @@
 package com.owncloud.android.ui.asynctasks
 
 import android.accounts.Account
-import android.content.Context
-import android.content.res.AssetFileDescriptor
-import android.net.Uri
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
-import com.owncloud.android.usecases.transfers.uploads.UploadFileFromSystemUseCase
 import com.owncloud.android.usecases.transfers.uploads.UploadFilesFromSystemUseCase
-import com.owncloud.android.utils.UriUtils
-import com.owncloud.android.utils.UriUtilsKt
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
-import java.nio.file.Files
-import java.nio.file.Paths
-import kotlin.io.path.Path
-import kotlin.io.path.bufferedWriter
-import kotlin.io.path.createFile
-import kotlin.io.path.createTempDirectory
-import kotlin.io.path.pathString
 
 class CopyAndUploadContentUrisRemake(
     private val account: Account,
-    private val spaceId: String,
+    private val spaceId: String?,
     private val uploadPath: String,
 ) {
 
-    private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase by inject(UploadFileFromSystemUseCase::class.java)
+    private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase by inject(UploadFilesFromSystemUseCase::class.java)
     fun uploadFile(
         temporaryFilePaths: List<String>,
         temporaryFilePathInputStreams: List<InputStream>
@@ -68,24 +54,27 @@ class CopyAndUploadContentUrisRemake(
         temporaryFilePathInString: String
     ): String? {
         val temporaryFilePath = File(temporaryFilePathInString)
-        val cacheFileTemporaryDir = createTempDirectory(temporaryFilePath.parentFile?.absolutePath)
-        val cacheFileTemporaryFile = kotlin.io.path.createTempFile(
-            directory = cacheFileTemporaryDir,
-            prefix = temporaryFilePath.absolutePath
-        )
+        temporaryFilePath.parentFile?.apply {
+            if (!exists())
+                mkdirs()
+        }
+        temporaryFilePath.createNewFile()
         return try {
-            cacheFileTemporaryFile.bufferedWriter().use { writer ->
-                val buffer = CharArray(4096)
-                inputStream.bufferedReader().use { reader ->
-                    val count = reader.read(buffer)
-                    while (count > 0) {
-                        writer.write(count)
+            FileOutputStream(temporaryFilePathInString).buffered().use { writer ->
+                inputStream.buffered().use { is_ ->
+                    val buffer = ByteArray(4096)
+                    var bytesConsumed: Int
+                    while (is_.read(buffer).also { bytesConsumed = it } != -1) {
+                        writer.write(buffer, 0, bytesConsumed)
                     }
                 }
             }
-            return cacheFileTemporaryFile.pathString
+            return temporaryFilePathInString
         } catch (ex: IOException) {
             Timber.e("Error While Creating Temp File $ex")
+            if (temporaryFilePath.exists()) {
+                temporaryFilePath.delete()
+            }
             null
         }
     }
