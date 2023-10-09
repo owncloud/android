@@ -34,6 +34,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -128,7 +129,15 @@ public class ReceiveExternalFilesActivity extends FileActivity
         CreateFolderDialogFragment.CreateFolderListener {
 
     private static final String FTAG_ERROR_FRAGMENT = "ERROR_FRAGMENT";
-
+    private final static int DIALOG_NO_ACCOUNT = 0;
+    private final static int DIALOG_MULTIPLE_ACCOUNT = 1;
+    private final static int REQUEST_CODE__SETUP_ACCOUNT = REQUEST_CODE__LAST_SHARED + 1;
+    private final static int MAX_FILENAME_LENGTH = 223;
+    private final static String KEY_PARENTS = "PARENTS";
+    private final static String KEY_FILE = "FILE";
+    private final static String KEY_ACCOUNT_SELECTED = "ACCOUNT_SELECTED";
+    private final static String KEY_ACCOUNT_SELECTION_SHOWING = "ACCOUNT_SELECTION_SHOWING";
+    private static final String DIALOG_WAIT_COPY_FILE = "DIALOG_WAIT_COPY_FILE";
     private AccountManager mAccountManager;
     private Stack<String> mParents;
     private ArrayList<Uri> mStreamsToUpload = new ArrayList<>();
@@ -137,12 +146,10 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private String mPersonalSpaceId;
     private SortOptionsView mSortOptionsView;
     private SearchView mSearchView;
-
     private View mEmptyListView;
     private ImageView mEmptyListImage;
     private TextView mEmptyListTitle;
     private Looper handlerThreadLooper;
-
     // this is inited lazily, when an account is selected. If no account is selected but an instance of this would
     // be crated it would result in an null pointer exception.
     private ReceiveExternalFilesAdapter mAdapter = null;
@@ -150,20 +157,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private boolean mSyncInProgress = false;
     private boolean mAccountSelected;
     private boolean mAccountSelectionShowing;
-
-    private final static int DIALOG_NO_ACCOUNT = 0;
-    private final static int DIALOG_MULTIPLE_ACCOUNT = 1;
-
-    private final static int REQUEST_CODE__SETUP_ACCOUNT = REQUEST_CODE__LAST_SHARED + 1;
-    private final static int MAX_FILENAME_LENGTH = 223;
-
-    private final static String KEY_PARENTS = "PARENTS";
-    private final static String KEY_FILE = "FILE";
-    private final static String KEY_ACCOUNT_SELECTED = "ACCOUNT_SELECTED";
-    private final static String KEY_ACCOUNT_SELECTION_SHOWING = "ACCOUNT_SELECTION_SHOWING";
-
-    private static final String DIALOG_WAIT_COPY_FILE = "DIALOG_WAIT_COPY_FILE";
-
+    private Handler mainThreadHandler;
     Pattern pattern = Pattern.compile("[/\\\\]");
 
     private ReceiveExternalFilesViewModel mReceiveExternalFilesViewModel;
@@ -185,7 +179,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
             mAccountSelected = savedInstanceState.getBoolean(KEY_ACCOUNT_SELECTED);
             mAccountSelectionShowing = savedInstanceState.getBoolean(KEY_ACCOUNT_SELECTION_SHOWING);
         }
-
         super.onCreate(savedInstanceState);
         MainApp application = (MainApp) this.getApplication();
 
@@ -193,7 +186,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         if (mAccountSelected) {
             setAccount(savedInstanceState.getParcelable(FileActivity.EXTRA_ACCOUNT));
         }
-
+        mainThreadHandler = new Handler(Looper.getMainLooper());
         //init ui
         setContentView(R.layout.uploader_layout);
 
@@ -568,6 +561,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 finish();
                 return;
             }
+
             if (streamToUpload.contains("/data") &&
                     streamToUpload.contains(getPackageName()) &&
                     !streamToUpload.contains(getCacheDir().getPath())
@@ -593,15 +587,15 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     public void uploadFiles() {
         String spaceId = mFile.getSpaceId();
-        if (spaceId==null) return; // return if the spaceId is null
         UriUploaderRemake uriUploader = new UriUploaderRemake(mStreamsToUpload, getAccount(),
                 spaceId,
-                mUploadPath, true,
+                mUploadPath,
+                true,
                 handlerThreadLooper);
 
         UriUploader.UriUploaderResultCode resultCode = uriUploader.uploadUris((uri -> UriUtils.getDisplayNameForUri(uri, this)),
                 (() -> {
-                    showLoadingDialog(R.string.wait_for_tmp_copy_from_private_storage);
+                    mainThreadHandler.post(() -> showLoadingDialog(R.string.wait_for_tmp_copy_from_private_storage));
                     return null;
                 }), (this::getInputStreamFromUri));
 
