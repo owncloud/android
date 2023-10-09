@@ -2,7 +2,8 @@
  * ownCloud Android client application
  *
  * @author Aitor Ballesteros Pavón
- * Copyright (C) 2020 ownCloud GmbH.
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,7 +21,6 @@
 package com.owncloud.android.data.appRegistry.datasources.implementation
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.owncloud.android.data.OwncloudDatabase
 import com.owncloud.android.data.appregistry.datasources.implementation.OCLocalAppRegistryDataSource
 import com.owncloud.android.data.appregistry.db.AppRegistryDao
 import com.owncloud.android.data.appregistry.db.AppRegistryEntity
@@ -29,13 +29,14 @@ import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_APP_REGISTRY_MIMETYPE
 import io.mockk.every
-import io.mockk.mockkClass
+import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -43,7 +44,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class OCLocalAppRegistryDataSourceTest {
     private lateinit var ocLocalAppRegistryDataSource: OCLocalAppRegistryDataSource
-    private val appRegistryDao = mockkClass(AppRegistryDao::class)
+    private val appRegistryDao = mockk<AppRegistryDao>(relaxUnitFun = true)
     private val mimetype = "DIR"
     private val ocAppRegistryEntity = AppRegistryEntity(
         accountName = OC_ACCOUNT_NAME,
@@ -64,12 +65,6 @@ class OCLocalAppRegistryDataSourceTest {
     @Before
     fun setUp() {
 
-        val db = mockkClass(OwncloudDatabase::class)
-
-        every {
-            db.appRegistryDao()
-        } returns appRegistryDao
-
         ocLocalAppRegistryDataSource =
             OCLocalAppRegistryDataSource(
                 appRegistryDao,
@@ -83,9 +78,8 @@ class OCLocalAppRegistryDataSourceTest {
 
         val appRegistry = ocLocalAppRegistryDataSource.getAppRegistryForMimeTypeAsStream(OC_ACCOUNT_NAME, mimetype)
 
-        appRegistry.collect { appRegistryEmitted ->
-            assertEquals(OC_APP_REGISTRY_MIMETYPE, appRegistryEmitted)
-        }
+        val result = appRegistry.first()
+        assertEquals(OC_APP_REGISTRY_MIMETYPE, result)
 
         verify(exactly = 1) { appRegistryDao.getAppRegistryForMimeType(OC_ACCOUNT_NAME, mimetype) }
     }
@@ -97,9 +91,9 @@ class OCLocalAppRegistryDataSourceTest {
 
         val appRegistry = ocLocalAppRegistryDataSource.getAppRegistryForMimeTypeAsStream(OC_ACCOUNT_NAME, mimetype)
 
-        appRegistry.collect { appRegistryEmitted ->
-            Assert.assertNull(appRegistryEmitted)
-        }
+        val result = appRegistry.first()
+        assertNull(result)
+
         verify(exactly = 1) { appRegistryDao.getAppRegistryForMimeType(OC_ACCOUNT_NAME, mimetype) }
     }
 
@@ -110,9 +104,8 @@ class OCLocalAppRegistryDataSourceTest {
 
         val appRegistry = ocLocalAppRegistryDataSource.getAppRegistryForMimeTypeAsStream(OC_ACCOUNT_NAME, mimetype)
 
-        appRegistry.collect { appRegistryEmitted ->
-            Assert.assertNull(appRegistryEmitted)
-        }
+        val result = appRegistry.first()
+        assertNull(result)
         verify(exactly = 1) { appRegistryDao.getAppRegistryForMimeType(OC_ACCOUNT_NAME, mimetype) }
     }
 
@@ -123,9 +116,9 @@ class OCLocalAppRegistryDataSourceTest {
 
         val appRegistry = ocLocalAppRegistryDataSource.getAppRegistryWhichAllowCreation(OC_ACCOUNT_NAME)
 
-        appRegistry.collect { appRegistryEmitted ->
-            assertEquals(listOf(OC_APP_REGISTRY_MIMETYPE), appRegistryEmitted)
-        }
+        val result = appRegistry.first()
+        assertEquals(listOf(OC_APP_REGISTRY_MIMETYPE), result)
+
 
         verify(exactly = 1) { appRegistryDao.getAppRegistryWhichAllowCreation(OC_ACCOUNT_NAME) }
     }
@@ -137,9 +130,8 @@ class OCLocalAppRegistryDataSourceTest {
 
         val appRegistry = ocLocalAppRegistryDataSource.getAppRegistryWhichAllowCreation(OC_ACCOUNT_NAME)
 
-        appRegistry.collect { listEmitted ->
-            assertEquals(emptyList<AppRegistryEntity>(), listEmitted)
-        }
+        val result = appRegistry.first()
+        assertEquals(emptyList<AppRegistryEntity>(), result)
 
         verify(exactly = 1) { appRegistryDao.getAppRegistryWhichAllowCreation(OC_ACCOUNT_NAME) }
     }
@@ -152,9 +144,6 @@ class OCLocalAppRegistryDataSourceTest {
                 AppRegistryMimeType("mime_type_2", "ext_2", emptyList(), "name_2", "icon_2", "description_2", true, "default_app_2")
             )
         )
-
-        every { appRegistryDao.deleteAppRegistryForAccount(OC_ACCOUNT_NAME) } returns Unit
-        every { appRegistryDao.upsertAppRegistries(any()) } returns Unit
 
         ocLocalAppRegistryDataSource.saveAppRegistryForAccount(appRegistry)
 
@@ -183,11 +172,8 @@ class OCLocalAppRegistryDataSourceTest {
     @Test
     fun `deleteAppRegistryForAccount should delete appRegistry`() = runTest {
 
-        every { appRegistryDao.deleteAppRegistryForAccount(OC_ACCOUNT_NAME) } returns Unit
-
         ocLocalAppRegistryDataSource.deleteAppRegistryForAccount(OC_ACCOUNT_NAME)
 
         verify(exactly = 1) { appRegistryDao.deleteAppRegistryForAccount(any()) }
     }
-
 }

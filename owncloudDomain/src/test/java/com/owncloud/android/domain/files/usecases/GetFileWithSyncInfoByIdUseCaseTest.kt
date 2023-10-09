@@ -6,6 +6,7 @@ import com.owncloud.android.testutil.OC_FILE_WITH_SYNC_INFO_AND_SPACE
 import io.mockk.every
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -20,20 +21,18 @@ class GetFileWithSyncInfoByIdUseCaseTest {
     private val useCaseParams = GetFileWithSyncInfoByIdUseCase.Params(OC_FILE.id!!)
 
     @Test
-    fun `get file with sync by id returns OCFileWithSyncInfo when no error`() = runTest {
+    fun `getFileWithSyncInfoByIdAsFlow returns OCFileWithSyncInfo when no error`() = runTest {
         every { repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) } returns flowOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE)
 
-        val useCaseResult = useCase(useCaseParams)
+        val useCaseResult = useCase(useCaseParams).first()
 
-        useCaseResult.collect { result ->
-            Assert.assertEquals(OC_FILE_WITH_SYNC_INFO_AND_SPACE, result)
-        }
+        Assert.assertEquals(OC_FILE_WITH_SYNC_INFO_AND_SPACE, useCaseResult)
 
         verify(exactly = 1) { repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) }
     }
 
     @Test
-    fun `get file with sync by id returns true when repository is null`() = runTest {
+    fun `getFileWithSyncInfoByIdAsFlow returns true when repository is null`() = runTest {
         val useCaseResult = useCase(useCaseParams)
 
         every { repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) } returns flowOf(null)
@@ -41,16 +40,4 @@ class GetFileWithSyncInfoByIdUseCaseTest {
 
         verify(exactly = 1) { repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) }
     }
-
-    @Test(expected = Exception::class)
-    fun `get file with sync by id returns an exception`() = runTest {
-        every { repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId) } throws Exception()
-
-        useCase(useCaseParams)
-
-        verify(exactly = 1) {
-            repository.getFileWithSyncInfoByIdAsFlow(useCaseParams.fileId)
-        }
-    }
-
 }

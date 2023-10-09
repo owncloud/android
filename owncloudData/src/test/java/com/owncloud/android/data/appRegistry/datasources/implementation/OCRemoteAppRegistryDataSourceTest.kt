@@ -1,9 +1,9 @@
-package com.owncloud.android.data.appRegistry.datasources.implementation
 /**
  * ownCloud Android client application
  *
  * @author Aitor Ballesteros Pavón
- * Copyright (C) 2020 ownCloud GmbH.
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -17,6 +17,8 @@ package com.owncloud.android.data.appRegistry.datasources.implementation
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package com.owncloud.android.data.appRegistry.datasources.implementation
 
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.appregistry.datasources.implementation.OCRemoteAppRegistryDataSource

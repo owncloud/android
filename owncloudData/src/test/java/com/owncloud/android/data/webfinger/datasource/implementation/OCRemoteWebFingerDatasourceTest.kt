@@ -2,7 +2,8 @@
  * ownCloud Android client application
  *
  * @author Aitor Ballesteros Pavón
- * Copyright (C) 2020 ownCloud GmbH.
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -43,7 +44,11 @@ class OCRemoteWebFingerDatasourceTest {
     private val clientManager: ClientManager = mockk(relaxed = true)
     private val ownCloudClient: OwnCloudClient = mockk(relaxed = true)
     private val ocWebFingerService: OCWebFingerService = mockk()
-    private val listString: List<String> = emptyList()
+    private val listString: List<String> = listOf(
+        "http://webfinger.owncloud/tests/server-instance1",
+        "http://webfinger.owncloud/tests/server-instance2",
+        "http://webfinger.owncloud/tests/server-instance3",
+    )
 
     @Before
     fun setUp() {
