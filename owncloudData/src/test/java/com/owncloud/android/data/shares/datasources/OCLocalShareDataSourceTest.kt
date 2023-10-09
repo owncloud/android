@@ -3,7 +3,8 @@
  *
  * @author David González Verdugo
  * @author Aitor Ballesteros Pavón
- * Copyright (C) 2020 ownCloud GmbH.
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -115,7 +116,7 @@ class OCLocalShareDataSourceTest {
     }
 
     @Test
-    fun `getSharesAsLiveData read local private share returns a OCShare`() {
+    fun `getShareAsLiveData read local private share returns a OCShare`() {
         val privateShareAsLiveData: MutableLiveData<OCShareEntity> = MutableLiveData()
         privateShareAsLiveData.value = privateShares.first()
 
@@ -132,7 +133,7 @@ class OCLocalShareDataSourceTest {
     }
 
     @Test
-    fun `insert private OCShare into repository returns a long`() {
+    fun `insert private OCShare saves it correctly`() {
         every { ocSharesDao.insertOrReplace(privateShares[0]) } returns 10
 
         val insertedShareId = ocLocalSharesDataSource.insert(
@@ -148,7 +149,7 @@ class OCLocalShareDataSourceTest {
     }
 
     @Test
-    fun `insert list of private OCShares into repository returns a list of long`() {
+    fun `insert list of private OCShares saves it correctly`() {
 
         val expectedValues = listOf<Long>(1, 2)
         every { ocSharesDao.insertOrReplace(privateShares) } returns expectedValues
@@ -163,7 +164,7 @@ class OCLocalShareDataSourceTest {
     }
 
     @Test
-    fun `update private OCShare returns a long`() {
+    fun `update private OCShare changes it correctly`() {
         every { ocSharesDao.update(privateShares[1]) } returns 3
 
         val updatedShareId = ocLocalSharesDataSource.update(
@@ -237,7 +238,7 @@ class OCLocalShareDataSourceTest {
     }
 
     @Test
-    fun `insert public OCShare into repository returns a long`() {
+    fun `insert public OCShare saves it correctly`() {
         every { ocSharesDao.insertOrReplace(publicShares[0]) } returns 7
 
         val insertedShareId = ocLocalSharesDataSource.insert(
@@ -254,7 +255,7 @@ class OCLocalShareDataSourceTest {
     }
 
     @Test
-    fun `insert list of public OCShares into repository returns a list of long`() {
+    fun `insert list of public OCShares saves it correctly`() {
         val expectedValues = listOf<Long>(1, 2)
         every { ocSharesDao.insertOrReplace(publicShares) } returns expectedValues
 
@@ -270,7 +271,7 @@ class OCLocalShareDataSourceTest {
 
 
     @Test
-    fun `update public OCShare returns a long`() {
+    fun `update public OCShare changes it correctly`() {
         every { ocSharesDao.update(publicShares[1]) } returns 8
 
         val updatedShareId = ocLocalSharesDataSource.update(
@@ -291,7 +292,7 @@ class OCLocalShareDataSourceTest {
      **************************************************************************************************************/
 
     @Test
-    fun `replaceShares returns a list of long`() {
+    fun `replaceShares renewal shares related to a list of files`() {
         val expectedValues = listOf<Long>(1, 2)
         every { ocSharesDao.replaceShares(publicShares) } returns expectedValues
 
@@ -305,14 +306,14 @@ class OCLocalShareDataSourceTest {
     }
 
     @Test
-    fun deleteSharesForFile() {
+    fun `deleteSharesForFile removes shares related to a file`() {
         ocLocalSharesDataSource.deleteSharesForFile("file", OC_ACCOUNT_NAME)
 
         verify(exactly = 1)  { ocSharesDao.deleteSharesForFile("file", OC_ACCOUNT_NAME) }
     }
 
     @Test
-    fun `deleteShare returns a Int`() {
+    fun `deleteShare removes a share related to a file`() {
         every { ocSharesDao.deleteShare(OC_SHARE.remoteId) } returns 1
 
         val deletedRows = ocLocalSharesDataSource.deleteShare(OC_SHARE.remoteId)
@@ -322,7 +323,7 @@ class OCLocalShareDataSourceTest {
         verify(exactly = 1) { ocSharesDao.deleteShare(OC_SHARE.remoteId) }
     }
     @Test
-    fun deleteSharesForAccount() {
+    fun `deleteSharesForAccount removes shares related to a file`() {
 
         ocLocalSharesDataSource.deleteSharesForAccount(OC_SHARE.accountOwner)
 

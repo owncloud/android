@@ -4,7 +4,8 @@
  * @author David González Verdugo
  * @author Jesús Recio
  * @author Aitor Ballesteros Pavón
- * Copyright (C) 2020 ownCloud GmbH.
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,6 +31,7 @@ import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.shares.ShareResponse
 import com.owncloud.android.lib.resources.shares.services.implementation.OCShareService
+import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_SHARE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
@@ -96,7 +98,7 @@ class OCRemoteShareDataSourceTest {
             shareType = ShareType.USER,
             shareWith = "user",
             permissions = 1,
-            accountName = "user@server"
+            accountName = OC_ACCOUNT_NAME
         )
 
         assertThat(privateShareAdded, notNullValue())
@@ -108,7 +110,7 @@ class OCRemoteShareDataSourceTest {
         assertEquals(1, privateShareAdded.permissions)
 
         verify(exactly = 1) {
-            clientManager.getShareService(any())
+            clientManager.getShareService(OC_ACCOUNT_NAME)
             ocShareService.insertShare(
                 remoteFilePath = "Photos/",
                 shareType = com.owncloud.android.lib.resources.shares.ShareType.fromValue(ShareType.USER.value)!!,
@@ -122,7 +124,7 @@ class OCRemoteShareDataSourceTest {
     }
 
     @Test
-    fun `updateShare update a private share returns OCShare`() {
+    fun `updateShare for private share returns OCShare`() {
         val updateRemoteShareOperationResult = createRemoteOperationResultMock(
             ShareResponse(
                 listOf(
@@ -155,7 +157,7 @@ class OCRemoteShareDataSourceTest {
         val privateShareUpdated = ocRemoteShareDataSource.updateShare(
             remoteId = "3",
             permissions = 17,
-            accountName = "user@server"
+            accountName = OC_ACCOUNT_NAME
         )
 
         assertThat(privateShareUpdated, notNullValue())
@@ -167,7 +169,7 @@ class OCRemoteShareDataSourceTest {
         assertEquals(false, privateShareUpdated.isFolder)
 
         verify(exactly = 1) {
-            clientManager.getShareService(any())
+            clientManager.getShareService(OC_ACCOUNT_NAME)
             ocShareService.updateShare(
                 remoteId = "3",
                 name = "",
@@ -218,7 +220,7 @@ class OCRemoteShareDataSourceTest {
             ShareType.PUBLIC_LINK,
             "",
             1,
-            accountName = "user@server"
+            accountName = OC_ACCOUNT_NAME
         )
 
         assertThat(publicShareAdded, notNullValue())
@@ -231,7 +233,7 @@ class OCRemoteShareDataSourceTest {
         assertEquals("http://server:port/s/112ejbhdasyd1", publicShareAdded.shareLink)
 
         verify(exactly = 1) {
-            clientManager.getShareService(any())
+            clientManager.getShareService(OC_ACCOUNT_NAME)
             ocShareService.insertShare(
                 remoteFilePath = "Photos/img1.png",
                 shareType = com.owncloud.android.lib.resources.shares.ShareType.fromValue(ShareType.PUBLIC_LINK.value)!!,
@@ -278,7 +280,7 @@ class OCRemoteShareDataSourceTest {
         val publicShareUpdated = ocRemoteShareDataSource.updateShare(
             remoteId = "3",
             permissions = 17,
-            accountName = "user@server"
+            accountName = OC_ACCOUNT_NAME
         )
 
         assertThat(publicShareUpdated, notNullValue())
@@ -291,7 +293,7 @@ class OCRemoteShareDataSourceTest {
         assertEquals("http://server:port/s/1275farv", publicShareUpdated.shareLink)
 
         verify(exactly = 1) {
-            clientManager.getShareService(any())
+            clientManager.getShareService(OC_ACCOUNT_NAME)
             ocShareService.updateShare(
                 remoteId = "3",
                 name = "",
@@ -357,7 +359,7 @@ class OCRemoteShareDataSourceTest {
             remoteFilePath = "/Documents/doc",
             reshares = true,
             subfiles = true,
-            accountName = "user@server"
+            accountName = OC_ACCOUNT_NAME
         )
 
         assertEquals(4, shares.size)
@@ -391,7 +393,7 @@ class OCRemoteShareDataSourceTest {
         assertEquals("My family", groupShare.sharedWithDisplayName)
 
         verify(exactly = 1) {
-            clientManager.getShareService(any())
+            clientManager.getShareService(OC_ACCOUNT_NAME)
             ocShareService.getShares(
                 remoteFilePath = "/Documents/doc",
                 reshares = true,
@@ -427,7 +429,7 @@ class OCRemoteShareDataSourceTest {
             ShareType.PUBLIC_LINK,
             "",
             1,
-            accountName = "user@server"
+            accountName = OC_ACCOUNT_NAME
         )
     }
 
@@ -461,7 +463,7 @@ class OCRemoteShareDataSourceTest {
     }
 
     @Test
-    fun `deleteShare delete a share returns unit`() {
+    fun `deleteShare remove a share correctly`() {
         val removeRemoteShareOperationResult = createRemoteOperationResultMock(
             Unit,
             isSuccess = true

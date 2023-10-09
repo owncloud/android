@@ -37,7 +37,7 @@ import com.owncloud.android.lib.resources.spaces.responses.QuotaResponse
 import com.owncloud.android.lib.resources.spaces.responses.RootResponse
 import com.owncloud.android.lib.resources.spaces.responses.SpaceResponse
 
-private val WEB_DAV_URL = "https://server.url/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f3805bca744-d89f-4e9c-a990-25a0d7f03fe9"
+const val WEB_DAV_URL = "https://server.url/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f3805bca744-d89f-4e9c-a990-25a0d7f03fe9"
 
 
 
@@ -142,7 +142,7 @@ val OC_SPACE_PROJECT_DISABLED = OC_SPACE_PROJECT_WITH_IMAGE.copy(
     special = null
 )
 
-val SPACE_WITH_SPECIALS = SpacesWithSpecials(
+val SPACE_ENTITY_WITH_SPECIALS = SpacesWithSpecials(
     SpacesEntity(
         accountName = OC_ACCOUNT_NAME,
         driveAlias = "driveAlias",
@@ -200,5 +200,4 @@ val SPACE_RESPONSE =
             used = 1
         ),
         special = null,
-
         )

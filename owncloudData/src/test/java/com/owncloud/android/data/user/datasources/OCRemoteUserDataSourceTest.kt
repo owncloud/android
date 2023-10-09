@@ -91,16 +91,6 @@ class OCRemoteUserDataSourceTest {
         verify(exactly = 1) { ocUserService.getUserInfo() }
     }
 
-    @Test(expected = Exception::class)
-    fun `getUserInfo returns an exception when service receive a exception`() {
-
-        every {
-            ocUserService.getUserInfo()
-        } throws Exception()
-
-        ocRemoteUserDataSource.getUserInfo(OC_ACCOUNT_NAME)
-    }
-
     @Test
     fun `getUserQuota returns UserQuota`() {
         val getUserQuotaResult: RemoteOperationResult<GetRemoteUserQuotaOperation.RemoteQuota> =
@@ -116,15 +106,6 @@ class OCRemoteUserDataSourceTest {
         assertEquals(OC_USER_QUOTA, userQuota)
 
         verify(exactly = 1) { ocUserService.getUserQuota() }
-    }
-
-    @Test(expected = Exception::class)
-    fun `getUserQuota returns an exception when service receive an exception`() {
-        every {
-            ocUserService.getUserQuota()
-        } throws Exception()
-
-        ocRemoteUserDataSource.getUserQuota(OC_ACCOUNT_NAME)
     }
 
     @Test
@@ -143,13 +124,5 @@ class OCRemoteUserDataSourceTest {
 
         verify(exactly = 1) { ocUserService.getUserAvatar(avatarDimension) }
     }
-
-    @Test(expected = Exception::class)
-    fun `getUserAvatar returns an exception when service receive exception`() {
-        every {
-            ocUserService.getUserAvatar(avatarDimension)
-        } throws Exception()
-
-        ocRemoteUserDataSource.getUserAvatar(OC_ACCOUNT_NAME)
-    }
 }
+

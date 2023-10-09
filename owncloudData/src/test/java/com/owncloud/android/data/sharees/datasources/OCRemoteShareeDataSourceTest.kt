@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -42,7 +43,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class OCRemoteShareesDataSourceTest {
+class OCRemoteShareeDataSourceTest {
     private lateinit var ocRemoteShareesDataSource: OCRemoteShareeDataSource
     private val ocShareeService: OCShareeService = mockk()
     private val clientManager: ClientManager = mockk()
@@ -50,7 +51,7 @@ class OCRemoteShareesDataSourceTest {
 
     @Before
     fun setUp() {
-        every { clientManager.getShareeService(any()) } returns ocShareeService
+        every { clientManager.getShareeService(OC_ACCOUNT_NAME) } returns ocShareeService
         ocRemoteShareesDataSource =
             OCRemoteShareeDataSource(clientManager, RemoteShareeMapper())
 
@@ -62,13 +63,10 @@ class OCRemoteShareesDataSourceTest {
         every {
             ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
         } returns getRemoteShareesOperationResult
-
-        // Get sharees from remote datasource
-
     }
 
     @Test
-    fun `getSharees returns a list with the sharees entered as remote sharees`() {
+    fun `getSharees returns a list of OCSharee entered as remote sharees`() {
         sharees = ocRemoteShareesDataSource.getSharees(
             "user",
             1,
@@ -79,7 +77,7 @@ class OCRemoteShareesDataSourceTest {
         assertEquals(5, sharees.size)
 
         verify(exactly = 1) {
-            clientManager.getShareeService(any())
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
             ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
         }
     }
@@ -101,13 +99,13 @@ class OCRemoteShareesDataSourceTest {
         assertTrue(sharee.isExactMatch)
 
         verify(exactly = 1) {
-            clientManager.getShareeService(any())
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
             ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
         }
     }
 
     @Test
-    fun `getSharees returns a list of OCSharee contains one user not exactly matched`() {
+    fun `getSharees returns a list of OCSharee when contains one user not exactly matched`() {
         sharees = ocRemoteShareesDataSource.getSharees(
             "user",
             1,
@@ -123,7 +121,7 @@ class OCRemoteShareesDataSourceTest {
         assertFalse(sharee.isExactMatch)
 
         verify(exactly = 1) {
-            clientManager.getShareeService(any())
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
             ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
         }
     }
@@ -144,7 +142,7 @@ class OCRemoteShareesDataSourceTest {
         assertFalse(sharee.isExactMatch)
 
         verify(exactly = 1) {
-            clientManager.getShareeService(any())
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
             ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
         }
     }
@@ -165,7 +163,7 @@ class OCRemoteShareesDataSourceTest {
         assertFalse(sharee.isExactMatch)
 
         verify(exactly = 1) {
-            clientManager.getShareeService(any())
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
             ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
         }
     }
@@ -187,7 +185,7 @@ class OCRemoteShareesDataSourceTest {
         assertFalse(sharee.isExactMatch)
 
         verify(exactly = 1) {
-            clientManager.getShareeService(any())
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
             ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
         }
     }
@@ -214,7 +212,7 @@ class OCRemoteShareesDataSourceTest {
         assertTrue(emptySharees.isEmpty())
 
         verify(exactly = 1) {
-            clientManager.getShareeService(any())
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
             ocShareeService.getSharees( searchString = "user2", page = 2, perPage = 32)
         }
     }
