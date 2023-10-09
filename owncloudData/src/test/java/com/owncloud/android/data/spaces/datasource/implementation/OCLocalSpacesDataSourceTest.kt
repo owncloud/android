@@ -31,6 +31,7 @@ import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARE
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_SPACE_PERSONAL
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
+import com.owncloud.android.testutil.SPACE_ENTITY_SHARE
 import com.owncloud.android.testutil.SPACE_ENTITY_WITH_SPECIALS
 import com.owncloud.android.testutil.WEB_DAV_URL
 import io.mockk.Runs
@@ -97,11 +98,11 @@ class OCLocalSpacesDataSourceTest {
     fun `getSharesSpaceForAccount returns a OCSpace`() {
         every {
             spacesDao.getSpaceByIdForAccount(SPACE_ID_SHARES, OC_ACCOUNT_NAME)
-        } returns SPACE_ENTITY_WITH_SPECIALS.space
+        } returns SPACE_ENTITY_SHARE.space
 
         val resultActual = ocLocalSpacesDataSource.getSharesSpaceForAccount(OC_ACCOUNT_NAME)
 
-        assertEquals(SPACE_ENTITY_WITH_SPECIALS.space.toModel(), resultActual)
+        assertEquals(SPACE_ENTITY_SHARE.space.toModel(), resultActual)
 
         verify(exactly = 1) {
             spacesDao.getSpaceByIdForAccount(SPACE_ID_SHARES, OC_ACCOUNT_NAME)
