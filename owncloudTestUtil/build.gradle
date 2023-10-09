@@ -20,8 +20,8 @@ android {
 
 dependencies {
     implementation project(':owncloudDomain')
+    implementation project(':owncloudData')
     implementation project(':owncloudComLibrary')
-    implementation project(path: ':owncloudData')
     implementation libs.kotlin.stdlib
     implementation libs.androidx.lifecycle.livedata.ktx
 }

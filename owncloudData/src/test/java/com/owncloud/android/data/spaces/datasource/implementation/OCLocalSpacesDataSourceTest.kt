@@ -2,7 +2,8 @@
  * ownCloud Android client application
  *
  * @author Aitor Ballesteros Pavón
- * Copyright (C) 2020 ownCloud GmbH.
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,12 +31,14 @@ import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARE
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_SPACE_PERSONAL
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
-import com.owncloud.android.testutil.SPACE_WITH_SPECIALS
+import com.owncloud.android.testutil.SPACE_ENTITY_WITH_SPECIALS
+import com.owncloud.android.testutil.WEB_DAV_URL
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -46,8 +49,6 @@ class OCLocalSpacesDataSourceTest {
 
     private lateinit var ocLocalSpacesDataSource: OCLocalSpacesDataSource
     private val spacesDao = mockk<SpacesDao>()
-
-    private val WEB_DAV_URL = "https://server.url/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f3805bca744-d89f-4e9c-a990-25a0d7f03fe9"
 
     @Before
     fun setUp() {
@@ -96,11 +97,11 @@ class OCLocalSpacesDataSourceTest {
     fun `getSharesSpaceForAccount returns a OCSpace`() {
         every {
             spacesDao.getSpaceByIdForAccount(SPACE_ID_SHARES, OC_ACCOUNT_NAME)
-        } returns SPACE_WITH_SPECIALS.space
+        } returns SPACE_ENTITY_WITH_SPECIALS.space
 
         val resultActual = ocLocalSpacesDataSource.getSharesSpaceForAccount(OC_ACCOUNT_NAME)
 
-        assertEquals(SPACE_WITH_SPECIALS.space.toModel(), resultActual)
+        assertEquals(SPACE_ENTITY_WITH_SPECIALS.space.toModel(), resultActual)
 
         verify(exactly = 1) {
             spacesDao.getSpaceByIdForAccount(SPACE_ID_SHARES, OC_ACCOUNT_NAME)
@@ -119,11 +120,9 @@ class OCLocalSpacesDataSourceTest {
             )
         } returns flowOf(listOf(OC_SPACE_PERSONAL.toEntity()))
 
-        val resultActual = ocLocalSpacesDataSource.getSpacesFromEveryAccountAsStream()
+        val resultActual = ocLocalSpacesDataSource.getSpacesFromEveryAccountAsStream().first()
 
-        resultActual.collect { result ->
-            assertEquals(listOf(OC_SPACE_PERSONAL), result)
-        }
+        assertEquals(listOf(OC_SPACE_PERSONAL), resultActual)
 
         verify(exactly = 1) {
             spacesDao.getSpacesByDriveTypeFromEveryAccountAsStream(
@@ -146,7 +145,7 @@ class OCLocalSpacesDataSourceTest {
                     OCSpace.DRIVE_TYPE_PROJECT
                 )
             )
-        } returns flowOf(listOf(SPACE_WITH_SPECIALS))
+        } returns flowOf(listOf(SPACE_ENTITY_WITH_SPECIALS))
 
         val resultActual = ocLocalSpacesDataSource.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
             OC_ACCOUNT_NAME, setOf(
@@ -155,9 +154,9 @@ class OCLocalSpacesDataSourceTest {
             )
         )
 
-        resultActual.collect { result ->
-            assertEquals(listOf(SPACE_WITH_SPECIALS.toModel()), result)
-        }
+        val result = resultActual.first()
+        assertEquals(listOf(SPACE_ENTITY_WITH_SPECIALS.toModel()), result)
+
 
         verify(exactly = 1) {
             spacesDao.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
@@ -204,11 +203,11 @@ class OCLocalSpacesDataSourceTest {
 
         every {
             spacesDao.getSpaceWithSpecialsByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
-        } returns SPACE_WITH_SPECIALS
+        } returns SPACE_ENTITY_WITH_SPECIALS
 
         val resultActual = ocLocalSpacesDataSource.getSpaceWithSpecialsByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
 
-        assertEquals(SPACE_WITH_SPECIALS.toModel(), resultActual)
+        assertEquals(SPACE_ENTITY_WITH_SPECIALS.toModel(), resultActual)
 
         verify(exactly = 1) {
             spacesDao.getSpaceWithSpecialsByIdForAccount(

@@ -57,7 +57,7 @@ import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
 import com.owncloud.android.testutil.OC_USER_INFO
 import com.owncloud.android.testutil.oauth.OC_CLIENT_REGISTRATION
 import io.mockk.every
-import io.mockk.mockkClass
+import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
@@ -73,7 +73,7 @@ class OCLocalAuthenticationDataSourceTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var ocLocalAuthenticationDataSource: OCLocalAuthenticationDataSource
-    private val accountManager = mockkClass(AccountManager::class)
+    private val accountManager = mockk<AccountManager>()
     private val preferencesProvider = spyk<SharedPreferencesProvider>()
 
     @Before

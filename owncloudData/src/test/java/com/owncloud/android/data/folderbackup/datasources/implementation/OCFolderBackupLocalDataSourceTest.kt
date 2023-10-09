@@ -63,7 +63,7 @@ class OCFolderBackupLocalDataSourceTest {
     }
 
     @Test
-    fun `getCameraUploadsConfiguration returns null when there are not configurations `() {
+    fun `getCameraUploadsConfiguration returns null when there are not configurations`() {
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } returns null
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } returns null
 
@@ -78,7 +78,7 @@ class OCFolderBackupLocalDataSourceTest {
     }
 
     @Test
-    fun `getFolderBackupConfigurationByNameAsFlow returns a flow of CameraUploadsConfiguration when having valid configurations `() = runBlocking {
+    fun `getFolderBackupConfigurationByNameAsFlow returns a flow of CameraUploadsConfiguration when having valid configurations`() = runBlocking {
         every { folderBackupDao.getFolderBackUpConfigurationByNameAsFlow(FolderBackUpConfiguration.pictureUploadsName) } returns flowOf(
             OC_BACKUP_ENTITY
         )
@@ -94,7 +94,7 @@ class OCFolderBackupLocalDataSourceTest {
     }
 
     @Test
-    fun `saveFolderBackupConfiguration with valid configurations save the information`() {
+    fun `saveFolderBackupConfiguration with valid configurations saves the information`() {
         ocFolderBackupLocalDataSource.saveFolderBackupConfiguration(OC_BACKUP)
 
         verify(exactly = 1) {
@@ -103,7 +103,7 @@ class OCFolderBackupLocalDataSourceTest {
     }
 
     @Test
-    fun `resetFolderBackupConfigurationByName when folder backup configuration is reset by name`() {
+    fun `resetFolderBackupConfigurationByName removes current folder backup configuration`() {
         ocFolderBackupLocalDataSource.resetFolderBackupConfigurationByName(FolderBackUpConfiguration.pictureUploadsName)
 
         verify(exactly = 1) {

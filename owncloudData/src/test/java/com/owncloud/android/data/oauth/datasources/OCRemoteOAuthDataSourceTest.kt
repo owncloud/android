@@ -45,7 +45,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
-class RemoteOAuthDataSourceTest {
+class OCRemoteOAuthDataSourceTest {
     private lateinit var remoteOAuthDataSource: RemoteOAuthDataSource
 
     private val clientManager: ClientManager = mockk(relaxed = true)
@@ -118,7 +118,7 @@ class RemoteOAuthDataSourceTest {
         assertEquals(OC_CLIENT_REGISTRATION, clientRegistrationInfo)
 
         verify(exactly = 1) {
-            clientManager.getClientForAnonymousCredentials(OC_CLIENT_REGISTRATION_REQUEST.registrationEndpoint, any())
+            clientManager.getClientForAnonymousCredentials(OC_CLIENT_REGISTRATION_REQUEST.registrationEndpoint, false)
             oidcService.registerClientWithRegistrationEndpoint(ocClientMocked, any())
         }
     }
