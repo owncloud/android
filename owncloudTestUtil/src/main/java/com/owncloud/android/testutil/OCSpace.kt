@@ -25,6 +25,7 @@ import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
 import com.owncloud.android.data.spaces.db.SpacesEntity
 import com.owncloud.android.data.spaces.db.SpacesWithSpecials
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARES
 import com.owncloud.android.domain.spaces.model.SpaceDeleted
 import com.owncloud.android.domain.spaces.model.SpaceFile
 import com.owncloud.android.domain.spaces.model.SpaceOwner
@@ -177,6 +178,40 @@ val SPACE_ENTITY_WITH_SPECIALS = SpacesWithSpecials(
     )
 )
 
+val SPACE_ENTITY_SHARE = SpacesWithSpecials(
+    SpacesEntity(
+        accountName = OC_ACCOUNT_NAME,
+        driveAlias = "driveAlias",
+        driveType = "driveType",
+        id = SPACE_ID_SHARES,
+        ownerId = OC_CLIENT_ID,
+        lastModifiedDateTime = "lastModifiedDateTime",
+        name = "name",
+        quota = null,
+        root = SpaceRootEntity(
+            eTag = "eTag",
+            id = "id",
+            webDavUrl = WEB_DAV_URL,
+            deleteState = "state"
+        ),
+        webUrl = "webUrl",
+        description = "description"
+    ),
+    listOf(
+        SpaceSpecialEntity(
+            accountName = OC_ACCOUNT_NAME,
+            eTag = "eTag",
+            fileMimeType = "fileMimeType",
+            id = OC_ACCOUNT_ID,
+            spaceId = OC_SPACE_PERSONAL.id,
+            lastModifiedDateTime = "lastModifiedDateTime",
+            name = "name",
+            webDavUrl = WEB_DAV_URL,
+            size = 100,
+            specialFolderName = OC_SPACE_SPECIAL_IMAGE.name
+        )
+    )
+)
 val SPACE_RESPONSE =
     SpaceResponse(
         driveAlias = "driveAlias",
