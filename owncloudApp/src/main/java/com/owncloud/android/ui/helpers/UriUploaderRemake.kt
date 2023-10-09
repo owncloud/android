@@ -15,7 +15,7 @@ import java.util.concurrent.CountDownLatch
 class UriUploaderRemake(
     private val urisToUpload: ArrayList<Uri>,
     private val account: Account,
-    private val spaceId: String,
+    private val spaceId: String?,
     private val uploadPath: String,
     private val showWaitingDialog: Boolean,
     handlerThreadLooper: Looper
@@ -35,8 +35,8 @@ class UriUploaderRemake(
         var uriUploaderResultCode = UriUploaderResultCode.OK
         val countdownLatch = CountDownLatch(1)
         ioThreadHandler.post {
-            val validUris = urisToUpload.filter {
-                ContentResolver.SCHEME_CONTENT.equals(it)
+            val validUris = urisToUpload.filter { uri ->
+                uri.scheme.equals(ContentResolver.SCHEME_CONTENT)
             }
             uriUploaderResultCode = try {
                 if (validUris.isEmpty()) {
@@ -50,7 +50,6 @@ class UriUploaderRemake(
                     val currentFullTemporaryPathInputStreams = validUris.mapNotNull {
                         getInputStreamFromUri(it)
                     }
-
                     if (currentFullTemporaryPathInputStreams.size == fullTemporaryPaths.size) {
                         copyAndUploadContentUriTask.uploadFile(
                             fullTemporaryPaths,
@@ -76,11 +75,11 @@ class UriUploaderRemake(
         try {
             countdownLatch.await()
         } catch (_: Exception) {
+            // swallow the interruption exception, don't crash the app
         }
         return uriUploaderResultCode
     }
 
- 
     private fun getFullTemporaryPath(displayNameForUri: String): String {
         val currentRemotePath = "$uploadPath${displayNameForUri}"
         return FileStorageUtils.getTemporalPath(
