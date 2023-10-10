@@ -1,0 +1,21 @@
+{
+  "ocs": {
+    "meta": {
+      "status": "ok",
+      "statuscode": 100,
+      "message": "OK",
+      "totalitems": "",
+      "itemsperpage": ""
+    },
+    "data": {
+      "exact": {
+        "users": [],
+        "groups": [],
+        "remotes": []
+      },
+      "users": [],
+      "groups": [],
+      "remotes": []
+    }
+  }
+}
