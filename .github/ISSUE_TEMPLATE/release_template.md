@@ -19,8 +19,6 @@ For OEM releases, keep the OEM Release template and remove the Open Release one
  - [ ] [DOC] Ping in #documentation-internal about the new release
  - [ ] [GIT] Create branch `release/M.m.p` in owncloud/android from master
  - [ ] [GIT] Rebase `release/M.m.p` against `stable` in owncloud/android
- - [ ] [GIT] Create branch `release/x.y.z` in owncloud/android-library from master
- - [ ] [GIT] Rebase `release/x.y.z` against `stable` in owncloud/android-library
  - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
  - [ ] [DEV] Update [SBOM](https://cloud.owncloud.com/f/6072870)
  - [ ] [DIS] Create a folder for the new version like `M.m.p_YYYY-MM-DD` inside the `changelog` folder
@@ -36,16 +34,13 @@ For OEM releases, keep the OEM Release template and remove the Open Release one
  - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
  - [ ] [DOC] Ping in #documentation-internal that we are close to sign the new tags
  - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
- - [ ] [GIT] Create and sign tag `vx.y.z` in HEAD commit of release branch, in owncloud/android-library
  - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
  - [ ] [DIS] Update screenshots and store listing, if needed, in Play Store
  - [ ] [GIT] Publish a new release in [owncloud/android](https://github.com/owncloud/android/releases)
  - [ ] [DIS] Release published in Play Store
  - [ ] [DIS] Publish post in central.owncloud.org ([`Category:News + Tag:android`](https://central.owncloud.org/tags/c/news/5/android))
  - [ ] [COM] Inform `#updates` and `#marketing` in internal chat that release is out
- - [ ] [GIT] Merge `release/M.m.p` branch into `stable`, in owncloud/android-library
  - [ ] [GIT] Merge `release/M.m.p` branch into `stable`, in owncloud/android
- - [ ] [GIT] Merge `release/M.m.p` branch into `master`, in owncloud/android-library
  - [ ] [GIT] Merge `release/M.m.p` branch into `master`, in owncloud/android
  - [ ] [DOC] Update documentation with new stuff by creating [issue](https://github.com/owncloud/docs-client-android/issues)
 
