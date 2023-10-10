@@ -31,8 +31,3 @@ Add any other context or screenshots about the feature request here.
 - [ ] Design test plan
 - [ ] QA
 - [ ] Merge branch feature/feature_name into master
-
-### PR
-
-- App
-- Library (if needed)
