@@ -1,0 +1,6 @@
+Change: Android library as a module instead of submodule
+
+Android library, containing all networking stuff, is now the 5th module in the app instead of submodule.
+
+https://github.com/owncloud/android/issues/3962
+https://github.com/owncloud/android/pull/4183
