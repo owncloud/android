@@ -1,0 +1,5 @@
+Enhancement: Koin DSL
+
+Koin DSL makes easier the dependency definition avoiding verbosity by allowing you to target a class constructor directly
+
+https://github.com/owncloud/android/pull/3966

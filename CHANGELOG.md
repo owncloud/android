@@ -8,11 +8,29 @@ ownCloud admins and users.
 Summary
 -------
 
+* Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
+* Enhancement - Koin DSL: [#3966](https://github.com/owncloud/android/pull/3966)
 * Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
 * Enhancement - "Share to" in oCIS accounts allows upload to any space: [#4088](https://github.com/owncloud/android/issues/4088)
+* Enhancement - Use invoke operator to execute usecases: [#4179](https://github.com/owncloud/android/pull/4179)
 
 Details
 -------
+
+* Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
+
+   Android library, containing all networking stuff, is now the 5th module in the app instead of
+   submodule.
+
+   https://github.com/owncloud/android/issues/3962
+   https://github.com/owncloud/android/pull/4183
+
+* Enhancement - Koin DSL: [#3966](https://github.com/owncloud/android/pull/3966)
+
+   Koin DSL makes easier the dependency definition avoiding verbosity by allowing you to target a
+   class constructor directly
+
+   https://github.com/owncloud/android/pull/3966
 
 * Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
 
@@ -29,6 +47,12 @@ Details
 
    https://github.com/owncloud/android/issues/4088
    https://github.com/owncloud/android/pull/4160
+
+* Enhancement - Use invoke operator to execute usecases: [#4179](https://github.com/owncloud/android/pull/4179)
+
+   Removes all the "execute" verbosity for use cases by using the "invoke" operator instead.
+
+   https://github.com/owncloud/android/pull/4179
 
 Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
 =======================================
