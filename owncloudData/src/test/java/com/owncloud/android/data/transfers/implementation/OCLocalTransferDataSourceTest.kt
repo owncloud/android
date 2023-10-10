@@ -18,7 +18,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package com.owncloud.android.data.transfers.implementation
 
 import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource
