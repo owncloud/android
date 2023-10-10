@@ -1,0 +1,5 @@
+Enhancement: Use invoke operator to execute usecases
+
+Removes all the "execute" verbosity for use cases by using the "invoke" operator instead.
+
+https://github.com/owncloud/android/pull/4179
