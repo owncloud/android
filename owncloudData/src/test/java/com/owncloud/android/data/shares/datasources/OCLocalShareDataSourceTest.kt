@@ -329,5 +329,4 @@ class OCLocalShareDataSourceTest {
 
         verify(exactly = 1) { ocSharesDao.deleteSharesForAccount(OC_SHARE.accountOwner) }
     }
-
 }
