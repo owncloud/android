@@ -1,0 +1,15 @@
+{
+  "subject": "acct:bob@example.com",
+  "aliases": [
+    "https://www.example.com/~bob/"
+  ],
+  "properties": {
+    "http://example.com/ns/role": "employee"
+  },
+  "links": [
+    {
+      "lel": "http://webfinger.example/rel/profile-page",
+      "foo": "https://www.example.com/~bob/"
+    }
+  ]
+}
