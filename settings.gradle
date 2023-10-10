@@ -1,1 +1,1 @@
-include ':owncloudApp', ':owncloudDomain', ':owncloudData', ':owncloud-android-library:owncloudComLibrary', ':owncloudTestUtil'
+include ':owncloudApp', ':owncloudDomain', ':owncloudData', ':owncloudComLibrary', ':owncloudTestUtil'

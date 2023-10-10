@@ -53,7 +53,7 @@ dependencies {
     implementation project(":owncloudDomain")
 
     // Owncloud Android Library
-    api project(":owncloud-android-library:owncloudComLibrary")
+    api project(":owncloudComLibrary")
 
     // Kotlin
     implementation libs.kotlin.stdlib
