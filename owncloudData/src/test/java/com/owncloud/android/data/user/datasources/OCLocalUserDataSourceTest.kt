@@ -104,7 +104,6 @@ class OCLocalUserDataSourceTest {
 
         every { ocUserQuotaDao.getAllUserQuotas() } returns listOf(userQuotaEntity)
 
-
         val resultActual = ocLocalUserDataSource.getAllUserQuotas()
 
         assertEquals(listOf(userQuotaEntity.toModel()), resultActual)
