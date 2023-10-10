@@ -34,7 +34,7 @@ Next steps will assume you have a Github account and that you will get the code 
 
 * In a web browser, go to https://github.com/owncloud/android, and click the 'Fork' button near the top right corner.
 * Open a terminal and go on with the next steps in it.
-* Clone your forked repository: ```git clone --recursive https://github.com/YOURGITHUBNAME/android.git```.
+* Clone your forked repository: ```git clone https://github.com/YOURGITHUBNAME/android.git```.
 * Move to the project folder with ```cd android```.
 * Fetch and apply any changes from your remote branch 'master': ```git fetch``` + ```git rebase```
 * Make official ownCloud repo known as upstream: ```git remote add upstream https://github.com/owncloud/android.git```
@@ -51,7 +51,6 @@ We recommend to use the last version available in the stable channel of Android 
 
 To set up the project in Android Studio follow the next steps:
 
-* Make sure you have called ```git submodule update``` whenever you switched branches
 * Open Android Studio and select 'Import Project (Eclipse ADT, Gradle, etc)'. Browse through your file system to the folder 'android' where the project is located. Android Studio will then create the '.iml' files it needs. If you ever close the project but the files are still there, you just select 'Open Project...'. The file chooser will show an Android face as the folder icon, which you can select to reopen the project.
 * Android Studio will try to build the project directly after importing it. To build it manually, follow the menu path 'Build'/'Make Project', or just click the 'Play' button in the tool bar to build and run it in a mobile device or an emulator. The resulting APK file will be saved in the 'build/outputs/apk/' subdirectory in the project folder.
 
@@ -61,7 +60,6 @@ To set up the project in Android Studio follow the next steps:
 [Gradle][6] is the build system used by Android Studio to manage the building operations on Android apps. You do not need to install Gradle in your system, and Google recommends not to do it, but instead trusting on the [Gradle wrapper][7] included in the project.
 
 * Open a terminal and go to the 'android' directory that contains the repository.
-* Make sure you have called ```git submodule update``` whenever you switched branches
 * Run the 'clean' and 'build' tasks using the Gradle wrapper provided
     - Windows: ```gradlew.bat clean build```
     - Mac OS/Linux: ```./gradlew clean build```
