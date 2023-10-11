@@ -73,7 +73,7 @@ class OCLocalAuthenticationDataSourceTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var ocLocalAuthenticationDataSource: OCLocalAuthenticationDataSource
-    private val accountManager = mockk<AccountManager>()
+    private val accountManager = mockk<AccountManager>(relaxUnitFun = true)
     private val preferencesProvider = spyk<SharedPreferencesProvider>()
 
     @Before
@@ -86,6 +86,13 @@ class OCLocalAuthenticationDataSourceTest {
             preferencesProvider,
             OC_ACCOUNT.type
         )
+        getAccountsByType(OC_ACCOUNT.type, arrayOf(OC_ACCOUNT))
+    }
+
+    private fun getAccountsByType(accountType: String, accounts: Array<Account>) {
+        every {
+            accountManager.getAccountsByType(accountType)
+        } returns accounts
     }
 
     @Test
@@ -102,7 +109,7 @@ class OCLocalAuthenticationDataSourceTest {
             null
         )
 
-        val newAccount = Account(OC_ACCOUNT_NAME, "owncloud")
+        val newAccount = Account(OC_ACCOUNT_NAME, OC_ACCOUNT.type)
 
         // One for checking if the account exists and another one for getting the new account
         verifyAccountsByTypeAreGot(newAccount.type, 2)
@@ -115,9 +122,6 @@ class OCLocalAuthenticationDataSourceTest {
 
     @Test(expected = AccountNotNewException::class)
     fun addBasicAccountAlreadyExistsNoUpdate() {
-        every {
-            accountManager.getAccountsByType(OC_ACCOUNT.type)
-        } returns arrayOf(OC_ACCOUNT) // The account is already there
 
         ocLocalAuthenticationDataSource.addBasicAccount(
             OC_ACCOUNT_ID,
@@ -131,17 +135,6 @@ class OCLocalAuthenticationDataSourceTest {
 
     @Test
     fun addBasicAccountAlreadyExistsUpdateSameUsername() {
-        every {
-            accountManager.getAccountsByType(OC_ACCOUNT.type)
-        } returns arrayOf(OC_ACCOUNT) // The account is already there
-
-        every {
-            accountManager.setPassword(any(), any())
-        } returns Unit
-
-        every {
-            accountManager.setUserData(any(), any(), any())
-        } returns Unit
 
         mockSelectedAccountNameInPreferences()
 
@@ -166,10 +159,6 @@ class OCLocalAuthenticationDataSourceTest {
 
     @Test
     fun addBasicAccountAlreadyExistsUpdateDifferentUsername() {
-
-        every {
-            accountManager.setUserData(any(), any(), any())
-        } returns Unit
 
         mockSelectedAccountNameInPreferences()
 
@@ -198,10 +187,6 @@ class OCLocalAuthenticationDataSourceTest {
         mockRegularAccountCreationFlow()
         mockSelectedAccountNameInPreferences()
 
-        every {
-            accountManager.setAuthToken(any(), any(), any())
-        } returns Unit
-
         val newAccountName = ocLocalAuthenticationDataSource.addOAuthAccount(
             OC_ACCOUNT_ID,
             OC_REDIRECTION_PATH.lastPermanentLocation,
@@ -215,7 +200,7 @@ class OCLocalAuthenticationDataSourceTest {
             OC_CLIENT_REGISTRATION
         )
 
-        val newAccount = Account(OC_ACCOUNT_NAME, "owncloud")
+        val newAccount = Account(OC_ACCOUNT_NAME, OC_ACCOUNT.type)
 
         // One for checking if the account exists and another one for getting the new account
         verifyAccountsByTypeAreGot(newAccount.type, 2)
@@ -231,9 +216,6 @@ class OCLocalAuthenticationDataSourceTest {
 
     @Test(expected = AccountNotNewException::class)
     fun addOAuthAccountAlreadyExistsNoUpdate() {
-        every {
-            accountManager.getAccountsByType(OC_ACCOUNT.type)
-        } returns arrayOf(OC_ACCOUNT) // The account is already there
 
         ocLocalAuthenticationDataSource.addOAuthAccount(
             OC_ACCOUNT_ID,
@@ -251,17 +233,6 @@ class OCLocalAuthenticationDataSourceTest {
 
     @Test
     fun addOAuthAccountAlreadyExistsUpdateSameUsername() {
-        every {
-            accountManager.getAccountsByType(OC_ACCOUNT.type)
-        } returns arrayOf(OC_ACCOUNT) // The account is already there
-
-        every {
-            accountManager.setUserData(any(), any(), any())
-        } returns Unit
-
-        every {
-            accountManager.setAuthToken(any(), any(), any())
-        } returns Unit
 
         mockSelectedAccountNameInPreferences()
 
@@ -291,14 +262,6 @@ class OCLocalAuthenticationDataSourceTest {
 
     @Test
     fun addOAuthAccountAlreadyExistsUpdateDifferentUsername() {
-
-        every {
-            accountManager.setUserData(any(), any(), any())
-        } returns Unit
-
-        every {
-            accountManager.setAuthToken(any(), any(), any())
-        } returns Unit
 
         mockSelectedAccountNameInPreferences()
 
@@ -337,9 +300,6 @@ class OCLocalAuthenticationDataSourceTest {
 
     @Test
     fun supportsOAuthOk() {
-        every {
-            accountManager.getAccountsByType(OC_ACCOUNT.type)
-        } returns arrayOf(OC_ACCOUNT)
 
         every {
             accountManager.getUserData(OC_ACCOUNT, KEY_SUPPORTS_OAUTH2)
@@ -355,18 +315,13 @@ class OCLocalAuthenticationDataSourceTest {
 
     @Test(expected = AccountNotFoundException::class)
     fun supportsOAuthAccountNotFound() {
-        every {
-            accountManager.getAccountsByType(OC_ACCOUNT.type)
-        } returns arrayOf() // That account does not exist
+        getAccountsByType(OC_ACCOUNT.type, arrayOf())// That account does not exist
 
         ocLocalAuthenticationDataSource.supportsOAuth2(OC_ACCOUNT.name)
     }
 
     @Test
     fun getBaseUrlOk() {
-        every {
-            accountManager.getAccountsByType(OC_ACCOUNT.type)
-        } returns arrayOf(OC_ACCOUNT)
 
         every {
             accountManager.getUserData(OC_ACCOUNT, KEY_OC_BASE_URL)
@@ -382,9 +337,7 @@ class OCLocalAuthenticationDataSourceTest {
 
     @Test(expected = AccountNotFoundException::class)
     fun getBaseUrlAccountNotFound() {
-        every {
-            accountManager.getAccountsByType(OC_ACCOUNT.type)
-        } returns arrayOf() // That account does not exist
+        getAccountsByType(OC_ACCOUNT.type, arrayOf()) // That account does not exist
 
         ocLocalAuthenticationDataSource.getBaseUrl(OC_ACCOUNT.name)
     }
@@ -402,9 +355,7 @@ class OCLocalAuthenticationDataSourceTest {
 
     private fun mockRegularAccountCreationFlow() {
         // Step 1: Get accounts to know if the current account exists
-        every {
-            accountManager.getAccountsByType("owncloud")
-        } returns arrayOf() // There's no accounts yet
+        getAccountsByType(OC_ACCOUNT.type, arrayOf()) // There's no accounts yet
 
         // Step 2: Add new account
         every {

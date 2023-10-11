@@ -247,7 +247,7 @@ class OCRemoteShareDataSourceTest {
     }
 
     @Test
-    fun `updateShare update a public share returns OCShare`() {
+    fun `updateShare for public share returns OCShare`() {
         val updateRemoteShareOperationResult = createRemoteOperationResultMock(
             ShareResponse(
                 listOf(
@@ -463,7 +463,7 @@ class OCRemoteShareDataSourceTest {
     }
 
     @Test
-    fun `deleteShare remove a share correctly`() {
+    fun `deleteShare removes a share correctly`() {
         val removeRemoteShareOperationResult = createRemoteOperationResultMock(
             Unit,
             isSuccess = true
