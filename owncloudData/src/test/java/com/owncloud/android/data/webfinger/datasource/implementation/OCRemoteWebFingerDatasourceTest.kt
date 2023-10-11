@@ -44,7 +44,7 @@ class OCRemoteWebFingerDatasourceTest {
     private val clientManager: ClientManager = mockk(relaxed = true)
     private val ownCloudClient: OwnCloudClient = mockk(relaxed = true)
     private val ocWebFingerService: OCWebFingerService = mockk()
-    private val listString: List<String> = listOf(
+    private val urls: List<String> = listOf(
         "http://webfinger.owncloud/tests/server-instance1",
         "http://webfinger.owncloud/tests/server-instance2",
         "http://webfinger.owncloud/tests/server-instance3",
@@ -65,7 +65,7 @@ class OCRemoteWebFingerDatasourceTest {
     fun `getInstancesFromWebFinger returns a list of web finger`() {
 
         val getInstancesFromWebFingerResult: RemoteOperationResult<List<String>> =
-            createRemoteOperationResultMock(data = listString, isSuccess = true)
+            createRemoteOperationResultMock(data = urls, isSuccess = true)
 
         every {
             ocWebFingerService.getInstancesFromWebFinger(
@@ -99,7 +99,7 @@ class OCRemoteWebFingerDatasourceTest {
     fun `getInstancesFromAuthenticatedWebFinger returns a list of web finger`() {
 
         val getInstancesFromAuthenticatedWebFingerResult: RemoteOperationResult<List<String>> =
-            createRemoteOperationResultMock(data = listString, isSuccess = true)
+            createRemoteOperationResultMock(data = urls, isSuccess = true)
 
         every {
             ocWebFingerService.getInstancesFromWebFinger(

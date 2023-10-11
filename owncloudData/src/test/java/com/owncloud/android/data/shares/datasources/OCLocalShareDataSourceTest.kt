@@ -292,7 +292,7 @@ class OCLocalShareDataSourceTest {
      **************************************************************************************************************/
 
     @Test
-    fun `replaceShares renewal shares related to a list of files`() {
+    fun `replaceShares renewal shares related to a list of shares`() {
         val expectedValues = listOf<Long>(1, 2)
         every { ocSharesDao.replaceShares(publicShares) } returns expectedValues
 
@@ -313,7 +313,7 @@ class OCLocalShareDataSourceTest {
     }
 
     @Test
-    fun `deleteShare removes a share related to a file`() {
+    fun `deleteShare removes a share correctly`() {
         every { ocSharesDao.deleteShare(OC_SHARE.remoteId) } returns 1
 
         val deletedRows = ocLocalSharesDataSource.deleteShare(OC_SHARE.remoteId)
@@ -323,7 +323,7 @@ class OCLocalShareDataSourceTest {
         verify(exactly = 1) { ocSharesDao.deleteShare(OC_SHARE.remoteId) }
     }
     @Test
-    fun `deleteSharesForAccount removes shares related to a file`() {
+    fun `deleteSharesForAccount removes shares related to an account`() {
 
         ocLocalSharesDataSource.deleteSharesForAccount(OC_SHARE.accountOwner)
 

@@ -204,16 +204,15 @@ class OCLocalTransferDataSourceTest {
     @Test
     fun `getAllTransfersAsStream returns a flow of list of OCTransfer ordered by status`() = runBlocking {
 
-        val transferEntityInProgress: OCTransferEntity = ocTransfer.toEntity().copy(status = 0)
+        val transferEntityInProgress: OCTransferEntity = ocTransfer.copy(status = TransferStatus.TRANSFER_IN_PROGRESS).toEntity()
 
-        val transferEntityQueue: OCTransferEntity = ocTransfer.toEntity().copy(status = 1)
+        val transferEntityQueue: OCTransferEntity = ocTransfer.copy(status = TransferStatus.TRANSFER_QUEUED).toEntity()
 
-        val transferEntityFailed: OCTransferEntity = ocTransfer.toEntity().copy(status = 2)
+        val transferEntityFailed: OCTransferEntity = ocTransfer.copy(status = TransferStatus.TRANSFER_FAILED).toEntity()
 
-        val transferEntitySucceeded: OCTransferEntity = ocTransfer.toEntity().copy(status = 3)
+        val transferEntitySucceeded: OCTransferEntity = ocTransfer.copy(status = TransferStatus.TRANSFER_SUCCEEDED).toEntity()
 
         val transferListRandom = listOf(transferEntityQueue, transferEntityFailed, transferEntityInProgress, transferEntitySucceeded)
-
 
         val transferQueue = ocTransfer.copy()
         transferQueue.status =  TransferStatus.TRANSFER_QUEUED
@@ -230,7 +229,7 @@ class OCLocalTransferDataSourceTest {
             transferDao.getAllTransfersAsStream()
         } returns flowOf(transferListRandom)
 
-        val actualResult = ocLocalTransferDataSource.getAllTransfersAsStream().first().map { it }
+        val actualResult = ocLocalTransferDataSource.getAllTransfersAsStream().first()
 
         assertEquals(transferListOrdered, actualResult)
 
@@ -305,7 +304,7 @@ class OCLocalTransferDataSourceTest {
     }
 
     @Test
-    fun `clearFailedTransfers clears it correctly`() {
+    fun `clearFailedTransfers removes transfers correctly`() {
 
         ocLocalTransferDataSource.clearFailedTransfers()
 
@@ -315,7 +314,7 @@ class OCLocalTransferDataSourceTest {
     }
 
     @Test
-    fun `clearSuccessfulTransfers clears it correctly`() {
+    fun `clearSuccessfulTransfers removes transfers correctly`() {
 
         ocLocalTransferDataSource.clearSuccessfulTransfers()
 
