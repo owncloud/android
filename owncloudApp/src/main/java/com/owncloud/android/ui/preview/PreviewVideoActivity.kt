@@ -133,6 +133,8 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
             title = file.fileName
         }
         playerView = binding.videoPlayer
+        playerView.setShowPreviousButton(false)
+        playerView.setShowNextButton(false)
         initWindowInsetsController()
 
         playerView.setFullscreenButtonClickListener { isFullScreen ->
