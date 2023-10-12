@@ -38,7 +38,6 @@ import android.view.WindowManager
 import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.pm.PackageInfoCompat
-import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
@@ -53,14 +52,15 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetPersonalSpaceForAccountUseCase
 import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.migration.StorageMigrationActivity
 import com.owncloud.android.presentation.releasenotes.ReleaseNotesActivity
 import com.owncloud.android.presentation.security.biometric.BiometricActivity
 import com.owncloud.android.presentation.security.biometric.BiometricManager
-import com.owncloud.android.presentation.security.pattern.PatternActivity
-import com.owncloud.android.presentation.security.pattern.PatternManager
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.security.passcode.PassCodeManager
+import com.owncloud.android.presentation.security.pattern.PatternActivity
+import com.owncloud.android.presentation.security.pattern.PatternManager
 import com.owncloud.android.presentation.settings.logging.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.LogsProvider
@@ -91,8 +91,6 @@ import timber.log.Timber
  * classes
  */
 class MainApp : Application() {
-    private val handlerThreadTag
-        get() = appContext.resources.getString(R.string.ouc_thread_handler_tag)
     lateinit var handlerThread: HandlerThread
         private set
 
@@ -102,7 +100,8 @@ class MainApp : Application() {
         appContext = applicationContext
 
         startLogsIfEnabled()
-        handlerThread = HandlerThread(handlerThreadTag).apply { start() }
+        handlerThread = HandlerThread(HANDLER_THREAD_TAG)
+        handlerThread.start()
         DebugInjector.injectDebugTools(appContext)
 
         createNotificationChannels()
@@ -305,6 +304,8 @@ class MainApp : Application() {
 
     companion object {
         const val MDM_FLAVOR = "mdm"
+
+        const val HANDLER_THREAD_TAG = "OucHandlerThread"
 
         lateinit var appContext: Context
             private set
