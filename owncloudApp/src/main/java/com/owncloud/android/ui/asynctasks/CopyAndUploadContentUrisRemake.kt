@@ -1,3 +1,23 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author Gibson Ruitiari
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.ui.asynctasks
 
 import android.accounts.Account
@@ -18,16 +38,14 @@ class CopyAndUploadContentUrisRemake(
 
     private val uploadFilesFromSystemUseCase: UploadFilesFromSystemUseCase by inject(UploadFilesFromSystemUseCase::class.java)
     fun uploadFile(
-        temporaryFilePaths: List<String>,
-        temporaryFilePathInputStreams: List<InputStream>
+        temporaryFilePaths: List<String>, temporaryFilePathInputStreams: List<InputStream>
     ): ResultCode {
         val filesToUpload = arrayListOf<String>()
         return try {
             for (it in temporaryFilePaths.zip(temporaryFilePathInputStreams)) {
                 val (filePathInString, filePathInputStream) = it
                 val createdTempFilePath = createTempFileFromContentUrisInputStream(
-                    filePathInputStream,
-                    filePathInString
+                    filePathInputStream, filePathInString
                 )
                 if (createdTempFilePath == null) {
                     ResultCode.FILE_NOT_FOUND
@@ -36,9 +54,7 @@ class CopyAndUploadContentUrisRemake(
                 }
             }
             val uploadParams = UploadFilesFromSystemUseCase.Params(
-                account.name,
-                filesToUpload,
-                uploadPath, spaceId
+                account.name, filesToUpload, uploadPath, spaceId
             )
             uploadFilesFromSystemUseCase.execute(uploadParams)
             filesToUpload.clear()
@@ -50,13 +66,11 @@ class CopyAndUploadContentUrisRemake(
     }
 
     private fun createTempFileFromContentUrisInputStream(
-        inputStream: InputStream,
-        temporaryFilePathInString: String
+        inputStream: InputStream, temporaryFilePathInString: String
     ): String? {
         val temporaryFilePath = File(temporaryFilePathInString)
         temporaryFilePath.parentFile?.apply {
-            if (!exists())
-                mkdirs()
+            if (!exists()) mkdirs()
         }
         temporaryFilePath.createNewFile()
         return try {
