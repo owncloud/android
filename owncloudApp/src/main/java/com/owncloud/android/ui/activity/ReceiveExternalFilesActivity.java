@@ -9,6 +9,7 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * @author John Kalimeris
+ * @author Gibson Ruitiari
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2021 ownCloud GmbH.
  * <p>
@@ -129,15 +130,25 @@ public class ReceiveExternalFilesActivity extends FileActivity
         CreateFolderDialogFragment.CreateFolderListener {
 
     private static final String FTAG_ERROR_FRAGMENT = "ERROR_FRAGMENT";
-    private final static int DIALOG_NO_ACCOUNT = 0;
-    private final static int DIALOG_MULTIPLE_ACCOUNT = 1;
-    private final static int REQUEST_CODE__SETUP_ACCOUNT = REQUEST_CODE__LAST_SHARED + 1;
-    private final static int MAX_FILENAME_LENGTH = 223;
-    private final static String KEY_PARENTS = "PARENTS";
-    private final static String KEY_FILE = "FILE";
-    private final static String KEY_ACCOUNT_SELECTED = "ACCOUNT_SELECTED";
-    private final static String KEY_ACCOUNT_SELECTION_SHOWING = "ACCOUNT_SELECTION_SHOWING";
+
+    private static final int DIALOG_NO_ACCOUNT = 0;
+
+    private static final int DIALOG_MULTIPLE_ACCOUNT = 1;
+
+    private static final int REQUEST_CODE__SETUP_ACCOUNT = REQUEST_CODE__LAST_SHARED + 1;
+                
+    private static final int MAX_FILENAME_LENGTH = 223;
+
+    private static final String KEY_PARENTS = "PARENTS";
+
+    private static final String KEY_FILE = "FILE";
+
+    private static final String KEY_ACCOUNT_SELECTED = "ACCOUNT_SELECTED";
+
+    private static final String KEY_ACCOUNT_SELECTION_SHOWING = "ACCOUNT_SELECTION_SHOWING";
+
     private static final String DIALOG_WAIT_COPY_FILE = "DIALOG_WAIT_COPY_FILE";
+
     private AccountManager mAccountManager;
     private Stack<String> mParents;
     private ArrayList<Uri> mStreamsToUpload = new ArrayList<>();
@@ -153,11 +164,17 @@ public class ReceiveExternalFilesActivity extends FileActivity
     // this is inited lazily, when an account is selected. If no account is selected but an instance of this would
     // be crated it would result in an null pointer exception.
     private ReceiveExternalFilesAdapter mAdapter = null;
+
     private ListView mListView;
+
     private boolean mSyncInProgress = false;
+
     private boolean mAccountSelected;
+
     private boolean mAccountSelectionShowing;
+
     private Handler mainThreadHandler;
+
     Pattern pattern = Pattern.compile("[/\\\\]");
 
     private ReceiveExternalFilesViewModel mReceiveExternalFilesViewModel;
@@ -805,17 +822,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
         });
     }
 
-    /**
-     * Process the result of CopyAndUploadContentUrisTask
-     *
-     @Override public void onTmpFilesCopied(ResultCode result) {
-     try {
-     dismissLoadingDialog();
-     } catch (IllegalStateException illegalStateException) {
-     Timber.e(illegalStateException);
-     }
-     finish();
-     }*/
 
     /**
      * Show an error dialog, forcing the user to click a single button to exit the activity
