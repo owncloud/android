@@ -407,6 +407,7 @@
   <string name="file_list_empty_moving">Nada aqui. Você pode adicionar uma pasta!</string>
   <string name="folder_picker_choose_button_text">Escolher</string>
   <string name="folder_picker_move_here_button_text">Mova aqui</string>
+  <string name="folder_picker_copy_here_button_text">Copiar aqui</string>
   <string name="forbidden_permissions_move">mover este arquivo</string>
   <string name="forbidden_permissions_copy">para copiar este arquivo</string>
   <string name="prefs_category_camera_upload">Envios da câmera</string>

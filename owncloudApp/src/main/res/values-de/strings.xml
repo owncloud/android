@@ -401,6 +401,8 @@
   <string name="actionbar_move">Verschieben</string>
   <string name="file_list_empty_moving">Keine Daten vorhanden. Ein Ordner kann hinzufügt werden!</string>
   <string name="folder_picker_choose_button_text">Auswählen</string>
+  <string name="folder_picker_move_here_button_text">Hierhin verschieben</string>
+  <string name="folder_picker_copy_here_button_text">Hierhin kopieren</string>
   <string name="forbidden_permissions_move">um diese Datei zu verschieben</string>
   <string name="forbidden_permissions_copy">um diese Datei zu kopieren</string>
   <string name="prefs_category_camera_upload">Kamera Uploads</string>
