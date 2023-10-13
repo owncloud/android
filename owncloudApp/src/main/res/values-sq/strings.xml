@@ -188,7 +188,9 @@
   <string name="uploader_upload_succeeded_ticker">Ngarkimi doli me sukses</string>
   <string name="uploader_upload_succeeded_content_single">%1$s u ngarkua</string>
   <string name="uploader_upload_failed_ticker">Ngarkimi dështoi</string>
+  <string name="uploader_upload_text_filename_hint">Emër kartele</string>
   <string name="uploader_upload_camera_upload_files">Po ngarkohen kartela ngarkimi nga kamera</string>
+  <string name="uploader_upload_camera_upload_source_path_error">Dështuan ngarkime nga kamera</string>
   <string name="uploader_upload_available_offline_files">Po ngarkohen kartela për punim jashtë linje</string>
   <string name="uploader_upload_requested_from_wifi_files">Po ngarkohen të kërkuarat nga kartela wifi</string>
   <string name="uploads_view_title">Ngarkime</string>
@@ -406,6 +408,7 @@
   <string name="file_list_empty_moving">S\’ka gjë këtu. Mund të shtoni një dosje!</string>
   <string name="folder_picker_choose_button_text">Zgjidhni</string>
   <string name="folder_picker_move_here_button_text">Shpjere këtu</string>
+  <string name="folder_picker_copy_here_button_text">Kopjoje këtu</string>
   <string name="forbidden_permissions_move">për zhvendosje të kësaj kartele</string>
   <string name="forbidden_permissions_copy">për kopjim të kësaj kartele</string>
   <string name="prefs_category_camera_upload">Ngarkime nga kamera</string>
