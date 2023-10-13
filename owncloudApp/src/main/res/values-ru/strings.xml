@@ -395,6 +395,7 @@
   <string name="file_list_empty_moving">Здесь ничего нет. Вы можете создать каталог!</string>
   <string name="folder_picker_choose_button_text">Выбрать</string>
   <string name="folder_picker_move_here_button_text">Поместить сюда</string>
+  <string name="folder_picker_copy_here_button_text">Копировать сюда</string>
   <string name="forbidden_permissions_move">для перемещения этого файла</string>
   <string name="forbidden_permissions_copy">для копирования этого файла</string>
   <string name="prefs_category_camera_upload">Загрузки камеры</string>
