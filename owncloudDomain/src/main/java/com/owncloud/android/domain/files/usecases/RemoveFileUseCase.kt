@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Aitor Balleseteros Pavón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,17 +25,35 @@ import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
 class RemoveFileUseCase(
-    private val fileRepository: FileRepository
+    private val fileRepository: FileRepository,
+    private val setLastUsageFileUseCase: SetLastUsageFileUseCase,
 ) : BaseUseCaseWithResult<Unit, RemoveFileUseCase.Params>() {
 
     override fun run(params: Params) {
 
         require(params.listOfFilesToDelete.isNotEmpty())
 
-        return fileRepository.deleteFiles(
+        val listOfFilesToDeleteOriginal = params.listOfFilesToDelete.map { it to it.isAvailableLocally }
+
+        val deleteFiles = fileRepository.deleteFiles(
             listOfFilesToDelete = params.listOfFilesToDelete,
-            removeOnlyLocalCopy = params.removeOnlyLocalCopy
+            removeOnlyLocalCopy = params.removeOnlyLocalCopy,
         )
+
+        if (params.removeOnlyLocalCopy) {
+            listOfFilesToDeleteOriginal.forEach { (ocFile, isAvailableLocally) ->
+                setLastUsageFile(ocFile, isAvailableLocally)
+            }
+        }
+        return deleteFiles
+    }
+
+    private fun setLastUsageFile(file: OCFile, isAvailableLocally: Boolean ){
+            setLastUsageFileUseCase(SetLastUsageFileUseCase.Params(
+                fileId = file.id!!,
+                lastUsage = null,
+                isAvailableLocally = isAvailableLocally,
+                isFolder = file.isFolder))
     }
 
     data class Params(

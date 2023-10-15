@@ -31,7 +31,7 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 41;
+    public static final int DB_VERSION = 42;
 
     private ProviderMeta() {
     }
@@ -109,6 +109,7 @@ public class ProviderMeta {
         public static final String FILE_IS_DOWNLOADING = "is_downloading";
         public static final String FILE_KEEP_IN_SYNC = "keep_in_sync";
         public static final String FILE_LAST_SYNC_DATE_FOR_DATA = "last_sync_date_for_data";
+        public static final String FILE_LAST_USAGE = "last_usage";
         public static final String FILE_MODIFIED = "modified";
         public static final String FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA = "modified_at_last_sync_for_data";
         public static final String FILE_NAME = "filename";

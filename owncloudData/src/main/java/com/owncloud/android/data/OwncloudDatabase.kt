@@ -48,6 +48,7 @@ import com.owncloud.android.data.migrations.MIGRATION_33_34
 import com.owncloud.android.data.migrations.MIGRATION_34_35
 import com.owncloud.android.data.migrations.MIGRATION_35_36
 import com.owncloud.android.data.migrations.MIGRATION_37_38
+import com.owncloud.android.data.migrations.MIGRATION_41_42
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
@@ -105,6 +106,7 @@ abstract class OwncloudDatabase : RoomDatabase() {
             MIGRATION_34_35,
             MIGRATION_35_36,
             MIGRATION_37_38,
+            MIGRATION_41_42
         )
 
         fun getDatabase(

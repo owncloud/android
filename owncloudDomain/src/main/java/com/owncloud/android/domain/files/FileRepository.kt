@@ -66,5 +66,5 @@ interface FileRepository {
     fun disableThumbnailsForFile(fileId: Long)
     fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
     fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
-
+    fun updateFileWithLastUsage(id: Long, lastUsage: Long?)
 }
