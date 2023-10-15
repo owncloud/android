@@ -75,6 +75,7 @@ import com.owncloud.android.domain.files.usecases.SaveFileOrFolderUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.files.usecases.SortFilesWithSyncInfoUseCase
 import com.owncloud.android.domain.files.usecases.UpdateAlreadyDownloadedFilesPathUseCase
+import com.owncloud.android.domain.files.usecases.SetLastUsageFileUseCase
 import com.owncloud.android.domain.server.usecases.GetServerInfoAsyncUseCase
 import com.owncloud.android.domain.sharing.sharees.GetShareesAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -178,6 +179,7 @@ val useCaseModule = module {
     factoryOf(::SynchronizeFileUseCase)
     factoryOf(::SynchronizeFolderUseCase)
     factoryOf(::ManageDeepLinkUseCase)
+    factoryOf(::SetLastUsageFileUseCase)
 
     // Open in web
     factoryOf(::CreateFileWithAppProviderUseCase)
