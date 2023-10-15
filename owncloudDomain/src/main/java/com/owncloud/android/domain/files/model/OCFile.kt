@@ -50,6 +50,7 @@ data class OCFile(
     var treeEtag: String? = "",
     var availableOfflineStatus: AvailableOfflineStatus? = null,
     var lastSyncDateForData: Long? = 0,
+    var lastUsage: Long? = null,
     var needsToUpdateThumbnail: Boolean = false,
     var modifiedAtLastSyncForData: Long? = 0,
     var etagInConflict: String? = null,
@@ -207,6 +208,7 @@ data class OCFile(
         treeEtag = sourceFile.treeEtag
         etagInConflict = sourceFile.etagInConflict
         availableOfflineStatus = sourceFile.availableOfflineStatus
+        lastUsage = sourceFile.lastUsage
     }
 
     /**

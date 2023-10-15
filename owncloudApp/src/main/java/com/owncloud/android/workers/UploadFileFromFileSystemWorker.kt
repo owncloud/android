@@ -335,6 +335,7 @@ class UploadFileFromFileSystemWorker(
                         length = (File(ocTransfer.localPath).length()),
                         lastSyncDateForData = currentTime,
                         modifiedAtLastSyncForData = currentTime,
+                        lastUsage = currentTime
                     )
                 } else {
                     // Uploading a file should remove any conflicts on the file.

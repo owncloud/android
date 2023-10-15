@@ -195,6 +195,10 @@ class OCLocalFileDataSource(
         fileDao.updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory, newDirectory)
     }
 
+    override fun updateFileWithLastUsage(id: Long, lastUsage: Long?) {
+        fileDao.updateFileWithLastUsage(id, lastUsage)
+    }
+
     override fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID) {
         TODO("Not yet implemented")
     }
@@ -230,6 +234,7 @@ class OCLocalFileDataSource(
                 needsToUpdateThumbnail = needsToUpdateThumbnail,
                 fileIsDownloading = fileIsDownloading,
                 lastSyncDateForData = lastSyncDateForData,
+                lastUsage = lastUsage,
                 modifiedAtLastSyncForData = modifiedAtLastSyncForData,
                 etagInConflict = etagInConflict,
                 treeEtag = treeEtag,
@@ -257,6 +262,7 @@ class OCLocalFileDataSource(
                 needsToUpdateThumbnail = needsToUpdateThumbnail,
                 fileIsDownloading = fileIsDownloading,
                 lastSyncDateForData = lastSyncDateForData,
+                lastUsage = lastUsage,
                 modifiedAtLastSyncForData = modifiedAtLastSyncForData,
                 etagInConflict = etagInConflict,
                 treeEtag = treeEtag,

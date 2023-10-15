@@ -543,6 +543,7 @@ class FileDetailsFragment : FileFragment() {
 
             else -> fileDisplayActivity.openOCFile(fileWaitingToPreview)
         }
+        fileDetailsViewModel.setLastUsageFile(fileWaitingToPreview, fileWaitingToPreview.isAvailableLocally)
     }
 
     override fun updateViewForSyncInProgress() {

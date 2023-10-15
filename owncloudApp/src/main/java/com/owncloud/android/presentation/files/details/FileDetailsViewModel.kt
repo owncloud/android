@@ -41,6 +41,7 @@ import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.usecases.GetFileWithSyncInfoByIdUseCase
+import com.owncloud.android.domain.files.usecases.SetLastUsageFileUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.extensions.getRunningWorkInfosByTags
@@ -71,6 +72,7 @@ class FileDetailsViewModel(
     private val cancelUploadForFileUseCase: CancelUploadForFileUseCase,
     private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
     getFileWithSyncInfoByIdUseCase: GetFileWithSyncInfoByIdUseCase,
+    private val setLastUsageFileUseCase: SetLastUsageFileUseCase,
     val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     private val workManager: WorkManager,
@@ -199,6 +201,14 @@ class FileDetailsViewModel(
             }
             _menuOptions.update { result }
         }
+    }
+
+    fun setLastUsageFile(file: OCFile, isAvailableLocally: Boolean ){
+        setLastUsageFileUseCase(SetLastUsageFileUseCase.Params(
+            fileId = file.id!!,
+            lastUsage = System.currentTimeMillis(),
+            isAvailableLocally = isAvailableLocally,
+            isFolder = file.isFolder))
     }
 
     enum class ActionsInDetailsView {

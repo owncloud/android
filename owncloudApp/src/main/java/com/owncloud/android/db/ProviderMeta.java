@@ -82,6 +82,7 @@ public class ProviderMeta {
         public static final String FILE_ACCOUNT_OWNER = "file_owner";
         public static final String FILE_LAST_SYNC_DATE = "last_sync_date";// _for_properties, but let's keep it as it is
         public static final String FILE_LAST_SYNC_DATE_FOR_DATA = "last_sync_date_for_data";
+        public static final String FILE_LAST_USAGE = "last_usage";
         public static final String FILE_KEEP_IN_SYNC = "keep_in_sync";
         public static final String FILE_ETAG = "etag";
         public static final String FILE_TREE_ETAG = "tree_etag";
