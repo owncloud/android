@@ -447,7 +447,7 @@ class FileDisplayActivity : FileActivity(),
             }
 
             else -> {
-                FileDetailsFragment.newInstance(file, account)
+                FileDetailsFragment.newInstance(file, account,false)
             }
         }
     }
