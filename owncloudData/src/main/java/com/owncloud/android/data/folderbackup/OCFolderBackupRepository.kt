@@ -18,27 +18,27 @@
  */
 package com.owncloud.android.data.folderbackup
 
-import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataSource
+import com.owncloud.android.data.folderbackup.datasources.LocalFolderBackupDataSource
 import com.owncloud.android.domain.camerauploads.FolderBackupRepository
 import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import kotlinx.coroutines.flow.Flow
 
 class OCFolderBackupRepository(
-    private val folderBackupLocalDataSource: FolderBackupLocalDataSource
+    private val localFolderBackupDataSource: LocalFolderBackupDataSource
 ) : FolderBackupRepository {
 
     override fun getCameraUploadsConfiguration(): CameraUploadsConfiguration? =
-        folderBackupLocalDataSource.getCameraUploadsConfiguration()
+        localFolderBackupDataSource.getCameraUploadsConfiguration()
 
     override fun getFolderBackupConfigurationByNameAsFlow(name: String): Flow<FolderBackUpConfiguration?> =
-        folderBackupLocalDataSource.getFolderBackupConfigurationByNameAsFlow(name)
+        localFolderBackupDataSource.getFolderBackupConfigurationByNameAsFlow(name)
 
     override fun saveFolderBackupConfiguration(folderBackUpConfiguration: FolderBackUpConfiguration) {
-        folderBackupLocalDataSource.saveFolderBackupConfiguration(folderBackUpConfiguration)
+        localFolderBackupDataSource.saveFolderBackupConfiguration(folderBackUpConfiguration)
     }
 
     override fun resetFolderBackupConfigurationByName(name: String) =
-        folderBackupLocalDataSource.resetFolderBackupConfigurationByName(name)
+        localFolderBackupDataSource.resetFolderBackupConfigurationByName(name)
 
 }
