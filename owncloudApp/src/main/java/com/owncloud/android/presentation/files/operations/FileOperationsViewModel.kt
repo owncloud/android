@@ -22,6 +22,7 @@
 
 package com.owncloud.android.presentation.files.operations
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -286,5 +287,8 @@ class FileOperationsViewModel(
                 }
             }
         }
+    }
+
+    fun handleDeepLink(uri: Uri) {
     }
 }
