@@ -129,7 +129,7 @@ class OCLocalTransferDataSourceTest {
     }
 
     @Test
-    fun `updateTransferLocalPath changes transfer local path correctly` () {
+    fun `updateTransferLocalPath changes transfer local path correctly`() {
 
         ocLocalTransferDataSource.updateTransferLocalPath(id, ocTransfer.localPath)
 
@@ -215,13 +215,13 @@ class OCLocalTransferDataSourceTest {
         val transferListRandom = listOf(transferEntityQueue, transferEntityFailed, transferEntityInProgress, transferEntitySucceeded)
 
         val transferQueue = ocTransfer.copy()
-        transferQueue.status =  TransferStatus.TRANSFER_QUEUED
+        transferQueue.status = TransferStatus.TRANSFER_QUEUED
 
         val transferFailed = ocTransfer.copy()
-        transferFailed.status =  TransferStatus.TRANSFER_FAILED
+        transferFailed.status = TransferStatus.TRANSFER_FAILED
 
         val transferSucceeded = ocTransfer.copy()
-        transferSucceeded.status =  TransferStatus.TRANSFER_SUCCEEDED
+        transferSucceeded.status = TransferStatus.TRANSFER_SUCCEEDED
 
         val transferListOrdered = listOf(ocTransfer, transferQueue, transferFailed, transferSucceeded)
 
@@ -237,7 +237,6 @@ class OCLocalTransferDataSourceTest {
             transferDao.getAllTransfersAsStream()
         }
     }
-
 
     @Test
     fun `getLastTransferFor returns a OCTransfer`() {
