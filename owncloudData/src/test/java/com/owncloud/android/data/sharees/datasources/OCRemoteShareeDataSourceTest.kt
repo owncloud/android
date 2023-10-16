@@ -61,7 +61,7 @@ class OCRemoteShareeDataSourceTest {
         )
 
         every {
-            ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
         } returns getRemoteShareesOperationResult
     }
 
@@ -78,7 +78,7 @@ class OCRemoteShareeDataSourceTest {
 
         verify(exactly = 1) {
             clientManager.getShareeService(OC_ACCOUNT_NAME)
-            ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
         }
     }
 
@@ -100,7 +100,7 @@ class OCRemoteShareeDataSourceTest {
 
         verify(exactly = 1) {
             clientManager.getShareeService(OC_ACCOUNT_NAME)
-            ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
         }
     }
 
@@ -122,7 +122,7 @@ class OCRemoteShareeDataSourceTest {
 
         verify(exactly = 1) {
             clientManager.getShareeService(OC_ACCOUNT_NAME)
-            ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
         }
     }
 
@@ -143,7 +143,7 @@ class OCRemoteShareeDataSourceTest {
 
         verify(exactly = 1) {
             clientManager.getShareeService(OC_ACCOUNT_NAME)
-            ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
         }
     }
 
@@ -164,7 +164,7 @@ class OCRemoteShareeDataSourceTest {
 
         verify(exactly = 1) {
             clientManager.getShareeService(OC_ACCOUNT_NAME)
-            ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
         }
     }
 
@@ -186,7 +186,7 @@ class OCRemoteShareeDataSourceTest {
 
         verify(exactly = 1) {
             clientManager.getShareeService(OC_ACCOUNT_NAME)
-            ocShareeService.getSharees( searchString = "user", page = 1, perPage = 30)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
         }
     }
 
@@ -198,8 +198,8 @@ class OCRemoteShareeDataSourceTest {
             true
         )
 
-       every {
-            ocShareeService.getSharees( searchString = "user2", page = 2, perPage = 32)
+        every {
+            ocShareeService.getSharees(searchString = "user2", page = 2, perPage = 32)
         } returns getRemoteShareesOperationResult
 
         val emptySharees = ocRemoteShareesDataSource.getSharees(
@@ -213,7 +213,7 @@ class OCRemoteShareeDataSourceTest {
 
         verify(exactly = 1) {
             clientManager.getShareeService(OC_ACCOUNT_NAME)
-            ocShareeService.getSharees( searchString = "user2", page = 2, perPage = 32)
+            ocShareeService.getSharees(searchString = "user2", page = 2, perPage = 32)
         }
     }
 
