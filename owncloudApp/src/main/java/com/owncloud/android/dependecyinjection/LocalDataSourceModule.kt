@@ -34,8 +34,8 @@ import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataS
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.implementation.OCLocalFileDataSource
-import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataSource
-import com.owncloud.android.data.folderbackup.datasources.implementation.OCFolderBackupLocalDataSource
+import com.owncloud.android.data.folderbackup.datasources.LocalFolderBackupDataSource
+import com.owncloud.android.data.folderbackup.datasources.implementation.OCLocalFolderBackupDataSource
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
@@ -70,7 +70,7 @@ val localDataSourceModule = module {
     single<LocalStorageProvider> { ScopedStorageProvider(dataFolder, androidContext()) }
 
     factory<LocalAuthenticationDataSource> { OCLocalAuthenticationDataSource(androidContext(), get(), get(), accountType) }
-    factoryOf(::OCFolderBackupLocalDataSource) bind FolderBackupLocalDataSource::class
+    factoryOf(::OCLocalFolderBackupDataSource) bind LocalFolderBackupDataSource::class
     factoryOf(::OCLocalAppRegistryDataSource) bind LocalAppRegistryDataSource::class
     factoryOf(::OCLocalCapabilitiesDataSource) bind LocalCapabilitiesDataSource::class
     factoryOf(::OCLocalFileDataSource) bind LocalFileDataSource::class

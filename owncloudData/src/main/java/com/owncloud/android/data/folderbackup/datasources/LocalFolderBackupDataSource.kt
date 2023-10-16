@@ -22,7 +22,7 @@ import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguratio
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import kotlinx.coroutines.flow.Flow
 
-interface FolderBackupLocalDataSource {
+interface LocalFolderBackupDataSource {
     fun getCameraUploadsConfiguration(): CameraUploadsConfiguration?
 
     fun getFolderBackupConfigurationByNameAsFlow(name: String): Flow<FolderBackUpConfiguration?>

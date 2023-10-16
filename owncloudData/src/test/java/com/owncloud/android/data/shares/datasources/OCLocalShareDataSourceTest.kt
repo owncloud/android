@@ -292,7 +292,7 @@ class OCLocalShareDataSourceTest {
      **************************************************************************************************************/
 
     @Test
-    fun `replaceShares renewal shares related to a list of shares`() {
+    fun `replaceShares update a list of shares correctly`() {
         val expectedValues = listOf<Long>(1, 2)
         every { ocSharesDao.replaceShares(publicShares) } returns expectedValues
 

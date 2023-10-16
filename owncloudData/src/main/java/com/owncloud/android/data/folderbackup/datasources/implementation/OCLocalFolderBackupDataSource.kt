@@ -19,7 +19,7 @@
 package com.owncloud.android.data.folderbackup.datasources.implementation
 
 import androidx.annotation.VisibleForTesting
-import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataSource
+import com.owncloud.android.data.folderbackup.datasources.LocalFolderBackupDataSource
 import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
 import com.owncloud.android.data.folderbackup.db.FolderBackupDao
 import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
@@ -30,9 +30,9 @@ import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class OCFolderBackupLocalDataSource(
+class OCLocalFolderBackupDataSource(
     private val folderBackupDao: FolderBackupDao,
-) : FolderBackupLocalDataSource {
+) : LocalFolderBackupDataSource {
 
     override fun getCameraUploadsConfiguration(): CameraUploadsConfiguration? {
         val pictureUploadsConfiguration = folderBackupDao.getFolderBackUpConfigurationByName(pictureUploadsName)
