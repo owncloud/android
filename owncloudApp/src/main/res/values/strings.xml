@@ -749,5 +749,6 @@
 
     <!-- DeepLinks -->
     <string name="no_user_logged_for_deep_link">You need a logged user to open the link</string>
+    <string name="invalid_deep_link_format">Invalid deep link format</string>
 
 </resources>

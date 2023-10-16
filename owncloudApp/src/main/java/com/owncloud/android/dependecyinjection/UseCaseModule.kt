@@ -65,6 +65,7 @@ import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
 import com.owncloud.android.domain.files.usecases.GetSharedByLinkForAccountAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetSharesRootFolderForAccount
 import com.owncloud.android.domain.files.usecases.GetWebDavUrlForSpaceUseCase
+import com.owncloud.android.domain.files.usecases.ManageDeepLinkUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
@@ -176,6 +177,7 @@ val useCaseModule = module {
     factoryOf(::SortFilesWithSyncInfoUseCase)
     factoryOf(::SynchronizeFileUseCase)
     factoryOf(::SynchronizeFolderUseCase)
+    factoryOf(::ManageDeepLinkUseCase)
 
     // Open in web
     factoryOf(::CreateFileWithAppProviderUseCase)
