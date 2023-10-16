@@ -20,7 +20,7 @@
 
 package com.owncloud.android.data.folderbackup.datasources.implementation
 
-import com.owncloud.android.data.folderbackup.datasources.implementation.OCFolderBackupLocalDataSource.Companion.toModel
+import com.owncloud.android.data.folderbackup.datasources.implementation.OCLocalFolderBackupDataSource.Companion.toModel
 import com.owncloud.android.data.folderbackup.db.FolderBackupDao
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.testutil.OC_BACKUP
@@ -36,14 +36,14 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
-class OCFolderBackupLocalDataSourceTest {
+class OCLocalFolderBackupDataSourceTest {
 
-    private lateinit var ocFolderBackupLocalDataSource: OCFolderBackupLocalDataSource
+    private lateinit var mOcLocalFolderBackupDataSource: OCLocalFolderBackupDataSource
     private val folderBackupDao = mockk<FolderBackupDao>(relaxed = true)
 
     @Before
     fun setUp() {
-        ocFolderBackupLocalDataSource = OCFolderBackupLocalDataSource(folderBackupDao)
+        mOcLocalFolderBackupDataSource = OCLocalFolderBackupDataSource(folderBackupDao)
     }
 
     @Test
@@ -51,7 +51,7 @@ class OCFolderBackupLocalDataSourceTest {
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } returns OC_BACKUP_ENTITY
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } returns OC_BACKUP_ENTITY
 
-        val resultCurrent = ocFolderBackupLocalDataSource.getCameraUploadsConfiguration()
+        val resultCurrent = mOcLocalFolderBackupDataSource.getCameraUploadsConfiguration()
 
         assertEquals(OC_BACKUP_ENTITY.toModel(), resultCurrent?.pictureUploadsConfiguration)
         assertEquals(OC_BACKUP_ENTITY.toModel(), resultCurrent?.videoUploadsConfiguration)
@@ -67,7 +67,7 @@ class OCFolderBackupLocalDataSourceTest {
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } returns null
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } returns null
 
-        val resultCurrent = ocFolderBackupLocalDataSource.getCameraUploadsConfiguration()
+        val resultCurrent = mOcLocalFolderBackupDataSource.getCameraUploadsConfiguration()
 
         assertNull(resultCurrent)
 
@@ -83,7 +83,7 @@ class OCFolderBackupLocalDataSourceTest {
             OC_BACKUP_ENTITY
         )
 
-        val resultCurrent = ocFolderBackupLocalDataSource.getFolderBackupConfigurationByNameAsFlow(FolderBackUpConfiguration.pictureUploadsName)
+        val resultCurrent = mOcLocalFolderBackupDataSource.getFolderBackupConfigurationByNameAsFlow(FolderBackUpConfiguration.pictureUploadsName)
 
         val result = resultCurrent.first()
         assertEquals(OC_BACKUP_ENTITY.toModel(), result)
@@ -95,7 +95,7 @@ class OCFolderBackupLocalDataSourceTest {
 
     @Test
     fun `saveFolderBackupConfiguration with valid configurations saves the information`() {
-        ocFolderBackupLocalDataSource.saveFolderBackupConfiguration(OC_BACKUP)
+        mOcLocalFolderBackupDataSource.saveFolderBackupConfiguration(OC_BACKUP)
 
         verify(exactly = 1) {
             folderBackupDao.update(OC_BACKUP_ENTITY)
@@ -104,7 +104,7 @@ class OCFolderBackupLocalDataSourceTest {
 
     @Test
     fun `resetFolderBackupConfigurationByName removes current folder backup configuration`() {
-        ocFolderBackupLocalDataSource.resetFolderBackupConfigurationByName(FolderBackUpConfiguration.pictureUploadsName)
+        mOcLocalFolderBackupDataSource.resetFolderBackupConfigurationByName(FolderBackUpConfiguration.pictureUploadsName)
 
         verify(exactly = 1) {
             folderBackupDao.delete(FolderBackUpConfiguration.pictureUploadsName)
