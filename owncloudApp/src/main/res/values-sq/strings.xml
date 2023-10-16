@@ -74,6 +74,7 @@
   <string name="prefs_log_no_logs_list_view">Zbraz dosje regjistrash!</string>
   <string name="prefs_log_title">Aktivizo regjistrimet</string>
   <string name="prefs_log_title_history">Historik regjistrimesh</string>
+  <string name="prefs_log_summary_history">Kjo shfaq regjistrimet e bëra.</string>
   <string name="prefs_log_delete_history_button">Fshije historikun</string>
   <string name="prefs_help">Ndihmë</string>
   <string name="prefs_sync_calendar_contacts">Njëkohësoni kontaktet, kalendarët dhe punët tuaja</string>
@@ -105,6 +106,7 @@
   <string name="recommend_text">Dua t\’ju ftoj të përdorni %1$s në telefonin tuaj!\nShkarkojeni prej këtu: %2$s</string>
   <string name="error_reason">ngaqë</string>
   <string name="auth_failure_snackbar">Mirëfilltësimi dështoi</string>
+  <string name="server_not_supported">Versioni i shërbyesit tuaj është më i vogël se 10, ndaj nuk mbulohet, ju lutemi, përmirësoni shërbyesin tuaj me version më të ri.</string>
   <string name="auth_failure_snackbar_action">Ndryshoni llogari</string>
   <string name="auth_oauth_failure_snackbar_action">Hyni</string>
   <string name="auth_check_server">Kontrollo shërbyesin</string>
@@ -188,6 +190,8 @@
   <string name="uploader_upload_succeeded_ticker">Ngarkimi doli me sukses</string>
   <string name="uploader_upload_succeeded_content_single">%1$s u ngarkua</string>
   <string name="uploader_upload_failed_ticker">Ngarkimi dështoi</string>
+  <string name="uploader_upload_text_dialog_title">Jepni një emër për kartelën e re.</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">Emri i kartelës s\’duhet të jetë i zbrazët.</string>
   <string name="uploader_upload_text_filename_hint">Emër kartele</string>
   <string name="uploader_upload_camera_upload_files">Po ngarkohen kartela ngarkimi nga kamera</string>
   <string name="uploader_upload_camera_upload_source_path_error">Dështuan ngarkime nga kamera</string>
