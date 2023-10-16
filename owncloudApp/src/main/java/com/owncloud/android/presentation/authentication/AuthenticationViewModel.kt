@@ -77,6 +77,8 @@ class AuthenticationViewModel(
     private val _legacyWebfingerHost = MediatorLiveData<Event<UIResult<String>>>()
     val legacyWebfingerHost: LiveData<Event<UIResult<String>>> = _legacyWebfingerHost
 
+    var launchedFromDeepLink = false
+
     fun getLegacyWebfingerHost(
         webfingerLookupServer: String,
         webfingerUsername: String,
