@@ -74,6 +74,7 @@ import com.owncloud.android.presentation.security.SecurityEnforced
 import com.owncloud.android.presentation.settings.SettingsActivity
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.MdmProvider
+import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.CONFIGURATION_OAUTH2_OPEN_ID_PROMPT
 import com.owncloud.android.utils.CONFIGURATION_OAUTH2_OPEN_ID_SCOPE
@@ -117,6 +118,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         } // else, let it go, or taking screenshots & testing will not be possible
 
         // Get values from intent
+        handleDeepLink()
         loginAction = intent.getByteExtra(EXTRA_ACTION, ACTION_CREATE)
         authTokenType = intent.getStringExtra(KEY_AUTH_TOKEN_TYPE)
         userAccount = intent.getParcelableExtra(EXTRA_ACCOUNT)
@@ -188,6 +190,24 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         initLiveDataObservers()
     }
 
+    private fun handleDeepLink() {
+        if (intent.data != null) {
+            authenticationViewModel.launchedFromDeepLink = true
+            if (com.owncloud.android.presentation.authentication.AccountUtils.getAccounts(baseContext).isNotEmpty()) {
+                launchFileDisplayActivity()
+            } else {
+                showMessageInSnackbar(message = baseContext.getString(R.string.no_user_logged_for_deep_link))
+            }
+        }
+    }
+
+    private fun launchFileDisplayActivity() {
+        val newIntent = Intent(this, FileDisplayActivity::class.java)
+        newIntent.data = intent.data
+        startActivity(newIntent)
+        finish()
+    }
+
     private fun initLiveDataObservers() {
         // LiveData observers
         authenticationViewModel.legacyWebfingerHost.observe(this) { event ->
@@ -217,8 +237,11 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         authenticationViewModel.accountDiscovery.observe(this) {
             if (it.peekContent() is UIResult.Success) {
                 notifyDocumentsProviderRoots(applicationContext)
-
-                finish()
+                if (authenticationViewModel.launchedFromDeepLink) {
+                    launchFileDisplayActivity()
+                } else {
+                    finish()
+                }
             } else {
                 binding.authStatusText.run {
                     text = context.getString(R.string.login_account_preparing)

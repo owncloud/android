@@ -747,4 +747,7 @@
     <string name="tab_label_ascii">Text</string>
     <string name="apply_to_all_conflicts">Apply to all %1$s conflicts</string>
 
+    <!-- DeepLinks -->
+    <string name="no_user_logged_for_deep_link">You need a logged user to open the link</string>
+
 </resources>
