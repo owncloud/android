@@ -544,20 +544,6 @@
   <string name="release_notes_footer">Thank you for using %1$s.\n❤</string>
   <string name="release_notes_proceed">Proceed</string>
   <string name="release_notes_icon">Release note icon</string>
-  <string name="release_notes_4_0_title_1">Support for Spaces</string>
-  <string name="release_notes_4_0_title_2">Bottom navigation bar</string>
-  <string name="release_notes_4_0_subtitle_2">Reordered some tabs</string>
-  <string name="release_notes_4_0_title_3">End of support Lollipop</string>
-  <string name="release_notes_4_0_subtitle_3">This will be the last release with support for Android Lollipop (v5.0)</string>
-  <string name="release_notes_4_0_title_4">Updated WebFinger flow</string>
-  <string name="release_notes_4_0_title_5">Permission handling</string>
-  <string name="release_notes_4_0_title_6">New \"Manage notifications\" setting</string>
-  <string name="release_notes_4_0_title_7">Minor bugfixes and improvements</string>
-  <string name="release_notes_4_0_title_8">Markdown support</string>
-  <string name="release_notes_4_0_subtitle_8">Markdown files rendered and displayed with proper format</string>
-  <string name="release_notes_4_0_title_10">Themed icons supported</string>
-  <string name="release_notes_4_0_title_12">New setting with app suggested to browse files</string>
-  <string name="release_notes_4_1_title_7">Minor bugfixes and improvements</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Open in web</string>
   <string name="ic_action_open_with_web">Open in %1$s (web)</string>
