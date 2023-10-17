@@ -538,16 +538,6 @@
   <string name="release_notes_footer">Благодарим за использование %1$s.\n❤</string>
   <string name="release_notes_proceed">Продолжить</string>
   <string name="release_notes_icon">Иконка к примечанию релиза</string>
-  <string name="release_notes_4_0_title_1">Поддержка хранилищ</string>
-  <string name="release_notes_4_0_title_2">Нижняя панель навигации</string>
-  <string name="release_notes_4_0_subtitle_2">Переупорядочены некоторые вкладки</string>
-  <string name="release_notes_4_0_title_3">Окончание поддержки Lollipop</string>
-  <string name="release_notes_4_0_subtitle_3">Это будет последний выпуск с поддержкой Android Lollipop (v5.0).</string>
-  <string name="release_notes_4_0_title_4">Обновленный поток WebFinger</string>
-  <string name="release_notes_4_0_title_5">Обработка разрешений</string>
-  <string name="release_notes_4_0_title_6">Новая настройка «Управление уведомлениями»</string>
-  <string name="release_notes_4_0_title_7">Мелкие исправления и улучшения</string>
-  <string name="release_notes_4_1_title_7">Мелкие исправления и улучшения</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Открыть в браузере</string>
   <string name="ic_action_open_with_web">Открыть в %1$s (веб)</string>
