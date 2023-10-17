@@ -1,0 +1,6 @@
+Bugfix: Thumbnails correctly shown for every user
+
+Due to an error in the request, users that included the '@' character in their usernames couldn't
+see the thumbnails of the image files. Now, every user can see them correctly.
+
+https://github.com/owncloud/android/pull/4189
