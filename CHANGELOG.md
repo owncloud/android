@@ -10,6 +10,7 @@ Summary
 
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
 * Enhancement - Koin DSL: [#3966](https://github.com/owncloud/android/pull/3966)
+* Enhancement - Unit tests for datasources classes - Part 3: [#4072](https://github.com/owncloud/android/issues/4072)
 * Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
 * Enhancement - "Share to" in oCIS accounts allows upload to any space: [#4088](https://github.com/owncloud/android/issues/4088)
 * Enhancement - Use invoke operator to execute usecases: [#4179](https://github.com/owncloud/android/pull/4179)
@@ -31,6 +32,17 @@ Details
    class constructor directly
 
    https://github.com/owncloud/android/pull/3966
+
+* Enhancement - Unit tests for datasources classes - Part 3: [#4072](https://github.com/owncloud/android/issues/4072)
+
+   Unit tests of the OCFolderBackupLocalDataSource, OCRemoteOAuthDataSource,
+   OCRemoteShareeDataSource, OCLocalShareDataSource, OCRemoteShareDataSource,
+   OCLocalSpacesDataSource, OCRemoteSpacesDataSource, OCLocalTransferDataSource,
+   OCLocalUserDataSource, OCRemoteUserDataSource, OCRemoteWebFingerDatasource classes
+   have been done and completed.
+
+   https://github.com/owncloud/android/issues/4072
+   https://github.com/owncloud/android/pull/4143
 
 * Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
 

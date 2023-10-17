@@ -33,6 +33,7 @@ import com.owncloud.android.testutil.OC_USER_QUOTA
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -64,7 +65,7 @@ class OCRemoteUserDataSourceTest {
     )
 
     @Before
-    fun init() {
+    fun setUp() {
         every { clientManager.getUserService(any()) } returns ocUserService
 
         ocRemoteUserDataSource = OCRemoteUserDataSource(
@@ -74,7 +75,7 @@ class OCRemoteUserDataSourceTest {
     }
 
     @Test
-    fun getUserInfoOk() {
+    fun `getUserInfo returns UserInfo`() {
         val getUserInfoResult: RemoteOperationResult<RemoteUserInfo> =
             createRemoteOperationResultMock(data = remoteUserInfo, isSuccess = true)
 
@@ -86,20 +87,12 @@ class OCRemoteUserDataSourceTest {
 
         assertNotNull(userInfo)
         assertEquals(OC_USER_INFO, userInfo)
-    }
 
-    @Test(expected = Exception::class)
-    fun getUserInfoException() {
-
-        every {
-            ocUserService.getUserInfo()
-        } throws Exception()
-
-        ocRemoteUserDataSource.getUserInfo(OC_ACCOUNT_NAME)
+        verify(exactly = 1) { ocUserService.getUserInfo() }
     }
 
     @Test
-    fun getUserQuotaOk() {
+    fun `getUserQuota returns UserQuota`() {
         val getUserQuotaResult: RemoteOperationResult<GetRemoteUserQuotaOperation.RemoteQuota> =
             createRemoteOperationResultMock(data = remoteQuota, isSuccess = true)
 
@@ -111,19 +104,12 @@ class OCRemoteUserDataSourceTest {
 
         assertNotNull(userQuota)
         assertEquals(OC_USER_QUOTA, userQuota)
-    }
 
-    @Test(expected = Exception::class)
-    fun getUserQuotaException() {
-        every {
-            ocUserService.getUserQuota()
-        } throws Exception()
-
-        ocRemoteUserDataSource.getUserQuota(OC_ACCOUNT_NAME)
+        verify(exactly = 1) { ocUserService.getUserQuota() }
     }
 
     @Test
-    fun getUserAvatarOk() {
+    fun `getUserAvatar returns UserAvatar`() {
         val getUserAvatarResult: RemoteOperationResult<RemoteAvatarData> =
             createRemoteOperationResultMock(data = remoteAvatar, isSuccess = true)
 
@@ -135,14 +121,8 @@ class OCRemoteUserDataSourceTest {
 
         assertNotNull(userAvatar)
         assertEquals(OC_USER_AVATAR, userAvatar)
-    }
 
-    @Test(expected = Exception::class)
-    fun getUserAvatarException() {
-        every {
-            ocUserService.getUserAvatar(avatarDimension)
-        } throws Exception()
-
-        ocRemoteUserDataSource.getUserAvatar(OC_ACCOUNT_NAME)
+        verify(exactly = 1) { ocUserService.getUserAvatar(avatarDimension) }
     }
 }
+
