@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -33,6 +35,7 @@ import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -40,15 +43,15 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class OCRemoteShareesDataSourceTest {
+class OCRemoteShareeDataSourceTest {
     private lateinit var ocRemoteShareesDataSource: OCRemoteShareeDataSource
     private val ocShareeService: OCShareeService = mockk()
     private val clientManager: ClientManager = mockk()
     private lateinit var sharees: List<OCSharee>
 
     @Before
-    fun init() {
-        every { clientManager.getShareeService(any()) } returns ocShareeService
+    fun setUp() {
+        every { clientManager.getShareeService(OC_ACCOUNT_NAME) } returns ocShareeService
         ocRemoteShareesDataSource =
             OCRemoteShareeDataSource(clientManager, RemoteShareeMapper())
 
@@ -58,94 +61,160 @@ class OCRemoteShareesDataSourceTest {
         )
 
         every {
-            ocShareeService.getSharees("user", 1, 30)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
         } returns getRemoteShareesOperationResult
+    }
 
-        // Get sharees from remote datasource
+    @Test
+    fun `getSharees returns a list of OCSharee entered as remote sharees`() {
         sharees = ocRemoteShareesDataSource.getSharees(
             "user",
             1,
             30,
             OC_ACCOUNT_NAME,
         )
-    }
-
-    @Test
-    fun `OCSharees List - ok - contains sharees entered as remote sharees`() {
         assertNotNull(sharees)
         assertEquals(5, sharees.size)
+
+        verify(exactly = 1) {
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
+        }
     }
 
     @Test
-    fun `OCSharees List - ok - contains exact user match`() {
-        val sharee = sharees[0]
-        assertEquals(sharee.label, "User")
-        assertEquals(sharee.shareType, ShareType.USER)
-        assertEquals(sharee.shareWith, "user")
-        assertEquals(sharee.additionalInfo, "user@exact.com")
-        assertTrue(sharee.isExactMatch)
-    }
-
-    @Test
-    fun `OCSharees List - ok - contains one user not exactly matched`() {
-        val sharee = sharees[1]
-        assertEquals("User 1", sharee.label)
-        assertEquals(ShareType.USER, sharee.shareType)
-        assertEquals("user1", sharee.shareWith)
-        assertEquals("user1@mail.com", sharee.additionalInfo)
-        assertFalse(sharee.isExactMatch)
-    }
-
-    @Test
-    fun `OCShares List - ok - contains one user without additional info`() {
-        val sharee = sharees[2]
-        assertEquals("User 2", sharee.label)
-        assertEquals(ShareType.USER, sharee.shareType)
-        assertEquals("user2", sharee.shareWith)
-        assertEquals("", sharee.additionalInfo)
-        assertFalse(sharee.isExactMatch)
-    }
-
-    @Test
-    fun `OCShares List - ok - contains one remote user`() {
-        val sharee = sharees[3]
-        assertEquals("Remoteuser 1", sharee.label)
-        assertEquals(ShareType.FEDERATED, sharee.shareType)
-        assertEquals("remoteuser1", sharee.shareWith)
-        assertEquals("user1@remote.com", sharee.additionalInfo)
-        assertFalse(sharee.isExactMatch)
-    }
-
-    @Test
-    fun `OCShares List - ok - contains one group`() {
-        val sharee = sharees[4]
-        assertEquals("Group 1", sharee.label)
-        assertEquals(ShareType.GROUP, sharee.shareType)
-        assertEquals("group1", sharee.shareWith)
-        assertEquals("group@group.com", sharee.additionalInfo)
-        assertFalse(sharee.isExactMatch)
-    }
-
-    @Test
-    fun `OCShares List - ok - handle empty response`() {
-        val getRemoteShareesOperationResult = createRemoteOperationResultMock(
-            EMPTY_REMOTE_SHAREES,
-            true
-        )
-
-        every {
-            ocShareeService.getSharees("user", 1, 30)
-        } returns getRemoteShareesOperationResult
-
-        // Get sharees from remote datasource
-        val emptySharees = ocRemoteShareesDataSource.getSharees(
+    fun `getSharees returns a list of OCSharee when contains exact user match`() {
+        sharees = ocRemoteShareesDataSource.getSharees(
             "user",
             1,
             30,
             OC_ACCOUNT_NAME,
         )
 
+        val sharee = sharees[0]
+        assertEquals(sharee.label, "User")
+        assertEquals(sharee.shareType, ShareType.USER)
+        assertEquals(sharee.shareWith, "user")
+        assertEquals(sharee.additionalInfo, "user@exact.com")
+        assertTrue(sharee.isExactMatch)
+
+        verify(exactly = 1) {
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
+        }
+    }
+
+    @Test
+    fun `getSharees returns a list of OCSharee when contains one user not exactly matched`() {
+        sharees = ocRemoteShareesDataSource.getSharees(
+            "user",
+            1,
+            30,
+            OC_ACCOUNT_NAME,
+        )
+
+        val sharee = sharees[1]
+        assertEquals("User 1", sharee.label)
+        assertEquals(ShareType.USER, sharee.shareType)
+        assertEquals("user1", sharee.shareWith)
+        assertEquals("user1@mail.com", sharee.additionalInfo)
+        assertFalse(sharee.isExactMatch)
+
+        verify(exactly = 1) {
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
+        }
+    }
+
+    @Test
+    fun `getSharees returns a list of OCSharee when contains one user without additional info`() {
+        sharees = ocRemoteShareesDataSource.getSharees(
+            "user",
+            1,
+            30,
+            OC_ACCOUNT_NAME,
+        )
+        val sharee = sharees[2]
+        assertEquals("User 2", sharee.label)
+        assertEquals(ShareType.USER, sharee.shareType)
+        assertEquals("user2", sharee.shareWith)
+        assertEquals("", sharee.additionalInfo)
+        assertFalse(sharee.isExactMatch)
+
+        verify(exactly = 1) {
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
+        }
+    }
+
+    @Test
+    fun `getSharees returns a list of OCSharee when contains one remote user`() {
+        sharees = ocRemoteShareesDataSource.getSharees(
+            "user",
+            1,
+            30,
+            OC_ACCOUNT_NAME,
+        )
+        val sharee = sharees[3]
+        assertEquals("Remoteuser 1", sharee.label)
+        assertEquals(ShareType.FEDERATED, sharee.shareType)
+        assertEquals("remoteuser1", sharee.shareWith)
+        assertEquals("user1@remote.com", sharee.additionalInfo)
+        assertFalse(sharee.isExactMatch)
+
+        verify(exactly = 1) {
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
+        }
+    }
+
+    @Test
+    fun `getSharees returns a list of OCSharee when contains one group`() {
+        sharees = ocRemoteShareesDataSource.getSharees(
+            "user",
+            1,
+            30,
+            OC_ACCOUNT_NAME,
+        )
+
+        val sharee = sharees[4]
+        assertEquals("Group 1", sharee.label)
+        assertEquals(ShareType.GROUP, sharee.shareType)
+        assertEquals("group1", sharee.shareWith)
+        assertEquals("group@group.com", sharee.additionalInfo)
+        assertFalse(sharee.isExactMatch)
+
+        verify(exactly = 1) {
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
+            ocShareeService.getSharees(searchString = "user", page = 1, perPage = 30)
+        }
+    }
+
+    @Test
+    fun `getSharees returns a list of OCSharee when handle empty response`() {
+
+        val getRemoteShareesOperationResult = createRemoteOperationResultMock(
+            EMPTY_REMOTE_SHAREES,
+            true
+        )
+
+        every {
+            ocShareeService.getSharees(searchString = "user2", page = 2, perPage = 32)
+        } returns getRemoteShareesOperationResult
+
+        val emptySharees = ocRemoteShareesDataSource.getSharees(
+            "user2",
+            2,
+            32,
+            OC_ACCOUNT_NAME,
+        )
+
         assertTrue(emptySharees.isEmpty())
+
+        verify(exactly = 1) {
+            clientManager.getShareeService(OC_ACCOUNT_NAME)
+            ocShareeService.getSharees(searchString = "user2", page = 2, perPage = 32)
+        }
     }
 
     companion object {

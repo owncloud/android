@@ -20,10 +20,8 @@
 package com.owncloud.android.data.oauth.datasources
 
 import com.owncloud.android.data.ClientManager
-import com.owncloud.android.data.oauth.OC_REMOTE_CLIENT_REGISTRATION_PARAMS
 import com.owncloud.android.data.oauth.OC_REMOTE_CLIENT_REGISTRATION_RESPONSE
 import com.owncloud.android.data.oauth.OC_REMOTE_OIDC_DISCOVERY_RESPONSE
-import com.owncloud.android.data.oauth.OC_REMOTE_TOKEN_REQUEST_PARAMS_ACCESS
 import com.owncloud.android.data.oauth.OC_REMOTE_TOKEN_RESPONSE
 import com.owncloud.android.data.oauth.datasources.implementation.OCRemoteOAuthDataSource
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -41,12 +39,13 @@ import com.owncloud.android.testutil.oauth.OC_TOKEN_RESPONSE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
-class RemoteOAuthDataSourceTest {
+class OCRemoteOAuthDataSourceTest {
     private lateinit var remoteOAuthDataSource: RemoteOAuthDataSource
 
     private val clientManager: ClientManager = mockk(relaxed = true)
@@ -55,7 +54,7 @@ class RemoteOAuthDataSourceTest {
     private val oidcService: OIDCService = mockk()
 
     @Before
-    fun init() {
+    fun setUp() {
         every { clientManager.getClientForAnonymousCredentials(any(), any()) } returns ocClientMocked
 
         remoteOAuthDataSource = OCRemoteOAuthDataSource(
@@ -65,7 +64,7 @@ class RemoteOAuthDataSourceTest {
     }
 
     @Test
-    fun `perform oidc discovery - ok`() {
+    fun `performOIDCDiscovery returns a OIDCServerConfiguration`() {
         val oidcDiscoveryResult: RemoteOperationResult<OIDCDiscoveryResponse> =
             createRemoteOperationResultMock(data = OC_REMOTE_OIDC_DISCOVERY_RESPONSE, isSuccess = true)
 
@@ -77,19 +76,15 @@ class RemoteOAuthDataSourceTest {
 
         assertNotNull(oidcDiscovery)
         assertEquals(OC_OIDC_SERVER_CONFIGURATION, oidcDiscovery)
-    }
 
-    @Test(expected = Exception::class)
-    fun `perform oidc discovery - ko`() {
-        every {
+        verify(exactly = 1) {
+            clientManager.getClientForAnonymousCredentials(OC_SECURE_BASE_URL, false)
             oidcService.getOIDCServerDiscovery(ocClientMocked)
-        } throws Exception()
-
-        remoteOAuthDataSource.performOIDCDiscovery(OC_SECURE_BASE_URL)
+        }
     }
 
     @Test
-    fun `perform token request - ok`() {
+    fun `performTokenRequest returns a TokenResponse`() {
         val tokenResponseResult: RemoteOperationResult<TokenResponse> =
             createRemoteOperationResultMock(data = OC_REMOTE_TOKEN_RESPONSE, isSuccess = true)
 
@@ -101,19 +96,15 @@ class RemoteOAuthDataSourceTest {
 
         assertNotNull(tokenResponse)
         assertEquals(OC_TOKEN_RESPONSE, tokenResponse)
-    }
 
-    @Test(expected = Exception::class)
-    fun `perform token request - ko`() {
-        every {
-            oidcService.performTokenRequest(ocClientMocked, OC_REMOTE_TOKEN_REQUEST_PARAMS_ACCESS)
-        } throws Exception()
-
-        remoteOAuthDataSource.performTokenRequest(OC_TOKEN_REQUEST_ACCESS)
+        verify(exactly = 1) {
+            clientManager.getClientForAnonymousCredentials(OC_SECURE_BASE_URL, any())
+            oidcService.performTokenRequest(ocClientMocked, any())
+        }
     }
 
     @Test
-    fun `register client - ok`() {
+    fun `registerClient returns a ClientRegistrationInfo`() {
         val clientRegistrationResponse: RemoteOperationResult<ClientRegistrationResponse> =
             createRemoteOperationResultMock(data = OC_REMOTE_CLIENT_REGISTRATION_RESPONSE, isSuccess = true)
 
@@ -125,14 +116,10 @@ class RemoteOAuthDataSourceTest {
 
         assertNotNull(clientRegistrationInfo)
         assertEquals(OC_CLIENT_REGISTRATION, clientRegistrationInfo)
-    }
 
-    @Test(expected = Exception::class)
-    fun `register client - ko`() {
-        every {
-            oidcService.registerClientWithRegistrationEndpoint(ocClientMocked, OC_REMOTE_CLIENT_REGISTRATION_PARAMS)
-        } throws Exception()
-
-        remoteOAuthDataSource.registerClient(OC_CLIENT_REGISTRATION_REQUEST)
+        verify(exactly = 1) {
+            clientManager.getClientForAnonymousCredentials(OC_CLIENT_REGISTRATION_REQUEST.registrationEndpoint, false)
+            oidcService.registerClientWithRegistrationEndpoint(ocClientMocked, any())
+        }
     }
 }

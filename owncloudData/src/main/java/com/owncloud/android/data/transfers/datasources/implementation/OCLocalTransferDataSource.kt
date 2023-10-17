@@ -20,6 +20,7 @@
 
 package com.owncloud.android.data.transfers.datasources.implementation
 
+import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.transfers.datasources.LocalTransferDataSource
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.data.transfers.db.TransferDao
@@ -143,35 +144,40 @@ class OCLocalTransferDataSource(
         transferDao.deleteTransfersWithStatus(TransferStatus.TRANSFER_SUCCEEDED.value)
     }
 
-    private fun OCTransferEntity.toModel() = OCTransfer(
-        id = id,
-        localPath = localPath,
-        remotePath = remotePath,
-        accountName = accountName,
-        fileSize = fileSize,
-        status = TransferStatus.fromValue(status),
-        localBehaviour = if (localBehaviour > 1) UploadBehavior.MOVE else UploadBehavior.values()[localBehaviour],
-        forceOverwrite = forceOverwrite,
-        transferEndTimestamp = transferEndTimestamp,
-        lastResult = lastResult?.let { TransferResult.fromValue(it) },
-        createdBy = UploadEnqueuedBy.values()[createdBy],
-        transferId = transferId,
-        spaceId = spaceId,
-    )
 
-    private fun OCTransfer.toEntity() = OCTransferEntity(
-        localPath = localPath,
-        remotePath = remotePath,
-        accountName = accountName,
-        fileSize = fileSize,
-        status = status.value,
-        localBehaviour = localBehaviour.ordinal,
-        forceOverwrite = forceOverwrite,
-        transferEndTimestamp = transferEndTimestamp,
-        lastResult = lastResult?.value,
-        createdBy = createdBy.ordinal,
-        transferId = transferId,
-        spaceId = spaceId,
-    ).apply { this@toEntity.id?.let { this.id = it } }
 
+    companion object {
+
+        @VisibleForTesting
+        fun OCTransferEntity.toModel() = OCTransfer(
+            id = id,
+            localPath = localPath,
+            remotePath = remotePath,
+            accountName = accountName,
+            fileSize = fileSize,
+            status = TransferStatus.fromValue(status),
+            localBehaviour = if (localBehaviour > 1) UploadBehavior.MOVE else UploadBehavior.values()[localBehaviour],
+            forceOverwrite = forceOverwrite,
+            transferEndTimestamp = transferEndTimestamp,
+            lastResult = lastResult?.let { TransferResult.fromValue(it) },
+            createdBy = UploadEnqueuedBy.values()[createdBy],
+            transferId = transferId,
+            spaceId = spaceId,
+        )
+        @VisibleForTesting
+        fun OCTransfer.toEntity() = OCTransferEntity(
+            localPath = localPath,
+            remotePath = remotePath,
+            accountName = accountName,
+            fileSize = fileSize,
+            status = status.value,
+            localBehaviour = localBehaviour.ordinal,
+            forceOverwrite = forceOverwrite,
+            transferEndTimestamp = transferEndTimestamp,
+            lastResult = lastResult?.value,
+            createdBy = createdBy.ordinal,
+            transferId = transferId,
+            spaceId = spaceId,
+        ).apply { this@toEntity.id?.let { this.id = it } }
+    }
 }
