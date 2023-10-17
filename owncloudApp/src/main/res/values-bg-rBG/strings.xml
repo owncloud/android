@@ -657,22 +657,6 @@
   <string name="release_notes_footer">Благодарим ви, че използвате %1$s.\n❤</string>
   <string name="release_notes_proceed">Продължаване</string>
   <string name="release_notes_icon">Икона за бележка по изданието</string>
-  <string name="release_notes_4_0_title_1">Поддръжка за пространства</string>
-  <string name="release_notes_4_0_subtitle_1">Въвеждане на поддръжка за функцията за пространства (oCIS). <b>Налична само за нови регистрирани профили</b></string>
-  <string name="release_notes_4_0_title_2">Долна лента за навигация</string>
-  <string name="release_notes_4_0_subtitle_2">Пренареждане на някои раздели</string>
-  <string name="release_notes_4_0_title_3">Край на поддръжката на Lollipop</string>
-  <string name="release_notes_4_0_subtitle_3">Това ще бъде последната версия с поддръжка на Android Lollipop (v5.0)</string>
-  <string name="release_notes_4_0_title_4">Актуализиране на потока от WebFinger</string>
-  <string name="release_notes_4_0_subtitle_4">За сървърите на WebFinger първо ще бъде поисканo търсене в сървър и ако не е успешно, ще бъде последван редовния процес на удостоверяване</string>
-  <string name="release_notes_4_0_title_5">Боравене с разрешения</string>
-  <string name="release_notes_4_0_subtitle_5">Сега, когато липсват разрешения за извършване на някои действия с дадена папка или файл, тези действия ще бъдат скрити.</string>
-  <string name="release_notes_4_0_title_6">Нова настройка \"Управление на известия\"</string>
-  <string name="release_notes_4_0_subtitle_6">В настройките е добавен нов елемент, който пренасочва към настройките за известия на приложението на устройството.</string>
-  <string name="release_notes_4_0_title_7">Незначителни поправки на грешки и подобрения</string>
-  <string name="release_notes_4_0_subtitle_7">Отстранени са някои дребни грешки и са въведени незначителни технически подобрения, за да се подобри работата с приложението.</string>
-  <string name="release_notes_4_1_title_7">Незначителни поправки на грешки и подобрения</string>
-  <string name="release_notes_4_1_subtitle_7">Отстранени са някои дребни грешки и са въведени незначителни технически подобрения, за да се подобри работата с приложението.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Отваряне в мрежата</string>
   <string name="ic_action_open_with_web">Отваряне в %1$s (уеб)</string>
