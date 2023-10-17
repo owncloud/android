@@ -23,9 +23,11 @@ package com.owncloud.android.ui.preview;
 
 import android.content.Context;
 
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.source.UnrecognizedInputFormatException;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
+import androidx.annotation.OptIn;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.datasource.HttpDataSource;
+import androidx.media3.exoplayer.ExoPlaybackException;
+import androidx.media3.exoplayer.source.UnrecognizedInputFormatException;
 import com.owncloud.android.R;
 
 import java.io.EOFException;
@@ -37,7 +39,7 @@ import java.security.cert.CertificateException;
  * Class to choose proper video player error messages to show to the user and proper behaviour to do
  * next depending on the ExoPlayer exceptions
  */
-
+@OptIn(markerClass = UnstableApi.class)
 public class PreviewVideoErrorAdapter {
 
     private static final int NOT_FOUND_ERROR = 404;

@@ -73,10 +73,10 @@
     </style>
 
     <!-- Extends Theme.ownCloud for video in full screen mode -->
-    <style name="Theme.ownCloud.Fullscreen">
-        <item name="android:windowFullscreen">true</item>
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
+    <style name="Theme.ownCloud.Video">
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">never</item>
+        <item name="actionBarTheme">@style/ownCloud.Appbar.Transparent</item>
         <item name="android:windowBackground">@android:color/background_dark</item>
     </style>
 
