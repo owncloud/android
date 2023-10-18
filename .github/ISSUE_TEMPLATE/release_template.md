@@ -22,11 +22,11 @@ For OEM releases, keep the OEM Release template and remove the Open Release one
  - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
  - [ ] [DEV] Update [SBOM](https://cloud.owncloud.com/f/6072870)
  - [ ] [DIS] Create a folder for the new version like `M.m.p_YYYY-MM-DD` inside the `changelog` folder
- - [ ] [DIS] Move all changelog files from the unreleased folder to the new version folder
+ - [ ] [DIS] Move all changelog files from the `unreleased` folder to the new version folder
  - [ ] [DIS] Update screenshots, if needed, in README.md
- - [ ] [DEV] Add ReleaseNotes replacing `emptyList` with `listOf` and adding inside `ReleaseNote()` with String resources
+ - [ ] [DEV] Add release notes replacing `emptyList` with `listOf` and adding inside `ReleaseNote()` with String resources, in `ReleaseNotesViewModel.kt`
  - [ ] [DIS] Prepare post in central.owncloud.org ([`Category:News + Tag:android`](https://central.owncloud.org/tags/c/news/5/android))
- - [ ] [DIS] Generate final bundle from signed commit in owncloud/android
+ - [ ] [DIS] Generate final bundle from last commit in owncloud/android
  - [ ] [QA] Design Test plan
  - [ ] [DEV] Code Review
  - [ ] [QA] Regression Test execution
@@ -36,7 +36,7 @@ For OEM releases, keep the OEM Release template and remove the Open Release one
  - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
  - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
  - [ ] [DIS] Update screenshots and store listing, if needed, in Play Store
- - [ ] [GIT] Publish a new release in [owncloud/android](https://github.com/owncloud/android/releases)
+ - [ ] [GIT] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
  - [ ] [DIS] Release published in Play Store
  - [ ] [DIS] Publish post in central.owncloud.org ([`Category:News + Tag:android`](https://central.owncloud.org/tags/c/news/5/android))
  - [ ] [COM] Inform `#updates` and `#marketing` in internal chat that release is out
