@@ -31,7 +31,6 @@ import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 
 import com.jakewharton.disklrucache.DiskLruCache;
-import com.owncloud.android.MainApp;
 import timber.log.Timber;
 
 public class DiskLruImageCache {
@@ -39,7 +38,7 @@ public class DiskLruImageCache {
     private final DiskLruCache mDiskCache;
     private final CompressFormat mCompressFormat;
     private final int mCompressQuality;
-    private static final int CACHE_VERSION = 1;
+    private static final int CACHE_VERSION = 2;
     private static final int VALUE_COUNT = 1;
     private static final int IO_BUFFER_SIZE = 8 * 1024;
 
