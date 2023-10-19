@@ -134,4 +134,7 @@
     <!-- Secure connection -->
     <bool name="enforce_secure_connection">false</bool>
 
+    <!-- Deep Link -->
+    <string name="deep_link_uri_scheme">owncloud</string>
+
 </resources>
