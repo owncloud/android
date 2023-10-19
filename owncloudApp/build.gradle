@@ -92,8 +92,8 @@ android {
 
         testInstrumentationRunner "com.owncloud.android.utils.OCTestAndroidJUnitRunner"
 
-        versionCode = 41000000
-        versionName = "4.1.0"
+        versionCode = 41000100
+        versionName = "4.1.1"
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
@@ -160,6 +160,11 @@ android {
     }
 
     testOptions {
+        packagingOptions {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
         unitTests.returnDefaultValues = true
         animationsDisabled = true
     }

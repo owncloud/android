@@ -309,7 +309,7 @@ class FileDetailsFragment : FileFragment() {
     }
 
     private fun setLastSync(ocFile: OCFile) {
-        if (ocFile.lastSyncDateForData!! > ZERO_MILLISECOND_TIME) {
+        if (ocFile.lastSyncDateForData?.let { it > ZERO_MILLISECOND_TIME } == true) {
             binding.fdLastSync.visibility = View.VISIBLE
             binding.fdLastSyncLabel.visibility = View.VISIBLE
             binding.fdLastSync.text = DisplayUtils.unixTimeToHumanReadable(ocFile.lastSyncDateForData!!)
@@ -317,15 +317,15 @@ class FileDetailsFragment : FileFragment() {
     }
 
     private fun setModified(ocFile: OCFile) {
-        if (ocFile.modificationTimestamp!! > ZERO_MILLISECOND_TIME) {
+        if (ocFile.modificationTimestamp?.let { it > ZERO_MILLISECOND_TIME } == true) {
             binding.fdModified.visibility = View.VISIBLE
             binding.fdModifiedLabel.visibility = View.VISIBLE
-            binding.fdModified.text = DisplayUtils.unixTimeToHumanReadable(ocFile.modificationTimestamp!!)
+            binding.fdModified.text = DisplayUtils.unixTimeToHumanReadable(ocFile.modificationTimestamp)
         }
     }
 
     private fun setCreated(ocFile: OCFile) {
-        if (ocFile.creationTimestamp!! > ZERO_MILLISECOND_TIME) {
+        if (ocFile.creationTimestamp?.let { it > ZERO_MILLISECOND_TIME } == true) {
             binding.fdCreated.visibility = View.VISIBLE
             binding.fdCreatedLabel.visibility = View.VISIBLE
             binding.fdCreated.text = DisplayUtils.unixTimeToHumanReadable(ocFile.creationTimestamp!!)
