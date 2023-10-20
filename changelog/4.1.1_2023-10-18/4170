@@ -1,0 +1,6 @@
+Bugfix: Some Null Pointer Exceptions avoided
+
+in the detail screen, in the main file list ViewModel and in the OCFile repository the app has been prevented from crashing when a null is found.
+
+https://github.com/owncloud/android/issues/4158
+https://github.com/owncloud/android/pull/4170

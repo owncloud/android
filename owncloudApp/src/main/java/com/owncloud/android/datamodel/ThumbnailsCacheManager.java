@@ -44,6 +44,7 @@ import com.owncloud.android.domain.spaces.model.SpaceSpecial;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.SingleSessionManager;
+import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.http.HttpConstants;
 import com.owncloud.android.lib.common.http.methods.nonwebdav.GetMethod;
 import com.owncloud.android.ui.adapter.DiskLruImageCache;
@@ -259,7 +260,7 @@ public class ThumbnailsCacheManager {
         }
 
         private String getPreviewUrl(OCFile ocFile, Account account) {
-            String baseUrl = mClient.getBaseUri() + "/remote.php/dav/files/" + account.name.split("@")[0];
+            String baseUrl = mClient.getBaseUri() + "/remote.php/dav/files/" + AccountUtils.getUserId(account, MainApp.Companion.getAppContext());
 
             if (ocFile.getSpaceId() != null) {
                 Lazy<GetWebDavUrlForSpaceUseCase> getWebDavUrlForSpaceUseCaseLazy = inject(GetWebDavUrlForSpaceUseCase.class);

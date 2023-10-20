@@ -3,7 +3,7 @@ Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
 The following sections list the changes in ownCloud Android Client unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/android/compare/v4.1.0...master
+[unreleased]: https://github.com/owncloud/android/compare/v4.1.1...master
 
 Summary
 -------
@@ -65,6 +65,37 @@ Details
    Removes all the "execute" verbosity for use cases by using the "invoke" operator instead.
 
    https://github.com/owncloud/android/pull/4179
+
+Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
+=======================================
+The following sections list the changes in ownCloud Android Client 4.1.1 relevant to
+ownCloud admins and users.
+
+[4.1.1]: https://github.com/owncloud/android/compare/v4.1.0...v4.1.1
+
+Summary
+-------
+
+* Bugfix - Some Null Pointer Exceptions avoided: [#4158](https://github.com/owncloud/android/issues/4158)
+* Bugfix - Thumbnails correctly shown for every user: [#4189](https://github.com/owncloud/android/pull/4189)
+
+Details
+-------
+
+* Bugfix - Some Null Pointer Exceptions avoided: [#4158](https://github.com/owncloud/android/issues/4158)
+
+   In the detail screen, in the main file list ViewModel and in the OCFile repository the app has
+   been prevented from crashing when a null is found.
+
+   https://github.com/owncloud/android/issues/4158
+   https://github.com/owncloud/android/pull/4170
+
+* Bugfix - Thumbnails correctly shown for every user: [#4189](https://github.com/owncloud/android/pull/4189)
+
+   Due to an error in the request, users that included the '@' character in their usernames
+   couldn't see the thumbnails of the image files. Now, every user can see them correctly.
+
+   https://github.com/owncloud/android/pull/4189
 
 Changelog for ownCloud Android Client [4.1.0] (2023-08-23)
 =======================================

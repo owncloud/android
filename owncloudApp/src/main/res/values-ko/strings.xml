@@ -535,11 +535,6 @@
   <string name="release_notes_header">%1$s 신규 추가</string>
   <string name="release_notes_footer">%1$s을(를) 사용해주셔서 감사합니다.\n❤</string>
   <string name="release_notes_proceed">진행</string>
-  <string name="release_notes_4_0_title_1">스페이스 관련 도움</string>
-  <string name="release_notes_4_0_title_2">하단 내비게이션 바</string>
-  <string name="release_notes_4_0_subtitle_2">일부 탭을 재정렬함</string>
-  <string name="release_notes_4_0_title_3">Lollipop 지원 종료</string>
-  <string name="release_notes_4_0_subtitle_3">Android Lollipop (v5.0)을 위한 마지막 지원 버전입니다</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">웹에서 열기</string>
   <string name="open_in_web_error_generic">웹에서 열 수 없음</string>

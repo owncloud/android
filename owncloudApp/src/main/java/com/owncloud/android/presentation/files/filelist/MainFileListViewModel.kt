@@ -256,7 +256,7 @@ class MainFileListViewModel(
                 TODO()
             }
 
-            updateFolderToDisplay(parentDir!!)
+            parentDir?.let { updateFolderToDisplay(it) }
         }
     }
 
