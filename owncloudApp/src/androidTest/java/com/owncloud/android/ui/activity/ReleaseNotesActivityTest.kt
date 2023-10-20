@@ -25,14 +25,13 @@ import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.owncloud.android.R
-import com.owncloud.android.presentation.releasenotes.ReleaseNote
-import com.owncloud.android.presentation.releasenotes.ReleaseNoteType
 import com.owncloud.android.presentation.releasenotes.ReleaseNotesActivity
 import com.owncloud.android.presentation.releasenotes.ReleaseNotesViewModel
 import com.owncloud.android.utils.click
 import com.owncloud.android.utils.matchers.assertChildCount
 import com.owncloud.android.utils.matchers.isDisplayed
 import com.owncloud.android.utils.matchers.withText
+import com.owncloud.android.utils.releaseNotesList
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
@@ -49,23 +48,6 @@ class ReleaseNotesActivityTest {
 
     private lateinit var releaseNotesViewModel: ReleaseNotesViewModel
 
-    private val releaseNotesList = listOf(
-        ReleaseNote(
-            title = R.string.release_notes_4_1_title_1,
-            subtitle = R.string.release_notes_4_1_subtitle_1,
-            type = ReleaseNoteType.ENHANCEMENT,
-        ),
-        ReleaseNote(
-            title = R.string.release_notes_4_1_title_2,
-            subtitle = R.string.release_notes_4_1_subtitle_2,
-            type = ReleaseNoteType.ENHANCEMENT,
-        ),
-        ReleaseNote(
-            title = R.string.release_notes_4_1_title_3,
-            subtitle = R.string.release_notes_4_1_subtitle_3,
-            type = ReleaseNoteType.ENHANCEMENT,
-        ),
-    )
     @Before
     fun setUp() {
         context = ApplicationProvider.getApplicationContext()
@@ -127,6 +109,6 @@ class ReleaseNotesActivityTest {
 
     @Test
     fun test_childCount() {
-        R.id.releaseNotes.assertChildCount(releaseNotesList.size)
+        R.id.releaseNotes.assertChildCount(3)
     }
 }
