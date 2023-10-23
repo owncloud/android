@@ -606,12 +606,11 @@ class MainFileListFragment : Fragment(),
         /* TransfersViewModel observables */
         // Observe the transfers
         collectLatestLifecycleFlow(transfersViewModel.transfersWithSpaceStateFlow) { transfers ->
-            val newlySucceededTransfers = transfers.map { it.first }.filter { it.status == TransferStatus.TRANSFER_SUCCEEDED
-                    && it.accountName == AccountUtils.getCurrentOwnCloudAccount(requireContext()).name }
+            val newlySucceededTransfers = transfers.map { it.first }.filter { it.status == TransferStatus.TRANSFER_SUCCEEDED &&
+                    it.accountName == AccountUtils.getCurrentOwnCloudAccount(requireContext()).name }
             if (succeededTransfers == null) {
                 succeededTransfers = newlySucceededTransfers
-            }
-            else if (succeededTransfers != newlySucceededTransfers) {
+            } else if (succeededTransfers != newlySucceededTransfers) {
                 fileOperationsViewModel.performOperation(
                     FileOperation.RefreshFolderOperation(
                         folderToRefresh = mainFileListViewModel.getFile(),
