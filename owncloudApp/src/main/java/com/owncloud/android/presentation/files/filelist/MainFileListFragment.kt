@@ -604,7 +604,11 @@ class MainFileListFragment : Fragment(),
         onDeeplLinkManaged()
 
         /* TransfersViewModel observables */
-        // Observe the transfers
+        observeTransfers()
+
+    }
+
+    private fun observeTransfers() {
         collectLatestLifecycleFlow(transfersViewModel.transfersWithSpaceStateFlow) { transfers ->
             val newlySucceededTransfers = transfers.map { it.first }.filter { it.status == TransferStatus.TRANSFER_SUCCEEDED &&
                     it.accountName == AccountUtils.getCurrentOwnCloudAccount(requireContext()).name }
