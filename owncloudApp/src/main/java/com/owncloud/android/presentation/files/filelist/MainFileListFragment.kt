@@ -111,6 +111,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
+import okio.Path.Companion.toPath
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -612,15 +613,24 @@ class MainFileListFragment : Fragment(),
         collectLatestLifecycleFlow(transfersViewModel.transfersWithSpaceStateFlow) { transfers ->
             val newlySucceededTransfers = transfers.map { it.first }.filter { it.status == TransferStatus.TRANSFER_SUCCEEDED &&
                     it.accountName == AccountUtils.getCurrentOwnCloudAccount(requireContext()).name }
-            if (succeededTransfers == null) {
+            val safeSucceededTransfers = succeededTransfers
+            if (safeSucceededTransfers == null) {
                 succeededTransfers = newlySucceededTransfers
-            } else if (succeededTransfers != newlySucceededTransfers) {
-                fileOperationsViewModel.performOperation(
-                    FileOperation.RefreshFolderOperation(
-                        folderToRefresh = mainFileListViewModel.getFile(),
-                        shouldSyncContents = false,
-                    )
-                )
+            } else if (safeSucceededTransfers != newlySucceededTransfers) {
+                val differentNewlySucceededTransfers = newlySucceededTransfers.filter { it !in safeSucceededTransfers }
+                differentNewlySucceededTransfers.forEach { transfer ->
+                    val currentFolder = mainFileListViewModel.getFile()
+                    if (!fileOperationsViewModel.refreshFolderLiveData.value!!.peekContent().isLoading &&
+                        transfer.remotePath.toPath().parent!!.toString() == currentFolder.remotePath.toPath().toString()) {
+                        fileOperationsViewModel.performOperation(
+                            FileOperation.RefreshFolderOperation(
+                                folderToRefresh = currentFolder,
+                                shouldSyncContents = false,
+                            )
+                        )
+                    }
+                }
+
                 succeededTransfers = newlySucceededTransfers
             }
         }
