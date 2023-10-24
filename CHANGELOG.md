@@ -14,6 +14,7 @@ Summary
 * Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
 * Enhancement - "Share to" in oCIS accounts allows upload to any space: [#4088](https://github.com/owncloud/android/issues/4088)
 * Enhancement - Use invoke operator to execute usecases: [#4179](https://github.com/owncloud/android/pull/4179)
+* Enhancement - Deep link open app correctly: [#4181](https://github.com/owncloud/android/issues/4181)
 
 Details
 -------
@@ -65,6 +66,13 @@ Details
    Removes all the "execute" verbosity for use cases by using the "invoke" operator instead.
 
    https://github.com/owncloud/android/pull/4179
+
+* Enhancement - Deep link open app correctly: [#4181](https://github.com/owncloud/android/issues/4181)
+
+   Opening the app with the deep link correctly and managing if user logged or not.
+
+   https://github.com/owncloud/android/issues/4181
+   https://github.com/owncloud/android/pull/4191
 
 Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
 =======================================
