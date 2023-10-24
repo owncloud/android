@@ -28,7 +28,8 @@ import java.net.URI
 class ManageDeepLinkUseCase : BaseUseCaseWithResult<OCFile?, ManageDeepLinkUseCase.Params>() {
 
     override fun run(params: Params): OCFile? {
-        val pathParts = params.uri.fragment.split(PATH_SEPARATOR)
+        val path = params.uri.fragment ?: params.uri.path
+        val pathParts = path.split(PATH_SEPARATOR)
         if (pathParts[pathParts.size - 2] != DEEP_LINK_PREVIOUS_PATH_SEGMENT) {
             throw DeepLinkException()
         }
