@@ -24,6 +24,7 @@ androidxWork = "2.8.1"
 coil = "2.2.2"
 dexopener = "2.0.5"
 disklrucache = "2.0.2"
+logcatcorelib = "3.2"
 media3 ="1.1.1"
 floatingactionbutton = "1.10.1"
 glide = "4.15.1"
@@ -78,6 +79,7 @@ androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTest" }
 androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "androidxTestUiAutomator" }
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
+appdevnext-logcat-logcatcorelib = { group = "com.github.AppDevNext.Logcat", name = "LogcatCoreLib", version.ref = "logcatcorelib" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 dexopener = { group = "com.github.tmurakami", name = "dexopener", version.ref = "dexopener" }
 disklrucache = { group = "com.jakewharton", name = "disklrucache", version.ref = "disklrucache" }

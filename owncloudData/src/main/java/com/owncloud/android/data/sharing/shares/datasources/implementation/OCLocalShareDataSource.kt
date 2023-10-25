@@ -21,7 +21,7 @@ package com.owncloud.android.data.sharing.shares.datasources.implementation
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
@@ -37,17 +37,16 @@ class OCLocalShareDataSource(
         accountName: String,
         shareTypes: List<ShareType>
     ): LiveData<List<OCShare>> =
-        Transformations.map(
-            ocShareDao.getSharesAsLiveData(
-                filePath,
-                accountName,
-                shareTypes.map { it.value })
-        ) { ocShareEntities ->
+        ocShareDao.getSharesAsLiveData(
+            filePath,
+            accountName,
+            shareTypes.map { it.value },
+        ).map { ocShareEntities ->
             ocShareEntities.map { ocShareEntity -> ocShareEntity.toModel() }
         }
 
     override fun getShareAsLiveData(remoteId: String): LiveData<OCShare> =
-        Transformations.map(ocShareDao.getShareAsLiveData(remoteId)) { ocShareEntity ->
+        ocShareDao.getShareAsLiveData(remoteId).map { ocShareEntity ->
             ocShareEntity.toModel()
         }
 
