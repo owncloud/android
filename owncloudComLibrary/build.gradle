@@ -7,7 +7,7 @@ dependencies {
     api 'com.squareup.okhttp3:okhttp:4.6.0'
     implementation libs.kotlin.stdlib
     api 'com.gitlab.ownclouders:dav4android:oc_support_2.1.5'
-    api 'com.github.AppDevNext.Logcat:LogcatCore:2.2.2'
+    api libs.appdevnext.logcat.logcatcorelib
 
     // Moshi
     implementation(libs.moshi.kotlin) {
