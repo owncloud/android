@@ -48,14 +48,15 @@ class RemoveFileUseCase(
         return deleteFiles
     }
 
-    private fun setLastUsageFile(file: OCFile, isAvailableLocally: Boolean ){
-            setLastUsageFileUseCase(SetLastUsageFileUseCase.Params(
+    private fun setLastUsageFile(file: OCFile, isAvailableLocally: Boolean) {
+        setLastUsageFileUseCase(
+            SetLastUsageFileUseCase.Params(
                 fileId = file.id,
                 lastUsage = null,
                 isAvailableLocally = isAvailableLocally,
                 isFolder = file.isFolder,
-                )
             )
+        )
     }
 
     data class Params(
