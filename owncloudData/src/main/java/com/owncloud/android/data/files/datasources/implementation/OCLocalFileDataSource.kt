@@ -195,7 +195,7 @@ class OCLocalFileDataSource(
         fileDao.updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory, newDirectory)
     }
 
-    override fun updateFileWithLastUsage(id: Long, lastUsage: Long?) {
+    override fun updateFileWithLastUsage(id: Long?, lastUsage: Long?) {
         fileDao.updateFileWithLastUsage(id, lastUsage)
     }
 

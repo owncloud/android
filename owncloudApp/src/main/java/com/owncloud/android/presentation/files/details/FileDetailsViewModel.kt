@@ -203,12 +203,14 @@ class FileDetailsViewModel(
         }
     }
 
-    fun setLastUsageFile(file: OCFile, isAvailableLocally: Boolean ){
+    fun setLastUsageFile(file: OCFile){
         setLastUsageFileUseCase(SetLastUsageFileUseCase.Params(
-            fileId = file.id!!,
+            fileId = file.id,
             lastUsage = System.currentTimeMillis(),
-            isAvailableLocally = isAvailableLocally,
-            isFolder = file.isFolder))
+            isAvailableLocally = file.isAvailableLocally,
+            isFolder = file.isFolder,
+            )
+        )
     }
 
     enum class ActionsInDetailsView {

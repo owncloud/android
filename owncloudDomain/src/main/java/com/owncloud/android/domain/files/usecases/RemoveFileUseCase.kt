@@ -50,10 +50,12 @@ class RemoveFileUseCase(
 
     private fun setLastUsageFile(file: OCFile, isAvailableLocally: Boolean ){
             setLastUsageFileUseCase(SetLastUsageFileUseCase.Params(
-                fileId = file.id!!,
+                fileId = file.id,
                 lastUsage = null,
                 isAvailableLocally = isAvailableLocally,
-                isFolder = file.isFolder))
+                isFolder = file.isFolder,
+                )
+            )
     }
 
     data class Params(

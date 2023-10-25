@@ -525,7 +525,7 @@ class OCFileRepository(
         localFileDataSource.updateAvailableOfflineStatusForFile(ocFile, newAvailableOfflineStatus)
     }
 
-    override fun updateFileWithLastUsage(id: Long, lastUsage: Long?) {
+    override fun updateFileWithLastUsage(id: Long?, lastUsage: Long?) {
         localFileDataSource.updateFileWithLastUsage(id, lastUsage)
     }
 
