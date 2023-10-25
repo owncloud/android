@@ -182,18 +182,20 @@ class FileDetailsViewModel(
         val shareWithUsersAllowed = contextProvider.getBoolean(R.bool.share_with_users_feature)
         val sendAllowed = contextProvider.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val result = filterFileMenuOptionsUseCase(FilterFileMenuOptionsUseCase.Params(
-                files = listOf(file),
-                accountName = getAccount().name,
-                isAnyFileVideoPreviewing = false,
-                displaySelectAll = false,
-                displaySelectInverse = false,
-                onlyAvailableOfflineFiles = false,
-                onlySharedByLinkFiles = false,
-                shareViaLinkAllowed = shareViaLinkAllowed,
-                shareWithUsersAllowed = shareWithUsersAllowed,
-                sendAllowed = sendAllowed,
-            ))
+            val result = filterFileMenuOptionsUseCase(
+                FilterFileMenuOptionsUseCase.Params(
+                    files = listOf(file),
+                    accountName = getAccount().name,
+                    isAnyFileVideoPreviewing = false,
+                    displaySelectAll = false,
+                    displaySelectInverse = false,
+                    onlyAvailableOfflineFiles = false,
+                    onlySharedByLinkFiles = false,
+                    shareViaLinkAllowed = shareViaLinkAllowed,
+                    shareWithUsersAllowed = shareWithUsersAllowed,
+                    sendAllowed = sendAllowed,
+                )
+            )
             result.apply {
                 remove(FileMenuOption.DETAILS)
                 remove(FileMenuOption.MOVE)
@@ -203,12 +205,13 @@ class FileDetailsViewModel(
         }
     }
 
-    fun setLastUsageFile(file: OCFile){
-        setLastUsageFileUseCase(SetLastUsageFileUseCase.Params(
-            fileId = file.id,
-            lastUsage = System.currentTimeMillis(),
-            isAvailableLocally = file.isAvailableLocally,
-            isFolder = file.isFolder,
+    fun setLastUsageFile(file: OCFile) {
+        setLastUsageFileUseCase(
+            SetLastUsageFileUseCase.Params(
+                fileId = file.id,
+                lastUsage = System.currentTimeMillis(),
+                isAvailableLocally = file.isAvailableLocally,
+                isFolder = file.isFolder,
             )
         )
     }
