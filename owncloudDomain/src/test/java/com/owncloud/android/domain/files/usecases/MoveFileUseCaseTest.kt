@@ -25,6 +25,7 @@ import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert
@@ -33,7 +34,8 @@ import org.junit.Test
 
 class MoveFileUseCaseTest {
     private val repository: FileRepository = spyk()
-    private val useCase = MoveFileUseCase(repository)
+    private val setLastUsageFileUseCase: SetLastUsageFileUseCase = mockk(relaxed = true)
+    private val useCase = MoveFileUseCase(repository, setLastUsageFileUseCase)
     private val useCaseParams = MoveFileUseCase.Params(
         listOfFilesToMove = listOf(OC_FILE.copy(remotePath = "/video.mp4", parentId = 123)),
         targetFolder = OC_FOLDER.copy(id = 100),
