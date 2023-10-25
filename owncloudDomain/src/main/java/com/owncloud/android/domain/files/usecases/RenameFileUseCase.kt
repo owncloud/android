@@ -43,12 +43,13 @@ class RenameFileUseCase(
         setLastUsageFile(params.ocFileToRename, isAvailableLocally)
     }
 
-    private fun setLastUsageFile(file: OCFile, isAvailableLocally: Boolean ){
-        setLastUsageFileUseCase(SetLastUsageFileUseCase.Params(
-            fileId = file.id,
-            lastUsage = System.currentTimeMillis(),
-            isAvailableLocally = isAvailableLocally,
-            isFolder = file.isFolder,
+    private fun setLastUsageFile(file: OCFile, isAvailableLocally: Boolean) {
+        setLastUsageFileUseCase(
+            SetLastUsageFileUseCase.Params(
+                fileId = file.id,
+                lastUsage = System.currentTimeMillis(),
+                isAvailableLocally = isAvailableLocally,
+                isFolder = file.isFolder,
             )
         )
     }
