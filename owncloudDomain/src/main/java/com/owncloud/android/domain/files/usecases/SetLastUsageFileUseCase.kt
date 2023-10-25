@@ -24,7 +24,7 @@ import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
 
 class SetLastUsageFileUseCase(
-    private val fileRepository: FileRepository
+    private val fileRepository: FileRepository,
 ) : BaseUseCaseWithResult<Unit, SetLastUsageFileUseCase.Params>() {
 
     override fun run(params: Params) {
@@ -33,5 +33,5 @@ class SetLastUsageFileUseCase(
         }
     }
 
-    data class Params(val fileId: Long, val lastUsage: Long?, val isAvailableLocally: Boolean, val isFolder: Boolean)
+    data class Params(val fileId: Long?, val lastUsage: Long?, val isAvailableLocally: Boolean, val isFolder: Boolean)
 }
