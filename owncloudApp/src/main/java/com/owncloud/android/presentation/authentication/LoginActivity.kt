@@ -196,7 +196,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             if (com.owncloud.android.presentation.authentication.AccountUtils.getAccounts(baseContext).isNotEmpty()) {
                 launchFileDisplayActivity()
             } else {
-                showMessageInSnackbar(message = baseContext.getString(R.string.no_user_logged_for_deep_link))
+                showMessageInSnackbar(message = baseContext.getString(R.string.uploader_wrn_no_account_title))
             }
         }
     }
