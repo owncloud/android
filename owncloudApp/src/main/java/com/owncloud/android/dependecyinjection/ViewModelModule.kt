@@ -67,6 +67,7 @@ val viewModelModule = module {
     viewModelOf(::AccountsManagementViewModel)
     viewModelOf(::BiometricViewModel)
     viewModelOf(::DrawerViewModel)
+    viewModelOf(::FileDetailsViewModel)
     viewModelOf(::LogListViewModel)
     viewModelOf(::OAuthViewModel)
     viewModelOf(::PatternViewModel)
@@ -96,7 +97,6 @@ val viewModelModule = module {
     }
     viewModel { (ocFile: OCFile) -> ConflictsResolveViewModel(get(), get(), get(), get(), get(), ocFile) }
     viewModel { AuthenticationViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { FileDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get(), get()) }
     viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { ReceiveExternalFilesViewModel(get(), get(), get()) }

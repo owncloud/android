@@ -60,5 +60,5 @@ interface LocalFileDataSource {
     fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID)
     fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID)
     fun cleanWorkersUuid(fileId: Long)
-    fun updateFileWithLastUsage(id: Long, lastUsage: Long?)
+    fun updateFileWithLastUsage(id: Long?, lastUsage: Long?)
 }

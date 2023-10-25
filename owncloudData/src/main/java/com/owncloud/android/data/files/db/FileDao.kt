@@ -237,7 +237,7 @@ interface FileDao {
                 treeEtag = localFile.treeEtag,
                 etagInConflict = localFile.etagInConflict,
                 availableOfflineStatus = localFile.availableOfflineStatus,
-                lastUsage = localFile.lastUsage
+                lastUsage = localFile.lastUsage,
             ).apply {
                 id = localFile.id
             })
@@ -280,7 +280,7 @@ interface FileDao {
                 permissions = null,
                 treeEtag = "",
                 availableOfflineStatus = NOT_AVAILABLE_OFFLINE.ordinal,
-                lastUsage = 221
+                lastUsage = null
             )
         )
     }
@@ -359,7 +359,7 @@ interface FileDao {
     fun updateFileWithAvailableOfflineStatus(id: Long, availableOfflineStatus: Int)
 
     @Query(UPDATE_FILE_WITH_LAST_USAGE)
-    fun updateFileWithLastUsage(id: Long, lastUsage: Long?)
+    fun updateFileWithLastUsage(id: Long?, lastUsage: Long?)
 
     @Transaction
     fun updateConflictStatusForFile(id: Long, eTagInConflict: String?) {
