@@ -65,6 +65,7 @@ import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils
 import com.owncloud.android.lib.common.accounts.AccountUtils
 import com.owncloud.android.lib.common.network.CertificateCombinedException
+import com.owncloud.android.presentation.authentication.AccountUtils.getAccounts
 import com.owncloud.android.presentation.authentication.AccountUtils.getUsernameOfAccount
 import com.owncloud.android.presentation.authentication.oauth.OAuthUtils
 import com.owncloud.android.presentation.common.UIResult
@@ -193,7 +194,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun handleDeepLink() {
         if (intent.data != null) {
             authenticationViewModel.launchedFromDeepLink = true
-            if (com.owncloud.android.presentation.authentication.AccountUtils.getAccounts(baseContext).isNotEmpty()) {
+            if (getAccounts(baseContext).isNotEmpty()) {
                 launchFileDisplayActivity()
             } else {
                 showMessageInSnackbar(message = baseContext.getString(R.string.uploader_wrn_no_account_title))
