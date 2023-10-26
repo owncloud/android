@@ -747,4 +747,7 @@
     <string name="tab_label_ascii">Text</string>
     <string name="apply_to_all_conflicts">Apply to all %1$s conflicts</string>
 
+    <!-- DeepLinks -->
+    <string name="invalid_deep_link_format">Invalid link format</string>
+
 </resources>

@@ -22,6 +22,7 @@
 
 package com.owncloud.android.presentation.files.operations
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -35,6 +36,7 @@ import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
+import com.owncloud.android.domain.files.usecases.ManageDeepLinkUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
@@ -50,6 +52,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.net.URI
 
 class FileOperationsViewModel(
     private val createFolderAsyncUseCase: CreateFolderAsyncUseCase,
@@ -62,8 +65,9 @@ class FileOperationsViewModel(
     private val createFileWithAppProviderUseCase: CreateFileWithAppProviderUseCase,
     private val setFilesAsAvailableOfflineUseCase: SetFilesAsAvailableOfflineUseCase,
     private val unsetFilesAsAvailableOfflineUseCase: UnsetFilesAsAvailableOfflineUseCase,
+    private val manageDeepLinkUseCase: ManageDeepLinkUseCase,
     private val contextProvider: ContextProvider,
-    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
     private val _createFolder = MediatorLiveData<Event<UIResult<Unit>>>()
@@ -93,8 +97,10 @@ class FileOperationsViewModel(
     private val _createFileWithAppProviderFlow = MutableStateFlow<Event<UIResult<String>>?>(null)
     val createFileWithAppProviderFlow: StateFlow<Event<UIResult<String>>?> = _createFileWithAppProviderFlow
 
-    val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
+    private val _deepLinkFlow = MutableStateFlow<Event<UIResult<OCFile?>>?>(null)
+    val deepLinkFlow: StateFlow<Event<UIResult<OCFile?>>?> = _deepLinkFlow
 
+    val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
 
     // Used to save the last operation folder
     private var lastTargetFolder: OCFile? = null
@@ -286,5 +292,14 @@ class FileOperationsViewModel(
                 }
             }
         }
+    }
+
+    fun handleDeepLink(uri: Uri) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            flow = _deepLinkFlow,
+            useCase = manageDeepLinkUseCase,
+            useCaseParams = ManageDeepLinkUseCase.Params(URI(uri.toString())),
+        )
     }
 }

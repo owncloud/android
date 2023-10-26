@@ -186,6 +186,8 @@ class FileDisplayActivity : FileActivity(),
 
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
 
+        handleDeepLink()
+
         /// Load of saved instance state
         if (savedInstanceState != null) {
             Timber.d(savedInstanceState.toString())
@@ -1760,6 +1762,13 @@ class FileDisplayActivity : FileActivity(),
             Intent.createChooser(action, getString(R.string.upload_chooser_title)),
             REQUEST_CODE__SELECT_CONTENT_FROM_APPS
         )
+    }
+
+    private fun handleDeepLink() {
+        intent.data?.let { uri ->
+            fileOperationsViewModel.handleDeepLink(uri)
+            intent.data = null
+        }
     }
 
     companion object {
