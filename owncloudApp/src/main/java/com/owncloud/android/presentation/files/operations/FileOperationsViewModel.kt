@@ -65,9 +65,9 @@ class FileOperationsViewModel(
     private val createFileWithAppProviderUseCase: CreateFileWithAppProviderUseCase,
     private val setFilesAsAvailableOfflineUseCase: SetFilesAsAvailableOfflineUseCase,
     private val unsetFilesAsAvailableOfflineUseCase: UnsetFilesAsAvailableOfflineUseCase,
+    private val manageDeepLinkUseCase: ManageDeepLinkUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
-    private val manageDeepLinkUseCase: ManageDeepLinkUseCase,
 ) : ViewModel() {
 
     private val _createFolder = MediatorLiveData<Event<UIResult<Unit>>>()
@@ -97,10 +97,10 @@ class FileOperationsViewModel(
     private val _createFileWithAppProviderFlow = MutableStateFlow<Event<UIResult<String>>?>(null)
     val createFileWithAppProviderFlow: StateFlow<Event<UIResult<String>>?> = _createFileWithAppProviderFlow
 
-    val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
-
     private val _deepLinkFlow = MutableStateFlow<Event<UIResult<OCFile?>>?>(null)
     val deepLinkFlow: StateFlow<Event<UIResult<OCFile?>>?> = _deepLinkFlow
+
+    val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
 
     // Used to save the last operation folder
     private var lastTargetFolder: OCFile? = null

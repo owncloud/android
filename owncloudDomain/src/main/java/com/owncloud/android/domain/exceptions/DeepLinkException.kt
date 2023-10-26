@@ -3,7 +3,7 @@
  *
  * @author Manuel Plazas Palacio
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,6 +20,6 @@
 
 package com.owncloud.android.domain.exceptions
 
-class DeepLinkException() : Exception(INVALID_FORMAT)
+class DeepLinkException : Exception(INVALID_FORMAT)
 
 const val INVALID_FORMAT = "Invalid deep link format"

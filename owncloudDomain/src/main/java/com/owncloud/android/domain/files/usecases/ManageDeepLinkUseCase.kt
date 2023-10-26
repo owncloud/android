@@ -3,7 +3,7 @@
  *
  * @author Manuel Plazas Palacio
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,6 +23,7 @@ package com.owncloud.android.domain.files.usecases
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.exceptions.DeepLinkException
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 import java.net.URI
 
 class ManageDeepLinkUseCase : BaseUseCaseWithResult<OCFile?, ManageDeepLinkUseCase.Params>() {
@@ -39,7 +40,6 @@ class ManageDeepLinkUseCase : BaseUseCaseWithResult<OCFile?, ManageDeepLinkUseCa
     data class Params(val uri: URI)
 
     companion object {
-        const val PATH_SEPARATOR = "/"
         const val DEEP_LINK_PREVIOUS_PATH_SEGMENT = "f"
     }
 
