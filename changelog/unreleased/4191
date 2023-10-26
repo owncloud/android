@@ -1,0 +1,6 @@
+Enhancement: Deep link open app correctly
+
+Opening the app with the deep link correctly and managing if user logged or not.
+
+https://github.com/owncloud/android/issues/4181
+https://github.com/owncloud/android/pull/4191
