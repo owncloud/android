@@ -548,4 +548,5 @@
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">Не показвай отново</string>
   <string name="tab_label_ascii">Текст</string>
+  <!--DeepLinks-->
 </resources>
