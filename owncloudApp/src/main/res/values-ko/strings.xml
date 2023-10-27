@@ -541,4 +541,5 @@
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_checkbox_message">다시 보지 않기</string>
   <string name="tab_label_ascii">텍스트</string>
+  <!--DeepLinks-->
 </resources>
