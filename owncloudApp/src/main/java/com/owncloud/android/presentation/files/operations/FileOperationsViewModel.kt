@@ -40,6 +40,7 @@ import com.owncloud.android.domain.files.usecases.ManageDeepLinkUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
+import com.owncloud.android.domain.files.usecases.SetLastUsageFileUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
@@ -66,6 +67,7 @@ class FileOperationsViewModel(
     private val setFilesAsAvailableOfflineUseCase: SetFilesAsAvailableOfflineUseCase,
     private val unsetFilesAsAvailableOfflineUseCase: UnsetFilesAsAvailableOfflineUseCase,
     private val manageDeepLinkUseCase: ManageDeepLinkUseCase,
+    private val setLastUsageFileUseCase: SetLastUsageFileUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
@@ -120,6 +122,20 @@ class FileOperationsViewModel(
             is FileOperation.CreateFileWithAppProviderOperation -> createFileWithAppProvider(fileOperation)
         }
     }
+
+    fun setLastUsageFile(file: OCFile) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            setLastUsageFileUseCase(
+                SetLastUsageFileUseCase.Params(
+                    fileId = file.id,
+                    lastUsage = System.currentTimeMillis(),
+                    isAvailableLocally = file.isAvailableLocally,
+                    isFolder = file.isFolder,
+                )
+            )
+        }
+    }
+
 
     private fun createFolderOperation(fileOperation: FileOperation.CreateFolder) {
         runOperation(
