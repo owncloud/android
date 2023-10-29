@@ -685,4 +685,5 @@
   <string name="tab_label_ascii">Tekst</string>
   <string name="apply_to_all_conflicts">Rakenda kõigile %1$s-le konfliktile</string>
   <!--DeepLinks-->
+  <string name="invalid_deep_link_format">Vigane lingi formaat</string>
 </resources>
