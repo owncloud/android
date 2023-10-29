@@ -683,4 +683,5 @@
   <string name="tab_label_ascii">Tekst</string>
   <string name="apply_to_all_conflicts">Zbatoje për krejt %1$s përplasjet</string>
   <!--DeepLinks-->
+  <string name="invalid_deep_link_format">Format i pavlefshëm lidhjeje</string>
 </resources>
