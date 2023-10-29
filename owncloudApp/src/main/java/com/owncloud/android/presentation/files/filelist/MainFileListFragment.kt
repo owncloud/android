@@ -1133,6 +1133,7 @@ class MainFileListFragment : Fragment(),
         if (ocFile.isFolder) {
             mainFileListViewModel.updateFolderToDisplay(ocFile)
         } else { // Click on a file
+            fileOperationsViewModel.setLastUsageFile(ocFile)
             fileActions?.onFileClicked(ocFile)
         }
     }
