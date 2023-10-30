@@ -20,35 +20,12 @@
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  */
-package com.owncloud.android.lib.common.http
+package com.owncloud.android.lib.common.http.loggin
 
 import com.owncloud.android.lib.common.http.HttpConstants.CONTENT_TYPE_JSON
 import com.owncloud.android.lib.common.http.HttpConstants.CONTENT_TYPE_WWW_FORM
 import com.owncloud.android.lib.common.http.HttpConstants.CONTENT_TYPE_XML
 import okhttp3.MediaType
-import timber.log.Timber
-import java.util.Locale
-
-object LogBuilder {
-    fun logHttp(
-        networkPetition: NetworkPetition,
-        networkNode: NetworkNode,
-        requestId: String? = "",
-        description: String
-    ) = Timber.d("[Network, $networkPetition] [$networkNode] [$requestId] $description")
-}
-
-enum class NetworkPetition {
-    REQUEST, RESPONSE;
-
-    override fun toString(): String = super.toString().lowercase(Locale.ROOT)
-}
-
-enum class NetworkNode {
-    INFO, HEADER, BODY;
-
-    override fun toString(): String = super.toString().lowercase(Locale.ROOT)
-}
 
 /**
  * Check whether a media type is loggable.
