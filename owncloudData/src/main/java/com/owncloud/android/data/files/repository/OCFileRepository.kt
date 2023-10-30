@@ -525,8 +525,8 @@ class OCFileRepository(
         localFileDataSource.updateAvailableOfflineStatusForFile(ocFile, newAvailableOfflineStatus)
     }
 
-    override fun updateFileWithLastUsage(id: Long?, lastUsage: Long?) {
-        localFileDataSource.updateFileWithLastUsage(id, lastUsage)
+    override fun updateFileWithLastUsage(fileId: Long, lastUsage: Long?) {
+        localFileDataSource.updateFileWithLastUsage(fileId, lastUsage)
     }
 
     override fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String) {

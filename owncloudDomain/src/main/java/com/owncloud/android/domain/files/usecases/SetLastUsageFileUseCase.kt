@@ -33,5 +33,5 @@ class SetLastUsageFileUseCase(
         }
     }
 
-    data class Params(val fileId: Long?, val lastUsage: Long?, val isAvailableLocally: Boolean, val isFolder: Boolean)
+    data class Params(val fileId: Long, val lastUsage: Long?, val isAvailableLocally: Boolean, val isFolder: Boolean)
 }

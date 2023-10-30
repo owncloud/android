@@ -28,8 +28,7 @@ val MIGRATION_41_42 = object : Migration(41, 42) {
         database.run {
             execSQL("ALTER TABLE `files` ADD COLUMN `lastUsage` INTEGER")
 
-            execSQL("UPDATE `files` SET `lastUsage` = " +
-                    "CASE WHEN `storagePath` IS NOT NULL THEN ${System.currentTimeMillis()} ELSE NULL END")
+            execSQL("UPDATE `files` SET `lastUsage` = CASE WHEN `storagePath` IS NOT NULL THEN ${System.currentTimeMillis()} ELSE NULL END")
         }
     }
 }

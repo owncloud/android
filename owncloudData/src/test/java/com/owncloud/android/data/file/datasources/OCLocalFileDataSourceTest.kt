@@ -683,6 +683,28 @@ class OCLocalFileDataSourceTest {
 
     }
 
+    @Test
+    fun `updateFileWithLastUsage should change last usage parameter with current time for a file`() {
+
+        val currentTime = System.currentTimeMillis()
+
+        every { dao.updateFileWithLastUsage(OC_FILE.id!!, currentTime) } returns Unit
+
+        localDataSource.updateFileWithLastUsage(OC_FILE.id!!, currentTime)
+
+        verify(exactly = 1) { dao.updateFileWithLastUsage(OC_FILE.id!!, currentTime) }
+    }
+
+    @Test
+    fun `updateFileWithLastUsage should change last usage parameter with null for a file`() {
+
+        every { dao.updateFileWithLastUsage(any(), null) } returns Unit
+
+        localDataSource.updateFileWithLastUsage(OC_FILE.id!!, null)
+
+        verify(exactly = 1) { dao.updateFileWithLastUsage(OC_FILE.id!!, null) }
+    }
+
     companion object {
         private val DUMMY_FILE_ENTITY: OCFileEntity = OC_FILE.toEntity()
     }

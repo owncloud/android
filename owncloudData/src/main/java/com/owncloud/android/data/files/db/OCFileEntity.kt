@@ -33,7 +33,6 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_ETAG_IN_CON
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_IS_DOWNLOADING
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_KEEP_IN_SYNC
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_LAST_USAGE
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_MODIFIED
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FILE_NAME
@@ -123,7 +122,6 @@ data class OCFileEntity(
                 name = cursor.getString(cursor.getColumnIndexOrThrow(FILE_NAME)),
                 treeEtag = cursor.getString(cursor.getColumnIndexOrThrow(FILE_TREE_ETAG)),
                 lastSyncDateForData = cursor.getLong(cursor.getColumnIndexOrThrow(FILE_LAST_SYNC_DATE_FOR_DATA)),
-                lastUsage = cursor.getLong(cursor.getColumnIndexOrThrow(FILE_LAST_USAGE)),
                 availableOfflineStatus = cursor.getInt(cursor.getColumnIndexOrThrow(FILE_KEEP_IN_SYNC)),
                 fileShareViaLink = cursor.getInt(cursor.getColumnIndexOrThrow(FILE_SHARED_VIA_LINK)),
                 needsToUpdateThumbnail = cursor.getInt(cursor.getColumnIndexOrThrow(FILE_UPDATE_THUMBNAIL)) == 1,
