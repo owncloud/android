@@ -1116,7 +1116,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     ProviderTableMeta.FILE_LAST_SYNC_DATE + " INTEGER, " +
                     ProviderTableMeta.FILE_KEEP_IN_SYNC + " INTEGER, " +
                     ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA + " INTEGER, " +
-                    ProviderTableMeta.FILE_LAST_USAGE + " INTEGER, " +
                     ProviderTableMeta.FILE_MODIFIED_AT_LAST_SYNC_FOR_DATA + " INTEGER, " +
                     ProviderTableMeta.FILE_ETAG + " TEXT, " +
                     ProviderTableMeta.FILE_TREE_ETAG + " TEXT, " +
@@ -1383,8 +1382,6 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             fileProjectionMap[ProviderTableMeta.FILE_LAST_SYNC_DATE] = ProviderTableMeta.FILE_LAST_SYNC_DATE
             fileProjectionMap[ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA] =
                 ProviderTableMeta.FILE_LAST_SYNC_DATE_FOR_DATA
-            fileProjectionMap[ProviderTableMeta.FILE_LAST_USAGE] =
-                ProviderTableMeta.FILE_LAST_USAGE
             fileProjectionMap[ProviderTableMeta.FILE_KEEP_IN_SYNC] = ProviderTableMeta.FILE_KEEP_IN_SYNC
             fileProjectionMap[ProviderTableMeta.FILE_ETAG] = ProviderTableMeta.FILE_ETAG
             fileProjectionMap[ProviderTableMeta.FILE_TREE_ETAG] = ProviderTableMeta.FILE_TREE_ETAG

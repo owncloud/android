@@ -68,6 +68,7 @@ val viewModelModule = module {
     viewModelOf(::BiometricViewModel)
     viewModelOf(::DrawerViewModel)
     viewModelOf(::FileDetailsViewModel)
+    viewModelOf(::FileOperationsViewModel)
     viewModelOf(::LogListViewModel)
     viewModelOf(::OAuthViewModel)
     viewModelOf(::PatternViewModel)
