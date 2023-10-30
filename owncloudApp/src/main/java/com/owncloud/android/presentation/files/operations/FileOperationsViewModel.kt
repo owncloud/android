@@ -127,7 +127,7 @@ class FileOperationsViewModel(
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             setLastUsageFileUseCase(
                 SetLastUsageFileUseCase.Params(
-                    fileId = file.id,
+                    fileId = file.id!!,
                     lastUsage = System.currentTimeMillis(),
                     isAvailableLocally = file.isAvailableLocally,
                     isFolder = file.isFolder,
