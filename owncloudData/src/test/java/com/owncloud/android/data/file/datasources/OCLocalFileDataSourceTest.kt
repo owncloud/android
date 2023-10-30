@@ -698,7 +698,7 @@ class OCLocalFileDataSourceTest {
     @Test
     fun `updateFileWithLastUsage should change last usage parameter with null for a file`() {
 
-        every { dao.updateFileWithLastUsage(any(), null) } returns Unit
+        every { dao.updateFileWithLastUsage(OC_FILE.id!!, null) } returns Unit
 
         localDataSource.updateFileWithLastUsage(OC_FILE.id!!, null)
 
