@@ -1731,6 +1731,7 @@ class FileDisplayActivity : FileActivity(),
                 startSyncThenOpen(file)
             }
         }
+        fileOperationsViewModel.setLastUsageFile(file)
     }
 
     override fun onShareFileClicked(file: OCFile) {
