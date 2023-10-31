@@ -9,6 +9,11 @@ dependencies {
     api 'com.gitlab.ownclouders:dav4android:oc_support_2.1.5'
     api libs.appdevnext.logcat.logcatcorelib
 
+    // Androidx
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.annotation
+
     // Moshi
     implementation(libs.moshi.kotlin) {
         exclude module: "kotlin-reflect"
