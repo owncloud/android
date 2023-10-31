@@ -55,6 +55,9 @@ class RecyclerViewLogsAdapter(
             imageViewDeleteActivityLogsList.setOnClickListener {
                 listener.delete(log)
             }
+            imageViewDownloadActivityLogsList.setOnClickListener {
+                listener.download(log)
+            }
             layoutContainerActivityLogsList.setOnClickListener {
                 listener.open(log)
             }
@@ -79,5 +82,6 @@ class RecyclerViewLogsAdapter(
         fun share(file: File)
         fun delete(file: File)
         fun open(file: File)
+        fun download(file: File)
     }
 }

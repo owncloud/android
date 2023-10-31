@@ -20,8 +20,12 @@
 
 package com.owncloud.android.presentation.logging
 
+import android.app.DownloadManager
+import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -34,7 +38,11 @@ import com.owncloud.android.databinding.LogsListActivityBinding
 import com.owncloud.android.extensions.openFile
 import com.owncloud.android.extensions.sendFile
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
 
 class LogsListActivity : AppCompatActivity() {
 
@@ -55,6 +63,10 @@ class LogsListActivity : AppCompatActivity() {
 
         override fun open(file: File) {
             openFile(file)
+        }
+
+        override fun download(file: File) {
+            downloadFile(file)
         }
     }, context = this)
 
@@ -107,5 +119,47 @@ class LogsListActivity : AppCompatActivity() {
         }
 
         recyclerViewLogsAdapter.setData(items)
+    }
+
+    private fun downloadFile(file: File) {
+        val destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
+        val destinationFolder = File(destinationPath)
+        val originalName = file.name
+        var uniqueName = originalName
+        var fileNumber = 1
+
+        while (File(destinationFolder, uniqueName).exists()) {
+            val fileNameParts = originalName.split(".")
+            uniqueName = "${fileNameParts[0]}_${fileNumber}.${fileNameParts[1]}.log"
+            fileNumber++
+        }
+
+        val destination = File(destinationFolder, uniqueName)
+
+        try {
+            val sourceChannel = FileInputStream(file).channel
+            val destinationChannel = FileOutputStream(destination).channel
+            sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel)
+            sourceChannel.close()
+            destinationChannel.close()
+            showDownloadDialog(destination.name)
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Timber.e(e, "There was a problem to download the file to Download folder.")
+        }
+    }
+
+    private fun showDownloadDialog(fileName: String) {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(getString(R.string.log_file_downloaded))
+            .setIcon(R.drawable.ic_baseline_download_grey)
+            .setMessage(getString(R.string.log_file_downloaded_description, fileName))
+            .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                dialog.dismiss()
+                startActivity(Intent(DownloadManager.ACTION_VIEW_DOWNLOADS))
+            }
+            .create()
+        dialog.show()
     }
 }
