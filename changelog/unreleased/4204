@@ -1,0 +1,10 @@
+Enhancement: Logging changes
+
+- Updating version of com.github.AppDevNext.Logcat:LogcatCoreLib lib.
+- Adding the hour, minutes and seconds to the log file.
+- Printing http logs in one line.
+- Printing http logs with 1000000 bytes as max size.
+- Printing http logs in a Json format.
+
+https://github.com/owncloud/android/issues/4151
+https://github.com/owncloud/android/pull/4204
