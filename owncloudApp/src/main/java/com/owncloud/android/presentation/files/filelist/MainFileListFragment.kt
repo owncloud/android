@@ -525,6 +525,7 @@ class MainFileListFragment : Fragment(),
                         itemIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_open_in_web, null)
                         setOnClickListener {
                             mainFileListViewModel.openInWeb(file.remoteId!!, appRegistryProvider.name)
+                            fileOperationsViewModel.setLastUsageFile(file)
                         }
                     }
                     fileOptionsBottomSheetSingleFileLayout!!.addView(appProviderItemView, 1)
