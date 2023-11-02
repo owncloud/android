@@ -129,8 +129,7 @@ class LogsListActivity : AppCompatActivity() {
         var fileNumber = 1
 
         while (File(destinationFolder, uniqueName).exists()) {
-            val fileNameParts = originalName.split(".")
-            uniqueName = "${fileNameParts[0]}_${fileNumber}.${fileNameParts[1]}.log"
+            uniqueName = "$originalName (${fileNumber}).log"
             fileNumber++
         }
 
@@ -155,9 +154,12 @@ class LogsListActivity : AppCompatActivity() {
             .setTitle(getString(R.string.log_file_downloaded))
             .setIcon(R.drawable.ic_baseline_download_grey)
             .setMessage(getString(R.string.log_file_downloaded_description, fileName))
-            .setPositiveButton(android.R.string.ok) { dialog, _ ->
+            .setPositiveButton(R.string.go_to_download_folder) { dialog, _ ->
                 dialog.dismiss()
                 startActivity(Intent(DownloadManager.ACTION_VIEW_DOWNLOADS))
+            }
+            .setNegativeButton(R.string.drawer_close) {dialog, _ ->
+                dialog.dismiss()
             }
             .create()
         dialog.show()
