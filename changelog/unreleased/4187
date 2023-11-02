@@ -1,0 +1,6 @@
+Enhancement: New field "last usage" in database
+
+To know the last usage of a file, a new field has been created in the database to handle this specific information.
+
+https://github.com/owncloud/android/issues/4173
+https://github.com/owncloud/android/pull/4187
