@@ -256,7 +256,7 @@ class MainFileListFragment : Fragment(),
                     shouldSyncContents = false,
                 )
             )
-            it.animate().translationY(-it.height.toFloat()*2).withEndAction { it.isVisible = false }
+            it.animate().translationY(-it.height.toFloat() * 2).withEndAction { it.isVisible = false }
         }
 
         // Set SortOptions and its listeners
