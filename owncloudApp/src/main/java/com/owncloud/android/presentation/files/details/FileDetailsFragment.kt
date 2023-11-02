@@ -228,6 +228,7 @@ class FileDetailsFragment : FileFragment() {
         openInWebProviders.forEach { (openInWebProviderName, menuItemId) ->
             if (menuItemId == item.itemId) {
                 fileDetailsViewModel.openInWeb(safeFile.file.remoteId!!, openInWebProviderName)
+                fileOperationsViewModel.setLastUsageFile(safeFile.file)
                 return true
             }
         }
@@ -244,6 +245,7 @@ class FileDetailsFragment : FileFragment() {
                     fileDetailsViewModel.updateActionInDetailsView(SYNC_AND_OPEN_WITH)
                 } else { // Already downloaded -> Open it
                     requireActivity().openOCFile(safeFile.file)
+                    fileOperationsViewModel.setLastUsageFile(safeFile.file)
                 }
                 true
             }
