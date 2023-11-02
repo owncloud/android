@@ -137,4 +137,7 @@
     <!-- Deep Link -->
     <string name="deep_link_uri_schemes">owncloud</string>
 
+    <!-- Number of max uploads to refresh automatically -->
+    <integer name="max_uploads_to_refresh">100</integer>
+
 </resources>
