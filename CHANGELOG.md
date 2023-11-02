@@ -13,6 +13,7 @@ Summary
 * Enhancement - Unit tests for datasources classes - Part 3: [#4072](https://github.com/owncloud/android/issues/4072)
 * Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
 * Enhancement - "Share to" in oCIS accounts allows upload to any space: [#4088](https://github.com/owncloud/android/issues/4088)
+* Enhancement - New field "last usage" in database: [#4173](https://github.com/owncloud/android/issues/4173)
 * Enhancement - Use invoke operator to execute usecases: [#4179](https://github.com/owncloud/android/pull/4179)
 * Enhancement - Deep link open app correctly: [#4181](https://github.com/owncloud/android/issues/4181)
 
@@ -60,6 +61,14 @@ Details
 
    https://github.com/owncloud/android/issues/4088
    https://github.com/owncloud/android/pull/4160
+
+* Enhancement - New field "last usage" in database: [#4173](https://github.com/owncloud/android/issues/4173)
+
+   To know the last usage of a file, a new field has been created in the database to handle this
+   specific information.
+
+   https://github.com/owncloud/android/issues/4173
+   https://github.com/owncloud/android/pull/4187
 
 * Enhancement - Use invoke operator to execute usecases: [#4179](https://github.com/owncloud/android/pull/4179)
 
