@@ -159,6 +159,7 @@ class MainFileListFragment : Fragment(),
     private var fileSingleFile: OCFile? = null
     private var fileOptionsBottomSheetSingleFileLayout: LinearLayout? = null
     private var succeededTransfers: List<OCTransfer>? = null
+    private var numberOfUploadsRefreshed: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -247,6 +248,17 @@ class MainFileListFragment : Fragment(),
             )
         }
 
+        // Set Refresh FAB and its listener
+        binding.fabRefresh.setOnClickListener {
+            fileOperationsViewModel.performOperation(
+                FileOperation.RefreshFolderOperation(
+                    folderToRefresh = mainFileListViewModel.getFile(),
+                    shouldSyncContents = false,
+                )
+            )
+            it.animate().translationY(-it.height.toFloat()*2).withEndAction { it.isVisible = false }
+        }
+
         // Set SortOptions and its listeners
         binding.optionsLayout.onSortOptionsListener = this
         setViewTypeSelector(SortOptionsView.AdditionalView.CREATE_FOLDER)
@@ -288,6 +300,7 @@ class MainFileListFragment : Fragment(),
             } else {
                 setViewTypeSelector(SortOptionsView.AdditionalView.HIDDEN)
             }
+            numberOfUploadsRefreshed = 0
         }
 
         // Observe the current space to update the toolbar
@@ -610,28 +623,42 @@ class MainFileListFragment : Fragment(),
     }
 
     private fun observeTransfers() {
+        val maxUploadsToRefresh = resources.getInteger(R.integer.max_uploads_to_refresh)
         collectLatestLifecycleFlow(transfersViewModel.transfersWithSpaceStateFlow) { transfers ->
-            val newlySucceededTransfers = transfers.map { it.first }.filter { it.status == TransferStatus.TRANSFER_SUCCEEDED &&
-                    it.accountName == AccountUtils.getCurrentOwnCloudAccount(requireContext()).name }
-            val safeSucceededTransfers = succeededTransfers
-            if (safeSucceededTransfers == null) {
-                succeededTransfers = newlySucceededTransfers
-            } else if (safeSucceededTransfers != newlySucceededTransfers) {
-                val differentNewlySucceededTransfers = newlySucceededTransfers.filter { it !in safeSucceededTransfers }
-                differentNewlySucceededTransfers.forEach { transfer ->
-                    val currentFolder = mainFileListViewModel.getFile()
-                    if (!fileOperationsViewModel.refreshFolderLiveData.value!!.peekContent().isLoading &&
-                        transfer.remotePath.toPath().parent!!.toString() == currentFolder.remotePath.toPath().toString()) {
-                        fileOperationsViewModel.performOperation(
-                            FileOperation.RefreshFolderOperation(
-                                folderToRefresh = currentFolder,
-                                shouldSyncContents = false,
-                            )
-                        )
-                    }
+            if (transfers.isNotEmpty()) {
+                val newlySucceededTransfers = transfers.map { it.first }.filter {
+                    it.status == TransferStatus.TRANSFER_SUCCEEDED &&
+                            it.accountName == AccountUtils.getCurrentOwnCloudAccount(requireContext()).name
                 }
+                val safeSucceededTransfers = succeededTransfers
+                if (safeSucceededTransfers == null) {
+                    succeededTransfers = newlySucceededTransfers
+                } else if (safeSucceededTransfers != newlySucceededTransfers) {
+                    val differentNewlySucceededTransfers = newlySucceededTransfers.filter { it !in safeSucceededTransfers }
+                    differentNewlySucceededTransfers.forEach { transfer ->
+                        numberOfUploadsRefreshed++
+                        if (numberOfUploadsRefreshed < maxUploadsToRefresh) {
+                            val currentFolder = mainFileListViewModel.getFile()
+                            if (!fileOperationsViewModel.refreshFolderLiveData.value!!.peekContent().isLoading &&
+                                transfer.remotePath.toPath().parent!!.toString() == currentFolder.remotePath.toPath().toString()
+                            ) {
+                                fileOperationsViewModel.performOperation(
+                                    FileOperation.RefreshFolderOperation(
+                                        folderToRefresh = currentFolder,
+                                        shouldSyncContents = false,
+                                    )
+                                )
+                            }
+                        } else {
+                            binding.fabRefresh.apply {
+                                isVisible = true
+                                animate().translationY(0f).duration = 100
+                            }
+                        }
+                    }
 
-                succeededTransfers = newlySucceededTransfers
+                    succeededTransfers = newlySucceededTransfers
+                }
             }
         }
 

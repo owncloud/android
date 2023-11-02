@@ -745,6 +745,7 @@
     <string name="ocis_accounts_warning_button">Understood</string>
 
     <string name="tab_label_ascii">Text</string>
+
     <string name="apply_to_all_conflicts">Apply to all %1$s conflicts</string>
     <string name="log_file_downloaded">Log file downloaded</string>
     <string name="go_to_download_folder">Go to Downloads</string>
@@ -752,5 +753,7 @@
 
     <!-- DeepLinks -->
     <string name="invalid_deep_link_format">Invalid link format</string>
+
+    <string name="fab_refresh_text">New content</string>
 
 </resources>
