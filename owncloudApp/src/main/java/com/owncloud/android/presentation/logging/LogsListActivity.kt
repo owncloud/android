@@ -129,7 +129,7 @@ class LogsListActivity : AppCompatActivity() {
         var fileNumber = 1
 
         while (File(destinationFolder, uniqueName).exists()) {
-            uniqueName = "$originalName (${fileNumber}).log"
+            uniqueName = "$originalName ($fileNumber).log"
             fileNumber++
         }
 
@@ -158,7 +158,7 @@ class LogsListActivity : AppCompatActivity() {
                 dialog.dismiss()
                 startActivity(Intent(DownloadManager.ACTION_VIEW_DOWNLOADS))
             }
-            .setNegativeButton(R.string.drawer_close) {dialog, _ ->
+            .setNegativeButton(R.string.drawer_close) { dialog, _ ->
                 dialog.dismiss()
             }
             .create()
