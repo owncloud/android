@@ -1,8 +1,7 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
- * @author Aitor Balleseteros Pavón
+ * @author Aitor Ballesteros Pavón
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -18,29 +17,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
-import com.owncloud.android.domain.files.model.OCFile
 
-class RemoveFileUseCase(
+class SetLastUsageFileUseCase(
     private val fileRepository: FileRepository,
-) : BaseUseCaseWithResult<Unit, RemoveFileUseCase.Params>() {
+) : BaseUseCaseWithResult<Unit, SetLastUsageFileUseCase.Params>() {
 
     override fun run(params: Params) {
-
-        require(params.listOfFilesToDelete.isNotEmpty())
-
-        return fileRepository.deleteFiles(
-            listOfFilesToDelete = params.listOfFilesToDelete,
-            removeOnlyLocalCopy = params.removeOnlyLocalCopy,
-        )
-
+        if (params.isAvailableLocally && !params.isFolder) {
+            fileRepository.updateFileWithLastUsage(params.fileId, params.lastUsage)
+        }
     }
 
     data class Params(
-        val listOfFilesToDelete: List<OCFile>,
-        val removeOnlyLocalCopy: Boolean
+        val fileId: Long,
+        val lastUsage: Long?,
+        val isAvailableLocally: Boolean,
+        val isFolder: Boolean,
     )
 }

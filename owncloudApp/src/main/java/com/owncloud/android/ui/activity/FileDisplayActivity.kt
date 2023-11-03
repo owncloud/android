@@ -899,6 +899,7 @@ class FileDisplayActivity : FileActivity(),
     override fun openFile(file: OCFile) {
         if (file.isAvailableLocally) {
             fileOperationsHelper.openFile(file)
+            fileOperationsViewModel.setLastUsageFile(file)
         } else {
             startDownloadForOpening(file)
         }
@@ -1731,6 +1732,7 @@ class FileDisplayActivity : FileActivity(),
                 startSyncThenOpen(file)
             }
         }
+        fileOperationsViewModel.setLastUsageFile(file)
     }
 
     override fun onShareFileClicked(file: OCFile) {

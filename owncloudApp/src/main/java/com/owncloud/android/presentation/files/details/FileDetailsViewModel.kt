@@ -180,18 +180,20 @@ class FileDetailsViewModel(
         val shareWithUsersAllowed = contextProvider.getBoolean(R.bool.share_with_users_feature)
         val sendAllowed = contextProvider.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val result = filterFileMenuOptionsUseCase(FilterFileMenuOptionsUseCase.Params(
-                files = listOf(file),
-                accountName = getAccount().name,
-                isAnyFileVideoPreviewing = false,
-                displaySelectAll = false,
-                displaySelectInverse = false,
-                onlyAvailableOfflineFiles = false,
-                onlySharedByLinkFiles = false,
-                shareViaLinkAllowed = shareViaLinkAllowed,
-                shareWithUsersAllowed = shareWithUsersAllowed,
-                sendAllowed = sendAllowed,
-            ))
+            val result = filterFileMenuOptionsUseCase(
+                FilterFileMenuOptionsUseCase.Params(
+                    files = listOf(file),
+                    accountName = getAccount().name,
+                    isAnyFileVideoPreviewing = false,
+                    displaySelectAll = false,
+                    displaySelectInverse = false,
+                    onlyAvailableOfflineFiles = false,
+                    onlySharedByLinkFiles = false,
+                    shareViaLinkAllowed = shareViaLinkAllowed,
+                    shareWithUsersAllowed = shareWithUsersAllowed,
+                    sendAllowed = sendAllowed,
+                )
+            )
             result.apply {
                 remove(FileMenuOption.DETAILS)
                 remove(FileMenuOption.MOVE)
@@ -200,6 +202,7 @@ class FileDetailsViewModel(
             _menuOptions.update { result }
         }
     }
+
 
     enum class ActionsInDetailsView {
         NONE, SYNC, SYNC_AND_OPEN, SYNC_AND_OPEN_WITH, SYNC_AND_SEND;

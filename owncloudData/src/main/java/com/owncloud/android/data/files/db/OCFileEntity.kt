@@ -83,6 +83,7 @@ data class OCFileEntity(
     @ColumnInfo(name = "keepInSync")
     var availableOfflineStatus: Int? = null,
     val lastSyncDateForData: Long? = null,
+    val lastUsage: Long? = null,
     val fileShareViaLink: Int? = null,
     var needsToUpdateThumbnail: Boolean = false,
     val modifiedAtLastSyncForData: Long? = null,

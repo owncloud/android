@@ -67,6 +67,8 @@ val viewModelModule = module {
     viewModelOf(::AccountsManagementViewModel)
     viewModelOf(::BiometricViewModel)
     viewModelOf(::DrawerViewModel)
+    viewModelOf(::FileDetailsViewModel)
+    viewModelOf(::FileOperationsViewModel)
     viewModelOf(::LogListViewModel)
     viewModelOf(::OAuthViewModel)
     viewModelOf(::PatternViewModel)
@@ -84,6 +86,7 @@ val viewModelModule = module {
     viewModelOf(::SettingsSecurityViewModel)
     viewModelOf(::SettingsVideoUploadsViewModel)
     viewModelOf(::SettingsViewModel)
+    viewModelOf(::FileOperationsViewModel)
 
     viewModel { (accountName: String) -> CapabilityViewModel(accountName, get(), get(), get()) }
     viewModel { (action: PasscodeAction) -> PassCodeViewModel(get(), get(), action) }
@@ -95,8 +98,6 @@ val viewModelModule = module {
     }
     viewModel { (ocFile: OCFile) -> ConflictsResolveViewModel(get(), get(), get(), get(), get(), ocFile) }
     viewModel { AuthenticationViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModel { FileDetailsViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
-    viewModelOf(::FileOperationsViewModel)
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get(), get()) }
     viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { ReceiveExternalFilesViewModel(get(), get(), get()) }

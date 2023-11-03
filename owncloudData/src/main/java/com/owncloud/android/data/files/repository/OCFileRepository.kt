@@ -525,6 +525,10 @@ class OCFileRepository(
         localFileDataSource.updateAvailableOfflineStatusForFile(ocFile, newAvailableOfflineStatus)
     }
 
+    override fun updateFileWithLastUsage(fileId: Long, lastUsage: Long?) {
+        localFileDataSource.updateFileWithLastUsage(fileId, lastUsage)
+    }
+
     override fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String) {
         localFileDataSource.updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory, newDirectory)
     }
@@ -560,7 +564,7 @@ class OCFileRepository(
     private fun deleteLocalFile(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         localStorageProvider.deleteLocalFile(ocFile)
         if (onlyFromLocalStorage) {
-            localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null))
+            localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null, lastUsage = null))
         } else {
             localFileDataSource.deleteFile(ocFile.id!!)
         }
