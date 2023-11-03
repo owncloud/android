@@ -58,6 +58,9 @@ dependencies {
     // Markdown Preview
     implementation libs.bundles.markwon
 
+    //Timber
+    implementation libs.timber
+
     // Tests
     testImplementation project(":owncloudTestUtil")
     testImplementation libs.androidx.arch.core.testing

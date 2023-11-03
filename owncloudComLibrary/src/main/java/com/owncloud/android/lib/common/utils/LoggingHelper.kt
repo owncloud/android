@@ -24,23 +24,22 @@
 
 package com.owncloud.android.lib.common.utils
 
-import info.hannes.timber.fileLoggingTree
 import timber.log.Timber
 import java.io.File
 
 object LoggingHelper {
 
     fun startLogging(directory: File, storagePath: String) {
-        fileLoggingTree()?.let {
+        ocFileLoggingTree()?.let {
             Timber.uproot(it)
         }
         if (!directory.exists())
             directory.mkdirs()
-        Timber.plant(OCFileLogginTree(directory, filename = storagePath))
+        Timber.plant(OCFileLoggingTree(directory, filename = storagePath))
     }
 
     fun stopLogging() {
-        fileLoggingTree()?.let {
+        ocFileLoggingTree()?.let {
             Timber.uproot(it)
         }
     }
