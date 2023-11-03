@@ -7,7 +7,6 @@ dependencies {
     api 'com.squareup.okhttp3:okhttp:4.6.0'
     implementation libs.kotlin.stdlib
     api 'com.gitlab.ownclouders:dav4android:oc_support_2.1.5'
-    api libs.appdevnext.logcat.logcatcorelib
 
     // Androidx
     implementation libs.androidx.core.ktx
@@ -20,6 +19,9 @@ dependencies {
     }
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     ksp libs.moshi.kotlin.codegen
+
+    //Timber
+    implementation libs.timber
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.10'

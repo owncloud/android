@@ -70,6 +70,9 @@ dependencies {
     implementation libs.moshi.kotlin
     ksp libs.moshi.kotlin.codegen
 
+    //Timber
+    implementation libs.timber
+
     // Dependencies for unit tests
     testImplementation project(":owncloudTestUtil")
     testImplementation libs.androidx.arch.core.testing
