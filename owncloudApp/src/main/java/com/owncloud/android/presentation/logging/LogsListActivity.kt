@@ -21,6 +21,7 @@
 package com.owncloud.android.presentation.logging
 
 import android.app.DownloadManager
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
@@ -37,6 +38,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.LogsListActivityBinding
 import com.owncloud.android.extensions.openFile
 import com.owncloud.android.extensions.sendFile
+import com.owncloud.android.extensions.showMessageInSnackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
@@ -156,12 +158,22 @@ class LogsListActivity : AppCompatActivity() {
             .setMessage(getString(R.string.log_file_downloaded_description, fileName))
             .setPositiveButton(R.string.go_to_download_folder) { dialog, _ ->
                 dialog.dismiss()
-                startActivity(Intent(DownloadManager.ACTION_VIEW_DOWNLOADS))
+                goToDownloadsFolder()
             }
             .setNegativeButton(R.string.drawer_close) { dialog, _ ->
                 dialog.dismiss()
             }
             .create()
         dialog.show()
+    }
+
+    private fun goToDownloadsFolder() {
+        try {
+            val intent = Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            showMessageInSnackbar(message = this.getString(R.string.file_list_no_app_for_perform_action))
+            Timber.e("No Activity found to handle Intent")
+        }
     }
 }
