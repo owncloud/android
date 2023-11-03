@@ -218,6 +218,7 @@ class DownloadFileWorker(
             length = (File(finalLocationForFile).length())
             lastSyncDateForData = currentTime
             modifiedAtLastSyncForData = downloadRemoteFileOperation.modificationTimestamp
+            lastUsage = currentTime
         }
         saveFileOrFolderUseCase(SaveFileOrFolderUseCase.Params(ocFile))
         cleanConflictUseCase(
