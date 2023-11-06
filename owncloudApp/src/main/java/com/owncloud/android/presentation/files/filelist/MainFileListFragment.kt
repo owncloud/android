@@ -617,11 +617,31 @@ class MainFileListFragment : Fragment(),
             }
         }
 
-        onDeeplLinkManaged()
+        observeDeepLink()
 
         /* TransfersViewModel observables */
         observeTransfers()
 
+    }
+
+    private fun observeDeepLink() {
+        collectLatestLifecycleFlow(fileOperationsViewModel.deepLinkFlow) {
+            val uiResult = it?.peekContent()
+            if (uiResult is UIResult.Error) {
+                showMessageInSnackbar(
+                    getString(
+                        if (uiResult.error is DeepLinkException) {
+                            R.string.invalid_deep_link_format
+                        } else {
+                            R.string.default_error_msg
+                        }
+                    )
+                )
+            } else if (uiResult is UIResult.Success) {
+                //TODO "Remove this message when end with managing the deep links"
+                showMessageInSnackbar("Deep link managed correctly")
+            }
+        }
     }
 
     private fun observeTransfers() {
@@ -664,26 +684,6 @@ class MainFileListFragment : Fragment(),
             }
         }
 
-    }
-
-    private fun onDeeplLinkManaged() {
-        collectLatestLifecycleFlow(fileOperationsViewModel.deepLinkFlow) {
-            val uiResult = it?.peekContent()
-            if (uiResult is UIResult.Error) {
-                showMessageInSnackbar(
-                    getString(
-                        if (uiResult.error is DeepLinkException) {
-                            R.string.invalid_deep_link_format
-                        } else {
-                            R.string.default_error_msg
-                        }
-                    )
-                )
-            } else if (uiResult is UIResult.Success) {
-                //TODO "Remove this message when end with managing the deep links"
-                showMessageInSnackbar("Deep link managed correctly")
-            }
-        }
     }
 
     fun navigateToFolderId(folderId: Long) {
