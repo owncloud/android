@@ -1,8 +1,7 @@
-package com.owncloud.android.data.storage
+package com.owncloud.android.data.providers
 
 import android.content.Context
 import android.net.Uri
-import com.owncloud.android.data.providers.ScopedStorageProvider
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
@@ -10,8 +9,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
+import org.junit.Assert.assertEquals
 import java.io.File
-import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -282,7 +281,7 @@ class ScopedStorageProviderTest {
 
     @Test
     fun `moveLocalFile calls getPrimaryStorageDirectory()`() {
-        val finalStoragePath: String = "file.txt"
+        val finalStoragePath = "file.txt"
         mockkStatic(Uri::class)
 
         every { Uri.encode(any(), any()) } returns uriEncoded
@@ -313,8 +312,8 @@ class ScopedStorageProviderTest {
 
     private fun conditionsExpectedRemotePath(parent: String, newName: String, isFolder: Boolean): String {
         every { filesDir.parent } returns parent
-        val parent = if (parent.endsWith(File.separator)) parent else parent + File.separator
-        var newRemotePath = parent + newName
+        val parentDir = if (parent.endsWith(File.separator)) parent else parent + File.separator
+        var newRemotePath = parentDir + newName
         if (isFolder) {
             newRemotePath += File.separator
         }
