@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   Copyright (C) 2023 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  *   THE SOFTWARE.
  *
  */
-package com.owncloud.android.lib.common.http.loggin
+package com.owncloud.android.lib.common.http.logging
 
 import com.owncloud.android.lib.common.http.HttpConstants.AUTHORIZATION_HEADER
 import com.owncloud.android.lib.common.http.HttpConstants.OC_X_REQUEST_ID
@@ -61,10 +61,10 @@ class LogInterceptor : Interceptor {
     }
 
     private fun logRequest(moshi: Moshi, request: Request) {
-        val jsonAdapter = moshi.adapter(LogRequest::class.java)
+        val requestJsonAdapter = moshi.adapter(LogRequest::class.java)
         Timber.d(
             "HTTP REQUEST: ${
-                jsonAdapter.toJson(
+                requestJsonAdapter.toJson(
                     LogRequest(
                         requestId = request.headers[OC_X_REQUEST_ID] ?: "",
                         method = request.method,

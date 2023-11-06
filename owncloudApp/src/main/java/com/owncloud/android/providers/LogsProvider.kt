@@ -24,7 +24,7 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.data.providers.ScopedStorageProvider
-import com.owncloud.android.lib.common.http.loggin.LogInterceptor
+import com.owncloud.android.lib.common.http.logging.LogInterceptor
 import com.owncloud.android.lib.common.utils.LoggingHelper
 import timber.log.Timber
 import java.io.File

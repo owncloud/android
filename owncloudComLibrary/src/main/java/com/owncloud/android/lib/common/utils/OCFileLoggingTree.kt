@@ -4,7 +4,7 @@
  * @author Hannes Achleitner
  * @author Manuel Plazas Palacio
  *
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,

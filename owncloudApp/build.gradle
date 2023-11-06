@@ -58,7 +58,7 @@ dependencies {
     // Markdown Preview
     implementation libs.bundles.markwon
 
-    //Timber
+    // Timber
     implementation libs.timber
 
     // Tests
