@@ -45,8 +45,8 @@ import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
 import com.owncloud.android.data.spaces.datasources.implementation.OCRemoteSpacesDataSource
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
 import com.owncloud.android.data.user.datasources.implementation.OCRemoteUserDataSource
-import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDatasource
-import com.owncloud.android.data.webfinger.datasources.implementation.OCRemoteWebFingerDatasource
+import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDataSource
+import com.owncloud.android.data.webfinger.datasources.implementation.OCRemoteWebFingerDataSource
 import com.owncloud.android.lib.common.ConnectionValidator
 import com.owncloud.android.lib.resources.oauth.services.OIDCService
 import com.owncloud.android.lib.resources.oauth.services.implementation.OCOIDCService
@@ -77,7 +77,7 @@ val remoteDataSourceModule = module {
     singleOf(::OCRemoteShareDataSource) bind RemoteShareDataSource::class
     singleOf(::OCRemoteShareeDataSource) bind RemoteShareeDataSource::class
     singleOf(::OCRemoteSpacesDataSource) bind RemoteSpacesDataSource::class
-    singleOf(::OCRemoteWebFingerDatasource) bind RemoteWebFingerDatasource::class
+    singleOf(::OCRemoteWebFingerDataSource) bind RemoteWebFingerDataSource::class
     single<RemoteUserDataSource> { OCRemoteUserDataSource(get(), androidContext().resources.getDimension(R.dimen.file_avatar_size).toInt()) }
 
     factoryOf(::RemoteCapabilityMapper)
