@@ -256,7 +256,7 @@ class MainFileListFragment : Fragment(),
                     shouldSyncContents = false,
                 )
             )
-            it.animate().translationY(-it.height.toFloat() * 2).withEndAction { it.isVisible = false }
+            hideRefreshFab()
         }
 
         // Set SortOptions and its listeners
@@ -301,6 +301,7 @@ class MainFileListFragment : Fragment(),
                 setViewTypeSelector(SortOptionsView.AdditionalView.HIDDEN)
             }
             numberOfUploadsRefreshed = 0
+            hideRefreshFab()
         }
 
         // Observe the current space to update the toolbar
@@ -595,6 +596,7 @@ class MainFileListFragment : Fragment(),
         fileOperationsViewModel.refreshFolderLiveData.observe(viewLifecycleOwner) {
             binding.syncProgressBar.isIndeterminate = it.peekContent().isLoading
             binding.swipeRefreshMainFileList.isRefreshing = it.peekContent().isLoading
+            hideRefreshFab()
         }
 
         // Observe the create file with app provider operation
@@ -637,7 +639,7 @@ class MainFileListFragment : Fragment(),
                     val differentNewlySucceededTransfers = newlySucceededTransfers.filter { it !in safeSucceededTransfers }
                     differentNewlySucceededTransfers.forEach { transfer ->
                         numberOfUploadsRefreshed++
-                        if (numberOfUploadsRefreshed < maxUploadsToRefresh) {
+                        if (numberOfUploadsRefreshed <= maxUploadsToRefresh) {
                             val currentFolder = mainFileListViewModel.getFile()
                             if (!fileOperationsViewModel.refreshFolderLiveData.value!!.peekContent().isLoading &&
                                 transfer.remotePath.toPath().parent!!.toString() == currentFolder.remotePath.toPath().toString()
@@ -708,6 +710,12 @@ class MainFileListFragment : Fragment(),
                 listEmptyDatasetTitle.setText(fileListUiState.fileListOption.toTitleStringRes())
                 listEmptyDatasetSubTitle.setText(fileListUiState.fileListOption.toSubtitleStringRes())
             }
+        }
+    }
+
+    private fun hideRefreshFab() {
+        binding.fabRefresh.apply {
+            animate().translationY(-this.height.toFloat() * 2).withEndAction { this.isVisible = false }
         }
     }
 
