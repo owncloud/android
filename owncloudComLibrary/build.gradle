@@ -20,7 +20,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     ksp libs.moshi.kotlin.codegen
 
-    //Timber
+    // Timber
     implementation libs.timber
 
     testImplementation 'junit:junit:4.13.2'

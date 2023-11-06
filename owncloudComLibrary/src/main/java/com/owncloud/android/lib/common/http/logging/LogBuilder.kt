@@ -20,7 +20,7 @@
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  */
-package com.owncloud.android.lib.common.http.loggin
+package com.owncloud.android.lib.common.http.logging
 
 import com.owncloud.android.lib.common.http.HttpConstants.CONTENT_TYPE_JSON
 import com.owncloud.android.lib.common.http.HttpConstants.CONTENT_TYPE_WWW_FORM
