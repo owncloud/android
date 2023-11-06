@@ -33,7 +33,7 @@ inline fun <reified T> LiveData<T>.getEmittedValues(
     val data = arrayOfNulls<T>(expectedSize)
     val latch = CountDownLatch(expectedSize)
     val observer = object : Observer<T> {
-        override fun onChanged(value: T) {
+        override fun onChanged(value: T?) {
             data[currentValue.getAndAdd(1)] = value
             if (currentValue.get() == expectedSize) {
                 removeObserver(this)

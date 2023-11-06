@@ -26,7 +26,7 @@ package com.owncloud.android.lib.common.http;
 
 import android.content.Context;
 
-import com.owncloud.android.lib.common.http.loggin.LogInterceptor;
+import com.owncloud.android.lib.common.http.logging.LogInterceptor;
 import com.owncloud.android.lib.common.network.AdvancedX509TrustManager;
 import com.owncloud.android.lib.common.network.NetworkUtils;
 import okhttp3.Cookie;
