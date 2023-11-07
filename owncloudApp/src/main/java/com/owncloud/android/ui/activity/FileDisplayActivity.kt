@@ -79,6 +79,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.SyncProfileOperation
+import com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
@@ -1768,7 +1769,7 @@ class FileDisplayActivity : FileActivity(),
 
     private fun handleDeepLink() {
         intent.data?.let { uri ->
-            fileOperationsViewModel.handleDeepLink(uri)
+            fileOperationsViewModel.handleDeepLink(uri, getCurrentOwnCloudAccount(baseContext))
             intent.data = null
         }
     }
@@ -1783,6 +1784,7 @@ class FileDisplayActivity : FileActivity(),
         private const val KEY_WAITING_TO_SEND = "WAITING_TO_SEND"
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
+        private const val KEY_DEEP_LINK_ACCOUNTS_CHECKED = "DEEP_LINK_ACCOUNTS_CHECKED"
 
         private const val CUSTOM_DIALOG_TAG = "CUSTOM_DIALOG"
 
