@@ -67,4 +67,7 @@ interface FileRepository {
     fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
     fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
     fun updateFileWithLastUsage(fileId: Long, lastUsage: Long?)
+
+    fun getFileFromRemoteId(fileId: String, accountName: String): OCFile?
+
 }

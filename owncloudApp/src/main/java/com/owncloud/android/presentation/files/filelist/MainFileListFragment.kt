@@ -56,11 +56,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
 import com.owncloud.android.domain.exceptions.DeepLinkException
+import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.TooEarlyException
 import com.owncloud.android.domain.files.model.FileListOption
@@ -632,6 +634,9 @@ class MainFileListFragment : Fragment(),
         collectLatestLifecycleFlow(fileOperationsViewModel.deepLinkFlow) {
             val uiResult = it?.peekContent()
             if (uiResult is UIResult.Error) {
+                if (uiResult.error is FileNotFoundException) {
+                    changeUser()
+                }
                 showMessageInSnackbar(
                     getString(
                         if (uiResult.error is DeepLinkException) {
@@ -688,6 +693,22 @@ class MainFileListFragment : Fragment(),
             }
         }
 
+    }
+
+    private fun changeUser() {
+        val currentUser = AccountUtils.getCurrentOwnCloudAccount(context)
+        AccountUtils.getAccounts(context).forEach {
+            if (currentUser.name != it.name) {
+                MainApp.initDependencyInjection()
+                val i = Intent(
+                    activity,
+                    FileDisplayActivity::class.java
+                )
+                i.putExtra(FileActivity.EXTRA_ACCOUNT, it)
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(i)
+            }
+        }
     }
 
     fun navigateToFolderId(folderId: Long) {

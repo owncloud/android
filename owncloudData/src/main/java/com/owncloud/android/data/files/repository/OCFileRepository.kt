@@ -25,8 +25,8 @@ package com.owncloud.android.data.files.repository
 
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
-import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.providers.LocalStorageProvider
+import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
@@ -37,6 +37,7 @@ import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import kotlinx.coroutines.flow.Flow
@@ -527,6 +528,28 @@ class OCFileRepository(
 
     override fun updateFileWithLastUsage(fileId: Long, lastUsage: Long?) {
         localFileDataSource.updateFileWithLastUsage(fileId, lastUsage)
+    }
+
+    override fun getFileFromRemoteId(fileId: String, accountName: String): OCFile? {
+        val result = remoteFileDataSource.getPathForFile(fileId, accountName)
+        val splitPath = result.split(PATH_SEPARATOR)
+        val spaceId = fileId.split("!")[0]
+        var containerFolder = listOf<OCFile>()
+        for (i in 1..splitPath.size - 2) {
+            var path = splitPath[0]
+            for (j in 1..i) {
+                path += "$PATH_SEPARATOR${splitPath[j]}"
+            }
+            containerFolder = refreshFolder(path, accountName, spaceId)
+        }
+        refreshFolder(result, accountName, spaceId)
+        return containerFolder.find { file ->
+            if (file.isFolder) {
+                file.remotePath.dropLast(1)
+            } else {
+                file.remotePath
+            } == result
+        }
     }
 
     override fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String) {
