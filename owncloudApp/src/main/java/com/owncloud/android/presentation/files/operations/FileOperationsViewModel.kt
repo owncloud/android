@@ -22,6 +22,7 @@
 
 package com.owncloud.android.presentation.files.operations
 
+import android.accounts.Account
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -310,12 +311,12 @@ class FileOperationsViewModel(
         }
     }
 
-    fun handleDeepLink(uri: Uri) {
+    fun handleDeepLink(uri: Uri, currentAccount: Account) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
             flow = _deepLinkFlow,
             useCase = manageDeepLinkUseCase,
-            useCaseParams = ManageDeepLinkUseCase.Params(URI(uri.toString())),
+            useCaseParams = ManageDeepLinkUseCase.Params(URI(uri.toString()), currentAccount.name),
         )
     }
 }
