@@ -19,10 +19,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.file.datasources
+package com.owncloud.android.data.files.datasources.implementation
 
 import com.owncloud.android.data.ClientManager
-import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.files.RemoteFile
 import com.owncloud.android.lib.resources.files.services.FileService
