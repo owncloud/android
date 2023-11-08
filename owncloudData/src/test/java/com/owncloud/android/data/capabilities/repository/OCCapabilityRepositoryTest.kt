@@ -60,7 +60,7 @@ class OCCapabilityRepositoryTest {
         }
 
         verify(exactly = 1) {
-            localCapabilitiesDataSource.insert(listOf(capability))
+            localCapabilitiesDataSource.insertCapabilities(listOf(capability))
         }
     }
 
@@ -75,7 +75,7 @@ class OCCapabilityRepositoryTest {
             remoteCapabilitiesDataSource.getCapabilities(OC_ACCOUNT_NAME)
         }
         verify(exactly = 0) {
-            localCapabilitiesDataSource.insert(any())
+            localCapabilitiesDataSource.insertCapabilities(any())
         }
     }
 
@@ -113,7 +113,7 @@ class OCCapabilityRepositoryTest {
     fun getStoredCapabilities() {
 
         every {
-            localCapabilitiesDataSource.getCapabilityForAccount(any())
+            localCapabilitiesDataSource.getCapabilitiesForAccount(any())
         } returns OC_CAPABILITY
 
         val result = ocCapabilityRepository.getStoredCapabilities(OC_ACCOUNT_NAME)
@@ -125,7 +125,7 @@ class OCCapabilityRepositoryTest {
     fun getStoredCapabilitiesNull() {
 
         every {
-            localCapabilitiesDataSource.getCapabilityForAccount(any())
+            localCapabilitiesDataSource.getCapabilitiesForAccount(any())
         } returns null
 
         val result = ocCapabilityRepository.getStoredCapabilities(OC_ACCOUNT_NAME)

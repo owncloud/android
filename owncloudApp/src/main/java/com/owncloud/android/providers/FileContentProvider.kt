@@ -913,7 +913,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
                     // Insert capability to the new capabilities table in new database
                     executors.diskIO().execute {
-                        ocLocalCapabilitiesDataSource.insert(
+                        ocLocalCapabilitiesDataSource.insertCapabilities(
                             listOf(OCCapabilityEntity.fromCursor(cursor)).map {
                                 it.toModel()
                             }

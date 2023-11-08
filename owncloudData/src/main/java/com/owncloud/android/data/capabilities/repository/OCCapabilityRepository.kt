@@ -41,13 +41,13 @@ class OCCapabilityRepository(
 
     override fun getStoredCapabilities(
         accountName: String
-    ): OCCapability? = localCapabilitiesDataSource.getCapabilityForAccount(accountName)
+    ): OCCapability? = localCapabilitiesDataSource.getCapabilitiesForAccount(accountName)
 
     override fun refreshCapabilitiesForAccount(
         accountName: String
     ) {
         val capabilitiesFromNetwork = remoteCapabilitiesDataSource.getCapabilities(accountName)
-        localCapabilitiesDataSource.insert(listOf(capabilitiesFromNetwork))
+        localCapabilitiesDataSource.insertCapabilities(listOf(capabilitiesFromNetwork))
 
         if (capabilitiesFromNetwork.filesAppProviders != null) {
             appRegistryRepository.refreshAppRegistryForAccount(accountName)
