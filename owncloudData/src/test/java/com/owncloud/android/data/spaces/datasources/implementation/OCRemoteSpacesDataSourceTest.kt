@@ -2,6 +2,7 @@
  * ownCloud Android client application
  *
  * @author Aitor Ballesteros Pavón
+ * @author Juan Carlos Garrote Gascón
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -43,25 +44,23 @@ class OCRemoteSpacesDataSourceTest {
     @Before
     fun setUp() {
         ocRemoteSpacesDataSource = OCRemoteSpacesDataSource(clientManager)
-        every { clientManager.getSpacesService(any()) } returns ocSpaceService
+        every { clientManager.getSpacesService(OC_ACCOUNT_NAME) } returns ocSpaceService
     }
 
     @Test
     fun `refreshSpacesForAccount returns a list of OCSpace`() {
-        val removeRemoteSpaceOperationResult = createRemoteOperationResultMock(
+        val getRemoteSpacesOperationResult = createRemoteOperationResultMock(
             listOf(SPACE_RESPONSE), isSuccess = true
         )
 
-        every { ocSpaceService.getSpaces() } returns removeRemoteSpaceOperationResult
+        every { ocSpaceService.getSpaces() } returns getRemoteSpacesOperationResult
 
         val resultActual = ocRemoteSpacesDataSource.refreshSpacesForAccount(OC_ACCOUNT_NAME)
 
-        assertEquals(
-            listOf(SPACE_RESPONSE.toModel(OC_ACCOUNT_NAME)), resultActual
-        )
+        assertEquals(listOf(SPACE_RESPONSE.toModel(OC_ACCOUNT_NAME)), resultActual)
 
         verify(exactly = 1) {
-            clientManager.getSpacesService(any())
+            clientManager.getSpacesService(OC_ACCOUNT_NAME)
             ocSpaceService.getSpaces()
         }
     }
