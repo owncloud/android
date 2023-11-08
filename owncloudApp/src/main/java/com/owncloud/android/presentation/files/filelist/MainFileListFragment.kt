@@ -635,6 +635,7 @@ class MainFileListFragment : Fragment(),
             val uiResult = it?.peekContent()
             if (uiResult is UIResult.Error) {
                 if (uiResult.error is FileNotFoundException) {
+                    showMessageInSnackbar("User haven't access to file")
                     changeUser()
                 }
                 showMessageInSnackbar(
@@ -648,6 +649,7 @@ class MainFileListFragment : Fragment(),
                 )
             } else if (uiResult is UIResult.Success) {
                 //TODO "Remove this message when end with managing the deep links"
+                activity?.intent?.data = null
                 showMessageInSnackbar("Deep link managed correctly")
             }
         }
@@ -697,14 +699,18 @@ class MainFileListFragment : Fragment(),
 
     private fun changeUser() {
         val currentUser = AccountUtils.getCurrentOwnCloudAccount(context)
+        val usersChecked = activity?.intent?.getStringArrayListExtra(FileDisplayActivity.KEY_DEEP_LINK_ACCOUNTS_CHECKED) ?: arrayListOf()
+        usersChecked.add(currentUser.name)
         AccountUtils.getAccounts(context).forEach {
-            if (currentUser.name != it.name) {
+            if (!usersChecked.contains(it.name)) {
                 MainApp.initDependencyInjection()
                 val i = Intent(
                     activity,
                     FileDisplayActivity::class.java
                 )
+                i.data = activity?.intent?.data
                 i.putExtra(FileActivity.EXTRA_ACCOUNT, it)
+                i.putExtra(FileDisplayActivity.KEY_DEEP_LINK_ACCOUNTS_CHECKED, usersChecked)
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(i)
             }
