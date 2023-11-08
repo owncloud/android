@@ -20,10 +20,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.capabilities.datasources
+package com.owncloud.android.data.capabilities.datasources.implementation
 
 import com.owncloud.android.data.ClientManager
-import com.owncloud.android.data.capabilities.datasources.implementation.OCRemoteCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.mapper.RemoteCapabilityMapper
 import com.owncloud.android.lib.resources.status.services.implementation.OCCapabilityService
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME

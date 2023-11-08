@@ -21,11 +21,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.capabilities.datasources
+package com.owncloud.android.data.capabilities.datasources.implementation
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toEntity
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
