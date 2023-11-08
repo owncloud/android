@@ -4,6 +4,7 @@
  * @author David González Verdugo
  * @author Abel García de Prada
  * @author Aitor Ballesteros Pavón
+ * @author Juan Carlos Garrote Gascón
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -42,8 +43,9 @@ import org.junit.Test
 import org.junit.rules.TestRule
 
 class OCLocalCapabilitiesDataSourceTest {
+
     private lateinit var ocLocalCapabilitiesDataSource: OCLocalCapabilitiesDataSource
-    private val ocCapabilityDao = mockk<OCCapabilityDao>(relaxed = true)
+    private val ocCapabilityDao = mockk<OCCapabilityDao>(relaxUnitFun = true)
 
     private val ocCapability = OC_CAPABILITY.copy(id = 0)
     private val ocCapabilityEntity = ocCapability.toEntity()
@@ -61,79 +63,68 @@ class OCLocalCapabilitiesDataSourceTest {
     }
 
     @Test
-    fun `getCapabilitiesForAccountAsLiveData returns a livedata of OCCapability`() {
-        val capabilitiesLiveData = MutableLiveData<OCCapabilityEntity>()
-        every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns capabilitiesLiveData
+    fun `getCapabilitiesForAccountAsLiveData returns a LiveData of OCCapability`() {
+        val capabilitiesLiveData = MutableLiveData(ocCapabilityEntity)
+        every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(OC_ACCOUNT_NAME) } returns capabilitiesLiveData
 
-        capabilitiesLiveData.postValue(ocCapabilityEntity)
+        val result = ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_ACCOUNT_NAME).getLastEmittedValue()
 
-        val capabilityEmitted =
-            ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(ocCapability.accountName!!)
-                .getLastEmittedValue()
-
-        assertEquals(ocCapability, capabilityEmitted)
+        assertEquals(ocCapability, result)
 
         verify(exactly = 1) {
-            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(ocCapability.accountName!!)
+            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(OC_ACCOUNT_NAME)
         }
     }
 
     @Test
-    fun `getCapabilitiesForAccountAsLiveData returns null when dao is null`() {
-        val capabilitiesLiveData = MutableLiveData<OCCapabilityEntity>()
-        every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(any()) } returns capabilitiesLiveData
+    fun `getCapabilitiesForAccountAsLiveData returns null when DAO returns a null capability`() {
+        val capabilitiesLiveData = MutableLiveData<OCCapabilityEntity>(null)
+        every { ocCapabilityDao.getCapabilitiesForAccountAsLiveData(OC_ACCOUNT_NAME) } returns capabilitiesLiveData
 
-        val capabilityEmitted =
-            ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(ocCapability.accountName!!)
-                .getLastEmittedValue()
+        val result = ocLocalCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_ACCOUNT_NAME).getLastEmittedValue()
 
-        assertNull(capabilityEmitted)
+        assertNull(result)
 
         verify(exactly = 1) {
-            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(ocCapability.accountName!!)
+            ocCapabilityDao.getCapabilitiesForAccountAsLiveData(OC_ACCOUNT_NAME)
         }
     }
 
     @Test
-    fun `getCapabilitiesForAccount returns a ocCapabilities`() {
-        every { ocCapabilityDao.getCapabilitiesForAccount(any()) } returns ocCapabilityEntity
+    fun `getCapabilitiesForAccount returns a OCCapability`() {
+        every { ocCapabilityDao.getCapabilitiesForAccount(OC_ACCOUNT_NAME) } returns ocCapabilityEntity
 
-        val capabilityEmitted = ocLocalCapabilitiesDataSource.getCapabilityForAccount(ocCapability.accountName!!)
+        val result = ocLocalCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME)
 
-        assertEquals(ocCapability, capabilityEmitted)
+        assertEquals(ocCapability, result)
 
         verify(exactly = 1) {
-            ocCapabilityDao.getCapabilitiesForAccount(ocCapability.accountName!!)
+            ocCapabilityDao.getCapabilitiesForAccount(OC_ACCOUNT_NAME)
         }
     }
 
     @Test
-    fun `getCapabilityForAccount returns null when dao is null`() {
-        every { ocCapabilityDao.getCapabilitiesForAccount(any()) } returns null
+    fun `getCapabilitiesForAccount returns null when DAO returns a null capability`() {
+        every { ocCapabilityDao.getCapabilitiesForAccount(OC_ACCOUNT_NAME) } returns null
 
-        val capabilityEmitted =
-            ocLocalCapabilitiesDataSource.getCapabilityForAccount(ocCapability.accountName!!)
+        val result = ocLocalCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME)
 
-        assertNull(capabilityEmitted)
+        assertNull(result)
 
         verify(exactly = 1) {
-            ocCapabilityDao.getCapabilitiesForAccount(ocCapability.accountName!!)
+            ocCapabilityDao.getCapabilitiesForAccount(OC_ACCOUNT_NAME)
         }
     }
 
     @Test
-    fun `insertCapabilities returns a list of OCCapability`() {
-        every { ocCapabilityDao.replace(any()) } returns Unit
-
-        ocLocalCapabilitiesDataSource.insert(listOf(ocCapability))
+    fun `insertCapabilities saves a list of OCCapability correctly`() {
+        ocLocalCapabilitiesDataSource.insertCapabilities(listOf(ocCapability))
 
         verify(exactly = 1) { ocCapabilityDao.replace(listOf(ocCapabilityEntity)) }
     }
 
     @Test
-    fun `deleteCapabilitiesForAccount return unit dao is ok`() {
-        every { ocCapabilityDao.deleteByAccountName(OC_ACCOUNT_NAME) } returns Unit
-
+    fun `deleteCapabilitiesForAccount removes capabilities correctly`() {
         ocLocalCapabilitiesDataSource.deleteCapabilitiesForAccount(OC_ACCOUNT_NAME)
 
         verify(exactly = 1) { ocCapabilityDao.deleteByAccountName(OC_ACCOUNT_NAME) }
