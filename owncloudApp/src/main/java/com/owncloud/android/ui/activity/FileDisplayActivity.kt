@@ -1770,7 +1770,6 @@ class FileDisplayActivity : FileActivity(),
     private fun handleDeepLink() {
         intent.data?.let { uri ->
             fileOperationsViewModel.handleDeepLink(uri, getCurrentOwnCloudAccount(baseContext))
-            intent.data = null
         }
     }
 
@@ -1784,7 +1783,7 @@ class FileDisplayActivity : FileActivity(),
         private const val KEY_WAITING_TO_SEND = "WAITING_TO_SEND"
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
-        private const val KEY_DEEP_LINK_ACCOUNTS_CHECKED = "DEEP_LINK_ACCOUNTS_CHECKED"
+        const val KEY_DEEP_LINK_ACCOUNTS_CHECKED = "DEEP_LINK_ACCOUNTS_CHECKED"
 
         private const val CUSTOM_DIALOG_TAG = "CUSTOM_DIALOG"
 
