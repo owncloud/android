@@ -250,13 +250,17 @@ class MainFileListFragment : Fragment(),
 
         // Set Refresh FAB and its listener
         binding.fabRefresh.setOnClickListener {
-            fileOperationsViewModel.performOperation(
-                FileOperation.RefreshFolderOperation(
-                    folderToRefresh = mainFileListViewModel.getFile(),
-                    shouldSyncContents = false,
+            if (fileOperationsViewModel.refreshFolderLiveData.value!!.peekContent().isLoading) {
+                showMessageInSnackbar(message = getString(R.string.fab_refresh_sync_in_progress))
+            } else {
+                fileOperationsViewModel.performOperation(
+                    FileOperation.RefreshFolderOperation(
+                        folderToRefresh = mainFileListViewModel.getFile(),
+                        shouldSyncContents = false,
+                    )
                 )
-            )
-            hideRefreshFab()
+                hideRefreshFab()
+            }
         }
 
         // Set SortOptions and its listeners
@@ -659,22 +663,22 @@ class MainFileListFragment : Fragment(),
                     val differentNewlySucceededTransfers = newlySucceededTransfers.filter { it !in safeSucceededTransfers }
                     differentNewlySucceededTransfers.forEach { transfer ->
                         numberOfUploadsRefreshed++
-                        if (numberOfUploadsRefreshed <= maxUploadsToRefresh) {
-                            val currentFolder = mainFileListViewModel.getFile()
-                            if (!fileOperationsViewModel.refreshFolderLiveData.value!!.peekContent().isLoading &&
-                                transfer.remotePath.toPath().parent!!.toString() == currentFolder.remotePath.toPath().toString()
-                            ) {
-                                fileOperationsViewModel.performOperation(
-                                    FileOperation.RefreshFolderOperation(
-                                        folderToRefresh = currentFolder,
-                                        shouldSyncContents = false,
+                        val currentFolder = mainFileListViewModel.getFile()
+                        if (transfer.remotePath.toPath().parent!!.toString() == currentFolder.remotePath.toPath().toString()) {
+                            if (numberOfUploadsRefreshed <= maxUploadsToRefresh) {
+                                if (!fileOperationsViewModel.refreshFolderLiveData.value!!.peekContent().isLoading) {
+                                    fileOperationsViewModel.performOperation(
+                                        FileOperation.RefreshFolderOperation(
+                                            folderToRefresh = currentFolder,
+                                            shouldSyncContents = false,
+                                        )
                                     )
-                                )
-                            }
-                        } else {
-                            binding.fabRefresh.apply {
-                                isVisible = true
-                                animate().translationY(0f).duration = 100
+                                }
+                            } else {
+                                binding.fabRefresh.apply {
+                                    isVisible = true
+                                    animate().translationY(0f).duration = 100
+                                }
                             }
                         }
                     }
