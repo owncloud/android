@@ -37,6 +37,7 @@ import okio.Buffer
 import timber.log.Timber
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
+import java.util.concurrent.TimeUnit
 
 class LogInterceptor : Interceptor {
 
@@ -66,17 +67,18 @@ class LogInterceptor : Interceptor {
             "HTTP REQUEST: ${
                 requestJsonAdapter.toJson(
                     LogRequest(
-                        requestId = request.headers[OC_X_REQUEST_ID] ?: "",
-                        method = request.method,
-                        url = request.url.toString(),
-                        headers = logHeaders(request.headers),
-                        bodyLength = request.body?.contentLength() ?: 0L,
-                        bodyContentType = request.body?.contentType()?.toString() ?: "",
-                        body = getRequestBodyString(request.body),
+                        Request(
+                            body = getRequestBodyString(request.body),
+                            headers = logHeaders(request.headers),
+                            info = RequestInfo(
+                                id = request.headers[OC_X_REQUEST_ID] ?: "",
+                                method = request.method,
+                                url = request.url.toString(),
+                            )
+                        )
                     )
                 )
             }"
-
         )
     }
 
@@ -112,28 +114,38 @@ class LogInterceptor : Interceptor {
         return EMPTY_BODY
     }
 
-    private fun logResponse(moshi: Moshi, it: Response, request: Request) {
+    private fun logResponse(moshi: Moshi, response: Response, request: Request) {
         val responseJsonAdapter = moshi.adapter(LogResponse::class.java)
-        val contentType = it.body?.contentType()
+        val contentType = response.body?.contentType()
         val charset: Charset = contentType?.charset(StandardCharsets.UTF_8) ?: StandardCharsets.UTF_8
-        val source = it.body?.source()
+        val source = response.body?.source()
         source?.request(LIMIT_BODY_LOG)
         val buffer = source?.buffer
         val rawResponseBody = buffer?.clone()?.readString(charset)
         val bodyLength = rawResponseBody?.toByteArray(charset)?.size ?: 0
         val responseBody = getResponseBodyString(contentType, bodyLength, rawResponseBody ?: "")
+        val duration = response.receivedResponseAtMillis - response.sentRequestAtMillis
         Timber.d(
             "HTTP RESPONSE: ${
                 responseJsonAdapter.toJson(
                     LogResponse(
-                        requestId = request.headers[OC_X_REQUEST_ID] ?: "",
-                        method = request.method,
-                        url = request.url.toString(),
-                        code = it.code,
-                        headers = logHeaders(it.headers),
-                        bodyLength = bodyLength,
-                        bodyContentType = contentType?.toString() ?: "",
-                        body = responseBody,
+                        Response(
+                            headers = logHeaders(response.headers),
+                            body = responseBody,
+                            info = ResponseInfo(
+                                id = request.headers[OC_X_REQUEST_ID] ?: "",
+                                method = request.method,
+                                bodyLength = bodyLength,
+                                reply = Reply(
+                                    cached = response.cacheResponse != null,
+                                    duration = duration,
+                                    durationString = getDurationString(duration),
+                                    status = response.code,
+                                    version = response.protocol.toString(),
+                                ),
+                                url = request.url.toString(),
+                            )
+                        )
                     )
                 )
             }"
@@ -148,6 +160,17 @@ class LogInterceptor : Interceptor {
         } else {
             EMPTY_BODY
         }
+    }
+
+    private fun getDurationString(millis: Long): String {
+        var auxMillis = millis
+        val hours = TimeUnit.MILLISECONDS.toHours(millis)
+        auxMillis -= TimeUnit.HOURS.toMillis(hours)
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(millis)
+        auxMillis -= TimeUnit.MINUTES.toMillis(minutes)
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(millis)
+        auxMillis -= TimeUnit.SECONDS.toMillis(seconds)
+        return String.format(DURATION_FORMAT, hours, minutes, seconds, auxMillis)
     }
 
     companion object {
