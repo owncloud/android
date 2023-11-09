@@ -41,16 +41,6 @@ import java.util.UUID
 class OCLocalFileDataSource(
     private val fileDao: FileDao,
 ) : LocalFileDataSource {
-    override fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String, replace: Boolean?) {
-        fileDao.copy(
-            sourceFile = sourceFile.toEntity(),
-            targetFolder = targetFolder.toEntity(),
-            finalRemotePath = finalRemotePath,
-            remoteId = remoteId,
-            replace = replace,
-        )
-    }
-
     override fun getFileById(fileId: Long): OCFile? =
         fileDao.getFileById(fileId)?.toModel()
 
@@ -144,6 +134,16 @@ class OCLocalFileDataSource(
             finalRemotePath = finalRemotePath,
             finalStoragePath = finalStoragePath
         )
+
+    override fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String, replace: Boolean?) {
+        fileDao.copy(
+            sourceFile = sourceFile.toEntity(),
+            targetFolder = targetFolder.toEntity(),
+            finalRemotePath = finalRemotePath,
+            remoteId = remoteId,
+            replace = replace,
+        )
+    }
 
     override fun saveFilesInFolderAndReturnThem(listOfFiles: List<OCFile>, folder: OCFile): List<OCFile> {
         // TODO: If it is root, add 0 as parent Id
