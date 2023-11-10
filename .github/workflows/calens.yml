@@ -27,7 +27,7 @@ jobs:
           image: toolhippie/calens:latest
           run: calens >| CHANGELOG.md
       - name: Commit files
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Calens changelog updated
           file_pattern: CHANGELOG.md
