@@ -1,0 +1,7 @@
+Enhancement: Auto-refresh when a file is uploaded
+
+The file list will be now refreshed automatically when an upload whose destination folder
+is the one we are in is completed successfully.
+
+https://github.com/owncloud/android/issues/4103
+https://github.com/owncloud/android/pull/4199

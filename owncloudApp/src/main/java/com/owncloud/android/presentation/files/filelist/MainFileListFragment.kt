@@ -70,6 +70,8 @@ import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.model.OCFileSyncInfo
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.transfers.model.OCTransfer
+import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.addOpenInWebMenuOptions
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
@@ -101,6 +103,7 @@ import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragm
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
 import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
+import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
@@ -108,6 +111,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
+import okio.Path.Companion.toPath
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -128,6 +132,7 @@ class MainFileListFragment : Fragment(),
         )
     }
     private val fileOperationsViewModel by sharedViewModel<FileOperationsViewModel>()
+    private val transfersViewModel by viewModel<TransfersViewModel>()
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
@@ -153,6 +158,8 @@ class MainFileListFragment : Fragment(),
     private var checkedFiles: List<OCFile> = emptyList()
     private var fileSingleFile: OCFile? = null
     private var fileOptionsBottomSheetSingleFileLayout: LinearLayout? = null
+    private var succeededTransfers: List<OCTransfer>? = null
+    private var numberOfUploadsRefreshed: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -241,6 +248,21 @@ class MainFileListFragment : Fragment(),
             )
         }
 
+        // Set Refresh FAB and its listener
+        binding.fabRefresh.setOnClickListener {
+            if (fileOperationsViewModel.refreshFolderLiveData.value!!.peekContent().isLoading) {
+                showMessageInSnackbar(message = getString(R.string.fab_refresh_sync_in_progress))
+            } else {
+                fileOperationsViewModel.performOperation(
+                    FileOperation.RefreshFolderOperation(
+                        folderToRefresh = mainFileListViewModel.getFile(),
+                        shouldSyncContents = false,
+                    )
+                )
+                hideRefreshFab()
+            }
+        }
+
         // Set SortOptions and its listeners
         binding.optionsLayout.onSortOptionsListener = this
         setViewTypeSelector(SortOptionsView.AdditionalView.CREATE_FOLDER)
@@ -282,6 +304,8 @@ class MainFileListFragment : Fragment(),
             } else {
                 setViewTypeSelector(SortOptionsView.AdditionalView.HIDDEN)
             }
+            numberOfUploadsRefreshed = 0
+            hideRefreshFab()
         }
 
         // Observe the current space to update the toolbar
@@ -534,7 +558,7 @@ class MainFileListFragment : Fragment(),
             fileSingleFile = null
         }
 
-        // Observe the file list ui state
+        // Observe the file list UI state
         collectLatestLifecycleFlow(mainFileListViewModel.fileListUiState) { fileListUiState ->
             if (fileListUiState !is MainFileListViewModel.FileListUiState.Success) return@collectLatestLifecycleFlow
 
@@ -576,6 +600,7 @@ class MainFileListFragment : Fragment(),
         fileOperationsViewModel.refreshFolderLiveData.observe(viewLifecycleOwner) {
             binding.syncProgressBar.isIndeterminate = it.peekContent().isLoading
             binding.swipeRefreshMainFileList.isRefreshing = it.peekContent().isLoading
+            hideRefreshFab()
         }
 
         // Observe the create file with app provider operation
@@ -596,11 +621,14 @@ class MainFileListFragment : Fragment(),
             }
         }
 
-        onDeeplLinkManaged()
+        observeDeepLink()
+
+        /* TransfersViewModel observables */
+        observeTransfers()
 
     }
 
-    private fun onDeeplLinkManaged() {
+    private fun observeDeepLink() {
         collectLatestLifecycleFlow(fileOperationsViewModel.deepLinkFlow) {
             val uiResult = it?.peekContent()
             if (uiResult is UIResult.Error) {
@@ -618,6 +646,48 @@ class MainFileListFragment : Fragment(),
                 showMessageInSnackbar("Deep link managed correctly")
             }
         }
+    }
+
+    private fun observeTransfers() {
+        val maxUploadsToRefresh = resources.getInteger(R.integer.max_uploads_to_refresh)
+        collectLatestLifecycleFlow(transfersViewModel.transfersWithSpaceStateFlow) { transfers ->
+            if (transfers.isNotEmpty()) {
+                val newlySucceededTransfers = transfers.map { it.first }.filter {
+                    it.status == TransferStatus.TRANSFER_SUCCEEDED &&
+                            it.accountName == AccountUtils.getCurrentOwnCloudAccount(requireContext()).name
+                }
+                val safeSucceededTransfers = succeededTransfers
+                if (safeSucceededTransfers == null) {
+                    succeededTransfers = newlySucceededTransfers
+                } else if (safeSucceededTransfers != newlySucceededTransfers) {
+                    val differentNewlySucceededTransfers = newlySucceededTransfers.filter { it !in safeSucceededTransfers }
+                    differentNewlySucceededTransfers.forEach { transfer ->
+                        numberOfUploadsRefreshed++
+                        val currentFolder = mainFileListViewModel.getFile()
+                        if (transfer.remotePath.toPath().parent!!.toString() == currentFolder.remotePath.toPath().toString()) {
+                            if (numberOfUploadsRefreshed <= maxUploadsToRefresh) {
+                                if (!fileOperationsViewModel.refreshFolderLiveData.value!!.peekContent().isLoading) {
+                                    fileOperationsViewModel.performOperation(
+                                        FileOperation.RefreshFolderOperation(
+                                            folderToRefresh = currentFolder,
+                                            shouldSyncContents = false,
+                                        )
+                                    )
+                                }
+                            } else {
+                                binding.fabRefresh.apply {
+                                    isVisible = true
+                                    animate().translationY(0f).duration = 100
+                                }
+                            }
+                        }
+                    }
+
+                    succeededTransfers = newlySucceededTransfers
+                }
+            }
+        }
+
     }
 
     fun navigateToFolderId(folderId: Long) {
@@ -644,6 +714,12 @@ class MainFileListFragment : Fragment(),
                 listEmptyDatasetTitle.setText(fileListUiState.fileListOption.toTitleStringRes())
                 listEmptyDatasetSubTitle.setText(fileListUiState.fileListOption.toSubtitleStringRes())
             }
+        }
+    }
+
+    private fun hideRefreshFab() {
+        binding.fabRefresh.apply {
+            animate().translationY(-this.height.toFloat() * 2).withEndAction { this.isVisible = false }
         }
     }
 
