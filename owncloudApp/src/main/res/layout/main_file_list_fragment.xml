@@ -76,6 +76,22 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                    android:id="@+id/fab_refresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/standard_quarter_margin"
+                    android:text="@string/fab_refresh_text"
+                    android:textColor="@color/white"
+                    android:theme="@style/Theme.MaterialComponents.Bridge"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:icon="@drawable/ic_action_refresh"
+                    app:iconTint="@color/white"
+                    app:backgroundTint="@color/primary_button_background_color"/>
+
                 <include
                     android:id="@+id/space_header"
                     layout="@layout/space_header"

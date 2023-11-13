@@ -1,25 +1,44 @@
-Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
-=======================================
+# Table of Contents
+
+* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
+* [Changelog for 4.1.1](#changelog-for-owncloud-android-client-411-2023-10-18)
+* [Changelog for 4.1.0](#changelog-for-owncloud-android-client-410-2023-08-23)
+* [Changelog for 4.0.0](#changelog-for-owncloud-android-client-400-2023-05-29)
+* [Changelog for 3.0.4](#changelog-for-owncloud-android-client-304-2023-03-07)
+* [Changelog for 3.0.3](#changelog-for-owncloud-android-client-303-2023-02-13)
+* [Changelog for 3.0.2](#changelog-for-owncloud-android-client-302-2023-01-26)
+* [Changelog for 3.0.1](#changelog-for-owncloud-android-client-301-2022-12-21)
+* [Changelog for 3.0.0](#changelog-for-owncloud-android-client-300-2022-12-12)
+* [Changelog for 2.21.2](#changelog-for-owncloud-android-client-2212-2022-09-07)
+* [Changelog for 2.21.1](#changelog-for-owncloud-android-client-2211-2022-06-15)
+* [Changelog for 2.21.0](#changelog-for-owncloud-android-client-2210-2022-06-07)
+* [Changelog for 2.20.0](#changelog-for-owncloud-android-client-2200-2022-02-16)
+* [Changelog for 2.19.0](#changelog-for-owncloud-android-client-2190-2021-11-15)
+* [Changelog for 2.18.3](#changelog-for-owncloud-android-client-2183-2021-10-27)
+* [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
+* [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
+* [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
+# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+
 The following sections list the changes in ownCloud Android Client unreleased relevant to
 ownCloud admins and users.
 
 [unreleased]: https://github.com/owncloud/android/compare/v4.1.1...master
 
-Summary
--------
+## Summary
 
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
 * Enhancement - Koin DSL: [#3966](https://github.com/owncloud/android/pull/3966)
 * Enhancement - Unit tests for datasources classes - Part 3: [#4072](https://github.com/owncloud/android/issues/4072)
 * Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
 * Enhancement - "Share to" in oCIS accounts allows upload to any space: [#4088](https://github.com/owncloud/android/issues/4088)
+* Enhancement - Auto-refresh when a file is uploaded: [#4103](https://github.com/owncloud/android/issues/4103)
 * Enhancement - Download log files: [#4155](https://github.com/owncloud/android/issues/4155)
 * Enhancement - New field "last usage" in database: [#4173](https://github.com/owncloud/android/issues/4173)
 * Enhancement - Use invoke operator to execute usecases: [#4179](https://github.com/owncloud/android/pull/4179)
 * Enhancement - Deep link open app correctly: [#4181](https://github.com/owncloud/android/issues/4181)
 
-Details
--------
+## Details
 
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
 
@@ -63,6 +82,14 @@ Details
    https://github.com/owncloud/android/issues/4088
    https://github.com/owncloud/android/pull/4160
 
+* Enhancement - Auto-refresh when a file is uploaded: [#4103](https://github.com/owncloud/android/issues/4103)
+
+   The file list will be now refreshed automatically when an upload whose destination folder is
+   the one we are in is completed successfully.
+
+   https://github.com/owncloud/android/issues/4103
+   https://github.com/owncloud/android/pull/4199
+
 * Enhancement - Download log files: [#4155](https://github.com/owncloud/android/issues/4155)
 
    A new icon to download a log file to the Downloads folder of the device has been added to the log
@@ -92,21 +119,19 @@ Details
    https://github.com/owncloud/android/issues/4181
    https://github.com/owncloud/android/pull/4191
 
-Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
-=======================================
+# Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
+
 The following sections list the changes in ownCloud Android Client 4.1.1 relevant to
 ownCloud admins and users.
 
 [4.1.1]: https://github.com/owncloud/android/compare/v4.1.0...v4.1.1
 
-Summary
--------
+## Summary
 
 * Bugfix - Some Null Pointer Exceptions avoided: [#4158](https://github.com/owncloud/android/issues/4158)
 * Bugfix - Thumbnails correctly shown for every user: [#4189](https://github.com/owncloud/android/pull/4189)
 
-Details
--------
+## Details
 
 * Bugfix - Some Null Pointer Exceptions avoided: [#4158](https://github.com/owncloud/android/issues/4158)
 
@@ -123,15 +148,14 @@ Details
 
    https://github.com/owncloud/android/pull/4189
 
-Changelog for ownCloud Android Client [4.1.0] (2023-08-23)
-=======================================
+# Changelog for ownCloud Android Client [4.1.0] (2023-08-23)
+
 The following sections list the changes in ownCloud Android Client 4.1.0 relevant to
 ownCloud admins and users.
 
 [4.1.0]: https://github.com/owncloud/android/compare/v4.0.0...v4.1.0
 
-Summary
--------
+## Summary
 
 * Bugfix - Spaces' thumbnails not loaded the first time: [#3959](https://github.com/owncloud/android/issues/3959)
 * Bugfix - Bad error message when copying/moving with server down: [#4044](https://github.com/owncloud/android/issues/4044)
@@ -160,8 +184,7 @@ Summary
 * Enhancement - Support "per app" language change on Android 13+: [#4082](https://github.com/owncloud/android/issues/4082)
 * Enhancement - Align Sharing icons with other platforms: [#4101](https://github.com/owncloud/android/issues/4101)
 
-Details
--------
+## Details
 
 * Bugfix - Spaces' thumbnails not loaded the first time: [#3959](https://github.com/owncloud/android/issues/3959)
 
@@ -369,15 +392,14 @@ Details
    https://github.com/owncloud/android/issues/4101
    https://github.com/owncloud/android/pull/4112
 
-Changelog for ownCloud Android Client [4.0.0] (2023-05-29)
-=======================================
+# Changelog for ownCloud Android Client [4.0.0] (2023-05-29)
+
 The following sections list the changes in ownCloud Android Client 4.0.0 relevant to
 ownCloud admins and users.
 
 [4.0.0]: https://github.com/owncloud/android/compare/v3.0.4...v4.0.0
 
-Summary
--------
+## Summary
 
 * Security - Make ShareActivity not-exported: [#4038](https://github.com/owncloud/android/pull/4038)
 * Bugfix - Error message for protocol exception: [#3948](https://github.com/owncloud/android/issues/3948)
@@ -398,8 +420,7 @@ Summary
 * Enhancement - Add prompt parameter to OIDC flow: [#4011](https://github.com/owncloud/android/pull/4011)
 * Enhancement - New setting "Access document provider": [#4032](https://github.com/owncloud/android/pull/4032)
 
-Details
--------
+## Details
 
 * Security - Make ShareActivity not-exported: [#4038](https://github.com/owncloud/android/pull/4038)
 
@@ -556,21 +577,19 @@ Details
    https://github.com/owncloud/android/issues/4028
    https://github.com/owncloud/android/pull/4032
 
-Changelog for ownCloud Android Client [3.0.4] (2023-03-07)
-=======================================
+# Changelog for ownCloud Android Client [3.0.4] (2023-03-07)
+
 The following sections list the changes in ownCloud Android Client 3.0.4 relevant to
 ownCloud admins and users.
 
 [3.0.4]: https://github.com/owncloud/android/compare/v3.0.3...v3.0.4
 
-Summary
--------
+## Summary
 
 * Security - Fix for security issues with database: [#3952](https://github.com/owncloud/android/pull/3952)
 * Enhancement - HTTP logs show more info: [#547](https://github.com/owncloud/android-library/pull/547)
 
-Details
--------
+## Details
 
 * Security - Fix for security issues with database: [#3952](https://github.com/owncloud/android/pull/3952)
 
@@ -585,22 +604,20 @@ Details
 
    https://github.com/owncloud/android-library/pull/547
 
-Changelog for ownCloud Android Client [3.0.3] (2023-02-13)
-=======================================
+# Changelog for ownCloud Android Client [3.0.3] (2023-02-13)
+
 The following sections list the changes in ownCloud Android Client 3.0.3 relevant to
 ownCloud admins and users.
 
 [3.0.3]: https://github.com/owncloud/android/compare/v3.0.2...v3.0.3
 
-Summary
--------
+## Summary
 
 * Bugfix - Error messages too long in folders operation: [#3852](https://github.com/owncloud/android/pull/3852)
 * Bugfix - Fix problems after authentication: [#3889](https://github.com/owncloud/android/pull/3889)
 * Bugfix - Toolbar in file details view: [#3899](https://github.com/owncloud/android/pull/3899)
 
-Details
--------
+## Details
 
 * Bugfix - Error messages too long in folders operation: [#3852](https://github.com/owncloud/android/pull/3852)
 
@@ -625,21 +642,19 @@ Details
    https://github.com/owncloud/android/issues/3866
    https://github.com/owncloud/android/pull/3899
 
-Changelog for ownCloud Android Client [3.0.2] (2023-01-26)
-=======================================
+# Changelog for ownCloud Android Client [3.0.2] (2023-01-26)
+
 The following sections list the changes in ownCloud Android Client 3.0.2 relevant to
 ownCloud admins and users.
 
 [3.0.2]: https://github.com/owncloud/android/compare/v3.0.1...v3.0.2
 
-Summary
--------
+## Summary
 
 * Bugfix - Fix reauthentication prompt: [#534](https://github.com/owncloud/android-library/pull/534)
 * Enhancement - Branded scope for OpenID Connect: [#3869](https://github.com/owncloud/android/pull/3869)
 
-Details
--------
+## Details
 
 * Bugfix - Fix reauthentication prompt: [#534](https://github.com/owncloud/android-library/pull/534)
 
@@ -653,21 +668,19 @@ Details
 
    https://github.com/owncloud/android/pull/3869
 
-Changelog for ownCloud Android Client [3.0.1] (2022-12-21)
-=======================================
+# Changelog for ownCloud Android Client [3.0.1] (2022-12-21)
+
 The following sections list the changes in ownCloud Android Client 3.0.1 relevant to
 ownCloud admins and users.
 
 [3.0.1]: https://github.com/owncloud/android/compare/v3.0.0...v3.0.1
 
-Summary
--------
+## Summary
 
 * Bugfix - Fix crash when upgrading from 2.18: [#3837](https://github.com/owncloud/android/pull/3837)
 * Bugfix - Fix crash when opening uploads section: [#3841](https://github.com/owncloud/android/pull/3841)
 
-Details
--------
+## Details
 
 * Bugfix - Fix crash when upgrading from 2.18: [#3837](https://github.com/owncloud/android/pull/3837)
 
@@ -683,15 +696,14 @@ Details
 
    https://github.com/owncloud/android/pull/3841
 
-Changelog for ownCloud Android Client [3.0.0] (2022-12-12)
-=======================================
+# Changelog for ownCloud Android Client [3.0.0] (2022-12-12)
+
 The following sections list the changes in ownCloud Android Client 3.0.0 relevant to
 ownCloud admins and users.
 
 [3.0.0]: https://github.com/owncloud/android/compare/v2.21.2...v3.0.0
 
-Summary
--------
+## Summary
 
 * Bugfix - Fix for thumbnails: [#3719](https://github.com/owncloud/android/pull/3719)
 * Enhancement - Sync engine rewritten: [#2934](https://github.com/owncloud/android/pull/2934)
@@ -700,8 +712,7 @@ Summary
 * Enhancement - Empty views improved: [#3728](https://github.com/owncloud/android/pull/3728)
 * Enhancement - Automatic conflicts propagation: [#3766](https://github.com/owncloud/android/pull/3766)
 
-Details
--------
+## Details
 
 * Bugfix - Fix for thumbnails: [#3719](https://github.com/owncloud/android/pull/3719)
 
@@ -752,22 +763,20 @@ Details
    https://github.com/owncloud/android/issues/3005
    https://github.com/owncloud/android/pull/3766
 
-Changelog for ownCloud Android Client [2.21.2] (2022-09-07)
-=======================================
+# Changelog for ownCloud Android Client [2.21.2] (2022-09-07)
+
 The following sections list the changes in ownCloud Android Client 2.21.2 relevant to
 ownCloud admins and users.
 
 [2.21.2]: https://github.com/owncloud/android/compare/v2.21.1...v2.21.2
 
-Summary
--------
+## Summary
 
 * Enhancement - Open in web: [#3672](https://github.com/owncloud/android/issues/3672)
 * Enhancement - Shares from propfind: [#3711](https://github.com/owncloud/android/issues/3711)
 * Enhancement - Private link capability: [#3732](https://github.com/owncloud/android/issues/3732)
 
-Details
--------
+## Details
 
 * Enhancement - Open in web: [#3672](https://github.com/owncloud/android/issues/3672)
 
@@ -794,20 +803,18 @@ Details
    https://github.com/owncloud/android/pull/3738
    https://github.com/owncloud/android-library/pull/505
 
-Changelog for ownCloud Android Client [2.21.1] (2022-06-15)
-=======================================
+# Changelog for ownCloud Android Client [2.21.1] (2022-06-15)
+
 The following sections list the changes in ownCloud Android Client 2.21.1 relevant to
 ownCloud admins and users.
 
 [2.21.1]: https://github.com/owncloud/android/compare/v2.21.0...v2.21.1
 
-Summary
--------
+## Summary
 
 * Bugfix - Fix crash when opening from details screen: [#3696](https://github.com/owncloud/android/pull/3696)
 
-Details
--------
+## Details
 
 * Bugfix - Fix crash when opening from details screen: [#3696](https://github.com/owncloud/android/pull/3696)
 
@@ -815,15 +822,14 @@ Details
 
    https://github.com/owncloud/android/pull/3696
 
-Changelog for ownCloud Android Client [2.21.0] (2022-06-07)
-=======================================
+# Changelog for ownCloud Android Client [2.21.0] (2022-06-07)
+
 The following sections list the changes in ownCloud Android Client 2.21.0 relevant to
 ownCloud admins and users.
 
 [2.21.0]: https://github.com/owncloud/android/compare/v2.20.0...v2.21.0
 
-Summary
--------
+## Summary
 
 * Bugfix - Prevented signed in user in the list of users to be shared: [#1419](https://github.com/owncloud/android/issues/1419)
 * Bugfix - Corrupt picture error controlled: [#3441](https://github.com/owncloud/android/issues/3441)
@@ -848,8 +854,7 @@ Summary
 * Enhancement - Option to allow screenshots or not in Android Enterprise: [#3625](https://github.com/owncloud/android/issues/3625)
 * Enhancement - Thumbnail click action in file detail: [#3653](https://github.com/owncloud/android/pull/3653)
 
-Details
--------
+## Details
 
 * Bugfix - Prevented signed in user in the list of users to be shared: [#1419](https://github.com/owncloud/android/issues/1419)
 
@@ -1019,15 +1024,14 @@ Details
 
    https://github.com/owncloud/android/pull/3653
 
-Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
-=======================================
+# Changelog for ownCloud Android Client [2.20.0] (2022-02-16)
+
 The following sections list the changes in ownCloud Android Client 2.20.0 relevant to
 ownCloud admins and users.
 
 [2.20.0]: https://github.com/owncloud/android/compare/v2.19.0...v2.20.0
 
-Summary
--------
+## Summary
 
 * Bugfix - Small glitch when side menu is full of accounts: [#3437](https://github.com/owncloud/android/pull/3437)
 * Bugfix - Small bug when privacy policy disabled: [#3542](https://github.com/owncloud/android/pull/3542)
@@ -1041,8 +1045,7 @@ Summary
 * Enhancement - Enable logs by default in debug mode: [#3526](https://github.com/owncloud/android/issues/3526)
 * Enhancement - Suggest the user to enable enhanced security: [#3539](https://github.com/owncloud/android/pull/3539)
 
-Details
--------
+## Details
 
 * Bugfix - Small glitch when side menu is full of accounts: [#3437](https://github.com/owncloud/android/pull/3437)
 
@@ -1136,15 +1139,14 @@ Details
 
    https://github.com/owncloud/android/pull/3539
 
-Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
-=======================================
+# Changelog for ownCloud Android Client [2.19.0] (2021-11-15)
+
 The following sections list the changes in ownCloud Android Client 2.19.0 relevant to
 ownCloud admins and users.
 
 [2.19.0]: https://github.com/owncloud/android/compare/v2.18.3...v2.19.0
 
-Summary
--------
+## Summary
 
 * Bugfix - Crash in FileDataStorageManager: [#2896](https://github.com/owncloud/android/issues/2896)
 * Bugfix - Account removed is not removed from the drawer: [#3340](https://github.com/owncloud/android/issues/3340)
@@ -1160,8 +1162,7 @@ Summary
 * Enhancement - New Logging Screen 2.0: [#3333](https://github.com/owncloud/android/issues/3333)
 * Enhancement - Delete old user directories in order to free memory: [#3336](https://github.com/owncloud/android/pull/3336)
 
-Details
--------
+## Details
 
 * Bugfix - Crash in FileDataStorageManager: [#2896](https://github.com/owncloud/android/issues/2896)
 
@@ -1281,20 +1282,18 @@ Details
    https://github.com/owncloud/android/issues/125
    https://github.com/owncloud/android/pull/3336
 
-Changelog for ownCloud Android Client [2.18.3] (2021-10-27)
-=======================================
+# Changelog for ownCloud Android Client [2.18.3] (2021-10-27)
+
 The following sections list the changes in ownCloud Android Client 2.18.3 relevant to
 ownCloud admins and users.
 
 [2.18.3]: https://github.com/owncloud/android/compare/v2.18.1...v2.18.3
 
-Summary
--------
+## Summary
 
 * Enhancement - Privacy policy button more accessible: [#3423](https://github.com/owncloud/android/pull/3423)
 
-Details
--------
+## Details
 
 * Enhancement - Privacy policy button more accessible: [#3423](https://github.com/owncloud/android/pull/3423)
 
@@ -1305,23 +1304,21 @@ Details
    https://github.com/owncloud/android/issues/3422
    https://github.com/owncloud/android/pull/3423
 
-Changelog for ownCloud Android Client [2.18.1] (2021-07-20)
-=======================================
+# Changelog for ownCloud Android Client [2.18.1] (2021-07-20)
+
 The following sections list the changes in ownCloud Android Client 2.18.1 relevant to
 ownCloud admins and users.
 
 [2.18.1]: https://github.com/owncloud/android/compare/v2.18.0...v2.18.1
 
-Summary
--------
+## Summary
 
 * Security - Add PKCE support: [#3310](https://github.com/owncloud/android/pull/3310)
 * Enhancement - Replace picker to select camera folder with native one: [#2899](https://github.com/owncloud/android/issues/2899)
 * Enhancement - Hide "More" section if all options are disabled: [#3271](https://github.com/owncloud/android/issues/3271)
 * Enhancement - Note icon in music player to be branded: [#3272](https://github.com/owncloud/android/issues/3272)
 
-Details
--------
+## Details
 
 * Security - Add PKCE support: [#3310](https://github.com/owncloud/android/pull/3310)
 
@@ -1355,15 +1352,14 @@ Details
    https://github.com/owncloud/android/issues/3272
    https://github.com/owncloud/android/pull/3297
 
-Changelog for ownCloud Android Client [2.18.0] (2021-05-24)
-=======================================
+# Changelog for ownCloud Android Client [2.18.0] (2021-05-24)
+
 The following sections list the changes in ownCloud Android Client 2.18.0 relevant to
 ownCloud admins and users.
 
 
 
-Summary
--------
+## Summary
 
 * Bugfix - Snackbar in passcode view is not displayed: [#2722](https://github.com/owncloud/android/issues/2722)
 * Bugfix - Fixed problem when a file is edited externally: [#2752](https://github.com/owncloud/android/issues/2752)
@@ -1379,8 +1375,7 @@ Summary
 * Enhancement - Align previews actions: [#3155](https://github.com/owncloud/android/issues/3155)
 * Enhancement - Fixed account for camera uploads: [#3166](https://github.com/owncloud/android/issues/3166)
 
-Details
--------
+## Details
 
 * Bugfix - Snackbar in passcode view is not displayed: [#2722](https://github.com/owncloud/android/issues/2722)
 
@@ -1492,6 +1487,8 @@ Details
 
    https://github.com/owncloud/android/issues/3166
    https://github.com/owncloud/android/pull/3226
+
+# Changelog for 2.17 versions and below
 
 ## 2.17 (March 2021)
 - Toolbar redesign
