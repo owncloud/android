@@ -84,6 +84,6 @@ interface FileService : Service {
         spaceWebDavUrl: String? = null,
     ): RemoteOperationResult<Unit>
 
-    fun fileMetaInfo(fileId: String): RemoteOperationResult<String>
+    fun fileMetaInfo(fileId: String, isOcis: Boolean): RemoteOperationResult<String>
 
 }

@@ -530,10 +530,10 @@ class OCFileRepository(
         localFileDataSource.updateFileWithLastUsage(fileId, lastUsage)
     }
 
-    override fun getFileFromRemoteId(fileId: String, accountName: String): OCFile? {
-        val result = remoteFileDataSource.getPathForFile(fileId, accountName)
+    override fun getFileFromRemoteId(fileId: String, accountName: String, isOcis: Boolean): OCFile? {
+        val result = remoteFileDataSource.getRemotePathForFile(fileId, accountName, isOcis)
+        val spaceId = if (!isOcis) null else fileId.split("!")[0]
         val splitPath = result.split(PATH_SEPARATOR)
-        val spaceId = fileId.split("!")[0]
         var containerFolder = listOf<OCFile>()
         for (i in 1..splitPath.size - 2) {
             var path = splitPath[0]

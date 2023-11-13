@@ -68,6 +68,6 @@ interface FileRepository {
     fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
     fun updateFileWithLastUsage(fileId: Long, lastUsage: Long?)
 
-    fun getFileFromRemoteId(fileId: String, accountName: String): OCFile?
+    fun getFileFromRemoteId(fileId: String, accountName: String, isOcis: Boolean): OCFile?
 
 }

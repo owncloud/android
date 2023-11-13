@@ -203,8 +203,8 @@ class OCRemoteFileDataSource(
         )
     }
 
-    override fun getPathForFile(fileId: String, accountName: String): String =
-        executeRemoteOperation { clientManager.getFileService(accountName).fileMetaInfo(fileId) }
+    override fun getRemotePathForFile(fileId: String, accountName: String, isOcis: Boolean): String =
+        executeRemoteOperation { clientManager.getFileService(accountName).fileMetaInfo(fileId, isOcis) }
 
     companion object {
         @VisibleForTesting
