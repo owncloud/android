@@ -90,6 +90,6 @@ interface RemoteFileDataSource {
         spaceWebDavUrl: String? = null,
     )
 
-    fun getPathForFile(fileId: String, accountName: String): String
+    fun getRemotePathForFile(fileId: String, accountName: String, isOcis: Boolean): String
 
 }
