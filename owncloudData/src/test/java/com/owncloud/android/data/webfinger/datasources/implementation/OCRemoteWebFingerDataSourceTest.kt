@@ -61,7 +61,7 @@ class OCRemoteWebFingerDataSourceTest {
     }
 
     @Test
-    fun `getInstancesFromWebFinger returns a list of web finger`() {
+    fun `getInstancesFromWebFinger returns a list of String of web finger urls`() {
 
         val getInstancesFromWebFingerResult: RemoteOperationResult<List<String>> =
             createRemoteOperationResultMock(data = urls, isSuccess = true)
@@ -95,7 +95,7 @@ class OCRemoteWebFingerDataSourceTest {
     }
 
     @Test
-    fun `getInstancesFromAuthenticatedWebFinger returns a list of web finger`() {
+    fun `getInstancesFromAuthenticatedWebFinger returns a list of String of web finger urls`() {
 
         val getInstancesFromAuthenticatedWebFingerResult: RemoteOperationResult<List<String>> =
             createRemoteOperationResultMock(data = urls, isSuccess = true)

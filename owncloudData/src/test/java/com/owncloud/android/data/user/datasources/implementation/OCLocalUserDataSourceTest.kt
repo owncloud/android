@@ -21,7 +21,6 @@
 
 package com.owncloud.android.data.user.datasources.implementation
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource.Companion.toEntity
 import com.owncloud.android.data.user.datasources.implementation.OCLocalUserDataSource.Companion.toModel
 import com.owncloud.android.data.user.db.UserDao
@@ -33,9 +32,7 @@ import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 
 class OCLocalUserDataSourceTest {
     private lateinit var ocLocalUserDataSource: OCLocalUserDataSource
@@ -43,17 +40,13 @@ class OCLocalUserDataSourceTest {
 
     private val userQuotaEntity = OC_USER_QUOTA.toEntity()
 
-    @Rule
-    @JvmField
-    var rule: TestRule = InstantTaskExecutorRule()
-
     @Before
     fun setUp() {
         ocLocalUserDataSource = OCLocalUserDataSource(ocUserQuotaDao)
     }
 
     @Test
-    fun saveQuotaForAccount() {
+    fun `saveQuotaForAccount saves user quota correctly`() {
 
         ocLocalUserDataSource.saveQuotaForAccount(OC_ACCOUNT_NAME, OC_USER_QUOTA)
 
@@ -76,7 +69,7 @@ class OCLocalUserDataSourceTest {
     }
 
     @Test
-    fun `getQuotaForAccount return null when dao receive null`() {
+    fun `getQuotaForAccount returns null when DAO returns a null quota`() {
         every { ocUserQuotaDao.getQuotaForAccount(any()) } returns null
 
         val quotaEntity = ocLocalUserDataSource.getQuotaForAccount(OC_ACCOUNT_NAME)
@@ -89,7 +82,7 @@ class OCLocalUserDataSourceTest {
     }
 
     @Test
-    fun deleteQuotaForAccount() {
+    fun `deleteQuotaForAccount removes user quota correctly`() {
 
         ocLocalUserDataSource.deleteQuotaForAccount(OC_ACCOUNT_NAME)
 
@@ -99,7 +92,7 @@ class OCLocalUserDataSourceTest {
     }
 
     @Test
-    fun `getAllUserQuotas returns a list of UserQuote`() {
+    fun `getAllUserQuotas returns a list of UserQuota`() {
 
         every { ocUserQuotaDao.getAllUserQuotas() } returns listOf(userQuotaEntity)
 

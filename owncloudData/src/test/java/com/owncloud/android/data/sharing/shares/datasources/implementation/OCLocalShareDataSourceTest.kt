@@ -78,7 +78,7 @@ class OCLocalShareDataSourceTest {
     private val privateShareTypes = listOf(ShareType.USER, ShareType.GROUP, ShareType.FEDERATED)
 
     @Test
-    fun `getSharesAsLiveData returns a list of LiveData OCShare when read local private shares`() {
+    fun `getSharesAsLiveData returns a LiveData of a list of OCShare when read local private shares`() {
         val privateSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
         privateSharesAsLiveData.value = privateShares
 
@@ -198,7 +198,7 @@ class OCLocalShareDataSourceTest {
     )
 
     @Test
-    fun `getSharesAsLiveData read local public shares returns a list of LiveData OCShare`() {
+    fun `getSharesAsLiveData returns a LiveData of a list of OCShare when read local public shares`() {
         val publicSharesAsLiveData: MutableLiveData<List<OCShareEntity>> = MutableLiveData()
         publicSharesAsLiveData.value = publicShares
 
@@ -291,7 +291,7 @@ class OCLocalShareDataSourceTest {
      **************************************************************************************************************/
 
     @Test
-    fun `replaceShares updates a list of shares correctly`() {
+    fun `replaceShares updates a list of OCShare correctly`() {
         val expectedValues = listOf<Long>(1, 2)
         every { ocSharesDao.replaceShares(publicShares) } returns expectedValues
 
