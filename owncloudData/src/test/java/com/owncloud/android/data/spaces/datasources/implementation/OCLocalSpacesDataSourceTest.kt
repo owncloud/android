@@ -56,7 +56,7 @@ class OCLocalSpacesDataSourceTest {
     }
 
     @Test
-    fun `saveSpacesForAccount inserts spaces and special spaces`() {
+    fun `saveSpacesForAccount inserts spaces and special spaces correctly`() {
         val spaceEntities = mutableListOf<SpacesEntity>()
         val spaceSpecialEntities = mutableListOf<SpaceSpecialEntity>()
 
@@ -109,7 +109,7 @@ class OCLocalSpacesDataSourceTest {
     }
 
     @Test
-    fun `getSpacesFromEveryAccountAsStream returns a flow of OCSpace`() = runBlocking {
+    fun `getSpacesFromEveryAccountAsStream returns a Flow with a list of OCSpace`() = runBlocking {
 
         every {
             spacesDao.getSpacesByDriveTypeFromEveryAccountAsStream(
@@ -135,7 +135,7 @@ class OCLocalSpacesDataSourceTest {
     }
 
     @Test
-    fun `getSpacesByDriveTypeWithSpecialsForAccountAsFlow returns a flow of OCSpace list`() = runBlocking {
+    fun `getSpacesByDriveTypeWithSpecialsForAccountAsFlow returns a Flow with a list of OCSpace`() = runBlocking {
 
         every {
             spacesDao.getSpacesByDriveTypeWithSpecialsForAccountAsFlow(
@@ -217,7 +217,7 @@ class OCLocalSpacesDataSourceTest {
     }
 
     @Test
-    fun `getWebDavUrlForSpace returns a string of webDavUrl`() {
+    fun `getWebDavUrlForSpace returns a String of webDavUrl`() {
 
         every {
             spacesDao.getWebDavUrlForSpace(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
@@ -235,7 +235,7 @@ class OCLocalSpacesDataSourceTest {
     }
 
     @Test
-    fun `deleteSpacesForAccount delete the space by account`() {
+    fun `deleteSpacesForAccount removes the spaces for an account correctly`() {
 
         every {
             spacesDao.deleteSpacesForAccount(OC_ACCOUNT_NAME)

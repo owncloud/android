@@ -24,12 +24,10 @@ import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTra
 import com.owncloud.android.data.transfers.datasources.implementation.OCLocalTransferDataSource.Companion.toModel
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.data.transfers.db.TransferDao
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
-import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferResult
 import com.owncloud.android.domain.transfers.model.TransferStatus
-import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_TRANSFER
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -43,54 +41,41 @@ import org.junit.Test
 class OCLocalTransferDataSourceTest {
     private lateinit var ocLocalTransferDataSource: OCLocalTransferDataSource
     private val transferDao = mockk<TransferDao>(relaxUnitFun = true)
-    private val id = 0L
-    private val ocTransfer = OCTransfer(
-        id = id,
-        localPath = "/local/path",
-        remotePath = "/remote/path",
-        accountName = OC_ACCOUNT_NAME,
-        fileSize = 1024L,
-        status = TransferStatus.TRANSFER_IN_PROGRESS,
-        localBehaviour = UploadBehavior.MOVE,
-        forceOverwrite = true,
-        createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER
-    )
 
-    private var transferEntity: OCTransferEntity = ocTransfer.toEntity()
+    private var transferEntity: OCTransferEntity = OC_TRANSFER.toEntity()
 
     @Before
     fun setUp() {
-
         ocLocalTransferDataSource = OCLocalTransferDataSource(transferDao)
     }
 
     @Test
-    fun `saveTransfer inserts it correctly`() {
+    fun `saveTransfer inserts a transfer correctly`() {
         val resultExpected = 1L
         every {
             transferDao.insertOrReplace(any())
         } returns resultExpected
 
-        val resultActual = ocLocalTransferDataSource.saveTransfer(ocTransfer)
+        val resultActual = ocLocalTransferDataSource.saveTransfer(OC_TRANSFER)
 
         assertEquals(resultExpected, resultActual)
 
         verify(exactly = 1) {
-            transferDao.insertOrReplace(ocTransfer.toEntity())
+            transferDao.insertOrReplace(OC_TRANSFER.toEntity())
         }
     }
 
     @Test
-    fun `updateTransfer changes it correctly`() {
+    fun `updateTransfer updates the transfer correctly`() {
         val resultExpected = 1L
         every {
             transferDao.insertOrReplace(any())
         } returns resultExpected
 
-        ocLocalTransferDataSource.updateTransfer(ocTransfer)
+        ocLocalTransferDataSource.updateTransfer(OC_TRANSFER)
 
         verify(exactly = 1) {
-            transferDao.insertOrReplace(ocTransfer.toEntity())
+            transferDao.insertOrReplace(OC_TRANSFER.toEntity())
         }
     }
 
@@ -120,20 +105,20 @@ class OCLocalTransferDataSourceTest {
     fun `updateTransferWhenFinished changes transfer status correctly`() {
         val timestamp = System.currentTimeMillis()
 
-        ocLocalTransferDataSource.updateTransferWhenFinished(id, TransferStatus.TRANSFER_SUCCEEDED, timestamp, TransferResult.UPLOADED)
+        ocLocalTransferDataSource.updateTransferWhenFinished(OC_TRANSFER.id!!, TransferStatus.TRANSFER_SUCCEEDED, timestamp, TransferResult.UPLOADED)
 
         verify(exactly = 1) {
-            transferDao.updateTransferWhenFinished(id, TransferStatus.TRANSFER_SUCCEEDED.value, timestamp, TransferResult.UPLOADED.value)
+            transferDao.updateTransferWhenFinished(OC_TRANSFER.id!!, TransferStatus.TRANSFER_SUCCEEDED.value, timestamp, TransferResult.UPLOADED.value)
         }
     }
 
     @Test
     fun `updateTransferLocalPath changes transfer local path correctly`() {
 
-        ocLocalTransferDataSource.updateTransferLocalPath(id, ocTransfer.localPath)
+        ocLocalTransferDataSource.updateTransferLocalPath(OC_TRANSFER.id!!, OC_TRANSFER.localPath)
 
         verify(exactly = 1) {
-            transferDao.updateTransferLocalPath(id, ocTransfer.localPath)
+            transferDao.updateTransferLocalPath(OC_TRANSFER.id!!, OC_TRANSFER.localPath)
         }
     }
 
@@ -142,25 +127,25 @@ class OCLocalTransferDataSourceTest {
         val oldDirectory = "oldDirectory"
         val newDirectory = "newDirectory"
 
-        ocLocalTransferDataSource.updateTransferStorageDirectoryInLocalPath(id, oldDirectory, newDirectory)
+        ocLocalTransferDataSource.updateTransferStorageDirectoryInLocalPath(OC_TRANSFER.id!!, oldDirectory, newDirectory)
 
         verify(exactly = 1) {
-            transferDao.updateTransferStorageDirectoryInLocalPath(id, oldDirectory, newDirectory)
+            transferDao.updateTransferStorageDirectoryInLocalPath(OC_TRANSFER.id!!, oldDirectory, newDirectory)
         }
     }
 
     @Test
-    fun `deleteTransferById removes it correctly`() {
+    fun `deleteTransferById removes a transfer correctly`() {
 
-        ocLocalTransferDataSource.deleteTransferById(id)
+        ocLocalTransferDataSource.deleteTransferById(OC_TRANSFER.id!!)
 
         verify(exactly = 1) {
-            transferDao.deleteTransferWithId(id)
+            transferDao.deleteTransferWithId(OC_TRANSFER.id!!)
         }
     }
 
     @Test
-    fun `deleteAllTransfersFromAccount removes all transfers correctly`() {
+    fun `deleteAllTransfersFromAccount removes all transfers for an account correctly`() {
 
         ocLocalTransferDataSource.deleteAllTransfersFromAccount(OC_ACCOUNT_NAME)
 
@@ -173,14 +158,14 @@ class OCLocalTransferDataSourceTest {
     fun `getTransferById returns a OCTransfer`() {
         every {
             transferDao.getTransferWithId(any())
-        } returns ocTransfer.toEntity()
+        } returns OC_TRANSFER.toEntity()
 
-        val actualResult = ocLocalTransferDataSource.getTransferById(id)
+        val actualResult = ocLocalTransferDataSource.getTransferById(OC_TRANSFER.id!!)
 
-        assertEquals(ocTransfer, actualResult)
+        assertEquals(OC_TRANSFER, actualResult)
 
         verify(exactly = 1) {
-            transferDao.getTransferWithId(id)
+            transferDao.getTransferWithId(OC_TRANSFER.id!!)
         }
     }
 
@@ -201,28 +186,28 @@ class OCLocalTransferDataSourceTest {
     }
 
     @Test
-    fun `getAllTransfersAsStream returns a flow of list of OCTransfer ordered by status`() = runBlocking {
+    fun `getAllTransfersAsStream returns a Flow with a list of OCTransfer ordered by status`() = runBlocking {
 
-        val transferEntityInProgress: OCTransferEntity = ocTransfer.copy(status = TransferStatus.TRANSFER_IN_PROGRESS).toEntity()
+        val transferEntityInProgress: OCTransferEntity = OC_TRANSFER.copy(status = TransferStatus.TRANSFER_IN_PROGRESS).toEntity()
 
-        val transferEntityQueue: OCTransferEntity = ocTransfer.copy(status = TransferStatus.TRANSFER_QUEUED).toEntity()
+        val transferEntityQueue: OCTransferEntity = OC_TRANSFER.copy(status = TransferStatus.TRANSFER_QUEUED).toEntity()
 
-        val transferEntityFailed: OCTransferEntity = ocTransfer.copy(status = TransferStatus.TRANSFER_FAILED).toEntity()
+        val transferEntityFailed: OCTransferEntity = OC_TRANSFER.copy(status = TransferStatus.TRANSFER_FAILED).toEntity()
 
-        val transferEntitySucceeded: OCTransferEntity = ocTransfer.copy(status = TransferStatus.TRANSFER_SUCCEEDED).toEntity()
+        val transferEntitySucceeded: OCTransferEntity = OC_TRANSFER.copy(status = TransferStatus.TRANSFER_SUCCEEDED).toEntity()
 
         val transferListRandom = listOf(transferEntityQueue, transferEntityFailed, transferEntityInProgress, transferEntitySucceeded)
 
-        val transferQueue = ocTransfer.copy()
+        val transferQueue = OC_TRANSFER.copy()
         transferQueue.status = TransferStatus.TRANSFER_QUEUED
 
-        val transferFailed = ocTransfer.copy()
+        val transferFailed = OC_TRANSFER.copy()
         transferFailed.status = TransferStatus.TRANSFER_FAILED
 
-        val transferSucceeded = ocTransfer.copy()
+        val transferSucceeded = OC_TRANSFER.copy()
         transferSucceeded.status = TransferStatus.TRANSFER_SUCCEEDED
 
-        val transferListOrdered = listOf(ocTransfer, transferQueue, transferFailed, transferSucceeded)
+        val transferListOrdered = listOf(OC_TRANSFER, transferQueue, transferFailed, transferSucceeded)
 
         every {
             transferDao.getAllTransfersAsStream()
@@ -241,15 +226,15 @@ class OCLocalTransferDataSourceTest {
     fun `getLastTransferFor returns a OCTransfer`() {
 
         every {
-            transferDao.getLastTransferWithRemotePathAndAccountName(ocTransfer.remotePath, OC_ACCOUNT_NAME)
+            transferDao.getLastTransferWithRemotePathAndAccountName(OC_TRANSFER.remotePath, OC_ACCOUNT_NAME)
         } returns transferEntity
 
-        val actualResult = ocLocalTransferDataSource.getLastTransferFor(ocTransfer.remotePath, OC_ACCOUNT_NAME)
+        val actualResult = ocLocalTransferDataSource.getLastTransferFor(OC_TRANSFER.remotePath, OC_ACCOUNT_NAME)
 
         assertEquals(transferEntity.toModel(), actualResult)
 
         verify(exactly = 1) {
-            transferDao.getLastTransferWithRemotePathAndAccountName(ocTransfer.remotePath, OC_ACCOUNT_NAME)
+            transferDao.getLastTransferWithRemotePathAndAccountName(OC_TRANSFER.remotePath, OC_ACCOUNT_NAME)
         }
     }
 
@@ -302,7 +287,7 @@ class OCLocalTransferDataSourceTest {
     }
 
     @Test
-    fun `clearFailedTransfers removes transfers correctly`() {
+    fun `clearFailedTransfers removes failed transfers correctly`() {
 
         ocLocalTransferDataSource.clearFailedTransfers()
 
@@ -312,7 +297,7 @@ class OCLocalTransferDataSourceTest {
     }
 
     @Test
-    fun `clearSuccessfulTransfers removes transfers correctly`() {
+    fun `clearSuccessfulTransfers removes successful transfers correctly`() {
 
         ocLocalTransferDataSource.clearSuccessfulTransfers()
 
