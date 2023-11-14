@@ -37,6 +37,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
@@ -61,6 +64,9 @@ import com.owncloud.android.ui.dialog.ShareLinkToDialog
 import com.owncloud.android.utils.CONFIGURATION_DEVICE_PROTECTION
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.UriUtilsKt.getExposedFileUriForOCFile
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.io.File
@@ -434,5 +440,17 @@ fun Activity.openOCFile(ocFile: OCFile) {
         startActivity(Intent.createChooser(intentForSavedMimeType, getString(R.string.actionbar_open_with)))
     } catch (anfe: ActivityNotFoundException) {
         showErrorInSnackbar(genericErrorMessageId = R.string.file_list_no_app_for_file_type, anfe)
+    }
+}
+
+fun <T> FragmentActivity.collectLatestLifecycleFlow(
+    flow: Flow<T>,
+    lifecycleState: Lifecycle.State = Lifecycle.State.STARTED,
+    collect: suspend (T) -> Unit
+) {
+    lifecycleScope.launch {
+        repeatOnLifecycle(lifecycleState) {
+            flow.collectLatest(collect)
+        }
     }
 }

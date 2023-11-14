@@ -56,13 +56,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
-import com.owncloud.android.domain.exceptions.DeepLinkException
-import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.TooEarlyException
 import com.owncloud.android.domain.files.model.FileListOption
@@ -623,36 +620,9 @@ class MainFileListFragment : Fragment(),
             }
         }
 
-        observeDeepLink()
-
         /* TransfersViewModel observables */
         observeTransfers()
 
-    }
-
-    private fun observeDeepLink() {
-        collectLatestLifecycleFlow(fileOperationsViewModel.deepLinkFlow) {
-            val uiResult = it?.peekContent()
-            if (uiResult is UIResult.Error) {
-                if (uiResult.error is FileNotFoundException) {
-                    showMessageInSnackbar("User haven't access to file")
-                    changeUser()
-                }
-                showMessageInSnackbar(
-                    getString(
-                        if (uiResult.error is DeepLinkException) {
-                            R.string.invalid_deep_link_format
-                        } else {
-                            R.string.default_error_msg
-                        }
-                    )
-                )
-            } else if (uiResult is UIResult.Success) {
-                //TODO "Remove this message when end with managing the deep links"
-                activity?.intent?.data = null
-                showMessageInSnackbar("Deep link managed correctly")
-            }
-        }
     }
 
     private fun observeTransfers() {
@@ -695,26 +665,6 @@ class MainFileListFragment : Fragment(),
             }
         }
 
-    }
-
-    private fun changeUser() {
-        val currentUser = AccountUtils.getCurrentOwnCloudAccount(context)
-        val usersChecked = activity?.intent?.getStringArrayListExtra(FileDisplayActivity.KEY_DEEP_LINK_ACCOUNTS_CHECKED) ?: arrayListOf()
-        usersChecked.add(currentUser.name)
-        AccountUtils.getAccounts(context).forEach {
-            if (!usersChecked.contains(it.name)) {
-                MainApp.initDependencyInjection()
-                val i = Intent(
-                    activity,
-                    FileDisplayActivity::class.java
-                )
-                i.data = activity?.intent?.data
-                i.putExtra(FileActivity.EXTRA_ACCOUNT, it)
-                i.putExtra(FileDisplayActivity.KEY_DEEP_LINK_ACCOUNTS_CHECKED, usersChecked)
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                startActivity(i)
-            }
-        }
     }
 
     fun navigateToFolderId(folderId: Long) {

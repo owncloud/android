@@ -314,6 +314,7 @@ class FileOperationsViewModel(
     fun handleDeepLink(uri: Uri, currentAccount: Account) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
+            showLoading = true,
             flow = _deepLinkFlow,
             useCase = manageDeepLinkUseCase,
             useCaseParams = ManageDeepLinkUseCase.Params(URI(uri.toString()), currentAccount.name),

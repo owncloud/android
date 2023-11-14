@@ -535,7 +535,7 @@ class OCFileRepository(
         val spaceId = if (!isOcis) null else fileId.split("!")[0]
         val splitPath = result.split(PATH_SEPARATOR)
         var containerFolder = listOf<OCFile>()
-        for (i in 1..splitPath.size - 2) {
+        for (i in 0..splitPath.size - 2) {
             var path = splitPath[0]
             for (j in 1..i) {
                 path += "$PATH_SEPARATOR${splitPath[j]}"
@@ -543,12 +543,16 @@ class OCFileRepository(
             containerFolder = refreshFolder(path, accountName, spaceId)
         }
         refreshFolder(result, accountName, spaceId)
-        return containerFolder.find { file ->
-            if (file.isFolder) {
-                file.remotePath.dropLast(1)
-            } else {
-                file.remotePath
-            } == result
+        return if (result == ROOT_PATH) {
+            getFileByRemotePath(result, accountName, spaceId)
+        } else {
+            containerFolder.find { file ->
+                if (file.isFolder) {
+                    file.remotePath.dropLast(1)
+                } else {
+                    file.remotePath
+                } == result
+            }
         }
     }
 
