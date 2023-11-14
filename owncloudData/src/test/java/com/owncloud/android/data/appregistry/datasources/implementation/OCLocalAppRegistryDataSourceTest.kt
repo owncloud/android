@@ -92,7 +92,7 @@ class OCLocalAppRegistryDataSourceTest {
     }
 
     @Test
-    fun `getAppRegistryWhichAllowCreation returns empty list when there are no app registries that allow creation`() = runTest {
+    fun `getAppRegistryWhichAllowCreation returns an empty list when there are no app registries that allow creation`() = runTest {
 
         every { appRegistryDao.getAppRegistryWhichAllowCreation(OC_ACCOUNT_NAME) } returns flowOf(emptyList())
 
@@ -105,7 +105,7 @@ class OCLocalAppRegistryDataSourceTest {
     }
 
     @Test
-    fun `saveAppRegistryForAccount saves the AppRegistry correctly`() {
+    fun `saveAppRegistryForAccount saves an AppRegistry correctly`() {
 
         val appRegistry = AppRegistry(
             OC_ACCOUNT_NAME, mutableListOf(
@@ -121,7 +121,7 @@ class OCLocalAppRegistryDataSourceTest {
     }
 
     @Test
-    fun `deleteAppRegistryForAccount removes app registries correctly`() {
+    fun `deleteAppRegistryForAccount removes the app registries for an account correctly`() {
 
         ocLocalAppRegistryDataSource.deleteAppRegistryForAccount(OC_ACCOUNT_NAME)
 
