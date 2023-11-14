@@ -17,13 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.oauth.datasources
+package com.owncloud.android.data.oauth.datasources.implementation
 
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.oauth.OC_REMOTE_CLIENT_REGISTRATION_RESPONSE
 import com.owncloud.android.data.oauth.OC_REMOTE_OIDC_DISCOVERY_RESPONSE
 import com.owncloud.android.data.oauth.OC_REMOTE_TOKEN_RESPONSE
-import com.owncloud.android.data.oauth.datasources.implementation.OCRemoteOAuthDataSource
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.oauth.responses.ClientRegistrationResponse
@@ -46,7 +45,7 @@ import org.junit.Before
 import org.junit.Test
 
 class OCRemoteOAuthDataSourceTest {
-    private lateinit var remoteOAuthDataSource: RemoteOAuthDataSource
+    private lateinit var remoteOAuthDataSource: OCRemoteOAuthDataSource
 
     private val clientManager: ClientManager = mockk(relaxed = true)
     private val ocClientMocked: OwnCloudClient = mockk()
