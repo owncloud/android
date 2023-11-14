@@ -20,6 +20,7 @@
 
 package com.owncloud.android.testutil
 
+import com.owncloud.android.data.spaces.db.SpaceQuotaEntity
 import com.owncloud.android.data.spaces.db.SpaceRootEntity
 import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
 import com.owncloud.android.data.spaces.db.SpacesEntity
@@ -177,6 +178,31 @@ val SPACE_ENTITY_WITH_SPECIALS = SpacesWithSpecials(
         )
     )
 )
+
+val SPACE_ENTITY_PERSONAL = SpacesEntity(
+        accountName = OC_ACCOUNT_NAME,
+        driveAlias = "personal/admin",
+        driveType = "personal",
+        id = "8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-857315568199",
+        ownerId = "0aa0e03c-ec36-498c-bb9f-857315568199",
+        lastModifiedDateTime = "2023-01-01T00:00:00.00000000Z",
+        name = "Admin",
+        quota = SpaceQuotaEntity(
+            remaining = 999999995,
+            state = "normal",
+            total = 1000000000,
+            used = 5,
+        ),
+        root = SpaceRootEntity(
+            eTag = "989c7968dbbbde8c5fd9849b9123c384",
+            id = "8871f4f3-fc6f-4a66-8bed-62f175f76f38\$0aa0e03c-ec36-498c-bb9f-857315568199",
+            webDavUrl = "https://server.com/dav/spaces/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-857315568199",
+            deleteState = null
+        ),
+        webUrl = "https://server.com/f/8871f4f3-fc6f-4a66-8bed-62f175f76f38$0aa0e03c-ec36-498c-bb9f-857315568199",
+        description = null
+    )
+
 
 val SPACE_ENTITY_SHARE = SpacesWithSpecials(
     SpacesEntity(
