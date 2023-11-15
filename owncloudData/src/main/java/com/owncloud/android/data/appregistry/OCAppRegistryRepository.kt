@@ -34,7 +34,7 @@ class OCAppRegistryRepository(
     private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
 ) : AppRegistryRepository {
     override fun refreshAppRegistryForAccount(accountName: String) {
-        val capabilities =  localCapabilitiesDataSource.getCapabilityForAccount(accountName)
+        val capabilities =  localCapabilitiesDataSource.getCapabilitiesForAccount(accountName)
         val appUrl =  capabilities?.filesAppProviders?.appsUrl?.substring(1)
         remoteAppRegistryDataSource.getAppRegistryForAccount(accountName, appUrl).also {
             localAppRegistryDataSource.saveAppRegistryForAccount(it)

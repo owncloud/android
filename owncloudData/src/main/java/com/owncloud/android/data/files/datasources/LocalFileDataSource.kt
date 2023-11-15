@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 interface LocalFileDataSource {
-    fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String, replace: Boolean?)
     fun getFileById(fileId: Long): OCFile?
     fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?>
     fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String?): OCFile?
@@ -46,6 +45,7 @@ interface LocalFileDataSource {
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
     fun getFileWithSyncInfoByIdAsFlow(id: Long): Flow<OCFileWithSyncInfo?>
     fun moveFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, finalStoragePath: String)
+    fun copyFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, remoteId: String, replace: Boolean?)
     fun saveFilesInFolderAndReturnThem(listOfFiles: List<OCFile>, folder: OCFile): List<OCFile>
     fun saveFile(file: OCFile)
     fun saveConflict(fileId: Long, eTagInConflict: String)

@@ -21,7 +21,7 @@ package com.owncloud.android.data.server.repository
 
 import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
-import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDatasource
+import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDataSource
 import com.owncloud.android.domain.server.ServerInfoRepository
 import com.owncloud.android.domain.server.model.ServerInfo
 import com.owncloud.android.domain.webfinger.model.WebFingerRel
@@ -29,7 +29,7 @@ import timber.log.Timber
 
 class OCServerInfoRepository(
     private val remoteServerInfoDataSource: RemoteServerInfoDataSource,
-    private val webFingerDatasource: RemoteWebFingerDatasource,
+    private val webFingerDatasource: RemoteWebFingerDataSource,
     private val oidcRemoteOAuthDataSource: RemoteOAuthDataSource,
 ) : ServerInfoRepository {
 

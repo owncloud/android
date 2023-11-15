@@ -15,7 +15,7 @@ import com.owncloud.android.presentation.files.operations.FileOperationsViewMode
 import com.owncloud.android.sharing.shares.ui.TestShareFileActivity
 import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_FILE
-import com.owncloud.android.testutil.OC_FILE_OC_AVAILABLE_OFFLINE_FILE
+import com.owncloud.android.testutil.OC_FILE_WITH_SYNC_INFO_AVAILABLE_OFFLINE
 import com.owncloud.android.testutil.OC_FILE_WITH_SYNC_INFO
 import com.owncloud.android.testutil.OC_FILE_WITH_SYNC_INFO_AND_SPACE
 import com.owncloud.android.testutil.OC_FILE_WITH_SYNC_INFO_AND_WITHOUT_PERSONAL_SPACE
@@ -44,7 +44,7 @@ class FileDetailsFragmentTest {
     private var currentFileWithoutPersonalSpace: MutableStateFlow<OCFileWithSyncInfo?> =
         MutableStateFlow(OC_FILE_WITH_SYNC_INFO_AND_WITHOUT_PERSONAL_SPACE)
     private var currentFileSyncInfo: MutableStateFlow<OCFileWithSyncInfo?> = MutableStateFlow(OC_FILE_WITH_SYNC_INFO)
-    private var currentFileAvailableOffline: MutableStateFlow<OCFileWithSyncInfo?> = MutableStateFlow(OC_FILE_OC_AVAILABLE_OFFLINE_FILE)
+    private var currentFileAvailableOffline: MutableStateFlow<OCFileWithSyncInfo?> = MutableStateFlow(OC_FILE_WITH_SYNC_INFO_AVAILABLE_OFFLINE)
 
     @Before
     fun setUp() {
