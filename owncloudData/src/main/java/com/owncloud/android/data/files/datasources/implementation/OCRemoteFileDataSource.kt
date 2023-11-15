@@ -22,6 +22,7 @@
 
 package com.owncloud.android.data.files.datasources.implementation
 
+import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
@@ -202,23 +203,26 @@ class OCRemoteFileDataSource(
         )
     }
 
-    private fun RemoteFile.toModel(): OCFile =
-        OCFile(
-            owner = owner,
-            remoteId = remoteId,
-            remotePath = remotePath,
-            length = if (isFolder) {
-                size
-            } else {
-                length
-            },
-            creationTimestamp = creationTimestamp,
-            modificationTimestamp = modifiedTimestamp,
-            mimeType = mimeType,
-            etag = etag,
-            permissions = permissions,
-            privateLink = privateLink,
-            sharedWithSharee = sharedWithSharee,
-            sharedByLink = sharedByLink,
-        )
+    companion object {
+        @VisibleForTesting
+        fun RemoteFile.toModel(): OCFile =
+            OCFile(
+                owner = owner,
+                remoteId = remoteId,
+                remotePath = remotePath,
+                length = if (isFolder) {
+                    size
+                } else {
+                    length
+                },
+                creationTimestamp = creationTimestamp,
+                modificationTimestamp = modifiedTimestamp,
+                mimeType = mimeType,
+                etag = etag,
+                permissions = permissions,
+                privateLink = privateLink,
+                sharedWithSharee = sharedWithSharee,
+                sharedByLink = sharedByLink,
+            )
+    }
 }
