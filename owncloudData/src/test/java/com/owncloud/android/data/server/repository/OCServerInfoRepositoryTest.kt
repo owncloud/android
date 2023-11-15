@@ -23,7 +23,7 @@ package com.owncloud.android.data.server.repository
 
 import com.owncloud.android.data.oauth.datasources.RemoteOAuthDataSource
 import com.owncloud.android.data.server.datasources.RemoteServerInfoDataSource
-import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDatasource
+import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDataSource
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
 import io.mockk.every
@@ -35,7 +35,7 @@ import org.junit.Test
 class OCServerInfoRepositoryTest {
 
     private val remoteServerInfoDataSource = mockk<RemoteServerInfoDataSource>(relaxed = true)
-    private val webFingerDataSource = mockk<RemoteWebFingerDatasource>(relaxed = true)
+    private val webFingerDataSource = mockk<RemoteWebFingerDataSource>(relaxed = true)
     private val oidcRemoteOAuthDataSource = mockk<RemoteOAuthDataSource>(relaxed = true)
     private val ocServerInfoRepository: OCServerInfoRepository = OCServerInfoRepository(remoteServerInfoDataSource, webFingerDataSource, oidcRemoteOAuthDataSource)
 
