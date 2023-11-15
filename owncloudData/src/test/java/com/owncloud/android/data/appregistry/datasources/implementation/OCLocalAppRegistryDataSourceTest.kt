@@ -106,11 +106,11 @@ class OCLocalAppRegistryDataSourceTest {
 
     @Test
     fun `saveAppRegistryForAccount saves an AppRegistry correctly`() {
-
+        val appRegistryOtherName = "appRegistryMimeTypes.name2"
         val appRegistry = AppRegistry(
             OC_ACCOUNT_NAME, mutableListOf(
                 OC_APP_REGISTRY_MIMETYPE,
-                OC_APP_REGISTRY_MIMETYPE.copy(name = "appRegistryMimeTypes.name2")
+                OC_APP_REGISTRY_MIMETYPE.copy(name = appRegistryOtherName)
             )
         )
 
@@ -118,7 +118,7 @@ class OCLocalAppRegistryDataSourceTest {
 
         verify(exactly = 1) {
             appRegistryDao.deleteAppRegistryForAccount(appRegistry.accountName)
-            appRegistryDao.upsertAppRegistries(listOf(OC_APP_REGISTRY_ENTITY, OC_APP_REGISTRY_ENTITY.copy(name = "appRegistryMimeTypes.name2")))
+            appRegistryDao.upsertAppRegistries(listOf(OC_APP_REGISTRY_ENTITY, OC_APP_REGISTRY_ENTITY.copy(name = appRegistryOtherName)))
         }
     }
 
