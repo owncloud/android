@@ -27,6 +27,7 @@ import com.owncloud.android.data.files.db.OCFileSyncEntity
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
+import com.owncloud.android.lib.resources.files.RemoteFile
 
 val OC_FOLDER = OCFile(
     id = 122,
@@ -179,4 +180,19 @@ val OC_FILE_AND_FILE_SYNC = OCFileAndFileSync(
     OC_FILE_ENTITY,
     OC_FILE_SYNC_ENTITY,
     SPACE_ENTITY_PERSONAL,
+)
+
+val REMOTE_FILE = RemoteFile(
+    remotePath = OC_FILE.remotePath,
+    mimeType = OC_FILE.mimeType,
+    length = OC_FILE.length,
+    creationTimestamp = OC_FILE.creationTimestamp!!,
+    modifiedTimestamp = OC_FILE.modificationTimestamp,
+    etag = OC_FILE.etag,
+    permissions = OC_FILE.permissions,
+    remoteId = OC_FILE.remoteId,
+    privateLink = OC_FILE.privateLink,
+    owner = OC_FILE.owner,
+    sharedByLink = OC_FILE.sharedByLink,
+    sharedWithSharee = OC_FILE.sharedWithSharee!!,
 )

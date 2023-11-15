@@ -22,418 +22,359 @@
 package com.owncloud.android.data.files.datasources.implementation
 
 import com.owncloud.android.data.ClientManager
-import com.owncloud.android.lib.common.operations.RemoteOperationResult
+import com.owncloud.android.data.files.datasources.implementation.OCRemoteFileDataSource.Companion.toModel
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.lib.resources.files.RemoteFile
-import com.owncloud.android.lib.resources.files.services.FileService
 import com.owncloud.android.lib.resources.files.services.implementation.OCFileService
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_FOLDER
-import com.owncloud.android.testutil.OC_SECURE_SERVER_INFO_BASIC_AUTH
-import com.owncloud.android.testutil.OC_SPACE_PROJECT_WITH_IMAGE
+import com.owncloud.android.testutil.REMOTE_FILE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class OCRemoteFileDataSourceTest {
+
     private lateinit var ocRemoteFileDataSource: OCRemoteFileDataSource
 
-    private val clientManager: ClientManager = mockk(relaxed = true)
     private val ocFileService: OCFileService = mockk()
-    private val sourceRemotePath = "source"
-    private val remoteResult: RemoteOperationResult<Unit> =
-        createRemoteOperationResultMock(data = Unit, isSuccess = true)
+    private val clientManager: ClientManager = mockk(relaxed = true)
 
-    private val remoteFileList = arrayListOf(
-        RemoteFile(
-            remotePath = OC_FILE.remotePath,
-            mimeType = OC_FILE.mimeType,
-            length = OC_FILE.length,
-            creationTimestamp = OC_FILE.creationTimestamp!!,
-            modifiedTimestamp = OC_FILE.modificationTimestamp,
-            etag = OC_FILE.etag,
-            permissions = OC_FILE.permissions,
-            remoteId = OC_FILE.remoteId,
-            privateLink = OC_FILE.privateLink,
-            owner = OC_FILE.owner,
-            sharedByLink = OC_FILE.sharedByLink,
-            sharedWithSharee = OC_FILE.sharedWithSharee!!,
-        )
-    )
+    private val sourceRemotePath = "/source/remote/path/file.txt"
+    private val targetRemotePath = "/target/remote/path/file.txt"
 
-    private val remoteFile =
-        RemoteFile(
-            remotePath = OC_FILE.remotePath,
-            mimeType = OC_FILE.mimeType,
-            length = OC_FILE.length,
-            creationTimestamp = OC_FILE.creationTimestamp!!,
-            modifiedTimestamp = OC_FILE.modificationTimestamp,
-            etag = OC_FILE.etag,
-            permissions = OC_FILE.permissions,
-            remoteId = OC_FILE.remoteId,
-            privateLink = OC_FILE.privateLink,
-            owner = OC_FILE.owner,
-            sharedByLink = OC_FILE.sharedByLink,
-            sharedWithSharee = OC_FILE.sharedWithSharee!!,
-        )
+    private val remoteResult = createRemoteOperationResultMock(data = Unit, isSuccess = true)
 
     @Before
     fun setUp() {
-        every { clientManager.getFileService(any()) } returns ocFileService
+        every { clientManager.getFileService(OC_ACCOUNT_NAME) } returns ocFileService
 
         ocRemoteFileDataSource = OCRemoteFileDataSource(clientManager)
     }
 
     @Test
-    fun `checkPathExistence returns true when there is date`() {
-        val checkPathExistenceRemoteResult: RemoteOperationResult<Boolean> =
-            createRemoteOperationResultMock(data = true, isSuccess = true)
+    fun `checkPathExistence returns true when the path exists in remote`() {
+        val checkPathExistenceRemoteResult = createRemoteOperationResultMock(data = true, isSuccess = true)
 
         every {
-            ocFileService.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true)
+            ocFileService.checkPathExistence(sourceRemotePath, true)
         } returns checkPathExistenceRemoteResult
 
-        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true, OC_ACCOUNT_NAME, null)
+        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(sourceRemotePath, true, OC_ACCOUNT_NAME, null)
 
-        assertNotNull(checkPathExistence)
-        assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
-
-        verify(exactly = 1) { ocFileService.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true) }
-    }
-
-    @Test
-    fun `checkPathExistence returns false when there is not date`() {
-        val checkPathExistenceRemoteResult: RemoteOperationResult<Boolean> =
-            createRemoteOperationResultMock(data = false, isSuccess = true)
-
-        every {
-            ocFileService.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true)
-        } returns checkPathExistenceRemoteResult
-
-        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true, OC_ACCOUNT_NAME, null)
-
-        assertNotNull(checkPathExistence)
-        assertEquals(checkPathExistenceRemoteResult.data, checkPathExistence)
-
-        verify(exactly = 1) { ocFileService.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true) }
-    }
-
-    @Test(expected = Exception::class)
-    fun `checkPathExistence returns an exception when checkPathExistence receive an exception`() {
-        every {
-            ocFileService.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true)
-        } throws Exception()
-
-        ocRemoteFileDataSource.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, true, OC_ACCOUNT_NAME, null)
-    }
-
-    @Test
-    fun `createFolder returns unit when createFolder is ok`() {
-
-        every {
-            ocFileService.createFolder(remotePath = OC_FOLDER.remotePath, createFullPath = false, isChunkFolder = false)
-        } returns remoteResult
-
-        val createFolderResult = ocRemoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME, null)
-
-        assertNotNull(createFolderResult)
-        assertEquals(remoteResult.data, createFolderResult)
-
-        verify(exactly = 1) { ocFileService.createFolder(any(), any(), any()) }
-    }
-
-    @Test(expected = Exception::class)
-    fun `createFolder returns an exception when createFolder receive an exception`() {
-        every {
-            ocFileService.createFolder(OC_FOLDER.remotePath, false, false)
-        } throws Exception()
-
-        ocRemoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME, null)
-    }
-
-    @Test
-    fun `getAvailableRemotePath returns same path if file does not exist`() {
-        every {
-            clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
-                path = OC_FILE.remotePath,
-                isUserLogged = false,
-                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-            ).data
-        } returns false
-
-        val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
-            remotePath = OC_FILE.remotePath,
-            accountName = OC_ACCOUNT_NAME,
-            spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-            isUserLogged = false,
-        )
-        assertEquals(OC_FILE.remotePath, firstCopyName)
+        assertTrue(checkPathExistence)
 
         verify(exactly = 1) {
-            clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
-                path = OC_FILE.remotePath,
-                isUserLogged = false,
-                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
+            clientManager.getFileService(OC_ACCOUNT_NAME)
+            ocFileService.checkPathExistence(sourceRemotePath, true)
+        }
+    }
+
+    @Test
+    fun `checkPathExistence returns false when the path does not exist in remote`() {
+        val checkPathExistenceRemoteResult = createRemoteOperationResultMock(data = false, isSuccess = true)
+
+        every {
+            ocFileService.checkPathExistence(sourceRemotePath, true)
+        } returns checkPathExistenceRemoteResult
+
+        val checkPathExistence = ocRemoteFileDataSource.checkPathExistence(sourceRemotePath, true, OC_ACCOUNT_NAME, null)
+
+        assertFalse(checkPathExistence)
+
+        verify(exactly = 1) {
+            clientManager.getFileService(OC_ACCOUNT_NAME)
+            ocFileService.checkPathExistence(sourceRemotePath, true)
+        }
+    }
+
+    @Test
+    fun `copyFile copies a file and returns a fileRemoteId`() {
+        val fileRemoteId = "fileRemoteId"
+
+        val remoteResult = createRemoteOperationResultMock(data = fileRemoteId as String?, isSuccess = true)
+
+        every {
+            ocFileService.copyFile(
+                sourceRemotePath = sourceRemotePath,
+                targetRemotePath = targetRemotePath,
+                sourceSpaceWebDavUrl = null,
+                targetSpaceWebDavUrl = null,
+                replace = any(),
+            )
+        } returns remoteResult
+
+        val result = ocRemoteFileDataSource.copyFile(
+            sourceRemotePath,
+            targetRemotePath,
+            OC_ACCOUNT_NAME,
+            null,
+            null,
+            true,
+        )
+
+        assertEquals(fileRemoteId, result)
+
+        verify(exactly = 1) {
+            clientManager.getFileService(OC_ACCOUNT_NAME)
+            ocFileService.copyFile(
+                sourceRemotePath = sourceRemotePath,
+                targetRemotePath = targetRemotePath,
+                sourceSpaceWebDavUrl = null,
+                targetSpaceWebDavUrl = null,
+                replace = true,
             )
         }
     }
 
     @Test
-    fun `getAvailableRemotePath returns path with one if file exists`() {
-        val suffix = "(1)"
-        val extension = "jpt"
-
+    fun `createFolder creates folder in remote correctly`() {
         every {
-            clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
-                path = any(),
-                isUserLogged = true,
-                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-            ).data
-        } returnsMany listOf(true, false)
+            ocFileService.createFolder(remotePath = sourceRemotePath, createFullPath = false)
+        } returns remoteResult
 
-        val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
-            remotePath = OC_FILE.remotePath,
+        ocRemoteFileDataSource.createFolder(
+            remotePath = sourceRemotePath,
+            createFullPath = false,
+            isChunksFolder = false,
             accountName = OC_ACCOUNT_NAME,
-            spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-            isUserLogged = true,
+            spaceWebDavUrl = null
         )
-        assertEquals("${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix.$extension", firstCopyName)
-    }
 
-    @Test
-    fun `getAvailableRemotePath returns path with two if file exists and with one`() {
-        val suffix = "(2)"
-        val extension = "jpt"
-
-        every {
-            clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
-                path = any(),
-                isUserLogged = true,
-                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-            ).data
-        } returnsMany listOf(true, true, false)
-
-        val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
-            remotePath = OC_FILE.remotePath,
-            accountName = OC_ACCOUNT_NAME,
-            spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-            isUserLogged = true,
-        )
-        assertEquals("${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix.$extension", firstCopyName)
-    }
-
-    @Test
-    fun `getAvailableRemotePath returns path with two ones if copying file with one`() {
-        val suffix = "(1)"
-        val extension = "jpt"
-
-        every {
-            clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
-                path = any(),
-                isUserLogged = false,
-                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-            ).data
-        } returnsMany listOf(true, false)
-
-        val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
-            remotePath = "${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix.$extension",
-            accountName = OC_ACCOUNT_NAME,
-            spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-            isUserLogged = false,
-        )
-        assertEquals("${OC_FILE.remotePath.substringBeforeLast('.', "")} $suffix $suffix.$extension", firstCopyName)
-
-        verify(exactly = 2) {
-            clientManager.getFileService(OC_ACCOUNT_NAME).checkPathExistence(
-                path = any(),
-                isUserLogged = false,
-                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-            )
+        verify(exactly = 1) {
+            clientManager.getFileService(OC_ACCOUNT_NAME)
+            ocFileService.createFolder(sourceRemotePath, false)
         }
     }
 
     @Test
-    fun `moveFile returns unit when replace is true`() {
+    fun `getAvailableRemotePath returns same String path if file does not exist`() {
+        val checkPathExistenceRemoteResult = createRemoteOperationResultMock(data = false, isSuccess = true)
 
+        every {
+            ocFileService.checkPathExistence(sourceRemotePath, true)
+        } returns checkPathExistenceRemoteResult
+
+        val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
+            remotePath = sourceRemotePath,
+            accountName = OC_ACCOUNT_NAME,
+            spaceWebDavUrl = null,
+            isUserLogged = true,
+        )
+
+        assertEquals(sourceRemotePath, firstCopyName)
+
+        verify(exactly = 1) {
+            clientManager.getFileService(OC_ACCOUNT_NAME)
+            ocFileService.checkPathExistence(sourceRemotePath, true)
+        }
+    }
+
+    @Test
+    fun `getAvailableRemotePath returns String path with (1) if file already exists`() {
+        val checkPathExistenceRemoteResultFirst = createRemoteOperationResultMock(data = true, isSuccess = true)
+        val checkPathExistenceRemoteResultSecond = createRemoteOperationResultMock(data = false, isSuccess = true)
+        val finalRemotePath = "/source/remote/path/file (1).txt"
+
+        every {
+            ocFileService.checkPathExistence(sourceRemotePath, true)
+        } returns checkPathExistenceRemoteResultFirst
+        every {
+            ocFileService.checkPathExistence(finalRemotePath, true)
+        } returns checkPathExistenceRemoteResultSecond
+
+        val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
+            remotePath = sourceRemotePath,
+            accountName = OC_ACCOUNT_NAME,
+            spaceWebDavUrl = null,
+            isUserLogged = true,
+        )
+
+        assertEquals(finalRemotePath, firstCopyName)
+
+        verify(exactly = 2) { clientManager.getFileService(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) {
+            ocFileService.checkPathExistence(sourceRemotePath, true)
+            ocFileService.checkPathExistence(finalRemotePath,  true)
+        }
+    }
+
+    @Test
+    fun `getAvailableRemotePath returns String path with two (1) if file with (1) already exists`() {
+        val checkPathExistenceRemoteResultFirst = createRemoteOperationResultMock(data = true, isSuccess = true)
+        val checkPathExistenceRemoteResultSecond = createRemoteOperationResultMock(data = false, isSuccess = true)
+        val remotePath = "/remote/path/file (1).txt"
+        val finalRemotePath = "/remote/path/file (1) (1).txt"
+
+        every {
+            ocFileService.checkPathExistence(remotePath, true)
+        } returns checkPathExistenceRemoteResultFirst
+        every {
+            ocFileService.checkPathExistence(finalRemotePath, true)
+        } returns checkPathExistenceRemoteResultSecond
+
+        val firstCopyName = ocRemoteFileDataSource.getAvailableRemotePath(
+            remotePath = remotePath,
+            accountName = OC_ACCOUNT_NAME,
+            spaceWebDavUrl = null,
+            isUserLogged = true,
+        )
+
+        assertEquals(finalRemotePath, firstCopyName)
+
+        verify(exactly = 2) { clientManager.getFileService(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) {
+            ocFileService.checkPathExistence(remotePath , true)
+            ocFileService.checkPathExistence(finalRemotePath,  true)
+        }
+    }
+
+    @Test
+    fun `moveFile moves a file correctly`() {
         every {
             ocFileService.moveFile(
-                sourceRemotePath = any(),
-                targetRemotePath = OC_FILE.remotePath,
-                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-                replace = true,
+                sourceRemotePath = sourceRemotePath,
+                targetRemotePath = targetRemotePath,
+                spaceWebDavUrl = null,
+                replace = any(),
             )
         } returns remoteResult
 
         ocRemoteFileDataSource.moveFile(
             sourceRemotePath,
-            OC_FILE.remotePath,
+            targetRemotePath,
             OC_ACCOUNT_NAME,
-            OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
+            null,
             true,
         )
 
         verify(exactly = 1) {
+            clientManager.getFileService(OC_ACCOUNT_NAME)
             ocFileService.moveFile(
-                sourceRemotePath = any(),
-                targetRemotePath = OC_FILE.remotePath,
-                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
+                sourceRemotePath = sourceRemotePath,
+                targetRemotePath = targetRemotePath,
+                spaceWebDavUrl = null,
                 replace = true,
             )
         }
-
     }
 
     @Test
-    fun `moveFile returns unit when replace is false`() {
+    fun `readFile returns a OCFile`() {
+        val remoteResult = createRemoteOperationResultMock(data = REMOTE_FILE, isSuccess = true)
 
         every {
-            ocFileService.moveFile(any(), OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl, false)
+            ocFileService.readFile(
+                remotePath = REMOTE_FILE.remotePath,
+                spaceWebDavUrl = null
+            )
         } returns remoteResult
 
-        ocRemoteFileDataSource.moveFile(
-            sourceRemotePath, OC_FILE.remotePath, OC_ACCOUNT_NAME,
-            OC_SPACE_PROJECT_WITH_IMAGE.webUrl, false
-        )
-
-        verify(exactly = 1) {
-            ocFileService.moveFile(
-                any(), OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl, false
-            )
-        }
-    }
-
-    @Test(expected = Exception::class)
-    fun `moveFile returns an exception when moveFile receive an exception`() {
-
-        every {
-            ocFileService.moveFile(
-                sourceRemotePath = any(),
-                targetRemotePath = OC_FILE.remotePath,
-                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-                replace = false
-            )
-        } throws Exception()
-
-        ocRemoteFileDataSource.moveFile(
-            sourceRemotePath,
-            OC_FILE.remotePath,
+        val result = ocRemoteFileDataSource.readFile(
+            REMOTE_FILE.remotePath,
             OC_ACCOUNT_NAME,
-            OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-            false,
+            null,
         )
 
-    }
-
-    @Test
-    fun `readFile should call readFile and convert to model and returns OCFile object`() {
-        val expectedOCFile = OC_FILE.copy(id = null, parentId = null, availableOfflineStatus = null) // Eliminar id y parentId
-
-        val fileServiceMock = mockk<FileService>(relaxed = true)
-
-        val clientManagerMock = mockk<ClientManager>()
-
-        val remoteResult: RemoteOperationResult<RemoteFile> =
-            createRemoteOperationResultMock(data = remoteFile, isSuccess = true)
-
-        every {
-            fileServiceMock.readFile(
-                remotePath = OC_FILE.remotePath,
-                spaceWebDavUrl = OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
-            )
-        } returns remoteResult
-
-        every { clientManagerMock.getFileService(OC_ACCOUNT_NAME) } returns fileServiceMock
-
-        val ocRemoteFileDataSource = OCRemoteFileDataSource(clientManagerMock)
-        val result = ocRemoteFileDataSource.readFile(OC_FILE.remotePath, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
-
-        assertEquals(expectedOCFile, result)
+        assertEquals(REMOTE_FILE.toModel(), result)
 
         verify(exactly = 1) {
-            fileServiceMock.readFile(
-                OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl
+            clientManager.getFileService(OC_ACCOUNT_NAME)
+            ocFileService.readFile(
+                REMOTE_FILE.remotePath,
+                null,
             )
         }
     }
 
     @Test
-    fun `refreshFolder call refreshFolder, convert to model and  returns a list of OCFile`() {
-        val expectedFile = arrayListOf(OC_FILE.copy(id = null, parentId = null, availableOfflineStatus = null)) // Eliminar id y parentId
-
-        val remoteResult: RemoteOperationResult<ArrayList<RemoteFile>> =
-            createRemoteOperationResultMock(data = remoteFileList, isSuccess = true)
+    fun `refreshFolder returns a list of OCFile`() {
+        val remoteResult = createRemoteOperationResultMock(data = arrayListOf(REMOTE_FILE), isSuccess = true)
 
         every {
-            ocFileService.refreshFolder(OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+            ocFileService.refreshFolder(OC_FOLDER.remotePath, null)
         } returns remoteResult
 
         val result = ocRemoteFileDataSource.refreshFolder(
-            OC_FILE.remotePath,
+            OC_FOLDER.remotePath,
             OC_ACCOUNT_NAME,
-            OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
+            null,
         )
-        assertEquals(expectedFile, result)
+        assertEquals(arrayListOf(REMOTE_FILE.toModel()), result)
 
         verify(exactly = 1) {
-            ocFileService.refreshFolder(OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+            clientManager.getFileService(OC_ACCOUNT_NAME)
+            ocFileService.refreshFolder(OC_FOLDER.remotePath, null)
         }
     }
 
     @Test
-    fun `deleteFile returns Unit when deleteFile is ok`() {
+    fun `refreshFolder returns an empty list if service returns an empty list`() {
+        val remoteResult = createRemoteOperationResultMock(data = arrayListOf<RemoteFile>(), isSuccess = true)
+
         every {
-            ocFileService.removeFile(OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+            ocFileService.refreshFolder(OC_FOLDER.remotePath, null)
+        } returns remoteResult
+
+        val result = ocRemoteFileDataSource.refreshFolder(
+            OC_FOLDER.remotePath,
+            OC_ACCOUNT_NAME,
+            null,
+        )
+        assertEquals(emptyList<OCFile>(), result)
+
+        verify(exactly = 1) {
+            clientManager.getFileService(OC_ACCOUNT_NAME)
+            ocFileService.refreshFolder(OC_FOLDER.remotePath, null)
+        }
+    }
+
+    @Test
+    fun `deleteFile deletes a file correctly`() {
+        every {
+            ocFileService.removeFile(OC_FILE.remotePath, null)
         } returns remoteResult
 
         ocRemoteFileDataSource.deleteFile(
-            OC_FILE.remotePath, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl,
+            OC_FILE.remotePath,
+            OC_ACCOUNT_NAME,
+            null,
         )
 
         verify(exactly = 1) {
-            ocFileService.removeFile(OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+            clientManager.getFileService(OC_ACCOUNT_NAME)
+            ocFileService.removeFile(OC_FILE.remotePath, null)
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `deleteFile returns an exception when deleteFile receive an exception`() {
-        every {
-            ocFileService.removeFile(OC_FILE.remotePath, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
-        } throws Exception()
-
-        ocRemoteFileDataSource.deleteFile(OC_FILE.remotePath, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
     }
 
     @Test
-    fun `renameFile returns Unit when renameFile is ok`() {
+    fun `renameFile renames a file correctly`() {
         val oldName = "oldName"
-        val oldRemotePath = "oldRemotePath"
+        val oldRemotePath = "/old/remote/path"
         val newName = "newName"
+
         every {
-            ocFileService.renameFile(oldName, oldRemotePath, newName, true, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+            ocFileService.renameFile(oldName, oldRemotePath, newName, false, null)
         } returns remoteResult
 
-        ocRemoteFileDataSource.renameFile(oldName, oldRemotePath, newName, true, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+        ocRemoteFileDataSource.renameFile(
+            oldName,
+            oldRemotePath,
+            newName,
+            false,
+            OC_ACCOUNT_NAME,
+            null)
 
         verify(exactly = 1) {
-            ocFileService.renameFile(oldName, oldRemotePath, newName, true, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
+            clientManager.getFileService(OC_ACCOUNT_NAME)
+            ocFileService.renameFile(oldName, oldRemotePath, newName, false, null)
         }
-    }
-
-    @Test(expected = Exception::class)
-    fun `renameFile returns an exception when renameFile receive an exception`() {
-        val oldName = "oldName"
-        val oldRemotePath = "oldRemotePath"
-        val newName = "newName"
-        every {
-            ocFileService.renameFile(oldName, oldRemotePath, newName, true, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
-        } throws Exception()
-
-        ocRemoteFileDataSource.renameFile(oldName, oldRemotePath, newName, true, OC_ACCOUNT_NAME, OC_SPACE_PROJECT_WITH_IMAGE.webUrl)
-
     }
 }
