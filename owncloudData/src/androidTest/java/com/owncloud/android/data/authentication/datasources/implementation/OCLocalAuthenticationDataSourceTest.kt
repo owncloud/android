@@ -47,6 +47,7 @@ import com.owncloud.android.testutil.OC_ACCOUNT
 import com.owncloud.android.testutil.OC_ACCOUNT_ID
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_AUTH_TOKEN_TYPE
+import com.owncloud.android.testutil.OC_BASIC_PASSWORD
 import com.owncloud.android.testutil.OC_SECURE_BASE_URL
 import com.owncloud.android.testutil.OC_BASIC_USERNAME
 import com.owncloud.android.testutil.OC_OAUTH_SUPPORTED_TRUE
@@ -91,7 +92,7 @@ class OCLocalAuthenticationDataSourceTest {
         val newAccountName = ocLocalAuthenticationDataSource.addBasicAccount(
             OC_ACCOUNT_ID,
             OC_REDIRECTION_PATH.lastPermanentLocation,
-            "password",
+            OC_BASIC_PASSWORD,
             OC_SECURE_SERVER_INFO_BASIC_AUTH,
             OC_USER_INFO,
             null
@@ -103,7 +104,7 @@ class OCLocalAuthenticationDataSourceTest {
 
         // One for checking if the account exists and another one for getting the new account
         verifyAccountsByTypeAreGot(newAccount.type, 2)
-        verifyAccountIsExplicitlyAdded(newAccount, "password", 1)
+        verifyAccountIsExplicitlyAdded(newAccount, OC_BASIC_PASSWORD, 1)
         verifyAccountInfoIsUpdated(newAccount, OC_SECURE_SERVER_INFO_BASIC_AUTH, OC_USER_INFO, 1)
     }
 
@@ -113,7 +114,7 @@ class OCLocalAuthenticationDataSourceTest {
         ocLocalAuthenticationDataSource.addBasicAccount(
             OC_ACCOUNT_ID,
             OC_REDIRECTION_PATH.lastPermanentLocation,
-            "password",
+            OC_BASIC_PASSWORD,
             OC_SECURE_SERVER_INFO_BASIC_AUTH,
             OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             null
@@ -128,7 +129,7 @@ class OCLocalAuthenticationDataSourceTest {
         val accountName = ocLocalAuthenticationDataSource.addBasicAccount(
             OC_ACCOUNT_ID,
             OC_REDIRECTION_PATH.lastPermanentLocation,
-            "password",
+            OC_BASIC_PASSWORD,
             OC_SECURE_SERVER_INFO_BASIC_AUTH,
             OC_USER_INFO.copy(id = OC_ACCOUNT_ID),
             OC_ACCOUNT_NAME
@@ -140,7 +141,7 @@ class OCLocalAuthenticationDataSourceTest {
         verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
 
         // The account already exists so do not create it
-        verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
+        verifyAccountIsExplicitlyAdded(OC_ACCOUNT, OC_BASIC_PASSWORD, 0)
 
         // The account already exists, so update it
         verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SECURE_SERVER_INFO_BASIC_AUTH, OC_USER_INFO, 1)
@@ -155,7 +156,7 @@ class OCLocalAuthenticationDataSourceTest {
             ocLocalAuthenticationDataSource.addBasicAccount(
                 OC_BASIC_USERNAME,
                 OC_REDIRECTION_PATH.lastPermanentLocation,
-                "password",
+                OC_BASIC_PASSWORD,
                 OC_SECURE_SERVER_INFO_BASIC_AUTH,
                 OC_USER_INFO,
                 "NotTheSameAccount"
@@ -164,7 +165,7 @@ class OCLocalAuthenticationDataSourceTest {
             assertTrue(exception is AccountNotTheSameException)
         } finally {
             // The account already exists so do not create a new one
-            verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
+            verifyAccountIsExplicitlyAdded(OC_ACCOUNT, OC_BASIC_PASSWORD, 0)
 
             // The account is not the same, so no update needed
             verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SECURE_SERVER_INFO_BASIC_AUTH, OC_USER_INFO, 0)
@@ -244,7 +245,7 @@ class OCLocalAuthenticationDataSourceTest {
         verifyAccountsByTypeAreGot(OC_ACCOUNT.type, 1)
 
         // The account already exists so do not create it
-        verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
+        verifyAccountIsExplicitlyAdded(OC_ACCOUNT, OC_BASIC_PASSWORD, 0)
 
         // The account already exists, so update it
         verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SECURE_SERVER_INFO_BASIC_AUTH, OC_USER_INFO, 1)
@@ -273,7 +274,7 @@ class OCLocalAuthenticationDataSourceTest {
             assertTrue(exception is AccountNotTheSameException)
         } finally {
             // The account already exists so do not create it
-            verifyAccountIsExplicitlyAdded(OC_ACCOUNT, "password", 0)
+            verifyAccountIsExplicitlyAdded(OC_ACCOUNT, OC_BASIC_PASSWORD, 0)
 
             // The account already exists, so update it
             verifyAccountInfoIsUpdated(OC_ACCOUNT, OC_SECURE_SERVER_INFO_BASIC_AUTH, OC_USER_INFO, 0)
