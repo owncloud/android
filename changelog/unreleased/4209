@@ -1,0 +1,9 @@
+Enhancement: Unit tests for datasources classes - Part 1 & Fixes
+
+Unit tests for OCLocalAppRegistryDataSource, OCRemoteAppRegistryDataSource, OCLocalAuthenticationDataSource,
+OCRemoteAuthenticationDataSource, OCLocalCapabilitiesDataSource and OCRemoteCapabilitiesDataSource classes have
+been done and completed, and several fixes have been applied to all existent unit test classes for
+datasources.
+
+https://github.com/owncloud/android/issues/4063
+https://github.com/owncloud/android/pull/4209
