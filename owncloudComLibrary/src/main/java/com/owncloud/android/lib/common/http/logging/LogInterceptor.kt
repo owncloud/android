@@ -90,7 +90,7 @@ class LogInterceptor : Interceptor {
         return auxHeaders
     }
 
-    private fun getRequestBodyString(requestBodyParam: RequestBody?): String {
+    private fun getRequestBodyString(requestBodyParam: RequestBody?): String? {
         requestBodyParam?.let { requestBody ->
             if (requestBody.isOneShot()) {
                 return "One shot body --   Omitted"
@@ -111,7 +111,7 @@ class LogInterceptor : Interceptor {
                 return "$BINARY_OMITTED ${requestBody.contentLength()} $BYTES"
             }
         }
-        return EMPTY_BODY
+        return null
     }
 
     private fun logResponse(moshi: Moshi, response: Response, request: Request) {
@@ -131,11 +131,17 @@ class LogInterceptor : Interceptor {
                     LogResponse(
                         Response(
                             headers = logHeaders(response.headers),
-                            body = responseBody,
+                            body = if (responseBody == null) {
+                                null
+                            } else {
+                                Body(
+                                    data = responseBody,
+                                    length = bodyLength,
+                                )
+                            },
                             info = ResponseInfo(
                                 id = request.headers[OC_X_REQUEST_ID] ?: "",
                                 method = request.method,
-                                bodyLength = bodyLength,
                                 reply = Reply(
                                     cached = response.cacheResponse != null,
                                     duration = duration,
@@ -152,13 +158,13 @@ class LogInterceptor : Interceptor {
         )
     }
 
-    private fun getResponseBodyString(contentType: MediaType?, contentLength: Int, responseBody: String): String {
+    private fun getResponseBodyString(contentType: MediaType?, contentLength: Int, responseBody: String): String? {
         return if (contentType?.isLoggable() == true) {
             responseBody
         } else if (contentLength > 0) {
             "$BINARY_OMITTED $contentLength $BYTES"
         } else {
-            EMPTY_BODY
+            null
         }
     }
 
@@ -176,7 +182,6 @@ class LogInterceptor : Interceptor {
     companion object {
         var httpLogsEnabled: Boolean = false
         private const val LIMIT_BODY_LOG: Long = 1000000
-        private const val EMPTY_BODY = "Empty body"
         private const val BINARY_OMITTED = "<-- Body end for response -- Binary -- Omitted:"
         private const val BYTES = "bytes -->"
     }

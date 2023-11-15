@@ -5,7 +5,7 @@ data class LogRequest(
 )
 
 data class Request(
-    val body: String,
+    val body: String?,
     val headers: Map<String, String>,
     val info: RequestInfo,
 )

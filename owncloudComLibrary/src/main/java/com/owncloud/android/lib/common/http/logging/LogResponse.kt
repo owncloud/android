@@ -5,7 +5,7 @@ data class LogResponse(
 )
 
 data class Response(
-    val body: String,
+    val body: Body?,
     val headers: Map<String, String>,
     val info: ResponseInfo,
 )
@@ -15,7 +15,6 @@ data class ResponseInfo(
     val method: String,
     val reply: Reply,
     val url: String,
-    val bodyLength: Int,
 )
 
 data class Reply(
@@ -23,7 +22,12 @@ data class Reply(
     val duration: Long,
     val durationString: String,
     val status: Int,
-    val version: String
+    val version: String,
+)
+
+data class Body(
+    val data: String?,
+    val length: Int,
 )
 
 const val DURATION_FORMAT = "duration(%dh, %dmin, %ds, %dms)"
