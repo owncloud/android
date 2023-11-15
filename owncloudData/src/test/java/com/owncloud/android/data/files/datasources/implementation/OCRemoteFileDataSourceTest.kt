@@ -232,7 +232,7 @@ class OCRemoteFileDataSourceTest {
         verify(exactly = 2) { clientManager.getFileService(OC_ACCOUNT_NAME) }
         verify(exactly = 1) {
             ocFileService.checkPathExistence(remotePath , true)
-            ocFileService.checkPathExistence(finalRemotePath,  true)
+            ocFileService.checkPathExistence(finalRemotePath, true)
         }
     }
 

@@ -361,7 +361,7 @@ class OCLocalFileDataSourceTest {
 
     @Test
     fun `getSharedByLinkWithSyncInfoForAccountAsFlow returns a Flow with a list of OCFileWithSyncInfo`() = runTest {
-        val fileAndFileSyncEntitySharedByLink = OC_FILE_AND_FILE_SYNC.copy(file = OC_FILE_ENTITY.copy(sharedByLink = true).apply { this.id = OC_FILE_ENTITY.id } )
+        val fileAndFileSyncEntitySharedByLink = OC_FILE_AND_FILE_SYNC.copy(file = OC_FILE_ENTITY.copy(sharedByLink = true).apply { this.id = OC_FILE_ENTITY.id })
 
         val fileWithSyncInfoSharedByLink = OC_FILE_WITH_SYNC_INFO_AND_SPACE.copy(file = OC_FILE.copy(sharedByLink = true))
 

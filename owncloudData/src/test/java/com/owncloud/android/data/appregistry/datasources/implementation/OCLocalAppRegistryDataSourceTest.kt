@@ -116,8 +116,10 @@ class OCLocalAppRegistryDataSourceTest {
 
         ocLocalAppRegistryDataSource.saveAppRegistryForAccount(appRegistry)
 
-        verify(exactly = 1) { appRegistryDao.deleteAppRegistryForAccount(appRegistry.accountName) }
-        verify(exactly = 1) { appRegistryDao.upsertAppRegistries(listOf(OC_APP_REGISTRY_ENTITY, OC_APP_REGISTRY_ENTITY.copy(name = "appRegistryMimeTypes.name2"))) }
+        verify(exactly = 1) {
+            appRegistryDao.deleteAppRegistryForAccount(appRegistry.accountName)
+            appRegistryDao.upsertAppRegistries(listOf(OC_APP_REGISTRY_ENTITY, OC_APP_REGISTRY_ENTITY.copy(name = "appRegistryMimeTypes.name2")))
+        }
     }
 
     @Test
