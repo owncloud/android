@@ -29,6 +29,7 @@ ownCloud admins and users.
 
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
 * Enhancement - Koin DSL: [#3966](https://github.com/owncloud/android/pull/3966)
+* Enhancement - Unit tests for datasources classes - Part 1 & Fixes: [#4063](https://github.com/owncloud/android/issues/4063)
 * Enhancement - Unit tests for datasources classes - Part 3: [#4072](https://github.com/owncloud/android/issues/4072)
 * Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
 * Enhancement - "Share to" in oCIS accounts allows upload to any space: [#4088](https://github.com/owncloud/android/issues/4088)
@@ -54,6 +55,17 @@ ownCloud admins and users.
    class constructor directly
 
    https://github.com/owncloud/android/pull/3966
+
+* Enhancement - Unit tests for datasources classes - Part 1 & Fixes: [#4063](https://github.com/owncloud/android/issues/4063)
+
+   Unit tests for OCLocalAppRegistryDataSource, OCRemoteAppRegistryDataSource,
+   OCLocalAuthenticationDataSource, OCRemoteAuthenticationDataSource,
+   OCLocalCapabilitiesDataSource and OCRemoteCapabilitiesDataSource classes have been
+   done and completed, and several fixes have been applied to all existent unit test classes for
+   datasources.
+
+   https://github.com/owncloud/android/issues/4063
+   https://github.com/owncloud/android/pull/4209
 
 * Enhancement - Unit tests for datasources classes - Part 3: [#4072](https://github.com/owncloud/android/issues/4072)
 
