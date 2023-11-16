@@ -31,7 +31,7 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 42;
+    public static final int DB_VERSION = 43;
 
     private ProviderMeta() {
     }
