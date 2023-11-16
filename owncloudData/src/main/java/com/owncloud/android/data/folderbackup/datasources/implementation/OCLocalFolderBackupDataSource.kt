@@ -72,7 +72,9 @@ class OCLocalFolderBackupDataSource(
                 wifiOnly = wifiOnly,
                 chargingOnly = chargingOnly,
                 lastSyncTimestamp = lastSyncTimestamp,
-                name = name
+                name = name,
+                spaceId = spaceId,
+                spaceName = spaceName,
             )
     }
 
@@ -86,6 +88,8 @@ class OCLocalFolderBackupDataSource(
             wifiOnly = wifiOnly,
             chargingOnly = chargingOnly,
             name = name,
-            lastSyncTimestamp = lastSyncTimestamp
+            lastSyncTimestamp = lastSyncTimestamp,
+            spaceId = spaceId,
+            spaceName = spaceName,
         )
 }
