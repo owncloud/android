@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -49,7 +50,6 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WI
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.ui.activity.FolderPickerActivity
-import com.owncloud.android.ui.activity.UploadPathActivity
 import com.owncloud.android.utils.DisplayUtils
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -68,6 +68,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
     private var prefPictureUploadsBehaviour: ListPreference? = null
     private var prefPictureUploadsAccount: ListPreference? = null
     private var prefPictureUploadsLastSync: Preference? = null
+    private var spaceId: String? = null
 
     private val selectPictureUploadsPathLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -96,7 +97,10 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
         prefPictureUploadsSourcePath = findPreference(PREF__CAMERA_PICTURE_UPLOADS_SOURCE)
         prefPictureUploadsLastSync = findPreference(PREF__CAMERA_PICTURE_UPLOADS_LAST_SYNC)
         prefPictureUploadsBehaviour = findPreference<ListPreference>(PREF__CAMERA_PICTURE_UPLOADS_BEHAVIOUR)?.apply {
-            entries = listOf(getString(R.string.pref_behaviour_entries_keep_file), getString(R.string.pref_behaviour_entries_remove_original_file)).toTypedArray()
+            entries = listOf(
+                getString(R.string.pref_behaviour_entries_keep_file),
+                getString(R.string.pref_behaviour_entries_remove_original_file)
+            ).toTypedArray()
             entryValues = listOf(UploadBehavior.COPY.name, UploadBehavior.MOVE.name).toTypedArray()
         }
         prefPictureUploadsAccount = findPreference<ListPreference>(PREF__CAMERA_PICTURE_UPLOADS_ACCOUNT_NAME)?.apply {
@@ -123,12 +127,17 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                     enablePictureUploads(pictureUploadsConfiguration != null)
                     pictureUploadsConfiguration?.let {
                         prefPictureUploadsAccount?.value = it.accountName
-                        prefPictureUploadsPath?.summary = DisplayUtils.getPathWithoutLastSlash(it.uploadPath)
+                        prefPictureUploadsPath?.summary = picturesViewModel.modifyUploadPath(
+                            uploadPath = it.uploadPath,
+                            spaceId = it.spaceId,
+                            spaceName = it.spaceName
+                        )
                         prefPictureUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                         prefPictureUploadsOnWifi?.isChecked = it.wifiOnly
                         prefPictureUploadsOnCharging?.isChecked = it.chargingOnly
                         prefPictureUploadsBehaviour?.value = it.behavior.name
                         prefPictureUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
+                        spaceId = it.spaceId
                     } ?: resetFields()
                 }
             }
@@ -165,10 +174,11 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
             if (!uploadPath.endsWith(File.separator)) {
                 uploadPath += File.separator
             }
-            val intent = Intent(activity, UploadPathActivity::class.java).apply {
-                putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, uploadPath)
-                putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.CAMERA_FOLDER)
-                putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_ACCOUNT, picturesViewModel.getPictureUploadsAccount())
+            val intent = Intent(activity, FolderPickerActivity::class.java).apply {
+                val accountName = picturesViewModel.getPictureUploadsAccount()
+                putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.UPLOAD_PATH)
+                putExtra(FolderPickerActivity.KEY_PERSONAL_SPACE_ID, spaceId)
+                putExtra(FolderPickerActivity.KEY_ACCOUNT_NAME, accountName)
             }
             selectPictureUploadsPathLauncher.launch(intent)
             true
