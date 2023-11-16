@@ -33,6 +33,8 @@ val OC_BACKUP = FolderBackUpConfiguration(
     chargingOnly = true,
     lastSyncTimestamp = 1542628397,
     name = "",
+    spaceId = null,
+    spaceName = null,
 )
 
 val OC_BACKUP_ENTITY = FolderBackUpEntity(
@@ -43,5 +45,7 @@ val OC_BACKUP_ENTITY = FolderBackUpEntity(
     wifiOnly = true,
     chargingOnly = true,
     lastSyncTimestamp = 1542628397,
-    name = ""
+    name = "",
+    spaceId = null,
+    spaceName = null,
 )
