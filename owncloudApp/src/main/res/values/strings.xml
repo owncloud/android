@@ -753,7 +753,7 @@
 
     <!-- DeepLinks -->
     <string name="invalid_deep_link_format">Invalid link format</string>
-    <string name="deep_link_user_no_access">User haven\'t access to file</string>
+    <string name="deep_link_user_no_access">The user doesn\'t have access to file</string>
     <string name="deep_link_loading">Opening file from link</string>
 
     <string name="fab_refresh_text">Refresh</string>

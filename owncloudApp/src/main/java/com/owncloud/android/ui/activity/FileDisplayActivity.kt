@@ -191,7 +191,6 @@ class FileDisplayActivity : FileActivity(),
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
 
         handleDeepLink()
-        onDeeplLinkManaged()
 
         /// Load of saved instance state
         if (savedInstanceState != null) {
@@ -1669,6 +1668,8 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun startListeningToOperations() {
+        onDeepLinkManaged()
+
         fileOperationsViewModel.copyFileLiveData.observe(this, Event.EventObserver {
             onCopyFileOperationFinish(it)
         })
@@ -1773,14 +1774,22 @@ class FileDisplayActivity : FileActivity(),
 
     private fun handleDeepLink() {
         intent.data?.let { uri ->
-            fileOperationsViewModel.handleDeepLink(uri, getCurrentOwnCloudAccount(baseContext))
+            fileOperationsViewModel.handleDeepLink(uri, getCurrentOwnCloudAccount(baseContext).name)
         }
     }
 
-    private fun onDeeplLinkManaged() {
+    private fun onDeepLinkManaged() {
         collectLatestLifecycleFlow(fileOperationsViewModel.deepLinkFlow) {
             it?.getContentIfNotHandled()?.let { uiResult ->
                 when (uiResult) {
+                    is UIResult.Loading -> {
+                        showLoadingDialog(R.string.deep_link_loading)
+                    }
+                    is UIResult.Success -> {
+                        intent?.data = null
+                        dismissLoadingDialog()
+                        uiResult.data?.let { it1 -> manageItem(it1) }
+                    }
                     is UIResult.Error -> {
                         dismissLoadingDialog()
                         if (uiResult.error is FileNotFoundException) {
@@ -1797,16 +1806,6 @@ class FileDisplayActivity : FileActivity(),
                                 }
                             )
                         )
-                    }
-
-                    is UIResult.Success -> {
-                        intent?.data = null
-                        dismissLoadingDialog()
-                        uiResult.data?.let { it1 -> manageItem(it1) }
-                    }
-
-                    is UIResult.Loading -> {
-                        showLoadingDialog(R.string.deep_link_loading)
                     }
                 }
             }
