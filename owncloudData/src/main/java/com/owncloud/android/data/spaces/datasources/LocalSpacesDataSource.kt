@@ -34,4 +34,5 @@ interface LocalSpacesDataSource {
     fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String): OCSpace
     fun getWebDavUrlForSpace(spaceId: String?, accountName: String): String?
     fun deleteSpacesForAccount(accountName: String)
+    fun getSpaceById(accountName: String, spaceId: String?): OCSpace?
 }

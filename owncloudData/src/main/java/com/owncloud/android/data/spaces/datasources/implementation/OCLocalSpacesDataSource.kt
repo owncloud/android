@@ -114,6 +114,10 @@ class OCLocalSpacesDataSource(
         spacesDao.deleteSpacesForAccount(accountName)
     }
 
+    override fun getSpaceById(accountName: String, spaceId: String?): OCSpace? {
+        return spacesDao.getSpaceByIdForAccount(spaceId = spaceId, accountName = accountName)?.toModel()
+    }
+
     companion object {
         @VisibleForTesting
         fun SpacesWithSpecials.toModel() =
