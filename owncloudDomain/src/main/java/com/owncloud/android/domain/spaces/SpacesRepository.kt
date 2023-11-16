@@ -32,4 +32,5 @@ interface SpacesRepository {
     fun getPersonalAndProjectSpacesForAccount(accountName: String): List<OCSpace>
     fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String): OCSpace
     fun getWebDavUrlForSpace(accountName: String, spaceId: String?): String?
+    fun getSpaceById(accountName: String, spaceId: String?): OCSpace?
 }
