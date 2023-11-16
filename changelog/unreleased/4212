@@ -1,4 +1,4 @@
-Enhancement: Select user and navigate when opening via deep link
+Enhancement: Select user and navigate to file when opening via deep link
 
 Select the correct user owner of the deep link file, managing possible errors and navigating to the correct file.
 

@@ -22,7 +22,6 @@
 
 package com.owncloud.android.presentation.files.operations
 
-import android.accounts.Account
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -137,6 +136,15 @@ class FileOperationsViewModel(
         }
     }
 
+    fun handleDeepLink(uri: Uri, accountName: String) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            showLoading = true,
+            flow = _deepLinkFlow,
+            useCase = manageDeepLinkUseCase,
+            useCaseParams = ManageDeepLinkUseCase.Params(URI(uri.toString()), accountName),
+        )
+    }
 
     private fun createFolderOperation(fileOperation: FileOperation.CreateFolder) {
         runOperation(
@@ -309,15 +317,5 @@ class FileOperationsViewModel(
                 }
             }
         }
-    }
-
-    fun handleDeepLink(uri: Uri, currentAccount: Account) {
-        runUseCaseWithResult(
-            coroutineDispatcher = coroutinesDispatcherProvider.io,
-            showLoading = true,
-            flow = _deepLinkFlow,
-            useCase = manageDeepLinkUseCase,
-            useCaseParams = ManageDeepLinkUseCase.Params(URI(uri.toString()), currentAccount.name),
-        )
     }
 }
