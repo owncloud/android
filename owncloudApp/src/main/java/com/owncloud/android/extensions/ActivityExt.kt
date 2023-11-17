@@ -242,8 +242,8 @@ fun Activity.openFileWithIntent(intentForSavedMimeType: Intent, intentForGuessed
 fun AppCompatActivity.sendFile(file: File?) {
     if (file != null) {
         val sendIntent: Intent = makeIntent(file, this)
-        // Show dialog, without the own app
-        val packagesToExclude = arrayOf<String>(this.packageName)
+
+        val packagesToExclude = arrayOf<String>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val shareSheetIntent = ShareSheetHelper().getShareSheetIntent(
                 sendIntent,
