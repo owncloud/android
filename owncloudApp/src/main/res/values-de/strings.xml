@@ -684,6 +684,11 @@
   <string name="ocis_accounts_warning_button">Verstanden</string>
   <string name="tab_label_ascii">Text</string>
   <string name="apply_to_all_conflicts">Auf alle %1$s Konflikte anwenden</string>
+  <string name="log_file_downloaded">Protokolldatei heruntergeladen</string>
+  <string name="go_to_download_folder">Gehe zu Downloads</string>
+  <string name="log_file_downloaded_description">Die Protokolldatei %1$s wurde erfolgreich in den Download-Ordner heruntergeladen.</string>
   <!--DeepLinks-->
   <string name="invalid_deep_link_format">Ungültiges Link-Format</string>
+  <string name="fab_refresh_text">Neuer Inhalt</string>
+  <string name="fab_refresh_sync_in_progress">Synchronisierung läuft bereits.</string>
 </resources>
