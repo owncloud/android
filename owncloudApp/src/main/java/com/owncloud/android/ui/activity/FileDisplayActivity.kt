@@ -112,7 +112,6 @@ import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.transfers.downloads.DownloadFileUseCase
 import com.owncloud.android.utils.PreferenceUtils
-import info.hannes.cvscanner.CVScanner
 import info.hannes.edgedetection.ScanConstants
 import info.hannes.github.AppUpdateHelper
 import kotlinx.coroutines.CoroutineScope
@@ -589,21 +588,6 @@ class FileDisplayActivity : FileActivity(),
             }
 
             // requestUploadOfFilesFromFileSystem(data,resultCode);
-        } else if (requestCode == REQUEST_CODE__UPLOAD_SCANNED_DOCUMENT) {
-            if (resultCode == RESULT_OK) {
-                val scannedDocumentPath = data?.getStringExtra(CVScanner.RESULT_IMAGE_PATH)
-
-                filesUploadHelper!!.onActivityResult(scannedDocumentPath, object : FilesUploadHelper.OnCheckAvailableSpaceListener {
-
-                    override fun onCheckAvailableSpaceStart() = Unit
-
-                    override fun onCheckAvailableSpaceFinished(hasEnoughSpace: Boolean, capturedFilePaths: Array<String>) {
-                        if (hasEnoughSpace) {
-                            requestUploadOfFilesFromFileSystem(capturedFilePaths, UploadBehavior.MOVE.toLegacyLocalBehavior())
-                        }
-                    }
-                })
-            }
         } else if (requestCode == REQUEST_CODE__UPLOAD_LIVEDGE_DOCUMENT) {
             if (resultCode == RESULT_OK) {
                 data?.extras?.let { bundle ->
@@ -1874,7 +1858,6 @@ class FileDisplayActivity : FileActivity(),
             const val REQUEST_CODE__MOVE_FILES = REQUEST_CODE__LAST_SHARED + 2
             const val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
             const val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
-            const val REQUEST_CODE__UPLOAD_SCANNED_DOCUMENT = REQUEST_CODE__LAST_SHARED + 5
             const val REQUEST_CODE__UPLOAD_LIVEDGE_DOCUMENT = REQUEST_CODE__LAST_SHARED + 6
             const val RESULT_OK_AND_MOVE = RESULT_FIRST_USER
         }
