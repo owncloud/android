@@ -19,28 +19,31 @@
 *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 *   THE SOFTWARE.
-*
 */
+
 package com.owncloud.android.lib.resources.files
 
-import at.bitfire.dav4jvm.PropStat
 import at.bitfire.dav4jvm.PropertyRegistry
+import at.bitfire.dav4jvm.property.OCId
 import com.owncloud.android.lib.common.OwnCloudClient
 import com.owncloud.android.lib.common.http.HttpConstants
 import com.owncloud.android.lib.common.http.methods.webdav.DavConstants
 import com.owncloud.android.lib.common.http.methods.webdav.PropfindMethod
+import com.owncloud.android.lib.common.http.methods.webdav.properties.OCFileId
 import com.owncloud.android.lib.common.http.methods.webdav.properties.OCMetaPathForUser
+import com.owncloud.android.lib.common.http.methods.webdav.properties.OCSpaceId
 import com.owncloud.android.lib.common.operations.RemoteOperation
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import timber.log.Timber
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
-class GetFileMetaInfoRemoteOperation(val fileId: String) : RemoteOperation<String>() {
+class GetRemoteMetaFileOperation(val fileId: String) : RemoteOperation<RemoteMetaFile>() {
 
-
-    override fun run(client: OwnCloudClient): RemoteOperationResult<String> {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteMetaFile> {
         PropertyRegistry.register(OCMetaPathForUser.Factory())
+        PropertyRegistry.register(OCFileId.Factory())
+        PropertyRegistry.register(OCSpaceId.Factory())
 
         val stringUrl = "${client.baseUri}$META_PATH$fileId"
         return try {
@@ -52,20 +55,36 @@ class GetFileMetaInfoRemoteOperation(val fileId: String) : RemoteOperation<Strin
                 }
 
             val status = client.executeHttpMethod(propFindMethod)
-            if (isSuccess(status)) RemoteOperationResult<String>(RemoteOperationResult.ResultCode.OK).apply {
-                data = propFindMethod.root?.properties?.find { property -> property is OCMetaPathForUser }
-                    ?.let { property -> (property as OCMetaPathForUser).path } ?: ""
+            if (isSuccess(status)) RemoteOperationResult<RemoteMetaFile>(RemoteOperationResult.ResultCode.OK).apply {
+                val remoteMetaFile = RemoteMetaFile()
+                propFindMethod.root?.properties?.let { properties ->
+                   properties.forEach { property ->
+                       when (property) {
+                           is OCMetaPathForUser -> {
+                               remoteMetaFile.metaPathForUser = property.path
+                           }
+                           is OCId -> {
+                               remoteMetaFile.id = property.id
+                           }
+                           is OCFileId -> {
+                               remoteMetaFile.fileId = property.fileId
+                           }
+                           is OCSpaceId -> {
+                               remoteMetaFile.spaceId = property.spaceId
+                           }
+                       }
+                   }
+                }
+                data = remoteMetaFile
             }
-            else RemoteOperationResult<String>(propFindMethod)
+            else RemoteOperationResult<RemoteMetaFile>(propFindMethod)
         } catch (e: Exception) {
-            Timber.e(e, "Could not get actual (or redirected) base URL from base url (/).")
-            RemoteOperationResult<String>(e)
+            Timber.e(e, "Exception while getting remote meta file")
+            RemoteOperationResult<RemoteMetaFile>(e)
         }
     }
 
     private fun isSuccess(status: Int) = status == HttpConstants.HTTP_OK || status == HttpConstants.HTTP_MULTI_STATUS
-
-    private fun PropStat.isSuccessOrPostProcessing() = (status.code / 100 == 2 || status.code == HttpConstants.HTTP_TOO_EARLY)
 
     companion object {
         private const val META_PATH = "/remote.php/dav/meta/"
