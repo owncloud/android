@@ -28,13 +28,13 @@ import at.bitfire.dav4jvm.PropertyFactory
 import at.bitfire.dav4jvm.XmlUtils
 import org.xmlpull.v1.XmlPullParser
 
-data class OCMetaPathForUser(val path: String) : Property {
+data class OCSpaceId(val spaceId: String) : Property {
     class Factory : PropertyFactory {
         override fun getName() = NAME
 
-        override fun create(parser: XmlPullParser): OCMetaPathForUser? {
+        override fun create(parser: XmlPullParser): OCSpaceId? {
             XmlUtils.readText(parser)?.let {
-                return OCMetaPathForUser(it)
+                return OCSpaceId(it)
             }
             return null
         }
@@ -42,6 +42,6 @@ data class OCMetaPathForUser(val path: String) : Property {
 
     companion object {
         @JvmField
-        val NAME = Property.Name(XmlUtils.NS_OWNCLOUD, "meta-path-for-user")
+        val NAME = Property.Name(XmlUtils.NS_OWNCLOUD, "spaceid")
     }
 }
