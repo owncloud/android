@@ -34,6 +34,7 @@ ownCloud admins and users.
 * Enhancement - "Apply to all" when many name conflicts arise: [#4078](https://github.com/owncloud/android/issues/4078)
 * Enhancement - "Share to" in oCIS accounts allows upload to any space: [#4088](https://github.com/owncloud/android/issues/4088)
 * Enhancement - Auto-refresh when a file is uploaded: [#4103](https://github.com/owncloud/android/issues/4103)
+* Enhancement - Auto upload in oCIS accounts allows upload to any space: [#4117](https://github.com/owncloud/android/issues/4117)
 * Enhancement - Download log files: [#4155](https://github.com/owncloud/android/issues/4155)
 * Enhancement - Log file sharing allowed within ownCloud Android app: [#4156](https://github.com/owncloud/android/issues/4156)
 * Enhancement - New field "last usage" in database: [#4173](https://github.com/owncloud/android/issues/4173)
@@ -102,6 +103,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4103
    https://github.com/owncloud/android/pull/4199
+
+* Enhancement - Auto upload in oCIS accounts allows upload to any space: [#4117](https://github.com/owncloud/android/issues/4117)
+
+   Auto uploads of images and videos can now be uploaded to any space and not only
+   the personal one in oCIS accounts.
+
+   https://github.com/owncloud/android/issues/4117
+   https://github.com/owncloud/android/pull/4214
 
 * Enhancement - Download log files: [#4155](https://github.com/owncloud/android/issues/4155)
 
