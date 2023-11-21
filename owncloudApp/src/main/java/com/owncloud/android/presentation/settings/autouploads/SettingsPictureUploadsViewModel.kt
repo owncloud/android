@@ -4,7 +4,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,6 +25,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.R
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_UPLOADS_DEFAULT_PATH
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.pictureUploadsName
@@ -35,8 +36,9 @@ import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConf
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetPersonalSpaceForAccountUseCase
-import com.owncloud.android.domain.spaces.usecases.GetSpaceByIdUseCase
+import com.owncloud.android.domain.spaces.usecases.GetSpaceByIdForAccountUseCase
 import com.owncloud.android.providers.AccountProvider
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.ui.activity.FolderPickerActivity
@@ -53,15 +55,16 @@ class SettingsPictureUploadsViewModel(
     private val getPictureUploadsConfigurationStreamUseCase: GetPictureUploadsConfigurationStreamUseCase,
     private val resetPictureUploadsUseCase: ResetPictureUploadsUseCase,
     private val getPersonalSpaceForAccountUseCase: GetPersonalSpaceForAccountUseCase,
-    private val getSpaceByIdUseCase: GetSpaceByIdUseCase,
+    private val getSpaceByIdForAccountUseCase: GetSpaceByIdForAccountUseCase,
     private val workManagerProvider: WorkManagerProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    private val contextProvider: ContextProvider,
 ) : ViewModel() {
 
     private val _pictureUploads: MutableStateFlow<FolderBackUpConfiguration?> = MutableStateFlow(null)
     val pictureUploads: StateFlow<FolderBackUpConfiguration?> = _pictureUploads
 
-    private val _spaceFlow: MutableStateFlow<OCSpace?> = MutableStateFlow(null)
+    private var _space: OCSpace? = null
 
     init {
         initPictureUploads()
@@ -70,6 +73,9 @@ class SettingsPictureUploadsViewModel(
     private fun initPictureUploads() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             getPictureUploadsConfigurationStreamUseCase(Unit).collect { pictureUploadsConfiguration ->
+                if(pictureUploadsConfiguration?.accountName != null) {
+                    getSpaceById(spaceId = pictureUploadsConfiguration.spaceId, accountName = pictureUploadsConfiguration.accountName)
+                }
                 _pictureUploads.update { pictureUploadsConfiguration }
             }
         }
@@ -84,7 +90,7 @@ class SettingsPictureUploadsViewModel(
                     SavePictureUploadsConfigurationUseCase.Params(
                         composePictureUploadsConfiguration(
                             accountName = name,
-                            spaceId = _spaceFlow.value?.id,
+                            spaceId = _space?.id,
                         )
                     )
                 )
@@ -128,13 +134,12 @@ class SettingsPictureUploadsViewModel(
         val folderToUpload = data?.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER)
         folderToUpload?.remotePath?.let {
             viewModelScope.launch(coroutinesDispatcherProvider.io) {
-                getSpaceById(_pictureUploads.value?.accountName!!, folderToUpload.spaceId)
+                getSpaceById(spaceId = folderToUpload.spaceId, accountName = _pictureUploads.value?.accountName!!)
                 savePictureUploadsConfigurationUseCase(
                     SavePictureUploadsConfigurationUseCase.Params(
                         composePictureUploadsConfiguration(
                             uploadPath = it,
-                            spaceId = _spaceFlow.value?.id,
-                            spaceName = _spaceFlow.value?.name,
+                            spaceId = _space?.id,
                         )
                     )
                 )
@@ -150,7 +155,7 @@ class SettingsPictureUploadsViewModel(
                     composePictureUploadsConfiguration(
                         accountName = accountName,
                         uploadPath = null,
-                        spaceId = _spaceFlow.value?.id,
+                        spaceId = _space?.id,
                     )
                 )
             )
@@ -196,8 +201,6 @@ class SettingsPictureUploadsViewModel(
         behavior: UploadBehavior? = _pictureUploads.value?.behavior,
         timestamp: Long? = _pictureUploads.value?.lastSyncTimestamp,
         spaceId: String? = _pictureUploads.value?.spaceId,
-        spaceName: String? = _spaceFlow.value?.name,
-
         ): FolderBackUpConfiguration = FolderBackUpConfiguration(
         accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
         behavior = behavior ?: UploadBehavior.COPY,
@@ -208,20 +211,24 @@ class SettingsPictureUploadsViewModel(
         lastSyncTimestamp = timestamp ?: System.currentTimeMillis(),
         name = _pictureUploads.value?.name ?: pictureUploadsName,
         spaceId = spaceId,
-        spaceName = handleSpaceName(spaceName),
     ).also {
         Timber.d("Picture uploads configuration updated. New configuration: $it")
     }
 
     private fun handleSpaceName(spaceName: String?): String? {
-        return if (_spaceFlow.value?.isPersonal == true) {
-            PERSONAL_SPACE_NAME
+        return if (_space?.isPersonal == true) {
+            contextProvider.getString(R.string.bottom_nav_personal)
         } else {
             spaceName
         }
     }
 
-    fun modifyUploadPath(uploadPath: String?, spaceId: String?, spaceName: String?): String {
+    fun getUploadPathString(): String {
+
+        val spaceName = handleSpaceName(_space?.name)
+        val uploadPath = pictureUploads.value?.uploadPath
+        val spaceId = pictureUploads.value?.spaceId
+
         return if (uploadPath != null) {
             if (spaceId != null) {
                 "$spaceName: $uploadPath"
@@ -243,20 +250,16 @@ class SettingsPictureUploadsViewModel(
                 accountName = accountName
             )
         )
-        _spaceFlow.value = result
+        _space = result
     }
 
-    private fun getSpaceById(accountName: String, spaceId: String?) {
-        val result = getSpaceByIdUseCase(
-            GetSpaceByIdUseCase.Params(
+    private fun getSpaceById(spaceId: String?, accountName: String) {
+        val result = getSpaceByIdForAccountUseCase(
+            GetSpaceByIdForAccountUseCase.Params(
                 accountName = accountName,
                 spaceId = spaceId
             )
         )
-        _spaceFlow.value = result
-    }
-
-    companion object {
-        private const val PERSONAL_SPACE_NAME = "Personal"
+        _space = result
     }
 }

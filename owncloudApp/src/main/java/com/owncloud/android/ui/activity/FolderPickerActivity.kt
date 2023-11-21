@@ -86,13 +86,9 @@ open class FolderPickerActivity : FileActivity(),
                     }
                 }
                 PickerMode.CAMERA_FOLDER -> {
-                    // Show the personal space
-                    initAndShowListOfFilesFragment(spaceId = null)
-                }
-                PickerMode.UPLOAD_PATH -> {
-                    val personalSpaceId = intent.getStringExtra(KEY_PERSONAL_SPACE_ID)
+                    val spaceId = intent.getStringExtra(KEY_SPACE_ID)
 
-                    if (personalSpaceId != null) {
+                    if (spaceId != null) {
                         // Show the list of spaces
                         initAndShowListOfSpaces()
                     } else {
@@ -356,7 +352,7 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     enum class PickerMode {
-        MOVE, COPY, CAMERA_FOLDER, UPLOAD_PATH;
+        MOVE, COPY, CAMERA_FOLDER;
 
         @StringRes
         fun toStringRes(): Int {
@@ -364,14 +360,13 @@ open class FolderPickerActivity : FileActivity(),
                 MOVE -> R.string.folder_picker_move_here_button_text
                 COPY -> R.string.folder_picker_copy_here_button_text
                 CAMERA_FOLDER -> R.string.folder_picker_choose_button_text
-                UPLOAD_PATH -> R.string.folder_picker_choose_button_text
             }
         }
     }
 
     companion object {
         const val KEY_ACCOUNT_NAME = "KEY_ACCOUNT_NAME"
-        const val KEY_PERSONAL_SPACE_ID = "KEY_PERSONAL_SPACE_ID"
+        const val KEY_SPACE_ID = "KEY_PERSONAL_SPACE_ID"
         const val EXTRA_FOLDER = "FOLDER_PICKER_EXTRA_FOLDER"
         const val EXTRA_FILES = "FOLDER_PICKER_EXTRA_FILES"
         const val EXTRA_PICKER_MODE = "FOLDER_PICKER_EXTRA_PICKER_MODE"
