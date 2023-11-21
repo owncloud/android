@@ -26,7 +26,6 @@ import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
 import com.owncloud.android.data.spaces.db.SpacesDao
 import com.owncloud.android.data.spaces.db.SpacesEntity
 import com.owncloud.android.domain.spaces.model.OCSpace
-import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_PERSONAL
 import com.owncloud.android.domain.spaces.model.OCSpace.Companion.SPACE_ID_SHARES
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_SPACE_PERSONAL
@@ -218,6 +217,22 @@ class OCLocalSpacesDataSourceTest {
     }
 
     @Test
+    fun `getSpaceByIdForAccount returns a OCSpace`() {
+
+        every {
+            spacesDao.getSpaceByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
+        } returns OC_SPACE_PERSONAL.toEntity()
+
+        val result = ocLocalSpacesDataSource.getSpaceByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
+
+        assertEquals(OC_SPACE_PERSONAL, result)
+
+        verify(exactly = 1) {
+            spacesDao.getSpaceByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test
     fun `getWebDavUrlForSpace returns a String of webDavUrl`() {
 
         every {
@@ -246,21 +261,6 @@ class OCLocalSpacesDataSourceTest {
 
         verify(exactly = 1) {
             spacesDao.deleteSpacesForAccount(OC_ACCOUNT_NAME)
-        }
-    }
-
-    @Test
-    fun `getSpaceById returns a OCSpace`() {
-        every {
-            spacesDao.getSpaceByIdForAccount(SPACE_ID_PERSONAL, OC_ACCOUNT_NAME)
-        } returns OC_SPACE_PERSONAL.toEntity()
-
-        val result = ocLocalSpacesDataSource.getSpaceById(OC_ACCOUNT_NAME, SPACE_ID_PERSONAL)
-
-        assertEquals(OC_SPACE_PERSONAL, result)
-
-        verify(exactly = 1) {
-            spacesDao.getSpaceByIdForAccount(SPACE_ID_PERSONAL, OC_ACCOUNT_NAME)
         }
     }
 }

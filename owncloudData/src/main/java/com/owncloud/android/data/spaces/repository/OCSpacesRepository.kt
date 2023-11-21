@@ -51,9 +51,10 @@ class OCSpacesRepository(
     override fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String) =
         localSpacesDataSource.getSpaceWithSpecialsByIdForAccount(spaceId, accountName)
 
+    override fun getSpaceByIdForAccount(spaceId: String?, accountName: String): OCSpace? =
+        localSpacesDataSource.getSpaceByIdForAccount(spaceId = spaceId, accountName = accountName)
+
     override fun getWebDavUrlForSpace(accountName: String, spaceId: String?): String? =
         localSpacesDataSource.getWebDavUrlForSpace(accountName = accountName, spaceId = spaceId)
 
-    override fun getSpaceById(accountName: String, spaceId: String?): OCSpace? =
-        localSpacesDataSource.getSpaceById(accountName = accountName, spaceId = spaceId)
 }

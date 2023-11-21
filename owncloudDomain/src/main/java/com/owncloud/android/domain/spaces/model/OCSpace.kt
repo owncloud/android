@@ -54,7 +54,6 @@ data class OCSpace(
 
         // https://github.com/owncloud/web/blob/2ab7e6da432cb344cd86f3451eea1678461c5c90/packages/web-client/src/helpers/space/types.ts#L11
         const val SPACE_ID_SHARES = "a0ca6a90-a365-4782-871e-d44447bbc668\$a0ca6a90-a365-4782-871e-d44447bbc668"
-        const val SPACE_ID_PERSONAL = "8871f4f3-fc6f-4a66-8bed-62f175f76f38\$9bfceafe-ac5a-47b4-bcaa-75e99a576043"
     }
 }
 
