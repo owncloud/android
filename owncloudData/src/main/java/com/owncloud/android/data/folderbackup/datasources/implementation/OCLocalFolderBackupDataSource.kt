@@ -74,7 +74,6 @@ class OCLocalFolderBackupDataSource(
                 lastSyncTimestamp = lastSyncTimestamp,
                 name = name,
                 spaceId = spaceId,
-                spaceName = spaceName,
             )
     }
 
@@ -90,6 +89,5 @@ class OCLocalFolderBackupDataSource(
             name = name,
             lastSyncTimestamp = lastSyncTimestamp,
             spaceId = spaceId,
-            spaceName = spaceName,
         )
 }

@@ -52,7 +52,6 @@ class CameraUploadsMigrationToRoom(val sharedPreferencesProvider: SharedPreferen
             name = pictureUploadsName,
             chargingOnly = false,
             spaceId = null,
-            spaceName = null,
         )
     }
 
@@ -69,7 +68,6 @@ class CameraUploadsMigrationToRoom(val sharedPreferencesProvider: SharedPreferen
             name = videoUploadsName,
             chargingOnly = false,
             spaceId = null,
-            spaceName = null,
         )
     }
 
