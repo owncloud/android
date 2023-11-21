@@ -65,6 +65,7 @@ class SettingsVideoUploadsViewModel(
     val videoUploads: StateFlow<FolderBackUpConfiguration?> = _videoUploads
 
     private var _space: OCSpace? = null
+
     init {
         initVideoUploads()
     }
@@ -72,7 +73,7 @@ class SettingsVideoUploadsViewModel(
     private fun initVideoUploads() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             getVideoUploadsConfigurationStreamUseCase(Unit).collect { videoUploadsConfiguration ->
-                if(videoUploadsConfiguration?.accountName != null) {
+                if (videoUploadsConfiguration?.accountName != null) {
                     getSpaceById(spaceId = videoUploadsConfiguration.spaceId, accountName = videoUploadsConfiguration.accountName)
                 }
                 _videoUploads.update { videoUploadsConfiguration }
