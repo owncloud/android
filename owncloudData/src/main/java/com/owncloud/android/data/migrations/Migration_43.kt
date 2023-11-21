@@ -29,29 +29,23 @@ val MIGRATION_42_43 = object : Migration(42, 43) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.run {
             execSQL("ALTER TABLE ${ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME} ADD COLUMN `spaceId` TEXT")
-            execSQL("ALTER TABLE ${ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME} ADD COLUMN `spaceName` TEXT")
             val query = "SELECT `accountName` FROM ${ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME}"
             val cursor = database.query(query)
             cursor.use {
                 while (it.moveToNext()) {
                     val accountName = it.getString(it.getColumnIndexOrThrow("accountName"))
 
-                    val spacePersonalQuery = "SELECT `space_id`, `name` FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}\n" +
+                    val spacePersonalQuery = "SELECT `space_id` FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}\n" +
                             "WHERE `account_name` = '${accountName}' AND `drive_type`= 'personal'"
-
                     val cursorSpacePersonal = database.query(spacePersonalQuery)
+
                     cursorSpacePersonal.use {
                         if (cursorSpacePersonal.moveToFirst()) {
-                            do {
-                                val spaceId = cursorSpacePersonal.getString(cursorSpacePersonal.getColumnIndexOrThrow("space_id"))
-                                val spaceName = cursorSpacePersonal.getString(cursorSpacePersonal.getColumnIndexOrThrow("name"))
-
-                                execSQL("UPDATE `folder_backup` SET `spaceId` = CASE WHEN '${spaceId}' IS NOT NULL THEN '${spaceId}' ELSE NULL END")
-                                execSQL("UPDATE `folder_backup` SET `spaceName` = CASE WHEN '${spaceName}' IS NOT NULL THEN '${spaceName}' ELSE NULL END")
-
-                            } while (cursorSpacePersonal.moveToNext())
+                            val spaceId = cursorSpacePersonal.getString(cursorSpacePersonal.getColumnIndexOrThrow("space_id"))
+                            execSQL("UPDATE `folder_backup` SET `spaceId` = '${spaceId}' WHERE `accountName` = '$accountName'")
                         } else {
-                            Timber.d("the cursor is empty")
+                            execSQL("UPDATE `folder_backup` SET `spaceId` = NULL WHERE `accountName` = '${accountName}'")
+                            Timber.d("No personal spaces found for account: $accountName. Query performed: $spacePersonalQuery")
                         }
                     }
                 }
