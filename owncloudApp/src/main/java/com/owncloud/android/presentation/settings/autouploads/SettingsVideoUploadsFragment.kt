@@ -124,10 +124,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                     enableVideoUploads(videoUploadsConfiguration != null)
                     videoUploadsConfiguration?.let {
                         prefVideoUploadsAccount?.value = it.accountName
-                        prefVideoUploadsPath?.summary = videosViewModel.modifyUploadPath(
-                            uploadPath = it.uploadPath,
-                            spaceId = it.spaceId,
-                            spaceName = it.spaceName)
+                        prefVideoUploadsPath?.summary = videosViewModel.getUploadPathString()
                         prefVideoUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                         prefVideoUploadsOnWifi?.isChecked = it.wifiOnly
                         prefVideoUploadsOnCharging?.isChecked = it.chargingOnly
@@ -171,10 +168,9 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                 uploadPath += File.separator
             }
             val intent = Intent(activity, FolderPickerActivity::class.java).apply {
-                val accountName = videosViewModel.getVideoUploadsAccount()
-                putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.UPLOAD_PATH)
-                putExtra(FolderPickerActivity.KEY_PERSONAL_SPACE_ID, spaceId)
-                putExtra(FolderPickerActivity.KEY_ACCOUNT_NAME, accountName)
+                putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.CAMERA_FOLDER)
+                putExtra(FolderPickerActivity.KEY_SPACE_ID, spaceId)
+                putExtra(FolderPickerActivity.KEY_ACCOUNT_NAME, videosViewModel.getVideoUploadsAccount())
             }
             selectVideoUploadsPathLauncher.launch(intent)
             true

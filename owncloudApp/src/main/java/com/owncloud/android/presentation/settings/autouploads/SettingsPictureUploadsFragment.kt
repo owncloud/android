@@ -127,11 +127,7 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                     enablePictureUploads(pictureUploadsConfiguration != null)
                     pictureUploadsConfiguration?.let {
                         prefPictureUploadsAccount?.value = it.accountName
-                        prefPictureUploadsPath?.summary = picturesViewModel.modifyUploadPath(
-                            uploadPath = it.uploadPath,
-                            spaceId = it.spaceId,
-                            spaceName = it.spaceName
-                        )
+                        prefPictureUploadsPath?.summary = picturesViewModel.getUploadPathString()
                         prefPictureUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                         prefPictureUploadsOnWifi?.isChecked = it.wifiOnly
                         prefPictureUploadsOnCharging?.isChecked = it.chargingOnly
@@ -175,10 +171,9 @@ class SettingsPictureUploadsFragment : PreferenceFragmentCompat() {
                 uploadPath += File.separator
             }
             val intent = Intent(activity, FolderPickerActivity::class.java).apply {
-                val accountName = picturesViewModel.getPictureUploadsAccount()
-                putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.UPLOAD_PATH)
-                putExtra(FolderPickerActivity.KEY_PERSONAL_SPACE_ID, spaceId)
-                putExtra(FolderPickerActivity.KEY_ACCOUNT_NAME, accountName)
+                putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.CAMERA_FOLDER)
+                putExtra(FolderPickerActivity.KEY_SPACE_ID, spaceId)
+                putExtra(FolderPickerActivity.KEY_ACCOUNT_NAME, picturesViewModel.getPictureUploadsAccount())
             }
             selectPictureUploadsPathLauncher.launch(intent)
             true
