@@ -36,15 +36,15 @@ val MIGRATION_42_43 = object : Migration(42, 43) {
                     val accountName = it.getString(it.getColumnIndexOrThrow("accountName"))
 
                     val spacePersonalQuery = "SELECT `space_id` FROM ${ProviderMeta.ProviderTableMeta.SPACES_TABLE_NAME}\n" +
-                            "WHERE `account_name` = '${accountName}' AND `drive_type`= 'personal'"
+                            "WHERE `account_name` = '$accountName' AND `drive_type`= 'personal'"
                     val cursorSpacePersonal = database.query(spacePersonalQuery)
 
                     cursorSpacePersonal.use {
                         if (cursorSpacePersonal.moveToFirst()) {
                             val spaceId = cursorSpacePersonal.getString(cursorSpacePersonal.getColumnIndexOrThrow("space_id"))
-                            execSQL("UPDATE `folder_backup` SET `spaceId` = '${spaceId}' WHERE `accountName` = '$accountName'")
+                            execSQL("UPDATE `folder_backup` SET `spaceId` = '$spaceId' WHERE `accountName` = '$accountName'")
                         } else {
-                            execSQL("UPDATE `folder_backup` SET `spaceId` = NULL WHERE `accountName` = '${accountName}'")
+                            execSQL("UPDATE `folder_backup` SET `spaceId` = NULL WHERE `accountName` = '$accountName'")
                             Timber.d("No personal spaces found for account: $accountName. Query performed: $spacePersonalQuery")
                         }
                     }

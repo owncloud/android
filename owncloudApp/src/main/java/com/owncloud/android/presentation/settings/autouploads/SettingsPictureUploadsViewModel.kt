@@ -73,7 +73,7 @@ class SettingsPictureUploadsViewModel(
     private fun initPictureUploads() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             getPictureUploadsConfigurationStreamUseCase(Unit).collect { pictureUploadsConfiguration ->
-                if(pictureUploadsConfiguration?.accountName != null) {
+                if (pictureUploadsConfiguration?.accountName != null) {
                     getSpaceById(spaceId = pictureUploadsConfiguration.spaceId, accountName = pictureUploadsConfiguration.accountName)
                 }
                 _pictureUploads.update { pictureUploadsConfiguration }
