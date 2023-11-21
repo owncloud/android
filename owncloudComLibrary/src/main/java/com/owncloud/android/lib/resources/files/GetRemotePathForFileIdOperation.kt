@@ -19,8 +19,8 @@
 *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 *   THE SOFTWARE.
-*
 */
+
 package com.owncloud.android.lib.resources.files
 
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -31,28 +31,29 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import timber.log.Timber
 import java.net.URL
 
-class GetPathForFileIdRemoteOperation(val fileId: String) : RemoteOperation<String>() {
-    override fun run(client: OwnCloudClient): RemoteOperationResult<String> {
+class GetRemotePathForFileIdOperation(val fileId: String) : RemoteOperation<RemoteMetaFile>() {
+    override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteMetaFile> {
 
         return try {
             val stringUrl = "${client.baseUri}${PATH}$fileId"
             val headMethod = HeadMethod(URL(stringUrl))
             val status = client.executeHttpMethod(headMethod)
             if (isSuccess(status)) {
-                RemoteOperationResult<String>(RemoteOperationResult.ResultCode.OK).apply {
-                    val fileName = headMethod.response.request.url.queryParameter(SCROLL_TO_QUERY)
-                    data = if (fileName != null) {
+                RemoteOperationResult<RemoteMetaFile>(RemoteOperationResult.ResultCode.OK).apply {
+                    var fileName = headMethod.response.request.url.queryParameter(SCROLL_TO_QUERY)
+                    fileName = if (fileName != null) {
                         "${headMethod.response.request.url.queryParameter(DIR_QUERY)}/$fileName"
                     } else {
                         headMethod.response.request.url.queryParameter(DIR_QUERY)
                     }
+                    data = RemoteMetaFile(metaPathForUser = fileName)
                 }
             } else {
-                RemoteOperationResult<String>(headMethod)
+                RemoteOperationResult<RemoteMetaFile>(headMethod)
             }
         } catch (e: Exception) {
-            Timber.e(e, "Error while execute head of get file method.")
-            RemoteOperationResult<String>(e)
+            Timber.e(e, "Exception while getting remote path head of get file method.")
+            RemoteOperationResult<RemoteMetaFile>(e)
         }
     }
 
