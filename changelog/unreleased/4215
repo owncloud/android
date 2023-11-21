@@ -1,0 +1,6 @@
+Enhancement: Log file sharing allowed within ownCloud Android app
+
+Sharing log files to the ownCloud app itself is now possible from the logs screen.
+
+https://github.com/owncloud/android/issues/4156
+https://github.com/owncloud/android/pull/4215
