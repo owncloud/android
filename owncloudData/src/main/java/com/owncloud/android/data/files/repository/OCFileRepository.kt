@@ -533,7 +533,6 @@ class OCFileRepository(
     override fun getFileFromRemoteId(fileId: String, accountName: String, isOcis: Boolean): OCFile? {
         val metaFile = remoteFileDataSource.getMetaFile(fileId, accountName, isOcis)
         val remotePath = metaFile.path!!
-        val spaceId = metaFile.spaceId!!
 
         val splitPath = remotePath.split(PATH_SEPARATOR)
         var containerFolder = listOf<OCFile>()
@@ -542,11 +541,11 @@ class OCFileRepository(
             for (j in 1..i) {
                 path += "$PATH_SEPARATOR${splitPath[j]}"
             }
-            containerFolder = refreshFolder(path, accountName, spaceId)
+            containerFolder = refreshFolder(path, accountName, metaFile.spaceId)
         }
-        refreshFolder(remotePath, accountName, spaceId)
+        refreshFolder(remotePath, accountName, metaFile.spaceId)
         return if (remotePath == ROOT_PATH) {
-            getFileByRemotePath(remotePath, accountName, spaceId)
+            getFileByRemotePath(remotePath, accountName, metaFile.spaceId)
         } else {
             containerFolder.find { file ->
                 if (file.isFolder) {
