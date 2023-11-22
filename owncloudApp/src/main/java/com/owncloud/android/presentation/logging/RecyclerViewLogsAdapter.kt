@@ -53,7 +53,7 @@ class RecyclerViewLogsAdapter(
                 listener.share(log)
             }
             imageViewDeleteActivityLogsList.setOnClickListener {
-                listener.delete(log)
+                listener.delete(log, logsList.last() == log)
             }
             imageViewDownloadActivityLogsList.setOnClickListener {
                 listener.download(log)
@@ -80,7 +80,7 @@ class RecyclerViewLogsAdapter(
 
     interface Listener {
         fun share(file: File)
-        fun delete(file: File)
+        fun delete(file: File, isLastLogFileDeleted: Boolean)
         fun open(file: File)
         fun download(file: File)
     }
