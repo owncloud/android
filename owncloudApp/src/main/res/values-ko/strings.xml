@@ -10,6 +10,7 @@
   <string name="actionbar_upload_from_apps">다른 앱의 콘텐츠</string>
   <string name="actionbar_upload_files">파일</string>
   <string name="actionbar_open_with">다음으로 열기</string>
+  <string name="actionbar_open_with_read_only">다음으로 열기(읽기전용)</string>
   <string name="actionbar_mkdir">새 폴더</string>
   <string name="actionbar_settings">설정</string>
   <string name="actionbar_see_details">자세한 정보</string>
@@ -53,6 +54,11 @@
   <string name="prefs_touches_with_other_visible_windows">표시되는 다른 창과의 터치</string>
   <string name="prefs_touches_with_other_visible_windows_summary">보기가 다른 표시 창에 가려질 때 터치를 허용합니다. 빛 필터링 앱을 사용할 수 있도록 활성화 합니다.</string>
   <string name="confirmation_touches_with_other_windows_title">이 기능을 활성화하도록 설정하시겠습니까?</string>
+  <string name="confirmation_touches_with_other_windows_message">이 기능은 사용자의 책임하에 사용하시기 바랍니다. 악의적인 프로그램이 다른 창을 활용하여 알려지지 않은 다른 작동을 실행하여 당신을 속일 수 있습니다.</string>
+  <string name="prefs_subsection_picture_uploads">사진 자동 업로드</string>
+  <string name="prefs_subsection_picture_uploads_summary">자동으로 업로드 된 사진의 위치와 동작을 관리하기</string>
+  <string name="prefs_subsection_video_uploads">자동으로 업로드 된 영상</string>
+  <string name="prefs_subsection_video_uploads_summary">자동으로 업로드된 비디오의 위치와 동작을 관리하기</string>
   <string name="prefs_camera_picture_upload">사진 업로드</string>
   <string name="prefs_camera_picture_upload_summary">카메라로 찍은 사진 자동으로 업로드</string>
   <string name="prefs_camera_picture_upload_path_title">사진 업로드 경로</string>
