@@ -5,7 +5,7 @@
 | <img src="docs_resources/filelist_device.png"> | <img src="docs_resources/photos_device.png"> | <img src="docs_resources/share_device.png"> | <img src="docs_resources/spaces_device.png"> |
 | ---------------------------------------------- | -------------------------------------------- | ------------------------------------------- | ------------------------------------------- |
 
-## Join development!
+## Join development
 
 **Build status:** <br>
 
