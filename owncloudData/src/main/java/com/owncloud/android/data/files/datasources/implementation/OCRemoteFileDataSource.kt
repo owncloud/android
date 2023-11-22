@@ -205,8 +205,11 @@ class OCRemoteFileDataSource(
         )
     }
 
-    override fun getMetaFile(fileId: String, accountName: String, isOcis: Boolean): OCMetaFile =
-        executeRemoteOperation {
+    override fun getMetaFile(
+        fileId: String,
+        accountName: String,
+        isOcis: Boolean
+    ): OCMetaFile = executeRemoteOperation {
             clientManager.getFileService(accountName).getMetaFileInfo(fileId, isOcis)
         }.toModel()
 
@@ -231,13 +234,14 @@ class OCRemoteFileDataSource(
                 sharedWithSharee = sharedWithSharee,
                 sharedByLink = sharedByLink,
             )
-    }
 
-    private fun RemoteMetaFile.toModel(): OCMetaFile =
-        OCMetaFile(
-            path = metaPathForUser,
-            id = id,
-            fileId = fileId,
-            spaceId = spaceId,
-        )
+        @VisibleForTesting
+        fun RemoteMetaFile.toModel(): OCMetaFile =
+            OCMetaFile(
+                path = metaPathForUser,
+                id = id,
+                fileId = fileId,
+                spaceId = spaceId,
+            )
+    }
 }

@@ -3,6 +3,7 @@
  *
  * @author Abel García de Prada
  * @author Aitor Ballesteros Pavón
+ * @author Juan Carlos Garrote Gascón
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -30,6 +31,7 @@ import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_FOLDER
 import com.owncloud.android.testutil.REMOTE_FILE
+import com.owncloud.android.testutil.REMOTE_META_FILE
 import com.owncloud.android.utils.createRemoteOperationResultMock
 import io.mockk.every
 import io.mockk.mockk
@@ -375,6 +377,34 @@ class OCRemoteFileDataSourceTest {
         verify(exactly = 1) {
             clientManager.getFileService(OC_ACCOUNT_NAME)
             ocFileService.renameFile(oldName, oldRemotePath, newName, false, null)
+        }
+    }
+
+    @Test
+    fun `getMetaFile returns a OCMetaFile`() {
+        val remoteResult = createRemoteOperationResultMock(data = REMOTE_META_FILE, isSuccess = true)
+
+        every {
+            ocFileService.getMetaFileInfo(
+                fileId = OC_FILE.remoteId!!,
+                isOcis = any()
+            )
+        } returns remoteResult
+
+        val result = ocRemoteFileDataSource.getMetaFile(
+            OC_FILE.remoteId!!,
+            OC_ACCOUNT_NAME,
+            false,
+        )
+
+        assertEquals(REMOTE_META_FILE.toModel(), result)
+
+        verify(exactly = 1) {
+            clientManager.getFileService(OC_ACCOUNT_NAME)
+            ocFileService.getMetaFileInfo(
+                OC_FILE.remoteId!!,
+                false,
+            )
         }
     }
 }

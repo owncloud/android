@@ -28,6 +28,7 @@ import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.lib.resources.files.RemoteFile
+import com.owncloud.android.lib.resources.files.RemoteMetaFile
 
 val OC_FOLDER = OCFile(
     id = 122,
@@ -195,4 +196,8 @@ val REMOTE_FILE = RemoteFile(
     owner = OC_FILE.owner,
     sharedByLink = OC_FILE.sharedByLink,
     sharedWithSharee = OC_FILE.sharedWithSharee!!,
+)
+
+val REMOTE_META_FILE = RemoteMetaFile(
+    metaPathForUser = OC_FILE.remotePath,
 )
