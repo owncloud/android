@@ -1795,17 +1795,15 @@ class FileDisplayActivity : FileActivity(),
                         if (uiResult.error is FileNotFoundException) {
                             showMessageInSnackbar(message = getString(R.string.deep_link_user_no_access))
                             changeUser()
-                        }
-                        showMessageInSnackbar(
-                            message =
-                            getString(
+                        } else {
+                            showMessageInSnackbar(message = getString(
                                 if (uiResult.error is DeepLinkException) {
                                     R.string.invalid_deep_link_format
                                 } else {
                                     R.string.default_error_msg
                                 }
-                            )
-                        )
+                            ))
+                        }
                     }
                 }
             }
