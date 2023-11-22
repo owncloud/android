@@ -29,12 +29,13 @@ import com.owncloud.android.lib.resources.files.CheckPathExistenceRemoteOperatio
 import com.owncloud.android.lib.resources.files.CopyRemoteFileOperation
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation
-import com.owncloud.android.lib.resources.files.GetFileMetaInfoRemoteOperation
-import com.owncloud.android.lib.resources.files.GetPathForFileIdRemoteOperation
+import com.owncloud.android.lib.resources.files.GetRemoteMetaFileOperation
+import com.owncloud.android.lib.resources.files.GetRemotePathForFileIdOperation
 import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation
 import com.owncloud.android.lib.resources.files.RemoteFile
+import com.owncloud.android.lib.resources.files.RemoteMetaFile
 import com.owncloud.android.lib.resources.files.RemoveRemoteFileOperation
 import com.owncloud.android.lib.resources.files.RenameRemoteFileOperation
 import com.owncloud.android.lib.resources.files.services.FileService
@@ -143,10 +144,10 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
             spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 
-    override fun fileMetaInfo(fileId: String, isOcis: Boolean): RemoteOperationResult<String> =
+    override fun getMetaFileInfo(fileId: String, isOcis: Boolean): RemoteOperationResult<RemoteMetaFile> =
         if (isOcis) {
-            GetFileMetaInfoRemoteOperation(fileId)
+            GetRemoteMetaFileOperation(fileId)
         } else {
-            GetPathForFileIdRemoteOperation(fileId)
+            GetRemotePathForFileIdOperation(fileId)
         }.execute(client)
 }
