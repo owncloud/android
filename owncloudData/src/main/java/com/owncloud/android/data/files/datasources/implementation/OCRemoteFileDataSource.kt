@@ -27,7 +27,9 @@ import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCMetaFile
 import com.owncloud.android.lib.resources.files.RemoteFile
+import com.owncloud.android.lib.resources.files.RemoteMetaFile
 
 class OCRemoteFileDataSource(
     private val clientManager: ClientManager,
@@ -203,8 +205,10 @@ class OCRemoteFileDataSource(
         )
     }
 
-    override fun getRemotePathForFile(fileId: String, accountName: String, isOcis: Boolean): String =
-        executeRemoteOperation { clientManager.getFileService(accountName).fileMetaInfo(fileId, isOcis) }
+    override fun getMetaFile(fileId: String, accountName: String, isOcis: Boolean): OCMetaFile =
+        executeRemoteOperation {
+            clientManager.getFileService(accountName).getMetaFileInfo(fileId, isOcis)
+        }.toModel()
 
     companion object {
         @VisibleForTesting
@@ -228,4 +232,12 @@ class OCRemoteFileDataSource(
                 sharedByLink = sharedByLink,
             )
     }
+
+    private fun RemoteMetaFile.toModel(): OCMetaFile =
+        OCMetaFile(
+            path = metaPathForUser,
+            id = id,
+            fileId = fileId,
+            spaceId = spaceId,
+        )
 }

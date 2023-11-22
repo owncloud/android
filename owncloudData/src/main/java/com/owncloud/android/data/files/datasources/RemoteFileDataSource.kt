@@ -22,6 +22,7 @@
 package com.owncloud.android.data.files.datasources
 
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCMetaFile
 
 interface RemoteFileDataSource {
     fun checkPathExistence(
@@ -90,6 +91,10 @@ interface RemoteFileDataSource {
         spaceWebDavUrl: String? = null,
     )
 
-    fun getRemotePathForFile(fileId: String, accountName: String, isOcis: Boolean): String
+    fun getMetaFile(
+        fileId: String,
+        accountName: String,
+        isOcis: Boolean
+    ): OCMetaFile
 
 }
