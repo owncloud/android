@@ -39,6 +39,7 @@ import com.owncloud.android.databinding.LogsListActivityBinding
 import com.owncloud.android.extensions.openFile
 import com.owncloud.android.extensions.sendFile
 import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.providers.LogsProvider
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
@@ -51,6 +52,8 @@ class LogsListActivity : AppCompatActivity() {
     private val viewModel by viewModel<LogListViewModel>()
 
     private var _binding: LogsListActivityBinding? = null
+
+    private var createNewLogFile: Boolean = false
     val binding get() = _binding!!
 
     private val recyclerViewLogsAdapter = RecyclerViewLogsAdapter(object : RecyclerViewLogsAdapter.Listener {
@@ -58,9 +61,10 @@ class LogsListActivity : AppCompatActivity() {
             sendFile(file)
         }
 
-        override fun delete(file: File) {
+        override fun delete(file: File, isLastLogFileDeleted: Boolean) {
             file.delete()
             setData()
+            createNewLogFile = isLastLogFileDeleted
         }
 
         override fun open(file: File) {
@@ -93,6 +97,9 @@ class LogsListActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (createNewLogFile){
+            LogsProvider(applicationContext).startLogging()
+        }
         when (item.itemId) {
             android.R.id.home -> finish()
         }
