@@ -45,7 +45,7 @@ val MIGRATION_42_43 = object : Migration(42, 43) {
                             execSQL("UPDATE `folder_backup` SET `spaceId` = '$spaceId' WHERE `accountName` = '$accountName'")
                         } else {
                             execSQL("UPDATE `folder_backup` SET `spaceId` = NULL WHERE `accountName` = '$accountName'")
-                            Timber.d("No personal spaces found for account: $accountName. Query performed: $spacePersonalQuery")
+                            Timber.d("No personal spaces found for account: $accountName.")
                         }
                     }
                 }
