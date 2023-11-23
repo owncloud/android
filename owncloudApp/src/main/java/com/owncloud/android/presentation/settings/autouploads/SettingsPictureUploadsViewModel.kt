@@ -134,7 +134,7 @@ class SettingsPictureUploadsViewModel(
         val folderToUpload = data?.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER)
         folderToUpload?.remotePath?.let {
             viewModelScope.launch(coroutinesDispatcherProvider.io) {
-                getSpaceById(spaceId = folderToUpload.spaceId, accountName = _pictureUploads.value?.accountName!!)
+                getSpaceById(spaceId = folderToUpload.spaceId, accountName = folderToUpload.owner)
                 savePictureUploadsConfigurationUseCase(
                     SavePictureUploadsConfigurationUseCase.Params(
                         composePictureUploadsConfiguration(
