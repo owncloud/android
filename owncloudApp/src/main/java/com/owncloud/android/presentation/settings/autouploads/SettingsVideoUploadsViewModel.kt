@@ -134,7 +134,7 @@ class SettingsVideoUploadsViewModel(
         val folderToUpload = data?.getParcelableExtra<OCFile>(FolderPickerActivity.EXTRA_FOLDER)
         folderToUpload?.remotePath?.let {
             viewModelScope.launch(coroutinesDispatcherProvider.io) {
-                getSpaceById(spaceId = folderToUpload.spaceId, accountName = _videoUploads.value?.accountName!!)
+                getSpaceById(spaceId = folderToUpload.spaceId, accountName = folderToUpload.owner)
                 saveVideoUploadsConfigurationUseCase(
                     SaveVideoUploadsConfigurationUseCase.Params(
                         composeVideoUploadsConfiguration(
