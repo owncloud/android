@@ -754,7 +754,7 @@
     <!-- DeepLinks -->
     <string name="invalid_deep_link_format">Invalid link format</string>
 
-    <string name="fab_refresh_text">New content</string>
+    <string name="fab_refresh_text">Refresh</string>
     <string name="fab_refresh_sync_in_progress">Synchronization already in progress</string>
 
 </resources>

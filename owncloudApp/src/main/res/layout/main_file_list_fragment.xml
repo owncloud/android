@@ -82,6 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/standard_quarter_margin"
                     android:text="@string/fab_refresh_text"
+                    android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:theme="@style/Theme.MaterialComponents.Bridge"
                     android:visibility="gone"
