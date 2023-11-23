@@ -64,7 +64,7 @@ class SettingsPictureUploadsViewModel(
     private val _pictureUploads: MutableStateFlow<FolderBackUpConfiguration?> = MutableStateFlow(null)
     val pictureUploads: StateFlow<FolderBackUpConfiguration?> = _pictureUploads
 
-    private var _space: OCSpace? = null
+    private var pictureUploadsSpace: OCSpace? = null
 
     init {
         initPictureUploads()
@@ -73,8 +73,8 @@ class SettingsPictureUploadsViewModel(
     private fun initPictureUploads() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             getPictureUploadsConfigurationStreamUseCase(Unit).collect { pictureUploadsConfiguration ->
-                if (pictureUploadsConfiguration?.accountName != null) {
-                    getSpaceById(spaceId = pictureUploadsConfiguration.spaceId, accountName = pictureUploadsConfiguration.accountName)
+                pictureUploadsConfiguration?.accountName?.let {
+                    getSpaceById(spaceId = pictureUploadsConfiguration.spaceId, accountName = it)
                 }
                 _pictureUploads.update { pictureUploadsConfiguration }
             }
@@ -90,7 +90,7 @@ class SettingsPictureUploadsViewModel(
                     SavePictureUploadsConfigurationUseCase.Params(
                         composePictureUploadsConfiguration(
                             accountName = name,
-                            spaceId = _space?.id,
+                            spaceId = pictureUploadsSpace?.id,
                         )
                     )
                 )
@@ -139,7 +139,7 @@ class SettingsPictureUploadsViewModel(
                     SavePictureUploadsConfigurationUseCase.Params(
                         composePictureUploadsConfiguration(
                             uploadPath = it,
-                            spaceId = _space?.id,
+                            spaceId = pictureUploadsSpace?.id,
                         )
                     )
                 )
@@ -155,7 +155,7 @@ class SettingsPictureUploadsViewModel(
                     composePictureUploadsConfiguration(
                         accountName = accountName,
                         uploadPath = null,
-                        spaceId = _space?.id,
+                        spaceId = pictureUploadsSpace?.id,
                     )
                 )
             )
@@ -201,7 +201,7 @@ class SettingsPictureUploadsViewModel(
         behavior: UploadBehavior? = _pictureUploads.value?.behavior,
         timestamp: Long? = _pictureUploads.value?.lastSyncTimestamp,
         spaceId: String? = _pictureUploads.value?.spaceId,
-        ): FolderBackUpConfiguration = FolderBackUpConfiguration(
+    ): FolderBackUpConfiguration = FolderBackUpConfiguration(
         accountName = accountName ?: accountProvider.getCurrentOwnCloudAccount()!!.name,
         behavior = behavior ?: UploadBehavior.COPY,
         sourcePath = sourcePath.orEmpty(),
@@ -216,7 +216,7 @@ class SettingsPictureUploadsViewModel(
     }
 
     private fun handleSpaceName(spaceName: String?): String? {
-        return if (_space?.isPersonal == true) {
+        return if (pictureUploadsSpace?.isPersonal == true) {
             contextProvider.getString(R.string.bottom_nav_personal)
         } else {
             spaceName
@@ -225,7 +225,7 @@ class SettingsPictureUploadsViewModel(
 
     fun getUploadPathString(): String {
 
-        val spaceName = handleSpaceName(_space?.name)
+        val spaceName = handleSpaceName(pictureUploadsSpace?.name)
         val uploadPath = pictureUploads.value?.uploadPath
         val spaceId = pictureUploads.value?.spaceId
 
@@ -250,7 +250,7 @@ class SettingsPictureUploadsViewModel(
                 accountName = accountName
             )
         )
-        _space = result
+        pictureUploadsSpace = result
     }
 
     private fun getSpaceById(spaceId: String?, accountName: String) {
@@ -260,6 +260,6 @@ class SettingsPictureUploadsViewModel(
                 spaceId = spaceId
             )
         )
-        _space = result
+        pictureUploadsSpace = result
     }
 }
