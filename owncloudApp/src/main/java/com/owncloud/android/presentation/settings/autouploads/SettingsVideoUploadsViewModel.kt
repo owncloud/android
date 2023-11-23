@@ -64,7 +64,7 @@ class SettingsVideoUploadsViewModel(
     private val _videoUploads: MutableStateFlow<FolderBackUpConfiguration?> = MutableStateFlow(null)
     val videoUploads: StateFlow<FolderBackUpConfiguration?> = _videoUploads
 
-    private var _space: OCSpace? = null
+    private var videoUploadsSpace: OCSpace? = null
 
     init {
         initVideoUploads()
@@ -73,8 +73,8 @@ class SettingsVideoUploadsViewModel(
     private fun initVideoUploads() {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             getVideoUploadsConfigurationStreamUseCase(Unit).collect { videoUploadsConfiguration ->
-                if (videoUploadsConfiguration?.accountName != null) {
-                    getSpaceById(spaceId = videoUploadsConfiguration.spaceId, accountName = videoUploadsConfiguration.accountName)
+                videoUploadsConfiguration?.accountName?.let {
+                    getSpaceById(spaceId = videoUploadsConfiguration.spaceId, accountName = it)
                 }
                 _videoUploads.update { videoUploadsConfiguration }
             }
@@ -90,7 +90,7 @@ class SettingsVideoUploadsViewModel(
                     SaveVideoUploadsConfigurationUseCase.Params(
                         composeVideoUploadsConfiguration(
                             accountName = name,
-                            spaceId = _space?.id,
+                            spaceId = videoUploadsSpace?.id,
                         )
                     )
                 )
@@ -139,7 +139,7 @@ class SettingsVideoUploadsViewModel(
                     SaveVideoUploadsConfigurationUseCase.Params(
                         composeVideoUploadsConfiguration(
                             uploadPath = it,
-                            spaceId = _space?.id,
+                            spaceId = videoUploadsSpace?.id,
                         )
                     )
                 )
@@ -155,7 +155,7 @@ class SettingsVideoUploadsViewModel(
                     composeVideoUploadsConfiguration(
                         accountName = accountName,
                         uploadPath = null,
-                        spaceId = _space?.id,
+                        spaceId = videoUploadsSpace?.id,
                     )
                 )
             )
@@ -217,7 +217,7 @@ class SettingsVideoUploadsViewModel(
         }
 
     private fun handleSpaceName(spaceName: String?): String? {
-        return if (_space?.isPersonal == true) {
+        return if (videoUploadsSpace?.isPersonal == true) {
             contextProvider.getString(R.string.bottom_nav_personal)
         } else {
             spaceName
@@ -226,7 +226,7 @@ class SettingsVideoUploadsViewModel(
 
     fun getUploadPathString(): String {
 
-        val spaceName = handleSpaceName(_space?.name)
+        val spaceName = handleSpaceName(videoUploadsSpace?.name)
         val uploadPath = videoUploads.value?.uploadPath
         val spaceId = videoUploads.value?.spaceId
 
@@ -251,7 +251,7 @@ class SettingsVideoUploadsViewModel(
                 accountName = accountName
             )
         )
-        _space = result
+        videoUploadsSpace = result
     }
 
     private fun getSpaceById(spaceId: String?, accountName: String) {
@@ -261,6 +261,6 @@ class SettingsVideoUploadsViewModel(
                 spaceId = spaceId
             )
         )
-        _space = result
+        videoUploadsSpace = result
     }
 }
