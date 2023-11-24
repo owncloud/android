@@ -242,18 +242,17 @@ fun Activity.openFileWithIntent(intentForSavedMimeType: Intent, intentForGuessed
 fun AppCompatActivity.sendFile(file: File?) {
     if (file != null) {
         val sendIntent: Intent = makeIntent(file, this)
-        // Show dialog, without the own app
-        val packagesToExclude = arrayOf<String>(this.packageName)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val shareSheetIntent = ShareSheetHelper().getShareSheetIntent(
-                sendIntent,
-                this,
-                R.string.activity_chooser_send_file_title,
-                packagesToExclude
+                intent = sendIntent,
+                context = this,
+                title = R.string.activity_chooser_send_file_title,
+                packagesToExclude = arrayOf()
             )
             this.startActivity(shareSheetIntent)
         } else {
-            val chooserDialog: DialogFragment = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude)
+            val chooserDialog: DialogFragment = ShareLinkToDialog.newInstance(sendIntent, arrayOf())
             chooserDialog.show(this.supportFragmentManager, "CHOOSER_DIALOG")
         }
     } else {
