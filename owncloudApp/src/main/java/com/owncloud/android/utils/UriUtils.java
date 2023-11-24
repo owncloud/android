@@ -38,6 +38,7 @@ import static com.owncloud.android.domain.files.model.MimeTypeConstantsKt.MIME_P
 public class UriUtils {
 
     public static final String URI_CONTENT_SCHEME = "content://";
+    public static final String LOG_EXTENSION = "log";
 
     public static String getDisplayNameForUri(Uri uri, Context context) {
 
@@ -63,15 +64,17 @@ public class UriUtils {
 
                 // Add best possible extension
                 int index = displayName.lastIndexOf(".");
-                if (index == -1 || MimeTypeMap.getSingleton().
-                        getMimeTypeFromExtension(displayName.substring(index + 1)) == null) {
-                    String mimeType = context.getContentResolver().getType(uri);
-                    String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
-                    if (extension != null) {
-                        displayName += "." + extension;
+                String fileExtension = displayName.substring(index + 1);
+                if(!(LOG_EXTENSION.equalsIgnoreCase(fileExtension))) {
+                    if (index == -1 || MimeTypeMap.getSingleton().
+                            getMimeTypeFromExtension(fileExtension) == null) {
+                        String mimeType = context.getContentResolver().getType(uri);
+                        String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
+                        if (extension != null) {
+                                displayName += "." + extension;
+                        }
                     }
                 }
-
             } catch (Exception e) {
                 Timber.e(e, "No way to get a display name for %s", uri.toString());
             }
