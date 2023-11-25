@@ -546,4 +546,5 @@
   <string name="ocis_accounts_warning_checkbox_message">Не показывать снова</string>
   <string name="tab_label_ascii">Текст</string>
   <!--DeepLinks-->
+  <string name="fab_refresh_text">Обновить</string>
 </resources>

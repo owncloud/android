@@ -558,4 +558,5 @@
   <string name="tab_label_ascii">Metin</string>
   <string name="apply_to_all_conflicts">Tüm %1$s çakışma için uygula</string>
   <!--DeepLinks-->
+  <string name="fab_refresh_text">Yenile</string>
 </resources>
