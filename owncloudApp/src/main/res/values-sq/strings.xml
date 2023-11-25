@@ -687,6 +687,6 @@
   <string name="log_file_downloaded_description">Kartela regjistër %1$s është shkarkuar saktë te dosja Shkarkime.</string>
   <!--DeepLinks-->
   <string name="invalid_deep_link_format">Format i pavlefshëm lidhjeje</string>
-  <string name="fab_refresh_text">Lëndë e re</string>
+  <string name="fab_refresh_text">Rifreskoje</string>
   <string name="fab_refresh_sync_in_progress">Njëkohësim tashmë në kryerje e sipër</string>
 </resources>
