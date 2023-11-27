@@ -92,6 +92,8 @@ open class FolderPickerActivity : FileActivity(),
                         // Show the list of spaces
                         initAndShowListOfSpaces()
                     } else {
+                        val accountName = intent.getStringExtra(KEY_ACCOUNT_NAME)
+                        account = AccountUtils.getOwnCloudAccountByName(this, accountName)
                         // Show the personal space
                         initAndShowListOfFilesFragment(spaceId = null)
                     }
