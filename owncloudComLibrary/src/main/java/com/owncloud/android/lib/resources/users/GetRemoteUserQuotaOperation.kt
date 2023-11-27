@@ -59,7 +59,7 @@ class GetRemoteUserQuotaOperation : RemoteOperation<RemoteQuota>() {
                     RemoteOperationResult<RemoteQuota>(ResultCode.OK).apply {
                         data = readData(propfindMethod.root?.properties)
                     }.also {
-                        Timber.i("Get quota completed: ${it.data} and message: ${it.logMessage}")
+                        Timber.i("Get quota completed: ${it.data} and message - HTTP status code: ${propfindMethod.statusCode}")
                     }
                 } else { // synchronization failed
                     RemoteOperationResult<RemoteQuota>(propfindMethod).also {

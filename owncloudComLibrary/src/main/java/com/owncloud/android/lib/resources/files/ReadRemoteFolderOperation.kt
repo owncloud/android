@@ -94,7 +94,7 @@ class ReadRemoteFolderOperation(
                 // Result of the operation
                 return RemoteOperationResult<ArrayList<RemoteFile>>(ResultCode.OK).apply {
                     data = mFolderAndFiles
-                    Timber.i("Synchronized $remotePath with ${mFolderAndFiles.size} files. ${this.logMessage}")
+                    Timber.i("Synchronized $remotePath with ${mFolderAndFiles.size} files. - HTTP status code: $status")
                 }
             } else { // synchronization failed
                 return RemoteOperationResult<ArrayList<RemoteFile>>(propfindMethod).also {
