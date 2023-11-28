@@ -39,6 +39,7 @@ import com.owncloud.android.databinding.LogsListActivityBinding
 import com.owncloud.android.extensions.openFile
 import com.owncloud.android.extensions.sendFile
 import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.presentation.settings.logging.SettingsLogsViewModel
 import com.owncloud.android.providers.LogsProvider
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -50,6 +51,8 @@ import java.io.IOException
 class LogsListActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<LogListViewModel>()
+
+    private val logsViewModel by viewModel<SettingsLogsViewModel>()
 
     private var _binding: LogsListActivityBinding? = null
 
@@ -97,7 +100,7 @@ class LogsListActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (createNewLogFile){
+        if (createNewLogFile && logsViewModel.isLoggingEnabled()){
             LogsProvider(applicationContext).startLogging()
         }
         when (item.itemId) {
