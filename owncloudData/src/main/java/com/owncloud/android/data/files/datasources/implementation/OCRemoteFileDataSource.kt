@@ -208,9 +208,8 @@ class OCRemoteFileDataSource(
     override fun getMetaFile(
         fileId: String,
         accountName: String,
-        isOcis: Boolean
     ): OCMetaFile = executeRemoteOperation {
-            clientManager.getFileService(accountName).getMetaFileInfo(fileId, isOcis)
+            clientManager.getFileService(accountName).getMetaFileInfo(fileId)
         }.toModel()
 
     companion object {

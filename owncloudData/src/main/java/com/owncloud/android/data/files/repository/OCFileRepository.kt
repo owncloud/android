@@ -165,6 +165,33 @@ class OCFileRepository(
     override fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String?): OCFile? =
         localFileDataSource.getFileByRemotePath(remotePath, owner, spaceId)
 
+    override fun getFileFromRemoteId(fileId: String, accountName: String): OCFile? {
+        val metaFile = remoteFileDataSource.getMetaFile(fileId, accountName)
+        val remotePath = metaFile.path!!
+
+        val splitPath = remotePath.split(PATH_SEPARATOR)
+        var containerFolder = listOf<OCFile>()
+        for (i in 0..splitPath.size - 2) {
+            var path = splitPath[0]
+            for (j in 1..i) {
+                path += "$PATH_SEPARATOR${splitPath[j]}"
+            }
+            containerFolder = refreshFolder(path, accountName, metaFile.spaceId)
+        }
+        refreshFolder(remotePath, accountName, metaFile.spaceId)
+        return if (remotePath == ROOT_PATH) {
+            getFileByRemotePath(remotePath, accountName, metaFile.spaceId)
+        } else {
+            containerFolder.find { file ->
+                if (file.isFolder) {
+                    file.remotePath.dropLast(1)
+                } else {
+                    file.remotePath
+                } == remotePath
+            }
+        }
+    }
+
     override fun getPersonalRootFolderForAccount(owner: String): OCFile {
         val personalSpace = localSpacesDataSource.getPersonalSpaceForAccount(owner)
         if (personalSpace == null) {
@@ -528,33 +555,6 @@ class OCFileRepository(
 
     override fun updateFileWithLastUsage(fileId: Long, lastUsage: Long?) {
         localFileDataSource.updateFileWithLastUsage(fileId, lastUsage)
-    }
-
-    override fun getFileFromRemoteId(fileId: String, accountName: String, isOcis: Boolean): OCFile? {
-        val metaFile = remoteFileDataSource.getMetaFile(fileId, accountName, isOcis)
-        val remotePath = metaFile.path!!
-
-        val splitPath = remotePath.split(PATH_SEPARATOR)
-        var containerFolder = listOf<OCFile>()
-        for (i in 0..splitPath.size - 2) {
-            var path = splitPath[0]
-            for (j in 1..i) {
-                path += "$PATH_SEPARATOR${splitPath[j]}"
-            }
-            containerFolder = refreshFolder(path, accountName, metaFile.spaceId)
-        }
-        refreshFolder(remotePath, accountName, metaFile.spaceId)
-        return if (remotePath == ROOT_PATH) {
-            getFileByRemotePath(remotePath, accountName, metaFile.spaceId)
-        } else {
-            containerFolder.find { file ->
-                if (file.isFolder) {
-                    file.remotePath.dropLast(1)
-                } else {
-                    file.remotePath
-                } == remotePath
-            }
-        }
     }
 
     override fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String) {

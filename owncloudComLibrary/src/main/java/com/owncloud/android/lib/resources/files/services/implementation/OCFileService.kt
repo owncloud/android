@@ -30,7 +30,6 @@ import com.owncloud.android.lib.resources.files.CopyRemoteFileOperation
 import com.owncloud.android.lib.resources.files.CreateRemoteFolderOperation
 import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation
 import com.owncloud.android.lib.resources.files.GetRemoteMetaFileOperation
-import com.owncloud.android.lib.resources.files.GetRemotePathForFileIdOperation
 import com.owncloud.android.lib.resources.files.MoveRemoteFileOperation
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation
@@ -144,10 +143,8 @@ class OCFileService(override val client: OwnCloudClient) : FileService {
             spaceWebDavUrl = spaceWebDavUrl,
         ).execute(client)
 
-    override fun getMetaFileInfo(fileId: String, isOcis: Boolean): RemoteOperationResult<RemoteMetaFile> =
-        if (isOcis) {
-            GetRemoteMetaFileOperation(fileId)
-        } else {
-            GetRemotePathForFileIdOperation(fileId)
-        }.execute(client)
+    override fun getMetaFileInfo(
+        fileId: String,
+    ): RemoteOperationResult<RemoteMetaFile> =
+        GetRemoteMetaFileOperation(fileId).execute(client)
 }
