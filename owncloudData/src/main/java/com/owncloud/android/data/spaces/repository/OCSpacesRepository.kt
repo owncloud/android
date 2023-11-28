@@ -24,6 +24,7 @@ package com.owncloud.android.data.spaces.repository
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
 import com.owncloud.android.domain.spaces.SpacesRepository
+import com.owncloud.android.domain.spaces.model.OCSpace
 
 class OCSpacesRepository(
     private val localSpacesDataSource: LocalSpacesDataSource,
@@ -50,6 +51,10 @@ class OCSpacesRepository(
     override fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String) =
         localSpacesDataSource.getSpaceWithSpecialsByIdForAccount(spaceId, accountName)
 
+    override fun getSpaceByIdForAccount(spaceId: String?, accountName: String): OCSpace? =
+        localSpacesDataSource.getSpaceByIdForAccount(spaceId = spaceId, accountName = accountName)
+
     override fun getWebDavUrlForSpace(accountName: String, spaceId: String?): String? =
         localSpacesDataSource.getWebDavUrlForSpace(accountName = accountName, spaceId = spaceId)
+
 }
