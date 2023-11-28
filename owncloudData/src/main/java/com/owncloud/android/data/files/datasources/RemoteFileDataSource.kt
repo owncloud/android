@@ -94,7 +94,6 @@ interface RemoteFileDataSource {
     fun getMetaFile(
         fileId: String,
         accountName: String,
-        isOcis: Boolean
     ): OCMetaFile
 
 }

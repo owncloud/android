@@ -87,7 +87,6 @@ interface FileService : Service {
 
     fun getMetaFileInfo(
         fileId: String,
-        isOcis: Boolean
     ): RemoteOperationResult<RemoteMetaFile>
 
 }
