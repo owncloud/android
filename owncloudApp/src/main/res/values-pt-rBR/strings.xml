@@ -54,6 +54,8 @@
   <string name="prefs_touches_with_other_visible_windows">Toques com outras janelas visíveis</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques quando a visualização é obscurecida por outra janela visível. Ativá-lo para usar aplicativos de filtragem de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">Tem certeza de que deseja ativar esse recurso?</string>
+  <string name="prefs_subsection_picture_uploads">Carregar fotos automaticamente</string>
+  <string name="prefs_subsection_video_uploads">Carregar vídeos automaticamente</string>
   <string name="prefs_camera_picture_upload">Enviar fotos</string>
   <string name="prefs_camera_picture_upload_summary">Carregar automaticamente fotos tiradas pela câmera</string>
   <string name="prefs_camera_picture_upload_path_title">Caminho para fotos enviadas</string>
@@ -73,12 +75,15 @@
   <string name="prefs_log_open_logs_list_view">Arquivos log</string>
   <string name="prefs_log_no_logs_list_view">Pasta de log vazia! </string>
   <string name="prefs_log_title">Habilitar login</string>
+  <string name="prefs_log_summary">Isso é usado para registrar problemas.</string>
   <string name="prefs_log_title_history">História de logins</string>
+  <string name="prefs_log_summary_history">Isso mostra os logs gravados.</string>
   <string name="prefs_log_delete_history_button">Apagar história</string>
   <string name="prefs_help">Ajuda</string>
   <string name="prefs_sync_calendar_contacts">Sincronize seus contatos, calendários e tarefas</string>
   <string name="prefs_sync_calendar_contacts_summary">Instalar DAVx⁵</string>
   <string name="prefs_access_document_provider">Acessar provedor de documentos</string>
+  <string name="prefs_access_document_provider_summary">Aplicativo sugerido para navegar pelos arquivos do seu dispositivo por meio do explorador de arquivos nativo do Android.</string>
   <string name="prefs_recommend">Recomendar a um amigo</string>
   <string name="prefs_feedback">Feedback</string>
   <string name="prefs_imprint">Imprint</string>
@@ -94,7 +99,16 @@
   <string name="pattern_configure_pattern">Digite seu padrão</string>
   <string name="pattern_remove_pattern">Remover seu padrão</string>
   <string name="pattern_incorrect_pattern">Padrão incorreto</string>
+  <string name="pattern_reenter_pattern">Por favor, insira novamente seu padrão.</string>
+  <string name="pattern_not_same_pattern">Os padrões não são os mesmos.</string>
+  <string name="pattern_error_set">Ocorreu um erro ao configurar o bloqueio de padrão.</string>
+  <string name="pattern_error_remove">Ocorreu um erro ao remover o bloqueio de padrão.</string>
+  <string name="pattern_already_set">Os bloqueios de padrão e senha não podem ser ativados ao mesmo tempo. Desative o padrão primeiro.</string>
+  <string name="passcode_already_set">Os bloqueios de padrão e senha não podem ser ativados ao mesmo tempo. Desative a senha primeiro.</string>
+  <string name="pattern_no_longer_required">O padrão não será mais solicitado.</string>
+  <string name="pattern_configure_your_pattern_explanation">O padrão será solicitado sempre que o aplicativo for iniciado.</string>
   <string name="document_provider_locked">Bloqueado</string>
+  <string name="illegal_argument_exception_message">Uma AÇÃO válida é necessária na intenção passada para</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Arquivos</string>
   <string name="bottom_nav_personal">Pessoal</string>
@@ -106,7 +120,9 @@
   <string name="recommend_text">Gostaria de convida-lo a usar %1$s em seu smartphone!\nBaixe aqui: %2$s</string>
   <string name="error_reason">porque</string>
   <string name="auth_failure_snackbar">Falha na autenticação</string>
+  <string name="server_not_supported">A versão do seu servidor é inferior a 10, portanto não é compatível. Atualize seu servidor para uma versão mais recente.</string>
   <string name="auth_failure_snackbar_action">Mudar de conta</string>
+  <string name="auth_oauth_failure">O token de acesso expirou ou tornou-se inválido. Faça login novamente para recuperar o acesso.</string>
   <string name="auth_oauth_failure_snackbar_action">Entrar</string>
   <string name="auth_check_server">Verificar servidor</string>
   <string name="auth_host_url">Endereço do servidor https://...</string>
@@ -117,6 +133,7 @@
   <string name="setup_btn_login">Entrar</string>
   <string name="uploader_btn_upload_text">Enviar</string>
   <string name="uploader_top_message">Escolher pasta para envio</string>
+  <string name="choose_upload_space">Escolha o espaço para upload.</string>
   <string name="uploader_wrn_no_account_title">Nenhuma conta encontrada</string>
   <string name="uploader_wrn_no_account_text">Não existe nenhuma conta %1$s em seu aparelho. Por favor configure uma conta primeiro.</string>
   <string name="uploader_wrn_no_account_setup_btn_text">Instalação</string>
@@ -125,6 +142,7 @@
   <string name="uploader_error_message_received_piece_of_text">%1$s não pode ser enviado um pedaço de texto como um arquivo.</string>
   <string name="uploader_error_message_no_file_to_upload">Os dados recebidos não incluem qualquer arquivo válido.</string>
   <string name="uploader_error_title_file_cannot_be_uploaded">O arquivo não pode sejam enviado</string>
+  <string name="uploader_error_message_read_permission_not_granted">%1$snão tem permissão para ler um arquivo recebido.</string>
   <string name="uploader_error_message_source_file_not_found">Arquivo para envio não foi encontrado em sua localização. Por favor verifique se o arquivo existe.</string>
   <string name="uploader_error_message_source_file_not_copied">Ocorreu um erro ao copiar o arquivo para uma pasta temporária. Por favor, tente enviar novamente.</string>
   <string name="file_list_seconds_ago">segundos atrás</string>
@@ -135,7 +153,10 @@
   <string name="file_list_empty_title_shared_by_links">Nenhum link compartilhado</string>
   <string name="file_list_empty_subtitle_all_files">Carregue algum conteúdo ou sincronize com seus dispositivos!</string>
   <string name="shares_list_empty_title">Sem compartilhamentos</string>
+  <string name="shares_list_empty_subtitle">Você não está colaborando com os recursos de outras pessoas.</string>
   <string name="spaces_list_empty_subtitle">You don\'t have access to any space!</string>
+  <string name="file_list_empty_subtitle_available_offline">Os arquivos e pastas marcados como disponíveis off-line aparecerão aqui.</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Arquivos e pastas que você compartilha por link aparecerão aqui.</string>
   <string name="file_list_loading">Carregando...</string>
   <string name="file_list_no_app_for_file_type">Nenhum aplicativo encontrado para esse tipo de arquivo</string>
   <string name="file_list_no_app_for_perform_action">Nenhum aplicativo encontrado para esta ação</string>
@@ -143,6 +164,7 @@
   <string name="local_file_list_empty_just_folders">Não existem pastas nessa pasta.</string>
   <string name="local_file_list_search_with_no_matches">Nenhum resultado para esta pesquisa</string>
   <string name="upload_list_empty">Nenhum arquivo enviado está disponível.</string>
+  <string name="upload_list_empty_subtitle">Faça upload de algo e ele aparecerá aqui.</string>
   <string name="file_list_folder">pasta</string>
   <string name="file_list_folders">pastas</string>
   <string name="file_list_file">arquivo</string>
@@ -188,9 +210,16 @@
   <string name="uploader_upload_succeeded_ticker">Envio bem sucedido</string>
   <string name="uploader_upload_succeeded_content_single">%1$s enviado</string>
   <string name="uploader_upload_failed_ticker">Falha no envio</string>
+  <string name="uploader_upload_failed_content_single">Carregar de%1$snão pôde ser concluído.</string>
+  <string name="uploader_upload_failed_credentials_error">Falha no upload, você precisa fazer login novamente.</string>
+  <string name="uploader_upload_failed_ssl_certificate_not_trusted">O certificado do servidor não é confiável.</string>
+  <string name="uploader_upload_text_dialog_title">Insira um nome para o novo arquivo.</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">O nome do arquivo não deve estar vazio.</string>
+  <string name="uploader_upload_text_dialog_filename_error_length_max">O nome do arquivo não deve ser maior que%dpersonagens.</string>
   <string name="uploader_upload_camera_upload_files">Enviando arquivos de envio da camera</string>
   <string name="uploader_upload_available_offline_files">Fazendo envio de arquivos off-line disponíveis</string>
   <string name="uploader_upload_requested_from_wifi_files">Enviando arquivos solicitados usando wifi</string>
+  <string name="ssl_certificate_not_trusted">O certificado do servidor não é confiável.</string>
   <string name="uploads_view_title">Envios</string>
   <string name="uploads_view_group_current_uploads">Atual</string>
   <string name="uploads_view_group_failed_uploads">Falha (toque para tentar novamente)</string>
