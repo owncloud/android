@@ -21,7 +21,6 @@
 package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.exceptions.DeepLinkException
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
@@ -30,7 +29,6 @@ import java.net.URI
 
 class ManageDeepLinkUseCase(
     private val fileRepository: FileRepository,
-    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
 ) :
     BaseUseCaseWithResult<OCFile?, ManageDeepLinkUseCase.Params>() {
 
@@ -40,9 +38,8 @@ class ManageDeepLinkUseCase(
         if (pathParts[pathParts.size - 2] != DEEP_LINK_PREVIOUS_PATH_SEGMENT) {
             throw DeepLinkException()
         }
-        val capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(params.accountName))
 
-        return fileRepository.getFileFromRemoteId(pathParts[pathParts.size - 1], params.accountName, capabilities?.isSpacesAllowed() ?: false)
+        return fileRepository.getFileFromRemoteId(pathParts[pathParts.size - 1], params.accountName)
     }
 
     data class Params(val uri: URI, val accountName: String)

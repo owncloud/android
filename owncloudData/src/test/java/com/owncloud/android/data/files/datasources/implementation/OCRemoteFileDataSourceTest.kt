@@ -387,24 +387,19 @@ class OCRemoteFileDataSourceTest {
         every {
             ocFileService.getMetaFileInfo(
                 fileId = OC_FILE.remoteId!!,
-                isOcis = any()
             )
         } returns remoteResult
 
         val result = ocRemoteFileDataSource.getMetaFile(
             OC_FILE.remoteId!!,
             OC_ACCOUNT_NAME,
-            false,
         )
 
         assertEquals(REMOTE_META_FILE.toModel(), result)
 
         verify(exactly = 1) {
             clientManager.getFileService(OC_ACCOUNT_NAME)
-            ocFileService.getMetaFileInfo(
-                OC_FILE.remoteId!!,
-                false,
-            )
+            ocFileService.getMetaFileInfo(OC_FILE.remoteId!!)
         }
     }
 }

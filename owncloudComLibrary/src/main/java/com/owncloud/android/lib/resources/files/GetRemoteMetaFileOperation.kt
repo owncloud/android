@@ -49,7 +49,9 @@ class GetRemoteMetaFileOperation(val fileId: String) : RemoteOperation<RemoteMet
         return try {
 
             val propFindMethod =
-                PropfindMethod(URL(stringUrl), DavConstants.DEPTH_0, arrayOf(OCMetaPathForUser.NAME)).apply {
+                PropfindMethod(URL(stringUrl), DavConstants.DEPTH_0,
+                    arrayOf(OCMetaPathForUser.NAME, OCId.NAME, OCFileId.NAME, OCSpaceId.NAME)
+                ).apply {
                     setReadTimeout(TIMEOUT, TimeUnit.SECONDS)
                     setConnectionTimeout(TIMEOUT, TimeUnit.SECONDS)
                 }
