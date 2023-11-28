@@ -40,13 +40,14 @@ class GetRemotePathForFileIdOperation(val fileId: String) : RemoteOperation<Remo
             val status = client.executeHttpMethod(headMethod)
             if (isSuccess(status)) {
                 RemoteOperationResult<RemoteMetaFile>(RemoteOperationResult.ResultCode.OK).apply {
-                    var fileName = headMethod.response.request.url.queryParameter(SCROLL_TO_QUERY)
-                    fileName = if (fileName != null) {
-                        "${headMethod.response.request.url.queryParameter(DIR_QUERY)}/$fileName"
+                    val fileName = headMethod.response.request.url.queryParameter(SCROLL_TO_QUERY)
+                    val dirName = headMethod.response.request.url.queryParameter(DIR_QUERY)
+                    val remotePath = if (fileName != null) {
+                        "$dirName${if (dirName != "/") "/" else ""}$fileName"
                     } else {
-                        headMethod.response.request.url.queryParameter(DIR_QUERY)
+                        dirName
                     }
-                    data = RemoteMetaFile(metaPathForUser = fileName)
+                    data = RemoteMetaFile(metaPathForUser = remotePath)
                 }
             } else {
                 RemoteOperationResult<RemoteMetaFile>(headMethod)
