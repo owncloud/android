@@ -187,6 +187,7 @@ class FileListAdapter(
             val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail).apply {
                 tag = file.id
             }
+            val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
 
             holder.itemView.findViewById<LinearLayout>(R.id.ListItemLayout)?.apply {
                 contentDescription = "LinearLayout-$name"
@@ -242,11 +243,18 @@ class FileListAdapter(
                     view.binding.Filename.text = file.fileName
                 }
                 ViewType.GRID_IMAGE.ordinal -> {
-                    val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
-                    val marginImage = 4
-                    layoutParams.setMargins(marginImage)
-                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                    val view = holder as GridImageViewHolder
+                    if (thumbnail == null) {
+                        view.binding.Filename.visibility = View.VISIBLE
+                        view.binding.Filename.text = file.fileName
+                    } else {
+                        val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
+                        val marginImage = 4
+                        layoutParams.setMargins(marginImage)
+                        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                    }
+
                 }
             }
 
@@ -285,7 +293,7 @@ class FileListAdapter(
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
                 fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
                 if (file.remoteId != null) {
-                    val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
+
                     if (thumbnail != null) {
                         fileIcon.setImageBitmap(thumbnail)
                     }
