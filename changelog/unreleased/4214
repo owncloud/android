@@ -1,0 +1,6 @@
+Enhancement: Auto upload in oCIS accounts allows upload to any space
+
+Auto uploads of images and videos can now be uploaded to any space and not only the personal one in oCIS accounts.
+
+https://github.com/owncloud/android/issues/4117
+https://github.com/owncloud/android/pull/4214

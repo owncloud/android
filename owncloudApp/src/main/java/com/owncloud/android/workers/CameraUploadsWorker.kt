@@ -150,7 +150,8 @@ class CameraUploadsWorker(
                 createdByWorker = when (syncType) {
                     SyncType.PICTURE_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_PICTURE
                     SyncType.VIDEO_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_VIDEO
-                }
+                },
+                spaceId = folderBackUpConfiguration.spaceId
             )
             enqueueSingleUpload(
                 contentUri = documentFile.uri,
@@ -289,7 +290,8 @@ class CameraUploadsWorker(
         uploadPath: String,
         accountName: String,
         behavior: UploadBehavior,
-        createdByWorker: UploadEnqueuedBy
+        createdByWorker: UploadEnqueuedBy,
+        spaceId: String?,
     ): Long {
         val ocTransfer = OCTransfer(
             localPath = documentFile.uri.toString(),
@@ -299,7 +301,8 @@ class CameraUploadsWorker(
             status = TransferStatus.TRANSFER_QUEUED,
             localBehaviour = behavior,
             forceOverwrite = false,
-            createdBy = createdByWorker
+            createdBy = createdByWorker,
+            spaceId = spaceId,
         )
 
         return transferRepository.saveTransfer(ocTransfer)

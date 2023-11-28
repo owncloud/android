@@ -217,6 +217,22 @@ class OCLocalSpacesDataSourceTest {
     }
 
     @Test
+    fun `getSpaceByIdForAccount returns a OCSpace`() {
+
+        every {
+            spacesDao.getSpaceByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
+        } returns OC_SPACE_PERSONAL.toEntity()
+
+        val result = ocLocalSpacesDataSource.getSpaceByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
+
+        assertEquals(OC_SPACE_PERSONAL, result)
+
+        verify(exactly = 1) {
+            spacesDao.getSpaceByIdForAccount(OC_SPACE_PERSONAL.id, OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test
     fun `getWebDavUrlForSpace returns a String of webDavUrl`() {
 
         every {
