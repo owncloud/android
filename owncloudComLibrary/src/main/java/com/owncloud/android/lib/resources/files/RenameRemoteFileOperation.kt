@@ -90,7 +90,7 @@ class RenameRemoteFileOperation(
                 RemoteOperationResult<Unit>(moveMethod)
             }
 
-            Timber.i("Rename $oldRemotePath to $newRemotePath: ${result.logMessage}")
+            Timber.i("Rename $oldRemotePath to $newRemotePath - HTTP status code: $status")
             client.exhaustResponse(moveMethod.getResponseBodyAsStream())
             return result
         } catch (exception: Exception) {

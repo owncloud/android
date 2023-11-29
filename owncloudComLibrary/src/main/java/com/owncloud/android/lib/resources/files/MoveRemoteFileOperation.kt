@@ -110,7 +110,7 @@ open class MoveRemoteFileOperation(
                 }
             }
 
-            Timber.i("Move $sourceRemotePath to $targetRemotePath: ${result.logMessage}")
+            Timber.i("Move $sourceRemotePath to $targetRemotePath - HTTP status code: $status")
         } catch (e: Exception) {
             result = RemoteOperationResult<Unit>(e)
             Timber.e(e, "Move $sourceRemotePath to $targetRemotePath: ${result.logMessage}")
