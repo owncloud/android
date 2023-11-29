@@ -35,6 +35,7 @@ ownCloud admins and users.
 * Enhancement - "Share to" in oCIS accounts allows upload to any space: [#4088](https://github.com/owncloud/android/issues/4088)
 * Enhancement - Auto-refresh when a file is uploaded: [#4103](https://github.com/owncloud/android/issues/4103)
 * Enhancement - Auto upload in oCIS accounts allows upload to any space: [#4117](https://github.com/owncloud/android/issues/4117)
+* Enhancement - Logging changes: [#4151](https://github.com/owncloud/android/issues/4151)
 * Enhancement - Download log files: [#4155](https://github.com/owncloud/android/issues/4155)
 * Enhancement - Log file sharing allowed within ownCloud Android app: [#4156](https://github.com/owncloud/android/issues/4156)
 * Enhancement - New field "last usage" in database: [#4173](https://github.com/owncloud/android/issues/4173)
@@ -111,6 +112,16 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4117
    https://github.com/owncloud/android/pull/4214
+
+* Enhancement - Logging changes: [#4151](https://github.com/owncloud/android/issues/4151)
+
+   - Updating version of com.github.AppDevNext.Logcat:LogcatCoreLib lib. - Adding
+   the hour, minutes and seconds to the log file. - Printing http logs in one line.
+   - Printing http logs with 1000000 bytes as max size. - Printing http logs in a
+   Json format.
+
+   https://github.com/owncloud/android/issues/4151
+   https://github.com/owncloud/android/pull/4204
 
 * Enhancement - Download log files: [#4155](https://github.com/owncloud/android/issues/4155)
 
