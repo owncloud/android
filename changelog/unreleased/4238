@@ -1,0 +1,6 @@
+Bugfix: Some Null Pointer Exceptions fixed from Google Play
+
+FileDisplayActivity and ReceiverExternalFilesActivity have prevented some functions from crashing when a null value is found.
+
+https://github.com/owncloud/android/issues/4207
+https://github.com/owncloud/android/pull/4238
