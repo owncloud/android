@@ -124,6 +124,10 @@ class LogsListActivity : AppCompatActivity() {
     private fun setData() {
         val items = viewModel.getLogsFiles()
 
+        if (items.isEmpty()) {
+            LogsProvider(applicationContext).stopLogging()
+        }
+
         binding.recyclerViewActivityLogsList.isVisible = items.isNotEmpty()
         binding.logsListEmpty.apply {
             root.isVisible = items.isEmpty()
