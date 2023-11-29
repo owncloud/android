@@ -27,6 +27,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Some Null Pointer Exceptions fixed from Google Play: [#4207](https://github.com/owncloud/android/issues/4207)
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
 * Enhancement - Koin DSL: [#3966](https://github.com/owncloud/android/pull/3966)
 * Enhancement - Unit tests for datasources classes - Part 1 & Fixes: [#4063](https://github.com/owncloud/android/issues/4063)
@@ -45,6 +46,14 @@ ownCloud admins and users.
 * Enhancement - Select user and navigate to file when opening via deep link: [#4194](https://github.com/owncloud/android/issues/4194)
 
 ## Details
+
+* Bugfix - Some Null Pointer Exceptions fixed from Google Play: [#4207](https://github.com/owncloud/android/issues/4207)
+
+   FileDisplayActivity and ReceiverExternalFilesActivity have prevented some
+   functions from crashing when a null value is found.
+
+   https://github.com/owncloud/android/issues/4207
+   https://github.com/owncloud/android/pull/4238
 
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
 
