@@ -100,7 +100,7 @@ class LogsListActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (createNewLogFile && logsViewModel.isLoggingEnabled()){
+        if (createNewLogFile && logsViewModel.isLoggingEnabled()) {
             LogsProvider(applicationContext).startLogging()
         }
         when (item.itemId) {
