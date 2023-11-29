@@ -105,7 +105,7 @@ class CopyRemoteFileOperation(
                     client.exhaustResponse(copyMethod.getResponseBodyAsStream())
                 }
             }
-            Timber.i("Copy $sourceRemotePath to $targetRemotePath: ${result.logMessage}")
+            Timber.i("Copy $sourceRemotePath to $targetRemotePath - HTTP status code: $status")
         } catch (e: Exception) {
             result = RemoteOperationResult(e)
             Timber.e(e, "Copy $sourceRemotePath to $targetRemotePath: ${result.logMessage}")

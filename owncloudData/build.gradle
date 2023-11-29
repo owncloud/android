@@ -59,12 +59,19 @@ dependencies {
     implementation libs.kotlin.stdlib
     implementation libs.kotlinx.coroutines.core
 
+    // Androidx
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.lifecycle.livedata.ktx
+
     // Room
     implementation libs.androidx.room.ktx
     ksp libs.androidx.room.compiler
 
     implementation libs.moshi.kotlin
     ksp libs.moshi.kotlin.codegen
+
+    // Timber
+    implementation libs.timber
 
     // Dependencies for unit tests
     testImplementation project(":owncloudTestUtil")

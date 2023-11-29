@@ -43,6 +43,7 @@ photoView = "2.3.0"
 preference = "1.2.0"
 sonarqube = "4.0.0.2929"
 stetho = "1.6.0"
+timber = "5.0.1"
 
 [libraries]
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidxAnnotation" }
@@ -107,6 +108,7 @@ moshi-kotlin-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-code
 patternlockview = { group = "com.github.aritraroy.PatternLockView", name = "patternlockview", version.ref = "patternlockview" }
 photoview = { group = "com.github.chrisbanes", name = "PhotoView", version.ref = "photoView" }
 stetho = { group = "com.facebook.stetho", name = "stetho", version.ref = "stetho" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }

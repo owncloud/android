@@ -63,7 +63,7 @@ open class RemoveRemoteFileOperation(
             } else {
                 RemoteOperationResult<Unit>(deleteMethod)
             }
-            Timber.i("Remove $remotePath: ${result.logMessage}")
+            Timber.i("Remove $remotePath - HTTP status code: $status")
         } catch (e: Exception) {
             result = RemoteOperationResult<Unit>(e)
             Timber.e(e, "Remove $remotePath: ${result.logMessage}")
