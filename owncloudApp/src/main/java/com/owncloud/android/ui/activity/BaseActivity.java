@@ -212,7 +212,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public FileDataStorageManager getStorageManager() {
-        return mStorageManager;
+        if (mStorageManager == null) {
+            return mStorageManager = new FileDataStorageManager(getAccount());
+        } else {
+            return mStorageManager;
+        }
     }
 
     /**
