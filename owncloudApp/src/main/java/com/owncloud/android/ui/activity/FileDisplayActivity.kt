@@ -1626,8 +1626,8 @@ class FileDisplayActivity : FileActivity(),
 
             FileListOption.SHARED_BY_LINK -> {
                 if (previousFileListOption != newFileListOption || initialState) {
-                    val rootFolderForShares = storageManager?.getRootSharesFolder()
-                    val personalFolder = storageManager?.getRootPersonalFolder()
+                    val rootFolderForShares = storageManager.getRootSharesFolder()
+                    val personalFolder = storageManager.getRootPersonalFolder()
                     if (rootFolderForShares == null && personalFolder?.spaceId != null) {
                         fileListOption = newFileListOption
                         initAndShowListOfShares()
