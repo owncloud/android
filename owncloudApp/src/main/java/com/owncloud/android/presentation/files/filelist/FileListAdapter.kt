@@ -24,6 +24,7 @@ package com.owncloud.android.presentation.files.filelist
 
 import android.accounts.Account
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -187,7 +188,11 @@ class FileListAdapter(
             val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail).apply {
                 tag = file.id
             }
-            val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
+            val thumbnail: Bitmap? = if (file.remoteId != null) {
+                ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
+            } else {
+                null
+            }
 
             holder.itemView.findViewById<LinearLayout>(R.id.ListItemLayout)?.apply {
                 contentDescription = "LinearLayout-$name"
@@ -245,7 +250,6 @@ class FileListAdapter(
                 ViewType.GRID_IMAGE.ordinal -> {
                     val view = holder as GridImageViewHolder
                     if (thumbnail == null) {
-                        view.binding.Filename.visibility = View.VISIBLE
                         view.binding.Filename.text = file.fileName
                     } else {
                         val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
