@@ -35,6 +35,7 @@ ownCloud admins and users.
 * Enhancement - "Share to" in oCIS accounts allows upload to any space: [#4088](https://github.com/owncloud/android/issues/4088)
 * Enhancement - Auto-refresh when a file is uploaded: [#4103](https://github.com/owncloud/android/issues/4103)
 * Enhancement - Auto upload in oCIS accounts allows upload to any space: [#4117](https://github.com/owncloud/android/issues/4117)
+* Enhancement - Thumbnail improvements in grid view: [#4145](https://github.com/owncloud/android/issues/4145)
 * Enhancement - Logging changes: [#4151](https://github.com/owncloud/android/issues/4151)
 * Enhancement - Download log files: [#4155](https://github.com/owncloud/android/issues/4155)
 * Enhancement - Log file sharing allowed within ownCloud Android app: [#4156](https://github.com/owncloud/android/issues/4156)
@@ -113,6 +114,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4117
    https://github.com/owncloud/android/pull/4214
+
+* Enhancement - Thumbnail improvements in grid view: [#4145](https://github.com/owncloud/android/issues/4145)
+
+   Grid view was improved by adding the file name to images when the thumbnail is
+   null.
+
+   https://github.com/owncloud/android/issues/4145
+   https://github.com/owncloud/android/pull/4237
 
 * Enhancement - Logging changes: [#4151](https://github.com/owncloud/android/issues/4151)
 
