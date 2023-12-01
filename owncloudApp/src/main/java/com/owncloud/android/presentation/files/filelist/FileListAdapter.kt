@@ -247,6 +247,7 @@ class FileListAdapter(
                     val view = holder as GridViewHolder
                     view.binding.Filename.text = file.fileName
                 }
+
                 ViewType.GRID_IMAGE.ordinal -> {
                     val view = holder as GridImageViewHolder
                     if (thumbnail == null) {
@@ -296,28 +297,26 @@ class FileListAdapter(
             } else {
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
                 fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
-                if (file.remoteId != null) {
 
-                    if (thumbnail != null) {
-                        fileIcon.setImageBitmap(thumbnail)
-                    }
-                    if (file.needsToUpdateThumbnail) {
-                        // generate new Thumbnail
-                        if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
-                            val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
-                            val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
+                if (thumbnail != null) {
+                    fileIcon.setImageBitmap(thumbnail)
+                }
+                if (file.needsToUpdateThumbnail) {
+                    // generate new Thumbnail
+                    if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
+                        val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
+                        val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
 
-                            // If drawable is not visible, do not update it.
-                            if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
-                                fileIcon.setImageDrawable(asyncDrawable)
-                            }
-                            task.execute(file)
+                        // If drawable is not visible, do not update it.
+                        if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
+                            fileIcon.setImageDrawable(asyncDrawable)
                         }
+                        task.execute(file)
                     }
+                }
 
-                    if (file.mimeType == "image/png") {
-                        fileIcon.setBackgroundColor(ContextCompat.getColor(context, R.color.background_color))
-                    }
+                if (file.mimeType == "image/png") {
+                    fileIcon.setBackgroundColor(ContextCompat.getColor(context, R.color.background_color))
                 }
             }
 
