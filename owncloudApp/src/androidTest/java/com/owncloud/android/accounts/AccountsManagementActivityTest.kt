@@ -126,4 +126,5 @@ class AccountsManagementActivityTest {
         )
         onView(withId(R.id.account_list_recycler_view)).check(matches(hasDescendant(withText("jrodper"))))
     }
+
 }

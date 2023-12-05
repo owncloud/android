@@ -201,6 +201,9 @@ class FileListAdapter(
             holder.itemView.findViewById<ImageView>(R.id.shared_via_users_icon).isVisible =
                 file.sharedWithSharee == true || file.isSharedWithMe
 
+            // Check if the file is in the "Personal" space based on your logic
+            val isInPersonalSpace = file.remotePath.contains("/Personal/")
+
             when (viewType) {
                 ViewType.LIST_ITEM.ordinal -> {
                     val view = holder as ListViewHolder
@@ -210,31 +213,44 @@ class FileListAdapter(
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
                         it.threeDotMenu.isVisible = getCheckedItems().isEmpty()
-                        if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileWithSyncInfo.space == null)) {
-                            it.spacePathLine.path.apply {
-                                text = file.getParentRemotePath()
-                                isVisible = true
-                            }
-                            fileWithSyncInfo.space?.let { space ->
-                                it.spacePathLine.spaceIcon.isVisible = true
-                                it.spacePathLine.spaceName.isVisible = true
-                                if (space.isPersonal) {
-                                    it.spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
-                                    it.spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
-                                } else {
-                                    it.spacePathLine.spaceName.text = space.name
-                                }
-                            }
-                        } else {
+
+                        if (isInPersonalSpace) {
+                            // This code checks if the current file is in the "Personal" space and customizes the UI accordingly.
+                            // If the file is in the "Personal" space, it hides the space path, space icon,
+                            //  and space name to provide a distinct UI representation for "Personal" space files
                             it.spacePathLine.path.isVisible = false
                             it.spacePathLine.spaceIcon.isVisible = false
                             it.spacePathLine.spaceName.isVisible = false
+                        } else {
+
+                            if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileWithSyncInfo.space == null)) {
+                                it.spacePathLine.path.apply {
+                                    text = file.getParentRemotePath()
+                                    isVisible = true
+                                }
+                                fileWithSyncInfo.space?.let { space ->
+                                    it.spacePathLine.spaceIcon.isVisible = true
+                                    it.spacePathLine.spaceName.isVisible = true
+                                    if (space.isPersonal) {
+                                        it.spacePathLine.spaceIcon.setImageResource(R.drawable.ic_folder)
+                                        it.spacePathLine.spaceName.setText(R.string.bottom_nav_personal)
+                                    } else {
+                                        it.spacePathLine.spaceName.text = space.name
+                                    }
+                                }
+                            } else {
+                                it.spacePathLine.path.isVisible = false
+                                it.spacePathLine.spaceIcon.isVisible = false
+                                it.spacePathLine.spaceName.isVisible = false
+                            }
                         }
+
                         it.threeDotMenu.setOnClickListener {
                             listener.onThreeDotButtonClick(fileWithSyncInfo = fileWithSyncInfo)
                         }
                     }
                 }
+
 
                 ViewType.GRID_ITEM.ordinal -> {
                     // Filename
@@ -320,6 +336,7 @@ class FileListAdapter(
             }
         }
     }
+
 
     private fun manageListOfFilesAndGenerateText(list: List<OCFileWithSyncInfo>): String {
         var filesCount = 0
