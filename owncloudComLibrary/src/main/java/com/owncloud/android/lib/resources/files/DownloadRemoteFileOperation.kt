@@ -130,6 +130,9 @@ class DownloadRemoteFileOperation(
                         }
                     }
                 }
+// Inside the downloadFile() function
+
+
 
                 if (transferred == totalToTransfer) {  // Check if the file is completed
                     savedFile = true
@@ -150,12 +153,50 @@ class DownloadRemoteFileOperation(
                     if (etag.isEmpty()) {
                         Timber.e("Could not read eTag from response downloading %s", remotePath)
                     }
+
+                    // Renaming the downloaded file to the expected format
+                    val newFileName = "owncloud.YYYY-MM-DD (1).log"  // Replace with the desired format
+
+                    val renamedFile = File(targetFile.parent, newFileName)
+
+                    if (targetFile.renameTo(renamedFile)) {
+                        Timber.i("File renamed successfully to $newFileName")
+                    } else {
+                        Timber.e("Failed to rename file to $newFileName")
+                        // Handle renaming failure if needed
+                    }
                 } else {
                     Timber.e("Content-Length not equal to transferred bytes.")
                     Timber.d("totalToTransfer = $totalToTransfer, transferred = $transferred")
                     client.exhaustResponse(getMethod.getResponseBodyAsStream())
                     // TODO some kind of error control!
                 }
+
+//                if (transferred == totalToTransfer) {  // Check if the file is completed
+//                    savedFile = true
+//                    val modificationTime =
+//                        getMethod.getResponseHeaders()?.get("Last-Modified")
+//                            ?: getMethod.getResponseHeader("last-modified")
+//
+//                    if (modificationTime != null) {
+//                        val modificationDate = WebdavUtils.parseResponseDate(modificationTime)
+//                        modificationTimestamp = modificationDate?.time ?: 0
+//                    } else {
+//                        Timber.e("Could not read modification time from response downloading %s", remotePath)
+//                    }
+//                    etag = WebdavUtils.getEtagFromResponse(getMethod)
+//
+//                    // Get rid of extra quotas
+//                    etag = etag.replace("\"", "")
+//                    if (etag.isEmpty()) {
+//                        Timber.e("Could not read eTag from response downloading %s", remotePath)
+//                    }
+//                } else {
+//                    Timber.e("Content-Length not equal to transferred bytes.")
+//                    Timber.d("totalToTransfer = $totalToTransfer, transferred = $transferred")
+//                    client.exhaustResponse(getMethod.getResponseBodyAsStream())
+//                    // TODO some kind of error control!
+//                }
 
             } else if (status != HttpConstants.HTTP_FORBIDDEN && status != HttpConstants.HTTP_SERVICE_UNAVAILABLE) {
                 client.exhaustResponse(getMethod.getResponseBodyAsStream())
