@@ -726,6 +726,11 @@
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
 
+    <string name="release_notes_4_1_1_title_1">Thumbnails correctly shown for every user</string>
+    <string name="release_notes_4_1_1_subtitle_1">Users with an @ in their username will now be able to see thumbnails correctly</string>
+    <string name="release_notes_4_1_1_title_2">Minor bugfixes</string>
+    <string name="release_notes_4_1_1_subtitle_2">Some bugs were fixed to improve experience in the app</string>
+
     <string name="release_notes_4_2_0_title_1">Opening files from outside the app using links</string>
     <string name="release_notes_4_2_0_subtitle_1">A link that points to the app will open the app and then, resolve the file to preview it directly</string>
     <string name="release_notes_4_2_0_title_2">"Share to" in oCIS accounts allows to upload to any space</string>
