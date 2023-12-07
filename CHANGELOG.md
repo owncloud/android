@@ -41,6 +41,7 @@ ownCloud admins and users.
 * Enhancement - New field "last usage" in database: [#4173](https://github.com/owncloud/android/issues/4173)
 * Enhancement - Use invoke operator to execute usecases: [#4179](https://github.com/owncloud/android/pull/4179)
 * Enhancement - Deep link open app correctly: [#4181](https://github.com/owncloud/android/issues/4181)
+* Enhancement - Select user and navigate to file when opening via deep link: [#4194](https://github.com/owncloud/android/issues/4194)
 
 ## Details
 
@@ -160,6 +161,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4181
    https://github.com/owncloud/android/pull/4191
+
+* Enhancement - Select user and navigate to file when opening via deep link: [#4194](https://github.com/owncloud/android/issues/4194)
+
+   Select the correct user owner of the deep link file, managing possible errors
+   and navigating to the correct file.
+
+   https://github.com/owncloud/android/issues/4194
+   https://github.com/owncloud/android/pull/4212
 
 # Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
 

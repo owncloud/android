@@ -60,7 +60,6 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.MainFileListFragmentBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.appregistry.model.AppRegistryMimeType
-import com.owncloud.android.domain.exceptions.DeepLinkException
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.TooEarlyException
 import com.owncloud.android.domain.files.model.FileListOption
@@ -621,31 +620,9 @@ class MainFileListFragment : Fragment(),
             }
         }
 
-        observeDeepLink()
-
         /* TransfersViewModel observables */
         observeTransfers()
 
-    }
-
-    private fun observeDeepLink() {
-        collectLatestLifecycleFlow(fileOperationsViewModel.deepLinkFlow) {
-            val uiResult = it?.peekContent()
-            if (uiResult is UIResult.Error) {
-                showMessageInSnackbar(
-                    getString(
-                        if (uiResult.error is DeepLinkException) {
-                            R.string.invalid_deep_link_format
-                        } else {
-                            R.string.default_error_msg
-                        }
-                    )
-                )
-            } else if (uiResult is UIResult.Success) {
-                //TODO "Remove this message when end with managing the deep links"
-                showMessageInSnackbar("Deep link managed correctly")
-            }
-        }
     }
 
     private fun observeTransfers() {

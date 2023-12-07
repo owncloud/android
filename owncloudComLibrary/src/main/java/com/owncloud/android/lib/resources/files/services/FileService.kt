@@ -19,13 +19,14 @@
  *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
- *
  */
+
 package com.owncloud.android.lib.resources.files.services
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.resources.Service
 import com.owncloud.android.lib.resources.files.RemoteFile
+import com.owncloud.android.lib.resources.files.RemoteMetaFile
 
 interface FileService : Service {
     fun checkPathExistence(
@@ -83,4 +84,9 @@ interface FileService : Service {
         isFolder: Boolean,
         spaceWebDavUrl: String? = null,
     ): RemoteOperationResult<Unit>
+
+    fun getMetaFileInfo(
+        fileId: String,
+    ): RemoteOperationResult<RemoteMetaFile>
+
 }
