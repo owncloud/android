@@ -726,10 +726,18 @@
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
 
-    <string name="release_notes_4_1_1_title_1">Thumbnails correctly shown for every user</string>
-    <string name="release_notes_4_1_1_subtitle_1">Users with an @ in their username will now be able to see thumbnails correctly</string>
-    <string name="release_notes_4_1_1_title_2">Minor bugfixes</string>
-    <string name="release_notes_4_1_1_subtitle_2">Some bugs were fixed to improve experience in the app</string>
+    <string name="release_notes_4_2_0_title_1">"Apply to all" when many name conflicts arise</string>
+    <string name="release_notes_4_2_0_subtitle_1">A new dialog has been created where a checkbox has been added to be able to select all the folders or files that have conflicts</string>
+    <string name="release_notes_4_2_0_title_2">"Share to" in oCIS accounts allows upload to any space</string>
+    <string name="release_notes_4_2_0_subtitle_2">With this improvement, shared stuff from other apps can be uploaded to any space and not only the personal one in oCIS accounts</string>
+    <string name="release_notes_4_2_0_title_3">Deep link open app correctly</string>
+    <string name="release_notes_4_2_0_subtitle_3">Opening the app with the deep link correctly and managing if user logged or not.</string>
+    <string name="release_notes_4_2_0_title_4">Auto-refresh when a file is uploaded</string>
+    <string name="release_notes_4_2_0_subtitle_4">The file list will be now refreshed automatically when an upload whose destination folder is the one we are in is completed successfully</string>
+    <string name="release_notes_4_2_0_title_5">Download log files</string>
+    <string name="release_notes_4_2_0_subtitle_5">A new icon to download a log file to the Downloads folder of the device has been added to the log list screen</string>
+    <string name="release_notes_4_2_0_title_6">Select user and navigate to file when opening via deep link</string>
+    <string name="release_notes_4_2_0_subtitle_6">Select the correct user owner of the deep link file, managing possible errors and navigating to the correct file</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
