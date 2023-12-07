@@ -136,6 +136,15 @@ class FileOperationsViewModel(
         }
     }
 
+    fun handleDeepLink(uri: Uri, accountName: String) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            showLoading = true,
+            flow = _deepLinkFlow,
+            useCase = manageDeepLinkUseCase,
+            useCaseParams = ManageDeepLinkUseCase.Params(URI(uri.toString()), accountName),
+        )
+    }
 
     private fun createFolderOperation(fileOperation: FileOperation.CreateFolder) {
         runOperation(
@@ -308,14 +317,5 @@ class FileOperationsViewModel(
                 }
             }
         }
-    }
-
-    fun handleDeepLink(uri: Uri) {
-        runUseCaseWithResult(
-            coroutineDispatcher = coroutinesDispatcherProvider.io,
-            flow = _deepLinkFlow,
-            useCase = manageDeepLinkUseCase,
-            useCaseParams = ManageDeepLinkUseCase.Params(URI(uri.toString())),
-        )
     }
 }

@@ -56,6 +56,8 @@ import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.exceptions.DeepLinkException
+import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.model.FileListOption
@@ -64,6 +66,7 @@ import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.checkPasscodeEnforced
+import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
@@ -79,6 +82,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.SyncProfileOperation
+import com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
@@ -1664,6 +1668,8 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun startListeningToOperations() {
+        onDeepLinkManaged()
+
         fileOperationsViewModel.copyFileLiveData.observe(this, Event.EventObserver {
             onCopyFileOperationFinish(it)
         })
@@ -1768,8 +1774,71 @@ class FileDisplayActivity : FileActivity(),
 
     private fun handleDeepLink() {
         intent.data?.let { uri ->
-            fileOperationsViewModel.handleDeepLink(uri)
-            intent.data = null
+            fileOperationsViewModel.handleDeepLink(uri, getCurrentOwnCloudAccount(baseContext).name)
+        }
+    }
+
+    private fun onDeepLinkManaged() {
+        collectLatestLifecycleFlow(fileOperationsViewModel.deepLinkFlow) {
+            it?.getContentIfNotHandled()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> {
+                        showLoadingDialog(R.string.deep_link_loading)
+                    }
+                    is UIResult.Success -> {
+                        intent?.data = null
+                        dismissLoadingDialog()
+                        uiResult.data?.let { it1 -> manageItem(it1) }
+                    }
+                    is UIResult.Error -> {
+                        dismissLoadingDialog()
+                        if (uiResult.error is FileNotFoundException) {
+                            showMessageInSnackbar(message = getString(R.string.deep_link_user_no_access))
+                            changeUser()
+                        } else {
+                            showMessageInSnackbar(message = getString(
+                                if (uiResult.error is DeepLinkException) {
+                                    R.string.invalid_deep_link_format
+                                } else {
+                                    R.string.default_error_msg
+                                }
+                            ))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun changeUser() {
+        val currentUser = getCurrentOwnCloudAccount(this)
+        val usersChecked = intent?.getStringArrayListExtra(KEY_DEEP_LINK_ACCOUNTS_CHECKED) ?: arrayListOf()
+        usersChecked.add(currentUser.name)
+        com.owncloud.android.presentation.authentication.AccountUtils.getAccounts(this).forEach {
+            if (!usersChecked.contains(it.name)) {
+                MainApp.initDependencyInjection()
+                val i = Intent(
+                    this,
+                    FileDisplayActivity::class.java
+                )
+                i.data = intent?.data
+                i.putExtra(EXTRA_ACCOUNT, it)
+                i.putExtra(KEY_DEEP_LINK_ACCOUNTS_CHECKED, usersChecked)
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(i)
+            }
+        }
+    }
+
+    private fun manageItem(file: OCFile) {
+        setFile(file)
+        account = com.owncloud.android.presentation.authentication.AccountUtils.getOwnCloudAccountByName(this, file.owner)
+
+        if (file.isFolder) {
+            refreshListOfFilesFragment()
+        } else {
+            initFragmentsWithFile()
+            onFileClicked(file)
         }
     }
 
@@ -1783,6 +1852,7 @@ class FileDisplayActivity : FileActivity(),
         private const val KEY_WAITING_TO_SEND = "WAITING_TO_SEND"
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
+        const val KEY_DEEP_LINK_ACCOUNTS_CHECKED = "DEEP_LINK_ACCOUNTS_CHECKED"
 
         private const val CUSTOM_DIALOG_TAG = "CUSTOM_DIALOG"
 

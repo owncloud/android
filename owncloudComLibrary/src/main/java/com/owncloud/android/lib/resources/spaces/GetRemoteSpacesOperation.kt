@@ -51,7 +51,7 @@ class GetRemoteSpacesOperation : RemoteOperation<List<SpaceResponse>>() {
                 onResultUnsuccessful(getMethod, response, status)
             }
         } catch (e: Exception) {
-            Timber.e(e, "Exception while getting remote shares")
+            Timber.e(e, "Exception while getting remote spaces")
             RemoteOperationResult(e)
         }
     }
