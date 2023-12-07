@@ -24,6 +24,7 @@ package com.owncloud.android.presentation.files.filelist
 
 import android.accounts.Account
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -187,6 +188,11 @@ class FileListAdapter(
             val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail).apply {
                 tag = file.id
             }
+            val thumbnail: Bitmap? = if (file.remoteId != null) {
+                ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
+            } else {
+                null
+            }
 
             holder.itemView.findViewById<LinearLayout>(R.id.ListItemLayout)?.apply {
                 contentDescription = "LinearLayout-$name"
@@ -241,12 +247,19 @@ class FileListAdapter(
                     val view = holder as GridViewHolder
                     view.binding.Filename.text = file.fileName
                 }
+
                 ViewType.GRID_IMAGE.ordinal -> {
-                    val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
-                    val marginImage = 4
-                    layoutParams.setMargins(marginImage)
-                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                    val view = holder as GridImageViewHolder
+                    if (thumbnail == null) {
+                        view.binding.Filename.text = file.fileName
+                    } else {
+                        val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
+                        val marginImage = 4
+                        layoutParams.setMargins(marginImage)
+                        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+                        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                    }
+
                 }
             }
 
@@ -284,28 +297,26 @@ class FileListAdapter(
             } else {
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
                 fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
-                if (file.remoteId != null) {
-                    val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
-                    if (thumbnail != null) {
-                        fileIcon.setImageBitmap(thumbnail)
-                    }
-                    if (file.needsToUpdateThumbnail) {
-                        // generate new Thumbnail
-                        if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
-                            val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
-                            val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
 
-                            // If drawable is not visible, do not update it.
-                            if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
-                                fileIcon.setImageDrawable(asyncDrawable)
-                            }
-                            task.execute(file)
+                if (thumbnail != null) {
+                    fileIcon.setImageBitmap(thumbnail)
+                }
+                if (file.needsToUpdateThumbnail) {
+                    // generate new Thumbnail
+                    if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
+                        val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
+                        val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
+
+                        // If drawable is not visible, do not update it.
+                        if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
+                            fileIcon.setImageDrawable(asyncDrawable)
                         }
+                        task.execute(file)
                     }
+                }
 
-                    if (file.mimeType == "image/png") {
-                        fileIcon.setBackgroundColor(ContextCompat.getColor(context, R.color.background_color))
-                    }
+                if (file.mimeType == "image/png") {
+                    fileIcon.setBackgroundColor(ContextCompat.getColor(context, R.color.background_color))
                 }
             }
 
