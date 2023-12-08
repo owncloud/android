@@ -552,4 +552,5 @@
   <string name="ocis_accounts_warning_checkbox_message">No mostrar de nuevo</string>
   <string name="tab_label_ascii">Texto</string>
   <!--DeepLinks-->
+  <string name="fab_refresh_text">Actualizar</string>
 </resources>

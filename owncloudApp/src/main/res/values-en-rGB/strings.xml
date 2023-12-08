@@ -689,4 +689,5 @@
   <string name="log_file_downloaded_description">The log file %1$s has been downloaded correctly in Downloads folder.</string>
   <!--DeepLinks-->
   <string name="invalid_deep_link_format">Invalid link format</string>
+  <string name="fab_refresh_text">Refresh</string>
 </resources>
