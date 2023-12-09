@@ -689,6 +689,8 @@
   <string name="log_file_downloaded_description">Logifail %1$s laeti korrektselt Allalaadimiste kausta.</string>
   <!--DeepLinks-->
   <string name="invalid_deep_link_format">Vigane lingi formaat</string>
+  <string name="deep_link_user_no_access">Kasutajal ei ole failile ligipääsuks õiguseid</string>
+  <string name="deep_link_loading">Faili avamine lingist</string>
   <string name="fab_refresh_text">Värskenda</string>
   <string name="fab_refresh_sync_in_progress">Sünkroniseerimine juba käib</string>
 </resources>
