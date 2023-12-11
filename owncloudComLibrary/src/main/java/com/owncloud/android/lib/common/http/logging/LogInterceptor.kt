@@ -84,9 +84,6 @@ class LogInterceptor : Interceptor {
 
     private fun logHeaders(headers: Headers): Map<String, String> {
         val auxHeaders = headers.toMap().toMutableMap()
-        if (auxHeaders.contains(AUTHORIZATION_HEADER)) {
-            auxHeaders[AUTHORIZATION_HEADER] = "[redacted]"
-        }
         return auxHeaders
     }
 
