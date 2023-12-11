@@ -726,23 +726,20 @@
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
 
-    <string name="release_notes_4_1_1_title_1">Thumbnails correctly shown for every user</string>
-    <string name="release_notes_4_1_1_subtitle_1">Users with an @ in their username will now be able to see thumbnails correctly</string>
-    <string name="release_notes_4_1_1_title_2">Minor bugfixes</string>
-    <string name="release_notes_4_1_1_subtitle_2">Some bugs were fixed to improve experience in the app</string>
-
     <string name="release_notes_4_2_0_title_1">Opening files from outside the app using links</string>
     <string name="release_notes_4_2_0_subtitle_1">A link that points to the app will open the app and then, resolve the file to preview it directly</string>
     <string name="release_notes_4_2_0_title_2">"Share to" in oCIS accounts allows to upload to any space</string>
-    <string name="release_notes_4_2_0_subtitle_2">Shared files from other apps can be uploaded to any space and not only the personal one in oCIS accounts</string>
-    <string name="release_notes_4_2_0_title_3">New dialog to fix all conflicts at once</string>
-    <string name="release_notes_4_2_0_subtitle_3">A new dialog has been created where a checkbox has been added to be able to select all the folders or files that have conflicts</string>
+    <string name="release_notes_4_2_0_subtitle_2">Shared files from other apps can be uploaded to any space and not only the Personal one in oCIS accounts</string>
+    <string name="release_notes_4_2_0_title_3">"Apply to all" for conflicts</string>
+    <string name="release_notes_4_2_0_subtitle_3">New dialog to fix all conflicts at once</string>
     <string name="release_notes_4_2_0_title_4">Auto-refresh when a file is uploaded</string>
-    <string name="release_notes_4_2_0_subtitle_4">The file list will be now refreshed automatically when an upload whose destination folder is the one we are in is completed successfully</string>
+    <string name="release_notes_4_2_0_subtitle_4">The file list will be now refreshed automatically while uploading to the target folder</string>
     <string name="release_notes_4_2_0_title_5">Download log files</string>
     <string name="release_notes_4_2_0_subtitle_5">New option to download a log file to the Downloads folder of the device</string>
     <string name="release_notes_4_2_0_title_6">Minor bugfixes</string>
     <string name="release_notes_4_2_0_subtitle_6">Some bugs were fixed to improve experience in the app</string>
+    <string name="release_notes_4_2_0_title_7">Auto uploads to spaces</string>
+    <string name="release_notes_4_2_0_subtitle_7">Photos and videos from camera now saved inside spaces, not only in Personal</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
