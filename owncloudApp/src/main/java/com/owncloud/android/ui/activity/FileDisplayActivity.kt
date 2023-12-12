@@ -470,7 +470,7 @@ class FileDisplayActivity : FileActivity(),
     private fun setSecondFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.right_fragment_container, fragment, TAG_SECOND_FRAGMENT)
-        transaction.commit()
+        transaction.commitNow()
         updateFragmentsVisibility(true)
     }
 
@@ -498,7 +498,7 @@ class FileDisplayActivity : FileActivity(),
         if (second != null) {
             val tr = supportFragmentManager.beginTransaction()
             tr.remove(second)
-            tr.commit()
+            tr.commitNow()
         }
         updateFragmentsVisibility(false)
         updateToolbar(null)
@@ -915,6 +915,9 @@ class FileDisplayActivity : FileActivity(),
 
     private fun updateToolbar(chosenFileFromParam: OCFile?, space: OCSpace? = null) {
         val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
+
+        // If we come from a preview activity (image or video), not updating toolbar when initializing this activity or it will show the root folder one
+        if (intent.action == ACTION_DETAILS && chosenFile?.remotePath == OCFile.ROOT_PATH && secondFragment is FileDetailsFragment) return
 
         if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))) {
             val title =
