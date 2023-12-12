@@ -667,10 +667,6 @@
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
   <string name="release_notes_icon">Symbol für Veröffentlichungsnotizen</string>
-  <string name="release_notes_4_1_1_title_1">Vorschaubilder werden für alle Benutzer korrekt angezeigt.</string>
-  <string name="release_notes_4_1_1_subtitle_1">Nutzer, in deren Benutzername ein @ vorkomment, können jetzt ebenfalls Vorschaubilder sehen.</string>
-  <string name="release_notes_4_1_1_title_2">Geringfügige Fehler behoben</string>
-  <string name="release_notes_4_1_1_subtitle_2">Einige Fehler wurden behoben, um die Benutzung der App zu verbessern.</string>
   <string name="release_notes_4_2_0_subtitle_6">Einige Fehler wurden behoben, um die Benutzung der App zu verbessern.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>

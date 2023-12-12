@@ -665,10 +665,6 @@
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
-  <string name="release_notes_4_1_1_title_1">Miniatura të shfaqura si duhet për çdo përdorues</string>
-  <string name="release_notes_4_1_1_subtitle_1">Përdoruesit me një @ te emri i tyre i përdoruesit tani do të jenë në gjendje të shohin saktë miniaturat</string>
-  <string name="release_notes_4_1_1_title_2">Ndreqje të metash të vockla</string>
-  <string name="release_notes_4_1_1_subtitle_2">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
   <string name="release_notes_4_2_0_title_6">Ndreqje të metash të vockla</string>
   <string name="release_notes_4_2_0_subtitle_6">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
   <!--Open in web-->
