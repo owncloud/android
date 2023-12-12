@@ -671,6 +671,7 @@
   <string name="release_notes_4_1_1_subtitle_1">Kasutajad, kelle nimedes sisaldub \"@\", näevad nüüd pisipilte korrektselt</string>
   <string name="release_notes_4_1_1_title_2">Väiksemad veaparandused</string>
   <string name="release_notes_4_1_1_subtitle_2">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
+  <string name="release_notes_4_2_0_subtitle_6">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
