@@ -33,7 +33,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.core.view.setMargins
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -250,16 +249,25 @@ class FileListAdapter(
 
                 ViewType.GRID_IMAGE.ordinal -> {
                     val view = holder as GridImageViewHolder
+                    val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
+
                     if (thumbnail == null) {
                         view.binding.Filename.text = file.fileName
+                        //Reset layout params values default
+                        manageGridLayoutParams(
+                            layoutParams = layoutParams,
+                            marginVertical = 0,
+                            height = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_height),
+                            width = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_width),
+                        )
                     } else {
-                        val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
-                        val marginImage = 4
-                        layoutParams.setMargins(marginImage)
-                        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-                        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                        manageGridLayoutParams(
+                            layoutParams = layoutParams,
+                            marginVertical = context.resources.getDimensionPixelSize(R.dimen.item_file_image_grid_margin),
+                            height = ViewGroup.LayoutParams.MATCH_PARENT,
+                            width = ViewGroup.LayoutParams.MATCH_PARENT,
+                        )
                     }
-
                 }
             }
 
@@ -330,6 +338,13 @@ class FileListAdapter(
                 view.binding.footerText.text = file.text
             }
         }
+    }
+
+    private fun manageGridLayoutParams(layoutParams: ViewGroup.MarginLayoutParams, marginVertical: Int, height: Int, width: Int) {
+        val marginHorizontal = context.resources.getDimensionPixelSize(R.dimen.item_file_image_grid_margin)
+        layoutParams.setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical)
+        layoutParams.height = height
+        layoutParams.width = width
     }
 
     private fun manageListOfFilesAndGenerateText(list: List<OCFileWithSyncInfo>): String {
