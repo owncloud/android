@@ -140,4 +140,7 @@
     <!-- Number of max uploads to refresh automatically -->
     <integer name="max_uploads_to_refresh">200</integer>
 
+    <!-- Redact authorization header info in logs -->
+    <bool name="redact_auth_header_logs">true</bool>
+
 </resources>
