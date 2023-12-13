@@ -613,7 +613,9 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         mSyncInProgress = true;
 
-        mReceiveExternalFilesViewModel.refreshFolderUseCase(folder);
+        if (mReceiveExternalFilesViewModel != null) {
+            mReceiveExternalFilesViewModel.refreshFolderUseCase(folder);
+        }
     }
 
     private List<OCFile> sortFileList(List<OCFile> files) {
