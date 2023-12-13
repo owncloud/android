@@ -668,6 +668,7 @@
   <string name="release_notes_4_2_0_title_1">Hapje kartelash nga jashtë aplikacionit, duke përdorur lidhje</string>
   <string name="release_notes_4_2_0_subtitle_1">Një lidhje që shpie te aplikacioni do ta hapë atë dhe, mandej, ftillojë kartelën për t’i bërë paraparje drejtpërsëdrejti</string>
   <string name="release_notes_4_2_0_title_2">“Ndajeni me të tjerë në” në llogari oCIS lejon të ngarkohet në çfarëdo hapësire</string>
+  <string name="release_notes_4_2_0_subtitle_3">Dialog i ri për të ndrequr njëherësh krejt përplasjet</string>
   <string name="release_notes_4_2_0_title_4">Rifreskim i vetvetishëm, kur ngarkohet një kartelë</string>
   <string name="release_notes_4_2_0_title_5">Shkarkoni kartela regjistër</string>
   <string name="release_notes_4_2_0_subtitle_5">Mundësi e re për të shkarkuar një kartelë regjistër te dosja Shkarkime e pajisjes</string>
