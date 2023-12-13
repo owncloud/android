@@ -102,6 +102,8 @@ class OCFileLoggingTree(
                 else -> "$priority"
             }
 
+            Log.d(tag, "$priorityText $message")
+
             val textLine = "$priorityText $logTimeStamp$tag$message\n"
             CoroutineScope(Dispatchers.IO).launch {
                 runCatching {
