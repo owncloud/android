@@ -85,7 +85,10 @@ class LogInterceptor : Interceptor {
     private fun logHeaders(headers: Headers): Map<String, String> {
         val auxHeaders = headers.toMap().toMutableMap()
         if (auxHeaders.contains(AUTHORIZATION_HEADER)) {
-            auxHeaders[AUTHORIZATION_HEADER] = "[redacted]"
+            val authHeaderList = auxHeaders[AUTHORIZATION_HEADER]!!.split(" ")
+            val authType = authHeaderList[0]
+            val authInfo = if (redactAuthHeader) "[redacted]" else authHeaderList[1]
+            auxHeaders[AUTHORIZATION_HEADER] = "$authType $authInfo"
         }
         return auxHeaders
     }
@@ -181,6 +184,7 @@ class LogInterceptor : Interceptor {
 
     companion object {
         var httpLogsEnabled: Boolean = false
+        var redactAuthHeader: Boolean = true
         private const val LIMIT_BODY_LOG: Long = 1000000
         private const val BINARY_OMITTED = "<-- Body end for response -- Binary -- Omitted:"
         private const val BYTES = "bytes -->"
