@@ -22,6 +22,7 @@ package com.owncloud.android.providers
 import android.content.Context
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.MainApp
+import com.owncloud.android.R
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.data.providers.ScopedStorageProvider
 import com.owncloud.android.lib.common.http.logging.LogInterceptor
@@ -52,9 +53,11 @@ class LogsProvider(
         LoggingHelper.stopLogging()
     }
 
-    fun initHttpLogs() {
+    private fun initHttpLogs() {
         val httpLogsEnabled: Boolean = sharedPreferencesProvider.getBoolean(PREFERENCE_LOG_HTTP, false)
         LogInterceptor.httpLogsEnabled = httpLogsEnabled
+        val redactAuthHeader = context.resources.getBoolean(R.bool.redact_auth_header_logs)
+        LogInterceptor.redactAuthHeader = redactAuthHeader
     }
 
     fun shouldLogHttpRequests(logsEnabled: Boolean) {
