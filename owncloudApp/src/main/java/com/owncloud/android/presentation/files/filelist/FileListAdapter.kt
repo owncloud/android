@@ -253,7 +253,7 @@ class FileListAdapter(
 
                     if (thumbnail == null) {
                         view.binding.Filename.text = file.fileName
-                        //Reset layout params values default
+                        // Reset layout params values default
                         manageGridLayoutParams(
                             layoutParams = layoutParams,
                             marginVertical = 0,
