@@ -52,13 +52,34 @@ class OCFileLoggingTree(
                 if (!it.mkdirs())
                     Log.e(LOG_TAG, "couldn't create ${it.absoluteFile}")
             }
-            val fileNameTimeStamp = SimpleDateFormat(LOG_FILE_TIME_FORMAT, Locale.getDefault()).format(Date())
+
+            var fileNameTimeStamp = SimpleDateFormat(LOG_FILE_TIME_FORMAT, Locale.getDefault()).format(Date())
+
+            if (it.list().isNotEmpty()) {
+                val lastDayDateLogFile = getDayFromLogFileName(it.list().last())
+                val newDayDateLogFile = getDayFromLogFileName(fileNameTimeStamp)
+                if (lastDayDateLogFile == newDayDateLogFile) {
+                    fileNameTimeStamp = getDateFromLogFileName(it.list().last())
+                }
+            }
+
             file = if (context != null) {
                 File(it, "${context.packageName}.$fileNameTimeStamp.log")
             } else {
                 File(it, "$filename.$fileNameTimeStamp.log")
             }
         }
+    }
+
+    private fun getDayFromLogFileName(filePath: String): String? {
+        val regex = Regex("""(\d{4}-\d{2}-)(\d{2})_\d{2}.\d{2}.\d{2}""")
+        val matchResult = regex.find(filePath)
+        return matchResult?.groupValues?.getOrNull(2)
+    }
+    private fun getDateFromLogFileName(filePath: String): String? {
+        val regex = Regex("""(\d{4}-\d{2}-\d{2}_\d{2}.\d{2}.\d{2})""")
+        val matchResult = regex.find(filePath)
+        return matchResult?.groupValues?.getOrNull(1)
     }
 
     override fun createStackElementTag(element: StackTraceElement): String {
