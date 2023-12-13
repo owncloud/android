@@ -670,6 +670,7 @@
   <string name="release_notes_4_2_0_title_1">Väljaspool rakendust olevate failide avamine linkide abil</string>
   <string name="release_notes_4_2_0_subtitle_1">Rakendusele viitav link avab rakenduse ja seejärel näitab faili eelvaadet.</string>
   <string name="release_notes_4_2_0_title_2">\"Jaga\" oCIS kontodel võimaldab üleslaadimist mistahes ruumi.</string>
+  <string name="release_notes_4_2_0_subtitle_3">Uus dialoog kõigi konfliktide korraga parandamiseks</string>
   <string name="release_notes_4_2_0_title_4">Automaatne värskendus faili üleslaadimisel</string>
   <string name="release_notes_4_2_0_title_5">Logifailide allalaadimine</string>
   <string name="release_notes_4_2_0_subtitle_5">Uus võimalus logifaili allalaadimiseks seadme allalaadimiste kausta</string>
