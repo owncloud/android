@@ -235,7 +235,8 @@ class MainApp : Application() {
         enabledLogging = preferenceProvider.getBoolean(PREFERENCE_ENABLE_LOGGING, false)
 
         if (enabledLogging) {
-            LogsProvider(applicationContext).startLogging()
+            val mdmProvider = MdmProvider(applicationContext)
+            LogsProvider(applicationContext, mdmProvider).startLogging()
         }
     }
 

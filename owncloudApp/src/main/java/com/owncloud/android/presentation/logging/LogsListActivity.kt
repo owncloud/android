@@ -41,6 +41,7 @@ import com.owncloud.android.extensions.sendFile
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.presentation.settings.logging.SettingsLogsViewModel
 import com.owncloud.android.providers.LogsProvider
+import com.owncloud.android.providers.MdmProvider
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
@@ -101,7 +102,8 @@ class LogsListActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (createNewLogFile && logsViewModel.isLoggingEnabled()) {
-            LogsProvider(applicationContext).startLogging()
+            val mdmProvider = MdmProvider(applicationContext)
+            LogsProvider(applicationContext, mdmProvider).startLogging()
         }
         when (item.itemId) {
             android.R.id.home -> finish()
