@@ -665,6 +665,12 @@
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
+  <string name="release_notes_4_2_0_title_1">Hapje kartelash nga jashtë aplikacionit, duke përdorur lidhje</string>
+  <string name="release_notes_4_2_0_subtitle_1">Një lidhje që shpie te aplikacioni do ta hapë atë dhe, mandej, ftillojë kartelën për t’i bërë paraparje drejtpërsëdrejti</string>
+  <string name="release_notes_4_2_0_title_2">“Ndajeni me të tjerë në” në llogari oCIS lejon të ngarkohet në çfarëdo hapësire</string>
+  <string name="release_notes_4_2_0_title_4">Rifreskim i vetvetishëm, kur ngarkohet një kartelë</string>
+  <string name="release_notes_4_2_0_title_5">Shkarkoni kartela regjistër</string>
+  <string name="release_notes_4_2_0_subtitle_5">Mundësi e re për të shkarkuar një kartelë regjistër te dosja Shkarkime e pajisjes</string>
   <string name="release_notes_4_2_0_title_6">Ndreqje të metash të vockla</string>
   <string name="release_notes_4_2_0_subtitle_6">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
   <!--Open in web-->
