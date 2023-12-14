@@ -102,6 +102,7 @@ class OCRemoteOAuthDataSource(
                     tokenEndpoint = this.tokenEndpoint,
                     authorizationCode = this.authorizationCode,
                     grantType = this.grantType,
+                    scope = this.scope,
                     redirectUri = this.redirectUri,
                     clientAuth = this.clientAuth,
                     codeVerifier = this.codeVerifier
@@ -110,6 +111,7 @@ class OCRemoteOAuthDataSource(
                 TokenRequestParams.RefreshToken(
                     tokenEndpoint = this.tokenEndpoint,
                     grantType = this.grantType,
+                    scope = this.scope,
                     clientAuth = this.clientAuth,
                     refreshToken = this.refreshToken
                 )
