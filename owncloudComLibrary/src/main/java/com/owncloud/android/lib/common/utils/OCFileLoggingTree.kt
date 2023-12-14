@@ -53,7 +53,7 @@ class OCFileLoggingTree(
                     Log.e(LOG_TAG, "couldn't create ${it.absoluteFile}")
             }
 
-            var fileNameTimeStamp = SimpleDateFormat(LOG_FILE_TIME_FORMAT, Locale.getDefault()).format(Date())
+            var fileNameTimestamp = SimpleDateFormat(LOG_FILE_TIME_FORMAT, Locale.getDefault()).format(Date())
 
             it.list()?.let { logFiles ->
                 if (logFiles.isNotEmpty()) {
@@ -62,21 +62,21 @@ class OCFileLoggingTree(
 
                     val dateFormat = SimpleDateFormat(LOG_FILE_TIME_FORMAT)
                     val lastDayLogFileDate = dateFormat.parse(lastDateLogFileString)
-                    val newDayLogFileDate = dateFormat.parse(fileNameTimeStamp)
+                    val newDayLogFileDate = dateFormat.parse(fileNameTimestamp)
 
                     val lastDayDateLogFileString = SimpleDateFormat(LOG_FILE_DAY_FORMAT, Locale.getDefault()).format(lastDayLogFileDate!!)
                     val newDayDateLogFileString = SimpleDateFormat(LOG_FILE_DAY_FORMAT, Locale.getDefault()).format(newDayLogFileDate!!)
 
                     if (lastDayDateLogFileString == newDayDateLogFileString) {
-                        fileNameTimeStamp = lastDateLogFileString
+                        fileNameTimestamp = lastDateLogFileString
                     }
                 }
             }
 
             file = if (context != null) {
-                File(it, "${context.packageName}.$fileNameTimeStamp.log")
+                File(it, "${context.packageName}.$fileNameTimestamp.log")
             } else {
-                File(it, "$filename.$fileNameTimeStamp.log")
+                File(it, "$filename.$fileNameTimestamp.log")
             }
         }
     }
