@@ -670,12 +670,17 @@
   <string name="release_notes_4_2_0_title_1">Väljaspool rakendust olevate failide avamine linkide abil</string>
   <string name="release_notes_4_2_0_subtitle_1">Rakendusele viitav link avab rakenduse ja seejärel näitab faili eelvaadet.</string>
   <string name="release_notes_4_2_0_title_2">\"Jaga\" oCIS kontodel võimaldab üleslaadimist mistahes ruumi.</string>
+  <string name="release_notes_4_2_0_subtitle_2">Jagatud failie teistest rakendustest saab üles laadida igasse ruumi, mitte ainult isikliku oCIS kontoga seotusse</string>
+  <string name="release_notes_4_2_0_title_3">Valik \"Rakenda kõigile\" konfliktide puhul</string>
   <string name="release_notes_4_2_0_subtitle_3">Uus dialoog kõigi konfliktide korraga parandamiseks</string>
   <string name="release_notes_4_2_0_title_4">Automaatne värskendus faili üleslaadimisel</string>
+  <string name="release_notes_4_2_0_subtitle_4">Faililoend värskendatakse nüüd sihtkausta üleslaadimisel automaatselt</string>
   <string name="release_notes_4_2_0_title_5">Logifailide allalaadimine</string>
   <string name="release_notes_4_2_0_subtitle_5">Uus võimalus logifaili allalaadimiseks seadme allalaadimiste kausta</string>
   <string name="release_notes_4_2_0_title_6">Väiksemad veaparandused</string>
   <string name="release_notes_4_2_0_subtitle_6">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
+  <string name="release_notes_4_2_0_title_7">Automaatne üleslaadimine ruumidesse</string>
+  <string name="release_notes_4_2_0_subtitle_7">Fotod ja videod kaamerast salvestatakse nüüd ruumidesse, mitte ainult isiklikku kausta</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
