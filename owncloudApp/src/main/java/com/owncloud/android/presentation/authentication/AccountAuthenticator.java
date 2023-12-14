@@ -44,8 +44,6 @@ import com.owncloud.android.domain.authentication.oauth.model.TokenRequest;
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.presentation.authentication.AuthenticatorConstants;
-import com.owncloud.android.presentation.authentication.LoginActivity;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
@@ -370,10 +368,13 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         String clientAuth = OAuthUtils.Companion.getClientAuth(clientSecret, clientId);
 
+        String scope = mContext.getResources().getString(R.string.oauth2_openid_scope);
+
         TokenRequest oauthTokenRequest = new TokenRequest.RefreshToken(
                 baseUrl,
                 tokenEndpoint,
                 clientAuth,
+                scope,
                 refreshToken
         );
 

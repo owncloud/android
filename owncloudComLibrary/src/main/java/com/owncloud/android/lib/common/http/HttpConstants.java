@@ -58,6 +58,7 @@ public class HttpConstants {
     public static final String OAUTH_HEADER_REDIRECT_URI = "redirect_uri";
     public static final String OAUTH_HEADER_REFRESH_TOKEN = "refresh_token";
     public static final String OAUTH_HEADER_CODE_VERIFIER = "code_verifier";
+    public static final String OAUTH_HEADER_SCOPE = "scope";
 
     /***********************************************************************************************************
      ************************************************ CONTENT TYPES ********************************************
