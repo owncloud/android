@@ -55,11 +55,21 @@ class OCFileLoggingTree(
 
             var fileNameTimeStamp = SimpleDateFormat(LOG_FILE_TIME_FORMAT, Locale.getDefault()).format(Date())
 
-            if (it.list().isNotEmpty()) {
-                val lastDayDateLogFile = getDayFromLogFileName(it.list().last())
-                val newDayDateLogFile = getDayFromLogFileName(fileNameTimeStamp)
-                if (lastDayDateLogFile == newDayDateLogFile) {
-                    fileNameTimeStamp = getDateFromLogFileName(it.list().last())
+            it.list()?.let { logFiles ->
+                if (logFiles.isNotEmpty()) {
+
+                    val lastDateLogFileString = logFiles.last().substringAfterLast("owncloud.").substringBeforeLast(".log")
+
+                    val dateFormat = SimpleDateFormat(LOG_FILE_TIME_FORMAT)
+                    val lastDayLogFileDate = dateFormat.parse(lastDateLogFileString)
+                    val newDayLogFileDate = dateFormat.parse(fileNameTimeStamp)
+
+                    val lastDayDateLogFileString = SimpleDateFormat(LOG_FILE_DAY_FORMAT, Locale.getDefault()).format(lastDayLogFileDate!!)
+                    val newDayDateLogFileString = SimpleDateFormat(LOG_FILE_DAY_FORMAT, Locale.getDefault()).format(newDayLogFileDate!!)
+
+                    if (lastDayDateLogFileString == newDayDateLogFileString) {
+                        fileNameTimeStamp = lastDateLogFileString
+                    }
                 }
             }
 
@@ -69,17 +79,6 @@ class OCFileLoggingTree(
                 File(it, "$filename.$fileNameTimeStamp.log")
             }
         }
-    }
-
-    private fun getDayFromLogFileName(filePath: String): String? {
-        val regex = Regex("""(\d{4}-\d{2}-)(\d{2})_\d{2}.\d{2}.\d{2}""")
-        val matchResult = regex.find(filePath)
-        return matchResult?.groupValues?.getOrNull(2)
-    }
-    private fun getDateFromLogFileName(filePath: String): String? {
-        val regex = Regex("""(\d{4}-\d{2}-\d{2}_\d{2}.\d{2}.\d{2})""")
-        val matchResult = regex.find(filePath)
-        return matchResult?.groupValues?.getOrNull(1)
     }
 
     override fun createStackElementTag(element: StackTraceElement): String {
@@ -151,6 +150,7 @@ class OCFileLoggingTree(
 
         private val LOG_TAG = OCFileLoggingTree::class.java.simpleName
         private const val LOG_FILE_TIME_FORMAT = "yyyy-MM-dd_HH.mm.ss"
+        private const val LOG_FILE_DAY_FORMAT = "dd"
         private const val LOG_MESSAGE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS"
 
     }
