@@ -37,4 +37,10 @@
         android:title="@string/device_protection_configuration_title"
         android:description="@string/device_protection_configuration_description"
         android:defaultValue="false" />
+    <restriction
+        android:key="redact_auth_header_logs_configuration"
+        android:restrictionType="bool"
+        android:title="@string/redact_auth_header_logs_configuration_title"
+        android:description="@string/redact_auth_header_logs_configuration_description"
+        android:defaultValue="true" />
 </restrictions>
