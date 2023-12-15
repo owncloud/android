@@ -1,0 +1,6 @@
+Bugfix: Add "scope" parameter to /token endpoint HTTP requests
+
+The "scope" parameter is now always sent in the body of HTTP requests to the /token endpoint,
+which is optional in v1 but required in v2.
+
+https://github.com/owncloud/android/pull/4260
