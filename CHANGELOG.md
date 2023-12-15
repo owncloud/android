@@ -44,6 +44,7 @@ ownCloud admins and users.
 * Enhancement - Use invoke operator to execute usecases: [#4179](https://github.com/owncloud/android/pull/4179)
 * Enhancement - Deep link open app correctly: [#4181](https://github.com/owncloud/android/issues/4181)
 * Enhancement - Select user and navigate to file when opening via deep link: [#4194](https://github.com/owncloud/android/issues/4194)
+* Enhancement - New branding/MDM parameter to show sensitive auth info in logs: [#4249](https://github.com/owncloud/android/issues/4249)
 
 ## Details
 
@@ -187,6 +188,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4194
    https://github.com/owncloud/android/pull/4212
+
+* Enhancement - New branding/MDM parameter to show sensitive auth info in logs: [#4249](https://github.com/owncloud/android/issues/4249)
+
+   A new branding and MDM parameter has been created to decide if the sensitive
+   information put in the authorization header in HTTP requests is shown or not in
+   the logs.
+
+   https://github.com/owncloud/android/issues/4249
+   https://github.com/owncloud/android/pull/4257
 
 # Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
 

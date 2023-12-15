@@ -1,0 +1,7 @@
+Enhancement: New branding/MDM parameter to show sensitive auth info in logs
+
+A new branding and MDM parameter has been created to decide if the sensitive information put in the
+authorization header in HTTP requests is shown or not in the logs.
+
+https://github.com/owncloud/android/issues/4249
+https://github.com/owncloud/android/pull/4257

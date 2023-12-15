@@ -38,7 +38,7 @@ val commonModule = module {
     single { AvatarManager() }
     single { CoroutinesDispatcherProvider() }
     factory<ContextProvider> { OCContextProvider(androidContext()) }
-    single { LogsProvider(get()) }
+    single { LogsProvider(get(), get()) }
     single { MdmProvider(androidContext()) }
     single { WorkManagerProvider(androidContext()) }
     single { AccountProvider(androidContext()) }
