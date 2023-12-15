@@ -158,6 +158,7 @@ class FileDisplayActivity : FileActivity(),
     private val secondFragment: FileFragment?
         get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
 
+    private var secondFragmentFocus:Boolean? = false
     private var selectAllMenuItem: MenuItem? = null
     private var mainMenu: Menu? = null
 
@@ -263,6 +264,18 @@ class FileDisplayActivity : FileActivity(),
         checkNotificationPermission()
         Timber.v("onCreate() end")
     }
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        when(intent?.action){
+            ACTION_DETAILS ->{
+                //show file details
+                intent?.extras?.getParcelable<OCFile>(EXTRA_FILE)?.let {
+                    file = it
+                    initFragmentsWithFile()
+                }
+            }
+        }
+    }
 
     private fun checkNotificationPermission() {
         // Ask for permission only in case it's api >= 33 and notifications are not granted.
@@ -366,6 +379,7 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun initAndShowListOfFiles(fileListOption: FileListOption = FileListOption.ALL_FILES) {
+
         val mainListOfFiles = MainFileListFragment.newInstance(
             initialFolderToDisplay = file,
             fileListOption = fileListOption,
@@ -408,6 +422,7 @@ class FileDisplayActivity : FileActivity(),
             secondFragment?.let {
                 setSecondFragment(it)
                 updateToolbar(it.file)
+                secondFragmentFocus = true;
             } ?: cleanSecondFragment()
 
         } else {
@@ -499,9 +514,11 @@ class FileDisplayActivity : FileActivity(),
             val tr = supportFragmentManager.beginTransaction()
             tr.remove(second)
             tr.commit()
+            secondFragmentFocus=false
         }
         updateFragmentsVisibility(false)
         updateToolbar(null)
+
     }
 
     private fun refreshListOfFilesFragment() {
@@ -915,7 +932,7 @@ class FileDisplayActivity : FileActivity(),
 
     private fun updateToolbar(chosenFileFromParam: OCFile?, space: OCSpace? = null) {
         val chosenFile = chosenFileFromParam ?: file // If no file is passed, current file decides
-
+        if ( secondFragmentFocus == true) return //skip up toolbar updates till MainListFragment comes bacl
         if (chosenFile == null || (chosenFile.remotePath == OCFile.ROOT_PATH && (space == null || !space.isProject))) {
             val title =
                 when (fileListOption) {

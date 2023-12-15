@@ -248,9 +248,11 @@ class PreviewImageActivity : FileActivity(),
     override fun showDetails(file: OCFile) {
         val showDetailsIntent = Intent(this, FileDisplayActivity::class.java).apply {
             action = FileDisplayActivity.ACTION_DETAILS
+            flags =  Intent.FLAG_ACTIVITY_SINGLE_TOP
             putExtra(EXTRA_FILE, file)
             putExtra(EXTRA_ACCOUNT, AccountUtils.getCurrentOwnCloudAccount(this@PreviewImageActivity))
         }
+        finish()
         startActivity(showDetailsIntent)
     }
 
