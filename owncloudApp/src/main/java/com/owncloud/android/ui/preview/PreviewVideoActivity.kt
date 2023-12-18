@@ -44,6 +44,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.common.AudioAttributes
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
@@ -189,7 +190,10 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
     private fun initializePlayer() {
         val videoTrackSelectionFactory = AdaptiveTrackSelection.Factory()
         trackSelector = DefaultTrackSelector(this, videoTrackSelectionFactory)
-        player = ExoPlayer.Builder(this).setTrackSelector(trackSelector)
+        player = ExoPlayer.Builder(this)
+            .setAudioAttributes(AudioAttributes.DEFAULT, true)
+            .setHandleAudioBecomingNoisy(true)
+            .setTrackSelector(trackSelector)
             .setLoadControl(DefaultLoadControl.Builder().build()).build()
 
         player?.addListener(this)
