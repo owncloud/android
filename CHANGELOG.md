@@ -27,6 +27,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Some Null Pointer Exceptions in MainFileListViewModel: [#4065](https://github.com/owncloud/android/issues/4065)
 * Bugfix - Some Null Pointer Exceptions fixed from Google Play: [#4207](https://github.com/owncloud/android/issues/4207)
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
 * Enhancement - Koin DSL: [#3966](https://github.com/owncloud/android/pull/3966)
@@ -47,6 +48,14 @@ ownCloud admins and users.
 * Enhancement - New branding/MDM parameter to show sensitive auth info in logs: [#4249](https://github.com/owncloud/android/issues/4249)
 
 ## Details
+
+* Bugfix - Some Null Pointer Exceptions in MainFileListViewModel: [#4065](https://github.com/owncloud/android/issues/4065)
+
+   The MainFileListViewModel has prevented the fileById variable from crashing when
+   a null value is found.
+
+   https://github.com/owncloud/android/issues/4065
+   https://github.com/owncloud/android/pull/4241
 
 * Bugfix - Some Null Pointer Exceptions fixed from Google Play: [#4207](https://github.com/owncloud/android/issues/4207)
 
