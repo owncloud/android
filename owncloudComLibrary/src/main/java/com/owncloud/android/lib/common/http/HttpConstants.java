@@ -67,6 +67,7 @@ public class HttpConstants {
     public static final String CONTENT_TYPE_XML = "application/xml";
     public static final String CONTENT_TYPE_JSON = "application/json";
     public static final String CONTENT_TYPE_WWW_FORM = "application/x-www-form-urlencoded";
+    public static final String CONTENT_TYPE_JRD_JSON = "application/jrd+json";
 
     /***********************************************************************************************************
      ************************************************ ARGUMENTS NAMES ********************************************
