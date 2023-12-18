@@ -1,0 +1,7 @@
+Bugfix: Bugs related to Details view
+
+When coming to Details view from video or image previews, now the top bar is shown correctly
+and navigation has the correct stack, so the back button has the expected flow.
+
+https://github.com/owncloud/android/issues/4188
+https://github.com/owncloud/android/pull/4265
