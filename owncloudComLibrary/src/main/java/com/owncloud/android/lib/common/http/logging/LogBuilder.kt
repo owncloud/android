@@ -31,7 +31,7 @@ import okhttp3.MediaType
 /**
  * Check whether a media type is loggable.
  *
- * @return true if its type is text, xml, json, or x-www-form-urlencoded.
+ * @return true if its type is text, xml, json, jrd+json or x-www-form-urlencoded.
  */
 fun MediaType?.isLoggable(): Boolean =
     this?.let { mediaType ->
