@@ -310,6 +310,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
             putExtra(FileActivity.EXTRA_FILE, file)
             putExtra(FileActivity.EXTRA_ACCOUNT, AccountUtils.getCurrentOwnCloudAccount(this@PreviewVideoActivity))
         }
+        finishAffinity()
         startActivity(showDetailsIntent)
     }
 
