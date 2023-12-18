@@ -262,6 +262,7 @@ class PreviewImageActivity : FileActivity(),
             putExtra(EXTRA_FILE, file)
             putExtra(EXTRA_ACCOUNT, AccountUtils.getCurrentOwnCloudAccount(this@PreviewImageActivity))
         }
+        finishAffinity()
         startActivity(showDetailsIntent)
     }
 
