@@ -591,12 +591,15 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             else -> "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
         }
 
+        val scope = resources.getString(R.string.oauth2_openid_scope)
+
         val requestToken = TokenRequest.AccessToken(
             baseUrl = serverBaseUrl,
             tokenEndpoint = tokenEndPoint,
             authorizationCode = authorizationCode,
             redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
             clientAuth = clientAuth,
+            scope = scope,
             codeVerifier = authenticationViewModel.codeVerifier
         )
 
