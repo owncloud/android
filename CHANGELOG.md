@@ -29,6 +29,7 @@ ownCloud admins and users.
 
 * Bugfix - Some Null Pointer Exceptions in MainFileListViewModel: [#4065](https://github.com/owncloud/android/issues/4065)
 * Bugfix - Some Null Pointer Exceptions fixed from Google Play: [#4207](https://github.com/owncloud/android/issues/4207)
+* Bugfix - Add "scope" parameter to /token endpoint HTTP requests: [#4260](https://github.com/owncloud/android/pull/4260)
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
 * Enhancement - Koin DSL: [#3966](https://github.com/owncloud/android/pull/3966)
 * Enhancement - Unit tests for datasources classes - Part 1 & Fixes: [#4063](https://github.com/owncloud/android/issues/4063)
@@ -64,6 +65,13 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4207
    https://github.com/owncloud/android/pull/4238
+
+* Bugfix - Add "scope" parameter to /token endpoint HTTP requests: [#4260](https://github.com/owncloud/android/pull/4260)
+
+   The "scope" parameter is now always sent in the body of HTTP requests to the
+   /token endpoint, which is optional in v1 but required in v2.
+
+   https://github.com/owncloud/android/pull/4260
 
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
 
