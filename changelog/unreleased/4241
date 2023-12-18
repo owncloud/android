@@ -1,0 +1,6 @@
+Bugfix: Some Null Pointer Exceptions in MainFileListViewModel
+
+The MainFileListViewModel has prevented the fileById variable from crashing when a null value is found.
+
+https://github.com/owncloud/android/issues/4065
+https://github.com/owncloud/android/pull/4241
