@@ -52,11 +52,31 @@ class OCFileLoggingTree(
                 if (!it.mkdirs())
                     Log.e(LOG_TAG, "couldn't create ${it.absoluteFile}")
             }
-            val fileNameTimeStamp = SimpleDateFormat(LOG_FILE_TIME_FORMAT, Locale.getDefault()).format(Date())
+
+            var fileNameTimestamp = SimpleDateFormat(LOG_FILE_TIME_FORMAT, Locale.getDefault()).format(Date())
+
+            it.list()?.let { logFiles ->
+                if (logFiles.isNotEmpty()) {
+
+                    val lastDateLogFileString = logFiles.last().substringAfterLast("owncloud.").substringBeforeLast(".log")
+
+                    val dateFormat = SimpleDateFormat(LOG_FILE_TIME_FORMAT)
+                    val lastDayLogFileDate = dateFormat.parse(lastDateLogFileString)
+                    val newDayLogFileDate = dateFormat.parse(fileNameTimestamp)
+
+                    val lastDayDateLogFileString = SimpleDateFormat(LOG_FILE_DAY_FORMAT, Locale.getDefault()).format(lastDayLogFileDate!!)
+                    val newDayDateLogFileString = SimpleDateFormat(LOG_FILE_DAY_FORMAT, Locale.getDefault()).format(newDayLogFileDate!!)
+
+                    if (lastDayDateLogFileString == newDayDateLogFileString) {
+                        fileNameTimestamp = lastDateLogFileString
+                    }
+                }
+            }
+
             file = if (context != null) {
-                File(it, "${context.packageName}.$fileNameTimeStamp.log")
+                File(it, "${context.packageName}.$fileNameTimestamp.log")
             } else {
-                File(it, "$filename.$fileNameTimeStamp.log")
+                File(it, "$filename.$fileNameTimestamp.log")
             }
         }
     }
@@ -130,6 +150,7 @@ class OCFileLoggingTree(
 
         private val LOG_TAG = OCFileLoggingTree::class.java.simpleName
         private const val LOG_FILE_TIME_FORMAT = "yyyy-MM-dd_HH.mm.ss"
+        private const val LOG_FILE_DAY_FORMAT = "dd"
         private const val LOG_MESSAGE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS"
 
     }
