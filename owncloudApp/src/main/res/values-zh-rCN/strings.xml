@@ -72,7 +72,7 @@
   <string name="prefs_camera_video_upload_on_wifi">仅通过 WIFI 上传图片。</string>
   <string name="prefs_camera_video_upload_on_charging">仅在充电时上传视频</string>
   <string name="prefs_subsection_advanced">高级</string>
-  <string name="prefs_subsection_notifications">管理通知</string>
+  <string name="prefs_subsection_notifications">通知权限管理</string>
   <string name="prefs_show_hidden_files">显示隐藏文件</string>
   <string name="prefs_log_open_logs_list_view">日志文件</string>
   <string name="prefs_log_no_logs_list_view">空白日志文件夹</string>
@@ -85,6 +85,7 @@
   <string name="prefs_help">帮助</string>
   <string name="prefs_sync_calendar_contacts">同步联系人、日历和任务</string>
   <string name="prefs_sync_calendar_contacts_summary">安装 DAVx⁵</string>
+  <string name="prefs_access_document_provider_summary">建议通过系统自带文件资源管理器浏览设备上的文件</string>
   <string name="prefs_recommend">推荐给朋友</string>
   <string name="prefs_feedback">反馈</string>
   <string name="prefs_imprint">版本说明</string>
