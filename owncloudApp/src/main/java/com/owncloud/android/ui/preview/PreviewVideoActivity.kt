@@ -61,7 +61,9 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.filterMenuOptions
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
+import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.files.operations.FileOperation.SetFilesAsAvailableOffline
 import com.owncloud.android.presentation.files.operations.FileOperation.UnsetFilesAsAvailableOffline
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
@@ -180,9 +182,18 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
     }
 
     private fun startObservingFileOperations() {
-        fileOperationsViewModel.removeFileLiveData.observe(this, Event.EventObserver {
-            if (it.isSuccess) {
-                finish()
+        fileOperationsViewModel.removeFileLiveData.observe(this, Event.EventObserver { uiResult ->
+            when (uiResult) {
+                is UIResult.Error -> {
+                    dismissLoadingDialog()
+                    showErrorInSnackbar(R.string.remove_fail_msg, uiResult.getThrowableOrNull())
+                }
+
+                is UIResult.Loading -> showLoadingDialog(R.string.wait_a_moment)
+                is UIResult.Success -> {
+                    dismissLoadingDialog()
+                    finish()
+                }
             }
         })
     }
