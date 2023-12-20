@@ -947,10 +947,11 @@ class FileDisplayActivity : FileActivity(),
     ) {
         when (uiResult) {
             is UIResult.Loading -> {
-                // Not blocking the UI
+                showLoadingDialog(R.string.wait_a_moment)
             }
 
             is UIResult.Success -> {
+                dismissLoadingDialog()
                 val listOfFilesRemoved = uiResult.data ?: return
                 val lastRemovedFile = listOfFilesRemoved.last()
                 val singleRemoval = listOfFilesRemoved.size == 1
@@ -974,6 +975,7 @@ class FileDisplayActivity : FileActivity(),
             }
 
             is UIResult.Error -> {
+                dismissLoadingDialog()
                 showErrorInSnackbar(R.string.remove_fail_msg, uiResult.getThrowableOrNull())
 
                 if (uiResult.getThrowableOrNull() is SSLRecoverablePeerUnverifiedException) {
