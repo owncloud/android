@@ -197,7 +197,7 @@ public class RemoteOperationResult<T>
             String bodyResponse = httpMethod.getResponseBodyAsString();
 
             // do not get for other HTTP codes!; could not be available
-            if (bodyResponse != null && bodyResponse.length() > 0) {
+            if (bodyResponse.length() > 0) {
                 InputStream is = new ByteArrayInputStream(bodyResponse.getBytes());
                 InvalidCharacterExceptionParser xmlParser = new InvalidCharacterExceptionParser();
                 try {

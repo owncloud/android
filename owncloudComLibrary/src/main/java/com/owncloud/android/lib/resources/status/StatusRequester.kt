@@ -96,7 +96,7 @@ internal class StatusRequester {
         if (!requestResult.status.isSuccess())
             return RemoteOperationResult(requestResult.getMethod)
 
-        val respJSON = JSONObject(requestResult.getMethod.getResponseBodyAsString() ?: "")
+        val respJSON = JSONObject(requestResult.getMethod.getResponseBodyAsString())
         if (!respJSON.getBoolean(NODE_INSTALLED))
             return RemoteOperationResult(RemoteOperationResult.ResultCode.INSTANCE_NOT_CONFIGURED)
 
