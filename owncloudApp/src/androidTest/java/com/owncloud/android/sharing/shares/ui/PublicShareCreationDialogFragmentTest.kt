@@ -226,7 +226,7 @@ class PublicShareCreationDialogFragmentTest {
         publicShareCreationStatus.postValue(
             Event(
                 UIResult.Error(
-                    error = Throwable("It was not possible to share this file or folder.")
+                    error = Throwable("It was not possible to share this file or folder")
                 )
             )
         )
