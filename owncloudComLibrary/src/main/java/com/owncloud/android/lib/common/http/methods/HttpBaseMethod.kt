@@ -135,7 +135,7 @@ abstract class HttpBaseMethod constructor(url: URL) {
     }
 
     // Body
-    fun getResponseBodyAsString(): String? = response.body?.string()
+    fun getResponseBodyAsString(): String = response.peekBody(Long.MAX_VALUE).string()
 
     open fun getResponseBodyAsStream(): InputStream? {
         return response.body?.byteStream()
