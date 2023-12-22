@@ -22,6 +22,7 @@
  */
 package com.owncloud.android.lib.common.http.logging
 
+import com.owncloud.android.lib.common.http.HttpConstants.CONTENT_TYPE_JRD_JSON
 import com.owncloud.android.lib.common.http.HttpConstants.CONTENT_TYPE_JSON
 import com.owncloud.android.lib.common.http.HttpConstants.CONTENT_TYPE_WWW_FORM
 import com.owncloud.android.lib.common.http.HttpConstants.CONTENT_TYPE_XML
@@ -30,7 +31,7 @@ import okhttp3.MediaType
 /**
  * Check whether a media type is loggable.
  *
- * @return true if its type is text, xml, json, or x-www-form-urlencoded.
+ * @return true if its type is text, xml, json, jrd+json or x-www-form-urlencoded.
  */
 fun MediaType?.isLoggable(): Boolean =
     this?.let { mediaType ->
@@ -38,5 +39,6 @@ fun MediaType?.isLoggable(): Boolean =
         (mediaType.type == "text" ||
                 mediaTypeString.contains(CONTENT_TYPE_XML) ||
                 mediaTypeString.contains(CONTENT_TYPE_JSON) ||
-                mediaTypeString.contains(CONTENT_TYPE_WWW_FORM))
+                mediaTypeString.contains(CONTENT_TYPE_WWW_FORM) ||
+                mediaTypeString.contains(CONTENT_TYPE_JRD_JSON))
     } ?: false

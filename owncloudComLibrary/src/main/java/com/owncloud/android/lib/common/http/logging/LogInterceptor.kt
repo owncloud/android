@@ -63,15 +63,16 @@ class LogInterceptor : Interceptor {
 
     private fun logRequest(moshi: Moshi, request: Request) {
         val requestJsonAdapter = moshi.adapter(LogRequest::class.java)
+        val requestId = request.headers[OC_X_REQUEST_ID] ?: ""
         Timber.d(
-            "HTTP REQUEST: ${
+            "REQUEST $requestId ${
                 requestJsonAdapter.toJson(
                     LogRequest(
                         Request(
                             body = getRequestBodyString(request.body),
                             headers = logHeaders(request.headers),
                             info = RequestInfo(
-                                id = request.headers[OC_X_REQUEST_ID] ?: "",
+                                id = requestId,
                                 method = request.method,
                                 url = request.url.toString(),
                             )
@@ -128,8 +129,9 @@ class LogInterceptor : Interceptor {
         val bodyLength = rawResponseBody?.toByteArray(charset)?.size ?: 0
         val responseBody = getResponseBodyString(contentType, bodyLength, rawResponseBody ?: "")
         val duration = response.receivedResponseAtMillis - response.sentRequestAtMillis
+        val requestId = request.headers[OC_X_REQUEST_ID] ?: ""
         Timber.d(
-            "HTTP RESPONSE: ${
+            "RESPONSE $requestId ${
                 responseJsonAdapter.toJson(
                     LogResponse(
                         Response(
@@ -143,7 +145,7 @@ class LogInterceptor : Interceptor {
                                 )
                             },
                             info = ResponseInfo(
-                                id = request.headers[OC_X_REQUEST_ID] ?: "",
+                                id = requestId,
                                 method = request.method,
                                 reply = Reply(
                                     cached = response.cacheResponse != null,
