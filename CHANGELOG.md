@@ -47,6 +47,7 @@ ownCloud admins and users.
 * Enhancement - Deep link open app correctly: [#4181](https://github.com/owncloud/android/issues/4181)
 * Enhancement - Select user and navigate to file when opening via deep link: [#4194](https://github.com/owncloud/android/issues/4194)
 * Enhancement - New branding/MDM parameter to show sensitive auth info in logs: [#4249](https://github.com/owncloud/android/issues/4249)
+* Enhancement - Fix in the type handling of the content-type: [#4258](https://github.com/owncloud/android/issues/4258)
 
 ## Details
 
@@ -214,6 +215,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4249
    https://github.com/owncloud/android/pull/4257
+
+* Enhancement - Fix in the type handling of the content-type: [#4258](https://github.com/owncloud/android/issues/4258)
+
+   The content-type `application/jrd+json` has been added to the loggable types
+   list, so that body in some requests and responses can be correctly logged.
+
+   https://github.com/owncloud/android/issues/4258
+   https://github.com/owncloud/android/pull/4266
 
 # Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
 
