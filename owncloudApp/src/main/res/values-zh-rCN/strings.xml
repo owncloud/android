@@ -419,6 +419,9 @@
   <string name="conflict_use_server_version">服务器版本</string>
   <string name="preview_image_description">图片预览</string>
   <string name="share_link_no_support_share_api">抱歉，共享功能未启用。请联系管理员。</string>
+  <string name="share_link_file_error">分享这个文件或文件夹是不可能的</string>
+  <string name="unshare_link_file_error">取消分享这个文件或文件夹是不可能的</string>
+  <string name="update_link_file_error">无法更新此文件或文件夹</string>
   <string name="share_link_password_title">输入密码</string>
   <string name="activity_chooser_send_file_title">发送</string>
   <string name="copy_link">复制链接</string>

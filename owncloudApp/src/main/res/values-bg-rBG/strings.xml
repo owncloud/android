@@ -368,6 +368,9 @@
   <string name="preview_image_description">Преглед на изображението</string>
   <string name="share_link_no_support_share_api">За съжаление, споделянето не е активирано на вашия сървър. Моля, свържете се с
 		администратор.</string>
+  <string name="share_link_file_error">Не е възможно споделянето на този файл или папка</string>
+  <string name="unshare_link_file_error">Прекратяването на споделянето на този файл или папка не беше успешно</string>
+  <string name="update_link_file_error">Актуализацията на този файл или папка не беше успешно</string>
   <string name="share_link_password_title">Въведете парола</string>
   <string name="activity_chooser_send_file_title">Изпращане</string>
   <string name="copy_link">Копиране на връзката</string>
