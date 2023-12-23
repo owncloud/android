@@ -368,6 +368,9 @@
   <string name="conflict_replace">바꾸기</string>
   <string name="preview_image_description">사진 미리 보기</string>
   <string name="share_link_no_support_share_api">서버에서 공유가 활성화되지 않았습니다. 시스템 관리자에게 연락하십시오.</string>
+  <string name="share_link_file_error">이 파일 또는 폴더를 공유할 수 없습니다</string>
+  <string name="unshare_link_file_error">이 파일 또는 폴더의 공유를 해제할 수 없습니다</string>
+  <string name="update_link_file_error">이 파일 또는 폴더를 업데이트할 수 없습니다</string>
   <string name="share_link_password_title">암호 입력</string>
   <string name="activity_chooser_send_file_title">보내기</string>
   <string name="copy_link">링크 주소 복사</string>

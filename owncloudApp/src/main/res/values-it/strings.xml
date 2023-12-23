@@ -365,6 +365,9 @@
   <string name="preview_image_description">Anteprima dell\'immagine</string>
   <string name="share_link_no_support_share_api">Spiacenti, la condivisione non è abilitata sul tuo server. Contatta il tuo
 		amministratore.</string>
+  <string name="share_link_file_error">Non è stato possibile condividere questo file o cartella</string>
+  <string name="unshare_link_file_error">Non è stato possibile annullare la condivisione di questo file o cartella</string>
+  <string name="update_link_file_error">Non è stato possibile aggiornare questo file o cartella</string>
   <string name="share_link_password_title">Digita una password</string>
   <string name="activity_chooser_send_file_title">Invia</string>
   <string name="copy_link">Copia collegamento</string>
