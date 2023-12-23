@@ -445,14 +445,11 @@
   <string name="preview_image_description">Pré-visualização da imagem</string>
   <string name="preview_image_error_unknown_format">Esta imagem não pode ser mostrada.</string>
   <string name="error__upload__local_file_not_copied">%1$s não foi possível copiar para %2$s pasta local.</string>
-  <string name="get_shares_error">Não foi possível recuperar os compartilhamentos do servidor.</string>
-  <string name="get_sharees_error">Não foi possível recuperar usuários e grupos do servidor.</string>
-  <string name="get_capabilities_error">Não foi possível recuperar os recursos do servidor.</string>
   <string name="share_link_no_support_share_api">Desculpe, o compartilhamento não está habilitado em seu servidor. Entre em contato com seu 
 ⇥⇥ administrador.</string>
-  <string name="share_link_file_error">Não foi possível compartilhar este arquivo ou pasta.</string>
-  <string name="unshare_link_file_error">Não foi possível cancelar o compartilhamento deste arquivo ou pasta.</string>
-  <string name="update_link_file_error">Não foi possível atualizar este arquivo ou pasta.</string>
+  <string name="share_link_file_error">Não foi possível compartilhar esse arquivo ou pasta</string>
+  <string name="unshare_link_file_error">Não foi possível desfazer o compartilhamento desse arquivo ou pasta</string>
+  <string name="update_link_file_error">Não foi possível atualizar esse arquivo ou pasta</string>
   <string name="share_link_password_title">Digite uma senha</string>
   <string name="share_link_empty_password">Você deve inserir uma senha.</string>
   <string name="activity_chooser_send_file_title">Enviar</string>

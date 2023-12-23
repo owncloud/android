@@ -375,6 +375,9 @@
   <string name="preview_image_description">Resim önizleme</string>
   <string name="share_link_no_support_share_api">Üzgünüz, paylaşım sunucunuzda etkin değil. Lütfen yöneticinizle
                 iletişime geçin.</string>
+  <string name="share_link_file_error">Bu dosya veya klasör paylaşılamadı</string>
+  <string name="unshare_link_file_error">Bu dosya veya klasör paylaşımdan kaldırılamadı</string>
+  <string name="update_link_file_error">Bu dosya veya klasör güncellenemedi</string>
   <string name="share_link_password_title">Bir parola girin</string>
   <string name="activity_chooser_send_file_title">Gönder</string>
   <string name="copy_link">Bağlantıyı kopyala</string>
