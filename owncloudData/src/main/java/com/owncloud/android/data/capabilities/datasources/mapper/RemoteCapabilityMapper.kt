@@ -68,6 +68,12 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesPrivateLinks = CapabilityBooleanType.fromValue(remote.filesPrivateLinks.value),
                 filesAppProviders = remote.filesAppProviders?.firstOrNull()?.toAppProviders(),
                 spaces = remote.spaces?.toSpaces(),
+                passwordPolicyMaxCharacters = remote.passwordPolicyMaxCharacters,
+                passwordPolicyMinCharacters = remote.passwordPolicyMinCharacters,
+                passwordPolicyMinDigits = remote.passwordPolicyMinDigits,
+                passwordPolicyMinLowercaseCharacters = remote.passwordPolicyMinLowercaseCharacters,
+                passwordPolicyMinSpecialCharacters = remote.passwordPolicyMinSpecialCharacters,
+                passwordPolicyMinUppercaseCharacters = remote.passwordPolicyMinUppercaseCharacters,
             )
         }
 
@@ -113,6 +119,12 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesPrivateLinks = RemoteCapabilityBooleanType.fromValue(model.filesPrivateLinks.value)!!,
                 filesAppProviders = null,
                 spaces = null,
+                passwordPolicyMaxCharacters = model.passwordPolicyMaxCharacters!!,
+                passwordPolicyMinCharacters = model.passwordPolicyMinCharacters!!,
+                passwordPolicyMinDigits = model.passwordPolicyMinDigits!!,
+                passwordPolicyMinLowercaseCharacters = model.passwordPolicyMinLowercaseCharacters!!,
+                passwordPolicyMinSpecialCharacters = model.passwordPolicyMinSpecialCharacters!!,
+                passwordPolicyMinUppercaseCharacters = model.passwordPolicyMinUppercaseCharacters!!,
             )
         }
 

@@ -85,6 +85,12 @@ class OCLocalCapabilitiesDataSource(
                 filesPrivateLinks = CapabilityBooleanType.fromValue(filesPrivateLinks),
                 filesAppProviders = appProviders,
                 spaces = spaces,
+                passwordPolicyMaxCharacters = passwordPolicyMaxCharacters,
+                passwordPolicyMinCharacters = passwordPolicyMinCharacters,
+                passwordPolicyMinDigits = passwordPolicyMinDigits,
+                passwordPolicyMinLowercaseCharacters = passwordPolicyMinLowercaseCharacters,
+                passwordPolicyMinSpecialCharacters = passwordPolicyMinSpecialCharacters,
+                passwordPolicyMinUppercaseCharacters = passwordPolicyMinUppercaseCharacters,
             )
 
         @VisibleForTesting
@@ -119,7 +125,13 @@ class OCLocalCapabilitiesDataSource(
                 filesVersioning = filesVersioning.value,
                 filesPrivateLinks = filesPrivateLinks.value,
                 appProviders = filesAppProviders,
-                spaces = spaces
+                spaces = spaces,
+                passwordPolicyMaxCharacters = passwordPolicyMaxCharacters,
+                passwordPolicyMinCharacters = passwordPolicyMinCharacters,
+                passwordPolicyMinDigits = passwordPolicyMinDigits,
+                passwordPolicyMinLowercaseCharacters = passwordPolicyMinLowercaseCharacters,
+                passwordPolicyMinSpecialCharacters = passwordPolicyMinSpecialCharacters,
+                passwordPolicyMinUppercaseCharacters = passwordPolicyMinUppercaseCharacters,
             )
     }
 }
