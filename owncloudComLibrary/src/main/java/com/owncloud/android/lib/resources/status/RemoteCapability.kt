@@ -76,6 +76,14 @@ data class RemoteCapability(
 
     // Spaces
     val spaces: RemoteSpaces?,
+
+    // Password Policy
+    val passwordPolicyMaxCharacters: Int = 72,
+    val passwordPolicyMinCharacters: Int = 8,
+    val passwordPolicyMinDigits: Int = 1,
+    val passwordPolicyMinLowercaseCharacters: Int = 1,
+    val passwordPolicyMinSpecialCharacters: Int = 1,
+    val passwordPolicyMinUppercaseCharacters: Int = 1,
 ) {
     /**
      * Enum for Boolean Type in capabilities, with values:
