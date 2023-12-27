@@ -4,7 +4,9 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2023 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -26,6 +28,10 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.InputType
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.DynamicDrawableSpan
+import android.text.style.ImageSpan
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -35,7 +41,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.ContextCompat
+import androidx.core.text.buildSpannedString
+import androidx.core.text.color
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.databinding.SharePublicDialogBinding
@@ -201,6 +211,7 @@ class PublicShareDialogFragment : DialogFragment() {
         initPasswordListener()
         initExpirationListener()
         initPasswordFocusChangeListener()
+        initPasswordChangeInputListener()
         initPasswordToggleListener()
 
         binding.saveButton.setOnClickListener { onSaveShareSetting() }
@@ -220,6 +231,7 @@ class PublicShareDialogFragment : DialogFragment() {
                         or RemoteShare.UPDATE_PERMISSION_FLAG
                         or RemoteShare.READ_PERMISSION_FLAG ->
                     binding.shareViaLinkEditPermissionReadAndWrite.isChecked = true
+
                 RemoteShare.CREATE_PERMISSION_FLAG -> binding.shareViaLinkEditPermissionUploadFiles.isChecked = true
                 else -> binding.shareViaLinkEditPermissionReadOnly.isChecked = true
             }
@@ -227,6 +239,7 @@ class PublicShareDialogFragment : DialogFragment() {
             if (publicShare?.isPasswordProtected == true) {
                 setPasswordSwitchChecked()
                 binding.shareViaLinkPasswordValue.isVisible = true
+                binding.shareViaLinkPasswordPolicy.isVisible = true
                 binding.shareViaLinkPasswordValue.hint = getString(R.string.share_via_link_default_password)
             }
 
@@ -258,6 +271,7 @@ class PublicShareDialogFragment : DialogFragment() {
                 publicLinkPermissions = RemoteShare.CREATE_PERMISSION_FLAG
                 publicUploadPermission = true
             }
+
             R.id.shareViaLinkEditPermissionReadAndWrite -> {
                 publicLinkPermissions = (RemoteShare.CREATE_PERMISSION_FLAG
                         or RemoteShare.DELETE_PERMISSION_FLAG
@@ -265,10 +279,12 @@ class PublicShareDialogFragment : DialogFragment() {
                         or RemoteShare.READ_PERMISSION_FLAG)
                 publicUploadPermission = true
             }
+
             R.id.shareViaLinkEditPermissionReadOnly -> {
                 publicLinkPermissions = RemoteShare.READ_PERMISSION_FLAG
                 publicUploadPermission = false
             }
+
             else -> {
                 publicLinkPermissions = RemoteShare.READ_PERMISSION_FLAG
                 publicUploadPermission = false
@@ -310,6 +326,12 @@ class PublicShareDialogFragment : DialogFragment() {
         }
     }
 
+    private fun initPasswordChangeInputListener() {
+        binding.shareViaLinkPasswordValue.doOnTextChanged { text, _, _, _ ->
+            updateRequirements(text.toString(), binding.shareViaLinkPasswordPolicy)
+        }
+    }
+
     private fun initPasswordToggleListener() {
         binding.shareViaLinkPasswordValue.setOnTouchListener(object : RightDrawableOnTouchListener() {
             override fun onDrawableTouch(event: MotionEvent): Boolean {
@@ -319,6 +341,70 @@ class PublicShareDialogFragment : DialogFragment() {
                 return true
             }
         })
+    }
+
+    private fun updateRequirements(password: String, textView: TextView) {
+        val hasMaxCharacters = password.length <= 72
+        val hasMinCharacters = password.length >= 8
+        val hasUpperCase = password.any { it.isUpperCase() }
+        val hasLowerCase = password.any { it.isLowerCase() }
+        val hasSpecialCharacter = password.any { SPECIALS_CHARACTERS.contains(it) }
+        val hasDigit = password.any { it.isDigit() }
+
+        val passwordChecks = arrayOf(
+            Triple(hasMinCharacters, R.string.password_policy_min_characters, capabilities?.passwordPolicyMinCharacters),
+            Triple(hasUpperCase, R.string.password_policy_uppercase_characters, capabilities?.passwordPolicyMinUppercaseCharacters),
+            Triple(hasLowerCase, R.string.password_policy_lowercase_characters, capabilities?.passwordPolicyMinLowercaseCharacters),
+            Triple(hasDigit, R.string.password_policy_min_digit, capabilities?.passwordPolicyMinDigits),
+            Triple(hasSpecialCharacter, R.string.password_policy_min_special_character, capabilities?.passwordPolicyMinSpecialCharacters),
+            Triple(hasMaxCharacters, R.string.password_policy_max_characters, capabilities?.passwordPolicyMaxCharacters)
+        )
+
+        val requirementsString = buildSpannedString {
+
+            appendLine(getString(R.string.password_policy_intro))
+
+            for ((requirementIsChecked, resourceId, capabilityValue) in passwordChecks) {
+                capabilityValue?.let {
+                    val requirement = getString(
+                        resourceId,
+                        capabilityValue.toString(),
+                        if (requirementIsChecked == hasSpecialCharacter) SPECIALS_CHARACTERS else ""
+                    )
+                    appendRequirement(requirementIsChecked, requirement)
+                }
+            }
+        }
+
+        textView.text = requirementsString
+
+        val allConditionsCheck = hasMinCharacters && hasUpperCase && hasLowerCase && hasDigit && hasSpecialCharacter && hasMaxCharacters
+        if (binding.shareViaLinkPasswordPolicy.isVisible) {
+            binding.saveButton.isEnabled = allConditionsCheck
+        }
+    }
+
+    private fun SpannableStringBuilder.appendRequirement(requirementIsChecked: Boolean, requirement: String) {
+        val iconDrawable = if (requirementIsChecked) {
+            ContextCompat.getDrawable(requireContext(), R.drawable.check_password_policy)
+        } else {
+            ContextCompat.getDrawable(requireContext(), R.drawable.close_password_policy)
+        }
+
+        iconDrawable?.let {
+            it.setBounds(0, 0, it.intrinsicWidth, it.intrinsicHeight)
+
+            val iconAndRequirements = SpannableString(" $requirement")
+            iconAndRequirements.setSpan(
+                ImageSpan(it, DynamicDrawableSpan.ALIGN_BOTTOM),
+                0, 1,
+                ImageSpan.ALIGN_BASELINE or ImageSpan.ALIGN_BOTTOM
+            )
+
+            color(ContextCompat.getColor(requireActivity(), if (requirementIsChecked) R.color.success else R.color.warning)) {
+                appendLine(iconAndRequirements)
+            }
+        }
     }
 
     private abstract class RightDrawableOnTouchListener : View.OnTouchListener {
@@ -364,11 +450,14 @@ class PublicShareDialogFragment : DialogFragment() {
      */
     private fun onPasswordFocusChanged(hasFocus: Boolean) {
         if (hasFocus) {
+            binding.saveButton.isEnabled = false
             showViewPasswordButton()
         } else {
+            binding.saveButton.isEnabled = true
             hidePassword()
             hidePasswordButton()
         }
+
     }
 
     /**
@@ -450,8 +539,10 @@ class PublicShareDialogFragment : DialogFragment() {
                     updateCapabilities(uiResult.data)
                     listener?.dismissLoading()
                 }
+
                 is UIResult.Error -> {
                 }
+
                 is UIResult.Loading -> {
                 }
             }
@@ -466,10 +557,12 @@ class PublicShareDialogFragment : DialogFragment() {
                     is UIResult.Success -> {
                         dismiss()
                     }
+
                     is UIResult.Error -> {
                         showError(getString(R.string.share_link_file_error), uiResult.error)
                         listener?.dismissLoading()
                     }
+
                     is UIResult.Loading -> {
                         listener?.showLoading()
                     }
@@ -486,10 +579,12 @@ class PublicShareDialogFragment : DialogFragment() {
                     is UIResult.Success -> {
                         dismiss()
                     }
+
                     is UIResult.Error -> {
                         showError(getString(R.string.update_link_file_error), uiResult.error)
                         listener?.dismissLoading()
                     }
+
                     is UIResult.Loading -> {
                         listener?.showLoading()
                     }
@@ -521,6 +616,7 @@ class PublicShareDialogFragment : DialogFragment() {
         override fun onCheckedChanged(switchView: CompoundButton, isChecked: Boolean) {
             if (isChecked) {
                 binding.shareViaLinkPasswordValue.isVisible = true
+                binding.shareViaLinkPasswordPolicy.isVisible = true
                 binding.shareViaLinkPasswordValue.requestFocus()
 
                 // Show keyboard to fill in the password
@@ -531,6 +627,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
             } else {
                 binding.shareViaLinkPasswordValue.isVisible = false
+                binding.shareViaLinkPasswordPolicy.isVisible = false
                 binding.shareViaLinkPasswordValue.text?.clear()
             }
         }
@@ -748,6 +845,7 @@ class PublicShareDialogFragment : DialogFragment() {
         binding.shareViaLinkPasswordSwitch.isVisible = true
         if (!binding.shareViaLinkPasswordSwitch.isChecked) {
             binding.shareViaLinkPasswordValue.isVisible = false
+            binding.shareViaLinkPasswordPolicy.isVisible = false
         }
     }
 
@@ -756,6 +854,7 @@ class PublicShareDialogFragment : DialogFragment() {
         binding.shareViaLinkPasswordSwitch.isChecked = true
         binding.shareViaLinkPasswordSwitch.isVisible = false
         binding.shareViaLinkPasswordValue.isVisible = true
+        binding.shareViaLinkPasswordPolicy.isVisible = true
     }
 
     /**
@@ -789,6 +888,7 @@ class PublicShareDialogFragment : DialogFragment() {
         private const val ARG_ACCOUNT = "ACCOUNT"
         private const val ARG_DEFAULT_LINK_NAME = "DEFAULT_LINK_NAME"
         private const val KEY_EXPIRATION_DATE = "EXPIRATION_DATE"
+        private const val SPECIALS_CHARACTERS = "\"!'\"#\$%&'()*+,-./:;<=>?@[\\]^_`{|}~\""
 
         /**
          * Create a new instance of PublicShareDialogFragment, providing fileToShare as an argument.
