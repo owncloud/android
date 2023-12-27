@@ -112,6 +112,14 @@
                 android:inputType="textPassword"
                 android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/shareViaLinkPasswordPolicy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/standard_half_margin"
+                android:layout_marginRight="@dimen/standard_half_margin"
+                android:visibility="gone" />
+
             <RelativeLayout
                 android:id="@+id/shareViaLinkExpirationSection"
                 android:layout_width="match_parent"
