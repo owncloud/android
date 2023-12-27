@@ -31,7 +31,7 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 43;
+    public static final int DB_VERSION = 44;
 
     private ProviderMeta() {
     }
@@ -98,6 +98,13 @@ public class ProviderMeta {
         public static final String CAPABILITIES_VERSION_MINOR = "version_minor";
         public static final String CAPABILITIES_VERSION_STRING = "version_string";
         public static final String LEGACY_CAPABILITIES_VERSION_MAYOR = "version_mayor";
+        public static final String CAPABILITIES_PASSWORD_POLICY_MAX_CHARACTERS = "password_policy_max_characters";
+        public static final String CAPABILITIES_PASSWORD_POLICY_MIN_CHARACTERS = "password_policy_min_characters";
+        public static final String CAPABILITIES_PASSWORD_POLICY_MIN_DIGITS = "password_policy_min_digits";
+        public static final String CAPABILITIES_PASSWORD_POLICY_MIN_LOWERCASE_CHARACTERS = "password_policy_min_lowercase_characters";
+        public static final String CAPABILITIES_PASSWORD_POLICY_MIN_UPPERCASE_CHARACTERS = "password_policy_min_uppercase_characters";
+        public static final String CAPABILITIES_PASSWORD_POLICY_MIN_SPECIAL_CHARACTERS = "password_policy_min_special_characters";
+
 
         // Columns of filelist table (legacy)
         public static final String FILE_ACCOUNT_OWNER = "file_owner";

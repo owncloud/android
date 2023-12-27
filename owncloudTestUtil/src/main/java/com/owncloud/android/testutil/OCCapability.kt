@@ -53,5 +53,11 @@ val OC_CAPABILITY =
         filesVersioning = CapabilityBooleanType.FALSE,
         filesPrivateLinks = CapabilityBooleanType.TRUE,
         filesAppProviders = null,
-        spaces = null
+        spaces = null,
+        passwordPolicyMaxCharacters = 72,
+        passwordPolicyMinCharacters = 8,
+        passwordPolicyMinDigits = 1,
+        passwordPolicyMinLowercaseCharacters = 1,
+        passwordPolicyMinSpecialCharacters = 1,
+        passwordPolicyMinUppercaseCharacters = 1,
     )
