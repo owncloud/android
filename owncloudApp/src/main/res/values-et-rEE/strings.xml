@@ -445,6 +445,9 @@
   <string name="preview_image_description">Pildi eelvaade</string>
   <string name="preview_image_error_unknown_format">Seda pilti ei saa näidata.</string>
   <string name="error__upload__local_file_not_copied">%1$s ei suudetud kopeerida kohalikku kataloogi %2$s.</string>
+  <string name="get_shares_error">Jagamiste saamine serverist ei olnud võimalik</string>
+  <string name="get_sharees_error">Kasutajate ja gruppide saamine serverist ei olnud võimalik</string>
+  <string name="get_capabilities_error">Võimekuste päring serverist ei õnnestunud</string>
   <string name="share_link_no_support_share_api">Vabandust, server ei toeta jagamist. Palun kontakteeru 
 ⇥⇥administraatoriga.</string>
   <string name="share_link_file_error">Selle faili või kausta jagamine ei olnud võimalik</string>
