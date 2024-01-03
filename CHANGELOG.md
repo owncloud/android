@@ -44,6 +44,7 @@ ownCloud admins and users.
 * Enhancement - Log file sharing allowed within ownCloud Android app: [#4156](https://github.com/owncloud/android/issues/4156)
 * Enhancement - New field "last usage" in database: [#4173](https://github.com/owncloud/android/issues/4173)
 * Enhancement - Use invoke operator to execute usecases: [#4179](https://github.com/owncloud/android/pull/4179)
+* Enhancement - Improve biometric authentication security: [#4180](https://github.com/owncloud/android/issues/4180)
 * Enhancement - Deep link open app correctly: [#4181](https://github.com/owncloud/android/issues/4181)
 * Enhancement - Select user and navigate to file when opening via deep link: [#4194](https://github.com/owncloud/android/issues/4194)
 * Enhancement - New branding/MDM parameter to show sensitive auth info in logs: [#4249](https://github.com/owncloud/android/issues/4249)
@@ -191,6 +192,14 @@ ownCloud admins and users.
    instead.
 
    https://github.com/owncloud/android/pull/4179
+
+* Enhancement - Improve biometric authentication security: [#4180](https://github.com/owncloud/android/issues/4180)
+
+   Passcode encrypted or decrypted with Cypher after successful authentication to
+   avoid biometric security breaches.
+
+   https://github.com/owncloud/android/issues/4180
+   https://github.com/owncloud/android/pull/4278
 
 * Enhancement - Deep link open app correctly: [#4181](https://github.com/owncloud/android/issues/4181)
 
