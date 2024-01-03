@@ -1,0 +1,6 @@
+Enhancement: Improve biometric authentication security
+
+Passcode encrypted or decrypted with Cypher after successful authentication to avoid biometric security breaches.
+
+https://github.com/owncloud/android/issues/4180
+https://github.com/owncloud/android/pull/4278
