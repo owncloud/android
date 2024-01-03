@@ -29,14 +29,17 @@ import androidx.lifecycle.ViewModel
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.presentation.security.PREFERENCE_LAST_UNLOCK_TIMESTAMP
+import com.owncloud.android.presentation.security.biometric.BiometricActivity.Companion.KEY_NAME
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity
 import com.owncloud.android.providers.ContextProvider
 import timber.log.Timber
+import java.nio.charset.Charset
 import java.security.KeyStore
 import java.security.KeyStoreException
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
+import javax.crypto.spec.IvParameterSpec
 
 class BiometricViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
@@ -44,6 +47,7 @@ class BiometricViewModel(
 ) : ViewModel() {
 
     private lateinit var keyStore: KeyStore
+    private lateinit var secretKey: SecretKey
     private lateinit var keyGenerator: KeyGenerator
     private lateinit var cipher: Cipher
 
@@ -54,7 +58,6 @@ class BiometricViewModel(
      * @return the cipher if it is properly initialized, null otherwise
      */
     fun initCipher(): Cipher? {
-        generateAndStoreKey()
 
         try {
             cipher = Cipher.getInstance(
@@ -67,10 +70,15 @@ class BiometricViewModel(
         }
 
         return try {
-            keyStore.load(null)
             // Initialize the cipher with the key stored in the Keystore container
-            val key = keyStore.getKey(BiometricActivity.KEY_NAME, null) as SecretKey
-            cipher.init(Cipher.ENCRYPT_MODE, key)
+            val secretKey = getOrCreateSecretKey()
+            val initializationVector = preferencesProvider.getByteArray(PassCodeActivity.PREFERENCE_IV_ENCRYPTED, null)
+
+            if (initializationVector == null) {
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey)
+            } else {
+                cipher.init(Cipher.DECRYPT_MODE, secretKey, IvParameterSpec(initializationVector))
+            }
             cipher
         } catch (e: KeyPermanentlyInvalidatedException) {
             Timber.e(e, "Key permanently invalidated while initializing the cipher")
@@ -91,16 +99,39 @@ class BiometricViewModel(
         return (passCode != null && passCode.length < passCodeDigits)
     }
 
+    fun encryptedOrDecryptedPassCode(cipher: Cipher?): Boolean {
+
+        val passCode = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
+        val passCodeEncrypted = preferencesProvider.getByteArray(PassCodeActivity.PREFERENCE_PASSCODE_ENCRYPTED, null)
+
+        return if (passCodeEncrypted == null) {
+            preferencesProvider.putByteArray(PassCodeActivity.PREFERENCE_IV_ENCRYPTED, cipher?.iv)
+            val encryptedInfo = cipher?.doFinal(passCode?.toByteArray(Charset.defaultCharset()))
+            preferencesProvider.putByteArray(PassCodeActivity.PREFERENCE_PASSCODE_ENCRYPTED, encryptedInfo)
+            true
+        } else {
+            val decryptedInfo = cipher?.doFinal(passCodeEncrypted)
+            if (decryptedInfo != null) {
+                String(decryptedInfo, Charset.defaultCharset()) == passCode
+            } else {
+                false
+            }
+        }
+    }
+
     fun removePassCode() {
         preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_PASSCODE)
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+        preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_PASSCODE_ENCRYPTED)
+        preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_IV_ENCRYPTED)
     }
 
     /**
      * Generate encryption key involved in biometric authentication process and store it securely on the device using
      * the Android Keystore system
      */
-    private fun generateAndStoreKey() {
+    private fun getOrCreateSecretKey(): SecretKey {
+
         try {
             // Access Android Keystore container, used to safely store cryptographic keys on Android devices
             keyStore = KeyStore.getInstance(ANDROID_KEY_STORE)
@@ -113,26 +144,33 @@ class BiometricViewModel(
         } catch (e: Exception) {
             Timber.e(e, "Failed while getting KeyGenerator instance")
         }
+
         try {
             // Generate and save the encryption key
-            keyStore.load(null)
-            keyGenerator.init(
-                KeyGenParameterSpec.Builder(
-                    BiometricActivity.KEY_NAME,
-                    KeyProperties.PURPOSE_ENCRYPT or
-                            KeyProperties.PURPOSE_DECRYPT
-                )
-                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                    .setUserAuthenticationRequired(true)
-                    .setEncryptionPaddings(
-                        KeyProperties.ENCRYPTION_PADDING_PKCS7
-                    )
-                    .build()
+            keyStore.load(null) // Keystore must be loaded before it can be accessed
+            keyStore.getKey(KEY_NAME, null)?.let { return it as SecretKey }
+
+            // if you reach here, then a new SecretKey must be generated for that keyName
+            val paramsBuilder = KeyGenParameterSpec.Builder(
+                KEY_NAME,
+                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
             )
-            keyGenerator.generateKey()
+            paramsBuilder.apply {
+                setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                setUserAuthenticationRequired(true)
+            }
+
+            val keyGenParams = paramsBuilder.build()
+
+            keyGenerator.init(keyGenParams)
+            secretKey = keyGenerator.generateKey()
+
         } catch (e: Exception) {
             Timber.e(e, "Failed while generating and saving the encryption key")
         }
+
+        return secretKey
     }
 
     private fun loadPinFromOldFormatIfPossible(): String? {

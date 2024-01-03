@@ -87,16 +87,21 @@ class BiometricActivity : AppCompatActivity() {
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    if (biometricViewModel.shouldAskForNewPassCode()) {
-                        biometricViewModel.removePassCode()
-                        val intent = Intent(baseContext, PassCodeActivity::class.java)
-                        intent.action = PassCodeActivity.ACTION_CREATE
-                        intent.putExtra(PassCodeActivity.EXTRAS_MIGRATION, true)
-                        startActivity(intent)
+                    if (biometricViewModel.encryptedOrDecryptedPassCode(cryptoObject.cipher)) {
+                        if (biometricViewModel.shouldAskForNewPassCode()) {
+                            biometricViewModel.removePassCode()
+                            val intent = Intent(baseContext, PassCodeActivity::class.java)
+                            intent.action = PassCodeActivity.ACTION_CREATE
+                            intent.putExtra(PassCodeActivity.EXTRAS_MIGRATION, true)
+                            startActivity(intent)
+                        }
+                        biometricViewModel.setLastUnlockTimestamp()
+                        OwnCloudBiometricManager.onActivityStopped(this@BiometricActivity)
+                        finish()
+                    } else {
+                        Timber.e("onAuthenticationError: There was an error with biometric authentication")
+                        authError()
                     }
-                    biometricViewModel.setLastUnlockTimestamp()
-                    OwnCloudBiometricManager.onActivityStopped(this@BiometricActivity)
-                    finish()
                 }
 
                 override fun onAuthenticationFailed() {

@@ -22,6 +22,7 @@ package com.owncloud.android.data.providers.implementation
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import android.util.Base64
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 
 class OCSharedPreferencesProvider(
@@ -49,4 +50,18 @@ class OCSharedPreferencesProvider(
     override fun removePreference(key: String) = editor.remove(key).apply()
 
     override fun contains(key: String) = sharedPreferences.contains(key)
+
+    override fun putByteArray(key: String, value: ByteArray?) {
+        val encodedString = Base64.encodeToString(value, Base64.DEFAULT)
+        editor.putString(key, encodedString).apply()
+    }
+
+    override fun getByteArray(key: String, defaultValue: ByteArray?): ByteArray? {
+        val encodedString = sharedPreferences.getString(key, null)
+        return if (encodedString != null) {
+            Base64.decode(encodedString, Base64.DEFAULT)
+        } else {
+            defaultValue
+        }
+    }
 }

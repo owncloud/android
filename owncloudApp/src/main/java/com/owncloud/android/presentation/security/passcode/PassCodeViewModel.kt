@@ -151,15 +151,17 @@ class PassCodeViewModel(
 
     fun getPassCode() = preferencesProvider.getString(PassCodeActivity.PREFERENCE_PASSCODE, loadPinFromOldFormatIfPossible())
 
-    fun setPassCode() {
+    private fun setPassCode() {
         preferencesProvider.putString(PassCodeActivity.PREFERENCE_PASSCODE, firstPasscode)
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, true)
         numberOfPasscodeDigits = (getPassCode()?.length ?: getNumberOfPassCodeDigits())
     }
 
-    fun removePassCode() {
+    private fun removePassCode() {
         preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_PASSCODE)
         preferencesProvider.putBoolean(PassCodeActivity.PREFERENCE_SET_PASSCODE, false)
+        preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_PASSCODE_ENCRYPTED)
+        preferencesProvider.removePreference(PassCodeActivity.PREFERENCE_IV_ENCRYPTED)
         numberOfPasscodeDigits = (getPassCode()?.length ?: getNumberOfPassCodeDigits())
     }
 

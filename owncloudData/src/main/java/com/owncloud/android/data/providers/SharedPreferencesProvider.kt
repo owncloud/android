@@ -38,4 +38,7 @@ interface SharedPreferencesProvider {
     fun removePreference(key: String)
 
     fun contains(key: String): Boolean
+
+    fun putByteArray(key: String, value: ByteArray?)
+    fun getByteArray(key: String, defaultValue: ByteArray?): ByteArray?
 }

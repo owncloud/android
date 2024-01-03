@@ -451,6 +451,8 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         // NOTE: PREFERENCE_SET_PASSCODE must have the same value as settings_security.xml-->android:key for passcode preference
         const val PREFERENCE_SET_PASSCODE = "set_pincode"
         const val PREFERENCE_PASSCODE = "PrefPinCode"
+        const val PREFERENCE_PASSCODE_ENCRYPTED = "PrefPinCodeEncrypted"
+        const val PREFERENCE_IV_ENCRYPTED = "PrefPinCodeEncryptedIv"
         const val PREFERENCE_MIGRATION_REQUIRED = "PrefMigrationRequired"
 
         // NOTE: This is required to read the legacy pin code format
