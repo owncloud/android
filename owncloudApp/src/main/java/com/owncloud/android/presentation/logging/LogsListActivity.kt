@@ -148,7 +148,7 @@ class LogsListActivity : AppCompatActivity() {
         var fileNumber = 1
 
         while (File(destinationFolder, uniqueName).exists()) {
-            uniqueName = "$originalName ($fileNumber).log"
+            uniqueName = "${file.nameWithoutExtension} ($fileNumber).log"
             fileNumber++
         }
 
