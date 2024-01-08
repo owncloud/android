@@ -41,7 +41,6 @@ import org.junit.Assert.*
 
 class OCAppRegistryRepositoryTest {
 
-
     private val localAppRegistryDataSource = mockk<LocalAppRegistryDataSource>(relaxUnitFun = true)
     private val remoteAppRegistryDataSource = mockk<RemoteAppRegistryDataSource>(relaxUnitFun = true)
     private val localCapabilitiesDataSource = mockk<LocalCapabilitiesDataSource>(relaxUnitFun = true)
@@ -152,7 +151,7 @@ class OCAppRegistryRepositoryTest {
             )
         } returns fileWithAppProvider
 
-        val resultActual = remoteAppRegistryDataSource.createFileWithAppProvider(
+        val resultActual = appRegistryRepository.createFileWithAppProvider(
             accountName = OC_ACCOUNT_NAME,
             createFileWithAppProviderEndpoint = createFileWithAppProviderEndpoint,
             parentContainerId = parentContainerId,

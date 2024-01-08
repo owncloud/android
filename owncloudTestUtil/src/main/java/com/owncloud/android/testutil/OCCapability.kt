@@ -56,3 +56,15 @@ val OC_CAPABILITY =
         spaces = null,
         passwordPolicy = null,
     )
+
+val OC_CAPABILITY_WITH_FILE_PROVIDERS = OC_CAPABILITY.copy(
+    accountName = OC_ACCOUNT_NAME,
+    filesAppProviders = OCCapability.AppProviders(
+        enabled = true,
+        version = "",
+        appsUrl = null,
+        openUrl = null,
+        openWebUrl = "/open-with-web",
+        newUrl = null
+    )
+)

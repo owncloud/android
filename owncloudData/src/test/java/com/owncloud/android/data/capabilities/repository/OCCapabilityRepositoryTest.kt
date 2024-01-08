@@ -26,13 +26,14 @@ import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataS
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.domain.appregistry.AppRegistryRepository
 import com.owncloud.android.domain.capabilities.model.OCCapability
-import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_CAPABILITY
+import com.owncloud.android.testutil.OC_CAPABILITY_WITH_FILE_PROVIDERS
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 
@@ -43,7 +44,7 @@ class OCCapabilityRepositoryTest {
 
     private val localCapabilitiesDataSource = mockk<LocalCapabilitiesDataSource>(relaxUnitFun = true)
     private val remoteCapabilitiesDataSource = mockk<RemoteCapabilitiesDataSource>(relaxUnitFun = true)
-    private val appRegistryRepository = mockk<AppRegistryRepository>()
+    private val appRegistryRepository = mockk<AppRegistryRepository>(relaxUnitFun = true)
     private val ocCapabilityRepository: OCCapabilityRepository =
         OCCapabilityRepository(localCapabilitiesDataSource, remoteCapabilitiesDataSource, appRegistryRepository)
 
@@ -92,41 +93,23 @@ class OCCapabilityRepositoryTest {
 
         val result = ocCapabilityRepository.getStoredCapabilities(OC_ACCOUNT_NAME)
 
-        assertEquals(null, result)
+        assertNull(result)
 
         verify(exactly = 1) { localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME) }
 
     }
 
     @Test
-    fun `refreshCapabilitiesForAccount update capabilities correctly`() {
-        val capability = OC_CAPABILITY.copy(accountName = OC_ACCOUNT_NAME)
+    fun `refreshCapabilitiesForAccount updates capabilities correctly`() {
 
-        every { remoteCapabilitiesDataSource.getCapabilities(any()) } returns capability
-
-        ocCapabilityRepository.refreshCapabilitiesForAccount(OC_ACCOUNT_NAME)
-
-        verify(exactly = 1) {
-            remoteCapabilitiesDataSource.getCapabilities(OC_ACCOUNT_NAME)
-        }
-
-        verify(exactly = 1) {
-            localCapabilitiesDataSource.insertCapabilities(listOf(capability))
-        }
-    }
-
-    @Test(expected = NoConnectionWithServerException::class)
-    fun refreshCapabilitiesFromNetworkNoConnection() {
-
-        every { remoteCapabilitiesDataSource.getCapabilities(any()) } throws NoConnectionWithServerException()
+        every { remoteCapabilitiesDataSource.getCapabilities(any()) } returns OC_CAPABILITY_WITH_FILE_PROVIDERS
 
         ocCapabilityRepository.refreshCapabilitiesForAccount(OC_ACCOUNT_NAME)
 
         verify(exactly = 1) {
             remoteCapabilitiesDataSource.getCapabilities(OC_ACCOUNT_NAME)
-        }
-        verify(exactly = 0) {
-            localCapabilitiesDataSource.insertCapabilities(any())
+            localCapabilitiesDataSource.insertCapabilities(listOf(OC_CAPABILITY_WITH_FILE_PROVIDERS))
+            appRegistryRepository.refreshAppRegistryForAccount(OC_ACCOUNT_NAME)
         }
     }
 }

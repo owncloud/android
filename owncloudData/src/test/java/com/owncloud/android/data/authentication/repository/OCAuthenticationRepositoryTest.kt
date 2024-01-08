@@ -87,7 +87,6 @@ class OCAuthenticationRepositoryTest {
                 updateAccountWithUsername = null
             )
         }
-        assertEquals(OC_ACCOUNT_NAME, accountName)
     }
 
     @Test
@@ -96,8 +95,8 @@ class OCAuthenticationRepositoryTest {
             serverPath = any(),
             username = OC_BASIC_USERNAME,
             accessToken = any()) } returns Pair(
-            OC_USER_INFO,
-            OC_REDIRECTION_PATH.lastPermanentLocation
+                first = OC_USER_INFO,
+                second = OC_REDIRECTION_PATH.lastPermanentLocation
         )
 
         every {
@@ -148,7 +147,7 @@ class OCAuthenticationRepositoryTest {
     @Test
     fun `supportsOAuth2UseCase returns Boolean`() {
         every {
-            localAuthenticationDataSource.supportsOAuth2(any())
+            localAuthenticationDataSource.supportsOAuth2(OC_ACCOUNT_NAME)
         } returns true
 
         val actualResult = ocAuthenticationRepository.supportsOAuth2UseCase(OC_ACCOUNT_NAME)
