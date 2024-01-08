@@ -32,7 +32,7 @@ import com.owncloud.android.testutil.OC_CAPABILITY
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
@@ -41,14 +41,65 @@ class OCCapabilityRepositoryTest {
     @JvmField
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val localCapabilitiesDataSource = mockk<LocalCapabilitiesDataSource>(relaxed = true)
-    private val remoteCapabilitiesDataSource = mockk<RemoteCapabilitiesDataSource>(relaxed = true)
+    private val localCapabilitiesDataSource = mockk<LocalCapabilitiesDataSource>(relaxUnitFun = true)
+    private val remoteCapabilitiesDataSource = mockk<RemoteCapabilitiesDataSource>(relaxUnitFun = true)
     private val appRegistryRepository = mockk<AppRegistryRepository>()
     private val ocCapabilityRepository: OCCapabilityRepository =
         OCCapabilityRepository(localCapabilitiesDataSource, remoteCapabilitiesDataSource, appRegistryRepository)
 
     @Test
-    fun refreshCapabilitiesFromNetworkOk() {
+    fun `getCapabilitiesAsLiveData returns a livedata of OCCapability correctly`() {
+        val capabilitiesLiveData = MutableLiveData<OCCapability>()
+
+        every {
+            localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(any())
+        } returns capabilitiesLiveData
+
+        val capabilitiesEmitted = mutableListOf<OCCapability>()
+        ocCapabilityRepository.getCapabilitiesAsLiveData(OC_ACCOUNT_NAME).observeForever {
+            capabilitiesEmitted.add(it!!)
+        }
+
+        val capabilitiesToEmit = listOf(OC_CAPABILITY)
+        capabilitiesToEmit.forEach {
+            capabilitiesLiveData.postValue(it)
+        }
+        assertEquals(capabilitiesToEmit, capabilitiesEmitted)
+
+        verify(exactly = 1) { localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_ACCOUNT_NAME) }
+    }
+
+    @Test
+    fun `getStoredCapabilities returns an object of OCCapability` () {
+
+        every {
+            localCapabilitiesDataSource.getCapabilitiesForAccount(any())
+        } returns OC_CAPABILITY
+
+        val actualResult = ocCapabilityRepository.getStoredCapabilities(OC_ACCOUNT_NAME)
+
+        assertEquals(OC_CAPABILITY, actualResult)
+
+        verify(exactly = 1) { localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME) }
+    }
+
+    @Test
+    fun `getStoredCapabilities returns null when DataSource receive a null capability`() {
+
+        every {
+            localCapabilitiesDataSource.getCapabilitiesForAccount(any())
+        } returns null
+
+        val result = ocCapabilityRepository.getStoredCapabilities(OC_ACCOUNT_NAME)
+
+        assertEquals(null, result)
+
+        verify(exactly = 1) { localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME) }
+
+    }
+
+    @Test
+    fun `refreshCapabilitiesForAccount update capabilities correctly`() {
         val capability = OC_CAPABILITY.copy(accountName = OC_ACCOUNT_NAME)
 
         every { remoteCapabilitiesDataSource.getCapabilities(any()) } returns capability
@@ -77,59 +128,5 @@ class OCCapabilityRepositoryTest {
         verify(exactly = 0) {
             localCapabilitiesDataSource.insertCapabilities(any())
         }
-    }
-
-    @Test
-    fun getCapabilitiesAsLiveData() {
-        val capabilitiesLiveData = MutableLiveData<OCCapability>()
-
-        every {
-            localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(any())
-        } returns capabilitiesLiveData
-
-        val capabilitiesEmitted = mutableListOf<OCCapability>()
-        ocCapabilityRepository.getCapabilitiesAsLiveData(OC_ACCOUNT_NAME).observeForever {
-            capabilitiesEmitted.add(it!!)
-        }
-
-        val capabilitiesToEmit = listOf(OC_CAPABILITY)
-        capabilitiesToEmit.forEach {
-            capabilitiesLiveData.postValue(it)
-        }
-
-        Assert.assertEquals(capabilitiesToEmit, capabilitiesEmitted)
-    }
-
-    @Test(expected = Exception::class)
-    fun getCapabilitiesAsLiveDataException() {
-        every {
-            localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(any())
-        } throws Exception()
-
-        ocCapabilityRepository.getCapabilitiesAsLiveData(OC_ACCOUNT_NAME)
-    }
-
-    @Test
-    fun getStoredCapabilities() {
-
-        every {
-            localCapabilitiesDataSource.getCapabilitiesForAccount(any())
-        } returns OC_CAPABILITY
-
-        val result = ocCapabilityRepository.getStoredCapabilities(OC_ACCOUNT_NAME)
-
-        Assert.assertEquals(OC_CAPABILITY, result)
-    }
-
-    @Test
-    fun getStoredCapabilitiesNull() {
-
-        every {
-            localCapabilitiesDataSource.getCapabilitiesForAccount(any())
-        } returns null
-
-        val result = ocCapabilityRepository.getStoredCapabilities(OC_ACCOUNT_NAME)
-
-        Assert.assertEquals(null, result)
     }
 }
