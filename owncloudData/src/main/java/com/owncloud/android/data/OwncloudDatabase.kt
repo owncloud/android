@@ -50,7 +50,6 @@ import com.owncloud.android.data.migrations.MIGRATION_35_36
 import com.owncloud.android.data.migrations.MIGRATION_37_38
 import com.owncloud.android.data.migrations.MIGRATION_41_42
 import com.owncloud.android.data.migrations.MIGRATION_42_43
-import com.owncloud.android.data.migrations.MIGRATION_43_44
 import com.owncloud.android.data.sharing.shares.db.OCShareDao
 import com.owncloud.android.data.sharing.shares.db.OCShareEntity
 import com.owncloud.android.data.spaces.db.SpaceSpecialEntity
@@ -79,6 +78,7 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
         AutoMigration(from = 38, to = 39),
         AutoMigration(from = 39, to = 40, spec = AutoMigration39To40::class),
         AutoMigration(from = 40, to = 41),
+        AutoMigration(from = 43, to = 44),
     ],
     version = ProviderMeta.DB_VERSION,
     exportSchema = true
@@ -110,7 +110,6 @@ abstract class OwncloudDatabase : RoomDatabase() {
             MIGRATION_37_38,
             MIGRATION_41_42,
             MIGRATION_42_43,
-            MIGRATION_43_44,
         )
 
         fun getDatabase(

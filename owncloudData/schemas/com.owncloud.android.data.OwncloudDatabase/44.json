@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 44,
-    "identityHash": "67a963e9a8ab1080e0a5ef30f9b28d69",
+    "identityHash": "8301cb3e334343ef4530fa2f4d7c3bb3",
     "entities": [
       {
         "tableName": "app_registry",
@@ -149,7 +149,7 @@
       },
       {
         "tableName": "capabilities",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`account` TEXT, `version_major` INTEGER NOT NULL, `version_minor` INTEGER NOT NULL, `version_micro` INTEGER NOT NULL, `version_string` TEXT, `version_edition` TEXT, `core_pollinterval` INTEGER NOT NULL, `dav_chunking_version` TEXT NOT NULL, `sharing_api_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_write` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_public_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_days` INTEGER NOT NULL, `sharing_public_expire_date_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_upload` INTEGER NOT NULL DEFAULT -1, `sharing_public_multiple` INTEGER NOT NULL DEFAULT -1, `supports_upload_only` INTEGER NOT NULL DEFAULT -1, `sharing_resharing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_outgoing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_incoming` INTEGER NOT NULL DEFAULT -1, `sharing_user_profile_picture` INTEGER NOT NULL DEFAULT -1, `files_bigfilechunking` INTEGER NOT NULL DEFAULT -1, `files_undelete` INTEGER NOT NULL DEFAULT -1, `files_versioning` INTEGER NOT NULL DEFAULT -1, `files_private_links` INTEGER NOT NULL DEFAULT -1, `password_policy_max_characters` INTEGER, `password_policy_min_characters` INTEGER, `password_policy_min_digits` INTEGER, `password_policy_min_lowercase_characters` INTEGER, `password_policy_min_special_characters` INTEGER, `password_policy_min_uppercase_characters` INTEGER, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `app_providers_enabled` INTEGER, `app_providers_version` TEXT, `app_providers_appsUrl` TEXT, `app_providers_openUrl` TEXT, `app_providers_openWebUrl` TEXT, `app_providers_newUrl` TEXT, `spaces_enabled` INTEGER, `spaces_projects` INTEGER, `spaces_shareJail` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`account` TEXT, `version_major` INTEGER NOT NULL, `version_minor` INTEGER NOT NULL, `version_micro` INTEGER NOT NULL, `version_string` TEXT, `version_edition` TEXT, `core_pollinterval` INTEGER NOT NULL, `dav_chunking_version` TEXT NOT NULL, `sharing_api_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_read_write` INTEGER NOT NULL DEFAULT -1, `sharing_public_password_enforced_public_only` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_enabled` INTEGER NOT NULL DEFAULT -1, `sharing_public_expire_date_days` INTEGER NOT NULL, `sharing_public_expire_date_enforced` INTEGER NOT NULL DEFAULT -1, `sharing_public_upload` INTEGER NOT NULL DEFAULT -1, `sharing_public_multiple` INTEGER NOT NULL DEFAULT -1, `supports_upload_only` INTEGER NOT NULL DEFAULT -1, `sharing_resharing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_outgoing` INTEGER NOT NULL DEFAULT -1, `sharing_federation_incoming` INTEGER NOT NULL DEFAULT -1, `sharing_user_profile_picture` INTEGER NOT NULL DEFAULT -1, `files_bigfilechunking` INTEGER NOT NULL DEFAULT -1, `files_undelete` INTEGER NOT NULL DEFAULT -1, `files_versioning` INTEGER NOT NULL DEFAULT -1, `files_private_links` INTEGER NOT NULL DEFAULT -1, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `app_providers_enabled` INTEGER, `app_providers_version` TEXT, `app_providers_appsUrl` TEXT, `app_providers_openUrl` TEXT, `app_providers_openWebUrl` TEXT, `app_providers_newUrl` TEXT, `spaces_enabled` INTEGER, `spaces_projects` INTEGER, `spaces_shareJail` INTEGER, `password_policy_maxCharacters` INTEGER, `password_policy_minCharacters` INTEGER, `password_policy_minDigits` INTEGER, `password_policy_minLowercaseCharacters` INTEGER, `password_policy_minSpecialCharacters` INTEGER, `password_policy_minUppercaseCharacters` INTEGER)",
         "fields": [
           {
             "fieldPath": "accountName",
@@ -339,42 +339,6 @@
             "defaultValue": "-1"
           },
           {
-            "fieldPath": "passwordPolicyMaxCharacters",
-            "columnName": "password_policy_max_characters",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "passwordPolicyMinCharacters",
-            "columnName": "password_policy_min_characters",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "passwordPolicyMinDigits",
-            "columnName": "password_policy_min_digits",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "passwordPolicyMinLowercaseCharacters",
-            "columnName": "password_policy_min_lowercase_characters",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "passwordPolicyMinSpecialCharacters",
-            "columnName": "password_policy_min_special_characters",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
-            "fieldPath": "passwordPolicyMinUppercaseCharacters",
-            "columnName": "password_policy_min_uppercase_characters",
-            "affinity": "INTEGER",
-            "notNull": false
-          },
-          {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
@@ -431,6 +395,42 @@
           {
             "fieldPath": "spaces.shareJail",
             "columnName": "spaces_shareJail",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "passwordPolicy.maxCharacters",
+            "columnName": "password_policy_maxCharacters",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "passwordPolicy.minCharacters",
+            "columnName": "password_policy_minCharacters",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "passwordPolicy.minDigits",
+            "columnName": "password_policy_minDigits",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "passwordPolicy.minLowercaseCharacters",
+            "columnName": "password_policy_minLowercaseCharacters",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "passwordPolicy.minSpecialCharacters",
+            "columnName": "password_policy_minSpecialCharacters",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "passwordPolicy.minUppercaseCharacters",
+            "columnName": "password_policy_minUppercaseCharacters",
             "affinity": "INTEGER",
             "notNull": false
           }
@@ -1116,7 +1116,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '67a963e9a8ab1080e0a5ef30f9b28d69')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8301cb3e334343ef4530fa2f4d7c3bb3')"
     ]
   }
 }
