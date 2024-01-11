@@ -22,10 +22,13 @@ package com.owncloud.android.presentation.logging
 
 import android.app.DownloadManager
 import android.content.ActivityNotFoundException
+import android.content.ContentValues
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.os.Environment
+import android.provider.MediaStore
 import android.view.MenuItem
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -46,7 +49,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.IOException
 
 class LogsListActivity : AppCompatActivity() {
@@ -76,7 +78,9 @@ class LogsListActivity : AppCompatActivity() {
         }
 
         override fun download(file: File) {
-            downloadFile(file)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                downloadFileQOrAbove(file)
+            }
         }
     }, context = this)
 
@@ -140,31 +144,44 @@ class LogsListActivity : AppCompatActivity() {
         recyclerViewLogsAdapter.setData(items)
     }
 
-    private fun downloadFile(file: File) {
-        val destinationPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath
-        val destinationFolder = File(destinationPath)
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun downloadFileQOrAbove(file: File) {
         val originalName = file.name
-        var uniqueName = originalName
-        var fileNumber = 1
 
-        while (File(destinationFolder, uniqueName).exists()) {
-            uniqueName = "${file.nameWithoutExtension} ($fileNumber).log"
-            fileNumber++
+        val resolver = applicationContext.contentResolver
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Downloads.DISPLAY_NAME, originalName)
+            put(MediaStore.Downloads.MIME_TYPE, "application/octet-stream")
+            put(MediaStore.Downloads.IS_PENDING, 1)
         }
 
-        val destination = File(destinationFolder, uniqueName)
+        val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
 
         try {
-            val sourceChannel = FileInputStream(file).channel
-            val destinationChannel = FileOutputStream(destination).channel
-            sourceChannel.transferTo(0, sourceChannel.size(), destinationChannel)
-            sourceChannel.close()
-            destinationChannel.close()
-            showDownloadDialog(destination.name)
+            uri?.let { downloadUri ->
+                resolver.openOutputStream(downloadUri)?.use { outputStream ->
+                    FileInputStream(file).use { fileInputStream ->
+                        fileInputStream.copyTo(outputStream)
+                    }
+                }
+                contentValues.clear()
+                contentValues.put(MediaStore.Downloads.IS_PENDING, 0)
+                resolver.update(downloadUri, contentValues, null, null)
 
+                val cursor = resolver.query(downloadUri, null, null, null, null)
+                cursor?.use {
+                    if (it.moveToFirst()) {
+                        val displayNameIndex = it.getColumnIndex(MediaStore.Downloads.DISPLAY_NAME)
+                        if (displayNameIndex != -1) {
+                            val finalName = it.getString(displayNameIndex)
+                            showDownloadDialog(finalName)
+                        }
+                    }
+                }
+            }
         } catch (e: IOException) {
             e.printStackTrace()
-            Timber.e(e, "There was a problem to download the file to Download folder.")
+            Timber.e(e, "There was a problem to download the file to Downloads folder.")
         }
     }
 
@@ -175,7 +192,7 @@ class LogsListActivity : AppCompatActivity() {
             .setMessage(getString(R.string.log_file_downloaded_description, fileName))
             .setPositiveButton(R.string.go_to_download_folder) { dialog, _ ->
                 dialog.dismiss()
-                goToDownloadsFolder()
+                openDownloadsFolder()
             }
             .setNegativeButton(R.string.drawer_close) { dialog, _ ->
                 dialog.dismiss()
@@ -184,10 +201,14 @@ class LogsListActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun goToDownloadsFolder() {
+    private fun openDownloadsFolder() {
         try {
             val intent = Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
-            startActivity(intent)
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent)
+            } else {
+                showMessageInSnackbar(message = this.getString(R.string.file_list_no_app_for_perform_action))
+            }
         } catch (e: ActivityNotFoundException) {
             showMessageInSnackbar(message = this.getString(R.string.file_list_no_app_for_perform_action))
             Timber.e("No Activity found to handle Intent")
