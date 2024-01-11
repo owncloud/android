@@ -28,10 +28,6 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.InputType
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.style.DynamicDrawableSpan
-import android.text.style.ImageSpan
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -42,11 +38,10 @@ import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
-import androidx.core.text.buildSpannedString
-import androidx.core.text.color
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
+import com.owncloud.android.MainApp.Companion.appContext
 import com.owncloud.android.R
 import com.owncloud.android.databinding.SharePublicDialogBinding
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
@@ -239,7 +234,6 @@ class PublicShareDialogFragment : DialogFragment() {
             if (publicShare?.isPasswordProtected == true) {
                 setPasswordSwitchChecked()
                 binding.shareViaLinkPasswordValue.isVisible = true
-                binding.shareViaLinkPasswordPolicy.isVisible = true
                 binding.shareViaLinkPasswordValue.hint = getString(R.string.share_via_link_default_password)
             }
 
@@ -328,7 +322,9 @@ class PublicShareDialogFragment : DialogFragment() {
 
     private fun initPasswordChangeInputListener() {
         binding.shareViaLinkPasswordValue.doOnTextChanged { text, _, _, _ ->
-            updateRequirements(text.toString(), binding.shareViaLinkPasswordPolicy)
+            capabilities?.passwordPolicy?.let { passwordPolicy ->
+                requirementsPasswordPolicy(text.toString(), passwordPolicy)
+            } ?: binding.saveButton.also { it.isEnabled = true }
         }
     }
 
@@ -343,68 +339,109 @@ class PublicShareDialogFragment : DialogFragment() {
         })
     }
 
-    private fun updateRequirements(password: String, textView: TextView) {
-        val hasMaxCharacters = password.length <= 72
-        val hasMinCharacters = password.length >= 8
-        val hasUpperCase = password.any { it.isUpperCase() }
-        val hasLowerCase = password.any { it.isLowerCase() }
-        val hasSpecialCharacter = password.any { SPECIALS_CHARACTERS.contains(it) }
-        val hasDigit = password.any { it.isDigit() }
+    private fun requirementsPasswordPolicy(password: String, passwordPolicy: OCCapability.PasswordPolicy) {
 
-        val passwordChecks = arrayOf(
-            Triple(hasMinCharacters, R.string.password_policy_min_characters, capabilities?.passwordPolicyMinCharacters),
-            Triple(hasUpperCase, R.string.password_policy_uppercase_characters, capabilities?.passwordPolicyMinUppercaseCharacters),
-            Triple(hasLowerCase, R.string.password_policy_lowercase_characters, capabilities?.passwordPolicyMinLowercaseCharacters),
-            Triple(hasDigit, R.string.password_policy_min_digit, capabilities?.passwordPolicyMinDigits),
-            Triple(hasSpecialCharacter, R.string.password_policy_min_special_character, capabilities?.passwordPolicyMinSpecialCharacters),
-            Triple(hasMaxCharacters, R.string.password_policy_max_characters, capabilities?.passwordPolicyMaxCharacters)
-        )
+            var hasMaxCharacters = password.length <= passwordPolicy.maxCharacters!!
+            var hasMinCharacters = password.length >= passwordPolicy.minCharacters!!
+            var hasUpperCase = password.count { it.isUpperCase() } >= passwordPolicy.minUppercaseCharacters!!
+            var hasLowerCase = password.count { it.isLowerCase() } >= passwordPolicy.minLowercaseCharacters!!
+            var hasSpecialCharacter = password.count { SPECIALS_CHARACTERS.contains(it) } >= passwordPolicy.minSpecialCharacters!!
+            var hasDigit = password.count { it.isDigit() } >= passwordPolicy.minDigits!!
 
-        val requirementsString = buildSpannedString {
+            if (hasMaxCharacters) requirementChecked(binding.shareViaLinkPasswordPolicyMaxCharacters)
+            else requirementWarning(binding.shareViaLinkPasswordPolicyMaxCharacters)
 
-            appendLine(getString(R.string.password_policy_intro))
+            if (hasMinCharacters) requirementChecked(binding.shareViaLinkPasswordPolicyMinCharacters)
+            else requirementWarning(binding.shareViaLinkPasswordPolicyMinCharacters)
 
-            for ((requirementIsChecked, resourceId, capabilityValue) in passwordChecks) {
-                capabilityValue?.let {
-                    val requirement = getString(
-                        resourceId,
-                        capabilityValue.toString(),
-                        if (requirementIsChecked == hasSpecialCharacter) SPECIALS_CHARACTERS else ""
-                    )
-                    appendRequirement(requirementIsChecked, requirement)
-                }
+            if (hasUpperCase) requirementChecked(binding.shareViaLinkPasswordPolicyUpperCaseCharacters)
+            else requirementWarning(binding.shareViaLinkPasswordPolicyUpperCaseCharacters)
+
+            if (hasLowerCase) requirementChecked(binding.shareViaLinkPasswordPolicyLowerCaseCharacters)
+            else requirementWarning(binding.shareViaLinkPasswordPolicyLowerCaseCharacters)
+
+            if (hasSpecialCharacter) {
+                binding.shareViaLinkPasswordPolicyMinSpecialCharactersText.setTextColor(ContextCompat.getColor(appContext, R.color.success))
+                requirementChecked(binding.shareViaLinkPasswordPolicyMinSpecialCharactersIcon)
+            } else {
+                binding.shareViaLinkPasswordPolicyMinSpecialCharactersText.setTextColor(ContextCompat.getColor(appContext, R.color.warning))
+                requirementWarning(binding.shareViaLinkPasswordPolicyMinSpecialCharactersIcon)
             }
-        }
 
-        textView.text = requirementsString
+            if (hasDigit) requirementChecked(binding.shareViaLinkPasswordPolicyMinDigitCharacters)
+            else requirementWarning(binding.shareViaLinkPasswordPolicyMinDigitCharacters)
 
-        val allConditionsCheck = hasMinCharacters && hasUpperCase && hasLowerCase && hasDigit && hasSpecialCharacter && hasMaxCharacters
-        if (binding.shareViaLinkPasswordPolicy.isVisible) {
+
+            binding.shareViaLinkPasswordPolicyIntro.isVisible = true
+
+            if (passwordPolicy.minCharacters!! > 0) {
+                binding.shareViaLinkPasswordPolicyMinCharacters.text = getString(
+                    R.string.password_policy_min_characters, passwordPolicy.minCharacters
+                )
+                binding.shareViaLinkPasswordPolicyMinCharacters.isVisible = true
+            } else {
+                hasMinCharacters = true
+            }
+
+            if (passwordPolicy.minUppercaseCharacters!! > 0) {
+                binding.shareViaLinkPasswordPolicyUpperCaseCharacters.text = getString(
+                    R.string.password_policy_uppercase_characters, passwordPolicy.minUppercaseCharacters
+                )
+                binding.shareViaLinkPasswordPolicyUpperCaseCharacters.isVisible = true
+            } else {
+                hasUpperCase = true
+            }
+
+            if (passwordPolicy.minLowercaseCharacters!! > 0) {
+                binding.shareViaLinkPasswordPolicyLowerCaseCharacters.text = getString(
+                    R.string.password_policy_lowercase_characters, passwordPolicy.minLowercaseCharacters
+                )
+                binding.shareViaLinkPasswordPolicyLowerCaseCharacters.isVisible = true
+            } else {
+                hasLowerCase = true
+            }
+
+            if (passwordPolicy.minSpecialCharacters!! > 0) {
+                binding.shareViaLinkPasswordPolicyMinSpecialCharactersText.text = getString(
+                    R.string.password_policy_min_special_character,
+                    passwordPolicy.minSpecialCharacters,
+                    SPECIALS_CHARACTERS
+                )
+                binding.shareViaLinkPasswordPolicyMinSpecialCharacters.isVisible = true
+            } else {
+                hasSpecialCharacter = true
+            }
+
+            if (passwordPolicy.maxCharacters!! > 0) {
+                binding.shareViaLinkPasswordPolicyMaxCharacters.text = getString(
+                    R.string.password_policy_max_characters, passwordPolicy.maxCharacters
+                )
+                binding.shareViaLinkPasswordPolicyMaxCharacters.isVisible = true
+            } else {
+                hasMaxCharacters = true
+            }
+
+            if (passwordPolicy.minDigits!! > 0) {
+                binding.shareViaLinkPasswordPolicyMinDigitCharacters.text = getString(
+                    R.string.password_policy_min_digit, passwordPolicy.minDigits
+                )
+                binding.shareViaLinkPasswordPolicyMinDigitCharacters.isVisible = true
+            } else {
+                hasDigit = true
+            }
+
+            val allConditionsCheck = hasMinCharacters && hasUpperCase && hasLowerCase && hasDigit && hasSpecialCharacter && hasMaxCharacters
             binding.saveButton.isEnabled = allConditionsCheck
-        }
     }
 
-    private fun SpannableStringBuilder.appendRequirement(requirementIsChecked: Boolean, requirement: String) {
-        val iconDrawable = if (requirementIsChecked) {
-            ContextCompat.getDrawable(requireContext(), R.drawable.check_password_policy)
-        } else {
-            ContextCompat.getDrawable(requireContext(), R.drawable.close_password_policy)
-        }
+    private fun requirementChecked(textView: TextView) {
+        textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_check_password_policy, 0, 0, 0)
+        textView.setTextColor(ContextCompat.getColor(appContext, R.color.success))
+    }
 
-        iconDrawable?.let {
-            it.setBounds(0, 0, it.intrinsicWidth, it.intrinsicHeight)
-
-            val iconAndRequirements = SpannableString(" $requirement")
-            iconAndRequirements.setSpan(
-                ImageSpan(it, DynamicDrawableSpan.ALIGN_BOTTOM),
-                0, 1,
-                ImageSpan.ALIGN_BASELINE or ImageSpan.ALIGN_BOTTOM
-            )
-
-            color(ContextCompat.getColor(requireActivity(), if (requirementIsChecked) R.color.success else R.color.warning)) {
-                appendLine(iconAndRequirements)
-            }
-        }
+    private fun requirementWarning(textView: TextView) {
+        textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_cross_warning_password_policy, 0, 0, 0)
+        textView.setTextColor(ContextCompat.getColor(appContext, R.color.warning))
     }
 
     private abstract class RightDrawableOnTouchListener : View.OnTouchListener {
@@ -453,7 +490,6 @@ class PublicShareDialogFragment : DialogFragment() {
             binding.saveButton.isEnabled = false
             showViewPasswordButton()
         } else {
-            binding.saveButton.isEnabled = true
             hidePassword()
             hidePasswordButton()
         }
@@ -616,7 +652,6 @@ class PublicShareDialogFragment : DialogFragment() {
         override fun onCheckedChanged(switchView: CompoundButton, isChecked: Boolean) {
             if (isChecked) {
                 binding.shareViaLinkPasswordValue.isVisible = true
-                binding.shareViaLinkPasswordPolicy.isVisible = true
                 binding.shareViaLinkPasswordValue.requestFocus()
 
                 // Show keyboard to fill in the password
@@ -627,7 +662,6 @@ class PublicShareDialogFragment : DialogFragment() {
 
             } else {
                 binding.shareViaLinkPasswordValue.isVisible = false
-                binding.shareViaLinkPasswordPolicy.isVisible = false
                 binding.shareViaLinkPasswordValue.text?.clear()
             }
         }
@@ -845,7 +879,6 @@ class PublicShareDialogFragment : DialogFragment() {
         binding.shareViaLinkPasswordSwitch.isVisible = true
         if (!binding.shareViaLinkPasswordSwitch.isChecked) {
             binding.shareViaLinkPasswordValue.isVisible = false
-            binding.shareViaLinkPasswordPolicy.isVisible = false
         }
     }
 
@@ -854,7 +887,6 @@ class PublicShareDialogFragment : DialogFragment() {
         binding.shareViaLinkPasswordSwitch.isChecked = true
         binding.shareViaLinkPasswordSwitch.isVisible = false
         binding.shareViaLinkPasswordValue.isVisible = true
-        binding.shareViaLinkPasswordPolicy.isVisible = true
     }
 
     /**
@@ -888,7 +920,7 @@ class PublicShareDialogFragment : DialogFragment() {
         private const val ARG_ACCOUNT = "ACCOUNT"
         private const val ARG_DEFAULT_LINK_NAME = "DEFAULT_LINK_NAME"
         private const val KEY_EXPIRATION_DATE = "EXPIRATION_DATE"
-        private const val SPECIALS_CHARACTERS = "\"!'\"#\$%&'()*+,-./:;<=>?@[\\]^_`{|}~\""
+        private const val SPECIALS_CHARACTERS = "\"!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~\""
 
         /**
          * Create a new instance of PublicShareDialogFragment, providing fileToShare as an argument.

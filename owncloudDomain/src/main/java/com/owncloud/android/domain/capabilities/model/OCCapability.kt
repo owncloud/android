@@ -51,12 +51,7 @@ data class OCCapability(
     val filesPrivateLinks: CapabilityBooleanType,
     val filesAppProviders: AppProviders?,
     val spaces: Spaces?,
-    val passwordPolicyMaxCharacters: Int?,
-    val passwordPolicyMinCharacters: Int?,
-    val passwordPolicyMinDigits: Int?,
-    val passwordPolicyMinLowercaseCharacters: Int?,
-    val passwordPolicyMinSpecialCharacters: Int?,
-    val passwordPolicyMinUppercaseCharacters: Int?,
+    val passwordPolicy:  PasswordPolicy?,
 ) {
     fun isChunkingAllowed(): Boolean {
         val doubleChunkingVersion = davChunkingVersion.toDoubleOrNull()
@@ -86,6 +81,15 @@ data class OCCapability(
         val enabled: Boolean,
         val projects: Boolean,
         val shareJail: Boolean,
+    )
+
+    data class PasswordPolicy(
+        val maxCharacters: Int?,
+        val minCharacters: Int?,
+        val minDigits: Int?,
+        val minLowercaseCharacters: Int?,
+        val minSpecialCharacters: Int?,
+        val minUppercaseCharacters: Int?,
     )
 }
 
