@@ -27,6 +27,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Security - Improve biometric authentication security: [#4180](https://github.com/owncloud/android/issues/4180)
 * Bugfix - Some Null Pointer Exceptions in MainFileListViewModel: [#4065](https://github.com/owncloud/android/issues/4065)
 * Bugfix - Some Null Pointer Exceptions fixed from Google Play: [#4207](https://github.com/owncloud/android/issues/4207)
 * Bugfix - Add "scope" parameter to /token endpoint HTTP requests: [#4260](https://github.com/owncloud/android/pull/4260)
@@ -50,6 +51,14 @@ ownCloud admins and users.
 * Enhancement - Fix in the type handling of the content-type: [#4258](https://github.com/owncloud/android/issues/4258)
 
 ## Details
+
+* Security - Improve biometric authentication security: [#4180](https://github.com/owncloud/android/issues/4180)
+
+   Biometric authentication has been improved by checking the result received when
+   performing a successful authentication.
+
+   https://github.com/owncloud/android/issues/4180
+   https://github.com/owncloud/android/pull/4283
 
 * Bugfix - Some Null Pointer Exceptions in MainFileListViewModel: [#4065](https://github.com/owncloud/android/issues/4065)
 
