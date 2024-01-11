@@ -68,12 +68,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesPrivateLinks = CapabilityBooleanType.fromValue(remote.filesPrivateLinks.value),
                 filesAppProviders = remote.filesAppProviders?.firstOrNull()?.toAppProviders(),
                 spaces = remote.spaces?.toSpaces(),
-                passwordPolicyMaxCharacters = remote.passwordPolicyMaxCharacters,
-                passwordPolicyMinCharacters = remote.passwordPolicyMinCharacters,
-                passwordPolicyMinDigits = remote.passwordPolicyMinDigits,
-                passwordPolicyMinLowercaseCharacters = remote.passwordPolicyMinLowercaseCharacters,
-                passwordPolicyMinSpecialCharacters = remote.passwordPolicyMinSpecialCharacters,
-                passwordPolicyMinUppercaseCharacters = remote.passwordPolicyMinUppercaseCharacters,
+                passwordPolicy = remote.passwordPolicy?.toPasswordPolicy()
             )
         }
 
@@ -119,12 +114,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesPrivateLinks = RemoteCapabilityBooleanType.fromValue(model.filesPrivateLinks.value)!!,
                 filesAppProviders = null,
                 spaces = null,
-                passwordPolicyMaxCharacters = model.passwordPolicyMaxCharacters!!,
-                passwordPolicyMinCharacters = model.passwordPolicyMinCharacters!!,
-                passwordPolicyMinDigits = model.passwordPolicyMinDigits!!,
-                passwordPolicyMinLowercaseCharacters = model.passwordPolicyMinLowercaseCharacters!!,
-                passwordPolicyMinSpecialCharacters = model.passwordPolicyMinSpecialCharacters!!,
-                passwordPolicyMinUppercaseCharacters = model.passwordPolicyMinUppercaseCharacters!!,
+                passwordPolicy = null,
             )
         }
 
@@ -134,4 +124,6 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
     private fun RemoteCapability.RemoteSpaces.toSpaces() =
         OCCapability.Spaces(enabled, projects, shareJail)
 
+    private fun RemoteCapability.RemotePasswordPolicy.toPasswordPolicy() =
+        OCCapability.PasswordPolicy(maxCharacters, minCharacters, minDigits, minLowercaseCharacters, minSpecialCharacters, minUppercaseCharacters)
 }

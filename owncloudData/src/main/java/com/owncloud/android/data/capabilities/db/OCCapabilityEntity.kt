@@ -33,12 +33,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FIL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_PRIVATE_LINKS
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_UNDELETE
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_VERSIONING
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_PASSWORD_POLICY_MAX_CHARACTERS
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_PASSWORD_POLICY_MIN_CHARACTERS
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_PASSWORD_POLICY_MIN_DIGITS
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_PASSWORD_POLICY_MIN_LOWERCASE_CHARACTERS
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_PASSWORD_POLICY_MIN_SPECIAL_CHARACTERS
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_PASSWORD_POLICY_MIN_UPPERCASE_CHARACTERS
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_PASSWORD_POLICY
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING
@@ -131,18 +126,8 @@ data class OCCapabilityEntity(
     val appProviders: OCCapability.AppProviders?,
     @Embedded(prefix = CAPABILITIES_SPACES_PREFIX)
     val spaces: OCCapability.Spaces?,
-    @ColumnInfo(name = CAPABILITIES_PASSWORD_POLICY_MAX_CHARACTERS)
-    val passwordPolicyMaxCharacters: Int?,
-    @ColumnInfo(name = CAPABILITIES_PASSWORD_POLICY_MIN_CHARACTERS)
-    val passwordPolicyMinCharacters: Int?,
-    @ColumnInfo(name = CAPABILITIES_PASSWORD_POLICY_MIN_DIGITS)
-    val passwordPolicyMinDigits: Int?,
-    @ColumnInfo(name = CAPABILITIES_PASSWORD_POLICY_MIN_LOWERCASE_CHARACTERS)
-    val passwordPolicyMinLowercaseCharacters: Int?,
-    @ColumnInfo(name = CAPABILITIES_PASSWORD_POLICY_MIN_SPECIAL_CHARACTERS)
-    val passwordPolicyMinSpecialCharacters: Int?,
-    @ColumnInfo(name = CAPABILITIES_PASSWORD_POLICY_MIN_UPPERCASE_CHARACTERS)
-    val passwordPolicyMinUppercaseCharacters: Int?,
+    @Embedded(prefix = CAPABILITIES_PASSWORD_POLICY)
+    val passwordPolicy: OCCapability.PasswordPolicy?,
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
@@ -180,12 +165,7 @@ data class OCCapabilityEntity(
                     ?: CapabilityBooleanType.UNKNOWN.value,
                 null,
                 null,
-                it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_PASSWORD_POLICY_MAX_CHARACTERS)),
-                it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_PASSWORD_POLICY_MIN_CHARACTERS)),
-                it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_PASSWORD_POLICY_MIN_DIGITS)),
-                it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_PASSWORD_POLICY_MIN_LOWERCASE_CHARACTERS)),
-                it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_PASSWORD_POLICY_MIN_SPECIAL_CHARACTERS)),
-                it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_PASSWORD_POLICY_MIN_UPPERCASE_CHARACTERS)),
+                null,
             )
         }
     }

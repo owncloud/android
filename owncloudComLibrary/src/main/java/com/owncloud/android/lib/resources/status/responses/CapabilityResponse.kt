@@ -78,12 +78,7 @@ data class CapabilityResponse(
         filesSharingFederationOutgoing = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.outgoing),
         filesSharingUserProfilePicture = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingUser?.profilePicture),
         spaces = capabilities?.spacesCapabilities?.toSpaces(),
-        passwordPolicyMaxCharacters = capabilities?.passwordPolicyCapabilities?.maxCharacters ?: 72,
-        passwordPolicyMinCharacters = capabilities?.passwordPolicyCapabilities?.minCharacters ?: 8,
-        passwordPolicyMinDigits = capabilities?.passwordPolicyCapabilities?.minDigitsCharacters ?: 1,
-        passwordPolicyMinLowercaseCharacters = capabilities?.passwordPolicyCapabilities?.minLowercaseCharacters ?: 1,
-        passwordPolicyMinSpecialCharacters = capabilities?.passwordPolicyCapabilities?.minSpecialCharacters ?: 1,
-        passwordPolicyMinUppercaseCharacters = capabilities?.passwordPolicyCapabilities?.minUppercaseCharacters ?: 1,
+        passwordPolicy = capabilities?.passwordPolicyCapabilities?.toPasswordPolicy(),
     )
 }
 
@@ -185,13 +180,21 @@ data class FileCapabilities(
 
 @JsonClass(generateAdapter = true)
 data class PasswordPolicyCapabilities(
-    val maxCharacters: Int?,
+    @Json(name = "max_characters")
+    val max_characters: Int?,
+    @Json(name = "min_characters")
     val minCharacters: Int?,
+    @Json(name = "min_digits")
     val minDigitsCharacters: Int?,
+    @Json(name = "min_lowercase_characters")
     val minLowercaseCharacters: Int?,
+    @Json(name = "min_special_characters")
     val minSpecialCharacters: Int?,
+    @Json(name = "min_uppercase_characters")
     val minUppercaseCharacters: Int?,
-)
+) {
+    fun toPasswordPolicy() = RemotePasswordPolicy(max_characters, minCharacters, minDigitsCharacters, minLowercaseCharacters, minSpecialCharacters, minUppercaseCharacters)
+}
 
 @JsonClass(generateAdapter = true)
 data class AppProvider(
