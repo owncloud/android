@@ -324,7 +324,11 @@ class PublicShareDialogFragment : DialogFragment() {
         binding.shareViaLinkPasswordValue.doOnTextChanged { text, _, _, _ ->
             capabilities?.passwordPolicy?.let { passwordPolicy ->
                 requirementsPasswordPolicy(text.toString(), passwordPolicy)
-            } ?: binding.saveButton.also { it.isEnabled = true }
+            } ?: binding.saveButton.also {
+                if(binding.shareViaLinkPasswordSwitch.isChecked){
+                    it.isEnabled = binding.shareViaLinkPasswordValue.text.isNotBlank()
+                }
+            }
         }
     }
 
@@ -487,7 +491,6 @@ class PublicShareDialogFragment : DialogFragment() {
      */
     private fun onPasswordFocusChanged(hasFocus: Boolean) {
         if (hasFocus) {
-            binding.saveButton.isEnabled = false
             showViewPasswordButton()
         } else {
             hidePassword()
@@ -653,6 +656,7 @@ class PublicShareDialogFragment : DialogFragment() {
             if (isChecked) {
                 binding.shareViaLinkPasswordValue.isVisible = true
                 binding.shareViaLinkPasswordValue.requestFocus()
+                binding.saveButton.isEnabled = false
 
                 // Show keyboard to fill in the password
                 val mgr = activity?.getSystemService(
@@ -662,6 +666,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
             } else {
                 binding.shareViaLinkPasswordValue.isVisible = false
+                binding.saveButton.isEnabled = true
                 binding.shareViaLinkPasswordValue.text?.clear()
             }
         }
