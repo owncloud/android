@@ -769,13 +769,13 @@
     <string name="fab_refresh_text">Refresh</string>
     <string name="fab_refresh_sync_in_progress">Synchronization already in progress</string>
 
-    <string name="password_policy_min_characters">At least %d characters long</string>
-    <string name="password_policy_max_characters">At most %d characters long</string>
-    <string name="password_policy_min_digit">At least %d numbers</string>
-    <string name="password_policy_lowercase_characters">At least %d lowercase characters</string>
-    <string name="password_policy_uppercase_characters">At least %d uppercase characters</string>
+    <string name="password_policy_min_characters">At least %1$d characters long</string>
+    <string name="password_policy_max_characters">At most %1$d characters long</string>
+    <string name="password_policy_min_digits">At least %1$d numbers</string>
+    <string name="password_policy_lowercase_characters">At least %1$d lowercase characters</string>
+    <string name="password_policy_uppercase_characters">At least %1$d uppercase characters</string>
     <string name="password_policy_intro">Please enter a password that meets the following criteria: \n</string>
-    <string name="password_policy_min_special_character">At least %d of the special characters: %2$s</string>
+    <string name="password_policy_min_special_character">At least %1$d of the special characters: \"%2$s\"</string>
 
 
 </resources>

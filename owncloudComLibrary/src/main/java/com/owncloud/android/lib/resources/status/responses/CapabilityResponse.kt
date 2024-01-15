@@ -72,7 +72,8 @@ data class CapabilityResponse(
         filesBigFileChunking = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.bigfilechunking),
         filesUndelete = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.undelete),
         filesVersioning = CapabilityBooleanType.fromBooleanValue(capabilities?.fileCapabilities?.versioning),
-        filesPrivateLinks = capabilities?.fileCapabilities?.privateLinks?.let { CapabilityBooleanType.fromBooleanValue(it) } ?: CapabilityBooleanType.UNKNOWN,
+        filesPrivateLinks = capabilities?.fileCapabilities?.privateLinks?.let { CapabilityBooleanType.fromBooleanValue(it) }
+            ?: CapabilityBooleanType.UNKNOWN,
         filesAppProviders = capabilities?.fileCapabilities?.appProviders?.map { it.toAppProviders() },
         filesSharingFederationIncoming = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.incoming),
         filesSharingFederationOutgoing = CapabilityBooleanType.fromBooleanValue(capabilities?.fileSharingCapabilities?.fileSharingFederation?.outgoing),
@@ -179,24 +180,6 @@ data class FileCapabilities(
 )
 
 @JsonClass(generateAdapter = true)
-data class PasswordPolicyCapabilities(
-    @Json(name = "max_characters")
-    val max_characters: Int?,
-    @Json(name = "min_characters")
-    val minCharacters: Int?,
-    @Json(name = "min_digits")
-    val minDigitsCharacters: Int?,
-    @Json(name = "min_lowercase_characters")
-    val minLowercaseCharacters: Int?,
-    @Json(name = "min_special_characters")
-    val minSpecialCharacters: Int?,
-    @Json(name = "min_uppercase_characters")
-    val minUppercaseCharacters: Int?,
-) {
-    fun toPasswordPolicy() = RemotePasswordPolicy(max_characters, minCharacters, minDigitsCharacters, minLowercaseCharacters, minSpecialCharacters, minUppercaseCharacters)
-}
-
-@JsonClass(generateAdapter = true)
 data class AppProvider(
     val enabled: Boolean,
     val version: String,
@@ -225,6 +208,25 @@ data class SpacesCapabilities(
     val shareJail: Boolean,
 ) {
     fun toSpaces() = RemoteSpaces(enabled, projects, shareJail)
+}
+
+@JsonClass(generateAdapter = true)
+data class PasswordPolicyCapabilities(
+    @Json(name = "max_characters")
+    val maxCharacters: Int?,
+    @Json(name = "min_characters")
+    val minCharacters: Int?,
+    @Json(name = "min_digits")
+    val minDigits: Int?,
+    @Json(name = "min_lowercase_characters")
+    val minLowercaseCharacters: Int?,
+    @Json(name = "min_special_characters")
+    val minSpecialCharacters: Int?,
+    @Json(name = "min_uppercase_characters")
+    val minUppercaseCharacters: Int?,
+) {
+    fun toPasswordPolicy() =
+        RemotePasswordPolicy(maxCharacters, minCharacters, minDigits, minLowercaseCharacters, minSpecialCharacters, minUppercaseCharacters)
 }
 
 @JsonClass(generateAdapter = true)

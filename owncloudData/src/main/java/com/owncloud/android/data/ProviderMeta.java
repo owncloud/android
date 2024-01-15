@@ -92,14 +92,13 @@ public class ProviderMeta {
         public static final String CAPABILITIES_SHARING_RESHARING = "sharing_resharing";
         public static final String CAPABILITIES_SHARING_USER_PROFILE_PICTURE = "sharing_user_profile_picture";
         public static final String CAPABILITIES_SPACES_PREFIX = "spaces_";
-        public static final String CAPABILITIES_PASSWORD_POLICY = "password_policy_";
+        public static final String CAPABILITIES_PASSWORD_POLICY_PREFIX = "password_policy_";
         public static final String CAPABILITIES_VERSION_EDITION = "version_edition";
         public static final String CAPABILITIES_VERSION_MAJOR = "version_major";
         public static final String CAPABILITIES_VERSION_MICRO = "version_micro";
         public static final String CAPABILITIES_VERSION_MINOR = "version_minor";
         public static final String CAPABILITIES_VERSION_STRING = "version_string";
         public static final String LEGACY_CAPABILITIES_VERSION_MAYOR = "version_mayor";
-
 
         // Columns of filelist table (legacy)
         public static final String FILE_ACCOUNT_OWNER = "file_owner";
