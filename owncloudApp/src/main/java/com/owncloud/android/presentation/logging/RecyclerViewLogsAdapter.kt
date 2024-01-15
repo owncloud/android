@@ -51,7 +51,9 @@ class RecyclerViewLogsAdapter(
         holder.binding.apply {
             textViewTitleActivityLogsList.text = log.name
             textViewSubtitleActivityLogsList.text = log.toLegibleStringSize(context)
-            hideDownloadButton(holder)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                imageViewDownloadActivityLogsList.isVisible = false
+            }
             imageViewShareActivityLogsList.setOnClickListener {
                 listener.share(log)
             }
@@ -86,12 +88,5 @@ class RecyclerViewLogsAdapter(
         fun delete(file: File, isLastLogFileDeleted: Boolean)
         fun open(file: File)
         fun download(file: File)
-    }
-
-
-    private fun hideDownloadButton(holder: ViewHolder) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            holder.binding.imageViewDownloadActivityLogsList.isVisible = false
-        }
     }
 }
