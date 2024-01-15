@@ -326,7 +326,7 @@ class FileDisplayActivity : FileActivity(),
                         0,
                         file.remotePath.lastIndexOf(file.fileName)
                     )
-                    if (storageManager.getFileByPath(parentPath) == null) {
+                    if (storageManager.getFileByPath(parentPath, file.spaceId) == null) {
                         file = null // not able to know the directory where the file is uploading
                     }
                 } else {
