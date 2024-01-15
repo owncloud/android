@@ -51,7 +51,7 @@ data class OCCapability(
     val filesPrivateLinks: CapabilityBooleanType,
     val filesAppProviders: AppProviders?,
     val spaces: Spaces?,
-    val passwordPolicy:  PasswordPolicy?,
+    val passwordPolicy: PasswordPolicy?,
 ) {
     fun isChunkingAllowed(): Boolean {
         val doubleChunkingVersion = davChunkingVersion.toDoubleOrNull()
