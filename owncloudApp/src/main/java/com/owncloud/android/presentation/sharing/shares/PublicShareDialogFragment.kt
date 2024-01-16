@@ -360,81 +360,93 @@ class PublicShareDialogFragment : DialogFragment() {
         )
 
         passwordPolicy.minCharacters?.let { minCharacters ->
-            hasMinCharacters = password.length >= minCharacters
-            binding.shareViaLinkPasswordPolicyMinCharactersText.text = getString(
-                R.string.password_policy_min_characters, passwordPolicy.minCharacters
-            )
-            binding.shareViaLinkPasswordPolicyMinCharacters.isVisible = true
-            handleRequirementCheckedOrWarning(
-                hasRequirement = hasMinCharacters,
-                textViewIcon = binding.shareViaLinkPasswordPolicyMinCharactersIcon,
-                textView = binding.shareViaLinkPasswordPolicyMinCharactersText
-            )
+            if (minCharacters > 0) {
+                hasMinCharacters = password.length >= minCharacters
+                binding.shareViaLinkPasswordPolicyMinCharactersText.text = getString(
+                    R.string.password_policy_min_characters, passwordPolicy.minCharacters
+                )
+                binding.shareViaLinkPasswordPolicyMinCharacters.isVisible = true
+                handleRequirementCheckedOrWarning(
+                    hasRequirement = hasMinCharacters,
+                    textViewIcon = binding.shareViaLinkPasswordPolicyMinCharactersIcon,
+                    textView = binding.shareViaLinkPasswordPolicyMinCharactersText
+                )
+            }
         }
 
         passwordPolicy.maxCharacters?.let { maxCharacters ->
-            hasMaxCharacters = password.length <= maxCharacters
-            binding.shareViaLinkPasswordPolicyMaxCharactersText.text = getString(
-                R.string.password_policy_max_characters, passwordPolicy.maxCharacters
-            )
-            binding.shareViaLinkPasswordPolicyMaxCharacters.isVisible = true
-            handleRequirementCheckedOrWarning(
-                hasRequirement = hasMaxCharacters,
-                textViewIcon = binding.shareViaLinkPasswordPolicyMaxCharactersIcon,
-                textView = binding.shareViaLinkPasswordPolicyMaxCharactersText
-            )
+            if (maxCharacters > 0) {
+                hasMaxCharacters = password.length <= maxCharacters
+                binding.shareViaLinkPasswordPolicyMaxCharactersText.text = getString(
+                    R.string.password_policy_max_characters, passwordPolicy.maxCharacters
+                )
+                binding.shareViaLinkPasswordPolicyMaxCharacters.isVisible = true
+                handleRequirementCheckedOrWarning(
+                    hasRequirement = hasMaxCharacters,
+                    textViewIcon = binding.shareViaLinkPasswordPolicyMaxCharactersIcon,
+                    textView = binding.shareViaLinkPasswordPolicyMaxCharactersText
+                )
+            }
         }
 
         passwordPolicy.minUppercaseCharacters?.let { minUppercaseCharacters ->
-            hasUpperCase = password.count { it.isUpperCase() } >= minUppercaseCharacters
-            binding.shareViaLinkPasswordPolicyUpperCaseCharactersText.text = getString(
-                R.string.password_policy_uppercase_characters, passwordPolicy.minUppercaseCharacters
-            )
-            binding.shareViaLinkPasswordPolicyUpperCaseCharacters.isVisible = true
-            handleRequirementCheckedOrWarning(
-                hasRequirement = hasUpperCase,
-                textViewIcon = binding.shareViaLinkPasswordPolicyUpperCaseCharactersIcon,
-                textView = binding.shareViaLinkPasswordPolicyUpperCaseCharactersText
-            )
+            if (minUppercaseCharacters > 0) {
+                hasUpperCase = password.count { it.isUpperCase() } >= minUppercaseCharacters
+                binding.shareViaLinkPasswordPolicyUpperCaseCharactersText.text = getString(
+                    R.string.password_policy_uppercase_characters, passwordPolicy.minUppercaseCharacters
+                )
+                binding.shareViaLinkPasswordPolicyUpperCaseCharacters.isVisible = true
+                handleRequirementCheckedOrWarning(
+                    hasRequirement = hasUpperCase,
+                    textViewIcon = binding.shareViaLinkPasswordPolicyUpperCaseCharactersIcon,
+                    textView = binding.shareViaLinkPasswordPolicyUpperCaseCharactersText
+                )
+            }
         }
 
         passwordPolicy.minLowercaseCharacters?.let { minLowercaseCharacters ->
-            hasLowerCase = password.count { it.isLowerCase() } >= minLowercaseCharacters
-            binding.shareViaLinkPasswordPolicyLowerCaseCharactersText.text = getString(
-                R.string.password_policy_lowercase_characters, passwordPolicy.minLowercaseCharacters
-            )
-            binding.shareViaLinkPasswordPolicyLowerCaseCharacters.isVisible = true
-            handleRequirementCheckedOrWarning(
-                hasRequirement = hasLowerCase,
-                textViewIcon = binding.shareViaLinkPasswordPolicyLowerCaseCharactersIcon,
-                textView = binding.shareViaLinkPasswordPolicyLowerCaseCharactersText
-            )
+            if (minLowercaseCharacters > 0) {
+                hasLowerCase = password.count { it.isLowerCase() } >= minLowercaseCharacters
+                binding.shareViaLinkPasswordPolicyLowerCaseCharactersText.text = getString(
+                    R.string.password_policy_lowercase_characters, passwordPolicy.minLowercaseCharacters
+                )
+                binding.shareViaLinkPasswordPolicyLowerCaseCharacters.isVisible = true
+                handleRequirementCheckedOrWarning(
+                    hasRequirement = hasLowerCase,
+                    textViewIcon = binding.shareViaLinkPasswordPolicyLowerCaseCharactersIcon,
+                    textView = binding.shareViaLinkPasswordPolicyLowerCaseCharactersText
+                )
+            }
         }
 
         passwordPolicy.minSpecialCharacters?.let { minSpecialCharacters ->
-            hasSpecialCharacter = password.count { SPECIALS_CHARACTERS.contains(it) } >= minSpecialCharacters
-            binding.shareViaLinkPasswordPolicyMinSpecialCharactersText.text = getString(
-                R.string.password_policy_min_special_character, passwordPolicy.minSpecialCharacters, SPECIALS_CHARACTERS
-            )
-            binding.shareViaLinkPasswordPolicyMinSpecialCharacters.isVisible = true
-            handleRequirementCheckedOrWarning(
-                hasRequirement = hasSpecialCharacter,
-                textViewIcon = binding.shareViaLinkPasswordPolicyMinSpecialCharactersIcon,
-                textView = binding.shareViaLinkPasswordPolicyMinSpecialCharactersText
-            )
+            if (minSpecialCharacters > 0) {
+                hasSpecialCharacter = password.count { SPECIALS_CHARACTERS.contains(it) } >= minSpecialCharacters
+                binding.shareViaLinkPasswordPolicyMinSpecialCharactersText.text = getString(
+                    R.string.password_policy_min_special_character, passwordPolicy.minSpecialCharacters, SPECIALS_CHARACTERS
+                )
+                binding.shareViaLinkPasswordPolicyMinSpecialCharacters.isVisible = true
+                handleRequirementCheckedOrWarning(
+                    hasRequirement = hasSpecialCharacter,
+                    textViewIcon = binding.shareViaLinkPasswordPolicyMinSpecialCharactersIcon,
+                    textView = binding.shareViaLinkPasswordPolicyMinSpecialCharactersText
+                )
+            }
         }
 
         passwordPolicy.minDigits?.let { minDigits ->
-            hasDigit = password.count { it.isDigit() } >= minDigits
-            binding.shareViaLinkPasswordPolicyMinDigitsText.text = getString(
-                R.string.password_policy_min_digits, passwordPolicy.minDigits
-            )
-            binding.shareViaLinkPasswordPolicyMinDigits.isVisible = true
-            handleRequirementCheckedOrWarning(
-                hasRequirement = hasDigit,
-                textViewIcon = binding.shareViaLinkPasswordPolicyMinDigitsIcon,
-                textView = binding.shareViaLinkPasswordPolicyMinDigitsText
-            )
+            if (minDigits > 0) {
+                hasDigit = password.count { it.isDigit() } >= minDigits
+                binding.shareViaLinkPasswordPolicyMinDigitsText.text = getString(
+                    R.string.password_policy_min_digits, passwordPolicy.minDigits
+                )
+                binding.shareViaLinkPasswordPolicyMinDigits.isVisible = true
+                handleRequirementCheckedOrWarning(
+                    hasRequirement = hasDigit,
+                    textViewIcon = binding.shareViaLinkPasswordPolicyMinDigitsIcon,
+                    textView = binding.shareViaLinkPasswordPolicyMinDigitsText
+                )
+            }
         }
 
         val allConditionsCheck = hasMinCharacters && hasUpperCase && hasLowerCase && hasDigit && hasSpecialCharacter && hasMaxCharacters
