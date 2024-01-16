@@ -169,8 +169,7 @@ public class RemoteOperationResult<T>
 
         } else if (e instanceof ProtocolException) {
             mCode = ResultCode.NETWORK_ERROR;
-        }
-        else {
+        } else {
             mCode = ResultCode.UNKNOWN_ERROR;
         }
     }
@@ -272,7 +271,7 @@ public class RemoteOperationResult<T>
                     continue;
                 }
                 if (WWW_AUTHENTICATE.equalsIgnoreCase(header.getKey())) {
-                    for (String value: header.getValue()) {
+                    for (String value : header.getValue()) {
                         mAuthenticate.add(value.toLowerCase());
                     }
                 }
@@ -305,6 +304,9 @@ public class RemoteOperationResult<T>
                     break;
                 case HttpConstants.HTTP_CONFLICT:                        // 409
                     mCode = ResultCode.CONFLICT;
+                    break;
+                case HttpConstants.HTTP_LOCKED:                          // 423
+                    mCode = ResultCode.RESOURCE_LOCKED;
                     break;
                 case HttpConstants.HTTP_INTERNAL_SERVER_ERROR:           // 500
                     mCode = ResultCode.INSTANCE_NOT_CONFIGURED;     // assuming too much...
@@ -594,5 +596,6 @@ public class RemoteOperationResult<T>
         SPECIFIC_BAD_REQUEST,
         TOO_EARLY,
         NETWORK_ERROR,
+        RESOURCE_LOCKED
     }
 }

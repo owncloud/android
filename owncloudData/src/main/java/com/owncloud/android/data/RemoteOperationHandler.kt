@@ -53,6 +53,7 @@ import com.owncloud.android.domain.exceptions.PartialCopyDoneException
 import com.owncloud.android.domain.exceptions.PartialMoveDoneException
 import com.owncloud.android.domain.exceptions.QuotaExceededException
 import com.owncloud.android.domain.exceptions.RedirectToNonSecureException
+import com.owncloud.android.domain.exceptions.ResourceLockedException
 import com.owncloud.android.domain.exceptions.SSLErrorException
 import com.owncloud.android.domain.exceptions.ServerConnectionTimeoutException
 import com.owncloud.android.domain.exceptions.ServerNotReachableException
@@ -95,6 +96,7 @@ private fun <T> handleRemoteOperationResult(
             if (remoteOperationResult.exception is SocketTimeoutException) throw ServerResponseTimeoutException()
             else throw ServerConnectionTimeoutException()
         }
+
         RemoteOperationResult.ResultCode.HOST_NOT_AVAILABLE -> throw ServerNotReachableException()
         RemoteOperationResult.ResultCode.SERVICE_UNAVAILABLE -> throw ServiceUnavailableException()
         RemoteOperationResult.ResultCode.SSL_RECOVERABLE_PEER_UNVERIFIED -> throw remoteOperationResult.exception as CertificateCombinedException
@@ -142,6 +144,7 @@ private fun <T> handleRemoteOperationResult(
         RemoteOperationResult.ResultCode.SHARE_FORBIDDEN -> throw ShareForbiddenException(remoteOperationResult.httpPhrase)
         RemoteOperationResult.ResultCode.TOO_EARLY -> throw TooEarlyException()
         RemoteOperationResult.ResultCode.NETWORK_ERROR -> throw NetworkErrorException()
+        RemoteOperationResult.ResultCode.RESOURCE_LOCKED -> throw ResourceLockedException()
         else -> throw Exception()
     }
 }
