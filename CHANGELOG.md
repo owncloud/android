@@ -29,6 +29,7 @@ ownCloud admins and users.
 
 * Security - Improve biometric authentication security: [#4180](https://github.com/owncloud/android/issues/4180)
 * Bugfix - Some Null Pointer Exceptions in MainFileListViewModel: [#4065](https://github.com/owncloud/android/issues/4065)
+* Bugfix - Bugs related to Details view: [#4188](https://github.com/owncloud/android/issues/4188)
 * Bugfix - Some Null Pointer Exceptions fixed from Google Play: [#4207](https://github.com/owncloud/android/issues/4207)
 * Bugfix - Add "scope" parameter to /token endpoint HTTP requests: [#4260](https://github.com/owncloud/android/pull/4260)
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
@@ -67,6 +68,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4065
    https://github.com/owncloud/android/pull/4241
+
+* Bugfix - Bugs related to Details view: [#4188](https://github.com/owncloud/android/issues/4188)
+
+   When coming to Details view from video or image previews, now the top bar is
+   shown correctly and navigation has the correct stack, so the back button has the
+   expected flow.
+
+   https://github.com/owncloud/android/issues/4188
+   https://github.com/owncloud/android/pull/4265
 
 * Bugfix - Some Null Pointer Exceptions fixed from Google Play: [#4207](https://github.com/owncloud/android/issues/4207)
 
