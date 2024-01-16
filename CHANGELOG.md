@@ -42,7 +42,7 @@ ownCloud admins and users.
 * Enhancement - Auto upload in oCIS accounts allows upload to any space: [#4117](https://github.com/owncloud/android/issues/4117)
 * Enhancement - Thumbnail improvements in grid view: [#4145](https://github.com/owncloud/android/issues/4145)
 * Enhancement - Logging changes: [#4151](https://github.com/owncloud/android/issues/4151)
-* Enhancement - Download log files: [#4155](https://github.com/owncloud/android/issues/4155)
+* Enhancement - Download log files on Android10+ devices: [#4155](https://github.com/owncloud/android/issues/4155)
 * Enhancement - Log file sharing allowed within ownCloud Android app: [#4156](https://github.com/owncloud/android/issues/4156)
 * Enhancement - New field "last usage" in database: [#4173](https://github.com/owncloud/android/issues/4173)
 * Enhancement - Use invoke operator to execute usecases: [#4179](https://github.com/owncloud/android/pull/4179)
@@ -180,10 +180,10 @@ ownCloud admins and users.
    https://github.com/owncloud/android/issues/4151
    https://github.com/owncloud/android/pull/4204
 
-* Enhancement - Download log files: [#4155](https://github.com/owncloud/android/issues/4155)
+* Enhancement - Download log files on Android10+ devices: [#4155](https://github.com/owncloud/android/issues/4155)
 
    A new icon to download a log file to the Downloads folder of the device has been
-   added to the log list screen.
+   added to the log list screen on Android10+ devices.
 
    https://github.com/owncloud/android/issues/4155
    https://github.com/owncloud/android/pull/4205
