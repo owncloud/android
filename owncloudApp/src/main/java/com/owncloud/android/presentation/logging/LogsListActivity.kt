@@ -204,11 +204,7 @@ class LogsListActivity : AppCompatActivity() {
     private fun openDownloadsFolder() {
         try {
             val intent = Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
-            if (intent.resolveActivity(packageManager) != null) {
-                startActivity(intent)
-            } else {
-                showMessageInSnackbar(message = this.getString(R.string.file_list_no_app_for_perform_action))
-            }
+            startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             showMessageInSnackbar(message = this.getString(R.string.file_list_no_app_for_perform_action))
             Timber.e("No Activity found to handle Intent")
