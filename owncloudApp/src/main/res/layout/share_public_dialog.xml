@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/standard_half_padding"
         android:text="@string/share_via_link_create_title"
-        android:textAppearance="@style/Theme.ownCloud.AlertDialog.WindowTitle" />
+        android:textAppearance="@android:style/TextAppearance.Material.DialogWindowTitle" />
 
     <ScrollView
         android:layout_width="match_parent"
