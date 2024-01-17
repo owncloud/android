@@ -75,6 +75,7 @@
         <activity
             android:name=".ui.activity.SplashActivity"
             android:exported="true"
+            android:excludeFromRecents="true"
             android:theme="@style/Theme.ownCloud.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
