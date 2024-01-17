@@ -48,10 +48,13 @@ class OCAuthenticationRepositoryTest {
 
     @Test
     fun `loginBasic returns String with the account name correctly`() {
-        every { remoteAuthenticationDataSource.loginBasic(
-            serverPath = any(),
-            username = OC_BASIC_USERNAME,
-            password = OC_BASIC_PASSWORD) } returns Pair(
+        every {
+            remoteAuthenticationDataSource.loginBasic(
+                serverPath = any(),
+                username = OC_BASIC_USERNAME,
+                password = OC_BASIC_PASSWORD
+            )
+        } returns Pair(
             OC_USER_INFO,
             OC_REDIRECTION_PATH.lastPermanentLocation
         )
@@ -60,7 +63,7 @@ class OCAuthenticationRepositoryTest {
             localAuthenticationDataSource.addBasicAccount(
                 userName = OC_BASIC_USERNAME,
                 lastPermanentLocation = OC_REDIRECTION_PATH.lastPermanentLocation,
-                password =  OC_BASIC_PASSWORD,
+                password = OC_BASIC_PASSWORD,
                 serverInfo = OC_SECURE_SERVER_INFO_BASIC_AUTH,
                 userInfo = OC_USER_INFO,
                 updateAccountWithUsername = null
@@ -91,12 +94,15 @@ class OCAuthenticationRepositoryTest {
 
     @Test
     fun `loginOAuth returns String with the account name correctly`() {
-        every { remoteAuthenticationDataSource.loginOAuth(
-            serverPath = any(),
-            username = OC_BASIC_USERNAME,
-            accessToken = any()) } returns Pair(
-                first = OC_USER_INFO,
-                second = OC_REDIRECTION_PATH.lastPermanentLocation
+        every {
+            remoteAuthenticationDataSource.loginOAuth(
+                serverPath = any(),
+                username = OC_BASIC_USERNAME,
+                accessToken = any()
+            )
+        } returns Pair(
+            first = OC_USER_INFO,
+            second = OC_REDIRECTION_PATH.lastPermanentLocation
         )
 
         every {

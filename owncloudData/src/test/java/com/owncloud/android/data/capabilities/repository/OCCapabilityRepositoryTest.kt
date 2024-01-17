@@ -71,7 +71,7 @@ class OCCapabilityRepositoryTest {
     }
 
     @Test
-    fun `getStoredCapabilities returns an object of OCCapability` () {
+    fun `getStoredCapabilities returns an object of OCCapability`() {
 
         every {
             localCapabilitiesDataSource.getCapabilitiesForAccount(any())
