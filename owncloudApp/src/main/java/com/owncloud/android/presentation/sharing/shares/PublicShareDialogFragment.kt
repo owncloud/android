@@ -46,6 +46,7 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.SharePublicDialogBinding
 import com.owncloud.android.domain.capabilities.model.CapabilityBooleanType
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.exceptions.UnhandledHttpCodeException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.utils.Event.EventObserver
@@ -891,8 +892,13 @@ class PublicShareDialogFragment : DialogFragment() {
      * Show error when creating or updating the public share, if any
      */
     private fun showError(genericErrorMessage: String, throwable: Throwable?) {
-        binding.publicLinkErrorMessage.text = throwable?.parseError(genericErrorMessage, resources)
+        if (throwable is UnhandledHttpCodeException) {
+            binding.publicLinkErrorMessage.text = getString(R.string.password_policy_error_password_banned)
+        } else {
+            binding.publicLinkErrorMessage.text = throwable?.parseError(genericErrorMessage, resources)
+        }
         binding.publicLinkErrorMessage.isVisible = true
+        binding.saveButton.isEnabled = false
     }
 
     private fun setPasswordSwitchChecked() {
