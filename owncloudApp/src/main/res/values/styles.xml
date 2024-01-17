@@ -96,10 +96,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <!-- Alert Dialog title -->
-    <style name="Theme.ownCloud.AlertDialog.WindowTitle" parent="TextAppearance.Material3.TitleMedium">
-    </style>
-
     <!-- APP BAR styles -->
 
     <!-- Regular style for the app bar (both for old actionbar and new toolbar);
