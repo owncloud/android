@@ -33,6 +33,7 @@ import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FIL
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_PRIVATE_LINKS
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_UNDELETE
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_FILES_VERSIONING
+import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_PASSWORD_POLICY_PREFIX
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_API_ENABLED
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_INCOMING
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.CAPABILITIES_SHARING_FEDERATION_OUTGOING
@@ -125,6 +126,8 @@ data class OCCapabilityEntity(
     val appProviders: OCCapability.AppProviders?,
     @Embedded(prefix = CAPABILITIES_SPACES_PREFIX)
     val spaces: OCCapability.Spaces?,
+    @Embedded(prefix = CAPABILITIES_PASSWORD_POLICY_PREFIX)
+    val passwordPolicy: OCCapability.PasswordPolicy?,
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 
@@ -160,6 +163,7 @@ data class OCCapabilityEntity(
                 it.getInt(it.getColumnIndexOrThrow(CAPABILITIES_FILES_VERSIONING)),
                 it.getColumnIndex(CAPABILITIES_FILES_PRIVATE_LINKS).takeUnless { it < 0 }?.let { index -> it.getInt(index) }
                     ?: CapabilityBooleanType.UNKNOWN.value,
+                null,
                 null,
                 null,
             )

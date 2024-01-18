@@ -50,6 +50,7 @@ ownCloud admins and users.
 * Enhancement - Select user and navigate to file when opening via deep link: [#4194](https://github.com/owncloud/android/issues/4194)
 * Enhancement - New branding/MDM parameter to show sensitive auth info in logs: [#4249](https://github.com/owncloud/android/issues/4249)
 * Enhancement - Fix in the type handling of the content-type: [#4258](https://github.com/owncloud/android/issues/4258)
+* Enhancement - Manage password policy in live mode: [#4269](https://github.com/owncloud/android/issues/4269)
 
 ## Details
 
@@ -242,6 +243,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4258
    https://github.com/owncloud/android/pull/4266
+
+* Enhancement - Manage password policy in live mode: [#4269](https://github.com/owncloud/android/issues/4269)
+
+   Password policy for public links is handled in live mode with new items in the
+   dialog.
+
+   https://github.com/owncloud/android/issues/4269
+   https://github.com/owncloud/android/pull/4276
 
 # Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
 

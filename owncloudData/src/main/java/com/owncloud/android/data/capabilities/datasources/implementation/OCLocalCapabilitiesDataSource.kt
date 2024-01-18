@@ -85,6 +85,7 @@ class OCLocalCapabilitiesDataSource(
                 filesPrivateLinks = CapabilityBooleanType.fromValue(filesPrivateLinks),
                 filesAppProviders = appProviders,
                 spaces = spaces,
+                passwordPolicy = passwordPolicy,
             )
 
         @VisibleForTesting
@@ -119,7 +120,8 @@ class OCLocalCapabilitiesDataSource(
                 filesVersioning = filesVersioning.value,
                 filesPrivateLinks = filesPrivateLinks.value,
                 appProviders = filesAppProviders,
-                spaces = spaces
+                spaces = spaces,
+                passwordPolicy = passwordPolicy,
             )
     }
 }
