@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,6 +30,7 @@ interface SpacesRepository {
     fun getSpacesByDriveTypeWithSpecialsForAccountAsFlow(accountName: String, filterDriveTypes: Set<String>): Flow<List<OCSpace>>
     fun getPersonalSpaceForAccount(accountName: String): OCSpace?
     fun getPersonalAndProjectSpacesForAccount(accountName: String): List<OCSpace>
+    fun getPersonalAndSharesAndProjectSpacesForAccount(accountName: String): List<OCSpace>
     fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String): OCSpace
     fun getSpaceByIdForAccount(spaceId: String?, accountName: String): OCSpace?
     fun getWebDavUrlForSpace(accountName: String, spaceId: String?): String?

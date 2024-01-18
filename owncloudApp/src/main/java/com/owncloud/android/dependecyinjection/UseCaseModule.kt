@@ -5,7 +5,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -87,6 +87,7 @@ import com.owncloud.android.domain.sharing.shares.usecases.GetShareAsLiveDataUse
 import com.owncloud.android.domain.sharing.shares.usecases.GetSharesAsLiveDataUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.RefreshSharesFromServerAsyncUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesForAccountUseCase
+import com.owncloud.android.domain.spaces.usecases.GetPersonalAndSharesAndProjectSpacesForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase
 import com.owncloud.android.domain.spaces.usecases.GetPersonalSpaceForAccountUseCase
 import com.owncloud.android.domain.spaces.usecases.GetProjectSpacesWithSpecialsForAccountAsStreamUseCase
@@ -208,6 +209,7 @@ val useCaseModule = module {
 
     // Spaces
     factoryOf(::GetPersonalAndProjectSpacesForAccountUseCase)
+    factoryOf(::GetPersonalAndSharesAndProjectSpacesForAccountUseCase)
     factoryOf(::GetPersonalAndProjectSpacesWithSpecialsForAccountAsStreamUseCase)
     factoryOf(::GetPersonalSpaceForAccountUseCase)
     factoryOf(::GetProjectSpacesWithSpecialsForAccountAsStreamUseCase)
