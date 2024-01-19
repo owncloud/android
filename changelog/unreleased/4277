@@ -1,0 +1,6 @@
+Bugfix: Fixed AlertDialog title theme in Samsung Devices
+
+Use of device default theme was removed.
+
+https://github.com/owncloud/android/issues/3192
+https://github.com/owncloud/android/pull/4277
