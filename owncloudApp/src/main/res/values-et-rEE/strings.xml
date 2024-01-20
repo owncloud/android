@@ -703,4 +703,12 @@
   <string name="deep_link_loading">Faili avamine lingist</string>
   <string name="fab_refresh_text">Värskenda</string>
   <string name="fab_refresh_sync_in_progress">Sünkroniseerimine juba käib</string>
+  <string name="password_policy_min_characters">Vähemalt %1$d tähemärki pikk</string>
+  <string name="password_policy_max_characters">Kõige rohkem %1$d tähemärki pikk</string>
+  <string name="password_policy_min_digits">Vähemalt %1$d numbrit</string>
+  <string name="password_policy_lowercase_characters">Vähemalt %1$d väiketähte</string>
+  <string name="password_policy_uppercase_characters">Vähemalt %1$d suurtähte</string>
+  <string name="password_policy_intro">Palun sisesta parool, mis vastab järgmistele nõudmistele: \n</string>
+  <string name="password_policy_min_special_character">Vähemalt %1$d erimärkidest: \"%2$s\"</string>
+  <string name="password_policy_error_password_banned">Kahjuks on teie parool tavaliselt kasutatav. Palun valige oma turvalisuse huvides raskemini ära arvatav parool.</string>
 </resources>
