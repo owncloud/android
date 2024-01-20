@@ -701,4 +701,12 @@
   <string name="deep_link_loading">Hapje kartele nga lidhje</string>
   <string name="fab_refresh_text">Rifreskoje</string>
   <string name="fab_refresh_sync_in_progress">Njëkohësim tashmë në kryerje e sipër</string>
+  <string name="password_policy_min_characters">Të paktën %1$d shenja i gjatë</string>
+  <string name="password_policy_max_characters">E shumta %1$d shenja i gjatë</string>
+  <string name="password_policy_min_digits">Të paktën %1$d numra</string>
+  <string name="password_policy_lowercase_characters">Të paktën %1$d shkronja me të vogla</string>
+  <string name="password_policy_uppercase_characters">Të paktën %1$d shkronja me të mëdha</string>
+  <string name="password_policy_intro">Ju lutemi, jepni një fjalëkalim që plotëson kriteret vijuese: \n</string>
+  <string name="password_policy_min_special_character">Të paktën %1$d nga shenjat speciale: “%2$s”</string>
+  <string name="password_policy_error_password_banned">Mjerisht fjalëkalimi juaj përdoret rëndom. Ju lutemi, për sigurinë tuaj zgjidhni një fjalëkalim më të vështirë për t’u hamendësuar.</string>
 </resources>
