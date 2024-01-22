@@ -77,14 +77,10 @@ class GetRemoteAppRegistryOperation(private val appUrl: String?) : RemoteOperati
 
     private fun removeSubfolder(url: String): String {
         val doubleSlashIndex = url.indexOf("//")
-        return if (doubleSlashIndex >= 0) {
-            val nextSlashIndex = url.indexOf('/', doubleSlashIndex + 2)
-            if (nextSlashIndex >= 0) {
-                val result = url.substring(0, nextSlashIndex)
-                return if (result.endsWith("/")) result else "$result/"
-            } else {
-                if (url.endsWith("/")) url else "$url/"
-            }
+        val nextSlashIndex = url.indexOf('/', doubleSlashIndex + 2)
+        return if (nextSlashIndex >= 0) {
+            val result = url.substring(0, nextSlashIndex)
+            if (result.endsWith("/")) result else "$result/"
         } else {
             if (url.endsWith("/")) url else "$url/"
         }
