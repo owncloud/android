@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,12 +29,13 @@ import com.owncloud.android.R
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_CLIENT_ID
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_CODE_CHALLENGE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_CODE_CHALLENGE_METHOD
+import com.owncloud.android.data.authentication.QUERY_PARAMETER_LOGIN_HINT
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_PROMPT
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_REDIRECT_URI
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_RESPONSE_TYPE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_SCOPE
 import com.owncloud.android.data.authentication.QUERY_PARAMETER_STATE
-import com.owncloud.android.data.authentication.QUERY_PARAMETER_USERNAME
+import com.owncloud.android.data.authentication.QUERY_PARAMETER_USER
 import com.owncloud.android.domain.authentication.oauth.model.ClientRegistrationRequest
 import java.net.URLEncoder
 import java.security.MessageDigest
@@ -113,7 +116,10 @@ class OAuthUtils {
                 appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE, codeChallenge)
                 appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE_METHOD, CODE_CHALLENGE_METHOD)
                 appendQueryParameter(QUERY_PARAMETER_STATE, state)
-                if (!username.isNullOrEmpty()) appendQueryParameter(QUERY_PARAMETER_USERNAME, username)
+                if (!username.isNullOrEmpty()) {
+                    appendQueryParameter(QUERY_PARAMETER_USER, username)
+                    appendQueryParameter(QUERY_PARAMETER_LOGIN_HINT, username)
+                }
             }.build()
 
         fun buildRedirectUri(context: Context): Uri =
