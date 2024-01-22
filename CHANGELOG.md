@@ -28,6 +28,7 @@ ownCloud admins and users.
 ## Summary
 
 * Security - Improve biometric authentication security: [#4180](https://github.com/owncloud/android/issues/4180)
+* Bugfix - Fixed AlertDialog title theme in Samsung Devices: [#3192](https://github.com/owncloud/android/issues/3192)
 * Bugfix - Some Null Pointer Exceptions in MainFileListViewModel: [#4065](https://github.com/owncloud/android/issues/4065)
 * Bugfix - Bugs related to Details view: [#4188](https://github.com/owncloud/android/issues/4188)
 * Bugfix - Some Null Pointer Exceptions fixed from Google Play: [#4207](https://github.com/owncloud/android/issues/4207)
@@ -61,6 +62,13 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4180
    https://github.com/owncloud/android/pull/4283
+
+* Bugfix - Fixed AlertDialog title theme in Samsung Devices: [#3192](https://github.com/owncloud/android/issues/3192)
+
+   Use of device default theme was removed.
+
+   https://github.com/owncloud/android/issues/3192
+   https://github.com/owncloud/android/pull/4277
 
 * Bugfix - Some Null Pointer Exceptions in MainFileListViewModel: [#4065](https://github.com/owncloud/android/issues/4065)
 
