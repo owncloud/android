@@ -105,7 +105,8 @@ class OAuthUtils {
             prompt: String,
             codeChallenge: String,
             state: String,
-            username: String?
+            username: String?,
+            sendLoginHintAndUser: Boolean,
         ): Uri =
             authorizationEndpoint.buildUpon().apply {
                 appendQueryParameter(QUERY_PARAMETER_REDIRECT_URI, redirectUri)
@@ -116,7 +117,7 @@ class OAuthUtils {
                 appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE, codeChallenge)
                 appendQueryParameter(QUERY_PARAMETER_CODE_CHALLENGE_METHOD, CODE_CHALLENGE_METHOD)
                 appendQueryParameter(QUERY_PARAMETER_STATE, state)
-                if (!username.isNullOrEmpty()) {
+                if (sendLoginHintAndUser && !username.isNullOrEmpty()) {
                     appendQueryParameter(QUERY_PARAMETER_USER, username)
                     appendQueryParameter(QUERY_PARAMETER_LOGIN_HINT, username)
                 }

@@ -143,4 +143,7 @@
     <!-- Redact authorization header info in logs -->
     <bool name="redact_auth_header_logs">true</bool>
 
+    <!-- Send login_hint and user parameters in login request -->
+    <bool name="send_login_hint_and_user">true</bool>
+
 </resources>

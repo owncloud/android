@@ -526,6 +526,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             codeChallenge = authenticationViewModel.codeChallenge,
             state = authenticationViewModel.oidcState,
             username = username,
+            sendLoginHintAndUser = resources.getBoolean(R.bool.send_login_hint_and_user),
         )
 
         try {
