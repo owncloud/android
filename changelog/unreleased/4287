@@ -1,0 +1,7 @@
+Bugfix: Fix in the handling of the base URL
+
+Base URL has been formatted in GetRemoteAppRegistryOperation
+when server instance is installed in subfolder, so that the endpoint is formed correctly.
+
+https://github.com/owncloud/android/issues/4279
+https://github.com/owncloud/android/pull/4287
