@@ -52,6 +52,7 @@ ownCloud admins and users.
 * Enhancement - New branding/MDM parameter to show sensitive auth info in logs: [#4249](https://github.com/owncloud/android/issues/4249)
 * Enhancement - Fix in the type handling of the content-type: [#4258](https://github.com/owncloud/android/issues/4258)
 * Enhancement - Manage password policy in live mode: [#4269](https://github.com/owncloud/android/issues/4269)
+* Enhancement - New branding/MDM parameter to send `login_hint` and `user` params: [#4288](https://github.com/owncloud/android/issues/4288)
 
 ## Details
 
@@ -259,6 +260,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4269
    https://github.com/owncloud/android/pull/4276
+
+* Enhancement - New branding/MDM parameter to send `login_hint` and `user` params: [#4288](https://github.com/owncloud/android/issues/4288)
+
+   A new branding and MDM parameter has been created to decide if `login_hint` and
+   `user` are sent as parameters in the login request, so that a value is shown in
+   the Username text field.
+
+   https://github.com/owncloud/android/issues/4288
+   https://github.com/owncloud/android/pull/4291
 
 # Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
 
