@@ -8,8 +8,10 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
+ *
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -79,6 +81,7 @@ import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.dialog.SslUntrustedCertDialog
 import com.owncloud.android.utils.CONFIGURATION_OAUTH2_OPEN_ID_PROMPT
 import com.owncloud.android.utils.CONFIGURATION_OAUTH2_OPEN_ID_SCOPE
+import com.owncloud.android.utils.CONFIGURATION_SEND_LOGIN_HINT_AND_USER
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 import com.owncloud.android.utils.NO_MDM_RESTRICTION_YET
@@ -526,7 +529,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
             codeChallenge = authenticationViewModel.codeChallenge,
             state = authenticationViewModel.oidcState,
             username = username,
-            sendLoginHintAndUser = resources.getBoolean(R.bool.send_login_hint_and_user),
+            sendLoginHintAndUser = mdmProvider.getBrandingBoolean(mdmKey = CONFIGURATION_SEND_LOGIN_HINT_AND_USER, booleanKey = R.bool.send_login_hint_and_user),
         )
 
         try {

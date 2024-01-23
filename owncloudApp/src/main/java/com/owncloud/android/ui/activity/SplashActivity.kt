@@ -36,6 +36,7 @@ import com.owncloud.android.utils.CONFIGURATION_LOCK_DELAY_TIME
 import com.owncloud.android.utils.CONFIGURATION_OAUTH2_OPEN_ID_PROMPT
 import com.owncloud.android.utils.CONFIGURATION_OAUTH2_OPEN_ID_SCOPE
 import com.owncloud.android.utils.CONFIGURATION_REDACT_AUTH_HEADER_LOGS
+import com.owncloud.android.utils.CONFIGURATION_SEND_LOGIN_HINT_AND_USER
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL
 import com.owncloud.android.utils.CONFIGURATION_SERVER_URL_INPUT_VISIBILITY
 
@@ -56,6 +57,7 @@ class SplashActivity : AppCompatActivity() {
                 cacheStringRestriction(CONFIGURATION_OAUTH2_OPEN_ID_PROMPT, R.string.oauth2_open_id_prompt_configuration_feedback_ok)
                 cacheBooleanRestriction(CONFIGURATION_DEVICE_PROTECTION, R.string.device_protection_configuration_feedback_ok)
                 cacheBooleanRestriction(CONFIGURATION_REDACT_AUTH_HEADER_LOGS, R.string.redact_auth_header_logs_configuration_feedback_ok)
+                cacheBooleanRestriction(CONFIGURATION_SEND_LOGIN_HINT_AND_USER, R.string.send_login_hint_and_user_configuration_feedback_ok)
             }
         }
 
