@@ -43,4 +43,10 @@
         android:title="@string/redact_auth_header_logs_configuration_title"
         android:description="@string/redact_auth_header_logs_configuration_description"
         android:defaultValue="true" />
+    <restriction
+        android:key="send_login_hint_and_user_configuration"
+        android:restrictionType="bool"
+        android:title="@string/send_login_hint_and_user_configuration_title"
+        android:description="@string/send_login_hint_and_user_configuration_description"
+        android:defaultValue="true" />
 </restrictions>
