@@ -43,10 +43,9 @@ class GetRemoteAppRegistryOperation(private val appUrl: String?) : RemoteOperati
         var result: RemoteOperationResult<AppRegistryResponse>
 
         try {
-            val uriBuilder = client.baseUri.buildUpon().apply {
-                appendEncodedPath(appUrl)
-            }
-            val getMethod = GetMethod(URL(uriBuilder.build().toString()))
+            val urlFormatted = removeSubfolder(client.baseUri.toString()) + appUrl
+            val getMethod = GetMethod(URL(urlFormatted))
+
             val status = client.executeHttpMethod(getMethod)
 
             val response = getMethod.getResponseBodyAsString()
@@ -74,5 +73,16 @@ class GetRemoteAppRegistryOperation(private val appUrl: String?) : RemoteOperati
         }
 
         return result
+    }
+
+    private fun removeSubfolder(url: String): String {
+        val doubleSlashIndex = url.indexOf("//")
+        val nextSlashIndex = url.indexOf('/', doubleSlashIndex + 2)
+        return if (nextSlashIndex >= 0) {
+            val result = url.substring(0, nextSlashIndex)
+            if (result.endsWith("/")) result else "$result/"
+        } else {
+            if (url.endsWith("/")) url else "$url/"
+        }
     }
 }
