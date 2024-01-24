@@ -32,6 +32,7 @@ ownCloud admins and users.
 * Bugfix - Some Null Pointer Exceptions in MainFileListViewModel: [#4065](https://github.com/owncloud/android/issues/4065)
 * Bugfix - Bugs related to Details view: [#4188](https://github.com/owncloud/android/issues/4188)
 * Bugfix - Some Null Pointer Exceptions fixed from Google Play: [#4207](https://github.com/owncloud/android/issues/4207)
+* Bugfix - Conflict in copy with files without extension: [#4222](https://github.com/owncloud/android/issues/4222)
 * Bugfix - Add "scope" parameter to /token endpoint HTTP requests: [#4260](https://github.com/owncloud/android/pull/4260)
 * Bugfix - Fix in the handling of the base URL: [#4279](https://github.com/owncloud/android/issues/4279)
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
@@ -96,6 +97,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4207
    https://github.com/owncloud/android/pull/4238
+
+* Bugfix - Conflict in copy with files without extension: [#4222](https://github.com/owncloud/android/issues/4222)
+
+   The check of files names that start in the same way has been removed from the
+   copy network operation, so that the copy use case takes care of that and works
+   properly with files without extension.
+
+   https://github.com/owncloud/android/issues/4222
+   https://github.com/owncloud/android/pull/4294
 
 * Bugfix - Add "scope" parameter to /token endpoint HTTP requests: [#4260](https://github.com/owncloud/android/pull/4260)
 
