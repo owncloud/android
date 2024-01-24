@@ -1,0 +1,8 @@
+Bugfix: Conflict in copy with files without extension
+
+The check of files names that start in the same way has been removed from the copy
+network operation, so that the copy use case takes care of that and works properly with
+files without extension.
+
+https://github.com/owncloud/android/issues/4222
+https://github.com/owncloud/android/pull/4294
