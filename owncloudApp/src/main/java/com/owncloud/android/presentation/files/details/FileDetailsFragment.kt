@@ -251,7 +251,7 @@ class FileDetailsFragment : FileFragment() {
             }
 
             R.id.action_remove_file -> {
-                val dialog = RemoveFilesDialogFragment.newInstance(safeFile.file)
+                val dialog = RemoveFilesDialogFragment.newInstance(safeFile.file, safeFile.file.isAvailableLocally)
                 dialog.show(parentFragmentManager, FRAGMENT_TAG_CONFIRMATION)
                 true
             }
@@ -353,7 +353,7 @@ class FileDetailsFragment : FileFragment() {
         thumbnailImageView.bringToFront()
         thumbnailImageView.isVisible = false
 
-        val file =  ocFileWithSyncInfo.file
+        val file = ocFileWithSyncInfo.file
         if (ocFileWithSyncInfo.isSynchronizing) {
             thumbnailImageView.setImageResource(R.drawable.sync_pin)
             thumbnailImageView.visibility = View.VISIBLE
