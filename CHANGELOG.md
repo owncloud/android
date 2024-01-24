@@ -32,6 +32,7 @@ ownCloud admins and users.
 * Bugfix - Bugs related to Details view: [#4188](https://github.com/owncloud/android/issues/4188)
 * Bugfix - Some Null Pointer Exceptions fixed from Google Play: [#4207](https://github.com/owncloud/android/issues/4207)
 * Bugfix - Add "scope" parameter to /token endpoint HTTP requests: [#4260](https://github.com/owncloud/android/pull/4260)
+* Bugfix - Doubled app in Recents screen after installing: [#4262](https://github.com/owncloud/android/issues/4262)
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
 * Enhancement - Koin DSL: [#3966](https://github.com/owncloud/android/pull/3966)
 * Enhancement - Unit tests for datasources classes - Part 1 & Fixes: [#4063](https://github.com/owncloud/android/issues/4063)
@@ -92,6 +93,14 @@ ownCloud admins and users.
    /token endpoint, which is optional in v1 but required in v2.
 
    https://github.com/owncloud/android/pull/4260
+
+* Bugfix - Doubled app in Recents screen after installing: [#4262](https://github.com/owncloud/android/issues/4262)
+
+   SplashActivity and FileDisplayActivity are not shown anymore in Recents screen
+   when the application is installed from scratch and we are on the login screen.
+
+   https://github.com/owncloud/android/issues/4262
+   https://github.com/owncloud/android/pull/4286
 
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
 
