@@ -28,6 +28,7 @@ ownCloud admins and users.
 ## Summary
 
 * Security - Improve biometric authentication security: [#4180](https://github.com/owncloud/android/issues/4180)
+* Bugfix - Fixed AlertDialog title theme in Samsung Devices: [#3192](https://github.com/owncloud/android/issues/3192)
 * Bugfix - Some Null Pointer Exceptions in MainFileListViewModel: [#4065](https://github.com/owncloud/android/issues/4065)
 * Bugfix - Bugs related to Details view: [#4188](https://github.com/owncloud/android/issues/4188)
 * Bugfix - Some Null Pointer Exceptions fixed from Google Play: [#4207](https://github.com/owncloud/android/issues/4207)
@@ -51,6 +52,7 @@ ownCloud admins and users.
 * Enhancement - New branding/MDM parameter to show sensitive auth info in logs: [#4249](https://github.com/owncloud/android/issues/4249)
 * Enhancement - Fix in the type handling of the content-type: [#4258](https://github.com/owncloud/android/issues/4258)
 * Enhancement - Manage password policy in live mode: [#4269](https://github.com/owncloud/android/issues/4269)
+* Enhancement - New branding/MDM parameter to send `login_hint` and `user` params: [#4288](https://github.com/owncloud/android/issues/4288)
 
 ## Details
 
@@ -61,6 +63,13 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4180
    https://github.com/owncloud/android/pull/4283
+
+* Bugfix - Fixed AlertDialog title theme in Samsung Devices: [#3192](https://github.com/owncloud/android/issues/3192)
+
+   Use of device default theme was removed.
+
+   https://github.com/owncloud/android/issues/3192
+   https://github.com/owncloud/android/pull/4277
 
 * Bugfix - Some Null Pointer Exceptions in MainFileListViewModel: [#4065](https://github.com/owncloud/android/issues/4065)
 
@@ -251,6 +260,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4269
    https://github.com/owncloud/android/pull/4276
+
+* Enhancement - New branding/MDM parameter to send `login_hint` and `user` params: [#4288](https://github.com/owncloud/android/issues/4288)
+
+   A new branding and MDM parameter has been created to decide if `login_hint` and
+   `user` are sent as parameters in the login request, so that a value is shown in
+   the Username text field.
+
+   https://github.com/owncloud/android/issues/4288
+   https://github.com/owncloud/android/pull/4291
 
 # Changelog for ownCloud Android Client [4.1.1] (2023-10-18)
 
