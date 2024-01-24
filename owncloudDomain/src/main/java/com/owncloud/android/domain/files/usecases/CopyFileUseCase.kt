@@ -49,7 +49,7 @@ class CopyFileUseCase(
     fun validateOrThrowException(listOfFilesToCopy: List<OCFile>, targetFolder: OCFile) {
         require(listOfFilesToCopy.isNotEmpty())
 
-        if (listOfFilesToCopy.any { targetFolder.remotePath.startsWith(it.remotePath) }) {
+        if (listOfFilesToCopy.any { targetFolder.remotePath.startsWith(it.remotePath) and (targetFolder.spaceId == it.spaceId) }) {
             throw CopyIntoDescendantException()
         }
     }
