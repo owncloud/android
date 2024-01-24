@@ -474,7 +474,7 @@ class MainFileListFragment : Fragment(),
                                 }
 
                                 FileMenuOption.REMOVE -> {
-                                    val dialogRemove = RemoveFilesDialogFragment.newInstance(file)
+                                    val dialogRemove = RemoveFilesDialogFragment.newInstance(file, file.isAvailableLocally)
                                     dialogRemove.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
                                 }
 
@@ -1099,7 +1099,8 @@ class MainFileListFragment : Fragment(),
             }
 
             R.id.action_remove_file -> {
-                val dialog = RemoveFilesDialogFragment.newInstance(checkedFiles)
+                // to handle using usecase
+                val dialog = RemoveFilesDialogFragment.newInstance(checkedFiles, false)
                 dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
                 fileListAdapter.clearSelection()
                 updateActionModeAfterTogglingSelected()

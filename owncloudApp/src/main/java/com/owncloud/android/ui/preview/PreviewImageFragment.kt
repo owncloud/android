@@ -216,35 +216,43 @@ class PreviewImageFragment : FileFragment() {
                 mContainerActivity.fileOperationsHelper.showShareFile(file)
                 true
             }
+
             R.id.action_open_file_with -> {
                 openFile()
                 true
             }
+
             R.id.action_remove_file -> {
-                val dialog = RemoveFilesDialogFragment.newInstance(file)
+                val dialog = RemoveFilesDialogFragment.newInstance(file, file.isAvailableLocally)
                 dialog.show(requireFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION)
                 true
             }
+
             R.id.action_see_details -> {
                 seeDetails()
                 true
             }
+
             R.id.action_send_file -> {
                 requireActivity().sendDownloadedFilesByShareSheet(listOf(file))
                 true
             }
+
             R.id.action_sync_file -> {
                 mContainerActivity.fileOperationsHelper.syncFile(file)
                 true
             }
+
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
                 true
             }
+
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
