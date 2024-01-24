@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -58,4 +60,5 @@ const val QUERY_PARAMETER_PROMPT = "prompt"
 const val QUERY_PARAMETER_CODE_CHALLENGE = "code_challenge"
 const val QUERY_PARAMETER_CODE_CHALLENGE_METHOD = "code_challenge_method"
 const val QUERY_PARAMETER_STATE = "state"
-const val QUERY_PARAMETER_USERNAME = "user"
+const val QUERY_PARAMETER_USER = "user"
+const val QUERY_PARAMETER_LOGIN_HINT = "login_hint"

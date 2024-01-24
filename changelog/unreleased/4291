@@ -1,0 +1,7 @@
+Enhancement: New branding/MDM parameter to send `login_hint` and `user` params
+
+A new branding and MDM parameter has been created to decide if `login_hint` and `user` are
+sent as parameters in the login request, so that a value is shown in the Username text field.
+
+https://github.com/owncloud/android/issues/4288
+https://github.com/owncloud/android/pull/4291
