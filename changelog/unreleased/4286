@@ -1,0 +1,7 @@
+Bugfix: Doubled app in Recents screen after installing
+
+SplashActivity and FileDisplayActivity are not shown anymore in Recents screen when the application is installed
+from scratch and we are on the login screen.
+
+https://github.com/owncloud/android/issues/4262
+https://github.com/owncloud/android/pull/4286
