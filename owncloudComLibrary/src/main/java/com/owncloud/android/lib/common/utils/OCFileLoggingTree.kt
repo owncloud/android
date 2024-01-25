@@ -59,7 +59,7 @@ class OCFileLoggingTree(
                 if (logFiles.isNotEmpty()) {
 
                     val lastDateLogFileString = if (context != null) {
-                        logFiles.last().substringAfterLast( context.packageName + ".").substringBeforeLast(".log")
+                        logFiles.last().substringAfterLast("${context.packageName}.").substringBeforeLast(".log")
                     } else {
                         logFiles.last().substringBeforeLast(".log")
                     }
