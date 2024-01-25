@@ -58,7 +58,11 @@ class OCFileLoggingTree(
             it.list()?.let { logFiles ->
                 if (logFiles.isNotEmpty()) {
 
-                    val lastDateLogFileString = logFiles.last().substringAfterLast("owncloud.").substringBeforeLast(".log")
+                    val lastDateLogFileString = if (context != null) {
+                        logFiles.last().substringAfterLast( context.packageName + ".").substringBeforeLast(".log")
+                    } else {
+                        logFiles.last().substringBeforeLast(".log")
+                    }
 
                     val dateFormat = SimpleDateFormat(LOG_FILE_TIME_FORMAT)
                     val lastDayLogFileDate = dateFormat.parse(lastDateLogFileString)
