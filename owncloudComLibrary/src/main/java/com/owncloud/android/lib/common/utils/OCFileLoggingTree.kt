@@ -37,7 +37,7 @@ import java.util.UUID
 class OCFileLoggingTree(
     externalCacheDir: File,
     context: Context? = null,
-    filename: String = UUID.randomUUID().toString(),
+    var filename: String = UUID.randomUUID().toString(),
     private val newLogcat: Boolean = true,
 ) : Timber.DebugTree() {
 
@@ -61,7 +61,7 @@ class OCFileLoggingTree(
                     val lastDateLogFileString = if (context != null) {
                         logFiles.last().substringAfterLast("${context.packageName}.").substringBeforeLast(".log")
                     } else {
-                        logFiles.last().substringBeforeLast(".log")
+                        logFiles.last().substringAfterLast("$filename.").substringBeforeLast(".log")
                     }
 
                     val dateFormat = SimpleDateFormat(LOG_FILE_TIME_FORMAT)
