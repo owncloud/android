@@ -36,6 +36,7 @@ import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
+import com.owncloud.android.domain.files.usecases.GetIfFileFolderLocalUseCase
 import com.owncloud.android.domain.files.usecases.ManageDeepLinkUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
@@ -68,6 +69,7 @@ class FileOperationsViewModel(
     private val unsetFilesAsAvailableOfflineUseCase: UnsetFilesAsAvailableOfflineUseCase,
     private val manageDeepLinkUseCase: ManageDeepLinkUseCase,
     private val setLastUsageFileUseCase: SetLastUsageFileUseCase,
+    private val getIfFileFolderLocalUseCase: GetIfFileFolderLocalUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
@@ -102,6 +104,9 @@ class FileOperationsViewModel(
     private val _deepLinkFlow = MutableStateFlow<Event<UIResult<OCFile?>>?>(null)
     val deepLinkFlow: StateFlow<Event<UIResult<OCFile?>>?> = _deepLinkFlow
 
+    private val _checkIfFileLocalLiveData = MediatorLiveData<Event<UIResult<Pair<List<OCFile>, Boolean>>>>()
+    val checkIfFileLocalLiveData: LiveData<Event<UIResult<Pair<List<OCFile>, Boolean>>>> = _checkIfFileLocalLiveData
+
     val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
 
     // Used to save the last operation folder
@@ -121,6 +126,17 @@ class FileOperationsViewModel(
             is FileOperation.RefreshFolderOperation -> refreshFolderOperation(fileOperation)
             is FileOperation.CreateFileWithAppProviderOperation -> createFileWithAppProvider(fileOperation)
         }
+    }
+
+    fun showRemoveDialog(filesToRemove: List<OCFile>) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            showLoading = true,
+            liveData = _checkIfFileLocalLiveData,
+            useCase = getIfFileFolderLocalUseCase,
+            useCaseParams = GetIfFileFolderLocalUseCase.Params(filesToRemove),
+            requiresConnection = false
+        )
     }
 
     fun setLastUsageFile(file: OCFile) {

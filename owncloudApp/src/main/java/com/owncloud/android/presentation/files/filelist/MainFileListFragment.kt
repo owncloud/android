@@ -474,8 +474,7 @@ class MainFileListFragment : Fragment(),
                                 }
 
                                 FileMenuOption.REMOVE -> {
-                                    val dialogRemove = RemoveFilesDialogFragment.newInstance(file, file.isAvailableLocally)
-                                    dialogRemove.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+                                    fileOperationsViewModel.showRemoveDialog(arrayListOf(file))
                                 }
 
                                 FileMenuOption.OPEN_WITH -> {
@@ -620,6 +619,22 @@ class MainFileListFragment : Fragment(),
                 }
             }
         }
+
+        fileOperationsViewModel.checkIfFileLocalLiveData.observe(viewLifecycleOwner, Event.EventObserver {
+            val fileActivity = (requireActivity() as FileActivity)
+            when (it) {
+                is UIResult.Loading -> fileActivity.showLoadingDialog(R.string.common_loading)
+                is UIResult.Success -> {
+                    fileActivity.dismissLoadingDialog()
+                    it.data?.let { result -> onShowRemoveDialog(result.first as ArrayList<OCFile>, result.second) }
+                }
+
+                is UIResult.Error -> {
+                    fileActivity.dismissLoadingDialog()
+                    showMessageInSnackbar(resources.getString(R.string.common_error_unknown))
+                }
+            }
+        })
 
         /* TransfersViewModel observables */
         observeTransfers()
@@ -938,6 +953,13 @@ class MainFileListFragment : Fragment(),
         }
     }
 
+    private fun onShowRemoveDialog(filesToRemove: ArrayList<OCFile>, isLocal: Boolean) {
+        val dialog = RemoveFilesDialogFragment.newInstance(filesToRemove, isLocal)
+        dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+        fileListAdapter.clearSelection()
+        updateActionModeAfterTogglingSelected()
+    }
+
     override fun onFolderNameSet(newFolderName: String, parentFolder: OCFile) {
         fileOperationsViewModel.performOperation(FileOperation.CreateFolder(newFolderName, parentFolder))
         fileOperationsViewModel.createFolder.observe(viewLifecycleOwner, Event.EventObserver { uiResult: UIResult<Unit> ->
@@ -1099,11 +1121,7 @@ class MainFileListFragment : Fragment(),
             }
 
             R.id.action_remove_file -> {
-                // to handle using usecase
-                val dialog = RemoveFilesDialogFragment.newInstance(checkedFiles, false)
-                dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
-                fileListAdapter.clearSelection()
-                updateActionModeAfterTogglingSelected()
+                fileOperationsViewModel.showRemoveDialog(checkedFiles)
                 return true
             }
 
