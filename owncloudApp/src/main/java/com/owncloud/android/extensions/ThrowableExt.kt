@@ -43,6 +43,7 @@ import com.owncloud.android.domain.exceptions.OAuth2ErrorAccessDeniedException
 import com.owncloud.android.domain.exceptions.OAuth2ErrorException
 import com.owncloud.android.domain.exceptions.QuotaExceededException
 import com.owncloud.android.domain.exceptions.RedirectToNonSecureException
+import com.owncloud.android.domain.exceptions.ResourceLockedException
 import com.owncloud.android.domain.exceptions.SSLErrorException
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
 import com.owncloud.android.domain.exceptions.ServerConnectionTimeoutException
@@ -101,6 +102,7 @@ fun Throwable.parseError(
             is SpecificForbiddenException -> resources.getString(R.string.uploads_view_upload_status_failed_permission_error)
             is UnauthorizedException -> resources.getString(R.string.auth_unauthorized)
             is NetworkErrorException -> resources.getString(R.string.network_error_message)
+            is ResourceLockedException -> resources.getString(R.string.resource_locked_error_message)
             else -> resources.getString(R.string.common_error_unknown)
         }
 

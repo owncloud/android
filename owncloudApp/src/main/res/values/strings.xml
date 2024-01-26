@@ -490,6 +490,7 @@
     <string name="network_error_connect_timeout_exception">The server took too long to connect.</string>
     <string name="network_host_not_available">Server could not be reached.</string>
     <string name="network_error_message">An error occurred in the network.</string>
+    <string name="resource_locked_error_message">Resource is locked</string>
 
     <string name="forbidden_permissions">You do not have permission %s</string>
 
