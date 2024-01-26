@@ -68,9 +68,6 @@ class CopyRemoteFileOperation(
             // nothing to do!
             return RemoteOperationResult(ResultCode.OK)
         }
-        if (targetRemotePath.startsWith(sourceRemotePath) && sourceSpaceWebDavUrl == targetSpaceWebDavUrl) {
-            return RemoteOperationResult(ResultCode.INVALID_COPY_INTO_DESCENDANT)
-        }
 
         /// perform remote operation
         var result: RemoteOperationResult<String>

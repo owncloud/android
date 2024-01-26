@@ -1,0 +1,6 @@
+Bugfix: Copy folder into descendant in different spaces
+
+Copying a folder into another folder with the same name in a different space now works correctly.
+
+https://github.com/owncloud/android/issues/4293
+https://github.com/owncloud/android/pull/4295
