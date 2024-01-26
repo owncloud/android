@@ -23,21 +23,21 @@ import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
 class GetIfFileFolderLocalUseCase(private val fileRepository: FileRepository) :
-    BaseUseCaseWithResult<Pair<List<OCFile>, Boolean>, GetIfFileFolderLocalUseCase.Params>() {
+    BaseUseCaseWithResult<Boolean, GetIfFileFolderLocalUseCase.Params>() {
 
-    override fun run(params: Params): Pair<List<OCFile>, Boolean> = getIfFileFolderLocal(params.filesToRemove)
-    private fun getIfFileFolderLocal(filesToRemove: List<OCFile>): Pair<List<OCFile>, Boolean> {
+    override fun run(params: Params): Boolean = getIfFileFolderLocal(params.filesToRemove)
+    private fun getIfFileFolderLocal(filesToRemove: List<OCFile>): Boolean {
 
         if (filesToRemove.any { it.isAvailableLocally }) {
-            return Pair(filesToRemove, true)
+            return true
         } else {
             filesToRemove.filter { it.isFolder }.forEach { folder ->
-                if (getIfFileFolderLocal(fileRepository.getFolderContent(folder.id!!)).second) {
-                    return Pair(filesToRemove, true)
+                if (getIfFileFolderLocal(fileRepository.getFolderContent(folder.id!!))) {
+                    return true
                 }
             }
         }
-        return Pair(filesToRemove, false)
+        return false
     }
 
     data class Params(val filesToRemove: List<OCFile>)
