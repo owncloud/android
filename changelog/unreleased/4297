@@ -1,0 +1,6 @@
+Enhancement: Added icon for .docxf files
+
+An icon has been added for files that have a .docxf extension.
+
+https://github.com/owncloud/android/issues/4267
+https://github.com/owncloud/android/pull/4297
