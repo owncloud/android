@@ -37,7 +37,7 @@ import java.util.UUID
 class OCFileLoggingTree(
     externalCacheDir: File,
     context: Context? = null,
-    var filename: String = UUID.randomUUID().toString(),
+    filename: String = UUID.randomUUID().toString(),
     private val newLogcat: Boolean = true,
 ) : Timber.DebugTree() {
 
