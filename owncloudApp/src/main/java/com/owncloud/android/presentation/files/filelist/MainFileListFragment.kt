@@ -156,6 +156,7 @@ class MainFileListFragment : Fragment(),
 
     private var menu: Menu? = null
     private var checkedFiles: List<OCFile> = emptyList()
+    private var filesToRemove: List<OCFile> = emptyList()
     private var fileSingleFile: OCFile? = null
     private var fileOptionsBottomSheetSingleFileLayout: LinearLayout? = null
     private var succeededTransfers: List<OCTransfer>? = null
@@ -474,7 +475,8 @@ class MainFileListFragment : Fragment(),
                                 }
 
                                 FileMenuOption.REMOVE -> {
-                                    fileOperationsViewModel.showRemoveDialog(arrayListOf(file))
+                                    filesToRemove = listOf(file)
+                                    fileOperationsViewModel.showRemoveDialog(filesToRemove)
                                 }
 
                                 FileMenuOption.OPEN_WITH -> {
@@ -620,13 +622,13 @@ class MainFileListFragment : Fragment(),
             }
         }
 
-        fileOperationsViewModel.checkIfFileLocalLiveData.observe(viewLifecycleOwner, Event.EventObserver {
+        collectLatestLifecycleFlow(fileOperationsViewModel.checkIfFileLocalSharedFlow) {
             val fileActivity = (requireActivity() as FileActivity)
             when (it) {
                 is UIResult.Loading -> fileActivity.showLoadingDialog(R.string.common_loading)
                 is UIResult.Success -> {
                     fileActivity.dismissLoadingDialog()
-                    it.data?.let { result -> onShowRemoveDialog(result.first as ArrayList<OCFile>, result.second) }
+                    it.data?.let { result -> onShowRemoveDialog(filesToRemove, result) }
                 }
 
                 is UIResult.Error -> {
@@ -634,7 +636,7 @@ class MainFileListFragment : Fragment(),
                     showMessageInSnackbar(resources.getString(R.string.common_error_unknown))
                 }
             }
-        })
+        }
 
         /* TransfersViewModel observables */
         observeTransfers()
@@ -953,8 +955,8 @@ class MainFileListFragment : Fragment(),
         }
     }
 
-    private fun onShowRemoveDialog(filesToRemove: ArrayList<OCFile>, isLocal: Boolean) {
-        val dialog = RemoveFilesDialogFragment.newInstance(filesToRemove, isLocal)
+    private fun onShowRemoveDialog(filesToRemove: List<OCFile>, isLocal: Boolean) {
+        val dialog = RemoveFilesDialogFragment.newInstance(ArrayList(filesToRemove), isLocal)
         dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
         fileListAdapter.clearSelection()
         updateActionModeAfterTogglingSelected()
@@ -1121,7 +1123,8 @@ class MainFileListFragment : Fragment(),
             }
 
             R.id.action_remove_file -> {
-                fileOperationsViewModel.showRemoveDialog(checkedFiles)
+                filesToRemove = checkedFiles
+                fileOperationsViewModel.showRemoveDialog(filesToRemove)
                 return true
             }
 

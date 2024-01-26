@@ -30,6 +30,7 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.ContextProvider
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -113,6 +114,43 @@ object ViewModelExt : KoinComponent {
                 }
             } else if (useCaseResult.isError) {
                 flow.update { Event(UIResult.Error(error = useCaseResult.getThrowableOrNull())) }
+            }
+        }
+    }
+
+    fun <T, Params> ViewModel.runUseCaseWithResult(
+        coroutineDispatcher: CoroutineDispatcher,
+        requiresConnection: Boolean = true,
+        showLoading: Boolean = false,
+        sharedFlow: MutableSharedFlow<UIResult<T>>,
+        useCase: BaseUseCaseWithResult<T, Params>,
+        useCaseParams: Params,
+        postSuccess: Boolean = true,
+        postSuccessWithData: Boolean = true
+    ) {
+        viewModelScope.launch(coroutineDispatcher) {
+            if (showLoading) {
+                sharedFlow.emit(UIResult.Loading())
+            }
+
+            // If use case requires connection and is not connected, it is not needed to execute use case
+            if (requiresConnection and !contextProvider.isConnected()) {
+                sharedFlow.emit(UIResult.Error(error = NoNetworkConnectionException()))
+                Timber.w("${useCase.javaClass.simpleName} will not be executed due to lack of network connection")
+                return@launch
+            }
+
+            val useCaseResult = useCase(useCaseParams)
+            Timber.d("Use case executed: ${useCase.javaClass.simpleName} with result: $useCaseResult")
+
+            if (useCaseResult.isSuccess && postSuccess) {
+                if (postSuccessWithData) {
+                    sharedFlow.emit(UIResult.Success(useCaseResult.getDataOrNull()))
+                } else {
+                    sharedFlow.emit(UIResult.Success())
+                }
+            } else if (useCaseResult.isError) {
+                sharedFlow.emit(UIResult.Error(error = useCaseResult.getThrowableOrNull()))
             }
         }
     }

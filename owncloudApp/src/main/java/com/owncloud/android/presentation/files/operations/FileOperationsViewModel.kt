@@ -50,7 +50,9 @@ import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.ui.dialog.FileAlreadyExistsDialog
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -104,8 +106,8 @@ class FileOperationsViewModel(
     private val _deepLinkFlow = MutableStateFlow<Event<UIResult<OCFile?>>?>(null)
     val deepLinkFlow: StateFlow<Event<UIResult<OCFile?>>?> = _deepLinkFlow
 
-    private val _checkIfFileLocalLiveData = MediatorLiveData<Event<UIResult<Pair<List<OCFile>, Boolean>>>>()
-    val checkIfFileLocalLiveData: LiveData<Event<UIResult<Pair<List<OCFile>, Boolean>>>> = _checkIfFileLocalLiveData
+    private val _checkIfFileLocalSharedFlow = MutableSharedFlow<UIResult<Boolean>>()
+    val checkIfFileLocalSharedFlow: SharedFlow<UIResult<Boolean>> = _checkIfFileLocalSharedFlow
 
     val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
 
@@ -132,7 +134,7 @@ class FileOperationsViewModel(
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
             showLoading = true,
-            liveData = _checkIfFileLocalLiveData,
+            sharedFlow = _checkIfFileLocalSharedFlow,
             useCase = getIfFileFolderLocalUseCase,
             useCaseParams = GetIfFileFolderLocalUseCase.Params(filesToRemove),
             requiresConnection = false
