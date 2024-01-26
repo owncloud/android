@@ -155,30 +155,12 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
 
     override fun onStart() {
         super.onStart()
-        if (Build.VERSION.SDK_INT > 23) {
-            initializePlayer()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (Build.VERSION.SDK_INT <= 23) {
-            initializePlayer()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if (Build.VERSION.SDK_INT <= 23) {
-            releasePlayer()
-        }
+        initializePlayer()
     }
 
     override fun onStop() {
         super.onStop()
-        if (Build.VERSION.SDK_INT > 23) {
-            releasePlayer()
-        }
+        releasePlayer()
     }
 
     private fun startObservingFileOperations() {
