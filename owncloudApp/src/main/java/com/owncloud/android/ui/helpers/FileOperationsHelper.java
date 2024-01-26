@@ -29,10 +29,8 @@ import android.accounts.AccountManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.webkit.MimeTypeMap;
 
-import androidx.fragment.app.DialogFragment;
 import com.owncloud.android.R;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.domain.sharing.shares.model.OCShare;
@@ -41,7 +39,6 @@ import com.owncloud.android.presentation.common.ShareSheetHelper;
 import com.owncloud.android.presentation.sharing.ShareActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.ui.activity.FileActivity;
-import com.owncloud.android.ui.dialog.ShareLinkToDialog;
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase;
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase;
 import com.owncloud.android.utils.UriUtilsKt;
@@ -261,18 +258,13 @@ public class FileOperationsHelper {
 
         String[] packagesToExclude = new String[]{mFileActivity.getPackageName()};
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Intent shareSheetIntent = new ShareSheetHelper().getShareSheetIntent(
-                    intentToShareLink,
-                    mFileActivity.getApplicationContext(),
-                    R.string.activity_chooser_title,
-                    packagesToExclude
-            );
+        Intent shareSheetIntent = new ShareSheetHelper().getShareSheetIntent(
+                intentToShareLink,
+                mFileActivity.getApplicationContext(),
+                R.string.activity_chooser_title,
+                packagesToExclude
+        );
 
-            mFileActivity.startActivity(shareSheetIntent);
-        } else {
-            DialogFragment chooserDialog = ShareLinkToDialog.newInstance(intentToShareLink, packagesToExclude);
-            chooserDialog.show(mFileActivity.getSupportFragmentManager(), FTAG_CHOOSER_DIALOG);
-        }
+        mFileActivity.startActivity(shareSheetIntent);
     }
 }
