@@ -465,6 +465,7 @@
   <string name="network_error_connect_timeout_exception">Shërbyesit iu desh shumë kohë për t\’u lidhur.</string>
   <string name="network_host_not_available">S\’u kap dot shërbyesi.</string>
   <string name="network_error_message">Ndodhi një gabim në rrjet.</string>
+  <string name="resource_locked_error_message">Burimi është i kyçur</string>
   <string name="forbidden_permissions">Nuk keni leje %s</string>
   <string name="forbidden_permissions_rename">për riemërtim të kësaj kartele</string>
   <string name="forbidden_permissions_delete">për fshirje të kësaj kartele</string>
