@@ -35,6 +35,7 @@ ownCloud admins and users.
 * Bugfix - Conflict in copy with files without extension: [#4222](https://github.com/owncloud/android/issues/4222)
 * Bugfix - Add "scope" parameter to /token endpoint HTTP requests: [#4260](https://github.com/owncloud/android/pull/4260)
 * Bugfix - Fix in the handling of the base URL: [#4279](https://github.com/owncloud/android/issues/4279)
+* Bugfix - Handle Http 423 (resource locked): [#4282](https://github.com/owncloud/android/issues/4282)
 * Bugfix - Copy folder into descendant in different spaces: [#4293](https://github.com/owncloud/android/issues/4293)
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
 * Enhancement - Koin DSL: [#3966](https://github.com/owncloud/android/pull/3966)
@@ -122,6 +123,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4279
    https://github.com/owncloud/android/pull/4287
+
+* Bugfix - Handle Http 423 (resource locked): [#4282](https://github.com/owncloud/android/issues/4282)
+
+   App can gracefully show if the file is locked when done certain operations on
+   it.
+
+   https://github.com/owncloud/android/issues/4282
+   https://github.com/owncloud/android/pull/4285
 
 * Bugfix - Copy folder into descendant in different spaces: [#4293](https://github.com/owncloud/android/issues/4293)
 
