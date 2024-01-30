@@ -25,6 +25,7 @@ package com.owncloud.android.presentation.files.filelist
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -854,6 +855,9 @@ class MainFileListFragment : Fragment(),
                 removeDefaultTint()
                 title = appRegistry.name
                 itemIcon = ResourcesCompat.getDrawable(resources, MimetypeIconUtil.getFileTypeIconId(appRegistry.mimeType, appRegistry.ext), null)
+                if (appRegistry.ext == FILE_DOCXF_EXTENSION) {
+                    itemIcon?.setTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.file_docxf)))
+                }
                 setOnClickListener {
                     showFilenameTextDialog(appRegistry.ext)
                     currentDefaultApplication = appRegistry.defaultApplication
@@ -1359,6 +1363,7 @@ class MainFileListFragment : Fragment(),
         private const val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
 
         private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
+        private const val FILE_DOCXF_EXTENSION = "docxf"
 
         @JvmStatic
         fun newInstance(
