@@ -467,6 +467,7 @@
   <string name="network_error_connect_timeout_exception">Serveril kulus ühendumiseks liiga kaua.</string>
   <string name="network_host_not_available">Serverit ei õnnestunud kätte saada.</string>
   <string name="network_error_message">Võrgus tekkis viga.</string>
+  <string name="resource_locked_error_message">Ressurss on lukustatud</string>
   <string name="forbidden_permissions">Sul ei ole %s õigusi</string>
   <string name="forbidden_permissions_rename">selle faili ümbernimetamiseks</string>
   <string name="forbidden_permissions_delete">selle faili kustutamiseks</string>
