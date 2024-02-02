@@ -213,6 +213,7 @@ public class MimetypeIconUtil {
         MIMETYPE_TO_ICON_MAPPING.put("application/vnd.oasis.opendocument.text-master", R.drawable.file_doc);
         MIMETYPE_TO_ICON_MAPPING.put("application/vnd.oasis.opendocument.text-template", R.drawable.file_doc);
         MIMETYPE_TO_ICON_MAPPING.put("application/vnd.oasis.opendocument.text-web", R.drawable.file_doc);
+        MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.wordprocessingml.form", R.drawable.file_docxf);
         MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.presentationml.presentation",
                 R.drawable.file_ppt);
         MIMETYPE_TO_ICON_MAPPING.put("application/vnd.openxmlformats-officedocument.presentationml.slideshow",
@@ -324,6 +325,8 @@ public class MimetypeIconUtil {
                 ".macroEnabled.12"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("docx", Collections.singletonList("application/vnd" +
                 ".openxmlformats-officedocument.wordprocessingml.document"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("docxf", Collections.singletonList("application/vnd" +
+                ".openxmlformats-officedocument.wordprocessingml.form"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("dot", Collections.singletonList("application/msword"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("dotx", Collections.singletonList("application/vnd" +
                 ".openxmlformats-officedocument.wordprocessingml.template"));

@@ -55,6 +55,7 @@ ownCloud admins and users.
 * Enhancement - Select user and navigate to file when opening via deep link: [#4194](https://github.com/owncloud/android/issues/4194)
 * Enhancement - New branding/MDM parameter to show sensitive auth info in logs: [#4249](https://github.com/owncloud/android/issues/4249)
 * Enhancement - Fix in the type handling of the content-type: [#4258](https://github.com/owncloud/android/issues/4258)
+* Enhancement - Added icon for .docxf files: [#4267](https://github.com/owncloud/android/issues/4267)
 * Enhancement - Manage password policy in live mode: [#4269](https://github.com/owncloud/android/issues/4269)
 * Enhancement - New branding/MDM parameter to send `login_hint` and `user` params: [#4288](https://github.com/owncloud/android/issues/4288)
 
@@ -289,6 +290,13 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4258
    https://github.com/owncloud/android/pull/4266
+
+* Enhancement - Added icon for .docxf files: [#4267](https://github.com/owncloud/android/issues/4267)
+
+   An icon has been added for files that have a .docxf extension.
+
+   https://github.com/owncloud/android/issues/4267
+   https://github.com/owncloud/android/pull/4297
 
 * Enhancement - Manage password policy in live mode: [#4269](https://github.com/owncloud/android/issues/4269)
 
