@@ -58,13 +58,16 @@ class OCFileLoggingTree(
             it.list()?.let { logFiles ->
                 if (logFiles.isNotEmpty()) {
 
-                    val lastDateLogFileString = if (context != null) {
+                    var lastDateLogFileString = if (context != null) {
                         logFiles.last().substringAfterLast("${context.packageName}.").substringBeforeLast(".log")
                     } else {
                         logFiles.last().substringAfterLast("$filename.").substringBeforeLast(".log")
                     }
 
                     val dateFormat = SimpleDateFormat(LOG_FILE_TIME_FORMAT)
+                    if (lastDateLogFileString.matches("^\\d{4}-\\d{2}-\\d{2}$".toRegex())) {
+                        lastDateLogFileString = "${lastDateLogFileString}_00.00.00"
+                    }
                     val lastDayLogFileDate = dateFormat.parse(lastDateLogFileString)
                     val newDayLogFileDate = dateFormat.parse(fileNameTimestamp)
 
