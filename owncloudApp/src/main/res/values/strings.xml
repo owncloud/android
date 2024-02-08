@@ -743,14 +743,12 @@
     <string name="release_notes_4_2_0_subtitle_7">Photos and videos from camera now saved inside spaces, not only in Personal</string>
     <string name="release_notes_4_2_0_title_8">Manage password policy in live mode in Infinite Scale accounts</string>
     <string name="release_notes_4_2_0_subtitle_8">Password policy for public links is handled in live mode with new items in the dialog</string>
-    <string name="release_notes_4_2_0_title_9">Merge network library as module</string>
-    <string name="release_notes_4_2_0_subtitle_9">The network library has been archived and integrated into the application architecture as a module</string>
-    <string name="release_notes_4_2_0_title_10">Migration to Media3 from Exoplayer</string>
-    <string name="release_notes_4_2_0_subtitle_10">Media3 is the new home for Exoplayer, which has become a part of this library</string>
-    <string name="release_notes_4_2_0_title_11">Prevent two media is playing at the same time</string>
-    <string name="release_notes_4_2_0_subtitle_11">The player handles the audio focus shifts, pausing one player if another starts</string>
-    <string name="release_notes_4_2_0_title_12">Minor bugfixes</string>
-    <string name="release_notes_4_2_0_subtitle_12">Some bugs were fixed to improve experience in the app</string>
+    <string name="release_notes_4_2_0_title_9">Video player improved</string>
+    <string name="release_notes_4_2_0_subtitle_9">A more advanced and optimized media playback experience for users, with improvements in performance and compatibility.</string>
+    <string name="release_notes_4_2_0_title_10">Prevent that two media files are playing at the same time</string>
+    <string name="release_notes_4_2_0_subtitle_10">The player handles the audio focus shifts, pausing one player if another starts</string>
+    <string name="release_notes_4_2_0_title_11">Minor bugfixes</string>
+    <string name="release_notes_4_2_0_subtitle_11">Some bugs were fixed to improve experience in the app</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
