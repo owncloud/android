@@ -3,7 +3,9 @@
  *
  * @author Abel García de Prada
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -41,16 +43,16 @@ import org.junit.Test
 
 class OCAuthenticationRepositoryTest {
 
-    private val localAuthenticationDataSource = mockk<LocalAuthenticationDataSource>(relaxUnitFun = true)
+    private val localAuthenticationDataSource = mockk<LocalAuthenticationDataSource>()
     private val remoteAuthenticationDataSource = mockk<RemoteAuthenticationDataSource>(relaxUnitFun = true)
     private val ocAuthenticationRepository: OCAuthenticationRepository =
         OCAuthenticationRepository(localAuthenticationDataSource, remoteAuthenticationDataSource)
 
     @Test
-    fun `loginBasic returns String with the account name correctly`() {
+    fun `loginBasic returns String with the account name`() {
         every {
             remoteAuthenticationDataSource.loginBasic(
-                serverPath = any(),
+                serverPath = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
                 username = OC_BASIC_USERNAME,
                 password = OC_BASIC_PASSWORD
             )
@@ -93,12 +95,12 @@ class OCAuthenticationRepositoryTest {
     }
 
     @Test
-    fun `loginOAuth returns String with the account name correctly`() {
+    fun `loginOAuth returns String with the account name`() {
         every {
             remoteAuthenticationDataSource.loginOAuth(
-                serverPath = any(),
+                serverPath = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
                 username = OC_BASIC_USERNAME,
-                accessToken = any()
+                accessToken = OC_ACCESS_TOKEN
             )
         } returns Pair(
             first = OC_USER_INFO,
@@ -115,7 +117,7 @@ class OCAuthenticationRepositoryTest {
                 userInfo = OC_USER_INFO,
                 refreshToken = OC_REFRESH_TOKEN,
                 scope = OC_SCOPE,
-                updateAccountWithUsername = any(),
+                updateAccountWithUsername = null,
                 clientRegistrationInfo = OC_CLIENT_REGISTRATION
             )
         } returns OC_ACCOUNT_NAME
@@ -134,7 +136,11 @@ class OCAuthenticationRepositoryTest {
         assertEquals(OC_ACCOUNT_NAME, accountName)
 
         verify(exactly = 1) {
-            remoteAuthenticationDataSource.loginOAuth(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, OC_BASIC_USERNAME, OC_ACCESS_TOKEN)
+            remoteAuthenticationDataSource.loginOAuth(
+                serverPath = OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl,
+                username = OC_BASIC_USERNAME,
+                accessToken = OC_ACCESS_TOKEN
+            )
             localAuthenticationDataSource.addOAuthAccount(
                 userName = OC_BASIC_USERNAME,
                 lastPermanentLocation = OC_REDIRECTION_PATH.lastPermanentLocation,
@@ -166,9 +172,9 @@ class OCAuthenticationRepositoryTest {
     }
 
     @Test
-    fun `getBaseUrl returns a String with the base url`() {
+    fun `getBaseUrl returns a String with the base URL`() {
         every {
-            localAuthenticationDataSource.getBaseUrl(any())
+            localAuthenticationDataSource.getBaseUrl(OC_ACCOUNT_NAME)
         } returns OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl
 
         val resultActual = ocAuthenticationRepository.getBaseUrl(OC_ACCOUNT_NAME)

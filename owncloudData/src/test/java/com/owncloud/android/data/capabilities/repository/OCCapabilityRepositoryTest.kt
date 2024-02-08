@@ -3,7 +3,9 @@
  *
  * @author David González Verdugo
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -28,12 +30,12 @@ import com.owncloud.android.domain.appregistry.AppRegistryRepository
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_CAPABILITY
-import com.owncloud.android.testutil.OC_CAPABILITY_WITH_FILE_PROVIDERS
+import com.owncloud.android.testutil.OC_CAPABILITY_WITH_FILES_APP_PROVIDERS
+import com.owncloud.android.testutil.livedata.getLastEmittedValue
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 
@@ -43,38 +45,33 @@ class OCCapabilityRepositoryTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private val localCapabilitiesDataSource = mockk<LocalCapabilitiesDataSource>(relaxUnitFun = true)
-    private val remoteCapabilitiesDataSource = mockk<RemoteCapabilitiesDataSource>(relaxUnitFun = true)
+    private val remoteCapabilitiesDataSource = mockk<RemoteCapabilitiesDataSource>()
     private val appRegistryRepository = mockk<AppRegistryRepository>(relaxUnitFun = true)
     private val ocCapabilityRepository: OCCapabilityRepository =
         OCCapabilityRepository(localCapabilitiesDataSource, remoteCapabilitiesDataSource, appRegistryRepository)
 
     @Test
-    fun `getCapabilitiesAsLiveData returns a livedata of OCCapability correctly`() {
+    fun `getCapabilitiesAsLiveData returns a Livedata of OCCapability`() {
         val capabilitiesLiveData = MutableLiveData<OCCapability>()
 
         every {
-            localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(any())
+            localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_ACCOUNT_NAME)
         } returns capabilitiesLiveData
 
-        val capabilitiesEmitted = mutableListOf<OCCapability>()
-        ocCapabilityRepository.getCapabilitiesAsLiveData(OC_ACCOUNT_NAME).observeForever {
-            capabilitiesEmitted.add(it!!)
-        }
+        val capabilitiesEmitted = ocCapabilityRepository.getCapabilitiesAsLiveData(OC_ACCOUNT_NAME).getLastEmittedValue()
 
-        val capabilitiesToEmit = listOf(OC_CAPABILITY)
-        capabilitiesToEmit.forEach {
-            capabilitiesLiveData.postValue(it)
-        }
+        val capabilitiesToEmit = capabilitiesLiveData.getLastEmittedValue()
+
         assertEquals(capabilitiesToEmit, capabilitiesEmitted)
 
         verify(exactly = 1) { localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_ACCOUNT_NAME) }
     }
 
     @Test
-    fun `getStoredCapabilities returns an object of OCCapability`() {
+    fun `getStoredCapabilities returns an OCCapability`() {
 
         every {
-            localCapabilitiesDataSource.getCapabilitiesForAccount(any())
+            localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME)
         } returns OC_CAPABILITY
 
         val actualResult = ocCapabilityRepository.getStoredCapabilities(OC_ACCOUNT_NAME)
@@ -85,31 +82,29 @@ class OCCapabilityRepositoryTest {
     }
 
     @Test
-    fun `getStoredCapabilities returns null when DataSource receive a null capability`() {
+    fun `refreshCapabilitiesForAccount updates capabilities correctly when files app providers is not null`() {
 
-        every {
-            localCapabilitiesDataSource.getCapabilitiesForAccount(any())
-        } returns null
-
-        val result = ocCapabilityRepository.getStoredCapabilities(OC_ACCOUNT_NAME)
-
-        assertNull(result)
-
-        verify(exactly = 1) { localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME) }
-
-    }
-
-    @Test
-    fun `refreshCapabilitiesForAccount updates capabilities correctly`() {
-
-        every { remoteCapabilitiesDataSource.getCapabilities(any()) } returns OC_CAPABILITY_WITH_FILE_PROVIDERS
+        every { remoteCapabilitiesDataSource.getCapabilities(OC_ACCOUNT_NAME) } returns OC_CAPABILITY_WITH_FILES_APP_PROVIDERS
 
         ocCapabilityRepository.refreshCapabilitiesForAccount(OC_ACCOUNT_NAME)
 
         verify(exactly = 1) {
             remoteCapabilitiesDataSource.getCapabilities(OC_ACCOUNT_NAME)
-            localCapabilitiesDataSource.insertCapabilities(listOf(OC_CAPABILITY_WITH_FILE_PROVIDERS))
+            localCapabilitiesDataSource.insertCapabilities(listOf(OC_CAPABILITY_WITH_FILES_APP_PROVIDERS))
             appRegistryRepository.refreshAppRegistryForAccount(OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test
+    fun `refreshCapabilitiesForAccount updates capabilities correctly but not refresh AppRegistry when filesAppProviders is null`() {
+
+        every { remoteCapabilitiesDataSource.getCapabilities(OC_ACCOUNT_NAME) } returns OC_CAPABILITY
+
+        ocCapabilityRepository.refreshCapabilitiesForAccount(OC_ACCOUNT_NAME)
+
+        verify(exactly = 1) {
+            remoteCapabilitiesDataSource.getCapabilities(OC_ACCOUNT_NAME)
+            localCapabilitiesDataSource.insertCapabilities(listOf(OC_CAPABILITY))
         }
     }
 }

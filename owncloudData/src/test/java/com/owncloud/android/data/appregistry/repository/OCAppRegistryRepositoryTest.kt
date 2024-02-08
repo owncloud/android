@@ -20,74 +20,77 @@
 
 package com.owncloud.android.data.appregistry.repository
 
-import com.owncloud.android.data.appregistry.OCAppRegistryRepository
 import com.owncloud.android.data.appregistry.datasources.LocalAppRegistryDataSource
 import com.owncloud.android.data.appregistry.datasources.RemoteAppRegistryDataSource
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_APP_REGISTRY
 import com.owncloud.android.testutil.OC_APP_REGISTRY_MIMETYPE
-import com.owncloud.android.testutil.OC_CAPABILITY
+import com.owncloud.android.testutil.OC_CAPABILITY_WITH_FILES_APP_PROVIDERS
 import com.owncloud.android.testutil.OC_FILE
+import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
 
 class OCAppRegistryRepositoryTest {
 
     private val localAppRegistryDataSource = mockk<LocalAppRegistryDataSource>(relaxUnitFun = true)
-    private val remoteAppRegistryDataSource = mockk<RemoteAppRegistryDataSource>(relaxUnitFun = true)
+    private val remoteAppRegistryDataSource = mockk<RemoteAppRegistryDataSource>()
     private val localCapabilitiesDataSource = mockk<LocalCapabilitiesDataSource>(relaxUnitFun = true)
-    private val appRegistryRepository = OCAppRegistryRepository(
+    private val ocAppRegistryRepository = OCAppRegistryRepository(
         localAppRegistryDataSource,
         remoteAppRegistryDataSource,
         localCapabilitiesDataSource,
     )
 
     @Test
-    fun `refreshAppRegistryForAccount get the AppRegistry object relate to an account and save it`() {
+    fun `refreshAppRegistryForAccount fetches the AppRegistry of an account and saves it`() {
 
-        every { localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME) } returns OC_CAPABILITY
+        every { localCapabilitiesDataSource.getCapabilitiesForAccount(OC_ACCOUNT_NAME) } returns OC_CAPABILITY_WITH_FILES_APP_PROVIDERS
         every {
             remoteAppRegistryDataSource.getAppRegistryForAccount(
                 OC_ACCOUNT_NAME,
-                OC_CAPABILITY.filesAppProviders?.appsUrl
+                OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.appsUrl?.substring(1)
             )
         } returns OC_APP_REGISTRY
 
-        appRegistryRepository.refreshAppRegistryForAccount(OC_ACCOUNT_NAME)
+        ocAppRegistryRepository.refreshAppRegistryForAccount(OC_ACCOUNT_NAME)
 
         verify(exactly = 1) {
-            remoteAppRegistryDataSource.getAppRegistryForAccount(OC_ACCOUNT_NAME, OC_CAPABILITY.filesAppProviders?.appsUrl)
+            remoteAppRegistryDataSource.getAppRegistryForAccount(
+                OC_ACCOUNT_NAME,
+                OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.appsUrl?.substring(1)
+            )
             localAppRegistryDataSource.saveAppRegistryForAccount(OC_APP_REGISTRY)
         }
     }
 
     @Test
     fun `getAppRegistryForMimeTypeAsStream returns a Flow of AppRegistryMimeType`() = runTest {
-
+        val mimeType = "DIR"
         every {
             localAppRegistryDataSource.getAppRegistryForMimeTypeAsStream(
                 accountName = OC_ACCOUNT_NAME,
-                mimeType = OC_FILE.mimeType
+                mimeType = mimeType
             )
         } returns flowOf(
             OC_APP_REGISTRY_MIMETYPE
         )
-        val resultActual = appRegistryRepository.getAppRegistryForMimeTypeAsStream(accountName = OC_ACCOUNT_NAME, mimeType = OC_FILE.mimeType).first()
+        val resultActual =
+            ocAppRegistryRepository.getAppRegistryForMimeTypeAsStream(accountName = OC_ACCOUNT_NAME, mimeType = mimeType).first()
 
         assertEquals(OC_APP_REGISTRY_MIMETYPE, resultActual)
 
         verify(exactly = 1) {
             localAppRegistryDataSource.getAppRegistryForMimeTypeAsStream(
                 accountName = OC_ACCOUNT_NAME,
-                mimeType = OC_FILE.mimeType
+                mimeType = mimeType
             )
         }
     }
@@ -97,7 +100,7 @@ class OCAppRegistryRepositoryTest {
 
         every { localAppRegistryDataSource.getAppRegistryWhichAllowCreation(OC_ACCOUNT_NAME) } returns
                 flowOf(listOf(OC_APP_REGISTRY_MIMETYPE))
-        val resultActual = appRegistryRepository.getAppRegistryWhichAllowCreation(OC_ACCOUNT_NAME).first()
+        val resultActual = ocAppRegistryRepository.getAppRegistryWhichAllowCreation(OC_ACCOUNT_NAME).first()
 
         assertEquals(listOf(OC_APP_REGISTRY_MIMETYPE), resultActual)
 
@@ -105,23 +108,22 @@ class OCAppRegistryRepositoryTest {
     }
 
     @Test
-    fun `getUrlToOpenInWeb returns a String correctly`() {
+    fun `getUrlToOpenInWeb returns a URL String`() {
         val expectedUrl = "https://example.com/file123"
-        val openWebEndpoint = "app/open-with-web"
         val appName = "ownCloud"
         every {
             remoteAppRegistryDataSource.getUrlToOpenInWeb(
                 accountName = OC_ACCOUNT_NAME,
-                openWebEndpoint = openWebEndpoint,
-                fileId = OC_FILE.id.toString(),
+                openWebEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl.toString(),
+                fileId = OC_FILE.remoteId.toString(),
                 appName = appName
             )
         } returns expectedUrl
 
-        val resultActual = appRegistryRepository.getUrlToOpenInWeb(
+        val resultActual = ocAppRegistryRepository.getUrlToOpenInWeb(
             accountName = OC_ACCOUNT_NAME,
-            openWebEndpoint = openWebEndpoint,
-            fileId = OC_FILE.id.toString(),
+            openWebEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl.toString(),
+            fileId = OC_FILE.remoteId.toString(),
             appName = appName
         )
 
@@ -130,41 +132,39 @@ class OCAppRegistryRepositoryTest {
         verify(exactly = 1) {
             remoteAppRegistryDataSource.getUrlToOpenInWeb(
                 accountName = OC_ACCOUNT_NAME,
-                openWebEndpoint = openWebEndpoint,
-                fileId = OC_FILE.id.toString(),
+                openWebEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl.toString(),
+                fileId = OC_FILE.remoteId.toString(),
                 appName = appName
             )
         }
     }
 
     @Test
-    fun `createFileWithAppProvider returns a String`() {
-        val createFileWithAppProviderEndpoint = "app/file-with-app-provider-endpoint"
-        val parentContainerId = OC_FILE.remoteId.toString()
-        val fileWithAppProvider = "fileWithAppProvider"
+    fun `createFileWithAppProvider returns a String with the new file ID`() {
+
         every {
             remoteAppRegistryDataSource.createFileWithAppProvider(
                 accountName = OC_ACCOUNT_NAME,
-                createFileWithAppProviderEndpoint = createFileWithAppProviderEndpoint,
-                parentContainerId = parentContainerId,
-                filename = OC_FILE.fileName,
+                createFileWithAppProviderEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl.toString(),
+                parentContainerId = OC_FOLDER.remoteId.toString(),
+                filename = OC_FOLDER.fileName,
             )
-        } returns fileWithAppProvider
+        } returns OC_FOLDER.id.toString()
 
-        val resultActual = appRegistryRepository.createFileWithAppProvider(
+        val resultActual = ocAppRegistryRepository.createFileWithAppProvider(
             accountName = OC_ACCOUNT_NAME,
-            createFileWithAppProviderEndpoint = createFileWithAppProviderEndpoint,
-            parentContainerId = parentContainerId,
-            filename = OC_FILE.fileName,
+            createFileWithAppProviderEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl.toString(),
+            parentContainerId = OC_FOLDER.remoteId.toString(),
+            filename = OC_FOLDER.fileName,
         )
-        assertEquals(fileWithAppProvider, resultActual)
+        assertEquals(OC_FOLDER.id.toString(), resultActual)
 
         verify(exactly = 1) {
             remoteAppRegistryDataSource.createFileWithAppProvider(
                 accountName = OC_ACCOUNT_NAME,
-                createFileWithAppProviderEndpoint = createFileWithAppProviderEndpoint,
-                parentContainerId = parentContainerId,
-                filename = OC_FILE.fileName,
+                createFileWithAppProviderEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl.toString(),
+                parentContainerId = OC_FOLDER.remoteId.toString(),
+                filename = OC_FOLDER.fileName,
             )
         }
     }

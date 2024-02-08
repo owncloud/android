@@ -1,7 +1,9 @@
 /**
  * ownCloud Android client application
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -56,14 +58,13 @@ val OC_CAPABILITY =
         passwordPolicy = null,
     )
 
-val OC_CAPABILITY_WITH_FILE_PROVIDERS = OC_CAPABILITY.copy(
-    accountName = OC_ACCOUNT_NAME,
+val OC_CAPABILITY_WITH_FILES_APP_PROVIDERS = OC_CAPABILITY.copy(
     filesAppProviders = OCCapability.AppProviders(
         enabled = true,
         version = "",
-        appsUrl = null,
-        openUrl = null,
+        appsUrl = "/app-url",
+        openUrl = "/open-url",
         openWebUrl = "/open-with-web",
-        newUrl = null
+        newUrl = "/new-url",
     )
 )
