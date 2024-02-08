@@ -1,6 +1,6 @@
 # Table of Contents
 
-* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
+* [Changelog for 4.2.0](#changelog-for-owncloud-android-client-420-2024-02-05)
 * [Changelog for 4.1.1](#changelog-for-owncloud-android-client-411-2023-10-18)
 * [Changelog for 4.1.0](#changelog-for-owncloud-android-client-410-2023-08-23)
 * [Changelog for 4.0.0](#changelog-for-owncloud-android-client-400-2023-05-29)
@@ -18,12 +18,12 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
-# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+# Changelog for ownCloud Android Client [4.2.0] (2024-02-05)
 
-The following sections list the changes in ownCloud Android Client unreleased relevant to
+The following sections list the changes in ownCloud Android Client 4.2.0 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/android/compare/v4.1.1...master
+[4.2.0]: https://github.com/owncloud/android/compare/v4.1.1...v4.2.0
 
 ## Summary
 
@@ -38,6 +38,7 @@ ownCloud admins and users.
 * Bugfix - Handle Http 423 (resource locked): [#4282](https://github.com/owncloud/android/issues/4282)
 * Bugfix - Copy folder into descendant in different spaces: [#4293](https://github.com/owncloud/android/issues/4293)
 * Change - Android library as a module instead of submodule: [#3962](https://github.com/owncloud/android/issues/3962)
+* Change - Migration to Media3 from Exoplayer: [#4157](https://github.com/owncloud/android/issues/4157)
 * Enhancement - Koin DSL: [#3966](https://github.com/owncloud/android/pull/3966)
 * Enhancement - Unit tests for datasources classes - Part 1 & Fixes: [#4063](https://github.com/owncloud/android/issues/4063)
 * Enhancement - Unit tests for datasources classes - Part 3: [#4072](https://github.com/owncloud/android/issues/4072)
@@ -55,6 +56,7 @@ ownCloud admins and users.
 * Enhancement - Select user and navigate to file when opening via deep link: [#4194](https://github.com/owncloud/android/issues/4194)
 * Enhancement - New branding/MDM parameter to show sensitive auth info in logs: [#4249](https://github.com/owncloud/android/issues/4249)
 * Enhancement - Fix in the type handling of the content-type: [#4258](https://github.com/owncloud/android/issues/4258)
+* Enhancement - Prevent that two media files are playing at the same time: [#4263](https://github.com/owncloud/android/pull/4263)
 * Enhancement - Added icon for .docxf files: [#4267](https://github.com/owncloud/android/issues/4267)
 * Enhancement - Manage password policy in live mode: [#4269](https://github.com/owncloud/android/issues/4269)
 * Enhancement - New branding/MDM parameter to send `login_hint` and `user` params: [#4288](https://github.com/owncloud/android/issues/4288)
@@ -148,6 +150,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/3962
    https://github.com/owncloud/android/pull/4183
+
+* Change - Migration to Media3 from Exoplayer: [#4157](https://github.com/owncloud/android/issues/4157)
+
+   Media3 is the new home for Exoplayer, which has become a part of this library.
+   Media3 provides a more advanced and optimized media playback experience for
+   users, with improvements in performance and compatibility.
+
+   https://github.com/owncloud/android/issues/4157
+   https://github.com/owncloud/android/pull/4177
 
 * Enhancement - Koin DSL: [#3966](https://github.com/owncloud/android/pull/3966)
 
@@ -290,6 +301,12 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4258
    https://github.com/owncloud/android/pull/4266
+
+* Enhancement - Prevent that two media files are playing at the same time: [#4263](https://github.com/owncloud/android/pull/4263)
+
+   The player handles the audio focus shifts, pausing one player if another starts.
+
+   https://github.com/owncloud/android/pull/4263
 
 * Enhancement - Added icon for .docxf files: [#4267](https://github.com/owncloud/android/issues/4267)
 
