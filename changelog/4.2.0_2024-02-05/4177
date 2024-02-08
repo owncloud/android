@@ -1,0 +1,8 @@
+Change: Migration to Media3 from Exoplayer
+
+Media3 is the new home for Exoplayer, which has become a part of this library.
+Media3 provides a more advanced and optimized media playback experience for users,
+with improvements in performance and compatibility.
+
+https://github.com/owncloud/android/issues/4157
+https://github.com/owncloud/android/pull/4177
