@@ -40,6 +40,7 @@
         android:layout_margin="@dimen/standard_margin"
         android:contentDescription="@string/manage_space_clear_data"
         android:text="@string/manage_space_clear_data"
+        android:enabled="false"
         android:theme="@style/Button.Primary" />
 
 </LinearLayout>
