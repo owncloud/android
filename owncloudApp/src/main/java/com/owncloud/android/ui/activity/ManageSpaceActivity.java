@@ -28,7 +28,6 @@ import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,13 +64,10 @@ public class ManageSpaceActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.manage_space_title);
 
-        TextView descriptionTextView = findViewById(R.id.general_description);
-        descriptionTextView.setText(getString(R.string.manage_space_description, getString(R.string.app_name)));
-
         Button clearDataButton = findViewById(R.id.clearDataButton);
         clearDataButton.setOnClickListener(v -> {
-            ClearDataAsyncTask clearDataTask = new ClearDataAsyncTask();
-            clearDataTask.execute();
+//            ClearDataAsyncTask clearDataTask = new ClearDataAsyncTask();
+//            clearDataTask.execute();
         });
     }
 
