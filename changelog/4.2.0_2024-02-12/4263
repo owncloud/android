@@ -1,0 +1,5 @@
+Enhancement: Prevent that two media files are playing at the same time
+
+The player handles the audio focus shifts, pausing one player if another starts.
+
+https://github.com/owncloud/android/pull/4263

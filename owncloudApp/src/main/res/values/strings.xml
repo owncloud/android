@@ -618,7 +618,7 @@
     <string name="action_upload_clear">Clear</string>
 
     <string name="manage_space_title">Manage space</string>
-    <string name="manage_space_description">Settings, database and server certificates from %1$s\'s data will be deleted permanently. \n\nDownloaded files will be kept untouched.\n\nThis process can take some time.</string>
+    <string name="manage_space_description">This feature is not currently available. Next versions will include new features for automatic and manual removal of storage. Stay tuned!</string>
     <string name="manage_space_clear_data">Clear data</string>
     <string name="manage_space_error">Some files could not be deleted.</string>
 
@@ -727,20 +727,28 @@
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
 
-    <string name="release_notes_4_2_0_title_1">Opening files from outside the app using links</string>
-    <string name="release_notes_4_2_0_subtitle_1">A link that points to the app will open the app and then, resolve the file to preview it directly</string>
-    <string name="release_notes_4_2_0_title_2">"Share to" in oCIS accounts allows to upload to any space</string>
-    <string name="release_notes_4_2_0_subtitle_2">Shared files from other apps can be uploaded to any space and not only the Personal one in oCIS accounts</string>
-    <string name="release_notes_4_2_0_title_3">"Apply to all" for conflicts</string>
-    <string name="release_notes_4_2_0_subtitle_3">New dialog to fix all conflicts at once</string>
-    <string name="release_notes_4_2_0_title_4">Auto-refresh when a file is uploaded</string>
-    <string name="release_notes_4_2_0_subtitle_4">The file list will be now refreshed automatically while uploading to the target folder</string>
-    <string name="release_notes_4_2_0_title_5">Download log files</string>
-    <string name="release_notes_4_2_0_subtitle_5">New option to download a log file to the Downloads folder of the device</string>
-    <string name="release_notes_4_2_0_title_6">Minor bugfixes</string>
-    <string name="release_notes_4_2_0_subtitle_6">Some bugs were fixed to improve experience in the app</string>
+    <string name="release_notes_4_2_0_title_1">Latest version with support for Android 6</string>
+    <string name="release_notes_4_2_0_subtitle_1">Current release will be the last one that supports Android 6</string>
+    <string name="release_notes_4_2_0_title_2">Opening files from outside the app using links</string>
+    <string name="release_notes_4_2_0_subtitle_2">A link that points to the app will open the app and then, resolve the file to preview it directly. Links for shared files are not included yet</string>
+    <string name="release_notes_4_2_0_title_3">"Share to" in Infinite Scale accounts allows to upload to any space</string>
+    <string name="release_notes_4_2_0_subtitle_3">Shared files from other apps can be uploaded to any space and not only the Personal one in Infinite Scale accounts</string>
+    <string name="release_notes_4_2_0_title_4">"Apply to all" for conflicts</string>
+    <string name="release_notes_4_2_0_subtitle_4">New dialog to fix all conflicts at once</string>
+    <string name="release_notes_4_2_0_title_5">Auto-refresh when a file is uploaded</string>
+    <string name="release_notes_4_2_0_subtitle_5">The file list will be now refreshed automatically while uploading to the target folder</string>
+    <string name="release_notes_4_2_0_title_6">Download log files</string>
+    <string name="release_notes_4_2_0_subtitle_6">New option to download a log file to the Downloads folder of the device</string>
     <string name="release_notes_4_2_0_title_7">Auto uploads to spaces</string>
     <string name="release_notes_4_2_0_subtitle_7">Photos and videos from camera now saved inside spaces, not only in Personal</string>
+    <string name="release_notes_4_2_0_title_8">Manage password policy in live mode in Infinite Scale accounts</string>
+    <string name="release_notes_4_2_0_subtitle_8">Password policy for public links is handled in live mode with new items in the dialog</string>
+    <string name="release_notes_4_2_0_title_9">Video player improved</string>
+    <string name="release_notes_4_2_0_subtitle_9">A more advanced and optimized media playback experience for users, with improvements in performance and compatibility.</string>
+    <string name="release_notes_4_2_0_title_10">Prevent that two media files are playing at the same time</string>
+    <string name="release_notes_4_2_0_subtitle_10">The player handles the audio focus shifts, pausing one player if another starts</string>
+    <string name="release_notes_4_2_0_title_11">Minor bugfixes</string>
+    <string name="release_notes_4_2_0_subtitle_11">Some bugs were fixed to improve experience in the app</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
