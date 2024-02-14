@@ -466,7 +466,6 @@
   <string name="action_upload_retry">Повторить</string>
   <string name="action_upload_clear">Очистить</string>
   <string name="manage_space_title">Управление свободным местом</string>
-  <string name="manage_space_description">Настройки, сертификаты базы данных и сервера из данных %1$s будут удалены навсегда. \n\nЗагруженные файлы будут сохранены нетронутыми. \n\nЭтот процесс может занять некоторое время.</string>
   <string name="manage_space_clear_data">Очистить данные</string>
   <string name="manage_space_error">Некоторые файлы не могут быть удалены.</string>
   <string name="local_file_not_found_toast">Файл не был найден в локальной файловой системе</string>
