@@ -74,7 +74,7 @@ import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.preview.PreviewAudioFragment
 import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
-import com.owncloud.android.ui.preview.PreviewVideoFragment
+import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -228,6 +228,7 @@ class FileDetailsFragment : FileFragment() {
         openInWebProviders.forEach { (openInWebProviderName, menuItemId) ->
             if (menuItemId == item.itemId) {
                 fileDetailsViewModel.openInWeb(safeFile.file.remoteId!!, openInWebProviderName)
+                fileOperationsViewModel.setLastUsageFile(safeFile.file)
                 return true
             }
         }
@@ -244,6 +245,7 @@ class FileDetailsFragment : FileFragment() {
                     fileDetailsViewModel.updateActionInDetailsView(SYNC_AND_OPEN_WITH)
                 } else { // Already downloaded -> Open it
                     requireActivity().openOCFile(safeFile.file)
+                    fileOperationsViewModel.setLastUsageFile(safeFile.file)
                 }
                 true
             }
@@ -533,7 +535,7 @@ class FileDetailsFragment : FileFragment() {
                 fileDisplayActivity.startAudioPreview(fileWaitingToPreview, 0)
             }
 
-            PreviewVideoFragment.canBePreviewed(fileWaitingToPreview) -> {
+            PreviewVideoActivity.canBePreviewed(fileWaitingToPreview) -> {
                 fileDisplayActivity.startVideoPreview(fileWaitingToPreview, 0)
             }
 
@@ -543,6 +545,7 @@ class FileDetailsFragment : FileFragment() {
 
             else -> fileDisplayActivity.openOCFile(fileWaitingToPreview)
         }
+        fileOperationsViewModel.setLastUsageFile(fileWaitingToPreview)
     }
 
     override fun updateViewForSyncInProgress() {

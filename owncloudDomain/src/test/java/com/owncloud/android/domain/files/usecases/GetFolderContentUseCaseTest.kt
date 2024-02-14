@@ -38,7 +38,7 @@ class GetFolderContentUseCaseTest {
     fun `get folder content - ok`() {
         every { repository.getFolderContent(useCaseParams.folderId) } returns listOf(OC_FILE)
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(listOf(OC_FILE), useCaseResult.getDataOrNull())
@@ -50,7 +50,7 @@ class GetFolderContentUseCaseTest {
     fun `get folder content - ko`() {
         every { repository.getFolderContent(useCaseParams.folderId) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

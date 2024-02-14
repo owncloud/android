@@ -189,12 +189,12 @@ public class FileOperationsHelper {
     public void syncFile(OCFile file) {
         if (!file.isFolder()) {
             @NotNull Lazy<SynchronizeFileUseCase> synchronizeFileUseCaseLazy = inject(SynchronizeFileUseCase.class);
-            synchronizeFileUseCaseLazy.getValue().execute(
+            synchronizeFileUseCaseLazy.getValue().invoke(
                     new SynchronizeFileUseCase.Params(file)
             );
         } else {
             @NotNull Lazy<SynchronizeFolderUseCase> synchronizeFolderUseCaseLazy = inject(SynchronizeFolderUseCase.class);
-            synchronizeFolderUseCaseLazy.getValue().execute(
+            synchronizeFolderUseCaseLazy.getValue().invoke(
                     new SynchronizeFolderUseCase.Params(
                             file.getRemotePath(),
                             file.getOwner(),

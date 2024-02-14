@@ -21,7 +21,7 @@ package com.owncloud.android.data.capabilities.datasources.implementation
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.db.OCCapabilityDao
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
@@ -33,14 +33,14 @@ class OCLocalCapabilitiesDataSource(
 ) : LocalCapabilitiesDataSource {
 
     override fun getCapabilitiesForAccountAsLiveData(accountName: String): LiveData<OCCapability?> =
-        Transformations.map(ocCapabilityDao.getCapabilitiesForAccountAsLiveData(accountName)) { ocCapabilityEntity ->
+        ocCapabilityDao.getCapabilitiesForAccountAsLiveData(accountName).map { ocCapabilityEntity ->
             ocCapabilityEntity?.toModel()
         }
 
-    override fun getCapabilityForAccount(accountName: String): OCCapability? =
+    override fun getCapabilitiesForAccount(accountName: String): OCCapability? =
         ocCapabilityDao.getCapabilitiesForAccount(accountName)?.toModel()
 
-    override fun insert(ocCapabilities: List<OCCapability>) {
+    override fun insertCapabilities(ocCapabilities: List<OCCapability>) {
         ocCapabilityDao.replace(
             ocCapabilities.map { ocCapability -> ocCapability.toEntity() }
         )
@@ -85,6 +85,7 @@ class OCLocalCapabilitiesDataSource(
                 filesPrivateLinks = CapabilityBooleanType.fromValue(filesPrivateLinks),
                 filesAppProviders = appProviders,
                 spaces = spaces,
+                passwordPolicy = passwordPolicy,
             )
 
         @VisibleForTesting
@@ -119,7 +120,8 @@ class OCLocalCapabilitiesDataSource(
                 filesVersioning = filesVersioning.value,
                 filesPrivateLinks = filesPrivateLinks.value,
                 appProviders = filesAppProviders,
-                spaces = spaces
+                spaces = spaces,
+                passwordPolicy = passwordPolicy,
             )
     }
 }

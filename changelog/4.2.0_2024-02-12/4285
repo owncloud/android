@@ -1,0 +1,6 @@
+Bugfix: Handle Http 423 (resource locked)
+
+App can gracefully show if the file is locked when done certain operations on it.
+
+https://github.com/owncloud/android/issues/4282
+https://github.com/owncloud/android/pull/4285

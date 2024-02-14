@@ -112,7 +112,7 @@ class CapabilityViewModelTest {
         getCapabilitiesAsLiveDataUseCase = spyk(mockkClass(GetCapabilitiesAsLiveDataUseCase::class))
         refreshCapabilitiesFromServerUseCase = spyk(mockkClass(RefreshCapabilitiesFromServerAsyncUseCase::class))
 
-        every { getCapabilitiesAsLiveDataUseCase.execute(any()) } returns capabilitiesLiveData
+        every { getCapabilitiesAsLiveDataUseCase(any()) } returns capabilitiesLiveData
 
         capabilityViewModel = CapabilityViewModel(
             accountName = testAccountName,
@@ -154,8 +154,8 @@ class CapabilityViewModelTest {
         assertEquals(expectedValue, value)
 
         // Calls performed during OCCapabilityViewModel initialization
-        verify(exactly = 1) { getCapabilitiesAsLiveDataUseCase.execute(any()) }
-        verify(exactly = 1) { refreshCapabilitiesFromServerUseCase.execute(any()) }
+        verify(exactly = 1) { getCapabilitiesAsLiveDataUseCase(any()) }
+        verify(exactly = 1) { refreshCapabilitiesFromServerUseCase(any()) }
     }
 
     @Test
@@ -180,14 +180,14 @@ class CapabilityViewModelTest {
         expectedValue: Event<UIResult<Unit>?>
     ) {
         initTest()
-        coEvery { refreshCapabilitiesFromServerUseCase.execute(any()) } returns useCaseResult
+        coEvery { refreshCapabilitiesFromServerUseCase(any()) } returns useCaseResult
 
         capabilityViewModel.refreshCapabilitiesFromNetwork()
 
         val value = capabilityViewModel.capabilities.getLastEmittedValue()
         assertEquals(expectedValue, value)
 
-        coVerify(exactly = 2) { refreshCapabilitiesFromServerUseCase.execute(any()) }
-        verify(exactly = 1) { getCapabilitiesAsLiveDataUseCase.execute(any()) }
+        coVerify(exactly = 2) { refreshCapabilitiesFromServerUseCase(any()) }
+        verify(exactly = 1) { getCapabilitiesAsLiveDataUseCase(any()) }
     }
 }

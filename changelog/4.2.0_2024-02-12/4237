@@ -1,0 +1,6 @@
+Enhancement: Thumbnail improvements in grid view
+
+Grid view was improved by adding the file name to images when the thumbnail is null.
+
+https://github.com/owncloud/android/issues/4145
+https://github.com/owncloud/android/pull/4237

@@ -38,7 +38,7 @@ class GetFilesAvailableOfflineFromAccountUseCaseTest {
     fun `get files available offline - ok`() {
         every { repository.getFilesAvailableOfflineFromAccount(useCaseParams.owner) } returns OC_AVAILABLE_OFFLINE_FILES
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertEquals(OC_AVAILABLE_OFFLINE_FILES, useCaseResult.getDataOrNull())
@@ -50,7 +50,7 @@ class GetFilesAvailableOfflineFromAccountUseCaseTest {
     fun `get files available offline - ok - empty list`() {
         every { repository.getFilesAvailableOfflineFromAccount(useCaseParams.owner) } returns OC_FILES_EMPTY
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertEquals(OC_FILES_EMPTY, useCaseResult.getDataOrNull())
@@ -62,7 +62,7 @@ class GetFilesAvailableOfflineFromAccountUseCaseTest {
     fun `get files savailable offline - ko`() {
         every { repository.getFilesAvailableOfflineFromAccount(useCaseParams.owner) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isError)
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

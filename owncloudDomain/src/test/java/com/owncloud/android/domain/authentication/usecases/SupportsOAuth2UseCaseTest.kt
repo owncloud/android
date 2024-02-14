@@ -38,7 +38,7 @@ class SupportsOAuth2UseCaseTest {
     fun `supports OAuth2 - ko - invalid params`() {
         val invalidSupportsOAuth2UseCaseParams = useCaseParams.copy(accountName = "")
 
-        val supportsOAuth2UseCaseResult = useCase.execute(invalidSupportsOAuth2UseCaseParams)
+        val supportsOAuth2UseCaseResult = useCase(invalidSupportsOAuth2UseCaseParams)
 
         assertTrue(supportsOAuth2UseCaseResult.isError)
         assertTrue(supportsOAuth2UseCaseResult.getThrowableOrNull() is IllegalArgumentException)
@@ -50,7 +50,7 @@ class SupportsOAuth2UseCaseTest {
     fun `supports OAuth2 - ok`() {
         every { repository.supportsOAuth2UseCase(any()) } returns true
 
-        val supportsOAuth2UseCaseResult = useCase.execute(useCaseParams)
+        val supportsOAuth2UseCaseResult = useCase(useCaseParams)
 
         assertTrue(supportsOAuth2UseCaseResult.isSuccess)
         assertEquals(true, supportsOAuth2UseCaseResult.getDataOrNull())
@@ -62,7 +62,7 @@ class SupportsOAuth2UseCaseTest {
     fun `supports OAuth2 - ko - another exception`() {
         every { repository.supportsOAuth2UseCase(any()) } throws Exception()
 
-        val supportsOAuth2UseCaseResult = useCase.execute(useCaseParams)
+        val supportsOAuth2UseCaseResult = useCase(useCaseParams)
 
         assertTrue(supportsOAuth2UseCaseResult.isError)
         assertTrue(supportsOAuth2UseCaseResult.getThrowableOrNull() is Exception)

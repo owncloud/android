@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2023 ownCloud GmbH.
+  Copyright (C) 2024 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -31,6 +31,10 @@
     <string name="oauth2_open_id_scope_configuration_description">Indicates the scope for OpenID Connect</string>
     <string name="device_protection_configuration_title">App security forced when device not protected</string>
     <string name="device_protection_configuration_description">Indicates if the app security when device is not protected is forced</string>
+    <string name="redact_auth_header_logs_configuration_title">Redact authorization header in HTTP logs</string>
+    <string name="redact_auth_header_logs_configuration_description">Indicates whether the sensitive information in the authorization header in HTTP requests is hidden in logs or not (NOTE: if logs are already enabled, they must be disabled and re-enabled for this option to work properly)</string>
+    <string name="send_login_hint_and_user_configuration_title">Send login_hint and user parameters</string>
+    <string name="send_login_hint_and_user_configuration_description">Indicates whether the login requests contain login_hint and user parameters to show a value in the username text field</string>
 
     <!-- MDM feedback -->
     <string name="lock_delay_configuration_feedback_ok">The lock delay was set correctly</string>
@@ -40,6 +44,8 @@
     <string name="oauth2_open_id_scope_configuration_feedback_ok">The OpenID Connect scope was set correctly</string>
     <string name="oauth2_open_id_prompt_configuration_feedback_ok">The OpenID Connect prompt was set correctly</string>
     <string name="device_protection_configuration_feedback_ok">The app security forced when device not protected was set correctly</string>
+    <string name="redact_auth_header_logs_configuration_feedback_ok">The preference for redacting auth header in logs was set correctly</string>
+    <string name="send_login_hint_and_user_configuration_feedback_ok">The preference for sending login_hint and user as parameters was set correctly</string>
 
     <!-- Spaces -->
     <string name="bottom_nav_spaces">Spaces</string>

@@ -51,7 +51,7 @@ class RetryUploadFromSystemUseCase(
         if (workInfos.isEmpty() || workInfos.firstOrNull()?.state == WorkInfo.State.FAILED) {
             transferRepository.updateTransferStatusToEnqueuedById(params.uploadIdInStorageManager)
 
-            uploadFileFromSystemUseCase.execute(
+            uploadFileFromSystemUseCase(
                 UploadFileFromSystemUseCase.Params(
                     accountName = uploadToRetry.accountName,
                     localPath = uploadToRetry.localPath,

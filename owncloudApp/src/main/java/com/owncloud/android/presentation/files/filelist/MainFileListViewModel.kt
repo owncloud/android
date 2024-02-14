@@ -101,7 +101,7 @@ class MainFileListViewModel(
     private val sortTypeAndOrder = MutableStateFlow(Pair(SortType.SORT_TYPE_BY_NAME, SortOrder.SORT_ORDER_ASCENDING))
     val space: MutableStateFlow<OCSpace?> = MutableStateFlow(null)
     val appRegistryToCreateFiles: StateFlow<List<AppRegistryMimeType>> =
-        getAppRegistryWhichAllowCreationAsStreamUseCase.execute(
+        getAppRegistryWhichAllowCreationAsStreamUseCase(
             GetAppRegistryWhichAllowCreationAsStreamUseCase.Params(
                 accountName = initialFolderToDisplay.owner
             )
@@ -157,7 +157,7 @@ class MainFileListViewModel(
         sortTypeAndOrder.update { Pair(sortTypeSelected, sortOrderSelected) }
         updateSpace()
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            synchronizeFolderUseCase.execute(
+            synchronizeFolderUseCase(
                 SynchronizeFolderUseCase.Params(
                     remotePath = initialFolderToDisplay.remotePath,
                     accountName = initialFolderToDisplay.owner,
@@ -170,7 +170,7 @@ class MainFileListViewModel(
 
     fun navigateToFolderId(folderId: Long) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val result = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId = folderId))
+            val result = getFileByIdUseCase(GetFileByIdUseCase.Params(fileId = folderId))
             result.getDataOrNull()?.let {
                 updateFolderToDisplay(it)
             }
@@ -200,7 +200,7 @@ class MainFileListViewModel(
     fun isGridModeSetAsPreferred() = sharedPreferencesProvider.getBoolean(RECYCLER_VIEW_PREFERRED, false)
 
     private fun sortList(filesWithSyncInfo: List<OCFileWithSyncInfo>, sortTypeAndOrder: Pair<SortType, SortOrder>): List<OCFileWithSyncInfo> {
-        return sortFilesWithSyncInfoUseCase.execute(
+        return sortFilesWithSyncInfoUseCase(
             SortFilesWithSyncInfoUseCase.Params(
                 listOfFiles = filesWithSyncInfo,
                 sortType = SortTypeDomain.fromPreferences(sortTypeAndOrder.first.ordinal),
@@ -218,23 +218,23 @@ class MainFileListViewModel(
             // browsing back to not shared by link or av offline should update to root
             if (parentId != null && parentId != ROOT_PARENT_ID) {
                 // Browsing to parent folder. Not root
-                val fileByIdResult = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(parentId))
+                val fileByIdResult = getFileByIdUseCase(GetFileByIdUseCase.Params(parentId))
                 when (fileListOption.value) {
                     FileListOption.ALL_FILES -> {
                         parentDir = fileByIdResult.getDataOrNull()
                     }
 
                     FileListOption.SHARED_BY_LINK -> {
-                        val fileById = fileByIdResult.getDataOrNull()!!
-                        parentDir = if ((!fileById.sharedByLink || fileById.sharedWithSharee != true) && fileById.spaceId == null) {
-                            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
+                        val fileById = fileByIdResult.getDataOrNull()
+                        parentDir = if (fileById != null && (!fileById.sharedByLink || fileById.sharedWithSharee != true) && fileById.spaceId == null) {
+                            getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
                         } else fileById
                     }
 
                     FileListOption.AV_OFFLINE -> {
-                        val fileById = fileByIdResult.getDataOrNull()!!
-                        parentDir = if (!fileById.isAvailableOffline) {
-                            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
+                        val fileById = fileByIdResult.getDataOrNull()
+                        parentDir = if (fileById != null && (!fileById.isAvailableOffline)) {
+                            getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(fileById.owner, ROOT_PATH)).getDataOrNull()
                         } else fileById
                     }
 
@@ -244,7 +244,7 @@ class MainFileListViewModel(
                 }
             } else if (parentId == ROOT_PARENT_ID) {
                 // Browsing to parent folder. Root
-                val rootFolderForAccountResult = getFileByRemotePathUseCase.execute(
+                val rootFolderForAccountResult = getFileByRemotePathUseCase(
                     GetFileByRemotePathUseCase.Params(
                         remotePath = ROOT_PATH,
                         owner = currentFolder.owner,
@@ -300,19 +300,19 @@ class MainFileListViewModel(
     }
 
     fun filterMenuOptions(
-        files: List<OCFile>, filesSyncInfo: List<OCFileSyncInfo>, isAnyFileVideoPreviewing: Boolean,
+        files: List<OCFile>, filesSyncInfo: List<OCFileSyncInfo>,
         displaySelectAll: Boolean, isMultiselection: Boolean
     ) {
         val shareViaLinkAllowed = contextProvider.getBoolean(R.bool.share_via_link_feature)
         val shareWithUsersAllowed = contextProvider.getBoolean(R.bool.share_with_users_feature)
         val sendAllowed = contextProvider.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val result = filterFileMenuOptionsUseCase.execute(
+            val result = filterFileMenuOptionsUseCase(
                 FilterFileMenuOptionsUseCase.Params(
                     files = files,
                     filesSyncInfo = filesSyncInfo,
                     accountName = currentFolderDisplayed.value.owner,
-                    isAnyFileVideoPreviewing = isAnyFileVideoPreviewing,
+                    isAnyFileVideoPreviewing = false,
                     displaySelectAll = displaySelectAll,
                     displaySelectInverse = isMultiselection,
                     onlyAvailableOfflineFiles = fileListOption.value.isAvailableOffline(),
@@ -332,7 +332,7 @@ class MainFileListViewModel(
 
     fun getAppRegistryForMimeType(mimeType: String, isMultiselection: Boolean) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val result = getAppRegistryForMimeTypeAsStreamUseCase.execute(
+            val result = getAppRegistryForMimeTypeAsStreamUseCase(
                 GetAppRegistryForMimeTypeAsStreamUseCase.Params(accountName = getFile().owner, mimeType)
             )
             if (isMultiselection) {
@@ -347,7 +347,7 @@ class MainFileListViewModel(
         val folderToDisplay = currentFolderDisplayed.value
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             if (folderToDisplay.remotePath == ROOT_PATH) {
-                val currentSpace = getSpaceWithSpecialsByIdForAccountUseCase.execute(
+                val currentSpace = getSpaceWithSpecialsByIdForAccountUseCase(
                     GetSpaceWithSpecialsByIdForAccountUseCase.Params(
                         spaceId = folderToDisplay.spaceId,
                         accountName = folderToDisplay.owner,
@@ -383,10 +383,10 @@ class MainFileListViewModel(
         currentFolderDisplayed: OCFile,
         accountName: String,
     ): Flow<List<OCFileWithSyncInfo>> =
-        getFolderContentAsStreamUseCase.execute(
+        getFolderContentAsStreamUseCase(
             GetFolderContentAsStreamUseCase.Params(
                 folderId = currentFolderDisplayed.id
-                    ?: getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, ROOT_PATH)).getDataOrNull()!!.id!!
+                    ?: getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(accountName, ROOT_PATH)).getDataOrNull()!!.id!!
             )
         )
 
@@ -399,7 +399,7 @@ class MainFileListViewModel(
         accountName: String,
     ): Flow<List<OCFileWithSyncInfo>> =
         if (currentFolderDisplayed.remotePath == ROOT_PATH && currentFolderDisplayed.spaceId == null) {
-            getSharedByLinkForAccountAsStreamUseCase.execute(GetSharedByLinkForAccountAsStreamUseCase.Params(accountName))
+            getSharedByLinkForAccountAsStreamUseCase(GetSharedByLinkForAccountAsStreamUseCase.Params(accountName))
         } else {
             retrieveFlowForAllFiles(currentFolderDisplayed, accountName)
         }
@@ -413,7 +413,7 @@ class MainFileListViewModel(
         accountName: String,
     ): Flow<List<OCFileWithSyncInfo>> =
         if (currentFolderDisplayed.remotePath == ROOT_PATH) {
-            getFilesAvailableOfflineFromAccountAsStreamUseCase.execute(GetFilesAvailableOfflineFromAccountAsStreamUseCase.Params(accountName))
+            getFilesAvailableOfflineFromAccountAsStreamUseCase(GetFilesAvailableOfflineFromAccountAsStreamUseCase.Params(accountName))
         } else {
             retrieveFlowForAllFiles(currentFolderDisplayed, accountName)
         }

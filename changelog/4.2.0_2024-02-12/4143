@@ -1,0 +1,8 @@
+Enhancement: Unit tests for datasources classes - Part 3
+
+Unit tests of the OCFolderBackupLocalDataSource, OCRemoteOAuthDataSource, OCRemoteShareeDataSource, OCLocalShareDataSource,
+OCRemoteShareDataSource, OCLocalSpacesDataSource, OCRemoteSpacesDataSource, OCLocalTransferDataSource, OCLocalUserDataSource,
+OCRemoteUserDataSource, OCRemoteWebFingerDatasource classes have been done and completed.
+
+https://github.com/owncloud/android/issues/4072
+https://github.com/owncloud/android/pull/4143

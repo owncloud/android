@@ -37,7 +37,7 @@ class RefreshSharesFromServerAsyncUseCaseTest {
 
     @Test
     fun `refresh shares from server - ok`() {
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
@@ -49,7 +49,7 @@ class RefreshSharesFromServerAsyncUseCaseTest {
     fun `refresh shares from server - ko`() {
         every { shareRepository.refreshSharesFromNetwork(any(), any()) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

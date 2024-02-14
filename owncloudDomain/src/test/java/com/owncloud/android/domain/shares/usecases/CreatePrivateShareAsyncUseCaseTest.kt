@@ -41,7 +41,7 @@ class CreatePrivateShareAsyncUseCaseTest {
             repository.insertPrivateShare(any(), any(), any(), any(), any())
         } returns Unit
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
@@ -53,7 +53,7 @@ class CreatePrivateShareAsyncUseCaseTest {
     fun `create private share - ko - unauthorized exception`() {
         every { repository.insertPrivateShare(any(), any(), any(), any(), any()) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)
@@ -64,13 +64,13 @@ class CreatePrivateShareAsyncUseCaseTest {
     @Test
     fun `create private share - ko - illegal argument exception`() {
         val useCaseParamsNotValid1 = useCaseParams.copy(shareType = null)
-        val useCaseResult1 = useCase.execute(useCaseParamsNotValid1)
+        val useCaseResult1 = useCase(useCaseParamsNotValid1)
 
         assertTrue(useCaseResult1.isError)
         assertTrue(useCaseResult1.getThrowableOrNull() is IllegalArgumentException)
 
         val useCaseParamsNotValid2 = useCaseParams.copy(shareType = ShareType.CONTACT)
-        val useCaseResult2 = useCase.execute(useCaseParamsNotValid2)
+        val useCaseResult2 = useCase(useCaseParamsNotValid2)
 
         assertTrue(useCaseResult2.isError)
         assertTrue(useCaseResult2.getThrowableOrNull() is IllegalArgumentException)

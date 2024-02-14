@@ -136,6 +136,7 @@ class PublicShareCreationDialogFragmentTest {
         loadPublicShareDialogFragment()
         onView(withId(R.id.shareViaLinkPasswordSwitch)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordValue)).check(matches(isDisplayed()))
+        onView(withId(R.id.saveButton)).check(matches(not(isEnabled())))
     }
 
     @Test
@@ -166,6 +167,7 @@ class PublicShareCreationDialogFragmentTest {
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
         onView(withId(R.id.shareViaLinkPasswordValue))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        onView(withId(R.id.saveButton)).check(matches(not(isEnabled())))
     }
 
     @Test
@@ -298,6 +300,7 @@ class PublicShareCreationDialogFragmentTest {
         )
         onView(withId(R.id.shareViaLinkPasswordLabel))
             .check(matches(withText(R.string.share_via_link_password_label)))
+        onView(withId(R.id.saveButton)).check(matches(isEnabled()))
     }
 
     @Test
@@ -310,6 +313,7 @@ class PublicShareCreationDialogFragmentTest {
         )
         onView(withId(R.id.shareViaLinkPasswordLabel))
             .check(matches(withText(R.string.share_via_link_password_enforced_label)))
+        onView(withId(R.id.saveButton)).check(matches(not(isEnabled())))
     }
 
     @Test
@@ -330,6 +334,7 @@ class PublicShareCreationDialogFragmentTest {
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
             .check(matches(withText(R.string.share_via_link_password_enforced_label)))
+        onView(withId(R.id.saveButton)).check(matches(not(isEnabled())))
     }
 
     @Test
@@ -348,6 +353,7 @@ class PublicShareCreationDialogFragmentTest {
         onView(withId(R.id.shareViaLinkEditPermissionReadOnly)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
             .check(matches(withText(R.string.share_via_link_password_label)))
+        onView(withId(R.id.saveButton)).check(matches(isEnabled()))
     }
 
     @Test
@@ -366,6 +372,7 @@ class PublicShareCreationDialogFragmentTest {
         onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
             .check(matches(withText(R.string.share_via_link_password_enforced_label)))
+        onView(withId(R.id.saveButton)).check(matches(not(isEnabled())))
     }
 
     @Test
@@ -384,6 +391,7 @@ class PublicShareCreationDialogFragmentTest {
         onView(withId(R.id.shareViaLinkEditPermissionReadAndWrite)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
             .check(matches(withText(R.string.share_via_link_password_label)))
+        onView(withId(R.id.saveButton)).check(matches(isEnabled()))
     }
 
     @Test
@@ -402,6 +410,7 @@ class PublicShareCreationDialogFragmentTest {
         onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
             .check(matches(withText(R.string.share_via_link_password_enforced_label)))
+        onView(withId(R.id.saveButton)).check(matches(not(isEnabled())))
     }
 
     @Test
@@ -420,6 +429,7 @@ class PublicShareCreationDialogFragmentTest {
         onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(click())
         onView(withId(R.id.shareViaLinkPasswordLabel))
             .check(matches(withText(R.string.share_via_link_password_label)))
+        onView(withId(R.id.saveButton)).check(matches(isEnabled()))
     }
 
     @Test
@@ -457,6 +467,7 @@ class PublicShareCreationDialogFragmentTest {
         onView(withId(R.id.shareViaLinkEditPermissionUploadFiles)).perform(scrollTo(), click())
 
         onView(withText(commonError)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.saveButton)).check(matches(not(isEnabled())))
     }
 
     private fun loadPublicShareDialogFragment(

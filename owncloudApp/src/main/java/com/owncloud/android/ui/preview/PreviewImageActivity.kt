@@ -43,7 +43,9 @@ import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.files.usecases.SortFilesUseCase
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.files.SortOrder
 import com.owncloud.android.presentation.files.SortType
 import com.owncloud.android.presentation.files.operations.FileOperation
@@ -124,9 +126,18 @@ class PreviewImageActivity : FileActivity(),
     }
 
     private fun startObservingFileOperations() {
-        fileOperationsViewModel.removeFileLiveData.observe(this, Event.EventObserver {
-            if (it.isSuccess) {
-                finish()
+        fileOperationsViewModel.removeFileLiveData.observe(this, Event.EventObserver { uiResult ->
+            when (uiResult) {
+                is UIResult.Error -> {
+                    dismissLoadingDialog()
+                    showErrorInSnackbar(R.string.remove_fail_msg, uiResult.getThrowableOrNull())
+                }
+
+                is UIResult.Loading -> showLoadingDialog(R.string.wait_a_moment)
+                is UIResult.Success -> {
+                    dismissLoadingDialog()
+                    finish()
+                }
             }
         })
     }
@@ -147,7 +158,7 @@ class PreviewImageActivity : FileActivity(),
         val sortType = sharedPreferencesProvider.getInt(SortType.PREF_FILE_LIST_SORT_TYPE, SortType.SORT_TYPE_BY_NAME.ordinal)
         val sortOrder = sharedPreferencesProvider.getInt(SortOrder.PREF_FILE_LIST_SORT_ORDER, SortOrder.SORT_ORDER_ASCENDING.ordinal)
         val sortFilesUseCase: SortFilesUseCase by inject()
-        val imageFiles = sortFilesUseCase.execute(
+        val imageFiles = sortFilesUseCase(
             SortFilesUseCase.Params(
                 listOfFiles = storageManager.getFolderImages(parentFolder),
                 sortType = com.owncloud.android.domain.files.usecases.SortType.fromPreferences(sortType),
@@ -251,6 +262,7 @@ class PreviewImageActivity : FileActivity(),
             putExtra(EXTRA_FILE, file)
             putExtra(EXTRA_ACCOUNT, AccountUtils.getCurrentOwnCloudAccount(this@PreviewImageActivity))
         }
+        finishAffinity()
         startActivity(showDetailsIntent)
     }
 

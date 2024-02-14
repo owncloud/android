@@ -68,6 +68,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesPrivateLinks = CapabilityBooleanType.fromValue(remote.filesPrivateLinks.value),
                 filesAppProviders = remote.filesAppProviders?.firstOrNull()?.toAppProviders(),
                 spaces = remote.spaces?.toSpaces(),
+                passwordPolicy = remote.passwordPolicy?.toPasswordPolicy()
             )
         }
 
@@ -113,6 +114,7 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
                 filesPrivateLinks = RemoteCapabilityBooleanType.fromValue(model.filesPrivateLinks.value)!!,
                 filesAppProviders = null,
                 spaces = null,
+                passwordPolicy = null,
             )
         }
 
@@ -122,4 +124,6 @@ class RemoteCapabilityMapper : RemoteMapper<OCCapability, RemoteCapability> {
     private fun RemoteCapability.RemoteSpaces.toSpaces() =
         OCCapability.Spaces(enabled, projects, shareJail)
 
+    private fun RemoteCapability.RemotePasswordPolicy.toPasswordPolicy() =
+        OCCapability.PasswordPolicy(maxCharacters, minCharacters, minDigits, minLowercaseCharacters, minSpecialCharacters, minUppercaseCharacters)
 }

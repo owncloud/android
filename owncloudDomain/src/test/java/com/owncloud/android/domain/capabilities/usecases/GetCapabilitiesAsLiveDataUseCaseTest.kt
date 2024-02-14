@@ -50,7 +50,7 @@ class GetCapabilitiesAsLiveDataUseCaseTest {
 
         val capabilitiesEmitted = mutableListOf<OCCapability>()
 
-        useCase.execute(useCaseParams).observeForever {
+        useCase(useCaseParams).observeForever {
             capabilitiesEmitted.add(it!!)
         }
 
@@ -65,6 +65,6 @@ class GetCapabilitiesAsLiveDataUseCaseTest {
     fun `get capabilities as livedata - ko`() {
         every { repository.getCapabilitiesAsLiveData(any()) } throws Exception()
 
-        useCase.execute(useCaseParams)
+        useCase(useCaseParams)
     }
 }

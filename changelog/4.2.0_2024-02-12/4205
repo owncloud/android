@@ -1,0 +1,7 @@
+Enhancement: Download log files on Android10+ devices
+
+A new icon to download a log file to the Downloads folder of the device has been added to the log list screen
+on Android10+ devices.
+
+https://github.com/owncloud/android/issues/4155
+https://github.com/owncloud/android/pull/4205

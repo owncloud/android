@@ -5,6 +5,7 @@
  * @author David González Verdugo
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
  * Copyright (C) 2023 ownCloud GmbH.
  *
@@ -35,6 +36,7 @@ import com.owncloud.android.datamodel.FileDataStorageManager
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.spaces.SpacesListFragment
 import com.owncloud.android.ui.fragment.FileFragment
@@ -84,8 +86,17 @@ open class FolderPickerActivity : FileActivity(),
                     }
                 }
                 PickerMode.CAMERA_FOLDER -> {
-                    // Show the personal space
-                    initAndShowListOfFilesFragment(spaceId = null)
+                    val spaceId = intent.getStringExtra(KEY_SPACE_ID)
+
+                    if (spaceId != null) {
+                        // Show the list of spaces
+                        initAndShowListOfSpaces()
+                    } else {
+                        val accountName = intent.getStringExtra(KEY_ACCOUNT_NAME)
+                        account = AccountUtils.getOwnCloudAccountByName(this, accountName)
+                        // Show the personal space
+                        initAndShowListOfFilesFragment(spaceId = null)
+                    }
                 }
             }
         }
@@ -248,7 +259,10 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     private fun initAndShowListOfSpaces() {
-        val listOfSpaces = SpacesListFragment(showPersonalSpace = true)
+        val accountNameIntent = intent.getStringExtra(KEY_ACCOUNT_NAME)
+        val accountName = accountNameIntent ?: AccountUtils.getCurrentOwnCloudAccount(applicationContext).name
+
+        val listOfSpaces = SpacesListFragment.newInstance(showPersonalSpace = true, accountName = accountName)
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, listOfSpaces)
         transaction.commit()
@@ -353,6 +367,8 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     companion object {
+        const val KEY_ACCOUNT_NAME = "KEY_ACCOUNT_NAME"
+        const val KEY_SPACE_ID = "KEY_PERSONAL_SPACE_ID"
         const val EXTRA_FOLDER = "FOLDER_PICKER_EXTRA_FOLDER"
         const val EXTRA_FILES = "FOLDER_PICKER_EXTRA_FILES"
         const val EXTRA_PICKER_MODE = "FOLDER_PICKER_EXTRA_PICKER_MODE"

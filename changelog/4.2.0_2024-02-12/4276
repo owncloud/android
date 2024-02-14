@@ -1,0 +1,6 @@
+Enhancement: Manage password policy in live mode
+
+Password policy for public links is handled in live mode with new items in the dialog.
+
+https://github.com/owncloud/android/issues/4269
+https://github.com/owncloud/android/pull/4276

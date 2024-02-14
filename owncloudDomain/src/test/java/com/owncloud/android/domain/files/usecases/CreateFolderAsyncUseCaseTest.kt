@@ -41,7 +41,7 @@ class CreateFolderAsyncUseCaseTest {
     fun `create folder - ok`() {
         every { repository.createFolder(any(), any()) } returns Unit
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(Unit, useCaseResult.getDataOrNull())
@@ -51,7 +51,7 @@ class CreateFolderAsyncUseCaseTest {
 
     @Test
     fun `create folder - ko - empty name`() {
-        val useCaseResult = useCase.execute(useCaseParams.copy(folderName = "   "))
+        val useCaseResult = useCase(useCaseParams.copy(folderName = "   "))
 
         assertTrue(useCaseResult.isError)
         assertEquals(
@@ -62,7 +62,7 @@ class CreateFolderAsyncUseCaseTest {
 
     @Test
     fun `create folder - ko - forbidden chars`() {
-        val useCaseResult = useCase.execute(useCaseParams.copy(folderName = "/Photos"))
+        val useCaseResult = useCase(useCaseParams.copy(folderName = "/Photos"))
 
         assertTrue(useCaseResult.isError)
         assertEquals(
@@ -75,7 +75,7 @@ class CreateFolderAsyncUseCaseTest {
     fun `create folder - ko - other exception`() {
         every { repository.createFolder(any(), any()) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

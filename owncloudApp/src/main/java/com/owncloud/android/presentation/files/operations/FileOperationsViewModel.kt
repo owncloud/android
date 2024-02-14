@@ -22,6 +22,7 @@
 
 package com.owncloud.android.presentation.files.operations
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
@@ -35,20 +36,24 @@ import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
+import com.owncloud.android.domain.files.usecases.ManageDeepLinkUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RenameFileUseCase
+import com.owncloud.android.domain.files.usecases.SetLastUsageFileUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.ui.dialog.FileAlreadyExistsDialog
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.net.URI
 
 class FileOperationsViewModel(
     private val createFolderAsyncUseCase: CreateFolderAsyncUseCase,
@@ -61,8 +66,10 @@ class FileOperationsViewModel(
     private val createFileWithAppProviderUseCase: CreateFileWithAppProviderUseCase,
     private val setFilesAsAvailableOfflineUseCase: SetFilesAsAvailableOfflineUseCase,
     private val unsetFilesAsAvailableOfflineUseCase: UnsetFilesAsAvailableOfflineUseCase,
+    private val manageDeepLinkUseCase: ManageDeepLinkUseCase,
+    private val setLastUsageFileUseCase: SetLastUsageFileUseCase,
     private val contextProvider: ContextProvider,
-    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
     private val _createFolder = MediatorLiveData<Event<UIResult<Unit>>>()
@@ -92,6 +99,11 @@ class FileOperationsViewModel(
     private val _createFileWithAppProviderFlow = MutableStateFlow<Event<UIResult<String>>?>(null)
     val createFileWithAppProviderFlow: StateFlow<Event<UIResult<String>>?> = _createFileWithAppProviderFlow
 
+    private val _deepLinkFlow = MutableStateFlow<Event<UIResult<OCFile?>>?>(null)
+    val deepLinkFlow: StateFlow<Event<UIResult<OCFile?>>?> = _deepLinkFlow
+
+    val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
+
     // Used to save the last operation folder
     private var lastTargetFolder: OCFile? = null
 
@@ -109,6 +121,29 @@ class FileOperationsViewModel(
             is FileOperation.RefreshFolderOperation -> refreshFolderOperation(fileOperation)
             is FileOperation.CreateFileWithAppProviderOperation -> createFileWithAppProvider(fileOperation)
         }
+    }
+
+    fun setLastUsageFile(file: OCFile) {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            setLastUsageFileUseCase(
+                SetLastUsageFileUseCase.Params(
+                    fileId = file.id!!,
+                    lastUsage = System.currentTimeMillis(),
+                    isAvailableLocally = file.isAvailableLocally,
+                    isFolder = file.isFolder,
+                )
+            )
+        }
+    }
+
+    fun handleDeepLink(uri: Uri, accountName: String) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            showLoading = true,
+            flow = _deepLinkFlow,
+            useCase = manageDeepLinkUseCase,
+            useCaseParams = ManageDeepLinkUseCase.Params(URI(uri.toString()), accountName),
+        )
     }
 
     private fun createFolderOperation(fileOperation: FileOperation.CreateFolder) {
@@ -242,13 +277,13 @@ class FileOperationsViewModel(
 
     private fun setFileAsAvailableOffline(fileOperation: FileOperation.SetFilesAsAvailableOffline) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            setFilesAsAvailableOfflineUseCase.execute(SetFilesAsAvailableOfflineUseCase.Params(fileOperation.filesToUpdate))
+            setFilesAsAvailableOfflineUseCase(SetFilesAsAvailableOfflineUseCase.Params(fileOperation.filesToUpdate))
         }
     }
 
     private fun unsetFileAsAvailableOffline(fileOperation: FileOperation.UnsetFilesAsAvailableOffline) {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            unsetFilesAsAvailableOfflineUseCase.execute(UnsetFilesAsAvailableOfflineUseCase.Params(fileOperation.filesToUpdate))
+            unsetFilesAsAvailableOfflineUseCase(UnsetFilesAsAvailableOfflineUseCase.Params(fileOperation.filesToUpdate))
         }
     }
 
@@ -268,7 +303,7 @@ class FileOperationsViewModel(
                 return@launch
             }
 
-            val useCaseResult = useCase.execute(useCaseParams).also {
+            val useCaseResult = useCase(useCaseParams).also {
                 Timber.d("Use case executed: ${useCase.javaClass.simpleName} with result: $it")
             }
 

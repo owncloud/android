@@ -17,12 +17,12 @@
  */
 package com.owncloud.android.data.webfinger.repository
 
-import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDatasource
+import com.owncloud.android.data.webfinger.datasources.RemoteWebFingerDataSource
 import com.owncloud.android.domain.webfinger.WebFingerRepository
 import com.owncloud.android.domain.webfinger.model.WebFingerRel
 
 class OCWebFingerRepository(
-    private val remoteWebFingerDatasource: RemoteWebFingerDatasource,
+    private val remoteWebFingerDatasource: RemoteWebFingerDataSource,
 ) : WebFingerRepository {
 
     override fun getInstancesFromWebFinger(

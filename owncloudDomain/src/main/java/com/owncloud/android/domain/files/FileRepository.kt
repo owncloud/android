@@ -39,6 +39,7 @@ interface FileRepository {
     fun getFileByIdAsFlow(fileId: Long): Flow<OCFile?>
     fun getFileWithSyncInfoByIdAsFlow(fileId: Long): Flow<OCFileWithSyncInfo?>
     fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String? = null): OCFile?
+    fun getFileFromRemoteId(fileId: String, accountName: String): OCFile?
     fun getPersonalRootFolderForAccount(owner: String): OCFile
     fun getSharesRootFolderForAccount(owner: String): OCFile?
     fun getSearchFolderContent(fileListOption: FileListOption, folderId: Long, search: String): List<OCFile>
@@ -66,5 +67,6 @@ interface FileRepository {
     fun disableThumbnailsForFile(fileId: Long)
     fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
     fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
+    fun updateFileWithLastUsage(fileId: Long, lastUsage: Long?)
 
 }

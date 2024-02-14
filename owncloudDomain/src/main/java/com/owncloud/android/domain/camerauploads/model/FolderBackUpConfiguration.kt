@@ -28,6 +28,7 @@ data class FolderBackUpConfiguration(
     val chargingOnly: Boolean,
     val lastSyncTimestamp: Long,
     val name: String,
+    val spaceId: String?,
 ) {
 
     val isPictureUploads get() = name == pictureUploadsName

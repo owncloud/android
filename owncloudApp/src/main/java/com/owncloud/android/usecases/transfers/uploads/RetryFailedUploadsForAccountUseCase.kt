@@ -47,9 +47,9 @@ class RetryFailedUploadsForAccountUseCase(
 
         failedUploadsForAccount.forEach { upload ->
             if (isContentUri(context = context, upload = upload)) {
-                retryUploadFromContentUriUseCase.execute(RetryUploadFromContentUriUseCase.Params(upload.id!!))
+                retryUploadFromContentUriUseCase(RetryUploadFromContentUriUseCase.Params(upload.id!!))
             } else {
-                retryUploadFromSystemUseCase.execute(RetryUploadFromSystemUseCase.Params(upload.id!!))
+                retryUploadFromSystemUseCase(RetryUploadFromSystemUseCase.Params(upload.id!!))
             }
         }
     }

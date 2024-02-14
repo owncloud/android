@@ -39,7 +39,7 @@ class GetUserAvatarAsyncUseCaseTest {
     fun `get user avatar - ok`() {
         every { repository.getUserAvatar(OC_ACCOUNT_NAME) } returns OC_USER_AVATAR
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(OC_USER_AVATAR, useCaseResult.getDataOrNull())
@@ -51,7 +51,7 @@ class GetUserAvatarAsyncUseCaseTest {
     fun `get user avatar - ko`() {
         every { repository.getUserAvatar(OC_ACCOUNT_NAME) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

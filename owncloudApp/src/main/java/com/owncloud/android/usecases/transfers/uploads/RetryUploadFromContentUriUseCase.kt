@@ -52,7 +52,7 @@ class RetryUploadFromContentUriUseCase(
         if (workInfos.isEmpty() || workInfos.firstOrNull()?.state == WorkInfo.State.FAILED) {
             transferRepository.updateTransferStatusToEnqueuedById(params.uploadIdInStorageManager)
 
-            uploadFileFromContentUriUseCase.execute(
+            uploadFileFromContentUriUseCase(
                 UploadFileFromContentUriUseCase.Params(
                     accountName = uploadToRetry.accountName,
                     contentUri = uploadToRetry.localPath.toUri(),

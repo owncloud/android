@@ -25,9 +25,9 @@ import android.accounts.Account
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
@@ -83,7 +83,7 @@ class FileDetailsViewModel(
     val openInWebUriLiveData: LiveData<Event<UIResult<String?>>> = _openInWebUriLiveData
 
     val appRegistryMimeType: StateFlow<AppRegistryMimeType?> =
-        getAppRegistryForMimeTypeAsStreamUseCase.execute(
+        getAppRegistryForMimeTypeAsStreamUseCase(
             GetAppRegistryForMimeTypeAsStreamUseCase.Params(accountName = account.name, ocFile.mimeType)
         ).stateIn(
             viewModelScope,
@@ -101,7 +101,7 @@ class FileDetailsViewModel(
     )
 
     val currentFile: StateFlow<OCFileWithSyncInfo?> =
-        getFileWithSyncInfoByIdUseCase.execute(GetFileWithSyncInfoByIdUseCase.Params(ocFile.id!!))
+        getFileWithSyncInfoByIdUseCase(GetFileWithSyncInfoByIdUseCase.Params(ocFile.id!!))
             .stateIn(
                 viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -109,14 +109,14 @@ class FileDetailsViewModel(
             )
 
     private val _ongoingTransferUUID = MutableLiveData<UUID>()
-    private val _ongoingTransfer = Transformations.switchMap(_ongoingTransferUUID) { transferUUID ->
+    private val _ongoingTransfer = _ongoingTransferUUID.switchMap { transferUUID ->
         workManager.getWorkInfoByIdLiveData(transferUUID)
     }.map { Event(it) }
     val ongoingTransfer: LiveData<Event<WorkInfo?>> = _ongoingTransfer
 
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            refreshCapabilitiesFromServerAsyncUseCase.execute(RefreshCapabilitiesFromServerAsyncUseCase.Params(account.name))
+            refreshCapabilitiesFromServerAsyncUseCase(RefreshCapabilitiesFromServerAsyncUseCase.Params(account.name))
         }
     }
 
@@ -153,9 +153,9 @@ class FileDetailsViewModel(
             val currentTransfer = ongoingTransfer.value?.peekContent() ?: return@launch
             val safeFile = currentFile.value ?: return@launch
             if (currentTransfer.isUpload()) {
-                cancelUploadForFileUseCase.execute(CancelUploadForFileUseCase.Params(safeFile.file))
+                cancelUploadForFileUseCase(CancelUploadForFileUseCase.Params(safeFile.file))
             } else if (currentTransfer.isDownload()) {
-                cancelDownloadForFileUseCase.execute(CancelDownloadForFileUseCase.Params(safeFile.file))
+                cancelDownloadForFileUseCase(CancelDownloadForFileUseCase.Params(safeFile.file))
             }
         }
     }
@@ -180,18 +180,20 @@ class FileDetailsViewModel(
         val shareWithUsersAllowed = contextProvider.getBoolean(R.bool.share_with_users_feature)
         val sendAllowed = contextProvider.getString(R.string.send_files_to_other_apps).equals("on", ignoreCase = true)
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            val result = filterFileMenuOptionsUseCase.execute(FilterFileMenuOptionsUseCase.Params(
-                files = listOf(file),
-                accountName = getAccount().name,
-                isAnyFileVideoPreviewing = false,
-                displaySelectAll = false,
-                displaySelectInverse = false,
-                onlyAvailableOfflineFiles = false,
-                onlySharedByLinkFiles = false,
-                shareViaLinkAllowed = shareViaLinkAllowed,
-                shareWithUsersAllowed = shareWithUsersAllowed,
-                sendAllowed = sendAllowed,
-            ))
+            val result = filterFileMenuOptionsUseCase(
+                FilterFileMenuOptionsUseCase.Params(
+                    files = listOf(file),
+                    accountName = getAccount().name,
+                    isAnyFileVideoPreviewing = false,
+                    displaySelectAll = false,
+                    displaySelectInverse = false,
+                    onlyAvailableOfflineFiles = false,
+                    onlySharedByLinkFiles = false,
+                    shareViaLinkAllowed = shareViaLinkAllowed,
+                    shareWithUsersAllowed = shareWithUsersAllowed,
+                    sendAllowed = sendAllowed,
+                )
+            )
             result.apply {
                 remove(FileMenuOption.DETAILS)
                 remove(FileMenuOption.MOVE)
@@ -200,6 +202,7 @@ class FileDetailsViewModel(
             _menuOptions.update { result }
         }
     }
+
 
     enum class ActionsInDetailsView {
         NONE, SYNC, SYNC_AND_OPEN, SYNC_AND_OPEN_WITH, SYNC_AND_SEND;

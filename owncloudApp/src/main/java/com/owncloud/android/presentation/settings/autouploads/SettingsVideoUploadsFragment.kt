@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2023 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -49,7 +50,6 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_VIDEO_UPLOADS_WIFI
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.ui.activity.FolderPickerActivity
-import com.owncloud.android.ui.activity.UploadPathActivity
 import com.owncloud.android.utils.DisplayUtils
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -68,6 +68,7 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
     private var prefVideoUploadsBehaviour: ListPreference? = null
     private var prefVideoUploadsAccount: ListPreference? = null
     private var prefVideoUploadsLastSync: Preference? = null
+    private var spaceId: String? = null
 
     private val selectVideoUploadsPathLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -123,12 +124,13 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
                     enableVideoUploads(videoUploadsConfiguration != null)
                     videoUploadsConfiguration?.let {
                         prefVideoUploadsAccount?.value = it.accountName
-                        prefVideoUploadsPath?.summary = DisplayUtils.getPathWithoutLastSlash(it.uploadPath)
+                        prefVideoUploadsPath?.summary = videosViewModel.getUploadPathString()
                         prefVideoUploadsSourcePath?.summary = DisplayUtils.getPathWithoutLastSlash(it.sourcePath.toUri().path)
                         prefVideoUploadsOnWifi?.isChecked = it.wifiOnly
                         prefVideoUploadsOnCharging?.isChecked = it.chargingOnly
                         prefVideoUploadsBehaviour?.value = it.behavior.name
                         prefVideoUploadsLastSync?.summary = DisplayUtils.unixTimeToHumanReadable(it.lastSyncTimestamp)
+                        spaceId = it.spaceId
                     } ?: resetFields()
                 }
             }
@@ -165,10 +167,10 @@ class SettingsVideoUploadsFragment : PreferenceFragmentCompat() {
             if (!uploadPath.endsWith(File.separator)) {
                 uploadPath += File.separator
             }
-            val intent = Intent(activity, UploadPathActivity::class.java).apply {
-                putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_PATH, uploadPath)
+            val intent = Intent(activity, FolderPickerActivity::class.java).apply {
                 putExtra(FolderPickerActivity.EXTRA_PICKER_MODE, FolderPickerActivity.PickerMode.CAMERA_FOLDER)
-                putExtra(UploadPathActivity.KEY_CAMERA_UPLOAD_ACCOUNT, videosViewModel.getVideoUploadsAccount())
+                putExtra(FolderPickerActivity.KEY_SPACE_ID, spaceId)
+                putExtra(FolderPickerActivity.KEY_ACCOUNT_NAME, videosViewModel.getVideoUploadsAccount())
             }
             selectVideoUploadsPathLauncher.launch(intent)
             true

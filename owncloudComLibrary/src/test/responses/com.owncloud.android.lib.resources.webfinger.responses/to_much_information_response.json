@@ -1,0 +1,24 @@
+{
+  "subject": "acct:peter.sine@gurken.xxx",
+  "aliases": [
+    "https://www.example.com/~bob/"
+  ],
+  "properties": {
+    "http://example.com/ns/role": "employee"
+  },
+  "gurken": {
+    "whatever": 42
+  },
+  "links": [
+    {
+      "gurken": "sallat",
+      "href": "https://gast.somedomain.de",
+      "rel": "http://webfinger.owncloud/rel/server-instance"
+    },
+    {
+      "gurken": "sallat",
+      "rel": "http://webfinger.example/rel/businesscard",
+      "href": "https://www.example.com/~bob/bob.vcf"
+    }
+  ]
+}

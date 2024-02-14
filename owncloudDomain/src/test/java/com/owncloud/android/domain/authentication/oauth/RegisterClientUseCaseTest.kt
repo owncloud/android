@@ -37,7 +37,7 @@ class RegisterClientUseCaseTest {
     fun `test register client - ok`() {
         every { repository.registerClient(useCaseParams.clientRegistrationRequest) } returns OC_CLIENT_REGISTRATION
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertEquals(OC_CLIENT_REGISTRATION, useCaseResult.getDataOrNull())
@@ -49,7 +49,7 @@ class RegisterClientUseCaseTest {
     fun `test register client - ko`() {
         every { repository.registerClient(useCaseParams.clientRegistrationRequest) } throws ServerNotReachableException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isError)
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is ServerNotReachableException)

@@ -20,7 +20,3 @@ do
 done
 
 ./gradlew ktlintFormat
-
-echo "========= Check Library =========="
-cd owncloud-android-library
-./check_code_script.sh

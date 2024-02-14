@@ -129,7 +129,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
         val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
 
-        val capabilities = getStoredCapabilitiesUseCase.execute(
+        val capabilities = getStoredCapabilitiesUseCase(
             GetStoredCapabilitiesUseCase.Params(
                 accountName = account.name
             )
@@ -137,7 +137,7 @@ class UsersAndGroupsSearchProvider : ContentProvider() {
 
         val getShareesAsyncUseCase: GetShareesAsyncUseCase by inject()
 
-        val getShareesResult = getShareesAsyncUseCase.execute(
+        val getShareesResult = getShareesAsyncUseCase(
             GetShareesAsyncUseCase.Params(
                 searchString = userQuery,
                 page = REQUESTED_PAGE,

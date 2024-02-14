@@ -44,8 +44,6 @@ import com.owncloud.android.domain.authentication.oauth.model.TokenRequest;
 import com.owncloud.android.domain.authentication.oauth.model.TokenResponse;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
-import com.owncloud.android.presentation.authentication.AuthenticatorConstants;
-import com.owncloud.android.presentation.authentication.LoginActivity;
 import kotlin.Lazy;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
@@ -338,7 +336,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         @NotNull Lazy<OIDCDiscoveryUseCase> oidcDiscoveryUseCase = inject(OIDCDiscoveryUseCase.class);
         OIDCDiscoveryUseCase.Params oidcDiscoveryUseCaseParams = new OIDCDiscoveryUseCase.Params(baseUrl);
         UseCaseResult<OIDCServerConfiguration> oidcServerConfigurationUseCaseResult =
-                oidcDiscoveryUseCase.getValue().execute(oidcDiscoveryUseCaseParams);
+                oidcDiscoveryUseCase.getValue().invoke(oidcDiscoveryUseCaseParams);
 
         String tokenEndpoint;
 
@@ -370,17 +368,20 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         String clientAuth = OAuthUtils.Companion.getClientAuth(clientSecret, clientId);
 
+        String scope = mContext.getResources().getString(R.string.oauth2_openid_scope);
+
         TokenRequest oauthTokenRequest = new TokenRequest.RefreshToken(
                 baseUrl,
                 tokenEndpoint,
                 clientAuth,
+                scope,
                 refreshToken
         );
 
         // Token exchange
         @NotNull Lazy<RequestTokenUseCase> requestTokenUseCase = inject(RequestTokenUseCase.class);
         RequestTokenUseCase.Params requestTokenParams = new RequestTokenUseCase.Params(oauthTokenRequest);
-        UseCaseResult<TokenResponse> tokenResponseResult = requestTokenUseCase.getValue().execute(requestTokenParams);
+        UseCaseResult<TokenResponse> tokenResponseResult = requestTokenUseCase.getValue().invoke(requestTokenParams);
 
         TokenResponse safeTokenResponse = tokenResponseResult.getDataOrNull();
         if (safeTokenResponse != null) {

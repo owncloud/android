@@ -22,11 +22,14 @@
 
 package com.owncloud.android.data.files.datasources.implementation
 
+import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCMetaFile
 import com.owncloud.android.lib.resources.files.RemoteFile
+import com.owncloud.android.lib.resources.files.RemoteMetaFile
 
 class OCRemoteFileDataSource(
     private val clientManager: ClientManager,
@@ -202,23 +205,42 @@ class OCRemoteFileDataSource(
         )
     }
 
-    private fun RemoteFile.toModel(): OCFile =
-        OCFile(
-            owner = owner,
-            remoteId = remoteId,
-            remotePath = remotePath,
-            length = if (isFolder) {
-                size
-            } else {
-                length
-            },
-            creationTimestamp = creationTimestamp,
-            modificationTimestamp = modifiedTimestamp,
-            mimeType = mimeType,
-            etag = etag,
-            permissions = permissions,
-            privateLink = privateLink,
-            sharedWithSharee = sharedWithSharee,
-            sharedByLink = sharedByLink,
-        )
+    override fun getMetaFile(
+        fileId: String,
+        accountName: String,
+    ): OCMetaFile = executeRemoteOperation {
+            clientManager.getFileService(accountName).getMetaFileInfo(fileId)
+        }.toModel()
+
+    companion object {
+        @VisibleForTesting
+        fun RemoteFile.toModel(): OCFile =
+            OCFile(
+                owner = owner,
+                remoteId = remoteId,
+                remotePath = remotePath,
+                length = if (isFolder) {
+                    size
+                } else {
+                    length
+                },
+                creationTimestamp = creationTimestamp,
+                modificationTimestamp = modifiedTimestamp,
+                mimeType = mimeType,
+                etag = etag,
+                permissions = permissions,
+                privateLink = privateLink,
+                sharedWithSharee = sharedWithSharee,
+                sharedByLink = sharedByLink,
+            )
+
+        @VisibleForTesting
+        fun RemoteMetaFile.toModel(): OCMetaFile =
+            OCMetaFile(
+                path = metaPathForUser,
+                id = id,
+                fileId = fileId,
+                spaceId = spaceId,
+            )
+    }
 }

@@ -45,7 +45,7 @@ class SynchronizeFolderUseCase(
         folderContent.forEach { ocFile ->
             if (ocFile.isFolder) {
                 if (shouldSyncFolder(params.syncMode, ocFile)) {
-                    SynchronizeFolderUseCase(synchronizeFileUseCase, fileRepository).execute(
+                    SynchronizeFolderUseCase(synchronizeFileUseCase, fileRepository)(
                         Params(
                             remotePath = ocFile.remotePath,
                             accountName = accountName,
@@ -55,7 +55,7 @@ class SynchronizeFolderUseCase(
                     )
                 }
             } else if (shouldSyncFile(params.syncMode, ocFile)) {
-                synchronizeFileUseCase.execute(
+                synchronizeFileUseCase(
                     SynchronizeFileUseCase.Params(
                         fileToSynchronize = ocFile,
                     )

@@ -1,0 +1,6 @@
+Enhancement: Select user and navigate to file when opening via deep link
+
+Select the correct user owner of the deep link file, managing possible errors and navigating to the correct file.
+
+https://github.com/owncloud/android/issues/4194
+https://github.com/owncloud/android/pull/4212

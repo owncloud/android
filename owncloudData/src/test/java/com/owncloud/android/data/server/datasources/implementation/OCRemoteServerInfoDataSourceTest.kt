@@ -67,13 +67,13 @@ class OCRemoteServerInfoDataSourceTest {
     private val authHeaderBearer = listOf(basicAuthHeader, bearerHeader)
 
     @Before
-    fun init() {
+    fun setUp() {
         ocRemoteServerInfoDatasource = OCRemoteServerInfoDataSource(ocServerInfoService, clientManager)
         every { clientManager.getClientForAnonymousCredentials(any(), any()) } returns ocClientMocked
     }
 
     @Test
-    fun getAuthenticationMethodBasic() {
+    fun `getAuthenticationMethod returns basic authentication`() {
         val expectedValue = AuthenticationMethod.BASIC_HTTP_AUTH
         prepareAuthorizationMethodToBeRetrieved(expectedValue)
 
@@ -86,7 +86,7 @@ class OCRemoteServerInfoDataSourceTest {
     }
 
     @Test
-    fun getAuthenticationMethodBearer() {
+    fun `getAuthenticationMethod returns bearer authentication`() {
         val expectedValue = AuthenticationMethod.BEARER_TOKEN
         prepareAuthorizationMethodToBeRetrieved(expectedValue)
 
@@ -99,7 +99,7 @@ class OCRemoteServerInfoDataSourceTest {
     }
 
     @Test
-    fun getAuthenticationMethodNone() {
+    fun `getAuthenticationMethod returns none method`() {
         val expectedValue = AuthenticationMethod.NONE
         prepareAuthorizationMethodToBeRetrieved(expectedValue)
 
@@ -112,7 +112,7 @@ class OCRemoteServerInfoDataSourceTest {
     }
 
     @Test(expected = SpecificServiceUnavailableException::class)
-    fun getAuthenticationMethodNotAvailable() {
+    fun `getAuthenticationMethod throws exception when server is not available`() {
         prepareAuthorizationMethodToBeRetrieved(
             expectedAuthenticationMethod = AuthenticationMethod.BASIC_HTTP_AUTH,
             isServerAvailable = false
@@ -120,17 +120,8 @@ class OCRemoteServerInfoDataSourceTest {
         ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
     }
 
-    @Test(expected = Exception::class)
-    fun getAuthenticationMethodException() {
-        every {
-            ocServerInfoService.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, false, ocClientMocked)
-        } throws Exception()
-
-        ocRemoteServerInfoDatasource.getAuthenticationMethod(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
-    }
-
     @Test
-    fun getRemoteStatusIsSecureConnection() {
+    fun `getRemoteStatus returns RemoteServerInfo with secure connection`() {
         val expectedValue = remoteServerInfo.copy(isSecureConnection = true)
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
@@ -143,7 +134,7 @@ class OCRemoteServerInfoDataSourceTest {
     }
 
     @Test
-    fun getRemoteStatusIsNotSecureConnection() {
+    fun `getRemoteStatus returns RemoteServerInfo with insecure connection`() {
         val expectedValue = remoteServerInfo.copy(isSecureConnection = false)
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
@@ -156,7 +147,7 @@ class OCRemoteServerInfoDataSourceTest {
     }
 
     @Test(expected = OwncloudVersionNotSupportedException::class)
-    fun getRemoteStatusOwncloudVersionNotSupported() {
+    fun `getRemoteStatus throws exception when ownCloud version is not supported`() {
         val expectedValue = remoteServerInfo.copy(ownCloudVersion = OwnCloudVersion("9.0.0"))
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
@@ -164,7 +155,7 @@ class OCRemoteServerInfoDataSourceTest {
     }
 
     @Test
-    fun getRemoteStatusOwncloudVersionHidden() {
+    fun `getRemoteStatus returns RemoteServerInfo with hidden ownCloud version`() {
         val expectedValue = remoteServerInfo.copy(ownCloudVersion = OwnCloudVersion(""))
         prepareRemoteStatusToBeRetrieved(expectedValue)
 
@@ -176,17 +167,8 @@ class OCRemoteServerInfoDataSourceTest {
         verify { ocServerInfoService.getRemoteStatus(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, ocClientMocked) }
     }
 
-    @Test(expected = Exception::class)
-    fun getRemoteStatusException() {
-        every {
-            ocServerInfoService.getRemoteStatus(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, ocClientMocked)
-        } throws Exception()
-
-        ocRemoteServerInfoDatasource.getRemoteStatus(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
-    }
-
     @Test
-    fun getServerInfoBasicAndSecureConnection() {
+    fun `getServerInfo returns ServerInfo with basic and secure connection`() {
         val expectedValue = OC_SECURE_SERVER_INFO_BASIC_AUTH
 
         prepareRemoteStatusToBeRetrieved(remoteServerInfo)
@@ -200,7 +182,7 @@ class OCRemoteServerInfoDataSourceTest {
     }
 
     @Test
-    fun getServerInfoBasicAndInsecureConnection() {
+    fun `getServerInfo returns ServerInfo with basic and insecure connection`() {
         val expectedValue = OC_INSECURE_SERVER_INFO_BASIC_AUTH
 
         prepareRemoteStatusToBeRetrieved(remoteServerInfo.copy(baseUrl = expectedValue.baseUrl, isSecureConnection = false))
@@ -214,7 +196,7 @@ class OCRemoteServerInfoDataSourceTest {
     }
 
     @Test
-    fun getServerInfoBearerAndSecureConnection() {
+    fun `getServerInfo returns ServerInfo with bearer and secure connection`() {
         val expectedValue = OC_SECURE_SERVER_INFO_BEARER_AUTH
 
         prepareRemoteStatusToBeRetrieved(remoteServerInfo.copy(isSecureConnection = true))
@@ -228,7 +210,7 @@ class OCRemoteServerInfoDataSourceTest {
     }
 
     @Test
-    fun getServerInfoBearerAndInsecureConnection() {
+    fun `getServerInfo returns ServerInfo with bearer and insecure connection`() {
         val expectedValue = OC_INSECURE_SERVER_INFO_BEARER_AUTH
 
         prepareRemoteStatusToBeRetrieved(remoteServerInfo.copy(baseUrl = expectedValue.baseUrl, isSecureConnection = true))
@@ -242,7 +224,7 @@ class OCRemoteServerInfoDataSourceTest {
     }
 
     @Test(expected = NoConnectionWithServerException::class)
-    fun getServerInfoNoConnection() {
+    fun `getServerInfo throws exception when there is no connection with the server`() {
         prepareRemoteStatusToBeRetrieved(remoteServerInfo, NoConnectionWithServerException())
 
         ocRemoteServerInfoDatasource.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)

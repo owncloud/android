@@ -24,6 +24,7 @@ package com.owncloud.android.presentation.files.filelist
 
 import android.accounts.Account
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +33,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.core.view.setMargins
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -187,6 +187,11 @@ class FileListAdapter(
             val fileIcon = holder.itemView.findViewById<ImageView>(R.id.thumbnail).apply {
                 tag = file.id
             }
+            val thumbnail: Bitmap? = if (file.remoteId != null) {
+                ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
+            } else {
+                null
+            }
 
             holder.itemView.findViewById<LinearLayout>(R.id.ListItemLayout)?.apply {
                 contentDescription = "LinearLayout-$name"
@@ -241,12 +246,28 @@ class FileListAdapter(
                     val view = holder as GridViewHolder
                     view.binding.Filename.text = file.fileName
                 }
+
                 ViewType.GRID_IMAGE.ordinal -> {
+                    val view = holder as GridImageViewHolder
                     val layoutParams = fileIcon.layoutParams as ViewGroup.MarginLayoutParams
-                    val marginImage = 4
-                    layoutParams.setMargins(marginImage)
-                    layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+
+                    if (thumbnail == null) {
+                        view.binding.Filename.text = file.fileName
+                        // Reset layout params values default
+                        manageGridLayoutParams(
+                            layoutParams = layoutParams,
+                            marginVertical = 0,
+                            height = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_height),
+                            width = context.resources.getDimensionPixelSize(R.dimen.item_file_grid_width),
+                        )
+                    } else {
+                        manageGridLayoutParams(
+                            layoutParams = layoutParams,
+                            marginVertical = context.resources.getDimensionPixelSize(R.dimen.item_file_image_grid_margin),
+                            height = ViewGroup.LayoutParams.MATCH_PARENT,
+                            width = ViewGroup.LayoutParams.MATCH_PARENT,
+                        )
+                    }
                 }
             }
 
@@ -284,28 +305,26 @@ class FileListAdapter(
             } else {
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
                 fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
-                if (file.remoteId != null) {
-                    val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
-                    if (thumbnail != null) {
-                        fileIcon.setImageBitmap(thumbnail)
-                    }
-                    if (file.needsToUpdateThumbnail) {
-                        // generate new Thumbnail
-                        if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
-                            val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
-                            val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
 
-                            // If drawable is not visible, do not update it.
-                            if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
-                                fileIcon.setImageDrawable(asyncDrawable)
-                            }
-                            task.execute(file)
+                if (thumbnail != null) {
+                    fileIcon.setImageBitmap(thumbnail)
+                }
+                if (file.needsToUpdateThumbnail) {
+                    // generate new Thumbnail
+                    if (ThumbnailsCacheManager.cancelPotentialThumbnailWork(file, fileIcon)) {
+                        val task = ThumbnailsCacheManager.ThumbnailGenerationTask(fileIcon, account)
+                        val asyncDrawable = ThumbnailsCacheManager.AsyncThumbnailDrawable(context.resources, thumbnail, task)
+
+                        // If drawable is not visible, do not update it.
+                        if (asyncDrawable.minimumHeight > 0 && asyncDrawable.minimumWidth > 0) {
+                            fileIcon.setImageDrawable(asyncDrawable)
                         }
+                        task.execute(file)
                     }
+                }
 
-                    if (file.mimeType == "image/png") {
-                        fileIcon.setBackgroundColor(ContextCompat.getColor(context, R.color.background_color))
-                    }
+                if (file.mimeType == "image/png") {
+                    fileIcon.setBackgroundColor(ContextCompat.getColor(context, R.color.background_color))
                 }
             }
 
@@ -319,6 +338,13 @@ class FileListAdapter(
                 view.binding.footerText.text = file.text
             }
         }
+    }
+
+    private fun manageGridLayoutParams(layoutParams: ViewGroup.MarginLayoutParams, marginVertical: Int, height: Int, width: Int) {
+        val marginHorizontal = context.resources.getDimensionPixelSize(R.dimen.item_file_image_grid_margin)
+        layoutParams.setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical)
+        layoutParams.height = height
+        layoutParams.width = width
     }
 
     private fun manageListOfFilesAndGenerateText(list: List<OCFileWithSyncInfo>): String {

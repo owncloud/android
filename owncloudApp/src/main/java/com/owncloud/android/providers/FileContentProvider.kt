@@ -55,8 +55,8 @@ import com.owncloud.android.data.capabilities.datasources.implementation.OCLocal
 import com.owncloud.android.data.capabilities.datasources.implementation.OCLocalCapabilitiesDataSource.Companion.toModel
 import com.owncloud.android.data.capabilities.db.OCCapabilityEntity
 import com.owncloud.android.data.files.db.OCFileEntity
-import com.owncloud.android.data.folderbackup.datasources.FolderBackupLocalDataSource
-import com.owncloud.android.data.folderbackup.datasources.implementation.OCFolderBackupLocalDataSource
+import com.owncloud.android.data.folderbackup.datasources.LocalFolderBackupDataSource
+import com.owncloud.android.data.folderbackup.datasources.implementation.OCLocalFolderBackupDataSource
 import com.owncloud.android.data.migrations.CameraUploadsMigrationToRoom
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
@@ -913,7 +913,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
 
                     // Insert capability to the new capabilities table in new database
                     executors.diskIO().execute {
-                        ocLocalCapabilitiesDataSource.insert(
+                        ocLocalCapabilitiesDataSource.insertCapabilities(
                             listOf(OCCapabilityEntity.fromCursor(cursor)).map {
                                 it.toModel()
                             }
@@ -973,8 +973,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                     val pictureUploadsConfiguration = migrationToRoom.getPictureUploadsConfigurationPreferences(pictureUploadsTimestamp)
                     val videoUploadsConfiguration = migrationToRoom.getVideoUploadsConfigurationPreferences(videoUploadsTimestamp)
 
-                    val backupLocalDataSource: FolderBackupLocalDataSource =
-                        OCFolderBackupLocalDataSource(OwncloudDatabase.getDatabase(context!!).folderBackUpDao())
+                    val backupLocalDataSource: LocalFolderBackupDataSource =
+                        OCLocalFolderBackupDataSource(OwncloudDatabase.getDatabase(context!!).folderBackUpDao())
                     // Insert camera uploads configuration in new database
                     executors.diskIO().execute {
                         pictureUploadsConfiguration?.let { backupLocalDataSource.saveFolderBackupConfiguration(it) }
@@ -1057,7 +1057,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                                 ) {
                                     val localFile = File(upload.localPath)
                                     val uploadFileFromSystemUseCase = UploadFileFromSystemUseCase(WorkManager.getInstance(context!!))
-                                    uploadFileFromSystemUseCase.execute(
+                                    uploadFileFromSystemUseCase(
                                         UploadFileFromSystemUseCase.Params(
                                             accountName = upload.accountName,
                                             localPath = upload.localPath,

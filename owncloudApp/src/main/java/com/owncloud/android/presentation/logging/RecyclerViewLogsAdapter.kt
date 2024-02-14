@@ -21,9 +21,11 @@
 package com.owncloud.android.presentation.logging
 
 import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
@@ -49,11 +51,17 @@ class RecyclerViewLogsAdapter(
         holder.binding.apply {
             textViewTitleActivityLogsList.text = log.name
             textViewSubtitleActivityLogsList.text = log.toLegibleStringSize(context)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                imageViewDownloadActivityLogsList.isVisible = false
+            }
             imageViewShareActivityLogsList.setOnClickListener {
                 listener.share(log)
             }
             imageViewDeleteActivityLogsList.setOnClickListener {
-                listener.delete(log)
+                listener.delete(log, logsList.last() == log)
+            }
+            imageViewDownloadActivityLogsList.setOnClickListener {
+                listener.download(log)
             }
             layoutContainerActivityLogsList.setOnClickListener {
                 listener.open(log)
@@ -77,7 +85,8 @@ class RecyclerViewLogsAdapter(
 
     interface Listener {
         fun share(file: File)
-        fun delete(file: File)
+        fun delete(file: File, isLastLogFileDeleted: Boolean)
         fun open(file: File)
+        fun download(file: File)
     }
 }

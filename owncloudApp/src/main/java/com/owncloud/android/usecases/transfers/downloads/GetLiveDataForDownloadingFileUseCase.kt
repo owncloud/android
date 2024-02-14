@@ -19,7 +19,7 @@
 package com.owncloud.android.usecases.transfers.downloads
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.owncloud.android.domain.BaseUseCase
@@ -42,7 +42,7 @@ class GetLiveDataForDownloadingFileUseCase(
             states = PENDING_WORK_STATUS
         )
 
-        return Transformations.map(workManager.getWorkInfosLiveData(workQuery)) { listOfDownloads ->
+        return workManager.getWorkInfosLiveData(workQuery).map { listOfDownloads ->
             listOfDownloads.firstOrNull { it.tags.containsAll(tagsToFilter) }
         }
     }

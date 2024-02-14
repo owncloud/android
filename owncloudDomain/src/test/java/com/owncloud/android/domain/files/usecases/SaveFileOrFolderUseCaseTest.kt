@@ -35,7 +35,7 @@ class SaveFileOrFolderUseCaseTest {
 
     @Test
     fun `save file or folder - ok`() {
-        val useCaseResult = useCase.execute(useCaseParamsFile)
+        val useCaseResult = useCase(useCaseParamsFile)
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertFalse(useCaseResult.isError)
         Assert.assertEquals(Unit, useCaseResult.getDataOrNull())
@@ -47,7 +47,7 @@ class SaveFileOrFolderUseCaseTest {
     fun `save file or folder - ko`() {
         every { fileRepository.saveFile(any()) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParamsFile)
+        val useCaseResult = useCase(useCaseParamsFile)
 
         Assert.assertFalse(useCaseResult.isSuccess)
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

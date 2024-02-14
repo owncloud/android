@@ -55,7 +55,7 @@ class GetSharesAsLiveDataUseCaseTest {
 
         val sharesEmitted = mutableListOf<OCShare>()
 
-        useCase.execute(useCaseParams).observeForever {
+        useCase(useCaseParams).observeForever {
             it?.forEach { ocShare -> sharesEmitted.add(ocShare) }
         }
 
@@ -70,6 +70,6 @@ class GetSharesAsLiveDataUseCaseTest {
     fun `get shares as livedata - ko`() {
         every { repository.getSharesAsLiveData(any(), any()) } throws Exception()
 
-        useCase.execute(useCaseParams)
+        useCase(useCaseParams)
     }
 }

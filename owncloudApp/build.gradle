@@ -49,13 +49,17 @@ dependencies {
 
     // Miscellaneous
     implementation libs.disklrucache
-    implementation libs.exoplayer
+    implementation libs.media3.exoplayer
+    implementation libs.media3.ui
     implementation libs.floatingactionbutton
     implementation libs.material
     implementation libs.patternlockview
 
     // Markdown Preview
     implementation libs.bundles.markwon
+
+    // Timber
+    implementation libs.timber
 
     // Tests
     testImplementation project(":owncloudTestUtil")
@@ -92,8 +96,8 @@ android {
 
         testInstrumentationRunner "com.owncloud.android.utils.OCTestAndroidJUnitRunner"
 
-        versionCode = 41000100
-        versionName = "4.1.1"
+        versionCode = 42000000
+        versionName = "4.2.0"
 
         buildConfigField "String", gitRemote, "\"" + getGitOriginRemote() + "\""
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""

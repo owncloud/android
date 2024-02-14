@@ -32,6 +32,7 @@ data class FolderBackUpEntity(
     val chargingOnly: Boolean,
     val name: String,
     val lastSyncTimestamp: Long,
+    val spaceId: String?,
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 }

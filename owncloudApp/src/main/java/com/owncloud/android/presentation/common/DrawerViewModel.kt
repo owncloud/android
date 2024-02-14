@@ -80,7 +80,7 @@ class DrawerViewModel(
             val loggedAccounts = AccountUtils.getAccounts(context)
             localStorageProvider.deleteUnusedUserDirs(loggedAccounts)
 
-            val userQuotas = getUserQuotasUseCase.execute(Unit)
+            val userQuotas = getUserQuotasUseCase(Unit)
             val loggedAccountsNames = loggedAccounts.map { it.name }
             val totalAccountsNames = userQuotas.map { it.accountName }
             val removedAccountsNames = mutableListOf<String>()
@@ -91,7 +91,7 @@ class DrawerViewModel(
             }
             removedAccountsNames.forEach { removedAccountName ->
                 Timber.d("$removedAccountName is being removed")
-                removeAccountUseCase.execute(
+                removeAccountUseCase(
                     RemoveAccountUseCase.Params(accountName = removedAccountName)
                 )
                 localStorageProvider.removeLocalStorageForAccount(removedAccountName)

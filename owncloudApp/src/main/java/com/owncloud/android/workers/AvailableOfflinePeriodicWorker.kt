@@ -45,7 +45,7 @@ class AvailableOfflinePeriodicWorker(
     override suspend fun doWork(): Result {
 
         return try {
-            val availableOfflineFiles = getFilesAvailableOfflineFromEveryAccountUseCase.execute(Unit)
+            val availableOfflineFiles = getFilesAvailableOfflineFromEveryAccountUseCase(Unit)
             Timber.i("Available offline files that needs to be synced: ${availableOfflineFiles.size}")
 
             syncAvailableOfflineFiles(availableOfflineFiles)
@@ -59,7 +59,7 @@ class AvailableOfflinePeriodicWorker(
     private fun syncAvailableOfflineFiles(availableOfflineFiles: List<OCFile>) {
         availableOfflineFiles.forEach {
             if (it.isFolder) {
-                synchronizeFolderUseCase.execute(
+                synchronizeFolderUseCase(
                     SynchronizeFolderUseCase.Params(
                         remotePath = it.remotePath,
                         accountName = it.owner,
@@ -68,7 +68,7 @@ class AvailableOfflinePeriodicWorker(
                     )
                 )
             } else {
-                synchronizeFileUseCase.execute(SynchronizeFileUseCase.Params(it))
+                synchronizeFileUseCase(SynchronizeFileUseCase.Params(it))
             }
         }
     }

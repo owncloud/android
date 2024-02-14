@@ -53,11 +53,15 @@ dependencies {
     implementation project(":owncloudDomain")
 
     // Owncloud Android Library
-    api project(":owncloud-android-library:owncloudComLibrary")
+    api project(":owncloudComLibrary")
 
     // Kotlin
     implementation libs.kotlin.stdlib
     implementation libs.kotlinx.coroutines.core
+
+    // Androidx
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.lifecycle.livedata.ktx
 
     // Room
     implementation libs.androidx.room.ktx
@@ -66,10 +70,14 @@ dependencies {
     implementation libs.moshi.kotlin
     ksp libs.moshi.kotlin.codegen
 
+    // Timber
+    implementation libs.timber
+
     // Dependencies for unit tests
     testImplementation project(":owncloudTestUtil")
     testImplementation libs.androidx.arch.core.testing
     testImplementation libs.junit4
+    testImplementation libs.kotlinx.coroutines.test
     testImplementation libs.mockk
 
     // Dependencies for instrumented tests

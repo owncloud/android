@@ -28,11 +28,11 @@ interface LocalCapabilitiesDataSource {
         accountName: String
     ): LiveData<OCCapability?>
 
-    fun getCapabilityForAccount(
+    fun getCapabilitiesForAccount(
         accountName: String
     ): OCCapability?
 
-    fun insert(ocCapabilities: List<OCCapability>)
+    fun insertCapabilities(ocCapabilities: List<OCCapability>)
 
     fun deleteCapabilitiesForAccount(accountName: String)
 }

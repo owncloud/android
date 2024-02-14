@@ -110,7 +110,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
             if (!ocFile.isAvailableLocally) {
                 val downloadFileUseCase: DownloadFileUseCase by inject()
 
-                downloadFileUseCase.execute(DownloadFileUseCase.Params(accountName = ocFile.owner, file = ocFile))
+                downloadFileUseCase(DownloadFileUseCase.Params(accountName = ocFile.owner, file = ocFile))
 
                 do {
                     if (!waitOrGetCancelled(signal)) {
@@ -146,12 +146,12 @@ class DocumentsStorageProvider : DocumentsProvider() {
                         spaceId = ocFile.spaceId,
                     )
                     CoroutineScope(Dispatchers.IO).launch {
-                        uploadFilesUseCase.execute(uploadFilesUseCaseParams)
+                        uploadFilesUseCase(uploadFilesUseCaseParams)
                     }
                 } else {
                     Thread {
                         val synchronizeFileUseCase: SynchronizeFileUseCase by inject()
-                        val result = synchronizeFileUseCase.execute(
+                        val result = synchronizeFileUseCase(
                             SynchronizeFileUseCase.Params(
                                 fileToSynchronize = ocFile,
                             )
@@ -194,13 +194,13 @@ class DocumentsStorageProvider : DocumentsProvider() {
             val getPersonalAndProjectSpacesForAccountUseCase: GetPersonalAndProjectSpacesForAccountUseCase by inject()
             val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
 
-            getPersonalAndProjectSpacesForAccountUseCase.execute(
+            getPersonalAndProjectSpacesForAccountUseCase(
                 GetPersonalAndProjectSpacesForAccountUseCase.Params(
                     accountName = parentDocumentId,
                 )
             ).forEach { space ->
                 if (!space.isDisabled) {
-                    getFileByRemotePathUseCase.execute(
+                    getFileByRemotePathUseCase(
                         GetFileByRemotePathUseCase.Params(
                             owner = space.accountName,
                             remotePath = ROOT_PATH,
@@ -294,7 +294,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         for (account in accounts) {
             val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
-            val capabilities = getStoredCapabilitiesUseCase.execute(
+            val capabilities = getStoredCapabilitiesUseCase(
                 GetStoredCapabilitiesUseCase.Params(
                     accountName = account.name
                 )
@@ -358,7 +358,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val file = getFileByIdOrException(documentId.toInt())
 
         val renameFileUseCase: RenameFileUseCase by inject()
-        renameFileUseCase.execute(RenameFileUseCase.Params(file, displayName)).also {
+        renameFileUseCase(RenameFileUseCase.Params(file, displayName)).also {
             checkUseCaseResult(
                 it, file.parentId.toString()
             )
@@ -372,7 +372,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         val file = getFileByIdOrException(documentId.toInt())
 
         val removeFileUseCase: RemoveFileUseCase by inject()
-        removeFileUseCase.execute(RemoveFileUseCase.Params(listOf(file), false)).also {
+        removeFileUseCase(RemoveFileUseCase.Params(listOf(file), false)).also {
             checkUseCaseResult(
                 it, file.parentId.toString()
             )
@@ -387,7 +387,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val copyFileUseCase: CopyFileUseCase by inject()
 
-        copyFileUseCase.execute(
+        copyFileUseCase(
             CopyFileUseCase.Params(
                 listOfFilesToCopy = listOf(sourceFile),
                 targetFolder = targetParentFile,
@@ -417,7 +417,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val moveFileUseCase: MoveFileUseCase by inject()
 
-        moveFileUseCase.execute(
+        moveFileUseCase(
             MoveFileUseCase.Params(
                 listOfFilesToMove = listOf(sourceFile),
                 targetFolder = targetParentFile,
@@ -455,7 +455,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
         val createFolderAsyncUseCase: CreateFolderAsyncUseCase by inject()
 
-        createFolderAsyncUseCase.execute(CreateFolderAsyncUseCase.Params(displayName, parentDocument)).run {
+        createFolderAsyncUseCase(CreateFolderAsyncUseCase.Params(displayName, parentDocument)).run {
             checkUseCaseResult(this, parentDocument.id.toString())
             val newPath = parentDocument.remotePath + displayName + File.separator
             val newFolder = getFileByPathOrException(newPath, parentDocument.owner, parentDocument.spaceId)
@@ -499,7 +499,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         )
 
         CoroutineScope(Dispatchers.IO).launch {
-            val useCaseResult = synchronizeFolderUseCase.execute(synchronizeFolderUseCaseParams)
+            val useCaseResult = synchronizeFolderUseCase(synchronizeFolderUseCaseParams)
             Timber.d("${folderToSync.remotePath} from ${folderToSync.owner} was synced with server with result: $useCaseResult")
 
             if (useCaseResult.isSuccess) {
@@ -517,7 +517,7 @@ class DocumentsStorageProvider : DocumentsProvider() {
         )
 
         CoroutineScope(Dispatchers.IO).launch {
-            val useCaseResult = refreshSpacesFromServerAsyncUseCase.execute(refreshSpacesFromServerAsyncUseCaseParams)
+            val useCaseResult = refreshSpacesFromServerAsyncUseCase(refreshSpacesFromServerAsyncUseCaseParams)
             Timber.d("Spaces from account were synced with server with result: $useCaseResult")
 
             if (useCaseResult.isSuccess) {
@@ -562,20 +562,20 @@ class DocumentsStorageProvider : DocumentsProvider() {
 
     private fun getFileByIdOrException(id: Int): OCFile {
         val getFileByIdUseCase: GetFileByIdUseCase by inject()
-        val result = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(id.toLong()))
+        val result = getFileByIdUseCase(GetFileByIdUseCase.Params(id.toLong()))
         return result.getDataOrNull() ?: throw FileNotFoundException("File $id not found")
     }
 
     private fun getFileByPathOrException(remotePath: String, accountName: String, spaceId: String? = null): OCFile {
         val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
         val result =
-            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(owner = accountName, remotePath = remotePath, spaceId = spaceId))
+            getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(owner = accountName, remotePath = remotePath, spaceId = spaceId))
         return result.getDataOrNull() ?: throw FileNotFoundException("File $remotePath not found")
     }
 
     private fun getFolderContent(id: Int): List<OCFile> {
         val getFolderContentUseCase: GetFolderContentUseCase by inject()
-        val result = getFolderContentUseCase.execute(GetFolderContentUseCase.Params(id.toLong()))
+        val result = getFolderContentUseCase(GetFolderContentUseCase.Params(id.toLong()))
         return result.getDataOrNull() ?: throw FileNotFoundException("Folder $id not found")
     }
 

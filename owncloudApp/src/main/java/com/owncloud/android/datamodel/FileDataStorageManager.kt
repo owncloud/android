@@ -56,7 +56,7 @@ class FileDataStorageManager(
         val getFileByRemotePathUseCase: GetFileByRemotePathUseCase by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getFileByRemotePathUseCase.execute(GetFileByRemotePathUseCase.Params(accountName, remotePath, spaceId))
+            getFileByRemotePathUseCase(GetFileByRemotePathUseCase.Params(accountName, remotePath, spaceId))
         }.getDataOrNull()
         result
     }
@@ -65,7 +65,7 @@ class FileDataStorageManager(
         val getPersonalRootFolderForAccountUseCase: GetPersonalRootFolderForAccountUseCase by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getPersonalRootFolderForAccountUseCase.execute(GetPersonalRootFolderForAccountUseCase.Params(account.name))
+            getPersonalRootFolderForAccountUseCase(GetPersonalRootFolderForAccountUseCase.Params(account.name))
         }
         result
     }
@@ -74,7 +74,7 @@ class FileDataStorageManager(
         val getSharesRootFolderForAccount: GetSharesRootFolderForAccount by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getSharesRootFolderForAccount.execute(GetSharesRootFolderForAccount.Params(account.name))
+            getSharesRootFolderForAccount(GetSharesRootFolderForAccount.Params(account.name))
         }
         result
     }
@@ -84,7 +84,7 @@ class FileDataStorageManager(
         val getFileByIdUseCase: GetFileByIdUseCase by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getFileByIdUseCase.execute(GetFileByIdUseCase.Params(id))
+            getFileByIdUseCase(GetFileByIdUseCase.Params(id))
         }.getDataOrNull()
         result
     }
@@ -106,7 +106,7 @@ class FileDataStorageManager(
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
             // TODO: Remove !!
-            getFolderImagesUseCase.execute(GetFolderImagesUseCase.Params(folderId = folder!!.id!!))
+            getFolderImagesUseCase(GetFolderImagesUseCase.Params(folderId = folder!!.id!!))
         }.getDataOrNull()
         result ?: listOf()
     }
@@ -116,7 +116,7 @@ class FileDataStorageManager(
         val getFolderContentUseCase: GetFolderContentUseCase by inject()
 
         val result = withContext(CoroutineScope(CoroutinesDispatcherProvider().io).coroutineContext) {
-            getFolderContentUseCase.execute(GetFolderContentUseCase.Params(parentId))
+            getFolderContentUseCase(GetFolderContentUseCase.Params(parentId))
         }.getDataOrNull()
         result ?: listOf()
     }

@@ -237,6 +237,7 @@ interface FileDao {
                 treeEtag = localFile.treeEtag,
                 etagInConflict = localFile.etagInConflict,
                 availableOfflineStatus = localFile.availableOfflineStatus,
+                lastUsage = localFile.lastUsage,
             ).apply {
                 id = localFile.id
             })
@@ -356,6 +357,9 @@ interface FileDao {
     @Query(UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS)
     fun updateFileWithAvailableOfflineStatus(id: Long, availableOfflineStatus: Int)
 
+    @Query(UPDATE_FILE_WITH_LAST_USAGE)
+    fun updateFileWithLastUsage(id: Long, lastUsage: Long?)
+
     @Transaction
     fun updateConflictStatusForFile(id: Long, eTagInConflict: String?) {
         val fileEntity = getFileById(id)
@@ -470,6 +474,7 @@ interface FileDao {
     }
 
     companion object {
+
         private const val SELECT_FILE_WITH_ID = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
@@ -559,6 +564,11 @@ interface FileDao {
             WHERE id = :id
         """
 
+        private const val UPDATE_FILE_WITH_LAST_USAGE = """
+            UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            SET lastUsage = :lastUsage
+            WHERE id = :id
+        """
         private const val DISABLE_THUMBNAILS_FOR_FILE = """
             UPDATE ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
             SET needsToUpdateThumbnail = false

@@ -51,6 +51,8 @@ class BiometricViewModel(
      * Init cipher that will be used to create the encrypted [BiometricPrompt.CryptoObject] instance. This
      * CryptoObject will be used during the biometric authentication process
      *
+     * This won't be used to encrypt data, just to rely on its exclusiveness and safe access
+     *
      * @return the cipher if it is properly initialized, null otherwise
      */
     fun initCipher(): Cipher? {

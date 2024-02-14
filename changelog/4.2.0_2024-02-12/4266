@@ -1,0 +1,7 @@
+Enhancement: Fix in the type handling of the content-type
+
+The content-type `application/jrd+json` has been added to the loggable types list, so that body in
+some requests and responses can be correctly logged.
+
+https://github.com/owncloud/android/issues/4258
+https://github.com/owncloud/android/pull/4266

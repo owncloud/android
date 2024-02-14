@@ -142,7 +142,7 @@ class DownloadFileWorker(
         val fileId = workerParameters.inputData.getLong(KEY_PARAM_FILE_ID, -1)
 
         account = AccountUtils.getOwnCloudAccountByName(appContext, accountName) ?: return false
-        ocFile = getFileByIdUseCase.execute(GetFileByIdUseCase.Params(fileId)).getDataOrNull() ?: return false
+        ocFile = getFileByIdUseCase(GetFileByIdUseCase.Params(fileId)).getDataOrNull() ?: return false
 
         return !ocFile.isFolder
     }
@@ -155,7 +155,7 @@ class DownloadFileWorker(
      * @see temporalFolderPath for the temporal location
      */
     private fun downloadFileToTemporalFile() {
-        saveDownloadWorkerUuidUseCase.execute(
+        saveDownloadWorkerUuidUseCase(
             SaveDownloadWorkerUUIDUseCase.Params(
                 fileId = workerParameters.inputData.getLong(KEY_PARAM_FILE_ID, -1),
                 workerUuid = id
@@ -163,7 +163,7 @@ class DownloadFileWorker(
         )
 
         val spaceWebDavUrl =
-            getWebdavUrlForSpaceUseCase.execute(GetWebDavUrlForSpaceUseCase.Params(accountName = account.name, spaceId = ocFile.spaceId))
+            getWebdavUrlForSpaceUseCase(GetWebDavUrlForSpaceUseCase.Params(accountName = account.name, spaceId = ocFile.spaceId))
 
         downloadRemoteFileOperation = DownloadRemoteFileOperation(
             ocFile.remotePath,
@@ -218,9 +218,10 @@ class DownloadFileWorker(
             length = (File(finalLocationForFile).length())
             lastSyncDateForData = currentTime
             modifiedAtLastSyncForData = downloadRemoteFileOperation.modificationTimestamp
+            lastUsage = currentTime
         }
-        saveFileOrFolderUseCase.execute(SaveFileOrFolderUseCase.Params(ocFile))
-        cleanConflictUseCase.execute(
+        saveFileOrFolderUseCase(SaveFileOrFolderUseCase.Params(ocFile))
+        cleanConflictUseCase(
             CleanConflictUseCase.Params(
                 fileId = ocFile.id!!
             )
@@ -236,7 +237,7 @@ class DownloadFileWorker(
     private fun notifyDownloadResult(
         throwable: Throwable?
     ): Result {
-        cleanWorkersUuidUseCase.execute(
+        cleanWorkersUuidUseCase(
             CleanWorkersUUIDUseCase.Params(
                 fileId = workerParameters.inputData.getLong(KEY_PARAM_FILE_ID, -1)
             )

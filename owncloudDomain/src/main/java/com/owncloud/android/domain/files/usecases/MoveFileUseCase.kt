@@ -35,18 +35,27 @@ import com.owncloud.android.domain.files.model.OCFile
  * or moving files to another space will throw an exception.
  */
 class MoveFileUseCase(
-    private val fileRepository: FileRepository
+    private val fileRepository: FileRepository,
+    private val setLastUsageFileUseCase: SetLastUsageFileUseCase,
 ) : BaseUseCaseWithResult<List<OCFile>, MoveFileUseCase.Params>() {
 
     override fun run(params: Params): List<OCFile> {
         validateOrThrowException(params.listOfFilesToMove, params.targetFolder)
 
-        return fileRepository.moveFile(
+        val listOfFilesToMoveOriginal = params.listOfFilesToMove.map { it to it.isAvailableLocally }
+
+        val listOfFilesToMove = fileRepository.moveFile(
             listOfFilesToMove = params.listOfFilesToMove,
             targetFolder = params.targetFolder,
             replace = params.replace,
             isUserLogged = params.isUserLogged,
         )
+
+        listOfFilesToMoveOriginal.forEach { (ocFile, isAvailableLocally) ->
+            setLastUsageFile(ocFile, isAvailableLocally)
+        }
+
+        return listOfFilesToMove
     }
 
     @Throws(
@@ -64,6 +73,17 @@ class MoveFileUseCase(
         } else if (listOfFilesToMove.any { it.parentId == targetFolder.id }) {
             throw MoveIntoSameFolderException()
         }
+    }
+
+    private fun setLastUsageFile(file: OCFile, isAvailableLocally: Boolean) {
+        setLastUsageFileUseCase(
+            SetLastUsageFileUseCase.Params(
+                fileId = file.id!!,
+                lastUsage = System.currentTimeMillis(),
+                isAvailableLocally = isAvailableLocally,
+                isFolder = file.isFolder,
+            )
+        )
     }
 
     data class Params(

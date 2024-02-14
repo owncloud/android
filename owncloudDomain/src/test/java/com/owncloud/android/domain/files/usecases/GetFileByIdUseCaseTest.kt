@@ -38,7 +38,7 @@ class GetFileByIdUseCaseTest {
     fun `get file by id - ok`() {
         every { repository.getFileById(useCaseParams.fileId) } returns OC_FOLDER
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertEquals(OC_FOLDER, useCaseResult.getDataOrNull())
@@ -50,7 +50,7 @@ class GetFileByIdUseCaseTest {
     fun `get file by id - ok - null`() {
         every { repository.getFileById(useCaseParams.fileId) } returns null
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isSuccess)
         Assert.assertEquals(null, useCaseResult.getDataOrNull())
@@ -62,7 +62,7 @@ class GetFileByIdUseCaseTest {
     fun `get file by id - ko`() {
         every { repository.getFileById(useCaseParams.fileId) } throws UnauthorizedException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         Assert.assertTrue(useCaseResult.isError)
         Assert.assertTrue(useCaseResult.getThrowableOrNull() is UnauthorizedException)

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/standard_half_padding"
         android:text="@string/share_via_link_create_title"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.DialogWindowTitle" />
+        android:textAppearance="@android:style/TextAppearance.Material.DialogWindowTitle" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -111,6 +111,129 @@
                 android:layout_marginRight="@dimen/standard_half_margin"
                 android:inputType="textPassword"
                 android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/shareViaLinkPasswordPolicyIntro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/standard_half_margin"
+                    android:layout_marginRight="@dimen/standard_half_margin"
+                    android:text="@string/password_policy_intro"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/shareViaLinkPasswordPolicyMinCharacters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/standard_half_margin"
+                    android:layout_marginRight="@dimen/standard_half_margin"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <TextView
+                        android:id="@+id/shareViaLinkPasswordPolicyMinCharactersIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/shareViaLinkPasswordPolicyMinCharactersText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shareViaLinkPasswordPolicyUpperCaseCharacters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/standard_half_margin"
+                    android:layout_marginRight="@dimen/standard_half_margin"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <TextView
+                        android:id="@+id/shareViaLinkPasswordPolicyUpperCaseCharactersIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/shareViaLinkPasswordPolicyUpperCaseCharactersText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shareViaLinkPasswordPolicyLowerCaseCharacters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/standard_half_margin"
+                    android:layout_marginRight="@dimen/standard_half_margin"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <TextView
+                        android:id="@+id/shareViaLinkPasswordPolicyLowerCaseCharactersIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/shareViaLinkPasswordPolicyLowerCaseCharactersText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shareViaLinkPasswordPolicyMinSpecialCharacters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/standard_half_margin"
+                    android:layout_marginRight="@dimen/standard_half_margin"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <TextView
+                        android:id="@+id/shareViaLinkPasswordPolicyMinSpecialCharactersIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/shareViaLinkPasswordPolicyMinSpecialCharactersText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shareViaLinkPasswordPolicyMaxCharacters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/standard_half_margin"
+                    android:layout_marginRight="@dimen/standard_half_margin"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <TextView
+                        android:id="@+id/shareViaLinkPasswordPolicyMaxCharactersIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/shareViaLinkPasswordPolicyMaxCharactersText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/shareViaLinkPasswordPolicyMinDigits"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/standard_half_margin"
+                    android:layout_marginRight="@dimen/standard_half_margin"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <TextView
+                        android:id="@+id/shareViaLinkPasswordPolicyMinDigitsIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/shareViaLinkPasswordPolicyMinDigitsText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/shareViaLinkExpirationSection"

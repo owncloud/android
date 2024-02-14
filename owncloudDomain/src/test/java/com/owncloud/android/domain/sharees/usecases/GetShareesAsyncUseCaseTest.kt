@@ -39,7 +39,7 @@ class GetShareesAsyncUseCaseTest {
     fun `get sharees from server - ok`() {
         every { repository.getSharees(any(), any(), any(), any()) } returns arrayListOf()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
 
@@ -52,7 +52,7 @@ class GetShareesAsyncUseCaseTest {
     fun `get sharees from server - ko`() {
         every { repository.getSharees(any(), any(), any(), any()) } throws NoConnectionWithServerException()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is NoConnectionWithServerException)

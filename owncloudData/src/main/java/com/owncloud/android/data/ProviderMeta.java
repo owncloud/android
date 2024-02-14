@@ -31,7 +31,7 @@ public class ProviderMeta {
 
     public static final String DB_NAME = "filelist";
     public static final String NEW_DB_NAME = "owncloud_database";
-    public static final int DB_VERSION = 41;
+    public static final int DB_VERSION = 44;
 
     private ProviderMeta() {
     }
@@ -92,6 +92,7 @@ public class ProviderMeta {
         public static final String CAPABILITIES_SHARING_RESHARING = "sharing_resharing";
         public static final String CAPABILITIES_SHARING_USER_PROFILE_PICTURE = "sharing_user_profile_picture";
         public static final String CAPABILITIES_SPACES_PREFIX = "spaces_";
+        public static final String CAPABILITIES_PASSWORD_POLICY_PREFIX = "password_policy_";
         public static final String CAPABILITIES_VERSION_EDITION = "version_edition";
         public static final String CAPABILITIES_VERSION_MAJOR = "version_major";
         public static final String CAPABILITIES_VERSION_MICRO = "version_micro";

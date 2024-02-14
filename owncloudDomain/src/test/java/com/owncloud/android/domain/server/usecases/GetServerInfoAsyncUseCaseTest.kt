@@ -45,7 +45,7 @@ class GetServerInfoAsyncUseCaseTest {
     fun `get server info - ok`() {
         every { repository.getServerInfo(useCaseParams.serverPath, false) } returns OC_SECURE_SERVER_INFO_BASIC_AUTH
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(OC_SECURE_SERVER_INFO_BASIC_AUTH, useCaseResult.getDataOrNull())
@@ -57,7 +57,7 @@ class GetServerInfoAsyncUseCaseTest {
     fun `get server info - ok - slash trimmed`() {
         every { repository.getServerInfo(useCaseParams.serverPath, false) } returns OC_SECURE_SERVER_INFO_BASIC_AUTH
 
-        val useCaseResult = useCase.execute(useCaseParamsWithSlash)
+        val useCaseResult = useCase(useCaseParamsWithSlash)
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(OC_SECURE_SERVER_INFO_BASIC_AUTH, useCaseResult.getDataOrNull())
@@ -69,7 +69,7 @@ class GetServerInfoAsyncUseCaseTest {
     fun `get server info - ko`() {
         every { repository.getServerInfo(useCaseParams.serverPath, false) } throws Exception()
 
-        val useCaseResult = useCase.execute(useCaseParams)
+        val useCaseResult = useCase(useCaseParams)
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is Exception)
@@ -81,7 +81,7 @@ class GetServerInfoAsyncUseCaseTest {
     fun `Should throw SSLErrorException when secureConnectionEnforced is true and ServerInfoRepository returns ServerInfo with isSecureConnection returning false`() {
         every { repository.getServerInfo(useCaseParams.serverPath, false) } returns OC_INSECURE_SERVER_INFO_BASIC_AUTH
 
-        val useCaseResult = useCase.execute(useCaseParams.copy(secureConnectionEnforced = true))
+        val useCaseResult = useCase(useCaseParams.copy(secureConnectionEnforced = true))
 
         assertTrue(useCaseResult.isError)
         assertTrue(useCaseResult.getThrowableOrNull() is SSLErrorException)
@@ -93,7 +93,7 @@ class GetServerInfoAsyncUseCaseTest {
     fun `Should work correctly when secureConnectionEnforced is true and ServerInfoRepository returns ServerInfo with isSecureConnection returning true`() {
         every { repository.getServerInfo(useCaseParams.serverPath, false) } returns OC_SECURE_SERVER_INFO_BASIC_AUTH
 
-        val useCaseResult = useCase.execute(useCaseParams.copy(secureConnectionEnforced = true))
+        val useCaseResult = useCase(useCaseParams.copy(secureConnectionEnforced = true))
 
         assertTrue(useCaseResult.isSuccess)
         assertEquals(OC_SECURE_SERVER_INFO_BASIC_AUTH, useCaseResult.getDataOrNull())

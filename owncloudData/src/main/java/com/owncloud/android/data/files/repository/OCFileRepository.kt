@@ -25,8 +25,8 @@ package com.owncloud.android.data.files.repository
 
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
-import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.providers.LocalStorageProvider
+import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.AVAILABLE_OFFLINE_PARENT
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
@@ -37,6 +37,7 @@ import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.model.OCFile.Companion.PATH_SEPARATOR
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import kotlinx.coroutines.flow.Flow
@@ -163,6 +164,33 @@ class OCFileRepository(
 
     override fun getFileByRemotePath(remotePath: String, owner: String, spaceId: String?): OCFile? =
         localFileDataSource.getFileByRemotePath(remotePath, owner, spaceId)
+
+    override fun getFileFromRemoteId(fileId: String, accountName: String): OCFile? {
+        val metaFile = remoteFileDataSource.getMetaFile(fileId, accountName)
+        val remotePath = metaFile.path!!
+
+        val splitPath = remotePath.split(PATH_SEPARATOR)
+        var containerFolder = listOf<OCFile>()
+        for (i in 0..splitPath.size - 2) {
+            var path = splitPath[0]
+            for (j in 1..i) {
+                path += "$PATH_SEPARATOR${splitPath[j]}"
+            }
+            containerFolder = refreshFolder(path, accountName, metaFile.spaceId)
+        }
+        refreshFolder(remotePath, accountName, metaFile.spaceId)
+        return if (remotePath == ROOT_PATH) {
+            getFileByRemotePath(remotePath, accountName, metaFile.spaceId)
+        } else {
+            containerFolder.find { file ->
+                if (file.isFolder) {
+                    file.remotePath.dropLast(1)
+                } else {
+                    file.remotePath
+                } == remotePath
+            }
+        }
+    }
 
     override fun getPersonalRootFolderForAccount(owner: String): OCFile {
         val personalSpace = localSpacesDataSource.getPersonalSpaceForAccount(owner)
@@ -525,6 +553,10 @@ class OCFileRepository(
         localFileDataSource.updateAvailableOfflineStatusForFile(ocFile, newAvailableOfflineStatus)
     }
 
+    override fun updateFileWithLastUsage(fileId: Long, lastUsage: Long?) {
+        localFileDataSource.updateFileWithLastUsage(fileId, lastUsage)
+    }
+
     override fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String) {
         localFileDataSource.updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory, newDirectory)
     }
@@ -560,7 +592,7 @@ class OCFileRepository(
     private fun deleteLocalFile(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         localStorageProvider.deleteLocalFile(ocFile)
         if (onlyFromLocalStorage) {
-            localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null))
+            localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null, lastUsage = null))
         } else {
             localFileDataSource.deleteFile(ocFile.id!!)
         }

@@ -46,13 +46,58 @@ class ReleaseNotesViewModel(
     companion object {
         val releaseNotesList = listOf(
             ReleaseNote(
-                title = R.string.release_notes_4_1_1_title_1,
-                subtitle = R.string.release_notes_4_1_1_subtitle_1,
-                type = ReleaseNoteType.BUGFIX,
+                title = R.string.release_notes_4_2_0_title_1,
+                subtitle = R.string.release_notes_4_2_0_subtitle_1,
+                type = ReleaseNoteType.CHANGE,
             ),
             ReleaseNote(
-                title = R.string.release_notes_4_1_1_title_2,
-                subtitle = R.string.release_notes_4_1_1_subtitle_2,
+                title = R.string.release_notes_4_2_0_title_2,
+                subtitle = R.string.release_notes_4_2_0_subtitle_2,
+                type = ReleaseNoteType.ENHANCEMENT,
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_2_0_title_3,
+                subtitle = R.string.release_notes_4_2_0_subtitle_3,
+                type = ReleaseNoteType.ENHANCEMENT,
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_2_0_title_4,
+                subtitle = R.string.release_notes_4_2_0_subtitle_4,
+                type = ReleaseNoteType.ENHANCEMENT,
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_2_0_title_5,
+                subtitle = R.string.release_notes_4_2_0_subtitle_5,
+                type = ReleaseNoteType.ENHANCEMENT,
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_2_0_title_6,
+                subtitle = R.string.release_notes_4_2_0_subtitle_6,
+                type = ReleaseNoteType.ENHANCEMENT,
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_2_0_title_7,
+                subtitle = R.string.release_notes_4_2_0_subtitle_7,
+                type = ReleaseNoteType.ENHANCEMENT,
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_2_0_title_8,
+                subtitle = R.string.release_notes_4_2_0_subtitle_8,
+                type = ReleaseNoteType.ENHANCEMENT,
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_2_0_title_9,
+                subtitle = R.string.release_notes_4_2_0_subtitle_9,
+                type = ReleaseNoteType.CHANGE,
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_2_0_title_10,
+                subtitle = R.string.release_notes_4_2_0_subtitle_10,
+                type = ReleaseNoteType.ENHANCEMENT,
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_2_0_title_11,
+                subtitle = R.string.release_notes_4_2_0_subtitle_11,
                 type = ReleaseNoteType.BUGFIX,
             ),
         )

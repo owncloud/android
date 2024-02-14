@@ -38,7 +38,7 @@ class GetStoredCapabilitiesUseCaseTest {
     fun `get stored capabilities - ok`() {
         every { repository.getStoredCapabilities(any()) } returns OC_CAPABILITY
 
-        val capability = useCase.execute(useCaseParams)
+        val capability = useCase(useCaseParams)
 
         assertEquals(OC_CAPABILITY, capability)
 
@@ -49,7 +49,7 @@ class GetStoredCapabilitiesUseCaseTest {
     fun `get stored capabilities - ok - null`() {
         every { repository.getStoredCapabilities(any()) } returns null
 
-        val capability = useCase.execute(useCaseParams)
+        val capability = useCase(useCaseParams)
 
         assertNull(capability)
 
@@ -60,6 +60,6 @@ class GetStoredCapabilitiesUseCaseTest {
     fun `get stored capabilities - ko`() {
         every { repository.getStoredCapabilities(any()) } throws Exception()
 
-        useCase.execute(useCaseParams)
+        useCase(useCaseParams)
     }
 }
