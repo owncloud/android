@@ -32,12 +32,14 @@ import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class OCAppRegistryRepositoryTest {
 
     private val localAppRegistryDataSource = mockk<LocalAppRegistryDataSource>(relaxUnitFun = true)
@@ -114,16 +116,16 @@ class OCAppRegistryRepositoryTest {
         every {
             remoteAppRegistryDataSource.getUrlToOpenInWeb(
                 accountName = OC_ACCOUNT_NAME,
-                openWebEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl.toString(),
-                fileId = OC_FILE.remoteId.toString(),
+                openWebEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl!!,
+                fileId = OC_FILE.remoteId!!,
                 appName = appName
             )
         } returns expectedUrl
 
         val resultActual = ocAppRegistryRepository.getUrlToOpenInWeb(
             accountName = OC_ACCOUNT_NAME,
-            openWebEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl.toString(),
-            fileId = OC_FILE.remoteId.toString(),
+            openWebEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl!!,
+            fileId = OC_FILE.remoteId!!,
             appName = appName
         )
 
@@ -132,8 +134,8 @@ class OCAppRegistryRepositoryTest {
         verify(exactly = 1) {
             remoteAppRegistryDataSource.getUrlToOpenInWeb(
                 accountName = OC_ACCOUNT_NAME,
-                openWebEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl.toString(),
-                fileId = OC_FILE.remoteId.toString(),
+                openWebEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl!!,
+                fileId = OC_FILE.remoteId!!,
                 appName = appName
             )
         }
@@ -145,26 +147,26 @@ class OCAppRegistryRepositoryTest {
         every {
             remoteAppRegistryDataSource.createFileWithAppProvider(
                 accountName = OC_ACCOUNT_NAME,
-                createFileWithAppProviderEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl.toString(),
-                parentContainerId = OC_FOLDER.remoteId.toString(),
-                filename = OC_FOLDER.fileName,
+                createFileWithAppProviderEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.newUrl!!,
+                parentContainerId = OC_FOLDER.remoteId!!,
+                filename = OC_FILE.fileName,
             )
-        } returns OC_FOLDER.id.toString()
+        } returns OC_FILE.remoteId!!
 
         val resultActual = ocAppRegistryRepository.createFileWithAppProvider(
             accountName = OC_ACCOUNT_NAME,
-            createFileWithAppProviderEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl.toString(),
-            parentContainerId = OC_FOLDER.remoteId.toString(),
-            filename = OC_FOLDER.fileName,
+            createFileWithAppProviderEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.newUrl!!,
+            parentContainerId = OC_FOLDER.remoteId!!,
+            filename = OC_FILE.fileName,
         )
-        assertEquals(OC_FOLDER.id.toString(), resultActual)
+        assertEquals(OC_FILE.remoteId!!, resultActual)
 
         verify(exactly = 1) {
             remoteAppRegistryDataSource.createFileWithAppProvider(
                 accountName = OC_ACCOUNT_NAME,
-                createFileWithAppProviderEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.openWebUrl.toString(),
-                parentContainerId = OC_FOLDER.remoteId.toString(),
-                filename = OC_FOLDER.fileName,
+                createFileWithAppProviderEndpoint = OC_CAPABILITY_WITH_FILES_APP_PROVIDERS.filesAppProviders?.newUrl!!,
+                parentContainerId = OC_FOLDER.remoteId!!,
+                filename = OC_FILE.fileName,
             )
         }
     }
