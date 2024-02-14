@@ -18,7 +18,6 @@ For OEM releases, keep the OEM Release template and remove the Open Release one
 
  - [ ] [DOC] Ping in #documentation-internal about the new release
  - [ ] [GIT] Create branch `release/M.m.p` in owncloud/android from master
- - [ ] [GIT] Rebase `release/M.m.p` against `stable` in owncloud/android using the [`--rebase-merge` option](https://git-scm.com/docs/git-rebase#Documentation/git-rebase.txt---rebase-mergesrebase-cousinsno-rebase-cousins)
  - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
  - [ ] [DEV] Update [SBOM](https://cloud.owncloud.com/f/6072870)
  - [ ] [DIS] Create a folder for the new version like `M.m.p_YYYY-MM-DD` inside the `changelog` folder
@@ -26,6 +25,7 @@ For OEM releases, keep the OEM Release template and remove the Open Release one
  - [ ] [DIS] Update screenshots, if needed, in README.md
  - [ ] [DEV] Add release notes replacing `emptyList` with `listOf` and adding inside `ReleaseNote()` with String resources, in `ReleaseNotesViewModel.kt`
  - [ ] [DIS] Prepare post in central.owncloud.org ([`Category:News + Tag:android`](https://central.owncloud.org/tags/c/news/5/android))
+ - [ ] [DIS] Check for new screenshots in Play Store / GitHub repo and generate them
  - [ ] [DIS] Generate final bundle from last commit in owncloud/android
  - [ ] [QA] Design Test plan
  - [ ] [DEV] Code Review
@@ -34,13 +34,13 @@ For OEM releases, keep the OEM Release template and remove the Open Release one
  - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
  - [ ] [DOC] Ping in #documentation-internal that we are close to sign the new tags
  - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
+ - [ ] [GIT] Move tag `latest` pointing the same commit as the release commit
  - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
  - [ ] [DIS] Update screenshots and store listing, if needed, in Play Store
  - [ ] [GIT] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
  - [ ] [DIS] Release published in Play Store
  - [ ] [DIS] Publish post in central.owncloud.org ([`Category:News + Tag:android`](https://central.owncloud.org/tags/c/news/5/android))
  - [ ] [COM] Inform `#updates` and `#marketing` in internal chat that release is out
- - [ ] [GIT] Merge `release/M.m.p` branch into `stable`, in owncloud/android
  - [ ] [GIT] Merge `release/M.m.p` branch into `master`, in owncloud/android
  - [ ] [DOC] Update documentation with new stuff by creating [issue](https://github.com/owncloud/docs-client-android/issues)
 
