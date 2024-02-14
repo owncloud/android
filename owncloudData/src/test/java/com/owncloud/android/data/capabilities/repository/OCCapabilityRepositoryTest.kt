@@ -51,16 +51,16 @@ class OCCapabilityRepositoryTest {
         OCCapabilityRepository(localCapabilitiesDataSource, remoteCapabilitiesDataSource, appRegistryRepository)
 
     @Test
-    fun `getCapabilitiesAsLiveData returns a Livedata of OCCapability`() {
+    fun `getCapabilitiesAsLiveData returns a LiveData of OCCapability`() {
         val capabilitiesLiveData = MutableLiveData<OCCapability>()
 
         every {
             localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_ACCOUNT_NAME)
         } returns capabilitiesLiveData
 
-        val capabilitiesEmitted = ocCapabilityRepository.getCapabilitiesAsLiveData(OC_ACCOUNT_NAME).getLastEmittedValue()
-
         val capabilitiesToEmit = capabilitiesLiveData.getLastEmittedValue()
+
+        val capabilitiesEmitted = ocCapabilityRepository.getCapabilitiesAsLiveData(OC_ACCOUNT_NAME).getLastEmittedValue()
 
         assertEquals(capabilitiesToEmit, capabilitiesEmitted)
 
