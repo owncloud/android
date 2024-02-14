@@ -44,7 +44,7 @@ import org.junit.Test
 class OCAuthenticationRepositoryTest {
 
     private val localAuthenticationDataSource = mockk<LocalAuthenticationDataSource>()
-    private val remoteAuthenticationDataSource = mockk<RemoteAuthenticationDataSource>(relaxUnitFun = true)
+    private val remoteAuthenticationDataSource = mockk<RemoteAuthenticationDataSource>()
     private val ocAuthenticationRepository: OCAuthenticationRepository =
         OCAuthenticationRepository(localAuthenticationDataSource, remoteAuthenticationDataSource)
 
