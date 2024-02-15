@@ -27,7 +27,6 @@ import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.data.capabilities.datasources.LocalCapabilitiesDataSource
 import com.owncloud.android.data.capabilities.datasources.RemoteCapabilitiesDataSource
 import com.owncloud.android.domain.appregistry.AppRegistryRepository
-import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_CAPABILITY
 import com.owncloud.android.testutil.OC_CAPABILITY_WITH_FILES_APP_PROVIDERS
@@ -52,7 +51,7 @@ class OCCapabilityRepositoryTest {
 
     @Test
     fun `getCapabilitiesAsLiveData returns a LiveData of OCCapability`() {
-        val capabilitiesLiveData = MutableLiveData<OCCapability>()
+        val capabilitiesLiveData = MutableLiveData(OC_CAPABILITY)
 
         every {
             localCapabilitiesDataSource.getCapabilitiesForAccountAsLiveData(OC_ACCOUNT_NAME)
