@@ -1,0 +1,6 @@
+Enhancement: Unit tests for repository classes - Part 1
+
+Unit tests for OCAppRegistryRepository, OCAuthenticationRepository and OCCapabilityRepository classes have been completed.
+
+https://github.com/owncloud/android/issues/4232
+https://github.com/owncloud/android/pull/4281
