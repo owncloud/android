@@ -22,7 +22,7 @@
 
 package com.owncloud.android.dependecyinjection
 
-import com.owncloud.android.data.appregistry.OCAppRegistryRepository
+import com.owncloud.android.data.appregistry.repository.OCAppRegistryRepository
 import com.owncloud.android.data.authentication.repository.OCAuthenticationRepository
 import com.owncloud.android.data.capabilities.repository.OCCapabilityRepository
 import com.owncloud.android.data.files.repository.OCFileRepository
