@@ -5,8 +5,9 @@
  * @author Christian Schabesberger
  * @author Juan Carlos Garrote Gascón
  * @author Manuel Plazas Palacio
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -242,6 +243,9 @@ class OCFileRepository(
 
     override fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile> =
         localFileDataSource.getFilesAvailableOfflineFromEveryAccount()
+
+    override fun getFilesLastUsageIsOlderThanGivenTime(milliseconds: Long): List<OCFile> =
+        localFileDataSource.getFilesLastUsageIsOlderThanGivenTime(milliseconds)
 
     override fun moveFile(listOfFilesToMove: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?>, isUserLogged: Boolean): List<OCFile> {
         val targetSpaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(targetFolder.spaceId, targetFolder.owner)
