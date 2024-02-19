@@ -787,4 +787,11 @@
     <string name="password_policy_min_special_character">At least %1$d of the special characters: \"%2$s\"</string>
     <string name="password_policy_error_password_banned">Unfortunately, your password is commonly used. Please, pick a harder-to-guess password for your safety.</string>
 
+    <string name="prefs_delete_local_files_entries_never">Never</string>
+    <string name="prefs_delete_local_files_entries_1hour">1 hour</string>
+    <string name="prefs_delete_local_files_entries_12hours">12 hours</string>
+    <string name="prefs_delete_local_files_entries_24hours">24 hours</string>
+    <string name="prefs_delete_local_files_entries_30days">30 days</string>
+    <string name="prefs_delete_local_files">Delete local copies</string>
+
 </resources>

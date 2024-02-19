@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David Crespo Ríos
- * Copyright (C) 2022 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,11 +22,16 @@
 package com.owncloud.android.presentation.settings.advanced
 
 import androidx.lifecycle.ViewModel
+import androidx.work.WorkManager
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
+import com.owncloud.android.providers.WorkManagerProvider
+import com.owncloud.android.workers.DeleteFilesOlderGivenTimeWorker.Companion.DELETE_FILES_OLDER_GIVEN_TIME_WORKER
 
 class SettingsAdvancedViewModel(
-    private val preferencesProvider: SharedPreferencesProvider
+    private val preferencesProvider: SharedPreferencesProvider,
+    private val workManagerProvider: WorkManagerProvider,
+    private val workManager: WorkManager,
 ) : ViewModel() {
 
     fun isHiddenFilesShown(): Boolean {
@@ -33,5 +40,15 @@ class SettingsAdvancedViewModel(
 
     fun setShowHiddenFiles(hide: Boolean) {
         preferencesProvider.putBoolean(PREF_SHOW_HIDDEN_FILES, hide)
+    }
+
+    fun scheduleDeleteLocalFiles(newValue: String) {
+        if (newValue == DeleteLocalFiles.NEVER.name) {
+            workManager.cancelAllWorkByTag(DELETE_FILES_OLDER_GIVEN_TIME_WORKER)
+        } else {
+            val timeSelected =
+                DeleteLocalFiles.valueOf(preferencesProvider.getString(PREFERENCE_DELETE_LOCAL_FILES, DeleteLocalFiles.NEVER.name)!!).toMilliseconds()
+            workManagerProvider.enqueueDeleteFilesOlderGivenTimeWorker(timeSelected)
+        }
     }
 }
