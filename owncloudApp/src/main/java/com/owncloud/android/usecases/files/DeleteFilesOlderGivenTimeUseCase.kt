@@ -32,19 +32,17 @@ class DeleteFilesOlderGivenTimeUseCase(
 ) : BaseUseCaseWithResult<Unit, DeleteFilesOlderGivenTimeUseCase.Params>() {
     override fun run(params: Params) {
         val listOfFilesToDelete = fileRepository.getFilesLastUsageIsOlderThanGivenTime(params.milliseconds)
-
+        localStorageProvider.clearTemporalFilesAutomatic(params.milliseconds)
         if (listOfFilesToDelete.isNotEmpty()) {
-
             val listOfFilesToDeleteUpdated = listOfFilesToDelete.filter { file ->
-                file.remoteId != params.idFileVideoPreviewing
+                file.remoteId != params.idFilePreviewing
             }
-            localStorageProvider.clearTemporalFilesAutomatic(listOfFilesToDeleteUpdated)
             removeFileUseCase(RemoveFileUseCase.Params(listOfFilesToDeleteUpdated, true))
         }
     }
 
     data class Params(
         val milliseconds: Long,
-        val idFileVideoPreviewing: String?,
+        val idFilePreviewing: String?,
     )
 }

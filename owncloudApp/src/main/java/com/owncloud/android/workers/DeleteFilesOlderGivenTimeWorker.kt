@@ -41,14 +41,14 @@ class DeleteFilesOlderGivenTimeWorker(
     workerParameters
 ), KoinComponent {
 
-    private val deleteFilesLastUsageIsOlderThanGivenTimeUseCase: DeleteFilesOlderGivenTimeUseCase by inject()
+    private val deleteFilesOlderGivenTimeUseCase: DeleteFilesOlderGivenTimeUseCase by inject()
     override suspend fun doWork(): Result {
 
         return try {
-            deleteFilesLastUsageIsOlderThanGivenTimeUseCase(
+            deleteFilesOlderGivenTimeUseCase(
                 DeleteFilesOlderGivenTimeUseCase.Params(
                     milliseconds = workerParameters.inputData.getLong(KEY_PARAM_MILLISECONDS, -1),
-                    idFileVideoPreviewing = filePreviewing()
+                    idFilePreviewing = filePreviewing()
                 )
             )
             Result.success()

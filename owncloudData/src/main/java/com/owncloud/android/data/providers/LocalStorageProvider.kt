@@ -227,16 +227,20 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         fileToMove.renameTo(targetFile)
     }
 
-    fun clearTemporalFilesAutomatic(listOfFilesToDelete: List<OCFile>) {
+    fun clearTemporalFilesAutomatic(millisecondsSelected: Long) {
         val temporalPath = getRootFolderPath() + File.separator + TEMPORAL_FOLDER_NAME
         val temporalFolder = File(temporalPath)
         cleanTemporalRecursively(temporalFolder) { temporalFile ->
-            for (fileToDelete in listOfFilesToDelete) {
-                if (fileToDelete.fileName != temporalFile.name) {
-                    temporalFile.delete()
-                }
+            if (isTemporalFileOlderGivenTime(temporalFile, millisecondsSelected)) {
+                temporalFile.delete()
             }
         }
+    }
+
+    private fun isTemporalFileOlderGivenTime(temporalFile: File, timeSelected: Long): Boolean {
+        val currentTimeInMillis = System.currentTimeMillis()
+        val thresholdTimeMillis = currentTimeInMillis - timeSelected
+        return temporalFile.lastModified() < thresholdTimeMillis
     }
 
     fun clearUnrelatedTemporalFiles(uploads: List<OCTransfer>, accountsNames: List<String>) {

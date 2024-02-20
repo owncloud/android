@@ -29,7 +29,6 @@ enum class DeleteLocalFiles {
         return when (this) {
             NEVER,
             ONE_HOUR -> 3600000
-
             TWELVE_HOURS -> 43200000
             TWENTY_FOUR_HOURS -> 86400000
             THIRTY_DAYS -> 2592000000
