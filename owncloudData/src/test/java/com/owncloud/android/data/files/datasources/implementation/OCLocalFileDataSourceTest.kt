@@ -62,7 +62,7 @@ class OCLocalFileDataSourceTest {
 
     private val fileEntitySharedByLink = OC_FILE_ENTITY.copy(sharedByLink = true).apply { this.id = OC_FILE_ENTITY.id }
     private val fileSharedByLink = OC_FILE.copy(sharedByLink = true)
-
+    private val timeInMilliseconds = 3600000L
     @Before
     fun setUp() {
         ocLocalFileDataSource = OCLocalFileDataSource(fileDao)
@@ -457,6 +457,28 @@ class OCLocalFileDataSourceTest {
         assertEquals(emptyList<OCFile>(), result)
 
         verify(exactly = 1) { fileDao.getFilesAvailableOfflineFromEveryAccount() }
+    }
+
+    @Test
+    fun `getFilesLastUsageIsOlderThanGivenTime returns a list of OCFile`() {
+        every { fileDao.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds) } returns listOf(OC_FILE_AVAILABLE_OFFLINE_ENTITY)
+
+        val result = ocLocalFileDataSource.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds)
+
+        assertEquals(listOf(OC_FILE_AVAILABLE_OFFLINE), result)
+
+        verify(exactly = 1) { fileDao.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds) }
+    }
+
+    @Test
+    fun `getFilesLastUsageIsOlderThanGivenTime returns an empty list when DAO returns an empty list`() {
+        every { fileDao.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds) } returns emptyList()
+
+        val result = ocLocalFileDataSource.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds)
+
+        assertEquals(emptyList<OCFile>(), result)
+
+        verify(exactly = 1) { fileDao.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds) }
     }
 
     @Test
