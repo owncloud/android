@@ -220,7 +220,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
         mReceiveExternalFilesViewModel = get(ReceiveExternalFilesViewModel.class);
         subscribeToViewModels();
-        mReceiveExternalFilesViewModel.getPersonalSpaceForAccount(getAccount().name);
 
         initPickerListener();
 
