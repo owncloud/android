@@ -24,7 +24,6 @@
 package com.owncloud.android.presentation.documentsprovider.cursors
 
 import android.database.MatrixCursor
-import android.os.Build
 import android.os.Bundle
 import android.provider.DocumentsContract
 import android.provider.DocumentsContract.Document
@@ -48,16 +47,13 @@ class FileCursor(projection: Array<String>?) : MatrixCursor(projection ?: DEFAUL
 
         flags = flags or Document.FLAG_SUPPORTS_DELETE
         flags = flags or Document.FLAG_SUPPORTS_RENAME
+        flags = flags or Document.FLAG_SUPPORTS_COPY
+        flags = flags or Document.FLAG_SUPPORTS_MOVE
 
         if (mimeType != Document.MIME_TYPE_DIR) { // If it is a file
             flags = flags or Document.FLAG_SUPPORTS_WRITE
         } else if (file.hasAddFilePermission && file.hasAddSubdirectoriesPermission) { // If it is a folder with writing permissions
             flags = flags or Document.FLAG_DIR_SUPPORTS_CREATE
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            flags = flags or Document.FLAG_SUPPORTS_COPY
-            flags = flags or Document.FLAG_SUPPORTS_MOVE
         }
 
         newRow()

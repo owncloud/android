@@ -1,0 +1,6 @@
+Change: Upgrade minimum SDK version to Android 7.0 (v24)
+
+The minimum Android version will be Android 7.0 Nougat (API 24). The application will no longer support previous versions.
+
+https://github.com/owncloud/android/issues/4230
+https://github.com/owncloud/android/pull/4299
