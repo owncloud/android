@@ -19,9 +19,11 @@
 
 package com.owncloud.android.presentation.viewmodels.settings
 
+import androidx.work.WorkManager
 import com.owncloud.android.data.providers.SharedPreferencesProvider
-import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedViewModel
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
+import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedViewModel
+import com.owncloud.android.providers.WorkManagerProvider
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert
@@ -31,12 +33,20 @@ import org.junit.Test
 class SettingsAdvancedViewModelTest {
     private lateinit var advancedViewModel: SettingsAdvancedViewModel
     private lateinit var preferencesProvider: SharedPreferencesProvider
+    private lateinit var workManagerProvider: WorkManagerProvider
+    private lateinit var workManager: WorkManager
 
     @Before
     fun setUp() {
         preferencesProvider = mockk()
+        workManagerProvider = mockk()
+        workManager = mockk()
 
-        advancedViewModel = SettingsAdvancedViewModel(preferencesProvider)
+        advancedViewModel = SettingsAdvancedViewModel(
+            preferencesProvider,
+            workManagerProvider,
+            workManager
+        )
     }
 
     @Test
