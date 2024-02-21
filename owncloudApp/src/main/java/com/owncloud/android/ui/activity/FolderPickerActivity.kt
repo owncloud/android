@@ -238,6 +238,9 @@ open class FolderPickerActivity : FileActivity(),
 
     private fun initAndShowListOfFilesFragment(spaceId: String? = null) {
         val safeInitialFolder = if (file == null) {
+            if (account == null) {
+                account = AccountUtils.getCurrentOwnCloudAccount(applicationContext)
+            }
             val fileDataStorageManager = FileDataStorageManager(account)
             fileDataStorageManager.getFileByPath(OCFile.ROOT_PATH, spaceId)
         } else {
