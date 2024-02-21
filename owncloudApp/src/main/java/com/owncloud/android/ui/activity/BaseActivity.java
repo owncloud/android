@@ -213,6 +213,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public FileDataStorageManager getStorageManager() {
         if (mStorageManager == null) {
+            if (getAccount() == null) {
+                swapToDefaultAccount();
+            }
             return mStorageManager = new FileDataStorageManager(getAccount());
         } else {
             return mStorageManager;
