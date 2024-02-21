@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Javier Rodríguez Pérez
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,15 +26,12 @@ import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
 import android.accounts.AccountManagerFuture
 import android.accounts.OperationCanceledException
-import android.content.ContentResolver
 import android.content.Intent
-import android.content.SyncRequest
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.MainApp.Companion.accountType
-import com.owncloud.android.MainApp.Companion.authority
 import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
 import com.owncloud.android.presentation.accounts.RemoveAccountDialogFragment.Companion.newInstance
@@ -185,25 +183,6 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
             ACTION_UPDATE_TOKEN
         )
         startActivity(updateAccountCredentials)
-    }
-
-    override fun refreshAccount(account: Account) {
-        Timber.d("Got to start sync")
-        Timber.d("Requesting sync for " + account.name + " at " + authority + " with new API")
-        val builder = SyncRequest.Builder()
-        builder.setSyncAdapter(account, authority)
-        builder.setExpedited(true)
-        builder.setManual(true)
-        builder.syncOnce()
-
-        // Fix bug in Android Lollipop when you click on refresh the whole account
-        val extras = Bundle()
-        builder.setExtras(extras)
-
-        val request = builder.build()
-        ContentResolver.requestSync(request)
-
-        showSnackMessage(getString(R.string.synchronizing_account))
     }
 
     override fun createAccount() {
