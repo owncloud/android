@@ -520,8 +520,6 @@
   <string name="action_upload_retry">重试</string>
   <string name="action_upload_clear">清除</string>
   <string name="manage_space_title">管理空间</string>
-  <string name="manage_space_description"> %1$s 的设置，数据库以及服务器证书将会被永久删除。
-\n\n 已下载的文件将会被保留。\n\n完成此操作需要一些时间。</string>
   <string name="manage_space_clear_data">清除数据</string>
   <string name="manage_space_error">某些文件无法删除。</string>
   <string name="local_file_not_found_toast">本地文件丢失</string>

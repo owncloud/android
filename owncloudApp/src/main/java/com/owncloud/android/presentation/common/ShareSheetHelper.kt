@@ -24,14 +24,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.os.Build
 import android.os.Parcelable
-import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 
 class ShareSheetHelper {
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun getShareSheetIntent(
         intent: Intent,
         context: Context,

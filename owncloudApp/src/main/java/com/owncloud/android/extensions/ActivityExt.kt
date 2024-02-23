@@ -22,20 +22,17 @@ package com.owncloud.android.extensions
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
-import android.os.Build
 import android.view.inputmethod.InputMethodManager
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -44,7 +41,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.lib.common.network.WebdavUtils
 import com.owncloud.android.presentation.common.ShareSheetHelper
 import com.owncloud.android.presentation.security.LockEnforcedType
 import com.owncloud.android.presentation.security.LockEnforcedType.Companion.parseFromInteger
@@ -60,7 +56,6 @@ import com.owncloud.android.presentation.settings.privacypolicy.PrivacyPolicyAct
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.ALL_FILES_SAF_REGEX
-import com.owncloud.android.ui.dialog.ShareLinkToDialog
 import com.owncloud.android.utils.CONFIGURATION_DEVICE_PROTECTION
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.UriUtilsKt.getExposedFileUriForOCFile
@@ -197,22 +192,15 @@ private fun getExposedFileUri(context: Context, localPath: String): Uri? {
         return null
     }
 
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-        // TODO - use FileProvider with any Android version, with deeper testing -> 2.2.0
-        exposedFileUri = Uri.parse(
-            ContentResolver.SCHEME_FILE + "://" + WebdavUtils.encodePath(localPath)
+    // Use the FileProvider to get a content URI
+    try {
+        exposedFileUri = FileProvider.getUriForFile(
+            context,
+            context.getString(R.string.file_provider_authority),
+            File(localPath)
         )
-    } else {
-        // Use the FileProvider to get a content URI
-        try {
-            exposedFileUri = FileProvider.getUriForFile(
-                context,
-                context.getString(R.string.file_provider_authority),
-                File(localPath)
-            )
-        } catch (e: IllegalArgumentException) {
-            Timber.e(e, "File can't be exported")
-        }
+    } catch (e: IllegalArgumentException) {
+        Timber.e(e, "File can't be exported")
     }
 
     return exposedFileUri
@@ -248,19 +236,13 @@ fun Activity.openFileWithIntent(intentForSavedMimeType: Intent, intentForGuessed
 fun AppCompatActivity.sendFile(file: File?) {
     if (file != null) {
         val sendIntent: Intent = makeIntent(file, this)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val shareSheetIntent = ShareSheetHelper().getShareSheetIntent(
-                intent = sendIntent,
-                context = this,
-                title = R.string.activity_chooser_send_file_title,
-                packagesToExclude = arrayOf()
-            )
-            this.startActivity(shareSheetIntent)
-        } else {
-            val chooserDialog: DialogFragment = ShareLinkToDialog.newInstance(sendIntent, arrayOf())
-            chooserDialog.show(this.supportFragmentManager, "CHOOSER_DIALOG")
-        }
+        val shareSheetIntent = ShareSheetHelper().getShareSheetIntent(
+            intent = sendIntent,
+            context = this,
+            title = R.string.activity_chooser_send_file_title,
+            packagesToExclude = arrayOf()
+        )
+        this.startActivity(shareSheetIntent)
     } else {
         Timber.e("Trying to send a NULL file")
     }
@@ -309,6 +291,7 @@ fun Activity.checkPasscodeEnforced(securityEnforced: SecurityEnforced) {
                 showSelectSecurityDialog(passcodeConfigured, patternConfigured, securityEnforced)
             }
         }
+
         LockEnforcedType.EITHER_ENFORCED -> {
             showSelectSecurityDialog(passcodeConfigured, patternConfigured, securityEnforced)
         }
@@ -413,18 +396,13 @@ fun FragmentActivity.sendDownloadedFilesByShareSheet(ocFiles: List<OCFile>) {
     }
 
     val packagesToExclude = arrayOf<String>(this@sendDownloadedFilesByShareSheet.packageName)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        val shareSheetIntent = ShareSheetHelper().getShareSheetIntent(
-            sendIntent,
-            this@sendDownloadedFilesByShareSheet,
-            R.string.activity_chooser_send_file_title,
-            packagesToExclude
-        )
-        startActivity(shareSheetIntent)
-    } else {
-        val chooserDialog: DialogFragment = ShareLinkToDialog.newInstance(sendIntent, packagesToExclude)
-        chooserDialog.show(supportFragmentManager, FRAGMENT_TAG_CHOOSER_DIALOG)
-    }
+    val shareSheetIntent = ShareSheetHelper().getShareSheetIntent(
+        sendIntent,
+        this@sendDownloadedFilesByShareSheet,
+        R.string.activity_chooser_send_file_title,
+        packagesToExclude
+    )
+    startActivity(shareSheetIntent)
 }
 
 fun Activity.openOCFile(ocFile: OCFile) {

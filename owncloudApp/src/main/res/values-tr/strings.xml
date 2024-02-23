@@ -54,6 +54,9 @@
   <string name="prefs_touches_with_other_visible_windows">Diğer görünür pencerelerle birlikte dokunma</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Başka bir görünür pencere tarafından gizlendiğinde dokunmalara izin ver. Uygulamaları hafif filtrelemek için etkinleştir.</string>
   <string name="confirmation_touches_with_other_windows_title">Bu özelliği etkinleştirmek istediğinizden emin misiniz?</string>
+  <string name="confirmation_touches_with_other_windows_message">Bu özelliği kendi riskinizi alarak kullanın. Kötü niyetli bir uygulama, sizi başka görünümler kullanarak bilmeden bazı eylemler yapmaya, kandırmaya çalışabilir.</string>
+  <string name="prefs_subsection_picture_uploads_summary">Otomatik olarak yüklenen resimlerin konumunu ve davranışını yönetin</string>
+  <string name="prefs_subsection_video_uploads_summary">Otomatik olarak yüklenen videoların konumunu ve davranışını yönetin</string>
   <string name="prefs_camera_picture_upload">Fotoğraf yüklemeleri</string>
   <string name="prefs_camera_picture_upload_summary">Kamera ile çekilen fotoğrafları otomatik olarak karşıya yükle</string>
   <string name="prefs_camera_picture_upload_path_title">Resim yükleme yolu</string>
@@ -478,7 +481,6 @@
   <string name="action_upload_retry">Yeniden Dene</string>
   <string name="action_upload_clear">Temizle</string>
   <string name="manage_space_title">Alanı ayarla</string>
-  <string name="manage_space_description">%1$s sunucusundan ayarlar, veritabanı ve sunucu sertifikaları kalıcı olarak silinecektir. \n\nİndirilen dosyalara dokunulmayacaktır.\n\nBu işlem biraz zaman alabilir.</string>
   <string name="manage_space_clear_data">Verileri temizle</string>
   <string name="manage_space_error">Bazı dosyalar silinemedi</string>
   <string name="local_file_not_found_toast">Dosya yerel dosya sisteminde bulunamadı</string>

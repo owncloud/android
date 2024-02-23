@@ -61,8 +61,6 @@ public class OperationsService extends Service {
     public static final String EXTRA_SERVER_URL = "SERVER_URL";
     public static final String EXTRA_FILE = "FILE";
 
-    public static final String EXTRA_COOKIE = "COOKIE";
-
     public static final String ACTION_CHECK_CURRENT_CREDENTIALS = "CHECK_CURRENT_CREDENTIALS";
 
     private ConcurrentMap<Integer, Pair<RemoteOperation, RemoteOperationResult>>
@@ -71,12 +69,10 @@ public class OperationsService extends Service {
     private static class Target {
         public Uri mServerUrl;
         public Account mAccount;
-        public String mCookie;
 
-        public Target(Account account, Uri serverUrl, String cookie) {
+        public Target(Account account, Uri serverUrl) {
             mAccount = account;
             mServerUrl = serverUrl;
-            mCookie = cookie;
         }
     }
 
@@ -348,11 +344,9 @@ public class OperationsService extends Service {
             } else {
                 Account account = operationIntent.getParcelableExtra(EXTRA_ACCOUNT);
                 String serverUrl = operationIntent.getStringExtra(EXTRA_SERVER_URL);
-                String cookie = operationIntent.getStringExtra(EXTRA_COOKIE);
                 target = new Target(
                         account,
-                        (serverUrl == null) ? null : Uri.parse(serverUrl),
-                        cookie
+                        (serverUrl == null) ? null : Uri.parse(serverUrl)
                 );
 
                 String action = operationIntent.getAction();
