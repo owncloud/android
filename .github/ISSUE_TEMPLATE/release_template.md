@@ -33,15 +33,15 @@ For OEM releases, keep the OEM Release template and remove the Open Release one
  - [ ] [QA] QA Approval
  - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
  - [ ] [DOC] Ping in #documentation-internal that we are close to sign the new tags
- - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
- - [ ] [GIT] Move tag `latest` pointing the same commit as the release commit
  - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
  - [ ] [DIS] Update screenshots and store listing, if needed, in Play Store
  - [ ] [GIT] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
  - [ ] [DIS] Release published in Play Store
  - [ ] [DIS] Publish post in central.owncloud.org ([`Category:News + Tag:android`](https://central.owncloud.org/tags/c/news/5/android))
  - [ ] [COM] Inform `#updates` and `#marketing` in internal chat that release is out
- - [ ] [GIT] Merge `release/M.m.p` branch into `master`, in owncloud/android
+ - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
+ - [ ] [GIT] Move tag `latest` pointing the same commit as the release commit
+ - [ ] [GIT] Merge (not rebase!!!) `release/M.m.p` branch into `master`, in owncloud/android
  - [ ] [DOC] Update documentation with new stuff by creating [issue](https://github.com/owncloud/docs-client-android/issues)
 
 
@@ -55,13 +55,56 @@ Bugs & improvements:
 
 _____
 
+## Patch Release
+
+### TASKS:
+
+ - [ ] [GIT] Create branch `release/M.m.p` in owncloud/android from `latest`
+ - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
+ - [ ] [DEV] Update [SBOM](https://cloud.owncloud.com/f/6072870)
+ - [ ] [DIS] Create a folder for the new version like `M.m.p_YYYY-MM-DD` inside the `changelog` folder with the proper fixes
+ - [ ] [DIS] Move the `unreleased` folder from `master` to `changelog` folder, to avoid Calens' conflicts problems
+ - [ ] [DIS] Update screenshots, if needed, in README.md
+ - [ ] [DEV] Add release notes replacing `emptyList` with `listOf` and adding inside `ReleaseNote()` with String resources, in `ReleaseNotesViewModel.kt` (in case patch release before OEM)
+ - [ ] [DIS] Check for new screenshots in Play Store / GitHub repo and generate them
+ - [ ] [DIS] Generate final bundle from last commit in owncloud/android
+ - [ ] [DEV] Code Review
+ - [ ] [QA] Test execution
+ - [ ] [QA] Trigger BitRise builds for unit tests and UI tests, in case CHANGELOG conflicts avoid them in GitHub
+ - [ ] [QA] QA Approval
+ - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
+ - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
+ - [ ] [DIS] Update screenshots and store listing, if needed, in Play Store
+ - [ ] [GIT] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
+ - [ ] [DIS] Release published in Play Store
+ - [ ] [COM] Inform `#updates` in internal chat that release is out
+ - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
+ - [ ] [GIT] Move tag `latest` pointing the same commit as the release commit
+ - [ ] [GIT] Fix conflicts if they happen. GitHub option will help and will merge `master` into release branch, getting it ready to fast forward
+ - [ ] [GIT] Merge (not rebase!!!!) `release/M.m.p` branch into `master`, in owncloud/android
+
+
+### QA
+
+QA checks:
+
+- [ ] Smoke test
+- [ ] Upgrade test
+
+Bugs & improvements:
+
+- [ ] (1) ...
+
+
+_____
+
 ## OEM Release
 
 ### TASKS:
 
 - [ ] [GIT] Create a new branch `release/M.m.p_oem` (optional)
 - [ ] [DIS] Update release notes in app with the proper content for oem release
-- [ ] [GIT] Create and sign tag `oc-android-M.m.p_oem` in HEAD commit of `release/M.m.p_oem` branch
+- [ ] [GIT] Create and sign tag `vM.m.p_oem` in HEAD commit of `release/M.m.p_oem` branch
 - [ ] [DEV] Approve and merge changes in ownBrander
   - [ ] Feature 1 oB https://github.com/owncloud/ownbrander/pull/
   - [ ] Feature 2 oB https://github.com/owncloud/ownbrander/pull/
