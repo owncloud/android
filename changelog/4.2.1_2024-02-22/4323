@@ -1,0 +1,6 @@
+Bugfix: Some crashes in 4.2.0
+
+Several crashes reported by Play Console in version 4.2.0 have been fixed.
+
+https://github.com/owncloud/android/issues/4318
+https://github.com/owncloud/android/pull/4323
