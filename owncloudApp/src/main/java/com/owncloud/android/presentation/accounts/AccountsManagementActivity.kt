@@ -34,17 +34,13 @@ import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
 import com.owncloud.android.presentation.accounts.RemoveAccountDialogFragment.Companion.newInstance
-import com.owncloud.android.presentation.authentication.ACTION_UPDATE_TOKEN
 import com.owncloud.android.presentation.authentication.AccountUtils
-import com.owncloud.android.presentation.authentication.EXTRA_ACTION
-import com.owncloud.android.presentation.authentication.LoginActivity
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT as EXTRA_ACCOUNT_LOGIN_ACTIVITY
 
 class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
 
@@ -172,16 +168,6 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
             removeAccountDialogViewModel.hasCameraUploadsAttached(account.name)
         )
         dialog.show(supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
-    }
-
-    override fun changePasswordOfAccount(account: Account) {
-        val updateAccountCredentials = Intent(this, LoginActivity::class.java)
-        updateAccountCredentials.putExtra(EXTRA_ACCOUNT_LOGIN_ACTIVITY, account)
-        updateAccountCredentials.putExtra(
-            EXTRA_ACTION,
-            ACTION_UPDATE_TOKEN
-        )
-        startActivity(updateAccountCredentials)
     }
 
     override fun createAccount() {
