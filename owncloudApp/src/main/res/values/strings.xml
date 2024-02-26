@@ -128,7 +128,7 @@
     <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
 
     <string name="error_reason">because</string>
-    <string name="auth_failure_snackbar">Authentication failed</string>
+    <string name="auth_failure_snackbar">Authentication failed. Sign in again to regain access.</string>
     <string name="server_not_supported">Your server version is lower than 10 so it is not supported, please upgrade your server to a newer version.</string>
     <string name="auth_failure_snackbar_action">Change account</string>
     <string name="auth_oauth_failure">The access token has expired or become invalid. Sign in again to regain access.</string>
@@ -731,6 +731,8 @@
     <string name="release_notes_4_3_0_subtitle_1">A new setting has been added in "Advanced" section to delete automatically downloaded files, when the time since their last usage exceeds the selected time in the setting</string>
     <string name="release_notes_4_3_0_title_2">Automatic discovery of the account in login</string>
     <string name="release_notes_4_3_0_subtitle_2">Removed the account refresh button in the Manage Accounts view, as automatic account discovery is done at login</string>
+    <string name="release_notes_4_3_0_title_3">Improvements in Manage Accounts view</string>
+    <string name="release_notes_4_3_0_subtitle_3">Removed the key icon, auto-sized the account text field to the container and redirect to login when the snack-bar appears authentication failed</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
