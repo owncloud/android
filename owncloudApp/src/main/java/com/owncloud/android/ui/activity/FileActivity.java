@@ -5,8 +5,10 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Abel García de Prada
+ * @author Aitor Ballesteros Pavón
+ * <p>
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -39,7 +41,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
 import com.owncloud.android.R;
-import com.owncloud.android.presentation.authentication.AccountUtils;
 import com.owncloud.android.domain.files.model.FileListOption;
 import com.owncloud.android.domain.files.model.OCFile;
 import com.owncloud.android.lib.common.network.CertificateCombinedException;
@@ -47,9 +48,9 @@ import com.owncloud.android.lib.common.operations.OnRemoteOperationListener;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
+import com.owncloud.android.presentation.authentication.AccountUtils;
 import com.owncloud.android.presentation.authentication.AuthenticatorConstants;
 import com.owncloud.android.presentation.authentication.LoginActivity;
-import com.owncloud.android.presentation.accounts.AccountsManagementActivity;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
@@ -271,15 +272,14 @@ public class FileActivity extends DrawerActivity
             new AlertDialog.Builder(this)
                     .setTitle(R.string.auth_failure_snackbar_action)
                     .setMessage(errorMessage)
-                    .setPositiveButton(android.R.string.yes, (dialog, which) -> startActivity(
-                            new Intent(FileActivity.this, AccountsManagementActivity.class)))
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> requestCredentialsUpdate())
                     .setIcon(R.drawable.common_error_grey)
                     .setCancelable(false)
                     .show();
         } else {
             Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_INDEFINITE)
                     .setAction(R.string.auth_failure_snackbar_action, v ->
-                            startActivity(new Intent(FileActivity.this, AccountsManagementActivity.class)))
+                            requestCredentialsUpdate())
                     .show();
         }
     }
@@ -353,7 +353,6 @@ public class FileActivity extends DrawerActivity
             dialog.show(ft, DIALOG_UNTRUSTED_CERT);
         }
     }
-
 
     protected void updateFileFromDB() {
         OCFile file = getFile();
