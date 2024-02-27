@@ -27,34 +27,31 @@ import com.owncloud.android.ui.preview.PreviewAudioFragment
 import com.owncloud.android.ui.preview.PreviewImageFragment
 import com.owncloud.android.ui.preview.PreviewTextFragment
 import com.owncloud.android.ui.preview.PreviewVideoActivity
-import com.owncloud.android.usecases.files.DeleteFilesOlderGivenTimeUseCase
+import com.owncloud.android.usecases.files.RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-class DeleteFilesOlderGivenTimeWorker(
+class RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker(
     val appContext: Context,
-    private val workerParameters: WorkerParameters,
+    workerParameters: WorkerParameters,
 ) : CoroutineWorker(
     appContext,
     workerParameters
 ), KoinComponent {
 
-    private val deleteFilesOlderGivenTimeUseCase: DeleteFilesOlderGivenTimeUseCase by inject()
+    private val removeLocallyFilesWithLastUsageOlderThanGivenTimeUseCase: RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase by inject()
     override suspend fun doWork(): Result {
 
         return try {
-            deleteFilesOlderGivenTimeUseCase(
-                DeleteFilesOlderGivenTimeUseCase.Params(
-                    milliseconds = workerParameters.inputData.getLong(KEY_PARAM_MILLISECONDS, -1),
-                    idFilePreviewing = filePreviewing()
+            removeLocallyFilesWithLastUsageOlderThanGivenTimeUseCase(
+                RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase.Params(
+                    idFilePreviewing = filePreviewing(),
                 )
             )
             Result.success()
         } catch (ioException: IOException) {
-            Result.failure()
-        } catch (securityException: SecurityException) {
             Result.failure()
         }
     }
@@ -70,7 +67,6 @@ class DeleteFilesOlderGivenTimeWorker(
     }
 
     companion object {
-        const val KEY_PARAM_MILLISECONDS = "KEY_PARAM_MILLISECONDS"
         const val DELETE_FILES_OLDER_GIVEN_TIME_WORKER = "DELETE_FILES_OLDER_GIVEN_TIME_WORKER"
         const val repeatInterval: Long = 15L
         val repeatIntervalTimeUnit: TimeUnit = TimeUnit.MINUTES

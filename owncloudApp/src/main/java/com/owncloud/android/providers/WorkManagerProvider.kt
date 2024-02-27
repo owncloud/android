@@ -36,9 +36,8 @@ import com.owncloud.android.workers.AccountDiscoveryWorker
 import com.owncloud.android.workers.AvailableOfflinePeriodicWorker
 import com.owncloud.android.workers.AvailableOfflinePeriodicWorker.Companion.AVAILABLE_OFFLINE_PERIODIC_WORKER
 import com.owncloud.android.workers.CameraUploadsWorker
-import com.owncloud.android.workers.DeleteFilesOlderGivenTimeWorker
-import com.owncloud.android.workers.DeleteFilesOlderGivenTimeWorker.Companion.DELETE_FILES_OLDER_GIVEN_TIME_WORKER
 import com.owncloud.android.workers.OldLogsCollectorWorker
+import com.owncloud.android.workers.RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
 import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 
@@ -105,23 +104,19 @@ class WorkManagerProvider(
         WorkManager.getInstance(context).enqueue(accountDiscoveryWorker)
     }
 
-    fun enqueueDeleteFilesOlderGivenTimeWorker(milliseconds: Long) {
+    fun enqueueRemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker() {
         val constraintsRequired = Constraints.Builder().setRequiredNetworkType(NetworkType.NOT_REQUIRED).build()
 
-        val inputData = workDataOf(
-            DeleteFilesOlderGivenTimeWorker.KEY_PARAM_MILLISECONDS to milliseconds,
-        )
+        val removeLocallyFilesWithLastUsageOlderThanGivenTimeWorker =
+            PeriodicWorkRequestBuilder<RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker>(
+                repeatInterval = RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker.repeatInterval,
+                repeatIntervalTimeUnit = RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker.repeatIntervalTimeUnit
+            )
+                .addTag(RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker.DELETE_FILES_OLDER_GIVEN_TIME_WORKER)
+                .setConstraints(constraintsRequired)
+                .build()
 
-        val deleteFilesOlderGivenTimeWorker = PeriodicWorkRequestBuilder<DeleteFilesOlderGivenTimeWorker>(
-            repeatInterval = DeleteFilesOlderGivenTimeWorker.repeatInterval,
-            repeatIntervalTimeUnit = DeleteFilesOlderGivenTimeWorker.repeatIntervalTimeUnit
-        )
-            .setInputData(inputData)
-            .addTag(DELETE_FILES_OLDER_GIVEN_TIME_WORKER)
-            .setConstraints(constraintsRequired)
-            .build()
-
-        WorkManager.getInstance(context).enqueue(deleteFilesOlderGivenTimeWorker)
+        WorkManager.getInstance(context).enqueue(removeLocallyFilesWithLastUsageOlderThanGivenTimeWorker)
     }
 
     fun getRunningUploadsWorkInfosLiveData(): LiveData<List<WorkInfo>> {
@@ -132,4 +127,7 @@ class WorkManagerProvider(
             )
         )
     }
+
+    fun cancelAllWorkByTag(tag: String) = WorkManager.getInstance(context).cancelAllWorkByTag(tag)
+
 }

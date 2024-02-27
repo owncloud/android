@@ -22,16 +22,14 @@
 package com.owncloud.android.presentation.settings.advanced
 
 import androidx.lifecycle.ViewModel
-import androidx.work.WorkManager
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
 import com.owncloud.android.providers.WorkManagerProvider
-import com.owncloud.android.workers.DeleteFilesOlderGivenTimeWorker.Companion.DELETE_FILES_OLDER_GIVEN_TIME_WORKER
+import com.owncloud.android.workers.RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker.Companion.DELETE_FILES_OLDER_GIVEN_TIME_WORKER
 
 class SettingsAdvancedViewModel(
     private val preferencesProvider: SharedPreferencesProvider,
     private val workManagerProvider: WorkManagerProvider,
-    private val workManager: WorkManager,
 ) : ViewModel() {
 
     fun isHiddenFilesShown(): Boolean {
@@ -43,12 +41,10 @@ class SettingsAdvancedViewModel(
     }
 
     fun scheduleDeleteLocalFiles(newValue: String) {
-        if (newValue == DeleteLocalFiles.NEVER.name) {
-            workManager.cancelAllWorkByTag(DELETE_FILES_OLDER_GIVEN_TIME_WORKER)
+        if (newValue == RemoveLocalFiles.NEVER.name) {
+            workManagerProvider.cancelAllWorkByTag(DELETE_FILES_OLDER_GIVEN_TIME_WORKER)
         } else {
-            val timeSelected =
-                DeleteLocalFiles.valueOf(preferencesProvider.getString(PREFERENCE_DELETE_LOCAL_FILES, DeleteLocalFiles.NEVER.name)!!).toMilliseconds()
-            workManagerProvider.enqueueDeleteFilesOlderGivenTimeWorker(timeSelected)
+            workManagerProvider.enqueueRemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker()
         }
     }
 }
