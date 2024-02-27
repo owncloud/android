@@ -37,6 +37,7 @@ class SettingsAdvancedFragment : PreferenceFragmentCompat() {
 
     private var prefShowHiddenFiles: SwitchPreferenceCompat? = null
     private var prefDeleteLocalFiles: ListPreference? = null
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings_advanced, rootKey)
 
@@ -50,12 +51,13 @@ class SettingsAdvancedFragment : PreferenceFragmentCompat() {
                 getString(R.string.prefs_delete_local_files_entries_30days)
             ).toTypedArray()
             entryValues = listOf(
-                DeleteLocalFiles.NEVER.name,
-                DeleteLocalFiles.ONE_HOUR.name,
-                DeleteLocalFiles.TWELVE_HOURS.name,
-                DeleteLocalFiles.TWENTY_FOUR_HOURS.name,
-                DeleteLocalFiles.THIRTY_DAYS.name
+                RemoveLocalFiles.NEVER.name,
+                RemoveLocalFiles.ONE_HOUR.name,
+                RemoveLocalFiles.TWELVE_HOURS.name,
+                RemoveLocalFiles.TWENTY_FOUR_HOURS.name,
+                RemoveLocalFiles.THIRTY_DAYS.name,
             ).toTypedArray()
+            summary = getString(R.string.prefs_delete_local_files_summary, this.entry)
         }
         initPreferenceListeners()
     }
@@ -72,8 +74,10 @@ class SettingsAdvancedFragment : PreferenceFragmentCompat() {
             true
         }
 
-        prefDeleteLocalFiles?.setOnPreferenceChangeListener { _: Preference?, newValue: Any ->
-            advancedViewModel.scheduleDeleteLocalFiles(newValue as String)
+        prefDeleteLocalFiles?.setOnPreferenceChangeListener { preference: Preference?, newValue: Any ->
+            val index = (preference as ListPreference).findIndexOfValue(newValue as String)
+            preference.summary = getString(R.string.prefs_delete_local_files_summary, preference.entries[index])
+            advancedViewModel.scheduleDeleteLocalFiles(newValue)
             true
         }
     }

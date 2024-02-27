@@ -28,6 +28,5 @@
         app:iconSpaceReserved="false"
         app:key="delete_local_files"
         app:negativeButtonText=""
-        app:title="@string/prefs_delete_local_files"
-        app:useSimpleSummaryProvider="true" />
+        app:title="@string/prefs_delete_local_files" />
 </PreferenceScreen>
