@@ -244,8 +244,8 @@ class OCFileRepository(
     override fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile> =
         localFileDataSource.getFilesAvailableOfflineFromEveryAccount()
 
-    override fun getFilesLastUsageIsOlderThanGivenTime(milliseconds: Long): List<OCFile> =
-        localFileDataSource.getFilesLastUsageIsOlderThanGivenTime(milliseconds)
+    override fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFile> =
+        localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(milliseconds)
 
     override fun moveFile(listOfFilesToMove: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?>, isUserLogged: Boolean): List<OCFile> {
         val targetSpaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(targetFolder.spaceId, targetFolder.owner)

@@ -138,7 +138,7 @@ interface FileDao {
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFileEntity>
 
     @Query(SELECT_FILES_WHERE_LAST_USAGE_IS_OLDER_THAN_GIVEN_TIME)
-    fun getFilesLastUsageIsOlderThanGivenTime(milliseconds: Long): List<OCFileEntity>
+    fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFileEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnore(ocFileEntity: OCFileEntity): Long
@@ -559,7 +559,8 @@ interface FileDao {
         private const val SELECT_FILES_WHERE_LAST_USAGE_IS_OLDER_THAN_GIVEN_TIME = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
-            WHERE lastUsage < strftime('%s', 'now') * 1000 - (:milliseconds);
+            WHERE lastUsage < (strftime('%s', 'now') * 1000 - :milliseconds)
+            AND keepInSync = '0'
         """
 
         private const val UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS = """

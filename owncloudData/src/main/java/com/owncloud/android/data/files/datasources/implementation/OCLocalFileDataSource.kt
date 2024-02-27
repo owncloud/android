@@ -125,8 +125,8 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
-    override fun getFilesLastUsageIsOlderThanGivenTime(milliseconds: Long): List<OCFile> =
-        fileDao.getFilesLastUsageIsOlderThanGivenTime(milliseconds).map {
+    override fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFile> =
+        fileDao.getFilesWithLastUsageOlderThanGivenTime(milliseconds).map {
             it.toModel()
         }
 

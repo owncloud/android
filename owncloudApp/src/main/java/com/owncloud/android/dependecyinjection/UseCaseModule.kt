@@ -107,8 +107,8 @@ import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsync
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
-import com.owncloud.android.usecases.files.DeleteFilesOlderGivenTimeUseCase
 import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
+import com.owncloud.android.usecases.files.RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
 import com.owncloud.android.usecases.transfers.downloads.CancelDownloadForFileUseCase
@@ -158,7 +158,6 @@ val useCaseModule = module {
     factoryOf(::CopyFileUseCase)
     factoryOf(::CreateFolderAsyncUseCase)
     factoryOf(::DisableThumbnailsForFileUseCase)
-    factoryOf(::DeleteFilesOlderGivenTimeUseCase)
     factoryOf(::FilterFileMenuOptionsUseCase)
     factoryOf(::GetFileByIdAsStreamUseCase)
     factoryOf(::GetFileByIdUseCase)
@@ -172,18 +171,19 @@ val useCaseModule = module {
     factoryOf(::GetSharedByLinkForAccountAsStreamUseCase)
     factoryOf(::GetSharesRootFolderForAccount)
     factoryOf(::GetUrlToOpenInWebUseCase)
+    factoryOf(::ManageDeepLinkUseCase)
     factoryOf(::MoveFileUseCase)
     factoryOf(::RemoveFileUseCase)
+    factoryOf(::RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase)
     factoryOf(::RenameFileUseCase)
     factoryOf(::SaveConflictUseCase)
     factoryOf(::SaveDownloadWorkerUUIDUseCase)
     factoryOf(::SaveFileOrFolderUseCase)
+    factoryOf(::SetLastUsageFileUseCase)
     factoryOf(::SortFilesUseCase)
     factoryOf(::SortFilesWithSyncInfoUseCase)
     factoryOf(::SynchronizeFileUseCase)
     factoryOf(::SynchronizeFolderUseCase)
-    factoryOf(::ManageDeepLinkUseCase)
-    factoryOf(::SetLastUsageFileUseCase)
 
     // Open in web
     factoryOf(::CreateFileWithAppProviderUseCase)
