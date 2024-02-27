@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -28,7 +30,6 @@ import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_FILE
-import com.owncloud.android.testutil.OC_FILE_AVAILABLE_OFFLINE
 import com.owncloud.android.testutil.OC_FILE_WITH_SYNC_INFO_AND_SPACE
 import com.owncloud.android.testutil.OC_FOLDER
 import io.mockk.every
@@ -213,30 +214,30 @@ class OCFileRepositoryTest {
     @Test
     fun `getFilesLastUsageIsOlderThanGivenTime returns a list of OCFile`() {
         every {
-            localFileDataSource.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds)
+            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
         } returns emptyList()
 
-        val result = ocFileRepository.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds)
+        val result = ocFileRepository.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
 
         assertEquals(emptyList<OCFile>(), result)
 
         verify(exactly = 1) {
-            localFileDataSource.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds)
+            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
         }
     }
 
     @Test
     fun `getFilesLastUsageIsOlderThanGivenTime returns an empty list when datasource returns an empty list`() {
         every {
-            localFileDataSource.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds)
-        } returns listOf(OC_FILE_AVAILABLE_OFFLINE)
+            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
+        } returns listOf(OC_FILE)
 
-        val result = ocFileRepository.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds)
+        val result = ocFileRepository.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
 
-        assertEquals(listOf(OC_FILE_AVAILABLE_OFFLINE), result)
+        assertEquals(listOf(OC_FILE), result)
 
         verify(exactly = 1) {
-            localFileDataSource.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds)
+            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
         }
     }
 

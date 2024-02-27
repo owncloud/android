@@ -461,24 +461,24 @@ class OCLocalFileDataSourceTest {
 
     @Test
     fun `getFilesLastUsageIsOlderThanGivenTime returns a list of OCFile`() {
-        every { fileDao.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds) } returns listOf(OC_FILE_AVAILABLE_OFFLINE_ENTITY)
+        every { fileDao.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds) } returns listOf(OC_FILE_ENTITY)
 
-        val result = ocLocalFileDataSource.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds)
+        val result = ocLocalFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
 
-        assertEquals(listOf(OC_FILE_AVAILABLE_OFFLINE), result)
+        assertEquals(listOf(OC_FILE), result)
 
-        verify(exactly = 1) { fileDao.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds) }
+        verify(exactly = 1) { fileDao.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds) }
     }
 
     @Test
     fun `getFilesLastUsageIsOlderThanGivenTime returns an empty list when DAO returns an empty list`() {
-        every { fileDao.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds) } returns emptyList()
+        every { fileDao.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds) } returns emptyList()
 
-        val result = ocLocalFileDataSource.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds)
+        val result = ocLocalFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
 
         assertEquals(emptyList<OCFile>(), result)
 
-        verify(exactly = 1) { fileDao.getFilesLastUsageIsOlderThanGivenTime(timeInMilliseconds) }
+        verify(exactly = 1) { fileDao.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds) }
     }
 
     @Test
