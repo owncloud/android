@@ -23,8 +23,7 @@ For OEM releases, keep the OEM Release template and remove the Open and Patch Re
  - [ ] [DEV] Update [SBOM](https://cloud.owncloud.com/f/6072870)
  - [ ] [DIS] Create a folder for the new version like `M.m.p_YYYY-MM-DD` inside the `changelog` folder
  - [ ] [DIS] Move all changelog files from the `unreleased` folder to the new version folder
- - [ ] [DIS] Update screenshots, if needed, in README.md
- - [ ] [DEV] Check release notes in `ReleaseNotesViewModel.kt` to assure nothing important is missing there.
+ - [ ] [DEV] Check release notes in `ReleaseNotesViewModel.kt` to assure nothing important is missing there
  - [ ] [DIS] Prepare post in central.owncloud.org ([`Category:News + Tag:android`](https://central.owncloud.org/tags/c/news/5/android))
  - [ ] [DIS] Check for new screenshots in Play Store / GitHub repo and generate them
  - [ ] [DIS] Generate final bundle from last commit in owncloud/android
@@ -35,14 +34,14 @@ For OEM releases, keep the OEM Release template and remove the Open and Patch Re
  - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
  - [ ] [DOC] Ping in #documentation-internal that we are close to sign the new tags
  - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
- - [ ] [DIS] Update screenshots and store listing, if needed, in Play Store
+ - [ ] [DIS] Update screenshots and check they are OK in Play Store and in `README.md` (if needed)
  - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
  - [ ] [GIT] Move tag `latest` pointing the same commit as the release commit
  - [ ] [GIT] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
  - [ ] [DIS] Release published in Play Store
  - [ ] [DIS] Publish post in central.owncloud.org ([`Category:News + Tag:android`](https://central.owncloud.org/tags/c/news/5/android))
  - [ ] [COM] Inform `#updates` and `#marketing` in internal chat that release is out
- - [ ] [GIT] Merge (not rebase!!!) `release/M.m.p` branch into `master`, in owncloud/android
+ - [ ] [GIT] Merge without rebasing `release/M.m.p` branch into `master`, in owncloud/android
  - [ ] [DOC] Update documentation with new stuff by creating [issue](https://github.com/owncloud/docs-client-android/issues)
 
 
@@ -64,8 +63,8 @@ _____
  - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
  - [ ] [DEV] Update [SBOM](https://cloud.owncloud.com/f/6072870)
  - [ ] [DIS] Create a folder for the new version like `M.m.p_YYYY-MM-DD` inside the `changelog` folder with the proper fixes
- - [ ] [DIS] Move the `unreleased` folder from `master` to `changelog` folder, to avoid Calens' conflicts problems
- - [ ] [DEV] Add release notes replacing `emptyList` with `listOf` and adding inside `ReleaseNote()` with String resources, in `ReleaseNotesViewModel.kt` (in case patch release before OEM)
+ - [ ] [DIS] Copy the `unreleased` folder in `master` branch to `changelog` folder in this branch, to avoid Calens' conflicts problems
+ - [ ] [DEV] Add release notes to `ReleaseNotesViewModel.kt` (in case patch release before OEM)
  - [ ] [DIS] Check for new screenshots in Play Store / GitHub repo and generate them
  - [ ] [DIS] Generate final bundle from last commit in owncloud/android
  - [ ] [DEV] Code Review
@@ -74,14 +73,14 @@ _____
  - [ ] [QA] QA Approval
  - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
  - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
- - [ ] [DIS] Update screenshots and store listing, if needed, in Play Store
+ - [ ] [DIS] Update screenshots and check they are OK in Play Store and in `README.md` (if needed)
  - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
  - [ ] [GIT] Move tag `latest` pointing the same commit as the release commit
  - [ ] [GIT] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
  - [ ] [DIS] Release published in Play Store
  - [ ] [COM] Inform `#updates` in internal chat that release is out
  - [ ] [GIT] Fix conflicts if they happen. GitHub option will help and will merge `master` into release branch, getting it ready to fast forward
- - [ ] [GIT] Merge (not rebase!!!!) `release/M.m.p` branch into `master`, in owncloud/android
+ - [ ] [GIT] Merge without rebasing `release/M.m.p` branch into `master`, in owncloud/android
 
 
 
@@ -119,3 +118,5 @@ _____
     - [ ] App update from previous version (generated in advance)
 - [ ] [QA] Notify result in #ownbrander
 - [ ] [OPS] Enable button
+- [ ] [GIT] Fix conflicts in branch if they happen. GitHub option will help and will merge `master` into release branch, getting it ready to fast forward
+- [ ] [GIT] Merge without rebasing `release/M.m.p_oem` branch into `master`, in owncloud/android
