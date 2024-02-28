@@ -22,6 +22,7 @@
 package com.owncloud.android.presentation.viewmodels.settings
 
 import com.owncloud.android.data.providers.SharedPreferencesProvider
+import com.owncloud.android.presentation.settings.advanced.RemoveLocalFiles
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedFragment.Companion.PREF_SHOW_HIDDEN_FILES
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedViewModel
 import com.owncloud.android.providers.WorkManagerProvider
@@ -41,7 +42,7 @@ class SettingsAdvancedViewModelTest {
     @Before
     fun setUp() {
         preferencesProvider = mockk()
-        workManagerProvider = mockk(relaxUnitFun = true)
+        workManagerProvider = mockk(relaxed = true)
 
         advancedViewModel = SettingsAdvancedViewModel(
             preferencesProvider,
@@ -68,19 +69,20 @@ class SettingsAdvancedViewModelTest {
     }
 
     @Test
-    fun `scheduleDeleteLocalFiles enqueues the worker when newValue is not NEVER selected correctly`() {
-        val newValue = "ONE_HOUR"
+    fun `scheduleDeleteLocalFiles cancels the worker and enqueues a new worker when Never option is not selected`() {
+        val newValue = RemoveLocalFiles.ONE_HOUR.name
 
         advancedViewModel.scheduleDeleteLocalFiles(newValue)
 
         verify(exactly = 1) {
+            workManagerProvider.cancelAllWorkByTag(DELETE_FILES_OLDER_GIVEN_TIME_WORKER)
             workManagerProvider.enqueueRemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker()
         }
     }
 
     @Test
-    fun `scheduleDeleteLocalFiles cancels the worker when newValue is NEVER selected correctly`() {
-        val newValue = "NEVER"
+    fun `scheduleDeleteLocalFiles cancels the worker when Never option is selected`() {
+        val newValue = RemoveLocalFiles.NEVER.name
 
         advancedViewModel.scheduleDeleteLocalFiles(newValue)
 
