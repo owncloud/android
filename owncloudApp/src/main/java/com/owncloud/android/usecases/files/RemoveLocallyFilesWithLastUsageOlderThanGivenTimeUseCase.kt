@@ -25,7 +25,7 @@ import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
-import com.owncloud.android.presentation.settings.advanced.PREFERENCE_DELETE_LOCAL_FILES
+import com.owncloud.android.presentation.settings.advanced.PREFERENCE_REMOVE_LOCAL_FILES
 import com.owncloud.android.presentation.settings.advanced.RemoveLocalFiles
 
 class RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase(
@@ -36,7 +36,7 @@ class RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase(
 ) : BaseUseCaseWithResult<Unit, RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase.Params>() {
     override fun run(params: Params) {
         val timeSelected =
-            RemoveLocalFiles.valueOf(preferencesProvider.getString(PREFERENCE_DELETE_LOCAL_FILES, RemoveLocalFiles.NEVER.name)!!).toMilliseconds()
+            RemoveLocalFiles.valueOf(preferencesProvider.getString(PREFERENCE_REMOVE_LOCAL_FILES, RemoveLocalFiles.NEVER.name)!!).toMilliseconds()
         localStorageProvider.clearTemporalFiles(timeSelected)
         val listOfFilesToDelete = fileRepository.getFilesWithLastUsageOlderThanGivenTime(timeSelected)
         if (listOfFilesToDelete.isNotEmpty()) {

@@ -30,7 +30,6 @@ import com.owncloud.android.ui.preview.PreviewVideoActivity
 import com.owncloud.android.usecases.files.RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 class RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker(
@@ -51,7 +50,7 @@ class RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker(
                 )
             )
             Result.success()
-        } catch (ioException: IOException) {
+        } catch (exception: Exception) {
             Result.failure()
         }
     }

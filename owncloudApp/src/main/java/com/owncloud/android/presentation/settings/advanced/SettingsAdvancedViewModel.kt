@@ -41,10 +41,8 @@ class SettingsAdvancedViewModel(
     }
 
     fun scheduleDeleteLocalFiles(newValue: String) {
-        if (newValue == RemoveLocalFiles.NEVER.name) {
-            workManagerProvider.cancelAllWorkByTag(DELETE_FILES_OLDER_GIVEN_TIME_WORKER)
-        } else {
-            workManagerProvider.cancelAllWorkByTag(DELETE_FILES_OLDER_GIVEN_TIME_WORKER)
+        workManagerProvider.cancelAllWorkByTag(DELETE_FILES_OLDER_GIVEN_TIME_WORKER)
+        if (newValue != RemoveLocalFiles.NEVER.name) {
             workManagerProvider.enqueueRemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker()
         }
     }

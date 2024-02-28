@@ -215,11 +215,11 @@ class OCFileRepositoryTest {
     fun `getFilesLastUsageIsOlderThanGivenTime returns a list of OCFile`() {
         every {
             localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
-        } returns emptyList()
+        } returns listOf(OC_FILE)
 
         val result = ocFileRepository.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
 
-        assertEquals(emptyList<OCFile>(), result)
+        assertEquals(listOf(OC_FILE), result)
 
         verify(exactly = 1) {
             localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
@@ -230,11 +230,11 @@ class OCFileRepositoryTest {
     fun `getFilesLastUsageIsOlderThanGivenTime returns an empty list when datasource returns an empty list`() {
         every {
             localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
-        } returns listOf(OC_FILE)
+        } returns emptyList()
 
         val result = ocFileRepository.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
 
-        assertEquals(listOf(OC_FILE), result)
+        assertEquals(emptyList<OCFile>(), result)
 
         verify(exactly = 1) {
             localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
