@@ -28,7 +28,6 @@ Add any other context or screenshots about the feature request here.
   - [ ] Implement whatever
   - [ ] ...
   - [ ] Implement unit tests (if needed)
-  - [ ] Add feature to Release Notes (if required)
 - [ ] Code review and apply changes requested
 - [ ] Design test plan
 - [ ] QA
