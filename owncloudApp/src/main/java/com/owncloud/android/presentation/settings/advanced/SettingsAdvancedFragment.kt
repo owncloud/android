@@ -47,14 +47,14 @@ class SettingsAdvancedFragment : PreferenceFragmentCompat() {
                 getString(R.string.prefs_delete_local_files_entries_never),
                 getString(R.string.prefs_delete_local_files_entries_1hour),
                 getString(R.string.prefs_delete_local_files_entries_12hours),
-                getString(R.string.prefs_delete_local_files_entries_24hours),
+                getString(R.string.prefs_delete_local_files_entries_1day),
                 getString(R.string.prefs_delete_local_files_entries_30days)
             ).toTypedArray()
             entryValues = listOf(
                 RemoveLocalFiles.NEVER.name,
                 RemoveLocalFiles.ONE_HOUR.name,
                 RemoveLocalFiles.TWELVE_HOURS.name,
-                RemoveLocalFiles.TWENTY_FOUR_HOURS.name,
+                RemoveLocalFiles.ONE_DAY.name,
                 RemoveLocalFiles.THIRTY_DAYS.name,
             ).toTypedArray()
             summary = getString(R.string.prefs_delete_local_files_summary, this.entry)
