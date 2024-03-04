@@ -67,7 +67,7 @@ class RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker(
 
     companion object {
         const val DELETE_FILES_OLDER_GIVEN_TIME_WORKER = "DELETE_FILES_OLDER_GIVEN_TIME_WORKER"
-        const val repeatInterval: Long = 15L
+        const val repeatInterval: Long = 60L
         val repeatIntervalTimeUnit: TimeUnit = TimeUnit.MINUTES
     }
 }
