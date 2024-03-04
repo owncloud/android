@@ -773,6 +773,6 @@
     <string name="prefs_delete_local_files_entries_1day">1 day</string>
     <string name="prefs_delete_local_files_entries_30days">30 days</string>
     <string name="prefs_delete_local_files">Delete local copies</string>
-    <string name="prefs_delete_local_files_summary">Remove automatically downloaded and temporary files when the time since their last usage exceeds the selected time.\nCurrent status: %1$s</string>
+    <string name="prefs_delete_local_files_summary">Remove automatically downloaded and temporary files that are not available offline, when the time since their last usage exceeds the selected time.\nSelected time: %1$s</string>
 
 </resources>
