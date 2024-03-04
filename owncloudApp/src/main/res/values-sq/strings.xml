@@ -666,29 +666,7 @@
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
-  <string name="release_notes_4_2_0_title_1">Versioni më i ri me mbulim për Android 6</string>
-  <string name="release_notes_4_2_0_subtitle_1">Hedhja e tanishme në qarkullim do të jetë e fundit që mbulon Android 6</string>
-  <string name="release_notes_4_2_0_title_2">Hapje kartelash nga jashtë aplikacionit, duke përdorur lidhje</string>
-  <string name="release_notes_4_2_0_subtitle_2">Do të hapet një lidhje që shpie te aplikacioni dhe mandej, gjeni kartelën, për t’i bërë paraparje drejtpërdrejt. Lidhjet për kartela të ndara me të tjerë nuk përfshihen ende</string>
-  <string name="release_notes_4_2_0_title_3">“Ndaje në” me llogari Infinite Scale lejon të ngarkohen gjëra në cilëndo hapësirë</string>
-  <string name="release_notes_4_2_0_subtitle_3">Në llogari Infinite Scale, kartela të ndara nga aplikacione të tjera mund të ngarkohen në çfarëdo hapësire dhe jo vetëm te ajo Personale</string>
-  <string name="release_notes_4_2_0_title_4">“Zbatoje mbi krejt”, për përplasje</string>
-  <string name="release_notes_4_2_0_subtitle_4">Dialog i ri për të ndrequr njëherësh krejt përplasjet</string>
-  <string name="release_notes_4_2_0_title_5">Rifreskim i vetvetishëm, kur ngarkohet një kartelë</string>
-  <string name="release_notes_4_2_0_subtitle_5">Lista e kartelave do të rifreskohet tani automatikisht, teksa ngarkohet te dosja e synuar</string>
-  <string name="release_notes_4_2_0_title_6">Shkarkoni kartela regjistër</string>
-  <string name="release_notes_4_2_0_subtitle_6">Mundësi e re për të shkarkuar një kartelë regjistër te dosja Shkarkime e pajisjes</string>
-  <string name="release_notes_4_2_0_title_7">Vetëngarkime te hapësira</string>
-  <string name="release_notes_4_2_0_subtitle_7">Foto dhe video prej kamerës tani ruhet brenda hapësirave, jo vetëm te Personale</string>
-  <string name="release_notes_4_2_0_title_8">Administroni rregulla fjalëkalimesh nën mënyrën “live” te llogari Infinite Scale</string>
-  <string name="release_notes_4_2_0_subtitle_8">Për lidhje publike, rregulla fjalëkalimesh trajtohen nën mënyrën “live” me objektet e reja te dialogu</string>
-  <string name="release_notes_4_2_0_title_9">U përmirësua lojtësi i videove</string>
-  <string name="release_notes_4_2_0_subtitle_9">Një funksionim më i përparuar dhe më optimal i luajtjes së mediave për përdoruesit, me përmirësime të punimit dhe përputhjes.</string>
-  <string name="release_notes_4_2_0_title_10">Pengo luajtjen njëherësh të dy kartelave media</string>
-  <string name="release_notes_4_2_0_subtitle_10">Lojtësi merret me ndryshime fokusi audio, duke ndalur njërin lojtës, nëse niset tjetri</string>
-  <string name="release_notes_4_2_0_title_11">Ndreqje të metash të vockla</string>
-  <string name="release_notes_4_2_0_subtitle_11">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
-  <!--Open in web-->
+    <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
   <string name="open_in_web_error_generic">S’u hap dot në web</string>
