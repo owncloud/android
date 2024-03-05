@@ -113,6 +113,17 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
+    fun `getFilesForAccount returns a list of OCFile`() {
+        every { fileDao.getFilesForAccount(OC_ACCOUNT_NAME) } returns listOf(OC_FILE_ENTITY)
+
+        val result = ocLocalFileDataSource.getFilesForAccount(OC_ACCOUNT_NAME)
+
+        assertEquals(listOf(OC_FILE), result)
+
+        verify(exactly = 1) { fileDao.getFilesForAccount(OC_ACCOUNT_NAME) }
+    }
+
+    @Test
     fun `getFileWithSyncInfoByIdAsFlow returns a Flow with an OCFileWithSyncInfo`() = runTest {
         every { fileDao.getFileWithSyncInfoByIdAsFlow(OC_FILE_ENTITY.id) } returns flowOf(OC_FILE_AND_FILE_SYNC)
 
