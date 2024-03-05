@@ -81,6 +81,23 @@
         app:layout_constraintTop_toBottomOf="@id/name" />
 
     <ImageView
+        android:id="@+id/cleanButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:paddingLeft="@dimen/standard_half_padding"
+        android:paddingTop="@dimen/standard_padding"
+        android:paddingRight="@dimen/standard_half_padding"
+        android:paddingBottom="@dimen/standard_padding"
+        android:src="@drawable/ic_clean_account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/removeButton"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
+
+    <ImageView
         android:id="@+id/removeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Javier Rodríguez Pérez
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -22,11 +23,23 @@ package com.owncloud.android.presentation.accounts
 
 import android.accounts.Account
 import androidx.lifecycle.ViewModel
+import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.AccountProvider
+import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import com.owncloud.android.usecases.files.RemoveFilesForAccountUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class AccountsManagementViewModel(
-    private val accountProvider: AccountProvider
+    private val accountProvider: AccountProvider,
+    private val removeFilesForAccountUseCase: RemoveFilesForAccountUseCase,
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
+
+    private val _cleanAccountFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
+    val cleanAccountFlow: StateFlow<Event<UIResult<Unit>>?> = _cleanAccountFlow
 
     fun getLoggedAccounts(): Array<Account> {
         return accountProvider.getLoggedAccounts()
@@ -34,5 +47,15 @@ class AccountsManagementViewModel(
 
     fun getCurrentAccount(): Account? {
         return accountProvider.getCurrentOwnCloudAccount()
+    }
+
+    fun cleanAccount(accountName: String) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            showLoading = true,
+            flow = _cleanAccountFlow,
+            useCase = removeFilesForAccountUseCase,
+            useCaseParams = RemoveFilesForAccountUseCase.Params(accountName),
+        )
     }
 }
