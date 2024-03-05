@@ -6,8 +6,9 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -224,6 +225,13 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
             targetFolder.mkdirs()
         }
         fileToMove.renameTo(targetFile)
+    }
+
+    fun clearTemporalFilesForAccount(accountName: String) {
+        val temporalFolderForAccount = File(getTemporalPath(accountName))
+        cleanTemporalRecursively(temporalFolderForAccount) { temporalFile ->
+            temporalFile.delete()
+        }
     }
 
     fun clearUnrelatedTemporalFiles(uploads: List<OCTransfer>, accountsNames: List<String>) {
