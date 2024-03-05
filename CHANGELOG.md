@@ -30,6 +30,7 @@ ownCloud admins and users.
 ## Summary
 
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
+* Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
 * Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
 
 ## Details
@@ -41,6 +42,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4230
    https://github.com/owncloud/android/pull/4299
+
+* Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
+
+   A new setting has been created to delete automatically downloaded files, when
+   the time since their last usage exceeds the selected time in the setting.
+
+   https://github.com/owncloud/android/issues/4175
+   https://github.com/owncloud/android/pull/4320
 
 * Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
 
