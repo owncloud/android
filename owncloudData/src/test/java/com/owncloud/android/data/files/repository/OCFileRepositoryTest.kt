@@ -199,6 +199,21 @@ class OCFileRepositoryTest {
     }
 
     @Test
+    fun `getFilesForAccount returns a list of OCFile`() {
+        every {
+            localFileDataSource.getFilesForAccount(OC_ACCOUNT_NAME)
+        } returns listOf(OC_FILE)
+
+        val result = ocFileRepository.getFilesForAccount(OC_ACCOUNT_NAME)
+
+        assertEquals(listOf(OC_FILE), result)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFilesForAccount(OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test
     fun `get folder content - ok`() {
         every { localFileDataSource.getFolderContent(OC_FOLDER.parentId!!) } returns listOf(OC_FOLDER)
 
