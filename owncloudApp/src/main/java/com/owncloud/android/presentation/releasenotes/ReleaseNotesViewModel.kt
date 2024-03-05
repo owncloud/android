@@ -53,7 +53,7 @@ class ReleaseNotesViewModel(
             ReleaseNote(
                 title = R.string.release_notes_4_3_0_title_2,
                 subtitle = R.string.release_notes_4_3_0_subtitle_2,
-                type = ReleaseNoteType.CHANGE,
+                type = ReleaseNoteType.ENHANCEMENT,
             ),
         )
     }
