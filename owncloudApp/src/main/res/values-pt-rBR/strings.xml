@@ -668,7 +668,7 @@
   <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Prosseguir</string>
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
-    <!--Open in web-->
+  <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
   <string name="open_in_web_error_generic">Não foi possível abrir na web</string>

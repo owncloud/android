@@ -666,7 +666,7 @@
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
-    <!--Open in web-->
+  <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
   <string name="open_in_web_error_generic">S’u hap dot në web</string>

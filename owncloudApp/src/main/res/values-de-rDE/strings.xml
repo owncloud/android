@@ -668,7 +668,7 @@
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
   <string name="release_notes_icon">Symbol für Veröffentlichungsnotizen</string>
-    <!--Open in web-->
+  <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
   <string name="open_in_web_error_generic">Kann im Webbrowser nicht geöffnet werden</string>

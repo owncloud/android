@@ -668,7 +668,7 @@
   <string name="release_notes_footer">Aitäh, et kasutad %1$si.\n❤</string>
   <string name="release_notes_proceed">Jätka</string>
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
-    <!--Open in web-->
+  <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
   <string name="open_in_web_error_generic">Ei saanud veebis avada</string>
