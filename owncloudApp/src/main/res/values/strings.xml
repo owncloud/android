@@ -728,7 +728,7 @@
     <string name="release_notes_icon">Release note icon</string>
 
     <string name="release_notes_4_3_0_title_1">New setting to remove automatically downloaded files and clean up local storage</string>
-    <string name="release_notes_4_3_0_subtitle_1">A new setting has been added in "Advanced" section to delete automatically downloaded and temporary files, when the time since their last usage exceeds the selected time in the setting</string>
+    <string name="release_notes_4_3_0_subtitle_1">A new setting has been added in "Advanced" section to delete automatically downloaded files, when the time since their last usage exceeds the selected time in the setting</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
@@ -773,6 +773,6 @@
     <string name="prefs_delete_local_files_entries_1day">1 day</string>
     <string name="prefs_delete_local_files_entries_30days">30 days</string>
     <string name="prefs_delete_local_files">Delete local copies</string>
-    <string name="prefs_delete_local_files_summary">Remove automatically downloaded and temporary files that are not available offline, when the time since their last usage exceeds the selected time.\nSelected time: %1$s</string>
+    <string name="prefs_delete_local_files_summary">Remove automatically downloaded files that are not available offline, when the time since their last usage exceeds the selected time.\nSelected time: %1$s</string>
 
 </resources>
