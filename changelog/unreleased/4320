@@ -1,0 +1,6 @@
+Enhancement: New setting for automatic removal of local files
+
+A new setting has been created to delete automatically downloaded files, when the time since their last usage exceeds the selected time in the setting.
+
+https://github.com/owncloud/android/issues/4175
+https://github.com/owncloud/android/pull/4320
