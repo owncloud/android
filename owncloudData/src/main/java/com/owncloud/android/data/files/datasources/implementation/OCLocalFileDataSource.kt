@@ -130,6 +130,11 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
+    override fun getFilesForAccount(owner: String): List<OCFile> =
+        fileDao.getFilesForAccount(accountOwner = owner).map {
+            it.toModel()
+        }
+
     override fun moveFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, finalStoragePath: String) =
         fileDao.moveFile(
             sourceFile = sourceFile.toEntity(),

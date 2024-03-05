@@ -44,6 +44,7 @@ interface LocalFileDataSource {
     fun getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>>
     fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
+    fun getFilesForAccount(owner: String): List<OCFile>
     fun getFileWithSyncInfoByIdAsFlow(id: Long): Flow<OCFileWithSyncInfo?>
     fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFile>
     fun moveFile(sourceFile: OCFile, targetFolder: OCFile, finalRemotePath: String, finalStoragePath: String)
