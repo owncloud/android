@@ -7,8 +7,9 @@
  * @author Abel García de Prada
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -177,6 +178,8 @@ class PreviewImageFragment : FileFragment() {
         file?.let {
             loadAndShowImage()
         }
+        isOpen = true
+        currentFilePreviewing = file
     }
 
     /**
@@ -256,6 +259,8 @@ class PreviewImageFragment : FileFragment() {
         // {@link FragmentStatePagerAdapter} when the fragment in swiped further than the
         // valid offscreen distance, and onStop() is never called before than that
         super.onDestroy()
+        isOpen = false
+        currentFilePreviewing = null
     }
 
     /**
@@ -341,6 +346,8 @@ class PreviewImageFragment : FileFragment() {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
         private const val ARG_IGNORE_FIRST = "IGNORE_FIRST"
+        var isOpen: Boolean = false
+        var currentFilePreviewing: OCFile? = null
 
         /**
          * Public factory method to create a new fragment that previews an image.

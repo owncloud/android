@@ -663,8 +663,6 @@
   <string name="release_notes_footer">Thank you for using %1$s.\n❤</string>
   <string name="release_notes_proceed">Proceed</string>
   <string name="release_notes_icon">Release note icon</string>
-  <string name="release_notes_4_2_0_title_11">Minor bugfixes</string>
-  <string name="release_notes_4_2_0_subtitle_11">Some bugs were fixed to improve experience in the app</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Open in web</string>
   <string name="ic_action_open_with_web">Open in %1$s (web)</string>

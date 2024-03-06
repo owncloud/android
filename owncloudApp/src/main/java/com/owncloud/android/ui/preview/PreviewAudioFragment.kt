@@ -7,8 +7,9 @@
  * @author Abel García de Prada
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -195,6 +196,8 @@ class PreviewAudioFragment : FileFragment() {
         if (file != null && file.isAvailableLocally) {
             bindMediaService()
         }
+        isOpen = true
+        currentFilePreviewing = file
     }
 
     override fun onFileMetadataChanged(updatedFile: OCFile?) {
@@ -307,6 +310,8 @@ class PreviewAudioFragment : FileFragment() {
             mediaServiceConnection = null
             mediaServiceBinder = null
         }
+        isOpen = false
+        currentFilePreviewing = null
         super.onStop()
     }
 
@@ -404,6 +409,8 @@ class PreviewAudioFragment : FileFragment() {
         const val EXTRA_ACCOUNT = "ACCOUNT"
         private const val EXTRA_PLAY_POSITION = "PLAY_POSITION"
         private const val EXTRA_PLAYING = "PLAYING"
+        var isOpen: Boolean = false
+        var currentFilePreviewing: OCFile? = null
 
         /**
          * Public factory method to create new PreviewAudioFragment instances.

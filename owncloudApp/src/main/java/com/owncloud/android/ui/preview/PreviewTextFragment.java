@@ -5,8 +5,9 @@
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
  * @author Parneet Singh
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -89,6 +90,9 @@ public class PreviewTextFragment extends FileFragment {
     private ViewPager2 mViewPager2;
     private RelativeLayout rootView;
     private TextLoadAsyncTask mTextLoadTask;
+    public static boolean isOpen = false;
+    public static OCFile currentFilePreviewing = null;
+
     PreviewTextViewModel previewTextViewModel = get(PreviewTextViewModel.class);
     FileOperationsViewModel fileOperationsViewModel = get(FileOperationsViewModel.class);
 
@@ -172,6 +176,8 @@ public class PreviewTextFragment extends FileFragment {
         }
         setFile(file);
         setHasOptionsMenu(true);
+        isOpen = true;
+        currentFilePreviewing = file;
     }
 
     @Override
@@ -457,6 +463,8 @@ public class PreviewTextFragment extends FileFragment {
             mTextLoadTask.cancel(Boolean.TRUE);
             mTextLoadTask.dismissLoadingDialog();
         }
+        isOpen = false;
+        currentFilePreviewing = null;
     }
 
     @Override

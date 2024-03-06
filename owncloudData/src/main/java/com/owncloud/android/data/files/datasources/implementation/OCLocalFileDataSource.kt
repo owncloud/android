@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -121,6 +122,11 @@ class OCLocalFileDataSource(
 
     override fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile> =
         fileDao.getFilesAvailableOfflineFromEveryAccount().map {
+            it.toModel()
+        }
+
+    override fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFile> =
+        fileDao.getFilesWithLastUsageOlderThanGivenTime(milliseconds).map {
             it.toModel()
         }
 

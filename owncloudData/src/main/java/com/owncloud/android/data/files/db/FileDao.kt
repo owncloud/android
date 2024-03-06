@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -135,6 +136,9 @@ interface FileDao {
 
     @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_EVERY_ACCOUNT)
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFileEntity>
+
+    @Query(SELECT_FILES_WHERE_LAST_USAGE_IS_OLDER_THAN_GIVEN_TIME)
+    fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFileEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnore(ocFileEntity: OCFileEntity): Long
@@ -550,6 +554,13 @@ interface FileDao {
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
             WHERE keepInSync = '1'
+        """
+
+        private const val SELECT_FILES_WHERE_LAST_USAGE_IS_OLDER_THAN_GIVEN_TIME = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE lastUsage < (strftime('%s', 'now') * 1000 - :milliseconds)
+            AND keepInSync = '0'
         """
 
         private const val UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS = """

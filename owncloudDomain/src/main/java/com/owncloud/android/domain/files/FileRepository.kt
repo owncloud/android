@@ -5,8 +5,9 @@
  * @author Christian Schabesberger
  * @author Juan Carlos Garrote Gascón
  * @author Manuel Plazas Palacio
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -50,6 +51,7 @@ interface FileRepository {
     fun getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>>
     fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
+    fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFile>
 
     // Returns files in conflict
     fun moveFile(listOfFilesToMove: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?> = emptyList(), isUserLogged: Boolean): List<OCFile>
