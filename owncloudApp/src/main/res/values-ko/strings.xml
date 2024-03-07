@@ -551,4 +551,5 @@
   <string name="tab_label_ascii">텍스트</string>
   <!--DeepLinks-->
   <string name="fab_refresh_text">새로 고침</string>
+  <string name="prefs_delete_local_files_entries_never">하지 않음</string>
 </resources>

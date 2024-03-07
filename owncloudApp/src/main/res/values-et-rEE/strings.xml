@@ -698,4 +698,5 @@
   <string name="password_policy_intro">Palun sisesta parool, mis vastab järgmistele nõudmistele: \n</string>
   <string name="password_policy_min_special_character">Vähemalt %1$d erimärkidest: \"%2$s\"</string>
   <string name="password_policy_error_password_banned">Kahjuks on teie parool tavaliselt kasutatav. Palun valige oma turvalisuse huvides raskemini ära arvatav parool.</string>
+  <string name="prefs_delete_local_files_entries_never">Mitte kunagi</string>
 </resources>

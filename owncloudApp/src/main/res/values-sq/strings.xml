@@ -696,4 +696,5 @@
   <string name="password_policy_intro">Ju lutemi, jepni një fjalëkalim që plotëson kriteret vijuese: \n</string>
   <string name="password_policy_min_special_character">Të paktën %1$d nga shenjat speciale: “%2$s”</string>
   <string name="password_policy_error_password_banned">Mjerisht fjalëkalimi juaj përdoret rëndom. Ju lutemi, për sigurinë tuaj zgjidhni një fjalëkalim më të vështirë për t’u hamendësuar.</string>
+  <string name="prefs_delete_local_files_entries_never">Kurrë</string>
 </resources>

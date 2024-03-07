@@ -154,6 +154,7 @@
   <string name="filedetails_type">Tipo:</string>
   <string name="filedetails_created">Creado:</string>
   <string name="filedetails_last_sync">Última sincronización:</string>
+  <string name="filedetails_path">Ruta</string>
   <string name="filedetails_modified">Modificado:</string>
   <string name="filedetails_download">Descargar</string>
   <string name="filedetails_file_image_content_description">Imagen de archivo</string>
@@ -186,6 +187,8 @@
   <string name="uploader_upload_succeeded_ticker">Subido con éxito</string>
   <string name="uploader_upload_succeeded_content_single">%1$s subido</string>
   <string name="uploader_upload_failed_ticker">Error en la subida</string>
+  <string name="uploader_upload_text_dialog_title">Introduzca un nombre para el nuevo archivo</string>
+  <string name="uploader_upload_text_dialog_filename_error_empty">El nombre del archivo no debe estar vacio</string>
   <string name="uploader_upload_camera_upload_files">Subiendo archivos de la cámara</string>
   <string name="uploader_upload_available_offline_files">Subiendo archivos disponible sin conexión</string>
   <string name="uploader_upload_requested_from_wifi_files">Subiendo archivos solicitados desde el wifi</string>
@@ -369,6 +372,7 @@
   <string name="conflict_use_server_version">versión del servidor</string>
   <string name="conflict_replace">Reemplazar</string>
   <string name="preview_image_description">Previsualización de imagen</string>
+  <string name="preview_image_error_unknown_format">No se puede mostrar la imagen</string>
   <string name="share_link_no_support_share_api">La función Compartir no está activada en su servidor. Contacte a su
 		administrador.</string>
   <string name="share_link_file_error">No se pudo compartir este archivo o carpeta</string>
@@ -555,4 +559,5 @@
   <string name="tab_label_ascii">Texto</string>
   <!--DeepLinks-->
   <string name="fab_refresh_text">Actualizar</string>
+  <string name="prefs_delete_local_files_entries_never">Nunca</string>
 </resources>

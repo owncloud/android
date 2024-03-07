@@ -698,4 +698,5 @@
   <string name="password_policy_intro">Insira uma senha que atenda aos seguintes critérios: \n</string>
   <string name="password_policy_min_special_character">Pelo menos %1$d dos caracteres especiais: \"%2$s\"</string>
   <string name="password_policy_error_password_banned">Infelizmente, sua senha é comumente usada. Por favor, escolha uma senha mais difícil de adivinhar para sua segurança.</string>
+  <string name="prefs_delete_local_files_entries_never">Nunca</string>
 </resources>

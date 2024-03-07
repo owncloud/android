@@ -582,4 +582,5 @@ Téléchargez-le ici : %2$s</string>
   <string name="apply_to_all_conflicts">Appliquer pour les %1$s conflits</string>
   <!--DeepLinks-->
   <string name="fab_refresh_text">Rafraîchir</string>
+  <string name="prefs_delete_local_files_entries_never">Jamais</string>
 </resources>

@@ -682,4 +682,5 @@
   <!--DeepLinks-->
   <string name="invalid_deep_link_format">Invalid link format</string>
   <string name="fab_refresh_text">Refresh</string>
+  <string name="prefs_delete_local_files_entries_never">Never</string>
 </resources>

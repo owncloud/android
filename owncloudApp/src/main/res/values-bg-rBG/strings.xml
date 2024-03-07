@@ -552,4 +552,5 @@
   <string name="tab_label_ascii">Текст</string>
   <!--DeepLinks-->
   <string name="fab_refresh_text">Опресняване</string>
+  <string name="prefs_delete_local_files_entries_never">Никога</string>
 </resources>

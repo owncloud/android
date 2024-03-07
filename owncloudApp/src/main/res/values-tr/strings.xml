@@ -564,4 +564,5 @@
   <string name="apply_to_all_conflicts">Tüm %1$s çakışma için uygula</string>
   <!--DeepLinks-->
   <string name="fab_refresh_text">Yenile</string>
+  <string name="prefs_delete_local_files_entries_never">Asla</string>
 </resources>

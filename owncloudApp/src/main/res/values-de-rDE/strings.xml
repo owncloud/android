@@ -698,4 +698,5 @@
   <string name="password_policy_intro">Bitte ein Passwort eingeben, das den folgenden Kriterien entspricht: \n</string>
   <string name="password_policy_min_special_character">Mindestens %1$d der Sonderzeichen: \"%2$s\"</string>
   <string name="password_policy_error_password_banned">Leider wird das gewählte Passwort häufig verwendet. Bitte ein schwerer zu erratendes Passwort wählen, um die Sicherheit zu erhöhen.</string>
+  <string name="prefs_delete_local_files_entries_never">Nie</string>
 </resources>

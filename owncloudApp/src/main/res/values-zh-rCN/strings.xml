@@ -594,4 +594,5 @@
   <string name="tab_label_ascii">文本</string>
   <!--DeepLinks-->
   <string name="fab_refresh_text">刷新</string>
+  <string name="prefs_delete_local_files_entries_never">从不</string>
 </resources>
