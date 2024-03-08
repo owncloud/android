@@ -729,6 +729,8 @@
 
     <string name="release_notes_4_3_0_title_1">New setting to remove automatically downloaded files that were not used for a certain time</string>
     <string name="release_notes_4_3_0_subtitle_1">A new setting has been added in "Advanced" section to delete automatically downloaded files, when the time since their last usage exceeds the selected time in the setting</string>
+    <string name="release_notes_4_3_0_title_2">Automatic discovery of the account in login</string>
+    <string name="release_notes_4_3_0_subtitle_2">Removed the account refresh button in the Manage Accounts view, as automatic account discovery is done at login</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>

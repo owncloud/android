@@ -79,25 +79,6 @@
         app:layout_constraintTop_toBottomOf="@id/name" />
 
     <ImageView
-        android:id="@+id/refreshAccountButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="@string/actionbar_sync"
-        android:paddingLeft="@dimen/standard_half_padding"
-        android:paddingTop="@dimen/standard_padding"
-        android:paddingRight="@dimen/standard_half_padding"
-        android:paddingBottom="@dimen/standard_padding"
-        android:src="@drawable/ic_action_refresh"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/passwordButton"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/account"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black" />
-
-    <ImageView
         android:id="@+id/passwordButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

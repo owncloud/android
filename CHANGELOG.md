@@ -30,6 +30,7 @@ ownCloud admins and users.
 ## Summary
 
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
+* Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
 * Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
 * Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
 
@@ -42,6 +43,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4230
    https://github.com/owncloud/android/pull/4299
+
+* Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
+
+   Automatic account discovery is done at login. Removed the refresh account button
+   in the Manage Accounts view.
+
+   https://github.com/owncloud/android/issues/4301
+   https://github.com/owncloud/android/pull/4325
 
 * Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
 
