@@ -71,7 +71,7 @@
         android:layout_width="0dp"
         android:layout_height="44dp"
         android:layout_marginStart="8dp"
-        android:ellipsize="end"
+        android:ellipsize="middle"
         android:text="@string/placeholder_sentence"
         android:textColor="@color/textColor"
         android:textSize="14sp"
