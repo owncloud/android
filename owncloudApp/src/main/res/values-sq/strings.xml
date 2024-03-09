@@ -666,6 +666,8 @@
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
+  <string name="release_notes_4_3_0_title_1">Rregullim i ri, për heqje të automatizuar kartelash të shkarkuara që s’qenë përdorur për një farë kohe</string>
+  <string name="release_notes_4_3_0_subtitle_1">Te pjesa “Të thelluara” është shtuar një rregullim i ri për fshirje të automatizuar të kartelave të shkarkuara, kur koha që nga hera e fundit që qenë përdorur është më e madhe se koha e përzgjedhur te rregullimi në fjalë</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
@@ -697,4 +699,10 @@
   <string name="password_policy_min_special_character">Të paktën %1$d nga shenjat speciale: “%2$s”</string>
   <string name="password_policy_error_password_banned">Mjerisht fjalëkalimi juaj përdoret rëndom. Ju lutemi, për sigurinë tuaj zgjidhni një fjalëkalim më të vështirë për t’u hamendësuar.</string>
   <string name="prefs_delete_local_files_entries_never">Kurrë</string>
+  <string name="prefs_delete_local_files_entries_1hour">1 orë</string>
+  <string name="prefs_delete_local_files_entries_12hours">12 orë</string>
+  <string name="prefs_delete_local_files_entries_1day">1 ditë</string>
+  <string name="prefs_delete_local_files_entries_30days">30 ditë</string>
+  <string name="prefs_delete_local_files">Fshi kopje vendore</string>
+  <string name="prefs_delete_local_files_summary">Hiqi automatikisht kartelat e shkarkuara që s’janë të passhme jashtë linje, kur koha që nga përdorimi i fundit i tyre është më e madhe se koha e përzgjedhur.\nKohë e përzgjedhur: %1$s</string>
 </resources>

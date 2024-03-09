@@ -668,6 +668,8 @@
   <string name="release_notes_footer">Aitäh, et kasutad %1$si.\n❤</string>
   <string name="release_notes_proceed">Jätka</string>
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
+  <string name="release_notes_4_3_0_title_1">Uus seadistus automaatselt allalaaditud failide eemaldamiseks, mida teatud aja jooksul ei kasutatud.</string>
+  <string name="release_notes_4_3_0_subtitle_1">\"Lisavalikud\" jaotisse on lisatud uus seadistus automaatselt allalaaditud failide kustutamiseks, kui nende viimase kasutamise aeg ületab seadistuses valitud aja.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -699,4 +701,10 @@
   <string name="password_policy_min_special_character">Vähemalt %1$d erimärkidest: \"%2$s\"</string>
   <string name="password_policy_error_password_banned">Kahjuks on teie parool tavaliselt kasutatav. Palun valige oma turvalisuse huvides raskemini ära arvatav parool.</string>
   <string name="prefs_delete_local_files_entries_never">Mitte kunagi</string>
+  <string name="prefs_delete_local_files_entries_1hour">1 tund</string>
+  <string name="prefs_delete_local_files_entries_12hours">12 tundi</string>
+  <string name="prefs_delete_local_files_entries_1day">1 päev</string>
+  <string name="prefs_delete_local_files_entries_30days">30 päeva</string>
+  <string name="prefs_delete_local_files">Kustuta kohalikud koopiad</string>
+  <string name="prefs_delete_local_files_summary">Eemalda automaatselt allalaaditud failid, mis pole võrguühenduseta saadaval, kui nende viimase kasutamise aeg ületab valitud aja.\nValitud aeg: %1$s</string>
 </resources>

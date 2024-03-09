@@ -668,6 +668,8 @@
   <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Prosseguir</string>
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
+  <string name="release_notes_4_3_0_title_1">Nova configuração para remover arquivos baixados automaticamente que não foram usados ​​por um determinado tempo</string>
+  <string name="release_notes_4_3_0_subtitle_1">Uma nova configuração foi adicionada na seção \"Avançado\" para excluir arquivos baixados automaticamente, quando o tempo desde a última utilização exceder o tempo selecionado na configuração</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
@@ -699,4 +701,10 @@
   <string name="password_policy_min_special_character">Pelo menos %1$d dos caracteres especiais: \"%2$s\"</string>
   <string name="password_policy_error_password_banned">Infelizmente, sua senha é comumente usada. Por favor, escolha uma senha mais difícil de adivinhar para sua segurança.</string>
   <string name="prefs_delete_local_files_entries_never">Nunca</string>
+  <string name="prefs_delete_local_files_entries_1hour">1 hora</string>
+  <string name="prefs_delete_local_files_entries_12hours">12 horas</string>
+  <string name="prefs_delete_local_files_entries_1day">1 dia</string>
+  <string name="prefs_delete_local_files_entries_30days">30 dias</string>
+  <string name="prefs_delete_local_files">Excluir cópias locais</string>
+  <string name="prefs_delete_local_files_summary">Remova arquivos baixados automaticamente que não estão disponíveis off-line, quando o tempo desde a última utilização exceder o tempo selecionado.\nTempo selecionado: %1$s</string>
 </resources>
