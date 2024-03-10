@@ -668,6 +668,8 @@
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
   <string name="release_notes_4_3_0_title_1">Rregullim i ri, për heqje të automatizuar kartelash të shkarkuara që s’qenë përdorur për një farë kohe</string>
   <string name="release_notes_4_3_0_subtitle_1">Te pjesa “Të thelluara” është shtuar një rregullim i ri për fshirje të automatizuar të kartelave të shkarkuara, kur koha që nga hera e fundit që qenë përdorur është më e madhe se koha e përzgjedhur te rregullimi në fjalë</string>
+  <string name="release_notes_4_3_0_title_2">Zbulim i automatizuar i llogarisë gjatë hyrjes</string>
+  <string name="release_notes_4_3_0_subtitle_2">U hoq butoni i rifreskimit të llogarisë te pamja Administroni Llogari, ngaqë gjatë hyrjesh bëhet zbulim i automatizuar i llogarive</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
