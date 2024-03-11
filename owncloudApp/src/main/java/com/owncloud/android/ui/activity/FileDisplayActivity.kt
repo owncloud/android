@@ -381,7 +381,10 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun initAndShowListOfSpaces() {
-        val listOfSpaces = SpacesListFragment.newInstance(showPersonalSpace = false, accountName = com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(applicationContext).name)
+        val listOfSpaces = SpacesListFragment.newInstance(
+            showPersonalSpace = false,
+            accountName = com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(applicationContext).name
+        )
         this.fileListOption = FileListOption.SPACES_LIST
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, listOfSpaces, TAG_LIST_OF_SPACES)
@@ -1351,7 +1354,6 @@ class FileDisplayActivity : FileActivity(),
                     is UnauthorizedException -> {
                         launch(Dispatchers.IO) {
                             val credentials = AccountUtils.getCredentialsForAccount(MainApp.appContext, account)
-
                             launch(Dispatchers.Main) {
                                 if (credentials is OwnCloudBearerCredentials) { // OAuth
                                     showRequestRegainAccess()
@@ -1790,24 +1792,28 @@ class FileDisplayActivity : FileActivity(),
                     is UIResult.Loading -> {
                         showLoadingDialog(R.string.deep_link_loading)
                     }
+
                     is UIResult.Success -> {
                         intent?.data = null
                         dismissLoadingDialog()
                         uiResult.data?.let { it1 -> manageItem(it1) }
                     }
+
                     is UIResult.Error -> {
                         dismissLoadingDialog()
                         if (uiResult.error is FileNotFoundException) {
                             showMessageInSnackbar(message = getString(R.string.deep_link_user_no_access))
                             changeUser()
                         } else {
-                            showMessageInSnackbar(message = getString(
-                                if (uiResult.error is DeepLinkException) {
-                                    R.string.invalid_deep_link_format
-                                } else {
-                                    R.string.default_error_msg
-                                }
-                            ))
+                            showMessageInSnackbar(
+                                message = getString(
+                                    if (uiResult.error is DeepLinkException) {
+                                        R.string.invalid_deep_link_format
+                                    } else {
+                                        R.string.default_error_msg
+                                    }
+                                )
+                            )
                         }
                     }
                 }

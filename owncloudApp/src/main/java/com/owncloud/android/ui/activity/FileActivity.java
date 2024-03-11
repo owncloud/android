@@ -278,7 +278,7 @@ public class FileActivity extends DrawerActivity
                     .show();
         } else {
             Snackbar.make(findViewById(android.R.id.content), errorMessage, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.auth_failure_snackbar_action, v ->
+                    .setAction(R.string.auth_oauth_failure_snackbar_action, v ->
                             requestCredentialsUpdate())
                     .show();
         }
