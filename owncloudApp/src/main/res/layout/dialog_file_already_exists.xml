@@ -24,19 +24,13 @@
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/dialog_file_already_exists_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/dialog_file_already_exists_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:textAppearance="@android:style/TextAppearance.Material.DialogWindowTitle"
-                    tools:text="@tools:sample/lorem[8]" />
-            </LinearLayout>
+                android:layout_gravity="center_vertical"
+                android:textAppearance="@android:style/TextAppearance.Material.DialogWindowTitle"
+                tools:text="@tools:sample/lorem[8]" />
 
             <TextView
                 android:id="@+id/dialog_file_already_exists_information"
