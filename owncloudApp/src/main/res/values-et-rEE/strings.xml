@@ -670,6 +670,8 @@
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
   <string name="release_notes_4_3_0_title_1">Uus seadistus automaatselt allalaaditud failide eemaldamiseks, mida teatud aja jooksul ei kasutatud.</string>
   <string name="release_notes_4_3_0_subtitle_1">\"Lisavalikud\" jaotisse on lisatud uus seadistus automaatselt allalaaditud failide kustutamiseks, kui nende viimase kasutamise aeg ületab seadistuses valitud aja.</string>
+  <string name="release_notes_4_3_0_title_2">Konto automaatne tuvastamine sisselogimisel</string>
+  <string name="release_notes_4_3_0_subtitle_2">Eemaldati konto värskendamise nupp konto haldamise vaates, kuna konto tuvastatatakse sisselogimisel automaatselt</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
