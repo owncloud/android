@@ -1,0 +1,7 @@
+Enhancement: Improvements in Manage Accounts view
+
+Removed the key icon and avoid overlap account name with icons in Manage Accounts.
+Redirect to login when snackbar appears in authentication failure.
+
+https://github.com/owncloud/android/issues/4148
+https://github.com/owncloud/android/pull/4330

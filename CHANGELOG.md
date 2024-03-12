@@ -31,6 +31,7 @@ ownCloud admins and users.
 
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 * Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
+* Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
 * Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
 * Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
 
@@ -51,6 +52,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4301
    https://github.com/owncloud/android/pull/4325
+
+* Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
+
+   Removed the key icon and avoid overlap account name with icons in Manage
+   Accounts. Redirect to login when snackbar appears in authentication failure.
+
+   https://github.com/owncloud/android/issues/4148
+   https://github.com/owncloud/android/pull/4330
 
 * Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
 
