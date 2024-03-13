@@ -104,7 +104,6 @@
   <string name="recommend_subject">Изпробвайте %1$s на своя смартфон!</string>
   <string name="recommend_text">Бих искал да те поканя да използваш %1$s на своя смартфон!\nИзтегли го от тук: %2$s</string>
   <string name="error_reason">защото</string>
-  <string name="auth_failure_snackbar">Удостоверяването е неуспешно</string>
   <string name="auth_failure_snackbar_action">Промяна на профила</string>
   <string name="auth_oauth_failure_snackbar_action">Регистрация</string>
   <string name="auth_check_server">Проверка на сървъра</string>

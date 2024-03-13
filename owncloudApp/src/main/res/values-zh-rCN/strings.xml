@@ -120,7 +120,6 @@
   <string name="recommend_subject">在您的智能手机上试用 %1$s！</string>
   <string name="recommend_text">我邀请你在智能手机上使用 %1$s\n下载路径：%2$s</string>
   <string name="error_reason">因为</string>
-  <string name="auth_failure_snackbar">认证失败</string>
   <string name="server_not_supported">不支持版本低于10的服务器，请升级你的服务器</string>
   <string name="auth_failure_snackbar_action">更换账户</string>
   <string name="auth_oauth_failure">访问令牌过期或失效，请重新登录以获得访问权限</string>

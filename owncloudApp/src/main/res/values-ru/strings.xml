@@ -105,7 +105,6 @@
   <string name="recommend_text">Хочу предложить вам использовать %1$s на смартфоне!\nЗагрузить можно здесь: %2$s
 	</string>
   <string name="error_reason">поскольку</string>
-  <string name="auth_failure_snackbar">Аутентификация не удалась</string>
   <string name="auth_failure_snackbar_action">Измените учётную запись</string>
   <string name="auth_oauth_failure_snackbar_action">Войти</string>
   <string name="auth_check_server">Проверить сервер</string>

@@ -124,7 +124,6 @@
   <string name="recommend_text">スマートフォンで %1$s を利用してみませんか！
 ここからダウンロードしてください: %2$s</string>
   <string name="error_reason">だから</string>
-  <string name="auth_failure_snackbar">認証失敗</string>
   <string name="server_not_supported">サーバーのバージョンが10より低いため、サポートされていません。</string>
   <string name="auth_failure_snackbar_action">アカウント変更</string>
   <string name="auth_oauth_failure">アクセストークンの有効期限が切れたか、無効になっています。再度サインインしてください。</string>

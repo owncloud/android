@@ -109,7 +109,6 @@
   <string name="recommend_subject">%1$s을(를) 스마트폰에서 사용해 보세요!</string>
   <string name="recommend_text">%1$s을(를) 스마트폰에서 사용해 보는 것을 추천합니다!\n다운로드 링크: %2$s</string>
   <string name="error_reason">이유: </string>
-  <string name="auth_failure_snackbar">인증 실패</string>
   <string name="auth_failure_snackbar_action">계정 변경</string>
   <string name="auth_oauth_failure_snackbar_action">로그인</string>
   <string name="auth_check_server">서버 확인</string>

@@ -105,7 +105,6 @@
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
   <string name="error_reason">debido a </string>
-  <string name="auth_failure_snackbar">Fallo en la autenticación</string>
   <string name="auth_failure_snackbar_action">Cambiar cuenta</string>
   <string name="auth_oauth_failure_snackbar_action">Registrarse</string>
   <string name="auth_check_server">Verificar servidor</string>

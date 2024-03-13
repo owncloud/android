@@ -115,7 +115,6 @@
   <string name="recommend_text">J\'aimerais vous inviter à utiliser %1$s sur votre smartphone !
 Téléchargez-le ici : %2$s</string>
   <string name="error_reason">parce que</string>
-  <string name="auth_failure_snackbar">Connexion échouée</string>
   <string name="server_not_supported">Votre serveur a une version inférieure à 10 qui n\'est plus supportée. Merci de mettre à jour votre serveur vers la dernière version</string>
   <string name="auth_failure_snackbar_action">Changer de compte</string>
   <string name="auth_oauth_failure">Le jeton d\'accès de la connexion a expiré ou est devenu invalide. Connectez-vous à nouveau pour rétablir l\'accès.</string>

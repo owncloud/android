@@ -123,7 +123,6 @@
   <string name="recommend_subject">Try %1$s on your smartphone!</string>
   <string name="recommend_text">I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s</string>
   <string name="error_reason">because</string>
-  <string name="auth_failure_snackbar">Authentication failed</string>
   <string name="server_not_supported">Your server version is lower than 10 so it is not supported, please upgrade your server to a newer version.</string>
   <string name="auth_failure_snackbar_action">Change account</string>
   <string name="auth_oauth_failure">The access token has expired or become invalid. Sign in again to regain access.</string>

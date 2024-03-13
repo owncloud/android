@@ -123,7 +123,6 @@
   <string name="recommend_subject">Proovi oma nutitelefonil rakendust %1$s!</string>
   <string name="recommend_text">Kutsun sind kasutama oma nutitelefonis rakendust %1$s!\nLaadi see alla siit: %2$s</string>
   <string name="error_reason">sest</string>
-  <string name="auth_failure_snackbar">Autentimine ebaõnnestus</string>
   <string name="server_not_supported">Sinu serveri versioon on väiksem kui 10 ning pole seega toetatud, palun uuenda server uuemale versioonile.</string>
   <string name="auth_failure_snackbar_action">Muuda kontot</string>
   <string name="auth_oauth_failure">Ligipääsutõend on aegunud või kehtivuse kaotanud. Ligipääsemiseks logi uuesti sisse.</string>

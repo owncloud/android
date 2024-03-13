@@ -108,7 +108,6 @@
   <string name="recommend_subject">%1$s uygulamasını akıllı telefonunda dene!</string>
   <string name="recommend_text">Seni, akıllı telefonunda %1$s kullanmaya davet ediyorum!\nBuradan indirebilirsin: %2$s</string>
   <string name="error_reason">çünkü</string>
-  <string name="auth_failure_snackbar">Kimlik doğrulaması başarısız oldu.</string>
   <string name="auth_failure_snackbar_action">Hesabı değiştir</string>
   <string name="auth_oauth_failure_snackbar_action">Oturum aç</string>
   <string name="auth_check_server">Sunucuyu denetle</string>
