@@ -1,0 +1,6 @@
+Enhancement: Make dialog more Android-alike
+
+Name conflicts dialog appearance was changed to look Android-alike and more similar to other dialogs in the app.
+
+https://github.com/owncloud/android/issues/4303
+https://github.com/owncloud/android/pull/4336

@@ -34,6 +34,7 @@ ownCloud admins and users.
 * Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
 * Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
 * Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
+* Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
 
 ## Details
 
@@ -76,6 +77,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4232
    https://github.com/owncloud/android/pull/4281
+
+* Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
+
+   Name conflicts dialog appearance was changed to look Android-alike and more
+   similar to other dialogs in the app.
+
+   https://github.com/owncloud/android/issues/4303
+   https://github.com/owncloud/android/pull/4336
 
 # Changelog for ownCloud Android Client [4.2.1] (2024-02-22)
 
