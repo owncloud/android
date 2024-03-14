@@ -122,6 +122,7 @@
   <string name="recommend_subject">Provojeni %1$s te telefoni juaj!</string>
   <string name="recommend_text">Dua t\’ju ftoj të përdorni %1$s në telefonin tuaj!\nShkarkojeni prej këtu: %2$s</string>
   <string name="error_reason">ngaqë</string>
+  <string name="auth_failure_snackbar">Mirëfilltësimi dështoi. Ribëni hyrjen, që të rifitoni mundësi përdorimi.</string>
   <string name="server_not_supported">Versioni i shërbyesit tuaj është më i vogël se 10, ndaj nuk mbulohet, ju lutemi, përmirësoni shërbyesin tuaj me version më të ri.</string>
   <string name="auth_failure_snackbar_action">Ndryshoni llogari</string>
   <string name="auth_oauth_failure">Token-i i hyrjeve ka skaduar ose është bërë i pavlefshëm. Ribëni hyrjen në llogari që të rifitoni mundësinë e përdorimit.</string>
@@ -669,6 +670,8 @@
   <string name="release_notes_4_3_0_subtitle_1">Te pjesa “Të thelluara” është shtuar një rregullim i ri për fshirje të automatizuar të kartelave të shkarkuara, kur koha që nga hera e fundit që qenë përdorur është më e madhe se koha e përzgjedhur te rregullimi në fjalë</string>
   <string name="release_notes_4_3_0_title_2">Zbulim i automatizuar i llogarisë gjatë hyrjes</string>
   <string name="release_notes_4_3_0_subtitle_2">U hoq butoni i rifreskimit të llogarisë te pamja Administroni Llogari, ngaqë gjatë hyrjesh bëhet zbulim i automatizuar i llogarive</string>
+  <string name="release_notes_4_3_0_title_3">Përmirësime te pamje Administroni Llogari</string>
+  <string name="release_notes_4_3_0_subtitle_3">U hoq ikonë dryni, për shmangie mbivendosjeje emri llogarie me ikona dhe ridrejtim te hyrje në llogari, kur në dështim mirëfilltësimi shfaqet “snackbar”-i</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
