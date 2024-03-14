@@ -179,6 +179,10 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private OCSharedPreferencesProvider sharedPreferencesProvider;
     private OCSpace personalSpace;
 
+    private boolean isInSpacesList;
+
+    private MenuItem menuItem;
+
     Pattern pattern = Pattern.compile("[/\\\\]");
 
     private ReceiveExternalFilesViewModel mReceiveExternalFilesViewModel;
@@ -236,7 +240,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     updateToolbar(getString(R.string.uploader_top_message));
                 }
             } else { // OCIS Server
-
                 if (haveMultiAccount) { // Multi account
                     mListView = findViewById(android.R.id.list);
                     fragmentContainer = findViewById(R.id.fragment_container);
@@ -292,6 +295,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         uploaderButton = findViewById(R.id.uploader_choose_folder);
         uploaderButton.setVisibility(View.GONE);
         updateToolbar(getString(R.string.choose_upload_space));
+        isInSpacesList = true;
     }
 
     private void initPickerListener() {
@@ -529,6 +533,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     private void updateDirectoryList() {
+        isInSpacesList = false;
         initToolbar(mParents.peek());
 
         String full_path = generatePath(mParents);
@@ -753,12 +758,14 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-
-        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        menuItem = menu.findItem(R.id.action_search);
+        mSearchView = (SearchView) menuItem.getActionView();
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
         mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
         mSearchView.setOnQueryTextListener(this);
-
+        if (isInSpacesList) {
+            menuItem.setVisible(false);
+        }
         menu.removeItem(menu.findItem(R.id.action_share_current_folder).getItemId());
 
         return true;
