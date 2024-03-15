@@ -261,6 +261,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     private void showListOfFiles() {
+        isInSpacesList = false;
         fragmentContainer = findViewById(R.id.fragment_container);
         mListView = findViewById(android.R.id.list);
         fragmentContainer.setVisibility(View.GONE);
@@ -533,7 +534,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     private void updateDirectoryList() {
-        isInSpacesList = false;
         initToolbar(mParents.peek());
 
         String full_path = generatePath(mParents);
