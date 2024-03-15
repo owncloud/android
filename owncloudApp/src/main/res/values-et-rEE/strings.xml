@@ -674,6 +674,8 @@
   <string name="release_notes_4_3_0_subtitle_2">Eemaldati konto värskendamise nupp konto haldamise vaates, kuna konto tuvastatatakse sisselogimisel automaatselt</string>
   <string name="release_notes_4_3_0_title_3">Täiustused kontode haldamise vaates</string>
   <string name="release_notes_4_3_0_subtitle_3">Eemaldatud on võtme ikoon, välditud on konto nime kattumist ikoonidega ning sisselogimisele ümbersuunamisega kui ilmub hüpikmenüü autentimisveaga</string>
+  <string name="release_notes_4_3_0_title_4">Nimekonfliktide dialoog sarnaneb rohkem Android-keskkonnaga</string>
+  <string name="release_notes_4_3_0_subtitle_4">Nimekonfliktide dialoogi välimus muudeti rohke Android-keskkonnale ja teistele rakenduse dialoogidele sarnasemaks</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
