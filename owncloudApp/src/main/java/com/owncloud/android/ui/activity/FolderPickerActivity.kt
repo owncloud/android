@@ -159,14 +159,18 @@ open class FolderPickerActivity : FileActivity(),
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
-        val menuItem = menu!!.findItem(R.id.action_search)
-        val searchView = menuItem.getActionView() as SearchView
-        searchView.maxWidth = Int.MAX_VALUE
-        searchView.queryHint = resources.getString(R.string.actionbar_search)
-        if (isInSpacesScreen) {
-            menuItem.setVisible(false)
+        menu?.let {
+            it.findItem(R.id.action_search)?.let { menuItem ->
+                (menuItem.actionView as? SearchView)?.apply {
+                    maxWidth = Int.MAX_VALUE
+                    queryHint = resources.getString(R.string.actionbar_search)
+                }
+                if (isInSpacesScreen) {
+                    menuItem.isVisible = false
+                }
+            }
+            menu.removeItem(menu.findItem(R.id.action_share_current_folder)?.itemId ?: 0)
         }
-        menu!!.removeItem(menu!!.findItem(R.id.action_share_current_folder).itemId)
         return true
     }
 
