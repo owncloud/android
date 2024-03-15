@@ -736,7 +736,7 @@
     <string name="release_notes_4_3_0_title_4">Name conflicts dialog more Android-alike</string>
     <string name="release_notes_4_3_0_subtitle_4">Name conflicts dialog appearance was changed to look Android-alike and more similar to other dialogs in the app</string>
     <string name="release_notes_4_3_0_title_5">Lens icon in folder picker</string>
-    <string name="release_notes_4_3_0_subtitle_5">The lens icon in the toolbar was removed in folder picker</string>
+    <string name="release_notes_4_3_0_subtitle_5">The lens icon in the toolbar was removed when listing spaces in folder picker</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
