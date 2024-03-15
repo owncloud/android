@@ -57,9 +57,6 @@ open class FolderPickerActivity : FileActivity(),
 
     private var isInSpacesScreen: Boolean = false
 
-    private lateinit var menuItem: MenuItem
-
-    private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("onCreate() start")
@@ -162,8 +159,8 @@ open class FolderPickerActivity : FileActivity(),
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
-        menuItem = menu!!.findItem(R.id.action_search)
-        searchView = menuItem.getActionView() as SearchView
+        val menuItem = menu!!.findItem(R.id.action_search)
+        val searchView = menuItem.getActionView() as SearchView
         searchView.maxWidth = Int.MAX_VALUE
         searchView.queryHint = resources.getString(R.string.actionbar_search)
         if (isInSpacesScreen) {

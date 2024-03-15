@@ -181,8 +181,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private boolean isInSpacesList;
 
-    private MenuItem menuItem;
-
     Pattern pattern = Pattern.compile("[/\\\\]");
 
     private ReceiveExternalFilesViewModel mReceiveExternalFilesViewModel;
@@ -758,7 +756,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        menuItem = menu.findItem(R.id.action_search);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
         mSearchView = (SearchView) menuItem.getActionView();
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
         mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
