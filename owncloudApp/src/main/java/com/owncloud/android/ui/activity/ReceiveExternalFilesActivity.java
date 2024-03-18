@@ -141,7 +141,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private String mUploadPath;
     private OCFile mFile;
     private SortOptionsView mSortOptionsView;
-    private SearchView mSearchView;
 
     private View mEmptyListView;
     private ImageView mEmptyListImage;
@@ -757,7 +756,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.action_search);
-        mSearchView = (SearchView) menuItem.getActionView();
+        SearchView mSearchView = (SearchView) menuItem.getActionView();
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
         mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
         mSearchView.setOnQueryTextListener(this);
