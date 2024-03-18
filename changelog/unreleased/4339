@@ -1,0 +1,6 @@
+Bugfix: Remove lens icon in folder picker
+
+The lens icon in the toolbar was removed only in the spaces screen.
+
+https://github.com/owncloud/android/issues/4311
+https://github.com/owncloud/android/pull/4339

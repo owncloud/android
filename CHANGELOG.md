@@ -29,6 +29,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Remove lens icon in folder picker: [#4311](https://github.com/owncloud/android/issues/4311)
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 * Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
 * Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
@@ -37,6 +38,13 @@ ownCloud admins and users.
 * Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
 
 ## Details
+
+* Bugfix - Remove lens icon in folder picker: [#4311](https://github.com/owncloud/android/issues/4311)
+
+   The lens icon in the toolbar was removed only in the spaces screen.
+
+   https://github.com/owncloud/android/issues/4311
+   https://github.com/owncloud/android/pull/4339
 
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 

@@ -29,6 +29,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.databinding.FilesFolderPickerBinding
@@ -53,6 +54,9 @@ open class FolderPickerActivity : FileActivity(),
     private lateinit var pickerMode: PickerMode
 
     private lateinit var binding: FilesFolderPickerBinding
+
+    private var isInSpacesScreen: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.d("onCreate() start")
@@ -155,6 +159,17 @@ open class FolderPickerActivity : FileActivity(),
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+        menu?.let {
+            val menuItem = it.findItem(R.id.action_search)
+            (menuItem.actionView as SearchView).apply {
+                maxWidth = Int.MAX_VALUE
+                queryHint = resources.getString(R.string.actionbar_search)
+            }
+            if (isInSpacesScreen) {
+                menuItem.isVisible = false
+            }
+            it.removeItem(it.findItem(R.id.action_share_current_folder)?.itemId ?: 0)
+        }
         return true
     }
 
@@ -237,6 +252,7 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     private fun initAndShowListOfFilesFragment(spaceId: String? = null) {
+        isInSpacesScreen = false
         val safeInitialFolder = if (file == null) {
             if (account == null) {
                 account = AccountUtils.getCurrentOwnCloudAccount(applicationContext)
@@ -270,6 +286,7 @@ open class FolderPickerActivity : FileActivity(),
         transaction.replace(R.id.fragment_container, listOfSpaces)
         transaction.commit()
         binding.folderPickerBtnChoose.isVisible = false
+        isInSpacesScreen = true
     }
 
     /**
@@ -378,3 +395,4 @@ open class FolderPickerActivity : FileActivity(),
         private const val TAG_LIST_OF_FOLDERS = "LIST_OF_FOLDERS"
     }
 }
+
