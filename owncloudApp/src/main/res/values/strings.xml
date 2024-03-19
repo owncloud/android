@@ -783,4 +783,7 @@
     <string name="prefs_delete_local_files">Delete local copies</string>
     <string name="prefs_delete_local_files_summary">Remove automatically downloaded files that are not available offline, when the time since their last usage exceeds the selected time.\nSelected time: %1$s</string>
 
+    <string name="title_dialog_insecure_http_url">Insecure HTTP URL</string>
+    <string name="message_dialog_insecure_http_url">The URL you provided uses HTTP rather than the encrypted HTTPS protocol. If you continue, your communication will not be encrypted.</string>
+
 </resources>

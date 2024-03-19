@@ -9,6 +9,7 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2024 ownCloud GmbH.
@@ -32,6 +33,7 @@ import android.accounts.Account
 import android.accounts.AccountAuthenticatorResponse
 import android.accounts.AccountManager
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -325,6 +327,7 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
     private fun getServerInfoIsSuccess(uiResult: UIResult.Success<ServerInfo>) {
         updateCenteredRefreshButtonVisibility(shouldBeVisible = false)
         uiResult.data?.run {
+            val serverInfo = this
             serverBaseUrl = baseUrl
             binding.hostUrlInput.run {
                 setText(baseUrl)
@@ -345,53 +348,67 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                 if (isSecureConnection) {
                     text = getString(R.string.auth_secure_connection)
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, 0, 0)
+                    checkServerType(serverInfo)
                 } else {
                     text = getString(R.string.auth_connection_established)
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_open, 0, 0, 0)
+                    val builder = AlertDialog.Builder(context)
+                    builder.apply {
+                        setTitle(context.getString(R.string.title_dialog_insecure_http_url))
+                        setMessage(context.getString(R.string.message_dialog_insecure_http_url))
+                        setPositiveButton("Continue") { dialog, which ->
+                            checkServerType(serverInfo)
+                        }
+                        setNegativeButton("Cancel", null)
+                        setCancelable(false)
+                        show()
+                    }
                 }
                 isVisible = true
             }
+        }
+    }
 
-            when (this) {
-                is ServerInfo.BasicServer -> {
-                    authTokenType = BASIC_TOKEN_TYPE
-                    oidcSupported = false
-                    showOrHideBasicAuthFields(shouldBeVisible = true)
-                    binding.accountUsername.doAfterTextChanged { updateLoginButtonVisibility() }
-                    binding.accountPassword.doAfterTextChanged { updateLoginButtonVisibility() }
+    private fun checkServerType(serverInfo: ServerInfo) {
+        when (serverInfo) {
+            is ServerInfo.BasicServer -> {
+                authTokenType = BASIC_TOKEN_TYPE
+                oidcSupported = false
+                showOrHideBasicAuthFields(shouldBeVisible = true)
+                binding.accountUsername.doAfterTextChanged { updateLoginButtonVisibility() }
+                binding.accountPassword.doAfterTextChanged { updateLoginButtonVisibility() }
+            }
+
+            is ServerInfo.OAuth2Server -> {
+                showOrHideBasicAuthFields(shouldBeVisible = false)
+                authTokenType = OAUTH_TOKEN_TYPE
+                oidcSupported = false
+
+                val oauth2authorizationEndpoint =
+                    Uri.parse("$serverBaseUrl${File.separator}${getString(R.string.oauth2_url_endpoint_auth)}")
+                performGetAuthorizationCodeRequest(oauth2authorizationEndpoint)
+            }
+
+            is ServerInfo.OIDCServer -> {
+                showOrHideBasicAuthFields(shouldBeVisible = false)
+                authTokenType = OAUTH_TOKEN_TYPE
+                oidcSupported = true
+                val registrationEndpoint = serverInfo.oidcServerConfiguration.registrationEndpoint
+                if (registrationEndpoint != null) {
+                    registerClient(
+                        authorizationEndpoint = serverInfo.oidcServerConfiguration.authorizationEndpoint.toUri(),
+                        registrationEndpoint = registrationEndpoint
+                    )
+                } else {
+                    performGetAuthorizationCodeRequest(serverInfo.oidcServerConfiguration.authorizationEndpoint.toUri())
                 }
+            }
 
-                is ServerInfo.OAuth2Server -> {
-                    showOrHideBasicAuthFields(shouldBeVisible = false)
-                    authTokenType = OAUTH_TOKEN_TYPE
-                    oidcSupported = false
-
-                    val oauth2authorizationEndpoint =
-                        Uri.parse("$baseUrl${File.separator}${getString(R.string.oauth2_url_endpoint_auth)}")
-                    performGetAuthorizationCodeRequest(oauth2authorizationEndpoint)
-                }
-
-                is ServerInfo.OIDCServer -> {
-                    showOrHideBasicAuthFields(shouldBeVisible = false)
-                    authTokenType = OAUTH_TOKEN_TYPE
-                    oidcSupported = true
-                    val registrationEndpoint = oidcServerConfiguration.registrationEndpoint
-                    if (registrationEndpoint != null) {
-                        registerClient(
-                            authorizationEndpoint = oidcServerConfiguration.authorizationEndpoint.toUri(),
-                            registrationEndpoint = registrationEndpoint
-                        )
-                    } else {
-                        performGetAuthorizationCodeRequest(oidcServerConfiguration.authorizationEndpoint.toUri())
-                    }
-                }
-
-                else -> {
-                    binding.serverStatusText.run {
-                        text = getString(R.string.auth_unsupported_auth_method)
-                        setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
-                        isVisible = true
-                    }
+            else -> {
+                binding.serverStatusText.run {
+                    text = getString(R.string.auth_unsupported_auth_method)
+                    setCompoundDrawablesWithIntrinsicBounds(R.drawable.common_error, 0, 0, 0)
+                    isVisible = true
                 }
             }
         }
