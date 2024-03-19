@@ -737,6 +737,8 @@
     <string name="release_notes_4_3_0_subtitle_4">Name conflicts dialog appearance was changed to look Android-alike and more similar to other dialogs in the app</string>
     <string name="release_notes_4_3_0_title_5">Lens icon in folder picker</string>
     <string name="release_notes_4_3_0_subtitle_5">The lens icon in the toolbar was removed when listing spaces in folder picker</string>
+    <string name="release_notes_4_3_0_title_6">Add warning in http connections</string>
+    <string name="release_notes_4_3_0_subtitle_6">Added a warning dialog in the login screen when it is a http connection</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
