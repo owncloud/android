@@ -29,6 +29,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Clear data button enabled in the App info: [#4309](https://github.com/owncloud/android/issues/4309)
 * Bugfix - Remove lens icon in folder picker: [#4311](https://github.com/owncloud/android/issues/4311)
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 * Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
@@ -40,6 +41,15 @@ ownCloud admins and users.
 * Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
 
 ## Details
+
+* Bugfix - Clear data button enabled in the App info: [#4309](https://github.com/owncloud/android/issues/4309)
+
+   Enabled the clear data button to delete the application data from the App info
+   in the Settings app. Shared preferences, temporary files and the local database
+   will be cleared when the button is pressed.
+
+   https://github.com/owncloud/android/issues/4309
+   https://github.com/owncloud/android/pull/4343
 
 * Bugfix - Remove lens icon in folder picker: [#4311](https://github.com/owncloud/android/issues/4311)
 
