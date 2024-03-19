@@ -1,0 +1,6 @@
+Enhancement: Add a warning in http connections
+
+Warning dialog has been added in the login screen when you are trying to connect to a http server.
+
+https://github.com/owncloud/android/issues/4284
+https://github.com/owncloud/android/pull/4345
