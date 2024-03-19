@@ -8,9 +8,10 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -83,6 +84,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.SyncProfileOperation
 import com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount
+import com.owncloud.android.presentation.authentication.AuthenticationViewModel
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
@@ -171,6 +173,7 @@ class FileDisplayActivity : FileActivity(),
 
     private var localBroadcastManager: LocalBroadcastManager? = null
 
+    private val authenticationViewModel: AuthenticationViewModel by viewModel()
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
     private val transfersViewModel: TransfersViewModel by viewModel()
 
@@ -1393,8 +1396,23 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
+    private fun onDiscoveryAccountOperationFinish(uiResult: UIResult<Unit>) {
+        when (uiResult) {
+            is UIResult.Loading -> showLoadingDialog(R.string.common_loading)
+            is UIResult.Success -> reLaunchFileDisplayActivity()
+            is UIResult.Error -> {
+                showErrorInSnackbar(R.string.common_error_unknown, uiResult.error)
+            }
+        }
+    }
+
+    private fun reLaunchFileDisplayActivity() {
+        val newIntent = Intent(this, FileDisplayActivity::class.java)
+        startActivity(newIntent)
+    }
+
     override fun onSavedCertificate() {
-        startSyncFolderOperation(currentDir, false)
+        authenticationViewModel.discoverAccount(accountName = account.name, discoveryNeeded = true)
     }
 
     /**
@@ -1697,6 +1715,9 @@ class FileDisplayActivity : FileActivity(),
         })
         fileOperationsViewModel.syncFolderLiveData.observe(this, Event.EventObserver {
             onSynchronizeFolderOperationFinish(it)
+        })
+        authenticationViewModel.accountDiscovery.observe(this, Event.EventObserver {
+            onDiscoveryAccountOperationFinish(it)
         })
     }
 
