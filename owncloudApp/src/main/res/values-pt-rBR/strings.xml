@@ -676,6 +676,8 @@
   <string name="release_notes_4_3_0_subtitle_3">Removido o ícone de chave, evita sobreposição do nome da conta com ícones e redireciona para login quando a snackbar aparece em falha de autenticação</string>
   <string name="release_notes_4_3_0_title_4">Caixa de diálogo de conflitos de nome mais semelhante ao Android</string>
   <string name="release_notes_4_3_0_subtitle_4">A aparência da caixa de diálogo de conflitos de nome foi alterada para se parecer com o Android e mais semelhante a outras caixas de diálogo no aplicativo</string>
+  <string name="release_notes_4_3_0_title_5">Ícone lente no seletor de pastas</string>
+  <string name="release_notes_4_3_0_subtitle_5">O ícone lente na barra de ferramentas foi removido ao listar espaços no seletor de pastas</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>

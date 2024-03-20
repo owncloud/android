@@ -676,6 +676,8 @@
   <string name="release_notes_4_3_0_subtitle_3">Eemaldatud on võtme ikoon, välditud on konto nime kattumist ikoonidega ning sisselogimisele ümbersuunamisega kui ilmub hüpikmenüü autentimisveaga</string>
   <string name="release_notes_4_3_0_title_4">Nimekonfliktide dialoog sarnaneb rohkem Android-keskkonnaga</string>
   <string name="release_notes_4_3_0_subtitle_4">Nimekonfliktide dialoogi välimus muudeti rohke Android-keskkonnale ja teistele rakenduse dialoogidele sarnasemaks</string>
+  <string name="release_notes_4_3_0_title_5">Läätse ikoon kaustade valijal</string>
+  <string name="release_notes_4_3_0_subtitle_5">Ruumide nimekirjas kaustade valijal eemaldati tööriistaribalt läätse ikoon</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
