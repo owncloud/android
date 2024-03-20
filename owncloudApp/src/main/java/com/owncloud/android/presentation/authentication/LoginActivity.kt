@@ -354,12 +354,12 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                     setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_open, 0, 0, 0)
                     val builder = AlertDialog.Builder(context)
                     builder.apply {
-                        setTitle(context.getString(R.string.title_dialog_insecure_http_url))
-                        setMessage(context.getString(R.string.message_dialog_insecure_http_url))
-                        setPositiveButton("Continue") { dialog, which ->
+                        setTitle(context.getString(R.string.insecure_http_url_title_dialog))
+                        setMessage(context.getString(R.string.insecure_http_url_message_dialog))
+                        setPositiveButton(R.string.insecure_http_url_continue_button) { dialog, which ->
                             checkServerType(serverInfo)
                         }
-                        setNegativeButton("Cancel", null)
+                        setNegativeButton(android.R.string.cancel, null)
                         setCancelable(false)
                         show()
                     }
