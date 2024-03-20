@@ -28,13 +28,21 @@ private val charsetDigits = ('0'..'9').toList()
 private val charsetSpecial = listOf('!', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']','^', '_', '`', '{', '|', '}' ,'~')
 
 fun generatePassword(
-    minCharacters: Int = 8,
-    maxCharacters: Int = 72,
-    minDigits: Int = 1,
-    minLowercaseCharacters: Int = 1,
-    minUppercaseCharacters: Int = 1,
-    minSpecialCharacters: Int = 1,
+    minChars: Int?,
+    maxChars: Int?,
+    minDigitsChars: Int?,
+    minLowercaseChars: Int?,
+    minUppercaseChars: Int?,
+    minSpecialChars: Int?,
 ): String {
+    // If params are null or 0 (N/A), they are set a value by default
+    val minCharacters = if (minChars == null || minChars == 0) 8 else minChars
+    val maxCharacters = if (maxChars == null || maxChars == 0) 72 else maxChars
+    val minDigits = if (minDigitsChars == null || minDigitsChars == 0) 1 else minDigitsChars
+    val minLowercaseCharacters = if (minLowercaseChars == null || minLowercaseChars == 0) 1 else minLowercaseChars
+    val minUppercaseCharacters = if (minUppercaseChars == null || minUppercaseChars == 0) 1 else minUppercaseChars
+    val minSpecialCharacters = if (minSpecialChars == null || minSpecialChars == 0) 1 else minSpecialChars
+
     val secureRandom = SecureRandom()
 
     // Determine the number of characters to generate randomly within the provided range
