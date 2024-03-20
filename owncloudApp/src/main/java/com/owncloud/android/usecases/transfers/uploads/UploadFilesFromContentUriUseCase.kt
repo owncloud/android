@@ -82,7 +82,7 @@ class UploadFilesFromContentUriUseCase(
             accountName = accountName,
             fileSize = documentFile.length(),
             status = TransferStatus.TRANSFER_QUEUED,
-            localBehaviour = UploadBehavior.COPY,
+            localBehaviour = UploadBehavior.MOVE,
             forceOverwrite = false,
             createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER,
             spaceId = spaceId,
