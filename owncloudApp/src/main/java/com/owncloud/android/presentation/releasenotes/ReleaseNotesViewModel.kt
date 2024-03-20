@@ -79,7 +79,12 @@ class ReleaseNotesViewModel(
                 title = R.string.release_notes_4_3_0_title_7,
                 subtitle = R.string.release_notes_4_3_0_subtitle_7,
                 type = ReleaseNoteType.ENHANCEMENT
-            )
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_retried_successful_uploads_delete_temporary_folder,
+                subtitle = R.string.release_notes_4_3_0_subtitle_retried_successful_uploads_delete_temporary_folder,
+                type = ReleaseNoteType.BUGFIX,
+            ),
         )
     }
 }
