@@ -359,7 +359,9 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
                         setPositiveButton(R.string.insecure_http_url_continue_button) { dialog, which ->
                             checkServerType(serverInfo)
                         }
-                        setNegativeButton(android.R.string.cancel, null)
+                        setNegativeButton(android.R.string.cancel) { dialog, which ->
+                            showOrHideBasicAuthFields(shouldBeVisible = false)
+                        }
                         setCancelable(false)
                         show()
                     }
