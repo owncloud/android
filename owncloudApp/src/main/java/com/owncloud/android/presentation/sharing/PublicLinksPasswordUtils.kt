@@ -25,7 +25,7 @@ import java.security.SecureRandom
 private val charsetLowercase = ('a'..'z').toList()
 private val charsetUppercase = ('A'..'Z').toList()
 private val charsetDigits = ('0'..'9').toList()
-private val charsetSpecial = listOf('!', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']','^', '_', '`', '{', '|', '}' ,'~')
+private val charsetSpecial = listOf('!', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~')
 
 fun generatePassword(
     minChars: Int?,
