@@ -473,8 +473,7 @@
   <string name="manage_space_clear_data">Изчистване на данни</string>
   <string name="manage_space_error">Някой файлове не могат да бъдат изтрити</string>
   <string name="local_file_not_found_toast">Файлът не беше намерен в локалната файлова система</string>
-  <string name="confirmation_remove_files_alert">Наистина ли желаете да премахнете избраните обекти?</string>
-  <string name="confirmation_remove_folders_alert">Наистина ли желаете да премахнете избраните обекти и тяхното съдържание?</string>
+    <string name="confirmation_remove_folders_alert">Наистина ли желаете да премахнете избраните обекти и тяхното съдържание?</string>
   <string name="failed_upload_quota_exceeded_text">Няма достатъчно място в профила</string>
   <string name="auth_forbidden">Забранено удостоверяване</string>
   <string name="actionbar_privacy_policy">Политика за поверителност</string>

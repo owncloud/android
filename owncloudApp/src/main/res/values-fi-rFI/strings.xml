@@ -414,8 +414,7 @@
   <string name="manage_space_clear_data">Tyhjennä tiedot</string>
   <string name="manage_space_error">Joitain tiedostoja ei voitu poistaa.</string>
   <string name="local_file_not_found_toast">Tiedostoa ei löytynyt paikallisesta tiedostojärjestelmästä</string>
-  <string name="confirmation_remove_files_alert">Haluatko varmasti poistaa valitut kohteet?</string>
-  <string name="confirmation_remove_folders_alert">Haluatko varmasti poistaa valitut kohteet ja niiden sisällön?</string>
+    <string name="confirmation_remove_folders_alert">Haluatko varmasti poistaa valitut kohteet ja niiden sisällön?</string>
   <string name="failed_upload_quota_exceeded_text">Tällä tilillä ei ole riittävästi tilaa käytettävissä</string>
   <string name="actionbar_privacy_policy">Yksityisyyskäytäntö</string>
   <string name="prefs_privacy_policy">Yksityisyyskäytäntö</string>

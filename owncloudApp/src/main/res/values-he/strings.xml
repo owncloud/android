@@ -508,8 +508,7 @@
   <string name="manage_space_clear_data">ניקוי מידע</string>
   <string name="manage_space_error">לא ניתן היה למחוק מספר קבצים.</string>
   <string name="local_file_not_found_toast">הקובץ לא נמצא במערכת הקבצים המקומית</string>
-  <string name="confirmation_remove_files_alert">האם באמת להסיר את הפריטים הנבחרים?</string>
-  <string name="confirmation_remove_folders_alert">האם באמת להסיר את הפריטים הנבחרים ואת התוכן שלהם?</string>
+    <string name="confirmation_remove_folders_alert">האם באמת להסיר את הפריטים הנבחרים ואת התוכן שלהם?</string>
   <string name="failed_upload_quota_exceeded_text">אין מספיק מקום בחשבון</string>
   <string name="auth_forbidden">אימות אסור</string>
   <string name="actionbar_privacy_policy">מדיניות הפרטיות</string>
