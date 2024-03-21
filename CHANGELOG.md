@@ -36,6 +36,7 @@ ownCloud admins and users.
 * Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
 * Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
 * Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
+* Enhancement - Add a warning in http connections: [#4284](https://github.com/owncloud/android/issues/4284)
 * Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
 
 ## Details
@@ -93,6 +94,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4232
    https://github.com/owncloud/android/pull/4281
+
+* Enhancement - Add a warning in http connections: [#4284](https://github.com/owncloud/android/issues/4284)
+
+   Warning dialog has been added in the login screen when you are trying to connect
+   to a http server.
+
+   https://github.com/owncloud/android/issues/4284
+   https://github.com/owncloud/android/pull/4345
 
 * Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
 

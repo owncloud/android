@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -33,12 +34,16 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.Visibility
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.owncloud.android.R
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.exceptions.OwncloudVersionNotSupportedException
@@ -327,6 +332,10 @@ class LoginActivityTest {
     fun checkServerInfo_isSuccess_NotSecure() {
         launchTest()
         serverInfoLiveData.postValue(Event(UIResult.Success(INSECURE_SERVER_INFO_BASIC)))
+
+        onView(withText(R.string.insecure_http_url_title_dialog)).check(matches(isDisplayed()))
+        onView(withText(R.string.insecure_http_url_message_dialog)).check(matches(isDisplayed()))
+        onView(withText(R.string.insecure_http_url_continue_button)).inRoot(isDialog()).check(matches(isDisplayed())).perform(click())
 
         with(R.id.server_status_text) {
             isDisplayed(true)
