@@ -116,6 +116,8 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
                 putInt(ARG_MESSAGE_RESOURCE_ID, messageStringId)
                 if (files.size == 1) {
                     putStringArray(ARG_MESSAGE_ARGUMENTS, arrayOf(files.first().fileName))
+                } else {
+                    putStringArray(ARG_MESSAGE_ARGUMENTS, arrayOf(files.size.toString()))
                 }
                 putInt(ARG_POSITIVE_BTN_RES, R.string.common_yes)
                 putInt(ARG_NEUTRAL_BTN_RES, R.string.common_no)
