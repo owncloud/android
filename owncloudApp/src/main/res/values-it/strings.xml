@@ -467,8 +467,7 @@
   <string name="action_upload_retry">Riprova</string>
   <string name="action_upload_clear">Cancella</string>
   <string name="local_file_not_found_toast">Il file non è stato trovato nel file system locale</string>
-  <string name="confirmation_remove_files_alert">Vuoi davvero rimuovere gli elementi selezionati?</string>
-  <string name="confirmation_remove_folders_alert">Vuoi davvero rimuovere gli elementi selezionati e il loro contenuto?</string>
+    <string name="confirmation_remove_folders_alert">Vuoi davvero rimuovere gli elementi selezionati e il loro contenuto?</string>
   <string name="failed_upload_quota_exceeded_text">Spazio insufficiente nell\'account</string>
   <string name="auth_forbidden">Autenticazione non accettata</string>
   <string name="actionbar_privacy_policy">Regole sulla Privacy</string>

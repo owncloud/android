@@ -501,8 +501,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="action_upload_retry">Réessayer</string>
   <string name="action_upload_clear">Effacer</string>
   <string name="local_file_not_found_toast">Ce fichier n\'a pas été trouvé dans le système de fichiers local.</string>
-  <string name="confirmation_remove_files_alert">Souhaitez vous vraiment supprimer l\'élément sélectionné ?</string>
-  <string name="confirmation_remove_folders_alert">Souhaitez vous vraiment supprimer les éléments sélectionnés et leur contenu ?</string>
+    <string name="confirmation_remove_folders_alert">Souhaitez vous vraiment supprimer les éléments sélectionnés et leur contenu ?</string>
   <string name="failed_upload_quota_exceeded_text">Pas assez de place sur ce compte</string>
   <string name="auth_forbidden">Authentification refusée</string>
   <string name="actionbar_privacy_policy">Politique de confidentialité</string>

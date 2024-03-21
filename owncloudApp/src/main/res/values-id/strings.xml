@@ -467,8 +467,7 @@
   <string name="action_upload_retry">Ulangi</string>
   <string name="action_upload_clear">Bersihkan</string>
   <string name="local_file_not_found_toast">Berkas tidak ditemukan di lokal sistem</string>
-  <string name="confirmation_remove_files_alert">Apakah anda yakin ingin menghapus item terpilih?</string>
-  <string name="confirmation_remove_folders_alert">Apakah anda yakin ingin menghapus item terpilih beserta isinya?</string>
+    <string name="confirmation_remove_folders_alert">Apakah anda yakin ingin menghapus item terpilih beserta isinya?</string>
   <string name="failed_upload_quota_exceeded_text">Tidak terdapat cukup ruang di akun</string>
   <string name="auth_forbidden">Otentikasi terlarang</string>
   <string name="actionbar_privacy_policy">Kebijakan pribadi</string>

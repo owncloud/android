@@ -495,8 +495,7 @@
   <string name="action_upload_retry">Újraprobálkozás</string>
   <string name="action_upload_clear">Törlés</string>
   <string name="local_file_not_found_toast">A fájl nem található a helyi fájlrendszerben</string>
-  <string name="confirmation_remove_files_alert">Tényleg szeretné eltávolítani a kijelölt elemeket?</string>
-  <string name="confirmation_remove_folders_alert">Tényleg szeretné eltávolítani a kijelölt elemeket és azok tartalmát?</string>
+    <string name="confirmation_remove_folders_alert">Tényleg szeretné eltávolítani a kijelölt elemeket és azok tartalmát?</string>
   <string name="failed_upload_quota_exceeded_text">Nincs elegendő hely a fiókban</string>
   <string name="auth_forbidden">Tiltott hitelesítés</string>
   <string name="actionbar_privacy_policy">Adatvédelmi irányelvek</string>

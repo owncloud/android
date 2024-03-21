@@ -470,8 +470,7 @@
   <string name="action_upload_retry">다시 시도</string>
   <string name="action_upload_clear">비우기</string>
   <string name="local_file_not_found_toast">로컬 파일 시스템에서 파일을 찾을 수 없음</string>
-  <string name="confirmation_remove_files_alert">선택한 항목을 삭제하시겠습니까?</string>
-  <string name="confirmation_remove_folders_alert">선택한 항목과 포함된 내용을 삭제하시겠습니까?</string>
+    <string name="confirmation_remove_folders_alert">선택한 항목과 포함된 내용을 삭제하시겠습니까?</string>
   <string name="failed_upload_quota_exceeded_text">계정에 공간이 충분하지 않음</string>
   <string name="auth_forbidden">인증 거부됨</string>
   <string name="actionbar_privacy_policy">개인 정보 취급 방침</string>

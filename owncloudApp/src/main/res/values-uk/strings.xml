@@ -448,8 +448,7 @@
   <string name="action_upload_retry">Повторити</string>
   <string name="action_upload_clear">Очистити</string>
   <string name="local_file_not_found_toast">Файл не знайдено в локальній файловій системі</string>
-  <string name="confirmation_remove_files_alert">Ви дійсно бажаєте вилучити вибране?</string>
-  <string name="confirmation_remove_folders_alert">Ви дійсно бажаєте вилучити вибране і їхній вміст?</string>
+    <string name="confirmation_remove_folders_alert">Ви дійсно бажаєте вилучити вибране і їхній вміст?</string>
   <string name="failed_upload_quota_exceeded_text">Недостатньо місця для цього облікового запису</string>
   <string name="auth_forbidden">Заборонена аутентифікація</string>
   <string name="actionbar_privacy_policy">Політика конфіденційності</string>
