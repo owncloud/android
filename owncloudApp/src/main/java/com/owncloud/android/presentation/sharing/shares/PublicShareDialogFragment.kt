@@ -5,8 +5,9 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Aitor Ballesteros Pavón
+ * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,6 +25,8 @@
 package com.owncloud.android.presentation.sharing.shares
 
 import android.accounts.Account
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -52,12 +55,14 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.utils.Event.EventObserver
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.parseError
+import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.sharing.ShareFragmentListener
 import com.owncloud.android.presentation.sharing.ShareViewModel
+import com.owncloud.android.presentation.sharing.generatePassword
 import com.owncloud.android.ui.dialog.ExpirationDatePickerDialogFragment
 import com.owncloud.android.utils.DateUtils
 import com.owncloud.android.utils.PreferenceUtils
@@ -213,6 +218,14 @@ class PublicShareDialogFragment : DialogFragment() {
         binding.saveButton.setOnClickListener { onSaveShareSetting() }
         binding.cancelButton.setOnClickListener { dismiss() }
 
+        binding.copyPasswordButton.setOnClickListener {
+            val passwordText = binding.shareViaLinkPasswordValue.text.toString()
+            val clipboard = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Public link", passwordText)
+            clipboard.setPrimaryClip(clip)
+            showMessageInSnackbar(getString(R.string.clipboard_text_copied))
+        }
+
         dialog?.avoidScreenshotsIfNeeded()
     }
 
@@ -325,6 +338,7 @@ class PublicShareDialogFragment : DialogFragment() {
         binding.shareViaLinkPasswordValue.doOnTextChanged { text, _, _, _ ->
             capabilities?.passwordPolicy?.let { passwordPolicy ->
                 updateRequirementsPasswordPolicy(text.toString(), passwordPolicy)
+                enableCopyPasswordButton(text.toString().isNotEmpty())
             } ?: handleNullPasswordPolicy()
         }
     }
@@ -338,6 +352,16 @@ class PublicShareDialogFragment : DialogFragment() {
                 return true
             }
         })
+    }
+
+    private fun enableCopyPasswordButton(enable: Boolean) {
+        binding.copyPasswordButton.apply {
+            isEnabled = enable
+            setTextColor(
+                if (enable) resources.getColor(R.color.primary_button_background_color, null)
+                else resources.getColor(R.color.grey, null)
+            )
+        }
     }
 
     private fun handleNullPasswordPolicy() {
@@ -669,6 +693,9 @@ class PublicShareDialogFragment : DialogFragment() {
                 binding.shareViaLinkPasswordValue.isVisible = true
                 binding.shareViaLinkPasswordValue.requestFocus()
                 binding.saveButton.isEnabled = false
+                capabilities?.passwordPolicy?.let {
+                    binding.layoutPasswordGeneratorButtons.isVisible = true
+                }
 
                 // Show keyboard to fill in the password
                 val mgr = activity?.getSystemService(
@@ -680,6 +707,9 @@ class PublicShareDialogFragment : DialogFragment() {
                 binding.shareViaLinkPasswordValue.isVisible = false
                 binding.saveButton.isEnabled = true
                 binding.shareViaLinkPasswordValue.text?.clear()
+                capabilities?.passwordPolicy?.let {
+                    binding.layoutPasswordGeneratorButtons.isVisible = false
+                }
             }
         }
     }
@@ -871,6 +901,20 @@ class PublicShareDialogFragment : DialogFragment() {
         if (!hasPasswordEnforcedFor && capabilities?.filesSharingPublicPasswordEnforced == CapabilityBooleanType.TRUE) {
             setPasswordEnforced()
         }
+
+        capabilities?.passwordPolicy?.let { passwordPolicy ->
+            binding.generatePasswordButton.setOnClickListener {
+                binding.shareViaLinkPasswordValue.setText(generatePassword(
+                    minChars = passwordPolicy.minCharacters,
+                    maxChars = passwordPolicy.maxCharacters,
+                    minDigitsChars = passwordPolicy.minDigits,
+                    minLowercaseChars = passwordPolicy.minLowercaseCharacters,
+                    minUppercaseChars = passwordPolicy.minUppercaseCharacters,
+                    minSpecialChars = passwordPolicy.minSpecialCharacters,
+                ))
+                showPassword()
+            }
+        }
     }
 
     private fun setPasswordNotEnforced() {
@@ -878,6 +922,9 @@ class PublicShareDialogFragment : DialogFragment() {
         binding.shareViaLinkPasswordSwitch.isVisible = true
         if (!binding.shareViaLinkPasswordSwitch.isChecked) {
             binding.shareViaLinkPasswordValue.isVisible = false
+            capabilities?.passwordPolicy?.let {
+                binding.layoutPasswordGeneratorButtons.isVisible = false
+            }
         }
     }
 
@@ -886,6 +933,9 @@ class PublicShareDialogFragment : DialogFragment() {
         binding.shareViaLinkPasswordSwitch.isChecked = true
         binding.shareViaLinkPasswordSwitch.isVisible = false
         binding.shareViaLinkPasswordValue.isVisible = true
+        capabilities?.passwordPolicy?.let {
+            binding.layoutPasswordGeneratorButtons.isVisible = true
+        }
     }
 
     /**

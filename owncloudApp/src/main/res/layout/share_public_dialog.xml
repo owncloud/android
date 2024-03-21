@@ -112,6 +112,34 @@
                 android:inputType="textPassword"
                 android:visibility="gone" />
 
+            <LinearLayout
+                android:id="@+id/layoutPasswordGeneratorButtons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/generatePasswordButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/share_via_link_generate_password_button"
+                    android:backgroundTint="@color/transparent"
+                    android:textColor="@color/primary_button_background_color"
+                    style="?android:attr/borderlessButtonStyle"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/copyPasswordButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/share_via_link_copy_password_button"
+                    android:backgroundTint="@color/transparent"
+                    android:textColor="@color/grey"
+                    android:enabled="false"
+                    style="?android:attr/borderlessButtonStyle" />
+
+            </LinearLayout>
+
                 <TextView
                     android:id="@+id/shareViaLinkPasswordPolicyIntro"
                     android:layout_width="match_parent"
