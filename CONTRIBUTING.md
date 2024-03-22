@@ -57,8 +57,14 @@ Before we're able to merge your code into the ownCloud app for Android, please, 
 NOTE: You must sign the [CLA](https://cla-assistant.io/owncloud/android) before your changes can be accepted!
 
 * Create new feature, fix, improvement or technical enhancement branch from your master branch: ```git checkout -b feature/feature_name```
-* Register your changes: git add filename
-* Commit your changes locally: ```git commit -m "Brief description of the changes performed"```
+* Register your changes: `git add filename`
+* Commit your changes locally. Please, if posible use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) to add descriptive messages to the commits. Take the simplest approach:
+	- Feature commits: `feat: brief description of the changes performed`
+	- Fix commits: `fix: brief description of applied fix`
+	- Test commits: `test: brief description of developed tests`
+	- Calens commits: `chore: add calens file`
+
+	Submit the commit with ```git commit -m "commit message"```
 * Push your changes to your GitHub repo: ```git push origin feature/feature_name```
 * Browse to https://github.com/YOURGITHUBNAME/android/pulls and issue pull request
 * Enter description and send pull request.
