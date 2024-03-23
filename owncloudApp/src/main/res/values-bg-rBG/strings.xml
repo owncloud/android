@@ -552,4 +552,6 @@
   <!--DeepLinks-->
   <string name="fab_refresh_text">Опресняване</string>
   <string name="prefs_delete_local_files_entries_never">Никога</string>
+  <string name="insecure_http_url_title_dialog">Несигурен HTTP url адрес</string>
+  <string name="insecure_http_url_continue_button">Продължете</string>
 </resources>

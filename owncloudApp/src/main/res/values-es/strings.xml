@@ -559,4 +559,6 @@
   <!--DeepLinks-->
   <string name="fab_refresh_text">Actualizar</string>
   <string name="prefs_delete_local_files_entries_never">Nunca</string>
+  <string name="insecure_http_url_title_dialog">URL HTTP insegura</string>
+  <string name="insecure_http_url_continue_button">Continuar</string>
 </resources>

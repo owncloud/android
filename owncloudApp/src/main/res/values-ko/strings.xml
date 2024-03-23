@@ -551,4 +551,6 @@
   <!--DeepLinks-->
   <string name="fab_refresh_text">새로 고침</string>
   <string name="prefs_delete_local_files_entries_never">하지 않음</string>
+  <string name="insecure_http_url_title_dialog">안전하지 않은 HTTP URL</string>
+  <string name="insecure_http_url_continue_button">계속</string>
 </resources>

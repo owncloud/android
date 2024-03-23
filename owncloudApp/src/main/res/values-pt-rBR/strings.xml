@@ -678,6 +678,8 @@
   <string name="release_notes_4_3_0_subtitle_4">A aparência da caixa de diálogo de conflitos de nome foi alterada para se parecer com o Android e mais semelhante a outras caixas de diálogo no aplicativo</string>
   <string name="release_notes_4_3_0_title_5">Ícone lente no seletor de pastas</string>
   <string name="release_notes_4_3_0_subtitle_5">O ícone lente na barra de ferramentas foi removido ao listar espaços no seletor de pastas</string>
+  <string name="release_notes_4_3_0_title_6">Adicionar aviso em conexões http</string>
+  <string name="release_notes_4_3_0_subtitle_6">Adicionada uma caixa de diálogo de aviso na visualização de login quando for uma conexão http</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
@@ -715,4 +717,7 @@
   <string name="prefs_delete_local_files_entries_30days">30 dias</string>
   <string name="prefs_delete_local_files">Excluir cópias locais</string>
   <string name="prefs_delete_local_files_summary">Remova arquivos baixados automaticamente que não estão disponíveis off-line, quando o tempo desde a última utilização exceder o tempo selecionado.\nTempo selecionado: %1$s</string>
+  <string name="insecure_http_url_title_dialog">HTTP URL Inseguro</string>
+  <string name="insecure_http_url_message_dialog">O URL fornecido usa HTTP em vez do protocolo HTTPS criptografado. Se você continuar, sua comunicação não será criptografada.</string>
+  <string name="insecure_http_url_continue_button">Continuar</string>
 </resources>

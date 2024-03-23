@@ -708,4 +708,6 @@
   <string name="prefs_delete_local_files_entries_30days">30 Tage</string>
   <string name="prefs_delete_local_files">Lokale Kopien löschen</string>
   <string name="prefs_delete_local_files_summary">Entfernen Sie automatisch heruntergeladene Dateien die offline nicht verfügbar sind, wenn die Zeit seit ihrer letzten Verwendung die ausgewählte Zeit überschreitet.\nGewählte Zeit: %1$s</string>
+  <string name="insecure_http_url_title_dialog">Unsichere HTTP-URL</string>
+  <string name="insecure_http_url_continue_button">Fortsetzen</string>
 </resources>

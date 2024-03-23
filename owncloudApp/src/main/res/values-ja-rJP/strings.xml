@@ -626,4 +626,6 @@
   <!--DeepLinks-->
   <string name="fab_refresh_text">同期</string>
   <string name="prefs_delete_local_files_entries_never">繰り返さない</string>
+  <string name="insecure_http_url_title_dialog">安全でないHTTP URL</string>
+  <string name="insecure_http_url_continue_button">続ける</string>
 </resources>

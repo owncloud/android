@@ -564,4 +564,6 @@
   <!--DeepLinks-->
   <string name="fab_refresh_text">Yenile</string>
   <string name="prefs_delete_local_files_entries_never">Asla</string>
+  <string name="insecure_http_url_title_dialog">Güvensiz HTTP URL</string>
+  <string name="insecure_http_url_continue_button">Devam et</string>
 </resources>

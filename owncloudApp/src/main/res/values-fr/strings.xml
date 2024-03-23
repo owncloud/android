@@ -582,4 +582,5 @@ Téléchargez-le ici : %2$s</string>
   <!--DeepLinks-->
   <string name="fab_refresh_text">Rafraîchir</string>
   <string name="prefs_delete_local_files_entries_never">Jamais</string>
+  <string name="insecure_http_url_continue_button">Continuer</string>
 </resources>

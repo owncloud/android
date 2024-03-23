@@ -678,6 +678,8 @@
   <string name="release_notes_4_3_0_subtitle_4">Nimekonfliktide dialoogi välimus muudeti rohke Android-keskkonnale ja teistele rakenduse dialoogidele sarnasemaks</string>
   <string name="release_notes_4_3_0_title_5">Läätse ikoon kaustade valijal</string>
   <string name="release_notes_4_3_0_subtitle_5">Ruumide nimekirjas kaustade valijal eemaldati tööriistaribalt läätse ikoon</string>
+  <string name="release_notes_4_3_0_title_6">Lisatud on hoiatus http-ühenduste korral</string>
+  <string name="release_notes_4_3_0_subtitle_6">Sisselogimise vaatesse on lisatud on hoiatav dialoogiaken kui tegemist on http-ühendusega</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -715,4 +717,7 @@
   <string name="prefs_delete_local_files_entries_30days">30 päeva</string>
   <string name="prefs_delete_local_files">Kustuta kohalikud koopiad</string>
   <string name="prefs_delete_local_files_summary">Eemalda automaatselt allalaaditud failid, mis pole võrguühenduseta saadaval, kui nende viimase kasutamise aeg ületab valitud aja.\nValitud aeg: %1$s</string>
+  <string name="insecure_http_url_title_dialog">Ebaturvaline HTTP URL</string>
+  <string name="insecure_http_url_message_dialog">Sisestatud URL kasutab krüpteeritud HTTPS-protokolli asemel HTTP-protokolli. Jätkamisel ei ole teie ühendus krüpteeritud.</string>
+  <string name="insecure_http_url_continue_button">Jätka</string>
 </resources>

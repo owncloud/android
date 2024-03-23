@@ -549,4 +549,5 @@
   <!--DeepLinks-->
   <string name="fab_refresh_text">Обновить</string>
   <string name="prefs_delete_local_files_entries_never">Никогда</string>
+  <string name="insecure_http_url_continue_button">Продолжить</string>
 </resources>
