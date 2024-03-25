@@ -1,0 +1,7 @@
+Enhancement: Password generator for public links in oCIS
+
+A new password generator has been added to the public links creation view in oCIS accounts, which creates
+passwords that fulfill all the policies coming from server in a cryptographically secure way.
+
+https://github.com/owncloud/android/issues/4308
+https://github.com/owncloud/android/pull/4349
