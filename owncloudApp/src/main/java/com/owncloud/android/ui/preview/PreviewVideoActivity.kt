@@ -351,7 +351,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
 
             R.id.action_remove_file -> {
                 player?.pause()
-                val dialog = newInstance(file)
+                val dialog = newInstance(file, file.isAvailableLocally)
                 dialog.show(supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
                 true
             }

@@ -156,6 +156,7 @@ class MainFileListFragment : Fragment(),
 
     private var menu: Menu? = null
     private var checkedFiles: List<OCFile> = emptyList()
+    private var filesToRemove: List<OCFile> = emptyList()
     private var fileSingleFile: OCFile? = null
     private var fileOptionsBottomSheetSingleFileLayout: LinearLayout? = null
     private var succeededTransfers: List<OCTransfer>? = null
@@ -474,8 +475,8 @@ class MainFileListFragment : Fragment(),
                                 }
 
                                 FileMenuOption.REMOVE -> {
-                                    val dialogRemove = RemoveFilesDialogFragment.newInstance(file)
-                                    dialogRemove.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+                                    filesToRemove = listOf(file)
+                                    fileOperationsViewModel.showRemoveDialog(filesToRemove)
                                 }
 
                                 FileMenuOption.OPEN_WITH -> {
@@ -617,6 +618,22 @@ class MainFileListFragment : Fragment(),
                 val appName = currentDefaultApplication
                 if (fileId != null && appName != null) {
                     mainFileListViewModel.openInWeb(fileId, appName)
+                }
+            }
+        }
+
+        collectLatestLifecycleFlow(fileOperationsViewModel.checkIfFileLocalSharedFlow) {
+            val fileActivity = (requireActivity() as FileActivity)
+            when (it) {
+                is UIResult.Loading -> fileActivity.showLoadingDialog(R.string.common_loading)
+                is UIResult.Success -> {
+                    fileActivity.dismissLoadingDialog()
+                    it.data?.let { result -> onShowRemoveDialog(filesToRemove, result) }
+                }
+
+                is UIResult.Error -> {
+                    fileActivity.dismissLoadingDialog()
+                    showMessageInSnackbar(resources.getString(R.string.common_error_unknown))
                 }
             }
         }
@@ -938,6 +955,13 @@ class MainFileListFragment : Fragment(),
         }
     }
 
+    private fun onShowRemoveDialog(filesToRemove: List<OCFile>, isLocal: Boolean) {
+        val dialog = RemoveFilesDialogFragment.newInstance(ArrayList(filesToRemove), isLocal)
+        dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+        fileListAdapter.clearSelection()
+        updateActionModeAfterTogglingSelected()
+    }
+
     override fun onFolderNameSet(newFolderName: String, parentFolder: OCFile) {
         fileOperationsViewModel.performOperation(FileOperation.CreateFolder(newFolderName, parentFolder))
         fileOperationsViewModel.createFolder.observe(viewLifecycleOwner, Event.EventObserver { uiResult: UIResult<Unit> ->
@@ -1099,10 +1123,8 @@ class MainFileListFragment : Fragment(),
             }
 
             R.id.action_remove_file -> {
-                val dialog = RemoveFilesDialogFragment.newInstance(checkedFiles)
-                dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
-                fileListAdapter.clearSelection()
-                updateActionModeAfterTogglingSelected()
+                filesToRemove = checkedFiles
+                fileOperationsViewModel.showRemoveDialog(filesToRemove)
                 return true
             }
 
