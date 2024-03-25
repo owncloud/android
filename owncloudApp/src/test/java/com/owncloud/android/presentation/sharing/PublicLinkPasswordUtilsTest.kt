@@ -39,29 +39,31 @@ class PublicLinkPasswordUtilsTest {
 
     @Test
     fun `generatePassword creates password fulfilling all policies`() {
-        val password = generatePassword(
-            minChars = minCharacters,
-            maxChars = maxCharacters,
-            minDigitsChars = minDigits,
-            minLowercaseChars = minLowercaseCharacters,
-            minUppercaseChars = minUppercaseCharacters,
-            minSpecialChars = minSpecialCharacters,
-        )
+        for (i in 1..1000) {
+            val password = generatePassword(
+                minChars = minCharacters,
+                maxChars = maxCharacters,
+                minDigitsChars = minDigits,
+                minLowercaseChars = minLowercaseCharacters,
+                minUppercaseChars = minUppercaseCharacters,
+                minSpecialChars = minSpecialCharacters,
+            )
 
-        assertTrue(password.length >= minCharacters)
-        assertTrue(password.length <= maxCharacters)
+            assertTrue(password.length >= minCharacters)
+            assertTrue(password.length <= maxCharacters)
 
-        val digitsInPassword = password.filter { charsetDigits.contains(it) }
-        assertTrue(digitsInPassword.length >= minDigits)
+            val digitsInPassword = password.filter { charsetDigits.contains(it) }
+            assertTrue(digitsInPassword.length >= minDigits)
 
-        val lowercaseCharsInPassword = password.filter { charsetLowercase.contains(it) }
-        assertTrue(lowercaseCharsInPassword.length >= minLowercaseCharacters)
+            val lowercaseCharsInPassword = password.filter { charsetLowercase.contains(it) }
+            assertTrue(lowercaseCharsInPassword.length >= minLowercaseCharacters)
 
-        val uppercaseCharsInPassword = password.filter { charsetUppercase.contains(it) }
-        assertTrue(uppercaseCharsInPassword.length >= minUppercaseCharacters)
+            val uppercaseCharsInPassword = password.filter { charsetUppercase.contains(it) }
+            assertTrue(uppercaseCharsInPassword.length >= minUppercaseCharacters)
 
-        val specialCharsInPassword = password.filter { charsetSpecial.contains(it) }
-        assertTrue(specialCharsInPassword.length >= minSpecialCharacters)
+            val specialCharsInPassword = password.filter { charsetSpecial.contains(it) }
+            assertTrue(specialCharsInPassword.length >= minSpecialCharacters)
+        }
     }
 
     @Test
