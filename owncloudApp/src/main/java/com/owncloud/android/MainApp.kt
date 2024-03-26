@@ -7,8 +7,9 @@
  * @author Christian Schabesberger
  * @author David Crespo Ríos
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -37,7 +38,6 @@ import android.view.WindowManager
 import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.pm.PackageInfoCompat
-import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.db.PreferenceManager
@@ -52,19 +52,21 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.spaces.usecases.GetPersonalSpaceForAccountUseCase
 import com.owncloud.android.extensions.createNotificationChannel
 import com.owncloud.android.lib.common.SingleSessionManager
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.migration.StorageMigrationActivity
 import com.owncloud.android.presentation.releasenotes.ReleaseNotesActivity
 import com.owncloud.android.presentation.security.biometric.BiometricActivity
 import com.owncloud.android.presentation.security.biometric.BiometricManager
-import com.owncloud.android.presentation.security.pattern.PatternActivity
-import com.owncloud.android.presentation.security.pattern.PatternManager
 import com.owncloud.android.presentation.security.passcode.PassCodeActivity
 import com.owncloud.android.presentation.security.passcode.PassCodeManager
+import com.owncloud.android.presentation.security.pattern.PatternActivity
+import com.owncloud.android.presentation.security.pattern.PatternManager
 import com.owncloud.android.presentation.settings.logging.SettingsLogsFragment.Companion.PREFERENCE_ENABLE_LOGGING
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
+import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.PREFERENCE_CLEAR_DATA
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.CONFIGURATION_ALLOW_SCREENSHOTS
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
@@ -133,24 +135,30 @@ class MainApp : Application() {
                         ReleaseNotesActivity.runIfNeeded(activity)
 
                         val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
-                        val dontShowAgainDialogPref = pref.getBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, false)
-                        if (!dontShowAgainDialogPref && shouldShowDialog(activity)) {
-                            val checkboxDialog = activity.layoutInflater.inflate(R.layout.checkbox_dialog, null)
-                            val checkbox = checkboxDialog.findViewById<CheckBox>(R.id.checkbox_dialog)
-                            checkbox.setText(R.string.ocis_accounts_warning_checkbox_message)
-                            val builder = AlertDialog.Builder(activity).apply {
-                                setView(checkboxDialog)
-                                setTitle(R.string.ocis_accounts_warning_title)
-                                setMessage(R.string.ocis_accounts_warning_message)
-                                setCancelable(false)
-                                setPositiveButton(R.string.ocis_accounts_warning_button) { _, _ ->
-                                    if (checkbox.isChecked) {
-                                        pref.edit().putBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, true).apply()
+                        val isClearDataClicked = pref.contains(PREFERENCE_CLEAR_DATA)
+                        if (!isClearDataClicked) {
+                            AccountUtils.deleteAccount(appContext)
+                            WhatsNewActivity.runIfNeeded(activity)
+                        } else {
+                            val dontShowAgainDialogPref = pref.getBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, false)
+                            if (!dontShowAgainDialogPref && shouldShowDialog(activity)) {
+                                val checkboxDialog = activity.layoutInflater.inflate(R.layout.checkbox_dialog, null)
+                                val checkbox = checkboxDialog.findViewById<CheckBox>(R.id.checkbox_dialog)
+                                checkbox.setText(R.string.ocis_accounts_warning_checkbox_message)
+                                val builder = AlertDialog.Builder(activity).apply {
+                                    setView(checkboxDialog)
+                                    setTitle(R.string.ocis_accounts_warning_title)
+                                    setMessage(R.string.ocis_accounts_warning_message)
+                                    setCancelable(false)
+                                    setPositiveButton(R.string.ocis_accounts_warning_button) { _, _ ->
+                                        if (checkbox.isChecked) {
+                                            pref.edit().putBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, true).apply()
+                                        }
                                     }
                                 }
+                                val alertDialog = builder.create()
+                                alertDialog.show()
                             }
-                            val alertDialog = builder.create()
-                            alertDialog.show()
                         }
                     }
                 }
