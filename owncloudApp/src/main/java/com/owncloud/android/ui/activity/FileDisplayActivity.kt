@@ -8,9 +8,10 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -187,7 +188,7 @@ class FileDisplayActivity : FileActivity(),
         super.onCreate(savedInstanceState) // this calls onAccountChanged() when ownCloud Account is valid
 
         checkPasscodeEnforced(this)
-
+        sharedPreferences.putBoolean(PREFERENCE_CLEAR_DATA, true)
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
 
         handleDeepLink()
@@ -1868,6 +1869,7 @@ class FileDisplayActivity : FileActivity(),
         private const val CUSTOM_DIALOG_TAG = "CUSTOM_DIALOG"
 
         private const val PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED = "PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED"
+        const val PREFERENCE_CLEAR_DATA = "PREFERENCE_CLEAR_DATA"
         const val ALL_FILES_SAF_REGEX = "*/*"
 
         const val ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS"
