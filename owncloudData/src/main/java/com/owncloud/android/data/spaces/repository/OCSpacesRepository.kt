@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -47,6 +47,9 @@ class OCSpacesRepository(
 
     override fun getPersonalAndProjectSpacesForAccount(accountName: String) =
         localSpacesDataSource.getPersonalAndProjectSpacesForAccount(accountName)
+
+    override fun getPersonalAndSharesAndProjectSpacesForAccount(accountName: String) =
+        localSpacesDataSource.getPersonalAndSharesAndProjectSpacesForAccount(accountName)
 
     override fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String) =
         localSpacesDataSource.getSpaceWithSpecialsByIdForAccount(spaceId, accountName)
