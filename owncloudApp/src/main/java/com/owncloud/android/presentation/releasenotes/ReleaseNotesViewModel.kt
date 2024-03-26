@@ -90,6 +90,11 @@ class ReleaseNotesViewModel(
                 subtitle = R.string.release_notes_4_3_0_subtitle_manual_removal_local_storage,
                 type = ReleaseNoteType.ENHANCEMENT,
             ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_clear_data_button_hard_reset,
+                subtitle = R.string.release_notes_4_3_0_subtitle_clear_data_button_hard_reset,
+                type = ReleaseNoteType.BUGFIX,
+            ),
         )
     }
 }
