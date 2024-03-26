@@ -227,7 +227,6 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         fileToMove.renameTo(targetFile)
     }
 
-
     fun clearUnrelatedTemporalFiles(uploads: List<OCTransfer>, accountsNames: List<String>) {
         accountsNames.forEach { accountName ->
             val temporalFolderForAccount = File(getTemporalPath(accountName))

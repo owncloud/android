@@ -78,6 +78,8 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
             displayShowTitleEnabled = true
         )
 
+        subscribeToViewModels()
+
     }
 
     override fun onStart() {
@@ -92,7 +94,6 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
         account = accountsManagementViewModel.getCurrentAccount()
         onAccountSet(false)
 
-        subscribeToViewModels()
     }
 
     /**
@@ -202,13 +203,13 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
 
     }
 
-    override fun cleanAccount(account: Account) {
+    override fun cleanAccountLocalStorage(account: Account) {
         val dialog = AlertDialog.Builder(this)
             .setTitle(getString(R.string.clean_data_account_title))
             .setIcon(R.drawable.ic_warning)
             .setMessage(getString(R.string.clean_data_account_message))
             .setPositiveButton(getString(R.string.clean_data_account_button_yes)) { dialog, _ ->
-                accountsManagementViewModel.cleanAccount(account.name)
+                accountsManagementViewModel.cleanAccountLocalStorage(account.name)
                 dialog.dismiss()
             }
             .setNegativeButton(R.string.drawer_close) { dialog, _ ->
@@ -219,7 +220,7 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
     }
 
     private fun subscribeToViewModels() {
-        collectLatestLifecycleFlow(accountsManagementViewModel.cleanAccountFlow) { event ->
+        collectLatestLifecycleFlow(accountsManagementViewModel.cleanAccountLocalStorageFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
                     is UIResult.Loading -> showLoadingDialog(R.string.common_loading)

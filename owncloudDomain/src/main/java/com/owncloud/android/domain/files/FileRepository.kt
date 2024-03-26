@@ -51,7 +51,7 @@ interface FileRepository {
     fun getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(owner: String): Flow<List<OCFileWithSyncInfo>>
     fun getFilesAvailableOfflineFromAccount(owner: String): List<OCFile>
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile>
-    fun getFilesForAccount(owner: String): List<OCFile>
+    fun getDownloadedFilesForAccount(owner: String): List<OCFile>
     fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFile>
 
     // Returns files in conflict
