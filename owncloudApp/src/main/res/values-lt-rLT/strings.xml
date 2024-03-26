@@ -431,8 +431,7 @@
   <string name="manage_space_clear_data">Išvalyti duomenis</string>
   <string name="manage_space_error">Kai kurių failų nepavyko ištrinti.</string>
   <string name="local_file_not_found_toast">Byla nerasta lokalioje sistemoje</string>
-  <string name="confirmation_remove_files_alert">Ar tikrai norite pašalinti pasirinktą sąrašą?</string>
-  <string name="confirmation_remove_folders_alert">Ar tikrai norite pašalinti pasirinktus obejktus ir jų turinį?</string>
+    <string name="confirmation_remove_folders_alert">Ar tikrai norite pašalinti pasirinktus obejktus ir jų turinį?</string>
   <string name="failed_upload_quota_exceeded_text">Nepakanka vietos paskyroje</string>
   <string name="auth_forbidden">Draudžiama autentifikacija</string>
   <string name="actionbar_privacy_policy">Privatumo taisyklės</string>

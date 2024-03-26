@@ -576,8 +576,7 @@
   <string name="manage_space_clear_data">Limpar dados</string>
   <string name="manage_space_error">Alguns arquivos não puderam ser excluído.</string>
   <string name="local_file_not_found_toast">O arquivo não foi encontrado no sistema de arquivos local</string>
-  <string name="confirmation_remove_files_alert">Você realmente deseja remover os itens selecionados?</string>
-  <string name="confirmation_remove_folders_alert">Você realmente deseja remover os itens selecionados e seus conteúdos?</string>
+    <string name="confirmation_remove_folders_alert">Você realmente deseja remover os itens selecionados e seus conteúdos?</string>
   <string name="failed_upload_quota_exceeded_text">Espaço insuficiente na conta</string>
   <string name="auth_forbidden">Autenticação proibida</string>
   <string name="actionbar_privacy_policy">Política de Privacidade</string>

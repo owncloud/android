@@ -407,8 +407,7 @@
   <string name="manage_space_clear_data">Vyčistenie dát.</string>
   <string name="manage_space_error">Niektoré súbory nemohli byť zmazané.</string>
   <string name="local_file_not_found_toast">Tento súbor sa nenachádza v lokálnom zozname súborov</string>
-  <string name="confirmation_remove_files_alert">Vážne si želáš odstrániť tieto položky ?</string>
-  <string name="confirmation_remove_folders_alert">Vážne si želáš odstrániť tieto položky a ich obsah ?</string>
+    <string name="confirmation_remove_folders_alert">Vážne si želáš odstrániť tieto položky a ich obsah ?</string>
   <string name="failed_upload_quota_exceeded_text">Nedostatok miesta na disku pre tento Užívateľský profil.</string>
   <string name="auth_forbidden">Zakázaná autentifikácia</string>
   <string name="actionbar_privacy_policy">Bezpečnostná politika</string>
