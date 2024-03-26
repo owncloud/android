@@ -34,6 +34,7 @@ ownCloud admins and users.
 * Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
 * Change - Add new prefixes in commit messages of 3rd party contributors: [#4346](https://github.com/owncloud/android/pull/4346)
 * Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
+* Enhancement - New setting for manual removal of local storage: [#4174](https://github.com/owncloud/android/issues/4174)
 * Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
 * Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
 * Enhancement - Add a warning in http connections: [#4284](https://github.com/owncloud/android/issues/4284)
@@ -78,6 +79,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4148
    https://github.com/owncloud/android/pull/4330
+
+* Enhancement - New setting for manual removal of local storage: [#4174](https://github.com/owncloud/android/issues/4174)
+
+   A new icon has been added in Manage Accounts view to delete manually local
+   files.
+
+   https://github.com/owncloud/android/issues/4174
+   https://github.com/owncloud/android/pull/4334
 
 * Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
 
