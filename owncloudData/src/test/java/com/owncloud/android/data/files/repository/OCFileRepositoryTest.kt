@@ -51,7 +51,8 @@ class OCFileRepositoryTest {
     private val localFileDataSource = mockk<LocalFileDataSource>(relaxed = true)
     private val localSpacesDataSource = mockk<LocalSpacesDataSource>(relaxed = true)
     private val localStorageProvider = mockk<LocalStorageProvider>()
-    private val ocFileRepository: OCFileRepository = OCFileRepository(localFileDataSource, remoteFileDataSource, localSpacesDataSource, localStorageProvider)
+    private val ocFileRepository: OCFileRepository =
+        OCFileRepository(localFileDataSource, remoteFileDataSource, localSpacesDataSource, localStorageProvider)
 
     private val folderToFetch = OC_FOLDER
     private val listOfFilesRetrieved = listOf(
@@ -110,7 +111,7 @@ class OCFileRepositoryTest {
     }
 
     @Test
-    fun `getFileWithSyncInfoByIdAsFlow returns OCFileWithSyncInfo`()  = runTest {
+    fun `getFileWithSyncInfoByIdAsFlow returns OCFileWithSyncInfo`() = runTest {
         every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE)
 
         val ocFile = ocFileRepository.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
@@ -125,7 +126,7 @@ class OCFileRepositoryTest {
     }
 
     @Test
-    fun `getFileWithSyncInfoByIdAsFlow returns null`()  = runTest {
+    fun `getFileWithSyncInfoByIdAsFlow returns null`() = runTest {
         every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(null)
 
         val ocFile = ocFileRepository.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
@@ -139,10 +140,9 @@ class OCFileRepositoryTest {
         }
     }
 
-
     @Test(expected = Exception::class)
-    fun `getFileWithSyncInfoByIdAsFlow returns an exception`()  = runTest {
-        every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }  throws Exception()
+    fun `getFileWithSyncInfoByIdAsFlow returns an exception`() = runTest {
+        every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } throws Exception()
 
         ocFileRepository.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
 
@@ -150,6 +150,7 @@ class OCFileRepositoryTest {
             localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
         }
     }
+
     @Test
     fun `get file by id - ok - null`() {
         every { localFileDataSource.getFileById(OC_FOLDER.id!!) } returns null
@@ -199,18 +200,29 @@ class OCFileRepositoryTest {
     }
 
     @Test
-    fun `getFilesForAccount returns a list of OCFile`() {
+    fun `getDownloadedFilesForAccount returns a list of OCFile`() {
         every {
-            localFileDataSource.getFilesForAccount(OC_ACCOUNT_NAME)
+            localFileDataSource.getDownloadedFilesForAccount(OC_ACCOUNT_NAME)
         } returns listOf(OC_FILE)
 
-        val result = ocFileRepository.getFilesForAccount(OC_ACCOUNT_NAME)
+        val result = ocFileRepository.getDownloadedFilesForAccount(OC_ACCOUNT_NAME)
 
         assertEquals(listOf(OC_FILE), result)
 
         verify(exactly = 1) {
-            localFileDataSource.getFilesForAccount(OC_ACCOUNT_NAME)
+            localFileDataSource.getDownloadedFilesForAccount(OC_ACCOUNT_NAME)
         }
+    }
+
+    @Test
+    fun `getDownloadedFilesForAccount returns an empty list when datasource returns an empty list`() {
+        every { localFileDataSource.getDownloadedFilesForAccount(OC_ACCOUNT_NAME) } returns emptyList()
+
+        val result = ocFileRepository.getDownloadedFilesForAccount(OC_ACCOUNT_NAME)
+
+        assertEquals(emptyList<OCFile>(), result)
+
+        verify(exactly = 1) { localFileDataSource.getDownloadedFilesForAccount(OC_ACCOUNT_NAME) }
     }
 
     @Test

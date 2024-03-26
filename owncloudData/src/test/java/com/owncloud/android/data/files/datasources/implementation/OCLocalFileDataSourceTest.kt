@@ -113,14 +113,25 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `getFilesForAccount returns a list of OCFile`() {
-        every { fileDao.getFilesForAccount(OC_ACCOUNT_NAME) } returns listOf(OC_FILE_ENTITY)
+    fun `getDownloadedFilesForAccount returns a list of OCFile`() {
+        every { fileDao.getDownloadedFilesForAccount(OC_ACCOUNT_NAME) } returns listOf(OC_FILE_ENTITY)
 
-        val result = ocLocalFileDataSource.getFilesForAccount(OC_ACCOUNT_NAME)
+        val result = ocLocalFileDataSource.getDownloadedFilesForAccount(OC_ACCOUNT_NAME)
 
         assertEquals(listOf(OC_FILE), result)
 
-        verify(exactly = 1) { fileDao.getFilesForAccount(OC_ACCOUNT_NAME) }
+        verify(exactly = 1) { fileDao.getDownloadedFilesForAccount(OC_ACCOUNT_NAME) }
+    }
+
+    @Test
+    fun `getDownloadedFilesForAccount returns an empty list when DAO returns an empty list`() {
+        every { fileDao.getDownloadedFilesForAccount(OC_ACCOUNT_NAME) } returns emptyList()
+
+        val result = ocLocalFileDataSource.getDownloadedFilesForAccount(OC_ACCOUNT_NAME)
+
+        assertEquals(emptyList<OCFile>(), result)
+
+        verify(exactly = 1) { fileDao.getDownloadedFilesForAccount(OC_ACCOUNT_NAME) }
     }
 
     @Test
