@@ -81,15 +81,15 @@
         app:layout_constraintTop_toBottomOf="@id/name" />
 
     <ImageView
-        android:id="@+id/cleanButton"
+        android:id="@+id/clean_account_local_storage_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
-        android:paddingLeft="@dimen/standard_half_padding"
+        android:paddingStart="@dimen/standard_half_padding"
         android:paddingTop="@dimen/standard_padding"
-        android:paddingRight="@dimen/standard_half_padding"
+        android:paddingEnd="@dimen/standard_half_padding"
         android:paddingBottom="@dimen/standard_padding"
         android:src="@drawable/ic_clean_account"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -100,10 +100,10 @@ class AccountsManagementAdapter(private val accountListener: AccountAdapterListe
                     holder.binding.ticker.visibility = View.INVISIBLE
                 }
 
-                /// bind listener to clean account
-                holder.binding.cleanButton.apply {
+                /// bind listener to clean local storage from account
+                holder.binding.cleanAccountLocalStorageButton.apply {
                     setImageResource(R.drawable.ic_clean_account)
-                    setOnClickListener { accountListener.cleanAccount(account) }
+                    setOnClickListener { accountListener.cleanAccountLocalStorage(account) }
                 }
                 /// bind listener to remove account
                 holder.binding.removeButton.apply {
@@ -162,7 +162,7 @@ class AccountsManagementAdapter(private val accountListener: AccountAdapterListe
      */
     interface AccountAdapterListener {
         fun removeAccount(account: Account)
-        fun cleanAccount(account: Account)
+        fun cleanAccountLocalStorage(account: Account)
         fun createAccount()
         fun switchAccount(position: Int)
     }

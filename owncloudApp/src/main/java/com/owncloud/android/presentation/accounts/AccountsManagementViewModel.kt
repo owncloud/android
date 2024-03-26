@@ -28,18 +28,18 @@ import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
-import com.owncloud.android.usecases.files.RemoveFilesForAccountUseCase
+import com.owncloud.android.usecases.files.RemoveLocalFilesForAccountUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class AccountsManagementViewModel(
     private val accountProvider: AccountProvider,
-    private val removeFilesForAccountUseCase: RemoveFilesForAccountUseCase,
+    private val removeLocalFilesForAccountUseCase: RemoveLocalFilesForAccountUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
-    private val _cleanAccountFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
-    val cleanAccountFlow: StateFlow<Event<UIResult<Unit>>?> = _cleanAccountFlow
+    private val _cleanAccountLocalStorageFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
+    val cleanAccountLocalStorageFlow: StateFlow<Event<UIResult<Unit>>?> = _cleanAccountLocalStorageFlow
 
     fun getLoggedAccounts(): Array<Account> {
         return accountProvider.getLoggedAccounts()
@@ -49,13 +49,13 @@ class AccountsManagementViewModel(
         return accountProvider.getCurrentOwnCloudAccount()
     }
 
-    fun cleanAccount(accountName: String) {
+    fun cleanAccountLocalStorage(accountName: String) {
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
             showLoading = true,
-            flow = _cleanAccountFlow,
-            useCase = removeFilesForAccountUseCase,
-            useCaseParams = RemoveFilesForAccountUseCase.Params(accountName),
+            flow = _cleanAccountLocalStorageFlow,
+            useCase = removeLocalFilesForAccountUseCase,
+            useCaseParams = RemoveLocalFilesForAccountUseCase.Params(accountName),
         )
     }
 }

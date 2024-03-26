@@ -125,8 +125,8 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
-    override fun getFilesForAccount(owner: String): List<OCFile> =
-        fileDao.getFilesForAccount(accountOwner = owner).map {
+    override fun getDownloadedFilesForAccount(owner: String): List<OCFile> =
+        fileDao.getDownloadedFilesForAccount(accountOwner = owner).map {
             it.toModel()
         }
 
