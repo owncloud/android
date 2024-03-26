@@ -904,14 +904,16 @@ class PublicShareDialogFragment : DialogFragment() {
 
         capabilities?.passwordPolicy?.let { passwordPolicy ->
             binding.generatePasswordButton.setOnClickListener {
-                binding.shareViaLinkPasswordValue.setText(generatePassword(
-                    minChars = passwordPolicy.minCharacters,
-                    maxChars = passwordPolicy.maxCharacters,
-                    minDigitsChars = passwordPolicy.minDigits,
-                    minLowercaseChars = passwordPolicy.minLowercaseCharacters,
-                    minUppercaseChars = passwordPolicy.minUppercaseCharacters,
-                    minSpecialChars = passwordPolicy.minSpecialCharacters,
-                ))
+                binding.shareViaLinkPasswordValue.setText(
+                    generatePassword(
+                        minChars = passwordPolicy.minCharacters,
+                        maxChars = passwordPolicy.maxCharacters,
+                        minDigitsChars = passwordPolicy.minDigits,
+                        minLowercaseChars = passwordPolicy.minLowercaseCharacters,
+                        minUppercaseChars = passwordPolicy.minUppercaseCharacters,
+                        minSpecialChars = passwordPolicy.minSpecialCharacters,
+                    )
+                )
                 showPassword()
             }
         }
