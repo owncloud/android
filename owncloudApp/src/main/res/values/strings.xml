@@ -795,7 +795,7 @@
     <string name="insecure_http_url_message_dialog">The URL you provided uses HTTP rather than the encrypted HTTPS protocol. If you continue, your communication will not be encrypted.</string>
     <string name="insecure_http_url_continue_button">Continue</string>
 
-    <string name="clean_data_account_message">All downloaded and temporal files that are not available offline and failed uploaded will be cleaned up</string>
+    <string name="clean_data_account_message">All downloaded files that are not available offline will be cleaned up</string>
     <string name="clean_data_account_title">Remove local storage</string>
     <string name="clean_data_account_button_yes">Clean data</string>
 
