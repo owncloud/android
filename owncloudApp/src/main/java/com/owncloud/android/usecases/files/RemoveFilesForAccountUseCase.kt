@@ -20,7 +20,6 @@
 
 package com.owncloud.android.usecases.files
 
-import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
@@ -28,11 +27,9 @@ import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
 class RemoveFilesForAccountUseCase(
     private val fileRepository: FileRepository,
     private val removeFileUseCase: RemoveFileUseCase,
-    private val localStorageProvider: LocalStorageProvider,
 ) : BaseUseCaseWithResult<Unit, RemoveFilesForAccountUseCase.Params>() {
 
     override fun run(params: Params) {
-        localStorageProvider.clearTemporalFilesForAccount(params.owner)
         val listOfFilesToDelete = fileRepository.getFilesForAccount(params.owner)
         if (listOfFilesToDelete.isNotEmpty()) {
             removeFileUseCase(RemoveFileUseCase.Params(listOfFilesToDelete, true))
