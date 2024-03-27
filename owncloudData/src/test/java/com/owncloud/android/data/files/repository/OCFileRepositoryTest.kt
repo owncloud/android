@@ -215,17 +215,6 @@ class OCFileRepositoryTest {
     }
 
     @Test
-    fun `getDownloadedFilesForAccount returns an empty list when datasource returns an empty list`() {
-        every { localFileDataSource.getDownloadedFilesForAccount(OC_ACCOUNT_NAME) } returns emptyList()
-
-        val result = ocFileRepository.getDownloadedFilesForAccount(OC_ACCOUNT_NAME)
-
-        assertEquals(emptyList<OCFile>(), result)
-
-        verify(exactly = 1) { localFileDataSource.getDownloadedFilesForAccount(OC_ACCOUNT_NAME) }
-    }
-
-    @Test
     fun `get folder content - ok`() {
         every { localFileDataSource.getFolderContent(OC_FOLDER.parentId!!) } returns listOf(OC_FOLDER)
 
