@@ -739,6 +739,8 @@
     <string name="release_notes_4_3_0_subtitle_5">The lens icon in the toolbar was removed when listing spaces in folder picker</string>
     <string name="release_notes_4_3_0_title_6">Add warning in http connections</string>
     <string name="release_notes_4_3_0_subtitle_6">Added a warning dialog in the login view when it is a http connection</string>
+    <string name="release_notes_4_3_0_title_8">New setting for manual removal of local storage</string>
+    <string name="release_notes_4_3_0_subtitle_8">A new icon has been added in Manage Accounts view to delete manually local files</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
@@ -788,5 +790,9 @@
     <string name="insecure_http_url_title_dialog">Insecure HTTP URL</string>
     <string name="insecure_http_url_message_dialog">The URL you provided uses HTTP rather than the encrypted HTTPS protocol. If you continue, your communication will not be encrypted.</string>
     <string name="insecure_http_url_continue_button">Continue</string>
+
+    <string name="clean_data_account_message">All downloaded files that are not available offline will be cleaned up for this account</string>
+    <string name="clean_data_account_title">Remove local storage</string>
+    <string name="clean_data_account_button_yes">Clean data</string>
 
 </resources>

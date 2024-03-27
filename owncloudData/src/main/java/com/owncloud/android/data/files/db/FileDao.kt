@@ -137,6 +137,11 @@ interface FileDao {
     @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_EVERY_ACCOUNT)
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFileEntity>
 
+    @Query(SELECT_DOWNLOADED_FILES_FOR_ACCOUNT)
+    fun getDownloadedFilesForAccount(
+        accountOwner: String
+    ): List<OCFileEntity>
+
     @Query(SELECT_FILES_WHERE_LAST_USAGE_IS_OLDER_THAN_GIVEN_TIME)
     fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFileEntity>
 
@@ -536,6 +541,12 @@ interface FileDao {
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
             WHERE parentId = :folderId AND mimeType LIKE :mimeType || '%'
+        """
+
+        private const val SELECT_DOWNLOADED_FILES_FOR_ACCOUNT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE owner = :accountOwner AND storagePath IS NOT NULL AND keepInSync = '0'
         """
 
         private const val SELECT_FILES_SHARED_BY_LINK = """

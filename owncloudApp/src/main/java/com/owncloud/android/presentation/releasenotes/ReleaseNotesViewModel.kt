@@ -75,6 +75,11 @@ class ReleaseNotesViewModel(
                 subtitle = R.string.release_notes_4_3_0_subtitle_6,
                 type = ReleaseNoteType.ENHANCEMENT,
             ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_8,
+                subtitle = R.string.release_notes_4_3_0_subtitle_8,
+                type = ReleaseNoteType.ENHANCEMENT,
+            ),
         )
     }
 }

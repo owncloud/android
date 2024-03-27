@@ -1,0 +1,6 @@
+Enhancement: New setting for manual removal of local storage
+
+A new icon has been added in Manage Accounts view to delete manually local files.
+
+https://github.com/owncloud/android/issues/4174
+https://github.com/owncloud/android/pull/4334

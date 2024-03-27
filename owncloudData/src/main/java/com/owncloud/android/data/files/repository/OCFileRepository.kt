@@ -244,6 +244,8 @@ class OCFileRepository(
     override fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile> =
         localFileDataSource.getFilesAvailableOfflineFromEveryAccount()
 
+    override fun getDownloadedFilesForAccount(owner: String): List<OCFile> = localFileDataSource.getDownloadedFilesForAccount(owner)
+
     override fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFile> =
         localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(milliseconds)
 
