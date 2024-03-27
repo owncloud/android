@@ -338,7 +338,6 @@ class PublicShareDialogFragment : DialogFragment() {
         binding.shareViaLinkPasswordValue.doOnTextChanged { text, _, _, _ ->
             capabilities?.passwordPolicy?.let { passwordPolicy ->
                 updateRequirementsPasswordPolicy(text.toString(), passwordPolicy)
-                enableCopyPasswordButton(text.toString().isNotEmpty())
             } ?: handleNullPasswordPolicy()
         }
     }
@@ -352,16 +351,6 @@ class PublicShareDialogFragment : DialogFragment() {
                 return true
             }
         })
-    }
-
-    private fun enableCopyPasswordButton(enable: Boolean) {
-        binding.copyPasswordButton.apply {
-            isEnabled = enable
-            setTextColor(
-                if (enable) resources.getColor(R.color.primary_button_background_color, null)
-                else resources.getColor(R.color.grey, null)
-            )
-        }
     }
 
     private fun handleNullPasswordPolicy() {
@@ -476,6 +465,7 @@ class PublicShareDialogFragment : DialogFragment() {
 
         val allConditionsCheck = hasMinCharacters && hasUpperCase && hasLowerCase && hasDigit && hasSpecialCharacter && hasMaxCharacters
         binding.saveButton.isEnabled = allConditionsCheck
+        enableCopyPasswordButton(allConditionsCheck)
     }
 
     private fun handleRequirementCheckedOrWarning(hasRequirement: Boolean, textViewIcon: TextView, textView: TextView) {
@@ -494,6 +484,16 @@ class PublicShareDialogFragment : DialogFragment() {
     private fun requirementWarning(textViewIcon: TextView, textView: TextView) {
         textViewIcon.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_cross_warning_password_policy, 0, 0, 0)
         textView.setTextColor(ContextCompat.getColor(appContext, R.color.warning))
+    }
+
+    private fun enableCopyPasswordButton(enable: Boolean) {
+        binding.copyPasswordButton.apply {
+            isEnabled = enable
+            setTextColor(
+                if (enable) resources.getColor(R.color.primary_button_background_color, null)
+                else resources.getColor(R.color.grey, null)
+            )
+        }
     }
 
     private abstract class RightDrawableOnTouchListener : View.OnTouchListener {
@@ -951,6 +951,7 @@ class PublicShareDialogFragment : DialogFragment() {
         }
         binding.publicLinkErrorMessage.isVisible = true
         binding.saveButton.isEnabled = false
+        enableCopyPasswordButton(false)
     }
 
     private fun setPasswordSwitchChecked() {
