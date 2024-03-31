@@ -1,6 +1,6 @@
-Enhancement: Local-only option in file remove dialog is checks selected file/folder (files in folder recursively) and shown if at least one local file exists.
+Enhancement: Correct "Local only" option in remove dialog
 
-Now local-only option in remove dialog will check file/folder (files in folder) from selection and will show it if at least one local file (downloaded) exists.
+"Local only" option in remove dialog will only be shown if checking selected files and folders recursively, at least one file is available locally.
 
 https://github.com/owncloud/android/issues/3936
 https://github.com/owncloud/android/pull/4289

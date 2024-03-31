@@ -77,7 +77,7 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
          * @return Dialog ready to show.
          */
         @JvmStatic
-        fun newInstance(files: ArrayList<OCFile>, isLocal: Boolean): RemoveFilesDialogFragment {
+        fun newInstance(files: ArrayList<OCFile>, isAvailableLocally: Boolean): RemoveFilesDialogFragment {
             val messageStringId: Int
             var containsFolder = false
             var containsAvailableOffline = false
@@ -106,7 +106,7 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
                     R.string.confirmation_remove_files_alert
                 }
             }
-            val localRemoveButton = if (!containsAvailableOffline && isLocal) {
+            val localRemoveButton = if (!containsAvailableOffline && isAvailableLocally) {
                 R.string.confirmation_remove_local
             } else {
                 -1
@@ -136,8 +136,8 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
          */
         @JvmStatic
         @JvmName("newInstanceForSingleFile")
-        fun newInstance(file: OCFile, isLocal: Boolean): RemoveFilesDialogFragment {
-            return newInstance(arrayListOf(file), isLocal)
+        fun newInstance(file: OCFile): RemoveFilesDialogFragment {
+            return newInstance(arrayListOf(file), file.isAvailableLocally)
         }
     }
 }

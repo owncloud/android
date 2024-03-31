@@ -60,7 +60,7 @@ import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFileWithSyncInfoByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
-import com.owncloud.android.domain.files.usecases.GetIfFileFolderLocalUseCase
+import com.owncloud.android.domain.files.usecases.IsAnyFileAvailableLocallyUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
 import com.owncloud.android.domain.files.usecases.GetPersonalRootFolderForAccountUseCase
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
@@ -167,7 +167,7 @@ val useCaseModule = module {
     factoryOf(::GetFolderContentAsStreamUseCase)
     factoryOf(::GetFolderContentUseCase)
     factoryOf(::GetFolderImagesUseCase)
-    factoryOf(::GetIfFileFolderLocalUseCase)
+    factoryOf(::IsAnyFileAvailableLocallyUseCase)
     factoryOf(::GetPersonalRootFolderForAccountUseCase)
     factoryOf(::GetSearchFolderContentUseCase)
     factoryOf(::GetSharedByLinkForAccountAsStreamUseCase)

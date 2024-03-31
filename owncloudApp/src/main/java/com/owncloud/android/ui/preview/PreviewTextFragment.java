@@ -418,7 +418,7 @@ public class PreviewTextFragment extends FileFragment {
                 return true;
             }
             case R.id.action_remove_file: {
-                RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstanceForSingleFile(getFile(), getFile().isAvailableLocally());
+                RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstanceForSingleFile(getFile());
                 dialog.show(getFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
                 return true;
             }

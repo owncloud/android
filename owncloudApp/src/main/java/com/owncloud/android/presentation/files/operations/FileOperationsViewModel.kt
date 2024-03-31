@@ -36,7 +36,7 @@ import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
-import com.owncloud.android.domain.files.usecases.GetIfFileFolderLocalUseCase
+import com.owncloud.android.domain.files.usecases.IsAnyFileAvailableLocallyUseCase
 import com.owncloud.android.domain.files.usecases.ManageDeepLinkUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
@@ -71,7 +71,7 @@ class FileOperationsViewModel(
     private val unsetFilesAsAvailableOfflineUseCase: UnsetFilesAsAvailableOfflineUseCase,
     private val manageDeepLinkUseCase: ManageDeepLinkUseCase,
     private val setLastUsageFileUseCase: SetLastUsageFileUseCase,
-    private val getIfFileFolderLocalUseCase: GetIfFileFolderLocalUseCase,
+    private val isAnyFileAvailableLocallyUseCase: IsAnyFileAvailableLocallyUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
@@ -135,8 +135,8 @@ class FileOperationsViewModel(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
             showLoading = true,
             sharedFlow = _checkIfFileLocalSharedFlow,
-            useCase = getIfFileFolderLocalUseCase,
-            useCaseParams = GetIfFileFolderLocalUseCase.Params(filesToRemove),
+            useCase = isAnyFileAvailableLocallyUseCase,
+            useCaseParams = IsAnyFileAvailableLocallyUseCase.Params(filesToRemove),
             requiresConnection = false
         )
     }

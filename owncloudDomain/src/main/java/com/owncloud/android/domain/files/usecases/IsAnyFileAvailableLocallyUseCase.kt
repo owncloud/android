@@ -16,23 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.domain.files.usecases
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
-class GetIfFileFolderLocalUseCase(private val fileRepository: FileRepository) :
-    BaseUseCaseWithResult<Boolean, GetIfFileFolderLocalUseCase.Params>() {
+class IsAnyFileAvailableLocallyUseCase(private val fileRepository: FileRepository) :
+    BaseUseCaseWithResult<Boolean, IsAnyFileAvailableLocallyUseCase.Params>() {
 
-    override fun run(params: Params): Boolean = getIfFileFolderLocal(params.filesToRemove)
-    private fun getIfFileFolderLocal(filesToRemove: List<OCFile>): Boolean {
+    override fun run(params: Params): Boolean = isAnyFileAvailableLocally(params.listOfFiles)
+    private fun isAnyFileAvailableLocally(filesToRemove: List<OCFile>): Boolean {
 
         if (filesToRemove.any { it.isAvailableLocally }) {
             return true
         } else {
             filesToRemove.filter { it.isFolder }.forEach { folder ->
-                if (getIfFileFolderLocal(fileRepository.getFolderContent(folder.id!!))) {
+                if (isAnyFileAvailableLocally(fileRepository.getFolderContent(folder.id!!))) {
                     return true
                 }
             }
@@ -40,6 +41,6 @@ class GetIfFileFolderLocalUseCase(private val fileRepository: FileRepository) :
         return false
     }
 
-    data class Params(val filesToRemove: List<OCFile>)
+    data class Params(val listOfFiles: List<OCFile>)
 
 }

@@ -270,7 +270,7 @@ class PreviewAudioFragment : FileFragment() {
             }
 
             R.id.action_remove_file -> {
-                val dialog = RemoveFilesDialogFragment.newInstance(file, file.isAvailableLocally)
+                val dialog = RemoveFilesDialogFragment.newInstance(file)
                 dialog.show(parentFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
                 true
             }
