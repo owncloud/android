@@ -83,7 +83,7 @@ public class AccountUtils {
         return accountManager.getAccountsByType(MainApp.Companion.getAccountType());
     }
 
-    public static void deleteAccount(Context context) {
+    public static void deleteAccounts(Context context) {
         AccountManager accountManager = AccountManager.get(context);
         Account[] accounts = getAccounts(context);
         for (Account account : accounts) {

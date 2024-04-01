@@ -135,11 +135,8 @@ class MainApp : Application() {
                         ReleaseNotesActivity.runIfNeeded(activity)
 
                         val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
-                        val isClearDataClicked = pref.contains(PREFERENCE_CLEAR_DATA)
-                        if (!isClearDataClicked) {
-                            AccountUtils.deleteAccount(appContext)
-                            WhatsNewActivity.runIfNeeded(activity)
-                        } else {
+                        val isClearDataPrefAvailable = pref.contains(PREFERENCE_CLEAR_DATA)
+                        if (isClearDataPrefAvailable) {
                             val dontShowAgainDialogPref = pref.getBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, false)
                             if (!dontShowAgainDialogPref && shouldShowDialog(activity)) {
                                 val checkboxDialog = activity.layoutInflater.inflate(R.layout.checkbox_dialog, null)
@@ -159,6 +156,9 @@ class MainApp : Application() {
                                 val alertDialog = builder.create()
                                 alertDialog.show()
                             }
+                        } else { // "Clear data" button is pressed from the app settings in the device settings.
+                            AccountUtils.deleteAccounts(appContext)
+                            WhatsNewActivity.runIfNeeded(activity)
                         }
                     }
                 }
