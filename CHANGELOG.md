@@ -30,6 +30,7 @@ ownCloud admins and users.
 ## Summary
 
 * Bugfix - Remove lens icon in folder picker: [#4311](https://github.com/owncloud/android/issues/4311)
+* Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 * Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
 * Change - Add new prefixes in commit messages of 3rd party contributors: [#4346](https://github.com/owncloud/android/pull/4346)
@@ -47,6 +48,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4311
    https://github.com/owncloud/android/pull/4339
+
+* Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
+
+   Temporary files related to a failed upload are deleted after retrying it and
+   being successfully completed.
+
+   https://github.com/owncloud/android/issues/4335
+   https://github.com/owncloud/android/pull/4341
 
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 
