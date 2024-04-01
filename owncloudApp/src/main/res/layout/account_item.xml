@@ -76,7 +76,7 @@
         android:textColor="@color/textColor"
         android:textSize="14sp"
         android:lines="1"
-        app:layout_constraintEnd_toStartOf="@+id/removeButton"
+        app:layout_constraintEnd_toStartOf="@+id/clean_account_local_storage_button"
         app:layout_constraintStart_toEndOf="@id/ticker"
         app:layout_constraintTop_toBottomOf="@id/name" />
 
