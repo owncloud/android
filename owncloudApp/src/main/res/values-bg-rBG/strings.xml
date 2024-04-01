@@ -469,9 +469,6 @@
   <string name="edit_share_done">готово</string>
   <string name="action_upload_retry">Повторен опит</string>
   <string name="action_upload_clear">Изчистване</string>
-  <string name="manage_space_title">Управление на пространството</string>
-  <string name="manage_space_clear_data">Изчистване на данни</string>
-  <string name="manage_space_error">Някой файлове не могат да бъдат изтрити</string>
   <string name="local_file_not_found_toast">Файлът не беше намерен в локалната файлова система</string>
   <string name="confirmation_remove_files_alert">Наистина ли желаете да премахнете избраните обекти?</string>
   <string name="confirmation_remove_folders_alert">Наистина ли желаете да премахнете избраните обекти и тяхното съдържание?</string>

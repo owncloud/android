@@ -384,9 +384,6 @@
   <string name="edit_share_done">انجام شد</string>
   <string name="action_upload_retry">تلاش مجدد</string>
   <string name="action_upload_clear">معلوم</string>
-  <string name="manage_space_title">مدیریت فضا</string>
-  <string name="manage_space_clear_data">پاک‌سازی داده</string>
-  <string name="manage_space_error">برخی پرونده‌ها نمي‌توانند حذف شوند.</string>
   <string name="auth_forbidden">دسترسی غیر مجاز</string>
   <string name="actionbar_privacy_policy">سیاست حفظ حریم خصوصی</string>
   <string name="prefs_privacy_policy">سیاست حفظ حریم خصوصی</string>

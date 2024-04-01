@@ -572,10 +572,6 @@
   <string name="edit_share_done">valmis</string>
   <string name="action_upload_retry">Proovi uuesti</string>
   <string name="action_upload_clear">Tühjenda</string>
-  <string name="manage_space_title">Ruumi haldamine</string>
-  <string name="manage_space_description">See funktsioon pole hetkel saadaval. Järgmised versioonid sisaldavad uusi funktsioone salvestusmahu automaatseks ja käsitsi eemaldamiseks. Jääge meiega!</string>
-  <string name="manage_space_clear_data">Tühjenda andmed</string>
-  <string name="manage_space_error">Mõningate failide kustutamine ebaõnnestus.</string>
   <string name="local_file_not_found_toast">Faili ei õnnestunud lokaalsest failisüsteemist leida</string>
   <string name="confirmation_remove_files_alert">Kas sa tõesti soovid valitud kirjeid eemaldada?</string>
   <string name="confirmation_remove_folders_alert">Kas soovid tõesti eemaldada valitud üksused ja nende sisud?</string>

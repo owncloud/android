@@ -488,10 +488,6 @@
   <string name="edit_share_done">färdig</string>
   <string name="action_upload_retry">Försök igen</string>
   <string name="action_upload_clear">Rensa</string>
-  <string name="manage_space_title">Hantera utrymme</string>
-  <string name="manage_space_description">Inställningar, databas och servercertifikat från %1$s\'s data kommer att raderas permanent. \n\nNedladdade filer kommer inte påverkas.\n\nDetta kan ta ett tag.</string>
-  <string name="manage_space_clear_data">Rensa data</string>
-  <string name="manage_space_error">Vissa filer kunde inte raderas.</string>
   <string name="local_file_not_found_toast">Filen hittades inte i det lokala filsystemet</string>
   <string name="confirmation_remove_files_alert">Vill du verkligen ta bort de markerade objekten?</string>
   <string name="confirmation_remove_folders_alert">Vill du verkligen ta bort de markerade objekten och deras innehåll?</string>
