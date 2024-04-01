@@ -29,6 +29,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - "Clear data" button enabled in the app settings in device settings: [#4309](https://github.com/owncloud/android/issues/4309)
 * Bugfix - Remove lens icon in folder picker: [#4311](https://github.com/owncloud/android/issues/4311)
 * Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
@@ -43,6 +44,15 @@ ownCloud admins and users.
 * Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
 
 ## Details
+
+* Bugfix - "Clear data" button enabled in the app settings in device settings: [#4309](https://github.com/owncloud/android/issues/4309)
+
+   The "Clear data" button has been enabled to delete the application data from the
+   app settings in the device settings. Shared preferences, temporary files,
+   accounts and the local database will be cleared when the button is pressed.
+
+   https://github.com/owncloud/android/issues/4309
+   https://github.com/owncloud/android/pull/4350
 
 * Bugfix - Remove lens icon in folder picker: [#4311](https://github.com/owncloud/android/issues/4311)
 
