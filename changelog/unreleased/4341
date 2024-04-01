@@ -1,0 +1,6 @@
+Bugfix: Retried successful uploads are cleaned up from the temporary folder
+
+Temporary files related to a failed upload are deleted after retrying it and being successfully completed.
+
+https://github.com/owncloud/android/issues/4335
+https://github.com/owncloud/android/pull/4341
