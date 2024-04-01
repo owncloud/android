@@ -66,7 +66,7 @@ import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.providers.LogsProvider
 import com.owncloud.android.providers.MdmProvider
 import com.owncloud.android.ui.activity.FileDisplayActivity
-import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.PREFERENCE_CLEAR_DATA
+import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED
 import com.owncloud.android.ui.activity.WhatsNewActivity
 import com.owncloud.android.utils.CONFIGURATION_ALLOW_SCREENSHOTS
 import com.owncloud.android.utils.DOWNLOAD_NOTIFICATION_CHANNEL_ID
@@ -135,8 +135,8 @@ class MainApp : Application() {
                         ReleaseNotesActivity.runIfNeeded(activity)
 
                         val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
-                        val isClearDataPrefAvailable = pref.contains(PREFERENCE_CLEAR_DATA)
-                        if (isClearDataPrefAvailable) {
+                        val clearDataAlreadyTriggered = pref.contains(PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED)
+                        if (clearDataAlreadyTriggered) {
                             val dontShowAgainDialogPref = pref.getBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, false)
                             if (!dontShowAgainDialogPref && shouldShowDialog(activity)) {
                                 val checkboxDialog = activity.layoutInflater.inflate(R.layout.checkbox_dialog, null)

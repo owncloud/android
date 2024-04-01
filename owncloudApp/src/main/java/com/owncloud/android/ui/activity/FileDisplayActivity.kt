@@ -188,7 +188,7 @@ class FileDisplayActivity : FileActivity(),
         super.onCreate(savedInstanceState) // this calls onAccountChanged() when ownCloud Account is valid
 
         checkPasscodeEnforced(this)
-        sharedPreferences.putBoolean(PREFERENCE_CLEAR_DATA, true)
+        sharedPreferences.putBoolean(PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED, true)
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
 
         handleDeepLink()
@@ -1869,7 +1869,7 @@ class FileDisplayActivity : FileActivity(),
         private const val CUSTOM_DIALOG_TAG = "CUSTOM_DIALOG"
 
         private const val PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED = "PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED"
-        const val PREFERENCE_CLEAR_DATA = "PREFERENCE_CLEAR_DATA"
+        const val PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED = "PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED"
         const val ALL_FILES_SAF_REGEX = "*/*"
 
         const val ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS"
