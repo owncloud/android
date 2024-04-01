@@ -1,0 +1,7 @@
+Bugfix: "Clear data" button enabled in the app settings in device settings
+
+The "Clear data" button has been enabled to delete the application data from the app settings in the device settings.
+Shared preferences, temporary files, accounts and the local database will be cleared when the button is pressed.
+
+https://github.com/owncloud/android/issues/4309
+https://github.com/owncloud/android/pull/4350
