@@ -353,7 +353,7 @@ class FileDetailsFragment : FileFragment() {
         thumbnailImageView.bringToFront()
         thumbnailImageView.isVisible = false
 
-        val file =  ocFileWithSyncInfo.file
+        val file = ocFileWithSyncInfo.file
         if (ocFileWithSyncInfo.isSynchronizing) {
             thumbnailImageView.setImageResource(R.drawable.sync_pin)
             thumbnailImageView.visibility = View.VISIBLE

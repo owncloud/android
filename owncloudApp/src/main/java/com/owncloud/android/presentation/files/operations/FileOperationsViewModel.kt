@@ -36,6 +36,7 @@ import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
+import com.owncloud.android.domain.files.usecases.IsAnyFileAvailableLocallyUseCase
 import com.owncloud.android.domain.files.usecases.ManageDeepLinkUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
@@ -49,7 +50,9 @@ import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.ui.dialog.FileAlreadyExistsDialog
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -68,6 +71,7 @@ class FileOperationsViewModel(
     private val unsetFilesAsAvailableOfflineUseCase: UnsetFilesAsAvailableOfflineUseCase,
     private val manageDeepLinkUseCase: ManageDeepLinkUseCase,
     private val setLastUsageFileUseCase: SetLastUsageFileUseCase,
+    private val isAnyFileAvailableLocallyUseCase: IsAnyFileAvailableLocallyUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
@@ -102,6 +106,9 @@ class FileOperationsViewModel(
     private val _deepLinkFlow = MutableStateFlow<Event<UIResult<OCFile?>>?>(null)
     val deepLinkFlow: StateFlow<Event<UIResult<OCFile?>>?> = _deepLinkFlow
 
+    private val _checkIfFileLocalSharedFlow = MutableSharedFlow<UIResult<Boolean>>()
+    val checkIfFileLocalSharedFlow: SharedFlow<UIResult<Boolean>> = _checkIfFileLocalSharedFlow
+
     val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
 
     // Used to save the last operation folder
@@ -121,6 +128,17 @@ class FileOperationsViewModel(
             is FileOperation.RefreshFolderOperation -> refreshFolderOperation(fileOperation)
             is FileOperation.CreateFileWithAppProviderOperation -> createFileWithAppProvider(fileOperation)
         }
+    }
+
+    fun showRemoveDialog(filesToRemove: List<OCFile>) {
+        runUseCaseWithResult(
+            coroutineDispatcher = coroutinesDispatcherProvider.io,
+            showLoading = true,
+            sharedFlow = _checkIfFileLocalSharedFlow,
+            useCase = isAnyFileAvailableLocallyUseCase,
+            useCaseParams = IsAnyFileAvailableLocallyUseCase.Params(filesToRemove),
+            requiresConnection = false
+        )
     }
 
     fun setLastUsageFile(file: OCFile) {

@@ -1,0 +1,6 @@
+Enhancement: Correct "Local only" option in remove dialog
+
+"Local only" option in remove dialog will only be shown if checking selected files and folders recursively, at least one file is available locally.
+
+https://github.com/owncloud/android/issues/3936
+https://github.com/owncloud/android/pull/4289
