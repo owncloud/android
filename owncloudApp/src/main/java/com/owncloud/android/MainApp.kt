@@ -136,7 +136,7 @@ class MainApp : Application() {
 
                         val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
                         val clearDataAlreadyTriggered = pref.contains(PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED)
-                        if (clearDataAlreadyTriggered) {
+                        if (clearDataAlreadyTriggered || isNewVersionCode()) {
                             val dontShowAgainDialogPref = pref.getBoolean(PREFERENCE_KEY_DONT_SHOW_OCIS_ACCOUNT_WARNING_DIALOG, false)
                             if (!dontShowAgainDialogPref && shouldShowDialog(activity)) {
                                 val checkboxDialog = activity.layoutInflater.inflate(R.layout.checkbox_dialog, null)
@@ -388,6 +388,14 @@ class MainApp : Application() {
         fun getLastSeenVersionCode(): Int {
             val pref = PreferenceManager.getDefaultSharedPreferences(appContext)
             return pref.getInt(PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, 0)
+        }
+
+        private fun isNewVersionCode(): Boolean {
+            val lastSeenVersionCode = getLastSeenVersionCode()
+            if (lastSeenVersionCode == 0) { // The preferences have been deleted, so we can delete the accounts and navigate to login
+                return false
+            }
+            return lastSeenVersionCode != versionCode // The version has changed and the accounts must not be deleted
         }
     }
 }
