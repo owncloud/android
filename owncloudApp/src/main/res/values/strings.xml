@@ -741,6 +741,8 @@
     <string name="release_notes_4_3_0_subtitle_6">Added a warning dialog in the login view when it is a http connection</string>
     <string name="release_notes_4_3_0_title_7">Correct \"Local only\" option in remove dialog</string>
     <string name="release_notes_4_3_0_subtitle_7">\"Local only\" option in remove dialog will only be shown if checking selected files and folders recursively, at least one file is available locally</string>
+    <string name="release_notes_4_3_0_title_retried_successful_uploads_delete_temporary_folder">Retried successful uploads are cleaned up from the temporary folder</string>
+    <string name="release_notes_4_3_0_subtitle_retried_successful_uploads_delete_temporary_folder">Temporary files related to an upload are deleted after the retried successful uploads is finished</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
