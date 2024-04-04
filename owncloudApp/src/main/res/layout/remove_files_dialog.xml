@@ -55,7 +55,8 @@
                 android:id="@+id/buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/dialog_remove_no"
