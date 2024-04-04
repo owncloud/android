@@ -680,6 +680,8 @@
   <string name="release_notes_4_3_0_subtitle_5">O ícone lente na barra de ferramentas foi removido ao listar espaços no seletor de pastas</string>
   <string name="release_notes_4_3_0_title_6">Adicionar aviso em conexões http</string>
   <string name="release_notes_4_3_0_subtitle_6">Adicionada uma caixa de diálogo de aviso na visualização de login quando for uma conexão http</string>
+  <string name="release_notes_4_3_0_title_7">Opção correta \"Somente local\" na caixa de diálogo de remoção</string>
+  <string name="release_notes_4_3_0_subtitle_7">A opção \"Somente local\" na caixa de diálogo de remoção só será mostrada se a verificação dos arquivos e pastas selecionados recursivamente, pelo menos um arquivo estiver disponível localmente</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
