@@ -162,6 +162,14 @@ class OCLocalFileDataSource(
         return folderContent.map { it.toModel() }
     }
 
+    override fun saveFilesInFolder(listOfFiles: List<OCFile>, folder: OCFile) {
+        // TODO: If it is root, add 0 as parent Id
+        fileDao.insertFilesInFolder(
+            folder = folder.toEntity(),
+            folderContent = listOfFiles.map { it.toEntity() }
+        )
+    }
+
     override fun saveFile(file: OCFile) {
         fileDao.upsert(file.toEntity())
     }
