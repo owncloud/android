@@ -110,7 +110,11 @@ class ReleaseNotesViewModel(
                 subtitle = R.string.release_notes_4_3_0_subtitle_display_name_truncation,
                 type = ReleaseNoteType.BUGFIX
             ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_improve_available_offline_performance,
+                subtitle = R.string.release_notes_4_3_0_subtitle_improve_available_offline_performance,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
         )
     }
 }
-

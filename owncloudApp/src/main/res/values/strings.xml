@@ -750,6 +750,8 @@
     <string name="release_notes_4_3_0_subtitle_password_generator">Passwords for public links can be now generated via a new generator in Infinite Scale accounts</string>
     <string name="release_notes_4_3_0_title_display_name_truncation">Resolved the bug where long display names were truncated incorrectly</string>
     <string name="release_notes_4_3_0_subtitle_display_name_truncation">Display names are now properly truncated in the middle with ellipsis (…) to maintain readability</string>
+    <string name="release_notes_4_3_0_title_improve_available_offline_performance">Improvements in available offline performance</string>
+    <string name="release_notes_4_3_0_subtitle_improve_available_offline_performance">Files contained in an available offline folder will be refreshed only if they have been modified</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
