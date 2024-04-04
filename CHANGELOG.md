@@ -34,6 +34,7 @@ ownCloud admins and users.
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 * Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
 * Change - Add new prefixes in commit messages of 3rd party contributors: [#4346](https://github.com/owncloud/android/pull/4346)
+* Enhancement - Correct "Local only" option in remove dialog: [#3936](https://github.com/owncloud/android/issues/3936)
 * Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
 * Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
 * Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
@@ -79,6 +80,14 @@ ownCloud admins and users.
    Commits'
 
    https://github.com/owncloud/android/pull/4346
+
+* Enhancement - Correct "Local only" option in remove dialog: [#3936](https://github.com/owncloud/android/issues/3936)
+
+   "Local only" option in remove dialog will only be shown if checking selected
+   files and folders recursively, at least one file is available locally.
+
+   https://github.com/owncloud/android/issues/3936
+   https://github.com/owncloud/android/pull/4289
 
 * Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
 
