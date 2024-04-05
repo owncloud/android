@@ -4,6 +4,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  * @author Jorge Aguado Recio
+ * @author Aitor Ballesteros Pavón
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -193,9 +194,9 @@ class LoginActivityTest {
         every { ocContextProvider.getString(R.string.app_name) } returns BRANDED_APP_NAME
 
         activityScenario = if (intent == null) {
-            ActivityScenario.launch(LoginActivity::class.java)
+            ActivityScenario.launchActivityForResult(LoginActivity::class.java)
         } else {
-            ActivityScenario.launch(intent)
+            ActivityScenario.launchActivityForResult(intent)
         }
     }
 
