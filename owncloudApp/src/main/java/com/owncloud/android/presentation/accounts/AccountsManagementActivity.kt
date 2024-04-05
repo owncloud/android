@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Javier Rodríguez Pérez
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -28,13 +29,17 @@ import android.accounts.OperationCanceledException
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.MainApp.Companion.accountType
 import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
+import com.owncloud.android.extensions.collectLatestLifecycleFlow
+import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.accounts.RemoveAccountDialogFragment.Companion.newInstance
 import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
@@ -72,6 +77,8 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
             homeButtonEnabled = true,
             displayShowTitleEnabled = true
         )
+
+        subscribeToViewModels()
 
     }
 
@@ -194,6 +201,39 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
             }, handler
         )
 
+    }
+
+    override fun cleanAccountLocalStorage(account: Account) {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(getString(R.string.clean_data_account_title))
+            .setIcon(R.drawable.ic_warning)
+            .setMessage(getString(R.string.clean_data_account_message))
+            .setPositiveButton(getString(R.string.clean_data_account_button_yes)) { dialog, _ ->
+                accountsManagementViewModel.cleanAccountLocalStorage(account.name)
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.drawer_close) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        dialog.show()
+    }
+
+    private fun subscribeToViewModels() {
+        collectLatestLifecycleFlow(accountsManagementViewModel.cleanAccountLocalStorageFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> showLoadingDialog(R.string.common_loading)
+                    is UIResult.Success -> dismissLoadingDialog()
+                    is UIResult.Error -> {
+                        dismissLoadingDialog()
+                        showErrorInSnackbar(R.string.common_error_unknown, uiResult.error)
+                        Timber.e(uiResult.error)
+                    }
+
+                }
+            }
+        }
     }
 
     override fun run(future: AccountManagerFuture<Boolean>) {

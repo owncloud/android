@@ -109,6 +109,7 @@ import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWeb
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
+import com.owncloud.android.usecases.files.RemoveLocalFilesForAccountUseCase
 import com.owncloud.android.usecases.files.RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFileUseCase
 import com.owncloud.android.usecases.synchronization.SynchronizeFolderUseCase
@@ -176,6 +177,7 @@ val useCaseModule = module {
     factoryOf(::ManageDeepLinkUseCase)
     factoryOf(::MoveFileUseCase)
     factoryOf(::RemoveFileUseCase)
+    factoryOf(::RemoveLocalFilesForAccountUseCase)
     factoryOf(::RemoveLocallyFilesWithLastUsageOlderThanGivenTimeUseCase)
     factoryOf(::RenameFileUseCase)
     factoryOf(::SaveConflictUseCase)

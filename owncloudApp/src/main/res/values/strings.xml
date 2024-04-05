@@ -743,6 +743,8 @@
     <string name="release_notes_4_3_0_subtitle_7">\"Local only\" option in remove dialog will only be shown if checking selected files and folders recursively, at least one file is available locally</string>
     <string name="release_notes_4_3_0_title_retried_successful_uploads_delete_temporary_folder">Retried successful uploads are cleaned up from the temporary folder</string>
     <string name="release_notes_4_3_0_subtitle_retried_successful_uploads_delete_temporary_folder">Temporary files related to an upload are deleted after the retried successful uploads is finished</string>
+    <string name="release_notes_4_3_0_title_manual_removal_local_storage">New setting to removal manually local storage</string>
+    <string name="release_notes_4_3_0_subtitle_manual_removal_local_storage">A new icon has been added in Manage Accounts view to delete manually local and temporary files</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
@@ -792,5 +794,9 @@
     <string name="insecure_http_url_title_dialog">Insecure HTTP URL</string>
     <string name="insecure_http_url_message_dialog">The URL you provided uses HTTP rather than the encrypted HTTPS protocol. If you continue, your communication will not be encrypted.</string>
     <string name="insecure_http_url_continue_button">Continue</string>
+
+    <string name="clean_data_account_message">All downloaded files that are not available offline will be cleaned up for this account</string>
+    <string name="clean_data_account_title">Remove local storage</string>
+    <string name="clean_data_account_button_yes">Clean data</string>
 
 </resources>

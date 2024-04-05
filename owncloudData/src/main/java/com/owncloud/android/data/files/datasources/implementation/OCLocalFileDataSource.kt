@@ -125,6 +125,11 @@ class OCLocalFileDataSource(
             it.toModel()
         }
 
+    override fun getDownloadedFilesForAccount(owner: String): List<OCFile> =
+        fileDao.getDownloadedFilesForAccount(accountOwner = owner).map {
+            it.toModel()
+        }
+
     override fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFile> =
         fileDao.getFilesWithLastUsageOlderThanGivenTime(milliseconds).map {
             it.toModel()
