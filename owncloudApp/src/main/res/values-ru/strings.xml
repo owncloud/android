@@ -464,9 +464,6 @@
   <string name="edit_share_done">завершено</string>
   <string name="action_upload_retry">Повторить</string>
   <string name="action_upload_clear">Очистить</string>
-  <string name="manage_space_title">Управление свободным местом</string>
-  <string name="manage_space_clear_data">Очистить данные</string>
-  <string name="manage_space_error">Некоторые файлы не могут быть удалены.</string>
   <string name="local_file_not_found_toast">Файл не был найден в локальной файловой системе</string>
   <string name="confirmation_remove_files_alert">Вы действительно хотите удалить выбранные элементы?</string>
   <string name="confirmation_remove_folders_alert">Вы действительно хотите удалить выбранные элементы вместе с их содержимым?</string>

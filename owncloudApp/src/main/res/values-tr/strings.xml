@@ -479,9 +479,6 @@
   <string name="edit_share_done">bitti</string>
   <string name="action_upload_retry">Yeniden Dene</string>
   <string name="action_upload_clear">Temizle</string>
-  <string name="manage_space_title">Alanı ayarla</string>
-  <string name="manage_space_clear_data">Verileri temizle</string>
-  <string name="manage_space_error">Bazı dosyalar silinemedi</string>
   <string name="local_file_not_found_toast">Dosya yerel dosya sisteminde bulunamadı</string>
   <string name="confirmation_remove_files_alert">Seçili nesneleri silmek istediğinize emin misiniz?</string>
   <string name="confirmation_remove_folders_alert">Seçili nesneleri ve içeriklerini silmek istediğinize emin misiniz?</string>

@@ -570,10 +570,6 @@
   <string name="edit_share_done">u bë</string>
   <string name="action_upload_retry">Riprovo</string>
   <string name="action_upload_clear">Spastroje</string>
-  <string name="manage_space_title">Administroni hapësirë</string>
-  <string name="manage_space_description">Kjo veçori s’është ende gati. Versione të ardhshëm do të përmbajnë veçori të reja për heqje të automatizuar dhe dorazi depozitash. Na ndiqni!</string>
-  <string name="manage_space_clear_data">Spastroji të dhënat</string>
-  <string name="manage_space_error">Ca kartela s\’u fshinë dot.</string>
   <string name="local_file_not_found_toast">Kartela s\’u gjet te sistemi vendor i kartelave</string>
   <string name="confirmation_remove_files_alert">Doni vërtet të hiqen objektet e përzgjedhur?</string>
   <string name="confirmation_remove_folders_alert">Doni vërtet të hiqen objektet e përzgjedhur dhe lënda e tyre?</string>

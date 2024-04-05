@@ -1,8 +1,10 @@
 /**
  * ownCloud Android client application
  * <p>
+ * @author Aitor Ballesteros Pavón
+ * <p>
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -79,6 +81,14 @@ public class AccountUtils {
     public static Account[] getAccounts(Context context) {
         AccountManager accountManager = AccountManager.get(context);
         return accountManager.getAccountsByType(MainApp.Companion.getAccountType());
+    }
+
+    public static void deleteAccounts(Context context) {
+        AccountManager accountManager = AccountManager.get(context);
+        Account[] accounts = getAccounts(context);
+        for (Account account : accounts) {
+            accountManager.removeAccount(account, null, null, null);
+        }
     }
 
     public static boolean exists(String accountName, Context context) {

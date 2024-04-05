@@ -334,7 +334,5 @@
   <string name="share_privilege_can_edit_delete">läschen</string>
   <string name="edit_share_unshare">Deelen ophalen</string>
   <string name="edit_share_done">gemaacht</string>
-  <string name="manage_space_clear_data">Donnéeë läschen</string>
-  <string name="manage_space_error">Verschidde Fichiere konnten net geläscht ginn.</string>
   <string name="local_file_not_found_toast">De Fichier konnt net am lokale Fichier System fonnt ginn</string>
 </resources>

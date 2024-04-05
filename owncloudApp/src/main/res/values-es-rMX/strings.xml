@@ -440,10 +440,6 @@
   <string name="edit_share_done">hecho</string>
   <string name="action_upload_retry">Intentar de nuevo</string>
   <string name="action_upload_clear">Borrar</string>
-  <string name="manage_space_title">Gestionar espacio</string>
-  <string name="manage_space_description">Las opciones, certificados y Bases de Datos de %1$s\'s serán borrados permanentemente. \n\nLos archibos bajados no serán tocados. .\n\nEste proceso tardará algún tiempo.</string>
-  <string name="manage_space_clear_data">Limpiar datos</string>
-  <string name="manage_space_error">No se han podido eliminar algunos archivos</string>
   <string name="local_file_not_found_toast">El archivo no se encuentra en el servidor local de archivos.</string>
   <string name="confirmation_remove_files_alert">¿Realmente deseas eliminar los elementos seleccionados?</string>
   <string name="confirmation_remove_folders_alert">¿Realmente deseas eliminar los elementos seleccionados y su contenido?</string>

@@ -568,9 +568,6 @@
   <string name="edit_share_done">完了</string>
   <string name="action_upload_retry">リトライ</string>
   <string name="action_upload_clear">クリア</string>
-  <string name="manage_space_title">管理領域</string>
-  <string name="manage_space_clear_data">データのクリア</string>
-  <string name="manage_space_error">いくつかのファイルがクリアできませんでした。</string>
   <string name="local_file_not_found_toast">ローカルファイルにファイルがありません</string>
   <string name="confirmation_remove_files_alert">選択したものを削除してよろしいですか?</string>
   <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか?</string>

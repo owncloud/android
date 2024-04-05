@@ -518,9 +518,6 @@
   <string name="edit_share_done">完成</string>
   <string name="action_upload_retry">重试</string>
   <string name="action_upload_clear">清除</string>
-  <string name="manage_space_title">管理空间</string>
-  <string name="manage_space_clear_data">清除数据</string>
-  <string name="manage_space_error">某些文件无法删除。</string>
   <string name="local_file_not_found_toast">本地文件丢失</string>
   <string name="confirmation_remove_files_alert">确认删除选中的项目吗？</string>
   <string name="confirmation_remove_folders_alert">你真的要删除选定的项目及其内容吗？</string>

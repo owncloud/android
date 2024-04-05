@@ -253,7 +253,4 @@
   <string name="share_privilege_can_edit_delete">forigi</string>
   <string name="edit_share_unshare">Ĉesi kunhavigi</string>
   <string name="edit_share_done">farita</string>
-  <string name="manage_space_title">Administri spacon</string>
-  <string name="manage_space_clear_data">Forviŝi datumojn</string>
-  <string name="manage_space_error">Kelkaj dosieroj ne povis foriĝi.</string>
 </resources>

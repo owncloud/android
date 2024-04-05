@@ -334,8 +334,6 @@ Telecargatz-lo aicí : %2$s</string>
   <string name="share_privilege_can_edit_delete">suprimir</string>
   <string name="edit_share_unshare">Acabar lo partiment</string>
   <string name="edit_share_done">Acabat</string>
-    <string name="manage_space_title">Gestion de l\'espaci</string>
-  <string name="manage_space_clear_data">Escafar las donadas</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d seleccionat</item>
     <item quantity="other">%d seleccionats</item>
