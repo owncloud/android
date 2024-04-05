@@ -13,11 +13,9 @@ updates:
       - "Dependencies"
     commit-message:
       prefix: "feat"
-      include: "scope"
   - package-ecosystem: "github-actions"
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
     commit-message:
       prefix: "feat"
-      include: "scope"
