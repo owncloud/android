@@ -675,6 +675,8 @@
   <string name="release_notes_4_3_0_title_6">Shto sinjalizim në lidhje HTTP</string>
   <string name="release_notes_4_3_0_subtitle_6">U shtua një dialog sinjalizimi te skena e hyrjes në llogari, kur është një lidhje HTTP</string>
   <string name="release_notes_4_3_0_title_7">Mundësi e saktë “Vetëm vendore” te dialog heqjeje</string>
+  <string name="release_notes_4_3_0_title_retried_successful_uploads_delete_temporary_folder">Ngarkime të riprovuar, të suksesshëm, spastrohen te dosja e përkohshme</string>
+  <string name="release_notes_4_3_0_subtitle_retried_successful_uploads_delete_temporary_folder">Kartela të përkohshme, të lidhura me një ngarkim, fshihen, pasi të ketë përfunduar me sukses ngarkimi i riprovuar</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>

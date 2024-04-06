@@ -678,6 +678,8 @@
   <string name="release_notes_4_3_0_subtitle_6">Sisselogimise vaatesse on lisatud on hoiatav dialoogiaken kui tegemist on http-ühendusega</string>
   <string name="release_notes_4_3_0_title_7">Korrektne \"Ainult kohalik\" valik eemaldmise dialoogis</string>
   <string name="release_notes_4_3_0_subtitle_7">\"Ainult kohalik\" valikut näidatakse eemaldamise dialoogis ainult siis, kui valitud faile ja kaustasid märgitakse rekursiivselt ja vähemalt üks fail on kohalikult saadaval</string>
+  <string name="release_notes_4_3_0_title_retried_successful_uploads_delete_temporary_folder">Ajutisest kaustast kustutatakse edukalt lõppenud taasalustatud üleslaadimised</string>
+  <string name="release_notes_4_3_0_subtitle_retried_successful_uploads_delete_temporary_folder">Üleslaadimisega seotud failid kustutatakse peale seda, kui taastalustatud üleslaadimised on edukalt lõpetatud</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
