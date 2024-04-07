@@ -677,6 +677,10 @@
   <string name="release_notes_4_3_0_title_7">Mundësi e saktë “Vetëm vendore” te dialog heqjeje</string>
   <string name="release_notes_4_3_0_title_retried_successful_uploads_delete_temporary_folder">Ngarkime të riprovuar, të suksesshëm, spastrohen te dosja e përkohshme</string>
   <string name="release_notes_4_3_0_subtitle_retried_successful_uploads_delete_temporary_folder">Kartela të përkohshme, të lidhura me një ngarkim, fshihen, pasi të ketë përfunduar me sukses ngarkimi i riprovuar</string>
+  <string name="release_notes_4_3_0_title_manual_removal_local_storage">Rregullim i ri për heqje dorazi depozite vendore</string>
+  <string name="release_notes_4_3_0_subtitle_manual_removal_local_storage">Te pamja Administrim Llogarish është shtuar një ikonë e re, për fshirje dorazi kartelash vendore dhe të përkohshme</string>
+  <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">Buton “Spastro të dhëna” i aktivizuar te rregullime aplikacione në rregullime pajisjeje</string>
+  <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">Butoni “Spastro të dhëna” është aktivizuar për të fshirë të dhëna aplikacioni që nga rregullimet e aplikacionet te rregullimet e pajisjes. Aplikacioni do të kryejë një rikthim te parazgjedhjet, nëse shtypet ky buton</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
@@ -717,4 +721,7 @@
   <string name="insecure_http_url_title_dialog">URL HTTP jo e sigurt</string>
   <string name="insecure_http_url_message_dialog">URL-ja që dhatë përdor HTTP, në vend se protokollin e fshehtëzuar HTTPS. Nëse vazhdoni, komunikimi juaj s’do të jetë i fshehtëzuar.</string>
   <string name="insecure_http_url_continue_button">Vazhdo</string>
+  <string name="clean_data_account_message">Krejt kartelat e shkarkuara që s’janë të passhme jashtë interneti do të spastrohen për këtë llogari</string>
+  <string name="clean_data_account_title">Hiq depozitë vendore</string>
+  <string name="clean_data_account_button_yes">Pastro të dhëna</string>
 </resources>
