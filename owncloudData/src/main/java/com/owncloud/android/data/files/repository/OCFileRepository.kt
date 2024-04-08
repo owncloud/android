@@ -424,23 +424,21 @@ class OCFileRepository(
                                 if (remoteFolder.isAvailableOffline) AVAILABLE_OFFLINE_PARENT else NOT_AVAILABLE_OFFLINE
 
                         })
-                } else {
-                    if (localChildToSync.etag != remoteChild.etag) {
-                        // File exists in the database, we need to check several stuff.
-                        folderContentUpdated.add(
-                            remoteChild.apply {
-                                copyLocalPropertiesFrom(localChildToSync)
-                                // DO NOT update etag till contents are synced.
-                                etag = localChildToSync.etag
-                                needsToUpdateThumbnail =
-                                    (!remoteChild.isFolder && remoteChild.modificationTimestamp != localChildToSync.modificationTimestamp) || localChildToSync.needsToUpdateThumbnail
-                                // Probably not needed, if the child was already in the database, the av offline status should be also there
-                                if (remoteFolder.isAvailableOffline) {
-                                    availableOfflineStatus = AVAILABLE_OFFLINE_PARENT
-                                }
-                                // FIXME: What about renames? Need to fix storage path
-                            })
-                    }
+                } else if (localChildToSync.etag != remoteChild.etag) {
+                    // File exists in the database, we need to check several stuff.
+                    folderContentUpdated.add(
+                        remoteChild.apply {
+                            copyLocalPropertiesFrom(localChildToSync)
+                            // DO NOT update etag till contents are synced.
+                            etag = localChildToSync.etag
+                            needsToUpdateThumbnail =
+                                (!remoteChild.isFolder && remoteChild.modificationTimestamp != localChildToSync.modificationTimestamp) || localChildToSync.needsToUpdateThumbnail
+                            // Probably not needed, if the child was already in the database, the av offline status should be also there
+                            if (remoteFolder.isAvailableOffline) {
+                                availableOfflineStatus = AVAILABLE_OFFLINE_PARENT
+                            }
+                            // FIXME: What about renames? Need to fix storage path
+                        })
                 }
             }
 
