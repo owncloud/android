@@ -227,26 +227,6 @@ interface FileDao {
     }
 
     @Transaction
-    fun insertFilesInFolder(
-        folder: OCFileEntity,
-        folderContent: List<OCFileEntity>,
-    ) {
-        var folderId = insertOrIgnore(folder)
-        // If it was already in database
-        if (folderId == -1L) {
-            updateFile(folder)
-            folderId = folder.id
-        }
-
-        folderContent.forEach { fileToInsert ->
-            upsert(fileToInsert.apply {
-                parentId = folderId
-                availableOfflineStatus = getNewAvailableOfflineStatus(folder.availableOfflineStatus, fileToInsert.availableOfflineStatus)
-            })
-        }
-    }
-
-    @Transaction
     fun mergeRemoteAndLocalFile(
         ocFileEntity: OCFileEntity
     ): Long {

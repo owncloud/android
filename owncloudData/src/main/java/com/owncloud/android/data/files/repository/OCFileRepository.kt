@@ -462,7 +462,7 @@ class OCFileRepository(
         if (!anyConflictInThisFolder) {
             remoteFolder.etagInConflict = null
         }
-        localFileDataSource.saveFilesInFolder(
+        localFileDataSource.saveFilesInFolderAndReturnThem(
             folder = remoteFolder,
             listOfFiles = folderContentUpdated
         )
