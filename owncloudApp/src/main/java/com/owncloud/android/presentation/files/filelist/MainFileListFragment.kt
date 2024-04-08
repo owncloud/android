@@ -1378,24 +1378,24 @@ class MainFileListFragment : Fragment(),
             show()
         }
 
-        val imageView = removeDialog.findViewById<ImageView>(R.id.dialog_remove_thumbnail)
-        val content = removeDialog.findViewById<TextView>(R.id.dialog_remove_information)
+        val thumbnailImageView = removeDialog.findViewById<ImageView>(R.id.dialog_remove_thumbnail)
+        val dialogText = removeDialog.findViewById<TextView>(R.id.dialog_remove_information)
         val localRemoveButton = removeDialog.findViewById<Button>(R.id.dialog_remove_local_only)
         val yesRemoveButton = removeDialog.findViewById<Button>(R.id.dialog_remove_yes)
         val noRemoveButton = removeDialog.findViewById<Button>(R.id.dialog_remove_no)
 
-        content.text = String.format(getString(R.string.confirmation_remove_file_alert), file.fileName)
+        dialogText.text = String.format(getString(R.string.confirmation_remove_file_alert), file.fileName)
 
-        // Show the thumbnail when the file has it
+        // Show the thumbnail when the file has one
         val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
 
         if (thumbnail != null) {
-            imageView.setImageBitmap(thumbnail)
+            thumbnailImageView.setImageBitmap(thumbnail)
         } else {
-            imageView.visibility = View.GONE
+            thumbnailImageView.visibility = View.GONE
         }
 
-        // Hide local remove only button when the file it is no available locally
+        // Hide "Local only" remove button when the file is not available locally
         if (!file.isAvailableLocally) {
             localRemoveButton.visibility = View.INVISIBLE
         }
