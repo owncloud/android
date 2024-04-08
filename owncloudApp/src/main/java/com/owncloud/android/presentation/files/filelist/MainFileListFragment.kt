@@ -1133,7 +1133,7 @@ class MainFileListFragment : Fragment(),
 
             R.id.action_remove_file -> {
                 if (checkedFiles.size == 1 && !checkedFiles[0].isFolder) {
-                    context?.let { showRemoveCustomDialog(checkedFiles[0], it) }
+                    showRemoveCustomDialog(checkedFiles[0], requireContext())
                 } else {
                     filesToRemove = checkedFiles
                     fileOperationsViewModel.showRemoveDialog(filesToRemove)
