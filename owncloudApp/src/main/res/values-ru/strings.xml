@@ -465,7 +465,7 @@
   <string name="action_upload_retry">Повторить</string>
   <string name="action_upload_clear">Очистить</string>
   <string name="local_file_not_found_toast">Файл не был найден в локальной файловой системе</string>
-    <string name="confirmation_remove_folders_alert">Вы действительно хотите удалить выбранные элементы вместе с их содержимым?</string>
+  <string name="confirmation_remove_folders_alert">Вы действительно хотите удалить выбранные элементы вместе с их содержимым?</string>
   <string name="failed_upload_quota_exceeded_text">Недостаточно места в учётной записи</string>
   <string name="auth_forbidden">Запрещённая аутентификация</string>
   <string name="actionbar_privacy_policy">Политика конфиденциальности</string>

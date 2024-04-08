@@ -569,7 +569,7 @@
   <string name="action_upload_retry">リトライ</string>
   <string name="action_upload_clear">クリア</string>
   <string name="local_file_not_found_toast">ローカルファイルにファイルがありません</string>
-    <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか?</string>
+  <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか?</string>
   <string name="failed_upload_quota_exceeded_text">アカウントに十分なスペースがありません</string>
   <string name="auth_forbidden">認証失敗</string>
   <string name="actionbar_privacy_policy">プライバシーポリシー</string>

@@ -480,7 +480,7 @@
   <string name="action_upload_retry">Επανάληψη</string>
   <string name="action_upload_clear">Εκκαθάριση</string>
   <string name="local_file_not_found_toast">Το αρχείο δεν βρέθηκε στο τοπικό σύστημα αρχείων</string>
-    <string name="confirmation_remove_folders_alert">Θέλετε να διαγράψετε τα επιλεγμένα αντικείμενα και τα περιεχόμενά τους;</string>
+  <string name="confirmation_remove_folders_alert">Θέλετε να διαγράψετε τα επιλεγμένα αντικείμενα και τα περιεχόμενά τους;</string>
   <string name="failed_upload_quota_exceeded_text">Δεν υπάρχει αρκετός διαθέσιμος χώρος στον λογαριασμό</string>
   <string name="auth_forbidden">Απαγορευμένη πιστοποίηση</string>
   <string name="actionbar_privacy_policy">Πολιτική απορρήτου</string>

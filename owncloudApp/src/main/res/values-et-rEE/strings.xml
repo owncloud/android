@@ -573,7 +573,7 @@
   <string name="action_upload_retry">Proovi uuesti</string>
   <string name="action_upload_clear">Tühjenda</string>
   <string name="local_file_not_found_toast">Faili ei õnnestunud lokaalsest failisüsteemist leida</string>
-    <string name="confirmation_remove_folders_alert">Kas soovid tõesti eemaldada valitud üksused ja nende sisud?</string>
+  <string name="confirmation_remove_folders_alert">Kas soovid tõesti eemaldada valitud üksused ja nende sisud?</string>
   <string name="failed_upload_quota_exceeded_text">Kontol pole piisavalt mahtu</string>
   <string name="auth_forbidden">Autentimine keelatud</string>
   <string name="actionbar_privacy_policy">Privaatsus</string>

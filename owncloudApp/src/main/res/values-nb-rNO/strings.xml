@@ -464,7 +464,7 @@
   <string name="action_upload_retry">Prøv igjen</string>
   <string name="action_upload_clear">Tøm</string>
   <string name="local_file_not_found_toast">Filen ble ikke funnet i det lokale filsystemet</string>
-    <string name="confirmation_remove_folders_alert">Vil du virkelig fjerne de valgte elementene og innholdet i dem?</string>
+  <string name="confirmation_remove_folders_alert">Vil du virkelig fjerne de valgte elementene og innholdet i dem?</string>
   <string name="failed_upload_quota_exceeded_text">For lite plass på kontoen</string>
   <string name="auth_forbidden">Forbudt autentisering</string>
   <string name="actionbar_privacy_policy">Personvernregler</string>

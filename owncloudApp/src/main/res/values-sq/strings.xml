@@ -571,7 +571,7 @@
   <string name="action_upload_retry">Riprovo</string>
   <string name="action_upload_clear">Spastroje</string>
   <string name="local_file_not_found_toast">Kartela s\’u gjet te sistemi vendor i kartelave</string>
-    <string name="confirmation_remove_folders_alert">Doni vërtet të hiqen objektet e përzgjedhur dhe lënda e tyre?</string>
+  <string name="confirmation_remove_folders_alert">Doni vërtet të hiqen objektet e përzgjedhur dhe lënda e tyre?</string>
   <string name="failed_upload_quota_exceeded_text">Hapësirë e pamjaftueshme te llogaria</string>
   <string name="auth_forbidden">Mirëfilltësim i ndaluar</string>
   <string name="actionbar_privacy_policy">Rregulla privatësie</string>

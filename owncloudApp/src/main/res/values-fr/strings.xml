@@ -504,7 +504,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="action_upload_retry">Réessayer</string>
   <string name="action_upload_clear">Effacer</string>
   <string name="local_file_not_found_toast">Le fichier n\'a pas été trouvé sur le système de fichier local</string>
-    <string name="confirmation_remove_folders_alert">Êtes-vous certain de vouloir supprimer les objets sélectionnés ainsi que leurs contenus ?</string>
+  <string name="confirmation_remove_folders_alert">Êtes-vous certain de vouloir supprimer les objets sélectionnés ainsi que leurs contenus ?</string>
   <string name="failed_upload_quota_exceeded_text">Espace insuffisant pour ce compte</string>
   <string name="auth_forbidden">Authentification interdite</string>
   <string name="actionbar_privacy_policy">Politique de confidentialité</string>

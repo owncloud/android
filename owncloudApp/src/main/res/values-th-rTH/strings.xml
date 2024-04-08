@@ -507,7 +507,7 @@
   <string name="action_upload_retry">ลองใหม่อีกครั้ง</string>
   <string name="action_upload_clear">ล้าง</string>
   <string name="local_file_not_found_toast">ไม่พบไฟล์ในเครื่อง</string>
-    <string name="confirmation_remove_folders_alert">คุณต้องการลบรายการที่เลือกและเนื้อหาของพวกเขา?</string>
+  <string name="confirmation_remove_folders_alert">คุณต้องการลบรายการที่เลือกและเนื้อหาของพวกเขา?</string>
   <string name="failed_upload_quota_exceeded_text">พื้นที่ในบัญชีไม่เพียงพอ</string>
   <string name="auth_forbidden">การรับรองความถูกต้องถูกห้าม</string>
   <string name="actionbar_privacy_policy">นโยบายความเป็นส่วนตัว</string>

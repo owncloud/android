@@ -427,7 +427,7 @@
   <string name="action_upload_retry">Pakartoti</string>
   <string name="action_upload_clear">Išvalyti</string>
   <string name="local_file_not_found_toast">Byla nerasta lokalioje sistemoje</string>
-    <string name="confirmation_remove_folders_alert">Ar tikrai norite pašalinti pasirinktus obejktus ir jų turinį?</string>
+  <string name="confirmation_remove_folders_alert">Ar tikrai norite pašalinti pasirinktus obejktus ir jų turinį?</string>
   <string name="failed_upload_quota_exceeded_text">Nepakanka vietos paskyroje</string>
   <string name="auth_forbidden">Draudžiama autentifikacija</string>
   <string name="actionbar_privacy_policy">Privatumo taisyklės</string>
