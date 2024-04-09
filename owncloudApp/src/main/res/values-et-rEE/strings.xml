@@ -680,6 +680,10 @@
   <string name="release_notes_4_3_0_subtitle_7">\"Ainult kohalik\" valikut näidatakse eemaldamise dialoogis ainult siis, kui valitud faile ja kaustasid märgitakse rekursiivselt ja vähemalt üks fail on kohalikult saadaval</string>
   <string name="release_notes_4_3_0_title_retried_successful_uploads_delete_temporary_folder">Ajutisest kaustast kustutatakse edukalt lõppenud taasalustatud üleslaadimised</string>
   <string name="release_notes_4_3_0_subtitle_retried_successful_uploads_delete_temporary_folder">Üleslaadimisega seotud failid kustutatakse peale seda, kui taastalustatud üleslaadimised on edukalt lõpetatud</string>
+  <string name="release_notes_4_3_0_title_manual_removal_local_storage">Uus seadistus kohaliku andmehoidla kustutamiseks</string>
+  <string name="release_notes_4_3_0_subtitle_manual_removal_local_storage">Kontode haldamise vaatesse on lisatud uus ikoon kohalike ja ajutiste failide käsitsi kustutamiseks</string>
+  <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">Seadme seadistuste rakenduste alajaotusesse on lisatud \"Tühjenda andmed\" nupp</string>
+  <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">Seadme seadistuste rakenduste alajaotusesse on lisatud \"Tühjenda andmed\" nupp. Nupu vajutamisel tehakse rakendusele täielik algseadistus.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -720,4 +724,7 @@
   <string name="insecure_http_url_title_dialog">Ebaturvaline HTTP URL</string>
   <string name="insecure_http_url_message_dialog">Sisestatud URL kasutab krüpteeritud HTTPS-protokolli asemel HTTP-protokolli. Jätkamisel ei ole teie ühendus krüpteeritud.</string>
   <string name="insecure_http_url_continue_button">Jätka</string>
+  <string name="clean_data_account_message">Kõik selle kasutajakonto allalaetud failid, mis ei ole võrguühenduseta saadaval, kustutatakse</string>
+  <string name="clean_data_account_title">Eemalda kohalik salvestusmaht</string>
+  <string name="clean_data_account_button_yes">Puhasta andmed</string>
 </resources>

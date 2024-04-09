@@ -678,6 +678,12 @@
   <string name="release_notes_4_3_0_subtitle_6">Adicionada uma caixa de diálogo de aviso na visualização de login quando for uma conexão http</string>
   <string name="release_notes_4_3_0_title_7">Opção correta \"Somente local\" na caixa de diálogo de remoção</string>
   <string name="release_notes_4_3_0_subtitle_7">A opção \"Somente local\" na caixa de diálogo de remoção só será mostrada se a verificação dos arquivos e pastas selecionados recursivamente, pelo menos um arquivo estiver disponível localmente</string>
+  <string name="release_notes_4_3_0_title_retried_successful_uploads_delete_temporary_folder">Novas tentativas de upload bem-sucedidas são limpas da pasta temporária</string>
+  <string name="release_notes_4_3_0_subtitle_retried_successful_uploads_delete_temporary_folder">Os arquivos temporários relacionados a um upload são excluídos após a conclusão das tentativas de upload bem-sucedidas.</string>
+  <string name="release_notes_4_3_0_title_manual_removal_local_storage">Nova configuração para remover manualmente o armazenamento local</string>
+  <string name="release_notes_4_3_0_subtitle_manual_removal_local_storage">Um novo ícone foi adicionado na visualização Gerenciar contas para excluir manualmente arquivos locais e temporários</string>
+  <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">Botão \"Limpar dados\" ativado nas configurações do aplicativo nas configurações do dispositivo</string>
+  <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">O botão \"Limpar dados\" foi habilitado para excluir os dados do aplicativo das configurações do aplicativo nas configurações do dispositivo. O aplicativo executará uma reinicialização total se este botão for pressionado</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
@@ -718,4 +724,6 @@
   <string name="insecure_http_url_title_dialog">HTTP URL Inseguro</string>
   <string name="insecure_http_url_message_dialog">O URL fornecido usa HTTP em vez do protocolo HTTPS criptografado. Se você continuar, sua comunicação não será criptografada.</string>
   <string name="insecure_http_url_continue_button">Continuar</string>
+  <string name="clean_data_account_message">Todos os arquivos baixados que não estão disponíveis off-line serão limpos nesta conta</string>
+  <string name="clean_data_account_title">Remover armazenamento local</string>
 </resources>
