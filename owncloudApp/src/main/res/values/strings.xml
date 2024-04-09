@@ -590,6 +590,8 @@
     <string name="share_via_link_expiration_date_label">Expiration</string>
     <string name="share_via_link_password_label">Password</string>
     <string name="share_via_link_password_title">Secured</string>
+    <string name="share_via_link_generate_password_button">Generate</string>
+    <string name="share_via_link_copy_password_button">Copy</string>
     <string name="share_via_link_edit_permission_read_only_label">Download / View</string>
     <string name="share_via_link_edit_permission_read_and_write_label">Download/View/Upload</string>
     <string name="share_via_link_edit_permission_upload_only_label">Upload Only (File Drop)</string>
@@ -744,6 +746,8 @@
     <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">The "Clear data" button has been enabled to delete the application data from the app settings in the device settings. The application will perform a hard reset if this button is pressed</string>
     <string name="release_notes_4_3_0_title_improvements_remove_dialog">Improvements in remove dialog</string>
     <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">Added a custom dialog when the file that is going to be deleted has thumbnail and added the number of files that are going to be deleted in a multiple selection</string>
+    <string name="release_notes_4_3_0_title_password_generator">Password generator for public links</string>
+    <string name="release_notes_4_3_0_subtitle_password_generator">Passwords for public links can be now generated via a new generator in Infinite Scale accounts</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>

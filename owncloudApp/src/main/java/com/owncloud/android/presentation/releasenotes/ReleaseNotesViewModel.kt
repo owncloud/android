@@ -99,7 +99,12 @@ class ReleaseNotesViewModel(
                 title = R.string.release_notes_4_3_0_title_improvements_remove_dialog,
                 subtitle = R.string.release_notes_4_3_0_subtitle_improvements_remove_dialog,
                 type = ReleaseNoteType.ENHANCEMENT
-            )
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_password_generator,
+                subtitle = R.string.release_notes_4_3_0_subtitle_password_generator,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
         )
     }
 }

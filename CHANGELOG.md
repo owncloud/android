@@ -42,6 +42,7 @@ ownCloud admins and users.
 * Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
 * Enhancement - Add a warning in http connections: [#4284](https://github.com/owncloud/android/issues/4284)
 * Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
+* Enhancement - Password generator for public links in oCIS: [#4308](https://github.com/owncloud/android/issues/4308)
 * Enhancement - Improvements in remove dialog alert: [#4342](https://github.com/owncloud/android/issues/4342)
 
 ## Details
@@ -148,6 +149,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4303
    https://github.com/owncloud/android/pull/4336
+
+* Enhancement - Password generator for public links in oCIS: [#4308](https://github.com/owncloud/android/issues/4308)
+
+   A new password generator has been added to the public links creation view in
+   oCIS accounts, which creates passwords that fulfill all the policies coming from
+   server in a cryptographically secure way.
+
+   https://github.com/owncloud/android/issues/4308
+   https://github.com/owncloud/android/pull/4349
 
 * Enhancement - Improvements in remove dialog alert: [#4342](https://github.com/owncloud/android/issues/4342)
 
