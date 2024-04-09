@@ -598,7 +598,7 @@ class OCFileRepository(
     private fun deleteLocalFile(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         localStorageProvider.deleteLocalFile(ocFile)
         if (onlyFromLocalStorage) {
-            localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null, lastUsage = null))
+            localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null, lastUsage = null, etag = null))
         } else {
             localFileDataSource.deleteFile(ocFile.id!!)
         }
