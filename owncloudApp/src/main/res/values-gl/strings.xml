@@ -484,7 +484,6 @@ Descárgueo de aquí: %2$s</string>
   <string name="action_upload_retry">Tentar de novo</string>
   <string name="action_upload_clear">Limpar</string>
   <string name="local_file_not_found_toast">Non se atopou o ficheiro no sistema local de ficheiros</string>
-  <string name="confirmation_remove_files_alert">Confirma que quere retirar os elementos seleccionados?</string>
   <string name="confirmation_remove_folders_alert">Confirma que quere eliminar os elementos seleccionados e o seu contido?</string>
   <string name="failed_upload_quota_exceeded_text">Non hai espazo abondo na conta</string>
   <string name="auth_forbidden">Autenticación non permitida</string>

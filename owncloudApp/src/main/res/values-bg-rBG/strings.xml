@@ -470,7 +470,6 @@
   <string name="action_upload_retry">Повторен опит</string>
   <string name="action_upload_clear">Изчистване</string>
   <string name="local_file_not_found_toast">Файлът не беше намерен в локалната файлова система</string>
-  <string name="confirmation_remove_files_alert">Наистина ли желаете да премахнете избраните обекти?</string>
   <string name="confirmation_remove_folders_alert">Наистина ли желаете да премахнете избраните обекти и тяхното съдържание?</string>
   <string name="failed_upload_quota_exceeded_text">Няма достатъчно място в профила</string>
   <string name="auth_forbidden">Забранено удостоверяване</string>

@@ -572,7 +572,6 @@
   <string name="action_upload_retry">Retry</string>
   <string name="action_upload_clear">Leeren</string>
   <string name="local_file_not_found_toast">Die Datei wurde im lokalen Dateisystem nicht gefunden</string>
-  <string name="confirmation_remove_files_alert">Möchtest du die ausgewählten Elemente wirklich löschen?</string>
   <string name="confirmation_remove_folders_alert">Möchtest du die ausgewählten Elemente und dessen Inhalt wirklich löschen?</string>
   <string name="failed_upload_quota_exceeded_text">Nicht genügend Speicherplatz im Konto verfügbar</string>
   <string name="auth_forbidden">Authentifizierung verweigert</string>

@@ -519,7 +519,6 @@
   <string name="action_upload_retry">重试</string>
   <string name="action_upload_clear">清除</string>
   <string name="local_file_not_found_toast">本地文件丢失</string>
-  <string name="confirmation_remove_files_alert">确认删除选中的项目吗？</string>
   <string name="confirmation_remove_folders_alert">你真的要删除选定的项目及其内容吗？</string>
   <string name="failed_upload_quota_exceeded_text">该账户没有足够的空间</string>
   <string name="auth_forbidden">强制验证</string>

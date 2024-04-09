@@ -477,7 +477,6 @@
   <string name="action_upload_retry">Reintentar</string>
   <string name="action_upload_clear">Borrar</string>
   <string name="local_file_not_found_toast">El archivo no ha sido encontrado en el sistema local de archivos.</string>
-  <string name="confirmation_remove_files_alert">¿Realmente quieres eliminar los items seleccionados?</string>
   <string name="confirmation_remove_folders_alert">¿Realmente quieres eliminar los ítems seleccionados y su contenido?</string>
   <string name="failed_upload_quota_exceeded_text">No hay suficiente espacio en la cuenta</string>
   <string name="auth_forbidden">Verificación prohibida</string>

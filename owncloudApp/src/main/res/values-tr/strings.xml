@@ -480,7 +480,6 @@
   <string name="action_upload_retry">Yeniden Dene</string>
   <string name="action_upload_clear">Temizle</string>
   <string name="local_file_not_found_toast">Dosya yerel dosya sisteminde bulunamadı</string>
-  <string name="confirmation_remove_files_alert">Seçili nesneleri silmek istediğinize emin misiniz?</string>
   <string name="confirmation_remove_folders_alert">Seçili nesneleri ve içeriklerini silmek istediğinize emin misiniz?</string>
   <string name="failed_upload_quota_exceeded_text">Hesapta yeterli yer yok</string>
   <string name="auth_forbidden">Yasak kimlik doğrulaması</string>

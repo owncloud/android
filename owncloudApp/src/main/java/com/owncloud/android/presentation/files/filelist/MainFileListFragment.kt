@@ -5,8 +5,9 @@
  * @author Jose Antonio Barros Ramos
  * @author Juan Carlos Garrote Gascón
  * @author Manuel Plazas Palacio
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,6 +25,8 @@
 package com.owncloud.android.presentation.files.filelist
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.net.Uri
@@ -35,6 +38,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -475,8 +479,13 @@ class MainFileListFragment : Fragment(),
                                 }
 
                                 FileMenuOption.REMOVE -> {
-                                    filesToRemove = listOf(file)
-                                    fileOperationsViewModel.showRemoveDialog(filesToRemove)
+                                    if (file.isFolder) {
+                                        filesToRemove = listOf(file)
+                                        fileOperationsViewModel.showRemoveDialog(filesToRemove)
+                                    } else {
+                                        showRemoveCustomDialog(file, context)
+                                    }
+
                                 }
 
                                 FileMenuOption.OPEN_WITH -> {
@@ -1123,8 +1132,12 @@ class MainFileListFragment : Fragment(),
             }
 
             R.id.action_remove_file -> {
-                filesToRemove = checkedFiles
-                fileOperationsViewModel.showRemoveDialog(filesToRemove)
+                if (checkedFiles.size == 1 && !checkedFiles[0].isFolder) {
+                    showRemoveCustomDialog(checkedFiles[0], requireContext())
+                } else {
+                    filesToRemove = checkedFiles
+                    fileOperationsViewModel.showRemoveDialog(filesToRemove)
+                }
                 return true
             }
 
@@ -1354,6 +1367,52 @@ class MainFileListFragment : Fragment(),
             visibility = View.VISIBLE
             isIndeterminate = indeterminate
             postInvalidate()
+        }
+    }
+
+    private fun showRemoveCustomDialog(file: OCFile, context: Context) {
+        val removeDialog = Dialog(context)
+        removeDialog.apply {
+            setContentView(R.layout.remove_files_dialog)
+            setCancelable(false)
+            show()
+        }
+
+        val thumbnailImageView = removeDialog.findViewById<ImageView>(R.id.dialog_remove_thumbnail)
+        val dialogText = removeDialog.findViewById<TextView>(R.id.dialog_remove_information)
+        val localRemoveButton = removeDialog.findViewById<Button>(R.id.dialog_remove_local_only)
+        val yesRemoveButton = removeDialog.findViewById<Button>(R.id.dialog_remove_yes)
+        val noRemoveButton = removeDialog.findViewById<Button>(R.id.dialog_remove_no)
+
+        dialogText.text = String.format(getString(R.string.confirmation_remove_file_alert), file.fileName)
+
+        // Show the thumbnail when the file has one
+        val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
+
+        if (thumbnail != null) {
+            thumbnailImageView.setImageBitmap(thumbnail)
+        } else {
+            thumbnailImageView.visibility = View.GONE
+        }
+
+        // Hide "Local only" remove button when the file is not available locally
+        if (!file.isAvailableLocally) {
+            localRemoveButton.visibility = View.INVISIBLE
+        }
+
+        localRemoveButton.setOnClickListener {
+            fileOperationsViewModel.performOperation(FileOperation.RemoveOperation(listOf(file), removeOnlyLocalCopy = true))
+            removeDialog.dismiss()
+        }
+
+        yesRemoveButton.setOnClickListener {
+            fileOperationsViewModel.performOperation(FileOperation.RemoveOperation(listOf(file), removeOnlyLocalCopy = false))
+            removeDialog.dismiss()
+        }
+
+        noRemoveButton.setOnClickListener {
+            // Nothing special to do
+            removeDialog.dismiss()
         }
     }
 

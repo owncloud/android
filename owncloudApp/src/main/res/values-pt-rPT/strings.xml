@@ -400,7 +400,6 @@
   <string name="action_upload_retry">Repetir</string>
   <string name="action_upload_clear">Limpar</string>
   <string name="local_file_not_found_toast">O ficheiro não foi encontrado no sistema de ficheiros local</string>
-  <string name="confirmation_remove_files_alert">Tem a certeza que deseja remover os items selecionados?</string>
   <string name="confirmation_remove_folders_alert">Tem a certeza que deseja remover os items selecionados e os seus respetivos conteúdos?</string>
   <string name="failed_upload_quota_exceeded_text">Não existe espaço suficiente na conta</string>
   <string name="auth_forbidden">Autenticação não permitida</string>

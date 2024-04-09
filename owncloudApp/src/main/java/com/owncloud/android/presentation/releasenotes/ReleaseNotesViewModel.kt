@@ -95,6 +95,11 @@ class ReleaseNotesViewModel(
                 subtitle = R.string.release_notes_4_3_0_subtitle_clear_data_button_hard_reset,
                 type = ReleaseNoteType.BUGFIX,
             ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_improvements_remove_dialog,
+                subtitle = R.string.release_notes_4_3_0_subtitle_improvements_remove_dialog,
+                type = ReleaseNoteType.ENHANCEMENT
+            )
         )
     }
 }

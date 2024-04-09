@@ -483,7 +483,6 @@
   <string name="action_upload_retry">إعادة المحاولة</string>
   <string name="action_upload_clear">مسح</string>
   <string name="local_file_not_found_toast">لم يتم العثور على الملف في نظام الملفات المحلية</string>
-  <string name="confirmation_remove_files_alert">هل ترغب حقًا في إزالة العناصر المحددة؟</string>
   <string name="confirmation_remove_folders_alert">هل ترغب حقًا في إزالة العناصر المحددة ومحتوياتها؟</string>
   <string name="failed_upload_quota_exceeded_text">لا توجد مساحة كافية في الحساب</string>
   <string name="auth_forbidden">مصادقة ممنوعة</string>

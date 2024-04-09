@@ -354,7 +354,6 @@
   <string name="edit_share_unshare">Dexar de compartir</string>
   <string name="edit_share_done">fechu</string>
   <string name="local_file_not_found_toast">El ficheru nun s\'atopó nel sistema de ficheros llocal</string>
-  <string name="confirmation_remove_files_alert">¿De que quies desaniciar los elementos seleicionaos?</string>
   <string name="confirmation_remove_folders_alert">¿De xuru que quies desaniciar los elementos seleicionaos y los sos conteníos?</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d escoyíu</item>

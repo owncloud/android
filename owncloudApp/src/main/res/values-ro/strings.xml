@@ -438,7 +438,6 @@ Te rog ia legătura cu administratorul</string>
   <string name="action_upload_retry">Reîncearcă</string>
   <string name="action_upload_clear">Curăță</string>
   <string name="local_file_not_found_toast">Acest fișier nu a fost găsit în sistemul de fișiere local</string>
-  <string name="confirmation_remove_files_alert">Chiar vrei să ștergi elementele selectate ?</string>
   <string name="confirmation_remove_folders_alert">Chiar vrei să ștergi elementele selectate și conținutul lor ?</string>
   <string name="failed_upload_quota_exceeded_text">Spațiu insufficient in cont</string>
   <string name="auth_forbidden">Autentificare interzisă</string>

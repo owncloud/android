@@ -42,6 +42,7 @@ ownCloud admins and users.
 * Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
 * Enhancement - Add a warning in http connections: [#4284](https://github.com/owncloud/android/issues/4284)
 * Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
+* Enhancement - Improvements in remove dialog alert: [#4342](https://github.com/owncloud/android/issues/4342)
 
 ## Details
 
@@ -147,6 +148,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4303
    https://github.com/owncloud/android/pull/4336
+
+* Enhancement - Improvements in remove dialog alert: [#4342](https://github.com/owncloud/android/issues/4342)
+
+   A custom dialog alert has been added when the file that is going to be deleted
+   has thumbnail. Also, when removing files in multiple selection, the number of
+   elements that are going to be removed is displayed in the dialog.
+
+   https://github.com/owncloud/android/issues/4342
+   https://github.com/owncloud/android/pull/4348
 
 # Changelog for ownCloud Android Client [4.2.1] (2024-02-22)
 
