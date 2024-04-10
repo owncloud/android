@@ -424,7 +424,7 @@ class OCFileRepository(
                                 if (remoteFolder.isAvailableOffline) AVAILABLE_OFFLINE_PARENT else NOT_AVAILABLE_OFFLINE
 
                         })
-                } else if (localChildToSync.etag != remoteChild.etag) {
+                } else if (localChildToSync.etag != remoteChild.etag || localChildToSync.localModificationTimestamp > remoteChild.lastSyncDateForData!!) {
                     // File exists in the database, we need to check several stuff.
                     folderContentUpdated.add(
                         remoteChild.apply {
