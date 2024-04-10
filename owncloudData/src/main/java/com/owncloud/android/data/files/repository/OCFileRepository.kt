@@ -65,7 +65,7 @@ class OCFileRepository(
             accountName = parentFolder.owner,
             spaceWebDavUrl = spaceWebDavUrl,
         ).also {
-            localFileDataSource.saveFilesInFolderAndReturnThem(
+            localFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(
                 folder = parentFolder,
                 listOfFiles = listOf(
                     OCFile(
@@ -460,11 +460,11 @@ class OCFileRepository(
         if (!anyConflictInThisFolder) {
             remoteFolder.etagInConflict = null
         }
-        localFileDataSource.saveFilesInFolderAndReturnThem(
+
+        return localFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(
             folder = remoteFolder,
             listOfFiles = folderContentUpdated
         )
-        return folderContentUpdated
     }
 
     override fun deleteFiles(listOfFilesToDelete: List<OCFile>, removeOnlyLocalCopy: Boolean) {

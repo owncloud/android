@@ -4,8 +4,9 @@
  * @author Abel García de Prada
  * @author Aitor Ballesteros Pavón
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -524,25 +525,25 @@ class OCLocalFileDataSourceTest {
     }
 
     @Test
-    fun `saveFilesInFolderAndReturnThem saves a list of OCFile and returns them`() {
-        every { fileDao.insertFilesInFolderAndReturnThem(OC_FOLDER_ENTITY, listOf(OC_FILE_ENTITY)) } returns listOf(OC_FILE_ENTITY)
+    fun `saveFilesInFolderAndReturnTheFilesThatChanged saves a list of OCFile and returns only the changed files`() {
+        every { fileDao.insertFilesInFolderAndReturnTheFilesThatChanged(OC_FOLDER_ENTITY, listOf(OC_FILE_ENTITY)) } returns listOf(OC_FILE_ENTITY)
 
-        val result = ocLocalFileDataSource.saveFilesInFolderAndReturnThem(listOf(OC_FILE), OC_FOLDER)
+        val result = ocLocalFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(listOf(OC_FILE), OC_FOLDER)
 
         assertEquals(listOf(OC_FILE), result)
 
-        verify(exactly = 1) { fileDao.insertFilesInFolderAndReturnThem(OC_FOLDER_ENTITY, listOf(OC_FILE_ENTITY)) }
+        verify(exactly = 1) { fileDao.insertFilesInFolderAndReturnTheFilesThatChanged(OC_FOLDER_ENTITY, listOf(OC_FILE_ENTITY)) }
     }
 
     @Test
-    fun `saveFilesInFolderAndReturnThem returns an empty list when DAO returns an empty list`() {
-        every { fileDao.insertFilesInFolderAndReturnThem(OC_FOLDER_ENTITY, emptyList()) } returns emptyList()
+    fun `saveFilesInFolderAndReturnTheFilesThatChanged returns an empty list when DAO returns an empty list`() {
+        every { fileDao.insertFilesInFolderAndReturnTheFilesThatChanged(OC_FOLDER_ENTITY, emptyList()) } returns emptyList()
 
-        val result = ocLocalFileDataSource.saveFilesInFolderAndReturnThem(emptyList(), OC_FOLDER)
+        val result = ocLocalFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(emptyList(), OC_FOLDER)
 
         assertEquals(emptyList<OCFile>(), result)
 
-        verify(exactly = 1) { fileDao.insertFilesInFolderAndReturnThem(OC_FOLDER_ENTITY, emptyList()) }
+        verify(exactly = 1) { fileDao.insertFilesInFolderAndReturnTheFilesThatChanged(OC_FOLDER_ENTITY, emptyList()) }
     }
 
     @Test
