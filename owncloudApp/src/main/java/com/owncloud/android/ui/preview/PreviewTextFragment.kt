@@ -36,11 +36,9 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.owncloud.android.R
-import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.filterMenuOptions
@@ -55,17 +53,9 @@ import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.lang.ref.WeakReference
-import kotlin.coroutines.Continuation
+import java.util.LinkedList
 
 class PreviewTextFragment : FileFragment() {
-
-    companion object {
-        const val EXTRA_FILE = "FILE"
-        const val EXTRA_ACCOUNT = "ACCOUNT"
-        var isOpen = false
-        var currentFilePreviewing: OCFile? = null
-    }
-
     private var mAccount: Account? = null
     private lateinit var mProgressBar: ProgressBar
     private lateinit var mProgressController: TransferProgressController
@@ -117,17 +107,17 @@ class PreviewTextFragment : FileFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var file: OCFile?
+        val file: OCFile?
         if (savedInstanceState == null) {
-            val args = arguments
-            file = args!!.getParcelable(EXTRA_FILE)
+            val args = requireArguments()
+            file = args.getParcelable(EXTRA_FILE)
             mAccount = args.getParcelable(EXTRA_ACCOUNT)
             if (file == null) {
                 throw IllegalStateException("Instanced with a NULL OCFile")
             }
 
             if (mAccount == null) {
-                throw IllegalStateException(("Instanced with a NULL ownCloud Account")
+                throw IllegalStateException("Instanced with a NULL ownCloud Account")
             }
         } else {
             file = savedInstanceState.getParcelable(EXTRA_FILE)
@@ -136,7 +126,7 @@ class PreviewTextFragment : FileFragment() {
         setFile(file)
         setHasOptionsMenu(true)
         isOpen = true
-        currentFilePreviewing = file!!
+        currentFilePreviewing = file
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -158,7 +148,7 @@ class PreviewTextFragment : FileFragment() {
     }
 
     private fun loadAndShowTextPreview() {
-        mTextLoadTask = PreviewTextFragment.TextLoadAsyncTask(
+        mTextLoadTask = TextLoadAsyncTask(
             WeakReference(mTextPreview),
             WeakReference(rootView),
             WeakReference(mTextLayout),
@@ -183,14 +173,9 @@ class PreviewTextFragment : FileFragment() {
             val accountName = mContainerActivity.storageManager.account.name
             previewTextViewModel.filterMenuOptions(safeFile, accountName)
 
-            FragmentExtKt.collectLatestLifecycleFlow(
-                this,
-                previewTextViewModel.menuOptions,
-                Lifecycle.State.CREATED
-            ) { menuOptions: List<FileMenuOption?>?, continuation: Continuation<Unit>? ->
+            collectLatestLifecycleFlow(previewTextViewModel.menuOptions) { menuOptions ->
                 val hasWritePermission = safeFile.hasWritePermission
-                MenuExtKt.filterMenuOptions(menu, menuOptions, hasWritePermission)
-                null
+                menu.filterMenuOptions(menuOptions, hasWritePermission)
             }
         }
 
@@ -243,9 +228,6 @@ class PreviewTextFragment : FileFragment() {
         }
     }
 
-    private fun seeDetails() {
-        mContainerActivity.showDetails(file)
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -259,19 +241,18 @@ class PreviewTextFragment : FileFragment() {
         currentFilePreviewing = null
     }
 
-    override fun onFileMetadataChanged(updatedFile: OCFile) {
+    override fun onFileMetadataChanged(updatedFile: OCFile?) {
         if (updatedFile != null) {
             file = updatedFile
         }
-        activity?.invalidateOptionsMenu()
+        requireActivity().invalidateOptionsMenu()
     }
 
     override fun onFileMetadataChanged() {
-        val storageManager = mContainerActivity.storageManager
-        if (storageManager != null) {
-            file = storageManager.getFileByPath(file.remotePath, null)
+        mContainerActivity.storageManager?.let {
+            file = it.getFileByPath(file.remotePath)
         }
-        activity?.invalidateOptionsMenu()
+        requireActivity().invalidateOptionsMenu()
     }
 
     override fun onFileContentChanged() {
@@ -286,15 +267,41 @@ class PreviewTextFragment : FileFragment() {
         mProgressController.hideProgressBar()
     }
 
-    // Opens the previewed file with an external application.
+    fun canBePreviewed(file: OCFile?): Boolean {
+        val unsupportedTypes = LinkedList<String>()
+        unsupportedTypes.apply {
+            add("text/richtext")
+            add("text/rtf")
+            add("text/vnd.abc")
+            add("text/vnd.fmi.flexstor")
+            add("text/vnd.rn-realtext")
+            add("text/vnd.wap.wml")
+            add("text/vnd.wap.wmlscript")
+        }
+
+        return (file != null && file.isAvailableLocally && file.isText &&
+                !unsupportedTypes.contains(file.mimeType) &&
+                !unsupportedTypes.contains(file.getMimeTypeFromName()))
+    }
+
     private fun openFile() {
         mContainerActivity.fileOperationsHelper.openFile(file)
         finish()
     }
 
-    // Finishes the preview
+    private fun seeDetails() {
+        mContainerActivity.showDetails(file)
+    }
+
     private fun finish() {
         activity?.onBackPressed()
+    }
+
+    companion object {
+        private const val EXTRA_FILE = "FILE"
+        private const val EXTRA_ACCOUNT = "ACCOUNT"
+        var isOpen = false
+        var currentFilePreviewing: OCFile? = null
     }
 
 }
