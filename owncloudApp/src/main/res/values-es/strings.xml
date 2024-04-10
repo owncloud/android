@@ -457,6 +457,7 @@
   <string name="share_via_link_expiration_date_label">Vencimiento</string>
   <string name="share_via_link_password_label">Contraseña</string>
   <string name="share_via_link_password_title">Seguro</string>
+  <string name="share_via_link_copy_password_button">Copiar</string>
   <string name="share_via_link_edit_permission_read_only_label">Descargar / Ver</string>
   <string name="share_via_link_edit_permission_upload_only_label">Solo cargar (Archivar)</string>
   <string name="share_get_public_link_button">Obtener enlace</string>

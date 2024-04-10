@@ -450,6 +450,7 @@
   <string name="share_via_link_expiration_date_label">Валидност</string>
   <string name="share_via_link_password_label">Парола</string>
   <string name="share_via_link_password_title">Защитено</string>
+  <string name="share_via_link_copy_password_button">Копиране</string>
   <string name="share_via_link_edit_permission_read_only_label">Изтегляне / Преглед</string>
   <string name="share_via_link_edit_permission_upload_only_label">Само качване (пускане на файл)</string>
   <string name="share_get_public_link_button">Получаване на връзка</string>

@@ -460,6 +460,7 @@
   <string name="share_via_link_expiration_date_label">Bitiş</string>
   <string name="share_via_link_password_label">Parola</string>
   <string name="share_via_link_password_title">Güvenli</string>
+  <string name="share_via_link_copy_password_button">Kopyala</string>
   <string name="share_via_link_edit_permission_read_only_label">İndir / Görüntüle</string>
   <string name="share_via_link_edit_permission_upload_only_label">Sadece karşı tarafa yükle (Dosya bırak)</string>
   <string name="share_get_public_link_button">Bağlantıyı al</string>

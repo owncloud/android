@@ -546,6 +546,7 @@
   <string name="share_via_link_expiration_date_label">期限切れ</string>
   <string name="share_via_link_password_label">パスワード</string>
   <string name="share_via_link_password_title">セキュア</string>
+  <string name="share_via_link_copy_password_button">コピー</string>
   <string name="share_via_link_edit_permission_read_only_label">ダウンロード / 表示</string>
   <string name="share_via_link_edit_permission_read_and_write_label">ダウンロード／表示／アップロード</string>
   <string name="share_via_link_edit_permission_upload_only_label">アップロードのみ（ファイルドロップ）</string>

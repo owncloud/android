@@ -550,6 +550,7 @@
   <string name="share_via_link_expiration_date_label">Aegumine</string>
   <string name="share_via_link_password_label">Parool</string>
   <string name="share_via_link_password_title">Turvatud</string>
+  <string name="share_via_link_copy_password_button">Kopeeri</string>
   <string name="share_via_link_edit_permission_read_only_label">Laadi alla / Vaata</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Laadi alla / Vaata / Laadi üles</string>
   <string name="share_via_link_edit_permission_upload_only_label">Ainult üleslaadimine (File Drop)</string>

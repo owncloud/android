@@ -484,6 +484,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="share_via_link_expiration_date_label">Expiration</string>
   <string name="share_via_link_password_label">Mot de passe</string>
   <string name="share_via_link_password_title">Sécurisé</string>
+  <string name="share_via_link_copy_password_button">Copier</string>
   <string name="share_via_link_edit_permission_read_only_label">Télécharger / Voir</string>
   <string name="share_via_link_edit_permission_upload_only_label">Téléversement seulement (Glisser le fichier)</string>
   <string name="share_get_public_link_button">Obtenir le lien</string>
