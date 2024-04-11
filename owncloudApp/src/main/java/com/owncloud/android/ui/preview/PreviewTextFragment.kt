@@ -69,16 +69,6 @@ class PreviewTextFragment : FileFragment() {
     private val previewTextViewModel by viewModel<PreviewTextViewModel>()
     private val fileOperationsViewModel by viewModel<FileOperationsViewModel>()
 
-    fun newInstance(file: OCFile, account: Account): PreviewTextFragment {
-        val frag = PreviewTextFragment()
-        val args = Bundle()
-        args.apply {
-            putParcelable(EXTRA_FILE, file)
-            putParcelable(EXTRA_ACCOUNT, account)
-        }
-        frag.arguments = args
-        return frag
-    }
 
     // PREVIEWTEXTFRAGMENT
 
@@ -86,8 +76,7 @@ class PreviewTextFragment : FileFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    )
-            : View? {
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         Timber.v("onCreateView")
 
@@ -267,23 +256,6 @@ class PreviewTextFragment : FileFragment() {
         mProgressController.hideProgressBar()
     }
 
-    fun canBePreviewed(file: OCFile?): Boolean {
-        val unsupportedTypes = LinkedList<String>()
-        unsupportedTypes.apply {
-            add("text/richtext")
-            add("text/rtf")
-            add("text/vnd.abc")
-            add("text/vnd.fmi.flexstor")
-            add("text/vnd.rn-realtext")
-            add("text/vnd.wap.wml")
-            add("text/vnd.wap.wmlscript")
-        }
-
-        return (file != null && file.isAvailableLocally && file.isText &&
-                !unsupportedTypes.contains(file.mimeType) &&
-                !unsupportedTypes.contains(file.getMimeTypeFromName()))
-    }
-
     private fun openFile() {
         mContainerActivity.fileOperationsHelper.openFile(file)
         finish()
@@ -302,6 +274,34 @@ class PreviewTextFragment : FileFragment() {
         private const val EXTRA_ACCOUNT = "ACCOUNT"
         var isOpen = false
         var currentFilePreviewing: OCFile? = null
+
+        fun newInstance(file: OCFile, account: Account): PreviewTextFragment {
+            val args = Bundle().apply {
+                putParcelable(EXTRA_FILE, file)
+                putParcelable(EXTRA_ACCOUNT, account)
+            }
+
+            return PreviewTextFragment().apply {
+                arguments = args
+            }
+        }
+
+        @JvmStatic
+        fun canBePreviewed(file: OCFile?): Boolean {
+            val unsupportedTypes = LinkedList<String>().apply {
+                add("text/richtext")
+                add("text/rtf")
+                add("text/vnd.abc")
+                add("text/vnd.fmi.flexstor")
+                add("text/vnd.rn-realtext")
+                add("text/vnd.wap.wml")
+                add("text/vnd.wap.wmlscript")
+            }
+
+            return (file != null && file.isAvailableLocally && file.isText &&
+                    !unsupportedTypes.contains(file.mimeType) &&
+                    !unsupportedTypes.contains(file.getMimeTypeFromName()))
+        }
     }
 
 }
