@@ -550,6 +550,7 @@
   <string name="share_via_link_expiration_date_label">Aegumine</string>
   <string name="share_via_link_password_label">Parool</string>
   <string name="share_via_link_password_title">Turvatud</string>
+  <string name="share_via_link_generate_password_button">Loo</string>
   <string name="share_via_link_copy_password_button">Kopeeri</string>
   <string name="share_via_link_edit_permission_read_only_label">Laadi alla / Vaata</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Laadi alla / Vaata / Laadi üles</string>
@@ -574,6 +575,7 @@
   <string name="action_upload_retry">Proovi uuesti</string>
   <string name="action_upload_clear">Tühjenda</string>
   <string name="local_file_not_found_toast">Faili ei õnnestunud lokaalsest failisüsteemist leida</string>
+  <string name="confirmation_remove_files_alert">Kas soovid tõesti eemaldada %s kirje/kirjet?</string>
   <string name="confirmation_remove_folders_alert">Kas soovid tõesti eemaldada valitud üksused ja nende sisud?</string>
   <string name="failed_upload_quota_exceeded_text">Kontol pole piisavalt mahtu</string>
   <string name="auth_forbidden">Autentimine keelatud</string>
@@ -684,6 +686,10 @@
   <string name="release_notes_4_3_0_subtitle_manual_removal_local_storage">Kontode haldamise vaatesse on lisatud uus ikoon kohalike ja ajutiste failide käsitsi kustutamiseks</string>
   <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">Seadme seadistuste rakenduste alajaotusesse on lisatud \"Tühjenda andmed\" nupp</string>
   <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">Seadme seadistuste rakenduste alajaotusesse on lisatud \"Tühjenda andmed\" nupp. Nupu vajutamisel tehakse rakendusele täielik algseadistus.</string>
+  <string name="release_notes_4_3_0_title_improvements_remove_dialog">Kustutamise dialoogi parendused</string>
+  <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">Lisatud kohandatud dialoog kui kustutataval failil on pisipilt ning kustutatavate failide arv kui faile kustutatakse korraga valides</string>
+  <string name="release_notes_4_3_0_title_password_generator">Salasõna looja avalikele linkidele</string>
+  <string name="release_notes_4_3_0_subtitle_password_generator">Avalike linkide salasõnasid saab Infinite Scale kontodel luua uue salasõnade loojaga</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>

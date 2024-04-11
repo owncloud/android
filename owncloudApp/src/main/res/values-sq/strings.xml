@@ -548,6 +548,7 @@
   <string name="share_via_link_expiration_date_label">Skadim</string>
   <string name="share_via_link_password_label">Fjalëkalim</string>
   <string name="share_via_link_password_title">E siguruar</string>
+  <string name="share_via_link_generate_password_button">Prodhoje</string>
   <string name="share_via_link_copy_password_button">Kopjoje</string>
   <string name="share_via_link_edit_permission_read_only_label">Të shkarkojë / Të shohë</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Të shkarkojë/Të shohë/Të ngarkojë</string>
@@ -572,6 +573,7 @@
   <string name="action_upload_retry">Riprovo</string>
   <string name="action_upload_clear">Spastroje</string>
   <string name="local_file_not_found_toast">Kartela s\’u gjet te sistemi vendor i kartelave</string>
+  <string name="confirmation_remove_files_alert">Doni vërtet të hiqet këta %s objekte?</string>
   <string name="confirmation_remove_folders_alert">Doni vërtet të hiqen objektet e përzgjedhur dhe lënda e tyre?</string>
   <string name="failed_upload_quota_exceeded_text">Hapësirë e pamjaftueshme te llogaria</string>
   <string name="auth_forbidden">Mirëfilltësim i ndaluar</string>
@@ -681,6 +683,10 @@
   <string name="release_notes_4_3_0_subtitle_manual_removal_local_storage">Te pamja Administrim Llogarish është shtuar një ikonë e re, për fshirje dorazi kartelash vendore dhe të përkohshme</string>
   <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">Buton “Spastro të dhëna” i aktivizuar te rregullime aplikacione në rregullime pajisjeje</string>
   <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">Butoni “Spastro të dhëna” është aktivizuar për të fshirë të dhëna aplikacioni që nga rregullimet e aplikacionet te rregullimet e pajisjes. Aplikacioni do të kryejë një rikthim te parazgjedhjet, nëse shtypet ky buton</string>
+  <string name="release_notes_4_3_0_title_improvements_remove_dialog">Përmirësime te dialog heqjeje</string>
+  <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">U shtua një dialog i përshtatur, kur kartela që do të fshihet ka miniaturë dhe u shtua numri i kartelave që do të fshihen në përzgjedhje të shumëfishtë</string>
+  <string name="release_notes_4_3_0_title_password_generator">Prodhues fjalëkalimesh për lidhje publike</string>
+  <string name="release_notes_4_3_0_subtitle_password_generator">Tanimë, fjalëkalime për lidhje publike mund të prodhohen përmes një prodhuesi të ri, në llogari Infinite Scale</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>

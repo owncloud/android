@@ -550,6 +550,7 @@
   <string name="share_via_link_expiration_date_label">Expiração</string>
   <string name="share_via_link_password_label">Senha</string>
   <string name="share_via_link_password_title">Asegurado</string>
+  <string name="share_via_link_generate_password_button">Gerar</string>
   <string name="share_via_link_copy_password_button">Copiar</string>
   <string name="share_via_link_edit_permission_read_only_label">Baixar / Visualizar</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Baixar/Visualizar/Enviar</string>
@@ -573,6 +574,7 @@
   <string name="action_upload_retry">Repetir</string>
   <string name="action_upload_clear">Limpar</string>
   <string name="local_file_not_found_toast">O arquivo não foi encontrado no sistema de arquivos local</string>
+  <string name="confirmation_remove_files_alert">Você realmente deseja remover estes %s itens?</string>
   <string name="confirmation_remove_folders_alert">Você realmente deseja remover os itens selecionados e seus conteúdos?</string>
   <string name="failed_upload_quota_exceeded_text">Espaço insuficiente na conta</string>
   <string name="auth_forbidden">Autenticação proibida</string>
@@ -684,6 +686,10 @@
   <string name="release_notes_4_3_0_subtitle_manual_removal_local_storage">Um novo ícone foi adicionado na visualização Gerenciar contas para excluir manualmente arquivos locais e temporários</string>
   <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">Botão \"Limpar dados\" ativado nas configurações do aplicativo nas configurações do dispositivo</string>
   <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">O botão \"Limpar dados\" foi habilitado para excluir os dados do aplicativo das configurações do aplicativo nas configurações do dispositivo. O aplicativo executará uma reinicialização total se este botão for pressionado</string>
+  <string name="release_notes_4_3_0_title_improvements_remove_dialog">Melhorias na caixa de diálogo de remoção</string>
+  <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">Adicionada uma caixa de diálogo personalizada quando o arquivo que será excluído tiver miniatura e adicionado o número de arquivos que serão excluídos em uma seleção múltipla</string>
+  <string name="release_notes_4_3_0_title_password_generator">Gerador de senha para links públicos</string>
+  <string name="release_notes_4_3_0_subtitle_password_generator">Senhas para links públicos agora podem ser geradas por meio de um novo gerador em contas Infinite Scale</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
