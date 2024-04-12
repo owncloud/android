@@ -106,9 +106,9 @@ class ReleaseNotesViewModel(
                 type = ReleaseNoteType.ENHANCEMENT
             ),
             ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_bug_fix_display_name_truncation,
-                subtitle = R.string.release_notes_4_3_0_subtitle_bug_fix_display_name_truncation,
-                type = ReleaseNoteType.ENHANCEMENT
+                title = R.string.release_notes_4_3_0_title_display_name_truncation,
+                subtitle = R.string.release_notes_4_3_0_subtitle_display_name_truncation,
+                type = ReleaseNoteType.BUGFIX
             ),
         )
     }
