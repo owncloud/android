@@ -52,10 +52,11 @@
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="210dp"
+        android:layout_width="0dp"
         android:layout_height="28dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:ellipsize="middle"
         android:gravity="bottom"
         android:maxLines="1"
         android:text="@string/placeholder_filename"
@@ -63,6 +64,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/account"
+        app:layout_constraintEnd_toStartOf="@+id/clean_account_local_storage_button"
         app:layout_constraintStart_toEndOf="@+id/ticker"
         app:layout_constraintTop_toTopOf="parent" />
 
