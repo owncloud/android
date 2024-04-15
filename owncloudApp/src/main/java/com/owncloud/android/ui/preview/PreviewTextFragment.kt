@@ -60,7 +60,6 @@ import java.io.BufferedWriter
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.StringWriter
-import java.lang.ref.WeakReference
 import java.util.LinkedList
 import java.util.Scanner
 
@@ -144,21 +143,21 @@ class PreviewTextFragment : FileFragment() {
 
     private fun loadAndShowTextPreview() {
         mTextLoadTask = TextLoadAsyncTask(
-            WeakReference(mTextPreview),
-            WeakReference(rootView),
-            WeakReference(mTextLayout),
-            WeakReference(mTabLayout),
-            WeakReference(mViewPager2)
+            mTextPreview,
+            rootView,
+            mTextLayout,
+            mTabLayout,
+            mViewPager2
         )
         mTextLoadTask.execute(file)
     }
 
     private inner class TextLoadAsyncTask(
-        var mTextViewReference: WeakReference<TextView>,
-        var mRootView: WeakReference<RelativeLayout>,
-        var mTextLayout: WeakReference<View>,
-        var mTabLayout: WeakReference<TabLayout>,
-        var mViewPager: WeakReference<ViewPager2>
+        var mTextViewReference: TextView,
+        var mRootView: RelativeLayout,
+        var mTextLayout: View,
+        var mTabLayout: TabLayout,
+        var mViewPager: ViewPager2
     ) : AsyncTask<OCFile, Void, StringWriter>() {
 
         private val DIALOG_WAIT_TAG = "DIALOG_WAIT"
@@ -214,11 +213,11 @@ class PreviewTextFragment : FileFragment() {
 
         override fun onPostExecute(result: StringWriter) {
             super.onPostExecute(result)
-            val textView = mTextViewReference as TextView
-            val rootView = mRootView as RelativeLayout
-            val textLayout = mTextLayout as View
-            val tabLayout = mTabLayout as TabLayout
-            val viewPager = mViewPager as ViewPager2
+            val textView = mTextViewReference
+            val rootView = mRootView
+            val textLayout = mTextLayout
+            val tabLayout = mTabLayout
+            val viewPager = mViewPager
 
             val text = String(result.buffer)
             showPreviewText(text, mimeType, rootView, textView, textLayout, tabLayout, viewPager)
