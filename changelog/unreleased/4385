@@ -1,0 +1,6 @@
+Bugfix: Removed unnecessary requests when the app is installed from scratch
+
+Some requests to the server that were not necessary when installing the app from scratch have been removed.
+
+https://github.com/owncloud/android/issues/4213
+https://github.com/owncloud/android/pull/4385
