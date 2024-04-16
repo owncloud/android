@@ -84,7 +84,6 @@ import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCo
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.SyncProfileOperation
 import com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount
-import com.owncloud.android.presentation.capabilities.CapabilityViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.files.details.FileDetailsFragment
@@ -119,7 +118,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.io.File
 import kotlin.coroutines.CoroutineContext
@@ -235,6 +233,7 @@ class FileDisplayActivity : FileActivity(),
         setupRootToolbar(
             isSearchEnabled = true,
             title = getString(R.string.default_display_name_for_root_folder),
+            isAvatarRequested = true,
         )
 
         // setup drawer
@@ -297,15 +296,6 @@ class FileDisplayActivity : FileActivity(),
         super.onPostCreate(savedInstanceState)
 
         if (savedInstanceState == null && mAccountWasSet) {
-            val capabilitiesViewModel: CapabilityViewModel by viewModel {
-                parametersOf(
-                    account?.name
-                )
-            }
-            capabilitiesViewModel.refreshCapabilitiesFromNetwork()
-            capabilitiesViewModel.capabilities.observe(this, Event.EventObserver {
-                onCapabilitiesOperationFinish(it)
-            })
             navigateTo(fileListOption, initialState = true)
         }
 
@@ -940,7 +930,7 @@ class FileDisplayActivity : FileActivity(),
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
                     FileListOption.SPACES_LIST -> getString(R.string.bottom_nav_spaces)
                 }
-            setupRootToolbar(title, isSearchEnabled = fileListOption != FileListOption.SPACES_LIST)
+            setupRootToolbar(title, isSearchEnabled = fileListOption != FileListOption.SPACES_LIST, false)
             mainFileListFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
         } else if (space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH) {
             updateStandardToolbar(title = space.name, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
