@@ -26,7 +26,6 @@ import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
-import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
 import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
@@ -46,7 +45,6 @@ class AccountDiscoveryWorker(
     workerParameters
 ), KoinComponent {
 
-    private val refreshCapabilitiesFromServerAsyncUseCase: RefreshCapabilitiesFromServerAsyncUseCase by inject()
     private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
     private val refreshSpacesFromServerAsyncUseCase: RefreshSpacesFromServerAsyncUseCase by inject()
     private val getPersonalAndProjectSpacesForAccountUseCase: GetPersonalAndProjectSpacesForAccountUseCase by inject()
@@ -60,8 +58,7 @@ class AccountDiscoveryWorker(
 
         if (accountName.isNullOrBlank() || account == null) return Result.failure()
 
-        // 1. Refresh capabilities for account
-        refreshCapabilitiesFromServerAsyncUseCase(RefreshCapabilitiesFromServerAsyncUseCase.Params(accountName))
+        // 1. Get capabilities for account
         val capabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(accountName))
 
         val spacesAvailableForAccount = AccountUtils.isSpacesFeatureAllowedForAccount(appContext, account, capabilities)
