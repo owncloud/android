@@ -7,7 +7,9 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavon
+ * <p>
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -482,14 +484,19 @@ abstract class DrawerActivity : ToolbarActivity() {
                         }
                     }
                 }
+
                 is UIResult.Loading -> getAccountQuotaText()?.text = getString(R.string.drawer_loading_quota)
                 is UIResult.Error -> getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
             }
         }
     }
 
-    override fun setupRootToolbar(title: String, isSearchEnabled: Boolean) {
-        super.setupRootToolbar(title, isSearchEnabled)
+    override fun setupRootToolbar(title: String, isSearchEnabled: Boolean, isAvatarRequested: Boolean) {
+        super.setupRootToolbar(
+            title = title,
+            isSearchEnabled = isSearchEnabled,
+            isAvatarRequested = isAvatarRequested,
+        )
 
         val toolbarLeftIcon = findViewById<ImageView>(R.id.root_toolbar_left_icon)
         toolbarLeftIcon.setOnClickListener { openDrawer() }
