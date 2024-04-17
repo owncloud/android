@@ -157,7 +157,7 @@ class PreviewTextFragment : FileFragment() {
         var textLayout: View,
         var tabLayout: TabLayout,
         var viewPager: ViewPager2
-    ) : AsyncTask<OCFile, Void, StringWriter>() {
+    ) : AsyncTask<OCFile, Unit, StringWriter>() {
 
         private val DIALOG_WAIT_TAG = "DIALOG_WAIT"
         private lateinit var mimeType: String
@@ -221,16 +221,14 @@ class PreviewTextFragment : FileFragment() {
         }
 
         fun showLoadingDialog() {
-            val frag = activity?.supportFragmentManager?.findFragmentByTag(DIALOG_WAIT_TAG)
+            val frag = requireActivity().supportFragmentManager.findFragmentByTag(DIALOG_WAIT_TAG)
             val loading: LoadingDialog
 
             if (frag == null) {
                 loading = LoadingDialog.newInstance(R.string.wait_a_moment, false)
-                val fm = activity?.supportFragmentManager
-                val ft = fm?.beginTransaction()
-                if (ft != null) {
-                    loading.show(ft, DIALOG_WAIT_TAG)
-                }
+                val fm = requireActivity().supportFragmentManager
+                val ft = fm.beginTransaction()
+                loading.show(ft, DIALOG_WAIT_TAG)
             } else {
                 loading = frag as LoadingDialog
                 loading.showsDialog = true
@@ -238,7 +236,7 @@ class PreviewTextFragment : FileFragment() {
         }
 
         fun dismissLoadingDialog() {
-            val frag = activity?.supportFragmentManager?.findFragmentByTag(DIALOG_WAIT_TAG)
+            val frag = requireActivity().supportFragmentManager.findFragmentByTag(DIALOG_WAIT_TAG)
             if (frag != null) {
                 val loading = frag as LoadingDialog
                 loading.dismiss()
@@ -398,7 +396,7 @@ class PreviewTextFragment : FileFragment() {
     }
 
     private fun finish() {
-        activity?.onBackPressed()
+        requireActivity().onBackPressed()
     }
 
     companion object {
