@@ -152,11 +152,11 @@ class PreviewTextFragment : FileFragment() {
     }
 
     private inner class TextLoadAsyncTask(
-        var mTextViewReference: TextView,
-        var mRootView: RelativeLayout,
-        var mTextLayout: View,
-        var mTabLayout: TabLayout,
-        var mViewPager: ViewPager2
+        var textViewReference: TextView,
+        var rootView: RelativeLayout,
+        var textLayout: View,
+        var tabLayout: TabLayout,
+        var viewPager: ViewPager2
     ) : AsyncTask<OCFile, Void, StringWriter>() {
 
         private val DIALOG_WAIT_TAG = "DIALOG_WAIT"
@@ -210,14 +210,8 @@ class PreviewTextFragment : FileFragment() {
         }
 
         override fun onPostExecute(result: StringWriter) {
-            val textView = mTextViewReference
-            val rootView = mRootView
-            val textLayout = mTextLayout
-            val tabLayout = mTabLayout
-            val viewPager = mViewPager
-
             val text = String(result.buffer)
-            showPreviewText(text, mimeType, rootView, textView, textLayout, tabLayout, viewPager)
+            showPreviewText(text, mimeType, rootView, textViewReference, textLayout, tabLayout, viewPager)
 
             try {
                 dismissLoadingDialog()
