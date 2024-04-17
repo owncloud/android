@@ -690,6 +690,8 @@
   <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">Lisatud kohandatud dialoog kui kustutataval failil on pisipilt ning kustutatavate failide arv kui faile kustutatakse korraga valides</string>
   <string name="release_notes_4_3_0_title_password_generator">Salasõna looja avalikele linkidele</string>
   <string name="release_notes_4_3_0_subtitle_password_generator">Avalike linkide salasõnasid saab Infinite Scale kontodel luua uue salasõnade loojaga</string>
+  <string name="release_notes_4_3_0_title_display_name_truncation">Lahendatud viga pikkade nimede kuvamisel, kus lühendamine toimus ebakorrektselt</string>
+  <string name="release_notes_4_3_0_subtitle_display_name_truncation">Kuvatavad nimed on nüüd loetavuse parandamiseks keskelt korrektselt (...) märgiga lühendatud</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
