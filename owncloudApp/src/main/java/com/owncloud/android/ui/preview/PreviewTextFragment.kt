@@ -163,7 +163,6 @@ class PreviewTextFragment : FileFragment() {
         private lateinit var mimeType: String
 
         override fun onPreExecute() {
-            super.onPreExecute()
             showLoadingDialog()
         }
 
@@ -211,7 +210,6 @@ class PreviewTextFragment : FileFragment() {
         }
 
         override fun onPostExecute(result: StringWriter) {
-            super.onPostExecute(result)
             val textView = mTextViewReference
             val rootView = mRootView
             val textLayout = mTextLayout
