@@ -1,0 +1,6 @@
+Change: Kotlinize PreviewTextFragment
+
+PreviewTextFragment class has been moved from Java to Kotlin.
+
+https://github.com/owncloud/android/issues/4356
+https://github.com/owncloud/android/pull/4376
