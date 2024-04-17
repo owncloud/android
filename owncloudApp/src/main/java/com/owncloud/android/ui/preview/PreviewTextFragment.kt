@@ -46,10 +46,11 @@ import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.filterMenuOptions
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.presentation.files.operations.FileOperation
-import com.owncloud.android.presentation.files.operations.FileOperation.SetFilesAsAvailableOffline
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.presentation.previews.PreviewTextViewModel
 import com.owncloud.android.ui.controller.TransferProgressController
+import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.LoadingDialog
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
@@ -308,43 +309,53 @@ class PreviewTextFragment : FileFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.action_share_file -> {
                 mContainerActivity.fileOperationsHelper.showShareFile(file)
-                return true
+                true
             }
 
             R.id.action_open_file_with -> {
                 openFile()
-                return true
+                true
+            }
+
+            R.id.action_remove_file -> {
+                RemoveFilesDialogFragment.newInstance(file).show(requireFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION)
+                true
             }
 
             R.id.action_see_details -> {
                 seeDetails()
-                return true
+                true
             }
 
             R.id.action_send_file -> {
                 requireActivity().sendDownloadedFilesByShareSheet(listOf(file))
-                return true
+                true
+            }
+
+            R.id.action_sync_file -> {
+                account?.let { fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, it.name)) }
+                true
             }
 
             R.id.action_set_available_offline -> {
                 val fileToSetAsAvailableOffline = ArrayList<OCFile>()
                 fileToSetAsAvailableOffline.add(file)
-                fileOperationsViewModel.performOperation(SetFilesAsAvailableOffline(fileToSetAsAvailableOffline))
-                return true
+                fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(fileToSetAsAvailableOffline))
+                true
             }
 
             R.id.action_unset_available_offline -> {
                 val fileToUnsetAsAvailableOffline = ArrayList<OCFile>()
                 fileToUnsetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline))
-                return true
+                true
             }
 
             else -> {
-                return super.onOptionsItemSelected(item)
+                super.onOptionsItemSelected(item)
             }
         }
     }
