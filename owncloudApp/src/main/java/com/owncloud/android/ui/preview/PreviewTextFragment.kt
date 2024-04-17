@@ -64,15 +64,15 @@ import java.util.LinkedList
 import java.util.Scanner
 
 class PreviewTextFragment : FileFragment() {
-    private var mAccount: Account? = null
-    private lateinit var mProgressBar: ProgressBar
-    private lateinit var mProgressController: TransferProgressController
-    private lateinit var mTextPreview: TextView
-    private lateinit var mTextLayout: View
-    private lateinit var mTabLayout: TabLayout
-    private lateinit var mViewPager2: ViewPager2
+    private var account: Account? = null
+    private lateinit var progressBar: ProgressBar
+    private lateinit var progressController: TransferProgressController
+    private lateinit var textPreview: TextView
+    private lateinit var textLayout: View
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager2: ViewPager2
     private lateinit var rootView: RelativeLayout
-    private lateinit var mTextLoadTask: TextLoadAsyncTask
+    private lateinit var textLoadTask: TextLoadAsyncTask
 
     private val previewTextViewModel by viewModel<PreviewTextViewModel>()
     private val fileOperationsViewModel by viewModel<FileOperationsViewModel>()
@@ -90,11 +90,11 @@ class PreviewTextFragment : FileFragment() {
 
         // We can use binding instead of findViewById
         rootView = ret.findViewById(R.id.top)
-        mProgressBar = ret.findViewById(R.id.syncProgressBar)
-        mTabLayout = ret.findViewById(R.id.tab_layout)
-        mViewPager2 = ret.findViewById(R.id.view_pager)
-        mTextPreview = ret.findViewById(R.id.text_preview)
-        mTextLayout = ret.findViewById(R.id.text_layout)
+        progressBar = ret.findViewById(R.id.syncProgressBar)
+        tabLayout = ret.findViewById(R.id.tab_layout)
+        viewPager2 = ret.findViewById(R.id.view_pager)
+        textPreview = ret.findViewById(R.id.text_preview)
+        textLayout = ret.findViewById(R.id.text_layout)
 
         return ret
     }
@@ -105,17 +105,17 @@ class PreviewTextFragment : FileFragment() {
         if (savedInstanceState == null) {
             val args = requireArguments()
             file = args.getParcelable(EXTRA_FILE)
-            mAccount = args.getParcelable(EXTRA_ACCOUNT)
+            account = args.getParcelable(EXTRA_ACCOUNT)
             if (file == null) {
                 throw IllegalStateException("Instanced with a NULL OCFile")
             }
 
-            if (mAccount == null) {
+            if (account == null) {
                 throw IllegalStateException("Instanced with a NULL ownCloud Account")
             }
         } else {
             file = savedInstanceState.getParcelable(EXTRA_FILE)
-            mAccount = savedInstanceState.getParcelable(EXTRA_ACCOUNT)
+            account = savedInstanceState.getParcelable(EXTRA_ACCOUNT)
         }
         setFile(file)
         setHasOptionsMenu(true)
@@ -125,8 +125,8 @@ class PreviewTextFragment : FileFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        mProgressController = TransferProgressController(mContainerActivity)
-        mProgressController.setProgressBar(mProgressBar)
+        progressController = TransferProgressController(mContainerActivity)
+        progressController.setProgressBar(progressBar)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -137,19 +137,19 @@ class PreviewTextFragment : FileFragment() {
         super.onSaveInstanceState(outState)
         outState.apply {
             putParcelable(EXTRA_FILE, file)
-            putParcelable(EXTRA_ACCOUNT, mAccount)
+            putParcelable(EXTRA_ACCOUNT, account)
         }
     }
 
     private fun loadAndShowTextPreview() {
-        mTextLoadTask = TextLoadAsyncTask(
-            mTextPreview,
+        textLoadTask = TextLoadAsyncTask(
+            textPreview,
             rootView,
-            mTextLayout,
-            mTabLayout,
-            mViewPager2
+            textLayout,
+            tabLayout,
+            viewPager2
         )
-        mTextLoadTask.execute(file)
+        textLoadTask.execute(file)
     }
 
     private inner class TextLoadAsyncTask(
@@ -366,7 +366,7 @@ class PreviewTextFragment : FileFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        mTextLoadTask.apply {
+        textLoadTask.apply {
             cancel(true)
             dismissLoadingDialog()
         }
@@ -393,11 +393,11 @@ class PreviewTextFragment : FileFragment() {
     }
 
     override fun updateViewForSyncInProgress() {
-        mProgressController.showProgressBar()
+        progressController.showProgressBar()
     }
 
     override fun updateViewForSyncOff() {
-        mProgressController.hideProgressBar()
+        progressController.hideProgressBar()
     }
 
     private fun openFile() {
