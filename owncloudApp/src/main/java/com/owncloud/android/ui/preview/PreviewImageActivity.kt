@@ -4,7 +4,9 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -85,6 +87,7 @@ class PreviewImageActivity : FileActivity(),
         // ActionBar
         supportActionBar?.run {
             setDisplayHomeAsUpEnabled(true)
+            setHomeActionContentDescription(R.string.common_back)
             setHomeButtonEnabled(true)
         }
         showActionBar(false)

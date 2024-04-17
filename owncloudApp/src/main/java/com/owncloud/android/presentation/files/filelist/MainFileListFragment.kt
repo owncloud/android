@@ -6,6 +6,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author Manuel Plazas Palacio
  * @author Jorge Aguado Recio
+ * @author Aitor Ballesteros Pavón
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -56,6 +57,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import coil.load
+import com.getbase.floatingactionbutton.AddFloatingActionButton
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -273,6 +275,9 @@ class MainFileListFragment : Fragment(),
         setViewTypeSelector(SortOptionsView.AdditionalView.CREATE_FOLDER)
 
         showOrHideFab(requireArguments().getParcelable(ARG_FILE_LIST_OPTION)!!, requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY)!!)
+
+        binding.fabMain.findViewById<AddFloatingActionButton>(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button).contentDescription =
+            getString(R.string.content_description_add_new_content)
     }
 
     private fun setViewTypeSelector(additionalView: SortOptionsView.AdditionalView) {

@@ -756,6 +756,8 @@
     <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">Search functionality has been added in spaces list when you are trying to filter them</string>
     <string name="release_notes_4_3_0_title_video_streaming_spaces">Video streaming in spaces</string>
     <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Video files located in spaces can now be played in streaming correctly</string>
+    <string name="release_notes_4_3_0_title_accesibility_non_text_content">Added text description in the elements to improve the accessibility</string>
+    <string name="release_notes_4_3_0_subtitle_accesibility_non_text_content">Content labels provide a text description of the meaning or action associated with the element improving hte accessibility</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
@@ -811,5 +813,17 @@
     <string name="clean_data_account_button_yes">Clean data</string>
 
     <string name="content_description_image_previewed">Image previewed</string>
+    <string name="content_description_root_toolbar_left_icon">Menu</string>
+    <string name="content_description_root_toolbar_avatar">Manage accounts</string>
+    <string name="content_description_root_toolbar_title_with_search_icon">Search</string>
+    <string name="content_description_selector_type_view">Selector type of view</string>
+    <string name="content_description_add_public_link">Add public link</string>
+    <string name="content_description_add_user_and_groups">Add user and groups</string>
+    <string name="content_description_get_private_link_button">Get private link</string>
+    <string name="content_description_get_public_link_button">Get public link</string>
+    <string name="content_description_delete_public_link">Delete public link</string>
+    <string name="content_description_get_edit_public_link_button">Edit public link</string>
+    <string name="content_description_remove_account">Remove account</string>
+    <string name="content_description_add_new_content">Add new content</string>
 
 </resources>
