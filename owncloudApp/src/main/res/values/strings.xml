@@ -756,8 +756,8 @@
     <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">Search functionality has been added in spaces list when you are trying to filter them</string>
     <string name="release_notes_4_3_0_title_video_streaming_spaces">Video streaming in spaces</string>
     <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Video files located in spaces can now be played in streaming correctly</string>
-    <string name="release_notes_4_3_0_title_accesibility_non_text_content">Added text description in the elements to improve the accessibility</string>
-    <string name="release_notes_4_3_0_subtitle_accesibility_non_text_content">Content labels provide a text description of the meaning or action associated with the element improving the accessibility</string>
+    <string name="release_notes_4_3_0_title_accessibility_improvements">Improvements in accessibility</string>
+    <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Some improvements to make the application more accessible</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>

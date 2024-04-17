@@ -126,8 +126,8 @@ class ReleaseNotesViewModel(
                 type = ReleaseNoteType.BUGFIX
             ),
             ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_accessibility_non_text_content,
-                subtitle = R.string.release_notes_4_3_0_subtitle_accessibility_non_text_content,
+                title = R.string.release_notes_4_3_0_title_accessibility_improvements,
+                subtitle = R.string.release_notes_4_3_0_subtitle_accessibility_improvements,
                 type = ReleaseNoteType.ENHANCEMENT
             ),
         )
