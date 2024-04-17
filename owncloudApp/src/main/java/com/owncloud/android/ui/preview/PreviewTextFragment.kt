@@ -134,7 +134,6 @@ class PreviewTextFragment : FileFragment() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
         outState.apply {
             putParcelable(EXTRA_FILE, file)
             putParcelable(EXTRA_ACCOUNT, account)
@@ -296,13 +295,10 @@ class PreviewTextFragment : FileFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.file_actions_menu, menu)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        super.onPrepareOptionsMenu(menu)
-
         if (mContainerActivity.storageManager != null) {
             val safeFile = file
             val accountName = mContainerActivity.storageManager.account.name
