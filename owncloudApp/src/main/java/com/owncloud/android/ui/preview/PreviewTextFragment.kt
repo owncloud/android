@@ -34,13 +34,14 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.owncloud.android.R
+import com.owncloud.android.databinding.PreviewTextFragmentBinding
+import com.owncloud.android.databinding.TopProgressBarBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.filterMenuOptions
@@ -65,38 +66,28 @@ import java.util.Scanner
 
 class PreviewTextFragment : FileFragment() {
     private var account: Account? = null
-    private lateinit var progressBar: ProgressBar
     private lateinit var progressController: TransferProgressController
-    private lateinit var textPreview: TextView
-    private lateinit var textLayout: View
-    private lateinit var tabLayout: TabLayout
-    private lateinit var viewPager2: ViewPager2
-    private lateinit var rootView: RelativeLayout
     private lateinit var textLoadTask: TextLoadAsyncTask
 
     private val previewTextViewModel by viewModel<PreviewTextViewModel>()
     private val fileOperationsViewModel by viewModel<FileOperationsViewModel>()
 
+    private lateinit var binding: PreviewTextFragmentBinding
+    private lateinit var bindingTopProgress: TopProgressBarBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         Timber.v("onCreateView")
 
-        val previewTextFragmentView = inflater.inflate(R.layout.preview_text_fragment, container, false)
-        previewTextFragmentView.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
-
-        // We can use binding instead of findViewById
-        rootView = previewTextFragmentView.findViewById(R.id.top)
-        progressBar = previewTextFragmentView.findViewById(R.id.syncProgressBar)
-        tabLayout = previewTextFragmentView.findViewById(R.id.tab_layout)
-        viewPager2 = previewTextFragmentView.findViewById(R.id.view_pager)
-        textPreview = previewTextFragmentView.findViewById(R.id.text_preview)
-        textLayout = previewTextFragmentView.findViewById(R.id.text_layout)
-
-        return previewTextFragmentView
+        binding = PreviewTextFragmentBinding.inflate(inflater, container, false)
+        bindingTopProgress = TopProgressBarBinding.bind(binding.root)
+        return binding.root.apply {
+            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,7 +117,7 @@ class PreviewTextFragment : FileFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         progressController = TransferProgressController(mContainerActivity)
-        progressController.setProgressBar(progressBar)
+        progressController.setProgressBar(bindingTopProgress.syncProgressBar)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -140,15 +131,139 @@ class PreviewTextFragment : FileFragment() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_share_file -> {
+                mContainerActivity.fileOperationsHelper.showShareFile(file)
+                true
+            }
+
+            R.id.action_open_file_with -> {
+                openFile()
+                true
+            }
+
+            R.id.action_remove_file -> {
+                RemoveFilesDialogFragment.newInstance(file).show(requireFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION)
+                true
+            }
+
+            R.id.action_see_details -> {
+                seeDetails()
+                true
+            }
+
+            R.id.action_send_file -> {
+                requireActivity().sendDownloadedFilesByShareSheet(listOf(file))
+                true
+            }
+
+            R.id.action_sync_file -> {
+                account?.let { fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, it.name)) }
+                true
+            }
+
+            R.id.action_set_available_offline -> {
+                val fileToSetAsAvailableOffline = ArrayList<OCFile>()
+                fileToSetAsAvailableOffline.add(file)
+                fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(fileToSetAsAvailableOffline))
+                true
+            }
+
+            R.id.action_unset_available_offline -> {
+                val fileToUnsetAsAvailableOffline = ArrayList<OCFile>()
+                fileToUnsetAsAvailableOffline.add(file)
+                fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline))
+                true
+            }
+
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        textLoadTask.apply {
+            cancel(true)
+            dismissLoadingDialog()
+        }
+        isOpen = false
+        currentFilePreviewing = null
+    }
+
+    override fun onFileMetadataChanged(updatedFile: OCFile?) {
+        updatedFile?.let {
+            file = updatedFile
+        }
+        requireActivity().invalidateOptionsMenu()
+    }
+
+    override fun onFileMetadataChanged() {
+        mContainerActivity.storageManager?.let {
+            file = it.getFileByPath(file.remotePath)
+        }
+        requireActivity().invalidateOptionsMenu()
+    }
+
+    override fun onFileContentChanged() {
+        loadAndShowTextPreview()
+    }
+
+    override fun updateViewForSyncInProgress() {
+        progressController.showProgressBar()
+    }
+
+    override fun updateViewForSyncOff() {
+        progressController.hideProgressBar()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.file_actions_menu, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        mContainerActivity.storageManager?.let {
+            val safeFile = file
+            val accountName = mContainerActivity.storageManager.account.name
+            previewTextViewModel.filterMenuOptions(safeFile, accountName)
+
+            collectLatestLifecycleFlow(previewTextViewModel.menuOptions) { menuOptions ->
+                val hasWritePermission = safeFile.hasWritePermission
+                menu.filterMenuOptions(menuOptions, hasWritePermission)
+            }
+        }
+
+        menu.findItem(R.id.action_search)?.apply {
+            isVisible = false
+            isEnabled = false
+        }
+
+    }
+
     private fun loadAndShowTextPreview() {
         textLoadTask = TextLoadAsyncTask(
-            textPreview,
-            rootView,
-            textLayout,
-            tabLayout,
-            viewPager2
+            binding.textLayout.textPreview,
+            binding.top,
+            binding.textLayout.root,
+            binding.tabLayout,
+            binding.viewPager
         )
         textLoadTask.execute(file)
+    }
+
+    private fun openFile() {
+        mContainerActivity.fileOperationsHelper.openFile(file)
+        finish()
+    }
+
+    private fun seeDetails() {
+        mContainerActivity.showDetails(file)
+    }
+
+    private fun finish() {
+        requireActivity().onBackPressed()
     }
 
     private inner class TextLoadAsyncTask(
@@ -284,130 +399,6 @@ class PreviewTextFragment : FileFragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.file_actions_menu, menu)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        mContainerActivity.storageManager?.let {
-            val safeFile = file
-            val accountName = mContainerActivity.storageManager.account.name
-            previewTextViewModel.filterMenuOptions(safeFile, accountName)
-
-            collectLatestLifecycleFlow(previewTextViewModel.menuOptions) { menuOptions ->
-                val hasWritePermission = safeFile.hasWritePermission
-                menu.filterMenuOptions(menuOptions, hasWritePermission)
-            }
-        }
-
-        menu.findItem(R.id.action_search)?.apply {
-            isVisible = false
-            isEnabled = false
-        }
-
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_share_file -> {
-                mContainerActivity.fileOperationsHelper.showShareFile(file)
-                true
-            }
-
-            R.id.action_open_file_with -> {
-                openFile()
-                true
-            }
-
-            R.id.action_remove_file -> {
-                RemoveFilesDialogFragment.newInstance(file).show(requireFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION)
-                true
-            }
-
-            R.id.action_see_details -> {
-                seeDetails()
-                true
-            }
-
-            R.id.action_send_file -> {
-                requireActivity().sendDownloadedFilesByShareSheet(listOf(file))
-                true
-            }
-
-            R.id.action_sync_file -> {
-                account?.let { fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, it.name)) }
-                true
-            }
-
-            R.id.action_set_available_offline -> {
-                val fileToSetAsAvailableOffline = ArrayList<OCFile>()
-                fileToSetAsAvailableOffline.add(file)
-                fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(fileToSetAsAvailableOffline))
-                true
-            }
-
-            R.id.action_unset_available_offline -> {
-                val fileToUnsetAsAvailableOffline = ArrayList<OCFile>()
-                fileToUnsetAsAvailableOffline.add(file)
-                fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline))
-                true
-            }
-
-            else -> {
-                super.onOptionsItemSelected(item)
-            }
-        }
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        textLoadTask.apply {
-            cancel(true)
-            dismissLoadingDialog()
-        }
-        isOpen = false
-        currentFilePreviewing = null
-    }
-
-    override fun onFileMetadataChanged(updatedFile: OCFile?) {
-        updatedFile?.let {
-            file = updatedFile
-        }
-        requireActivity().invalidateOptionsMenu()
-    }
-
-    override fun onFileMetadataChanged() {
-        mContainerActivity.storageManager?.let {
-            file = it.getFileByPath(file.remotePath)
-        }
-        requireActivity().invalidateOptionsMenu()
-    }
-
-    override fun onFileContentChanged() {
-        loadAndShowTextPreview()
-    }
-
-    override fun updateViewForSyncInProgress() {
-        progressController.showProgressBar()
-    }
-
-    override fun updateViewForSyncOff() {
-        progressController.hideProgressBar()
-    }
-
-    private fun openFile() {
-        mContainerActivity.fileOperationsHelper.openFile(file)
-        finish()
-    }
-
-    private fun seeDetails() {
-        mContainerActivity.showDetails(file)
-    }
-
-    private fun finish() {
-        requireActivity().onBackPressed()
-    }
 
     companion object {
         private const val EXTRA_FILE = "FILE"
