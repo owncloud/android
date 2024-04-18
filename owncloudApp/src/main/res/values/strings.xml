@@ -806,4 +806,6 @@
     <string name="clean_data_account_title">Remove local storage</string>
     <string name="clean_data_account_button_yes">Clean data</string>
 
+    <string name="content_description_image_previewed">Image previewed</string>
+
 </resources>
