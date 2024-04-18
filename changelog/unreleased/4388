@@ -1,0 +1,6 @@
+Enhancement: Added contentDescription attribute in the previewed image
+
+A contentDescription attribute has been added to previewed image to make the application more accessible.
+
+https://github.com/owncloud/android/issues/4360
+https://github.com/owncloud/android/pull/4388
