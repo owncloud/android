@@ -61,7 +61,6 @@ import java.io.BufferedWriter
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.StringWriter
-import java.util.LinkedList
 import java.util.Scanner
 
 class PreviewTextFragment : FileFragment() {
@@ -427,17 +426,16 @@ class PreviewTextFragment : FileFragment() {
             }
         }
 
-        @JvmStatic
         fun canBePreviewed(file: OCFile?): Boolean {
-            val unsupportedTypes = LinkedList<String>().apply {
-                add("text/richtext")
-                add("text/rtf")
-                add("text/vnd.abc")
-                add("text/vnd.fmi.flexstor")
-                add("text/vnd.rn-realtext")
-                add("text/vnd.wap.wml")
-                add("text/vnd.wap.wmlscript")
-            }
+            val unsupportedTypes = listOf(
+                "test/richtest",
+                "text/rtf",
+                "text/vnd.abc",
+                "text/vnd.fmi.flexstor",
+                "text/vnd.rn-realtext",
+                "text/vnd.wap.wml",
+                "text/vnd.wap.wmlscript"
+            )
 
             return (file != null && file.isAvailableLocally && file.isText &&
                     !unsupportedTypes.contains(file.mimeType) &&
