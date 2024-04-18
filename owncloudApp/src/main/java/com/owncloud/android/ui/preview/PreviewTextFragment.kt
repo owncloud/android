@@ -238,7 +238,7 @@ class PreviewTextFragment : FileFragment() {
 
         fun dismissLoadingDialog() {
             val waitDialogFragment = requireActivity().supportFragmentManager.findFragmentByTag(DIALOG_WAIT_TAG)
-            if (waitDialogFragment != null) {
+            waitDialogFragment?.let {
                 val loading = waitDialogFragment as LoadingDialog
                 loading.dismiss()
             }
@@ -290,7 +290,7 @@ class PreviewTextFragment : FileFragment() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        if (mContainerActivity.storageManager != null) {
+        mContainerActivity.storageManager?.let {
             val safeFile = file
             val accountName = mContainerActivity.storageManager.account.name
             previewTextViewModel.filterMenuOptions(safeFile, accountName)
@@ -372,7 +372,7 @@ class PreviewTextFragment : FileFragment() {
     }
 
     override fun onFileMetadataChanged(updatedFile: OCFile?) {
-        if (updatedFile != null) {
+        updatedFile?.let {
             file = updatedFile
         }
         requireActivity().invalidateOptionsMenu()
