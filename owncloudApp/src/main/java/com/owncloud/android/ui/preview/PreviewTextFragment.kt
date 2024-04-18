@@ -86,18 +86,18 @@ class PreviewTextFragment : FileFragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         Timber.v("onCreateView")
 
-        val ret = inflater.inflate(R.layout.preview_text_fragment, container, false)
-        ret.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+        val previewTextFragmentView = inflater.inflate(R.layout.preview_text_fragment, container, false)
+        previewTextFragmentView.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
 
         // We can use binding instead of findViewById
-        rootView = ret.findViewById(R.id.top)
-        progressBar = ret.findViewById(R.id.syncProgressBar)
-        tabLayout = ret.findViewById(R.id.tab_layout)
-        viewPager2 = ret.findViewById(R.id.view_pager)
-        textPreview = ret.findViewById(R.id.text_preview)
-        textLayout = ret.findViewById(R.id.text_layout)
+        rootView = previewTextFragmentView.findViewById(R.id.top)
+        progressBar = previewTextFragmentView.findViewById(R.id.syncProgressBar)
+        tabLayout = previewTextFragmentView.findViewById(R.id.tab_layout)
+        viewPager2 = previewTextFragmentView.findViewById(R.id.view_pager)
+        textPreview = previewTextFragmentView.findViewById(R.id.text_preview)
+        textLayout = previewTextFragmentView.findViewById(R.id.text_layout)
 
-        return ret
+        return previewTextFragmentView
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -177,21 +177,21 @@ class PreviewTextFragment : FileFragment() {
             mimeType = file.mimeType
 
             var inputStream: FileInputStream? = null
-            var sc: Scanner? = null
+            var scanner: Scanner? = null
             val source = StringWriter()
             val bufferedWriter = BufferedWriter(source)
 
             try {
                 inputStream = FileInputStream(location)
-                sc = Scanner(inputStream)
-                while (sc.hasNextLine()) {
-                    bufferedWriter.append(sc.nextLine())
-                    if (sc.hasNextLine()) {
+                scanner = Scanner(inputStream)
+                while (scanner.hasNextLine()) {
+                    bufferedWriter.append(scanner.nextLine())
+                    if (scanner.hasNextLine()) {
                         bufferedWriter.append("\n")
                     }
                 }
                 bufferedWriter.close()
-                val exc = sc.ioException()
+                val exc = scanner.ioException()
                 if (exc != null) {
                     throw exc
                 }
@@ -205,7 +205,7 @@ class PreviewTextFragment : FileFragment() {
                         Timber.e(e)
                     }
                 }
-                sc?.close()
+                scanner?.close()
             }
             return source
         }
@@ -222,24 +222,24 @@ class PreviewTextFragment : FileFragment() {
         }
 
         fun showLoadingDialog() {
-            val frag = requireActivity().supportFragmentManager.findFragmentByTag(DIALOG_WAIT_TAG)
+            val waitDialogFragment = requireActivity().supportFragmentManager.findFragmentByTag(DIALOG_WAIT_TAG)
             val loading: LoadingDialog
 
-            if (frag == null) {
+            if (waitDialogFragment == null) {
                 loading = LoadingDialog.newInstance(R.string.wait_a_moment, false)
-                val fm = requireActivity().supportFragmentManager
-                val ft = fm.beginTransaction()
-                loading.show(ft, DIALOG_WAIT_TAG)
+                val fragmentManager = requireActivity().supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                loading.show(fragmentTransaction, DIALOG_WAIT_TAG)
             } else {
-                loading = frag as LoadingDialog
+                loading = waitDialogFragment as LoadingDialog
                 loading.showsDialog = true
             }
         }
 
         fun dismissLoadingDialog() {
-            val frag = requireActivity().supportFragmentManager.findFragmentByTag(DIALOG_WAIT_TAG)
-            if (frag != null) {
-                val loading = frag as LoadingDialog
+            val waitDialogFragment = requireActivity().supportFragmentManager.findFragmentByTag(DIALOG_WAIT_TAG)
+            if (waitDialogFragment != null) {
+                val loading = waitDialogFragment as LoadingDialog
                 loading.dismiss()
             }
         }
