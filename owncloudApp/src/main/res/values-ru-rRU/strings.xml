@@ -221,6 +221,15 @@
   <string name="uploader_upload_text_dialog_title">Укажите имя для нового файла</string>
   <string name="uploader_upload_text_dialog_filename_error_empty">Имя файла не должно быть пустым</string>
   <string name="uploader_upload_text_dialog_filename_error_length_max">Имя файла должно быть не длиннее %d символов</string>
+  <string name="uploader_upload_text_filename_hint">Полное имя</string>
+  <string name="uploader_upload_camera_upload_files">Загрузка файлов, загруженных из камеры</string>
+  <string name="uploader_upload_picture_upload_files">Будет загружено %d новых изображений</string>
+  <string name="uploader_upload_video_upload_files">Будет загружено %d новых видео</string>
+  <string name="uploader_upload_camera_upload_source_path_error">Загрузка из камеры не удалась</string>
+  <string name="uploader_upload_picture_upload_error">Исходный путь для загрузки изображений больше не является допустимым</string>
+  <string name="uploader_upload_video_upload_error">Исходный путь для загрузки видео больше не является допустимым</string>
+  <string name="uploader_upload_available_offline_files">Загрузка файлов, доступных автономно</string>
+  <string name="uploader_upload_requested_from_wifi_files">Загрузка файлов, запрошенных через WiFi</string>
   <string name="ssl_certificate_not_trusted">Нет доверия сертификату сервера</string>
   <string name="uploads_view_title">Загрузки</string>
   <string name="uploads_view_group_current_uploads">Текущие</string>
@@ -269,6 +278,7 @@
   <string name="sync_conflicts_in_favourites_content">%1$d файлов не может быть синхронизировано</string>
   <string name="sync_fail_in_favourites_ticker">Не удалось синхронизировать файлы</string>
   <string name="sync_fail_in_favourites_content">Содержимое %1$d файлов не может быть синхронизировано (конфликтов: %2$d)</string>
+  <string name="sync_current_folder_was_removed">Целевой каталог 1%1$s уже не существует</string>
   <string name="pass_code_enter_pass_code">Пожалуйста, укажите ваш код</string>
   <string name="pass_code_configure_your_pass_code">Укажите ваш код</string>
   <string name="pass_code_configure_your_pass_code_migration">Введите новый %1$d-значный код</string>
@@ -659,11 +669,34 @@
   <string name="release_notes_4_3_0_subtitle_3">Удален значок ключа, чтобы избежать совпадения имени учетной записи со значками и перенаправления на вход в систему при появлении всплывающей панели при сбое аутентификации.</string>
   <string name="release_notes_4_3_0_title_4">Диалоговое окно конфликта имен больше похоже на Android.</string>
   <string name="release_notes_4_3_0_subtitle_4">Внешний вид диалогового окна «Конфликты имен» был изменен, чтобы оно выглядело в стиле Android и стало более похожим на другие диалоговые окна в приложении.</string>
+  <string name="release_notes_4_3_0_title_5">Значок объектива в селекторе папок</string>
+  <string name="release_notes_4_3_0_subtitle_5">Значок объектива на панели инструментов был удален при отображении пробелов в папках</string>
+  <string name="release_notes_4_3_0_title_6">Добавить предупреждение о http-соединениях</string>
+  <string name="release_notes_4_3_0_subtitle_6">Добавлено диалоговое окно предупреждения в представлении входа в систему при http-соединении</string>
+  <string name="release_notes_4_3_0_title_7">Исправьте опцию \"Только локально\" в диалоговом окне удаления</string>
+  <string name="release_notes_4_3_0_subtitle_7">Опция \"Только локально\" в диалоге удаления будет отображаться только в том случае, если при рекурсивной проверке выбранных файлов и папок хотя бы один файл доступен локально
+</string>
+  <string name="release_notes_4_3_0_title_retried_successful_uploads_delete_temporary_folder">Deleted successful downloads are deleted from the temporary folder</string>
+  <string name="release_notes_4_3_0_subtitle_retried_successful_uploads_delete_temporary_folder">Удаленные успешные загрузки удаляются из временной папки</string>
+  <string name="release_notes_4_3_0_title_manual_removal_local_storage">Новая настройка для ручного удаления локального хранилища</string>
+  <string name="release_notes_4_3_0_subtitle_manual_removal_local_storage">Добавлена новая иконка в представлении \"Управление учетными записями\" для ручного удаления локальных и временных файлов</string>
+  <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">Кнопка \"Очистить данные\" включена в настройках приложения в настройках устройства</string>
+  <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">Кнопка \"Очистить данные\" позволяет удалить данные приложения из настроек приложения в настройках устройства. При нажатии этой кнопки приложение выполнит жесткий сброс.</string>
+  <string name="release_notes_4_3_0_title_improvements_remove_dialog">Улучшения в диалоге удаления</string>
+  <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">Добавлено пользовательское диалоговое окно, когда удаляемый файл имеет миниатюру, и добавлено количество удаляемых файлов при множественном выборе</string>
+  <string name="release_notes_4_3_0_title_password_generator">Генератор паролей для общедоступных ссылок</string>
+  <string name="release_notes_4_3_0_subtitle_password_generator">Пароли для публичных ссылок теперь можно генерировать с помощью нового генератора в аккаунтах Infinite Scale.</string>
+  <string name="release_notes_4_3_0_title_display_name_truncation">Исправлена ошибка, из-за которой длинные имена отображаемых объектов некорректно усекались.</string>
+  <string name="release_notes_4_3_0_subtitle_display_name_truncation">Имена дисплеев теперь правильно обрезаются посередине с помощью многоточия (...), чтобы сохранить читабельность.</string>
   <!--Open in web-->
+  <string name="ic_action_open_in_web">Открыть в браузере</string>
+  <string name="ic_action_open_with_web">Открыть в %1$s (веб)</string>
+  <string name="open_in_web_error_generic">Не удалось открыть в сети</string>
   <string name="open_in_web_error_not_supported">нет приложений, которые поддерживают этот тип файла</string>
   <string name="open_in_web_error_too_early">Запрашиваемый файл в данный момент недоступен, пожалуйста, попробуйте позже </string>
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_title">Предупреждение о бесконечной шкале счетов</string>
+  <string name="ocis_accounts_warning_message">Пожалуйста, удалите учетную запись и войдите снова, чтобы получить возможность использования пространства.</string>
   <string name="ocis_accounts_warning_checkbox_message">Не показывать снова</string>
   <string name="ocis_accounts_warning_button">понял</string>
   <string name="tab_label_ascii">Текст</string>
