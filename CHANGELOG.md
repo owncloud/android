@@ -32,9 +32,11 @@ ownCloud admins and users.
 * Bugfix - "Clear data" button enabled in the app settings in device settings: [#4309](https://github.com/owncloud/android/issues/4309)
 * Bugfix - Remove lens icon in folder picker: [#4311](https://github.com/owncloud/android/issues/4311)
 * Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
+* Bugfix - Resolve incorrect truncation of long display names in Manage Accounts: [#4351](https://github.com/owncloud/android/issues/4351)
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 * Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
 * Change - Add new prefixes in commit messages of 3rd party contributors: [#4346](https://github.com/owncloud/android/pull/4346)
+* Change - Kotlinize PreviewTextFragment: [#4356](https://github.com/owncloud/android/issues/4356)
 * Enhancement - Correct "Local only" option in remove dialog: [#3936](https://github.com/owncloud/android/issues/3936)
 * Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
 * Enhancement - New setting for manual removal of local storage: [#4174](https://github.com/owncloud/android/issues/4174)
@@ -71,6 +73,15 @@ ownCloud admins and users.
    https://github.com/owncloud/android/issues/4335
    https://github.com/owncloud/android/pull/4341
 
+* Bugfix - Resolve incorrect truncation of long display names in Manage Accounts: [#4351](https://github.com/owncloud/android/issues/4351)
+
+   Resolved the bug where long display names were truncated incorrectly in the
+   Manage Accounts view. Now, display names are properly truncated in the middle
+   with ellipsis (...) to maintain readability.
+
+   https://github.com/owncloud/android/issues/4351
+   https://github.com/owncloud/android/pull/4380
+
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 
    The minimum Android version will be Android 7.0 Nougat (API 24). The application
@@ -93,6 +104,13 @@ ownCloud admins and users.
    Commits'
 
    https://github.com/owncloud/android/pull/4346
+
+* Change - Kotlinize PreviewTextFragment: [#4356](https://github.com/owncloud/android/issues/4356)
+
+   PreviewTextFragment class has been moved from Java to Kotlin.
+
+   https://github.com/owncloud/android/issues/4356
+   https://github.com/owncloud/android/pull/4376
 
 * Enhancement - Correct "Local only" option in remove dialog: [#3936](https://github.com/owncloud/android/issues/3936)
 
