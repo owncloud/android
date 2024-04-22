@@ -67,7 +67,7 @@ abstract class ToolbarActivity : BaseActivity() {
     open fun setupRootToolbar(
         title: String,
         isSearchEnabled: Boolean,
-        isAvatarRequested: Boolean,
+        isAvatarRequested: Boolean = false,
     ) {
         useStandardToolbar(false)
 
