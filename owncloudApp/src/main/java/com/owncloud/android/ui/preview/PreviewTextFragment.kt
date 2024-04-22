@@ -226,7 +226,7 @@ class PreviewTextFragment : FileFragment() {
     override fun onPrepareOptionsMenu(menu: Menu) {
         mContainerActivity.storageManager?.let {
             val safeFile = file
-            val accountName = mContainerActivity.storageManager.account.name
+            val accountName = it.account.name
             previewTextViewModel.filterMenuOptions(safeFile, accountName)
 
             collectLatestLifecycleFlow(previewTextViewModel.menuOptions) { menuOptions ->
