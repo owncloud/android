@@ -30,6 +30,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -58,6 +59,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import coil.load
 import com.getbase.floatingactionbutton.AddFloatingActionButton
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -117,6 +119,8 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okio.Path.Companion.toPath
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -561,7 +565,13 @@ class MainFileListFragment : Fragment(),
                     val appProviderItemView = BottomSheetFragmentItemView(requireContext())
                     appProviderItemView.apply {
                         title = getString(R.string.ic_action_open_with_web, appRegistryProvider.name)
-                        itemIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_open_in_web, null)
+                        itemIcon = try {
+                            removeDefaultTint()
+                            getDrawableFromUrl(context, appRegistryProvider.icon)
+                        } catch (e: Exception) {
+                            addDefaultTint(R.color.bottom_sheet_fragment_item_color)
+                            ResourcesCompat.getDrawable(resources, R.drawable.ic_open_in_web, null)
+                        }
                         setOnClickListener {
                             mainFileListViewModel.openInWeb(file.remoteId!!, appRegistryProvider.name)
                             fileOperationsViewModel.setLastUsageFile(file)
@@ -655,6 +665,16 @@ class MainFileListFragment : Fragment(),
         /* TransfersViewModel observables */
         observeTransfers()
 
+    }
+
+    private suspend fun getDrawableFromUrl(context: Context, url: String): Drawable? {
+        return withContext(Dispatchers.IO) {
+            Glide.with(context)
+                .load(url)
+                .fitCenter()
+                .submit()
+                .get()
+        }
     }
 
     private fun observeTransfers() {
