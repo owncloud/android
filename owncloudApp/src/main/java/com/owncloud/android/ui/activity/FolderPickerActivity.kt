@@ -55,7 +55,6 @@ open class FolderPickerActivity : FileActivity(),
 
     private lateinit var binding: FilesFolderPickerBinding
 
-    private var isInSpacesScreen: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -165,9 +164,6 @@ open class FolderPickerActivity : FileActivity(),
                 maxWidth = Int.MAX_VALUE
                 queryHint = resources.getString(R.string.actionbar_search)
             }
-            if (isInSpacesScreen) {
-                menuItem.isVisible = false
-            }
             it.removeItem(it.findItem(R.id.action_share_current_folder)?.itemId ?: 0)
         }
         return true
@@ -252,7 +248,6 @@ open class FolderPickerActivity : FileActivity(),
     }
 
     private fun initAndShowListOfFilesFragment(spaceId: String? = null) {
-        isInSpacesScreen = false
         val safeInitialFolder = if (file == null) {
             if (account == null) {
                 account = AccountUtils.getCurrentOwnCloudAccount(applicationContext)
@@ -286,7 +281,6 @@ open class FolderPickerActivity : FileActivity(),
         transaction.replace(R.id.fragment_container, listOfSpaces)
         transaction.commit()
         binding.folderPickerBtnChoose.isVisible = false
-        isInSpacesScreen = true
     }
 
     /**

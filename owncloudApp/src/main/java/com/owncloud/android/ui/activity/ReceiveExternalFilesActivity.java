@@ -178,7 +178,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private OCSharedPreferencesProvider sharedPreferencesProvider;
     private OCSpace personalSpace;
 
-    private boolean isInSpacesList;
 
     Pattern pattern = Pattern.compile("[/\\\\]");
 
@@ -258,7 +257,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
     }
 
     private void showListOfFiles() {
-        isInSpacesList = false;
         fragmentContainer = findViewById(R.id.fragment_container);
         mListView = findViewById(android.R.id.list);
         fragmentContainer.setVisibility(View.GONE);
@@ -293,7 +291,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
         uploaderButton = findViewById(R.id.uploader_choose_folder);
         uploaderButton.setVisibility(View.GONE);
         updateToolbar(getString(R.string.choose_upload_space));
-        isInSpacesList = true;
     }
 
     private void initPickerListener() {
@@ -760,9 +757,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
         mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
         mSearchView.setOnQueryTextListener(this);
-        if (isInSpacesList) {
-            menuItem.setVisible(false);
-        }
         menu.removeItem(menu.findItem(R.id.action_share_current_folder).getItemId());
 
         return true;

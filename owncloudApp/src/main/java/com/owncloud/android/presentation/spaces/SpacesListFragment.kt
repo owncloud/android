@@ -88,10 +88,20 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
 
     private fun subscribeToViewModels() {
         collectLatestLifecycleFlow(spacesListViewModel.spacesList) { uiState ->
-            val spacesToList = uiState.spaces.filter { it.name.toLowerCase().contains(uiState.searchFilter.toLowerCase()) }
-
-            showOrHideEmptyView(spacesToList)
-            spacesListAdapter.setData(spacesToList)
+            val spacesToListFiltered = uiState.spaces.filter { it.name.toLowerCase().contains(uiState.searchFilter.toLowerCase()) }
+            if (uiState.searchFilter != "") {
+                val personalSpace = uiState.spaces.find { it.isPersonal }
+                val spacesToList = spacesToListFiltered.toMutableList().apply {
+                    if (personalSpace != null) {
+                        add(0, personalSpace)
+                    }
+                }
+                showOrHideEmptyView(spacesToList)
+                spacesListAdapter.setData(spacesToList)
+            } else {
+                showOrHideEmptyView(spacesToListFiltered)
+                spacesListAdapter.setData(spacesToListFiltered)
+            }
             binding.swipeRefreshSpacesList.isRefreshing = uiState.refreshing
             uiState.error?.let { showErrorInSnackbar(R.string.spaces_sync_failed, it) }
 
