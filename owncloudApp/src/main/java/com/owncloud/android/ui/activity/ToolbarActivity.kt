@@ -60,7 +60,6 @@ abstract class ToolbarActivity : BaseActivity() {
         title?.let { standardToolbar.title = it }
         setSupportActionBar(standardToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(displayHomeAsUpEnabled)
-        supportActionBar?.setHomeActionContentDescription(R.string.common_back)
         supportActionBar?.setHomeButtonEnabled(homeButtonEnabled)
         supportActionBar?.setDisplayShowTitleEnabled(displayShowTitleEnabled)
     }

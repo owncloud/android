@@ -812,6 +812,10 @@
     <string name="clean_data_account_title">Remove local storage</string>
     <string name="clean_data_account_button_yes">Clean data</string>
 
+    <string name="content_description_root_left_icon">Menu</string>
+    <string name="content_description_root_avatar">Manage accounts</string>
+    <string name="content_description_root_title_with_search_icon">Search</string>
+    <string name="content_description_type_view">Type of view</string>
     <string name="content_description_image_previewed">Image previewed</string>
     <string name="content_description_root_toolbar_left_icon">Menu</string>
     <string name="content_description_root_toolbar_avatar">Manage accounts</string>
@@ -819,11 +823,14 @@
     <string name="content_description_selector_type_view">Selector type of view</string>
     <string name="content_description_add_public_link">Add public link</string>
     <string name="content_description_add_user_and_groups">Add user and groups</string>
-    <string name="content_description_get_private_link_button">Get private link</string>
-    <string name="content_description_get_public_link_button">Get public link</string>
+    <string name="content_description_get_private_link">Get private link</string>
+    <string name="content_description_get_public_link">Get public link</string>
     <string name="content_description_delete_public_link">Delete public link</string>
-    <string name="content_description_get_edit_public_link_button">Edit public link</string>
+    <string name="content_description_get_edit_public_link">Edit public link</string>
     <string name="content_description_remove_account">Remove account</string>
     <string name="content_description_add_new_content">Add new content</string>
+    <string name="content_description_logo">Logo</string>
+    <string name="content_description_edit_user_and_group">Edit user and group</string>
+    <string name="content_description_delete_user_and_group">Delete user and group</string>
 
 </resources>

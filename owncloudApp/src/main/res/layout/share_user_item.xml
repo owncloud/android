@@ -59,7 +59,8 @@
             android:src="@drawable/ic_action_delete_grey"
             android:padding="14dp"
             android:scaleType="centerCrop"
-            android:background="@color/transparent" />
+            android:background="@color/transparent"
+            android:contentDescription="@string/content_description_delete_user_and_group" />
 
         <ImageButton
             android:layout_width="48dp"
@@ -67,7 +68,8 @@
             android:id="@+id/editShareButton"
             android:src="@drawable/ic_lead_pencil_grey"
             android:padding="14dp"
-            android:background="@color/transparent"/>
+            android:background="@color/transparent"
+            android:contentDescription="@string/content_description_edit_user_and_group" />
 
     </LinearLayout>
 

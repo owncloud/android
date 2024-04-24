@@ -74,7 +74,7 @@
                 android:src="@drawable/copy_link"
                 android:scaleType="centerCrop"
                 android:background="@color/transparent"
-                android:contentDescription="@string/content_description_get_private_link_button" />
+                android:contentDescription="@string/content_description_get_private_link" />
 
         </RelativeLayout>
 
