@@ -9,6 +9,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2024 ownCloud GmbH.
@@ -389,7 +390,9 @@ class FileDisplayActivity : FileActivity(),
         val listOfSpaces = SpacesListFragment.newInstance(
             showPersonalSpace = false,
             accountName = com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(applicationContext).name
-        )
+        ).apply {
+            setSearchListener(findViewById(R.id.root_toolbar_search_view))
+        }
         this.fileListOption = FileListOption.SPACES_LIST
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, listOfSpaces, TAG_LIST_OF_SPACES)
@@ -940,8 +943,7 @@ class FileDisplayActivity : FileActivity(),
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
                     FileListOption.SPACES_LIST -> getString(R.string.bottom_nav_spaces)
                 }
-            setupRootToolbar(title = title, isSearchEnabled = fileListOption != FileListOption.SPACES_LIST, isAvatarRequested = false)
-            mainFileListFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
+            setupRootToolbar(title = title, isSearchEnabled = true, isAvatarRequested = false)
         } else if (space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH) {
             updateStandardToolbar(title = space.name, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         } else {
