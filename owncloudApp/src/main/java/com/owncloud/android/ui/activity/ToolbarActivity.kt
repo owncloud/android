@@ -3,9 +3,8 @@
  *
  * @author Andy Scherzinger
  * @author Christian Schabesberger
- * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2024 ownCloud GmbH.
+ * Copyright (C) 2020 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
