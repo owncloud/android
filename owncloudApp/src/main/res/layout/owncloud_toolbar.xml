@@ -62,7 +62,7 @@
             android:paddingHorizontal="@dimen/standard_half_padding"
             android:textColor="@color/white"
             android:textSize="@dimen/toolbar_title_text_size"
-            android:contentDescription="@string/content_description_title_with_search"
+            android:contentDescription="@string/content_description_search"
             app:drawableEndCompat="@drawable/ic_search"
             app:drawableTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"

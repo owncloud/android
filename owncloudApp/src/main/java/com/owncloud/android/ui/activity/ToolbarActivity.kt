@@ -3,7 +3,6 @@
  *
  * @author Andy Scherzinger
  * @author Christian Schabesberger
- *
  * Copyright (C) 2020 ownCloud GmbH.
  *
  *
