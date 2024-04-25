@@ -1561,7 +1561,7 @@ class FileDisplayActivity : FileActivity(),
      *
      * @param file Text [OCFile] to preview.
      */
-    fun startTextPreview(file: OCFile?) {
+    fun startTextPreview(file: OCFile) {
         val textPreviewFragment = PreviewTextFragment.newInstance(
             file,
             account
