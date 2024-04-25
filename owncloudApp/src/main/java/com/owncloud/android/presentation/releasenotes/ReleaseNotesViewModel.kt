@@ -133,7 +133,7 @@ class ReleaseNotesViewModel(
             ReleaseNote(
                 title = R.string.release_notes_4_3_0_title_show_app_provider_icon_from_endpoint,
                 subtitle = R.string.release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint,
-                type = ReleaseNoteType.BUGFIX
+                type = ReleaseNoteType.ENHANCEMENT
             ),
         )
     }
