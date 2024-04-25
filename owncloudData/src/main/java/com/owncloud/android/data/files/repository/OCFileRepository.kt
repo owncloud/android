@@ -65,7 +65,7 @@ class OCFileRepository(
             accountName = parentFolder.owner,
             spaceWebDavUrl = spaceWebDavUrl,
         ).also {
-            localFileDataSource.saveFilesInFolderAndReturnThem(
+            localFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(
                 folder = parentFolder,
                 listOfFiles = listOf(
                     OCFile(
@@ -424,7 +424,7 @@ class OCFileRepository(
                                 if (remoteFolder.isAvailableOffline) AVAILABLE_OFFLINE_PARENT else NOT_AVAILABLE_OFFLINE
 
                         })
-                } else {
+                } else if (localChildToSync.etag != remoteChild.etag || localChildToSync.localModificationTimestamp > remoteChild.lastSyncDateForData!!) {
                     // File exists in the database, we need to check several stuff.
                     folderContentUpdated.add(
                         remoteChild.apply {
@@ -461,7 +461,7 @@ class OCFileRepository(
             remoteFolder.etagInConflict = null
         }
 
-        return localFileDataSource.saveFilesInFolderAndReturnThem(
+        return localFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(
             folder = remoteFolder,
             listOfFiles = folderContentUpdated
         )
@@ -598,7 +598,7 @@ class OCFileRepository(
     private fun deleteLocalFile(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         localStorageProvider.deleteLocalFile(ocFile)
         if (onlyFromLocalStorage) {
-            localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null, lastUsage = null))
+            localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null, lastUsage = null, etag = null))
         } else {
             localFileDataSource.deleteFile(ocFile.id!!)
         }

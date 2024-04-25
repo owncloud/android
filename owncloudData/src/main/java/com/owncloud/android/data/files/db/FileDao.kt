@@ -206,7 +206,7 @@ interface FileDao {
      * return folder content
      */
     @Transaction
-    fun insertFilesInFolderAndReturnThem(
+    fun insertFilesInFolderAndReturnTheFilesThatChanged(
         folder: OCFileEntity,
         folderContent: List<OCFileEntity>,
     ): List<OCFileEntity> {
@@ -223,7 +223,13 @@ interface FileDao {
                 availableOfflineStatus = getNewAvailableOfflineStatus(folder.availableOfflineStatus, fileToInsert.availableOfflineStatus)
             })
         }
-        return getFolderContent(folderId)
+        val folderContentLocal = getFolderContent(folderId)
+
+        return folderContentLocal.filter { localFile ->
+            folderContent.any { changedFile ->
+                localFile.remoteId == changedFile.remoteId
+            }
+        }
     }
 
     @Transaction

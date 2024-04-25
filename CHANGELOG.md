@@ -41,6 +41,7 @@ ownCloud admins and users.
 * Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
 * Enhancement - New setting for manual removal of local storage: [#4174](https://github.com/owncloud/android/issues/4174)
 * Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
+* Enhancement - Avoid unnecessary requests when an av. offline folder is refreshed: [#4197](https://github.com/owncloud/android/issues/4197)
 * Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
 * Enhancement - Add a warning in http connections: [#4284](https://github.com/owncloud/android/issues/4284)
 * Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
@@ -143,6 +144,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4175
    https://github.com/owncloud/android/pull/4320
+
+* Enhancement - Avoid unnecessary requests when an av. offline folder is refreshed: [#4197](https://github.com/owncloud/android/issues/4197)
+
+   The available offline folders will only be refreshed when their eTag from the
+   server and the corresponding one of the local database are different, avoiding
+   sending unnecessary request.
+
+   https://github.com/owncloud/android/issues/4197
+   https://github.com/owncloud/android/pull/4354
 
 * Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
 
