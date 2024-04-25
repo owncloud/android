@@ -1,0 +1,7 @@
+Enhancement: Content description in UI elements to improve accessibility
+
+A description of the meaning or action associated with some UI elements has been included as alternative text to make the application more accessible.
+Views improved: toolbar, file list, spaces list, share, drawer menu, manage accounts and image preview.
+
+https://github.com/owncloud/android/issues/4360
+https://github.com/owncloud/android/pull/4387
