@@ -89,16 +89,16 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
     private fun subscribeToViewModels() {
         collectLatestLifecycleFlow(spacesListViewModel.spacesList) { uiState ->
             if (uiState.searchFilter != "") {
-                val spacesToListFiltered =
-                    uiState.spaces.filter { it.name.toLowerCase().contains(uiState.searchFilter.toLowerCase()) && !it.isPersonal }
+                var spacesToListFiltered =
+                    uiState.spaces.filter { it.name.lowercase().contains(uiState.searchFilter.lowercase()) && !it.isPersonal }
                 val personalSpace = uiState.spaces.find { it.isPersonal }
-                val spacesToList = spacesToListFiltered.toMutableList().apply {
-                    if (personalSpace != null) {
+                personalSpace?.let {
+                    spacesToListFiltered = spacesToListFiltered.toMutableList().apply {
                         add(0, personalSpace)
                     }
                 }
-                showOrHideEmptyView(spacesToList)
-                spacesListAdapter.setData(spacesToList)
+                showOrHideEmptyView(spacesToListFiltered)
+                spacesListAdapter.setData(spacesToListFiltered)
             } else {
                 showOrHideEmptyView(uiState.spaces)
                 spacesListAdapter.setData(uiState.spaces)
