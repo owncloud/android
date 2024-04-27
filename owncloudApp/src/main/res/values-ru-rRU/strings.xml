@@ -247,6 +247,7 @@
   <string name="uploads_view_upload_status_failed_folder_error">Ошибка каталога</string>
   <string name="uploads_view_upload_status_failed_file_error">Ошибка файла</string>
   <string name="uploads_view_upload_status_failed_localfile_error">Локальный файл не найден</string>
+  <string name="uploads_view_upload_status_failed_permission_error">Ошибка разрешения доступа</string>
   <string name="uploads_view_upload_status_failed_firewall_error">Запрещено правилом в межсетевом экране</string>
   <string name="uploads_view_upload_status_conflict">Конфликт</string>
   <string name="uploads_view_upload_status_service_interrupted">Работа приложения была прекращена</string>

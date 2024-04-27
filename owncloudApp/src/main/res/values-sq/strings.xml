@@ -687,6 +687,9 @@
   <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">U shtua një dialog i përshtatur, kur kartela që do të fshihet ka miniaturë dhe u shtua numri i kartelave që do të fshihen në përzgjedhje të shumëfishtë</string>
   <string name="release_notes_4_3_0_title_password_generator">Prodhues fjalëkalimesh për lidhje publike</string>
   <string name="release_notes_4_3_0_subtitle_password_generator">Tanimë, fjalëkalime për lidhje publike mund të prodhohen përmes një prodhuesi të ri, në llogari Infinite Scale</string>
+  <string name="release_notes_4_3_0_title_display_name_truncation">U ndreq e meta prej të cilës emra të gjatë në ekran cungoheshin pasaktësish</string>
+  <string name="release_notes_4_3_0_subtitle_display_name_truncation">Emrat në ekran tanimë cungohen saktë, me shenjën e elipsës (…), për të ruajtur lexueshmërinë</string>
+  <string name="release_notes_4_3_0_subtitle_improve_available_offline_performance">Kartelat që përmbahen në një dosje të përdorshme jo në linjë do të rifreskohen vetëm nëse janë ndryshuar</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
