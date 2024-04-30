@@ -737,4 +737,5 @@
   <string name="clean_data_account_message">Kõik selle kasutajakonto allalaetud failid, mis ei ole võrguühenduseta saadaval, kustutatakse</string>
   <string name="clean_data_account_title">Eemalda kohalik salvestusmaht</string>
   <string name="clean_data_account_button_yes">Puhasta andmed</string>
+  <string name="content_description_image_previewed">Eelvaadatav pilt</string>
 </resources>
