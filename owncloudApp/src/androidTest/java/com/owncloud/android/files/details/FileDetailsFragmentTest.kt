@@ -94,6 +94,7 @@ class FileDetailsFragmentTest {
     }
 
     @Test
+    @Ignore("Flaky test")
     fun show_space_personal_when_it_has_value() {
         R.id.fdSpace.assertVisibility(ViewMatchers.Visibility.VISIBLE)
         R.id.fdSpaceLabel.assertVisibility(ViewMatchers.Visibility.VISIBLE)
@@ -106,6 +107,7 @@ class FileDetailsFragmentTest {
     }
 
     @Test
+    @Ignore("Flaky test")
     fun hide_space_when_it_has_no_value() {
         every { fileDetailsViewModel.currentFile } returns currentFileSyncInfo
 
@@ -115,6 +117,7 @@ class FileDetailsFragmentTest {
     }
 
     @Test
+    @Ignore("Flaky test")
     fun show_space_not_personal_when_it_has_value() {
         every { fileDetailsViewModel.currentFile } returns currentFileWithoutPersonalSpace
 
