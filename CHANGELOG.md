@@ -31,13 +31,13 @@ ownCloud admins and users.
 
 * Bugfix - Removed unnecessary requests when the app is installed from scratch: [#4213](https://github.com/owncloud/android/issues/4213)
 * Bugfix - "Clear data" button enabled in the app settings in device settings: [#4309](https://github.com/owncloud/android/issues/4309)
-* Bugfix - Remove lens icon in folder picker: [#4311](https://github.com/owncloud/android/issues/4311)
 * Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
 * Bugfix - Resolve incorrect truncation of long display names in Manage Accounts: [#4351](https://github.com/owncloud/android/issues/4351)
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 * Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
 * Change - Add new prefixes in commit messages of 3rd party contributors: [#4346](https://github.com/owncloud/android/pull/4346)
 * Change - Kotlinize PreviewTextFragment: [#4356](https://github.com/owncloud/android/issues/4356)
+* Enhancement - Add search functionality to spaces list: [#3865](https://github.com/owncloud/android/issues/3865)
 * Enhancement - Correct "Local only" option in remove dialog: [#3936](https://github.com/owncloud/android/issues/3936)
 * Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
 * Enhancement - New setting for manual removal of local storage: [#4174](https://github.com/owncloud/android/issues/4174)
@@ -68,13 +68,6 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4309
    https://github.com/owncloud/android/pull/4350
-
-* Bugfix - Remove lens icon in folder picker: [#4311](https://github.com/owncloud/android/issues/4311)
-
-   The lens icon in the toolbar was removed only in the spaces screen.
-
-   https://github.com/owncloud/android/issues/4311
-   https://github.com/owncloud/android/pull/4339
 
 * Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
 
@@ -122,6 +115,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4356
    https://github.com/owncloud/android/pull/4376
+
+* Enhancement - Add search functionality to spaces list: [#3865](https://github.com/owncloud/android/issues/3865)
+
+   Search functionality was added in spaces list when you are trying to filter
+   them.
+
+   https://github.com/owncloud/android/issues/3865
+   https://github.com/owncloud/android/pull/4393
 
 * Enhancement - Correct "Local only" option in remove dialog: [#3936](https://github.com/owncloud/android/issues/3936)
 
