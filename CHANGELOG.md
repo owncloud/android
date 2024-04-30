@@ -29,6 +29,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Removed unnecessary requests when the app is installed from scratch: [#4213](https://github.com/owncloud/android/issues/4213)
 * Bugfix - "Clear data" button enabled in the app settings in device settings: [#4309](https://github.com/owncloud/android/issues/4309)
 * Bugfix - Remove lens icon in folder picker: [#4311](https://github.com/owncloud/android/issues/4311)
 * Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
@@ -50,6 +51,14 @@ ownCloud admins and users.
 * Enhancement - Added contentDescription attribute in the previewed image: [#4360](https://github.com/owncloud/android/issues/4360)
 
 ## Details
+
+* Bugfix - Removed unnecessary requests when the app is installed from scratch: [#4213](https://github.com/owncloud/android/issues/4213)
+
+   Some requests to the server that were not necessary when installing the app from
+   scratch have been removed.
+
+   https://github.com/owncloud/android/issues/4213
+   https://github.com/owncloud/android/pull/4385
 
 * Bugfix - "Clear data" button enabled in the app settings in device settings: [#4309](https://github.com/owncloud/android/issues/4309)
 

@@ -235,6 +235,7 @@ class FileDisplayActivity : FileActivity(),
         setupRootToolbar(
             isSearchEnabled = true,
             title = getString(R.string.default_display_name_for_root_folder),
+            isAvatarRequested = true,
         )
 
         // setup drawer
@@ -302,7 +303,6 @@ class FileDisplayActivity : FileActivity(),
                     account?.name
                 )
             }
-            capabilitiesViewModel.refreshCapabilitiesFromNetwork()
             capabilitiesViewModel.capabilities.observe(this, Event.EventObserver {
                 onCapabilitiesOperationFinish(it)
             })
@@ -940,7 +940,7 @@ class FileDisplayActivity : FileActivity(),
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
                     FileListOption.SPACES_LIST -> getString(R.string.bottom_nav_spaces)
                 }
-            setupRootToolbar(title, isSearchEnabled = fileListOption != FileListOption.SPACES_LIST)
+            setupRootToolbar(title = title, isSearchEnabled = fileListOption != FileListOption.SPACES_LIST, isAvatarRequested = false)
             mainFileListFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
         } else if (space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH) {
             updateStandardToolbar(title = space.name, displayHomeAsUpEnabled = true, homeButtonEnabled = true)

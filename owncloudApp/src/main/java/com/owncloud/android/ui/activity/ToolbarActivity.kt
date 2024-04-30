@@ -3,7 +3,9 @@
  *
  * @author Andy Scherzinger
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -64,7 +66,8 @@ abstract class ToolbarActivity : BaseActivity() {
 
     open fun setupRootToolbar(
         title: String,
-        isSearchEnabled: Boolean
+        isSearchEnabled: Boolean,
+        isAvatarRequested: Boolean = false,
     ) {
         useStandardToolbar(false)
 
@@ -98,13 +101,14 @@ abstract class ToolbarActivity : BaseActivity() {
         }
 
         AccountUtils.getCurrentOwnCloudAccount(baseContext) ?: return
-
-        AvatarUtils().loadAvatarForAccount(
-            avatarView,
-            AccountUtils.getCurrentOwnCloudAccount(baseContext),
-            true,
-            baseContext.resources.getDimension(R.dimen.toolbar_avatar_radius)
-        )
+        if (isAvatarRequested) {
+            AvatarUtils().loadAvatarForAccount(
+                avatarView,
+                AccountUtils.getCurrentOwnCloudAccount(baseContext),
+                true,
+                baseContext.resources.getDimension(R.dimen.toolbar_avatar_radius)
+            )
+        }
         avatarView.setOnClickListener {
             // The drawer activity will take care of checking if the account changed.
             val manageAccountsIntent = Intent(applicationContext, AccountsManagementActivity::class.java)
