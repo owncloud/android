@@ -94,6 +94,7 @@
         android:paddingEnd="@dimen/standard_half_padding"
         android:paddingBottom="@dimen/standard_padding"
         android:src="@drawable/ic_clean_account"
+        android:contentDescription="@string/content_description_clean_account_storage"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/removeButton"
         app:layout_constraintTop_toTopOf="parent"

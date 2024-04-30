@@ -6,7 +6,9 @@
  * @author Juan Carlos González Cabrero
  * @author David González Verdugo
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -65,7 +67,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
         // Set back button
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
+        supportActionBar?.setHomeActionContentDescription(R.string.common_back)
         supportFragmentManager.transaction {
             if (savedInstanceState == null && file != null && account != null) {
                 // Add Share fragment on first creation
