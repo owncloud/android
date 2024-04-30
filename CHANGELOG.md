@@ -29,8 +29,8 @@ ownCloud admins and users.
 
 ## Summary
 
-* Bugfix - "Clear data" button enabled in the app settings in device settings: [#4309](https://github.com/owncloud/android/issues/4309)
 * Bugfix - Removed unnecessary requests when the app is installed from scratch: [#4213](https://github.com/owncloud/android/issues/4213)
+* Bugfix - "Clear data" button enabled in the app settings in device settings: [#4309](https://github.com/owncloud/android/issues/4309)
 * Bugfix - Remove lens icon in folder picker: [#4311](https://github.com/owncloud/android/issues/4311)
 * Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
 * Bugfix - Resolve incorrect truncation of long display names in Manage Accounts: [#4351](https://github.com/owncloud/android/issues/4351)
