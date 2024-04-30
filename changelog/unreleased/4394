@@ -1,0 +1,7 @@
+Bugfix: Video streaming in spaces
+
+The URI formed to perform video streaming in spaces has been adapted to oCIS accounts so that it takes into account the
+space where the file is located.
+
+https://github.com/owncloud/android/issues/4328
+https://github.com/owncloud/android/pull/4394
