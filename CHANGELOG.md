@@ -31,6 +31,7 @@ ownCloud admins and users.
 
 * Bugfix - Removed unnecessary requests when the app is installed from scratch: [#4213](https://github.com/owncloud/android/issues/4213)
 * Bugfix - "Clear data" button enabled in the app settings in device settings: [#4309](https://github.com/owncloud/android/issues/4309)
+* Bugfix - Video streaming in spaces: [#4328](https://github.com/owncloud/android/issues/4328)
 * Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
 * Bugfix - Resolve incorrect truncation of long display names in Manage Accounts: [#4351](https://github.com/owncloud/android/issues/4351)
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
@@ -68,6 +69,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4309
    https://github.com/owncloud/android/pull/4350
+
+* Bugfix - Video streaming in spaces: [#4328](https://github.com/owncloud/android/issues/4328)
+
+   The URI formed to perform video streaming in spaces has been adapted to oCIS
+   accounts so that it takes into account the space where the file is located.
+
+   https://github.com/owncloud/android/issues/4328
+   https://github.com/owncloud/android/pull/4394
 
 * Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
 

@@ -754,6 +754,8 @@
     <string name="release_notes_4_3_0_subtitle_improve_available_offline_performance">Files contained in an available offline folder will be refreshed only if they have been modified</string>
     <string name="release_notes_4_3_0_title_search_functionality_in_spaces_list">Search functionality in spaces list</string>
     <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">Search functionality has been added in spaces list when you are trying to filter them</string>
+    <string name="release_notes_4_3_0_title_video_streaming_spaces">Video streaming in spaces</string>
+    <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Video files located in spaces can now be played in streaming correctly</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>

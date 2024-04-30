@@ -120,6 +120,11 @@ class ReleaseNotesViewModel(
                 subtitle = R.string.release_notes_4_3_0_subtitle_search_functionality_in_spaces_list,
                 type = ReleaseNoteType.ENHANCEMENT
             ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_video_streaming_spaces,
+                subtitle = R.string.release_notes_4_3_0_subtitle_video_streaming_spaces,
+                type = ReleaseNoteType.BUGFIX
+            ),
         )
     }
 }

@@ -39,17 +39,22 @@ import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter;
 import androidx.media3.extractor.DefaultExtractorsFactory;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.domain.files.model.OCFile;
+import com.owncloud.android.domain.files.usecases.GetWebDavUrlForSpaceUseCase;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.OwnCloudBasicCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudBearerCredentials;
 import com.owncloud.android.lib.common.authentication.OwnCloudCredentials;
+import com.owncloud.android.lib.common.network.WebdavUtils;
 import com.owncloud.android.utils.UriUtilsKt;
+import kotlin.Lazy;
 import timber.log.Timber;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.koin.java.KoinJavaComponent.inject;
 
 /**
  * Task for prepare video player asynchronously
@@ -77,23 +82,26 @@ public class PrepareVideoPlayerAsyncTask extends AsyncTask<Object, Void, MediaSo
 
         MediaSource mediaSource = null;
 
-        Uri uri;
-
         try {
             // If the file is already downloaded, reproduce it locally, if not, do streaming
-            uri = mFile.isAvailableLocally() ? UriUtilsKt.INSTANCE.getStorageUriForFile(mFile) :
-                    Uri.parse(AccountUtils.getWebDavUrlForAccount(mContext, mAccount) + Uri.encode(mFile.getRemotePath(), "/"));
-
-            boolean useBandwidthMeter = true;
-
-            DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
+            Uri uri;
+            if (mFile.isAvailableLocally()) {
+                uri = UriUtilsKt.INSTANCE.getStorageUriForFile(mFile);
+            } else {
+                Lazy<GetWebDavUrlForSpaceUseCase> getWebDavUrlForSpaceUseCaseLazy = inject(GetWebDavUrlForSpaceUseCase.class);
+                String spaceWebDavUrl = getWebDavUrlForSpaceUseCaseLazy.getValue().invoke(
+                        new GetWebDavUrlForSpaceUseCase.Params(mFile.getOwner(), mFile.getSpaceId())
+                );
+                String webDavUrl = spaceWebDavUrl == null ? AccountUtils.getWebDavUrlForAccount(mContext, mAccount) : spaceWebDavUrl;
+                uri = Uri.parse(webDavUrl + WebdavUtils.encodePath(mFile.getRemotePath()));
+            }
 
             HttpDataSource.Factory httpDataSourceFactory =
-                    buildHttpDataSourceFactory(bandwidthMeter, mFile, mAccount);
+                    buildHttpDataSourceFactory(BANDWIDTH_METER, mFile, mAccount);
 
             // Produces DataSource instances through which media data is loaded.
             DataSource.Factory mediaDataSourceFactory = new DefaultDataSourceFactory(mContext,
-                    bandwidthMeter, httpDataSourceFactory);
+                    BANDWIDTH_METER, httpDataSourceFactory);
 
             // This represents the media to be played.
             mediaSource = buildMediaSource(mediaDataSourceFactory, uri);
