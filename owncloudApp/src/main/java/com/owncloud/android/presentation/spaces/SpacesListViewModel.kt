@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -48,7 +49,7 @@ class SpacesListViewModel(
 ) : ViewModel() {
 
     private val _spacesList: MutableStateFlow<SpacesListUiState> =
-        MutableStateFlow(SpacesListUiState(spaces = emptyList(), refreshing = false, error = null))
+        MutableStateFlow(SpacesListUiState(spaces = emptyList(), refreshing = false, error = null, searchFilter = ""))
     val spacesList: StateFlow<SpacesListUiState> = _spacesList
 
     init {
@@ -90,10 +91,15 @@ class SpacesListViewModel(
         }
     }
 
+    fun updateSearchFilter(newSearchFilter: String) {
+        _spacesList.update { it.copy(searchFilter = newSearchFilter) }
+    }
+
     data class SpacesListUiState(
         val spaces: List<OCSpace>,
         val rootFolderFromSelectedSpace: OCFile? = null,
         val refreshing: Boolean,
         val error: Throwable?,
+        val searchFilter: String
     )
 }

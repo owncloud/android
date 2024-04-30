@@ -115,6 +115,11 @@ class ReleaseNotesViewModel(
                 subtitle = R.string.release_notes_4_3_0_subtitle_improve_available_offline_performance,
                 type = ReleaseNoteType.ENHANCEMENT
             ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_search_functionality_in_spaces_list,
+                subtitle = R.string.release_notes_4_3_0_subtitle_search_functionality_in_spaces_list,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
         )
     }
 }

@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -26,6 +27,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -43,15 +45,14 @@ import com.owncloud.android.extensions.toTitleStringRes
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment() {
+class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment(), SearchView.OnQueryTextListener {
     private var _binding: SpacesListFragmentBinding? = null
     private val binding get() = _binding!!
 
-
     private val spacesListViewModel: SpacesListViewModel by viewModel {
         parametersOf(
-                requireArguments().getString(BUNDLE_ACCOUNT_NAME),
-                requireArguments().getBoolean(BUNDLE_SHOW_PERSONAL_SPACE),
+            requireArguments().getString(BUNDLE_ACCOUNT_NAME),
+            requireArguments().getBoolean(BUNDLE_SHOW_PERSONAL_SPACE),
         )
     }
 
@@ -87,16 +88,26 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
 
     private fun subscribeToViewModels() {
         collectLatestLifecycleFlow(spacesListViewModel.spacesList) { uiState ->
-            // Let's filter the ones that are disabled for the moment. We may show them as disabled in the future.
-            val onlyEnabledSpaces = uiState.spaces.filterNot { it.isDisabled }
-
-            showOrHideEmptyView(onlyEnabledSpaces)
-            spacesListAdapter.setData(onlyEnabledSpaces)
+            if (uiState.searchFilter != "") {
+                var spacesToListFiltered =
+                    uiState.spaces.filter { it.name.lowercase().contains(uiState.searchFilter.lowercase()) && !it.isPersonal }
+                val personalSpace = uiState.spaces.find { it.isPersonal }
+                personalSpace?.let {
+                    spacesToListFiltered = spacesToListFiltered.toMutableList().apply {
+                        add(0, personalSpace)
+                    }
+                }
+                showOrHideEmptyView(spacesToListFiltered)
+                spacesListAdapter.setData(spacesToListFiltered)
+            } else {
+                showOrHideEmptyView(uiState.spaces)
+                spacesListAdapter.setData(uiState.spaces)
+            }
             binding.swipeRefreshSpacesList.isRefreshing = uiState.refreshing
             uiState.error?.let { showErrorInSnackbar(R.string.spaces_sync_failed, it) }
 
             uiState.rootFolderFromSelectedSpace?.let {
-               setFragmentResult(REQUEST_KEY_CLICK_SPACE, bundleOf(BUNDLE_KEY_CLICK_SPACE to it))
+                setFragmentResult(REQUEST_KEY_CLICK_SPACE, bundleOf(BUNDLE_KEY_CLICK_SPACE to it))
             }
         }
     }
@@ -118,7 +129,23 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
+        (menu.findItem(R.id.action_search).actionView as SearchView).run {
+            maxWidth = Int.MAX_VALUE
+            queryHint = resources.getString(R.string.actionbar_search)
+            setOnQueryTextListener(this@SpacesListFragment)
+        }
         menu.findItem(R.id.action_share_current_folder)?.itemId?.let { menu.removeItem(it) }
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean = false
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        newText?.let { spacesListViewModel.updateSearchFilter(it) }
+        return true
+    }
+
+    fun setSearchListener(searchView: SearchView) {
+        searchView.setOnQueryTextListener(this)
     }
 
     companion object {
@@ -137,4 +164,5 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
             return SpacesListFragment().apply { arguments = args }
         }
     }
+
 }
