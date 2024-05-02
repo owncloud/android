@@ -1419,6 +1419,9 @@ class MainFileListFragment : Fragment(),
             // Nothing special to do
             removeDialog.dismiss()
         }
+
+        fileListAdapter.clearSelection()
+        updateActionModeAfterTogglingSelected()
     }
 
     interface FileActions {
