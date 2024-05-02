@@ -690,6 +690,10 @@
   <string name="release_notes_4_3_0_title_display_name_truncation">U ndreq e meta prej të cilës emra të gjatë në ekran cungoheshin pasaktësish</string>
   <string name="release_notes_4_3_0_subtitle_display_name_truncation">Emrat në ekran tanimë cungohen saktë, me shenjën e elipsës (…), për të ruajtur lexueshmërinë</string>
   <string name="release_notes_4_3_0_subtitle_improve_available_offline_performance">Kartelat që përmbahen në një dosje të përdorshme jo në linjë do të rifreskohen vetëm nëse janë ndryshuar</string>
+  <string name="release_notes_4_3_0_title_search_functionality_in_spaces_list">Funksion kërkimi në listë hapësirash</string>
+  <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">Te listë hapësirash u shtua funksion kërkimi, kur provoni t’i filtroni.</string>
+  <string name="release_notes_4_3_0_title_video_streaming_spaces">Transmetim videosh në hapësira</string>
+  <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Kartela video që gjenden në hapësira tanimë mund të luhen saktë në transmetim</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
