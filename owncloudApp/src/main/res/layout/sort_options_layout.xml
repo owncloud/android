@@ -50,6 +50,7 @@
         android:padding="@dimen/standard_half_padding"
         android:src="@drawable/ic_baseline_view_list"
         android:tint="@color/white"
+        android:contentDescription="@string/content_description_type_view"
         app:layout_constraintBottom_toBottomOf="@id/sort_type_selector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/sort_type_selector"

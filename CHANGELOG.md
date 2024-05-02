@@ -49,6 +49,7 @@ ownCloud admins and users.
 * Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
 * Enhancement - Password generator for public links in oCIS: [#4308](https://github.com/owncloud/android/issues/4308)
 * Enhancement - Improvements in remove dialog alert: [#4342](https://github.com/owncloud/android/issues/4342)
+* Enhancement - Content description in UI elements to improve accessibility: [#4360](https://github.com/owncloud/android/issues/4360)
 * Enhancement - Added contentDescription attribute in the previewed image: [#4360](https://github.com/owncloud/android/issues/4360)
 
 ## Details
@@ -215,6 +216,16 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4342
    https://github.com/owncloud/android/pull/4348
+
+* Enhancement - Content description in UI elements to improve accessibility: [#4360](https://github.com/owncloud/android/issues/4360)
+
+   A description of the meaning or action associated with some UI elements has been
+   included as alternative text to make the application more accessible. Views
+   improved: toolbar, file list, spaces list, share, drawer menu, manage accounts
+   and image preview.
+
+   https://github.com/owncloud/android/issues/4360
+   https://github.com/owncloud/android/pull/4387
 
 * Enhancement - Added contentDescription attribute in the previewed image: [#4360](https://github.com/owncloud/android/issues/4360)
 
