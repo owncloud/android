@@ -1379,7 +1379,6 @@ class MainFileListFragment : Fragment(),
         val removeDialog = Dialog(context)
         removeDialog.apply {
             setContentView(R.layout.remove_files_dialog)
-            setCancelable(false)
             show()
         }
 
