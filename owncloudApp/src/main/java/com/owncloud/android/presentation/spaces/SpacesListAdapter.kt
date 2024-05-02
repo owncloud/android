@@ -57,8 +57,10 @@ class SpacesListAdapter(
 
             if (space.isPersonal) {
                 spacesListItemName.text = holder.itemView.context.getString(R.string.bottom_nav_personal)
-
-                spacesListItemImage.setImageResource(R.drawable.ic_folder)
+                spacesListItemImage.apply {
+                    dispose()
+                    setImageResource(R.drawable.ic_folder)
+                }
             } else {
                 spacesListItemName.text = space.name
                 spacesListItemSubtitle.text = space.description
