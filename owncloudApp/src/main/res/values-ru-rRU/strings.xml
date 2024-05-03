@@ -729,4 +729,7 @@
   <string name="clean_data_account_message">Все загруженные файлы, недоступные в автономном режиме, будут удалены для этой учетной записи</string>
   <string name="clean_data_account_title">удалить локальное хранилище</string>
   <string name="clean_data_account_button_yes">Очистить данные</string>
+  <string name="content_description_menu">Меню</string>
+  <string name="content_description_search">Поиск</string>
+  <string name="content_description_remove_account">Удалить аккаунт</string>
 </resources>

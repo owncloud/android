@@ -694,6 +694,10 @@
   <string name="release_notes_4_3_0_subtitle_display_name_truncation">Kuvatavad nimed on nüüd loetavuse parandamiseks keskelt korrektselt (...) märgiga lühendatud</string>
   <string name="release_notes_4_3_0_title_improve_available_offline_performance">Parendused võrguühenduseta jõudluses</string>
   <string name="release_notes_4_3_0_subtitle_improve_available_offline_performance">Võrguühenduseta saadaval olevas kaustas värskendatakse faile ainult muutmise korral</string>
+  <string name="release_notes_4_3_0_title_search_functionality_in_spaces_list">Otsinguvõimekus ruumide nimekirjas</string>
+  <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">Ruumide nimekirja filtreerimise juurde on lisatud otsing</string>
+  <string name="release_notes_4_3_0_title_video_streaming_spaces">Video voogedastus ruumides</string>
+  <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Ruumides asuvaid videofaile on nüüd võimalik korrektselt voogedastada</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>

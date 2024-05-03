@@ -625,4 +625,6 @@
   <string name="prefs_delete_local_files_entries_never">繰り返さない</string>
   <string name="insecure_http_url_title_dialog">安全でないHTTP URL</string>
   <string name="insecure_http_url_continue_button">続ける</string>
+  <string name="content_description_search">検索</string>
+  <string name="content_description_remove_account">アカウント削除</string>
 </resources>

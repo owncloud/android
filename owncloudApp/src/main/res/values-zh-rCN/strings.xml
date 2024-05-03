@@ -592,4 +592,7 @@
   <string name="fab_refresh_text">刷新</string>
   <string name="prefs_delete_local_files_entries_never">从不</string>
   <string name="insecure_http_url_continue_button">继续</string>
+  <string name="content_description_menu">菜单</string>
+  <string name="content_description_search">搜索</string>
+  <string name="content_description_remove_account">删除账号</string>
 </resources>

@@ -737,4 +737,7 @@
   <string name="clean_data_account_message">Krejt kartelat e shkarkuara që s’janë të passhme jashtë interneti do të spastrohen për këtë llogari</string>
   <string name="clean_data_account_title">Hiq depozitë vendore</string>
   <string name="clean_data_account_button_yes">Pastro të dhëna</string>
+  <string name="content_description_menu">Menu</string>
+  <string name="content_description_search">Kërko</string>
+  <string name="content_description_remove_account">Hiqe llogarinë</string>
 </resources>
