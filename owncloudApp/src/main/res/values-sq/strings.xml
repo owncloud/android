@@ -694,6 +694,8 @@
   <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">Te listë hapësirash u shtua funksion kërkimi, kur provoni t’i filtroni.</string>
   <string name="release_notes_4_3_0_title_video_streaming_spaces">Transmetim videosh në hapësira</string>
   <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Kartela video që gjenden në hapësira tanimë mund të luhen saktë në transmetim</string>
+  <string name="release_notes_4_3_0_title_accessibility_improvements">Përmirësime përdorimi nga persona me aftësi të kufizuara</string>
+  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Disa përmirësime për ta bërë aplikacionin më të lehtë për persona me aftësi të kufizuara</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
@@ -738,6 +740,20 @@
   <string name="clean_data_account_title">Hiq depozitë vendore</string>
   <string name="clean_data_account_button_yes">Pastro të dhëna</string>
   <string name="content_description_menu">Menu</string>
+  <string name="content_description_manage_accounts">Administroni llogari</string>
   <string name="content_description_search">Kërko</string>
+  <string name="content_description_type_view">Lloj pamjeje</string>
+  <string name="content_description_add_public_link">Shtoni lidhje publike</string>
+  <string name="content_description_get_private_link">Merrni lidhje private</string>
+  <string name="content_description_get_public_link">Merrni lidhje publike</string>
+  <string name="content_description_delete_public_link">Fshini lidhje publike</string>
+  <string name="content_description_get_edit_public_link">Përpunoni lidhje publike</string>
   <string name="content_description_remove_account">Hiqe llogarinë</string>
+  <string name="content_description_add_new_content">Shtoni lëndë të re</string>
+  <string name="content_description_clean_account_storage">Pastro depozitë llogarie</string>
+  <string name="content_description_logo">Stemë</string>
+  <string name="content_description_add_share">Shtoni pjesë</string>
+  <string name="content_description_edit_share">Përpunoni pjesë</string>
+  <string name="content_description_delete_share">Fshini pjesë</string>
+  <string name="content_description_file_operations">%1$s veprime</string>
 </resources>

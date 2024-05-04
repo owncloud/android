@@ -698,6 +698,8 @@
   <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">Ruumide nimekirja filtreerimise juurde on lisatud otsing</string>
   <string name="release_notes_4_3_0_title_video_streaming_spaces">Video voogedastus ruumides</string>
   <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Ruumides asuvaid videofaile on nüüd võimalik korrektselt voogedastada</string>
+  <string name="release_notes_4_3_0_title_accessibility_improvements">Juurdepääsetavuse täiustused</string>
+  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Mõned täiustused, et teha rakendus paremini juurdepääsetavaks</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -741,5 +743,22 @@
   <string name="clean_data_account_message">Kõik selle kasutajakonto allalaetud failid, mis ei ole võrguühenduseta saadaval, kustutatakse</string>
   <string name="clean_data_account_title">Eemalda kohalik salvestusmaht</string>
   <string name="clean_data_account_button_yes">Puhasta andmed</string>
+  <string name="content_description_menu">Menüü</string>
+  <string name="content_description_manage_accounts">Halda kontosid</string>
+  <string name="content_description_search">Otsi</string>
+  <string name="content_description_type_view">Vaate tüüp</string>
   <string name="content_description_image_previewed">Eelvaadatav pilt</string>
+  <string name="content_description_add_public_link">Lisa avalik link</string>
+  <string name="content_description_get_private_link">Hangi privaatne link</string>
+  <string name="content_description_get_public_link">Hangi avalik link</string>
+  <string name="content_description_delete_public_link">Kustuta avalik link</string>
+  <string name="content_description_get_edit_public_link">Muuda avalik link</string>
+  <string name="content_description_remove_account">Eemalda konto</string>
+  <string name="content_description_add_new_content">Lisa uut sisu</string>
+  <string name="content_description_clean_account_storage">Puhasta konto salvestusmaht</string>
+  <string name="content_description_logo">Logo</string>
+  <string name="content_description_add_share">Lisa jagamine</string>
+  <string name="content_description_edit_share">Muuda jagamist</string>
+  <string name="content_description_delete_share">Kustuta jagamine</string>
+  <string name="content_description_file_operations">%1$s tegevus(t)</string>
 </resources>

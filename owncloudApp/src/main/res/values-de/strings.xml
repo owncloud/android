@@ -706,4 +706,8 @@
   <string name="prefs_delete_local_files_summary">Entfernen Sie automatisch heruntergeladene Dateien die offline nicht verfügbar sind, wenn die Zeit seit ihrer letzten Verwendung die ausgewählte Zeit überschreitet.\nGewählte Zeit: %1$s</string>
   <string name="insecure_http_url_title_dialog">Unsichere HTTP-URL</string>
   <string name="insecure_http_url_continue_button">Fortsetzen</string>
+  <string name="content_description_menu">Menü</string>
+  <string name="content_description_manage_accounts">Konten verwalten</string>
+  <string name="content_description_search">Suche</string>
+  <string name="content_description_remove_account">Benutzerkonto löschen</string>
 </resources>

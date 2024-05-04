@@ -734,6 +734,7 @@
   <string name="clean_data_account_title">Remover armazenamento local</string>
   <string name="clean_data_account_button_yes">Limpar dados</string>
   <string name="content_description_menu">Menu</string>
+  <string name="content_description_manage_accounts">Gerenciar contas</string>
   <string name="content_description_search">Pesquisar</string>
   <string name="content_description_remove_account">Remover conta</string>
 </resources>

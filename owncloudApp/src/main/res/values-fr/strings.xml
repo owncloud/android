@@ -580,4 +580,8 @@ Téléchargez-le ici : %2$s</string>
   <string name="fab_refresh_text">Rafraîchir</string>
   <string name="prefs_delete_local_files_entries_never">Jamais</string>
   <string name="insecure_http_url_continue_button">Continuer</string>
+  <string name="content_description_menu">Menu</string>
+  <string name="content_description_manage_accounts">Gérer les comptes</string>
+  <string name="content_description_search">Rechercher</string>
+  <string name="content_description_remove_account">Supprimer le compte</string>
 </resources>

@@ -735,4 +735,8 @@
   <string name="clean_data_account_message">All downloaded files that are not available offline will be cleaned up for this account</string>
   <string name="clean_data_account_title">Remove local storage</string>
   <string name="clean_data_account_button_yes">Clean data</string>
+  <string name="content_description_menu">Menu</string>
+  <string name="content_description_manage_accounts">Manage accounts</string>
+  <string name="content_description_search">Search</string>
+  <string name="content_description_remove_account">Remove account</string>
 </resources>
