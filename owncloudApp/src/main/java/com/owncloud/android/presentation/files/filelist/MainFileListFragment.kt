@@ -567,7 +567,7 @@ class MainFileListFragment : Fragment(),
                         title = getString(R.string.ic_action_open_with_web, appRegistryProvider.name)
                         itemIcon = try {
                             removeDefaultTint()
-                            getDrawableFromUrl(context, appRegistryProvider.icon)
+                            getDrawableFromUrl(requireContext(), appRegistryProvider.icon)
                         } catch (e: Exception) {
                             addDefaultTint(R.color.bottom_sheet_fragment_item_color)
                             ResourcesCompat.getDrawable(resources, R.drawable.ic_open_in_web, null)
