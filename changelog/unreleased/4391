@@ -1,0 +1,6 @@
+Enhancement: Show app provider icon from endpoint
+
+App provider icon fetched from the server has been added to the "Open in (web)" option on the bottom sheet that appears when clicking the 3-dots button of a file.
+
+https://github.com/owncloud/android/issues/4105
+https://github.com/owncloud/android/pull/4391
