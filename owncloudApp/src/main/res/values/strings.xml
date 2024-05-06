@@ -758,8 +758,8 @@
     <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Video files located in spaces can now be played in streaming correctly</string>
     <string name="release_notes_4_3_0_title_accessibility_improvements">Improvements in accessibility</string>
     <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Some improvements to make the application more accessible</string>
-    <string name="release_notes_4_3_0_title_show_app_provider_icon_from_endpoint">New icons in "Open with (web)" option on the bottom sheet</string>
-    <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">More appropriate icons have been added to the "Open with (web)" option on the bottom sheet</string>
+    <string name="release_notes_4_3_0_title_show_app_provider_icon_from_endpoint">New icons in "Open in (web)" option on the operations menu</string>
+    <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">More appropriate icons have been added to the "Open in (web)" option on the operations menu</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
