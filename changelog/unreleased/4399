@@ -1,0 +1,7 @@
+Bugfix: Av. offline files are not removed when "Local only" option is clicked
+
+"Local only" option in remove dialog will be displayed when the selected folder contains at least one downloaded file, ignoring those available offline.
+If the "Local only" option is displayed and clicked, available offline files will not be deleted.
+
+https://github.com/owncloud/android/issues/4353
+https://github.com/owncloud/android/pull/4399
