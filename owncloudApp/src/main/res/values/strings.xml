@@ -763,6 +763,8 @@
     <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Some improvements to make the application more accessible</string>
     <string name="release_notes_4_3_0_title_show_app_provider_icon_from_endpoint">New icons in "Open in (web)" option on the operations menu</string>
     <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">More appropriate icons have been added to the "Open in (web)" option on the operations menu</string>
+    <string name="release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option">Displayed \"Local only\" option appropriately in remove dialog</string>
+    <string name="release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option">\"Local only\" option in remove dialog will be shown when the selected folder contains at least one downloaded file, ignoring those available offline</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
