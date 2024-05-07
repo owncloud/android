@@ -58,8 +58,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import coil.load
-import com.getbase.floatingactionbutton.AddFloatingActionButton
 import com.bumptech.glide.Glide
+import com.getbase.floatingactionbutton.AddFloatingActionButton
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -569,6 +569,7 @@ class MainFileListFragment : Fragment(),
                             removeDefaultTint()
                             getDrawableFromUrl(requireContext(), appRegistryProvider.icon)
                         } catch (e: Exception) {
+                            Timber.e(e, "An exception occurred while Glide is trying to load an image")
                             addDefaultTint(R.color.bottom_sheet_fragment_item_color)
                             ResourcesCompat.getDrawable(resources, R.drawable.ic_open_in_web, null)
                         }
