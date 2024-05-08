@@ -35,6 +35,7 @@ ownCloud admins and users.
 * Bugfix - Video streaming in spaces: [#4328](https://github.com/owncloud/android/issues/4328)
 * Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
 * Bugfix - Resolve incorrect truncation of long display names in Manage Accounts: [#4351](https://github.com/owncloud/android/issues/4351)
+* Bugfix - Av. offline files are not removed when "Local only" option is clicked: [#4353](https://github.com/owncloud/android/issues/4353)
 * Bugfix - Unwanted DELETE operations when synchronization in single file fails: [#6638](https://github.com/owncloud/enterprise/issues/6638)
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 * Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
@@ -109,6 +110,16 @@ ownCloud admins and users.
 
    https://github.com/owncloud/enterprise/issues/6638
    https://github.com/owncloud/android/pull/4408
+
+* Bugfix - Av. offline files are not removed when "Local only" option is clicked: [#4353](https://github.com/owncloud/android/issues/4353)
+
+   "Local only" option in remove dialog will be displayed when the selected folder
+   contains at least one downloaded file, ignoring those available offline. If the
+   "Local only" option is displayed and clicked, available offline files will not
+   be deleted.
+
+   https://github.com/owncloud/android/issues/4353
+   https://github.com/owncloud/android/pull/4399
 
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 
