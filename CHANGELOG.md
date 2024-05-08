@@ -40,6 +40,7 @@ ownCloud admins and users.
 * Change - Kotlinize PreviewTextFragment: [#4356](https://github.com/owncloud/android/issues/4356)
 * Enhancement - Add search functionality to spaces list: [#3865](https://github.com/owncloud/android/issues/3865)
 * Enhancement - Correct "Local only" option in remove dialog: [#3936](https://github.com/owncloud/android/issues/3936)
+* Enhancement - Show app provider icon from endpoint: [#4105](https://github.com/owncloud/android/issues/4105)
 * Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
 * Enhancement - New setting for manual removal of local storage: [#4174](https://github.com/owncloud/android/issues/4174)
 * Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
@@ -141,6 +142,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/3936
    https://github.com/owncloud/android/pull/4289
+
+* Enhancement - Show app provider icon from endpoint: [#4105](https://github.com/owncloud/android/issues/4105)
+
+   App provider icon fetched from the server has been added to the "Open in (web)"
+   option on the bottom sheet that appears when clicking the 3-dots button of a
+   file.
+
+   https://github.com/owncloud/android/issues/4105
+   https://github.com/owncloud/android/pull/4391
 
 * Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
 
