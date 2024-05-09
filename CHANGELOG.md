@@ -41,6 +41,7 @@ ownCloud admins and users.
 * Change - Add new prefixes in commit messages of 3rd party contributors: [#4346](https://github.com/owncloud/android/pull/4346)
 * Change - Kotlinize PreviewTextFragment: [#4356](https://github.com/owncloud/android/issues/4356)
 * Enhancement - Add search functionality to spaces list: [#3865](https://github.com/owncloud/android/issues/3865)
+* Enhancement - Get personal space quota from GraphAPI: [#3874](https://github.com/owncloud/android/issues/3874)
 * Enhancement - Correct "Local only" option in remove dialog: [#3936](https://github.com/owncloud/android/issues/3936)
 * Enhancement - Show app provider icon from endpoint: [#4105](https://github.com/owncloud/android/issues/4105)
 * Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
@@ -146,6 +147,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/3865
    https://github.com/owncloud/android/pull/4393
+
+* Enhancement - Get personal space quota from GraphAPI: [#3874](https://github.com/owncloud/android/issues/3874)
+
+   Personal space quota in an oCIS account has been added from GraphAPI instead of
+   propfind.
+
+   https://github.com/owncloud/android/issues/3874
+   https://github.com/owncloud/android/pull/4401
 
 * Enhancement - Correct "Local only" option in remove dialog: [#3936](https://github.com/owncloud/android/issues/3936)
 
