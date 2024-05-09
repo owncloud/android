@@ -692,6 +692,14 @@
   <string name="release_notes_4_3_0_subtitle_password_generator">Passwords for public links can be now generated via a new generator in Infinite Scale accounts</string>
   <string name="release_notes_4_3_0_title_display_name_truncation">Resolved the bug where long display names were truncated incorrectly</string>
   <string name="release_notes_4_3_0_subtitle_display_name_truncation">Display names are now properly truncated in the middle with ellipsis (…) to maintain readability</string>
+  <string name="release_notes_4_3_0_title_improve_available_offline_performance">Improvements in available offline performance</string>
+  <string name="release_notes_4_3_0_subtitle_improve_available_offline_performance">Files contained in an available offline folder will be refreshed only if they have been modified</string>
+  <string name="release_notes_4_3_0_title_search_functionality_in_spaces_list">Search functionality in spaces list</string>
+  <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">Search functionality has been added in spaces list when you are trying to filter them</string>
+  <string name="release_notes_4_3_0_title_video_streaming_spaces">Video streaming in spaces</string>
+  <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Video files located in spaces can now be played in streaming correctly</string>
+  <string name="release_notes_4_3_0_title_accessibility_improvements">Improvements in accessibility</string>
+  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Some improvements to make the application more accessible</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Open in web</string>
   <string name="ic_action_open_with_web">Open in %1$s (web)</string>
@@ -738,5 +746,19 @@
   <string name="content_description_menu">Menu</string>
   <string name="content_description_manage_accounts">Manage accounts</string>
   <string name="content_description_search">Search</string>
+  <string name="content_description_type_view">Type of view</string>
+  <string name="content_description_image_previewed">Image previewed</string>
+  <string name="content_description_add_public_link">Add public link</string>
+  <string name="content_description_get_private_link">Get private link</string>
+  <string name="content_description_get_public_link">Get public link</string>
+  <string name="content_description_delete_public_link">Delete public link</string>
+  <string name="content_description_get_edit_public_link">Edit public link</string>
   <string name="content_description_remove_account">Remove account</string>
+  <string name="content_description_add_new_content">Add new content</string>
+  <string name="content_description_clean_account_storage">Clean account storage</string>
+  <string name="content_description_logo">Logo</string>
+  <string name="content_description_add_share">Add share</string>
+  <string name="content_description_edit_share">Edit share</string>
+  <string name="content_description_delete_share">Delete share</string>
+  <string name="content_description_file_operations">%1$s operations</string>
 </resources>

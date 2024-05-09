@@ -689,6 +689,14 @@
   <string name="release_notes_4_3_0_subtitle_password_generator">Пароли для публичных ссылок теперь можно генерировать с помощью нового генератора в аккаунтах Infinite Scale.</string>
   <string name="release_notes_4_3_0_title_display_name_truncation">Исправлена ошибка, из-за которой длинные имена отображаемых объектов некорректно усекались.</string>
   <string name="release_notes_4_3_0_subtitle_display_name_truncation">Имена дисплеев теперь правильно обрезаются посередине с помощью многоточия (...), чтобы сохранить читабельность.</string>
+  <string name="release_notes_4_3_0_title_improve_available_offline_performance">Улучшения доступной производительности в автономном режиме</string>
+  <string name="release_notes_4_3_0_subtitle_improve_available_offline_performance">Файлы, содержащиеся в доступной автономной папке, будут обновляться только в том случае, если они были изменены</string>
+  <string name="release_notes_4_3_0_title_search_functionality_in_spaces_list">Функциональность поиска в списке пространств</string>
+  <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">Функция поиска была добавлена в список пробелов, когда вы пытаетесь их отфильтровать</string>
+  <string name="release_notes_4_3_0_title_video_streaming_spaces">Потоковое видео в пространствах</string>
+  <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Видеофайлы, расположенные в пространствах, теперь можно передавать правильно</string>
+  <string name="release_notes_4_3_0_title_accessibility_improvements">Улучшения доступности</string>
+  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Некоторые улучшения, чтобы сделать приложение более доступным.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Открыть в браузере</string>
   <string name="ic_action_open_with_web">Открыть в %1$s (веб)</string>
@@ -713,6 +721,9 @@
   <string name="fab_refresh_sync_in_progress">Синхронизация уже выполняется</string>
   <string name="password_policy_min_characters">иметь длину как минимум 1%1$d символов </string>
   <string name="password_policy_max_characters">иметь длину как минимум 1%1$d символов </string>
+  <string name="password_policy_min_digits">Как минимум %1$d цифры</string>
+  <string name="password_policy_lowercase_characters">Как минимум %1$d специальных символов</string>
+  <string name="password_policy_uppercase_characters">Не менее %1$d символов верхнего регистра</string>
   <string name="password_policy_intro">Пожалуйста, введите пароль, соответствующий следующим критериям: \n</string>
   <string name="password_policy_min_special_character">Не менее %1$d специальных символов: \"%2$s\"</string>
   <string name="password_policy_error_password_banned">К сожалению, ваш пароль часто используется. Пожалуйста, выберите более сложный для угадывания пароль для вашей безопасности.</string>
@@ -732,5 +743,19 @@
   <string name="content_description_menu">Меню</string>
   <string name="content_description_manage_accounts">Управление аккаунтами</string>
   <string name="content_description_search">Поиск</string>
+  <string name="content_description_type_view">Тип просмотра</string>
+  <string name="content_description_image_previewed">Предварительный просмотр изображений</string>
+  <string name="content_description_add_public_link">Добавить публичную ссылку</string>
+  <string name="content_description_get_private_link">Получить приватную ссылку</string>
+  <string name="content_description_get_public_link">Получить публичную ссылку</string>
+  <string name="content_description_delete_public_link">Удалить общедоступную ссылку</string>
+  <string name="content_description_get_edit_public_link">Редактировать публичную ссылку</string>
   <string name="content_description_remove_account">Удалить аккаунт</string>
+  <string name="content_description_add_new_content">Добавить новый контент</string>
+  <string name="content_description_clean_account_storage">Чистое хранилище учетных записей</string>
+  <string name="content_description_logo">Лого</string>
+  <string name="content_description_add_share">Добавить долю</string>
+  <string name="content_description_edit_share">Редактировать Поделиться</string>
+  <string name="content_description_delete_share">Удалить долю</string>
+  <string name="content_description_file_operations">%1$s  операции</string>
 </resources>
