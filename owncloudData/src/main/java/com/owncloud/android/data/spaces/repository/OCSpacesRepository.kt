@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,16 +24,25 @@ package com.owncloud.android.data.spaces.repository
 
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
+import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.domain.spaces.SpacesRepository
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.user.model.UserQuota
 
 class OCSpacesRepository(
     private val localSpacesDataSource: LocalSpacesDataSource,
+    private val localUserDataSource: LocalUserDataSource,
     private val remoteSpacesDataSource: RemoteSpacesDataSource,
 ) : SpacesRepository {
     override fun refreshSpacesForAccount(accountName: String) {
         remoteSpacesDataSource.refreshSpacesForAccount(accountName).also { listOfSpaces ->
             localSpacesDataSource.saveSpacesForAccount(listOfSpaces)
+            val personalSpace = listOfSpaces.find { it.isPersonal }
+            personalSpace?.let {
+                val userQuota = UserQuota(accountName, it.quota?.total!!, it.quota?.used!!)
+                localUserDataSource.saveQuotaForAccount(accountName, userQuota)
+            }
+
         }
     }
 

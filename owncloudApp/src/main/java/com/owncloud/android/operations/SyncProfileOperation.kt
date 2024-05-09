@@ -60,30 +60,33 @@ class SyncProfileOperation(
                         setUserData(account, AccountUtils.Constants.KEY_ID, userInfo.id)
                     }
 
-                    val refreshUserQuotaFromServerAsyncUseCase: RefreshUserQuotaFromServerAsyncUseCase by inject()
-                    val userQuotaResult =
-                        refreshUserQuotaFromServerAsyncUseCase(
-                            RefreshUserQuotaFromServerAsyncUseCase.Params(
-                                account.name
-                            )
-                        )
-                    userQuotaResult.getDataOrNull()?.let {
-                        Timber.d("User quota synchronized for account ${account.name}")
+                    val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
+                    val storedCapabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(account.name))
 
-                        val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase by inject()
+                    storedCapabilities?.let {
+                        if (it.isSpacesAllowed()) {
+                            val refreshUserQuotaFromServerAsyncUseCase: RefreshUserQuotaFromServerAsyncUseCase by inject()
+                            val userQuotaResult =
+                                refreshUserQuotaFromServerAsyncUseCase(
+                                    RefreshUserQuotaFromServerAsyncUseCase.Params(
+                                        account.name
+                                    )
+                                )
+                            userQuotaResult.getDataOrNull()?.let {
+                                Timber.d("User quota synchronized for account ${account.name}")
+                                val shouldFetchAvatar = storedCapabilities?.isFetchingAvatarAllowed() ?: true
 
-                        val storedCapabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(account.name))
-                        val shouldFetchAvatar = storedCapabilities?.isFetchingAvatarAllowed() ?: true
-
-                        if (shouldFetchAvatar) {
-                            val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
-                            val userAvatarResult = getUserAvatarAsyncUseCase(GetUserAvatarAsyncUseCase.Params(account.name))
-                            AvatarManager().handleAvatarUseCaseResult(account, userAvatarResult)
-                            if (userAvatarResult.isSuccess) {
-                                Timber.d("Avatar synchronized for account ${account.name}")
+                                if (shouldFetchAvatar) {
+                                    val getUserAvatarAsyncUseCase: GetUserAvatarAsyncUseCase by inject()
+                                    val userAvatarResult = getUserAvatarAsyncUseCase(GetUserAvatarAsyncUseCase.Params(account.name))
+                                    AvatarManager().handleAvatarUseCaseResult(account, userAvatarResult)
+                                    if (userAvatarResult.isSuccess) {
+                                        Timber.d("Avatar synchronized for account ${account.name}")
+                                    }
+                                } else {
+                                    Timber.d("Avatar for this account: ${account.name} won't be synced due to capabilities ")
+                                }
                             }
-                        } else {
-                            Timber.d("Avatar for this account: ${account.name} won't be synced due to capabilities ")
                         }
                     }
                 } ?: Timber.d("User profile was not synchronized")
