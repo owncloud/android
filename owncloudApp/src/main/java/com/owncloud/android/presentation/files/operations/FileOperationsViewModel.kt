@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -258,7 +259,8 @@ class FileOperationsViewModel(
                 remotePath = fileOperation.folderToSync.remotePath,
                 accountName = fileOperation.folderToSync.owner,
                 spaceId = fileOperation.folderToSync.spaceId,
-                syncMode = SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY
+                syncMode = SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY,
+                isActionSetFolderAvailableOffline = fileOperation.isActionSetFolderAvailableOffline,
             )
         )
     }
