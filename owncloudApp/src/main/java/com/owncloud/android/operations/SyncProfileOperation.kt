@@ -64,7 +64,7 @@ class SyncProfileOperation(
                     val storedCapabilities = getStoredCapabilitiesUseCase(GetStoredCapabilitiesUseCase.Params(account.name))
 
                     storedCapabilities?.let {
-                        if (it.isSpacesAllowed()) {
+                        if (!it.isSpacesAllowed()) {
                             val refreshUserQuotaFromServerAsyncUseCase: RefreshUserQuotaFromServerAsyncUseCase by inject()
                             val userQuotaResult =
                                 refreshUserQuotaFromServerAsyncUseCase(
