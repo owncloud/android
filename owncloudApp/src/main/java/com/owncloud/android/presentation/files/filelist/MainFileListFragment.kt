@@ -525,7 +525,13 @@ class MainFileListFragment : Fragment(),
                                 FileMenuOption.SET_AV_OFFLINE -> {
                                     fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
                                     if (file.isFolder) {
-                                        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFolderOperation(file, file.owner))
+                                        fileOperationsViewModel.performOperation(
+                                            FileOperation.SynchronizeFolderOperation(
+                                                folderToSync = file,
+                                                accountName = file.owner,
+                                                isActionSetFolderAvailableOffline = true,
+                                            )
+                                        )
                                     } else {
                                         fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, file.owner))
                                     }
@@ -1129,7 +1135,13 @@ class MainFileListFragment : Fragment(),
                 R.id.action_set_available_offline -> {
                     fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(singleFile)))
                     if (singleFile.isFolder) {
-                        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFolderOperation(singleFile, singleFile.owner))
+                        fileOperationsViewModel.performOperation(
+                            FileOperation.SynchronizeFolderOperation(
+                                folderToSync = singleFile,
+                                accountName = singleFile.owner,
+                                isActionSetFolderAvailableOffline = true,
+                            )
+                        )
                     } else {
                         fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(singleFile, singleFile.owner))
                     }

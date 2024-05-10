@@ -378,6 +378,7 @@ class OCFileRepository(
         remotePath: String,
         accountName: String,
         spaceId: String?,
+        isActionSetFolderAvailableOffline: Boolean,
     ): List<OCFile> {
         val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(spaceId, accountName)
 
@@ -424,7 +425,10 @@ class OCFileRepository(
                                 if (remoteFolder.isAvailableOffline) AVAILABLE_OFFLINE_PARENT else NOT_AVAILABLE_OFFLINE
 
                         })
-                } else if (localChildToSync.etag != remoteChild.etag || localChildToSync.localModificationTimestamp > remoteChild.lastSyncDateForData!!) {
+                } else if (localChildToSync.etag != remoteChild.etag ||
+                    localChildToSync.localModificationTimestamp > remoteChild.lastSyncDateForData!! ||
+                    isActionSetFolderAvailableOffline
+                ) {
                     // File exists in the database, we need to check several stuff.
                     folderContentUpdated.add(
                         remoteChild.apply {

@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -39,7 +40,8 @@ class SynchronizeFolderUseCase(
         val folderContent = fileRepository.refreshFolder(
             remotePath = remotePath,
             accountName = accountName,
-            spaceId = params.spaceId
+            spaceId = params.spaceId,
+            isActionSetFolderAvailableOffline = params.isActionSetFolderAvailableOffline,
         )
 
         folderContent.forEach { ocFile ->
@@ -75,6 +77,7 @@ class SynchronizeFolderUseCase(
         val accountName: String,
         val spaceId: String? = null,
         val syncMode: SyncFolderMode,
+        val isActionSetFolderAvailableOffline: Boolean = false,
     )
 
     /**
