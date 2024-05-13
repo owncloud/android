@@ -22,14 +22,19 @@
  */
 package com.owncloud.android.presentation.files.removefile
 
-import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
+import com.owncloud.android.databinding.RemoveFilesDialogBinding
+import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
-import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
-import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDialogFragmentListener
+import com.owncloud.android.utils.MimetypeIconUtil
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 /**
@@ -37,60 +42,42 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
  *
  * Triggers the removal according to the user response.
  */
-class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
+class RemoveFilesDialogFragment(
+    private val targetFiles: List<OCFile>,
+    private val isAvailableLocallyAndNotAvailableOffline: Boolean,
+) : DialogFragment() {
 
-    private lateinit var targetFiles: ArrayList<OCFile>
     private val fileOperationViewModel: FileOperationsViewModel by sharedViewModel()
+    private var _binding: RemoveFilesDialogBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        targetFiles = requireArguments().getParcelableArrayList(ARG_TARGET_FILES) ?: arrayListOf()
-        setOnConfirmationListener(this)
-        return dialog
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = RemoveFilesDialogBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    /**
-     * Performs the removal of the target file, both locally and in the server.
-     */
-    override fun onConfirmation(callerTag: String) {
-        fileOperationViewModel.performOperation(FileOperation.RemoveOperation(targetFiles.toList(), removeOnlyLocalCopy = false))
-    }
 
-    /**
-     * Performs the removal of the local copy of the target file
-     */
-    override fun onCancel(callerTag: String) {
-        fileOperationViewModel.performOperation(FileOperation.RemoveOperation(targetFiles.toList(), removeOnlyLocalCopy = true))
-    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onNeutral(callerTag: String) {
-        // nothing to do here
-    }
+        var containsFolder = false
+        var messageStringId: Int
+        val messageArguments: String
 
-    companion object {
-        const val FRAGMENT_TAG_CONFIRMATION = "REMOVE_CONFIRMATION_FRAGMENT"
+        binding.apply {
 
-        private const val ARG_TARGET_FILES = "TARGET_FILES"
-
-        /**
-         * Public factory method to create new RemoveFilesDialogFragment instances.
-         *
-         * @param files           Files to remove.
-         * @return Dialog ready to show.
-         */
-        @JvmStatic
-        fun newInstance(files: ArrayList<OCFile>, isAvailableLocallyAndNotAvailableOffline: Boolean): RemoveFilesDialogFragment {
-            val messageStringId: Int
-            var containsFolder = false
-            for (file in files) {
+            for (file in targetFiles) {
                 if (file.isFolder) {
                     containsFolder = true
                 }
             }
 
-            messageStringId = if (files.size == 1) {
+            handleThumbnail(targetFiles, dialogRemoveThumbnail)
+
+            messageStringId = if (targetFiles.size == 1) {
                 // choose message for a single file
-                val file = files.first()
+                val file = targetFiles.first()
+                messageArguments = file.fileName
                 if (file.isFolder) {
                     R.string.confirmation_remove_folder_alert
                 } else {
@@ -98,34 +85,65 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
                 }
             } else {
                 // choose message for more than one file
+                messageArguments = targetFiles.size.toString()
                 if (containsFolder) {
                     R.string.confirmation_remove_folders_alert
                 } else {
                     R.string.confirmation_remove_files_alert
                 }
             }
-            val localRemoveButton = if (isAvailableLocallyAndNotAvailableOffline) {
-                R.string.confirmation_remove_local
+            dialogRemoveInformation.text = requireContext().getString(messageStringId, messageArguments)
+
+            if (isAvailableLocallyAndNotAvailableOffline) {
+                dialogRemoveLocalOnly.text = requireContext().getString(R.string.confirmation_remove_local)
             } else {
-                -1
+                dialogRemoveLocalOnly.visibility = View.GONE
             }
 
-            val args = Bundle().apply {
-                putInt(ARG_MESSAGE_RESOURCE_ID, messageStringId)
-                if (files.size == 1) {
-                    putStringArray(ARG_MESSAGE_ARGUMENTS, arrayOf(files.first().fileName))
-                } else {
-                    putStringArray(ARG_MESSAGE_ARGUMENTS, arrayOf(files.size.toString()))
-                }
-                putInt(ARG_POSITIVE_BTN_RES, R.string.common_yes)
-                putInt(ARG_NEUTRAL_BTN_RES, R.string.common_no)
-                putInt(ARG_NEGATIVE_BTN_RES, localRemoveButton)
-                putParcelableArrayList(ARG_TARGET_FILES, files)
+            dialogRemoveLocalOnly.setOnClickListener {
+                fileOperationViewModel.performOperation(FileOperation.RemoveOperation(targetFiles.toList(), removeOnlyLocalCopy = true))
+                dismiss()
             }
 
-            return RemoveFilesDialogFragment().apply {
-                arguments = args
+            dialogRemoveYes.setOnClickListener {
+                fileOperationViewModel.performOperation(FileOperation.RemoveOperation(targetFiles.toList(), removeOnlyLocalCopy = false))
+                dismiss()
             }
+
+            dialogRemoveNo.setOnClickListener { dismiss() }
+        }
+    }
+
+    private fun handleThumbnail(files: List<OCFile>, thumbnailImageView: ImageView) {
+        if (files.size == 1) {
+            val file = files[0]
+            // Show the thumbnail when the file has one
+            val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
+            if (thumbnail != null) {
+                thumbnailImageView.setImageBitmap(thumbnail)
+            } else {
+                thumbnailImageView.setImageResource(
+                    MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName)
+                )
+            }
+        } else {
+            thumbnailImageView.visibility = View.GONE
+        }
+    }
+
+    companion object {
+        const val TAG_REMOVE_FILES_DIALOG_FRAGMENT = "TAG_REMOVE_FILES_DIALOG_FRAGMENT"
+
+        /**
+         * Public factory method to create new RemoveFilesDialogFragment instances.
+         *
+         * @param files           Files to remove.
+         * @param isAvailableLocallyAndNotAvailableOffline
+         * @return Dialog ready to show.
+         */
+        @JvmStatic
+        fun newInstance(files: ArrayList<OCFile>, isAvailableLocallyAndNotAvailableOffline: Boolean): RemoveFilesDialogFragment {
+            return RemoveFilesDialogFragment(targetFiles = files, isAvailableLocallyAndNotAvailableOffline = isAvailableLocallyAndNotAvailableOffline)
         }
 
         /**
@@ -137,7 +155,7 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
         @JvmStatic
         @JvmName("newInstanceForSingleFile")
         fun newInstance(file: OCFile): RemoveFilesDialogFragment {
-            return newInstance(arrayListOf(file), file.isAvailableLocally)
+            return newInstance(files = arrayListOf(file), isAvailableLocallyAndNotAvailableOffline = file.isAvailableLocally)
         }
     }
 }
