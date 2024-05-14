@@ -53,6 +53,7 @@ class SynchronizeFolderUseCase(
                             accountName = accountName,
                             spaceId = ocFile.spaceId,
                             syncMode = params.syncMode,
+                            isActionSetFolderAvailableOffline = params.isActionSetFolderAvailableOffline,
                         )
                     )
                 }
