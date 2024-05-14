@@ -3,7 +3,9 @@
  *
  * @author David A. Velasco
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -77,16 +79,12 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
          * @return Dialog ready to show.
          */
         @JvmStatic
-        fun newInstance(files: ArrayList<OCFile>, isAvailableLocally: Boolean): RemoveFilesDialogFragment {
+        fun newInstance(files: ArrayList<OCFile>, isAvailableLocallyAndNotAvailableOffline: Boolean): RemoveFilesDialogFragment {
             val messageStringId: Int
             var containsFolder = false
-            var containsAvailableOffline = false
             for (file in files) {
                 if (file.isFolder) {
                     containsFolder = true
-                }
-                if (file.isAvailableOffline) {
-                    containsAvailableOffline = true
                 }
             }
 
@@ -106,7 +104,7 @@ class RemoveFilesDialogFragment : ConfirmationDialogFragment(), ConfirmationDial
                     R.string.confirmation_remove_files_alert
                 }
             }
-            val localRemoveButton = if (!containsAvailableOffline && isAvailableLocally) {
+            val localRemoveButton = if (isAvailableLocallyAndNotAvailableOffline) {
                 R.string.confirmation_remove_local
             } else {
                 -1
