@@ -653,7 +653,7 @@ class MainFileListFragment : Fragment(),
             }
         }
 
-        collectLatestLifecycleFlow(fileOperationsViewModel.checkIfFileLocalSharedFlow) {
+        collectLatestLifecycleFlow(fileOperationsViewModel.checkIfFileIsLocalAndNotAvailableOfflineSharedFlow) {
             val fileActivity = (requireActivity() as FileActivity)
             when (it) {
                 is UIResult.Loading -> fileActivity.showLoadingDialog(R.string.common_loading)
@@ -996,8 +996,8 @@ class MainFileListFragment : Fragment(),
         }
     }
 
-    private fun onShowRemoveDialog(filesToRemove: List<OCFile>, isLocal: Boolean) {
-        val dialog = RemoveFilesDialogFragment.newInstance(ArrayList(filesToRemove), isLocal)
+    private fun onShowRemoveDialog(filesToRemove: List<OCFile>, isAvailableLocallyAndNotAvailableOffline: Boolean) {
+        val dialog = RemoveFilesDialogFragment.newInstance(ArrayList(filesToRemove), isAvailableLocallyAndNotAvailableOffline)
         dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
         fileListAdapter.clearSelection()
         updateActionModeAfterTogglingSelected()

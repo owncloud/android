@@ -35,7 +35,7 @@ import com.owncloud.android.domain.availableoffline.usecases.SetFilesAsAvailable
 import com.owncloud.android.domain.availableoffline.usecases.UnsetFilesAsAvailableOfflineUseCase
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.domain.files.usecases.AreAnyFileAvailableLocallyAndNotAvailableOfflineUseCase
+import com.owncloud.android.domain.files.usecases.IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
 import com.owncloud.android.domain.files.usecases.ManageDeepLinkUseCase
@@ -72,7 +72,7 @@ class FileOperationsViewModel(
     private val unsetFilesAsAvailableOfflineUseCase: UnsetFilesAsAvailableOfflineUseCase,
     private val manageDeepLinkUseCase: ManageDeepLinkUseCase,
     private val setLastUsageFileUseCase: SetLastUsageFileUseCase,
-    private val areAnyFileAvailableLocallyAndNotAvailableOfflineUseCase: AreAnyFileAvailableLocallyAndNotAvailableOfflineUseCase,
+    private val isAnyFileAvailableLocallyAndNotAvailableOfflineUseCase: IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
@@ -107,8 +107,8 @@ class FileOperationsViewModel(
     private val _deepLinkFlow = MutableStateFlow<Event<UIResult<OCFile?>>?>(null)
     val deepLinkFlow: StateFlow<Event<UIResult<OCFile?>>?> = _deepLinkFlow
 
-    private val _checkIfFileLocalSharedFlow = MutableSharedFlow<UIResult<Boolean>>()
-    val checkIfFileLocalSharedFlow: SharedFlow<UIResult<Boolean>> = _checkIfFileLocalSharedFlow
+    private val _checkIfFileIsLocalAndNotAvailableOfflineSharedFlow = MutableSharedFlow<UIResult<Boolean>>()
+    val checkIfFileIsLocalAndNotAvailableOfflineSharedFlow: SharedFlow<UIResult<Boolean>> = _checkIfFileIsLocalAndNotAvailableOfflineSharedFlow
 
     val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
 
@@ -135,9 +135,9 @@ class FileOperationsViewModel(
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
             showLoading = true,
-            sharedFlow = _checkIfFileLocalSharedFlow,
-            useCase = areAnyFileAvailableLocallyAndNotAvailableOfflineUseCase,
-            useCaseParams = AreAnyFileAvailableLocallyAndNotAvailableOfflineUseCase.Params(filesToRemove),
+            sharedFlow = _checkIfFileIsLocalAndNotAvailableOfflineSharedFlow,
+            useCase = isAnyFileAvailableLocallyAndNotAvailableOfflineUseCase,
+            useCaseParams = IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase.Params(filesToRemove),
             requiresConnection = false
         )
     }

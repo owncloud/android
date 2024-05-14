@@ -6,8 +6,9 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -209,6 +210,17 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         }
 
         return fileToDelete.deleteRecursively()
+    }
+
+    fun deleteFolderIfHasNoFilesInside(ocFile: OCFile) {
+        val safeStoragePath = ocFile.getStoragePathOrExpectedPathForFile()
+        val folder = File(safeStoragePath)
+
+        val filesInFolder = folder.listFiles()
+        if (filesInFolder.isNullOrEmpty()) { // Verify if the folder is empty
+            // If it is empty, delete it
+            folder.deleteRecursively()
+        }
     }
 
     fun moveLocalFile(ocFile: OCFile, finalStoragePath: String) {
