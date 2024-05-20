@@ -61,25 +61,31 @@ class SynchronizeFileUseCase(
                 return SyncType.FileNotFound
             }
 
-            // 2. File not downloaded -> Download it
+            // 2. Check if we need to force a refresh (isActionSetFolderAvailableOffline is true)
+            if (params.isActionSetFolderAvailableOffline) {
+                Timber.i("Forced refresh due to folder offline availability action")
+                return forceRefresh(accountName, fileToSynchronize)
+            }
+
+            // 3. File not downloaded -> Download it
             if (!fileToSynchronize.isAvailableLocally) {
                 Timber.i("File ${fileToSynchronize.fileName} is not downloaded. Let's download it")
                 val uuid = requestForDownload(accountName = accountName, ocFile = fileToSynchronize)
                 return SyncType.DownloadEnqueued(uuid)
             }
 
-            // 3. Check if file has changed locally
+            // 4. Check if file has changed locally
             val changedLocally = fileToSynchronize.localModificationTimestamp > fileToSynchronize.lastSyncDateForData!!
             Timber.i("Local file modification timestamp :${fileToSynchronize.localModificationTimestamp} and last sync date for data :${fileToSynchronize.lastSyncDateForData}")
             Timber.i("So it has changed locally: $changedLocally")
 
-            // 4. Check if file has changed remotely
+            // 5. Check if file has changed remotely
             val changedRemotely = serverFile.etag != fileToSynchronize.etag
             Timber.i("Local etag :${fileToSynchronize.etag} and remote etag :${serverFile.etag}")
             Timber.i("So it has changed remotely: $changedRemotely")
 
             if (changedLocally && changedRemotely) {
-                // 5.1 File has changed locally and remotely. We got a conflict, save the conflict.
+                // 6.1 File has changed locally and remotely. We got a conflict, save the conflict.
                 Timber.i("File ${fileToSynchronize.fileName} has changed locally and remotely. We got a conflict with etag: ${serverFile.etag}")
                 if (fileToSynchronize.etagInConflict == null) {
                     saveConflictUseCase(
@@ -91,21 +97,28 @@ class SynchronizeFileUseCase(
                 }
                 return SyncType.ConflictDetected(serverFile.etag!!)
             } else if (changedRemotely) {
-                // 5.2 File has changed ONLY remotely -> download new version
+                // 6.2 File has changed ONLY remotely -> download new version
                 Timber.i("File ${fileToSynchronize.fileName} has changed remotely. Let's download the new version")
                 val uuid = requestForDownload(accountName, fileToSynchronize)
                 return SyncType.DownloadEnqueued(uuid)
             } else if (changedLocally) {
-                // 5.3 File has change ONLY locally -> upload new version
+                // 6.3 File has change ONLY locally -> upload new version
                 Timber.i("File ${fileToSynchronize.fileName} has changed locally. Let's upload the new version")
                 val uuid = requestForUpload(accountName, fileToSynchronize, fileToSynchronize.etag!!)
                 return SyncType.UploadEnqueued(uuid)
             } else {
-                // 5.4 File has not change locally not remotely -> do nothing
+                // 6.4 File has not change locally not remotely -> do nothing
                 Timber.i("File ${fileToSynchronize.fileName} is already synchronized. Nothing to do here")
                 return SyncType.AlreadySynchronized
             }
         }
+    }
+
+    private fun forceRefresh(accountName: String, ocFile: OCFile): SyncType {
+        // Force refresh logic to download the file
+        Timber.i("Force refreshing file ${ocFile.fileName}")
+        val uuid = requestForDownload(accountName, ocFile)
+        return SyncType.DownloadEnqueued(uuid)
     }
 
     private fun requestForDownload(accountName: String, ocFile: OCFile): UUID? {
@@ -130,6 +143,7 @@ class SynchronizeFileUseCase(
 
     data class Params(
         val fileToSynchronize: OCFile,
+        val isActionSetFolderAvailableOffline: Boolean = false
     )
 
     sealed interface SyncType {
