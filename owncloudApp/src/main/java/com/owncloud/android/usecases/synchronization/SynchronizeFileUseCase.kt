@@ -2,13 +2,14 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
+ * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2023 ownCloud GmbH.
- * <p>
+ * Copyright (C) 2024 ownCloud GmbH.
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -17,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.usecases.synchronization
 
 import com.owncloud.android.domain.BaseUseCaseWithResult
@@ -54,9 +56,10 @@ class SynchronizeFileUseCase(
                 // 1.1 File does not exist anymore in remote
                 val localFile = fileToSynchronize.id?.let { fileRepository.getFileById(it) }
                 // If it still exists locally, but file has different path, another operation could have been done simultaneously
-                // Do not remove the file in that case. It may be synced later
+                // Do not remove the file in that case, it may be synced later
+                // Remove locally (storage) in any other case
                 if (localFile != null && (localFile.remotePath == fileToSynchronize.remotePath && localFile.spaceId == fileToSynchronize.spaceId)) {
-                    fileRepository.deleteFiles(listOf(fileToSynchronize), false)
+                    fileRepository.deleteFiles(listOf(fileToSynchronize), true)
                 }
                 return SyncType.FileNotFound
             }
