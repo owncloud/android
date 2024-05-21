@@ -195,6 +195,9 @@
                             android:visibility="gone" />
                     </FrameLayout>
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width=""
+                        android:layout_height=""></androidx.constraintlayout.widget.ConstraintLayout>
                     <TextView
                         android:id="@+id/server_status_text"
                         android:layout_width="match_parent"

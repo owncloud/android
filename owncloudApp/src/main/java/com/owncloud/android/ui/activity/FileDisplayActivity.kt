@@ -40,6 +40,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -530,11 +531,11 @@ class FileDisplayActivity : FileActivity(),
         val inflater = menuInflater
 
         // Allow or disallow touches with other visible windows
-        val actionBarView = findViewById<View>(R.id.action_bar)
-        if (actionBarView != null) {
-            actionBarView.filterTouchesWhenObscured =
-                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(applicationContext)
-        }
+//        val actionBarView = findViewById<View>(R.id.action_bar)
+//        if (actionBarView != null) {
+//            actionBarView.filterTouchesWhenObscured =
+//                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(applicationContext)
+//        }
 
         inflater.inflate(R.menu.main_menu, menu)
 
@@ -1817,7 +1818,7 @@ class FileDisplayActivity : FileActivity(),
                                     if (uiResult.error is DeepLinkException) {
                                         R.string.invalid_deep_link_format
                                     } else {
-                                        R.string.default_error_msg
+                                        Log.d("Error", "Default error")
                                     }
                                 )
                             )

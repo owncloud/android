@@ -33,7 +33,7 @@ open class SingleFragmentActivity : BaseActivity() {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
-            id = R.id.container
+//            id = R.id.container
         }
         setContentView(content)
     }
