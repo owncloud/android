@@ -41,6 +41,7 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.databinding.FileDetailsFragmentBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.TooEarlyException
 import com.owncloud.android.domain.files.model.OCFile
@@ -158,9 +159,13 @@ class FileDetailsFragment : FileFragment() {
         fileOperationsViewModel.syncFileLiveData.observe(viewLifecycleOwner, Event.EventObserver { uiResult ->
             when (uiResult) {
                 is UIResult.Error -> {
-                    showErrorInSnackbar(R.string.sync_fail_ticker, uiResult.error)
-                    fileDetailsViewModel.updateActionInDetailsView(NONE)
-                    requireActivity().invalidateOptionsMenu()
+                    if (uiResult.error is AccountNotFoundException) {
+                        showMessageInSnackbar(getString(R.string.sync_fail_ticker_unauthorized))
+                    } else {
+                        showErrorInSnackbar(R.string.sync_fail_ticker, uiResult.error)
+                        fileDetailsViewModel.updateActionInDetailsView(NONE)
+                        requireActivity().invalidateOptionsMenu()
+                    }
                 }
 
                 is UIResult.Loading -> {}
@@ -176,9 +181,11 @@ class FileDetailsFragment : FileFragment() {
                         fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
                     }
 
-                    SynchronizeFileUseCase.SyncType.FileNotFound -> showMessageInSnackbar("FILE NOT FOUND")
+                    SynchronizeFileUseCase.SyncType.FileNotFound -> showMessageInSnackbar(getString(R.string.sync_file_not_found_msg))
+
                     is SynchronizeFileUseCase.SyncType.UploadEnqueued -> fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
-                    null -> showMessageInSnackbar("NULL")
+
+                    null -> showMessageInSnackbar(getString(R.string.common_error_unknown))
                 }
             }
         })

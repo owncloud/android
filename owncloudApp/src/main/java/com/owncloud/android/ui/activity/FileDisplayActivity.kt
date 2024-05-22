@@ -58,6 +58,7 @@ import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.databinding.ActivityMainBinding
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.DeepLinkException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.SSLRecoverablePeerUnverifiedException
@@ -1308,6 +1309,7 @@ class FileDisplayActivity : FileActivity(),
                     }
 
                     is SynchronizeFileUseCase.SyncType.UploadEnqueued -> showSnackMessage(getString(R.string.upload_enqueued_msg))
+
                     null -> TODO()
                 }
             }
@@ -1318,6 +1320,9 @@ class FileDisplayActivity : FileActivity(),
                     fileWaitingToPreview = null
                 }
                 when (uiResult.error) {
+                    is AccountNotFoundException -> {
+                        showSnackMessage(getString(R.string.sync_fail_ticker_unauthorized))
+                    }
                     is UnauthorizedException -> {
                         launch(Dispatchers.IO) {
                             val credentials = AccountUtils.getCredentialsForAccount(MainApp.appContext, account)

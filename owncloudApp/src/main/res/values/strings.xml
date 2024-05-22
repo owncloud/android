@@ -390,6 +390,7 @@
     <string name="folder_already_exists_description">Folder with name %1$s already exists.</string>
     <string name="sync_file_fail_msg">Remote file could not be checked</string>
     <string name="sync_file_nothing_to_do_msg">File contents already synchronized</string>
+    <string name="sync_file_not_found_msg">File not found</string>
     <string name="new_remote_version_found_msg">A new version was found in server. Downloading…</string>
     <string name="download_enqueued_msg">Download enqueued</string>
     <string name="upload_enqueued_msg">Upload enqueued</string>
