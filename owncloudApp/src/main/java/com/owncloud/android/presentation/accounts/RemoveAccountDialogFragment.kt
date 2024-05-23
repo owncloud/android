@@ -1,29 +1,8 @@
-/**
- * ownCloud Android client application
- *
- * @author David A. Velasco
- * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2,
- * as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
- */
-
 package com.owncloud.android.presentation.accounts
 
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
-import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.os.Handler
@@ -37,7 +16,7 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment.ConfirmationDia
  *
  * Removes the account if the user confirms.
  *
- * Container Activity needs to implement AccountManagerCallback<Boolean>.
+ * Container Fragment needs to implement AccountManagerCallback<Boolean>.
 </Boolean> */
 class RemoveAccountDialogFragment : ConfirmationDialogFragment(), ConfirmationDialogFragmentListener {
     private var targetAccount: Account? = null
@@ -46,10 +25,10 @@ class RemoveAccountDialogFragment : ConfirmationDialogFragment(), ConfirmationDi
         super.onActivityCreated(savedInstanceState)
         // checked here to fail soon in case of wrong usage
         try {
-            activity as AccountManagerCallback<Boolean>?
+            parentFragment as AccountManagerCallback<Boolean>?
         } catch (c: ClassCastException) {
             throw IllegalStateException(
-                "Container Activity needs to implement (AccountManagerCallback<Boolean>)", c
+                "Container Fragment needs to implement (AccountManagerCallback<Boolean>)", c
             )
         }
     }
@@ -66,9 +45,8 @@ class RemoveAccountDialogFragment : ConfirmationDialogFragment(), ConfirmationDi
      * Performs the removal of the target account and all its associated data.
      */
     override fun onConfirmation(callerTag: String) {
-        val parentActivity: Activity? = activity
-        val am = AccountManager.get(parentActivity)
-        val callback = parentActivity as AccountManagerCallback<Boolean>?
+        val am = AccountManager.get(parentFragment?.context)
+        val callback = parentFragment as AccountManagerCallback<Boolean>?
         am.removeAccount(targetAccount, callback, Handler())
     }
 
