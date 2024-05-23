@@ -195,9 +195,6 @@
                             android:visibility="gone" />
                     </FrameLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width=""
-                        android:layout_height=""></androidx.constraintlayout.widget.ConstraintLayout>
                     <TextView
                         android:id="@+id/server_status_text"
                         android:layout_width="match_parent"
@@ -213,6 +210,7 @@
                         app:drawableTint="@color/login_connection_text_color"
                         tools:text="@string/auth_testing_connection"
                         tools:visibility="visible" />
+
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/account_username_container"

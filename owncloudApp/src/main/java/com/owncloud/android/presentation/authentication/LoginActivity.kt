@@ -35,9 +35,11 @@ import android.accounts.AccountManager
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.PowerManager
 import android.view.View.INVISIBLE
 import android.view.WindowManager.LayoutParams.FLAG_SECURE
 import androidx.appcompat.app.AppCompatActivity
@@ -324,6 +326,10 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
+    private fun isBatterySaverOn(context: Context): Boolean {
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        return powerManager.isPowerSaveMode
+    }
     private fun getServerInfoIsSuccess(uiResult: UIResult.Success<ServerInfo>) {
         updateCenteredRefreshButtonVisibility(shouldBeVisible = false)
         uiResult.data?.run {
