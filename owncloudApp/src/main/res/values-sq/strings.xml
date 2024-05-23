@@ -696,6 +696,8 @@
   <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Kartela video që gjenden në hapësira tanimë mund të luhen saktë në transmetim</string>
   <string name="release_notes_4_3_0_title_accessibility_improvements">Përmirësime përdorimi nga persona me aftësi të kufizuara</string>
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Disa përmirësime për ta bërë aplikacionin më të lehtë për persona me aftësi të kufizuara</string>
+  <string name="release_notes_4_3_0_title_show_app_provider_icon_from_endpoint">Ikona të reja te mundësia “Hape në (web)”, te menuja e veprimeve</string>
+  <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">Te mundësia “Hape në (web)” në menunë veprime janë shtuar ikona më të përshtatshme</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
