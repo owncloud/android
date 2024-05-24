@@ -177,9 +177,7 @@ class FileDisplayActivity : FileActivity(),
 
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
     private val transfersViewModel: TransfersViewModel by viewModel()
-    private val spacesListViewModel: SpacesListViewModel by viewModel {
-        parametersOf(account.name, false)
-    }
+
 
     private val sharedPreferences: SharedPreferencesProvider by inject()
 
@@ -272,7 +270,6 @@ class FileDisplayActivity : FileActivity(),
             AppRater.appLaunched(this, packageName)
         }
 
-        spacesListViewModel.refreshSpacesFromServer()
 
         checkNotificationPermission()
         Timber.v("onCreate() end")
@@ -376,6 +373,11 @@ class FileDisplayActivity : FileActivity(),
                 }
             }
         }
+
+        val spacesListViewModel: SpacesListViewModel by viewModel {
+            parametersOf(account.name, false)
+        }
+        spacesListViewModel.refreshSpacesFromServer()
     }
 
     private fun initAndShowListOfFiles(fileListOption: FileListOption = FileListOption.ALL_FILES) {
