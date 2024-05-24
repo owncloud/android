@@ -90,7 +90,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
         collectLatestLifecycleFlow(spacesListViewModel.spacesList) { uiState ->
             if (uiState.searchFilter != "") {
                 var spacesToListFiltered =
-                    uiState.spaces.filter { it.name.lowercase().contains(uiState.searchFilter.lowercase()) && !it.isPersonal }
+                    uiState.spaces.filter { it.name.lowercase().contains(uiState.searchFilter.lowercase()) && !it.isPersonal && !it.isDisabled }
                 val personalSpace = uiState.spaces.find { it.isPersonal }
                 personalSpace?.let {
                     spacesToListFiltered = spacesToListFiltered.toMutableList().apply {
@@ -101,7 +101,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
                 spacesListAdapter.setData(spacesToListFiltered)
             } else {
                 showOrHideEmptyView(uiState.spaces)
-                spacesListAdapter.setData(uiState.spaces)
+                spacesListAdapter.setData(uiState.spaces.filter { !it.isDisabled })
             }
             binding.swipeRefreshSpacesList.isRefreshing = uiState.refreshing
             uiState.error?.let { showErrorInSnackbar(R.string.spaces_sync_failed, it) }
