@@ -1,7 +1,7 @@
 <!-- res/drawable/hollow_circle_drawable.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
     <stroke
-        android:width="2sp"
+        android:width="0.01sp"
         android:color="@android:color/white"/>
     <size android:width="24dp" android:height="24dp"/> <!-- Set the size of the circle here -->
 </shape>

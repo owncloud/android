@@ -37,7 +37,10 @@ import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
+import android.os.BatteryManager
+import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.view.View.INVISIBLE
@@ -326,10 +329,6 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
-    private fun isBatterySaverOn(context: Context): Boolean {
-        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-        return powerManager.isPowerSaveMode
-    }
     private fun getServerInfoIsSuccess(uiResult: UIResult.Success<ServerInfo>) {
         updateCenteredRefreshButtonVisibility(shouldBeVisible = false)
         uiResult.data?.run {
@@ -422,10 +421,23 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
     }
 
+    fun isPowerSaveMode(context: Context): Boolean {
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager?
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && powerManager != null) {
+            powerManager.isPowerSaveMode
+        } else {
+            false
+        }
+    }
+
     private fun getServerInfoIsLoading() {
         binding.serverStatusText.run {
             text = getString(R.string.auth_testing_connection)
-            setCompoundDrawablesWithIntrinsicBounds(R.drawable.progress_small, 0, 0, 0)
+            if(isPowerSaveMode(context)){
+                setCompoundDrawablesWithIntrinsicBounds((R.drawable.progress_small), 0, 0, 0)
+            }else{
+                setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.stat_notify_sync, 0, 0, 0)
+            }
             isVisible = true
         }
     }
