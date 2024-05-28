@@ -6,7 +6,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author Parneet Singh
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -32,7 +32,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -55,7 +54,6 @@ import com.owncloud.android.presentation.files.operations.FileOperation;
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel;
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment;
 import com.owncloud.android.presentation.previews.PreviewTextViewModel;
-import com.owncloud.android.ui.controller.TransferProgressController;
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
 import com.owncloud.android.ui.dialog.LoadingDialog;
 import com.owncloud.android.ui.fragment.FileFragment;
@@ -78,11 +76,8 @@ import static org.koin.java.KoinJavaComponent.get;
 public class PreviewTextFragment extends FileFragment {
     private static final String EXTRA_FILE = "FILE";
     private static final String EXTRA_ACCOUNT = "ACCOUNT";
-    private static final String TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT";
 
     private Account mAccount;
-    private ProgressBar mProgressBar;
-    private TransferProgressController mProgressController;
     private TextView mTextPreview;
     private View mTextLayout;
     private TabLayout mTabLayout;
@@ -140,7 +135,6 @@ public class PreviewTextFragment extends FileFragment {
         );
 
         rootView = ret.findViewById(R.id.top);
-        mProgressBar = ret.findViewById(R.id.syncProgressBar);
         mTabLayout = ret.findViewById(R.id.tab_layout);
         mViewPager2 = ret.findViewById(R.id.view_pager);
         mTextPreview = ret.findViewById(R.id.text_preview);
@@ -177,8 +171,6 @@ public class PreviewTextFragment extends FileFragment {
     @Override
     public void onActivityCreated(Bundle savedState) {
         super.onActivityCreated(savedState);
-        mProgressController = new TransferProgressController(mContainerActivity);
-        mProgressController.setProgressBar(mProgressBar);
     }
 
     @Override
@@ -483,12 +475,12 @@ public class PreviewTextFragment extends FileFragment {
 
     @Override
     public void updateViewForSyncInProgress() {
-        mProgressController.showProgressBar();
+        // Nothing to do here, sync is not shown in previews
     }
 
     @Override
     public void updateViewForSyncOff() {
-        mProgressController.hideProgressBar();
+        // Nothing to do here, sync is not shown in previews
     }
 
     /**
