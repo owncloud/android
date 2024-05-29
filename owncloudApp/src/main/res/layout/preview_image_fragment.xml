@@ -80,9 +80,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <!-- last to draw, will be top in Z axis -->
-    <include layout="@layout/top_progress_bar" />
-
     <androidx.constraintlayout.widget.Group
         tools:visibility="visible"
         android:id="@+id/error_group"

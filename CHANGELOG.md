@@ -1,6 +1,6 @@
 # Table of Contents
 
-* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
+* [Changelog for 4.2.2](#changelog-for-owncloud-android-client-422-2024-05-30)
 * [Changelog for 4.2.1](#changelog-for-owncloud-android-client-421-2024-02-22)
 * [Changelog for 4.2.0](#changelog-for-owncloud-android-client-420-2024-02-12)
 * [Changelog for 4.1.1](#changelog-for-owncloud-android-client-411-2023-10-18)
@@ -20,35 +20,27 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
-# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+# Changelog for ownCloud Android Client [4.2.2] (2024-05-30)
 
-The following sections list the changes in ownCloud Android Client unreleased relevant to
+The following sections list the changes in ownCloud Android Client 4.2.2 relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/android/compare/v4.2.1...master
+[4.2.2]: https://github.com/owncloud/android/compare/v4.2.1...v4.2.2
 
 ## Summary
 
-* Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
-* Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
+* Bugfix - Downloads not working when `Content-Length` is not received: [#4352](https://github.com/owncloud/android/issues/4352)
 
 ## Details
 
-* Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
+* Bugfix - Downloads not working when `Content-Length` is not received: [#4352](https://github.com/owncloud/android/issues/4352)
 
-   The minimum Android version will be Android 7.0 Nougat (API 24). The application
-   will no longer support previous versions.
+   The case when Content-Length header is not received in the response of a GET for
+   a download has been handled, and now the progress bar in images preview and
+   details view is indeterminate for those cases.
 
-   https://github.com/owncloud/android/issues/4230
-   https://github.com/owncloud/android/pull/4299
-
-* Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
-
-   Unit tests for OCAppRegistryRepository, OCAuthenticationRepository and
-   OCCapabilityRepository classes have been completed.
-
-   https://github.com/owncloud/android/issues/4232
-   https://github.com/owncloud/android/pull/4281
+   https://github.com/owncloud/android/issues/4352
+   https://github.com/owncloud/android/pull/4415
 
 # Changelog for ownCloud Android Client [4.2.1] (2024-02-22)
 

@@ -667,20 +667,6 @@
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
   <string name="release_notes_icon">Symbol für Veröffentlichungsnotizen</string>
-  <string name="release_notes_4_2_0_title_1">Dateien per Link außerhalb der App öffnen</string>
-  <string name="release_notes_4_2_0_subtitle_1">Ein Link, der auf die App weist, wird diese Öffnen und die Datei in einer Vorschau anzeigen.</string>
-  <string name="release_notes_4_2_0_title_2">\"Freigeben nach\" in Infinite-Scale-Konten erlaubt es, in beliebige Ordner hochzuladen.</string>
-  <string name="release_notes_4_2_0_subtitle_2">Freigaben von anderen Apps können in beliebige Spaces auf Infinite Scale hochgeladen werden.</string>
-  <string name="release_notes_4_2_0_title_3">\"Auf alle anwenden\" bei Konflikten</string>
-  <string name="release_notes_4_2_0_subtitle_3">Neues Dialogfenster, um alle Konflikte auf einmal aufzulösen.</string>
-  <string name="release_notes_4_2_0_title_4">Automatisch aktualisieren, wenn eine Datei hochgeladen wird</string>
-  <string name="release_notes_4_2_0_subtitle_4">Die Dateiliste wird jetzt automatisch aktualisiert, während sie in den Zielordner hochgeladen wird.</string>
-  <string name="release_notes_4_2_0_title_5">Protokolldateien herunterladen</string>
-  <string name="release_notes_4_2_0_subtitle_5">Neue Option, um eine Protokolldatei in den Ordner \"Downloads\" des Geräts herunterzuladen.</string>
-  <string name="release_notes_4_2_0_title_6">Geringfügige Fehler behoben</string>
-  <string name="release_notes_4_2_0_subtitle_6">Einige Fehler wurden behoben, um die Benutzung der App zu verbessern.</string>
-  <string name="release_notes_4_2_0_title_7">Automatisch in Spaces hochladen</string>
-  <string name="release_notes_4_2_0_subtitle_7">Fotos und Videos von der Kamera werden jetzt in Spaces gespeichert, nicht nur in Persönlich.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>

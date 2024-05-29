@@ -3,7 +3,9 @@
  *
  * @author David A. Velasco
  * @author Christian Schabesberger
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -20,6 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.ui.preview
 
 import android.accounts.Account
@@ -220,11 +223,15 @@ class FileDownloadFragment : FileFragment() {
             liveData?.observeWorkerTillItFinishes(
                 owner = this,
                 onWorkEnqueued = { progressBar?.isIndeterminate = true },
-                onWorkRunning = { progress ->
+                onWorkRunning = { workProgress ->
                     progressBar?.apply {
-                        isIndeterminate = false
-                        setProgress(progress)
-                        invalidate()
+                        if (workProgress == -1) {
+                            isIndeterminate = true
+                        } else {
+                            isIndeterminate = false
+                            progress = workProgress
+                            invalidate()
+                        }
                     }
                 },
                 onWorkSucceeded = { },

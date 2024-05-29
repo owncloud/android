@@ -668,20 +668,6 @@
   <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Prosseguir</string>
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
-  <string name="release_notes_4_2_0_title_1">Abrindo arquivos de fora do aplicativo usando links</string>
-  <string name="release_notes_4_2_0_subtitle_1">Um link que aponta para o aplicativo abrirá o aplicativo e, em seguida, resolverá o arquivo para visualizá-lo diretamente</string>
-  <string name="release_notes_4_2_0_title_2">\"Compartilhar com\" nas contas oCIS permite fazer upload para qualquer espaço</string>
-  <string name="release_notes_4_2_0_subtitle_2">Arquivos compartilhados de outros aplicativos podem ser carregados para qualquer espaço e não apenas para o pessoal nas contas oCIS</string>
-  <string name="release_notes_4_2_0_title_3">\"Aplicar a todos\" para conflitos</string>
-  <string name="release_notes_4_2_0_subtitle_3">Nova caixa de diálogo para corrigir todos os conflitos de uma vez</string>
-  <string name="release_notes_4_2_0_title_4">Atualização automática quando um arquivo é carregado</string>
-  <string name="release_notes_4_2_0_subtitle_4">A lista de arquivos será atualizada automaticamente durante o upload para a pasta de destino</string>
-  <string name="release_notes_4_2_0_title_5">Baixar arquivos de log</string>
-  <string name="release_notes_4_2_0_subtitle_5">Nova opção para baixar um arquivo de log para a pasta Downloads do dispositivo</string>
-  <string name="release_notes_4_2_0_title_6">Pequenas correções de bugs</string>
-  <string name="release_notes_4_2_0_subtitle_6">Alguns bugs foram corrigidos para melhorar a experiência no aplicativo</string>
-  <string name="release_notes_4_2_0_title_7">Uploads automáticos para espaços</string>
-  <string name="release_notes_4_2_0_subtitle_7">Fotos e vídeos da câmera agora são salvos em espaços, não apenas no Pessoal</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>

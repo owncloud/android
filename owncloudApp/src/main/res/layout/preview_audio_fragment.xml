@@ -67,6 +67,4 @@
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <include layout="@layout/top_progress_bar" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

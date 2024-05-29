@@ -1,0 +1,7 @@
+Bugfix: Downloads not working when `Content-Length` is not received
+
+The case when Content-Length header is not received in the response of a GET for a download has been
+handled, and now the progress bar in images preview and details view is indeterminate for those cases.
+
+https://github.com/owncloud/android/issues/4352
+https://github.com/owncloud/android/pull/4415
