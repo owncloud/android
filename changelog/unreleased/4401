@@ -1,0 +1,6 @@
+Enhancement: Get personal space quota from GraphAPI
+
+Personal space quota in an oCIS account has been added from GraphAPI instead of propfind.
+
+https://github.com/owncloud/android/issues/3874
+https://github.com/owncloud/android/pull/4401

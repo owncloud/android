@@ -100,6 +100,7 @@ import com.owncloud.android.presentation.shares.SharesFragment
 import com.owncloud.android.presentation.spaces.SpacesListFragment
 import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.BUNDLE_KEY_CLICK_SPACE
 import com.owncloud.android.presentation.spaces.SpacesListFragment.Companion.REQUEST_KEY_CLICK_SPACE
+import com.owncloud.android.presentation.spaces.SpacesListViewModel
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.providers.WorkManagerProvider
 import com.owncloud.android.syncadapter.FileSyncAdapter
@@ -176,6 +177,7 @@ class FileDisplayActivity : FileActivity(),
 
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
     private val transfersViewModel: TransfersViewModel by viewModel()
+
 
     private val sharedPreferences: SharedPreferencesProvider by inject()
 
@@ -267,6 +269,7 @@ class FileDisplayActivity : FileActivity(),
         if (resources.getBoolean(R.bool.enable_rate_me_feature) && !BuildConfig.DEBUG) {
             AppRater.appLaunched(this, packageName)
         }
+
 
         checkNotificationPermission()
         Timber.v("onCreate() end")
@@ -370,6 +373,11 @@ class FileDisplayActivity : FileActivity(),
                 }
             }
         }
+
+        val spacesListViewModel: SpacesListViewModel by viewModel {
+            parametersOf(account.name, false)
+        }
+        spacesListViewModel.refreshSpacesFromServer()
     }
 
     private fun initAndShowListOfFiles(fileListOption: FileListOption = FileListOption.ALL_FILES) {
