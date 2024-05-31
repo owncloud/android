@@ -48,7 +48,6 @@ import com.bumptech.glide.request.target.Target
 import com.github.chrisbanes.photoview.PhotoView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.PreviewImageFragmentBinding
-import com.owncloud.android.databinding.TopProgressBarBinding
 import com.owncloud.android.domain.files.model.MIME_SVG
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
@@ -57,7 +56,6 @@ import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
-import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
@@ -82,15 +80,12 @@ import java.io.File
  */
 class PreviewImageFragment : FileFragment() {
 
-    private var progressController: TransferProgressController? = null
     private val bitmap: Bitmap? = null
     private var account: Account? = null
     private var ignoreFirstSavedState = false
 
     private var _binding: PreviewImageFragmentBinding? = null
     private val binding get() = _binding!!
-    private var _bindingTopProgress: TopProgressBarBinding? = null
-    private val bindingTopProgress get() = _bindingTopProgress!!
 
     private val previewImageViewModel by viewModel<PreviewImageViewModel>()
     private val fileOperationsViewModel: FileOperationsViewModel by inject()
@@ -116,7 +111,6 @@ class PreviewImageFragment : FileFragment() {
         super.onCreateView(inflater, container, savedInstanceState)
         // Inflate the layout for this fragment
         _binding = PreviewImageFragmentBinding.inflate(inflater, container, false)
-        _bindingTopProgress = TopProgressBarBinding.bind(binding.root)
         return binding.root.apply {
             // Allow or disallow touches with other visible windows
             filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
@@ -126,7 +120,6 @@ class PreviewImageFragment : FileFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        _bindingTopProgress = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -139,10 +132,6 @@ class PreviewImageFragment : FileFragment() {
             (requireActivity() as PreviewImageActivity).toggleFullScreen()
         }
 
-        progressController = TransferProgressController(mContainerActivity).apply {
-            setProgressBar(bindingTopProgress.syncProgressBar)
-            hideProgressBar()
-        }
         savedInstanceState?.let {
             if (!ignoreFirstSavedState) {
                 val file: OCFile? = it.getParcelable(ARG_FILE)
@@ -292,11 +281,11 @@ class PreviewImageFragment : FileFragment() {
     override fun onFileContentChanged() = loadAndShowImage()
 
     override fun updateViewForSyncInProgress() {
-        progressController?.showProgressBar()
+        // Nothing to do here, sync is not shown in previews
     }
 
     override fun updateViewForSyncOff() {
-        progressController?.hideProgressBar()
+        // Nothing to do here, sync is not shown in previews
     }
 
     private fun loadAndShowImage() {

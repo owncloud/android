@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -448,9 +448,15 @@ class FileDetailsFragment : FileFragment() {
         } else { // Transfer is upload (?)
             getString(R.string.uploader_upload_in_progress_ticker)
         }
+        val workProgress = workInfo.progress.getInt(DownloadFileWorker.WORKER_KEY_PROGRESS, -1)
         binding.fdProgressBar.apply {
-            isIndeterminate = false
-            progress = workInfo.progress.getInt(DownloadFileWorker.WORKER_KEY_PROGRESS, -1)
+            if (workProgress == -1) {
+                isIndeterminate = true
+            } else {
+                isIndeterminate = false
+                progress = workProgress
+                invalidate()
+            }
         }
         binding.fdCancelBtn.setOnClickListener { fileDetailsViewModel.cancelCurrentTransfer() }
     }

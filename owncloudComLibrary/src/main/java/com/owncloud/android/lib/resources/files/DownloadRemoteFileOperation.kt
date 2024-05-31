@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   Copyright (C) 2024 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -19,8 +19,8 @@
  *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
- *
  */
+
 package com.owncloud.android.lib.resources.files
 
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -109,7 +109,7 @@ class DownloadRemoteFileOperation(
                 val totalToTransfer = if (!contentLength.isNullOrEmpty()) {
                     contentLength.toLong()
                 } else {
-                    0
+                    -1L
                 }
                 val bytes = ByteArray(4096)
                 var readResult: Int
@@ -131,7 +131,7 @@ class DownloadRemoteFileOperation(
                     }
                 }
 
-                if (transferred == totalToTransfer) {  // Check if the file is completed
+                if (totalToTransfer == -1L || transferred == totalToTransfer) {  // Check if the file is completed
                     savedFile = true
                     val modificationTime =
                         getMethod.getResponseHeaders()?.get("Last-Modified")

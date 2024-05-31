@@ -724,6 +724,8 @@
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
 
+    <string name="release_notes_4_2_2_title_downloads_content_length">Fixes in downloads</string>
+    <string name="release_notes_4_2_2_subtitle_downloads_content_length">Downloads work properly again for every type of file</string>
     <string name="release_notes_4_3_0_title_1">New setting to remove automatically downloaded files that were not used for a certain time</string>
     <string name="release_notes_4_3_0_subtitle_1">A new setting has been added in "Advanced" section to delete automatically downloaded files, when the time since their last usage exceeds the selected time in the setting</string>
     <string name="release_notes_4_3_0_title_2">Automatic discovery of the account in login</string>

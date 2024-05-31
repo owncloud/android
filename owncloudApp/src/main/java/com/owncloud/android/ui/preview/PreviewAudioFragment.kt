@@ -42,7 +42,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
@@ -55,7 +54,6 @@ import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.presentation.previews.PreviewAudioViewModel
-import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
@@ -86,8 +84,6 @@ class PreviewAudioFragment : FileFragment() {
     private var mediaController: MediaControlView? = null
     private var mediaServiceConnection: MediaServiceConnection? = null
     private var autoplay = true
-    private var progressBar: ProgressBar? = null
-    private var progressController: TransferProgressController? = null
 
     private val previewAudioViewModel by viewModel<PreviewAudioViewModel>()
     private val fileOperationsViewModel: FileOperationsViewModel by inject()
@@ -120,7 +116,6 @@ class PreviewAudioFragment : FileFragment() {
 
         imagePreview = view.findViewById(R.id.image_preview)
         mediaController = view.findViewById(R.id.media_controller)
-        progressBar = view.findViewById(R.id.syncProgressBar)
     }
 
     /**
@@ -149,9 +144,6 @@ class PreviewAudioFragment : FileFragment() {
         check(file.isAvailableLocally) { "There is no local file to preview" }
         check(file.isAudio) { "Not an audio file" }
         extractAndSetCoverArt(file)
-        progressController = TransferProgressController(mContainerActivity).also {
-            it.setProgressBar(progressBar)
-        }
     }
 
     /**
@@ -219,11 +211,11 @@ class PreviewAudioFragment : FileFragment() {
     }
 
     override fun updateViewForSyncInProgress() {
-        progressController?.showProgressBar()
+        // Nothing to do here, sync is not shown in previews
     }
 
     override fun updateViewForSyncOff() {
-        progressController?.hideProgressBar()
+        // Nothing to do here, sync is not shown in previews
     }
 
     /**
