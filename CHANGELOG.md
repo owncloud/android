@@ -1,5 +1,6 @@
 # Table of Contents
 
+* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
 * [Changelog for 4.2.2](#changelog-for-owncloud-android-client-422-2024-05-30)
 * [Changelog for 4.2.1](#changelog-for-owncloud-android-client-421-2024-02-22)
 * [Changelog for 4.2.0](#changelog-for-owncloud-android-client-420-2024-02-12)
@@ -20,6 +21,231 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
+# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v4.2.2...master
+
+## Summary
+
+* Bugfix - Removed unnecessary requests when the app is installed from scratch: [#4213](https://github.com/owncloud/android/issues/4213)
+* Bugfix - "Clear data" button enabled in the app settings in device settings: [#4309](https://github.com/owncloud/android/issues/4309)
+* Bugfix - Video streaming in spaces: [#4328](https://github.com/owncloud/android/issues/4328)
+* Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
+* Bugfix - Resolve incorrect truncation of long display names in Manage Accounts: [#4351](https://github.com/owncloud/android/issues/4351)
+* Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
+* Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
+* Change - Add new prefixes in commit messages of 3rd party contributors: [#4346](https://github.com/owncloud/android/pull/4346)
+* Change - Kotlinize PreviewTextFragment: [#4356](https://github.com/owncloud/android/issues/4356)
+* Enhancement - Add search functionality to spaces list: [#3865](https://github.com/owncloud/android/issues/3865)
+* Enhancement - Correct "Local only" option in remove dialog: [#3936](https://github.com/owncloud/android/issues/3936)
+* Enhancement - Show app provider icon from endpoint: [#4105](https://github.com/owncloud/android/issues/4105)
+* Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
+* Enhancement - New setting for manual removal of local storage: [#4174](https://github.com/owncloud/android/issues/4174)
+* Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
+* Enhancement - Avoid unnecessary requests when an av. offline folder is refreshed: [#4197](https://github.com/owncloud/android/issues/4197)
+* Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
+* Enhancement - Add a warning in http connections: [#4284](https://github.com/owncloud/android/issues/4284)
+* Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
+* Enhancement - Password generator for public links in oCIS: [#4308](https://github.com/owncloud/android/issues/4308)
+* Enhancement - Improvements in remove dialog alert: [#4342](https://github.com/owncloud/android/issues/4342)
+* Enhancement - Content description in UI elements to improve accessibility: [#4360](https://github.com/owncloud/android/issues/4360)
+* Enhancement - Added contentDescription attribute in the previewed image: [#4360](https://github.com/owncloud/android/issues/4360)
+
+## Details
+
+* Bugfix - Removed unnecessary requests when the app is installed from scratch: [#4213](https://github.com/owncloud/android/issues/4213)
+
+   Some requests to the server that were not necessary when installing the app from
+   scratch have been removed.
+
+   https://github.com/owncloud/android/issues/4213
+   https://github.com/owncloud/android/pull/4385
+
+* Bugfix - "Clear data" button enabled in the app settings in device settings: [#4309](https://github.com/owncloud/android/issues/4309)
+
+   The "Clear data" button has been enabled to delete the application data from the
+   app settings in the device settings. Shared preferences, temporary files,
+   accounts and the local database will be cleared when the button is pressed.
+
+   https://github.com/owncloud/android/issues/4309
+   https://github.com/owncloud/android/pull/4350
+
+* Bugfix - Video streaming in spaces: [#4328](https://github.com/owncloud/android/issues/4328)
+
+   The URI formed to perform video streaming in spaces has been adapted to oCIS
+   accounts so that it takes into account the space where the file is located.
+
+   https://github.com/owncloud/android/issues/4328
+   https://github.com/owncloud/android/pull/4394
+
+* Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
+
+   Temporary files related to a failed upload are deleted after retrying it and
+   being successfully completed.
+
+   https://github.com/owncloud/android/issues/4335
+   https://github.com/owncloud/android/pull/4341
+
+* Bugfix - Resolve incorrect truncation of long display names in Manage Accounts: [#4351](https://github.com/owncloud/android/issues/4351)
+
+   Resolved the bug where long display names were truncated incorrectly in the
+   Manage Accounts view. Now, display names are properly truncated in the middle
+   with ellipsis (...) to maintain readability.
+
+   https://github.com/owncloud/android/issues/4351
+   https://github.com/owncloud/android/pull/4380
+
+* Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
+
+   The minimum Android version will be Android 7.0 Nougat (API 24). The application
+   will no longer support previous versions.
+
+   https://github.com/owncloud/android/issues/4230
+   https://github.com/owncloud/android/pull/4299
+
+* Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
+
+   Automatic account discovery is done at login. Removed the refresh account button
+   in the Manage Accounts view.
+
+   https://github.com/owncloud/android/issues/4301
+   https://github.com/owncloud/android/pull/4325
+
+* Change - Add new prefixes in commit messages of 3rd party contributors: [#4346](https://github.com/owncloud/android/pull/4346)
+
+   Dependaboy and Calens' commit messages with prefixes that fits 'Conventional
+   Commits'
+
+   https://github.com/owncloud/android/pull/4346
+
+* Change - Kotlinize PreviewTextFragment: [#4356](https://github.com/owncloud/android/issues/4356)
+
+   PreviewTextFragment class has been moved from Java to Kotlin.
+
+   https://github.com/owncloud/android/issues/4356
+   https://github.com/owncloud/android/pull/4376
+
+* Enhancement - Add search functionality to spaces list: [#3865](https://github.com/owncloud/android/issues/3865)
+
+   Search functionality was added in spaces list when you are trying to filter
+   them.
+
+   https://github.com/owncloud/android/issues/3865
+   https://github.com/owncloud/android/pull/4393
+
+* Enhancement - Correct "Local only" option in remove dialog: [#3936](https://github.com/owncloud/android/issues/3936)
+
+   "Local only" option in remove dialog will only be shown if checking selected
+   files and folders recursively, at least one file is available locally.
+
+   https://github.com/owncloud/android/issues/3936
+   https://github.com/owncloud/android/pull/4289
+
+* Enhancement - Show app provider icon from endpoint: [#4105](https://github.com/owncloud/android/issues/4105)
+
+   App provider icon fetched from the server has been added to the "Open in (web)"
+   option on the bottom sheet that appears when clicking the 3-dots button of a
+   file.
+
+   https://github.com/owncloud/android/issues/4105
+   https://github.com/owncloud/android/pull/4391
+
+* Enhancement - Improvements in Manage Accounts view: [#4148](https://github.com/owncloud/android/issues/4148)
+
+   Removed the key icon and avoid overlap account name with icons in Manage
+   Accounts. Redirect to login when snackbar appears in authentication failure.
+
+   https://github.com/owncloud/android/issues/4148
+   https://github.com/owncloud/android/pull/4330
+
+* Enhancement - New setting for manual removal of local storage: [#4174](https://github.com/owncloud/android/issues/4174)
+
+   A new icon has been added in Manage Accounts view to delete manually local
+   files.
+
+   https://github.com/owncloud/android/issues/4174
+   https://github.com/owncloud/android/pull/4334
+
+* Enhancement - New setting for automatic removal of local files: [#4175](https://github.com/owncloud/android/issues/4175)
+
+   A new setting has been created to delete automatically downloaded files, when
+   the time since their last usage exceeds the selected time in the setting.
+
+   https://github.com/owncloud/android/issues/4175
+   https://github.com/owncloud/android/pull/4320
+
+* Enhancement - Avoid unnecessary requests when an av. offline folder is refreshed: [#4197](https://github.com/owncloud/android/issues/4197)
+
+   The available offline folders will only be refreshed when their eTag from the
+   server and the corresponding one of the local database are different, avoiding
+   sending unnecessary request.
+
+   https://github.com/owncloud/android/issues/4197
+   https://github.com/owncloud/android/pull/4354
+
+* Enhancement - Unit tests for repository classes - Part 1: [#4232](https://github.com/owncloud/android/issues/4232)
+
+   Unit tests for OCAppRegistryRepository, OCAuthenticationRepository and
+   OCCapabilityRepository classes have been completed.
+
+   https://github.com/owncloud/android/issues/4232
+   https://github.com/owncloud/android/pull/4281
+
+* Enhancement - Add a warning in http connections: [#4284](https://github.com/owncloud/android/issues/4284)
+
+   Warning dialog has been added in the login screen when you are trying to connect
+   to a http server.
+
+   https://github.com/owncloud/android/issues/4284
+   https://github.com/owncloud/android/pull/4345
+
+* Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
+
+   Name conflicts dialog appearance was changed to look Android-alike and more
+   similar to other dialogs in the app.
+
+   https://github.com/owncloud/android/issues/4303
+   https://github.com/owncloud/android/pull/4336
+
+* Enhancement - Password generator for public links in oCIS: [#4308](https://github.com/owncloud/android/issues/4308)
+
+   A new password generator has been added to the public links creation view in
+   oCIS accounts, which creates passwords that fulfill all the policies coming from
+   server in a cryptographically secure way.
+
+   https://github.com/owncloud/android/issues/4308
+   https://github.com/owncloud/android/pull/4349
+
+* Enhancement - Improvements in remove dialog alert: [#4342](https://github.com/owncloud/android/issues/4342)
+
+   A custom dialog alert has been added when the file that is going to be deleted
+   has thumbnail. Also, when removing files in multiple selection, the number of
+   elements that are going to be removed is displayed in the dialog.
+
+   https://github.com/owncloud/android/issues/4342
+   https://github.com/owncloud/android/pull/4348
+
+* Enhancement - Content description in UI elements to improve accessibility: [#4360](https://github.com/owncloud/android/issues/4360)
+
+   A description of the meaning or action associated with some UI elements has been
+   included as alternative text to make the application more accessible. Views
+   improved: toolbar, file list, spaces list, share, drawer menu, manage accounts
+   and image preview.
+
+   https://github.com/owncloud/android/issues/4360
+   https://github.com/owncloud/android/pull/4387
+
+* Enhancement - Added contentDescription attribute in the previewed image: [#4360](https://github.com/owncloud/android/issues/4360)
+
+   A contentDescription attribute has been added to previewed image to make the
+   application more accessible.
+
+   https://github.com/owncloud/android/issues/4360
+   https://github.com/owncloud/android/pull/4388
+
 # Changelog for ownCloud Android Client [4.2.2] (2024-05-30)
 
 The following sections list the changes in ownCloud Android Client 4.2.2 relevant to
