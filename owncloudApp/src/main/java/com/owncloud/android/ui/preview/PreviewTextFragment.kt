@@ -41,7 +41,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.owncloud.android.R
 import com.owncloud.android.databinding.PreviewTextFragmentBinding
-import com.owncloud.android.databinding.TopProgressBarBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.filterMenuOptions
@@ -50,7 +49,6 @@ import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
 import com.owncloud.android.presentation.previews.PreviewTextViewModel
-import com.owncloud.android.ui.controller.TransferProgressController
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.LoadingDialog
 import com.owncloud.android.ui.fragment.FileFragment
@@ -66,14 +64,12 @@ import java.util.Scanner
 
 class PreviewTextFragment : FileFragment() {
     private var account: Account? = null
-    private lateinit var progressController: TransferProgressController
     private lateinit var textLoadTask: TextLoadAsyncTask
 
     private val previewTextViewModel by viewModel<PreviewTextViewModel>()
     private val fileOperationsViewModel by viewModel<FileOperationsViewModel>()
 
     private lateinit var binding: PreviewTextFragmentBinding
-    private lateinit var bindingTopProgress: TopProgressBarBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,7 +80,6 @@ class PreviewTextFragment : FileFragment() {
         Timber.v("onCreateView")
 
         binding = PreviewTextFragmentBinding.inflate(inflater, container, false)
-        bindingTopProgress = TopProgressBarBinding.bind(binding.root)
         return binding.root.apply {
             filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
         }
@@ -112,12 +107,6 @@ class PreviewTextFragment : FileFragment() {
         setHasOptionsMenu(true)
         isOpen = true
         currentFilePreviewing = file
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        progressController = TransferProgressController(mContainerActivity)
-        progressController.setProgressBar(bindingTopProgress.syncProgressBar)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -212,11 +201,11 @@ class PreviewTextFragment : FileFragment() {
     }
 
     override fun updateViewForSyncInProgress() {
-        progressController.showProgressBar()
+        // Nothing to do here, sync is not shown in previews
     }
 
     override fun updateViewForSyncOff() {
-        progressController.hideProgressBar()
+        // Nothing to do here, sync is not shown in previews
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
