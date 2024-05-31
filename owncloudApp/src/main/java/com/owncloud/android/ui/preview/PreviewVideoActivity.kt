@@ -7,8 +7,9 @@
  * @author Christian Schabesberger
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -155,30 +156,16 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
 
     override fun onStart() {
         super.onStart()
-        if (Build.VERSION.SDK_INT > 23) {
-            initializePlayer()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (Build.VERSION.SDK_INT <= 23) {
-            initializePlayer()
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if (Build.VERSION.SDK_INT <= 23) {
-            releasePlayer()
-        }
+        initializePlayer()
+        isOpen = true
+        currentFilePreviewing = file
     }
 
     override fun onStop() {
         super.onStop()
-        if (Build.VERSION.SDK_INT > 23) {
-            releasePlayer()
-        }
+        releasePlayer()
+        isOpen = false
+        currentFilePreviewing = null
     }
 
     private fun startObservingFileOperations() {
@@ -425,6 +412,8 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
     companion object {
         const val EXTRA_FILE = "FILE"
         const val EXTRA_ACCOUNT = "ACCOUNT"
+        var isOpen: Boolean = false
+        var currentFilePreviewing: OCFile? = null
 
         /**
          * Key to receive a flag signaling if the video should be started immediately

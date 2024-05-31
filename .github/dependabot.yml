@@ -11,7 +11,11 @@ updates:
       interval: "daily"
     labels:
       - "Dependencies"
+    commit-message:
+      prefix: "feat"
   - package-ecosystem: "github-actions"
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    commit-message:
+      prefix: "feat"

@@ -27,6 +27,7 @@ Add any other context or screenshots about the feature request here.
 - [ ] Development tasks
   - [ ] Implement whatever
   - [ ] ...
+  - [ ] Implement unit tests (if needed)
 - [ ] Code review and apply changes requested
 - [ ] Design test plan
 - [ ] QA

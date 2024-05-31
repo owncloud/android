@@ -141,7 +141,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private String mUploadPath;
     private OCFile mFile;
     private SortOptionsView mSortOptionsView;
-    private SearchView mSearchView;
 
     private View mEmptyListView;
     private ImageView mEmptyListImage;
@@ -178,6 +177,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private boolean showHiddenFiles;
     private OCSharedPreferencesProvider sharedPreferencesProvider;
     private OCSpace personalSpace;
+
 
     Pattern pattern = Pattern.compile("[/\\\\]");
 
@@ -236,7 +236,6 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     updateToolbar(getString(R.string.uploader_top_message));
                 }
             } else { // OCIS Server
-
                 if (haveMultiAccount) { // Multi account
                     mListView = findViewById(android.R.id.list);
                     fragmentContainer = findViewById(R.id.fragment_container);
@@ -753,12 +752,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-
-        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView mSearchView = (SearchView) menuItem.getActionView();
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
         mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
         mSearchView.setOnQueryTextListener(this);
-
         menu.removeItem(menu.findItem(R.id.action_share_current_folder).getItemId());
 
         return true;

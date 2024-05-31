@@ -353,12 +353,7 @@
   <string name="share_privilege_can_edit_delete">desaniciar</string>
   <string name="edit_share_unshare">Dexar de compartir</string>
   <string name="edit_share_done">fechu</string>
-    <string name="manage_space_title">Alministrar espaciu</string>
-  <string name="manage_space_description">Axustes, bases de datos y sirvidor de certificaos de los datos %1$s esborraránse dafechu. \n\nLos archivos descargados caltendrase intactos.\n\nEsti procesu puede tardar dalgún tiempu.</string>
-  <string name="manage_space_clear_data">Llimpiar datos</string>
-  <string name="manage_space_error">Dalgunos ficheros nun pudieron esborrase.</string>
   <string name="local_file_not_found_toast">El ficheru nun s\'atopó nel sistema de ficheros llocal</string>
-  <string name="confirmation_remove_files_alert">¿De que quies desaniciar los elementos seleicionaos?</string>
   <string name="confirmation_remove_folders_alert">¿De xuru que quies desaniciar los elementos seleicionaos y los sos conteníos?</string>
   <plurals name="items_selected_count">
     <item quantity="one">%d escoyíu</item>

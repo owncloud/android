@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,6 +25,7 @@ package com.owncloud.android.usecases.transfers.uploads
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.extensions.getWorkInfoByTags
 import com.owncloud.android.workers.UploadFileFromFileSystemWorker
@@ -56,7 +58,7 @@ class RetryUploadFromSystemUseCase(
                     accountName = uploadToRetry.accountName,
                     localPath = uploadToRetry.localPath,
                     lastModifiedInSeconds = (uploadToRetry.transferEndTimestamp?.div(1000)).toString(),
-                    behavior = uploadToRetry.localBehaviour.name,
+                    behavior = UploadBehavior.MOVE.name,
                     uploadPath = uploadToRetry.remotePath,
                     uploadIdInStorageManager = params.uploadIdInStorageManager
                 )

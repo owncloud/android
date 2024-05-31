@@ -1,0 +1,7 @@
+Bugfix: Resolve incorrect truncation of long display names in Manage Accounts
+
+Resolved the bug where long display names were truncated incorrectly in the Manage Accounts view.
+Now, display names are properly truncated in the middle with ellipsis (...) to maintain readability.
+
+https://github.com/owncloud/android/issues/4351
+https://github.com/owncloud/android/pull/4380

@@ -7,6 +7,7 @@
  * @author Abel García de Prada
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -166,6 +167,8 @@ class PreviewImageFragment : FileFragment() {
         file?.let {
             loadAndShowImage()
         }
+        isOpen = true
+        currentFilePreviewing = file
     }
 
     /**
@@ -202,35 +205,43 @@ class PreviewImageFragment : FileFragment() {
                 mContainerActivity.fileOperationsHelper.showShareFile(file)
                 true
             }
+
             R.id.action_open_file_with -> {
                 openFile()
                 true
             }
+
             R.id.action_remove_file -> {
                 val dialog = RemoveFilesDialogFragment.newInstance(file)
                 dialog.show(requireFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION)
                 true
             }
+
             R.id.action_see_details -> {
                 seeDetails()
                 true
             }
+
             R.id.action_send_file -> {
                 requireActivity().sendDownloadedFilesByShareSheet(listOf(file))
                 true
             }
+
             R.id.action_sync_file -> {
                 mContainerActivity.fileOperationsHelper.syncFile(file)
                 true
             }
+
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
                 true
             }
+
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -245,6 +256,8 @@ class PreviewImageFragment : FileFragment() {
         // {@link FragmentStatePagerAdapter} when the fragment in swiped further than the
         // valid offscreen distance, and onStop() is never called before than that
         super.onDestroy()
+        isOpen = false
+        currentFilePreviewing = null
     }
 
     /**
@@ -330,6 +343,8 @@ class PreviewImageFragment : FileFragment() {
         private const val ARG_FILE = "FILE"
         private const val ARG_ACCOUNT = "ACCOUNT"
         private const val ARG_IGNORE_FIRST = "IGNORE_FIRST"
+        var isOpen: Boolean = false
+        var currentFilePreviewing: OCFile? = null
 
         /**
          * Public factory method to create a new fragment that previews an image.

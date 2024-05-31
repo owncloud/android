@@ -477,12 +477,7 @@
   <string name="edit_share_done">Erledigt</string>
   <string name="action_upload_retry">Wiederholen</string>
   <string name="action_upload_clear">Leeren</string>
-  <string name="manage_space_title">Speicher verwalten</string>
-  <string name="manage_space_description">Einstellungen, Datenbank und Server-Zertifikate von %1$s\'s Daten werden dauerhaft gelöscht.\n\nHerunter geladene Dateien bleiben unangetastet.\n\nDieser Vorgang kann eine Zeit dauern.</string>
-  <string name="manage_space_clear_data">Daten löschen</string>
-  <string name="manage_space_error">Einige Dateien konnten nicht gelöscht werden.</string>
   <string name="local_file_not_found_toast">Die Datei wurde im lokalen Dateisystem nicht gefunden</string>
-  <string name="confirmation_remove_files_alert">Möchtest du die ausgewählten Elemente wirklich löschen?</string>
   <string name="confirmation_remove_folders_alert">Möchtest du die ausgewählten Elemente und dessen Inhalt wirklich löschen?</string>
   <string name="failed_upload_quota_exceeded_text">Nicht genügend Speicherplatz im Konto verfügbar</string>
   <string name="auth_forbidden">Authentifizierung verweigert</string>

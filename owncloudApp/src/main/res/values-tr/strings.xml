@@ -54,6 +54,9 @@
   <string name="prefs_touches_with_other_visible_windows">Diğer görünür pencerelerle birlikte dokunma</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Başka bir görünür pencere tarafından gizlendiğinde dokunmalara izin ver. Uygulamaları hafif filtrelemek için etkinleştir.</string>
   <string name="confirmation_touches_with_other_windows_title">Bu özelliği etkinleştirmek istediğinizden emin misiniz?</string>
+  <string name="confirmation_touches_with_other_windows_message">Bu özelliği kendi riskinizi alarak kullanın. Kötü niyetli bir uygulama, sizi başka görünümler kullanarak bilmeden bazı eylemler yapmaya, kandırmaya çalışabilir.</string>
+  <string name="prefs_subsection_picture_uploads_summary">Otomatik olarak yüklenen resimlerin konumunu ve davranışını yönetin</string>
+  <string name="prefs_subsection_video_uploads_summary">Otomatik olarak yüklenen videoların konumunu ve davranışını yönetin</string>
   <string name="prefs_camera_picture_upload">Fotoğraf yüklemeleri</string>
   <string name="prefs_camera_picture_upload_summary">Kamera ile çekilen fotoğrafları otomatik olarak karşıya yükle</string>
   <string name="prefs_camera_picture_upload_path_title">Resim yükleme yolu</string>
@@ -105,7 +108,6 @@
   <string name="recommend_subject">%1$s uygulamasını akıllı telefonunda dene!</string>
   <string name="recommend_text">Seni, akıllı telefonunda %1$s kullanmaya davet ediyorum!\nBuradan indirebilirsin: %2$s</string>
   <string name="error_reason">çünkü</string>
-  <string name="auth_failure_snackbar">Kimlik doğrulaması başarısız oldu.</string>
   <string name="auth_failure_snackbar_action">Hesabı değiştir</string>
   <string name="auth_oauth_failure_snackbar_action">Oturum aç</string>
   <string name="auth_check_server">Sunucuyu denetle</string>
@@ -458,6 +460,7 @@
   <string name="share_via_link_expiration_date_label">Bitiş</string>
   <string name="share_via_link_password_label">Parola</string>
   <string name="share_via_link_password_title">Güvenli</string>
+  <string name="share_via_link_copy_password_button">Kopyala</string>
   <string name="share_via_link_edit_permission_read_only_label">İndir / Görüntüle</string>
   <string name="share_via_link_edit_permission_upload_only_label">Sadece karşı tarafa yükle (Dosya bırak)</string>
   <string name="share_get_public_link_button">Bağlantıyı al</string>
@@ -477,12 +480,7 @@
   <string name="edit_share_done">bitti</string>
   <string name="action_upload_retry">Yeniden Dene</string>
   <string name="action_upload_clear">Temizle</string>
-  <string name="manage_space_title">Alanı ayarla</string>
-  <string name="manage_space_description">%1$s sunucusundan ayarlar, veritabanı ve sunucu sertifikaları kalıcı olarak silinecektir. \n\nİndirilen dosyalara dokunulmayacaktır.\n\nBu işlem biraz zaman alabilir.</string>
-  <string name="manage_space_clear_data">Verileri temizle</string>
-  <string name="manage_space_error">Bazı dosyalar silinemedi</string>
   <string name="local_file_not_found_toast">Dosya yerel dosya sisteminde bulunamadı</string>
-  <string name="confirmation_remove_files_alert">Seçili nesneleri silmek istediğinize emin misiniz?</string>
   <string name="confirmation_remove_folders_alert">Seçili nesneleri ve içeriklerini silmek istediğinize emin misiniz?</string>
   <string name="failed_upload_quota_exceeded_text">Hesapta yeterli yer yok</string>
   <string name="auth_forbidden">Yasak kimlik doğrulaması</string>
@@ -562,4 +560,7 @@
   <string name="apply_to_all_conflicts">Tüm %1$s çakışma için uygula</string>
   <!--DeepLinks-->
   <string name="fab_refresh_text">Yenile</string>
+  <string name="prefs_delete_local_files_entries_never">Asla</string>
+  <string name="insecure_http_url_title_dialog">Güvensiz HTTP URL</string>
+  <string name="insecure_http_url_continue_button">Devam et</string>
 </resources>

@@ -64,8 +64,6 @@ class AvatarUtils : KoinComponent {
                 displayRadius = displayRadius
             )
             withContext(Dispatchers.Main) {
-                // Not just accessibility support, used to know what account is bound to each imageView
-                imageView.contentDescription = account.name
                 if (drawable != null) {
                     imageView.setImageDrawable(drawable)
                 } else {

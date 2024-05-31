@@ -437,12 +437,7 @@ Te rog ia legătura cu administratorul</string>
   <string name="edit_share_done">terminat</string>
   <string name="action_upload_retry">Reîncearcă</string>
   <string name="action_upload_clear">Curăță</string>
-  <string name="manage_space_title">Gestionează spațiul</string>
-  <string name="manage_space_description">Configurările, baza de date și certificatele serverului de la informațiile %1$s vor fi șterse definitiv.\n\nFișierele descărcate vor fi păstrate neatinse.\n\nAcest process poate dura o vreme.</string>
-  <string name="manage_space_clear_data">Curăță informațiile</string>
-  <string name="manage_space_error">Unele fișiere nu pot fi șterse.</string>
   <string name="local_file_not_found_toast">Acest fișier nu a fost găsit în sistemul de fișiere local</string>
-  <string name="confirmation_remove_files_alert">Chiar vrei să ștergi elementele selectate ?</string>
   <string name="confirmation_remove_folders_alert">Chiar vrei să ștergi elementele selectate și conținutul lor ?</string>
   <string name="failed_upload_quota_exceeded_text">Spațiu insufficient in cont</string>
   <string name="auth_forbidden">Autentificare interzisă</string>

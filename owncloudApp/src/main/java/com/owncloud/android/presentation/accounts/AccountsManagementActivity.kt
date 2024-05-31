@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Javier Rodríguez Pérez
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,29 +26,26 @@ import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
 import android.accounts.AccountManagerFuture
 import android.accounts.OperationCanceledException
-import android.content.ContentResolver
 import android.content.Intent
-import android.content.SyncRequest
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.MainApp.Companion.accountType
-import com.owncloud.android.MainApp.Companion.authority
 import com.owncloud.android.MainApp.Companion.initDependencyInjection
 import com.owncloud.android.R
+import com.owncloud.android.extensions.collectLatestLifecycleFlow
+import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.presentation.accounts.RemoveAccountDialogFragment.Companion.newInstance
-import com.owncloud.android.presentation.authentication.ACTION_UPDATE_TOKEN
 import com.owncloud.android.presentation.authentication.AccountUtils
-import com.owncloud.android.presentation.authentication.EXTRA_ACTION
-import com.owncloud.android.presentation.authentication.LoginActivity
+import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT as EXTRA_ACCOUNT_LOGIN_ACTIVITY
 
 class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
 
@@ -79,6 +77,8 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
             homeButtonEnabled = true,
             displayShowTitleEnabled = true
         )
+
+        subscribeToViewModels()
 
     }
 
@@ -177,35 +177,6 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
         dialog.show(supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
     }
 
-    override fun changePasswordOfAccount(account: Account) {
-        val updateAccountCredentials = Intent(this, LoginActivity::class.java)
-        updateAccountCredentials.putExtra(EXTRA_ACCOUNT_LOGIN_ACTIVITY, account)
-        updateAccountCredentials.putExtra(
-            EXTRA_ACTION,
-            ACTION_UPDATE_TOKEN
-        )
-        startActivity(updateAccountCredentials)
-    }
-
-    override fun refreshAccount(account: Account) {
-        Timber.d("Got to start sync")
-        Timber.d("Requesting sync for " + account.name + " at " + authority + " with new API")
-        val builder = SyncRequest.Builder()
-        builder.setSyncAdapter(account, authority)
-        builder.setExpedited(true)
-        builder.setManual(true)
-        builder.syncOnce()
-
-        // Fix bug in Android Lollipop when you click on refresh the whole account
-        val extras = Bundle()
-        builder.setExtras(extras)
-
-        val request = builder.build()
-        ContentResolver.requestSync(request)
-
-        showSnackMessage(getString(R.string.synchronizing_account))
-    }
-
     override fun createAccount() {
         val am = AccountManager.get(applicationContext)
         am.addAccount(
@@ -230,6 +201,39 @@ class AccountsManagementActivity : FileActivity(), AccountsManagementAdapter.Acc
             }, handler
         )
 
+    }
+
+    override fun cleanAccountLocalStorage(account: Account) {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(getString(R.string.clean_data_account_title))
+            .setIcon(R.drawable.ic_warning)
+            .setMessage(getString(R.string.clean_data_account_message))
+            .setPositiveButton(getString(R.string.clean_data_account_button_yes)) { dialog, _ ->
+                accountsManagementViewModel.cleanAccountLocalStorage(account.name)
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.drawer_close) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+        dialog.show()
+    }
+
+    private fun subscribeToViewModels() {
+        collectLatestLifecycleFlow(accountsManagementViewModel.cleanAccountLocalStorageFlow) { event ->
+            event?.peekContent()?.let { uiResult ->
+                when (uiResult) {
+                    is UIResult.Loading -> showLoadingDialog(R.string.common_loading)
+                    is UIResult.Success -> dismissLoadingDialog()
+                    is UIResult.Error -> {
+                        dismissLoadingDialog()
+                        showErrorInSnackbar(R.string.common_error_unknown, uiResult.error)
+                        Timber.e(uiResult.error)
+                    }
+
+                }
+            }
+        }
     }
 
     override fun run(future: AccountManagerFuture<Boolean>) {

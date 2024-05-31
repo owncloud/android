@@ -31,6 +31,7 @@
             android:layout_marginHorizontal="@dimen/standard_half_margin"
             android:padding="@dimen/standard_half_padding"
             android:src="@drawable/ic_drawer_icon"
+            android:contentDescription="@string/content_description_menu"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -61,6 +62,7 @@
             android:paddingHorizontal="@dimen/standard_half_padding"
             android:textColor="@color/white"
             android:textSize="@dimen/toolbar_title_text_size"
+            android:contentDescription="@string/content_description_search"
             app:drawableEndCompat="@drawable/ic_search"
             app:drawableTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -77,6 +79,7 @@
             android:padding="@dimen/standard_half_padding"
             android:src="@drawable/ic_account_circle"
             android:tint="@color/primary"
+            android:contentDescription="@string/content_description_manage_accounts"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -89,5 +92,6 @@
         android:background="?attr/colorPrimary"
         android:theme="@style/ownCloud.Appbar"
         android:visibility="gone"
+        app:navigationContentDescription="@string/common_back"
         app:popupTheme="?attr/actionBarPopupTheme" />
 </com.google.android.material.appbar.AppBarLayout>

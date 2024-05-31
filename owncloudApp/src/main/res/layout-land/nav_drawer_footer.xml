@@ -29,6 +29,7 @@
         android:layout_height="24dp"
         android:visibility="gone"
         android:src="@drawable/drawer_logo"
+        android:contentDescription="@string/content_description_logo"
         app:layout_constraintBottom_toTopOf="@id/account_quota_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

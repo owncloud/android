@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.data.appregistry
+package com.owncloud.android.data.appregistry.repository
 
 import com.owncloud.android.data.appregistry.datasources.LocalAppRegistryDataSource
 import com.owncloud.android.data.appregistry.datasources.RemoteAppRegistryDataSource
@@ -34,8 +34,8 @@ class OCAppRegistryRepository(
     private val localCapabilitiesDataSource: LocalCapabilitiesDataSource,
 ) : AppRegistryRepository {
     override fun refreshAppRegistryForAccount(accountName: String) {
-        val capabilities =  localCapabilitiesDataSource.getCapabilitiesForAccount(accountName)
-        val appUrl =  capabilities?.filesAppProviders?.appsUrl?.substring(1)
+        val capabilities = localCapabilitiesDataSource.getCapabilitiesForAccount(accountName)
+        val appUrl = capabilities?.filesAppProviders?.appsUrl?.substring(1)
         remoteAppRegistryDataSource.getAppRegistryForAccount(accountName, appUrl).also {
             localAppRegistryDataSource.saveAppRegistryForAccount(it)
         }

@@ -128,7 +128,7 @@
     <string name="recommend_text">"I want to invite you to use %1$s on your smartphone!\nDownload here: %2$s"</string>
 
     <string name="error_reason">because</string>
-    <string name="auth_failure_snackbar">Authentication failed</string>
+    <string name="auth_failure_snackbar">Authentication failed. Sign in again to regain access.</string>
     <string name="server_not_supported">Your server version is lower than 10 so it is not supported, please upgrade your server to a newer version.</string>
     <string name="auth_failure_snackbar_action">Change account</string>
     <string name="auth_oauth_failure">The access token has expired or become invalid. Sign in again to regain access.</string>
@@ -590,6 +590,8 @@
     <string name="share_via_link_expiration_date_label">Expiration</string>
     <string name="share_via_link_password_label">Password</string>
     <string name="share_via_link_password_title">Secured</string>
+    <string name="share_via_link_generate_password_button">Generate</string>
+    <string name="share_via_link_copy_password_button">Copy</string>
     <string name="share_via_link_edit_permission_read_only_label">Download / View</string>
     <string name="share_via_link_edit_permission_read_and_write_label">Download/View/Upload</string>
     <string name="share_via_link_edit_permission_upload_only_label">Upload Only (File Drop)</string>
@@ -617,13 +619,8 @@
     <string name="action_upload_retry">Retry</string>
     <string name="action_upload_clear">Clear</string>
 
-    <string name="manage_space_title">Manage space</string>
-    <string name="manage_space_description">This feature is not currently available. Next versions will include new features for automatic and manual removal of storage. Stay tuned!</string>
-    <string name="manage_space_clear_data">Clear data</string>
-    <string name="manage_space_error">Some files could not be deleted.</string>
-
     <string name="local_file_not_found_toast">The file was not found in the local file system</string>
-    <string name="confirmation_remove_files_alert">Do you really want to remove the selected items?</string>
+    <string name="confirmation_remove_files_alert">Do you really want to remove these %s items?</string>
     <string name="confirmation_remove_folders_alert">Do you really want to remove the selected items and their contents?</string>
     <string name="failed_upload_quota_exceeded_text">Not enough space in the account</string>
     <string name="auth_forbidden">Forbidden authentication</string>
@@ -729,6 +726,42 @@
 
     <string name="release_notes_4_2_2_title_downloads_content_length">Fixes in downloads</string>
     <string name="release_notes_4_2_2_subtitle_downloads_content_length">Downloads work properly again for every type of file</string>
+    <string name="release_notes_4_3_0_title_1">New setting to remove automatically downloaded files that were not used for a certain time</string>
+    <string name="release_notes_4_3_0_subtitle_1">A new setting has been added in "Advanced" section to delete automatically downloaded files, when the time since their last usage exceeds the selected time in the setting</string>
+    <string name="release_notes_4_3_0_title_2">Automatic discovery of the account in login</string>
+    <string name="release_notes_4_3_0_subtitle_2">Removed the account refresh button in the Manage Accounts view, as automatic account discovery is done at login</string>
+    <string name="release_notes_4_3_0_title_3">Improvements in Manage Accounts view</string>
+    <string name="release_notes_4_3_0_subtitle_3">Removed the key icon, avoid overlap account name with icons and redirect to login when the snackbar appears in authentication failure</string>
+    <string name="release_notes_4_3_0_title_4">Name conflicts dialog more Android-alike</string>
+    <string name="release_notes_4_3_0_subtitle_4">Name conflicts dialog appearance was changed to look Android-alike and more similar to other dialogs in the app</string>
+    <string name="release_notes_4_3_0_title_5">Lens icon in folder picker</string>
+    <string name="release_notes_4_3_0_subtitle_5">The lens icon in the toolbar was removed when listing spaces in folder picker</string>
+    <string name="release_notes_4_3_0_title_6">Add warning in http connections</string>
+    <string name="release_notes_4_3_0_subtitle_6">Added a warning dialog in the login view when it is a http connection</string>
+    <string name="release_notes_4_3_0_title_7">Correct \"Local only\" option in remove dialog</string>
+    <string name="release_notes_4_3_0_subtitle_7">\"Local only\" option in remove dialog will only be shown if checking selected files and folders recursively, at least one file is available locally</string>
+    <string name="release_notes_4_3_0_title_retried_successful_uploads_delete_temporary_folder">Retried successful uploads are cleaned up from the temporary folder</string>
+    <string name="release_notes_4_3_0_subtitle_retried_successful_uploads_delete_temporary_folder">Temporary files related to an upload are deleted after the retried successful uploads is finished</string>
+    <string name="release_notes_4_3_0_title_manual_removal_local_storage">New setting to removal manually local storage</string>
+    <string name="release_notes_4_3_0_subtitle_manual_removal_local_storage">A new icon has been added in Manage Accounts view to delete manually local and temporary files</string>
+    <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">"Clear data" button enabled in the app settings in device settings</string>
+    <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">The "Clear data" button has been enabled to delete the application data from the app settings in the device settings. The application will perform a hard reset if this button is pressed</string>
+    <string name="release_notes_4_3_0_title_improvements_remove_dialog">Improvements in remove dialog</string>
+    <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">Added a custom dialog when the file that is going to be deleted has thumbnail and added the number of files that are going to be deleted in a multiple selection</string>
+    <string name="release_notes_4_3_0_title_password_generator">Password generator for public links</string>
+    <string name="release_notes_4_3_0_subtitle_password_generator">Passwords for public links can be now generated via a new generator in Infinite Scale accounts</string>
+    <string name="release_notes_4_3_0_title_display_name_truncation">Resolved the bug where long display names were truncated incorrectly</string>
+    <string name="release_notes_4_3_0_subtitle_display_name_truncation">Display names are now properly truncated in the middle with ellipsis (…) to maintain readability</string>
+    <string name="release_notes_4_3_0_title_improve_available_offline_performance">Improvements in available offline performance</string>
+    <string name="release_notes_4_3_0_subtitle_improve_available_offline_performance">Files contained in an available offline folder will be refreshed only if they have been modified</string>
+    <string name="release_notes_4_3_0_title_search_functionality_in_spaces_list">Search functionality in spaces list</string>
+    <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">Search functionality has been added in spaces list when you are trying to filter them</string>
+    <string name="release_notes_4_3_0_title_video_streaming_spaces">Video streaming in spaces</string>
+    <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Video files located in spaces can now be played in streaming correctly</string>
+    <string name="release_notes_4_3_0_title_accessibility_improvements">Improvements in accessibility</string>
+    <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Some improvements to make the application more accessible</string>
+    <string name="release_notes_4_3_0_title_show_app_provider_icon_from_endpoint">New icons in "Open in (web)" option on the operations menu</string>
+    <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">More appropriate icons have been added to the "Open in (web)" option on the operations menu</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
@@ -766,5 +799,40 @@
     <string name="password_policy_intro">Please enter a password that meets the following criteria: \n</string>
     <string name="password_policy_min_special_character">At least %1$d of the special characters: \"%2$s\"</string>
     <string name="password_policy_error_password_banned">Unfortunately, your password is commonly used. Please, pick a harder-to-guess password for your safety.</string>
+
+    <string name="prefs_delete_local_files_entries_never">Never</string>
+    <string name="prefs_delete_local_files_entries_1hour">1 hour</string>
+    <string name="prefs_delete_local_files_entries_12hours">12 hours</string>
+    <string name="prefs_delete_local_files_entries_1day">1 day</string>
+    <string name="prefs_delete_local_files_entries_30days">30 days</string>
+    <string name="prefs_delete_local_files">Delete local copies</string>
+    <string name="prefs_delete_local_files_summary">Remove automatically downloaded files that are not available offline, when the time since their last usage exceeds the selected time.\nSelected time: %1$s</string>
+
+    <string name="insecure_http_url_title_dialog">Insecure HTTP URL</string>
+    <string name="insecure_http_url_message_dialog">The URL you provided uses HTTP rather than the encrypted HTTPS protocol. If you continue, your communication will not be encrypted.</string>
+    <string name="insecure_http_url_continue_button">Continue</string>
+
+    <string name="clean_data_account_message">All downloaded files that are not available offline will be cleaned up for this account</string>
+    <string name="clean_data_account_title">Remove local storage</string>
+    <string name="clean_data_account_button_yes">Clean data</string>
+
+    <string name="content_description_menu">Menu</string>
+    <string name="content_description_manage_accounts">Manage accounts</string>
+    <string name="content_description_search">Search</string>
+    <string name="content_description_type_view">Type of view</string>
+    <string name="content_description_image_previewed">Image previewed</string>
+    <string name="content_description_add_public_link">Add public link</string>
+    <string name="content_description_get_private_link">Get private link</string>
+    <string name="content_description_get_public_link">Get public link</string>
+    <string name="content_description_delete_public_link">Delete public link</string>
+    <string name="content_description_get_edit_public_link">Edit public link</string>
+    <string name="content_description_remove_account">Remove account</string>
+    <string name="content_description_add_new_content">Add new content</string>
+    <string name="content_description_clean_account_storage">Clean account storage</string>
+    <string name="content_description_logo">Logo</string>
+    <string name="content_description_add_share">Add share</string>
+    <string name="content_description_edit_share">Edit share</string>
+    <string name="content_description_delete_share">Delete share</string>
+    <string name="content_description_file_operations">%1$s operations</string>
 
 </resources>

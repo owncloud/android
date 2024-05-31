@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,10 +23,11 @@ package com.owncloud.android.data.files.repository
 
 import com.owncloud.android.data.files.datasources.LocalFileDataSource
 import com.owncloud.android.data.files.datasources.RemoteFileDataSource
-import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.providers.LocalStorageProvider
+import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.domain.exceptions.FileNotFoundException
 import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
+import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.testutil.OC_ACCOUNT_NAME
 import com.owncloud.android.testutil.OC_FILE
 import com.owncloud.android.testutil.OC_FILE_WITH_SYNC_INFO_AND_SPACE
@@ -48,7 +51,8 @@ class OCFileRepositoryTest {
     private val localFileDataSource = mockk<LocalFileDataSource>(relaxed = true)
     private val localSpacesDataSource = mockk<LocalSpacesDataSource>(relaxed = true)
     private val localStorageProvider = mockk<LocalStorageProvider>()
-    private val ocFileRepository: OCFileRepository = OCFileRepository(localFileDataSource, remoteFileDataSource, localSpacesDataSource, localStorageProvider)
+    private val ocFileRepository: OCFileRepository =
+        OCFileRepository(localFileDataSource, remoteFileDataSource, localSpacesDataSource, localStorageProvider)
 
     private val folderToFetch = OC_FOLDER
     private val listOfFilesRetrieved = listOf(
@@ -62,6 +66,8 @@ class OCFileRepositoryTest {
         OC_FILE.copy(id = 3)
     )
 
+    private val timeInMilliseconds = 3600000L
+
     @Test
     fun `create folder - ok`() {
         every { remoteFileDataSource.createFolder(OC_FOLDER.remotePath, false, false, OC_ACCOUNT_NAME, null) } returns Unit
@@ -71,7 +77,7 @@ class OCFileRepositoryTest {
 
         verify(exactly = 1) {
             remoteFileDataSource.createFolder(any(), false, false, OC_ACCOUNT_NAME, null)
-            localFileDataSource.saveFilesInFolderAndReturnThem(any(), OC_FOLDER)
+            localFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(any(), OC_FOLDER)
         }
     }
 
@@ -87,7 +93,7 @@ class OCFileRepositoryTest {
             remoteFileDataSource.createFolder(any(), false, false, OC_ACCOUNT_NAME, null)
         }
         verify(exactly = 0) {
-            localFileDataSource.saveFilesInFolderAndReturnThem(any(), OC_FOLDER)
+            localFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(any(), OC_FOLDER)
         }
     }
 
@@ -105,7 +111,7 @@ class OCFileRepositoryTest {
     }
 
     @Test
-    fun `getFileWithSyncInfoByIdAsFlow returns OCFileWithSyncInfo`()  = runTest {
+    fun `getFileWithSyncInfoByIdAsFlow returns OCFileWithSyncInfo`() = runTest {
         every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(OC_FILE_WITH_SYNC_INFO_AND_SPACE)
 
         val ocFile = ocFileRepository.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
@@ -120,7 +126,7 @@ class OCFileRepositoryTest {
     }
 
     @Test
-    fun `getFileWithSyncInfoByIdAsFlow returns null`()  = runTest {
+    fun `getFileWithSyncInfoByIdAsFlow returns null`() = runTest {
         every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } returns flowOf(null)
 
         val ocFile = ocFileRepository.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
@@ -134,10 +140,9 @@ class OCFileRepositoryTest {
         }
     }
 
-
     @Test(expected = Exception::class)
-    fun `getFileWithSyncInfoByIdAsFlow returns an exception`()  = runTest {
-        every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) }  throws Exception()
+    fun `getFileWithSyncInfoByIdAsFlow returns an exception`() = runTest {
+        every { localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!) } throws Exception()
 
         ocFileRepository.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
 
@@ -145,6 +150,7 @@ class OCFileRepositoryTest {
             localFileDataSource.getFileWithSyncInfoByIdAsFlow(OC_FILE.id!!)
         }
     }
+
     @Test
     fun `get file by id - ok - null`() {
         every { localFileDataSource.getFileById(OC_FOLDER.id!!) } returns null
@@ -194,6 +200,21 @@ class OCFileRepositoryTest {
     }
 
     @Test
+    fun `getDownloadedFilesForAccount returns a list of OCFile`() {
+        every {
+            localFileDataSource.getDownloadedFilesForAccount(OC_ACCOUNT_NAME)
+        } returns listOf(OC_FILE)
+
+        val result = ocFileRepository.getDownloadedFilesForAccount(OC_ACCOUNT_NAME)
+
+        assertEquals(listOf(OC_FILE), result)
+
+        verify(exactly = 1) {
+            localFileDataSource.getDownloadedFilesForAccount(OC_ACCOUNT_NAME)
+        }
+    }
+
+    @Test
     fun `get folder content - ok`() {
         every { localFileDataSource.getFolderContent(OC_FOLDER.parentId!!) } returns listOf(OC_FOLDER)
 
@@ -203,6 +224,36 @@ class OCFileRepositoryTest {
 
         verify(exactly = 1) {
             localFileDataSource.getFolderContent(OC_FOLDER.parentId!!)
+        }
+    }
+
+    @Test
+    fun `getFilesLastUsageIsOlderThanGivenTime returns a list of OCFile`() {
+        every {
+            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
+        } returns listOf(OC_FILE)
+
+        val result = ocFileRepository.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
+
+        assertEquals(listOf(OC_FILE), result)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
+        }
+    }
+
+    @Test
+    fun `getFilesLastUsageIsOlderThanGivenTime returns an empty list when datasource returns an empty list`() {
+        every {
+            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
+        } returns emptyList()
+
+        val result = ocFileRepository.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
+
+        assertEquals(emptyList<OCFile>(), result)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
         }
     }
 
@@ -251,7 +302,7 @@ class OCFileRepositoryTest {
 
         verify(exactly = 1) {
             remoteFileDataSource.refreshFolder(folderToFetch.remotePath, OC_ACCOUNT_NAME)
-            localFileDataSource.saveFilesInFolderAndReturnThem(
+            localFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(
                 listOfFiles = listOfFilesRetrieved.drop(1),
                 folder = listOfFilesRetrieved.first()
             )
@@ -270,7 +321,7 @@ class OCFileRepositoryTest {
             remoteFileDataSource.refreshFolder(OC_FOLDER.remotePath, OC_ACCOUNT_NAME)
         }
         verify(exactly = 0) {
-            localFileDataSource.saveFilesInFolderAndReturnThem(any(), any())
+            localFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(any(), any())
         }
     }
 

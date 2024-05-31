@@ -229,7 +229,7 @@ def setOutputFileName(variant, appName, callerProject) {
     println "$variant.name: newName is $newName"
 
     variant.outputs.all {
-        outputFileName = new File(".", newName)
+        outputFileName = newName
     }
 }
 

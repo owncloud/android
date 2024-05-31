@@ -1,0 +1,6 @@
+Change: Automatic discovery of the account in login
+
+Automatic account discovery is done at login. Removed the refresh account button in the Manage Accounts view.
+
+https://github.com/owncloud/android/issues/4301
+https://github.com/owncloud/android/pull/4325

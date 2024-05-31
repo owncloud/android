@@ -8,9 +8,11 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -188,6 +190,10 @@ class FileDisplayActivity : FileActivity(),
 
         checkPasscodeEnforced(this)
 
+        if (BuildConfig.DEBUG) {
+            sharedPreferences.putInt(MainApp.PREFERENCE_KEY_LAST_SEEN_VERSION_CODE, MainApp.versionCode)
+        }
+        sharedPreferences.putBoolean(PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED, true)
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
 
         handleDeepLink()
@@ -230,6 +236,7 @@ class FileDisplayActivity : FileActivity(),
         setupRootToolbar(
             isSearchEnabled = true,
             title = getString(R.string.default_display_name_for_root_folder),
+            isAvatarRequested = true,
         )
 
         // setup drawer
@@ -297,7 +304,6 @@ class FileDisplayActivity : FileActivity(),
                     account?.name
                 )
             }
-            capabilitiesViewModel.refreshCapabilitiesFromNetwork()
             capabilitiesViewModel.capabilities.observe(this, Event.EventObserver {
                 onCapabilitiesOperationFinish(it)
             })
@@ -381,7 +387,12 @@ class FileDisplayActivity : FileActivity(),
     }
 
     private fun initAndShowListOfSpaces() {
-        val listOfSpaces = SpacesListFragment.newInstance(showPersonalSpace = false, accountName = com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(applicationContext).name)
+        val listOfSpaces = SpacesListFragment.newInstance(
+            showPersonalSpace = false,
+            accountName = com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount(applicationContext).name
+        ).apply {
+            setSearchListener(findViewById(R.id.root_toolbar_search_view))
+        }
         this.fileListOption = FileListOption.SPACES_LIST
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, listOfSpaces, TAG_LIST_OF_SPACES)
@@ -932,8 +943,7 @@ class FileDisplayActivity : FileActivity(),
                     FileListOption.ALL_FILES -> getString(R.string.default_display_name_for_root_folder)
                     FileListOption.SPACES_LIST -> getString(R.string.bottom_nav_spaces)
                 }
-            setupRootToolbar(title, isSearchEnabled = fileListOption != FileListOption.SPACES_LIST)
-            mainFileListFragment?.setSearchListener(findViewById(R.id.root_toolbar_search_view))
+            setupRootToolbar(title = title, isSearchEnabled = true, isAvatarRequested = false)
         } else if (space?.isProject == true && chosenFile.remotePath == OCFile.ROOT_PATH) {
             updateStandardToolbar(title = space.name, displayHomeAsUpEnabled = true, homeButtonEnabled = true)
         } else {
@@ -1351,7 +1361,6 @@ class FileDisplayActivity : FileActivity(),
                     is UnauthorizedException -> {
                         launch(Dispatchers.IO) {
                             val credentials = AccountUtils.getCredentialsForAccount(MainApp.appContext, account)
-
                             launch(Dispatchers.Main) {
                                 if (credentials is OwnCloudBearerCredentials) { // OAuth
                                     showRequestRegainAccess()
@@ -1554,7 +1563,7 @@ class FileDisplayActivity : FileActivity(),
      *
      * @param file Text [OCFile] to preview.
      */
-    fun startTextPreview(file: OCFile?) {
+    fun startTextPreview(file: OCFile) {
         val textPreviewFragment = PreviewTextFragment.newInstance(
             file,
             account
@@ -1790,24 +1799,28 @@ class FileDisplayActivity : FileActivity(),
                     is UIResult.Loading -> {
                         showLoadingDialog(R.string.deep_link_loading)
                     }
+
                     is UIResult.Success -> {
                         intent?.data = null
                         dismissLoadingDialog()
                         uiResult.data?.let { it1 -> manageItem(it1) }
                     }
+
                     is UIResult.Error -> {
                         dismissLoadingDialog()
                         if (uiResult.error is FileNotFoundException) {
                             showMessageInSnackbar(message = getString(R.string.deep_link_user_no_access))
                             changeUser()
                         } else {
-                            showMessageInSnackbar(message = getString(
-                                if (uiResult.error is DeepLinkException) {
-                                    R.string.invalid_deep_link_format
-                                } else {
-                                    R.string.default_error_msg
-                                }
-                            ))
+                            showMessageInSnackbar(
+                                message = getString(
+                                    if (uiResult.error is DeepLinkException) {
+                                        R.string.invalid_deep_link_format
+                                    } else {
+                                        R.string.default_error_msg
+                                    }
+                                )
+                            )
                         }
                     }
                 }
@@ -1862,6 +1875,7 @@ class FileDisplayActivity : FileActivity(),
         private const val CUSTOM_DIALOG_TAG = "CUSTOM_DIALOG"
 
         private const val PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED = "PREFERENCE_NOTIFICATION_PERMISSION_REQUESTED"
+        const val PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED = "PREFERENCE_CLEAR_DATA_ALREADY_TRIGGERED"
         const val ALL_FILES_SAF_REGEX = "*/*"
 
         const val ACTION_DETAILS = "com.owncloud.android.ui.activity.action.DETAILS"

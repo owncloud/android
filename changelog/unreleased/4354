@@ -1,0 +1,7 @@
+Enhancement: Avoid unnecessary requests when an av. offline folder is refreshed
+
+The available offline folders will only be refreshed when their eTag from the server and the corresponding one of the local database are different,
+avoiding sending unnecessary request.
+
+https://github.com/owncloud/android/issues/4197
+https://github.com/owncloud/android/pull/4354

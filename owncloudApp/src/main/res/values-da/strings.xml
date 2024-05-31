@@ -425,12 +425,7 @@
   <string name="edit_share_done">færdig</string>
   <string name="action_upload_retry">Forsøg igen</string>
   <string name="action_upload_clear">Ryd</string>
-  <string name="manage_space_title">Administrer plads</string>
-  <string name="manage_space_description">Indstillinger, database og server certifikater fra %1$s\'s data vil blive slettet permanent.\n\nHentede filer vil blive beholdt urørte.\n\nDenne proces kan tage nogen tid.</string>
-  <string name="manage_space_clear_data">Ryd data</string>
-  <string name="manage_space_error">Nogle filer kunne ikke slettes.</string>
   <string name="local_file_not_found_toast">Filen blev ikke fundet i det lokale filsystem</string>
-  <string name="confirmation_remove_files_alert">Ønsker du virkelig at fjerne de valgte enheder?</string>
   <string name="confirmation_remove_folders_alert">Ønsker du virkelig at fjerne de valgte emner og deres indhold?</string>
   <string name="failed_upload_quota_exceeded_text">Ikke nok plads for denne konto</string>
   <string name="auth_forbidden">Godkendelse forbudt</string>

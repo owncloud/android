@@ -52,10 +52,11 @@
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="210dp"
+        android:layout_width="0dp"
         android:layout_height="28dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:ellipsize="middle"
         android:gravity="bottom"
         android:maxLines="1"
         android:text="@string/placeholder_filename"
@@ -63,52 +64,37 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/account"
+        app:layout_constraintEnd_toStartOf="@+id/clean_account_local_storage_button"
         app:layout_constraintStart_toEndOf="@+id/ticker"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/account"
-        android:layout_width="210dp"
+        android:layout_width="0dp"
         android:layout_height="44dp"
         android:layout_marginStart="8dp"
-        android:ellipsize="end"
+        android:ellipsize="middle"
         android:text="@string/placeholder_sentence"
         android:textColor="@color/textColor"
         android:textSize="14sp"
+        android:lines="1"
+        app:layout_constraintEnd_toStartOf="@+id/clean_account_local_storage_button"
         app:layout_constraintStart_toEndOf="@id/ticker"
         app:layout_constraintTop_toBottomOf="@id/name" />
 
     <ImageView
-        android:id="@+id/refreshAccountButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="@string/actionbar_sync"
-        android:paddingLeft="@dimen/standard_half_padding"
-        android:paddingTop="@dimen/standard_padding"
-        android:paddingRight="@dimen/standard_half_padding"
-        android:paddingBottom="@dimen/standard_padding"
-        android:src="@drawable/ic_action_refresh"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/passwordButton"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/account"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black" />
-
-    <ImageView
-        android:id="@+id/passwordButton"
+        android:id="@+id/clean_account_local_storage_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
-        android:paddingLeft="@dimen/standard_half_padding"
+        android:paddingStart="@dimen/standard_half_padding"
         android:paddingTop="@dimen/standard_padding"
-        android:paddingRight="@dimen/standard_half_padding"
+        android:paddingEnd="@dimen/standard_half_padding"
         android:paddingBottom="@dimen/standard_padding"
-        android:src="@drawable/ic_key"
+        android:src="@drawable/ic_clean_account"
+        android:contentDescription="@string/content_description_clean_account_storage"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/removeButton"
         app:layout_constraintTop_toTopOf="parent"
@@ -129,6 +115,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/content_description_remove_account"
         app:tint="@color/black" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

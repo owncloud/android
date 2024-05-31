@@ -529,12 +529,7 @@
   <string name="edit_share_done">zakończono</string>
   <string name="action_upload_retry">Powtórz</string>
   <string name="action_upload_clear">Wyczyść</string>
-  <string name="manage_space_title">Zarządzaj przestrzenią</string>
-  <string name="manage_space_description">Ustawienia, baza danych i certyfikaty serwera %1$s zostaną trwale skasowane.\n\nPobrane pliki pozostaną na swoich miejscach.\n\nTen proces zajmie trochę czasu.</string>
-  <string name="manage_space_clear_data">Wyczyść dane</string>
-  <string name="manage_space_error">Nie udało się usunąć niektórych plików.</string>
   <string name="local_file_not_found_toast">Plik nie został znaleziony w lokalnym systemie plików</string>
-  <string name="confirmation_remove_files_alert">Czy na pewno chcesz usunąć wybrane pliki?</string>
   <string name="confirmation_remove_folders_alert">Czy naprawdę chcesz usunąć wybrane foldery i ich zawartość?</string>
   <string name="failed_upload_quota_exceeded_text">Brak wystarczającej ilości miejsca na koncie</string>
   <string name="auth_forbidden">Uwierzytelnienie zabronione</string>

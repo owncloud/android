@@ -5,8 +5,9 @@
  * @author Christian Schabesberger
  * @author Juan Carlos Garrote Gascón
  * @author Manuel Plazas Palacio
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -64,7 +65,7 @@ class OCFileRepository(
             accountName = parentFolder.owner,
             spaceWebDavUrl = spaceWebDavUrl,
         ).also {
-            localFileDataSource.saveFilesInFolderAndReturnThem(
+            localFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(
                 folder = parentFolder,
                 listOfFiles = listOf(
                     OCFile(
@@ -243,6 +244,11 @@ class OCFileRepository(
     override fun getFilesAvailableOfflineFromEveryAccount(): List<OCFile> =
         localFileDataSource.getFilesAvailableOfflineFromEveryAccount()
 
+    override fun getDownloadedFilesForAccount(owner: String): List<OCFile> = localFileDataSource.getDownloadedFilesForAccount(owner)
+
+    override fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFile> =
+        localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(milliseconds)
+
     override fun moveFile(listOfFilesToMove: List<OCFile>, targetFolder: OCFile, replace: List<Boolean?>, isUserLogged: Boolean): List<OCFile> {
         val targetSpaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(targetFolder.spaceId, targetFolder.owner)
         val filesNeedsAction = mutableListOf<OCFile>()
@@ -418,7 +424,7 @@ class OCFileRepository(
                                 if (remoteFolder.isAvailableOffline) AVAILABLE_OFFLINE_PARENT else NOT_AVAILABLE_OFFLINE
 
                         })
-                } else {
+                } else if (localChildToSync.etag != remoteChild.etag || localChildToSync.localModificationTimestamp > remoteChild.lastSyncDateForData!!) {
                     // File exists in the database, we need to check several stuff.
                     folderContentUpdated.add(
                         remoteChild.apply {
@@ -455,7 +461,7 @@ class OCFileRepository(
             remoteFolder.etagInConflict = null
         }
 
-        return localFileDataSource.saveFilesInFolderAndReturnThem(
+        return localFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(
             folder = remoteFolder,
             listOfFiles = folderContentUpdated
         )
@@ -592,7 +598,7 @@ class OCFileRepository(
     private fun deleteLocalFile(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         localStorageProvider.deleteLocalFile(ocFile)
         if (onlyFromLocalStorage) {
-            localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null, lastUsage = null))
+            localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null, lastUsage = null, etag = null))
         } else {
             localFileDataSource.deleteFile(ocFile.id!!)
         }

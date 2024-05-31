@@ -4,8 +4,9 @@
  * @author Fernando Sanz Velasco
  * @author Juan Carlos Garrote Gascón
  * @author Manuel Plazas Palacio
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -215,6 +216,7 @@ class FileListAdapter(
                         it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
                         it.threeDotMenu.isVisible = getCheckedItems().isEmpty()
+                        it.threeDotMenu.contentDescription = context.getString(R.string.content_description_file_operations, file.fileName)
                         if (fileListOption.isAvailableOffline() || (fileListOption.isSharedByLink() && fileWithSyncInfo.space == null)) {
                             it.spacePathLine.path.apply {
                                 text = file.getParentRemotePath()

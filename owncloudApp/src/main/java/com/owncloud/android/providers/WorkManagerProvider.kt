@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2021 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -35,6 +37,7 @@ import com.owncloud.android.workers.AvailableOfflinePeriodicWorker
 import com.owncloud.android.workers.AvailableOfflinePeriodicWorker.Companion.AVAILABLE_OFFLINE_PERIODIC_WORKER
 import com.owncloud.android.workers.CameraUploadsWorker
 import com.owncloud.android.workers.OldLogsCollectorWorker
+import com.owncloud.android.workers.RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
 import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 
@@ -101,6 +104,21 @@ class WorkManagerProvider(
         WorkManager.getInstance(context).enqueue(accountDiscoveryWorker)
     }
 
+    fun enqueueRemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker() {
+        val constraintsRequired = Constraints.Builder().setRequiredNetworkType(NetworkType.NOT_REQUIRED).build()
+
+        val removeLocallyFilesWithLastUsageOlderThanGivenTimeWorker =
+            PeriodicWorkRequestBuilder<RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker>(
+                repeatInterval = RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker.repeatInterval,
+                repeatIntervalTimeUnit = RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker.repeatIntervalTimeUnit
+            )
+                .addTag(RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker.DELETE_FILES_OLDER_GIVEN_TIME_WORKER)
+                .setConstraints(constraintsRequired)
+                .build()
+
+        WorkManager.getInstance(context).enqueue(removeLocallyFilesWithLastUsageOlderThanGivenTimeWorker)
+    }
+
     fun getRunningUploadsWorkInfosLiveData(): LiveData<List<WorkInfo>> {
         return WorkManager.getInstance(context).getRunningWorkInfosLiveData(
             listOf(
@@ -109,4 +127,7 @@ class WorkManagerProvider(
             )
         )
     }
+
+    fun cancelAllWorkByTag(tag: String) = WorkManager.getInstance(context).cancelAllWorkByTag(tag)
+
 }

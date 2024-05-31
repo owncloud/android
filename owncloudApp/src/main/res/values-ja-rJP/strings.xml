@@ -124,7 +124,6 @@
   <string name="recommend_text">スマートフォンで %1$s を利用してみませんか！
 ここからダウンロードしてください: %2$s</string>
   <string name="error_reason">だから</string>
-  <string name="auth_failure_snackbar">認証失敗</string>
   <string name="server_not_supported">サーバーのバージョンが10より低いため、サポートされていません。</string>
   <string name="auth_failure_snackbar_action">アカウント変更</string>
   <string name="auth_oauth_failure">アクセストークンの有効期限が切れたか、無効になっています。再度サインインしてください。</string>
@@ -547,6 +546,7 @@
   <string name="share_via_link_expiration_date_label">期限切れ</string>
   <string name="share_via_link_password_label">パスワード</string>
   <string name="share_via_link_password_title">セキュア</string>
+  <string name="share_via_link_copy_password_button">コピー</string>
   <string name="share_via_link_edit_permission_read_only_label">ダウンロード / 表示</string>
   <string name="share_via_link_edit_permission_read_and_write_label">ダウンロード／表示／アップロード</string>
   <string name="share_via_link_edit_permission_upload_only_label">アップロードのみ（ファイルドロップ）</string>
@@ -569,12 +569,7 @@
   <string name="edit_share_done">完了</string>
   <string name="action_upload_retry">リトライ</string>
   <string name="action_upload_clear">クリア</string>
-  <string name="manage_space_title">管理領域</string>
-  <string name="manage_space_description">%1$s のデータから 設定、データベース、サーバー証明書が完全に削除されます。\n\n ダウンロードされたファイルはそのまま残ります。\n\n 実行中はしばらくお待ちください。</string>
-  <string name="manage_space_clear_data">データのクリア</string>
-  <string name="manage_space_error">いくつかのファイルがクリアできませんでした。</string>
   <string name="local_file_not_found_toast">ローカルファイルにファイルがありません</string>
-  <string name="confirmation_remove_files_alert">選択したものを削除してよろしいですか?</string>
   <string name="confirmation_remove_folders_alert">選択したものとそのコンテンツを削除してよろしいですか?</string>
   <string name="failed_upload_quota_exceeded_text">アカウントに十分なスペースがありません</string>
   <string name="auth_forbidden">認証失敗</string>
@@ -627,4 +622,11 @@
   <string name="tab_label_ascii">TTY TDD</string>
   <!--DeepLinks-->
   <string name="fab_refresh_text">同期</string>
+  <string name="prefs_delete_local_files_entries_never">繰り返さない</string>
+  <string name="insecure_http_url_title_dialog">安全でないHTTP URL</string>
+  <string name="insecure_http_url_continue_button">続ける</string>
+  <string name="content_description_menu">メニュー</string>
+  <string name="content_description_manage_accounts">アカウント管理</string>
+  <string name="content_description_search">検索</string>
+  <string name="content_description_remove_account">アカウント削除</string>
 </resources>

@@ -104,7 +104,6 @@
   <string name="recommend_subject">Prova %1$s sul tuo smartphone!</string>
   <string name="recommend_text">Vorrei invitarti a usare %1$s sul tuo smartphone!\nScarica qui: %2$s</string>
   <string name="error_reason">perchè</string>
-  <string name="auth_failure_snackbar">Autenticazione fallita</string>
   <string name="auth_failure_snackbar_action">Cambia account</string>
   <string name="auth_oauth_failure_snackbar_action">Accedi</string>
   <string name="auth_check_server">Controlla il server</string>
@@ -467,12 +466,7 @@
   <string name="edit_share_done">completato</string>
   <string name="action_upload_retry">Riprova</string>
   <string name="action_upload_clear">Cancella</string>
-  <string name="manage_space_title">Gestisci lo spazio</string>
-  <string name="manage_space_description">Impostazioni, database e certificati server dai dati di %1$s saranno eliminati definitivamente. \n\n\I file scaricati rimarranno intatti.\n\nQuesto processo può richiedere del tempo.</string>
-  <string name="manage_space_clear_data">Cancella i dati</string>
-  <string name="manage_space_error">Alcuni file non possono essere eliminati.</string>
   <string name="local_file_not_found_toast">Il file non è stato trovato nel file system locale</string>
-  <string name="confirmation_remove_files_alert">Vuoi davvero rimuovere gli elementi selezionati?</string>
   <string name="confirmation_remove_folders_alert">Vuoi davvero rimuovere gli elementi selezionati e il loro contenuto?</string>
   <string name="failed_upload_quota_exceeded_text">Spazio insufficiente nell\'account</string>
   <string name="auth_forbidden">Autenticazione non accettata</string>
@@ -538,4 +532,5 @@
   <string name="tab_label_ascii">Testo</string>
   <!--DeepLinks-->
   <string name="fab_refresh_text">Aggiorna</string>
+  <string name="prefs_delete_local_files_entries_never">Mai</string>
 </resources>

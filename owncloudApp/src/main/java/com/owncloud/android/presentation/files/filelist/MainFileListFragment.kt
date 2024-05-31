@@ -5,8 +5,10 @@
  * @author Jose Antonio Barros Ramos
  * @author Juan Carlos Garrote Gascón
  * @author Manuel Plazas Palacio
+ * @author Jorge Aguado Recio
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,8 +26,11 @@
 package com.owncloud.android.presentation.files.filelist
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,6 +40,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -52,6 +58,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import coil.load
+import com.bumptech.glide.Glide
+import com.getbase.floatingactionbutton.AddFloatingActionButton
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -111,6 +119,8 @@ import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okio.Path.Companion.toPath
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -156,6 +166,7 @@ class MainFileListFragment : Fragment(),
 
     private var menu: Menu? = null
     private var checkedFiles: List<OCFile> = emptyList()
+    private var filesToRemove: List<OCFile> = emptyList()
     private var fileSingleFile: OCFile? = null
     private var fileOptionsBottomSheetSingleFileLayout: LinearLayout? = null
     private var succeededTransfers: List<OCTransfer>? = null
@@ -268,6 +279,9 @@ class MainFileListFragment : Fragment(),
         setViewTypeSelector(SortOptionsView.AdditionalView.CREATE_FOLDER)
 
         showOrHideFab(requireArguments().getParcelable(ARG_FILE_LIST_OPTION)!!, requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY)!!)
+
+        binding.fabMain.findViewById<AddFloatingActionButton>(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button).contentDescription =
+            getString(R.string.content_description_add_new_content)
     }
 
     private fun setViewTypeSelector(additionalView: SortOptionsView.AdditionalView) {
@@ -474,8 +488,13 @@ class MainFileListFragment : Fragment(),
                                 }
 
                                 FileMenuOption.REMOVE -> {
-                                    val dialogRemove = RemoveFilesDialogFragment.newInstance(file)
-                                    dialogRemove.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+                                    if (file.isFolder) {
+                                        filesToRemove = listOf(file)
+                                        fileOperationsViewModel.showRemoveDialog(filesToRemove)
+                                    } else {
+                                        showRemoveCustomDialog(file, context)
+                                    }
+
                                 }
 
                                 FileMenuOption.OPEN_WITH -> {
@@ -546,7 +565,14 @@ class MainFileListFragment : Fragment(),
                     val appProviderItemView = BottomSheetFragmentItemView(requireContext())
                     appProviderItemView.apply {
                         title = getString(R.string.ic_action_open_with_web, appRegistryProvider.name)
-                        itemIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_open_in_web, null)
+                        itemIcon = try {
+                            removeDefaultTint()
+                            getDrawableFromUrl(requireContext(), appRegistryProvider.icon)
+                        } catch (e: Exception) {
+                            Timber.e(e, "An exception occurred while Glide is trying to load an image")
+                            addDefaultTint(R.color.bottom_sheet_fragment_item_color)
+                            ResourcesCompat.getDrawable(resources, R.drawable.ic_open_in_web, null)
+                        }
                         setOnClickListener {
                             mainFileListViewModel.openInWeb(file.remoteId!!, appRegistryProvider.name)
                             fileOperationsViewModel.setLastUsageFile(file)
@@ -621,9 +647,35 @@ class MainFileListFragment : Fragment(),
             }
         }
 
+        collectLatestLifecycleFlow(fileOperationsViewModel.checkIfFileLocalSharedFlow) {
+            val fileActivity = (requireActivity() as FileActivity)
+            when (it) {
+                is UIResult.Loading -> fileActivity.showLoadingDialog(R.string.common_loading)
+                is UIResult.Success -> {
+                    fileActivity.dismissLoadingDialog()
+                    it.data?.let { result -> onShowRemoveDialog(filesToRemove, result) }
+                }
+
+                is UIResult.Error -> {
+                    fileActivity.dismissLoadingDialog()
+                    showMessageInSnackbar(resources.getString(R.string.common_error_unknown))
+                }
+            }
+        }
+
         /* TransfersViewModel observables */
         observeTransfers()
 
+    }
+
+    private suspend fun getDrawableFromUrl(context: Context, url: String): Drawable? {
+        return withContext(Dispatchers.IO) {
+            Glide.with(context)
+                .load(url)
+                .fitCenter()
+                .submit()
+                .get()
+        }
     }
 
     private fun observeTransfers() {
@@ -938,6 +990,13 @@ class MainFileListFragment : Fragment(),
         }
     }
 
+    private fun onShowRemoveDialog(filesToRemove: List<OCFile>, isLocal: Boolean) {
+        val dialog = RemoveFilesDialogFragment.newInstance(ArrayList(filesToRemove), isLocal)
+        dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+        fileListAdapter.clearSelection()
+        updateActionModeAfterTogglingSelected()
+    }
+
     override fun onFolderNameSet(newFolderName: String, parentFolder: OCFile) {
         fileOperationsViewModel.performOperation(FileOperation.CreateFolder(newFolderName, parentFolder))
         fileOperationsViewModel.createFolder.observe(viewLifecycleOwner, Event.EventObserver { uiResult: UIResult<Unit> ->
@@ -1099,10 +1158,12 @@ class MainFileListFragment : Fragment(),
             }
 
             R.id.action_remove_file -> {
-                val dialog = RemoveFilesDialogFragment.newInstance(checkedFiles)
-                dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
-                fileListAdapter.clearSelection()
-                updateActionModeAfterTogglingSelected()
+                if (checkedFiles.size == 1 && !checkedFiles[0].isFolder) {
+                    showRemoveCustomDialog(checkedFiles[0], requireContext())
+                } else {
+                    filesToRemove = checkedFiles
+                    fileOperationsViewModel.showRemoveDialog(filesToRemove)
+                }
                 return true
             }
 
@@ -1333,6 +1394,54 @@ class MainFileListFragment : Fragment(),
             isIndeterminate = indeterminate
             postInvalidate()
         }
+    }
+
+    private fun showRemoveCustomDialog(file: OCFile, context: Context) {
+        val removeDialog = Dialog(context)
+        removeDialog.apply {
+            setContentView(R.layout.remove_files_dialog)
+            show()
+        }
+
+        val thumbnailImageView = removeDialog.findViewById<ImageView>(R.id.dialog_remove_thumbnail)
+        val dialogText = removeDialog.findViewById<TextView>(R.id.dialog_remove_information)
+        val localRemoveButton = removeDialog.findViewById<Button>(R.id.dialog_remove_local_only)
+        val yesRemoveButton = removeDialog.findViewById<Button>(R.id.dialog_remove_yes)
+        val noRemoveButton = removeDialog.findViewById<Button>(R.id.dialog_remove_no)
+
+        dialogText.text = String.format(getString(R.string.confirmation_remove_file_alert), file.fileName)
+
+        // Show the thumbnail when the file has one
+        val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
+
+        if (thumbnail != null) {
+            thumbnailImageView.setImageBitmap(thumbnail)
+        } else {
+            thumbnailImageView.visibility = View.GONE
+        }
+
+        // Hide "Local only" remove button when the file is not available locally
+        if (!file.isAvailableLocally) {
+            localRemoveButton.visibility = View.INVISIBLE
+        }
+
+        localRemoveButton.setOnClickListener {
+            fileOperationsViewModel.performOperation(FileOperation.RemoveOperation(listOf(file), removeOnlyLocalCopy = true))
+            removeDialog.dismiss()
+        }
+
+        yesRemoveButton.setOnClickListener {
+            fileOperationsViewModel.performOperation(FileOperation.RemoveOperation(listOf(file), removeOnlyLocalCopy = false))
+            removeDialog.dismiss()
+        }
+
+        noRemoveButton.setOnClickListener {
+            // Nothing special to do
+            removeDialog.dismiss()
+        }
+
+        fileListAdapter.clearSelection()
+        updateActionModeAfterTogglingSelected()
     }
 
     interface FileActions {

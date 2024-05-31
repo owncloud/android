@@ -5,6 +5,8 @@
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
  * @author Parneet Singh
+ * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -21,501 +23,415 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.ui.preview;
+package com.owncloud.android.ui.preview
 
-import android.accounts.Account;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.accounts.Account
+import android.os.AsyncTask
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.owncloud.android.R
+import com.owncloud.android.databinding.PreviewTextFragmentBinding
+import com.owncloud.android.databinding.TopProgressBarBinding
+import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.extensions.collectLatestLifecycleFlow
+import com.owncloud.android.extensions.filterMenuOptions
+import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
+import com.owncloud.android.presentation.files.operations.FileOperation
+import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
+import com.owncloud.android.presentation.previews.PreviewTextViewModel
+import com.owncloud.android.ui.controller.TransferProgressController
+import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
+import com.owncloud.android.ui.dialog.LoadingDialog
+import com.owncloud.android.ui.fragment.FileFragment
+import com.owncloud.android.utils.PreferenceUtils
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.component.getScopeName
+import timber.log.Timber
+import java.io.BufferedWriter
+import java.io.FileInputStream
+import java.io.IOException
+import java.io.StringWriter
+import java.util.Scanner
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Lifecycle;
-import androidx.viewpager2.widget.ViewPager2;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
-import com.owncloud.android.R;
-import com.owncloud.android.datamodel.FileDataStorageManager;
-import com.owncloud.android.domain.files.model.OCFile;
-import com.owncloud.android.extensions.ActivityExtKt;
-import com.owncloud.android.extensions.FragmentExtKt;
-import com.owncloud.android.extensions.MenuExtKt;
-import com.owncloud.android.presentation.files.operations.FileOperation;
-import com.owncloud.android.presentation.files.operations.FileOperationsViewModel;
-import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment;
-import com.owncloud.android.presentation.previews.PreviewTextViewModel;
-import com.owncloud.android.ui.dialog.ConfirmationDialogFragment;
-import com.owncloud.android.ui.dialog.LoadingDialog;
-import com.owncloud.android.ui.fragment.FileFragment;
-import com.owncloud.android.utils.PreferenceUtils;
-import timber.log.Timber;
+class PreviewTextFragment : FileFragment() {
+    private var account: Account? = null
+    private lateinit var progressController: TransferProgressController
+    private lateinit var textLoadTask: TextLoadAsyncTask
 
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+    private val previewTextViewModel by viewModel<PreviewTextViewModel>()
+    private val fileOperationsViewModel by viewModel<FileOperationsViewModel>()
 
-import static org.koin.java.KoinJavaComponent.get;
+    private lateinit var binding: PreviewTextFragmentBinding
+    private lateinit var bindingTopProgress: TopProgressBarBinding
 
-public class PreviewTextFragment extends FileFragment {
-    private static final String EXTRA_FILE = "FILE";
-    private static final String EXTRA_ACCOUNT = "ACCOUNT";
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
+        Timber.v("onCreateView")
 
-    private Account mAccount;
-    private TextView mTextPreview;
-    private View mTextLayout;
-    private TabLayout mTabLayout;
-    private ViewPager2 mViewPager2;
-    private RelativeLayout rootView;
-    private TextLoadAsyncTask mTextLoadTask;
-    PreviewTextViewModel previewTextViewModel = get(PreviewTextViewModel.class);
-    FileOperationsViewModel fileOperationsViewModel = get(FileOperationsViewModel.class);
-
-    /**
-     * Public factory method to create new PreviewTextFragment instances.
-     *
-     * @param file    An {@link OCFile} to preview in the fragment
-     * @param account ownCloud account containing file
-     * @return Fragment ready to be used.
-     */
-    public static PreviewTextFragment newInstance(
-            OCFile file,
-            Account account
-    ) {
-        PreviewTextFragment frag = new PreviewTextFragment();
-        Bundle args = new Bundle();
-        args.putParcelable(EXTRA_FILE, file);
-        args.putParcelable(EXTRA_ACCOUNT, account);
-        frag.setArguments(args);
-        return frag;
+        binding = PreviewTextFragmentBinding.inflate(inflater, container, false)
+        bindingTopProgress = TopProgressBarBinding.bind(binding.root)
+        return binding.root.apply {
+            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
+        }
     }
 
-    /**
-     * Creates an empty fragment for previews.
-     * <p/>
-     * MUST BE KEPT: the system uses it when tries to reinstantiate a fragment automatically
-     * (for instance, when the device is turned a aside).
-     * <p/>
-     * DO NOT CALL IT: an {@link OCFile} and {@link Account} must be provided for a successful
-     * construction
-     */
-    public PreviewTextFragment() {
-        super();
-        mAccount = null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        Timber.v("onCreateView");
-
-        View ret = inflater.inflate(R.layout.preview_text_fragment, container, false);
-        ret.setFilterTouchesWhenObscured(
-                PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(getContext())
-        );
-
-        rootView = ret.findViewById(R.id.top);
-        mTabLayout = ret.findViewById(R.id.tab_layout);
-        mViewPager2 = ret.findViewById(R.id.view_pager);
-        mTextPreview = ret.findViewById(R.id.text_preview);
-
-        mTextLayout = ret.findViewById(R.id.text_layout);
-        return ret;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        OCFile file;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val file: OCFile?
         if (savedInstanceState == null) {
-            Bundle args = getArguments();
-            file = args.getParcelable(EXTRA_FILE);
-            mAccount = args.getParcelable(EXTRA_ACCOUNT);
+            val args = requireArguments()
+            file = args.getParcelable(EXTRA_FILE)
+            account = args.getParcelable(EXTRA_ACCOUNT)
             if (file == null) {
-                throw new IllegalStateException("Instanced with a NULL OCFile");
+                throw IllegalStateException("Instanced with a NULL OCFile")
             }
-            if (mAccount == null) {
-                throw new IllegalStateException("Instanced with a NULL ownCloud Account");
+
+            if (account == null) {
+                throw IllegalStateException("Instanced with a NULL ownCloud Account")
             }
         } else {
-            file = savedInstanceState.getParcelable(EXTRA_FILE);
-            mAccount = savedInstanceState.getParcelable(EXTRA_ACCOUNT);
+            file = savedInstanceState.getParcelable(EXTRA_FILE)
+            account = savedInstanceState.getParcelable(EXTRA_ACCOUNT)
         }
-        setFile(file);
-        setHasOptionsMenu(true);
+        setFile(file)
+        setHasOptionsMenu(true)
+        isOpen = true
+        currentFilePreviewing = file
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedState) {
-        super.onActivityCreated(savedState);
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        progressController = TransferProgressController(mContainerActivity)
+        progressController.setProgressBar(bindingTopProgress.syncProgressBar)
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        loadAndShowTextPreview();
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        loadAndShowTextPreview()
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable(EXTRA_FILE, getFile());
-        outState.putParcelable(EXTRA_ACCOUNT, mAccount);
-    }
-
-    private void loadAndShowTextPreview() {
-        mTextLoadTask = new TextLoadAsyncTask(new WeakReference<TextView>(mTextPreview),
-                new WeakReference<RelativeLayout>(rootView), new WeakReference<View>(mTextLayout),
-                new WeakReference<TabLayout>(mTabLayout),
-                new WeakReference<ViewPager2>(mViewPager2));
-        mTextLoadTask.execute(getFile());
-    }
-
-    /**
-     * Reads the file to preview and shows its contents. Too critical to be anonymous.
-     */
-    private class TextLoadAsyncTask extends AsyncTask<Object, Void, StringWriter> {
-        private final String DIALOG_WAIT_TAG = "DIALOG_WAIT";
-        private final WeakReference<TextView> mTextViewReference;
-        private final WeakReference<RelativeLayout> mRootView;
-        private final WeakReference<View> mTextLayout;
-        private final WeakReference<TabLayout> mTabLayout;
-        private final WeakReference<ViewPager2> mViewPager;
-        private String mimeType;
-
-        private TextLoadAsyncTask(WeakReference<TextView> textView, WeakReference<RelativeLayout> rootView,
-                                  WeakReference<View> textLayout,
-                                  WeakReference<TabLayout> tabLayout, WeakReference<ViewPager2> viewPager) {
-            mTextViewReference = textView;
-            mRootView = rootView;
-            mTextLayout = textLayout;
-            mTabLayout = tabLayout;
-            mViewPager = viewPager;
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.apply {
+            putParcelable(EXTRA_FILE, file)
+            putParcelable(EXTRA_ACCOUNT, account)
         }
+    }
 
-        @Override
-        protected void onPreExecute() {
-            showLoadingDialog();
-        }
-
-        @Override
-        protected StringWriter doInBackground(java.lang.Object... params) {
-            if (params.length != 1) {
-                throw new IllegalArgumentException("The parameter to " + TextLoadAsyncTask.class.getName() + " must " +
-                        "be (1) the file location");
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_share_file -> {
+                mContainerActivity.fileOperationsHelper.showShareFile(file)
+                true
             }
-            final OCFile file = (OCFile) params[0];
-            final String location = file.getStoragePath();
-            mimeType = file.getMimeType();
 
-            FileInputStream inputStream = null;
-            Scanner sc = null;
-            StringWriter source = new StringWriter();
-            BufferedWriter bufferedWriter = new BufferedWriter(source);
+            R.id.action_open_file_with -> {
+                openFile()
+                true
+            }
+
+            R.id.action_remove_file -> {
+                RemoveFilesDialogFragment.newInstance(file).show(requireFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION)
+                true
+            }
+
+            R.id.action_see_details -> {
+                seeDetails()
+                true
+            }
+
+            R.id.action_send_file -> {
+                requireActivity().sendDownloadedFilesByShareSheet(listOf(file))
+                true
+            }
+
+            R.id.action_sync_file -> {
+                account?.let { fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, it.name)) }
+                true
+            }
+
+            R.id.action_set_available_offline -> {
+                val fileToSetAsAvailableOffline = ArrayList<OCFile>()
+                fileToSetAsAvailableOffline.add(file)
+                fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(fileToSetAsAvailableOffline))
+                true
+            }
+
+            R.id.action_unset_available_offline -> {
+                val fileToUnsetAsAvailableOffline = ArrayList<OCFile>()
+                fileToUnsetAsAvailableOffline.add(file)
+                fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline))
+                true
+            }
+
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        textLoadTask.apply {
+            cancel(true)
+            dismissLoadingDialog()
+        }
+        isOpen = false
+        currentFilePreviewing = null
+    }
+
+    override fun onFileMetadataChanged(updatedFile: OCFile?) {
+        updatedFile?.let {
+            file = updatedFile
+        }
+        requireActivity().invalidateOptionsMenu()
+    }
+
+    override fun onFileMetadataChanged() {
+        mContainerActivity.storageManager?.let {
+            file = it.getFileByPath(file.remotePath)
+        }
+        requireActivity().invalidateOptionsMenu()
+    }
+
+    override fun onFileContentChanged() {
+        loadAndShowTextPreview()
+    }
+
+    override fun updateViewForSyncInProgress() {
+        progressController.showProgressBar()
+    }
+
+    override fun updateViewForSyncOff() {
+        progressController.hideProgressBar()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.file_actions_menu, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        mContainerActivity.storageManager?.let {
+            val safeFile = file
+            val accountName = it.account.name
+            previewTextViewModel.filterMenuOptions(safeFile, accountName)
+
+            collectLatestLifecycleFlow(previewTextViewModel.menuOptions) { menuOptions ->
+                val hasWritePermission = safeFile.hasWritePermission
+                menu.filterMenuOptions(menuOptions, hasWritePermission)
+            }
+        }
+
+        menu.findItem(R.id.action_search)?.apply {
+            isVisible = false
+            isEnabled = false
+        }
+
+    }
+
+    private fun loadAndShowTextPreview() {
+        textLoadTask = TextLoadAsyncTask(
+            binding.textLayout.textPreview,
+            binding.top,
+            binding.textLayout.root,
+            binding.tabLayout,
+            binding.viewPager
+        )
+        textLoadTask.execute(file)
+    }
+
+    private fun openFile() {
+        mContainerActivity.fileOperationsHelper.openFile(file)
+        finish()
+    }
+
+    private fun seeDetails() {
+        mContainerActivity.showDetails(file)
+    }
+
+    private fun finish() {
+        requireActivity().onBackPressed()
+    }
+
+    private inner class TextLoadAsyncTask(
+        var textViewReference: TextView,
+        var rootView: RelativeLayout,
+        var textLayout: View,
+        var tabLayout: TabLayout,
+        var viewPager: ViewPager2
+    ) : AsyncTask<OCFile, Unit, StringWriter>() {
+
+        private val DIALOG_WAIT_TAG = "DIALOG_WAIT"
+        private lateinit var mimeType: String
+
+        override fun onPreExecute() {
+            showLoadingDialog()
+        }
+
+        override fun doInBackground(vararg params: OCFile?): StringWriter {
+            if (params.size != 1) {
+                throw IllegalArgumentException("The parameter to ${this.getScopeName()} must be (1) the file location")
+            }
+
+            val file = params[0] as OCFile
+            val location = file.storagePath
+            mimeType = file.mimeType
+
+            var inputStream: FileInputStream? = null
+            var scanner: Scanner? = null
+            val source = StringWriter()
+            val bufferedWriter = BufferedWriter(source)
+
             try {
-                inputStream = new FileInputStream(location);
-                sc = new Scanner(inputStream);
-                while (sc.hasNextLine()) {
-                    bufferedWriter.append(sc.nextLine());
-                    if (sc.hasNextLine()) {
-                        bufferedWriter.append("\n");
+                inputStream = FileInputStream(location)
+                scanner = Scanner(inputStream)
+                while (scanner.hasNextLine()) {
+                    bufferedWriter.append(scanner.nextLine())
+                    if (scanner.hasNextLine()) {
+                        bufferedWriter.append("\n")
                     }
                 }
-                bufferedWriter.close();
-                IOException exc = sc.ioException();
+                bufferedWriter.close()
+                val exc = scanner.ioException()
                 if (exc != null) {
-                    throw exc;
+                    throw exc
                 }
-            } catch (IOException e) {
-                Timber.e(e);
+            } catch (e: IOException) {
+                Timber.e(e)
             } finally {
                 if (inputStream != null) {
                     try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        Timber.e(e);
+                        inputStream.close()
+                    } catch (e: IOException) {
+                        Timber.e(e)
                     }
                 }
-                if (sc != null) {
-                    sc.close();
-                }
+                scanner?.close()
             }
-            return source;
+            return source
         }
 
-        @Override
-        protected void onPostExecute(final StringWriter stringWriter) {
-            final TextView textView = mTextViewReference.get();
-            final RelativeLayout rootView = mRootView.get();
-            final View textLayout = mTextLayout.get();
-            final TabLayout tabLayout = mTabLayout.get();
-            final ViewPager2 viewPager = mViewPager.get();
-
-            String text = new String(stringWriter.getBuffer());
-            if (textView != null && rootView != null && textLayout != null && tabLayout != null && viewPager != null) {
-                showPreviewText(text, mimeType, rootView, textView, textLayout, tabLayout, viewPager);
-            }
+        override fun onPostExecute(result: StringWriter) {
+            val text = String(result.buffer)
+            showPreviewText(text, mimeType, rootView, textViewReference, textLayout, tabLayout, viewPager)
 
             try {
-                dismissLoadingDialog();
-            } catch (IllegalStateException illegalStateException) {
-                Timber.w(illegalStateException, "Dismissing dialog not allowed after onSaveInstanceState");
+                dismissLoadingDialog()
+            } catch (illegalStateException: java.lang.IllegalStateException) {
+                Timber.w(illegalStateException, "Dismissing dialog not allowed after onSaveInstanceState")
             }
         }
 
-        /**
-         * Show loading dialog
-         */
-        public void showLoadingDialog() {
-            // only once
-            Fragment frag = getActivity().getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
-            LoadingDialog loading = null;
-            if (frag == null) {
-                // Construct dialog
-                loading = LoadingDialog.newInstance(R.string.wait_a_moment, false);
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                loading.show(ft, DIALOG_WAIT_TAG);
+        fun showLoadingDialog() {
+            val waitDialogFragment = requireActivity().supportFragmentManager.findFragmentByTag(DIALOG_WAIT_TAG)
+            val loading: LoadingDialog
+
+            if (waitDialogFragment == null) {
+                loading = LoadingDialog.newInstance(R.string.wait_a_moment, false)
+                val fragmentManager = requireActivity().supportFragmentManager
+                val fragmentTransaction = fragmentManager.beginTransaction()
+                loading.show(fragmentTransaction, DIALOG_WAIT_TAG)
             } else {
-                loading = (LoadingDialog) frag;
-                loading.setShowsDialog(true);
-            }
-
-        }
-
-        /**
-         * Dismiss loading dialog
-         */
-        public void dismissLoadingDialog() {
-            final Fragment frag = getActivity().getSupportFragmentManager().findFragmentByTag(DIALOG_WAIT_TAG);
-            if (frag != null) {
-                LoadingDialog loading = (LoadingDialog) frag;
-                loading.dismiss();
+                loading = waitDialogFragment as LoadingDialog
+                loading.showsDialog = true
             }
         }
 
-        private void showPreviewText(String text, String mimeType, RelativeLayout rootView, TextView textView,
-                                     View textLayout,
-                                     TabLayout tabLayout, ViewPager2 viewPager) {
-            if (mimeType.equals("text/markdown")) {
-                rootView.removeView(textLayout);
-                showFormatType(text, mimeType, tabLayout, viewPager);
-                tabLayout.setVisibility(View.VISIBLE);
-                viewPager.setVisibility(View.VISIBLE);
+        fun dismissLoadingDialog() {
+            val waitDialogFragment = requireActivity().supportFragmentManager.findFragmentByTag(DIALOG_WAIT_TAG)
+            waitDialogFragment?.let {
+                val loading = waitDialogFragment as LoadingDialog
+                loading.dismiss()
+            }
+        }
+
+        private fun showPreviewText(
+            text: String,
+            mimeType: String,
+            rootView: RelativeLayout,
+            textView: TextView,
+            textLayout: View,
+            tabLayout: TabLayout,
+            viewPager: ViewPager2
+        ) {
+            if (mimeType == "text/markdown") {
+                rootView.removeView(textLayout)
+                showFormatType(text, mimeType, tabLayout, viewPager)
+                tabLayout.visibility = View.VISIBLE
+                viewPager.visibility = View.VISIBLE
             } else {
-                rootView.removeView(tabLayout);
-                rootView.removeView(viewPager);
-                textView.setText(text);
-                textLayout.setVisibility(View.VISIBLE);
+                rootView.removeView(tabLayout)
+                rootView.removeView(viewPager)
+                textView.text = text
+                textLayout.visibility = View.VISIBLE
             }
         }
 
-        private void showFormatType(String text, String mimeType, TabLayout tabLayout, ViewPager2 viewPager) {
-            PreviewFormatTextFragmentStateAdapter adapter =
-                    new PreviewFormatTextFragmentStateAdapter(PreviewTextFragment.this, text, mimeType);
-            viewPager.setAdapter(adapter);
-            new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+        private fun showFormatType(
+            text: String,
+            mimeType: String,
+            tabLayout: TabLayout,
+            viewPager: ViewPager2
+        ) {
+            val adapter = PreviewFormatTextFragmentStateAdapter(this@PreviewTextFragment, text, mimeType)
+            viewPager.adapter = adapter
+
+            TabLayoutMediator(tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->
                 if (position == 0) {
-                    tab.setText(adapter.getFormatTypes().get(mimeType));
+                    tab.text = adapter.formatTypes[mimeType]
                 } else {
-                    tab.setText(adapter.getFormatTypes().get(PreviewFormatTextFragmentStateAdapter.TYPE_PLAIN));
+                    tab.text = adapter.formatTypes[PreviewFormatTextFragmentStateAdapter.TYPE_PLAIN]
                 }
-            }).attach();
-        }
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.file_actions_menu, menu);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-
-        if (mContainerActivity.getStorageManager() != null) {
-            OCFile safeFile = getFile();
-            String accountName = mContainerActivity.getStorageManager().getAccount().name;
-            previewTextViewModel.filterMenuOptions(safeFile, accountName);
-
-            FragmentExtKt.collectLatestLifecycleFlow(this, previewTextViewModel.getMenuOptions(),
-                    Lifecycle.State.CREATED,
-                    (menuOptions, continuation) -> {
-                        boolean hasWritePermission = safeFile.getHasWritePermission();
-                        MenuExtKt.filterMenuOptions(menu, menuOptions, hasWritePermission);
-                        return null;
-                    }
-            );
-        }
-
-        MenuItem item = menu.findItem(R.id.action_search);
-        if (item != null) {
-            item.setVisible(false);
-            item.setEnabled(false);
+            }.attach()
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_share_file: {
-                mContainerActivity.getFileOperationsHelper().showShareFile(getFile());
-                return true;
+
+    companion object {
+        private const val EXTRA_FILE = "FILE"
+        private const val EXTRA_ACCOUNT = "ACCOUNT"
+        var isOpen = false
+        var currentFilePreviewing: OCFile? = null
+
+        fun newInstance(file: OCFile, account: Account): PreviewTextFragment {
+            val args = Bundle().apply {
+                putParcelable(EXTRA_FILE, file)
+                putParcelable(EXTRA_ACCOUNT, account)
             }
-            case R.id.action_open_file_with: {
-                openFile();
-                return true;
+
+            return PreviewTextFragment().apply {
+                arguments = args
             }
-            case R.id.action_remove_file: {
-                RemoveFilesDialogFragment dialog = RemoveFilesDialogFragment.newInstanceForSingleFile(getFile());
-                dialog.show(getFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION);
-                return true;
-            }
-            case R.id.action_see_details: {
-                seeDetails();
-                return true;
-            }
-            case R.id.action_send_file: {
-                ActivityExtKt.sendDownloadedFilesByShareSheet(requireActivity(), Collections.singletonList(getFile()));
-                return true;
-            }
-            case R.id.action_sync_file: {
-                fileOperationsViewModel.performOperation(new FileOperation.SynchronizeFileOperation(getFile(),
-                        mAccount.name));
-                return true;
-            }
-            case R.id.action_set_available_offline: {
-                ArrayList<OCFile> fileToSetAsAvailableOffline = new ArrayList<>();
-                fileToSetAsAvailableOffline.add(getFile());
-                fileOperationsViewModel.performOperation(new FileOperation.SetFilesAsAvailableOffline(fileToSetAsAvailableOffline));
-                return true;
-            }
-            case R.id.action_unset_available_offline: {
-                ArrayList<OCFile> fileToUnsetAsAvailableOffline = new ArrayList<>();
-                fileToUnsetAsAvailableOffline.add(getFile());
-                fileOperationsViewModel.performOperation(new FileOperation.UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline));
-                return true;
-            }
-            default:
-                return super.onOptionsItemSelected(item);
         }
-    }
 
-    private void seeDetails() {
-        mContainerActivity.showDetails(getFile());
-    }
+        fun canBePreviewed(file: OCFile?): Boolean {
+            val unsupportedTypes = listOf(
+                "test/richtest",
+                "text/rtf",
+                "text/vnd.abc",
+                "text/vnd.fmi.flexstor",
+                "text/vnd.rn-realtext",
+                "text/vnd.wap.wml",
+                "text/vnd.wap.wmlscript"
+            )
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (mTextLoadTask != null) {
-            mTextLoadTask.cancel(Boolean.TRUE);
-            mTextLoadTask.dismissLoadingDialog();
+            return (file != null && file.isAvailableLocally && file.isText &&
+                    !unsupportedTypes.contains(file.mimeType) &&
+                    !unsupportedTypes.contains(file.getMimeTypeFromName()))
         }
-    }
-
-    @Override
-    public void onFileMetadataChanged(OCFile updatedFile) {
-        if (updatedFile != null) {
-            setFile(updatedFile);
-        }
-        getActivity().invalidateOptionsMenu();
-    }
-
-    @Override
-    public void onFileMetadataChanged() {
-        FileDataStorageManager storageManager = mContainerActivity.getStorageManager();
-        if (storageManager != null) {
-            setFile(storageManager.getFileByPath(getFile().getRemotePath(), null));
-        }
-        getActivity().invalidateOptionsMenu();
-    }
-
-    @Override
-    public void onFileContentChanged() {
-        loadAndShowTextPreview();
-    }
-
-    @Override
-    public void updateViewForSyncInProgress() {
-        // Nothing to do here, sync is not shown in previews
-    }
-
-    @Override
-    public void updateViewForSyncOff() {
-        // Nothing to do here, sync is not shown in previews
-    }
-
-    /**
-     * Opens the previewed file with an external application.
-     */
-    private void openFile() {
-        mContainerActivity.getFileOperationsHelper().openFile(getFile());
-        finish();
-    }
-
-    /**
-     * Helper method to test if an {@link OCFile} can be passed to a {@link PreviewTextFragment} to be previewed.
-     *
-     * @param file File to test if can be previewed.
-     * @return 'True' if the file can be handled by the fragment.
-     */
-    public static boolean canBePreviewed(OCFile file) {
-        final List<String> unsupportedTypes = new LinkedList<String>();
-        unsupportedTypes.add("text/richtext");
-        unsupportedTypes.add("text/rtf");
-        unsupportedTypes.add("text/vnd.abc");
-        unsupportedTypes.add("text/vnd.fmi.flexstor");
-        unsupportedTypes.add("text/vnd.rn-realtext");
-        unsupportedTypes.add("text/vnd.wap.wml");
-        unsupportedTypes.add("text/vnd.wap.wmlscript");
-        return (file != null && file.isAvailableLocally() && file.isText() &&
-                !unsupportedTypes.contains(file.getMimeType()) &&
-                !unsupportedTypes.contains(file.getMimeTypeFromName())
-        );
-    }
-
-    /**
-     * Finishes the preview
-     */
-    private void finish() {
-        getActivity().onBackPressed();
     }
 }
+

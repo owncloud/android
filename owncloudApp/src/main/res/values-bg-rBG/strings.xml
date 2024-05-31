@@ -104,7 +104,6 @@
   <string name="recommend_subject">Изпробвайте %1$s на своя смартфон!</string>
   <string name="recommend_text">Бих искал да те поканя да използваш %1$s на своя смартфон!\nИзтегли го от тук: %2$s</string>
   <string name="error_reason">защото</string>
-  <string name="auth_failure_snackbar">Удостоверяването е неуспешно</string>
   <string name="auth_failure_snackbar_action">Промяна на профила</string>
   <string name="auth_oauth_failure_snackbar_action">Регистрация</string>
   <string name="auth_check_server">Проверка на сървъра</string>
@@ -451,6 +450,7 @@
   <string name="share_via_link_expiration_date_label">Валидност</string>
   <string name="share_via_link_password_label">Парола</string>
   <string name="share_via_link_password_title">Защитено</string>
+  <string name="share_via_link_copy_password_button">Копиране</string>
   <string name="share_via_link_edit_permission_read_only_label">Изтегляне / Преглед</string>
   <string name="share_via_link_edit_permission_upload_only_label">Само качване (пускане на файл)</string>
   <string name="share_get_public_link_button">Получаване на връзка</string>
@@ -470,12 +470,7 @@
   <string name="edit_share_done">готово</string>
   <string name="action_upload_retry">Повторен опит</string>
   <string name="action_upload_clear">Изчистване</string>
-  <string name="manage_space_title">Управление на пространството</string>
-  <string name="manage_space_description">Настройките, базата данни и сървърните сертификати от %1$s данни ще бъдат изтрити за постоянно. \in\nИзтеглените файлове ще бъдат запазени непроменени.\in\nТози процес може да отнеме известно време.</string>
-  <string name="manage_space_clear_data">Изчистване на данни</string>
-  <string name="manage_space_error">Някой файлове не могат да бъдат изтрити</string>
   <string name="local_file_not_found_toast">Файлът не беше намерен в локалната файлова система</string>
-  <string name="confirmation_remove_files_alert">Наистина ли желаете да премахнете избраните обекти?</string>
   <string name="confirmation_remove_folders_alert">Наистина ли желаете да премахнете избраните обекти и тяхното съдържание?</string>
   <string name="failed_upload_quota_exceeded_text">Няма достатъчно място в профила</string>
   <string name="auth_forbidden">Забранено удостоверяване</string>
@@ -553,4 +548,7 @@
   <string name="tab_label_ascii">Текст</string>
   <!--DeepLinks-->
   <string name="fab_refresh_text">Опресняване</string>
+  <string name="prefs_delete_local_files_entries_never">Никога</string>
+  <string name="insecure_http_url_title_dialog">Несигурен HTTP url адрес</string>
+  <string name="insecure_http_url_continue_button">Продължете</string>
 </resources>

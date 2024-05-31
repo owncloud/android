@@ -6,8 +6,9 @@
  * @author masensio
  * @author Christian Schabesberger
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -34,10 +35,10 @@ import android.view.View;
 
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.R;
-import com.owncloud.android.presentation.authentication.AccountUtils;
 import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.operations.CheckCurrentCredentialsOperation;
+import com.owncloud.android.presentation.authentication.AccountUtils;
 import com.owncloud.android.presentation.transfers.TransferListFragment;
 import com.owncloud.android.presentation.transfers.TransfersViewModel;
 import com.owncloud.android.utils.MimetypeIconUtil;
@@ -74,7 +75,7 @@ public class UploadListActivity extends FileActivity {
         setFile(null);
 
         // setup toolbar
-        setupRootToolbar(getString(R.string.uploads_view_title), false);
+        setupRootToolbar(getString(R.string.uploads_view_title), false, false);
 
         // setup drawer
         setupDrawer();

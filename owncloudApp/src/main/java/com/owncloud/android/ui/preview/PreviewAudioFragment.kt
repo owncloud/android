@@ -7,6 +7,7 @@
  * @author Abel García de Prada
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -187,6 +188,8 @@ class PreviewAudioFragment : FileFragment() {
         if (file != null && file.isAvailableLocally) {
             bindMediaService()
         }
+        isOpen = true
+        currentFilePreviewing = file
     }
 
     override fun onFileMetadataChanged(updatedFile: OCFile?) {
@@ -252,35 +255,43 @@ class PreviewAudioFragment : FileFragment() {
                 mContainerActivity.fileOperationsHelper.showShareFile(file)
                 true
             }
+
             R.id.action_open_file_with -> {
                 openFile()
                 true
             }
+
             R.id.action_remove_file -> {
                 val dialog = RemoveFilesDialogFragment.newInstance(file)
                 dialog.show(parentFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
                 true
             }
+
             R.id.action_see_details -> {
                 seeDetails()
                 true
             }
+
             R.id.action_send_file -> {
                 requireActivity().sendDownloadedFilesByShareSheet(listOf(file))
                 true
             }
+
             R.id.action_sync_file -> {
                 mContainerActivity.fileOperationsHelper.syncFile(file)
                 true
             }
+
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
                 true
             }
+
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -299,6 +310,8 @@ class PreviewAudioFragment : FileFragment() {
             mediaServiceConnection = null
             mediaServiceBinder = null
         }
+        isOpen = false
+        currentFilePreviewing = null
         super.onStop()
     }
 
@@ -396,6 +409,8 @@ class PreviewAudioFragment : FileFragment() {
         const val EXTRA_ACCOUNT = "ACCOUNT"
         private const val EXTRA_PLAY_POSITION = "PLAY_POSITION"
         private const val EXTRA_PLAYING = "PLAYING"
+        var isOpen: Boolean = false
+        var currentFilePreviewing: OCFile? = null
 
         /**
          * Public factory method to create new PreviewAudioFragment instances.

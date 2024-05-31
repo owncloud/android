@@ -123,7 +123,6 @@
   <string name="recommend_subject">Probiere %1$s auf Deinem Smartphone!</string>
   <string name="recommend_text">Kennst Du schon %1$s? Ich benutze die App um auch mobil Zugriff auf meinen eigenen Cloud-Server zu haben. \nHier kommst Du direkt zum Download: %2$s</string>
   <string name="error_reason">weil</string>
-  <string name="auth_failure_snackbar">Authentifizierung fehlgeschlagen</string>
   <string name="server_not_supported">Ihre Serverversion ist niedriger als 10 und wird daher nicht unterstützt. Bitte aktualisiere den Server auf eine neuere Version.</string>
   <string name="auth_failure_snackbar_action">Konto ändern</string>
   <string name="auth_oauth_failure">Das Zugriffstoken ist abgelaufen oder ungültig geworden. Melden Sie sich erneut an, um wieder Zugriff zu erhalten.</string>
@@ -467,6 +466,7 @@
   <string name="network_error_connect_timeout_exception">Der Server braucht zu lange zum Verbinden.</string>
   <string name="network_host_not_available">Server konnte nicht erreicht werden.</string>
   <string name="network_error_message">Ein Netzwerkfehler ist aufgetreten.</string>
+  <string name="resource_locked_error_message">Ressource ist gesperrt.</string>
   <string name="forbidden_permissions">Du hast keine Berechtigung %s</string>
   <string name="forbidden_permissions_rename">diese Datei umzubenennen</string>
   <string name="forbidden_permissions_delete">diese Datei zu löschen</string>
@@ -549,6 +549,7 @@
   <string name="share_via_link_expiration_date_label">Ablaufdatum</string>
   <string name="share_via_link_password_label">Kennwort</string>
   <string name="share_via_link_password_title">Gesichert</string>
+  <string name="share_via_link_copy_password_button">Kopieren</string>
   <string name="share_via_link_edit_permission_read_only_label">Herunterladen / Ansehen</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Herunterladen/Ansehen/Hochladen</string>
   <string name="share_via_link_edit_permission_upload_only_label">Nur Hochladen (Datei hineinziehen)</string>
@@ -571,12 +572,7 @@
   <string name="edit_share_done">Erledigt</string>
   <string name="action_upload_retry">Retry</string>
   <string name="action_upload_clear">Leeren</string>
-  <string name="manage_space_title">Speicher verwalten</string>
-  <string name="manage_space_description">Einstellungen, Datenbank und Server-Zertifikate von %1$s\'s Daten werden dauerhaft gelöscht.\n\nHerunter geladene Dateien bleiben unangetastet.\n\nDieser Vorgang kann eine Zeit dauern.</string>
-  <string name="manage_space_clear_data">Daten löschen</string>
-  <string name="manage_space_error">Einige Dateien konnten nicht gelöscht werden.</string>
   <string name="local_file_not_found_toast">Die Datei wurde im lokalen Dateisystem nicht gefunden</string>
-  <string name="confirmation_remove_files_alert">Möchtest du die ausgewählten Elemente wirklich löschen?</string>
   <string name="confirmation_remove_folders_alert">Möchtest du die ausgewählten Elemente und dessen Inhalt wirklich löschen?</string>
   <string name="failed_upload_quota_exceeded_text">Nicht genügend Speicherplatz im Konto verfügbar</string>
   <string name="auth_forbidden">Authentifizierung verweigert</string>
@@ -667,6 +663,10 @@
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
   <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
+  <string name="release_notes_4_3_0_title_1">Neue Einstellung zum automatischen Entfernen heruntergeladener Dateien, welche eine bestimmte Zeit lang nicht verwendet wurden</string>
+  <string name="release_notes_4_3_0_subtitle_1">Im Abschnitt „Erweitert“ wurde eine neue Einstellung hinzugefügt, um automatisch heruntergeladene Dateien zu löschen, wenn die Zeit seit ihrer letzten Verwendung die in der Einstellung ausgewählte Zeit überschreitet</string>
+  <string name="release_notes_4_3_0_title_2">Automatische Konto Erkennung beim Login</string>
+  <string name="release_notes_4_3_0_subtitle_2">Die Schaltfläche zum Aktualisieren des Kontos wurde in der Ansicht „Konten verwalten“ entfernt, da die automatische Kontoerkennung beim Anmelden erfolgt</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
@@ -689,4 +689,25 @@
   <string name="deep_link_loading">Datei per Link öffnen</string>
   <string name="fab_refresh_text">Aktualisieren</string>
   <string name="fab_refresh_sync_in_progress">Synchronisierung läuft bereits.</string>
+  <string name="password_policy_min_characters">Mindestens %1$d Zeichen lang</string>
+  <string name="password_policy_max_characters">Höchstens %1$d Zeichen lang</string>
+  <string name="password_policy_min_digits">Mindestens %1$d Ziffern</string>
+  <string name="password_policy_lowercase_characters">Mindestens %1$d Kleinbuchstaben</string>
+  <string name="password_policy_uppercase_characters">Mindestens %1$d Großbuchstaben</string>
+  <string name="password_policy_intro">Bitte ein Passwort eingeben, das den folgenden Kriterien entspricht: \n</string>
+  <string name="password_policy_min_special_character">Mindestens %1$d der Sonderzeichen: \"%2$s\"</string>
+  <string name="password_policy_error_password_banned">Leider wird das gewählte Passwort häufig verwendet. Bitte ein schwerer zu erratendes Passwort wählen, um die Sicherheit zu erhöhen.</string>
+  <string name="prefs_delete_local_files_entries_never">Nie</string>
+  <string name="prefs_delete_local_files_entries_1hour">1 Stunde</string>
+  <string name="prefs_delete_local_files_entries_12hours">12 Stunden</string>
+  <string name="prefs_delete_local_files_entries_1day">1 Tag</string>
+  <string name="prefs_delete_local_files_entries_30days">30 Tage</string>
+  <string name="prefs_delete_local_files">Lokale Kopien löschen</string>
+  <string name="prefs_delete_local_files_summary">Entfernen Sie automatisch heruntergeladene Dateien die offline nicht verfügbar sind, wenn die Zeit seit ihrer letzten Verwendung die ausgewählte Zeit überschreitet.\nGewählte Zeit: %1$s</string>
+  <string name="insecure_http_url_title_dialog">Unsichere HTTP-URL</string>
+  <string name="insecure_http_url_continue_button">Fortsetzen</string>
+  <string name="content_description_menu">Menü</string>
+  <string name="content_description_manage_accounts">Konten verwalten</string>
+  <string name="content_description_search">Suche</string>
+  <string name="content_description_remove_account">Benutzerkonto löschen</string>
 </resources>

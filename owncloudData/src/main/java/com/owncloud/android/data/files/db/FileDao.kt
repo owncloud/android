@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -136,6 +137,14 @@ interface FileDao {
     @Query(SELECT_FILES_AVAILABLE_OFFLINE_FROM_EVERY_ACCOUNT)
     fun getFilesAvailableOfflineFromEveryAccount(): List<OCFileEntity>
 
+    @Query(SELECT_DOWNLOADED_FILES_FOR_ACCOUNT)
+    fun getDownloadedFilesForAccount(
+        accountOwner: String
+    ): List<OCFileEntity>
+
+    @Query(SELECT_FILES_WHERE_LAST_USAGE_IS_OLDER_THAN_GIVEN_TIME)
+    fun getFilesWithLastUsageOlderThanGivenTime(milliseconds: Long): List<OCFileEntity>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOrIgnore(ocFileEntity: OCFileEntity): Long
 
@@ -197,7 +206,7 @@ interface FileDao {
      * return folder content
      */
     @Transaction
-    fun insertFilesInFolderAndReturnThem(
+    fun insertFilesInFolderAndReturnTheFilesThatChanged(
         folder: OCFileEntity,
         folderContent: List<OCFileEntity>,
     ): List<OCFileEntity> {
@@ -214,7 +223,13 @@ interface FileDao {
                 availableOfflineStatus = getNewAvailableOfflineStatus(folder.availableOfflineStatus, fileToInsert.availableOfflineStatus)
             })
         }
-        return getFolderContent(folderId)
+        val folderContentLocal = getFolderContent(folderId)
+
+        return folderContentLocal.filter { localFile ->
+            folderContent.any { changedFile ->
+                localFile.remoteId == changedFile.remoteId
+            }
+        }
     }
 
     @Transaction
@@ -534,6 +549,12 @@ interface FileDao {
             WHERE parentId = :folderId AND mimeType LIKE :mimeType || '%'
         """
 
+        private const val SELECT_DOWNLOADED_FILES_FOR_ACCOUNT = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE owner = :accountOwner AND storagePath IS NOT NULL AND keepInSync = '0'
+        """
+
         private const val SELECT_FILES_SHARED_BY_LINK = """
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
@@ -550,6 +571,13 @@ interface FileDao {
             SELECT *
             FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
             WHERE keepInSync = '1'
+        """
+
+        private const val SELECT_FILES_WHERE_LAST_USAGE_IS_OLDER_THAN_GIVEN_TIME = """
+            SELECT *
+            FROM ${ProviderMeta.ProviderTableMeta.FILES_TABLE_NAME}
+            WHERE lastUsage < (strftime('%s', 'now') * 1000 - :milliseconds)
+            AND keepInSync = '0'
         """
 
         private const val UPDATE_FILE_WITH_NEW_AVAILABLE_OFFLINE_STATUS = """

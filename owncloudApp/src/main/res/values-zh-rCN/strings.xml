@@ -120,7 +120,6 @@
   <string name="recommend_subject">在您的智能手机上试用 %1$s！</string>
   <string name="recommend_text">我邀请你在智能手机上使用 %1$s\n下载路径：%2$s</string>
   <string name="error_reason">因为</string>
-  <string name="auth_failure_snackbar">认证失败</string>
   <string name="server_not_supported">不支持版本低于10的服务器，请升级你的服务器</string>
   <string name="auth_failure_snackbar_action">更换账户</string>
   <string name="auth_oauth_failure">访问令牌过期或失效，请重新登录以获得访问权限</string>
@@ -500,6 +499,7 @@
   <string name="share_via_link_expiration_date_label">过期</string>
   <string name="share_via_link_password_label">密码</string>
   <string name="share_via_link_password_title">安全</string>
+  <string name="share_via_link_copy_password_button">复制</string>
   <string name="share_via_link_edit_permission_read_only_label">下载 / 查看</string>
   <string name="share_via_link_edit_permission_upload_only_label">仅上传(File Drop))</string>
   <string name="share_get_public_link_button">获取链接</string>
@@ -519,13 +519,7 @@
   <string name="edit_share_done">完成</string>
   <string name="action_upload_retry">重试</string>
   <string name="action_upload_clear">清除</string>
-  <string name="manage_space_title">管理空间</string>
-  <string name="manage_space_description"> %1$s 的设置，数据库以及服务器证书将会被永久删除。
-\n\n 已下载的文件将会被保留。\n\n完成此操作需要一些时间。</string>
-  <string name="manage_space_clear_data">清除数据</string>
-  <string name="manage_space_error">某些文件无法删除。</string>
   <string name="local_file_not_found_toast">本地文件丢失</string>
-  <string name="confirmation_remove_files_alert">确认删除选中的项目吗？</string>
   <string name="confirmation_remove_folders_alert">你真的要删除选定的项目及其内容吗？</string>
   <string name="failed_upload_quota_exceeded_text">该账户没有足够的空间</string>
   <string name="auth_forbidden">强制验证</string>
@@ -596,4 +590,10 @@
   <string name="tab_label_ascii">文本</string>
   <!--DeepLinks-->
   <string name="fab_refresh_text">刷新</string>
+  <string name="prefs_delete_local_files_entries_never">从不</string>
+  <string name="insecure_http_url_continue_button">继续</string>
+  <string name="content_description_menu">菜单</string>
+  <string name="content_description_manage_accounts">管理账号</string>
+  <string name="content_description_search">搜索</string>
+  <string name="content_description_remove_account">删除账号</string>
 </resources>

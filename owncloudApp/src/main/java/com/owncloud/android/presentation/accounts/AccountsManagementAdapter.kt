@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Javier Rodríguez Pérez
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -99,18 +100,11 @@ class AccountsManagementAdapter(private val accountListener: AccountAdapterListe
                     holder.binding.ticker.visibility = View.INVISIBLE
                 }
 
-                /// bind listener to refresh account
-                holder.binding.refreshAccountButton.apply {
-                    setImageResource(R.drawable.ic_action_refresh)
-                    setOnClickListener { accountListener.refreshAccount(account) }
+                /// bind listener to clean local storage from account
+                holder.binding.cleanAccountLocalStorageButton.apply {
+                    setImageResource(R.drawable.ic_clean_account)
+                    setOnClickListener { accountListener.cleanAccountLocalStorage(account) }
                 }
-
-                /// bind listener to change password
-                holder.binding.passwordButton.apply {
-                    setImageResource(R.drawable.ic_key)
-                    setOnClickListener { accountListener.changePasswordOfAccount(account) }
-                }
-
                 /// bind listener to remove account
                 holder.binding.removeButton.apply {
                     setImageResource(R.drawable.ic_action_delete_grey)
@@ -168,8 +162,7 @@ class AccountsManagementAdapter(private val accountListener: AccountAdapterListe
      */
     interface AccountAdapterListener {
         fun removeAccount(account: Account)
-        fun changePasswordOfAccount(account: Account)
-        fun refreshAccount(account: Account)
+        fun cleanAccountLocalStorage(account: Account)
         fun createAccount()
         fun switchAccount(position: Int)
     }

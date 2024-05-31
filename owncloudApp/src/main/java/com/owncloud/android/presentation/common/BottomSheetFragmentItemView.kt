@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -22,6 +23,7 @@
 package com.owncloud.android.presentation.common
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -79,5 +81,11 @@ class BottomSheetFragmentItemView @JvmOverloads constructor(
 
     fun removeDefaultTint() {
         binding.itemIcon.imageTintList = null
+    }
+
+    fun addDefaultTint(tintColor: Int) {
+        val itemColor = ContextCompat.getColor(context, tintColor)
+        val itemColorStateList = ColorStateList.valueOf(itemColor)
+        binding.itemIcon.imageTintList = itemColorStateList
     }
 }

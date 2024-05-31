@@ -482,12 +482,7 @@ Neem contact op met uw beheerder</string>
   <string name="edit_share_done">gedaan</string>
   <string name="action_upload_retry">Opniew</string>
   <string name="action_upload_clear">Opschonen</string>
-  <string name="manage_space_title">Beheer ruimte</string>
-  <string name="manage_space_description">Instellingen, database en servercertificaten van %1$s\'s data zullen permanent worden verwijderd. \n\nGedownloade bestanden blijven onaangeroerd.\n\nDit proces kan even duren.</string>
-  <string name="manage_space_clear_data">Verwijder data</string>
-  <string name="manage_space_error">Sommige bestanden konden niet worden verwijderd</string>
   <string name="local_file_not_found_toast">Het bestand is niet te vinden binnen het lokale bestandssysteem.</string>
-  <string name="confirmation_remove_files_alert">Wilt u werkelijk de geselecteerde onderwerpen verwijderen?</string>
   <string name="confirmation_remove_folders_alert">Wilt u werkelijk de geselecteerde onderwerpen en de inhoud ervan verwijderen?</string>
   <string name="failed_upload_quota_exceeded_text">Niet genoeg ruimte in dit account</string>
   <string name="auth_forbidden">Verboden authenticatie</string>
