@@ -147,7 +147,7 @@ class PreviewImageActivity : FileActivity(),
 
         fileOperationsViewModel.syncFileLiveData.observe(this, Event.EventObserver { uiResult ->
             if (uiResult is UIResult.Error && uiResult.error is AccountNotFoundException) {
-                showSnackMessage(getString(R.string.sync_fail_ticker_unauthorized))
+                showRequestAccountChangeNotice(getString(R.string.sync_fail_ticker_unauthorized), false)
             }
         })
     }

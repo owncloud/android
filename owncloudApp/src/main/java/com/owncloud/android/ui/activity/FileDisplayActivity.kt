@@ -1321,7 +1321,7 @@ class FileDisplayActivity : FileActivity(),
                 }
                 when (uiResult.error) {
                     is AccountNotFoundException -> {
-                        showSnackMessage(getString(R.string.sync_fail_ticker_unauthorized))
+                        showRequestAccountChangeNotice(getString(R.string.sync_fail_ticker_unauthorized), false)
                     }
                     is UnauthorizedException -> {
                         launch(Dispatchers.IO) {
