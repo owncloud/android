@@ -1,0 +1,8 @@
+Bugfix: Unwanted DELETE operations when synchronization in single file fails
+
+A new exception is now thrown and handled when the account of the network client is null, avoiding
+DELETE requests to the server when synchronization (PROPFIND) on a single file responds with 404. Also,
+when PROPFINDs respond with 404, the delete operation has been changed to be just local and not remote too.
+
+https://github.com/owncloud/enterprise/issues/6638
+https://github.com/owncloud/android/pull/4408

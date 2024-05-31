@@ -35,6 +35,7 @@ ownCloud admins and users.
 * Bugfix - Video streaming in spaces: [#4328](https://github.com/owncloud/android/issues/4328)
 * Bugfix - Retried successful uploads are cleaned up from the temporary folder: [#4335](https://github.com/owncloud/android/issues/4335)
 * Bugfix - Resolve incorrect truncation of long display names in Manage Accounts: [#4351](https://github.com/owncloud/android/issues/4351)
+* Bugfix - Unwanted DELETE operations when synchronization in single file fails: [#6638](https://github.com/owncloud/enterprise/issues/6638)
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 * Change - Automatic discovery of the account in login: [#4301](https://github.com/owncloud/android/issues/4301)
 * Change - Add new prefixes in commit messages of 3rd party contributors: [#4346](https://github.com/owncloud/android/pull/4346)
@@ -97,6 +98,16 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4351
    https://github.com/owncloud/android/pull/4380
+
+* Bugfix - Unwanted DELETE operations when synchronization in single file fails: [#6638](https://github.com/owncloud/enterprise/issues/6638)
+
+   A new exception is now thrown and handled when the account of the network client
+   is null, avoiding DELETE requests to the server when synchronization (PROPFIND)
+   on a single file responds with 404. Also, when PROPFINDs respond with 404, the
+   delete operation has been changed to be just local and not remote too.
+
+   https://github.com/owncloud/enterprise/issues/6638
+   https://github.com/owncloud/android/pull/4408
 
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 

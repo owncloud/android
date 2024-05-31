@@ -41,6 +41,7 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.databinding.FileDetailsFragmentBinding
 import com.owncloud.android.datamodel.ThumbnailsCacheManager
+import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.InstanceNotConfiguredException
 import com.owncloud.android.domain.exceptions.TooEarlyException
 import com.owncloud.android.domain.files.model.OCFile
@@ -54,6 +55,10 @@ import com.owncloud.android.extensions.openOCFile
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
 import com.owncloud.android.extensions.showMessageInSnackbar
+import com.owncloud.android.presentation.authentication.ACTION_UPDATE_EXPIRED_TOKEN
+import com.owncloud.android.presentation.authentication.EXTRA_ACCOUNT
+import com.owncloud.android.presentation.authentication.EXTRA_ACTION
+import com.owncloud.android.presentation.authentication.LoginActivity
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.files.details.FileDetailsViewModel.ActionsInDetailsView.NONE
@@ -69,6 +74,7 @@ import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragm
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.FRAGMENT_TAG_CONFIRMATION
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
+import com.owncloud.android.ui.activity.FileActivity.REQUEST_CODE__UPDATE_CREDENTIALS
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.preview.PreviewAudioFragment
@@ -158,9 +164,22 @@ class FileDetailsFragment : FileFragment() {
         fileOperationsViewModel.syncFileLiveData.observe(viewLifecycleOwner, Event.EventObserver { uiResult ->
             when (uiResult) {
                 is UIResult.Error -> {
-                    showErrorInSnackbar(R.string.sync_fail_ticker, uiResult.error)
-                    fileDetailsViewModel.updateActionInDetailsView(NONE)
-                    requireActivity().invalidateOptionsMenu()
+                    if (uiResult.error is AccountNotFoundException) {
+                        Snackbar.make(view, getString(R.string.sync_fail_ticker_unauthorized), Snackbar.LENGTH_INDEFINITE)
+                            .setAction(R.string.auth_oauth_failure_snackbar_action) {
+                                val updateAccountCredentials = Intent(requireActivity(), LoginActivity::class.java)
+                                updateAccountCredentials.apply {
+                                    putExtra(EXTRA_ACCOUNT, fileDetailsViewModel.getAccount())
+                                    putExtra(EXTRA_ACTION, ACTION_UPDATE_EXPIRED_TOKEN)
+                                    addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                                }
+                                startActivityForResult(updateAccountCredentials, REQUEST_CODE__UPDATE_CREDENTIALS)
+                            }.show()
+                    } else {
+                        showErrorInSnackbar(R.string.sync_fail_ticker, uiResult.error)
+                        fileDetailsViewModel.updateActionInDetailsView(NONE)
+                        requireActivity().invalidateOptionsMenu()
+                    }
                 }
 
                 is UIResult.Loading -> {}
@@ -176,9 +195,11 @@ class FileDetailsFragment : FileFragment() {
                         fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
                     }
 
-                    SynchronizeFileUseCase.SyncType.FileNotFound -> showMessageInSnackbar("FILE NOT FOUND")
+                    SynchronizeFileUseCase.SyncType.FileNotFound -> showMessageInSnackbar(getString(R.string.sync_file_not_found_msg))
+
                     is SynchronizeFileUseCase.SyncType.UploadEnqueued -> fileDetailsViewModel.startListeningToWorkInfo(uiResult.data.workerId)
-                    null -> showMessageInSnackbar("NULL")
+
+                    null -> showMessageInSnackbar(getString(R.string.common_error_unknown))
                 }
             }
         })

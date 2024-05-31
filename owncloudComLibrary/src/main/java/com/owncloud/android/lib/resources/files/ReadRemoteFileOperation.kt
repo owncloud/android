@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2016 ownCloud GmbH.
+ *   Copyright (C) 2024 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -19,8 +19,8 @@
  *   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
- *
  */
+
 package com.owncloud.android.lib.resources.files
 
 import com.owncloud.android.lib.common.OwnCloudClient
@@ -44,6 +44,7 @@ import java.util.concurrent.TimeUnit
  * @author David A. Velasco
  * @author masensio
  * @author David González Verdugo
+ * @author Juan Carlos Garrote Gascón
  */
 
 class ReadRemoteFileOperation(
@@ -56,9 +57,11 @@ class ReadRemoteFileOperation(
      *
      * @param client Client object to communicate with the remote ownCloud server.
      */
-    @Override
     override fun run(client: OwnCloudClient): RemoteOperationResult<RemoteFile> {
         try {
+            if (client.account == null) {
+                throw AccountUtils.AccountNotFoundException()
+            }
             val propFind = PropfindMethod(
                 url = getFinalWebDavUrl(),
                 depth = DEPTH_0,

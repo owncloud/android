@@ -179,6 +179,10 @@ public class AccountUtils {
 
         private Account mFailedAccount;
 
+        public AccountNotFoundException() {
+            super();
+        }
+
         public AccountNotFoundException(Account failedAccount, String message, Throwable cause) {
             super(message, cause);
             mFailedAccount = failedAccount;
