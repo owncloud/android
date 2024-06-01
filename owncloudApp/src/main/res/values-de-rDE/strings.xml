@@ -377,6 +377,7 @@
   <string name="folder_already_exists_description">Ordner mit dem Namen %1$s existiert bereits.</string>
   <string name="sync_file_fail_msg">Die entfernte Datei konnte nicht überprüft werden.</string>
   <string name="sync_file_nothing_to_do_msg">Dateiinhalte wurden bereits synchronisiert.</string>
+  <string name="sync_file_not_found_msg">Datei nicht gefunden</string>
   <string name="new_remote_version_found_msg">Eine neue Version befindet sich auf dem Server. Lade herunter ...</string>
   <string name="download_enqueued_msg">Herunterladen in Warteschlange eingereiht</string>
   <string name="upload_enqueued_msg">Hochladen in Warteschlange eingereiht</string>

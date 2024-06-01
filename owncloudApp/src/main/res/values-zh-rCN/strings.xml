@@ -372,6 +372,7 @@
   <string name="folder_already_exists_description">文件夹%1$s已存在</string>
   <string name="sync_file_fail_msg">无法核实远程文件</string>
   <string name="sync_file_nothing_to_do_msg">文件内容已同步</string>
+  <string name="sync_file_not_found_msg">文件未找到</string>
   <string name="create_dir_fail_msg">文件夹无法创建</string>
   <string name="filename_forbidden_characters_from_server">文件名中存在至少一个非法字符</string>
   <string name="filename_empty">文件名不能为空</string>

@@ -355,6 +355,7 @@ Téléchargez-le ici : %2$s</string>
   <string name="rename_server_fail_msg">Renommage impossible</string>
   <string name="sync_file_fail_msg">Le fichier distant n\'a pu être vérifié</string>
   <string name="sync_file_nothing_to_do_msg">Le contenu du fichier est déjà synchronisé</string>
+  <string name="sync_file_not_found_msg">Fichier non trouvé</string>
   <string name="create_dir_fail_msg">Le dossier n\'a pas pu être créé</string>
   <string name="filename_forbidden_characters">Caractères interdits: / \\</string>
   <string name="filename_forbidden_characters_from_server">Le nom de fichier contient au moins un caractère non valide</string>

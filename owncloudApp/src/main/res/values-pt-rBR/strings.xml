@@ -378,6 +378,7 @@
   <string name="folder_already_exists_description">Folder with name %1$s already exists.</string>
   <string name="sync_file_fail_msg">Arquivo remoto não pode ser verificado</string>
   <string name="sync_file_nothing_to_do_msg">Conteúdo do arquivo já foi sincronizado</string>
+  <string name="sync_file_not_found_msg">Arquivo não encontrado</string>
   <string name="new_remote_version_found_msg">Uma nova versão foi encontrada no servidor. Baixando…</string>
   <string name="download_enqueued_msg">Baixar em fila</string>
   <string name="upload_enqueued_msg">Enviar em fila</string>

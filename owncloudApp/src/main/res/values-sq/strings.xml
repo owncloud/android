@@ -377,6 +377,7 @@
   <string name="folder_already_exists_description">Ka tashmë një dosje me emrin %1$s.</string>
   <string name="sync_file_fail_msg">S\’u kap dot kartela e largët</string>
   <string name="sync_file_nothing_to_do_msg">Lëndë kartele tashmë e njëkohësuar</string>
+  <string name="sync_file_not_found_msg">S’u gjet kartelë</string>
   <string name="new_remote_version_found_msg">U gjet një version i ri në shërbyes. Po shkarkohet…</string>
   <string name="download_enqueued_msg">Shkarkimi u vu në radhë</string>
   <string name="upload_enqueued_msg">Ngarkimi u vu në radhë</string>

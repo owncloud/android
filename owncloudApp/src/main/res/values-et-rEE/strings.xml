@@ -378,6 +378,7 @@
   <string name="folder_already_exists_description">Kaust nimega %1$s on juba olemas.</string>
   <string name="sync_file_fail_msg">Mujaloleva faili kontrollimine ebaõnnestus</string>
   <string name="sync_file_nothing_to_do_msg">Faili sisu on juba sünkroniseeritud</string>
+  <string name="sync_file_not_found_msg">Faili ei leitud</string>
   <string name="new_remote_version_found_msg">Serveris leidus uus versioon. Laen alla…</string>
   <string name="download_enqueued_msg">Allalaadimine lisati järjekorda</string>
   <string name="upload_enqueued_msg">Üleslaadimine lisati järjekorda</string>

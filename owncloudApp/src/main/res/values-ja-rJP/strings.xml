@@ -375,6 +375,7 @@
   <string name="folder_already_exists_description">名前が%1$sのフォルダはすでに存在します。</string>
   <string name="sync_file_fail_msg">リモートファイルをチェックできませんでした</string>
   <string name="sync_file_nothing_to_do_msg">ファイルコンテンツはすでに同期されています</string>
+  <string name="sync_file_not_found_msg">ファイルが見つかりません</string>
   <string name="new_remote_version_found_msg">サーバーに新しいバージョンが見つかりました。ダウンロード...</string>
   <string name="download_enqueued_msg">ダウンロード中</string>
   <string name="upload_enqueued_msg">アップロード待機中</string>
