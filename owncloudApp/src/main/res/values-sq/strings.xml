@@ -665,6 +665,8 @@
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
+  <string name="release_notes_4_2_2_title_downloads_content_length">Ndreqje në shkarkime</string>
+  <string name="release_notes_4_2_2_subtitle_downloads_content_length">Shkarkimet funksionojnë sërish për çdo lloj kartele</string>
   <string name="release_notes_4_3_0_title_1">Rregullim i ri, për heqje të automatizuar kartelash të shkarkuara që s’qenë përdorur për një farë kohe</string>
   <string name="release_notes_4_3_0_subtitle_1">Te pjesa “Të thelluara” është shtuar një rregullim i ri për fshirje të automatizuar të kartelave të shkarkuara, kur koha që nga hera e fundit që qenë përdorur është më e madhe se koha e përzgjedhur te rregullimi në fjalë</string>
   <string name="release_notes_4_3_0_title_2">Zbulim i automatizuar i llogarisë gjatë hyrjes</string>
