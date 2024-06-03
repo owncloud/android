@@ -5,7 +5,7 @@
  * @author David A. Velasco
  * @author David González Verdugo
  * @author Aitor Ballesteros Pavón
- *
+ * <p>
  * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
@@ -229,11 +229,12 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
         @NotNull Lazy<SynchronizeFolderUseCase> synchronizeFolderUseCase =
                 inject(SynchronizeFolderUseCase.class);
         SynchronizeFolderUseCase.Params params = new SynchronizeFolderUseCase.Params(
-                folder.getRemotePath(),
-                folder.getOwner(),
-                folder.getSpaceId(),
-                SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER_RECURSIVELY,
-                false);
+            folder.getRemotePath(),
+            folder.getOwner(),
+            folder.getSpaceId(),
+            SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER_RECURSIVELY,
+            false
+        );
         UseCaseResult<Unit> useCaseResult;
 
         useCaseResult = synchronizeFolderUseCase.getValue().invoke(params);

@@ -199,7 +199,8 @@ public class FileOperationsHelper {
                             file.getOwner(),
                             file.getSpaceId(),
                             SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY,
-                            false)
+                            false
+                    )
             );
         }
     }
