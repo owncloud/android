@@ -101,16 +101,6 @@ ownCloud admins and users.
    https://github.com/owncloud/android/issues/4351
    https://github.com/owncloud/android/pull/4380
 
-* Bugfix - Unwanted DELETE operations when synchronization in single file fails: [#6638](https://github.com/owncloud/enterprise/issues/6638)
-
-   A new exception is now thrown and handled when the account of the network client
-   is null, avoiding DELETE requests to the server when synchronization (PROPFIND)
-   on a single file responds with 404. Also, when PROPFINDs respond with 404, the
-   delete operation has been changed to be just local and not remote too.
-
-   https://github.com/owncloud/enterprise/issues/6638
-   https://github.com/owncloud/android/pull/4408
-
 * Bugfix - Av. offline files are not removed when "Local only" option is clicked: [#4353](https://github.com/owncloud/android/issues/4353)
 
    "Local only" option in remove dialog will be displayed when the selected folder
@@ -120,6 +110,16 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4353
    https://github.com/owncloud/android/pull/4399
+
+* Bugfix - Unwanted DELETE operations when synchronization in single file fails: [#6638](https://github.com/owncloud/enterprise/issues/6638)
+
+   A new exception is now thrown and handled when the account of the network client
+   is null, avoiding DELETE requests to the server when synchronization (PROPFIND)
+   on a single file responds with 404. Also, when PROPFINDs respond with 404, the
+   delete operation has been changed to be just local and not remote too.
+
+   https://github.com/owncloud/enterprise/issues/6638
+   https://github.com/owncloud/android/pull/4408
 
 * Change - Upgrade minimum SDK version to Android 7.0 (v24): [#4230](https://github.com/owncloud/android/issues/4230)
 
