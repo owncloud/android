@@ -667,6 +667,8 @@
   <string name="release_notes_footer">Aitäh, et kasutad %1$si.\n❤</string>
   <string name="release_notes_proceed">Jätka</string>
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
+  <string name="release_notes_4_2_2_title_downloads_content_length">Parandused allalaadimistes</string>
+  <string name="release_notes_4_2_2_subtitle_downloads_content_length">Allalaadimised töötavad taas normaalselt iga failitüübi korral</string>
   <string name="release_notes_4_3_0_title_1">Uus seadistus automaatselt allalaaditud failide eemaldamiseks, mida teatud aja jooksul ei kasutatud.</string>
   <string name="release_notes_4_3_0_subtitle_1">\"Lisavalikud\" jaotisse on lisatud uus seadistus automaatselt allalaaditud failide kustutamiseks, kui nende viimase kasutamise aeg ületab seadistuses valitud aja.</string>
   <string name="release_notes_4_3_0_title_2">Konto automaatne tuvastamine sisselogimisel</string>
