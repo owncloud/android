@@ -597,13 +597,13 @@ class OCFileRepository(
             }
         }
 
-        // 2. Remove the folder itself if it has files
-        deleteFolderIfHasNoFilesInside(ocFile = ocFile, onlyFromLocalStorage = onlyFromLocalStorage)
+        // 2. Remove the folder itself if it has no files
+        deleteFolderIfItHasNoFilesInside(ocFolder = ocFile, onlyFromLocalStorage = onlyFromLocalStorage)
     }
 
-    private fun deleteFolderIfHasNoFilesInside(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
-        localStorageProvider.deleteFolderIfHasNoFilesInside(ocFile = ocFile)
-        deleteFromLocalDatabase(ocFile, onlyFromLocalStorage)
+    private fun deleteFolderIfItHasNoFilesInside(ocFolder: OCFile, onlyFromLocalStorage: Boolean) {
+        localStorageProvider.deleteLocalFolderIfItHasNoFilesInside(ocFolder = ocFolder)
+        deleteFromLocalDatabase(ocFolder, onlyFromLocalStorage)
     }
 
     private fun deleteLocalFile(ocFile: OCFile, onlyFromLocalStorage: Boolean) {

@@ -6,6 +6,7 @@
  * @author David González Verdugo
  * @author Aitor Ballesteros Pavón
  *
+ * Copyright (C) 2011  Bartek Przybylski
  * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify

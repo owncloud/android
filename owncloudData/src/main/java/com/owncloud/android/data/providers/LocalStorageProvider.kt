@@ -212,13 +212,12 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
         return fileToDelete.deleteRecursively()
     }
 
-    fun deleteFolderIfHasNoFilesInside(ocFile: OCFile) {
-        val safeStoragePath = ocFile.getStoragePathOrExpectedPathForFile()
+    fun deleteLocalFolderIfItHasNoFilesInside(ocFolder: OCFile) {
+        val safeStoragePath = ocFolder.getStoragePathOrExpectedPathForFile()
         val folder = File(safeStoragePath)
 
         val filesInFolder = folder.listFiles()
-        if (filesInFolder.isNullOrEmpty()) { // Verify if the folder is empty
-            // If it is empty, delete it
+        if (filesInFolder.isNullOrEmpty()) {
             folder.deleteRecursively()
         }
     }
