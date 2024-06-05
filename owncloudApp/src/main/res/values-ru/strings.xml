@@ -152,14 +152,14 @@
   <string name="uploader_error_message_source_file_not_copied">Произошла ошибка во время копирования этого файла во временную папку. Пожалуйста попробуйте послать заново.</string>
   <string name="file_list_seconds_ago">несколько секунд назад</string>
   <string name="file_list_empty_title_all_files">Здесь нет файлов</string>
-  <string name="spaces_list_empty_title">Нет пробелов</string>
+  <string name="spaces_list_empty_title">Нет пространств</string>
   <string name="space_label">пространство:</string>
   <string name="file_list_empty_title_available_offline">Нет файлов</string>
   <string name="file_list_empty_title_shared_by_links">Нет ссылок</string>
   <string name="file_list_empty_subtitle_all_files">Загрузите что-нибудь или синхронизируйте со своими устройствами!</string>
   <string name="shares_list_empty_title">Нет пробелов</string>
   <string name="shares_list_empty_subtitle">Вы не используете стороние ресурсами</string>
-  <string name="spaces_list_empty_subtitle">У вас нет доступа ни к одному хранилищу!</string>
+  <string name="spaces_list_empty_subtitle">У вас нет доступа ни к одному пространству!</string>
   <string name="file_list_empty_subtitle_available_offline">Здесь будут файлы и каталоги, отмеченные для оффлайн-режима</string>
   <string name="file_list_empty_subtitle_shared_by_links">Здесь появятся файлы и каталоги, ссылкой на которые вы поделитесь</string>
   <string name="file_list_loading">Загрузка...</string>
@@ -644,12 +644,12 @@
   <string name="prefs_http_logs">Записывать в лог-файл HTTP запросы и ответы</string>
   <string name="prefs_logs_summary">В логах может содержаться чувствительная информация. Отправка логов третьим лицам находится под вашей ответственностью</string>
   <string name="synchronizing_account">Синхронизация аккаунта</string>
-  <string name="spaces_sync_failed">Хранилища не могут быть обновлены</string>
+  <string name="spaces_sync_failed">Пространства не могут быть обновлены</string>
   <!--Scoped storage migration wizard-->
   <string name="scoped_storage_wizard_explanation">Найдено %1$s данных на вашем внешнем хранилище. Он будет перемещен в безопасное хранилище на вашем устройстве. Оставшиеся файлы будут удалены из вашего внешнего хранилища после переноса, чтобы избежать дублирования и уязвимости.</string>
   <string name="scoped_storage_wizard_intro">Ваше приложение было обновлено. Это обновление приложения переносит ваши файлы в более безопасное место на вашем устройстве. Эта одноразовая миграция данных обязательна и может занять до минуты или больше.</string>
   <string name="scoped_storage_wizard_intro_button">Давайте начнём</string>
-  <string name="scoped_storage_wizard_not_enough_space_warning">В настоящее время ваше свободное место на вашем устройстве ограничено. Некоторые файлы могут не быть перенесены, пожалуйста, убедитесь, что все загруженные файлы продолжают загружаться после завершения процесса.</string>
+  <string name="scoped_storage_wizard_not_enough_space_warning">В настоящее время свободное место на вашем устройстве ограничено. Перенос некоторых файлов может не завершиться. Пожалуйста, убедитесь, что все загруженные файлы действительно загрузились по окончании процесса.</string>
   <string name="scoped_storage_wizard_migrate_and_clean_button">Перенести сейчас</string>
   <string name="scoped_storage_wizard_migration_completed">Перенос завершен успешно. Ваши файлы теперь в большей безопасности, чем когда-либо прежде.</string>
   <string name="scoped_storage_wizard_migration_completed_access_files_button">Доступ к вашим файлам</string>
@@ -678,7 +678,7 @@
   <string name="release_notes_4_3_0_title_4">Диалоговое окно конфликта имен больше похоже на Android.</string>
   <string name="release_notes_4_3_0_subtitle_4">Внешний вид диалогового окна «Конфликты имен» был изменен, чтобы оно выглядело в стиле Android и стало более похожим на другие диалоговые окна в приложении.</string>
   <string name="release_notes_4_3_0_title_5">Значок объектива в селекторе папок</string>
-  <string name="release_notes_4_3_0_subtitle_5">Значок объектива на панели инструментов был удален при отображении пробелов в папках</string>
+  <string name="release_notes_4_3_0_subtitle_5">Значок лупы на панели инструментов был удален при выводе списка пространств в инструменте выбора папок</string>
   <string name="release_notes_4_3_0_title_6">Добавить предупреждение о http-соединениях</string>
   <string name="release_notes_4_3_0_subtitle_6">Добавлено диалоговое окно предупреждения в представлении входа в систему при http-соединении</string>
   <string name="release_notes_4_3_0_title_7">Исправьте опцию \"Только локально\" в диалоговом окне удаления</string>
@@ -699,7 +699,7 @@
   <string name="release_notes_4_3_0_title_improve_available_offline_performance">Улучшения доступной производительности в автономном режиме</string>
   <string name="release_notes_4_3_0_subtitle_improve_available_offline_performance">Файлы, содержащиеся в доступной автономной папке, будут обновляться только в том случае, если они были изменены</string>
   <string name="release_notes_4_3_0_title_search_functionality_in_spaces_list">Функциональность поиска в списке пространств</string>
-  <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">Функция поиска была добавлена в список пробелов, когда вы пытаетесь их отфильтровать</string>
+  <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">Функция поиска была добавлена в список пространств, когда вы пытаетесь их отфильтровать</string>
   <string name="release_notes_4_3_0_title_video_streaming_spaces">Потоковое видео в пространствах</string>
   <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Видеофайлы, расположенные в пространствах, теперь можно передавать правильно</string>
   <string name="release_notes_4_3_0_title_accessibility_improvements">Улучшения доступности</string>
@@ -714,7 +714,7 @@
   <string name="open_in_web_error_too_early">Запрашиваемый файл в данный момент недоступен, пожалуйста, попробуйте позже </string>
   <!--oCIS accounts warning-->
   <string name="ocis_accounts_warning_title">Предупреждение о бесконечной шкале счетов</string>
-  <string name="ocis_accounts_warning_message">Пожалуйста, удалите учетную запись и войдите снова, чтобы получить возможность использования пространства.</string>
+  <string name="ocis_accounts_warning_message">Пожалуйста, удалите учетную запись и войдите снова, чтобы получить возможность использования пространств.</string>
   <string name="ocis_accounts_warning_checkbox_message">Не показывать снова</string>
   <string name="ocis_accounts_warning_button">понял</string>
   <string name="tab_label_ascii">Текст</string>

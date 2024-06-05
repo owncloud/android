@@ -667,6 +667,8 @@
   <string name="release_notes_footer">Obrigado por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Prosseguir</string>
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
+  <string name="release_notes_4_2_2_title_downloads_content_length">Correções em arquivos</string>
+  <string name="release_notes_4_2_2_subtitle_downloads_content_length">Os arquivos baixados voltam a funcionar corretamente para todos os tipos de arquivo</string>
   <string name="release_notes_4_3_0_title_1">Nova configuração para remover arquivos baixados automaticamente que não foram usados ​​por um determinado tempo</string>
   <string name="release_notes_4_3_0_subtitle_1">Uma nova configuração foi adicionada na seção \"Avançado\" para excluir arquivos baixados automaticamente, quando o tempo desde a última utilização exceder o tempo selecionado na configuração</string>
   <string name="release_notes_4_3_0_title_2">Descoberta automática da conta no login</string>
@@ -691,6 +693,18 @@
   <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">Adicionada uma caixa de diálogo personalizada quando o arquivo que será excluído tiver miniatura e adicionado o número de arquivos que serão excluídos em uma seleção múltipla</string>
   <string name="release_notes_4_3_0_title_password_generator">Gerador de senha para links públicos</string>
   <string name="release_notes_4_3_0_subtitle_password_generator">Senhas para links públicos agora podem ser geradas por meio de um novo gerador em contas Infinite Scale</string>
+  <string name="release_notes_4_3_0_title_display_name_truncation">Resolvido o bug em que nomes de exibição longos eram truncados incorretamente</string>
+  <string name="release_notes_4_3_0_subtitle_display_name_truncation">Os nomes de exibição agora estão devidamente truncados no meio com reticências (…) para manter a legibilidade</string>
+  <string name="release_notes_4_3_0_title_improve_available_offline_performance">Melhorias no desempenho off-line disponível</string>
+  <string name="release_notes_4_3_0_subtitle_improve_available_offline_performance">Os arquivos contidos em uma pasta off-line disponível serão atualizados somente se tiverem sido modificados</string>
+  <string name="release_notes_4_3_0_title_search_functionality_in_spaces_list">Funcionalidade de pesquisa na lista de espaços</string>
+  <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">A funcionalidade de pesquisa foi adicionada à lista de espaços quando você tenta filtrá-los</string>
+  <string name="release_notes_4_3_0_title_video_streaming_spaces">Streaming de vídeo em espaços</string>
+  <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Arquivos de vídeo localizados em espaços agora podem ser reproduzidos corretamente em streaming</string>
+  <string name="release_notes_4_3_0_title_accessibility_improvements">Melhorias na acessibilidade</string>
+  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Algumas melhorias para tornar o aplicativo mais acessível</string>
+  <string name="release_notes_4_3_0_title_show_app_provider_icon_from_endpoint">Novos ícones na opção \"Abrir em (web)\" no menu de operações</string>
+  <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">Ícones mais apropriados foram adicionados à opção \"Abrir em (web)\" no menu de operações</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
@@ -737,5 +751,19 @@
   <string name="content_description_menu">Menu</string>
   <string name="content_description_manage_accounts">Gerenciar contas</string>
   <string name="content_description_search">Pesquisar</string>
+  <string name="content_description_type_view">Tipo de visualização</string>
+  <string name="content_description_image_previewed">Imagem visualizada</string>
+  <string name="content_description_add_public_link">Adicionar link público</string>
+  <string name="content_description_get_private_link">Obtenha link privado</string>
+  <string name="content_description_get_public_link">Obter link público</string>
+  <string name="content_description_delete_public_link">Excluir link público</string>
+  <string name="content_description_get_edit_public_link">Editar link público</string>
   <string name="content_description_remove_account">Remover conta</string>
+  <string name="content_description_add_new_content">Adicione novo conteúdo</string>
+  <string name="content_description_clean_account_storage">Limpe o armazenamento da conta</string>
+  <string name="content_description_logo">Logo</string>
+  <string name="content_description_add_share">Adicionar compartilhamento</string>
+  <string name="content_description_edit_share">Editar compartilhamento</string>
+  <string name="content_description_delete_share">Excluir compartilhamento</string>
+  <string name="content_description_file_operations">%1$s operações</string>
 </resources>
