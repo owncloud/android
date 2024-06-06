@@ -603,15 +603,15 @@ class OCFileRepository(
 
     private fun deleteFolderIfItHasNoFilesInside(ocFolder: OCFile, onlyFromLocalStorage: Boolean) {
         localStorageProvider.deleteLocalFolderIfItHasNoFilesInside(ocFolder = ocFolder)
-        deleteFromLocalDatabase(ocFolder, onlyFromLocalStorage)
+        deleteOrResetFileFromDatabase(ocFolder, onlyFromLocalStorage)
     }
 
     private fun deleteLocalFile(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         localStorageProvider.deleteLocalFile(ocFile)
-        deleteFromLocalDatabase(ocFile, onlyFromLocalStorage)
+        deleteOrResetFileFromDatabase(ocFile, onlyFromLocalStorage)
     }
 
-    private fun deleteFromLocalDatabase(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
+    private fun deleteOrResetFileFromDatabase(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         if (onlyFromLocalStorage) {
             localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null, lastUsage = null, etag = null))
         } else {
