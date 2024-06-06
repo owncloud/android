@@ -493,7 +493,7 @@ class OCFileRepository(
                 localFileDataSource.cleanConflict(ocFile.id!!)
             }
             if (ocFile.isFolder) {
-                deleteLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy)
+                deleteLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy, keepAvailableOfflineFile = true)
             } else {
                 deleteLocalFile(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy)
             }
@@ -583,22 +583,36 @@ class OCFileRepository(
         localFileDataSource.cleanWorkersUuid(fileId)
     }
 
-    private fun deleteLocalFolderRecursively(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
+    private fun deleteLocalFolderRecursively(ocFile: OCFile, onlyFromLocalStorage: Boolean, keepAvailableOfflineFile: Boolean = false) {
         val folderContent = localFileDataSource.getFolderContent(ocFile.id!!)
 
         // 1. Remove folder content recursively
         folderContent.forEach { file ->
-            if (!file.isAvailableOffline) {
-                if (file.isFolder) {
-                    deleteLocalFolderRecursively(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
-                } else {
-                    deleteLocalFile(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
+            if (keepAvailableOfflineFile) {
+                if (!file.isAvailableOffline) {
+                    deleteLocalFolderRecursivelyOrLocalFile(
+                        file = file,
+                        onlyFromLocalStorage = onlyFromLocalStorage,
+                    )
                 }
+            } else {
+                deleteLocalFolderRecursivelyOrLocalFile(
+                    file = file,
+                    onlyFromLocalStorage = onlyFromLocalStorage,
+                )
             }
         }
 
         // 2. Remove the folder itself if it has no files
         deleteFolderIfItHasNoFilesInside(ocFolder = ocFile, onlyFromLocalStorage = onlyFromLocalStorage)
+    }
+
+    private fun deleteLocalFolderRecursivelyOrLocalFile(file: OCFile, onlyFromLocalStorage: Boolean) {
+        if (file.isFolder) {
+            deleteLocalFolderRecursively(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
+        } else {
+            deleteLocalFile(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
+        }
     }
 
     private fun deleteFolderIfItHasNoFilesInside(ocFolder: OCFile, onlyFromLocalStorage: Boolean) {
