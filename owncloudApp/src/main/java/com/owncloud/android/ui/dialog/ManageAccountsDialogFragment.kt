@@ -1,3 +1,24 @@
+/**
+ * ownCloud Android client application
+ *
+ * @author Jorge Aguado Recio
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.owncloud.android.ui.dialog
 
 import android.accounts.Account
@@ -28,7 +49,7 @@ import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class AccountsManagementDialog : DialogFragment(), AccountsManagementAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
+class ManageAccountsDialogFragment : DialogFragment(), AccountsManagementAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
     private var accountListAdapter: AccountsManagementAdapter = AccountsManagementAdapter(this)
 
     private lateinit var originalAccounts: Set<String>
@@ -46,7 +67,7 @@ class AccountsManagementDialog : DialogFragment(), AccountsManagementAdapter.Acc
         val dialogView = inflater.inflate(R.layout.manage_accounts_dialog, null)
         builder.setView(dialogView)
 
-        val recyclerView = dialogView.findViewById<RecyclerView>(R.id.account_list_recycler_view_2)
+        val recyclerView = dialogView.findViewById<RecyclerView>(R.id.account_list_recycler_view)
 
         recyclerView.run {
             filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
@@ -62,7 +83,10 @@ class AccountsManagementDialog : DialogFragment(), AccountsManagementAdapter.Acc
 
         //subscribeToViewModels()
 
-        return builder.create()
+        val dialog = builder.create()
+        dialog.window?.setBackgroundDrawableResource(R.color.transparent)
+
+        return dialog
     }
 
     private fun subscribeToViewModels() {
