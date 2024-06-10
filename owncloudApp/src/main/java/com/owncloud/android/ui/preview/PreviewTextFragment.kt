@@ -414,7 +414,8 @@ class PreviewTextFragment : FileFragment() {
                 "text/vnd.fmi.flexstor",
                 "text/vnd.rn-realtext",
                 "text/vnd.wap.wml",
-                "text/vnd.wap.wmlscript"
+                "text/vnd.wap.wmlscript",
+                "text/uri-list",
             )
 
             return (file != null && file.isAvailableLocally && file.isText &&
