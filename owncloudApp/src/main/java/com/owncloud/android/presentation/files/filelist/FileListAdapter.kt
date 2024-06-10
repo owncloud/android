@@ -304,6 +304,8 @@ class FileListAdapter(
             if (file.isFolder) {
                 // Folder
                 fileIcon.setImageResource(R.drawable.ic_menu_archive)
+            } else if (file.mimeType == "text/uri-list") {
+                fileIcon.setImageResource(R.drawable.ic_action_open_shortcut)
             } else {
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
                 fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))
