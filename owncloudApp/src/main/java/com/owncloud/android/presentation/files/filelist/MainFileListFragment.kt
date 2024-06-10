@@ -105,6 +105,7 @@ import com.owncloud.android.presentation.files.SortOrder
 import com.owncloud.android.presentation.files.SortType
 import com.owncloud.android.presentation.files.ViewType
 import com.owncloud.android.presentation.files.createfolder.CreateFolderDialogFragment
+import com.owncloud.android.presentation.files.createshortcut.CreateShortcutDialogFragment
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
@@ -126,6 +127,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
+import java.io.File
 
 class MainFileListFragment : Fragment(),
     CreateFolderDialogFragment.CreateFolderListener,
@@ -133,7 +135,8 @@ class MainFileListFragment : Fragment(),
     SearchView.OnQueryTextListener,
     SortDialogListener,
     SortOptionsView.CreateFolderListener,
-    SortOptionsView.SortOptionsListener {
+    SortOptionsView.SortOptionsListener,
+    CreateShortcutDialogFragment.CreateShortcutListener {
 
     private val mainFileListViewModel by viewModel<MainFileListViewModel> {
         parametersOf(
@@ -824,6 +827,7 @@ class MainFileListFragment : Fragment(),
             }
             registerFabUploadListener()
             registerFabMkDirListener()
+            registerFabNewShortcutListener()
         }
     }
 
@@ -868,6 +872,17 @@ class MainFileListFragment : Fragment(),
     private fun registerFabNewFileListener(listAppRegistry: List<AppRegistryMimeType>) {
         binding.fabNewfile.setOnClickListener {
             openBottomSheetToCreateNewFile(listAppRegistry)
+            collapseFab()
+        }
+    }
+
+    /**
+     * Registers [android.view.View.OnClickListener] on the 'New shortcut' mini FAB for the linked action.
+     */
+    private fun registerFabNewShortcutListener() {
+        binding.fabNewshortcut.setOnClickListener {
+            val dialog = CreateShortcutDialogFragment.newInstance(mainFileListViewModel.getFile(), this)
+            dialog.show(requireActivity().supportFragmentManager, DIALOG_CREATE_SHORTCUT)
             collapseFab()
         }
     }
@@ -1001,6 +1016,18 @@ class MainFileListFragment : Fragment(),
         dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
         fileListAdapter.clearSelection()
         updateActionModeAfterTogglingSelected()
+    }
+
+    override fun createShortcutFileFromApp(fileName: String, url: String) {
+        val fileContent = """
+                [InternetShortcut]
+                URL=$url
+                """.trimIndent()
+        val storageDir = requireActivity().externalCacheDir
+        val shortcutFile = File(storageDir, "$fileName.url")
+        shortcutFile.writeText(fileContent)
+        val shortcutFilePath = shortcutFile.absolutePath
+        uploadActions?.uploadShortcutFileFromApp(arrayOf(shortcutFilePath))
     }
 
     override fun onFolderNameSet(newFolderName: String, parentFolder: OCFile) {
@@ -1477,6 +1504,7 @@ class MainFileListFragment : Fragment(),
 
     interface UploadActions {
         fun uploadFromCamera()
+        fun uploadShortcutFileFromApp(shortcutFilePath: Array<String>)
         fun uploadFromFileSystem()
     }
 
@@ -1488,6 +1516,7 @@ class MainFileListFragment : Fragment(),
         private val forbiddenChars = listOf('/', '\\')
 
         private const val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
+        private const val DIALOG_CREATE_SHORTCUT = "DIALOG_CREATE_SHORTCUT"
 
         private const val TAG_SECOND_FRAGMENT = "SECOND_FRAGMENT"
         private const val FILE_DOCXF_EXTENSION = "docxf"

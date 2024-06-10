@@ -40,11 +40,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
+import android.text.SpannableStringBuilder
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -70,6 +72,8 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
+import com.owncloud.android.extensions.extractUrlFromFile
+import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.extensions.manageOptionLockSelected
 import com.owncloud.android.extensions.observeWorkerTillItFinishes
@@ -1361,6 +1365,36 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
+    private fun openShortcutFileInBrowser(file :OCFile) {
+            val url = extractUrlFromFile(file.storagePath.toString())
+            val truncatedUrl = url?.truncateWithEllipsis(MAX_URL_LENGTH)
+            val message = SpannableStringBuilder()
+                .append(getString(R.string.open_shortcut_description))
+                .append(truncatedUrl)
+                val dialog = AlertDialog.Builder(this@FileDisplayActivity)
+                    .setTitle(getString(R.string.open_shortcut_title))
+                    .setMessage(message)
+                    .setPositiveButton(R.string.drawer_open) { view, _ ->
+                        url?.let {
+                            goToUrl(url)
+                        }
+                        view.dismiss()
+                    }
+                    .setNegativeButton(R.string.share_cancel_public_link_button) { view, _ ->
+                        view.dismiss()
+                    }
+                    .setCancelable(true)
+                    .create()
+                dialog.show()
+    }
+    private fun String.truncateWithEllipsis(maxLength: Int): String {
+        return if (this.length > maxLength) {
+            "${this.substring(0, maxLength)}..."
+        } else {
+            this
+        }
+    }
+
     private fun onSynchronizeFolderOperationFinish(
         uiResult: UIResult<Unit>
     ) {
@@ -1451,7 +1485,12 @@ class FileDisplayActivity : FileActivity(),
             onWorkRunning = { progress -> Timber.d("Downloading - Progress $progress") },
             onWorkSucceeded = {
                 CoroutineScope(Dispatchers.IO).launch {
-                    if (file.id == waitingToSend?.id) {
+                    if (file.mimeType == MIMETYPE_TEXT_URI_LIST) {
+                        waitingToOpen = storageManager.getFileByPath(file.remotePath, file.spaceId)
+                        launch(Dispatchers.Main) {
+                            openShortcutFileInBrowser(waitingToOpen!!)
+                        }
+                    } else if (file.id == waitingToSend?.id) {
                         waitingToSend = storageManager.getFileByPath(file.remotePath, file.spaceId)
                         sendDownloadedFile()
                     } else if (file.id == waitingToOpen?.id) {
@@ -1613,11 +1652,24 @@ class FileDisplayActivity : FileActivity(),
      * @param file [OCFile] to sync and open.
      */
     private fun startSyncThenOpen(file: OCFile) {
-        navigateToDetails(account = account, ocFile = file, syncFileAtOpen = true)
+        if (file.mimeType == MIMETYPE_TEXT_URI_LIST) {
+            openOrDownloadShortcutFile(file)
+        } else {
+            navigateToDetails(account = account, ocFile = file, syncFileAtOpen = true)
 //        fileWaitingToPreview = file
 //        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, account.name))
-        updateToolbar(file)
-        setFile(file)
+            updateToolbar(file)
+            setFile(file)
+        }
+    }
+
+    private fun openOrDownloadShortcutFile(file: OCFile) {
+        if (file.isAvailableLocally) {
+            waitingToOpen = storageManager.getFileByPath(file.remotePath, file.spaceId)
+            openShortcutFileInBrowser(waitingToOpen!!)
+        } else {
+            requestForDownload(file)
+        }
     }
 
     private fun navigateToDetails(account: Account, ocFile: OCFile, syncFileAtOpen: Boolean) {
@@ -1788,6 +1840,9 @@ class FileDisplayActivity : FileActivity(),
         filesUploadHelper?.uploadFromCamera(REQUEST_CODE__UPLOAD_FROM_CAMERA)
     }
 
+    override fun uploadShortcutFileFromApp(shortcutFilePath: Array<String>) {
+        requestUploadOfFilesFromFileSystem(shortcutFilePath, UploadBehavior.MOVE.toLegacyLocalBehavior())
+    }
     override fun uploadFromFileSystem() {
         val action = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             setType(ALL_FILES_SAF_REGEX).addCategory(Intent.CATEGORY_OPENABLE)
@@ -1883,6 +1938,8 @@ class FileDisplayActivity : FileActivity(),
         private const val KEY_WAITING_TO_SEND = "WAITING_TO_SEND"
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
+        private const val MAX_URL_LENGTH = 90
+        private const val MIMETYPE_TEXT_URI_LIST = "text/uri-list"
         const val KEY_DEEP_LINK_ACCOUNTS_CHECKED = "DEEP_LINK_ACCOUNTS_CHECKED"
 
         private const val CUSTOM_DIALOG_TAG = "CUSTOM_DIALOG"
