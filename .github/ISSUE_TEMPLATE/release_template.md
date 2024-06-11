@@ -17,7 +17,7 @@ For OEM releases, keep the OEM Release template and remove the Open and Patch Re
 
 ### TASKS:
 
- - [ ] [DOC] Ping in #android-dev-internal about the new release (@mmatel)
+ - [ ] [DOC] Ping in #android-dev-internal about the new release (@mmattel)
  - [ ] [GIT] Create branch `release/M.m.p` in owncloud/android from master
  - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
  - [ ] [DEV] Update [SBOM](https://cloud.owncloud.com/f/6072870)
@@ -32,7 +32,7 @@ For OEM releases, keep the OEM Release template and remove the Open and Patch Re
  - [ ] [QA] Regression Test execution
  - [ ] [QA] QA Approval
  - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
- - [ ] [DOC] Ping in #android-dev-internal that we are close to sign the new tags (@mmatel)
+ - [ ] [DOC] Ping in #android-dev-internal that we are close to sign the new tags (@mmattel)
  - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
  - [ ] [DIS] Update screenshots and check they are OK in Play Store and in `README.md` (if needed)
  - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
