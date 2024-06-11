@@ -493,7 +493,7 @@ class OCFileRepository(
                 localFileDataSource.cleanConflict(ocFile.id!!)
             }
             if (ocFile.isFolder) {
-                deleteLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy, removeAvailableOfflineFile = false)
+                deleteLocalFolderRecursively(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy)
             } else {
                 deleteLocalFile(ocFile = ocFile, onlyFromLocalStorage = removeOnlyLocalCopy)
             }
@@ -583,12 +583,12 @@ class OCFileRepository(
         localFileDataSource.cleanWorkersUuid(fileId)
     }
 
-    private fun deleteLocalFolderRecursively(ocFile: OCFile, onlyFromLocalStorage: Boolean, removeAvailableOfflineFile: Boolean = true) {
+    private fun deleteLocalFolderRecursively(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         val folderContent = localFileDataSource.getFolderContent(ocFile.id!!)
 
         // 1. Remove folder content recursively
         folderContent.forEach { file ->
-            if (removeAvailableOfflineFile || !file.isAvailableOffline) {
+            if (!onlyFromLocalStorage || !file.isAvailableOffline) {
                 if (file.isFolder) {
                     deleteLocalFolderRecursively(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
                 } else {

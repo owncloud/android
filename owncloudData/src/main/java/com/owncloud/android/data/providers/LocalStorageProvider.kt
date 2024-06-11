@@ -218,7 +218,7 @@ sealed class LocalStorageProvider(private val rootFolderName: String) {
 
         val filesInFolder = folder.listFiles()
         if (filesInFolder.isNullOrEmpty()) {
-            folder.deleteRecursively()
+            folder.delete()
         }
     }
 
