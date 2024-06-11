@@ -182,7 +182,6 @@ class FileDisplayActivity : FileActivity(),
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
     private val transfersViewModel: TransfersViewModel by viewModel()
 
-
     private val sharedPreferences: SharedPreferencesProvider by inject()
 
     var filesUploadHelper: FilesUploadHelper? = null
@@ -1335,6 +1334,7 @@ class FileDisplayActivity : FileActivity(),
                     is AccountNotFoundException -> {
                         showRequestAccountChangeNotice(getString(R.string.sync_fail_ticker_unauthorized), false)
                     }
+
                     is UnauthorizedException -> {
                         launch(Dispatchers.IO) {
                             val credentials = AccountUtils.getCredentialsForAccount(MainApp.appContext, account)
@@ -1365,28 +1365,29 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
-    private fun openShortcutFileInBrowser(file :OCFile) {
-            val url = extractUrlFromFile(file.storagePath.toString())
-            val truncatedUrl = url?.truncateWithEllipsis(MAX_URL_LENGTH)
-            val message = SpannableStringBuilder()
-                .append(getString(R.string.open_shortcut_description))
-                .append(truncatedUrl)
-                val dialog = AlertDialog.Builder(this@FileDisplayActivity)
-                    .setTitle(getString(R.string.open_shortcut_title))
-                    .setMessage(message)
-                    .setPositiveButton(R.string.drawer_open) { view, _ ->
-                        url?.let {
-                            goToUrl(url)
-                        }
-                        view.dismiss()
-                    }
-                    .setNegativeButton(R.string.share_cancel_public_link_button) { view, _ ->
-                        view.dismiss()
-                    }
-                    .setCancelable(true)
-                    .create()
-                dialog.show()
+    private fun openShortcutFileInBrowser(file: OCFile) {
+        val url = extractUrlFromFile(file.storagePath.toString())
+        val truncatedUrl = url?.truncateWithEllipsis(MAX_URL_LENGTH)
+        val message = SpannableStringBuilder()
+            .append(getString(R.string.open_shortcut_description))
+            .append(truncatedUrl)
+        val dialog = AlertDialog.Builder(this@FileDisplayActivity)
+            .setTitle(getString(R.string.open_shortcut_title))
+            .setMessage(message)
+            .setPositiveButton(R.string.drawer_open) { view, _ ->
+                url?.let {
+                    goToUrl(url)
+                }
+                view.dismiss()
+            }
+            .setNegativeButton(R.string.share_cancel_public_link_button) { view, _ ->
+                view.dismiss()
+            }
+            .setCancelable(true)
+            .create()
+        dialog.show()
     }
+
     private fun String.truncateWithEllipsis(maxLength: Int): String {
         return if (this.length > maxLength) {
             "${this.substring(0, maxLength)}..."
@@ -1843,6 +1844,7 @@ class FileDisplayActivity : FileActivity(),
     override fun uploadShortcutFileFromApp(shortcutFilePath: Array<String>) {
         requestUploadOfFilesFromFileSystem(shortcutFilePath, UploadBehavior.MOVE.toLegacyLocalBehavior())
     }
+
     override fun uploadFromFileSystem() {
         val action = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             setType(ALL_FILES_SAF_REGEX).addCategory(Intent.CATEGORY_OPENABLE)

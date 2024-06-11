@@ -24,7 +24,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
@@ -40,7 +39,7 @@ class CreateShortcutDialogFragment : DialogFragment() {
     private var isValidFileName = false
     private var hasForbiddenCharacters = false
     private var hasMaxCharacters = false
-    private var hasSpace = false
+    private var hasEmptyValue = false
     private val binding get() = _binding!!
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = CreateShortcutDialogBinding.inflate(inflater, container, false)
@@ -86,9 +85,9 @@ class CreateShortcutDialogFragment : DialogFragment() {
         }
         binding.createShortcutDialogUrlValue.doOnTextChanged { urlValue, _, _, _ ->
             urlValue?.let {
-                hasSpace = urlValue.contains(" ")
-                isValidUrl = urlValue.isNotBlank() && !hasSpace
-                handleUrlRequirements(hasSpace)
+                hasEmptyValue = urlValue.contains(" ")
+                isValidUrl = urlValue.isNotBlank() && !hasEmptyValue
+                handleUrlRequirements(hasEmptyValue)
                 updateCreateShortcutButtonState()
             }
         }
