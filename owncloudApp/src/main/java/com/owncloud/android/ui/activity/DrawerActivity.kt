@@ -8,18 +8,18 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavon
- * <p>
+ *
  * Copyright (C) 2024 ownCloud GmbH.
- * <p>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
- * <p>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -650,29 +650,6 @@ abstract class DrawerActivity : ToolbarActivity() {
     override fun onResume() {
         super.onResume()
         setDrawerMenuItemChecked(checkedMenuItem)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        // update Account list and active account if Manage Account activity replies with
-        // - ACCOUNT_LIST_CHANGED = true
-        // - RESULT_OK
-        if (requestCode == ACTION_MANAGE_ACCOUNTS && resultCode == RESULT_OK && data!!.getBooleanExtra(
-                KEY_ACCOUNT_LIST_CHANGED,
-                false
-            )
-        ) {
-
-            // current account has changed
-            if (data.getBooleanExtra(KEY_CURRENT_ACCOUNT_CHANGED, false)) {
-                account = drawerViewModel.getCurrentAccount(this)
-                restart()
-            } else {
-                updateAccountList()
-                updateQuota()
-            }
-        }
     }
 
     override fun onAccountCreationSuccessful(future: AccountManagerFuture<Bundle?>?) {

@@ -4,6 +4,7 @@
  * @author Andy Scherzinger
  * @author Christian Schabesberger
  * @author Jorge Aguado Recio
+ * @author Juan Carlos Garrote Gascón
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -107,11 +108,8 @@ abstract class ToolbarActivity : BaseActivity() {
             )
         }
         avatarView.setOnClickListener {
-            // The drawer activity will take care of checking if the account changed.
             val dialog = ManageAccountsDialogFragment()
             dialog.show(supportFragmentManager, "ACCOUNTS_MANAGEMENT_DIALOG")
-            //val manageAccountsIntent = Intent(applicationContext, AccountsManagementActivity::class.java)
-            //startActivityForResult(manageAccountsIntent, DrawerActivity.ACTION_MANAGE_ACCOUNTS)
         }
     }
 
