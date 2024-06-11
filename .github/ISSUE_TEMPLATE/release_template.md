@@ -17,7 +17,7 @@ For OEM releases, keep the OEM Release template and remove the Open and Patch Re
 
 ### TASKS:
 
- - [ ] [DOC] Ping in #documentation-internal about the new release
+ - [ ] [DOC] Ping in #android-dev-internal about the new release (@mmatel)
  - [ ] [GIT] Create branch `release/M.m.p` in owncloud/android from master
  - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
  - [ ] [DEV] Update [SBOM](https://cloud.owncloud.com/f/6072870)
@@ -32,7 +32,7 @@ For OEM releases, keep the OEM Release template and remove the Open and Patch Re
  - [ ] [QA] Regression Test execution
  - [ ] [QA] QA Approval
  - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
- - [ ] [DOC] Ping in #documentation-internal that we are close to sign the new tags
+ - [ ] [DOC] Ping in #android-dev-internal that we are close to sign the new tags (@mmatel)
  - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
  - [ ] [DIS] Update screenshots and check they are OK in Play Store and in `README.md` (if needed)
  - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
@@ -40,8 +40,9 @@ For OEM releases, keep the OEM Release template and remove the Open and Patch Re
  - [ ] [GIT] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
  - [ ] [DIS] Release published in Play Store
  - [ ] [DIS] Publish post in central.owncloud.org ([`Category:News + Tag:android`](https://central.owncloud.org/tags/c/news/5/android))
- - [ ] [COM] Inform `#updates` and `#marketing` in internal chat that release is out
+ - [ ] [COM] Inform #general in public chat that release is out
  - [ ] [GIT] Merge without rebasing `release/M.m.p` branch into `master`, in owncloud/android
+ - [ ] [DOC] Ping @TheOneRing to update release information in https://owncloud.com/mobile-apps/
  - [ ] [DOC] Update documentation with new stuff by creating [issue](https://github.com/owncloud/docs-client-android/issues)
 
 
@@ -78,9 +79,10 @@ _____
  - [ ] [GIT] Move tag `latest` pointing the same commit as the release commit
  - [ ] [GIT] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
  - [ ] [DIS] Release published in Play Store
- - [ ] [COM] Inform `#updates` in internal chat that release is out
- - [ ] [GIT] Fix conflicts if they happen. GitHub option will help and will merge `master` into release branch, getting it ready to fast forward
+ - [ ] [COM] Inform `#general` in public chat that release is out
+ - [ ] [GIT] Merge `master` into `release/M.m.p`, fixing all the conflicts that could happen
  - [ ] [GIT] Merge without rebasing `release/M.m.p` branch into `master`, in owncloud/android
+ - [ ] [DOC] Ping @TheOneRing to update release information in https://owncloud.com/mobile-apps/
 
 
 
