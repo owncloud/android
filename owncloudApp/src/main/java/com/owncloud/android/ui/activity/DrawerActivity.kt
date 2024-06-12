@@ -58,6 +58,7 @@ import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.goToUrl
+import com.owncloud.android.extensions.openFeedbackDialog
 import com.owncloud.android.extensions.openPrivacyPolicy
 import com.owncloud.android.extensions.sendEmail
 import com.owncloud.android.lib.common.OwnCloudAccount
@@ -207,17 +208,20 @@ abstract class DrawerActivity : ToolbarActivity() {
                     val settingsIntent = Intent(applicationContext, SettingsActivity::class.java)
                     startActivity(settingsIntent)
                 }
+
                 R.id.drawer_menu_account_add -> createAccount(false)
                 R.id.drawer_menu_account_manage -> {
                     val manageAccountsIntent = Intent(applicationContext, AccountsManagementActivity::class.java)
                     startActivityForResult(manageAccountsIntent, ACTION_MANAGE_ACCOUNTS)
                 }
+
                 R.id.drawer_menu_feedback -> openFeedback()
                 R.id.drawer_menu_help -> openHelp()
                 R.id.drawer_menu_privacy_policy -> openPrivacyPolicy()
                 Menu.NONE -> {
                     accountClicked(menuItem.title.toString())
                 }
+
                 else -> Timber.i("Unknown drawer menu item clicked: %s", menuItem.title)
             }
             true
@@ -276,6 +280,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                 uploadListIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(uploadListIntent)
             }
+
             R.id.nav_available_offline_files -> navigateToOption(FileListOption.AV_OFFLINE)
             R.id.nav_shared_by_link_files -> navigateToOption(FileListOption.SHARED_BY_LINK)
         }
@@ -286,9 +291,13 @@ abstract class DrawerActivity : ToolbarActivity() {
     }
 
     private fun openFeedback() {
-        val feedbackMail = getString(R.string.mail_feedback)
-        val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.drawer_feedback)
-        sendEmail(email = feedbackMail, subject = feedback)
+        if (drawerViewModel.isFeedbackEnabled()) {
+            val feedbackMail = getString(R.string.mail_feedback)
+            val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.drawer_feedback)
+            sendEmail(email = feedbackMail, subject = feedback)
+        } else {
+            openFeedbackDialog()
+        }
     }
 
     private fun openDrawerLink() {
@@ -464,10 +473,12 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 )
 
                             }
+
                             userQuota.available == 0L -> { // Quota 0, guest users
                                 getAccountQuotaBar()?.isVisible = false
                                 getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
                             }
+
                             else -> { // Limited quota
                                 // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
                                 getAccountQuotaBar()?.run {
@@ -737,6 +748,8 @@ abstract class DrawerActivity : ToolbarActivity() {
     protected abstract fun restart()
 
     companion object {
+        const val CENTRAL_URL = "https://central.owncloud.org/"
+        const val GITHUB_URL = "https://github.com/owncloud/android/issues/new/choose"
         private const val KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE"
         private const val KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM"
         const val ACTION_MANAGE_ACCOUNTS = 101

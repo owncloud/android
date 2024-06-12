@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,6 +28,7 @@ import androidx.preference.PreferenceScreen
 import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.extensions.goToUrl
+import com.owncloud.android.extensions.openFeedbackDialog
 import com.owncloud.android.extensions.sendEmail
 import com.owncloud.android.presentation.settings.SettingsFragment.Companion.removePreferenceFromScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -115,7 +117,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
                 true
             }
         } else {
-            moreScreen?.removePreferenceFromScreen(prefFeedback)
+            requireActivity().openFeedbackDialog()
         }
 
         // Imprint

@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -28,11 +30,14 @@ import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
+import android.text.method.LinkMovementMethod
 import android.view.inputmethod.InputMethodManager
 import android.webkit.MimeTypeMap
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -55,6 +60,7 @@ import com.owncloud.android.presentation.security.pattern.PatternActivity
 import com.owncloud.android.presentation.settings.privacypolicy.PrivacyPolicyActivity
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.providers.MdmProvider
+import com.owncloud.android.ui.activity.DrawerActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.ALL_FILES_SAF_REGEX
 import com.owncloud.android.utils.CONFIGURATION_DEVICE_PROTECTION
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -332,6 +338,23 @@ private fun Activity.showSelectSecurityDialog(
             }
             .show()
     }
+}
+
+fun Activity.openFeedbackDialog() {
+    val message = getString(R.string.feedback_description_dialog, DrawerActivity.CENTRAL_URL, DrawerActivity.GITHUB_URL).trimIndent()
+    val spannableString = HtmlCompat.fromHtml(message, HtmlCompat.FROM_HTML_MODE_LEGACY)
+    val builder = AlertDialog.Builder(this)
+    builder.apply {
+        setTitle(getString(R.string.drawer_feedback))
+        setMessage(spannableString)
+        setNegativeButton(R.string.drawer_close) { dialog, _ ->
+            dialog.dismiss()
+        }
+        setCancelable(false)
+    }
+    val alertDialog = builder.create()
+    alertDialog.show()
+    alertDialog.findViewById<TextView>(android.R.id.message)?.movementMethod = LinkMovementMethod.getInstance()
 }
 
 fun Activity.manageOptionLockSelected(type: LockType) {
