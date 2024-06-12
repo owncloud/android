@@ -30,12 +30,14 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.preference.Preference
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasFlag
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
@@ -303,9 +305,9 @@ class SettingsMoreFragmentTest {
     }
 
     @Test
-    fun feedbackOpensSender() {
+    fun feedbackOpensSenderIfFeedbackMailExists() {
         launchTest()
-
+        every { moreViewModel.getFeedbackMail() } returns FEEDBACK_MAIL
         mockIntent(action = Intent.ACTION_SENDTO)
 
         onView(withText(R.string.prefs_send_feedback)).perform(click())
@@ -323,6 +325,16 @@ class SettingsMoreFragmentTest {
                 hasFlag(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
         )
+    }
+
+    @Test
+    fun feedbackOpensAlertDialogIfFeedbackMailIsEmpty() {
+        launchTest()
+        every { moreViewModel.getFeedbackMail() } returns EMPTY_VALUE
+
+        onView(withText(R.string.prefs_send_feedback)).perform(click())
+
+        onView(withText(R.string.drawer_feedback)).check(ViewAssertions.matches(isDisplayed()))
     }
 
     @Test
@@ -344,6 +356,9 @@ class SettingsMoreFragmentTest {
         private const val PREFERENCE_RECOMMEND = "recommend"
         private const val PREFERENCE_FEEDBACK = "feedback"
         private const val PREFERENCE_IMPRINT = "imprint"
+        private const val EMPTY_VALUE = ""
+        private const val FEEDBACK_MAIL = "mailto:android-app@owncloud.com"
+
     }
 
 }
