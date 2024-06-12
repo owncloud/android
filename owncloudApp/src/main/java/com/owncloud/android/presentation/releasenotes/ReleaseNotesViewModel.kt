@@ -145,6 +145,11 @@ class ReleaseNotesViewModel(
                 subtitle = R.string.release_notes_4_3_0_subtitle_create_open_shortcut,
                 type = ReleaseNoteType.ENHANCEMENT
             ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_report_feedback_central_github,
+                subtitle = R.string.release_notes_4_3_0_subtitle_report_feedback_central_github,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
         )
     }
 }
