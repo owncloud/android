@@ -769,7 +769,7 @@
     <string name="release_notes_4_3_0_subtitle_create_open_shortcut">Support for URL shortcut files</string>
     <string name="release_notes_4_3_0_title_create_open_shortcut">A new option has been added in the FAB to create a shortcut file with a .url extension. When the file is clicked, the URL will open in the browser</string>
     <string name="release_notes_4_3_0_title_report_feedback_central_github">Changes in the Feedback section</string>
-    <string name="release_notes_4_3_0_subtitle_report_feedback_central_github">A new dialog has been added when Feedback section is opened in the drawer menu and Settings. Two options for feedback will be offered within the dialog: Central Community and Github. Clicking on the links will redirect you to these pages</string>
+    <string name="release_notes_4_3_0_subtitle_report_feedback_central_github">A new dialog has been added when the Feedback section is opened in the drawer menu or Settings. Two options for feedback will be offered within the dialog: Central Community and GitHub. Clicking on the links will redirect you to these pages</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
