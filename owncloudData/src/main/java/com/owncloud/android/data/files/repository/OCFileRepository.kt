@@ -588,7 +588,7 @@ class OCFileRepository(
 
         // 1. Remove folder content recursively
         folderContent.forEach { file ->
-            if (!onlyFromLocalStorage || !file.isAvailableOffline) {
+            if (!(onlyFromLocalStorage && file.isAvailableOffline)) { // The condition will not be met when onlyFromLocalStorage is true and the file is of type available offline
                 if (file.isFolder) {
                     deleteLocalFolderRecursively(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
                 } else {
