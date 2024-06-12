@@ -291,7 +291,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     }
 
     private fun openFeedback() {
-        if (drawerViewModel.isFeedbackEnabled()) {
+        if (drawerViewModel.getFeedbackMail().isNotEmpty()) {
             val feedbackMail = getString(R.string.mail_feedback)
             val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.drawer_feedback)
             sendEmail(email = feedbackMail, subject = feedback)

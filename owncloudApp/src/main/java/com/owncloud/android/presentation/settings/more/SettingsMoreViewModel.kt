@@ -44,6 +44,8 @@ class SettingsMoreViewModel(
 
     fun isFeedbackEnabled() = contextProvider.getBoolean(R.bool.feedback_enabled)
 
+    fun getFeedbackMail() = contextProvider.getString(R.string.mail_feedback)
+
     fun isPrivacyPolicyEnabled() = contextProvider.getBoolean(R.bool.privacy_policy_enabled)
 
     fun isImprintEnabled() = contextProvider.getBoolean(R.bool.imprint_enabled)

@@ -110,14 +110,18 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         // Feedback
         if (moreViewModel.isFeedbackEnabled()) {
             prefFeedback?.setOnPreferenceClickListener {
-                val feedbackMail = getString(R.string.mail_feedback)
-                val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.prefs_feedback)
-
-                requireActivity().sendEmail(email = feedbackMail, subject = feedback)
-                true
+                if (moreViewModel.getFeedbackMail().isNotEmpty()) {
+                    val feedbackMail = getString(R.string.mail_feedback)
+                    val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.prefs_feedback)
+                    requireActivity().sendEmail(email = feedbackMail, subject = feedback)
+                    true
+                } else {
+                    requireActivity().openFeedbackDialog()
+                    true
+                }
             }
         } else {
-            requireActivity().openFeedbackDialog()
+            moreScreen?.removePreferenceFromScreen(prefFeedback)
         }
 
         // Imprint

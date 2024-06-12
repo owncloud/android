@@ -51,7 +51,7 @@ class DrawerViewModel(
     private val contextProvider: ContextProvider,
 ) : ViewModel() {
 
-    fun isFeedbackEnabled() = contextProvider.getBoolean(R.bool.feedback_enabled)
+    fun getFeedbackMail() = contextProvider.getString(R.string.mail_feedback)
 
     private val _userQuota = MediatorLiveData<Event<UIResult<UserQuota?>>>()
     val userQuota: LiveData<Event<UIResult<UserQuota?>>> = _userQuota
