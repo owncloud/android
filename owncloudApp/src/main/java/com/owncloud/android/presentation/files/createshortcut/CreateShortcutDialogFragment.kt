@@ -115,21 +115,19 @@ class CreateShortcutDialogFragment : DialogFragment() {
     private fun enableYesButton(enable: Boolean) {
         binding.yesButton.apply {
             isEnabled = enable
-            setTextColor(
-                if (enable) {
-                    setOnClickListener {
-                        createShortcutListener.createShortcutFileFromApp(
-                            fileName = binding.createShortcutDialogNameFileValue.text.toString(),
-                            url = formatUrl(binding.createShortcutDialogUrlValue.text.toString()),
-                        )
-                        dialog?.dismiss()
-                    }
-                    resources.getColor(R.color.primary_button_background_color, null)
-                } else {
-                    setOnClickListener(null)
-                    resources.getColor(R.color.grey, null)
+            if (enable) {
+                setOnClickListener {
+                    createShortcutListener.createShortcutFileFromApp(
+                        fileName = binding.createShortcutDialogNameFileValue.text.toString(),
+                        url = formatUrl(binding.createShortcutDialogUrlValue.text.toString()),
+                    )
+                    dialog?.dismiss()
                 }
-            )
+                setTextColor(resources.getColor(R.color.primary_button_background_color, null))
+            } else {
+                setOnClickListener(null)
+                setTextColor(resources.getColor(R.color.grey, null))
+            }
         }
     }
 
@@ -139,7 +137,6 @@ class CreateShortcutDialogFragment : DialogFragment() {
 
     companion object {
 
-        @JvmStatic
         fun newInstance(parentFolder: OCFile, listener: CreateShortcutListener): CreateShortcutDialogFragment {
             return CreateShortcutDialogFragment().apply {
                 createShortcutListener = listener

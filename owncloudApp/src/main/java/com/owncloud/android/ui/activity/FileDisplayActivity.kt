@@ -40,11 +40,14 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
-import android.text.SpannableStringBuilder
+import android.text.TextUtils
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -72,7 +75,6 @@ import com.owncloud.android.domain.spaces.model.OCSpace
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
-import com.owncloud.android.extensions.extractUrlFromFile
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.isDownloadPending
 import com.owncloud.android.extensions.manageOptionLockSelected
@@ -1367,13 +1369,31 @@ class FileDisplayActivity : FileActivity(),
 
     private fun openShortcutFileInBrowser(file: OCFile) {
         val url = extractUrlFromFile(file.storagePath.toString())
-        val truncatedUrl = url?.truncateWithEllipsis(MAX_URL_LENGTH)
-        val message = SpannableStringBuilder()
-            .append(getString(R.string.open_shortcut_description))
-            .append(truncatedUrl)
+        val message = getString(R.string.open_shortcut_description)
+        val messageTextView = TextView(this).apply {
+            text = message
+            setPadding(0, 70, 0, 30)
+            setTextColor(ContextCompat.getColor(this@FileDisplayActivity, android.R.color.black))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+        }
+        val urlTextView = TextView(this).apply {
+            text = url
+            maxLines = 1
+            ellipsize = TextUtils.TruncateAt.MIDDLE
+            setTextColor(ContextCompat.getColor(this@FileDisplayActivity, android.R.color.black))
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+        }
+
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(62, 0, 62, 70)
+            addView(messageTextView)
+            addView(urlTextView)
+        }
+
         val dialog = AlertDialog.Builder(this@FileDisplayActivity)
             .setTitle(getString(R.string.open_shortcut_title))
-            .setMessage(message)
+            .setView(layout)
             .setPositiveButton(R.string.drawer_open) { view, _ ->
                 url?.let {
                     goToUrl(url)
@@ -1388,12 +1408,17 @@ class FileDisplayActivity : FileActivity(),
         dialog.show()
     }
 
-    private fun String.truncateWithEllipsis(maxLength: Int): String {
-        return if (this.length > maxLength) {
-            "${this.substring(0, maxLength)}..."
-        } else {
-            this
+    private fun extractUrlFromFile(filePath: String): String? {
+        val file = File(filePath)
+        if (file.exists()) {
+            val lines = file.readLines()
+            for (line in lines) {
+                if (line.startsWith("URL=")) {
+                    return line.substringAfter("URL=").trim('"')
+                }
+            }
         }
+        return null
     }
 
     private fun onSynchronizeFolderOperationFinish(
@@ -1941,7 +1966,7 @@ class FileDisplayActivity : FileActivity(),
         private const val KEY_UPLOAD_HELPER = "FILE_UPLOAD_HELPER"
         private const val KEY_FILE_LIST_OPTION = "FILE_LIST_OPTION"
         private const val MAX_URL_LENGTH = 90
-        private const val MIMETYPE_TEXT_URI_LIST = "text/uri-list"
+        const val MIMETYPE_TEXT_URI_LIST = "text/uri-list"
         const val KEY_DEEP_LINK_ACCOUNTS_CHECKED = "DEEP_LINK_ACCOUNTS_CHECKED"
 
         private const val CUSTOM_DIALOG_TAG = "CUSTOM_DIALOG"

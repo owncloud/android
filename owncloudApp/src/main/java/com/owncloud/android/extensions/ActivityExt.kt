@@ -114,19 +114,6 @@ fun Activity.goToUrl(
     }
 }
 
-fun extractUrlFromFile(filePath: String): String? {
-    val file = File(filePath)
-    if (file.exists()) {
-        val lines = file.readLines()
-        for (line in lines) {
-            if (line.startsWith("URL=")) {
-                return line.substringAfter("URL=").trim('"')
-            }
-        }
-    }
-    return null
-}
-
 fun Activity.openPrivacyPolicy() {
     val urlPrivacyPolicy = getString(R.string.url_privacy_policy)
 

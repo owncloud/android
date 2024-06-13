@@ -46,6 +46,7 @@ import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
 import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.MIMETYPE_TEXT_URI_LIST
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
@@ -60,7 +61,6 @@ class FileListAdapter(
     var files = mutableListOf<Any>()
     private var account: Account? = AccountUtils.getCurrentOwnCloudAccount(context)
     private var fileListOption: FileListOption = FileListOption.ALL_FILES
-    private val MIMETYPE_TEXT_URI_LIST = "text/uri-list"
 
     fun updateFileList(filesToAdd: List<OCFileWithSyncInfo>, fileListOption: FileListOption) {
 
