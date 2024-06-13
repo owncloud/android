@@ -1,0 +1,6 @@
+Enhancement: Support for URL shortcut files
+
+A new option has been added in the FAB to create a shortcut file with a .url extension. When the file is clicked, the URL will open in the browser.
+
+https://github.com/owncloud/android/issues/4413
+https://github.com/owncloud/android/pull/4420
