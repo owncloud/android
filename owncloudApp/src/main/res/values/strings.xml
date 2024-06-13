@@ -766,7 +766,7 @@
     <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">More appropriate icons have been added to the "Open in (web)" option on the operations menu</string>
     <string name="release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option">Displayed \"Local only\" option properly and prevented deletion of available offline files in the remove dialog</string>
     <string name="release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option">\"Local only\" option in remove dialog will be shown when the selected folder contains at least one downloaded file, ignoring those available offline. If the "Local only" option is displayed and clicked, available offline files will not be deleted</string>
-    <string name="release_notes_4_3_0_subtitle_create_open_shortcut">New option to create and open a shortcut file</string>
+    <string name="release_notes_4_3_0_subtitle_create_open_shortcut">Support for URL shortcut files</string>
     <string name="release_notes_4_3_0_title_create_open_shortcut">A new option has been added in the FAB to create a shortcut file with a .url extension. When the file is clicked, the URL will open in the browser</string>
 
     <!-- Open in web -->
@@ -843,8 +843,8 @@
 
     <string name="create_shortcut_dialog_title">Create new shortcut</string>
     <string name="create_shortcut_dialog_url">URL</string>
-    <string name="create_shortcut_dialog_url_information">The URL must start with https:// or http:// so that it can be opened in the browser.</string>
-    <string name="create_shortcut_dialog_url_error_no_spaces">The URL cannot have spaces</string>
+    <string name="create_shortcut_dialog_url_information">The URL must start with https:// or http:// so that it can be opened in the browser</string>
+    <string name="create_shortcut_dialog_url_error_no_spaces">The URL cannot contain spaces</string>
     <string name="open_shortcut_description">This shortcut points to:\n\n</string>
     <string name="open_shortcut_title">Open link</string>
 
