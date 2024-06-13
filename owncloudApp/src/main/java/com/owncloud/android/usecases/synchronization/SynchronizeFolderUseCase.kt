@@ -41,7 +41,7 @@ class SynchronizeFolderUseCase(
             remotePath = remotePath,
             accountName = accountName,
             spaceId = params.spaceId,
-            isActionSetFolderAvailableOffline = params.isActionSetFolderAvailableOffline,
+            isActionSetFolderAvailableOfflineOrSynchronize = params.isActionSetFolderAvailableOfflineOrSynchronize,
         )
 
         folderContent.forEach { ocFile ->
@@ -53,7 +53,7 @@ class SynchronizeFolderUseCase(
                             accountName = accountName,
                             spaceId = ocFile.spaceId,
                             syncMode = params.syncMode,
-                            isActionSetFolderAvailableOffline = params.isActionSetFolderAvailableOffline,
+                            isActionSetFolderAvailableOfflineOrSynchronize = params.isActionSetFolderAvailableOfflineOrSynchronize,
                         )
                     )
                 }
@@ -78,7 +78,7 @@ class SynchronizeFolderUseCase(
         val accountName: String,
         val spaceId: String? = null,
         val syncMode: SyncFolderMode,
-        val isActionSetFolderAvailableOffline: Boolean = false,
+        val isActionSetFolderAvailableOfflineOrSynchronize: Boolean = false,
     )
 
     /**

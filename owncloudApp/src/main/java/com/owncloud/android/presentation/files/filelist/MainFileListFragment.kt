@@ -529,7 +529,7 @@ class MainFileListFragment : Fragment(),
                                             FileOperation.SynchronizeFolderOperation(
                                                 folderToSync = file,
                                                 accountName = file.owner,
-                                                isActionSetFolderAvailableOffline = true,
+                                                isActionSetFolderAvailableOfflineOrSynchronize = true,
                                             )
                                         )
                                     } else {
@@ -1139,7 +1139,7 @@ class MainFileListFragment : Fragment(),
                             FileOperation.SynchronizeFolderOperation(
                                 folderToSync = singleFile,
                                 accountName = singleFile.owner,
-                                isActionSetFolderAvailableOffline = true,
+                                isActionSetFolderAvailableOfflineOrSynchronize = true,
                             )
                         )
                     } else {
@@ -1391,7 +1391,13 @@ class MainFileListFragment : Fragment(),
     private fun syncFiles(files: List<OCFile>) {
         for (file in files) {
             if (file.isFolder) {
-                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFolderOperation(folderToSync = file, accountName = file.owner))
+                fileOperationsViewModel.performOperation(
+                    FileOperation.SynchronizeFolderOperation(
+                        folderToSync = file,
+                        accountName = file.owner,
+                        isActionSetFolderAvailableOfflineOrSynchronize = true,
+                    )
+                )
             } else {
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(fileToSync = file, accountName = file.owner))
             }

@@ -35,9 +35,9 @@ import com.owncloud.android.domain.availableoffline.usecases.SetFilesAsAvailable
 import com.owncloud.android.domain.availableoffline.usecases.UnsetFilesAsAvailableOfflineUseCase
 import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.domain.files.usecases.IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
+import com.owncloud.android.domain.files.usecases.IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase
 import com.owncloud.android.domain.files.usecases.ManageDeepLinkUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
@@ -260,7 +260,7 @@ class FileOperationsViewModel(
                 accountName = fileOperation.folderToSync.owner,
                 spaceId = fileOperation.folderToSync.spaceId,
                 syncMode = SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY,
-                isActionSetFolderAvailableOffline = fileOperation.isActionSetFolderAvailableOffline,
+                isActionSetFolderAvailableOfflineOrSynchronize = fileOperation.isActionSetFolderAvailableOfflineOrSynchronize,
             )
         )
     }
