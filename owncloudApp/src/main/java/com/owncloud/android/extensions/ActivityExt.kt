@@ -114,7 +114,7 @@ fun Activity.goToUrl(
     }
 }
 
-fun Activity.extractUrlFromFile(filePath: String): String? {
+fun extractUrlFromFile(filePath: String): String? {
     val file = File(filePath)
     if (file.exists()) {
         val lines = file.readLines()

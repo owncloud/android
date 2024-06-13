@@ -60,6 +60,7 @@ class FileListAdapter(
     var files = mutableListOf<Any>()
     private var account: Account? = AccountUtils.getCurrentOwnCloudAccount(context)
     private var fileListOption: FileListOption = FileListOption.ALL_FILES
+    private val MIMETYPE_TEXT_URI_LIST = "text/uri-list"
 
     fun updateFileList(filesToAdd: List<OCFileWithSyncInfo>, fileListOption: FileListOption) {
 
@@ -304,7 +305,7 @@ class FileListAdapter(
             if (file.isFolder) {
                 // Folder
                 fileIcon.setImageResource(R.drawable.ic_menu_archive)
-            } else if (file.mimeType == "text/uri-list") {
+            } else if (file.mimeType == MIMETYPE_TEXT_URI_LIST) {
                 fileIcon.setImageResource(R.drawable.ic_action_open_shortcut)
             } else {
                 // Set file icon depending on its mimetype. Ask for thumbnail later.

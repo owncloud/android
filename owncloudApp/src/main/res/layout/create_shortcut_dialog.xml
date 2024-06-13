@@ -95,8 +95,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    style="@style/Button.Borderless"
-                    android:text="@string/share_cancel_public_link_button" />
+                    style="?android:attr/borderlessButtonStyle"
+                    android:text="@android:string/cancel" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/yesButton"
