@@ -29,6 +29,8 @@ import androidx.fragment.app.DialogFragment
 import com.owncloud.android.R
 import com.owncloud.android.databinding.CreateShortcutDialogBinding
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.presentation.files.filelist.MainFileListFragment.Companion.MAX_FILENAME_LENGTH
+import com.owncloud.android.presentation.files.filelist.MainFileListFragment.Companion.forbiddenChars
 
 class CreateShortcutDialogFragment : DialogFragment() {
     private lateinit var parentFolder: OCFile
@@ -68,8 +70,8 @@ class CreateShortcutDialogFragment : DialogFragment() {
         var hasEmptyValue: Boolean
         binding.createShortcutDialogNameFileValue.doOnTextChanged { fileNameValue, _, _, _ ->
             fileNameValue?.let {
-                hasForbiddenCharacters = FORBIDDEN_CHARACTERS.any { fileNameValue.contains(it) }
-                hasMaxCharacters = fileNameValue.length >= MAX_FILE_NAME
+                hasForbiddenCharacters = forbiddenChars.any { fileNameValue.contains(it) }
+                hasMaxCharacters = fileNameValue.length >= MAX_FILENAME_LENGTH
                 isValidFileName = fileNameValue.isNotBlank() && !hasForbiddenCharacters && !hasMaxCharacters
                 handleNameRequirements(hasForbiddenCharacters, hasMaxCharacters)
                 updateCreateShortcutButtonState(isValidFileName, isValidUrl)
@@ -93,7 +95,7 @@ class CreateShortcutDialogFragment : DialogFragment() {
     private fun handleNameRequirements(hasForbiddenCharacters: Boolean, hasMaxCharacters: Boolean) {
         binding.createShortcutDialogNameFileLayout.apply {
             error = when {
-                hasMaxCharacters -> getString(R.string.uploader_upload_text_dialog_filename_error_length_max, MAX_FILE_NAME)
+                hasMaxCharacters -> getString(R.string.uploader_upload_text_dialog_filename_error_length_max, MAX_FILENAME_LENGTH)
                 hasForbiddenCharacters -> getString(R.string.filename_forbidden_characters)
                 else -> null
             }
@@ -136,9 +138,6 @@ class CreateShortcutDialogFragment : DialogFragment() {
     }
 
     companion object {
-
-        private const val FORBIDDEN_CHARACTERS = "/\\"
-        private const val MAX_FILE_NAME = 256
 
         @JvmStatic
         fun newInstance(parentFolder: OCFile, listener: CreateShortcutListener): CreateShortcutDialogFragment {

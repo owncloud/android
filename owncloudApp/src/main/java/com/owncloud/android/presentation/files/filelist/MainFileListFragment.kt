@@ -1512,8 +1512,8 @@ class MainFileListFragment : Fragment(),
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
         val ARG_INITIAL_FOLDER_TO_DISPLAY = "${MainFileListFragment::class.java.canonicalName}.ARG_INITIAL_FOLDER_TO_DISPLAY}"
         val ARG_FILE_LIST_OPTION = "${MainFileListFragment::class.java.canonicalName}.FILE_LIST_OPTION}"
-        private const val MAX_FILENAME_LENGTH = 223
-        private val forbiddenChars = listOf('/', '\\')
+        const val MAX_FILENAME_LENGTH = 223
+        val forbiddenChars = listOf('/', '\\')
 
         private const val DIALOG_CREATE_FOLDER = "DIALOG_CREATE_FOLDER"
         private const val DIALOG_CREATE_SHORTCUT = "DIALOG_CREATE_SHORTCUT"
