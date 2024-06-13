@@ -34,13 +34,9 @@ class CreateShortcutDialogFragment : DialogFragment() {
     private lateinit var parentFolder: OCFile
     private lateinit var createShortcutListener: CreateShortcutListener
     private var _binding: CreateShortcutDialogBinding? = null
-    private var isCreateShortcutButtonEnable = false
-    private var isValidUrl = false
-    private var isValidFileName = false
-    private var hasForbiddenCharacters = false
-    private var hasMaxCharacters = false
-    private var hasEmptyValue = false
     private val binding get() = _binding!!
+    private var isCreateShortcutButtonEnabled = false
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = CreateShortcutDialogBinding.inflate(inflater, container, false)
         return binding.root
@@ -50,15 +46,6 @@ class CreateShortcutDialogFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
             handleInputsUrlAndFileName()
-            yesButton.setOnClickListener {
-                if (isCreateShortcutButtonEnable) {
-                    createShortcutListener.createShortcutFileFromApp(
-                        fileName = createShortcutDialogNameFileValue.text.toString(),
-                        url = formatUrl(createShortcutDialogUrlValue.text.toString()),
-                    )
-                    dialog?.dismiss()
-                }
-            }
             cancelButton.setOnClickListener {
                 dialog?.dismiss()
             }
@@ -74,13 +61,18 @@ class CreateShortcutDialogFragment : DialogFragment() {
     }
 
     private fun handleInputsUrlAndFileName() {
+        var isValidUrl = false
+        var isValidFileName = false
+        var hasForbiddenCharacters: Boolean
+        var hasMaxCharacters: Boolean
+        var hasEmptyValue: Boolean
         binding.createShortcutDialogNameFileValue.doOnTextChanged { fileNameValue, _, _, _ ->
             fileNameValue?.let {
                 hasForbiddenCharacters = FORBIDDEN_CHARACTERS.any { fileNameValue.contains(it) }
                 hasMaxCharacters = fileNameValue.length >= MAX_FILE_NAME
                 isValidFileName = fileNameValue.isNotBlank() && !hasForbiddenCharacters && !hasMaxCharacters
                 handleNameRequirements(hasForbiddenCharacters, hasMaxCharacters)
-                updateCreateShortcutButtonState()
+                updateCreateShortcutButtonState(isValidFileName, isValidUrl)
             }
         }
         binding.createShortcutDialogUrlValue.doOnTextChanged { urlValue, _, _, _ ->
@@ -88,14 +80,14 @@ class CreateShortcutDialogFragment : DialogFragment() {
                 hasEmptyValue = urlValue.contains(" ")
                 isValidUrl = urlValue.isNotBlank() && !hasEmptyValue
                 handleUrlRequirements(hasEmptyValue)
-                updateCreateShortcutButtonState()
+                updateCreateShortcutButtonState(isValidFileName, isValidUrl)
             }
         }
     }
 
-    private fun updateCreateShortcutButtonState() {
-        isCreateShortcutButtonEnable = isValidFileName && isValidUrl
-        enableYesButton(isCreateShortcutButtonEnable)
+    private fun updateCreateShortcutButtonState(isValidFileName: Boolean, isValidUrl: Boolean) {
+        isCreateShortcutButtonEnabled = isValidFileName && isValidUrl
+        enableYesButton(isCreateShortcutButtonEnabled)
     }
 
     private fun handleNameRequirements(hasForbiddenCharacters: Boolean, hasMaxCharacters: Boolean) {
@@ -122,8 +114,19 @@ class CreateShortcutDialogFragment : DialogFragment() {
         binding.yesButton.apply {
             isEnabled = enable
             setTextColor(
-                if (enable) resources.getColor(R.color.primary_button_background_color, null)
-                else resources.getColor(R.color.grey, null)
+                if (enable) {
+                    setOnClickListener {
+                        createShortcutListener.createShortcutFileFromApp(
+                            fileName = binding.createShortcutDialogNameFileValue.text.toString(),
+                            url = formatUrl(binding.createShortcutDialogUrlValue.text.toString()),
+                        )
+                        dialog?.dismiss()
+                    }
+                    resources.getColor(R.color.primary_button_background_color, null)
+                } else {
+                    setOnClickListener(null)
+                    resources.getColor(R.color.grey, null)
+                }
             )
         }
     }
@@ -137,17 +140,11 @@ class CreateShortcutDialogFragment : DialogFragment() {
         private const val FORBIDDEN_CHARACTERS = "/\\"
         private const val MAX_FILE_NAME = 256
 
-        /**
-         * Public factory method to create new CreateShortcutDialogFragment instances.
-         *
-         * @param parentFile File to create
-         * @return Dialog ready to show.
-         */
         @JvmStatic
-        fun newInstance(parent: OCFile, listener: CreateShortcutListener): CreateShortcutDialogFragment {
+        fun newInstance(parentFolder: OCFile, listener: CreateShortcutListener): CreateShortcutDialogFragment {
             return CreateShortcutDialogFragment().apply {
                 createShortcutListener = listener
-                parentFolder = parent
+                this.parentFolder = parentFolder
             }
         }
     }
