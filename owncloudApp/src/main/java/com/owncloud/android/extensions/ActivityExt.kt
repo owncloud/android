@@ -43,6 +43,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
+import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.domain.files.model.OCFile
@@ -337,6 +338,16 @@ private fun Activity.showSelectSecurityDialog(
                 dialog.dismiss()
             }
             .show()
+    }
+}
+
+fun Activity.feedbackBehaviour(feedbackMail: String) {
+    if (feedbackMail.isNotEmpty()) {
+        val feedbackMail = getString(R.string.mail_feedback)
+        val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.prefs_feedback)
+        sendEmail(email = feedbackMail, subject = feedback)
+    } else {
+        openFeedbackDialog()
     }
 }
 

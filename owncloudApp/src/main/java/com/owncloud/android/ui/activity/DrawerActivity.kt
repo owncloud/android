@@ -52,15 +52,13 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.DrawerListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
-import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.utils.Event
+import com.owncloud.android.extensions.feedbackBehaviour
 import com.owncloud.android.extensions.goToUrl
-import com.owncloud.android.extensions.openFeedbackDialog
 import com.owncloud.android.extensions.openPrivacyPolicy
-import com.owncloud.android.extensions.sendEmail
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.accounts.AccountsManagementActivity
 import com.owncloud.android.presentation.accounts.AccountsManagementActivity.Companion.KEY_ACCOUNT_LIST_CHANGED
@@ -291,13 +289,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     }
 
     private fun openFeedback() {
-        if (drawerViewModel.getFeedbackMail().isNotEmpty()) {
-            val feedbackMail = getString(R.string.mail_feedback)
-            val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.drawer_feedback)
-            sendEmail(email = feedbackMail, subject = feedback)
-        } else {
-            openFeedbackDialog()
-        }
+        feedbackBehaviour(drawerViewModel.getFeedbackMail())
     }
 
     private fun openDrawerLink() {

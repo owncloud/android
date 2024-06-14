@@ -51,8 +51,6 @@ class DrawerViewModel(
     private val contextProvider: ContextProvider,
 ) : ViewModel() {
 
-    fun getFeedbackMail() = contextProvider.getString(R.string.mail_feedback)
-
     private val _userQuota = MediatorLiveData<Event<UIResult<UserQuota?>>>()
     val userQuota: LiveData<Event<UIResult<UserQuota?>>> = _userQuota
 
@@ -77,6 +75,8 @@ class DrawerViewModel(
     fun getUsernameOfAccount(accountName: String): String {
         return AccountUtils.getUsernameOfAccount(accountName)
     }
+
+    fun getFeedbackMail() = contextProvider.getString(R.string.mail_feedback)
 
     fun setCurrentAccount(context: Context, accountName: String): Boolean {
         return AccountUtils.setCurrentOwnCloudAccount(context, accountName)
