@@ -38,6 +38,7 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasFlag
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
@@ -330,11 +331,12 @@ class SettingsMoreFragmentTest {
     @Test
     fun feedbackOpensAlertDialogIfFeedbackMailIsEmpty() {
         launchTest()
-        every { moreViewModel.getFeedbackMail() } returns EMPTY_VALUE
+        every { moreViewModel.getFeedbackMail() } returns ""
 
         onView(withText(R.string.prefs_send_feedback)).perform(click())
 
         onView(withText(R.string.drawer_feedback)).check(ViewAssertions.matches(isDisplayed()))
+        onView(withId(android.R.id.message)).check(ViewAssertions.matches(isDisplayed()))
     }
 
     @Test
@@ -356,7 +358,6 @@ class SettingsMoreFragmentTest {
         private const val PREFERENCE_RECOMMEND = "recommend"
         private const val PREFERENCE_FEEDBACK = "feedback"
         private const val PREFERENCE_IMPRINT = "imprint"
-        private const val EMPTY_VALUE = ""
         private const val FEEDBACK_MAIL = "mailto:android-app@owncloud.com"
 
     }
