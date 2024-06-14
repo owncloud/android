@@ -525,7 +525,13 @@ class MainFileListFragment : Fragment(),
                                 FileMenuOption.SET_AV_OFFLINE -> {
                                     fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
                                     if (file.isFolder) {
-                                        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFolderOperation(file, file.owner))
+                                        fileOperationsViewModel.performOperation(
+                                            FileOperation.SynchronizeFolderOperation(
+                                                folderToSync = file,
+                                                accountName = file.owner,
+                                                isActionSetFolderAvailableOfflineOrSynchronize = true,
+                                            )
+                                        )
                                     } else {
                                         fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(file, file.owner))
                                     }
@@ -647,7 +653,7 @@ class MainFileListFragment : Fragment(),
             }
         }
 
-        collectLatestLifecycleFlow(fileOperationsViewModel.checkIfFileLocalSharedFlow) {
+        collectLatestLifecycleFlow(fileOperationsViewModel.checkIfFileIsLocalAndNotAvailableOfflineSharedFlow) {
             val fileActivity = (requireActivity() as FileActivity)
             when (it) {
                 is UIResult.Loading -> fileActivity.showLoadingDialog(R.string.common_loading)
@@ -990,8 +996,8 @@ class MainFileListFragment : Fragment(),
         }
     }
 
-    private fun onShowRemoveDialog(filesToRemove: List<OCFile>, isLocal: Boolean) {
-        val dialog = RemoveFilesDialogFragment.newInstance(ArrayList(filesToRemove), isLocal)
+    private fun onShowRemoveDialog(filesToRemove: List<OCFile>, isAvailableLocallyAndNotAvailableOffline: Boolean) {
+        val dialog = RemoveFilesDialogFragment.newInstance(ArrayList(filesToRemove), isAvailableLocallyAndNotAvailableOffline)
         dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
         fileListAdapter.clearSelection()
         updateActionModeAfterTogglingSelected()
@@ -1129,7 +1135,13 @@ class MainFileListFragment : Fragment(),
                 R.id.action_set_available_offline -> {
                     fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(singleFile)))
                     if (singleFile.isFolder) {
-                        fileOperationsViewModel.performOperation(FileOperation.SynchronizeFolderOperation(singleFile, singleFile.owner))
+                        fileOperationsViewModel.performOperation(
+                            FileOperation.SynchronizeFolderOperation(
+                                folderToSync = singleFile,
+                                accountName = singleFile.owner,
+                                isActionSetFolderAvailableOfflineOrSynchronize = true,
+                            )
+                        )
                     } else {
                         fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(singleFile, singleFile.owner))
                     }
@@ -1379,7 +1391,13 @@ class MainFileListFragment : Fragment(),
     private fun syncFiles(files: List<OCFile>) {
         for (file in files) {
             if (file.isFolder) {
-                fileOperationsViewModel.performOperation(FileOperation.SynchronizeFolderOperation(folderToSync = file, accountName = file.owner))
+                fileOperationsViewModel.performOperation(
+                    FileOperation.SynchronizeFolderOperation(
+                        folderToSync = file,
+                        accountName = file.owner,
+                        isActionSetFolderAvailableOfflineOrSynchronize = true,
+                    )
+                )
             } else {
                 fileOperationsViewModel.performOperation(FileOperation.SynchronizeFileOperation(fileToSync = file, accountName = file.owner))
             }

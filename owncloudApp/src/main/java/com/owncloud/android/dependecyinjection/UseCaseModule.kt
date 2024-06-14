@@ -49,6 +49,7 @@ import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfig
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
+import com.owncloud.android.domain.files.usecases.IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase
 import com.owncloud.android.domain.files.usecases.CleanConflictUseCase
 import com.owncloud.android.domain.files.usecases.CleanWorkersUUIDUseCase
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
@@ -60,7 +61,6 @@ import com.owncloud.android.domain.files.usecases.GetFileByRemotePathUseCase
 import com.owncloud.android.domain.files.usecases.GetFileWithSyncInfoByIdUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderContentUseCase
-import com.owncloud.android.domain.files.usecases.IsAnyFileAvailableLocallyUseCase
 import com.owncloud.android.domain.files.usecases.GetFolderImagesUseCase
 import com.owncloud.android.domain.files.usecases.GetPersonalRootFolderForAccountUseCase
 import com.owncloud.android.domain.files.usecases.GetSearchFolderContentUseCase
@@ -168,7 +168,7 @@ val useCaseModule = module {
     factoryOf(::GetFolderContentAsStreamUseCase)
     factoryOf(::GetFolderContentUseCase)
     factoryOf(::GetFolderImagesUseCase)
-    factoryOf(::IsAnyFileAvailableLocallyUseCase)
+    factoryOf(::IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase)
     factoryOf(::GetPersonalRootFolderForAccountUseCase)
     factoryOf(::GetSearchFolderContentUseCase)
     factoryOf(::GetSharedByLinkForAccountAsStreamUseCase)

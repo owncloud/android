@@ -378,6 +378,7 @@ class OCFileRepository(
         remotePath: String,
         accountName: String,
         spaceId: String?,
+        isActionSetFolderAvailableOfflineOrSynchronize: Boolean,
     ): List<OCFile> {
         val spaceWebDavUrl = localSpacesDataSource.getWebDavUrlForSpace(spaceId, accountName)
 
@@ -424,7 +425,10 @@ class OCFileRepository(
                                 if (remoteFolder.isAvailableOffline) AVAILABLE_OFFLINE_PARENT else NOT_AVAILABLE_OFFLINE
 
                         })
-                } else if (localChildToSync.etag != remoteChild.etag || localChildToSync.localModificationTimestamp > remoteChild.lastSyncDateForData!!) {
+                } else if (localChildToSync.etag != remoteChild.etag ||
+                    localChildToSync.localModificationTimestamp > remoteChild.lastSyncDateForData!! ||
+                    isActionSetFolderAvailableOfflineOrSynchronize
+                ) {
                     // File exists in the database, we need to check several stuff.
                     folderContentUpdated.add(
                         remoteChild.apply {
@@ -584,19 +588,30 @@ class OCFileRepository(
 
         // 1. Remove folder content recursively
         folderContent.forEach { file ->
-            if (file.isFolder) {
-                deleteLocalFolderRecursively(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
-            } else {
-                deleteLocalFile(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
+            if (!(onlyFromLocalStorage && file.isAvailableOffline)) { // The condition will not be met when onlyFromLocalStorage is true and the file is of type available offline
+                if (file.isFolder) {
+                    deleteLocalFolderRecursively(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
+                } else {
+                    deleteLocalFile(ocFile = file, onlyFromLocalStorage = onlyFromLocalStorage)
+                }
             }
         }
 
-        // 2. Remove the folder itself
-        deleteLocalFile(ocFile = ocFile, onlyFromLocalStorage = onlyFromLocalStorage)
+        // 2. Remove the folder itself if it has no files
+        deleteLocalFolderIfItHasNoFilesInside(ocFolder = ocFile, onlyFromLocalStorage = onlyFromLocalStorage)
+    }
+
+    private fun deleteLocalFolderIfItHasNoFilesInside(ocFolder: OCFile, onlyFromLocalStorage: Boolean) {
+        localStorageProvider.deleteLocalFolderIfItHasNoFilesInside(ocFolder = ocFolder)
+        deleteOrResetFileFromDatabase(ocFolder, onlyFromLocalStorage)
     }
 
     private fun deleteLocalFile(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         localStorageProvider.deleteLocalFile(ocFile)
+        deleteOrResetFileFromDatabase(ocFile, onlyFromLocalStorage)
+    }
+
+    private fun deleteOrResetFileFromDatabase(ocFile: OCFile, onlyFromLocalStorage: Boolean) {
         if (onlyFromLocalStorage) {
             localFileDataSource.saveFile(ocFile.copy(storagePath = null, etagInConflict = null, lastUsage = null, etag = null))
         } else {

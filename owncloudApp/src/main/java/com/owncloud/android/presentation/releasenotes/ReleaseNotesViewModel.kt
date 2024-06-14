@@ -135,6 +135,11 @@ class ReleaseNotesViewModel(
                 subtitle = R.string.release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint,
                 type = ReleaseNoteType.ENHANCEMENT
             ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option,
+                subtitle = R.string.release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option,
+                type = ReleaseNoteType.BUGFIX
+            ),
         )
     }
 }

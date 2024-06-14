@@ -2,6 +2,8 @@
  * ownCloud Android client application
  *
  * @author Parneet Singh
+ * @author Aitor Ballesteros Pavón
+ *
  * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,17 +25,17 @@ import com.owncloud.android.domain.BaseUseCaseWithResult
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.files.model.OCFile
 
-class IsAnyFileAvailableLocallyUseCase(private val fileRepository: FileRepository) :
-    BaseUseCaseWithResult<Boolean, IsAnyFileAvailableLocallyUseCase.Params>() {
+class IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase(private val fileRepository: FileRepository) :
+    BaseUseCaseWithResult<Boolean, IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase.Params>() {
 
-    override fun run(params: Params): Boolean = isAnyFileAvailableLocally(params.listOfFiles)
-    private fun isAnyFileAvailableLocally(filesToRemove: List<OCFile>): Boolean {
+    override fun run(params: Params): Boolean = isAnyFileAvailableLocallyAndNotAvailableOffline(params.listOfFiles)
+    private fun isAnyFileAvailableLocallyAndNotAvailableOffline(filesToRemove: List<OCFile>): Boolean {
 
-        if (filesToRemove.any { it.isAvailableLocally }) {
+        if (filesToRemove.any { it.isAvailableLocally && !it.isAvailableOffline }) {
             return true
         } else {
             filesToRemove.filter { it.isFolder }.forEach { folder ->
-                if (isAnyFileAvailableLocally(fileRepository.getFolderContent(folder.id!!))) {
+                if (isAnyFileAvailableLocallyAndNotAvailableOffline(fileRepository.getFolderContent(folder.id!!))) {
                     return true
                 }
             }

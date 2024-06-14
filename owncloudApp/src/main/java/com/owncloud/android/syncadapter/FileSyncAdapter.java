@@ -4,8 +4,10 @@
  * @author Bartek Przybylski
  * @author David A. Velasco
  * @author David González Verdugo
+ * @author Aitor Ballesteros Pavón
+ *
  * Copyright (C) 2011  Bartek Przybylski
- * Copyright (C) 2020 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -231,7 +233,8 @@ public class FileSyncAdapter extends AbstractOwnCloudSyncAdapter {
                 folder.getRemotePath(),
                 folder.getOwner(),
                 folder.getSpaceId(),
-                SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER_RECURSIVELY);
+                SynchronizeFolderUseCase.SyncFolderMode.REFRESH_FOLDER_RECURSIVELY,
+                false);
         UseCaseResult<Unit> useCaseResult;
 
         useCaseResult = synchronizeFolderUseCase.getValue().invoke(params);

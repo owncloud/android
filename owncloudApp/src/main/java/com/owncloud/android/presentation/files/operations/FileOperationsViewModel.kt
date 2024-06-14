@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -36,7 +37,7 @@ import com.owncloud.android.domain.exceptions.NoNetworkConnectionException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.CopyFileUseCase
 import com.owncloud.android.domain.files.usecases.CreateFolderAsyncUseCase
-import com.owncloud.android.domain.files.usecases.IsAnyFileAvailableLocallyUseCase
+import com.owncloud.android.domain.files.usecases.IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase
 import com.owncloud.android.domain.files.usecases.ManageDeepLinkUseCase
 import com.owncloud.android.domain.files.usecases.MoveFileUseCase
 import com.owncloud.android.domain.files.usecases.RemoveFileUseCase
@@ -71,7 +72,7 @@ class FileOperationsViewModel(
     private val unsetFilesAsAvailableOfflineUseCase: UnsetFilesAsAvailableOfflineUseCase,
     private val manageDeepLinkUseCase: ManageDeepLinkUseCase,
     private val setLastUsageFileUseCase: SetLastUsageFileUseCase,
-    private val isAnyFileAvailableLocallyUseCase: IsAnyFileAvailableLocallyUseCase,
+    private val isAnyFileAvailableLocallyAndNotAvailableOfflineUseCase: IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
@@ -106,8 +107,8 @@ class FileOperationsViewModel(
     private val _deepLinkFlow = MutableStateFlow<Event<UIResult<OCFile?>>?>(null)
     val deepLinkFlow: StateFlow<Event<UIResult<OCFile?>>?> = _deepLinkFlow
 
-    private val _checkIfFileLocalSharedFlow = MutableSharedFlow<UIResult<Boolean>>()
-    val checkIfFileLocalSharedFlow: SharedFlow<UIResult<Boolean>> = _checkIfFileLocalSharedFlow
+    private val _checkIfFileIsLocalAndNotAvailableOfflineSharedFlow = MutableSharedFlow<UIResult<Boolean>>()
+    val checkIfFileIsLocalAndNotAvailableOfflineSharedFlow: SharedFlow<UIResult<Boolean>> = _checkIfFileIsLocalAndNotAvailableOfflineSharedFlow
 
     val openDialogs = mutableListOf<FileAlreadyExistsDialog>()
 
@@ -134,9 +135,9 @@ class FileOperationsViewModel(
         runUseCaseWithResult(
             coroutineDispatcher = coroutinesDispatcherProvider.io,
             showLoading = true,
-            sharedFlow = _checkIfFileLocalSharedFlow,
-            useCase = isAnyFileAvailableLocallyUseCase,
-            useCaseParams = IsAnyFileAvailableLocallyUseCase.Params(filesToRemove),
+            sharedFlow = _checkIfFileIsLocalAndNotAvailableOfflineSharedFlow,
+            useCase = isAnyFileAvailableLocallyAndNotAvailableOfflineUseCase,
+            useCaseParams = IsAnyFileAvailableLocallyAndNotAvailableOfflineUseCase.Params(filesToRemove),
             requiresConnection = false
         )
     }
@@ -258,7 +259,8 @@ class FileOperationsViewModel(
                 remotePath = fileOperation.folderToSync.remotePath,
                 accountName = fileOperation.folderToSync.owner,
                 spaceId = fileOperation.folderToSync.spaceId,
-                syncMode = SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY
+                syncMode = SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY,
+                isActionSetFolderAvailableOfflineOrSynchronize = fileOperation.isActionSetFolderAvailableOfflineOrSynchronize,
             )
         )
     }

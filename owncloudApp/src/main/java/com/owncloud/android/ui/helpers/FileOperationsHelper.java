@@ -7,7 +7,9 @@
  * @author David González Verdugo
  * @author Shashvat Kedia
  * @author David Crespo Rios
- * Copyright (C) 2022 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -196,7 +198,8 @@ public class FileOperationsHelper {
                             file.getRemotePath(),
                             file.getOwner(),
                             file.getSpaceId(),
-                            SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY)
+                            SynchronizeFolderUseCase.SyncFolderMode.SYNC_FOLDER_RECURSIVELY,
+                            false)
             );
         }
     }
