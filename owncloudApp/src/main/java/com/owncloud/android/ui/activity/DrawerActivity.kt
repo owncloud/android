@@ -61,8 +61,6 @@ import com.owncloud.android.extensions.openPrivacyPolicy
 import com.owncloud.android.extensions.sendEmailOrOpenFeedbackDialogAction
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.accounts.AccountsManagementActivity
-import com.owncloud.android.presentation.accounts.AccountsManagementActivity.Companion.KEY_ACCOUNT_LIST_CHANGED
-import com.owncloud.android.presentation.accounts.AccountsManagementActivity.Companion.KEY_CURRENT_ACCOUNT_CHANGED
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.avatar.AvatarUtils
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel

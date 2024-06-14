@@ -39,7 +39,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.presentation.accounts.AccountsManagementAdapter
-import com.owncloud.android.presentation.accounts.AccountsManagementViewModel
+import com.owncloud.android.presentation.accounts.ManageAccountsViewModel
 import com.owncloud.android.presentation.accounts.RemoveAccountDialogFragment
 import com.owncloud.android.presentation.accounts.RemoveAccountDialogViewModel
 import com.owncloud.android.presentation.authentication.AccountUtils
@@ -50,6 +50,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class ManageAccountsDialogFragment : DialogFragment(), AccountsManagementAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
+
     private var accountListAdapter: AccountsManagementAdapter = AccountsManagementAdapter(this)
 
     private lateinit var originalAccounts: Set<String>
@@ -59,7 +60,23 @@ class ManageAccountsDialogFragment : DialogFragment(), AccountsManagementAdapter
     private lateinit var handler: Handler
 
     private val removeAccountDialogViewModel: RemoveAccountDialogViewModel by viewModel()
-    private val accountsManagementViewModel: AccountsManagementViewModel by viewModel()
+    private val manageAccountsViewModel: ManageAccountsViewModel by viewModel()
+
+    override fun onStart() {
+        super.onStart()
+
+        val accountList = manageAccountsViewModel.getLoggedAccounts()
+        originalAccounts = toAccountNameSet(accountList)
+        originalCurrentAccount = manageAccountsViewModel.getCurrentAccount()?.name.toString()
+
+        accountListAdapter.submitAccountList(accountList = getAccountListItems())
+
+        account = manageAccountsViewModel.getCurrentAccount()
+
+        subscribeToViewModels()
+
+        handler = Handler()
+}
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(ContextThemeWrapper(requireContext(), R.style.Theme_AppCompat_Dialog_Alert))
@@ -69,19 +86,16 @@ class ManageAccountsDialogFragment : DialogFragment(), AccountsManagementAdapter
 
         val recyclerView = dialogView.findViewById<RecyclerView>(R.id.account_list_recycler_view)
 
-        recyclerView.run {
+        recyclerView.apply {
             filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
             adapter = accountListAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
 
-        // Listener for the cross button
         val closeButton = dialogView.findViewById<ImageView>(R.id.cross)
         closeButton.setOnClickListener {
             dismiss()
         }
-
-        //subscribeToViewModels()
 
         val dialog = builder.create()
         dialog.window?.setBackgroundDrawableResource(R.color.transparent)
@@ -91,22 +105,6 @@ class ManageAccountsDialogFragment : DialogFragment(), AccountsManagementAdapter
 
     private fun subscribeToViewModels() {
         TODO("Not yet implemented")
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        val accountList = accountsManagementViewModel.getLoggedAccounts()
-        originalAccounts = toAccountNameSet(accountList)
-        originalCurrentAccount = accountsManagementViewModel.getCurrentAccount()?.name.toString()
-
-        accountListAdapter.submitAccountList(accountList = getAccountListItems())
-
-        account = accountsManagementViewModel.getCurrentAccount()
-
-        handler = Handler()
-        //onAccountSet(false) -> Take a look
-
     }
 
     override fun removeAccount(account: Account) {
@@ -125,7 +123,7 @@ class ManageAccountsDialogFragment : DialogFragment(), AccountsManagementAdapter
             .setIcon(R.drawable.ic_warning)
             .setMessage(getString(R.string.clean_data_account_message))
             .setPositiveButton(getString(R.string.clean_data_account_button_yes)) { dialog, _ ->
-                accountsManagementViewModel.cleanAccountLocalStorage(account.name)
+                manageAccountsViewModel.cleanAccountLocalStorage(account.name)
                 dialog.dismiss()
             }
             .setNegativeButton(R.string.drawer_close) { dialog, _ ->
@@ -209,7 +207,7 @@ class ManageAccountsDialogFragment : DialogFragment(), AccountsManagementAdapter
      * @return list of account list items
      */
     private fun getAccountListItems(): List<AccountsManagementAdapter.AccountRecyclerItem> {
-        val accountList = accountsManagementViewModel.getLoggedAccounts()
+        val accountList = manageAccountsViewModel.getLoggedAccounts()
         val provisionalAccountList = mutableListOf<AccountsManagementAdapter.AccountRecyclerItem>()
         accountList.forEach {
             provisionalAccountList.add(AccountsManagementAdapter.AccountRecyclerItem.AccountItem(it))
@@ -227,7 +225,7 @@ class ManageAccountsDialogFragment : DialogFragment(), AccountsManagementAdapter
             // Create new adapter with the remaining accounts
             accountListAdapter.submitAccountList(accountList = getAccountListItems())
             val am = AccountManager.get(requireContext())
-            if (accountsManagementViewModel.getLoggedAccounts().isEmpty()) {
+            if (manageAccountsViewModel.getLoggedAccounts().isEmpty()) {
                 // Show create account screen if there isn't any account
                 am.addAccount(
                     MainApp.accountType,
@@ -236,10 +234,10 @@ class ManageAccountsDialogFragment : DialogFragment(), AccountsManagementAdapter
                     null, null
                 )
             } else {    // at least one account left
-                if (accountsManagementViewModel.getCurrentAccount() == null) {
+                if (manageAccountsViewModel.getCurrentAccount() == null) {
                     // current account was removed - set another as current
                     var accountName = ""
-                    val accounts = accountsManagementViewModel.getLoggedAccounts()
+                    val accounts = manageAccountsViewModel.getLoggedAccounts()
                     if (accounts.isNotEmpty()) {
                         accountName = accounts[0].name
                     }
@@ -247,6 +245,12 @@ class ManageAccountsDialogFragment : DialogFragment(), AccountsManagementAdapter
                 }
 
             }
+        }
+    }
+
+    companion object {
+        fun newInstance(): ManageAccountsDialogFragment {
+            return ManageAccountsDialogFragment()
         }
     }
 

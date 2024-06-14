@@ -32,7 +32,7 @@ import com.owncloud.android.usecases.files.RemoveLocalFilesForAccountUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class AccountsManagementViewModel(
+class ManageAccountsViewModel(
     private val accountProvider: AccountProvider,
     private val removeLocalFilesForAccountUseCase: RemoveLocalFilesForAccountUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,

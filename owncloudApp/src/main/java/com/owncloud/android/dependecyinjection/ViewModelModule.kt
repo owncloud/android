@@ -6,7 +6,7 @@
  * @author Juan Carlos Garrote Gascón
  * @author David Crespo Ríos
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,11 +23,10 @@
 
 package com.owncloud.android.dependecyinjection
 
-
 import com.owncloud.android.MainApp
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
-import com.owncloud.android.presentation.accounts.AccountsManagementViewModel
+import com.owncloud.android.presentation.accounts.ManageAccountsViewModel
 import com.owncloud.android.presentation.accounts.RemoveAccountDialogViewModel
 import com.owncloud.android.presentation.authentication.AuthenticationViewModel
 import com.owncloud.android.presentation.authentication.oauth.OAuthViewModel
@@ -64,7 +63,7 @@ import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModelOf(::AccountsManagementViewModel)
+    viewModelOf(::ManageAccountsViewModel)
     viewModelOf(::BiometricViewModel)
     viewModelOf(::DrawerViewModel)
     viewModelOf(::FileDetailsViewModel)
@@ -101,7 +100,6 @@ val viewModelModule = module {
     viewModel { MigrationViewModel(MainApp.dataFolder, get(), get(), get(), get(), get(), get(), get()) }
     viewModel { TransfersViewModel(get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get(), get()) }
     viewModel { ReceiveExternalFilesViewModel(get(), get(), get()) }
-    viewModel { AccountsManagementViewModel(get(), get(), get()) }
     viewModel { (accountName: String, showPersonalSpace: Boolean) ->
         SpacesListViewModel(get(), get(), get(), get(), get(), accountName, showPersonalSpace)
     }

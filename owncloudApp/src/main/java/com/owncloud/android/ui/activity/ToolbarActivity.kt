@@ -108,7 +108,7 @@ abstract class ToolbarActivity : BaseActivity() {
             )
         }
         avatarView.setOnClickListener {
-            val dialog = ManageAccountsDialogFragment()
+            val dialog = ManageAccountsDialogFragment.newInstance()
             dialog.show(supportFragmentManager, "ACCOUNTS_MANAGEMENT_DIALOG")
         }
     }
