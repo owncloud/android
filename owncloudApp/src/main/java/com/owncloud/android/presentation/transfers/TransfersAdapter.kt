@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -129,16 +130,18 @@ class TransfersAdapter(
 
                     uploadStatus.isVisible = transferItem.transfer.status != TransferStatus.TRANSFER_SUCCEEDED
                     uploadStatus.text = " — " + holder.itemView.context.getString(transferItem.transfer.statusToStringRes())
-
+                    val placeholderIcon = if (transferItem.transfer.localPath.endsWith(".url")) {
+                        R.drawable.ic_action_open_shortcut
+                    } else {
+                        MimetypeIconUtil.getFileTypeIconId(
+                            MimetypeIconUtil.getBestMimeTypeByFilename(transferItem.transfer.localPath),
+                            fileName
+                        )
+                    }
                     Glide.with(holder.itemView)
                         .load(transferItem.transfer.localPath)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .placeholder(
-                            MimetypeIconUtil.getFileTypeIconId(
-                                MimetypeIconUtil.getBestMimeTypeByFilename(transferItem.transfer.localPath),
-                                fileName
-                            )
-                        )
+                        .placeholder(placeholderIcon)
                         .into(thumbnail)
 
                     uploadRightButton.isVisible = transferItem.transfer.status != TransferStatus.TRANSFER_SUCCEEDED
