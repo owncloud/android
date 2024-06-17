@@ -89,7 +89,7 @@ class CreateShortcutDialogFragment : DialogFragment() {
 
     private fun updateCreateShortcutButtonState(isValidFileName: Boolean, isValidUrl: Boolean) {
         isCreateShortcutButtonEnabled = isValidFileName && isValidUrl
-        enableYesButton(isCreateShortcutButtonEnabled)
+        enableCreateButton(isCreateShortcutButtonEnabled)
     }
 
     private fun handleNameRequirements(hasForbiddenCharacters: Boolean, hasMaxCharacters: Boolean) {
@@ -112,8 +112,8 @@ class CreateShortcutDialogFragment : DialogFragment() {
         }
     }
 
-    private fun enableYesButton(enable: Boolean) {
-        binding.yesButton.apply {
+    private fun enableCreateButton(enable: Boolean) {
+        binding.createButton.apply {
             isEnabled = enable
             if (enable) {
                 setOnClickListener {
