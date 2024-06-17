@@ -748,7 +748,6 @@
   <string name="insecure_http_url_title_dialog">Ebaturvaline HTTP URL</string>
   <string name="insecure_http_url_message_dialog">Sisestatud URL kasutab krüpteeritud HTTPS-protokolli asemel HTTP-protokolli. Jätkamisel ei ole teie ühendus krüpteeritud.</string>
   <string name="insecure_http_url_continue_button">Jätka</string>
-  <string name="clean_data_account_message">Kõik selle kasutajakonto allalaetud failid, mis ei ole võrguühenduseta saadaval, kustutatakse</string>
   <string name="clean_data_account_title">Eemalda kohalik salvestusmaht</string>
   <string name="clean_data_account_button_yes">Puhasta andmed</string>
   <string name="content_description_menu">Menüü</string>

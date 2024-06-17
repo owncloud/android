@@ -744,7 +744,6 @@
   <string name="insecure_http_url_title_dialog">URL HTTP jo e sigurt</string>
   <string name="insecure_http_url_message_dialog">URL-ja që dhatë përdor HTTP, në vend se protokollin e fshehtëzuar HTTPS. Nëse vazhdoni, komunikimi juaj s’do të jetë i fshehtëzuar.</string>
   <string name="insecure_http_url_continue_button">Vazhdo</string>
-  <string name="clean_data_account_message">Krejt kartelat e shkarkuara që s’janë të passhme jashtë interneti do të spastrohen për këtë llogari</string>
   <string name="clean_data_account_title">Hiq depozitë vendore</string>
   <string name="clean_data_account_button_yes">Pastro të dhëna</string>
   <string name="content_description_menu">Menu</string>
