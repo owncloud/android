@@ -57,7 +57,7 @@ class CreateShortcutDialogFragment : DialogFragment() {
     private fun formatUrl(url: String): String {
         var formattedUrl = url
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            formattedUrl = "http://$url"
+            formattedUrl = "https://$url"
         }
         return formattedUrl
     }
@@ -71,7 +71,7 @@ class CreateShortcutDialogFragment : DialogFragment() {
         binding.createShortcutDialogNameFileValue.doOnTextChanged { fileNameValue, _, _, _ ->
             fileNameValue?.let {
                 hasForbiddenCharacters = forbiddenChars.any { fileNameValue.contains(it) }
-                hasMaxCharacters = fileNameValue.length >= MAX_FILENAME_LENGTH
+                hasMaxCharacters = fileNameValue.length > MAX_FILENAME_LENGTH
                 isValidFileName = fileNameValue.isNotBlank() && !hasForbiddenCharacters && !hasMaxCharacters
                 handleNameRequirements(hasForbiddenCharacters, hasMaxCharacters)
                 updateCreateShortcutButtonState(isValidFileName, isValidUrl)
