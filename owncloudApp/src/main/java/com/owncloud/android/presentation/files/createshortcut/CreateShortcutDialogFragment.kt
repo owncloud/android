@@ -105,7 +105,7 @@ class CreateShortcutDialogFragment : DialogFragment() {
     private fun handleUrlRequirements(hasSpace: Boolean) {
         binding.createShortcutDialogUrlLayout.apply {
             if (hasSpace) {
-                error = getString(R.string.create_shortcut_dialog_url_error_no_spaces)
+                error = getString(R.string.create_shortcut_dialog_url_error_no_blanks)
             } else {
                 error = null
             }
