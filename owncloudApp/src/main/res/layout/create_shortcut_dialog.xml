@@ -50,19 +50,9 @@
                             android:id="@+id/create_shortcut_dialog_url_value"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_toStartOf="@+id/url_suffix"
                             android:inputType="textNoSuggestions"
                             android:textSize="15sp" />
 
-                        <TextView
-                            android:id="@+id/url_suffix"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:text="@string/create_shortcut_dialog_url_extension"
-                            android:textColor="@color/black"
-                            android:textSize="15sp" />
                     </RelativeLayout>
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -96,13 +86,26 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/create_shortcut_dialog_name_file_value"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textNoSuggestions"
-                        android:textSize="15sp" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/create_shortcut_dialog_name_file_value"
+                            android:layout_toStartOf="@+id/url_suffix"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textNoSuggestions"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/url_suffix"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/create_shortcut_dialog_url_extension"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
                     </RelativeLayout>
+
                 </com.google.android.material.textfield.TextInputLayout>
 
             </RelativeLayout>

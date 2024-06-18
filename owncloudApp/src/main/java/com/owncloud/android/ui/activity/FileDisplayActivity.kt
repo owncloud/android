@@ -40,13 +40,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.RemoteException
-import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -1376,19 +1376,25 @@ class FileDisplayActivity : FileActivity(),
             setTextColor(ContextCompat.getColor(this@FileDisplayActivity, android.R.color.black))
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
         }
+
         val urlTextView = TextView(this).apply {
             text = url
-            maxLines = 1
-            ellipsize = TextUtils.TruncateAt.MIDDLE
             setTextColor(ContextCompat.getColor(this@FileDisplayActivity, android.R.color.black))
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+        }
+        val scrollView = ScrollView(this).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            addView(urlTextView)
         }
 
         val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(62, 0, 62, 70)
             addView(messageTextView)
-            addView(urlTextView)
+            addView(scrollView)
         }
 
         val dialog = AlertDialog.Builder(this@FileDisplayActivity)
