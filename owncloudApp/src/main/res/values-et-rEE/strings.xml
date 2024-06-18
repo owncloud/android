@@ -705,6 +705,8 @@
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Mõned täiustused, et teha rakendus paremini juurdepääsetavaks</string>
   <string name="release_notes_4_3_0_title_show_app_provider_icon_from_endpoint">Uued ikoonid tegevuste menüüs \"Ava veebis\" valikul</string>
   <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">Tegevuste menüüs \"Ava veebis\" valikule on lisatud sobivamad ikoonid</string>
+  <string name="release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option">\"Ainult kohalik\" valikut näidatakse korrektselt ja kustutamise dialoogis välditakse võrguühenduseta saadaval olevate failide kustutamist</string>
+  <string name="release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option">Valikut \"Ainult kohalik\" näidatakse kustutamise dialoogis, kui valitud kaustas on vähemalt üks allalaaditud fail, ignoreerides ilma võrguühenduseta saadaval olevaid faile. Kui \"Ainult kohalik\" valik on nähtaval ja valitud, siis võrguühenduseta saadaval olevaid faile ei kustutata.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>

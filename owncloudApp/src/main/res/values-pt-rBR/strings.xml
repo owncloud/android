@@ -705,6 +705,8 @@
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Algumas melhorias para tornar o aplicativo mais acessível</string>
   <string name="release_notes_4_3_0_title_show_app_provider_icon_from_endpoint">Novos ícones na opção \"Abrir em (web)\" no menu de operações</string>
   <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">Ícones mais apropriados foram adicionados à opção \"Abrir em (web)\" no menu de operações</string>
+  <string name="release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option">Exibiu a opção \"Somente local\" corretamente e impediu a exclusão de arquivos off-line disponíveis na caixa de diálogo de remoção</string>
+  <string name="release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option">A opção \"Somente local\" na caixa de diálogo de remoção será mostrada quando a pasta selecionada contiver pelo menos um arquivo baixado, ignorando aqueles disponíveis offline. Se a opção \"Somente local\" for exibida e clicada, os arquivos off-line disponíveis não serão excluídos</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
