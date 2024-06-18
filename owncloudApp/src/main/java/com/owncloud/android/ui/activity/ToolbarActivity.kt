@@ -34,7 +34,8 @@ import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.avatar.AvatarUtils
-import com.owncloud.android.ui.dialog.ManageAccountsDialogFragment
+import com.owncloud.android.presentation.accounts.ManageAccountsDialogFragment
+import com.owncloud.android.presentation.accounts.ManageAccountsDialogFragment.Companion.MANAGE_ACCOUNTS_DIALOG
 
 /**
  * Base class providing toolbar registration functionality, see [.setupToolbar].
@@ -108,8 +109,8 @@ abstract class ToolbarActivity : BaseActivity() {
             )
         }
         avatarView.setOnClickListener {
-            val dialog = ManageAccountsDialogFragment.newInstance()
-            dialog.show(supportFragmentManager, "ACCOUNTS_MANAGEMENT_DIALOG")
+            val dialog = ManageAccountsDialogFragment.newInstance(supportFragmentManager)
+            dialog.show(supportFragmentManager, MANAGE_ACCOUNTS_DIALOG)
         }
     }
 

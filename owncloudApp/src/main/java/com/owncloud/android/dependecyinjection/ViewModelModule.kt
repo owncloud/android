@@ -27,7 +27,6 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.accounts.ManageAccountsViewModel
-import com.owncloud.android.presentation.accounts.RemoveAccountDialogViewModel
 import com.owncloud.android.presentation.authentication.AuthenticationViewModel
 import com.owncloud.android.presentation.authentication.oauth.OAuthViewModel
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
@@ -77,7 +76,6 @@ val viewModelModule = module {
     viewModelOf(::PreviewVideoViewModel)
     viewModelOf(::ReceiveExternalFilesViewModel)
     viewModelOf(::ReleaseNotesViewModel)
-    viewModelOf(::RemoveAccountDialogViewModel)
     viewModelOf(::SettingsAdvancedViewModel)
     viewModelOf(::SettingsLogsViewModel)
     viewModelOf(::SettingsMoreViewModel)

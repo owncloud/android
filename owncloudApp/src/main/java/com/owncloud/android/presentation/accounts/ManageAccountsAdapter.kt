@@ -36,7 +36,7 @@ import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 import timber.log.Timber
 
-class AccountsManagementAdapter(private val accountListener: AccountAdapterListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ManageAccountsAdapter(private val accountListener: AccountAdapterListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var accountItemsList = listOf<AccountRecyclerItem>()
 
@@ -158,7 +158,7 @@ class AccountsManagementAdapter(private val accountListener: AccountAdapterListe
     }
 
     /**
-     * Listener interface for Activities using the [AccountsManagementAdapter]
+     * Listener interface for Activities using the [ManageAccountsAdapter]
      */
     interface AccountAdapterListener {
         fun removeAccount(account: Account)
