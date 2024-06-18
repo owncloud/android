@@ -341,9 +341,8 @@ private fun Activity.showSelectSecurityDialog(
     }
 }
 
-fun Activity.feedbackBehaviour(feedbackMail: String) {
+fun Activity.sendEmailOrOpenFeedbackDialogAction(feedbackMail: String) {
     if (feedbackMail.isNotEmpty()) {
-        val feedbackMail = getString(R.string.mail_feedback)
         val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.prefs_feedback)
         sendEmail(email = feedbackMail, subject = feedback)
     } else {

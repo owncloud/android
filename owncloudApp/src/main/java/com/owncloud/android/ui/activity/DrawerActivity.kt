@@ -56,9 +56,9 @@ import com.owncloud.android.R
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.extensions.feedbackBehaviour
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.openPrivacyPolicy
+import com.owncloud.android.extensions.sendEmailOrOpenFeedbackDialogAction
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.accounts.AccountsManagementActivity
 import com.owncloud.android.presentation.accounts.AccountsManagementActivity.Companion.KEY_ACCOUNT_LIST_CHANGED
@@ -289,7 +289,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     }
 
     private fun openFeedback() {
-        feedbackBehaviour(drawerViewModel.getFeedbackMail())
+        sendEmailOrOpenFeedbackDialogAction(drawerViewModel.getFeedbackMail())
     }
 
     private fun openDrawerLink() {

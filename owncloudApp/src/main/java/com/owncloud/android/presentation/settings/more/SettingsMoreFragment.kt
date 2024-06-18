@@ -26,9 +26,9 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
 import com.owncloud.android.R
-import com.owncloud.android.extensions.feedbackBehaviour
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.sendEmail
+import com.owncloud.android.extensions.sendEmailOrOpenFeedbackDialogAction
 import com.owncloud.android.presentation.settings.SettingsFragment.Companion.removePreferenceFromScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -109,7 +109,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         // Feedback
         if (moreViewModel.isFeedbackEnabled()) {
             prefFeedback?.setOnPreferenceClickListener {
-                requireActivity().feedbackBehaviour(moreViewModel.getFeedbackMail())
+                requireActivity().sendEmailOrOpenFeedbackDialogAction(moreViewModel.getFeedbackMail())
                 true
             }
         } else {
