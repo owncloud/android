@@ -54,14 +54,6 @@ class CreateShortcutDialogFragment : DialogFragment() {
         }
     }
 
-    private fun formatUrl(url: String): String {
-        var formattedUrl = url
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            formattedUrl = "https://$url"
-        }
-        return formattedUrl
-    }
-
     private fun handleInputsUrlAndFileName() {
         var isValidUrl = false
         var isValidFileName = false
@@ -119,7 +111,7 @@ class CreateShortcutDialogFragment : DialogFragment() {
                 setOnClickListener {
                     createShortcutListener.createShortcutFileFromApp(
                         fileName = binding.createShortcutDialogNameFileValue.text.toString(),
-                        url = formatUrl(binding.createShortcutDialogUrlValue.text.toString()),
+                        url = binding.createShortcutDialogUrlValue.text.toString(),
                     )
                     dialog?.dismiss()
                 }

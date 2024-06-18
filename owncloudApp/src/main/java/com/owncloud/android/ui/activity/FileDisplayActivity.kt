@@ -1369,6 +1369,7 @@ class FileDisplayActivity : FileActivity(),
 
     private fun openShortcutFileInBrowser(file: OCFile) {
         val url = extractUrlFromFile(file.storagePath.toString())
+        val urlFormat = formatUrl(url!!)
         val message = getString(R.string.open_shortcut_description)
         val messageTextView = TextView(this).apply {
             text = message
@@ -1378,7 +1379,7 @@ class FileDisplayActivity : FileActivity(),
         }
 
         val urlTextView = TextView(this).apply {
-            text = url
+            text = urlFormat
             setTextColor(ContextCompat.getColor(this@FileDisplayActivity, android.R.color.black))
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
         }
@@ -1401,8 +1402,8 @@ class FileDisplayActivity : FileActivity(),
             .setTitle(getString(R.string.open_shortcut_title))
             .setView(layout)
             .setPositiveButton(R.string.drawer_open) { view, _ ->
-                url?.let {
-                    goToUrl(url)
+                urlFormat?.let {
+                    goToUrl(urlFormat)
                 }
                 view.dismiss()
             }
@@ -1425,6 +1426,14 @@ class FileDisplayActivity : FileActivity(),
             }
         }
         return null
+    }
+
+    private fun formatUrl(url: String): String {
+        var formattedUrl = url
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            formattedUrl = "https://$url"
+        }
+        return formattedUrl
     }
 
     private fun onSynchronizeFolderOperationFinish(
