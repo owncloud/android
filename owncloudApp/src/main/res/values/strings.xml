@@ -851,6 +851,6 @@
     <string name="open_shortcut_description">This shortcut points to:</string>
     <string name="open_shortcut_title">Open link</string>
 
-    <string name="feedback_description_dialog"><![CDATA[\n    There are two options for submitting your comments:<br><br>\n    1. <a href=\"%1$s\"><b>Central community</b></a>: This platform is an open forum that allows you to report any issues.<br><br>\n    2. <a href=\"%2$s\"><b>GitHub</b></a>: This option is ideal for reporting technical bugs or suggesting improvements about the app.<br><br>\n    We appreciate your cooperation.\n]]></string>
+    <string name="feedback_description_dialog"><![CDATA[ \n  Fill out the following <a href=\"%1$s\"><b>survey</b></a> to send us your feedback on the app. <br><br>\n There are two options more for submitting your comments:<br><br>\n    1. <a href=\"%2$s\"><b>Central community</b></a>: This platform is an open forum that allows you to report any issues.<br><br>\n    2. <a href=\"%3$s\"><b>GitHub</b></a>: This option is ideal for reporting technical bugs or suggesting improvements about the app.<br><br>\n    We appreciate your cooperation.\n]]></string>
 
 </resources>

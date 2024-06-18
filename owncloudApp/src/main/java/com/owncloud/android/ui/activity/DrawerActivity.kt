@@ -742,6 +742,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     companion object {
         const val CENTRAL_URL = "https://central.owncloud.org/"
         const val GITHUB_URL = "https://github.com/owncloud/android/issues/new/choose"
+        const val SURVEY_URL = "https://owncloud.com/android-app-feedback"
         private const val KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE"
         private const val KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM"
         const val ACTION_MANAGE_ACCOUNTS = 101

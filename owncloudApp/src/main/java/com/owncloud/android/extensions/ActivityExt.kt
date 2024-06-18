@@ -351,7 +351,8 @@ fun Activity.sendEmailOrOpenFeedbackDialogAction(feedbackMail: String) {
 }
 
 fun Activity.openFeedbackDialog() {
-    val message = getString(R.string.feedback_description_dialog, DrawerActivity.CENTRAL_URL, DrawerActivity.GITHUB_URL).trimIndent()
+    val message =
+        getString(R.string.feedback_description_dialog, DrawerActivity.SURVEY_URL, DrawerActivity.CENTRAL_URL, DrawerActivity.GITHUB_URL).trimIndent()
     val spannableString = HtmlCompat.fromHtml(message, HtmlCompat.FROM_HTML_MODE_LEGACY)
     val builder = AlertDialog.Builder(this)
     builder.apply {
