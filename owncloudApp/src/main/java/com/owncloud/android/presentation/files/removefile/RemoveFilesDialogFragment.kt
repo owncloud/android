@@ -133,14 +133,6 @@ class RemoveFilesDialogFragment(
     companion object {
         const val TAG_REMOVE_FILES_DIALOG_FRAGMENT = "TAG_REMOVE_FILES_DIALOG_FRAGMENT"
 
-        /**
-         * Public factory method to create new RemoveFilesDialogFragment instances.
-         *
-         * @param files           Files to remove.
-         * @param isAvailableLocallyAndNotAvailableOffline
-         * @return Dialog ready to show.
-         */
-        @JvmStatic
         fun newInstance(files: ArrayList<OCFile>, isAvailableLocallyAndNotAvailableOffline: Boolean): RemoveFilesDialogFragment {
             return RemoveFilesDialogFragment(targetFiles = files, isAvailableLocallyAndNotAvailableOffline = isAvailableLocallyAndNotAvailableOffline)
         }
