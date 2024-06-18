@@ -322,7 +322,7 @@ class SettingsMoreFragmentTest {
                     EXTRA_SUBJECT,
                     "Android v" + BuildConfig.VERSION_NAME + " - " + context.getText(R.string.prefs_feedback)
                 ),
-                hasData(Uri.parse(context.getString(R.string.mail_feedback))),
+                hasData(Uri.parse(FEEDBACK_MAIL)),
                 hasFlag(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
         )
