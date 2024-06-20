@@ -150,6 +150,11 @@ class ReleaseNotesViewModel(
                 subtitle = R.string.release_notes_4_3_0_subtitle_report_feedback_central_github,
                 type = ReleaseNoteType.ENHANCEMENT
             ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_new_ui_manage_accounts,
+                subtitle = R.string.release_notes_4_3_0_subtitle_new_ui_manage_accounts,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
         )
     }
 }
