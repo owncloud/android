@@ -188,8 +188,7 @@ class ManageAccountsDialogFragment(
             if (currentAccount == manageAccountsViewModel.getCurrentAccount()) {
                 // Create new adapter with the remaining accounts
                 accountListAdapter.submitAccountList(accountList = getAccountListItems())
-            }
-            else if (manageAccountsViewModel.getLoggedAccounts().isEmpty()) {
+            } else if (manageAccountsViewModel.getLoggedAccounts().isEmpty()) {
                 // Show create account screen if there isn't any account
                 createAccount()
             } else { // At least one account left
