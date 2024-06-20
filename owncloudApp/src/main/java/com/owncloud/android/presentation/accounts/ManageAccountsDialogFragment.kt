@@ -58,17 +58,10 @@ class ManageAccountsDialogFragment(
     private var accountListAdapter: ManageAccountsAdapter = ManageAccountsAdapter(this)
     private lateinit var parentActivity: ToolbarActivity
 
-    private lateinit var originalAccounts: Set<String>
-    private lateinit var originalCurrentAccount: String
-
     private val manageAccountsViewModel: ManageAccountsViewModel by viewModel()
 
     override fun onStart() {
         super.onStart()
-
-        val accountList = manageAccountsViewModel.getLoggedAccounts()
-        originalAccounts = toAccountNameSet(accountList)
-        originalCurrentAccount = manageAccountsViewModel.getCurrentAccount()?.name.toString()
 
         accountListAdapter.submitAccountList(accountList = getAccountListItems())
 
@@ -182,6 +175,7 @@ class ManageAccountsDialogFragment(
         } else {
             // restart list of files with new account
             parentActivity.showLoadingDialog(R.string.common_loading)
+            dismiss()
             changeToAccountContext(clickedAccount)
         }
     }
@@ -215,6 +209,7 @@ class ManageAccountsDialogFragment(
             parentActivity.applicationContext,
             account.name
         )
+        parentActivity.account = account
         // Refresh dependencies to be used in selected account
         MainApp.initDependencyInjection()
         val i = Intent(
@@ -244,20 +239,6 @@ class ManageAccountsDialogFragment(
     }
 
     /**
-     * converts an array of accounts into a set of account names.
-     *
-     * @param accountList the account array
-     * @return set of account names
-     */
-    private fun toAccountNameSet(accountList: Array<Account>): Set<String> {
-        val actualAccounts: MutableSet<String> = HashSet(accountList.size)
-        accountList.forEach { account ->
-            actualAccounts.add(account.name)
-        }
-        return actualAccounts
-    }
-
-    /**
      * creates the account list items list including the add-account action in case multiaccount_support is enabled.
      *
      * @return list of account list items
@@ -274,27 +255,6 @@ class ManageAccountsDialogFragment(
             provisionalAccountList.add(ManageAccountsAdapter.AccountRecyclerItem.NewAccount)
         }
         return provisionalAccountList
-    }
-
-    /**
-     * checks the set of current accounts against the set of original accounts when the dialog was started.
-     *
-     * @return `true` if account list has changed, `false` if not
-     */
-    private fun hasAccountListChanged(): Boolean {
-        val accountList = manageAccountsViewModel.getLoggedAccounts()
-        val currentAccounts = toAccountNameSet(accountList)
-        return originalAccounts != currentAccounts
-    }
-
-    /**
-     * checks current account against original current account when the dialog was started.
-     *
-     * @return `true` if current account has changed, `false` if not
-     */
-    private fun hasCurrentAccountChanged(): Boolean {
-        val currentAccount = manageAccountsViewModel.getCurrentAccount()
-        return currentAccount != null && originalCurrentAccount != currentAccount.name
     }
 
     companion object {
