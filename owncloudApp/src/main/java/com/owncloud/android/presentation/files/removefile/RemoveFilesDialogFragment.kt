@@ -34,6 +34,7 @@ import com.owncloud.android.datamodel.ThumbnailsCacheManager
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
+import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.MIMETYPE_TEXT_URI_LIST
 import com.owncloud.android.utils.MimetypeIconUtil
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -121,9 +122,13 @@ class RemoveFilesDialogFragment(
             if (thumbnail != null) {
                 thumbnailImageView.setImageBitmap(thumbnail)
             } else {
-                thumbnailImageView.setImageResource(
-                    MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName)
-                )
+                if (file.mimeType == MIMETYPE_TEXT_URI_LIST) {
+                    thumbnailImageView.setImageResource(R.drawable.ic_action_open_shortcut)
+                } else {
+                    thumbnailImageView.setImageResource(
+                        MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName)
+                    )
+                }
             }
         } else {
             thumbnailImageView.visibility = View.GONE
