@@ -1430,8 +1430,8 @@ class FileDisplayActivity : FileActivity(),
 
     private fun formatUrl(url: String): String {
         var formattedUrl = url
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            formattedUrl = "https://$url"
+        if (!url.startsWith(PROTOCOL_HTTP) && !url.startsWith(PROTOCOL_HTTPS)) {
+            formattedUrl = PROTOCOL_HTTPS + url
         }
         return formattedUrl
     }
@@ -1997,5 +1997,7 @@ class FileDisplayActivity : FileActivity(),
         const val REQUEST_CODE__COPY_FILES = REQUEST_CODE__LAST_SHARED + 3
         const val REQUEST_CODE__UPLOAD_FROM_CAMERA = REQUEST_CODE__LAST_SHARED + 4
         const val RESULT_OK_AND_MOVE = RESULT_FIRST_USER
+        const val PROTOCOL_HTTPS = "https://"
+        const val PROTOCOL_HTTP = "http://"
     }
 }

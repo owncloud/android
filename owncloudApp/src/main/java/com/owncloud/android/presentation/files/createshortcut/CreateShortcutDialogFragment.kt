@@ -31,6 +31,7 @@ import com.owncloud.android.databinding.CreateShortcutDialogBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment.Companion.MAX_FILENAME_LENGTH
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment.Companion.forbiddenChars
+import com.owncloud.android.ui.activity.FileDisplayActivity
 
 class CreateShortcutDialogFragment : DialogFragment() {
     private lateinit var parentFolder: OCFile
@@ -111,7 +112,7 @@ class CreateShortcutDialogFragment : DialogFragment() {
                 setOnClickListener {
                     createShortcutListener.createShortcutFileFromApp(
                         fileName = binding.createShortcutDialogNameFileValue.text.toString(),
-                        url = binding.createShortcutDialogUrlValue.text.toString(),
+                        url = formatUrl(binding.createShortcutDialogUrlValue.text.toString()),
                     )
                     dialog?.dismiss()
                 }
@@ -121,6 +122,14 @@ class CreateShortcutDialogFragment : DialogFragment() {
                 setTextColor(resources.getColor(R.color.grey, null))
             }
         }
+    }
+
+    private fun formatUrl(url: String): String {
+        var formattedUrl = url
+        if (!url.startsWith(FileDisplayActivity.PROTOCOL_HTTP) && !url.startsWith(FileDisplayActivity.PROTOCOL_HTTPS)) {
+            formattedUrl = FileDisplayActivity.PROTOCOL_HTTPS + url
+        }
+        return formattedUrl
     }
 
     interface CreateShortcutListener {
