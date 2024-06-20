@@ -155,7 +155,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param mandatoryCreation When 'true', if an account is not created by the user, the app will be closed.
      *                          To use when no ownCloud account is available.
      */
-    protected void createAccount(boolean mandatoryCreation) {
+    private void createAccount(boolean mandatoryCreation) {
         AccountManager am = AccountManager.get(getApplicationContext());
         am.addAccount(MainApp.Companion.getAccountType(),
                 null,

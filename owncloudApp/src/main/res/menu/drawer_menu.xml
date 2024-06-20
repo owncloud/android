@@ -2,7 +2,7 @@
 <!--
   ownCloud Android client application
 
-  Copyright (C) 2020 ownCloud GmbH.
+  Copyright (C) 2024 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -17,39 +17,6 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--
-        account list placeholder
-        all items in this group MUST have orderInCategory="2" set
-        all accounts are dynamically added with orderInCategory="1" set
-    -->
-    <group android:id="@+id/drawer_menu_accounts">
-        <item
-            android:orderInCategory="2"
-            android:id="@+id/drawer_menu_account_add"
-            android:icon="@drawable/ic_plus_grey"
-            android:title="@string/prefs_add_account" />
-        <item
-            android:orderInCategory="2"
-            android:id="@+id/drawer_menu_account_manage"
-            android:icon="@drawable/ic_account_multiple_grey"
-            android:title="@string/drawer_manage_accounts" />
-
-        <item
-            android:id="@+id/footer_spacer_3"
-            android:checkable="false"
-            android:enabled="false"
-            android:orderInCategory="200"
-            android:title="" />
-
-        <item
-            android:id="@+id/footer_spacer_4"
-            android:checkable="false"
-            android:enabled="false"
-            android:orderInCategory="200"
-            android:title="" />
-
-    </group>
 
     <!--
       standard menu

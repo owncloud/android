@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
 
-  Copyright (C) 2023 ownCloud GmbH.
+  Copyright (C) 2024 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -32,11 +32,6 @@
     <dimen name="nav_drawer_header_avatar">56dp</dimen>
     <!-- avatar radius needs to 1/2 of the avatar dp value -->
     <dimen name="nav_drawer_header_avatar_radius">28dp</dimen>
-    <dimen name="nav_drawer_header_avatar_other_accounts_size">40dp</dimen>
-    <dimen name="nav_drawer_header_avatar_other_accounts_radius">20dp</dimen>
-    <!-- margin must be nav_drawer_header_avatar_other_accounts_size+16dp -->
-    <dimen name="nav_drawer_header_avatar_second_account_margin">56dp</dimen>
-    <dimen name="nav_drawer_menu_avatar_radius">12sp</dimen>
     <dimen name="list_item_avatar_icon_radius">20dp</dimen>
 
     <!-- Bottom navigation bar -->
