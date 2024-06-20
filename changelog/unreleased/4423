@@ -1,0 +1,6 @@
+Enhancement: Changes in the Feedback section
+
+Based on a brandable parameter, a new dialog has been added to handle feedback. Within the dialog, links to the survey, GitHub and the open forum Central will be displayed.
+
+https://github.com/owncloud/enterprise/issues/6594
+https://github.com/owncloud/android/pull/4423
