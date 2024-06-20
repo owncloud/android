@@ -140,6 +140,11 @@ class ReleaseNotesViewModel(
                 subtitle = R.string.release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option,
                 type = ReleaseNoteType.BUGFIX
             ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_create_open_shortcut,
+                subtitle = R.string.release_notes_4_3_0_subtitle_create_open_shortcut,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
         )
     }
 }

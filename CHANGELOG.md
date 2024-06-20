@@ -56,6 +56,7 @@ ownCloud admins and users.
 * Enhancement - Improvements in remove dialog alert: [#4342](https://github.com/owncloud/android/issues/4342)
 * Enhancement - Content description in UI elements to improve accessibility: [#4360](https://github.com/owncloud/android/issues/4360)
 * Enhancement - Added contentDescription attribute in the previewed image: [#4360](https://github.com/owncloud/android/issues/4360)
+* Enhancement - Support for URL shortcut files: [#4413](https://github.com/owncloud/android/issues/4413)
 
 ## Details
 
@@ -276,6 +277,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4360
    https://github.com/owncloud/android/pull/4388
+
+* Enhancement - Support for URL shortcut files: [#4413](https://github.com/owncloud/android/issues/4413)
+
+   A new option has been added in the FAB to create a shortcut file with a .url
+   extension. When the file is clicked, the URL will open in the browser.
+
+   https://github.com/owncloud/android/issues/4413
+   https://github.com/owncloud/android/pull/4420
 
 # Changelog for ownCloud Android Client [4.2.2] (2024-05-30)
 

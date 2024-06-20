@@ -46,6 +46,7 @@ import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
 import com.owncloud.android.domain.files.model.OCFooterFile
 import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.MIMETYPE_TEXT_URI_LIST
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
@@ -304,6 +305,8 @@ class FileListAdapter(
             if (file.isFolder) {
                 // Folder
                 fileIcon.setImageResource(R.drawable.ic_menu_archive)
+            } else if (file.mimeType == MIMETYPE_TEXT_URI_LIST) {
+                fileIcon.setImageResource(R.drawable.ic_action_open_shortcut)
             } else {
                 // Set file icon depending on its mimetype. Ask for thumbnail later.
                 fileIcon.setImageResource(MimetypeIconUtil.getFileTypeIconId(file.mimeType, file.fileName))

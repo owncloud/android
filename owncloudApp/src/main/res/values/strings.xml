@@ -20,6 +20,7 @@
     <string name="actionbar_descending">Descending</string>
     <string name="actionbar_sort_title">Sort by</string>
     <string name="fab_new_file">New document</string>
+    <string name="fab_new_shortcut">New shortcut</string>
     <string name="drawer_item_all_files">All files</string>
     <string name="drawer_item_only_available_offline">Available offline</string>
     <string name="drawer_item_shared_by_link_files">Shared by link</string>
@@ -765,6 +766,8 @@
     <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">More appropriate icons have been added to the "Open in (web)" option on the operations menu</string>
     <string name="release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option">Displayed \"Local only\" option properly and prevented deletion of available offline files in the remove dialog</string>
     <string name="release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option">\"Local only\" option in remove dialog will be shown when the selected folder contains at least one downloaded file, ignoring those available offline. If the "Local only" option is displayed and clicked, available offline files will not be deleted</string>
+    <string name="release_notes_4_3_0_subtitle_create_open_shortcut">Support for URL shortcut files</string>
+    <string name="release_notes_4_3_0_title_create_open_shortcut">A new option has been added in the FAB to create a shortcut file with a .url extension. When the file is clicked, the URL will open in the browser</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
@@ -837,5 +840,13 @@
     <string name="content_description_edit_share">Edit share</string>
     <string name="content_description_delete_share">Delete share</string>
     <string name="content_description_file_operations">%1$s operations</string>
+
+    <string name="create_shortcut_dialog_title">Create a shortcut</string>
+    <string name="create_shortcut_dialog_url">URL</string>
+    <string name="create_shortcut_dialog_url_information">The URL must start with https:// or http:// so that it can be opened in the browser</string>
+    <string name="create_shortcut_dialog_url_error_no_blanks">The URL cannot contain blanks</string>
+    <string name="create_shortcut_dialog_url_extension">.url</string>
+    <string name="open_shortcut_description">This shortcut points to:</string>
+    <string name="open_shortcut_title">Open link</string>
 
 </resources>
