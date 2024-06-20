@@ -57,6 +57,7 @@ ownCloud admins and users.
 * Enhancement - Content description in UI elements to improve accessibility: [#4360](https://github.com/owncloud/android/issues/4360)
 * Enhancement - Added contentDescription attribute in the previewed image: [#4360](https://github.com/owncloud/android/issues/4360)
 * Enhancement - Support for URL shortcut files: [#4413](https://github.com/owncloud/android/issues/4413)
+* Enhancement - Changes in the Feedback section: [#6594](https://github.com/owncloud/enterprise/issues/6594)
 
 ## Details
 
@@ -285,6 +286,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4413
    https://github.com/owncloud/android/pull/4420
+
+* Enhancement - Changes in the Feedback section: [#6594](https://github.com/owncloud/enterprise/issues/6594)
+
+   Based on a brandable parameter, a new dialog has been added to handle feedback.
+   Within the dialog, links to the survey, GitHub and the open forum Central will
+   be displayed.
+
+   https://github.com/owncloud/enterprise/issues/6594
+   https://github.com/owncloud/android/pull/4423
 
 # Changelog for ownCloud Android Client [4.2.2] (2024-05-30)
 
