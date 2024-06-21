@@ -50,13 +50,13 @@ import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class ManageAccountsDialogFragment(
-    private val supportFragmentManager: FragmentManager,
-    private val currentAccount: Account?
-) : DialogFragment(), ManageAccountsAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
+class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
 
     private var accountListAdapter: ManageAccountsAdapter = ManageAccountsAdapter(this)
+    private var currentAccount: Account? = null
+    private lateinit var supportFragmentManager: FragmentManager
     private lateinit var parentActivity: ToolbarActivity
+
 
     private val manageAccountsViewModel: ManageAccountsViewModel by viewModel()
 
@@ -66,6 +66,8 @@ class ManageAccountsDialogFragment(
         accountListAdapter.submitAccountList(accountList = getAccountListItems())
 
         parentActivity = requireActivity() as ToolbarActivity
+        supportFragmentManager = parentActivity.supportFragmentManager
+        currentAccount = requireArguments().getParcelable(KEY_CURRENT_ACCOUNT)
 
         subscribeToViewModels()
     }
@@ -258,9 +260,13 @@ class ManageAccountsDialogFragment(
 
     companion object {
         const val MANAGE_ACCOUNTS_DIALOG = "MANAGE_ACCOUNTS_DIALOG"
+        const val KEY_CURRENT_ACCOUNT = "KEY_CURRENT_ACCOUNT"
 
-        fun newInstance(supportFragmentManager: FragmentManager, currentAccount: Account?): ManageAccountsDialogFragment {
-            return ManageAccountsDialogFragment(supportFragmentManager, currentAccount)
+        fun newInstance(currentAccount: Account?): ManageAccountsDialogFragment {
+            val args = Bundle().apply {
+                putParcelable(KEY_CURRENT_ACCOUNT, currentAccount)
+            }
+            return ManageAccountsDialogFragment().apply { arguments = args }
         }
     }
 

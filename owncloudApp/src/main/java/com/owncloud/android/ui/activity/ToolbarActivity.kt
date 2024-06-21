@@ -109,7 +109,7 @@ abstract class ToolbarActivity : BaseActivity() {
             )
         }
         avatarView.setOnClickListener {
-            val dialog = ManageAccountsDialogFragment.newInstance(supportFragmentManager, AccountUtils.getCurrentOwnCloudAccount(applicationContext))
+            val dialog = ManageAccountsDialogFragment.newInstance(AccountUtils.getCurrentOwnCloudAccount(applicationContext))
             dialog.show(supportFragmentManager, MANAGE_ACCOUNTS_DIALOG)
         }
     }
