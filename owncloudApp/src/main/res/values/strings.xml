@@ -853,6 +853,6 @@
 
     <string name="feedback_dialog_description">Improve the app with your feedback</string>
     <string name="feedback_dialog_get_in_contact_title">Get in contact</string>
-    <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a> or <a href=\"%2$s\"><b>chat</b></a> with us or contribute on <a href=\"%3$s\"><b>GitHub</b></a>]]></string>
+    <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a>, <a href=\"%2$s\"><b>chat with us</b></a> or contribute on <a href=\"%3$s\"><b>GitHub</b></a>]]></string>
 
 </resources>
