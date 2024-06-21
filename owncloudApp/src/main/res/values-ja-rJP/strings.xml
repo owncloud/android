@@ -630,4 +630,5 @@
   <string name="content_description_manage_accounts">アカウント管理</string>
   <string name="content_description_search">検索</string>
   <string name="content_description_remove_account">アカウント削除</string>
+  <string name="open_shortcut_title">リンクを開く</string>
 </resources>

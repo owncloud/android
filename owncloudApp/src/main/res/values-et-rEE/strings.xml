@@ -768,4 +768,5 @@
   <string name="content_description_edit_share">Muuda jagamist</string>
   <string name="content_description_delete_share">Kustuta jagamine</string>
   <string name="content_description_file_operations">%1$s tegevus(t)</string>
+  <string name="open_shortcut_title">Ava link</string>
 </resources>

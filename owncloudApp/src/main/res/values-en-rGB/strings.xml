@@ -768,4 +768,5 @@
   <string name="content_description_edit_share">Edit share</string>
   <string name="content_description_delete_share">Delete share</string>
   <string name="content_description_file_operations">%1$s operations</string>
+  <string name="open_shortcut_title">Open link</string>
 </resources>

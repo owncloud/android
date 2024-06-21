@@ -767,4 +767,6 @@
   <string name="content_description_edit_share">Редактировать Поделиться</string>
   <string name="content_description_delete_share">Удалить долю</string>
   <string name="content_description_file_operations">%1$s  операции</string>
+  <string name="create_shortcut_dialog_url">URL</string>
+  <string name="open_shortcut_title">Открыть ссылку</string>
 </resources>

@@ -711,4 +711,5 @@
   <string name="content_description_manage_accounts">Konten verwalten</string>
   <string name="content_description_search">Suche</string>
   <string name="content_description_remove_account">Benutzerkonto löschen</string>
+  <string name="open_shortcut_title">Link öffnen</string>
 </resources>

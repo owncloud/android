@@ -768,4 +768,6 @@
   <string name="content_description_edit_share">Editar compartilhamento</string>
   <string name="content_description_delete_share">Excluir compartilhamento</string>
   <string name="content_description_file_operations">%1$s operações</string>
+  <string name="create_shortcut_dialog_url">URL</string>
+  <string name="open_shortcut_title">Link aberto</string>
 </resources>
