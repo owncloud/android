@@ -38,7 +38,6 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasFlag
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import com.owncloud.android.BuildConfig
@@ -336,7 +335,7 @@ class SettingsMoreFragmentTest {
         onView(withText(R.string.prefs_send_feedback)).perform(click())
 
         onView(withText(R.string.drawer_feedback)).check(ViewAssertions.matches(isDisplayed()))
-        onView(withId(android.R.id.message)).check(ViewAssertions.matches(isDisplayed()))
+        onView(withText(R.string.feedback_dialog_description)).check(ViewAssertions.matches(isDisplayed()))
     }
 
     @Test
