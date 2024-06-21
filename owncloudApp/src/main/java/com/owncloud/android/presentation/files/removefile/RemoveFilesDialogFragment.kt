@@ -62,9 +62,10 @@ class RemoveFilesDialogFragment : DialogFragment() {
         var containsFolder = false
         var messageStringId: Int
         val messageArguments: String
-        arguments?.let {
-            targetFiles = it.getParcelableArrayList(ARG_TARGET_FILES) ?: emptyList()
-            isAvailableLocallyAndNotAvailableOffline = it.getBoolean(ARG_IS_AVAILABLE_LOCALLY_AND_NOT_AVAILABLE_OFFLINE)
+
+        requireArguments().apply {
+            targetFiles = getParcelableArrayList(ARG_TARGET_FILES) ?: emptyList()
+            isAvailableLocallyAndNotAvailableOffline = getBoolean(ARG_IS_AVAILABLE_LOCALLY_AND_NOT_AVAILABLE_OFFLINE)
         }
 
         binding.apply {
