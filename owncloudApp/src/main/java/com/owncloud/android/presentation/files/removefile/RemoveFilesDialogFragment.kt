@@ -43,15 +43,14 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
  *
  * Triggers the removal according to the user response.
  */
-class RemoveFilesDialogFragment(
-    private val targetFiles: List<OCFile>,
-    private val isAvailableLocallyAndNotAvailableOffline: Boolean,
-) : DialogFragment() {
+class RemoveFilesDialogFragment : DialogFragment() {
 
     private val fileOperationViewModel: FileOperationsViewModel by sharedViewModel()
     private var _binding: RemoveFilesDialogBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var targetFiles: List<OCFile>
+    private var isAvailableLocallyAndNotAvailableOffline: Boolean = false
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = RemoveFilesDialogBinding.inflate(inflater, container, false)
         return binding.root
@@ -63,6 +62,10 @@ class RemoveFilesDialogFragment(
         var containsFolder = false
         var messageStringId: Int
         val messageArguments: String
+        arguments?.let {
+            targetFiles = it.getParcelableArrayList(ARG_TARGET_FILES) ?: emptyList()
+            isAvailableLocallyAndNotAvailableOffline = it.getBoolean(ARG_IS_AVAILABLE_LOCALLY_AND_NOT_AVAILABLE_OFFLINE)
+        }
 
         binding.apply {
 
@@ -137,9 +140,16 @@ class RemoveFilesDialogFragment(
 
     companion object {
         const val TAG_REMOVE_FILES_DIALOG_FRAGMENT = "TAG_REMOVE_FILES_DIALOG_FRAGMENT"
+        private const val ARG_TARGET_FILES = "ARG_TARGET_FILES"
+        private const val ARG_IS_AVAILABLE_LOCALLY_AND_NOT_AVAILABLE_OFFLINE = "ARG_IS_AVAILABLE_LOCALLY_AND_NOT_AVAILABLE_OFFLINE"
 
         fun newInstance(files: ArrayList<OCFile>, isAvailableLocallyAndNotAvailableOffline: Boolean): RemoveFilesDialogFragment {
-            return RemoveFilesDialogFragment(targetFiles = files, isAvailableLocallyAndNotAvailableOffline = isAvailableLocallyAndNotAvailableOffline)
+
+            val args = Bundle().apply {
+                putParcelableArrayList(ARG_TARGET_FILES, files)
+                putBoolean(ARG_IS_AVAILABLE_LOCALLY_AND_NOT_AVAILABLE_OFFLINE, isAvailableLocallyAndNotAvailableOffline)
+            }
+            return RemoveFilesDialogFragment().apply { arguments = args }
         }
 
         /**
