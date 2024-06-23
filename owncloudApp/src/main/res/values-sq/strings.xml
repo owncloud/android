@@ -18,6 +18,7 @@
   <string name="actionbar_descending">Në rend zbritës</string>
   <string name="actionbar_sort_title">Renditi sipas</string>
   <string name="fab_new_file">Dokument i ri</string>
+  <string name="fab_new_shortcut">Shkurtore e re</string>
   <string name="drawer_item_all_files">Krejt kartelat</string>
   <string name="drawer_item_only_available_offline">I passhëm jo në linjë</string>
   <string name="drawer_item_shared_by_link_files">Të ndara me lidhje</string>
@@ -701,6 +702,10 @@
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Disa përmirësime për ta bërë aplikacionin më të lehtë për persona me aftësi të kufizuara</string>
   <string name="release_notes_4_3_0_title_show_app_provider_icon_from_endpoint">Ikona të reja te mundësia “Hape në (web)”, te menuja e veprimeve</string>
   <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">Te mundësia “Hape në (web)” në menunë veprime janë shtuar ikona më të përshtatshme</string>
+  <string name="release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option">Shfaqje si duhet e mundësisë “Vetëm vendore” dhe pengim fshirjeje kartelash të përdorshme pa internet, te dialogu i heqjes</string>
+  <string name="release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option">Mundësia “Vetëm vendore”, te dialogu i heqjes, do të shfaqet kur dosja e përzgjedhur përmban të paktën një kartelë, duke shpërfillur ato të përdorshme pa internet. Nëse mundësia “Vetëm vendore” shfaqet dhe klikohet, s’do të fshihen kartela të përdorshme pa internet</string>
+  <string name="release_notes_4_3_0_subtitle_create_open_shortcut">Mbulim për kartela shkurtoresh URL</string>
+  <string name="release_notes_4_3_0_title_create_open_shortcut">Te FAB është shtuar një mundësi e re për krijim të një kartele shkurtoreje me .url si zgjatim. Kur kartela klikohet, URL-ja do të hapet në shfletues</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
@@ -761,6 +766,11 @@
   <string name="content_description_edit_share">Përpunoni pjesë</string>
   <string name="content_description_delete_share">Fshini pjesë</string>
   <string name="content_description_file_operations">%1$s veprime</string>
+  <string name="create_shortcut_dialog_title">Krijoni një shkurtore</string>
   <string name="create_shortcut_dialog_url">URL</string>
+  <string name="create_shortcut_dialog_url_information">URL-ja duhet të fillojë me https:// ose http:// , që të mund të hapet në shfletues</string>
+  <string name="create_shortcut_dialog_url_error_no_blanks">URL-ja s’mund të përmbajë hapësira të zbrazëta</string>
+  <string name="create_shortcut_dialog_url_extension">.url</string>
+  <string name="open_shortcut_description">Kjo shkurtore shpie te:</string>
   <string name="open_shortcut_title">Hap lidhje</string>
 </resources>

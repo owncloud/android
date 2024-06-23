@@ -18,6 +18,7 @@
   <string name="actionbar_descending">Kahanevalt</string>
   <string name="actionbar_sort_title">Sorteeri</string>
   <string name="fab_new_file">Uus dokument</string>
+  <string name="fab_new_shortcut">Uus otsetee</string>
   <string name="drawer_item_all_files">Kõik failid</string>
   <string name="drawer_item_only_available_offline">Saadaval ilma võrguühenduseta</string>
   <string name="drawer_item_shared_by_link_files">Jagatud lingiga</string>
@@ -707,6 +708,8 @@
   <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">Tegevuste menüüs \"Ava veebis\" valikule on lisatud sobivamad ikoonid</string>
   <string name="release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option">\"Ainult kohalik\" valikut näidatakse korrektselt ja kustutamise dialoogis välditakse võrguühenduseta saadaval olevate failide kustutamist</string>
   <string name="release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option">Valikut \"Ainult kohalik\" näidatakse kustutamise dialoogis, kui valitud kaustas on vähemalt üks allalaaditud fail, ignoreerides ilma võrguühenduseta saadaval olevaid faile. Kui \"Ainult kohalik\" valik on nähtaval ja valitud, siis võrguühenduseta saadaval olevaid faile ei kustutata.</string>
+  <string name="release_notes_4_3_0_subtitle_create_open_shortcut">URL otsetee failide tugi</string>
+  <string name="release_notes_4_3_0_title_create_open_shortcut">Lisatud on uus .url-laiendiga otsetee faili loomise võimalus FAB-s. Kui failil klikitakse, siis URL avatakse brauseris.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -768,5 +771,11 @@
   <string name="content_description_edit_share">Muuda jagamist</string>
   <string name="content_description_delete_share">Kustuta jagamine</string>
   <string name="content_description_file_operations">%1$s tegevus(t)</string>
+  <string name="create_shortcut_dialog_title">Loo otsetee</string>
+  <string name="create_shortcut_dialog_url">URL</string>
+  <string name="create_shortcut_dialog_url_information">Brauseris avamiseks peab URL alguses olema kas http:// või https://</string>
+  <string name="create_shortcut_dialog_url_error_no_blanks">URL ei saa sisaldada tühikuid</string>
+  <string name="create_shortcut_dialog_url_extension">.url</string>
+  <string name="open_shortcut_description">See otsetee viitab:</string>
   <string name="open_shortcut_title">Ava link</string>
 </resources>
