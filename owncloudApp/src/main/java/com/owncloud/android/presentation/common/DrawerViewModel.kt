@@ -3,7 +3,9 @@
  *
  * @author David González Verdugo
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -26,6 +28,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.R
 import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
@@ -33,6 +36,7 @@ import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.accounts.RemoveAccountUseCase
 import kotlinx.coroutines.launch
@@ -43,7 +47,8 @@ class DrawerViewModel(
     private val removeAccountUseCase: RemoveAccountUseCase,
     private val getUserQuotasUseCase: GetUserQuotasUseCase,
     private val localStorageProvider: LocalStorageProvider,
-    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    private val contextProvider: ContextProvider,
 ) : ViewModel() {
 
     private val _userQuota = MediatorLiveData<Event<UIResult<UserQuota?>>>()
@@ -70,6 +75,8 @@ class DrawerViewModel(
     fun getUsernameOfAccount(accountName: String): String {
         return AccountUtils.getUsernameOfAccount(accountName)
     }
+
+    fun getFeedbackMail() = contextProvider.getString(R.string.mail_feedback)
 
     fun setCurrentAccount(context: Context, accountName: String): Boolean {
         return AccountUtils.setCurrentOwnCloudAccount(context, accountName)

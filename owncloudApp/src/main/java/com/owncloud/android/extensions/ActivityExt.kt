@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,17 +29,26 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.graphics.Typeface
 import android.net.Uri
+import android.text.method.LinkMovementMethod
+import android.util.TypedValue
+import android.view.ContextThemeWrapper
 import android.view.inputmethod.InputMethodManager
 import android.webkit.MimeTypeMap
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
+import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.domain.files.model.OCFile
@@ -55,6 +66,7 @@ import com.owncloud.android.presentation.security.pattern.PatternActivity
 import com.owncloud.android.presentation.settings.privacypolicy.PrivacyPolicyActivity
 import com.owncloud.android.presentation.settings.security.SettingsSecurityFragment.Companion.EXTRAS_LOCK_ENFORCED
 import com.owncloud.android.providers.MdmProvider
+import com.owncloud.android.ui.activity.DrawerActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity.Companion.ALL_FILES_SAF_REGEX
 import com.owncloud.android.utils.CONFIGURATION_DEVICE_PROTECTION
 import com.owncloud.android.utils.MimetypeIconUtil
@@ -332,6 +344,75 @@ private fun Activity.showSelectSecurityDialog(
             }
             .show()
     }
+}
+
+fun Activity.sendEmailOrOpenFeedbackDialogAction(feedbackMail: String) {
+    if (feedbackMail.isNotEmpty()) {
+        val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.prefs_feedback)
+        sendEmail(email = feedbackMail, subject = feedback)
+    } else {
+        openFeedbackDialog()
+    }
+}
+
+fun Activity.openFeedbackDialog() {
+    val getInContactDescription =
+        getString(
+            R.string.feedback_dialog_get_in_contact_description,
+            DrawerActivity.CENTRAL_URL,
+            DrawerActivity.TALK_MOBILE_URL,
+            DrawerActivity.GITHUB_URL
+        ).trimIndent()
+    val spannableString = HtmlCompat.fromHtml(getInContactDescription, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+    val descriptionSurvey = TextView(this).apply {
+        text = getString(R.string.feedback_dialog_description)
+        setPadding(0, 0, 0, 64)
+        setTextColor(getColor(android.R.color.black))
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+
+    }
+    val button = Button(ContextThemeWrapper(this, R.style.Button_Primary), null, 0).apply {
+        text = getString(R.string.prefs_send_feedback)
+        setOnClickListener {
+            goToUrl(DrawerActivity.SURVEY_URL)
+        }
+    }
+
+    val getInContactTitle = TextView(this).apply {
+        text = getString(R.string.feedback_dialog_get_in_contact_title)
+        setPadding(0, 64, 0, 0)
+        setTextColor(getColor(android.R.color.black))
+        setTypeface(typeface, Typeface.BOLD)
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+
+    }
+    val getInContactDescriptionTextView = TextView(this).apply {
+        text = spannableString
+        setTextColor(getColor(android.R.color.black))
+        setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+        movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    val layout = LinearLayout(this).apply {
+        orientation = LinearLayout.VERTICAL
+        setPadding(64, 16, 64, 16)
+        addView(descriptionSurvey)
+        addView(button)
+        addView(getInContactTitle)
+        addView(getInContactDescriptionTextView)
+    }
+    val builder = AlertDialog.Builder(this)
+    builder.apply {
+        setTitle(getString(R.string.drawer_feedback))
+        setView(layout)
+        setNegativeButton(R.string.drawer_close) { dialog, _ ->
+            dialog.dismiss()
+        }
+        setCancelable(false)
+    }
+    val alertDialog = builder.create()
+    alertDialog.show()
 }
 
 fun Activity.manageOptionLockSelected(type: LockType) {

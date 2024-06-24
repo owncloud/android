@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -24,10 +25,10 @@ import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
-import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.sendEmail
+import com.owncloud.android.extensions.sendEmailOrOpenFeedbackDialogAction
 import com.owncloud.android.presentation.settings.SettingsFragment.Companion.removePreferenceFromScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -108,10 +109,7 @@ class SettingsMoreFragment : PreferenceFragmentCompat() {
         // Feedback
         if (moreViewModel.isFeedbackEnabled()) {
             prefFeedback?.setOnPreferenceClickListener {
-                val feedbackMail = getString(R.string.mail_feedback)
-                val feedback = "Android v" + BuildConfig.VERSION_NAME + " - " + getString(R.string.prefs_feedback)
-
-                requireActivity().sendEmail(email = feedbackMail, subject = feedback)
+                requireActivity().sendEmailOrOpenFeedbackDialogAction(moreViewModel.getFeedbackMail())
                 true
             }
         } else {

@@ -768,6 +768,8 @@
     <string name="release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option">\"Local only\" option in remove dialog will be shown when the selected folder contains at least one downloaded file, ignoring those available offline. If the "Local only" option is displayed and clicked, available offline files will not be deleted</string>
     <string name="release_notes_4_3_0_subtitle_create_open_shortcut">Support for URL shortcut files</string>
     <string name="release_notes_4_3_0_title_create_open_shortcut">A new option has been added in the FAB to create a shortcut file with a .url extension. When the file is clicked, the URL will open in the browser</string>
+    <string name="release_notes_4_3_0_title_report_feedback_central_github">Changes in the Feedback section</string>
+    <string name="release_notes_4_3_0_subtitle_report_feedback_central_github">A new dialog has been added to handle feedback: the ownCloud survey, GitHub and the open forum Central will be our meeting point</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
@@ -848,5 +850,9 @@
     <string name="create_shortcut_dialog_url_extension">.url</string>
     <string name="open_shortcut_description">This shortcut points to:</string>
     <string name="open_shortcut_title">Open link</string>
+
+    <string name="feedback_dialog_description">Improve the app with your feedback</string>
+    <string name="feedback_dialog_get_in_contact_title">Get in contact</string>
+    <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href=\"%1$s\"><b>forum</b></a>, <a href=\"%2$s\"><b>chat with us</b></a> or contribute on <a href=\"%3$s\"><b>GitHub</b></a>]]></string>
 
 </resources>
