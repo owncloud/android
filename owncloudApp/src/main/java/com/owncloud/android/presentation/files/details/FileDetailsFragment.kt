@@ -3,6 +3,7 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -71,7 +72,7 @@ import com.owncloud.android.presentation.files.operations.FileOperation.Synchron
 import com.owncloud.android.presentation.files.operations.FileOperation.UnsetFilesAsAvailableOffline
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
-import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.FRAGMENT_TAG_CONFIRMATION
+import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.TAG_REMOVE_FILES_DIALOG_FRAGMENT
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
 import com.owncloud.android.ui.activity.FileActivity.REQUEST_CODE__UPDATE_CREDENTIALS
@@ -273,7 +274,7 @@ class FileDetailsFragment : FileFragment() {
 
             R.id.action_remove_file -> {
                 val dialog = RemoveFilesDialogFragment.newInstance(safeFile.file)
-                dialog.show(parentFragmentManager, FRAGMENT_TAG_CONFIRMATION)
+                dialog.show(parentFragmentManager, TAG_REMOVE_FILES_DIALOG_FRAGMENT)
                 true
             }
 

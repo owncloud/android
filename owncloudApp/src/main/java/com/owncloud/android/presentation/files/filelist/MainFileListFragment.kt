@@ -26,7 +26,6 @@
 package com.owncloud.android.presentation.files.filelist
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -40,7 +39,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -109,6 +107,7 @@ import com.owncloud.android.presentation.files.createshortcut.CreateShortcutDial
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
+import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.TAG_REMOVE_FILES_DIALOG_FRAGMENT
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
 import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
@@ -116,7 +115,6 @@ import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.activity.FolderPickerActivity
-import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.MimetypeIconUtil
 import com.owncloud.android.utils.PreferenceUtils
@@ -491,13 +489,8 @@ class MainFileListFragment : Fragment(),
                                 }
 
                                 FileMenuOption.REMOVE -> {
-                                    if (file.isFolder) {
-                                        filesToRemove = listOf(file)
-                                        fileOperationsViewModel.showRemoveDialog(filesToRemove)
-                                    } else {
-                                        showRemoveCustomDialog(file, context)
-                                    }
-
+                                    filesToRemove = listOf(file)
+                                    fileOperationsViewModel.showRemoveDialog(filesToRemove)
                                 }
 
                                 FileMenuOption.OPEN_WITH -> {
@@ -1013,7 +1006,7 @@ class MainFileListFragment : Fragment(),
 
     private fun onShowRemoveDialog(filesToRemove: List<OCFile>, isAvailableLocallyAndNotAvailableOffline: Boolean) {
         val dialog = RemoveFilesDialogFragment.newInstance(ArrayList(filesToRemove), isAvailableLocallyAndNotAvailableOffline)
-        dialog.show(requireActivity().supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+        dialog.show(requireActivity().supportFragmentManager, TAG_REMOVE_FILES_DIALOG_FRAGMENT)
         fileListAdapter.clearSelection()
         updateActionModeAfterTogglingSelected()
     }
@@ -1197,12 +1190,8 @@ class MainFileListFragment : Fragment(),
             }
 
             R.id.action_remove_file -> {
-                if (checkedFiles.size == 1 && !checkedFiles[0].isFolder) {
-                    showRemoveCustomDialog(checkedFiles[0], requireContext())
-                } else {
-                    filesToRemove = checkedFiles
-                    fileOperationsViewModel.showRemoveDialog(filesToRemove)
-                }
+                filesToRemove = checkedFiles
+                fileOperationsViewModel.showRemoveDialog(filesToRemove)
                 return true
             }
 
@@ -1439,54 +1428,6 @@ class MainFileListFragment : Fragment(),
             isIndeterminate = indeterminate
             postInvalidate()
         }
-    }
-
-    private fun showRemoveCustomDialog(file: OCFile, context: Context) {
-        val removeDialog = Dialog(context)
-        removeDialog.apply {
-            setContentView(R.layout.remove_files_dialog)
-            show()
-        }
-
-        val thumbnailImageView = removeDialog.findViewById<ImageView>(R.id.dialog_remove_thumbnail)
-        val dialogText = removeDialog.findViewById<TextView>(R.id.dialog_remove_information)
-        val localRemoveButton = removeDialog.findViewById<Button>(R.id.dialog_remove_local_only)
-        val yesRemoveButton = removeDialog.findViewById<Button>(R.id.dialog_remove_yes)
-        val noRemoveButton = removeDialog.findViewById<Button>(R.id.dialog_remove_no)
-
-        dialogText.text = String.format(getString(R.string.confirmation_remove_file_alert), file.fileName)
-
-        // Show the thumbnail when the file has one
-        val thumbnail = ThumbnailsCacheManager.getBitmapFromDiskCache(file.remoteId)
-
-        if (thumbnail != null) {
-            thumbnailImageView.setImageBitmap(thumbnail)
-        } else {
-            thumbnailImageView.visibility = View.GONE
-        }
-
-        // Hide "Local only" remove button when the file is not available locally
-        if (!file.isAvailableLocally) {
-            localRemoveButton.visibility = View.INVISIBLE
-        }
-
-        localRemoveButton.setOnClickListener {
-            fileOperationsViewModel.performOperation(FileOperation.RemoveOperation(listOf(file), removeOnlyLocalCopy = true))
-            removeDialog.dismiss()
-        }
-
-        yesRemoveButton.setOnClickListener {
-            fileOperationsViewModel.performOperation(FileOperation.RemoveOperation(listOf(file), removeOnlyLocalCopy = false))
-            removeDialog.dismiss()
-        }
-
-        noRemoveButton.setOnClickListener {
-            // Nothing special to do
-            removeDialog.dismiss()
-        }
-
-        fileListAdapter.clearSelection()
-        updateActionModeAfterTogglingSelected()
     }
 
     interface FileActions {

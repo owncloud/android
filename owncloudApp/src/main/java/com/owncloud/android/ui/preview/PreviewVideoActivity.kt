@@ -68,12 +68,12 @@ import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.files.operations.FileOperation.SetFilesAsAvailableOffline
 import com.owncloud.android.presentation.files.operations.FileOperation.UnsetFilesAsAvailableOffline
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.TAG_REMOVE_FILES_DIALOG_FRAGMENT
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.newInstance
 import com.owncloud.android.presentation.previews.PreviewVideoViewModel
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
-import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.preview.PrepareVideoPlayerAsyncTask.OnPrepareVideoPlayerTaskListener
 import kotlinx.coroutines.flow.Flow
@@ -352,7 +352,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
             R.id.action_remove_file -> {
                 player?.pause()
                 val dialog = newInstance(file)
-                dialog.show(supportFragmentManager, ConfirmationDialogFragment.FTAG_CONFIRMATION)
+                dialog.show(supportFragmentManager, TAG_REMOVE_FILES_DIALOG_FRAGMENT)
                 true
             }
 

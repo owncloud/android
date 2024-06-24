@@ -48,8 +48,8 @@ import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment
+import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.TAG_REMOVE_FILES_DIALOG_FRAGMENT
 import com.owncloud.android.presentation.previews.PreviewTextViewModel
-import com.owncloud.android.ui.dialog.ConfirmationDialogFragment
 import com.owncloud.android.ui.dialog.LoadingDialog
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
@@ -133,7 +133,7 @@ class PreviewTextFragment : FileFragment() {
             }
 
             R.id.action_remove_file -> {
-                RemoveFilesDialogFragment.newInstance(file).show(requireFragmentManager(), ConfirmationDialogFragment.FTAG_CONFIRMATION)
+                RemoveFilesDialogFragment.newInstance(file).show(requireFragmentManager(), TAG_REMOVE_FILES_DIALOG_FRAGMENT)
                 true
             }
 
