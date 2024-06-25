@@ -337,7 +337,10 @@ class FileListAdapter(
                 (view.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams).apply {
                     isFullSpan = true
                 }
-                view.binding.footerText.text = file.text
+                view.binding.footerText.apply {
+                    text = file.text
+                    setTextColor(ContextCompat.getColor(context, R.color.accessibility_grey_color))
+                }
             }
         }
     }
