@@ -300,6 +300,7 @@ abstract class DrawerActivity : ToolbarActivity() {
         val account = drawerViewModel.getCurrentAccount(this) ?: return
         drawerViewModel.getStoredQuota(account.name)
         drawerViewModel.userQuota.observe(this) { event ->
+            getAccountQuotaText()?.setTextColor(getColor(R.color.accessibility_grey_color))
             when (val uiResult = event.peekContent()) {
                 is UIResult.Success -> {
                     uiResult.data?.let { userQuota ->
