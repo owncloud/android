@@ -302,6 +302,7 @@
                     android:paddingLeft="@dimen/standard_half_padding"
                     android:paddingRight="@dimen/standard_half_padding"
                     android:textSize="12sp"
+                    android:textColor="@color/accessibility_grey_color"
                     android:visibility="gone" />
 
                 <TextView
