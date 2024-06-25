@@ -85,7 +85,6 @@
             android:name=".ui.activity.FileDisplayActivity"
             android:theme="@style/Theme.ownCloud.Toolbar.Drawer"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".presentation.accounts.AccountsManagementActivity" />
         <activity
             android:name=".ui.activity.ReceiveExternalFilesActivity"
             android:configChanges="orientation|screenSize"

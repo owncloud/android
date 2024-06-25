@@ -1,0 +1,8 @@
+Enhancement: New UI for "Manage accounts" view
+
+A new dialog has been added to substitute the previous view for "Manage accounts". In addition,
+all the accounts management related stuff has been removed from the drawer menu in order not to
+show repetitive actions and make this menu simpler.
+
+https://github.com/owncloud/android/issues/4312
+https://github.com/owncloud/android/pull/4410

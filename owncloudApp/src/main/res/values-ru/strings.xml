@@ -745,7 +745,6 @@
   <string name="insecure_http_url_title_dialog">Небезопасный HTTP-URL</string>
   <string name="insecure_http_url_message_dialog">Указанный вами URL-адрес использует протокол HTTP, а не зашифрованный протокол HTTPS. Если вы продолжите, ваше общение не будет зашифровано.</string>
   <string name="insecure_http_url_continue_button">Продолжить</string>
-  <string name="clean_data_account_message">Все загруженные файлы, недоступные в автономном режиме, будут удалены для этой учетной записи</string>
   <string name="clean_data_account_title">удалить локальное хранилище</string>
   <string name="clean_data_account_button_yes">Очистить данные</string>
   <string name="content_description_menu">Меню</string>

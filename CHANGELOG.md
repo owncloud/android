@@ -53,6 +53,7 @@ ownCloud admins and users.
 * Enhancement - Add a warning in http connections: [#4284](https://github.com/owncloud/android/issues/4284)
 * Enhancement - Make dialog more Android-alike: [#4303](https://github.com/owncloud/android/issues/4303)
 * Enhancement - Password generator for public links in oCIS: [#4308](https://github.com/owncloud/android/issues/4308)
+* Enhancement - New UI for "Manage accounts" view: [#4312](https://github.com/owncloud/android/issues/4312)
 * Enhancement - Improvements in remove dialog: [#4342](https://github.com/owncloud/android/issues/4342)
 * Enhancement - Content description in UI elements to improve accessibility: [#4360](https://github.com/owncloud/android/issues/4360)
 * Enhancement - Added contentDescription attribute in the previewed image: [#4360](https://github.com/owncloud/android/issues/4360)
@@ -251,6 +252,16 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4308
    https://github.com/owncloud/android/pull/4349
+
+* Enhancement - New UI for "Manage accounts" view: [#4312](https://github.com/owncloud/android/issues/4312)
+
+   A new dialog has been added to substitute the previous view for "Manage
+   accounts". In addition, all the accounts management related stuff has been
+   removed from the drawer menu in order not to show repetitive actions and make
+   this menu simpler.
+
+   https://github.com/owncloud/android/issues/4312
+   https://github.com/owncloud/android/pull/4410
 
 * Enhancement - Improvements in remove dialog: [#4342](https://github.com/owncloud/android/issues/4342)
 
