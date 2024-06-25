@@ -31,9 +31,10 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.ContextThemeWrapper
+import android.view.View
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.MainApp
@@ -54,9 +55,9 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
 
     private var accountListAdapter: ManageAccountsAdapter = ManageAccountsAdapter(this)
     private var currentAccount: Account? = null
-    private lateinit var supportFragmentManager: FragmentManager
-    private lateinit var parentActivity: ToolbarActivity
 
+    private lateinit var dialogView: View
+    private lateinit var parentActivity: ToolbarActivity
 
     private val manageAccountsViewModel: ManageAccountsViewModel by viewModel()
 
@@ -66,7 +67,6 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
         accountListAdapter.submitAccountList(accountList = getAccountListItems())
 
         parentActivity = requireActivity() as ToolbarActivity
-        supportFragmentManager = parentActivity.supportFragmentManager
         currentAccount = requireArguments().getParcelable(KEY_CURRENT_ACCOUNT)
 
         subscribeToViewModels()
@@ -75,7 +75,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(ContextThemeWrapper(requireContext(), R.style.Theme_AppCompat_Dialog_Alert))
         val inflater = this.layoutInflater
-        val dialogView = inflater.inflate(R.layout.manage_accounts_dialog, null)
+        dialogView = inflater.inflate(R.layout.manage_accounts_dialog, null)
         builder.setView(dialogView)
 
         val recyclerView = dialogView.findViewById<RecyclerView>(R.id.account_list_recycler_view)
@@ -98,7 +98,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
     }
 
     override fun removeAccount(account: Account) {
-        dismiss()
+        dialogView.isVisible = false
         val hasAccountAttachedCameraUploads = manageAccountsViewModel.hasCameraUploadsAttached(account.name)
         val dialog = AlertDialog.Builder(requireContext())
             .setMessage(getString(
@@ -109,11 +109,14 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
                 val accountManager = AccountManager.get(MainApp.appContext)
                 accountManager.removeAccount(account, this, null)
                 if (manageAccountsViewModel.getLoggedAccounts().size > 1) {
-                    show(supportFragmentManager, MANAGE_ACCOUNTS_DIALOG)
+                    dialogView.isVisible = true
                 }
             }
             .setNegativeButton(getString(R.string.common_no)) { _, _ ->
-                show(supportFragmentManager, MANAGE_ACCOUNTS_DIALOG)
+                dialogView.isVisible = true
+            }
+            .setOnDismissListener {
+                dialogView.isVisible = true
             }
             .create()
         dialog.avoidScreenshotsIfNeeded()
@@ -121,17 +124,20 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
     }
 
     override fun cleanAccountLocalStorage(account: Account) {
-        dismiss()
+        dialogView.isVisible = false
         val dialog = AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.clean_data_account_title))
             .setIcon(R.drawable.ic_warning)
             .setMessage(getString(R.string.clean_data_account_message, account.name))
             .setPositiveButton(getString(R.string.clean_data_account_button_yes)) { _, _ ->
-                show(supportFragmentManager, MANAGE_ACCOUNTS_DIALOG)
+                dialogView.isVisible = true
                 manageAccountsViewModel.cleanAccountLocalStorage(account.name)
             }
             .setNegativeButton(R.string.drawer_close) { _, _ ->
-                show(supportFragmentManager, MANAGE_ACCOUNTS_DIALOG)
+                dialogView.isVisible = true
+            }
+            .setOnDismissListener {
+                dialogView.isVisible = true
             }
             .create()
         dialog.avoidScreenshotsIfNeeded()
@@ -226,8 +232,14 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
         collectLatestLifecycleFlow(manageAccountsViewModel.cleanAccountLocalStorageFlow) { event ->
             event?.peekContent()?.let { uiResult ->
                 when (uiResult) {
-                    is UIResult.Loading -> parentActivity.showLoadingDialog(R.string.common_loading)
-                    is UIResult.Success -> parentActivity.dismissLoadingDialog()
+                    is UIResult.Loading -> {
+                        parentActivity.showLoadingDialog(R.string.common_loading)
+                        dialogView.isVisible = false
+                    }
+                    is UIResult.Success -> {
+                        parentActivity.dismissLoadingDialog()
+                        dialogView.isVisible = true
+                    }
                     is UIResult.Error -> {
                         parentActivity.dismissLoadingDialog()
                         showErrorInSnackbar(R.string.common_error_unknown, uiResult.error)
