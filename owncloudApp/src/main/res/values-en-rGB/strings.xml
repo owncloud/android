@@ -690,7 +690,6 @@
   <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">\"Clear data\" button enabled in the app settings in device settings</string>
   <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">The \"Clear data\" button has been enabled to delete the application data from the app settings in the device settings. The application will perform a hard reset if this button is pressed</string>
   <string name="release_notes_4_3_0_title_improvements_remove_dialog">Improvements in remove dialogue</string>
-  <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">Added a custom dialogue when the file that is going to be deleted has thumbnail and added the number of files that are going to be deleted in a multiple selection</string>
   <string name="release_notes_4_3_0_title_password_generator">Password generator for public links</string>
   <string name="release_notes_4_3_0_subtitle_password_generator">Passwords for public links can be now generated via a new generator in Infinite Scale accounts</string>
   <string name="release_notes_4_3_0_title_display_name_truncation">Resolved the bug where long display names were truncated incorrectly</string>
@@ -768,5 +767,6 @@
   <string name="content_description_edit_share">Edit share</string>
   <string name="content_description_delete_share">Delete share</string>
   <string name="content_description_file_operations">%1$s operations</string>
+  <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Open link</string>
 </resources>

@@ -691,7 +691,6 @@
   <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">Seadme seadistuste rakenduste alajaotusesse on lisatud \"Tühjenda andmed\" nupp</string>
   <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">Seadme seadistuste rakenduste alajaotusesse on lisatud \"Tühjenda andmed\" nupp. Nupu vajutamisel tehakse rakendusele täielik algseadistus.</string>
   <string name="release_notes_4_3_0_title_improvements_remove_dialog">Kustutamise dialoogi parendused</string>
-  <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">Lisatud kohandatud dialoog kui kustutataval failil on pisipilt ning kustutatavate failide arv kui faile kustutatakse korraga valides</string>
   <string name="release_notes_4_3_0_title_password_generator">Salasõna looja avalikele linkidele</string>
   <string name="release_notes_4_3_0_subtitle_password_generator">Avalike linkide salasõnasid saab Infinite Scale kontodel luua uue salasõnade loojaga</string>
   <string name="release_notes_4_3_0_title_display_name_truncation">Lahendatud viga pikkade nimede kuvamisel, kus lühendamine toimus ebakorrektselt</string>
@@ -708,8 +707,7 @@
   <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">Tegevuste menüüs \"Ava veebis\" valikule on lisatud sobivamad ikoonid</string>
   <string name="release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option">\"Ainult kohalik\" valikut näidatakse korrektselt ja kustutamise dialoogis välditakse võrguühenduseta saadaval olevate failide kustutamist</string>
   <string name="release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option">Valikut \"Ainult kohalik\" näidatakse kustutamise dialoogis, kui valitud kaustas on vähemalt üks allalaaditud fail, ignoreerides ilma võrguühenduseta saadaval olevaid faile. Kui \"Ainult kohalik\" valik on nähtaval ja valitud, siis võrguühenduseta saadaval olevaid faile ei kustutata.</string>
-  <string name="release_notes_4_3_0_subtitle_create_open_shortcut">URL otsetee failide tugi</string>
-  <string name="release_notes_4_3_0_title_create_open_shortcut">Lisatud on uus .url-laiendiga otsetee faili loomise võimalus FAB-s. Kui failil klikitakse, siis URL avatakse brauseris.</string>
+  <string name="release_notes_4_3_0_title_create_open_shortcut">URL otsetee failide tugi</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>

@@ -685,7 +685,6 @@
   <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">Кнопка \"Очистить данные\" включена в настройках приложения в настройках устройства</string>
   <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">Кнопка \"Очистить данные\" позволяет удалить данные приложения из настроек приложения в настройках устройства. При нажатии этой кнопки приложение выполнит жесткий сброс.</string>
   <string name="release_notes_4_3_0_title_improvements_remove_dialog">Улучшения в диалоге удаления</string>
-  <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">Добавлено пользовательское диалоговое окно, когда удаляемый файл имеет миниатюру, и добавлено количество удаляемых файлов при множественном выборе</string>
   <string name="release_notes_4_3_0_title_password_generator">Генератор паролей для общедоступных ссылок</string>
   <string name="release_notes_4_3_0_subtitle_password_generator">Пароли для публичных ссылок теперь можно генерировать с помощью нового генератора в аккаунтах Infinite Scale.</string>
   <string name="release_notes_4_3_0_title_display_name_truncation">Исправлена ошибка, из-за которой длинные имена отображаемых объектов некорректно усекались.</string>

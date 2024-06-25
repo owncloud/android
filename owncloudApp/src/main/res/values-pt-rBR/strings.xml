@@ -690,7 +690,6 @@
   <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">Botão \"Limpar dados\" ativado nas configurações do aplicativo nas configurações do dispositivo</string>
   <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">O botão \"Limpar dados\" foi habilitado para excluir os dados do aplicativo das configurações do aplicativo nas configurações do dispositivo. O aplicativo executará uma reinicialização total se este botão for pressionado</string>
   <string name="release_notes_4_3_0_title_improvements_remove_dialog">Melhorias na caixa de diálogo de remoção</string>
-  <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">Adicionada uma caixa de diálogo personalizada quando o arquivo que será excluído tiver miniatura e adicionado o número de arquivos que serão excluídos em uma seleção múltipla</string>
   <string name="release_notes_4_3_0_title_password_generator">Gerador de senha para links públicos</string>
   <string name="release_notes_4_3_0_subtitle_password_generator">Senhas para links públicos agora podem ser geradas por meio de um novo gerador em contas Infinite Scale</string>
   <string name="release_notes_4_3_0_title_display_name_truncation">Resolvido o bug em que nomes de exibição longos eram truncados incorretamente</string>

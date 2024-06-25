@@ -688,7 +688,6 @@
   <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">Buton “Spastro të dhëna” i aktivizuar te rregullime aplikacione në rregullime pajisjeje</string>
   <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">Butoni “Spastro të dhëna” është aktivizuar për të fshirë të dhëna aplikacioni që nga rregullimet e aplikacionet te rregullimet e pajisjes. Aplikacioni do të kryejë një rikthim te parazgjedhjet, nëse shtypet ky buton</string>
   <string name="release_notes_4_3_0_title_improvements_remove_dialog">Përmirësime te dialog heqjeje</string>
-  <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">U shtua një dialog i përshtatur, kur kartela që do të fshihet ka miniaturë dhe u shtua numri i kartelave që do të fshihen në përzgjedhje të shumëfishtë</string>
   <string name="release_notes_4_3_0_title_password_generator">Prodhues fjalëkalimesh për lidhje publike</string>
   <string name="release_notes_4_3_0_subtitle_password_generator">Tanimë, fjalëkalime për lidhje publike mund të prodhohen përmes një prodhuesi të ri, në llogari Infinite Scale</string>
   <string name="release_notes_4_3_0_title_display_name_truncation">U ndreq e meta prej të cilës emra të gjatë në ekran cungoheshin pasaktësish</string>
@@ -704,8 +703,7 @@
   <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">Te mundësia “Hape në (web)” në menunë veprime janë shtuar ikona më të përshtatshme</string>
   <string name="release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option">Shfaqje si duhet e mundësisë “Vetëm vendore” dhe pengim fshirjeje kartelash të përdorshme pa internet, te dialogu i heqjes</string>
   <string name="release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option">Mundësia “Vetëm vendore”, te dialogu i heqjes, do të shfaqet kur dosja e përzgjedhur përmban të paktën një kartelë, duke shpërfillur ato të përdorshme pa internet. Nëse mundësia “Vetëm vendore” shfaqet dhe klikohet, s’do të fshihen kartela të përdorshme pa internet</string>
-  <string name="release_notes_4_3_0_subtitle_create_open_shortcut">Mbulim për kartela shkurtoresh URL</string>
-  <string name="release_notes_4_3_0_title_create_open_shortcut">Te FAB është shtuar një mundësi e re për krijim të një kartele shkurtoreje me .url si zgjatim. Kur kartela klikohet, URL-ja do të hapet në shfletues</string>
+  <string name="release_notes_4_3_0_title_create_open_shortcut">Mbulim për kartela shkurtoresh URL</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
