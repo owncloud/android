@@ -46,6 +46,16 @@ class ReleaseNotesViewModel(
     companion object {
         val releaseNotesList = listOf(
             ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_new_ui_manage_accounts,
+                subtitle = R.string.release_notes_4_3_0_subtitle_new_ui_manage_accounts,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_create_open_shortcut,
+                subtitle = R.string.release_notes_4_3_0_subtitle_create_open_shortcut,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
+            ReleaseNote(
                 title = R.string.release_notes_4_3_0_title_1,
                 subtitle = R.string.release_notes_4_3_0_subtitle_1,
                 type = ReleaseNoteType.ENHANCEMENT,
@@ -56,11 +66,6 @@ class ReleaseNotesViewModel(
                 type = ReleaseNoteType.ENHANCEMENT,
             ),
             ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_new_ui_manage_accounts,
-                subtitle = R.string.release_notes_4_3_0_subtitle_new_ui_manage_accounts,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
                 title = R.string.release_notes_4_3_0_title_manual_removal_local_storage,
                 subtitle = R.string.release_notes_4_3_0_subtitle_manual_removal_local_storage,
                 type = ReleaseNoteType.ENHANCEMENT,
@@ -68,12 +73,6 @@ class ReleaseNotesViewModel(
             ReleaseNote(
                 title = R.string.release_notes_4_3_0_title_password_generator,
                 subtitle = R.string.release_notes_4_3_0_subtitle_password_generator,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-
-            ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_create_open_shortcut,
-                subtitle = R.string.release_notes_4_3_0_subtitle_create_open_shortcut,
                 type = ReleaseNoteType.ENHANCEMENT
             ),
             ReleaseNote(
