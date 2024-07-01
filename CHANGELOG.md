@@ -1,5 +1,6 @@
 # Table of Contents
 
+* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
 * [Changelog for 4.3.0](#changelog-for-owncloud-android-client-430-2024-07-01)
 * [Changelog for 4.2.2](#changelog-for-owncloud-android-client-422-2024-05-30)
 * [Changelog for 4.2.1](#changelog-for-owncloud-android-client-421-2024-02-22)
@@ -21,6 +22,27 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
+# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v4.3.0...master
+
+## Summary
+
+* Enhancement - Changed the color of some elements to improve accessibility: [#4364](https://github.com/owncloud/android/issues/4364)
+
+## Details
+
+* Enhancement - Changed the color of some elements to improve accessibility: [#4364](https://github.com/owncloud/android/issues/4364)
+
+   The color of some UI elements has been changed to meet minimum color contrast
+   requirements.
+
+   https://github.com/owncloud/android/issues/4364
+   https://github.com/owncloud/android/pull/4429
+
 # Changelog for ownCloud Android Client [4.3.0] (2024-07-01)
 
 The following sections list the changes in ownCloud Android Client 4.3.0 relevant to
