@@ -46,6 +46,16 @@ class ReleaseNotesViewModel(
     companion object {
         val releaseNotesList = listOf(
             ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_new_ui_manage_accounts,
+                subtitle = R.string.release_notes_4_3_0_subtitle_new_ui_manage_accounts,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_create_open_shortcut,
+                subtitle = R.string.release_notes_4_3_0_subtitle_create_open_shortcut,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
+            ReleaseNote(
                 title = R.string.release_notes_4_3_0_title_1,
                 subtitle = R.string.release_notes_4_3_0_subtitle_1,
                 type = ReleaseNoteType.ENHANCEMENT,
@@ -56,9 +66,24 @@ class ReleaseNotesViewModel(
                 type = ReleaseNoteType.ENHANCEMENT,
             ),
             ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_3,
-                subtitle = R.string.release_notes_4_3_0_subtitle_3,
+                title = R.string.release_notes_4_3_0_title_manual_removal_local_storage,
+                subtitle = R.string.release_notes_4_3_0_subtitle_manual_removal_local_storage,
                 type = ReleaseNoteType.ENHANCEMENT,
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_password_generator,
+                subtitle = R.string.release_notes_4_3_0_subtitle_password_generator,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_report_feedback_central_github,
+                subtitle = R.string.release_notes_4_3_0_subtitle_report_feedback_central_github,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_clear_data_button_hard_reset,
+                subtitle = R.string.release_notes_4_3_0_subtitle_clear_data_button_hard_reset,
+                type = ReleaseNoteType.BUGFIX,
             ),
             ReleaseNote(
                 title = R.string.release_notes_4_3_0_title_4,
@@ -86,23 +111,8 @@ class ReleaseNotesViewModel(
                 type = ReleaseNoteType.BUGFIX,
             ),
             ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_manual_removal_local_storage,
-                subtitle = R.string.release_notes_4_3_0_subtitle_manual_removal_local_storage,
-                type = ReleaseNoteType.ENHANCEMENT,
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_clear_data_button_hard_reset,
-                subtitle = R.string.release_notes_4_3_0_subtitle_clear_data_button_hard_reset,
-                type = ReleaseNoteType.BUGFIX,
-            ),
-            ReleaseNote(
                 title = R.string.release_notes_4_3_0_title_improvements_remove_dialog,
                 subtitle = R.string.release_notes_4_3_0_subtitle_improvements_remove_dialog,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_password_generator,
-                subtitle = R.string.release_notes_4_3_0_subtitle_password_generator,
                 type = ReleaseNoteType.ENHANCEMENT
             ),
             ReleaseNote(
@@ -139,21 +149,6 @@ class ReleaseNotesViewModel(
                 title = R.string.release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option,
                 subtitle = R.string.release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option,
                 type = ReleaseNoteType.BUGFIX
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_create_open_shortcut,
-                subtitle = R.string.release_notes_4_3_0_subtitle_create_open_shortcut,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_report_feedback_central_github,
-                subtitle = R.string.release_notes_4_3_0_subtitle_report_feedback_central_github,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_new_ui_manage_accounts,
-                subtitle = R.string.release_notes_4_3_0_subtitle_new_ui_manage_accounts,
-                type = ReleaseNoteType.ENHANCEMENT
             ),
         )
     }

@@ -672,8 +672,6 @@
   <string name="release_notes_4_3_0_subtitle_1">Te pjesa “Të thelluara” është shtuar një rregullim i ri për fshirje të automatizuar të kartelave të shkarkuara, kur koha që nga hera e fundit që qenë përdorur është më e madhe se koha e përzgjedhur te rregullimi në fjalë</string>
   <string name="release_notes_4_3_0_title_2">Zbulim i automatizuar i llogarisë gjatë hyrjes</string>
   <string name="release_notes_4_3_0_subtitle_2">U hoq butoni i rifreskimit të llogarisë te pamja Administroni Llogari, ngaqë gjatë hyrjesh bëhet zbulim i automatizuar i llogarive</string>
-  <string name="release_notes_4_3_0_title_3">Përmirësime te pamje Administroni Llogari</string>
-  <string name="release_notes_4_3_0_subtitle_3">U hoq ikonë dryni, për shmangie mbivendosjeje emri llogarie me ikona dhe ridrejtim te hyrje në llogari, kur në dështim mirëfilltësimi shfaqet “snackbar”-i</string>
   <string name="release_notes_4_3_0_title_4">Dialogu për përplasje emrash më i ngjashëm me ata të Android-it</string>
   <string name="release_notes_4_3_0_subtitle_4">Pamja e dialogut rreth përplasje emrash u ndryshua për t’u dukur më afër atyre të Android-it dhe më i ngjashëm me dialogë të tjerë në aplikacion</string>
   <string name="release_notes_4_3_0_title_5">Ikonë thjerre te zgjedhës dosjeje</string>

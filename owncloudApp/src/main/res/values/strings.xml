@@ -732,8 +732,6 @@
     <string name="release_notes_4_3_0_subtitle_1">A new setting has been added in "Advanced" section to delete automatically downloaded files, when the time since their last usage exceeds the selected time in the setting</string>
     <string name="release_notes_4_3_0_title_2">Automatic discovery of the account in login</string>
     <string name="release_notes_4_3_0_subtitle_2">Removed the account refresh button in the Manage Accounts view, as automatic account discovery is done at login</string>
-    <string name="release_notes_4_3_0_title_3">Improvements in Manage Accounts view</string>
-    <string name="release_notes_4_3_0_subtitle_3">Removed the key icon, avoid overlap account name with icons and redirect to login when the snackbar appears in authentication failure</string>
     <string name="release_notes_4_3_0_title_4">Name conflicts dialog more Android-alike</string>
     <string name="release_notes_4_3_0_subtitle_4">Name conflicts dialog appearance was changed to look Android-alike and more similar to other dialogs in the app</string>
     <string name="release_notes_4_3_0_title_5">Lens icon in folder picker</string>

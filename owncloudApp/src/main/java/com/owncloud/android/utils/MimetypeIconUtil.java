@@ -260,6 +260,7 @@ public class MimetypeIconUtil {
         MIMETYPE_TO_ICON_MAPPING.put("text/css", R.drawable.file_code);
         MIMETYPE_TO_ICON_MAPPING.put("text/csv", R.drawable.file_xls);
         MIMETYPE_TO_ICON_MAPPING.put("text/html", R.drawable.file_code);
+        MIMETYPE_TO_ICON_MAPPING.put("text/uri-list", R.drawable.ic_action_open_shortcut);
         MIMETYPE_TO_ICON_MAPPING.put("text/vcard", R.drawable.file_vcard);
         MIMETYPE_TO_ICON_MAPPING.put("text/x-c", R.drawable.file_code);
         MIMETYPE_TO_ICON_MAPPING.put("text/x-c++src", R.drawable.file_code);
@@ -449,6 +450,7 @@ public class MimetypeIconUtil {
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("tif", Collections.singletonList("image/tiff"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("ttf", Collections.singletonList("application/font-sfnt"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("txt", Collections.singletonList("text/plain"));
+        FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("url", Collections.singletonList("text/uri-list"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("vcard", Collections.singletonList("text/vcard"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("vcf", Collections.singletonList("text/vcard"));
         FILE_EXTENSION_TO_MIMETYPE_MAPPING.put("vob", Collections.singletonList("video/dvd"));
