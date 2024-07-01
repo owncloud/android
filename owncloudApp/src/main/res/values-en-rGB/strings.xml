@@ -18,6 +18,7 @@
   <string name="actionbar_descending">Descending</string>
   <string name="actionbar_sort_title">Sort by</string>
   <string name="fab_new_file">New document</string>
+  <string name="fab_new_shortcut">New shortcut</string>
   <string name="drawer_item_all_files">All files</string>
   <string name="drawer_item_only_available_offline">Available offline</string>
   <string name="drawer_item_shared_by_link_files">Shared by link</string>
@@ -688,6 +689,7 @@
   <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">\"Clear data\" button enabled in the app settings in device settings</string>
   <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">The \"Clear data\" button has been enabled to delete the application data from the app settings in the device settings. The application will perform a hard reset if this button is pressed</string>
   <string name="release_notes_4_3_0_title_improvements_remove_dialog">Improvements in remove dialogue</string>
+  <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">A new remove dialogue has been created by adding the thumbnail of the file to be deleted. Added the number of files that are going to be deleted in a multiple selection</string>
   <string name="release_notes_4_3_0_title_password_generator">Password generator for public links</string>
   <string name="release_notes_4_3_0_subtitle_password_generator">Passwords for public links can be now generated via a new generator in Infinite Scale accounts</string>
   <string name="release_notes_4_3_0_title_display_name_truncation">Resolved the bug where long display names were truncated incorrectly</string>
@@ -704,6 +706,12 @@
   <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">More appropriate icons have been added to the \"Open in (web)\" option on the operations menu</string>
   <string name="release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option">Displayed \"Local only\" option properly and prevented deletion of available offline files in the remove dialogue</string>
   <string name="release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option">\"Local only\" option in the remove dialogue will be shown when the selected folder contains at least one downloaded file, ignoring those available offline. If the \"Local only\" option is displayed and clicked, available offline files will not be deleted</string>
+  <string name="release_notes_4_3_0_title_create_open_shortcut">Support for URL shortcut files</string>
+  <string name="release_notes_4_3_0_subtitle_create_open_shortcut">A new option has been added in the floating button to create a shortcut file with a .url extension. When the file is clicked, the URL will open in the browser</string>
+  <string name="release_notes_4_3_0_title_report_feedback_central_github">Changes in the Feedback section</string>
+  <string name="release_notes_4_3_0_subtitle_report_feedback_central_github">A new dialogue has been added to handle feedback: the ownCloud survey, GitHub and the open forum Central will be our meeting point</string>
+  <string name="release_notes_4_3_0_title_new_ui_manage_accounts">New dialogue for \"Manage accounts\"</string>
+  <string name="release_notes_4_3_0_subtitle_new_ui_manage_accounts">All the accounts management stuff has been moved to a new dialogue that appears when pressing the avatar. The drawer menu has been simplified removing all accounts management-related stuff as well</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Open in web</string>
   <string name="ic_action_open_with_web">Open in %1$s (web)</string>
@@ -744,6 +752,7 @@
   <string name="insecure_http_url_title_dialog">Insecure HTTP URL</string>
   <string name="insecure_http_url_message_dialog">The URL you provided uses HTTP rather than the encrypted HTTPS protocol. If you continue, your communication will not be encrypted.</string>
   <string name="insecure_http_url_continue_button">Continue</string>
+  <string name="clean_data_account_message">All downloaded files that are not available offline will be cleaned up for the account %1$s</string>
   <string name="clean_data_account_title">Remove local storage</string>
   <string name="clean_data_account_button_yes">Clean data</string>
   <string name="content_description_menu">Menu</string>
@@ -764,6 +773,14 @@
   <string name="content_description_edit_share">Edit share</string>
   <string name="content_description_delete_share">Delete share</string>
   <string name="content_description_file_operations">%1$s operations</string>
+  <string name="create_shortcut_dialog_title">Create a shortcut</string>
   <string name="create_shortcut_dialog_url">URL</string>
+  <string name="create_shortcut_dialog_url_information">The URL must start with https:// or http:// so that it can be opened in the browser</string>
+  <string name="create_shortcut_dialog_url_error_no_blanks">The URL cannot contain blanks</string>
+  <string name="create_shortcut_dialog_url_extension">.url</string>
+  <string name="open_shortcut_description">This shortcut points to:</string>
   <string name="open_shortcut_title">Open link</string>
+  <string name="feedback_dialog_description">Improve the app with your feedback</string>
+  <string name="feedback_dialog_get_in_contact_title">Get in contact</string>
+  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href="%1$s"><b>forum</b></a>, <a href="%2$s"><b>chat with us</b></a> or contribute on <a href="%3$s"><b>GitHub</b></a>]]></string>
 </resources>

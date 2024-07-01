@@ -689,6 +689,7 @@
   <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">Seadme seadistuste rakenduste alajaotusesse on lisatud \"Tühjenda andmed\" nupp</string>
   <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">Seadme seadistuste rakenduste alajaotusesse on lisatud \"Tühjenda andmed\" nupp. Nupu vajutamisel tehakse rakendusele täielik algseadistus.</string>
   <string name="release_notes_4_3_0_title_improvements_remove_dialog">Kustutamise dialoogi parendused</string>
+  <string name="release_notes_4_3_0_subtitle_improvements_remove_dialog">Lisatud on uus \"eemalda\" dialoog, valides kustutatava faili pisipilti. Lisatud on kustutavate failide arv kui kustutatakse mitu valitud faili.</string>
   <string name="release_notes_4_3_0_title_password_generator">Salasõna looja avalikele linkidele</string>
   <string name="release_notes_4_3_0_subtitle_password_generator">Avalike linkide salasõnasid saab Infinite Scale kontodel luua uue salasõnade loojaga</string>
   <string name="release_notes_4_3_0_title_display_name_truncation">Lahendatud viga pikkade nimede kuvamisel, kus lühendamine toimus ebakorrektselt</string>
@@ -706,6 +707,11 @@
   <string name="release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option">\"Ainult kohalik\" valikut näidatakse korrektselt ja kustutamise dialoogis välditakse võrguühenduseta saadaval olevate failide kustutamist</string>
   <string name="release_notes_4_3_0_subtitle_av_offline_files_removed_locally_with_local_only_option">Valikut \"Ainult kohalik\" näidatakse kustutamise dialoogis, kui valitud kaustas on vähemalt üks allalaaditud fail, ignoreerides ilma võrguühenduseta saadaval olevaid faile. Kui \"Ainult kohalik\" valik on nähtaval ja valitud, siis võrguühenduseta saadaval olevaid faile ei kustutata.</string>
   <string name="release_notes_4_3_0_title_create_open_shortcut">URL otsetee failide tugi</string>
+  <string name="release_notes_4_3_0_subtitle_create_open_shortcut">Lisatud on uus valik hõljuvale nupule, millega saab luua .url-laiendiga otsetee faili. Kui failile vajutada, avatakse brauseris URL</string>
+  <string name="release_notes_4_3_0_title_report_feedback_central_github">Muutused tagasiside sektsioonis</string>
+  <string name="release_notes_4_3_0_subtitle_report_feedback_central_github">Tagasiside haldamiseks on lisatud uus dialoog: ownCloud survey, GitHub ja open forum Central on meie kokkusaamispaigad</string>
+  <string name="release_notes_4_3_0_title_new_ui_manage_accounts">Uus dialoog \"Halda kontosid\"</string>
+  <string name="release_notes_4_3_0_subtitle_new_ui_manage_accounts">Kogu kontohaldusega seotu on viidud uude dialoogi, mis tekkib avatarile vajutades. Lihtstustatud on ka menüü, eemaldades konto haldusega seotud valikud</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -746,6 +752,7 @@
   <string name="insecure_http_url_title_dialog">Ebaturvaline HTTP URL</string>
   <string name="insecure_http_url_message_dialog">Sisestatud URL kasutab krüpteeritud HTTPS-protokolli asemel HTTP-protokolli. Jätkamisel ei ole teie ühendus krüpteeritud.</string>
   <string name="insecure_http_url_continue_button">Jätka</string>
+  <string name="clean_data_account_message">Kõik allalaetud failid, mis ei ole saadaval võrguühenduseta, kustutatakse kontolt %1$s</string>
   <string name="clean_data_account_title">Eemalda kohalik salvestusmaht</string>
   <string name="clean_data_account_button_yes">Puhasta andmed</string>
   <string name="content_description_menu">Menüü</string>
@@ -773,4 +780,7 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">See otsetee viitab:</string>
   <string name="open_shortcut_title">Ava link</string>
+  <string name="feedback_dialog_description">Aita rakendust parandada oma tagasisidega</string>
+  <string name="feedback_dialog_get_in_contact_title">Võta ühendust</string>
+  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Küsi abi <a href="%1$s"><b>foorumist</b></a>, <a href="%2$s"><b>vestle meiega</b></a> või panusta <a href="%3$s"><b>GitHub\'is</b></a>]]></string>
 </resources>

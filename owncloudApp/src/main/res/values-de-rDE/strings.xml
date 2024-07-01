@@ -18,6 +18,7 @@
   <string name="actionbar_descending">Absteigend</string>
   <string name="actionbar_sort_title">Sortieren nach</string>
   <string name="fab_new_file">Neues Dokument</string>
+  <string name="fab_new_shortcut"> Neue Verknüpfung</string>
   <string name="drawer_item_all_files">Alle Dateien</string>
   <string name="drawer_item_only_available_offline">Offline verfügbar</string>
   <string name="drawer_item_shared_by_link_files">Über einen Link geteilt</string>
