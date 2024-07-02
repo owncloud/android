@@ -28,8 +28,8 @@
     <color name="owncloud_blue">#1b223d</color>
     <color name="owncloud_blue_accent">#4E85C8</color>
     <color name="owncloud_blue_bright">#00ddff</color>
-    <color name="accessibility_grey_color">#616465</color>
-    <color name="list_item_lastmod_and_filesize_text">@color/accessibility_grey_color</color>
+    <color name="share_warning_text">#616465</color>
+    <color name="list_item_lastmod_and_filesize_text">#707575</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="white_transparent">#4DFFFFFF</color>
