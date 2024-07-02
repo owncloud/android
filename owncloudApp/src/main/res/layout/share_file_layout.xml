@@ -182,7 +182,7 @@
                 android:paddingRight="@dimen/standard_half_padding"
                 android:paddingTop="@dimen/standard_padding"
                 android:text="@string/share_warning_about_forwarding_public_links"
-                android:textColor="@color/share_warning_text"
+                android:textColor="@color/warning_grey_text"
                 android:textSize="15sp" />
 
             <ListView
