@@ -15,7 +15,7 @@
         android:padding="@dimen/standard_padding"
         android:layout_gravity="center"
         android:gravity="center"
-        android:textColor="@color/secondaryTextColor"
+        android:textColor="@color/list_item_lastmod_and_filesize_text"
         android:layout_marginBottom="56dp"
         />
 

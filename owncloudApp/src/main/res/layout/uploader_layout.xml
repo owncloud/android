@@ -78,6 +78,7 @@
             android:paddingHorizontal="@dimen/standard_padding"
             android:paddingVertical="@dimen/standard_half_padding"
             android:text="@string/folder_picker_no_permissions_message_text"
+            android:textColor="@color/warning_grey_text"
             android:visibility="gone"
             tools:visibility="visible" />
 

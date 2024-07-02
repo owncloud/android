@@ -1,0 +1,6 @@
+Enhancement: Changed the color of some elements to improve accessibility
+
+The color of some UI elements has been changed to meet minimum color contrast requirements.
+
+https://github.com/owncloud/android/issues/4364
+https://github.com/owncloud/android/pull/4429

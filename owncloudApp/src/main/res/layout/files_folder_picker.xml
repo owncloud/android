@@ -39,6 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         android:background="@color/warning_background_color"
         android:visibility="gone"
         android:text="@string/folder_picker_no_permissions_message_text"
+        android:textColor="@color/warning_grey_text"
         tools:visibility="visible"/>
 
     <ImageView

@@ -663,36 +663,6 @@
   <string name="release_notes_footer">Благодарим за использование %1$s.\n❤</string>
   <string name="release_notes_proceed">Продолжить</string>
   <string name="release_notes_icon">Иконка к примечанию релиза</string>
-  <string name="release_notes_4_3_0_title_1">Новая настройка для удаления автоматически загружаемых файлов, которые не использовались в течение определенного периода времени.</string>
-  <string name="release_notes_4_3_0_subtitle_1">В разделе \"Дополнительно\" добавлена новая настройка для автоматического удаления загруженных файлов, когда время с момента их последнего использования превышает выбранное в настройках время</string>
-  <string name="release_notes_4_3_0_title_2">Автоматическое обнаружение учетной записи при входе в систему</string>
-  <string name="release_notes_4_3_0_subtitle_2">Убрана кнопка обновления учетной записи в окне Управления учетными записями, так как автоматическое обнаружение учетной записи выполняется при входе в систему</string>
-  <string name="release_notes_4_3_0_title_4">Диалоговое окно конфликта имен больше похоже на Android.</string>
-  <string name="release_notes_4_3_0_subtitle_4">Внешний вид диалогового окна «Конфликты имен» был изменен, чтобы оно выглядело в стиле Android и стало более похожим на другие диалоговые окна в приложении.</string>
-  <string name="release_notes_4_3_0_title_5">Значок объектива в селекторе папок</string>
-  <string name="release_notes_4_3_0_subtitle_5">Значок объектива на панели инструментов был удален при отображении пробелов в папках</string>
-  <string name="release_notes_4_3_0_title_6">Добавить предупреждение о http-соединениях</string>
-  <string name="release_notes_4_3_0_subtitle_6">Добавлено диалоговое окно предупреждения в представлении входа в систему при http-соединении</string>
-  <string name="release_notes_4_3_0_title_7">Исправьте опцию \"Только локально\" в диалоговом окне удаления</string>
-  <string name="release_notes_4_3_0_subtitle_7">Опция \"Только локально\" в диалоге удаления будет отображаться только в том случае, если при рекурсивной проверке выбранных файлов и папок хотя бы один файл доступен локально
-</string>
-  <string name="release_notes_4_3_0_title_retried_successful_uploads_delete_temporary_folder">Deleted successful downloads are deleted from the temporary folder</string>
-  <string name="release_notes_4_3_0_subtitle_retried_successful_uploads_delete_temporary_folder">Удаленные успешные загрузки удаляются из временной папки</string>
-  <string name="release_notes_4_3_0_title_manual_removal_local_storage">Новая настройка для ручного удаления локального хранилища</string>
-  <string name="release_notes_4_3_0_subtitle_manual_removal_local_storage">Добавлена новая иконка в представлении \"Управление учетными записями\" для ручного удаления локальных и временных файлов</string>
-  <string name="release_notes_4_3_0_title_clear_data_button_hard_reset">Кнопка \"Очистить данные\" включена в настройках приложения в настройках устройства</string>
-  <string name="release_notes_4_3_0_subtitle_clear_data_button_hard_reset">Кнопка \"Очистить данные\" позволяет удалить данные приложения из настроек приложения в настройках устройства. При нажатии этой кнопки приложение выполнит жесткий сброс.</string>
-  <string name="release_notes_4_3_0_title_improvements_remove_dialog">Улучшения в диалоге удаления</string>
-  <string name="release_notes_4_3_0_title_password_generator">Генератор паролей для общедоступных ссылок</string>
-  <string name="release_notes_4_3_0_subtitle_password_generator">Пароли для публичных ссылок теперь можно генерировать с помощью нового генератора в аккаунтах Infinite Scale.</string>
-  <string name="release_notes_4_3_0_title_display_name_truncation">Исправлена ошибка, из-за которой длинные имена отображаемых объектов некорректно усекались.</string>
-  <string name="release_notes_4_3_0_subtitle_display_name_truncation">Имена дисплеев теперь правильно обрезаются посередине с помощью многоточия (...), чтобы сохранить читабельность.</string>
-  <string name="release_notes_4_3_0_title_improve_available_offline_performance">Улучшения доступной производительности в автономном режиме</string>
-  <string name="release_notes_4_3_0_subtitle_improve_available_offline_performance">Файлы, содержащиеся в доступной автономной папке, будут обновляться только в том случае, если они были изменены</string>
-  <string name="release_notes_4_3_0_title_search_functionality_in_spaces_list">Функциональность поиска в списке пространств</string>
-  <string name="release_notes_4_3_0_subtitle_search_functionality_in_spaces_list">Функция поиска была добавлена в список пробелов, когда вы пытаетесь их отфильтровать</string>
-  <string name="release_notes_4_3_0_title_video_streaming_spaces">Потоковое видео в пространствах</string>
-  <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Видеофайлы, расположенные в пространствах, теперь можно передавать правильно</string>
   <string name="release_notes_4_3_0_title_accessibility_improvements">Улучшения доступности</string>
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Некоторые улучшения, чтобы сделать приложение более доступным.</string>
   <!--Open in web-->

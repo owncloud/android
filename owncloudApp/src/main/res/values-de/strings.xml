@@ -664,10 +664,6 @@
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
   <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
-  <string name="release_notes_4_3_0_title_1">Neue Einstellung zum automatischen Entfernen heruntergeladener Dateien, welche eine bestimmte Zeit lang nicht verwendet wurden</string>
-  <string name="release_notes_4_3_0_subtitle_1">Im Abschnitt „Erweitert“ wurde eine neue Einstellung hinzugefügt, um automatisch heruntergeladene Dateien zu löschen, wenn die Zeit seit ihrer letzten Verwendung die in der Einstellung ausgewählte Zeit überschreitet</string>
-  <string name="release_notes_4_3_0_title_2">Automatische Konto Erkennung beim Login</string>
-  <string name="release_notes_4_3_0_subtitle_2">Die Schaltfläche zum Aktualisieren des Kontos wurde in der Ansicht „Konten verwalten“ entfernt, da die automatische Kontoerkennung beim Anmelden erfolgt</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
