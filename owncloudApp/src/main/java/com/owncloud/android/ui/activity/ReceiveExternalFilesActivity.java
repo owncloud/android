@@ -9,8 +9,10 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * @author John Kalimeris
+ * @author Aitor Ballesteros Pavón
+ *
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -757,6 +759,16 @@ public class ReceiveExternalFilesActivity extends FileActivity
         mSearchView.setMaxWidth(Integer.MAX_VALUE);
         mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
         mSearchView.setOnQueryTextListener(this);
+
+        EditText textHint = mSearchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        ImageView closeButton = mSearchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+        ImageView searchButton = mSearchView.findViewById(androidx.appcompat.R.id.search_button);
+
+        searchButton.setBackgroundColor(getColor(R.color.actionbar_start_color));
+        textHint.setHintTextColor(getColor(R.color.search_view_hint_text));
+        closeButton.setColorFilter(getColor(R.color.search_view_hint_text));
+        mSearchView.setBackground(getDrawable(R.drawable.rounded_search_view));
+
         menu.removeItem(menu.findItem(R.id.action_share_current_folder).getItemId());
 
         return true;

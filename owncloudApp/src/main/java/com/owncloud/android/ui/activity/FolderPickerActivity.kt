@@ -28,6 +28,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
+import android.widget.ImageView
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
@@ -163,6 +165,15 @@ open class FolderPickerActivity : FileActivity(),
             (menuItem.actionView as SearchView).apply {
                 maxWidth = Int.MAX_VALUE
                 queryHint = resources.getString(R.string.actionbar_search)
+
+                val textHint = findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+                val closeButton = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+                val searchButton = findViewById<ImageView>(androidx.appcompat.R.id.search_button)
+
+                searchButton.setBackgroundColor(getColor(R.color.actionbar_start_color))
+                textHint.setHintTextColor(getColor(R.color.search_view_hint_text))
+                closeButton.setColorFilter(getColor(R.color.search_view_hint_text))
+                background = getDrawable(R.drawable.rounded_search_view)
             }
             it.removeItem(it.findItem(R.id.action_share_current_folder)?.itemId ?: 0)
         }
