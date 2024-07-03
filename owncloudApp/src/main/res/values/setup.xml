@@ -46,6 +46,7 @@
     <color name="secondary_button_text_color">@color/black</color>
     <color name="drawer_header_color">@color/owncloud_blue_accent</color>
     <color name="spaces_card_background_color">#edf3fa</color>
+    <color name="search_view_background_color">@color/owncloud_blue</color>
 
     <!-- Splash Screen Background -->
     <color name="splash_background">@color/owncloud_blue</color>
