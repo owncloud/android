@@ -5,6 +5,7 @@
  * @author Christian Schabesberger
  * @author Jorge Aguado Recio
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -25,17 +26,19 @@ package com.owncloud.android.ui.activity
 
 import android.view.View
 import android.view.View.VISIBLE
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.owncloud.android.R
-import com.owncloud.android.presentation.authentication.AccountUtils
-import com.owncloud.android.presentation.avatar.AvatarUtils
 import com.owncloud.android.presentation.accounts.ManageAccountsDialogFragment
 import com.owncloud.android.presentation.accounts.ManageAccountsDialogFragment.Companion.MANAGE_ACCOUNTS_DIALOG
+import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.presentation.avatar.AvatarUtils
 
 /**
  * Base class providing toolbar registration functionality, see [.setupToolbar].
@@ -97,6 +100,11 @@ abstract class ToolbarActivity : BaseActivity() {
                 toolbarTitle.visibility = VISIBLE
                 false
             }
+            val textHintSearchView = findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
+            val closeButton = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+
+            textHintSearchView.setHintTextColor(ContextCompat.getColor(applicationContext, R.color.search_view_hint_text))
+            closeButton.setColorFilter(ContextCompat.getColor(applicationContext, R.color.search_view_hint_text))
         }
 
         AccountUtils.getCurrentOwnCloudAccount(baseContext) ?: return
