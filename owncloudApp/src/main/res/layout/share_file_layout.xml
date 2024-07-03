@@ -63,6 +63,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_toEndOf="@+id/shareFileIcon"
                 android:text="@string/placeholder_filesize"
+                android:textColor="@color/list_item_lastmod_and_filesize_text"
                 android:textSize="12sp" />
 
             <ImageButton
@@ -181,6 +182,7 @@
                 android:paddingRight="@dimen/standard_half_padding"
                 android:paddingTop="@dimen/standard_padding"
                 android:text="@string/share_warning_about_forwarding_public_links"
+                android:textColor="@color/warning_grey_text"
                 android:textSize="15sp" />
 
             <ListView
