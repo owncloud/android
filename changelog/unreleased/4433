@@ -1,0 +1,7 @@
+Enhancement: Improved SearchView accessibility
+
+The text hint and cross button color of the SearchView has been changed to meet the color contrast requirements.
+In addition, the SearchView includes a new resource with rounded edges, using the same background color (brandable) as the containing toolbar.
+
+https://github.com/owncloud/android/issues/4365
+https://github.com/owncloud/android/pull/4433
