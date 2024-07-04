@@ -321,6 +321,7 @@
   <string name="folder_already_exists_description">%1$s adlı klasör zaten mevcut. </string>
   <string name="sync_file_fail_msg">Uzak dosya denetlenemedi</string>
   <string name="sync_file_nothing_to_do_msg">Dosya içerikleri zaten eşitlenmiş</string>
+  <string name="sync_file_not_found_msg">Dosya bulunamadı</string>
   <string name="new_remote_version_found_msg">Sunucuda yeni bir sürüm bulundu. İndiriliyor…</string>
   <string name="download_enqueued_msg">İndirme kuyruğa alınmış</string>
   <string name="upload_enqueued_msg">Yükleme kuyruğa alınmış</string>
@@ -563,4 +564,10 @@
   <string name="prefs_delete_local_files_entries_never">Asla</string>
   <string name="insecure_http_url_title_dialog">Güvensiz HTTP URL</string>
   <string name="insecure_http_url_continue_button">Devam et</string>
+  <string name="content_description_menu">Menü</string>
+  <string name="content_description_manage_accounts">Hesapları yönet</string>
+  <string name="content_description_search">Ara</string>
+  <string name="content_description_remove_account">Hesabı kaldır</string>
+  <string name="create_shortcut_dialog_url">URL</string>
+  <string name="open_shortcut_title">Bağlantıyı aç</string>
 </resources>
