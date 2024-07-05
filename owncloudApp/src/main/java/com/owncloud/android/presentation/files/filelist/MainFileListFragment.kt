@@ -39,7 +39,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -204,17 +203,7 @@ class MainFileListFragment : Fragment(),
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         (menu.findItem(R.id.action_search).actionView as SearchView).run {
-            maxWidth = Int.MAX_VALUE
-            queryHint = resources.getString(R.string.actionbar_search)
             setOnQueryTextListener(this@MainFileListFragment)
-            val textHint = findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
-            val closeButton = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
-            val searchButton = findViewById<ImageView>(androidx.appcompat.R.id.search_button)
-
-            searchButton.setBackgroundColor(requireContext().getColor(R.color.actionbar_start_color))
-            textHint.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.search_view_hint_text))
-            closeButton.setColorFilter(ContextCompat.getColor(requireContext(), R.color.search_view_hint_text))
-            background = ContextCompat.getDrawable(context, R.drawable.rounded_search_view)
         }
         (menu.findItem(R.id.action_select_all)).setOnMenuItemClickListener {
             fileListAdapter.selectAll()

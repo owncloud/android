@@ -130,8 +130,6 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         (menu.findItem(R.id.action_search).actionView as SearchView).run {
-            maxWidth = Int.MAX_VALUE
-            queryHint = resources.getString(R.string.actionbar_search)
             setOnQueryTextListener(this@SpacesListFragment)
         }
         menu.findItem(R.id.action_share_current_folder)?.itemId?.let { menu.removeItem(it) }
