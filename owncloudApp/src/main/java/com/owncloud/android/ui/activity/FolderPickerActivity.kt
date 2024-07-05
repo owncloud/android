@@ -172,7 +172,7 @@ open class FolderPickerActivity : FileActivity(),
 
                 searchButton.setBackgroundColor(getColor(R.color.actionbar_start_color))
                 textHint.setHintTextColor(getColor(R.color.search_view_hint_text))
-                closeButton.setColorFilter(getColor(R.color.search_view_hint_text))
+                closeButton.setColorFilter(getColor(R.color.white))
                 background = getDrawable(R.drawable.rounded_search_view)
             }
             it.removeItem(it.findItem(R.id.action_share_current_folder)?.itemId ?: 0)

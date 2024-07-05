@@ -565,7 +565,7 @@ class FileDisplayActivity : FileActivity(),
 
             searchButton.setBackgroundColor(getColor(R.color.actionbar_start_color))
             textHint.setHintTextColor(getColor(R.color.search_view_hint_text))
-            closeButton.setColorFilter(getColor(R.color.search_view_hint_text))
+            closeButton.setColorFilter(getColor(R.color.white))
             background = getDrawable(R.drawable.rounded_search_view)
         }
         selectAllMenuItem = menu.findItem(R.id.action_select_all)

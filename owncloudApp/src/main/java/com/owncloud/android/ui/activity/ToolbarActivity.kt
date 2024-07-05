@@ -104,7 +104,7 @@ abstract class ToolbarActivity : BaseActivity() {
             val closeButton = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
 
             textHintSearchView.setHintTextColor(ContextCompat.getColor(applicationContext, R.color.search_view_hint_text))
-            closeButton.setColorFilter(ContextCompat.getColor(applicationContext, R.color.search_view_hint_text))
+            closeButton.setColorFilter(ContextCompat.getColor(applicationContext, R.color.white))
         }
 
         AccountUtils.getCurrentOwnCloudAccount(baseContext) ?: return
