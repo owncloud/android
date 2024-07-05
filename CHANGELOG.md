@@ -33,6 +33,7 @@ ownCloud admins and users.
 ## Summary
 
 * Enhancement - Changed the color of some elements to improve accessibility: [#4364](https://github.com/owncloud/android/issues/4364)
+* Enhancement - Improved SearchView accessibility: [#4365](https://github.com/owncloud/android/issues/4365)
 
 ## Details
 
@@ -43,6 +44,16 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4364
    https://github.com/owncloud/android/pull/4429
+
+* Enhancement - Improved SearchView accessibility: [#4365](https://github.com/owncloud/android/issues/4365)
+
+   The text hint and cross button color of the SearchView has been changed to meet
+   the color contrast requirements. In addition, the SearchView includes a new
+   resource with rounded edges, using the same background color (brandable) as the
+   containing toolbar.
+
+   https://github.com/owncloud/android/issues/4365
+   https://github.com/owncloud/android/pull/4433
 
 # Changelog for ownCloud Android Client [4.3.1] (2024-07-22)
 
