@@ -710,12 +710,14 @@
   <string name="insecure_http_url_title_dialog">URL HTTP jo e sigurt</string>
   <string name="insecure_http_url_message_dialog">URL-ja që dhatë përdor HTTP, në vend se protokollin e fshehtëzuar HTTPS. Nëse vazhdoni, komunikimi juaj s’do të jetë i fshehtëzuar.</string>
   <string name="insecure_http_url_continue_button">Vazhdo</string>
+  <string name="clean_data_account_message">Krejt kartelat e shkarkuara që s’janë të passhme jashtë interneti, do të spastrohen për llogarinë %1$s</string>
   <string name="clean_data_account_title">Hiq depozitë vendore</string>
   <string name="clean_data_account_button_yes">Pastro të dhëna</string>
   <string name="content_description_menu">Menu</string>
   <string name="content_description_manage_accounts">Administroni llogari</string>
   <string name="content_description_search">Kërko</string>
   <string name="content_description_type_view">Lloj pamjeje</string>
+  <string name="content_description_image_previewed">U parapa figura</string>
   <string name="content_description_add_public_link">Shtoni lidhje publike</string>
   <string name="content_description_get_private_link">Merrni lidhje private</string>
   <string name="content_description_get_public_link">Merrni lidhje publike</string>
