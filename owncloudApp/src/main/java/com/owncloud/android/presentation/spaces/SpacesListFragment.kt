@@ -3,6 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  * @author Jorge Aguado Recio
+ * @author Aitor Ballesteros Pavón
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -58,7 +59,6 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
 
     private lateinit var spacesListAdapter: SpacesListAdapter
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -84,6 +84,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
         binding.swipeRefreshSpacesList.setOnRefreshListener {
             spacesListViewModel.refreshSpacesFromServer()
         }
+        setTextHintRootToolbar()
     }
 
     private fun subscribeToViewModels() {
@@ -131,6 +132,7 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
         super.onCreateOptionsMenu(menu, inflater)
         (menu.findItem(R.id.action_search).actionView as SearchView).run {
             setOnQueryTextListener(this@SpacesListFragment)
+            queryHint = resources.getString(R.string.actionbar_search_space)
         }
         menu.findItem(R.id.action_share_current_folder)?.itemId?.let { menu.removeItem(it) }
     }
@@ -144,6 +146,11 @@ class SpacesListFragment : SpacesListAdapter.SpacesListAdapterListener, Fragment
 
     fun setSearchListener(searchView: SearchView) {
         searchView.setOnQueryTextListener(this)
+    }
+
+    private fun setTextHintRootToolbar() {
+        val searchViewRootToolbar = requireActivity().findViewById<SearchView>(R.id.root_toolbar_search_view)
+        searchViewRootToolbar.queryHint = getString(R.string.actionbar_search_space)
     }
 
     companion object {
