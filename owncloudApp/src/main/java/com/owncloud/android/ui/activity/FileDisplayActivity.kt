@@ -44,15 +44,12 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -555,19 +552,6 @@ class FileDisplayActivity : FileActivity(),
 
         inflater.inflate(R.menu.main_menu, menu)
 
-        (menu.findItem(R.id.action_search).actionView as SearchView).run {
-            maxWidth = Int.MAX_VALUE
-            queryHint = resources.getString(R.string.actionbar_search)
-
-            val textHint = findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
-            val closeButton = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
-            val searchButton = findViewById<ImageView>(androidx.appcompat.R.id.search_button)
-
-            searchButton.setBackgroundColor(getColor(R.color.actionbar_start_color))
-            textHint.setHintTextColor(getColor(R.color.search_view_hint_text))
-            closeButton.setColorFilter(getColor(R.color.white))
-            background = getDrawable(R.drawable.rounded_search_view)
-        }
         selectAllMenuItem = menu.findItem(R.id.action_select_all)
         if (secondFragment == null) {
             selectAllMenuItem?.isVisible = true
