@@ -65,7 +65,6 @@ class OCShareService(override val client: OwnCloudClient) : ShareService {
             this.name = name
             this.password = password
             this.expirationDateInMillis = expirationDate
-            this.retrieveShareDetails = true
         }.execute(client)
 
     override fun updateShare(
@@ -82,7 +81,6 @@ class OCShareService(override val client: OwnCloudClient) : ShareService {
             this.password = password
             this.expirationDateInMillis = expirationDate
             this.permissions = permissions
-            this.retrieveShareDetails = true
         }.execute(client)
 
     override fun deleteShare(remoteId: String): RemoteOperationResult<Unit> =
