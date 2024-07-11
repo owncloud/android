@@ -29,6 +29,7 @@ package com.owncloud.android.presentation.sharing
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.transaction
 import com.owncloud.android.R
@@ -296,6 +297,11 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
     override fun dismissLoading() {
         dismissLoadingDialog()
+    }
+
+    // The main_menu won't be displayed
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        return false
     }
 
     companion object {
