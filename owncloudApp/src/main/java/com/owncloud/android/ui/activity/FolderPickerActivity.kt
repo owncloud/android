@@ -155,11 +155,9 @@ open class FolderPickerActivity : FileActivity(),
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        menu?.let {
-            it.removeItem(it.findItem(R.id.action_share_current_folder)?.itemId ?: 0)
-        }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menu.removeItem(menu.findItem(R.id.action_share_current_folder)?.itemId ?: 0)
         return true
     }
 

@@ -169,7 +169,6 @@ class FileDisplayActivity : FileActivity(),
         get() = supportFragmentManager.findFragmentByTag(TAG_SECOND_FRAGMENT) as FileFragment?
 
     private var selectAllMenuItem: MenuItem? = null
-    private var mainMenu: Menu? = null
 
     private var fileWaitingToPreview: OCFile? = null
 
@@ -541,16 +540,13 @@ class FileDisplayActivity : FileActivity(),
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-
+        super.onCreateOptionsMenu(menu)
         // Allow or disallow touches with other visible windows
         val actionBarView = findViewById<View>(R.id.action_bar)
         if (actionBarView != null) {
             actionBarView.filterTouchesWhenObscured =
                 PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(applicationContext)
         }
-
-        inflater.inflate(R.menu.main_menu, menu)
 
         selectAllMenuItem = menu.findItem(R.id.action_select_all)
         if (secondFragment == null) {
@@ -559,7 +555,6 @@ class FileDisplayActivity : FileActivity(),
             val shareFileMenuItem = menu.findItem(R.id.action_share_current_folder)
             menu.removeItem(shareFileMenuItem.itemId)
         }
-        mainMenu = menu
 
         return true
     }

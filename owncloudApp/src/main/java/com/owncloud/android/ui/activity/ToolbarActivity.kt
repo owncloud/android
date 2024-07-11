@@ -102,7 +102,7 @@ abstract class ToolbarActivity : BaseActivity() {
                 false
             }
             val textSearchView = findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
-            val closeButton = searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+            val closeButton = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
             textSearchView.setHintTextColor(ContextCompat.getColor(applicationContext, R.color.search_view_hint_text))
             closeButton.setColorFilter(ContextCompat.getColor(applicationContext, R.color.white))
         }
@@ -146,7 +146,8 @@ abstract class ToolbarActivity : BaseActivity() {
 
     private fun getStandardToolbar(): Toolbar = findViewById(R.id.standard_toolbar)
 
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
         (menu.findItem(R.id.action_search).actionView as SearchView).run {
             val searchText = findViewById<EditText>(androidx.appcompat.R.id.search_src_text)
             val closeButton = findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
@@ -159,7 +160,6 @@ abstract class ToolbarActivity : BaseActivity() {
             closeButton.setColorFilter(getColor(R.color.white))
             background = getDrawable(R.drawable.rounded_search_view)
         }
-
         return true
     }
 }
