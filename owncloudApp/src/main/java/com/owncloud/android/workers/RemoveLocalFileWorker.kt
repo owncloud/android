@@ -46,7 +46,6 @@ class RemoveLocalFileWorker(
     override suspend fun doWork(): Result {
         if (!areParametersValid()) return Result.failure()
         return try {
-            // File is already uploaded, so the original one can be removed if the behaviour is MOVE
             if (behavior == UploadBehavior.MOVE) {
                 removeLocalFile()
             }
