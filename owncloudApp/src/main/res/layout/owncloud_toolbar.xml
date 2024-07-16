@@ -17,7 +17,8 @@
     android:id="@+id/owncloud_app_bar"
     android:layout_width="match_parent"
     android:layout_height="?android:actionBarSize"
-    android:theme="@style/ownCloud.Appbar">
+    android:theme="@style/ownCloud.Appbar"
+    android:focusableInTouchMode="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/root_toolbar"
