@@ -69,7 +69,7 @@ class UploadFileFromContentUriUseCase(
             .build()
 
         workManager.beginWith(uploadFileFromContentUriWorker)
-            .then(removeLocalFileWorker)
+            .then(removeLocalFileWorker) // File is already uploaded, so the original one can be removed if the behaviour is MOVE
             .enqueue()
 
         Timber.i("Plain upload of ${params.contentUri.path} has been enqueued.")
