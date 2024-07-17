@@ -279,7 +279,9 @@ abstract class DrawerActivity : ToolbarActivity() {
      * opens the drawer.
      */
     open fun openDrawer() {
+        // mover el foco al menú
         getDrawerLayout()?.openDrawer(GravityCompat.START)
+        findViewById<View>(R.id.nav_view).requestFocus()
     }
 
     /**
