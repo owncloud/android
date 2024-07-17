@@ -770,6 +770,8 @@
     <string name="release_notes_4_3_0_subtitle_report_feedback_central_github">A new dialog has been added to handle feedback: the ownCloud survey, GitHub and the open forum Central will be our meeting point</string>
     <string name="release_notes_4_3_0_title_new_ui_manage_accounts">New dialog for "Manage accounts"</string>
     <string name="release_notes_4_3_0_subtitle_new_ui_manage_accounts">All the accounts management stuff has been moved to a new dialog that appears when pressing the avatar. Drawer menu has been simplified removing all accounts management related stuff as well</string>
+    <string name="release_notes_4_3_0_title_technical_improvement">Technical improvement</string>
+    <string name="release_notes_4_3_0_subtitle_technical_improvement">Technical update as an Android requirement</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
