@@ -7,6 +7,7 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Aitor Ballesteros Pavón
+ * @author Juan Carlos Garrote Gascón
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -66,9 +67,14 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
 
         setContentView(R.layout.share_activity)
 
-        // Set back button
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setupStandardToolbar(
+            title = null,
+            displayHomeAsUpEnabled = true,
+            homeButtonEnabled = true,
+            displayShowTitleEnabled = true
+        )
         supportActionBar?.setHomeActionContentDescription(R.string.common_back)
+
         supportFragmentManager.transaction {
             if (savedInstanceState == null && file != null && account != null) {
                 // Add Share fragment on first creation
