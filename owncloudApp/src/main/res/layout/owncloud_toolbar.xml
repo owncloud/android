@@ -93,6 +93,7 @@
         android:background="?attr/colorPrimary"
         android:theme="@style/ownCloud.Appbar"
         android:visibility="gone"
+        android:layout_marginEnd="@dimen/standard_margin"
         app:navigationContentDescription="@string/common_back"
         app:popupTheme="?attr/actionBarPopupTheme" />
 </com.google.android.material.appbar.AppBarLayout>
