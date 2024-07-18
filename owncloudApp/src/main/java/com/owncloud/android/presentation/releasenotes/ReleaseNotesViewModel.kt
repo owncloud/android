@@ -151,8 +151,8 @@ class ReleaseNotesViewModel(
                 type = ReleaseNoteType.BUGFIX
             ),
             ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_technical_improvement,
-                subtitle = R.string.release_notes_4_3_0_subtitle_technical_improvement,
+                title = R.string.release_notes_4_3_1_title_technical_improvement,
+                subtitle = R.string.release_notes_4_3_1_subtitle_technical_improvement,
                 type = ReleaseNoteType.CHANGE
             ),
         )
