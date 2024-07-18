@@ -5,6 +5,7 @@
  * @author David González Verdugo
  * @author Christian Schabesberger
  * @author Aitor Ballesteros Pavón
+ * @author Juan Carlos Garrote Gascón
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -23,12 +24,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http:></http:>//www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.ui.preview
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -395,6 +398,16 @@ class PreviewImageActivity : FileActivity(),
     // The main_menu won't be displayed
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         return false
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        return when(keyCode) {
+            KeyEvent.KEYCODE_TAB -> {
+                showSystemUI(fullScreenAnchorView)
+                true
+            }
+            else -> super.onKeyUp(keyCode, event)
+        }
     }
 
     companion object {
