@@ -760,8 +760,6 @@
     <string name="release_notes_4_3_0_subtitle_video_streaming_spaces">Video files located in spaces can now be played in streaming correctly</string>
     <string name="release_notes_4_3_0_title_accessibility_improvements">Improvements in accessibility</string>
     <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Some improvements to make the application more accessible</string>
-    <string name="release_notes_4_3_1_title_technical_improvement">Technical improvement</string>
-    <string name="release_notes_4_3_1_subtitle_technical_improvement">Technical update as an Android requirement</string>
     <string name="release_notes_4_3_0_title_show_app_provider_icon_from_endpoint">New icons in "Open in (web)" option on the operations menu</string>
     <string name="release_notes_4_3_0_subtitle_show_app_provider_icon_from_endpoint">More appropriate icons have been added to the "Open in (web)" option on the operations menu</string>
     <string name="release_notes_4_3_0_title_av_offline_files_removed_locally_with_local_only_option">Displayed \"Local only\" option properly and prevented deletion of available offline files in the remove dialog</string>
@@ -772,8 +770,8 @@
     <string name="release_notes_4_3_0_subtitle_report_feedback_central_github">A new dialog has been added to handle feedback: the ownCloud survey, GitHub and the open forum Central will be our meeting point</string>
     <string name="release_notes_4_3_0_title_new_ui_manage_accounts">New dialog for "Manage accounts"</string>
     <string name="release_notes_4_3_0_subtitle_new_ui_manage_accounts">All the accounts management stuff has been moved to a new dialog that appears when pressing the avatar. Drawer menu has been simplified removing all accounts management related stuff as well</string>
-    <string name="release_notes_4_3_0_title_technical_improvement">Technical improvement</string>
-    <string name="release_notes_4_3_0_subtitle_technical_improvement">Technical update as an Android requirement</string>
+    <string name="release_notes_4_3_1_title_technical_improvement">Technical improvement</string>
+    <string name="release_notes_4_3_1_subtitle_technical_improvement">Technical update as an Android requirement</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
