@@ -73,7 +73,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
             title = null,
             displayHomeAsUpEnabled = true,
             homeButtonEnabled = true,
-            displayShowTitleEnabled = true
+            displayShowTitleEnabled = true,
         )
         supportActionBar?.setHomeActionContentDescription(R.string.common_back)
 
