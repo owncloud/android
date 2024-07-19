@@ -30,8 +30,10 @@ package com.owncloud.android.presentation.sharing
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.fragment.app.transaction
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
@@ -308,6 +310,18 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
     // The main_menu won't be displayed
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         return false
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        return when(keyCode) {
+            KeyEvent.KEYCODE_DPAD_DOWN -> {
+                if (findViewById<View>(R.id.owncloud_app_bar).hasFocus()) {
+                    findViewById<View>(R.id.share_fragment_container).requestFocus()
+                }
+                true
+            }
+            else -> super.onKeyUp(keyCode, event)
+        }
     }
 
     companion object {
