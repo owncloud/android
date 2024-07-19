@@ -401,7 +401,7 @@ class PreviewImageActivity : FileActivity(),
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-        return when(keyCode) {
+        return when (keyCode) {
             KeyEvent.KEYCODE_TAB -> {
                 showSystemUI(fullScreenAnchorView)
                 true
