@@ -7,6 +7,7 @@
     <string name="global_size">Size</string>
 
     <string name="actionbar_search">Search this folder</string>
+    <string name="actionbar_search_space">Search spaces</string>
     <string name="actionbar_sync">Refresh account</string>
     <string name="actionbar_upload">Upload</string>
     <string name="actionbar_upload_from_apps">Content from other apps</string>

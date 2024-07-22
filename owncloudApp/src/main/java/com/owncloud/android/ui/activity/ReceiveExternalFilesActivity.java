@@ -9,8 +9,10 @@
  * @author Shashvat Kedia
  * @author Abel García de Prada
  * @author John Kalimeris
+ * @author Aitor Ballesteros Pavón
+ *
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -39,7 +41,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -60,6 +61,7 @@ import androidx.appcompat.app.AlertDialog.Builder;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.textfield.TextInputEditText;
@@ -173,6 +175,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private final static String KEY_ACCOUNT_SELECTION_SHOWING = "ACCOUNT_SELECTION_SHOWING";
 
     private static final String DIALOG_WAIT_COPY_FILE = "DIALOG_WAIT_COPY_FILE";
+    private static final String TAG_SPACE_LIST_FRAGMENT = "TAG_SPACE_LIST_FRAGMENT";
 
     private boolean showHiddenFiles;
     private OCSharedPreferencesProvider sharedPreferencesProvider;
@@ -244,6 +247,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 }
                 initAndShowListOfSpaces();
                 getSupportFragmentManager().setFragmentResultListener(SpacesListFragment.REQUEST_KEY_CLICK_SPACE, this, (requestKey, bundle) -> {
+                    removeSpaceListFragment();
                     OCFile rootSpaceFolder = bundle.getParcelable(SpacesListFragment.BUNDLE_KEY_CLICK_SPACE);
                     mFile = rootSpaceFolder;
                     currentSpaceId = mFile.getSpaceId();
@@ -254,6 +258,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
             }
         }
         );
+    }
+
+    private void removeSpaceListFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_SPACE_LIST_FRAGMENT);
+        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 
     private void showListOfFiles() {
@@ -286,7 +295,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     private void initAndShowListOfSpaces() {
         SpacesListFragment listOfSpaces = SpacesListFragment.Companion.newInstance(true, getAccount().name);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, listOfSpaces);
+        transaction.replace(R.id.fragment_container, listOfSpaces, TAG_SPACE_LIST_FRAGMENT);
         transaction.commit();
         uploaderButton = findViewById(R.id.uploader_choose_folder);
         uploaderButton.setVisibility(View.GONE);
@@ -750,15 +759,16 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+        super.onCreateOptionsMenu(menu);
         MenuItem menuItem = menu.findItem(R.id.action_search);
         SearchView mSearchView = (SearchView) menuItem.getActionView();
-        mSearchView.setMaxWidth(Integer.MAX_VALUE);
-        mSearchView.setQueryHint(getResources().getString(R.string.actionbar_search));
         mSearchView.setOnQueryTextListener(this);
         menu.removeItem(menu.findItem(R.id.action_share_current_folder).getItemId());
 
+        Toolbar toolbar = findViewById(R.id.standard_toolbar);
+        if (getString(R.string.choose_upload_space) != toolbar.getTitle()) {
+            mSearchView.setQueryHint(getString(R.string.actionbar_search));
+        }
         return true;
     }
 

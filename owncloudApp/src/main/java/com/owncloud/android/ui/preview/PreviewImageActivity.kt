@@ -29,6 +29,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
@@ -389,6 +390,11 @@ class PreviewImageActivity : FileActivity(),
 
     private fun updateActionBarTitle(title: String) {
         supportActionBar?.title = title
+    }
+
+    // The main_menu won't be displayed
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        return false
     }
 
     companion object {

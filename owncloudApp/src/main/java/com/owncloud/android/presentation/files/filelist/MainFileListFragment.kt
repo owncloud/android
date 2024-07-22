@@ -203,9 +203,8 @@ class MainFileListFragment : Fragment(),
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         (menu.findItem(R.id.action_search).actionView as SearchView).run {
-            maxWidth = Int.MAX_VALUE
-            queryHint = resources.getString(R.string.actionbar_search)
             setOnQueryTextListener(this@MainFileListFragment)
+            queryHint = resources.getString(R.string.actionbar_search)
         }
         (menu.findItem(R.id.action_select_all)).setOnMenuItemClickListener {
             fileListAdapter.selectAll()
@@ -283,6 +282,13 @@ class MainFileListFragment : Fragment(),
 
         binding.fabMain.findViewById<AddFloatingActionButton>(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button).contentDescription =
             getString(R.string.content_description_add_new_content)
+
+        setTextHintRootToolbar()
+    }
+
+    private fun setTextHintRootToolbar() {
+        val searchViewRootToolbar = requireActivity().findViewById<SearchView>(R.id.root_toolbar_search_view)
+        searchViewRootToolbar.queryHint = getString(R.string.actionbar_search)
     }
 
     private fun setViewTypeSelector(additionalView: SortOptionsView.AdditionalView) {

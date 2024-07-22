@@ -328,13 +328,6 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
             val hasWritePermission: Boolean = safeFile.hasWritePermission
             menu.filterMenuOptions(menuOptions, hasWritePermission)
         }
-
-        // additional restrictions for this fragment
-        val item = menu.findItem(R.id.action_search)
-        if (item != null) {
-            item.isVisible = false
-            item.isEnabled = false
-        }
     }
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -407,6 +400,11 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
                 false
             }
         }
+    }
+
+    // The main_menu won't be displayed
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        return false
     }
 
     companion object {

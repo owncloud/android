@@ -29,7 +29,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.annotation.StringRes
-import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import com.owncloud.android.R
 import com.owncloud.android.databinding.FilesFolderPickerBinding
@@ -156,16 +155,9 @@ open class FolderPickerActivity : FileActivity(),
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        menu?.let {
-            val menuItem = it.findItem(R.id.action_search)
-            (menuItem.actionView as SearchView).apply {
-                maxWidth = Int.MAX_VALUE
-                queryHint = resources.getString(R.string.actionbar_search)
-            }
-            it.removeItem(it.findItem(R.id.action_share_current_folder)?.itemId ?: 0)
-        }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menu.removeItem(menu.findItem(R.id.action_share_current_folder)?.itemId ?: 0)
         return true
     }
 

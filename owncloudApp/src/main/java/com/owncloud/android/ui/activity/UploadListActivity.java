@@ -31,6 +31,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 
 import androidx.fragment.app.FragmentTransaction;
@@ -171,4 +172,9 @@ public class UploadListActivity extends FileActivity {
         }
     }
 
+    // The main_menu won't be displayed
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return false;
+    }
 }
