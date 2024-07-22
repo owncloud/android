@@ -26,8 +26,6 @@ import androidx.core.net.toUri
 import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
-import com.owncloud.android.workers.UploadFileFromContentUriWorker.Companion.KEY_PARAM_BEHAVIOR
 import com.owncloud.android.workers.UploadFileFromContentUriWorker.Companion.KEY_PARAM_CONTENT_URI
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
@@ -40,15 +38,13 @@ class RemoveLocalFileWorker(
     workerParameters
 ), KoinComponent {
 
-    private lateinit var behavior: UploadBehavior
     private lateinit var contentUri: Uri
 
     override suspend fun doWork(): Result {
         if (!areParametersValid()) return Result.failure()
         return try {
-            if (behavior == UploadBehavior.MOVE) {
-                removeLocalFile()
-            }
+            val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
+            documentFile?.delete()
             Result.success()
         } catch (throwable: Throwable) {
             Timber.e(throwable)
@@ -57,17 +53,10 @@ class RemoveLocalFileWorker(
     }
 
     private fun areParametersValid(): Boolean {
-        val paramBehavior = workerParameters.inputData.getString(KEY_PARAM_BEHAVIOR)
         val paramContentUri = workerParameters.inputData.getString(KEY_PARAM_CONTENT_URI)
 
         contentUri = paramContentUri?.toUri() ?: return false
-        behavior = paramBehavior?.let { UploadBehavior.fromString(it) } ?: return false
 
         return true
-    }
-
-    private fun removeLocalFile() {
-        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
-        documentFile?.delete()
     }
 }
