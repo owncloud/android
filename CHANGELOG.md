@@ -1,6 +1,7 @@
 # Table of Contents
 
 * [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
+* [Changelog for 4.3.1](#changelog-for-owncloud-android-client-431-2024-07-22)
 * [Changelog for 4.3.0](#changelog-for-owncloud-android-client-430-2024-07-01)
 * [Changelog for 4.2.2](#changelog-for-owncloud-android-client-422-2024-05-30)
 * [Changelog for 4.2.1](#changelog-for-owncloud-android-client-421-2024-02-22)
@@ -27,7 +28,7 @@
 The following sections list the changes in ownCloud Android Client unreleased relevant to
 ownCloud admins and users.
 
-[unreleased]: https://github.com/owncloud/android/compare/v4.3.0...master
+[unreleased]: https://github.com/owncloud/android/compare/v4.3.1...master
 
 ## Summary
 
@@ -42,6 +43,26 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4364
    https://github.com/owncloud/android/pull/4429
+
+# Changelog for ownCloud Android Client [4.3.1] (2024-07-22)
+
+The following sections list the changes in ownCloud Android Client 4.3.1 relevant to
+ownCloud admins and users.
+
+[4.3.1]: https://github.com/owncloud/android/compare/v4.3.0...v4.3.1
+
+## Summary
+
+* Change - Bump target SDK to 34: [#4434](https://github.com/owncloud/android/issues/4434)
+
+## Details
+
+* Change - Bump target SDK to 34: [#4434](https://github.com/owncloud/android/issues/4434)
+
+   Target SDK was upgraded to 34 in order to fulfill Android platform requirements.
+
+   https://github.com/owncloud/android/issues/4434
+   https://github.com/owncloud/android/pull/4440
 
 # Changelog for ownCloud Android Client [4.3.0] (2024-07-01)
 

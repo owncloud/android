@@ -18,7 +18,7 @@
   <string name="actionbar_descending">Descendente</string>
   <string name="actionbar_sort_title">Classificar por</string>
   <string name="fab_new_file">Novo documento</string>
-  <string name="fab_new_shortcut">Novo atalho</string>
+    <string name="fab_new_shortcut">Novo atalho</string>
   <string name="drawer_item_all_files">Todos os arquivos</string>
   <string name="drawer_item_only_available_offline">Disponível externamente</string>
   <string name="drawer_item_shared_by_link_files">Compartilhado por link</string>
@@ -670,8 +670,8 @@
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
   <string name="release_notes_4_3_0_title_accessibility_improvements">Melhorias na acessibilidade</string>
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Algumas melhorias para tornar o aplicativo mais acessível</string>
-  <string name="release_notes_bugfixes_title">Pequenas correções de bugs</string>
-  <string name="release_notes_bugfixes_subtitle">Alguns bugs foram corrigidos para melhorar a experiência no aplicativo</string>
+    <string name="release_notes_bugfixes_title">Pequenas correções de bugs</string>
+    <string name="release_notes_bugfixes_subtitle">Alguns bugs foram corrigidos para melhorar a experiência no aplicativo</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
@@ -712,7 +712,7 @@
   <string name="insecure_http_url_title_dialog">HTTP URL Inseguro</string>
   <string name="insecure_http_url_message_dialog">O URL fornecido usa HTTP em vez do protocolo HTTPS criptografado. Se você continuar, sua comunicação não será criptografada.</string>
   <string name="insecure_http_url_continue_button">Continuar</string>
-  <string name="clean_data_account_message">Todos os arquivos baixados que não estiverem disponíveis off-line serão limpos na conta %1$s</string>
+    <string name="clean_data_account_message">Todos os arquivos baixados que não estiverem disponíveis off-line serão limpos na conta %1$s</string>
   <string name="clean_data_account_title">Remover armazenamento local</string>
   <string name="clean_data_account_button_yes">Limpar dados</string>
   <string name="content_description_menu">Menu</string>
@@ -733,14 +733,14 @@
   <string name="content_description_edit_share">Editar compartilhamento</string>
   <string name="content_description_delete_share">Excluir compartilhamento</string>
   <string name="content_description_file_operations">%1$s operações</string>
-  <string name="create_shortcut_dialog_title">Crie um atalho</string>
+    <string name="create_shortcut_dialog_title">Crie um atalho</string>
   <string name="create_shortcut_dialog_url">URL</string>
-  <string name="create_shortcut_dialog_url_information">A URL deve começar com https:// ou http:// para que possa ser aberta no navegador</string>
-  <string name="create_shortcut_dialog_url_error_no_blanks">O URL não pode conter espaços em branco</string>
-  <string name="create_shortcut_dialog_url_extension">.url</string>
-  <string name="open_shortcut_description">Este atalho aponta para:</string>
+    <string name="create_shortcut_dialog_url_information">A URL deve começar com https:// ou http:// para que possa ser aberta no navegador</string>
+    <string name="create_shortcut_dialog_url_error_no_blanks">O URL não pode conter espaços em branco</string>
+    <string name="create_shortcut_dialog_url_extension">.url</string>
+    <string name="open_shortcut_description">Este atalho aponta para:</string>
   <string name="open_shortcut_title">Link aberto</string>
-  <string name="feedback_dialog_description">Melhore o aplicativo com seu feedback</string>
-  <string name="feedback_dialog_get_in_contact_title">Entre em contato</string>
-  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Peça ajuda em nosso <a href="%1$s"><b>forum</b></a>, <a href="%2$s"><b>Converse conosco</b></a> ou contribua em <a href="%3$s"><b>GitHub</b></a>]]></string>
+    <string name="feedback_dialog_description">Melhore o aplicativo com seu feedback</string>
+    <string name="feedback_dialog_get_in_contact_title">Entre em contato</string>
+    <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Peça ajuda em nosso <a href="%1$s"><b>forum</b></a>, <a href="%2$s"><b>Converse conosco</b></a> ou contribua em <a href="%3$s"><b>GitHub</b></a>]]></string>
 </resources>

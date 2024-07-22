@@ -1,0 +1,6 @@
+Change: Bump target SDK to 34
+
+Target SDK was upgraded to 34 in order to fulfill Android platform requirements.
+
+https://github.com/owncloud/android/issues/4434
+https://github.com/owncloud/android/pull/4440
