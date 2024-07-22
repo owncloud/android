@@ -20,7 +20,7 @@ assignees: ''
 
 
 Can this problem be reproduced with the official owncloud server?
-(url: https://demo.owncloud.org, user: test, password: test)
+(url: https://ocis.ocis.master.owncloud.works, user: einstein, password: relativity)
 
 
 ### Environment data
