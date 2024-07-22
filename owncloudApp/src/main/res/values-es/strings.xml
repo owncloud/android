@@ -319,6 +319,7 @@
   <string name="folder_already_exists_description">Ya existe una carpeta con el nombre %1$s.</string>
   <string name="sync_file_fail_msg">No se ha podido comprobar el fichero remoto</string>
   <string name="sync_file_nothing_to_do_msg">Ya está sincronizado</string>
+    <string name="sync_file_not_found_msg">Archivo no encontrado</string>
   <string name="new_remote_version_found_msg">Se ha encontrado una nueva versión en el servidor. Descargando...</string>
   <string name="download_enqueued_msg">Descarga encolada</string>
   <string name="upload_enqueued_msg">Subida encolada</string>
@@ -558,4 +559,10 @@
   <string name="prefs_delete_local_files_entries_never">Nunca</string>
   <string name="insecure_http_url_title_dialog">URL HTTP insegura</string>
   <string name="insecure_http_url_continue_button">Continuar</string>
+    <string name="content_description_menu">Menú</string>
+    <string name="content_description_manage_accounts">Gestionar cuentas</string>
+    <string name="content_description_search">Buscar</string>
+    <string name="content_description_remove_account">Eliminar cuenta</string>
+    <string name="create_shortcut_dialog_url">URL</string>
+    <string name="open_shortcut_title">Abrir enlace</string>
 </resources>
