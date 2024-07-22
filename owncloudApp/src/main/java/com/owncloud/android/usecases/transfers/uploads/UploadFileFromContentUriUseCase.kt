@@ -29,6 +29,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.workers.RemoveLocalFileWorker
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
 import timber.log.Timber
@@ -47,7 +48,6 @@ class UploadFileFromContentUriUseCase(
             UploadFileFromContentUriWorker.KEY_PARAM_UPLOAD_ID to params.uploadIdInStorageManager
         )
         val inputDataRemoveLocalFileWorker = workDataOf(
-            UploadFileFromContentUriWorker.KEY_PARAM_BEHAVIOR to params.behavior,
             UploadFileFromContentUriWorker.KEY_PARAM_CONTENT_URI to params.contentUri.toString(),
         )
 
@@ -64,13 +64,15 @@ class UploadFileFromContentUriUseCase(
             .addTag(params.uploadIdInStorageManager.toString())
             .build()
 
-        val removeLocalFileWorker = OneTimeWorkRequestBuilder<RemoveLocalFileWorker>()
-            .setInputData(inputDataRemoveLocalFileWorker)
-            .build()
-
-        workManager.beginWith(uploadFileFromContentUriWorker)
-            .then(removeLocalFileWorker) // File is already uploaded, so the original one can be removed if the behaviour is MOVE
-            .enqueue()
+        var workContinuation = workManager.beginWith(uploadFileFromContentUriWorker)
+        val behavior = UploadBehavior.fromString(params.behavior)
+        if (behavior == UploadBehavior.MOVE) {
+            val removeLocalFileWorker = OneTimeWorkRequestBuilder<RemoveLocalFileWorker>()
+                .setInputData(inputDataRemoveLocalFileWorker)
+                .build()
+            workContinuation = workContinuation.then(removeLocalFileWorker) // File is already uploaded, so the original one can be removed if the behaviour is MOVE
+        }
+        workContinuation.enqueue()
 
         Timber.i("Plain upload of ${params.contentUri.path} has been enqueued.")
     }
