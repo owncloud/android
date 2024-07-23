@@ -670,8 +670,8 @@
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
   <string name="release_notes_4_3_0_title_accessibility_improvements">Juurdepääsetavuse täiustused</string>
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Mõned täiustused, et teha rakendus paremini juurdepääsetavaks</string>
-    <string name="release_notes_bugfixes_title">Väiksemad veaparandused</string>
-    <string name="release_notes_bugfixes_subtitle">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
+  <string name="release_notes_bugfixes_title">Väiksemad veaparandused</string>
+  <string name="release_notes_bugfixes_subtitle">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -712,7 +712,7 @@
   <string name="insecure_http_url_title_dialog">Ebaturvaline HTTP URL</string>
   <string name="insecure_http_url_message_dialog">Sisestatud URL kasutab krüpteeritud HTTPS-protokolli asemel HTTP-protokolli. Jätkamisel ei ole teie ühendus krüpteeritud.</string>
   <string name="insecure_http_url_continue_button">Jätka</string>
-    <string name="clean_data_account_message">Kõik allalaetud failid, mis ei ole saadaval võrguühenduseta, kustutatakse kontolt %1$s</string>
+  <string name="clean_data_account_message">Kõik allalaetud failid, mis ei ole saadaval võrguühenduseta, kustutatakse kontolt %1$s</string>
   <string name="clean_data_account_title">Eemalda kohalik salvestusmaht</string>
   <string name="clean_data_account_button_yes">Puhasta andmed</string>
   <string name="content_description_menu">Menüü</string>
@@ -740,7 +740,7 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">See otsetee viitab:</string>
   <string name="open_shortcut_title">Ava link</string>
-    <string name="feedback_dialog_description">Aita rakendust parandada oma tagasisidega</string>
-    <string name="feedback_dialog_get_in_contact_title">Võta ühendust</string>
-    <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Küsi abi <a href="%1$s"><b>foorumist</b></a>, <a href="%2$s"><b>vestle meiega</b></a> või panusta <a href="%3$s"><b>GitHub\'is</b></a>]]></string>
+  <string name="feedback_dialog_description">Aita rakendust parandada oma tagasisidega</string>
+  <string name="feedback_dialog_get_in_contact_title">Võta ühendust</string>
+  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Küsi abi <a href="%1$s"><b>foorumist</b></a>, <a href="%2$s"><b>vestle meiega</b></a> või panusta <a href="%3$s"><b>GitHub\'is</b></a>]]></string>
 </resources>

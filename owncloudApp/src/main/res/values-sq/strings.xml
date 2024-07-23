@@ -668,8 +668,8 @@
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
   <string name="release_notes_4_3_0_title_accessibility_improvements">Përmirësime përdorimi nga persona me aftësi të kufizuara</string>
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Disa përmirësime për ta bërë aplikacionin më të lehtë për persona me aftësi të kufizuara</string>
-    <string name="release_notes_bugfixes_title">Ndreqje të metash të vockla</string>
-    <string name="release_notes_bugfixes_subtitle">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
+  <string name="release_notes_bugfixes_title">Ndreqje të metash të vockla</string>
+  <string name="release_notes_bugfixes_subtitle">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Hape në web</string>
   <string name="ic_action_open_with_web">Hape në %1$s (web)</string>
@@ -710,14 +710,14 @@
   <string name="insecure_http_url_title_dialog">URL HTTP jo e sigurt</string>
   <string name="insecure_http_url_message_dialog">URL-ja që dhatë përdor HTTP, në vend se protokollin e fshehtëzuar HTTPS. Nëse vazhdoni, komunikimi juaj s’do të jetë i fshehtëzuar.</string>
   <string name="insecure_http_url_continue_button">Vazhdo</string>
-    <string name="clean_data_account_message">Krejt kartelat e shkarkuara që s’janë të passhme jashtë interneti, do të spastrohen për llogarinë %1$s</string>
+  <string name="clean_data_account_message">Krejt kartelat e shkarkuara që s’janë të passhme jashtë interneti, do të spastrohen për llogarinë %1$s</string>
   <string name="clean_data_account_title">Hiq depozitë vendore</string>
   <string name="clean_data_account_button_yes">Pastro të dhëna</string>
   <string name="content_description_menu">Menu</string>
   <string name="content_description_manage_accounts">Administroni llogari</string>
   <string name="content_description_search">Kërko</string>
   <string name="content_description_type_view">Lloj pamjeje</string>
-    <string name="content_description_image_previewed">U parapa figura</string>
+  <string name="content_description_image_previewed">U parapa figura</string>
   <string name="content_description_add_public_link">Shtoni lidhje publike</string>
   <string name="content_description_get_private_link">Merrni lidhje private</string>
   <string name="content_description_get_public_link">Merrni lidhje publike</string>
@@ -738,7 +738,7 @@
   <string name="create_shortcut_dialog_url_extension">.url</string>
   <string name="open_shortcut_description">Kjo shkurtore shpie te:</string>
   <string name="open_shortcut_title">Hap lidhje</string>
-    <string name="feedback_dialog_description">Përmirësojeni aplikacionin duke dhënë përshtypjet tuaja</string>
-    <string name="feedback_dialog_get_in_contact_title">Lidhuni me ne</string>
-    <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë në <a href="%1$s"><b>forumin</b></a> tonë, <a href="%2$s"><b>bisedoni me ne</b></a>, ose kontribuoni në <a href="%3$s"><b>GitHub</b></a>]]></string>
+  <string name="feedback_dialog_description">Përmirësojeni aplikacionin duke dhënë përshtypjet tuaja</string>
+  <string name="feedback_dialog_get_in_contact_title">Lidhuni me ne</string>
+  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë në <a href="%1$s"><b>forumin</b></a> tonë, <a href="%2$s"><b>bisedoni me ne</b></a>, ose kontribuoni në <a href="%3$s"><b>GitHub</b></a>]]></string>
 </resources>
