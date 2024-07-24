@@ -64,15 +64,18 @@ class UploadFileFromContentUriUseCase(
             .addTag(params.uploadIdInStorageManager.toString())
             .build()
 
-        var workContinuation = workManager.beginWith(uploadFileFromContentUriWorker)
         val behavior = UploadBehavior.fromString(params.behavior)
         if (behavior == UploadBehavior.MOVE) {
             val removeLocalFileWorker = OneTimeWorkRequestBuilder<RemoveLocalFileWorker>()
                 .setInputData(inputDataRemoveLocalFileWorker)
                 .build()
-            workContinuation = workContinuation.then(removeLocalFileWorker) // File is already uploaded, so the original one can be removed if the behaviour is MOVE
+            workManager.beginWith(uploadFileFromContentUriWorker)
+                .then(removeLocalFileWorker) // File is already uploaded, so the original one can be removed if the behaviour is MOVE
+                .enqueue()
+        } else {
+            workManager.beginWith(uploadFileFromContentUriWorker)
+                .enqueue()
         }
-        workContinuation.enqueue()
 
         Timber.i("Plain upload of ${params.contentUri.path} has been enqueued.")
     }
