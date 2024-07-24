@@ -5,6 +5,7 @@
   <string name="global_date">Data</string>
   <string name="global_size">Tamanho</string>
   <string name="actionbar_search">Procurar no diretório atual</string>
+  <string name="actionbar_search_space">Espaços de pesquisa</string>
   <string name="actionbar_sync">Atualizar conta</string>
   <string name="actionbar_upload">Enviar</string>
   <string name="actionbar_upload_from_apps">Conteúdo de outros apps</string>

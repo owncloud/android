@@ -5,6 +5,7 @@
   <string name="global_date">Datë</string>
   <string name="global_size">Madhësi</string>
   <string name="actionbar_search">Kërko në këtë dosje</string>
+  <string name="actionbar_search_space">Kërko në hapësira</string>
   <string name="actionbar_sync">Fresko llogarinë</string>
   <string name="actionbar_upload">Ngarkoni</string>
   <string name="actionbar_upload_from_apps">Lëndë nga aplikacione të tjera</string>
