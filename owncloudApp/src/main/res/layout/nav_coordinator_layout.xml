@@ -48,6 +48,7 @@
         android:layout_gravity="bottom"
         android:background="@color/actionbar_start_color"
         android:visibility="visible"
+        android:theme="@style/focus_primary_color_style"
         app:itemIconTint="@color/primary_button_text_color"
         app:itemTextColor="@color/primary_button_text_color"
         app:labelVisibilityMode="auto"
