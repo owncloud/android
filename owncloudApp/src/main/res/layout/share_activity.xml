@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ownCloud Android client application
-  Copyright (C) 2020 ownCloud GmbH.
+  Copyright (C) 2024 ownCloud GmbH.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -23,7 +23,10 @@
     android:layout_height="match_parent"
     tools:context=".presentation.sharing.ShareActivity"
     android:filterTouchesWhenObscured="true"
+    android:orientation="vertical"
     >
+
+    <include layout="@layout/owncloud_toolbar" />
 
     <FrameLayout
         android:layout_width="match_parent"
