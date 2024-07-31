@@ -824,9 +824,16 @@ class MainFileListFragment : Fragment(),
             } else if (!currentFolder.hasAddSubdirectoriesPermission) {
                 binding.fabMkdir.isVisible = false
             }
+            registerFabMainListener()
             registerFabUploadListener()
             registerFabMkDirListener()
             registerFabNewShortcutListener()
+            binding.apply {
+                fabUpload.isFocusable = false
+                fabMkdir.isFocusable = false
+                fabNewfile.isFocusable = false
+                fabNewshortcut.isFocusable = false
+            }
         }
     }
 
@@ -842,6 +849,18 @@ class MainFileListFragment : Fragment(),
         binding.fabMain.isVisible = shouldBeShown
         binding.fabUpload.isVisible = shouldBeShown
         binding.fabMkdir.isVisible = shouldBeShown
+    }
+
+    private fun registerFabMainListener() {
+        binding.apply {
+            fabMain.findViewById<View>(R.id.fab_expand_menu_button).setOnClickListener {
+                fabMain.toggle()
+                fabUpload.isFocusable = isFabExpanded()
+                fabMkdir.isFocusable = isFabExpanded()
+                fabNewfile.isFocusable = isFabExpanded()
+                fabNewshortcut.isFocusable = isFabExpanded()
+            }
+        }
     }
 
     /**
@@ -887,7 +906,14 @@ class MainFileListFragment : Fragment(),
     }
 
     fun collapseFab() {
-        binding.fabMain.collapse()
+        binding.apply {
+            fabMain.collapse()
+            fabUpload.isFocusable = false
+            fabMkdir.isFocusable = false
+            fabNewfile.isFocusable = false
+            fabNewshortcut.isFocusable = false
+        }
+
     }
 
     fun isFabExpanded() = binding.fabMain.isExpanded
