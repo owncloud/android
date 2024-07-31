@@ -121,14 +121,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    style="?android:attr/borderlessButtonStyle"
+                    style="@style/custom_borderless_button"
                     android:text="@android:string/cancel" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/createButton"
                     android:enabled="false"
                     android:textColor="@color/grey"
-                    style="?android:attr/borderlessButtonStyle"
+                    style="@style/custom_borderless_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
