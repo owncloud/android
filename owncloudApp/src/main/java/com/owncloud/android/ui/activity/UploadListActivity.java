@@ -183,7 +183,10 @@ public class UploadListActivity extends FileActivity {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
             if (findViewById(R.id.owncloud_app_bar).hasFocus()) {
-                findViewById(R.id.left_fragment_container).requestFocus();
+                boolean nonEmptyView = findViewById(R.id.left_fragment_container).requestFocus();
+                if (!nonEmptyView) {
+                    findViewById(R.id.bottom_nav_view).requestFocus();
+                }
                 return true;
             }
         }
