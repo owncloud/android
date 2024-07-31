@@ -31,6 +31,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 
@@ -176,5 +177,16 @@ public class UploadListActivity extends FileActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            if (findViewById(R.id.owncloud_app_bar).hasFocus()) {
+                findViewById(R.id.left_fragment_container).requestFocus();
+                return true;
+            }
+        }
+        return super.onKeyUp(keyCode, event);
     }
 }

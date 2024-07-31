@@ -34,6 +34,7 @@ ownCloud admins and users.
 
 * Enhancement - Changed the color of some elements to improve accessibility: [#4364](https://github.com/owncloud/android/issues/4364)
 * Enhancement - Improved SearchView accessibility: [#4365](https://github.com/owncloud/android/issues/4365)
+* Enhancement - Hardware keyboard support: [#4438](https://github.com/owncloud/android/pull/4438)
 
 ## Details
 
@@ -54,6 +55,18 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4365
    https://github.com/owncloud/android/pull/4433
+
+* Enhancement - Hardware keyboard support: [#4438](https://github.com/owncloud/android/pull/4438)
+
+   Navigation via hardware keyboard has been improved so that now focus order has a
+   logical path, every element is reachable and there are no traps. These
+   improvements have been applied in main file list, spaces list, drawer menu,
+   share view and image preview.
+
+   https://github.com/owncloud/android/issues/4366
+   https://github.com/owncloud/android/issues/4367
+   https://github.com/owncloud/android/issues/4368
+   https://github.com/owncloud/android/pull/4438
 
 # Changelog for ownCloud Android Client [4.3.1] (2024-07-22)
 

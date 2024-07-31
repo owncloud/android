@@ -45,6 +45,8 @@
 
         <!-- style for search view -->
         <item name="searchViewStyle">@style/ownCloud.SearchView</item>
+
+        <item name="android:colorControlHighlight">@color/grey_focus</item>
     </style>
 
     <!-- Splash Screen -->
@@ -105,6 +107,7 @@
     <style name="ownCloud.Appbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorPrimary">@color/actionbar_start_color</item>
         <item name="toolbarNavigationButtonStyle">@style/Toolbar.Button.Navigation.Tinted</item>
+        <item name="android:colorControlHighlight">@color/focus_primary_color</item>
     </style>
 
     <style name="Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
@@ -137,6 +140,7 @@
         <item name="colorButtonNormal">@color/primary_button_background_color</item>
         <item name="colorAccent">@color/primary_button_background_color</item>
         <item name="android:textColor">@color/primary_button_text_color</item>
+        <item name="android:colorControlHighlight">@color/focus_primary_button_color</item>
     </style>
 
     <style name="Button.Borderless" parent="Widget.AppCompat.Button.Borderless">
@@ -303,4 +307,17 @@
     <style name="Theme.ownCloud.SortBottomSheetFragment.Item">
         <item name="android:textAppearance">@style/TextAppearance.OwnCloud.SortBottomSheetFragment.Item</item>
     </style>
+
+    <style name="focus_primary_color_style">
+        <item name="android:colorControlHighlight">@color/focus_primary_color</item>
+    </style>
+    <style name="focus_secondary_color_style">
+        <item name="android:colorControlHighlight">@color/grey</item>
+    </style>
+
+    <style name="custom_borderless_button" >
+        <item name="android:background">@drawable/abc_btn_borderless_material</item>
+        <item name="android:colorControlHighlight">@color/grey</item>
+    </style>
+
 </resources>

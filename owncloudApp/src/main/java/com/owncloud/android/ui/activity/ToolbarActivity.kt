@@ -159,6 +159,7 @@ abstract class ToolbarActivity : BaseActivity() {
             searchText.setHintTextColor(getColor(R.color.search_view_hint_text))
             closeButton.setColorFilter(getColor(R.color.white))
             background = getDrawable(R.drawable.rounded_search_view)
+            isFocusable = false
         }
         return true
     }

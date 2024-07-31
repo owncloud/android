@@ -1,0 +1,10 @@
+Enhancement: Hardware keyboard support
+
+Navigation via hardware keyboard has been improved so that now focus order has a logical path, every element
+is reachable and there are no traps. These improvements have been applied in main file list, spaces list,
+drawer menu, share view and image preview.
+
+https://github.com/owncloud/android/pull/4438
+https://github.com/owncloud/android/issues/4366
+https://github.com/owncloud/android/issues/4367
+https://github.com/owncloud/android/issues/4368
