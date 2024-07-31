@@ -25,7 +25,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/focus_secondary_color_style">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/spaces_list_item_card"
