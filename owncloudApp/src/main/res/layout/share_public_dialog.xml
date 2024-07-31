@@ -86,7 +86,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:padding="@dimen/standard_half_padding" />
+                    android:padding="@dimen/standard_half_padding"
+                    android:theme="@style/focus_secondary_color_style"/>
 
                 <TextView
                     android:id="@+id/shareViaLinkPasswordLabel"
@@ -126,7 +127,7 @@
                     android:text="@string/share_via_link_generate_password_button"
                     android:backgroundTint="@color/transparent"
                     android:textColor="@color/primary_button_background_color"
-                    style="?android:attr/borderlessButtonStyle"/>
+                    style="@style/custom_borderless_button"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/copyPasswordButton"
@@ -136,7 +137,7 @@
                     android:backgroundTint="@color/transparent"
                     android:textColor="@color/grey"
                     android:enabled="false"
-                    style="?android:attr/borderlessButtonStyle" />
+                    style="@style/custom_borderless_button" />
 
             </LinearLayout>
 
@@ -276,7 +277,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
                     android:checked="false"
-                    android:padding="@dimen/standard_half_padding" />
+                    android:padding="@dimen/standard_half_padding"
+                    android:theme="@style/focus_secondary_color_style"/>
 
                 <TextView
                     android:id="@+id/shareViaLinkExpirationLabel"
