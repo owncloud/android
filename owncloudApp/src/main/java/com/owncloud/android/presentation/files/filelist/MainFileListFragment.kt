@@ -1349,6 +1349,8 @@ class MainFileListFragment : Fragment(),
             setDrawerStatus(enabled = false)
             actionMode = mode
 
+            requireActivity().findViewById<View>(R.id.owncloud_app_bar).isFocusableInTouchMode = false
+
             val inflater = requireActivity().menuInflater
             inflater.inflate(R.menu.file_actions_menu, menu)
             this@MainFileListFragment.menu = menu
@@ -1420,6 +1422,8 @@ class MainFileListFragment : Fragment(),
         override fun onDestroyActionMode(mode: ActionMode?) {
             setDrawerStatus(enabled = true)
             actionMode = null
+
+            requireActivity().findViewById<View>(R.id.owncloud_app_bar).isFocusableInTouchMode = true
 
             // reset to previous color
             requireActivity().window.statusBarColor = statusBarColor!!
