@@ -123,6 +123,16 @@ class OCLocalTransferDataSourceTest {
     }
 
     @Test
+    fun `updateTransferSourcePath changes transfer source path correctly`() {
+
+        ocLocalTransferDataSource.updateTransferSourcePath(OC_TRANSFER.id!!, OC_TRANSFER.sourcePath!!)
+
+        verify(exactly = 1) {
+            transferDao.updateTransferSourcePath(OC_TRANSFER.id!!, OC_TRANSFER.sourcePath!!)
+        }
+    }
+
+    @Test
     fun `updateTransferStorageDirectoryInLocalPath changes directory correctly`() {
         val oldDirectory = "oldDirectory"
         val newDirectory = "newDirectory"
