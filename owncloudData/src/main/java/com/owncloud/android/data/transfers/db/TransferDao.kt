@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -55,6 +56,9 @@ interface TransferDao {
 
     @Query(UPDATE_TRANSFER_LOCAL_PATH_WITH_ID)
     fun updateTransferLocalPath(id: Long, localPath: String)
+
+    @Query(UPDATE_TRANSFER_SOURCE_PATH_WITH_ID)
+    fun updateTransferSourcePath(id: Long, sourcePath: String)
 
     @Query(UPDATE_TRANSFER_STORAGE_DIRECTORY)
     fun updateTransferStorageDirectoryInLocalPath(id: Long, oldDirectory: String, newDirectory: String)
@@ -111,7 +115,11 @@ interface TransferDao {
             SET localPath = :localPath
             WHERE id = :id
         """
-
+        private const val UPDATE_TRANSFER_SOURCE_PATH_WITH_ID = """
+            UPDATE $TRANSFERS_TABLE_NAME
+            SET sourcePath = :sourcePath
+            WHERE id = :id
+        """
         private const val UPDATE_TRANSFER_STORAGE_DIRECTORY = """
             UPDATE $TRANSFERS_TABLE_NAME
             SET localPath = `REPLACE`(localPath, :oldDirectory, :newDirectory)
