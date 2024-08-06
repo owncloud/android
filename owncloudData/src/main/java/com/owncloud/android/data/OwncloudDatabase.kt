@@ -79,6 +79,7 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
         AutoMigration(from = 39, to = 40, spec = AutoMigration39To40::class),
         AutoMigration(from = 40, to = 41),
         AutoMigration(from = 43, to = 44),
+        AutoMigration(from = 44, to = 45),
     ],
     version = ProviderMeta.DB_VERSION,
     exportSchema = true
