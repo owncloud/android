@@ -5,6 +5,7 @@
   <string name="global_date">Kuupäev</string>
   <string name="global_size">Suurus</string>
   <string name="actionbar_search">Otsi sellest kaustast</string>
+  <string name="actionbar_search_space">Otsi ruumidest</string>
   <string name="actionbar_sync">Värskenda kontot</string>
   <string name="actionbar_upload">Lae fail üles</string>
   <string name="actionbar_upload_from_apps">Sisu teistest rakendustest</string>
