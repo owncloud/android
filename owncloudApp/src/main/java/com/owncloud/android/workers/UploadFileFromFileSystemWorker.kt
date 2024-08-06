@@ -27,7 +27,6 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.owncloud.android.R
-import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
@@ -55,6 +54,7 @@ import com.owncloud.android.lib.resources.files.UploadFileFromFileSystemOperatio
 import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation
 import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation.Companion.CHUNK_SIZE
 import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
 import com.owncloud.android.utils.SecurityUtils
@@ -250,8 +250,8 @@ class UploadFileFromFileSystemWorker(
 
         val result = executeRemoteOperation { uploadFileOperation.execute(client) }
 
-        if (result == Unit && behavior == UploadBehavior.MOVE) {
-            removeLocalFile()
+        if (result == Unit) {
+            removeLocalFile() // Removed file from tmp folder
         }
     }
 
@@ -288,8 +288,8 @@ class UploadFileFromFileSystemWorker(
             fileLength = fileSize
         )
 
-        // Step 4: Remove local file after uploading
-        if (result == Unit && behavior == UploadBehavior.MOVE) {
+        // Step 4: Remove tmp file folder after uploading
+        if (result == Unit) {
             removeLocalFile()
         }
     }
