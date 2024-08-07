@@ -31,6 +31,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:labelFor="@+id/shareViaLinkNameValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/standard_half_padding"
@@ -91,6 +92,7 @@
 
                 <TextView
                     android:id="@+id/shareViaLinkPasswordLabel"
+                    android:labelFor="@+id/shareViaLinkPasswordSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -281,6 +283,7 @@
 
                 <TextView
                     android:id="@+id/shareViaLinkExpirationLabel"
+                    android:labelFor="@+id/shareViaLinkExpirationSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
