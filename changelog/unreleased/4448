@@ -1,0 +1,10 @@
+Enhancement: Improved accessibility of information and relationships
+
+Headings have been added to the following views: Share, Edit/Create Share Link, Standard Toolbar and Manage Accounts.
+The filename input field and the two switches are now linked to their labels.
+The 'contentDescription' attributes of the buttons in the Edit/Create Share Link view have also been updated.
+
+https://github.com/owncloud/android/issues/4362
+https://github.com/owncloud/android/issues/4363
+https://github.com/owncloud/android/issues/4371
+https://github.com/owncloud/android/pull/4448

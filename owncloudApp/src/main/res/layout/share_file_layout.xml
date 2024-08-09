@@ -105,7 +105,8 @@
                     android:text="@string/share_with_user_section_title"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:accessibilityHeading="true"/>
 
                 <ImageButton
                     android:id="@+id/addUserButton"
@@ -159,7 +160,8 @@
                     android:text="@string/share_via_link_section_title"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:accessibilityHeading="true"/>
 
                 <ImageButton
                     android:id="@+id/addPublicLinkButton"

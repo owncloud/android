@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/standard_half_padding"
         android:text="@string/share_via_link_create_title"
-        android:textAppearance="@android:style/TextAppearance.Material.DialogWindowTitle" />
+        android:textAppearance="@android:style/TextAppearance.Material.DialogWindowTitle"
+        android:accessibilityHeading="true"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,6 +31,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:labelFor="@+id/shareViaLinkNameValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/standard_half_padding"
@@ -90,6 +92,7 @@
 
                 <TextView
                     android:id="@+id/shareViaLinkPasswordLabel"
+                    android:labelFor="@+id/shareViaLinkPasswordSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -280,6 +283,7 @@
 
                 <TextView
                     android:id="@+id/shareViaLinkExpirationLabel"
+                    android:labelFor="@+id/shareViaLinkExpirationSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -354,7 +358,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:contentDescription="shareAddPublicLinkCancelButton"
+                        android:contentDescription="@string/share_cancel_public_link_button"
                         android:text="@string/share_cancel_public_link_button"
                         android:theme="@style/Button.Primary" />
 
@@ -364,7 +368,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:contentDescription="shareAddPublicLinkConfirmButton"
+                        android:contentDescription="@string/share_confirm_public_link_button"
                         android:text="@string/share_confirm_public_link_button"
                         android:theme="@style/Button.Primary" />
 
