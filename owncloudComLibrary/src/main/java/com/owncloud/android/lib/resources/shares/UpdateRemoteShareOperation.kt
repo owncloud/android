@@ -103,8 +103,6 @@ class UpdateRemoteShareOperation
      */
     var permissions: Int = DEFAULT_PERMISSION
 
-    var retrieveShareDetails = false // To retrieve more info about the just updated share
-
     private fun buildRequestUri(baseUri: Uri) =
         baseUri.buildUpon()
             .appendEncodedPath(OCS_ROUTE)
@@ -139,14 +137,8 @@ class UpdateRemoteShareOperation
         Timber.d("Successful response: $response")
         result.data = parseResponse(response!!)
         Timber.d("*** Retrieve the index of the new share completed ")
-        val emptyShare = result.data.shares.first()
 
-        return if (retrieveShareDetails) {
-            // retrieve more info - PUT only returns the index of the new share
-            GetRemoteShareOperation(emptyShare.id).execute(client)
-        } else {
-            result
-        }
+        return result
     }
 
     private fun createFormBodyBuilder(): FormBody.Builder {

@@ -1,0 +1,6 @@
+Bugfix: Shares in non-root are updated correctly
+
+The items of the "Share" view are updated instantly when create/edit a link or share with users or groups in a non-root file.
+
+https://github.com/owncloud/android/issues/4432
+https://github.com/owncloud/android/pull/4435
