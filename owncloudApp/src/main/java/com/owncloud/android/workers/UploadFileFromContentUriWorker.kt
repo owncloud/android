@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,7 +31,6 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.owncloud.android.R
-import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
@@ -57,6 +57,7 @@ import com.owncloud.android.lib.resources.files.UploadFileFromFileSystemOperatio
 import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation
 import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation.Companion.CHUNK_SIZE
 import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService
+import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
 import com.owncloud.android.utils.SecurityUtils
@@ -194,17 +195,8 @@ class UploadFileFromContentUriWorker(
         inputStream?.close()
         outputStream.close()
 
+        transferRepository.updateTransferSourcePath(uploadIdInStorageManager, contentUri.toString())
         transferRepository.updateTransferLocalPath(uploadIdInStorageManager, cachePath)
-
-        // File is already in cache, so the original one can be removed if the behaviour is MOVE
-        if (behavior == UploadBehavior.MOVE) {
-            removeLocalFile()
-        }
-    }
-
-    private fun removeLocalFile() {
-        val documentFile = DocumentFile.fromSingleUri(appContext, contentUri)
-        documentFile?.delete()
     }
 
     private fun getClientForThisUpload(): OwnCloudClient =

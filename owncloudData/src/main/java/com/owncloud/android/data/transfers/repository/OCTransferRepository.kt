@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -46,6 +47,10 @@ class OCTransferRepository(
 
     override fun updateTransferLocalPath(id: Long, localPath: String) {
         localTransferDataSource.updateTransferLocalPath(id = id, localPath = localPath)
+    }
+
+    override fun updateTransferSourcePath(id: Long, sourcePath: String) {
+        localTransferDataSource.updateTransferSourcePath(id = id, sourcePath = sourcePath)
     }
 
     override fun updateTransferWhenFinished(

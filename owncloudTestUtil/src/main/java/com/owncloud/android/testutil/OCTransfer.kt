@@ -34,5 +34,6 @@ val OC_TRANSFER = OCTransfer(
     status = TransferStatus.TRANSFER_IN_PROGRESS,
     localBehaviour = UploadBehavior.MOVE,
     forceOverwrite = true,
-    createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER
+    createdBy = UploadEnqueuedBy.ENQUEUED_BY_USER,
+    sourcePath = "/source/path",
 )
