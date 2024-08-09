@@ -33,6 +33,7 @@
                     android:src="@drawable/ic_cross_manage_accounts"
                     android:layout_marginVertical="13dp"
                     android:layout_marginStart="13dp"
+                    android:contentDescription="@string/drawer_close"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
