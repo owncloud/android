@@ -154,7 +154,10 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     is UIResult.Loading -> {
                         showLoadingDialog(R.string.common_loading)
                     }
-                    is UIResult.Success -> {}
+                    is UIResult.Success -> {
+                        // Needs to trigger refresh after creation because creation request returns wrong path resulting list not getting updated.
+                        shareViewModel.refreshSharesFromNetwork()
+                    }
                 }
             }
         )
