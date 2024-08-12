@@ -28,7 +28,7 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.owncloud.android.domain.BaseUseCase
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
-import com.owncloud.android.workers.RemoveLocalFileWorker
+import com.owncloud.android.workers.RemoveSourceFileWorker
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
 import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 import timber.log.Timber
@@ -46,7 +46,7 @@ class UploadFileFromSystemUseCase(
             UploadFileFromFileSystemWorker.KEY_PARAM_UPLOAD_PATH to params.uploadPath,
             UploadFileFromFileSystemWorker.KEY_PARAM_UPLOAD_ID to params.uploadIdInStorageManager
         )
-        val inputDataRemoveLocalFileWorker = workDataOf(
+        val inputDataRemoveSourceFileWorker = workDataOf(
             UploadFileFromContentUriWorker.KEY_PARAM_CONTENT_URI to params.sourcePath,
         )
 
@@ -63,11 +63,11 @@ class UploadFileFromSystemUseCase(
 
         val behavior = UploadBehavior.fromString(params.behavior)
         if (behavior == UploadBehavior.MOVE) {
-            val removeLocalFileWorker = OneTimeWorkRequestBuilder<RemoveLocalFileWorker>()
-                .setInputData(inputDataRemoveLocalFileWorker)
+            val removeSourceFileWorker = OneTimeWorkRequestBuilder<RemoveSourceFileWorker>()
+                .setInputData(inputDataRemoveSourceFileWorker)
                 .build()
             workManager.beginWith(uploadFileFromSystemWorker)
-                .then(removeLocalFileWorker) // File is already uploaded, so the original one can be removed if the behaviour is MOVE
+                .then(removeSourceFileWorker) // File is already uploaded, so the original one can be removed if the behaviour is MOVE
                 .enqueue()
         } else {
             workManager.enqueue(uploadFileFromSystemWorker)

@@ -30,7 +30,7 @@ import com.owncloud.android.workers.UploadFileFromContentUriWorker.Companion.KEY
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
-class RemoveLocalFileWorker(
+class RemoveSourceFileWorker(
     private val appContext: Context,
     private val workerParameters: WorkerParameters
 ) : CoroutineWorker(
