@@ -32,11 +32,33 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Shares in non-root are updated correctly: [#4432](https://github.com/owncloud/android/issues/4432)
+* Enhancement - Improved accessibility of information and relationships: [#4362](https://github.com/owncloud/android/issues/4362)
 * Enhancement - Changed the color of some elements to improve accessibility: [#4364](https://github.com/owncloud/android/issues/4364)
 * Enhancement - Improved SearchView accessibility: [#4365](https://github.com/owncloud/android/issues/4365)
 * Enhancement - Hardware keyboard support: [#4438](https://github.com/owncloud/android/pull/4438)
 
 ## Details
+
+* Bugfix - Shares in non-root are updated correctly: [#4432](https://github.com/owncloud/android/issues/4432)
+
+   The items of the "Share" view are updated instantly when create/edit a link or
+   share with users or groups in a non-root file.
+
+   https://github.com/owncloud/android/issues/4432
+   https://github.com/owncloud/android/pull/4435
+
+* Enhancement - Improved accessibility of information and relationships: [#4362](https://github.com/owncloud/android/issues/4362)
+
+   Headings have been added to the following views: Share, Edit/Create Share Link,
+   Standard Toolbar and Manage Accounts. The filename input field and the two
+   switches are now linked to their labels. The 'contentDescription' attributes of
+   the buttons in the Edit/Create Share Link view have also been updated.
+
+   https://github.com/owncloud/android/issues/4362
+   https://github.com/owncloud/android/issues/4363
+   https://github.com/owncloud/android/issues/4371
+   https://github.com/owncloud/android/pull/4448
 
 * Enhancement - Changed the color of some elements to improve accessibility: [#4364](https://github.com/owncloud/android/issues/4364)
 
