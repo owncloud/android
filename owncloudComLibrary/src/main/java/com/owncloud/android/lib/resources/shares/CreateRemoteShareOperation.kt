@@ -89,8 +89,6 @@ class CreateRemoteShareOperation(
 
     var expirationDateInMillis: Long = INIT_EXPIRATION_DATE_IN_MILLIS // Expiration date to set for the public link
 
-    var retrieveShareDetails = false // To retrieve more info about the just created share
-
     private fun buildRequestUri(baseUri: Uri) =
         baseUri.buildUpon()
             .appendEncodedPath(OCS_ROUTE)
@@ -125,14 +123,7 @@ class CreateRemoteShareOperation(
         result.data = parseResponse(response!!)
         Timber.d("*** Creating new remote share operation completed ")
 
-        val emptyShare = result.data.shares.first()
-
-        return if (retrieveShareDetails) {
-            // retrieve more info - PUT only returns the index of the new share
-            GetRemoteShareOperation(emptyShare.id).execute(client)
-        } else {
-            result
-        }
+        return result
     }
 
     private fun createFormBody(): FormBody {

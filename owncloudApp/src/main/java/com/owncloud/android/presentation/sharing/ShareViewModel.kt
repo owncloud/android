@@ -70,7 +70,7 @@ class ShareViewModel(
         refreshSharesFromNetwork()
     }
 
-    private fun refreshSharesFromNetwork() = runUseCaseWithResultAndUseCachedData(
+    fun refreshSharesFromNetwork() = runUseCaseWithResultAndUseCachedData(
         coroutineDispatcher = coroutineDispatcherProvider.io,
         cachedData = sharesLiveData.value,
         liveData = _shares,
