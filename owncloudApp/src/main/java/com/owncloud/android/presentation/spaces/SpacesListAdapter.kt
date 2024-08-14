@@ -3,8 +3,9 @@
  *
  * @author Juan Carlos Garrote Gascón
  * @author Manuel Plazas Palacio
+ * @author Aitor Balleteros Pavón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,6 +24,7 @@ package com.owncloud.android.presentation.spaces
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +33,7 @@ import coil.load
 import com.owncloud.android.R
 import com.owncloud.android.databinding.SpacesListItemBinding
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.extensions.setAccessibilityRole
 import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
 import com.owncloud.android.utils.PreferenceUtils
 
@@ -54,6 +57,7 @@ class SpacesListAdapter(
             spacesListItemCard.setOnClickListener {
                 listener.onItemClick(space)
             }
+            spacesListItemCard.setAccessibilityRole(className = Button::class.java)
 
             if (space.isPersonal) {
                 spacesListItemName.text = holder.itemView.context.getString(R.string.bottom_nav_personal)
