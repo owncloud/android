@@ -76,7 +76,7 @@ class DownloadFileWorker(
     private val workerParameters: WorkerParameters
 ) : CoroutineWorker(
     appContext,
-    workerParameters
+    workerParameters,
 ), KoinComponent, OnDatatransferProgressListener {
 
     private val getFileByIdUseCase: GetFileByIdUseCase by inject()
