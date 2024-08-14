@@ -280,8 +280,7 @@ class MainFileListFragment : Fragment(),
 
         showOrHideFab(requireArguments().getParcelable(ARG_FILE_LIST_OPTION)!!, requireArguments().getParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY)!!)
 
-        binding.fabMain.findViewById<AddFloatingActionButton>(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button).contentDescription =
-            getString(R.string.content_description_add_new_content)
+        setFabMainContentDescription()
 
         setTextHintRootToolbar()
     }
@@ -859,6 +858,11 @@ class MainFileListFragment : Fragment(),
                 fabMkdir.isFocusable = isFabExpanded()
                 fabNewfile.isFocusable = isFabExpanded()
                 fabNewshortcut.isFocusable = isFabExpanded()
+                if (fabMain.isExpanded) {
+                    binding.fabMain.findViewById<AddFloatingActionButton>(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button).contentDescription = getString(R.string.content_description_add_new_content_expanded)
+                } else {
+                    setFabMainContentDescription()
+                }
             }
         }
     }
@@ -917,6 +921,11 @@ class MainFileListFragment : Fragment(),
     }
 
     fun isFabExpanded() = binding.fabMain.isExpanded
+
+    fun setFabMainContentDescription() {
+        binding.fabMain.findViewById<AddFloatingActionButton>(com.getbase.floatingactionbutton.R.id.fab_expand_menu_button).contentDescription =
+            getString(R.string.content_description_add_new_content)
+    }
 
     private fun openBottomSheetToUploadFiles() {
         val uploadBottomSheet = layoutInflater.inflate(R.layout.upload_bottom_sheet_fragment, null)
