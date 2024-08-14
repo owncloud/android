@@ -59,6 +59,7 @@ import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.openPrivacyPolicy
 import com.owncloud.android.extensions.sendEmailOrOpenFeedbackDialogAction
+import com.owncloud.android.extensions.setAccessibilityRole
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.avatar.AvatarUtils
@@ -112,10 +113,12 @@ abstract class DrawerActivity : ToolbarActivity() {
                 getDrawerLinkIcon()?.apply {
                     isVisible = true
                     setOnClickListener { openDrawerLink() }
+                    setAccessibilityRole(roleDescription = context.getString(R.string.link_role_accessibility))
                 }
                 getDrawerLinkText()?.apply {
                     isVisible = true
                     setOnClickListener { openDrawerLink() }
+                    setAccessibilityRole(roleDescription = context.getString(R.string.link_role_accessibility))
                 }
             } else {
                 getDrawerLogo()?.setImageResource(R.drawable.drawer_logo)
@@ -189,6 +192,7 @@ abstract class DrawerActivity : ToolbarActivity() {
             }
             true
         }
+        setRolesAccessibilityToMenuItems()
     }
 
     fun setCheckedItemAtBottomBar(checkedMenuItem: Int) {
@@ -413,6 +417,19 @@ abstract class DrawerActivity : ToolbarActivity() {
                 mAccountWasSet = false
             }
         }, Handler(), false)
+    }
+
+    private fun setRolesAccessibilityToMenuItems() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val navViewMenu = getNavView()?.menu ?: return
+            val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
+            navViewMenu.apply {
+                findItem(R.id.nav_settings)?.contentDescription = getString(R.string.actionbar_settings) + roleAccessibilityDescription
+                findItem(R.id.drawer_menu_feedback)?.contentDescription = getString(R.string.drawer_feedback) + roleAccessibilityDescription
+                findItem(R.id.drawer_menu_help)?.contentDescription = getString(R.string.prefs_help) + roleAccessibilityDescription
+                findItem(R.id.drawer_menu_privacy_policy)?.contentDescription = getString(R.string.prefs_privacy_policy) + roleAccessibilityDescription
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
