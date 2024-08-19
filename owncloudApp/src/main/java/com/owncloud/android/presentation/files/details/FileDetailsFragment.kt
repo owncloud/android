@@ -26,10 +26,10 @@ import android.accounts.Account
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -219,10 +219,6 @@ class FileDetailsFragment : FileFragment() {
         fileDetailsViewModel.checkOnGoingTransfersWhenOpening()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.file_actions_menu, menu)
-    }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
@@ -241,6 +237,20 @@ class FileDetailsFragment : FileFragment() {
 
         val appRegistryProviders = fileDetailsViewModel.appRegistryMimeType.value?.appProviders
         openInWebProviders = addOpenInWebMenuOptions(menu, openInWebProviders, appRegistryProviders)
+
+        setRolesAccessibilityToMenuItems(menu)
+    }
+
+    private fun setRolesAccessibilityToMenuItems(menu: Menu) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
+            menu.findItem(R.id.action_rename_file).setContentDescription(
+                getString(R.string.common_rename) + roleAccessibilityDescription
+            )
+            menu.findItem(R.id.action_remove_file).setContentDescription(
+                getString(R.string.common_remove) + roleAccessibilityDescription
+            )
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

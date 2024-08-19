@@ -30,10 +30,10 @@ import android.accounts.Account
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -174,14 +174,6 @@ class PreviewImageFragment : FileFragment() {
     /**
      * {@inheritDoc}
      */
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.file_actions_menu, menu)
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         val safeFile = file
@@ -193,6 +185,16 @@ class PreviewImageFragment : FileFragment() {
         collectLatestLifecycleFlow(previewImageViewModel.menuOptions) { menuOptions ->
             val hasWritePermission = safeFile.hasWritePermission
             menu.filterMenuOptions(menuOptions, hasWritePermission)
+        }
+
+        setRolesAccessibilityToMenuItems(menu)
+    }
+
+    private fun setRolesAccessibilityToMenuItems(menu: Menu) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            menu.findItem(R.id.action_see_details).setContentDescription(
+                getString(R.string.actionbar_see_details) + getString(R.string.button_role_accessibility)
+            )
         }
     }
 
