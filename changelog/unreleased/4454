@@ -1,0 +1,6 @@
+Enhancement: Roles added to some elements to improve accessibility
+
+Roles have been added to specific elements within the following views: Toolbar, Spaces, Drawer Menu, Manage accounts and Floating Action Button.
+
+https://github.com/owncloud/android/issues/4373
+https://github.com/owncloud/android/pull/4454
