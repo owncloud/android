@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Aitor Ballesteros Pavón
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -28,6 +29,8 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.workers.RemoveSourceFileWorker
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
 import timber.log.Timber
 
@@ -36,13 +39,16 @@ class UploadFileFromContentUriUseCase(
 ) : BaseUseCase<Unit, UploadFileFromContentUriUseCase.Params>() {
 
     override fun run(params: Params) {
-        val inputData = workDataOf(
+        val inputDataUploadFileFromContentUriWorker = workDataOf(
             UploadFileFromContentUriWorker.KEY_PARAM_ACCOUNT_NAME to params.accountName,
             UploadFileFromContentUriWorker.KEY_PARAM_BEHAVIOR to params.behavior,
             UploadFileFromContentUriWorker.KEY_PARAM_CONTENT_URI to params.contentUri.toString(),
             UploadFileFromContentUriWorker.KEY_PARAM_LAST_MODIFIED to params.lastModifiedInSeconds,
             UploadFileFromContentUriWorker.KEY_PARAM_UPLOAD_PATH to params.uploadPath,
             UploadFileFromContentUriWorker.KEY_PARAM_UPLOAD_ID to params.uploadIdInStorageManager
+        )
+        val inputDataRemoveSourceFileWorker = workDataOf(
+            UploadFileFromContentUriWorker.KEY_PARAM_CONTENT_URI to params.contentUri.toString(),
         )
 
         val networkRequired = if (params.wifiOnly) NetworkType.UNMETERED else NetworkType.CONNECTED
@@ -52,13 +58,24 @@ class UploadFileFromContentUriUseCase(
             .build()
 
         val uploadFileFromContentUriWorker = OneTimeWorkRequestBuilder<UploadFileFromContentUriWorker>()
-            .setInputData(inputData)
+            .setInputData(inputDataUploadFileFromContentUriWorker)
             .setConstraints(constraints)
             .addTag(params.accountName)
             .addTag(params.uploadIdInStorageManager.toString())
             .build()
 
-        workManager.enqueue(uploadFileFromContentUriWorker)
+        val behavior = UploadBehavior.fromString(params.behavior)
+        if (behavior == UploadBehavior.MOVE) {
+            val removeSourceFileWorker = OneTimeWorkRequestBuilder<RemoveSourceFileWorker>()
+                .setInputData(inputDataRemoveSourceFileWorker)
+                .build()
+            workManager.beginWith(uploadFileFromContentUriWorker)
+                .then(removeSourceFileWorker) // File is already uploaded, so the original one can be removed if the behaviour is MOVE
+                .enqueue()
+        } else {
+            workManager.enqueue(uploadFileFromContentUriWorker)
+        }
+
         Timber.i("Plain upload of ${params.contentUri.path} has been enqueued.")
     }
 
