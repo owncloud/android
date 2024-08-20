@@ -9,8 +9,10 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  * @author David Crespo Ríos
+ * @author  Aitor Ballesteros Pavón
+ *
  * Copyright (C) 2011 Bartek Przybylski
- * Copyright (C) 2021 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -440,6 +442,22 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
             else -> {
                 return PasscodeAction.CHECK
             }
+        }
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+        return when (keyCode) {
+            KeyEvent.KEYCODE_TAB -> {
+                findViewById<View>(R.id.lock_time).requestFocus()
+                true
+            }
+            KeyEvent.KEYCODE_DPAD_DOWN -> {
+                if (!findViewById<View>(R.id.numberKeyboard).hasFocus()){
+                    findViewById<View>(R.id.numberKeyboard).requestFocus()
+                }
+                true
+            }
+            else -> super.onKeyUp(keyCode, event)
         }
     }
 
