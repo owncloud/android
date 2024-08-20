@@ -1,0 +1,6 @@
+Enhancement: Hardware keyboard support for passcode view
+
+Navigation via hardware keyboard has been added to the passcode view.
+
+https://github.com/owncloud/android/issues/4447
+https://github.com/owncloud/android/pull/4455
