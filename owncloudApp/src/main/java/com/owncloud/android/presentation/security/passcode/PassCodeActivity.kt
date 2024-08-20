@@ -120,6 +120,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
                 binding.explanation.visibility = View.INVISIBLE
                 supportActionBar?.setDisplayHomeAsUpEnabled(false) //Don´t show the back arrow
             }
+
             ACTION_CREATE -> { //Create a new password
                 if (confirmingPassCode) {
                     //the app was in the passcode confirmation
@@ -138,15 +139,18 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
                         intent.extras?.getBoolean(EXTRAS_MIGRATION) == true -> {
                             supportActionBar?.setDisplayHomeAsUpEnabled(false)
                         }
+
                         intent.extras?.getBoolean(EXTRAS_LOCK_ENFORCED) == true -> {
                             supportActionBar?.setDisplayHomeAsUpEnabled(false)
                         }
+
                         else -> {
                             supportActionBar?.setDisplayHomeAsUpEnabled(true)
                         }
                     }
                 }
             }
+
             ACTION_REMOVE -> { // Remove password
                 // pass code preference has just been disabled in Preferences;
                 // will confirm user knows pass code, then remove it
@@ -154,6 +158,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
                 binding.explanation.visibility = View.INVISIBLE
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
             }
+
             else -> {
                 throw IllegalArgumentException(R.string.illegal_argument_exception_message.toString() + " ")
             }
@@ -233,12 +238,14 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
                         else -> actionCheckError()
                     }
                 }
+
                 PasscodeAction.REMOVE -> {
                     when (status.type) {
                         PasscodeType.OK -> actionRemoveOk()
                         else -> actionRemoveError()
                     }
                 }
+
                 PasscodeAction.CREATE -> {
                     when (status.type) {
                         PasscodeType.NO_CONFIRM -> actionCreateNoConfirm()
@@ -423,6 +430,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
             BiometricStatus.ENABLED_BY_USER -> {
                 passCodeViewModel.setBiometricsState(enabled = true)
             }
+
             BiometricStatus.DISABLED_BY_USER -> {
                 passCodeViewModel.setBiometricsState(enabled = false)
             }
@@ -436,9 +444,11 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
             ACTION_REMOVE -> {
                 return PasscodeAction.REMOVE
             }
+
             ACTION_CREATE -> {
                 return PasscodeAction.CREATE
             }
+
             else -> {
                 return PasscodeAction.CHECK
             }
@@ -451,12 +461,14 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
                 findViewById<View>(R.id.lock_time).requestFocus()
                 true
             }
+
             KeyEvent.KEYCODE_DPAD_DOWN -> {
-                if (!findViewById<View>(R.id.numberKeyboard).hasFocus()){
+                if (!findViewById<View>(R.id.numberKeyboard).hasFocus()) {
                     findViewById<View>(R.id.numberKeyboard).requestFocus()
                 }
                 true
             }
+
             else -> super.onKeyUp(keyCode, event)
         }
     }
