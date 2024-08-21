@@ -46,6 +46,11 @@ class ReleaseNotesViewModel(
     companion object {
         val releaseNotesList = listOf(
             ReleaseNote(
+                title = R.string.release_notes_4_4_0_title_improved_from_original_folder_auto_upload,
+                subtitle = R.string.release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
+            ReleaseNote(
                 title = R.string.release_notes_4_3_0_title_accessibility_improvements,
                 subtitle = R.string.release_notes_4_3_0_subtitle_accessibility_improvements,
                 type = ReleaseNoteType.ENHANCEMENT
