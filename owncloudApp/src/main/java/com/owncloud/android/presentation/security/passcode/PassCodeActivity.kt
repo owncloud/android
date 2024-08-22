@@ -469,6 +469,23 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
                 true
             }
 
+            in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
+                val number = keyCode - KeyEvent.KEYCODE_0
+                passCodeViewModel.onNumberClicked(number)
+                true
+            }
+
+            KeyEvent.KEYCODE_DEL -> {
+                passCodeViewModel.onBackspaceClicked()
+                true
+            }
+
+            KeyEvent.KEYCODE_ESCAPE -> {
+                PassCodeManager.onActivityStopped(this)
+                super.onBackPressed()
+                true
+            }
+
             else -> super.onKeyUp(keyCode, event)
         }
     }
