@@ -99,10 +99,11 @@ class SortOptionsView @JvmOverloads constructor(
         ViewCompat.setAccessibilityDelegate(binding.sortTypeSelector, object : AccessibilityDelegateCompat() {
             override fun onInitializeAccessibilityNodeInfo(v: View, info: AccessibilityNodeInfoCompat) {
                 super.onInitializeAccessibilityNodeInfo(v, info)
+                val sortTitleText = binding.sortTypeTitle.text
                 if (sortOrderSelected == SORT_ORDER_ASCENDING) {
-                    binding.sortTypeTitle.contentDescription = context.getString(R.string.content_description_sort_by_name_ascending)
+                    binding.sortTypeTitle.contentDescription = context.getString(R.string.content_description_sort_by_name_ascending, sortTitleText)
                 } else {
-                    binding.sortTypeTitle.contentDescription = context.getString(R.string.content_description_sort_by_name_descending)
+                    binding.sortTypeTitle.contentDescription = context.getString(R.string.content_description_sort_by_name_descending, sortTitleText)
                 }
             }
         })

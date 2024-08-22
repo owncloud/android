@@ -806,8 +806,8 @@
     <string name="content_description_edit_share">Edit share</string>
     <string name="content_description_delete_share">Delete share</string>
     <string name="content_description_file_operations">%1$s operations</string>
-    <string name="content_description_sort_by_name_ascending">Sort by name ascending</string>
-    <string name="content_description_sort_by_name_descending">sort by name descending</string>
+    <string name="content_description_sort_by_name_ascending">Sort by %1$s ascending</string>
+    <string name="content_description_sort_by_name_descending">sort by %1$s descending</string>
 
     <string name="create_shortcut_dialog_title">Create a shortcut</string>
     <string name="create_shortcut_dialog_url">URL</string>
