@@ -49,14 +49,16 @@
             android:checkable="false"
             android:enabled="false"
             android:orderInCategory="200"
-            android:title="" />
+            android:title=""
+            android:visible="false"/>
 
         <item
             android:id="@+id/footer_spacer_2"
             android:checkable="false"
             android:enabled="false"
             android:orderInCategory="200"
-            android:title="" />
+            android:title=""
+            android:visible="false"/>
     </group>
 
 </menu>
