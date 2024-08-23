@@ -671,6 +671,8 @@
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
   <string name="release_notes_4_3_0_title_accessibility_improvements">Melhorias na acessibilidade</string>
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Algumas melhorias para tornar o aplicativo mais acessível</string>
+  <string name="release_notes_4_4_0_title_improved_from_original_folder_auto_upload">Envios automáticos mais consistentes</string>
+  <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">Adicionados alguns mecanismos de novas tentativas para melhorar a confiabilidade</string>
   <string name="release_notes_bugfixes_title">Pequenas correções de bugs</string>
   <string name="release_notes_bugfixes_subtitle">Alguns bugs foram corrigidos para melhorar a experiência no aplicativo</string>
   <!--Open in web-->

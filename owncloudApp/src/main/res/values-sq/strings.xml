@@ -669,6 +669,7 @@
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
   <string name="release_notes_4_3_0_title_accessibility_improvements">Përmirësime përdorimi nga persona me aftësi të kufizuara</string>
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Disa përmirësime për ta bërë aplikacionin më të lehtë për persona me aftësi të kufizuara</string>
+  <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">U shtuan disa mekanizma për përgjatë riprovash, për përmirësim të qëndrueshmërisë</string>
   <string name="release_notes_bugfixes_title">Ndreqje të metash të vockla</string>
   <string name="release_notes_bugfixes_subtitle">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
   <!--Open in web-->
