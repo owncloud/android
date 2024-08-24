@@ -671,6 +671,8 @@
   <string name="release_notes_icon">Release note icon</string>
   <string name="release_notes_4_3_0_title_accessibility_improvements">Improvements in accessibility</string>
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Some improvements to make the application more accessible</string>
+  <string name="release_notes_4_4_0_title_improved_from_original_folder_auto_upload">Auto uploads more consistent</string>
+  <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">Added some mechanisms over retries to improve reliability</string>
   <string name="release_notes_bugfixes_title">Minor bugfixes</string>
   <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
   <!--Open in web-->
