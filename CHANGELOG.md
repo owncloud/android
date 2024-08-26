@@ -38,6 +38,7 @@ ownCloud admins and users.
 * Enhancement - Changed the color of some elements to improve accessibility: [#4364](https://github.com/owncloud/android/issues/4364)
 * Enhancement - Improved SearchView accessibility: [#4365](https://github.com/owncloud/android/issues/4365)
 * Enhancement - Hardware keyboard support: [#4438](https://github.com/owncloud/android/pull/4438)
+* Enhancement - Hardware keyboard support for passcode view: [#4447](https://github.com/owncloud/android/issues/4447)
 
 ## Details
 
@@ -98,6 +99,13 @@ ownCloud admins and users.
    https://github.com/owncloud/android/issues/4367
    https://github.com/owncloud/android/issues/4368
    https://github.com/owncloud/android/pull/4438
+
+* Enhancement - Hardware keyboard support for passcode view: [#4447](https://github.com/owncloud/android/issues/4447)
+
+   Navigation via hardware keyboard has been added to the passcode view.
+
+   https://github.com/owncloud/android/issues/4447
+   https://github.com/owncloud/android/pull/4455
 
 # Changelog for ownCloud Android Client [4.3.1] (2024-07-22)
 
