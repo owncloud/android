@@ -671,6 +671,8 @@
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
   <string name="release_notes_4_3_0_title_accessibility_improvements">Juurdepääsetavuse täiustused</string>
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Mõned täiustused, et teha rakendus paremini juurdepääsetavaks</string>
+  <string name="release_notes_4_4_0_title_improved_from_original_folder_auto_upload">Automaatsed üleslaadimised on ühtlasemad</string>
+  <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">Lisatud mõned mehhanismid korduskatsete töökindluse parandamiseks</string>
   <string name="release_notes_bugfixes_title">Väiksemad veaparandused</string>
   <string name="release_notes_bugfixes_subtitle">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
   <!--Open in web-->
