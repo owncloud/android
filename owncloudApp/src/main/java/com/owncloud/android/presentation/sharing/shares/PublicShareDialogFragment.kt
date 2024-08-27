@@ -37,6 +37,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
@@ -55,6 +56,7 @@ import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.utils.Event.EventObserver
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.parseError
+import com.owncloud.android.extensions.setAccessibilityRole
 import com.owncloud.android.extensions.showMessageInSnackbar
 import com.owncloud.android.lib.resources.shares.RemoteShare
 import com.owncloud.android.lib.resources.status.OwnCloudVersion
@@ -122,6 +124,7 @@ class PublicShareDialogFragment : DialogFragment() {
     val expirationDateValueInMillis: Long
         get() {
             var publicLinkExpirationDateInMillis: Long = -1
+            binding.shareViaLinkExpirationValue.setAccessibilityRole(className = Button::class.java)
             val expirationDate = binding.shareViaLinkExpirationValue.text.toString()
             if (expirationDate.isNotEmpty()) {
                 try {

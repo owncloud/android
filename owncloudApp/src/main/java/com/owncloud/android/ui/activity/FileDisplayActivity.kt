@@ -557,7 +557,16 @@ class FileDisplayActivity : FileActivity(),
             menu.removeItem(shareFileMenuItem.itemId)
         }
 
+        setRolesAccessibilityToMenuItems()
+
         return true
+    }
+
+    private fun setRolesAccessibilityToMenuItems() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            selectAllMenuItem?.contentDescription =
+                getString(R.string.actionbar_select_all) + getString(R.string.button_role_accessibility)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -718,6 +727,7 @@ class FileDisplayActivity : FileActivity(),
         } else if (!isDrawerOpen() && isFabOpen) {
             // close fab
             mainFileListFragment?.collapseFab()
+            mainFileListFragment?.setFabMainContentDescription()
         } else {
             // Every single menu is collapsed. We can navigate up.
             if (secondFragment != null) {

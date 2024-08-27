@@ -37,6 +37,7 @@ ownCloud admins and users.
 * Enhancement - Improved accessibility of information and relationships: [#4362](https://github.com/owncloud/android/issues/4362)
 * Enhancement - Changed the color of some elements to improve accessibility: [#4364](https://github.com/owncloud/android/issues/4364)
 * Enhancement - Improved SearchView accessibility: [#4365](https://github.com/owncloud/android/issues/4365)
+* Enhancement - Roles added to some elements to improve accessibility: [#4373](https://github.com/owncloud/android/issues/4373)
 * Enhancement - Hardware keyboard support: [#4438](https://github.com/owncloud/android/pull/4438)
 * Enhancement - Hardware keyboard support for passcode view: [#4447](https://github.com/owncloud/android/issues/4447)
 
@@ -87,6 +88,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4365
    https://github.com/owncloud/android/pull/4433
+
+* Enhancement - Roles added to some elements to improve accessibility: [#4373](https://github.com/owncloud/android/issues/4373)
+
+   Roles have been added to specific elements within the following views: Toolbar,
+   Spaces, Drawer Menu, Manage accounts and Floating Action Button.
+
+   https://github.com/owncloud/android/issues/4373
+   https://github.com/owncloud/android/pull/4454
 
 * Enhancement - Hardware keyboard support: [#4438](https://github.com/owncloud/android/pull/4438)
 

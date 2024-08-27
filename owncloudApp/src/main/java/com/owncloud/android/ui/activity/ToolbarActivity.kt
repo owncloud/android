@@ -27,6 +27,7 @@ package com.owncloud.android.ui.activity
 import android.view.Menu
 import android.view.View
 import android.view.View.VISIBLE
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -36,6 +37,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.owncloud.android.R
+import com.owncloud.android.extensions.setAccessibilityRole
 import com.owncloud.android.presentation.accounts.ManageAccountsDialogFragment
 import com.owncloud.android.presentation.accounts.ManageAccountsDialogFragment.Companion.MANAGE_ACCOUNTS_DIALOG
 import com.owncloud.android.presentation.authentication.AccountUtils
@@ -93,6 +95,7 @@ abstract class ToolbarActivity : BaseActivity() {
                 toolbarTitle.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             }
         }
+        toolbarTitle.setAccessibilityRole(className = Button::class.java)
 
         searchView.apply {
             isVisible = false

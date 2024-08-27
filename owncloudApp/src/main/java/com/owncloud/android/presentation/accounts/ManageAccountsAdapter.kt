@@ -25,10 +25,12 @@ import android.accounts.Account
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AccountActionBinding
 import com.owncloud.android.databinding.AccountItemBinding
+import com.owncloud.android.extensions.setAccessibilityRole
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.authentication.AccountUtils
 import com.owncloud.android.presentation.avatar.AvatarUtils
@@ -46,6 +48,7 @@ class ManageAccountsAdapter(private val accountListener: AccountAdapterListener)
         return if (viewType == AccountManagementRecyclerItemViewType.ITEM_VIEW_ACCOUNT.ordinal) {
             val view = inflater.inflate(R.layout.account_item, parent, false)
             view.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(parent.context)
+            view.setAccessibilityRole(className = Button::class.java)
             AccountManagementViewHolder(view)
         } else {
             val view = inflater.inflate(R.layout.account_action, parent, false)
@@ -119,6 +122,7 @@ class ManageAccountsAdapter(private val accountListener: AccountAdapterListener)
             is NewAccountViewHolder -> {
                 holder.binding.icon.setImageResource(R.drawable.ic_account_plus)
                 holder.binding.name.setText(R.string.prefs_add_account)
+                holder.binding.name.setAccessibilityRole(className = Button::class.java)
 
                 // bind action listener
                 holder.binding.constraintLayoutAction.setOnClickListener {

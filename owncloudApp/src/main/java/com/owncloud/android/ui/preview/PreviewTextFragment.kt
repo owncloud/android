@@ -27,10 +27,10 @@ package com.owncloud.android.ui.preview
 
 import android.accounts.Account
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -208,10 +208,6 @@ class PreviewTextFragment : FileFragment() {
         // Nothing to do here, sync is not shown in previews
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.file_actions_menu, menu)
-    }
-
     override fun onPrepareOptionsMenu(menu: Menu) {
         mContainerActivity.storageManager?.let {
             val safeFile = file
@@ -229,6 +225,15 @@ class PreviewTextFragment : FileFragment() {
             isEnabled = false
         }
 
+        setRolesAccessibilityToMenuItems(menu)
+    }
+
+    private fun setRolesAccessibilityToMenuItems(menu: Menu) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            menu.findItem(R.id.action_see_details).setContentDescription(
+                getString(R.string.actionbar_see_details) + getString(R.string.button_role_accessibility)
+            )
+        }
     }
 
     private fun loadAndShowTextPreview() {
