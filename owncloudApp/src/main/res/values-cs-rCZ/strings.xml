@@ -593,4 +593,5 @@ správce systému.</string>
   <string name="content_description_delete_share">Zrušit sdílení</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Otevřít odkaz</string>
+  <string name="link_role_accessibility">Odkaz</string>
 </resources>

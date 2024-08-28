@@ -743,4 +743,5 @@
   <string name="feedback_dialog_description">Përmirësojeni aplikacionin duke dhënë përshtypjet tuaja</string>
   <string name="feedback_dialog_get_in_contact_title">Lidhuni me ne</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë në <a href="%1$s"><b>forumin</b></a> tonë, <a href="%2$s"><b>bisedoni me ne</b></a>, ose kontribuoni në <a href="%3$s"><b>GitHub</b></a>]]></string>
+  <string name="link_role_accessibility">Lidhje</string>
 </resources>

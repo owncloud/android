@@ -587,4 +587,5 @@ Téléchargez-le ici : %2$s</string>
   <string name="content_description_remove_account">Supprimer le compte</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Ouvrir le lien</string>
+  <string name="link_role_accessibility">Lien</string>
 </resources>
