@@ -744,4 +744,5 @@
   <string name="feedback_dialog_description">Paranna sovellusta palautteesi avulla</string>
   <string name="feedback_dialog_get_in_contact_title">Pidä yhteyttä</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kysy neuvoa <a href="%1$s"><b> foorumilla </b></a>, <a href="%2$s"><b> chattaa kanssamme </b></a> tai osallistu <a href="%3$s"><b> GitHub:ssa </b></a>]]></string>
+  <string name="link_role_accessibility">Linkki</string>
 </resources>

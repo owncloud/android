@@ -742,4 +742,5 @@
   <string name="feedback_dialog_description">당신의 피드백과 함께 앱이 성장합니다.</string>
   <string name="feedback_dialog_get_in_contact_title">연락하기</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ 우리 <a href="%1$s"><b>포럼</b></a>에서 도움을 요청하거나, <a href="%2$s"><b>우리와 채팅</b></a> 하거나, <a href="%3$s"><b>깃허브</b></a>에 기여해보세요.]]></string>
+  <string name="link_role_accessibility">링크</string>
 </resources>

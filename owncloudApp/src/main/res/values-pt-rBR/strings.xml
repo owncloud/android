@@ -746,4 +746,5 @@
   <string name="feedback_dialog_description">Melhore o aplicativo com seu feedback</string>
   <string name="feedback_dialog_get_in_contact_title">Entre em contato</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Peça ajuda em nosso <a href="%1$s"><b>forum</b></a>, <a href="%2$s"><b>Converse conosco</b></a> ou contribua em <a href="%3$s"><b>GitHub</b></a>]]></string>
+  <string name="link_role_accessibility">Linque</string>
 </resources>

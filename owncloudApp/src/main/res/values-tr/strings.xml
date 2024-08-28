@@ -570,4 +570,5 @@
   <string name="content_description_remove_account">Hesabı kaldır</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Bağlantıyı aç</string>
+  <string name="link_role_accessibility">Bağlantı</string>
 </resources>
