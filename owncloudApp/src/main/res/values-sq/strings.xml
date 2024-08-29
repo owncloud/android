@@ -727,12 +727,15 @@
   <string name="content_description_get_edit_public_link">Përpunoni lidhje publike</string>
   <string name="content_description_remove_account">Hiqe llogarinë</string>
   <string name="content_description_add_new_content">Shtoni lëndë të re</string>
+  <string name="content_description_add_new_content_expanded">Zgjerim i mekanizmit për shtim lënde të re</string>
   <string name="content_description_clean_account_storage">Pastro depozitë llogarie</string>
   <string name="content_description_logo">Stemë</string>
   <string name="content_description_add_share">Shtoni pjesë</string>
   <string name="content_description_edit_share">Përpunoni pjesë</string>
   <string name="content_description_delete_share">Fshini pjesë</string>
   <string name="content_description_file_operations">%1$s veprime</string>
+  <string name="content_description_sort_by_name_ascending">Renditi sipas %1$s në rend rritës</string>
+  <string name="content_description_sort_by_name_descending">renditur sipas %1$s në rend rritës</string>
   <string name="create_shortcut_dialog_title">Krijoni një shkurtore</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URL-ja duhet të fillojë me https:// ose http:// , që të mund të hapet në shfletues</string>
@@ -744,4 +747,5 @@
   <string name="feedback_dialog_get_in_contact_title">Lidhuni me ne</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë në <a href="%1$s"><b>forumin</b></a> tonë, <a href="%2$s"><b>bisedoni me ne</b></a>, ose kontribuoni në <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Lidhje</string>
+  <string name="button_role_accessibility">Buton</string>
 </resources>

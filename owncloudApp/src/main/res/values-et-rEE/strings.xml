@@ -730,12 +730,15 @@
   <string name="content_description_get_edit_public_link">Muuda avalik link</string>
   <string name="content_description_remove_account">Eemalda konto</string>
   <string name="content_description_add_new_content">Lisa uut sisu</string>
+  <string name="content_description_add_new_content_expanded">Uue sisu lisamine on laiendatud</string>
   <string name="content_description_clean_account_storage">Puhasta konto salvestusmaht</string>
   <string name="content_description_logo">Logo</string>
   <string name="content_description_add_share">Lisa jagamine</string>
   <string name="content_description_edit_share">Muuda jagamist</string>
   <string name="content_description_delete_share">Kustuta jagamine</string>
   <string name="content_description_file_operations">%1$s tegevus(t)</string>
+  <string name="content_description_sort_by_name_ascending">Sorteeri %1$s järgi tõusvalt</string>
+  <string name="content_description_sort_by_name_descending">Sorteeri %1$s järgi kahanevalt</string>
   <string name="create_shortcut_dialog_title">Loo otsetee</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">Brauseris avamiseks peab URL alguses olema kas http:// või https://</string>
@@ -747,4 +750,5 @@
   <string name="feedback_dialog_get_in_contact_title">Võta ühendust</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Küsi abi <a href="%1$s"><b>foorumist</b></a>, <a href="%2$s"><b>vestle meiega</b></a> või panusta <a href="%3$s"><b>GitHub\'is</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
+  <string name="button_role_accessibility">Nupp</string>
 </resources>
