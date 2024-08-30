@@ -5,6 +5,7 @@
   <string name="global_date">Datum</string>
   <string name="global_size">Größe</string>
   <string name="actionbar_search">Diesen Ordner durchsuchen</string>
+  <string name="actionbar_search_space">Suche in Spaces</string>
   <string name="actionbar_sync">Konto aktualisieren</string>
   <string name="actionbar_upload">Datei hochladen</string>
   <string name="actionbar_upload_from_apps">Inhalt von anderen Apps</string>
@@ -18,6 +19,7 @@
   <string name="actionbar_descending">Absteigend</string>
   <string name="actionbar_sort_title">Sortieren nach</string>
   <string name="fab_new_file">Neues Dokument</string>
+  <string name="fab_new_shortcut">Neue Verknüpfung</string>
   <string name="drawer_item_all_files">Alle Dateien</string>
   <string name="drawer_item_only_available_offline">Offline verfügbar</string>
   <string name="drawer_item_shared_by_link_files">Über einen Link geteilt</string>
@@ -123,6 +125,7 @@
   <string name="recommend_subject">Probiere %1$s auf Deinem Smartphone!</string>
   <string name="recommend_text">Kennst Du schon %1$s? Ich benutze die App um auch mobil Zugriff auf meinen eigenen Cloud-Server zu haben. \nHier kommst Du direkt zum Download: %2$s</string>
   <string name="error_reason">weil</string>
+  <string name="auth_failure_snackbar">Authentifizierung fehlgeschlagen. Melden Sie sich erneut an, um wieder Zugang zu erhalten.</string>
   <string name="server_not_supported">Ihre Serverversion ist niedriger als 10 und wird daher nicht unterstützt. Bitte aktualisiere den Server auf eine neuere Version.</string>
   <string name="auth_failure_snackbar_action">Konto ändern</string>
   <string name="auth_oauth_failure">Das Zugriffstoken ist abgelaufen oder ungültig geworden. Melden Sie sich erneut an, um wieder Zugriff zu erhalten.</string>
@@ -550,6 +553,7 @@
   <string name="share_via_link_expiration_date_label">Ablaufdatum</string>
   <string name="share_via_link_password_label">Kennwort</string>
   <string name="share_via_link_password_title">Gesichert</string>
+  <string name="share_via_link_generate_password_button">Erstelle</string>
   <string name="share_via_link_copy_password_button">Kopieren</string>
   <string name="share_via_link_edit_permission_read_only_label">Herunterladen / Ansehen</string>
   <string name="share_via_link_edit_permission_read_and_write_label">Herunterladen/Ansehen/Hochladen</string>
@@ -574,6 +578,7 @@
   <string name="action_upload_retry">Retry</string>
   <string name="action_upload_clear">Leeren</string>
   <string name="local_file_not_found_toast">Die Datei wurde im lokalen Dateisystem nicht gefunden</string>
+  <string name="confirmation_remove_files_alert">Wollen Sie wirklich diese %s Elemente löschen?</string>
   <string name="confirmation_remove_folders_alert">Möchtest du die ausgewählten Elemente und dessen Inhalt wirklich löschen?</string>
   <string name="failed_upload_quota_exceeded_text">Nicht genügend Speicherplatz im Konto verfügbar</string>
   <string name="auth_forbidden">Authentifizierung verweigert</string>
@@ -664,6 +669,10 @@
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
   <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
+  <string name="release_notes_4_3_0_title_accessibility_improvements">Verbesserung der Zugänglichkeit</string>
+  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Einige Verbesserungen, um die Anwendung besser zugänglich zu machen</string>
+  <string name="release_notes_4_4_0_title_improved_from_original_folder_auto_upload">Automatisches Hochladen ist konsistenter</string>
+  <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">Einige Mechanismen für Wiederholungen wurden hinzugefügt, dies verbessert die Zuverlässigkeit</string>
   <string name="release_notes_bugfixes_title">Geringfügige Fehler behoben</string>
   <string name="release_notes_bugfixes_subtitle">Einige Fehler wurden behoben, um die Benutzung der App zu verbessern.</string>
   <!--Open in web-->
@@ -704,12 +713,42 @@
   <string name="prefs_delete_local_files">Lokale Kopien löschen</string>
   <string name="prefs_delete_local_files_summary">Entfernen Sie automatisch heruntergeladene Dateien die offline nicht verfügbar sind, wenn die Zeit seit ihrer letzten Verwendung die ausgewählte Zeit überschreitet.\nGewählte Zeit: %1$s</string>
   <string name="insecure_http_url_title_dialog">Unsichere HTTP-URL</string>
+  <string name="insecure_http_url_message_dialog">Die von Ihnen angegebene URL verwendet HTTP und nicht das verschlüsselte HTTPS-Protokoll. Wenn Sie fortfahren, wird Ihre Kommunikation nicht verschlüsselt sein.</string>
   <string name="insecure_http_url_continue_button">Fortsetzen</string>
+  <string name="clean_data_account_message">Alle heruntergeladenen Dateien, die nicht offline verfügbar sind, werden für das Konto %1$s bereinigt.</string>
+  <string name="clean_data_account_title">Lokalen Speicher entfernen</string>
+  <string name="clean_data_account_button_yes">Daten bereinigen</string>
   <string name="content_description_menu">Menü</string>
   <string name="content_description_manage_accounts">Konten verwalten</string>
   <string name="content_description_search">Suche</string>
+  <string name="content_description_type_view">Art der Darstellung</string>
+  <string name="content_description_image_previewed">Vorschaubild angesehen</string>
+  <string name="content_description_add_public_link">Öffentlichen Link hinzufügen</string>
+  <string name="content_description_get_private_link">Privaten Link erhalten</string>
+  <string name="content_description_get_public_link">Öffentlichen Link erhalten</string>
+  <string name="content_description_delete_public_link">Öffentlichen Link löschen</string>
+  <string name="content_description_get_edit_public_link">Öffentlichen Link bearbeiten</string>
   <string name="content_description_remove_account">Benutzerkonto löschen</string>
+  <string name="content_description_add_new_content">Neuen Inhalt erstellen</string>
+  <string name="content_description_add_new_content_expanded">Neue Inhalte erweitert hinzufügen</string>
+  <string name="content_description_clean_account_storage">Benutzer Speicher bereinigen</string>
+  <string name="content_description_logo">Logo</string>
+  <string name="content_description_add_share">Teilen hinzufügen</string>
+  <string name="content_description_edit_share">Teilen bearbeiten</string>
+  <string name="content_description_delete_share">Teilen löschen</string>
+  <string name="content_description_file_operations">%1$s Operationen</string>
+  <string name="content_description_sort_by_name_ascending"> %1$s aufsteigend sortieren</string>
+  <string name="content_description_sort_by_name_descending"> %1$s absteigend sortieren</string>
+  <string name="create_shortcut_dialog_title">Verknüpfung erstellen</string>
   <string name="create_shortcut_dialog_url">URL</string>
+  <string name="create_shortcut_dialog_url_information">Die URL muss mit https:// oder http:// beginnen, damit sie im Browser geöffnet werden kann.</string>
+  <string name="create_shortcut_dialog_url_error_no_blanks">Die URL kann keine Leerzeichen enthalten</string>
+  <string name="create_shortcut_dialog_url_extension">.url</string>
+  <string name="open_shortcut_description">Diese Verknüpfung zeigt auf:</string>
   <string name="open_shortcut_title">Link öffnen</string>
+  <string name="feedback_dialog_description">Verbessern Sie die App durch Ihr Feedback</string>
+  <string name="feedback_dialog_get_in_contact_title">In Kontakt treten</string>
+  <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Fragen Sie nach Hilfe in unserem <a href="%1$s"><b>Forum</b></a>, <a href="%2$s"><b>chatten Sie mit uns</b></a> oder machen Sie einen Beitrag auf <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
+  <string name="button_role_accessibility">Schaltfläche</string>
 </resources>
