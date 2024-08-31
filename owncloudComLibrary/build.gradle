@@ -48,6 +48,10 @@ android {
         ignoreWarnings true
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
     testOptions {
         unitTests {
             includeAndroidResources = true
