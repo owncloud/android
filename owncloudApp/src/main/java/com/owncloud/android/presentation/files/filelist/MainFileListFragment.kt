@@ -33,6 +33,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -668,6 +669,9 @@ class MainFileListFragment : Fragment(),
                     fileActivity.dismissLoadingDialog()
                     showMessageInSnackbar(resources.getString(R.string.common_error_unknown))
                 }
+                else -> {
+
+                }
             }
         }
 
@@ -1086,6 +1090,7 @@ class MainFileListFragment : Fragment(),
     override fun onQueryTextSubmit(query: String?): Boolean = false
 
     override fun onQueryTextChange(newText: String?): Boolean {
+        Log.d("newTxtVal",""+newText)
         newText?.let { mainFileListViewModel.updateSearchFilter(it) }
         return true
     }

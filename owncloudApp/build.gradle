@@ -103,14 +103,15 @@ android {
         buildConfigField "String", commitSHA1, "\"" + getLatestGitHash() + "\""
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
+
 
     sourceSets {
         androidTest.java.srcDirs += "src/test-common/java"

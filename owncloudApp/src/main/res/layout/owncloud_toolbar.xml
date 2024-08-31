@@ -41,6 +41,7 @@
             android:id="@+id/root_toolbar_search_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/rounded_search_view"
             android:gravity="center_vertical"
             android:paddingHorizontal="@dimen/standard_half_padding"
             android:visibility="gone"
@@ -49,7 +50,6 @@
             app:layout_constraintStart_toEndOf="@id/root_toolbar_left_icon"
             app:layout_constraintTop_toTopOf="parent"
             app:queryHint="@string/actionbar_search"
-            android:background="@drawable/rounded_search_view"
             app:searchHintIcon="@null" />
 
         <androidx.appcompat.widget.AppCompatTextView
