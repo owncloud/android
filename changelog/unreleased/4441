@@ -1,0 +1,6 @@
+fix: List filtering not working after rotating device.
+
+Added a android:configChange tag in FileDisplayActivity activity under application tag in manifest file.
+
+https://github.com/owncloud/android/issues/4441
+https://github.com/owncloud/android/pull/4441
