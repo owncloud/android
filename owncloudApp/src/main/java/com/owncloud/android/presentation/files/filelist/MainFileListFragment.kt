@@ -1090,7 +1090,6 @@ class MainFileListFragment : Fragment(),
     override fun onQueryTextSubmit(query: String?): Boolean = false
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        Log.d("newTxtVal",""+newText)
         newText?.let { mainFileListViewModel.updateSearchFilter(it) }
         return true
     }
