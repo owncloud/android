@@ -89,6 +89,7 @@
   <string name="prefs_sync_calendar_contacts">Sincronice sus contactos, calendarios y tareas</string>
   <string name="prefs_sync_calendar_contacts_summary">Instalar DAVx⁵</string>
   <string name="prefs_access_document_provider">Acceso al proveedor de documentos</string>
+  <string name="prefs_access_document_provider_summary">Aplicación sugerida para explorar los archivos de su dispositivo mediante el explorador de archivos nativo de Android.</string>
   <string name="prefs_recommend">Recomendar a un amigo</string>
   <string name="prefs_feedback">Sugerencias</string>
   <string name="prefs_imprint">Imprimir</string>
@@ -106,7 +107,14 @@
   <string name="pattern_incorrect_pattern">Patrón incorrecto</string>
   <string name="pattern_reenter_pattern">Por favor, vuelva a introducir el patrón.</string>
   <string name="pattern_not_same_pattern">Los patrones no coinciden.</string>
+  <string name="pattern_error_set">Se ha producido un error al configurar el bloqueo de patrón.</string>
+  <string name="pattern_error_remove">Se ha producido un error al eliminar el bloqueo de patrón.</string>
+  <string name="pattern_already_set">Los bloqueos por patrón y por código de acceso no pueden activarse al mismo tiempo, desactive primero el bloqueo por patrón.</string>
+  <string name="passcode_already_set">Los bloqueos por patrón y por código de acceso no pueden activarse al mismo tiempo, desactive primero el código de acceso.</string>
+  <string name="pattern_no_longer_required">Ya no se pedirá el patrón.</string>
+  <string name="pattern_configure_your_pattern_explanation">El patrón se solicitará cada vez que se inicie la aplicación.</string>
   <string name="document_provider_locked">Bloqueado</string>
+  <string name="illegal_argument_exception_message">Se necesita una ACCIÓN válida en el intento pasado a</string>
   <!--Bottom navigation bar-->
   <string name="bottom_nav_files">Archivos</string>
   <string name="bottom_nav_personal">Personal</string>
