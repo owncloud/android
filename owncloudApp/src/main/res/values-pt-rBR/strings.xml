@@ -730,12 +730,15 @@
   <string name="content_description_get_edit_public_link">Editar link público</string>
   <string name="content_description_remove_account">Remover conta</string>
   <string name="content_description_add_new_content">Adicione novo conteúdo</string>
+  <string name="content_description_add_new_content_expanded">Adicionar novo conteúdo expandido</string>
   <string name="content_description_clean_account_storage">Limpe o armazenamento da conta</string>
   <string name="content_description_logo">Logo</string>
   <string name="content_description_add_share">Adicionar compartilhamento</string>
   <string name="content_description_edit_share">Editar compartilhamento</string>
   <string name="content_description_delete_share">Excluir compartilhamento</string>
   <string name="content_description_file_operations">%1$s operações</string>
+  <string name="content_description_sort_by_name_ascending">Classificar por %1$s crescente</string>
+  <string name="content_description_sort_by_name_descending">classificar por %1$s decrescente</string>
   <string name="create_shortcut_dialog_title">Crie um atalho</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">A URL deve começar com https:// ou http:// para que possa ser aberta no navegador</string>
@@ -747,4 +750,5 @@
   <string name="feedback_dialog_get_in_contact_title">Entre em contato</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Peça ajuda em nosso <a href="%1$s"><b>forum</b></a>, <a href="%2$s"><b>Converse conosco</b></a> ou contribua em <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Linque</string>
+  <string name="button_role_accessibility">Botão</string>
 </resources>
