@@ -1,0 +1,6 @@
+Bugfix: The color of some elements is set up correctly
+
+The colors of the Manage Accounts header and status bar have been changed to be consistent with the branding colors.
+
+https://github.com/owncloud/android/issues/4442
+https://github.com/owncloud/android/pull/4463
