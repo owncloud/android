@@ -125,6 +125,7 @@
   <string name="recommend_subject">¡Prueba  %1$s en su smarthphone!</string>
   <string name="recommend_text">¡Quiero invitarle a usar %1$s en su smartphone!\nDescárguelo aquí: %2$s</string>
   <string name="error_reason">debido a </string>
+  <string name="auth_failure_snackbar">Falló la autenticación. Conecte de nuevo para volver a tener acceso.</string>
   <string name="auth_failure_snackbar_action">Cambiar cuenta</string>
   <string name="auth_oauth_failure_snackbar_action">Registrarse</string>
   <string name="auth_check_server">Verificar servidor</string>
@@ -157,6 +158,7 @@
   <string name="file_list_empty_subtitle_all_files">¡Suba algún contenido o sincronice con sus dispositivos!</string>
   <string name="shares_list_empty_title">Sin acciones</string>
   <string name="spaces_list_empty_subtitle">¡No tienes acceso a ningún espacio!</string>
+  <string name="file_list_empty_subtitle_shared_by_links">Los ficheros y las carpetas que usted compartió serán mostrados aquí.</string>
   <string name="file_list_loading">Cargando...</string>
   <string name="file_list_no_app_for_file_type">No se han encontrado apps para ese tipo de archivos</string>
   <string name="file_list_no_app_for_perform_action">No se encuentra aplicación para esta acción</string>
@@ -215,6 +217,8 @@
   <string name="uploader_upload_text_dialog_filename_error_empty">El nombre del archivo no debe estar vacio</string>
   <string name="uploader_upload_text_filename_hint">Nombre de fichero</string>
   <string name="uploader_upload_camera_upload_files">Subiendo archivos de la cámara</string>
+  <string name="uploader_upload_picture_upload_files">%d nuevas imágenes serán subidas.</string>
+  <string name="uploader_upload_video_upload_files">%d nuevos vídeos serán subidos.</string>
   <string name="uploader_upload_camera_upload_source_path_error">La subida de cámara falló.</string>
   <string name="uploader_upload_available_offline_files">Subiendo archivos disponible sin conexión</string>
   <string name="uploader_upload_requested_from_wifi_files">Subiendo archivos solicitados desde el wifi</string>
@@ -259,6 +263,7 @@
   <string name="downloader_download_forbidden_permissions">Para descargar este archivo</string>
   <string name="common_choose_account">Elija una cuenta</string>
   <string name="sync_fail_ticker">Sincronización fallida</string>
+  <string name="sync_fail_content">La sincronización de %1$s no se pudo completar.</string>
   <string name="sync_fail_content_unauthorized">Contraseña no válida para %1$s</string>
   <string name="sync_conflicts_in_favourites_ticker">Se encontraron conflictos</string>
   <string name="sync_conflicts_in_favourites_content">Falló la sincronización de contenidos de %1$d ficheros</string>
