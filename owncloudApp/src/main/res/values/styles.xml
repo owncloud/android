@@ -37,7 +37,7 @@
 
         <!-- colors, Material Design way -->
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorPrimaryDark">@color/actionbar_start_color</item>
         <item name="colorAccent">@color/color_accent</item>
 
         <!-- default theme for alert dialogs -->

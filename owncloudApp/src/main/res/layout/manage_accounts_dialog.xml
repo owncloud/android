@@ -24,7 +24,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/primary">
+                android:background="@color/actionbar_start_color">
 
                 <ImageView
                     android:id="@+id/cross"
