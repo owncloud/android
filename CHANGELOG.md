@@ -33,6 +33,7 @@ ownCloud admins and users.
 ## Summary
 
 * Bugfix - Shares in non-root are updated correctly: [#4432](https://github.com/owncloud/android/issues/4432)
+* Bugfix - The color of some elements is set up correctly: [#4442](https://github.com/owncloud/android/issues/4442)
 * Enhancement - Improved "Remove from original folder" option in auto-upload: [#4357](https://github.com/owncloud/android/issues/4357)
 * Enhancement - Improved accessibility of information and relationships: [#4362](https://github.com/owncloud/android/issues/4362)
 * Enhancement - Changed the color of some elements to improve accessibility: [#4364](https://github.com/owncloud/android/issues/4364)
@@ -50,6 +51,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4432
    https://github.com/owncloud/android/pull/4435
+
+* Bugfix - The color of some elements is set up correctly: [#4442](https://github.com/owncloud/android/issues/4442)
+
+   The colors of the Manage Accounts header and status bar have been changed to be
+   consistent with the branding colors.
+
+   https://github.com/owncloud/android/issues/4442
+   https://github.com/owncloud/android/pull/4463
 
 * Enhancement - Improved "Remove from original folder" option in auto-upload: [#4357](https://github.com/owncloud/android/issues/4357)
 
