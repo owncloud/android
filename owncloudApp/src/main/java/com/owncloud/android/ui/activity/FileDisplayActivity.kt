@@ -564,8 +564,7 @@ class FileDisplayActivity : FileActivity(),
 
     private fun setRolesAccessibilityToMenuItems() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            selectAllMenuItem?.contentDescription =
-                getString(R.string.actionbar_select_all) + getString(R.string.button_role_accessibility)
+            selectAllMenuItem?.contentDescription = "${getString(R.string.actionbar_select_all)} ${getString(R.string.button_role_accessibility)}"
         }
     }
 

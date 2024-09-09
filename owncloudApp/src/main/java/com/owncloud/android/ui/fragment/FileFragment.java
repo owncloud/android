@@ -159,22 +159,10 @@ public abstract class FileFragment extends Fragment {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String roleAccessibilityDescription = getString(R.string.button_role_accessibility);
-
-            menu.findItem(R.id.action_open_file_with).setContentDescription(
-                    getString(R.string.actionbar_open_with) + roleAccessibilityDescription
-            );
-
-            menu.findItem(R.id.action_send_file).setContentDescription(
-                    getString(R.string.actionbar_send_file) + roleAccessibilityDescription
-            );
-
-            menu.findItem(R.id.action_set_available_offline).setContentDescription(
-                    getString(R.string.set_available_offline) + roleAccessibilityDescription
-            );
-
-            menu.findItem(R.id.action_unset_available_offline).setContentDescription(
-                    getString(R.string.set_available_offline) + roleAccessibilityDescription
-            );
+            menu.findItem(R.id.action_open_file_with).setContentDescription(getString(R.string.actionbar_open_with) + " " + roleAccessibilityDescription);
+            menu.findItem(R.id.action_send_file).setContentDescription(getString(R.string.actionbar_send_file) + " " + roleAccessibilityDescription);
+            menu.findItem(R.id.action_set_available_offline).setContentDescription(getString(R.string.set_available_offline) + " " + roleAccessibilityDescription);
+            menu.findItem(R.id.action_unset_available_offline).setContentDescription(getString(R.string.set_available_offline) + " " + roleAccessibilityDescription);
         }
     }
 }
