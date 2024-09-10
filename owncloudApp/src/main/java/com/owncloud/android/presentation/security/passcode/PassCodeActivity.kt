@@ -194,7 +194,24 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
     private fun setTextListeners() {
         val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
         for (i in 0 until numberOfPasscodeDigits) {
-            passCodeEditTexts[i]?.setOnClickListener { hideSoftKeyboard() }
+
+            passCodeEditTexts[i]?.apply {
+                hideSoftKeyboard()
+
+                setOnKeyListener { v, keyCode, event ->
+                    if (keyCode == KeyEvent.KEYCODE_TAB && event.action == KeyEvent.ACTION_DOWN) {
+                        val focusDirection = if (passCodeEditTexts.indexOf(v) == 0) {
+                            View.FOCUS_DOWN
+                        } else {
+                            View.FOCUS_LEFT
+                        }
+                        v.focusSearch(focusDirection)?.requestFocus()
+                        true
+                    } else {
+                        false
+                    }
+                }
+            }
             passCodeEditTexts[i]?.onFocusChangeListener = OnFocusChangeListener { _: View, _: Boolean ->
                 // Return the focus to the first EditText without number
                 for (j in 0 until i) {
@@ -457,17 +474,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         return when (keyCode) {
-            KeyEvent.KEYCODE_TAB -> {
-                findViewById<View>(R.id.lock_time).requestFocus()
-                true
-            }
-
-            KeyEvent.KEYCODE_DPAD_DOWN -> {
-                if (!findViewById<View>(R.id.numberKeyboard).hasFocus()) {
-                    findViewById<View>(R.id.numberKeyboard).requestFocus()
-                }
-                true
-            }
 
             in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
                 val number = keyCode - KeyEvent.KEYCODE_0
