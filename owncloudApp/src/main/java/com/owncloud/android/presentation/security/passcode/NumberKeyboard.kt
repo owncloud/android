@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David Crespo Ríos
- * Copyright (C) 2022 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -69,6 +71,12 @@ class NumberKeyboard(context: Context, attrs: AttributeSet) : ConstraintLayout(c
         backspaceBtn = view.findViewById(R.id.backspaceBtn)
         // Set listeners
         setupListeners()
+    }
+
+    fun setFocusOnKey(number: Int) {
+        if (number in 0..9) {
+            numericKeys[number].requestFocus()
+        }
     }
 
     /**
