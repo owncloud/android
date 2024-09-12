@@ -478,6 +478,7 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
             in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
                 val number = keyCode - KeyEvent.KEYCODE_0
                 passCodeViewModel.onNumberClicked(number)
+                binding.numberKeyboard.setFocusOnKey(number)
                 true
             }
 
