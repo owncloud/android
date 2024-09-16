@@ -5,7 +5,6 @@
     <string name="global_name">Name</string>
     <string name="global_date">Date</string>
     <string name="global_size">Size</string>
-
     <string name="actionbar_search">Search this folder</string>
     <string name="actionbar_search_space">Search spaces</string>
     <string name="actionbar_sync">Refresh account</string>
@@ -733,6 +732,9 @@
     <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">Added some mechanisms over retries to improve reliability</string>
     <string name="release_notes_bugfixes_title">Minor bugfixes</string>
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
+
+    <string name="release_notes_4_4_6_4_bugfixes_title">Handling Device Rotation to Retain List Filtering</string>
+    <string name="release_notes_4_4_6_4_bugfixes_subtitle">Configuration changes have been handled when rotating the device so that list filtering works.</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
