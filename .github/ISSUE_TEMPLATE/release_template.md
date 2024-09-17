@@ -8,41 +8,41 @@ assignees: ''
 
 <!--
 Another release for the ownCloud Android client!
-For Open releases, keep the Open Release template and remove the OEM and Patch Release ones
-For Patch releases, keep the Patch Release template and remove the Open and OEM Release ones
-For OEM releases, keep the OEM Release template and remove the Open and Patch Release ones
+For Open releases, keep the Open release template and remove the Patch and Enterprise release ones
+For Patch releases, keep the Patch release template and remove the Open and Enterprise release ones
+For Enterprise releases, keep the Enterprise release template and remove the Open and Patch release ones
+If you don't need some of the steps, cross them by removing the "[ ]" and surrounding the line by "~~ ~~", like "- ~~Non-applicable step~~"
 -->
 
-## Open Release
+## Open release
 
 ### TASKS:
 
- - [ ] [DOC] Ping in #android-dev-internal about the new release (@mmattel)
- - [ ] [GIT] Create branch `release/M.m.p` in owncloud/android from master
+ - [ ] [COM] Ping in #android-dev-internal about the new release (@mmattel)
+ - [ ] [GIT] Create branch `release/M.m.p` in owncloud/android from `master`
  - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
- - [ ] [DEV] Update [SBOM](https://cloud.owncloud.com/f/6072870)
- - [ ] [DIS] Create a folder for the new version like `M.m.p_YYYY-MM-DD` inside the `changelog` folder
- - [ ] [DIS] Move all changelog files from the `unreleased` folder to the new version folder
- - [ ] [DEV] Check release notes in `ReleaseNotesViewModel.kt` to assure nothing important is missing there
- - [ ] [DIS] Prepare post in central.owncloud.org ([`Category:News + Tag:android`](https://central.owncloud.org/tags/c/news/5/android))
- - [ ] [DIS] Check for new screenshots in Play Store / GitHub repo and generate them
- - [ ] [DIS] Generate final bundle from last commit in owncloud/android
- - [ ] [QA] Design Test plan
- - [ ] [DEV] Code Review
- - [ ] [QA] Regression Test execution
- - [ ] [QA] QA Approval
- - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
- - [ ] [DOC] Ping in #android-dev-internal that we are close to sign the new tags (@mmattel)
- - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
- - [ ] [DIS] Update screenshots and check they are OK in Play Store and in `README.md` (if needed)
+ - [ ] [DOC] Update [SBOM](https://infinite.owncloud.com/f/31e6d44f-f373-557c-9ab3-1748fc0c650d$4994cd9c-1c17-4254-829a-f5ef6e1ff7e3%215080be84-fbcc-4aca-956e-b278a7090418)
+ - [ ] [DIS] Move Calens files from `unreleased` to a new folder like `M.m.p_YYYY-MM-DD` inside the `changelog` folder
+ - [ ] [DEV] Check and reorder release notes in `ReleaseNotesViewModel.kt` to assure nothing important is missing there
+ - [ ] [DEV] Code review
+ - [ ] [DIS] Generate final bundle and APK from last commit in release branch
+ - [ ] [COM] Prepare post in central.owncloud.org ([Category:News + Tag:android](https://central.owncloud.org/tags/c/news/5/android))
+ - [ ] [DIS] Check for new screenshots in Play Store/GitHub/F-Droid and generate them
+ - [ ] [QA] Design test plan
+ - [ ] [QA] Regression test execution
+ - [ ] [QA] QA approval
+ - [ ] [DIS] Upload release APK and bundle to internal ownCloud instance
+ - [ ] [COM] Ping in #android-dev-internal that we are close to sign the new tags (@mmattel)
+ - [ ] [DIS] Upload and publish release bundle and changelog in Play Store
+ - [ ] [DIS] Update screenshots in Play Store/GitHub/F-Droid
  - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
  - [ ] [GIT] Move tag `latest` pointing the same commit as the release commit
- - [ ] [GIT] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
+ - [ ] [DIS] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
  - [ ] [DIS] Release published in Play Store
- - [ ] [DIS] Publish post in central.owncloud.org ([`Category:News + Tag:android`](https://central.owncloud.org/tags/c/news/5/android))
- - [ ] [COM] Inform #general in public chat that release is out
+ - [ ] [COM] Publish post in central.owncloud.org ([Category:News + Tag:android](https://central.owncloud.org/tags/c/news/5/android))
+ - [ ] [COM] Inform in #general that release is out
  - [ ] [GIT] Merge without rebasing `release/M.m.p` branch into `master`, in owncloud/android
- - [ ] [DOC] Ping @TheOneRing to update release information in https://owncloud.com/mobile-apps/
+ - [ ] [COM] Ping @TheOneRing to update release information in https://owncloud.com/mobile-apps/
  - [ ] [DOC] Update documentation with new stuff by creating [issue](https://github.com/owncloud/docs-client-android/issues)
 
 
@@ -56,34 +56,35 @@ Bugs & improvements:
 
 _____
 
-## Patch Release
+## Patch release
 
 ### TASKS:
 
  - [ ] [GIT] Create branch `release/M.m.p` in owncloud/android from `latest`
  - [ ] [DEV] Update version number and name in build.gradle in owncloudApp module
- - [ ] [DEV] Update [SBOM](https://cloud.owncloud.com/f/6072870)
- - [ ] [DIS] Create a folder for the new version like `M.m.p_YYYY-MM-DD` inside the `changelog` folder with the proper fixes
- - [ ] [DIS] Copy the `unreleased` folder in `master` branch to `changelog` folder in this branch, to avoid Calens' conflicts problems
- - [ ] [DEV] Add release notes to `ReleaseNotesViewModel.kt` (in case patch release before OEM)
- - [ ] [DIS] Check for new screenshots in Play Store / GitHub repo and generate them
- - [ ] [DIS] Generate final bundle from last commit in owncloud/android
- - [ ] [DEV] Code Review
+ - [ ] [DOC] Update [SBOM](https://infinite.owncloud.com/f/31e6d44f-f373-557c-9ab3-1748fc0c650d$4994cd9c-1c17-4254-829a-f5ef6e1ff7e3%215080be84-fbcc-4aca-956e-b278a7090418)
+ - [ ] [DIS] Update release notes in app and changelog in `unreleased` with the proper content for the release
+ - [ ] [DIS] Move Calens files from `unreleased` to a new folder like `M.m.p_YYYY-MM-DD` inside the `changelog` folder
+ - [ ] [DIS] Copy the `unreleased` folder in `master` branch into this branch, to avoid Calens conflicts problems
+ - [ ] [DEV] Check and reorder release notes in `ReleaseNotesViewModel.kt` to assure nothing important is missing there
+ - [ ] [DEV] Code review
+ - [ ] [DIS] Generate final bundle and APK from last commit in the release branch
+ - [ ] [DIS] Check for new screenshots in Play Store/GitHub/F-Droid and generate them
+ - [ ] [QA] Design test plan
  - [ ] [QA] Test execution
- - [ ] [QA] Trigger BitRise builds for unit tests and UI tests, in case CHANGELOG conflicts avoid them in GitHub
- - [ ] [QA] QA Approval
- - [ ] [DIS] Upload release APK and bundle to internal owncloud instance
- - [ ] [DIS] Upload & publish release bundle and changelog in Play Store
- - [ ] [DIS] Update screenshots and check they are OK in Play Store and in `README.md` (if needed)
+ - [ ] [QA] Trigger BitRise builds for unit tests and UI tests, in case changelog conflicts avoid them in GitHub
+ - [ ] [QA] QA approval
+ - [ ] [DIS] Upload release APK and bundle to internal ownCloud instance
+ - [ ] [DIS] Upload and publish release bundle and changelog in Play Store
+ - [ ] [DIS] Update screenshots in Play Store/GitHub/F-Droid
  - [ ] [GIT] Create and sign tag `vM.m.p` in HEAD commit of release branch, in owncloud/android
  - [ ] [GIT] Move tag `latest` pointing the same commit as the release commit
- - [ ] [GIT] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
+ - [ ] [DIS] Publish a new [release](https://github.com/owncloud/android/releases) in owncloud/android
  - [ ] [DIS] Release published in Play Store
- - [ ] [COM] Inform `#general` in public chat that release is out
- - [ ] [GIT] Merge `master` into `release/M.m.p`, fixing all the conflicts that could happen
+ - [ ] [COM] Inform in #general that release is out
+ - [ ] [GIT] Merge `master` into `release/M.m.p`, fixing all the conflicts that could happen, in owncloud/android
  - [ ] [GIT] Merge without rebasing `release/M.m.p` branch into `master`, in owncloud/android
- - [ ] [DOC] Ping @TheOneRing to update release information in https://owncloud.com/mobile-apps/
-
+ - [ ] [COM] Ping @TheOneRing to update release information in https://owncloud.com/mobile-apps/
 
 
 ### QA
@@ -100,25 +101,35 @@ Bugs & improvements:
 
 _____
 
-## OEM Release
+## Enterprise release
 
 ### TASKS:
 
-- [ ] [GIT] Create a new branch `release/M.m.p_oem` (optional)
-- [ ] [DIS] Update release notes in app with the proper content for oem release
-- [ ] [GIT] Create and sign tag `vM.m.p_oem` in HEAD commit of `release/M.m.p_oem` branch
+- [ ] [GIT] Create branch `release/M.m.p_enterprise` in owncloud/android from `latest` (or the corresponding release tag)
+- [ ] [DOC] Update [SBOM](https://infinite.owncloud.com/f/31e6d44f-f373-557c-9ab3-1748fc0c650d$4994cd9c-1c17-4254-829a-f5ef6e1ff7e3%215080be84-fbcc-4aca-956e-b278a7090418)
+- [ ] [DIS] Update release notes in app and changelog in `M.m.p_YYYY-MM-DD` (already released version) with the proper content for the release
+- [ ] [DIS] Copy the `unreleased` folder in `master` branch into this branch, to avoid Calens conflicts problems
+- [ ] [DEV] Check and reorder release notes in `ReleaseNotesViewModel.kt` to assure nothing important is missing there
+- [ ] [DEV] Code review
+- [ ] [DIS] Generate final bundle and APK from last commit in the release branch
+- [ ] [QA] Design test plan
+- [ ] [QA] Test execution
+- [ ] [QA] Trigger BitRise builds for unit tests and UI tests, in case changelog conflicts avoid them in GitHub
+- [ ] [QA] QA approval
+- [ ] [DIS] Upload release APK and bundle to internal ownCloud instance
+- [ ] [GIT] Create and sign tag `vM.m.p_enterprise` in HEAD commit of release branch, in owncloud/android
 - [ ] [DEV] Approve and merge changes in ownBrander
   - [ ] Feature 1 oB https://github.com/owncloud/ownbrander/pull/
   - [ ] Feature 2 oB https://github.com/owncloud/ownbrander/pull/
   - [ ] Update version number in ownBrander
-- [ ] [OPS] Block oB button
-- [ ] [OPS] Deploy oB
-- [ ] [QA] Generate final APKs files from signed commit in builder machine and perform some basic checks:
-    - [ ] Installation of apk/aab generated by builder machine
+- [ ] [COM] Block oB button
+- [ ] [COM] Deploy oB
+- [ ] [QA] Generate final APKs from signed commit in builder machine and perform some basic checks
+    - [ ] Installation of APK/aab generated by builder machine
     - [ ] Check Feature 1 oB
     - [ ] Check Feature 2 oB
     - [ ] App update from previous version (generated in advance)
-- [ ] [QA] Notify result in #ownbrander
-- [ ] [OPS] Enable button
-- [ ] [GIT] Fix conflicts in branch if they happen. GitHub option will help and will merge `master` into release branch, getting it ready to fast forward
-- [ ] [GIT] Merge without rebasing `release/M.m.p_oem` branch into `master`, in owncloud/android
+- [ ] [COM] Notify result in internal chat
+- [ ] [COM] Enable oB button
+- [ ] [GIT] Merge `master` into `release/M.m.p_enterprise`, fixing all the conflicts that could happen, in owncloud/android
+- [ ] [GIT] Merge without rebasing `release/M.m.p_enterprise` branch into `master`, in owncloud/android
