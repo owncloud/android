@@ -1,0 +1,6 @@
+Enhancement: TalkBack announces the view label correctly
+
+TalkBack no longer announces "ownCloud" every time the screen changes. Now, it correctly dictates the name of the current view.
+
+https://github.com/owncloud/android/issues/4458
+https://github.com/owncloud/android/pull/4470
