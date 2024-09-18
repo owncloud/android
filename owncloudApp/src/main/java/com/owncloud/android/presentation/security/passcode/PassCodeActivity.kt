@@ -44,7 +44,6 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.databinding.PasscodelockBinding
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.showBiometricDialog
 import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
 import com.owncloud.android.presentation.security.biometric.BiometricStatus
@@ -195,23 +194,20 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
         val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
         for (i in 0 until numberOfPasscodeDigits) {
 
-            passCodeEditTexts[i]?.apply {
-                hideSoftKeyboard()
-
-                setOnKeyListener { v, keyCode, event ->
-                    if (keyCode == KeyEvent.KEYCODE_TAB && event.action == KeyEvent.ACTION_DOWN) {
-                        val focusDirection = if (passCodeEditTexts.indexOf(v) == 0) {
-                            View.FOCUS_DOWN
-                        } else {
-                            View.FOCUS_LEFT
-                        }
-                        v.focusSearch(focusDirection)?.requestFocus()
-                        true
+            passCodeEditTexts[i]?.setOnKeyListener { v, keyCode, event ->
+                if (keyCode == KeyEvent.KEYCODE_TAB && event.action == KeyEvent.ACTION_DOWN) {
+                    val focusDirection = if (passCodeEditTexts.indexOf(v) == 0) {
+                        View.FOCUS_DOWN
                     } else {
-                        false
+                        View.FOCUS_RIGHT
                     }
+                    v.focusSearch(focusDirection)?.requestFocus()
+                    true
+                } else {
+                    false
                 }
             }
+
             passCodeEditTexts[i]?.onFocusChangeListener = OnFocusChangeListener { _: View, _: Boolean ->
                 // Return the focus to the first EditText without number
                 for (j in 0 until i) {
