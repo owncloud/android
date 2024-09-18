@@ -34,6 +34,7 @@ import android.net.Uri
 import android.text.method.LinkMovementMethod
 import android.util.TypedValue
 import android.view.ContextThemeWrapper
+import android.view.inputmethod.InputMethodManager
 import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.LinearLayout
@@ -271,6 +272,17 @@ private fun makeIntent(file: File?, context: Context): Intent {
     }
     sendIntent.putExtra(Intent.ACTION_SEND, true) // Send Action
     return sendIntent
+}
+
+fun Activity.hideSoftKeyboard() {
+    val focusedView = currentFocus
+    focusedView?.let {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(
+            focusedView.windowToken,
+            0
+        )
+    }
 }
 
 fun Activity.checkPasscodeEnforced(securityEnforced: SecurityEnforced) {
