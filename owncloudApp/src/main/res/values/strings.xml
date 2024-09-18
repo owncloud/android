@@ -733,8 +733,8 @@
     <string name="release_notes_bugfixes_title">Minor bugfixes</string>
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
 
-    <string name="release_notes_4_4_6_4_bugfixes_title">Handling Device Rotation to Retain List Filtering</string>
-    <string name="release_notes_4_4_6_4_bugfixes_subtitle">Configuration changes have been handled when rotating the device so that list filtering works.</string>
+    <string name="release_notes_4_4_6_4_bugfixes_title">List filtering after rotating device</string>
+    <string name="release_notes_4_4_6_4_bugfixes_subtitle">Configuration changes have been handled when rotating the device so that list filtering works</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
