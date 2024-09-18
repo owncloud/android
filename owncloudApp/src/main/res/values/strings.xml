@@ -829,4 +829,17 @@
     <string name="link_role_accessibility">Link</string>
     <string name="button_role_accessibility">Button</string>
 
+    <string name="folder_picker_label">Folder picker</string>
+    <string name="passcode_label">Passcode</string>
+    <string name="pattern_label">Pattern</string>
+    <string name="receive_external_files_label">Receive external files</string>
+    <string name="video_preview_label">Video preview</string>
+    <string name="release_notes_label">Release notes</string>
+    <string name="image_preview_label">Image preview</string>
+    <string name="login_label">Login</string>
+    <string name="whats_new_label">What\'s new</string>
+    <string name="audio_preview_label">Audio preview</string>
+    <string name="details_label">Details</string>
+    <string name="text_preview_label">Text preview</string>
+
 </resources>
