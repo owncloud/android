@@ -103,6 +103,7 @@ class PreviewTextFragment : FileFragment() {
             file = savedInstanceState.getParcelable(EXTRA_FILE)
             account = savedInstanceState.getParcelable(EXTRA_ACCOUNT)
         }
+        activity?.title = getString(R.string.text_preview_label)
         setFile(file)
         setHasOptionsMenu(true)
         isOpen = true

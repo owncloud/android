@@ -217,6 +217,7 @@ class FileDetailsFragment : FileFragment() {
         }
         startListeningToOngoingTransfers()
         fileDetailsViewModel.checkOnGoingTransfersWhenOpening()
+        activity?.title = getString(R.string.details_label)
     }
 
 
