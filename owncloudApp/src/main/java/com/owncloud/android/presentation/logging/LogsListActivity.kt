@@ -99,7 +99,6 @@ class LogsListActivity : AppCompatActivity() {
         findViewById<ConstraintLayout>(R.id.root_toolbar).isVisible = false
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
-            setTitle(R.string.prefs_log_open_logs_list_view)
             setDisplayHomeAsUpEnabled(true)
         }
     }
