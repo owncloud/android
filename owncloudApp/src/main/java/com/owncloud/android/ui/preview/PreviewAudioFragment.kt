@@ -94,7 +94,7 @@ class PreviewAudioFragment : FileFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        activity?.title = getString(R.string.audio_preview_label)
+        requireActivity().title = getString(R.string.audio_preview_label)
     }
 
     /**
