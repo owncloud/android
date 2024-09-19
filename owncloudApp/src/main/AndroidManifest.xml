@@ -74,8 +74,7 @@
             android:name=".presentation.settings.privacypolicy.PrivacyPolicyActivity"
             android:label="@string/actionbar_privacy_policy" />
         <activity
-            android:name=".presentation.settings.SettingsActivity"
-            android:label="@string/actionbar_settings"/>
+            android:name=".presentation.settings.SettingsActivity"/>
 
         <activity android:name=".presentation.migration.StorageMigrationActivity" />
         <activity
@@ -192,6 +191,7 @@
             android:theme="@style/Theme.ownCloud" />
         <activity
             android:name=".presentation.logging.LogsListActivity"
+            android:label="@string/prefs_log_open_logs_list_view"
             android:configChanges="orientation|screenSize" />
         <activity android:name=".ui.errorhandling.ErrorShowActivity" />
         <activity
