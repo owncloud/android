@@ -11,7 +11,6 @@
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
- *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
  * as published by the Free Software Foundation.
@@ -167,7 +166,7 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
         // check if the Share is FERERATED
         val isFederated = ShareType.FEDERATED == shareType
 
-        return when {
+        val permissions = when {
             file.isSharedWithMe -> RemoteShare.READ_PERMISSION_FLAG    // minimum permissions
             isFederated ->
                 if (file.isFolder) {
@@ -182,6 +181,8 @@ class ShareActivity : FileActivity(), ShareFragmentListener {
                     RemoteShare.MAXIMUM_PERMISSIONS_FOR_FILE
                 }
         }
+
+        return if (shareViewModel.isResharingAllowed()) permissions else permissions - RemoteShare.SHARE_PERMISSION_FLAG
     }
 
     private fun observePrivateShareEdition() {
