@@ -1,0 +1,6 @@
+Bugfix: List filtering not working after rotating device
+
+Configuration changes have been handled when rotating the device so that list filtering works.
+
+https://github.com/owncloud/android/issues/4441
+https://github.com/owncloud/android/pull/4467

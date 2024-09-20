@@ -33,6 +33,7 @@ ownCloud admins and users.
 ## Summary
 
 * Bugfix - Shares in non-root are updated correctly: [#4432](https://github.com/owncloud/android/issues/4432)
+* Bugfix - List filtering not working after rotating device: [#4441](https://github.com/owncloud/android/issues/4441)
 * Bugfix - The color of some elements is set up correctly: [#4442](https://github.com/owncloud/android/issues/4442)
 * Enhancement - Improved "Remove from original folder" option in auto-upload: [#4357](https://github.com/owncloud/android/issues/4357)
 * Enhancement - Improved accessibility of information and relationships: [#4362](https://github.com/owncloud/android/issues/4362)
@@ -51,6 +52,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4432
    https://github.com/owncloud/android/pull/4435
+
+* Bugfix - List filtering not working after rotating device: [#4441](https://github.com/owncloud/android/issues/4441)
+
+   Configuration changes have been handled when rotating the device so that list
+   filtering works.
+
+   https://github.com/owncloud/android/issues/4441
+   https://github.com/owncloud/android/pull/4467
 
 * Bugfix - The color of some elements is set up correctly: [#4442](https://github.com/owncloud/android/issues/4442)
 
