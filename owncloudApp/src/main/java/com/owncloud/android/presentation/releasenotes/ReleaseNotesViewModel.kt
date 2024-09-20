@@ -56,6 +56,11 @@ class ReleaseNotesViewModel(
                 type = ReleaseNoteType.ENHANCEMENT
             ),
             ReleaseNote(
+                title = R.string.release_notes_4_4_0_title_resharing_capability,
+                subtitle = R.string.release_notes_4_4_0_subtitle_resharing_capability,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
+            ReleaseNote(
                 title = R.string.release_notes_bugfixes_title,
                 subtitle = R.string.release_notes_bugfixes_subtitle,
                 type = ReleaseNoteType.BUGFIX
