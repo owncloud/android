@@ -23,6 +23,7 @@ package com.owncloud.android.presentation.viewmodels.sharing
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import com.owncloud.android.domain.UseCaseResult
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePublicShareAsyncUseCase
@@ -74,6 +75,7 @@ class ShareViewModelTest {
     private lateinit var createPublicShareAsyncUseCase: CreatePublicShareAsyncUseCase
     private lateinit var editPublicShareAsyncUseCase: EditPublicShareAsyncUseCase
     private lateinit var deletePublicShareAsyncUseCase: DeleteShareAsyncUseCase
+    private lateinit var getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase
     private lateinit var ocContextProvider: ContextProvider
 
     private val filePath = "/Photos/image.jpg"
@@ -130,6 +132,7 @@ class ShareViewModelTest {
         createPublicShareAsyncUseCase = spyk(mockkClass(CreatePublicShareAsyncUseCase::class))
         editPublicShareAsyncUseCase = spyk(mockkClass(EditPublicShareAsyncUseCase::class))
         deletePublicShareAsyncUseCase = spyk(mockkClass(DeleteShareAsyncUseCase::class))
+        getStoredCapabilitiesUseCase = spyk(mockkClass(GetStoredCapabilitiesUseCase::class))
 
         every { getSharesAsLiveDataUseCase(any()) } returns sharesLiveData
         every { getShareAsLiveDataUseCase(any()) } returns privateShareLiveData
@@ -147,6 +150,7 @@ class ShareViewModelTest {
             createPublicShareAsyncUseCase,
             editPublicShareAsyncUseCase,
             deletePublicShareAsyncUseCase,
+            getStoredCapabilitiesUseCase,
             coroutineDispatcherProvider
         )
     }
