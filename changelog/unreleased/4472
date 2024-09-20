@@ -1,0 +1,8 @@
+Bugfix: Rely on `resharing` capability
+
+The request to create a new share has been fixed so that it only includes the share permission
+by default when the resharing capability is true, and the "can share" switch in the edition view
+of private shares is now only shown when resharing is true.
+
+https://github.com/owncloud/android/issues/4397
+https://github.com/owncloud/android/pull/4472
