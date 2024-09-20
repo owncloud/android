@@ -32,6 +32,7 @@ ownCloud admins and users.
 
 ## Summary
 
+* Bugfix - Rely on `resharing` capability: [#4397](https://github.com/owncloud/android/issues/4397)
 * Bugfix - Shares in non-root are updated correctly: [#4432](https://github.com/owncloud/android/issues/4432)
 * Bugfix - List filtering not working after rotating device: [#4441](https://github.com/owncloud/android/issues/4441)
 * Bugfix - The color of some elements is set up correctly: [#4442](https://github.com/owncloud/android/issues/4442)
@@ -44,6 +45,16 @@ ownCloud admins and users.
 * Enhancement - Hardware keyboard support for passcode view: [#4447](https://github.com/owncloud/android/issues/4447)
 
 ## Details
+
+* Bugfix - Rely on `resharing` capability: [#4397](https://github.com/owncloud/android/issues/4397)
+
+   The request to create a new share has been fixed so that it only includes the
+   share permission by default when the resharing capability is true, and the "can
+   share" switch in the edition view of private shares is now only shown when
+   resharing is true.
+
+   https://github.com/owncloud/android/issues/4397
+   https://github.com/owncloud/android/pull/4472
 
 * Bugfix - Shares in non-root are updated correctly: [#4432](https://github.com/owncloud/android/issues/4432)
 
