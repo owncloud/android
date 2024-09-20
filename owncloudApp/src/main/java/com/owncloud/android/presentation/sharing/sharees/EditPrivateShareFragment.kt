@@ -5,7 +5,9 @@
  * @author David A. Velasco
  * @author Christian Schabesberger
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -165,6 +167,7 @@ class EditPrivateShareFragment : DialogFragment() {
 
         val sharePermissions = share!!.permissions
 
+        binding.canShareSwitch.isVisible = shareViewModel.isResharingAllowed()
         binding.canShareSwitch.isChecked = sharePermissions and RemoteShare.SHARE_PERMISSION_FLAG > 0
 
         val anyUpdatePermission = RemoteShare.CREATE_PERMISSION_FLAG or
