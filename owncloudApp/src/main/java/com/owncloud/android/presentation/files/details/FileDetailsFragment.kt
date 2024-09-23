@@ -244,12 +244,8 @@ class FileDetailsFragment : FileFragment() {
     private fun setRolesAccessibilityToMenuItems(menu: Menu) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
-            menu.findItem(R.id.action_rename_file).setContentDescription(
-                getString(R.string.common_rename) + roleAccessibilityDescription
-            )
-            menu.findItem(R.id.action_remove_file).setContentDescription(
-                getString(R.string.common_remove) + roleAccessibilityDescription
-            )
+            menu.findItem(R.id.action_rename_file)?.contentDescription = "${getString(R.string.common_rename)} $roleAccessibilityDescription"
+            menu.findItem(R.id.action_remove_file)?.contentDescription = "${getString(R.string.common_remove)} $roleAccessibilityDescription"
         }
     }
 

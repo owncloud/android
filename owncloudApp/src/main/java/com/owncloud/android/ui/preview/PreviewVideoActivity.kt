@@ -335,12 +335,12 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
             menu.apply {
-                menu.findItem(R.id.action_open_file_with)?.contentDescription = getString(R.string.actionbar_open_with) + roleAccessibilityDescription
-                menu.findItem(R.id.action_send_file)?.contentDescription = getString(R.string.actionbar_send_file) + roleAccessibilityDescription
-                menu.findItem(R.id.action_set_available_offline)?.contentDescription = getString(R.string.set_available_offline) + roleAccessibilityDescription
-                menu.findItem(R.id.action_unset_available_offline)?.contentDescription = getString(R.string.unset_available_offline) + roleAccessibilityDescription
-                menu.findItem(R.id.action_see_details)?.contentDescription = getString(R.string.actionbar_see_details) + roleAccessibilityDescription
-                menu.findItem(R.id.action_remove_file)?.contentDescription = getString(R.string.common_remove) + roleAccessibilityDescription
+                menu.findItem(R.id.action_open_file_with)?.contentDescription = "${getString(R.string.actionbar_open_with)} $roleAccessibilityDescription"
+                menu.findItem(R.id.action_send_file)?.contentDescription = "${getString(R.string.actionbar_send_file)} $roleAccessibilityDescription"
+                menu.findItem(R.id.action_set_available_offline)?.contentDescription = "${getString(R.string.set_available_offline)} $roleAccessibilityDescription"
+                menu.findItem(R.id.action_unset_available_offline)?.contentDescription = "${getString(R.string.unset_available_offline)} $roleAccessibilityDescription"
+                menu.findItem(R.id.action_see_details)?.contentDescription = "${getString(R.string.actionbar_see_details)} $roleAccessibilityDescription"
+                menu.findItem(R.id.action_remove_file)?.contentDescription = "${getString(R.string.common_remove)} $roleAccessibilityDescription"
             }
         }
     }

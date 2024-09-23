@@ -1430,17 +1430,17 @@ class MainFileListFragment : Fragment(),
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
                 menu?.apply {
-                    findItem(R.id.file_action_select_all)?.contentDescription =  getString(R.string.actionbar_select_all) + roleAccessibilityDescription
-                    findItem(R.id.action_select_inverse)?.contentDescription =  getString(R.string.actionbar_select_inverse) + roleAccessibilityDescription
-                    findItem(R.id.action_open_file_with)?.contentDescription =  getString(R.string.actionbar_open_with) + roleAccessibilityDescription
-                    findItem(R.id.action_rename_file)?.contentDescription =  getString(R.string.common_rename) + roleAccessibilityDescription
-                    findItem(R.id.action_move)?.contentDescription =  getString(R.string.actionbar_move) + roleAccessibilityDescription
-                    findItem(R.id.action_copy)?.contentDescription =  getString(R.string.copy) + roleAccessibilityDescription
-                    findItem(R.id.action_send_file)?.contentDescription = getString(R.string.actionbar_send_file) + roleAccessibilityDescription
-                    findItem(R.id.action_set_available_offline)?.contentDescription =  getString(R.string.set_available_offline) + roleAccessibilityDescription
-                    findItem(R.id.action_unset_available_offline)?.contentDescription =  getString(R.string.unset_available_offline) + roleAccessibilityDescription
-                    findItem(R.id.action_see_details)?.contentDescription =  getString(R.string.actionbar_see_details) + roleAccessibilityDescription
-                    findItem(R.id.action_remove_file)?.contentDescription =  getString(R.string.common_remove) + roleAccessibilityDescription
+                    findItem(R.id.file_action_select_all)?.contentDescription = "${getString(R.string.actionbar_select_all)} $roleAccessibilityDescription"
+                    findItem(R.id.action_select_inverse)?.contentDescription = "${getString(R.string.actionbar_select_inverse)} $roleAccessibilityDescription"
+                    findItem(R.id.action_open_file_with)?.contentDescription = "${getString(R.string.actionbar_open_with)} $roleAccessibilityDescription"
+                    findItem(R.id.action_rename_file)?.contentDescription = "${getString(R.string.common_rename)} $roleAccessibilityDescription"
+                    findItem(R.id.action_move)?.contentDescription = "${getString(R.string.actionbar_move)} $roleAccessibilityDescription"
+                    findItem(R.id.action_copy)?.contentDescription = "${getString(R.string.copy)} $roleAccessibilityDescription"
+                    findItem(R.id.action_send_file)?.contentDescription = "${getString(R.string.actionbar_send_file)} $roleAccessibilityDescription"
+                    findItem(R.id.action_set_available_offline)?.contentDescription = "${getString(R.string.set_available_offline)} $roleAccessibilityDescription"
+                    findItem(R.id.action_unset_available_offline)?.contentDescription = "${getString(R.string.unset_available_offline)} $roleAccessibilityDescription"
+                    findItem(R.id.action_see_details)?.contentDescription = "${getString(R.string.actionbar_see_details)} $roleAccessibilityDescription"
+                    findItem(R.id.action_remove_file)?.contentDescription = "${getString(R.string.common_remove)} $roleAccessibilityDescription"
                 }
             }
         }

@@ -35,7 +35,6 @@ import android.text.Editable
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
-import android.view.View.OnFocusChangeListener
 import android.view.WindowManager
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -44,7 +43,6 @@ import com.owncloud.android.BuildConfig
 import com.owncloud.android.R
 import com.owncloud.android.databinding.PasscodelockBinding
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.extensions.hideSoftKeyboard
 import com.owncloud.android.extensions.showBiometricDialog
 import com.owncloud.android.presentation.documentsprovider.DocumentsProviderUtils.Companion.notifyDocumentsProviderRoots
 import com.owncloud.android.presentation.security.biometric.BiometricStatus
@@ -163,8 +161,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
                 throw IllegalArgumentException(R.string.illegal_argument_exception_message.toString() + " ")
             }
         }
-
-        setTextListeners()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -186,27 +182,6 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
             passCodeEditTexts[i] = txt
         }
         passCodeEditTexts.first()?.requestFocus()
-    }
-
-    /**
-     * Binds the appropriate listeners to the input boxes receiving each digit of the pass code.
-     */
-    private fun setTextListeners() {
-        val numberOfPasscodeDigits = (passCodeViewModel.getPassCode()?.length ?: passCodeViewModel.getNumberOfPassCodeDigits())
-        for (i in 0 until numberOfPasscodeDigits) {
-            passCodeEditTexts[i]?.setOnClickListener { hideSoftKeyboard() }
-            passCodeEditTexts[i]?.onFocusChangeListener = OnFocusChangeListener { _: View, _: Boolean ->
-                // Return the focus to the first EditText without number
-                for (j in 0 until i) {
-                    if (passCodeEditTexts[j]?.text.toString() == "") {  // TODO WIP validation
-                        // could be done in a global way, with a single OnFocusChangeListener for all the
-                        // input fields
-                        passCodeEditTexts[j]?.requestFocus()
-                        break
-                    }
-                }
-            }
-        }
     }
 
     override fun onNumberClicked(number: Int) {
@@ -457,21 +432,11 @@ class PassCodeActivity : AppCompatActivity(), NumberKeyboardListener, EnableBiom
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         return when (keyCode) {
-            KeyEvent.KEYCODE_TAB -> {
-                findViewById<View>(R.id.lock_time).requestFocus()
-                true
-            }
-
-            KeyEvent.KEYCODE_DPAD_DOWN -> {
-                if (!findViewById<View>(R.id.numberKeyboard).hasFocus()) {
-                    findViewById<View>(R.id.numberKeyboard).requestFocus()
-                }
-                true
-            }
 
             in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
                 val number = keyCode - KeyEvent.KEYCODE_0
                 passCodeViewModel.onNumberClicked(number)
+                binding.numberKeyboard.setFocusOnKey(number)
                 true
             }
 

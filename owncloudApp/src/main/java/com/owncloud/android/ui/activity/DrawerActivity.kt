@@ -424,10 +424,10 @@ abstract class DrawerActivity : ToolbarActivity() {
             val navViewMenu = getNavView()?.menu ?: return
             val roleAccessibilityDescription = getString(R.string.button_role_accessibility)
             navViewMenu.apply {
-                findItem(R.id.nav_settings)?.contentDescription = getString(R.string.actionbar_settings) + roleAccessibilityDescription
-                findItem(R.id.drawer_menu_feedback)?.contentDescription = getString(R.string.drawer_feedback) + roleAccessibilityDescription
-                findItem(R.id.drawer_menu_help)?.contentDescription = getString(R.string.prefs_help) + roleAccessibilityDescription
-                findItem(R.id.drawer_menu_privacy_policy)?.contentDescription = getString(R.string.prefs_privacy_policy) + roleAccessibilityDescription
+                findItem(R.id.nav_settings)?.contentDescription = "${getString(R.string.actionbar_settings)} $roleAccessibilityDescription"
+                findItem(R.id.drawer_menu_feedback)?.contentDescription = "${getString(R.string.drawer_feedback)} $roleAccessibilityDescription"
+                findItem(R.id.drawer_menu_help)?.contentDescription = "${getString(R.string.prefs_help)} $roleAccessibilityDescription"
+                findItem(R.id.drawer_menu_privacy_policy)?.contentDescription = "${getString(R.string.prefs_privacy_policy)} $roleAccessibilityDescription"
             }
         }
     }

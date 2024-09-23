@@ -110,10 +110,12 @@ ownCloud admins and users.
 * Enhancement - Roles added to some elements to improve accessibility: [#4373](https://github.com/owncloud/android/issues/4373)
 
    Roles have been added to specific elements within the following views: Toolbar,
-   Spaces, Drawer Menu, Manage accounts and Floating Action Button.
+   Spaces, Drawer Menu, Manage accounts and Floating Action Button. Improved the
+   navigation system within the passcode view.
 
    https://github.com/owncloud/android/issues/4373
    https://github.com/owncloud/android/pull/4454
+   https://github.com/owncloud/android/pull/4466
 
 * Enhancement - Hardware keyboard support: [#4438](https://github.com/owncloud/android/pull/4438)
 
