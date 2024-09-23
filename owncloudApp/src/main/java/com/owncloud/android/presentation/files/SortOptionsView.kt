@@ -115,6 +115,7 @@ class SortOptionsView @JvmOverloads constructor(
             AdditionalView.CREATE_FOLDER -> {
                 binding.viewTypeSelector.apply {
                     visibility = VISIBLE
+                    contentDescription = context.getString(R.string.content_description_create_new_folder)
                     setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_action_create_dir))
                     setOnClickListener {
                         onCreateFolderListener?.onCreateFolderListener()
@@ -125,6 +126,7 @@ class SortOptionsView @JvmOverloads constructor(
                 viewTypeSelected = viewTypeSelected
                 binding.viewTypeSelector.apply {
                     visibility = VISIBLE
+                    contentDescription = context.getString(R.string.content_description_type_view)
                     setOnClickListener {
                         onSortOptionsListener?.onViewTypeListener(
                             viewTypeSelected.getOppositeViewType()

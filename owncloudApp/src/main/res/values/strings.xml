@@ -810,6 +810,7 @@
     <string name="content_description_file_operations">%1$s operations</string>
     <string name="content_description_sort_by_name_ascending">Sort by %1$s ascending</string>
     <string name="content_description_sort_by_name_descending">Sort by %1$s descending</string>
+    <string name="content_description_create_new_folder">Create new folder</string>
 
     <string name="create_shortcut_dialog_title">Create a shortcut</string>
     <string name="create_shortcut_dialog_url">URL</string>
