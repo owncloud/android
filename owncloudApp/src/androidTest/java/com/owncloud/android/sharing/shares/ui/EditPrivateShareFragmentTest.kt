@@ -65,6 +65,7 @@ class EditPrivateShareFragmentTest {
     @Before
     fun setUp() {
         every { shareViewModel.privateShare } returns privateShareAsLiveData
+        every { shareViewModel.isResharingAllowed() } returns true
 
         stopKoin()
 
