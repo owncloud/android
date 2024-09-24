@@ -274,7 +274,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         Timber.d("onActivityCreated")
-
+        requireActivity().setTitle(R.string.share_dialog_title)
         observeCapabilities() // Get capabilities to update some UI elements depending on them
         observeShares()
     }
