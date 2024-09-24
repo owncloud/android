@@ -41,6 +41,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 
     <application
         android:name=".MainApp"
@@ -177,7 +178,11 @@
         </provider>
 
         <service android:name=".services.OperationsService" />
-        <service android:name=".media.MediaService" />
+        <service
+            android:name=".media.MediaService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="false">
+        </service>
 
         <activity
             android:name=".presentation.security.passcode.PassCodeActivity"
