@@ -36,6 +36,7 @@ ownCloud admins and users.
 * Bugfix - Shares in non-root are updated correctly: [#4432](https://github.com/owncloud/android/issues/4432)
 * Bugfix - List filtering not working after rotating device: [#4441](https://github.com/owncloud/android/issues/4441)
 * Bugfix - The color of some elements is set up correctly: [#4442](https://github.com/owncloud/android/issues/4442)
+* Bugfix - Audio player does not work: [#4474](https://github.com/owncloud/android/issues/4474)
 * Enhancement - Improved "Remove from original folder" option in auto-upload: [#4357](https://github.com/owncloud/android/issues/4357)
 * Enhancement - Improved accessibility of information and relationships: [#4362](https://github.com/owncloud/android/issues/4362)
 * Enhancement - Changed the color of some elements to improve accessibility: [#4364](https://github.com/owncloud/android/issues/4364)
@@ -80,6 +81,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4442
    https://github.com/owncloud/android/pull/4463
+
+* Bugfix - Audio player does not work: [#4474](https://github.com/owncloud/android/issues/4474)
+
+   Audio player in Android 14+ devices wasn't working, so some proper permissions
+   have been added in Manifest so that media can be played correctly in the
+   foreground and background in all versions.
+
+   https://github.com/owncloud/android/issues/4474
+   https://github.com/owncloud/android/pull/4479
 
 * Enhancement - Improved "Remove from original folder" option in auto-upload: [#4357](https://github.com/owncloud/android/issues/4357)
 
