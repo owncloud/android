@@ -738,7 +738,6 @@
   <string name="content_description_delete_share">Teilen löschen</string>
   <string name="content_description_file_operations">%1$s Operationen</string>
   <string name="content_description_sort_by_name_ascending"> %1$s aufsteigend sortieren</string>
-  <string name="content_description_sort_by_name_descending"> %1$s absteigend sortieren</string>
   <string name="create_shortcut_dialog_title">Verknüpfung erstellen</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">Die URL muss mit https:// oder http:// beginnen, damit sie im Browser geöffnet werden kann.</string>

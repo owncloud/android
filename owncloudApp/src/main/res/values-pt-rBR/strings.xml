@@ -738,7 +738,6 @@
   <string name="content_description_delete_share">Excluir compartilhamento</string>
   <string name="content_description_file_operations">%1$s operações</string>
   <string name="content_description_sort_by_name_ascending">Classificar por %1$s crescente</string>
-  <string name="content_description_sort_by_name_descending">classificar por %1$s decrescente</string>
   <string name="create_shortcut_dialog_title">Crie um atalho</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">A URL deve começar com https:// ou http:// para que possa ser aberta no navegador</string>
