@@ -1,0 +1,7 @@
+Bugfix: Audio player does not work
+
+Audio player in Android 14+ devices wasn't working, so some proper permissions have been added
+in Manifest so that media can be played correctly in the foreground and background in all versions.
+
+https://github.com/owncloud/android/issues/4474
+https://github.com/owncloud/android/pull/4479
