@@ -738,7 +738,6 @@
   <string name="content_description_delete_share">Kustuta jagamine</string>
   <string name="content_description_file_operations">%1$s tegevus(t)</string>
   <string name="content_description_sort_by_name_ascending">Sorteeri %1$s järgi tõusvalt</string>
-  <string name="content_description_sort_by_name_descending">Sorteeri %1$s järgi kahanevalt</string>
   <string name="create_shortcut_dialog_title">Loo otsetee</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">Brauseris avamiseks peab URL alguses olema kas http:// või https://</string>

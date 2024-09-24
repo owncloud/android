@@ -674,7 +674,6 @@ Póngase en contacto con su administrador</string>
   <string name="content_description_delete_share">Borrar compartición</string>
   <string name="content_description_file_operations">%1$s operaciones</string>
   <string name="content_description_sort_by_name_ascending">Ordenar por %1$s ascendente</string>
-  <string name="content_description_sort_by_name_descending">ordenar por %1$s descendente</string>
   <string name="create_shortcut_dialog_title">Crear un acceso directo</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">La URL tiene que empezar con https:// o http:// para que pueda ser abierta por el navegador</string>

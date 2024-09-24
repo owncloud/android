@@ -735,7 +735,6 @@
   <string name="content_description_delete_share">Fshini pjesë</string>
   <string name="content_description_file_operations">%1$s veprime</string>
   <string name="content_description_sort_by_name_ascending">Renditi sipas %1$s në rend rritës</string>
-  <string name="content_description_sort_by_name_descending">renditur sipas %1$s në rend rritës</string>
   <string name="create_shortcut_dialog_title">Krijoni një shkurtore</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URL-ja duhet të fillojë me https:// ose http:// , që të mund të hapet në shfletues</string>
