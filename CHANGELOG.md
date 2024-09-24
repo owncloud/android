@@ -43,6 +43,7 @@ ownCloud admins and users.
 * Enhancement - Roles added to some elements to improve accessibility: [#4373](https://github.com/owncloud/android/issues/4373)
 * Enhancement - Hardware keyboard support: [#4438](https://github.com/owncloud/android/pull/4438)
 * Enhancement - Hardware keyboard support for passcode view: [#4447](https://github.com/owncloud/android/issues/4447)
+* Enhancement - TalkBack announces the view label correctly: [#4458](https://github.com/owncloud/android/issues/4458)
 
 ## Details
 
@@ -146,6 +147,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4447
    https://github.com/owncloud/android/pull/4455
+
+* Enhancement - TalkBack announces the view label correctly: [#4458](https://github.com/owncloud/android/issues/4458)
+
+   TalkBack no longer announces "ownCloud" every time the screen changes. Now, it
+   correctly dictates the name of the current view.
+
+   https://github.com/owncloud/android/issues/4458
+   https://github.com/owncloud/android/pull/4470
 
 # Changelog for ownCloud Android Client [4.3.1] (2024-07-22)
 
