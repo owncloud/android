@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David González Verdugo
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -22,6 +24,9 @@ package com.owncloud.android.presentation.sharing
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.owncloud.android.domain.capabilities.model.OCCapability
+import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.sharing.shares.model.OCShare
 import com.owncloud.android.domain.sharing.shares.model.ShareType
 import com.owncloud.android.domain.sharing.shares.usecases.CreatePrivateShareAsyncUseCase
@@ -37,6 +42,7 @@ import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResultAndUseCachedData
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
+import kotlinx.coroutines.launch
 
 /**
  * View Model to keep a reference to the share repository and an up-to-date list of a shares
@@ -52,6 +58,7 @@ class ShareViewModel(
     private val createPublicShareUseCase: CreatePublicShareAsyncUseCase,
     private val editPublicShareUseCase: EditPublicShareAsyncUseCase,
     private val deletePublicShareUseCase: DeleteShareAsyncUseCase,
+    private val getStoredCapabilitiesUseCase: GetStoredCapabilitiesUseCase,
     private val coroutineDispatcherProvider: CoroutinesDispatcherProvider
 ) : ViewModel() {
 
@@ -62,12 +69,22 @@ class ShareViewModel(
         GetSharesAsLiveDataUseCase.Params(filePath = filePath, accountName = accountName)
     )
 
+    private var capabilities: OCCapability? = null
+
     init {
         _shares.addSource(sharesLiveData) { shares ->
             _shares.postValue(Event(UIResult.Success(shares)))
         }
 
         refreshSharesFromNetwork()
+
+        viewModelScope.launch(coroutineDispatcherProvider.io) {
+            capabilities = getStoredCapabilitiesUseCase(
+                GetStoredCapabilitiesUseCase.Params(
+                    accountName = accountName
+                )
+            )
+        }
     }
 
     fun refreshSharesFromNetwork() = runUseCaseWithResultAndUseCachedData(
@@ -97,6 +114,8 @@ class ShareViewModel(
         ),
         postSuccess = false
     )
+
+    fun isResharingAllowed() = capabilities?.filesSharingResharing?.isTrue ?: false
 
     /******************************************************************************************************
      ******************************************* PRIVATE SHARES *******************************************
