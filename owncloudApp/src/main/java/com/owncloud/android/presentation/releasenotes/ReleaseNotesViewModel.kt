@@ -70,6 +70,11 @@ class ReleaseNotesViewModel(
                 subtitle = R.string.release_notes_4_4_6_4_bugfixes_subtitle,
                 type = ReleaseNoteType.BUGFIX
             ),
+            ReleaseNote(
+                title = R.string.release_notes_4_4_0_title_audio_player_android14,
+                subtitle = R.string.release_notes_4_4_0_subtitle_audio_player_android14,
+                type = ReleaseNoteType.BUGFIX
+            ),
         )
     }
 }
