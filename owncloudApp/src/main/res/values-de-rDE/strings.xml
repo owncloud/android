@@ -710,7 +710,12 @@
   <string name="content_description_manage_accounts">Konten verwalten</string>
   <string name="content_description_search">Suche</string>
   <string name="content_description_remove_account">Benutzerkonto löschen</string>
+  <string name="content_description_create_new_folder">Neuen Ordner Erstellen</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Link öffnen</string>
   <string name="link_role_accessibility">Link</string>
+  <string name="pattern_label">Muster</string>
+  <string name="image_preview_label">Bildvorschau</string>
+  <string name="login_label">Anmelden</string>
+  <string name="details_label">Details</string>
 </resources>

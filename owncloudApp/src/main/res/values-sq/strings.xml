@@ -735,6 +735,7 @@
   <string name="content_description_delete_share">Fshini pjesë</string>
   <string name="content_description_file_operations">%1$s veprime</string>
   <string name="content_description_sort_by_name_ascending">Renditi sipas %1$s në rend rritës</string>
+  <string name="content_description_create_new_folder">Krijo dosje të re</string>
   <string name="create_shortcut_dialog_title">Krijoni një shkurtore</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URL-ja duhet të fillojë me https:// ose http:// , që të mund të hapet në shfletues</string>
@@ -747,4 +748,8 @@
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë në <a href="%1$s"><b>forumin</b></a> tonë, <a href="%2$s"><b>bisedoni me ne</b></a>, ose kontribuoni në <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Lidhje</string>
   <string name="button_role_accessibility">Buton</string>
+  <string name="pattern_label">Mostër</string>
+  <string name="image_preview_label">Paraparje figure</string>
+  <string name="login_label">Hyrje</string>
+  <string name="details_label">Hollësi</string>
 </resources>
