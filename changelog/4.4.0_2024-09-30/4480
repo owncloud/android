@@ -1,0 +1,7 @@
+Bugfix: Buttons visibility in name conflicts dialog
+
+In some languages, labels for the buttons in the name conflicts dialog were too long and their
+visibility was very poor. These buttons have been placed in vertical instead of horizontal to avoid
+this problem.
+
+https://github.com/owncloud/android/pull/4480
