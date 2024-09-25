@@ -738,6 +738,7 @@
   <string name="content_description_delete_share">Delete share</string>
   <string name="content_description_file_operations">%1$s operations</string>
   <string name="content_description_sort_by_name_ascending">Sort by %1$s ascending</string>
+  <string name="content_description_create_new_folder">Create new folder</string>
   <string name="create_shortcut_dialog_title">Create a shortcut</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">The URL must start with https:// or http:// so that it can be opened in the browser</string>
@@ -750,4 +751,8 @@
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Ask for help in our <a href="%1$s"><b>forum</b></a>, <a href="%2$s"><b>chat with us</b></a> or contribute on <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Button</string>
+  <string name="pattern_label">Pattern</string>
+  <string name="image_preview_label">Image preview</string>
+  <string name="login_label">Login</string>
+  <string name="details_label">Details</string>
 </resources>

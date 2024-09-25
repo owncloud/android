@@ -597,7 +597,12 @@
   <string name="content_description_manage_accounts">管理账号</string>
   <string name="content_description_search">搜索</string>
   <string name="content_description_remove_account">删除账号</string>
+  <string name="content_description_create_new_folder">创建新文件夹</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">开放链接</string>
   <string name="link_role_accessibility">链接</string>
+  <string name="pattern_label">模式</string>
+  <string name="image_preview_label">图片预览</string>
+  <string name="login_label">登录</string>
+  <string name="details_label">详细信息</string>
 </resources>

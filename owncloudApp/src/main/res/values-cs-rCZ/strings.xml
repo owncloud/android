@@ -591,7 +591,12 @@ správce systému.</string>
   <string name="content_description_remove_account">Odebrat účet</string>
   <string name="content_description_logo">Logo</string>
   <string name="content_description_delete_share">Zrušit sdílení</string>
+  <string name="content_description_create_new_folder">Vytvořit novou složku</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Otevřít odkaz</string>
   <string name="link_role_accessibility">Odkaz</string>
+  <string name="pattern_label">Maska</string>
+  <string name="image_preview_label">Náhled obrázku</string>
+  <string name="login_label">Přihlásit</string>
+  <string name="details_label">Podrobnosti</string>
 </resources>
