@@ -53,20 +53,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:gravity="end"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/dialog_file_already_exists_skip"
-                    style="@style/Button.Borderless"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/welcome_feature_skip_button" />
+                android:orientation="vertical">
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/dialog_file_already_exists_replace"
                     style="@style/Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical"
                     android:text="@string/conflict_replace" />
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -74,7 +68,16 @@
                     style="@style/Button.Borderless"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical"
                     android:text="@string/conflict_keep_both" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/dialog_file_already_exists_skip"
+                    style="@style/Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end|center_vertical"
+                    android:text="@string/welcome_feature_skip_button" />
 
             </LinearLayout>
         </LinearLayout>
