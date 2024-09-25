@@ -37,6 +37,7 @@ ownCloud admins and users.
 * Bugfix - List filtering not working after rotating device: [#4441](https://github.com/owncloud/android/issues/4441)
 * Bugfix - The color of some elements is set up correctly: [#4442](https://github.com/owncloud/android/issues/4442)
 * Bugfix - Audio player does not work: [#4474](https://github.com/owncloud/android/issues/4474)
+* Bugfix - Buttons visibility in name conflicts dialog: [#4480](https://github.com/owncloud/android/pull/4480)
 * Enhancement - Improved "Remove from original folder" option in auto-upload: [#4357](https://github.com/owncloud/android/issues/4357)
 * Enhancement - Improved accessibility of information and relationships: [#4362](https://github.com/owncloud/android/issues/4362)
 * Enhancement - Changed the color of some elements to improve accessibility: [#4364](https://github.com/owncloud/android/issues/4364)
@@ -90,6 +91,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4474
    https://github.com/owncloud/android/pull/4479
+
+* Bugfix - Buttons visibility in name conflicts dialog: [#4480](https://github.com/owncloud/android/pull/4480)
+
+   In some languages, labels for the buttons in the name conflicts dialog were too
+   long and their visibility was very poor. These buttons have been placed in
+   vertical instead of horizontal to avoid this problem.
+
+   https://github.com/owncloud/android/pull/4480
 
 * Enhancement - Improved "Remove from original folder" option in auto-upload: [#4357](https://github.com/owncloud/android/issues/4357)
 
