@@ -41,6 +41,7 @@ If you don't need some of the steps, cross them by removing the "[ ]" and surrou
  - [ ] [DIS] Release published in Play Store
  - [ ] [COM] Publish post in central.owncloud.org ([Category:News + Tag:android](https://central.owncloud.org/tags/c/news/5/android))
  - [ ] [COM] Inform in #general that release is out
+ - [ ] [GIT] Merge `master` into `release/M.m.p`, fixing all the conflicts that could happen, in owncloud/android
  - [ ] [GIT] Merge without rebasing `release/M.m.p` branch into `master`, in owncloud/android
  - [ ] [COM] Ping @TheOneRing to update release information in https://owncloud.com/mobile-apps/
  - [ ] [DOC] Update documentation with new stuff by creating [issue](https://github.com/owncloud/docs-client-android/issues)
