@@ -51,19 +51,9 @@ class ReleaseNotesViewModel(
                 type = ReleaseNoteType.ENHANCEMENT
             ),
             ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_accessibility_improvements,
-                subtitle = R.string.release_notes_4_3_0_subtitle_accessibility_improvements,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
                 title = R.string.release_notes_4_4_0_title_resharing_capability,
                 subtitle = R.string.release_notes_4_4_0_subtitle_resharing_capability,
                 type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_bugfixes_title,
-                subtitle = R.string.release_notes_bugfixes_subtitle,
-                type = ReleaseNoteType.BUGFIX
             ),
             ReleaseNote(
                 title = R.string.release_notes_4_4_6_4_bugfixes_title,
@@ -73,6 +63,16 @@ class ReleaseNotesViewModel(
             ReleaseNote(
                 title = R.string.release_notes_4_4_0_title_audio_player_android14,
                 subtitle = R.string.release_notes_4_4_0_subtitle_audio_player_android14,
+                type = ReleaseNoteType.BUGFIX
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_4_3_0_title_accessibility_improvements,
+                subtitle = R.string.release_notes_4_3_0_subtitle_accessibility_improvements,
+                type = ReleaseNoteType.ENHANCEMENT
+            ),
+            ReleaseNote(
+                title = R.string.release_notes_bugfixes_title,
+                subtitle = R.string.release_notes_bugfixes_subtitle,
                 type = ReleaseNoteType.BUGFIX
             ),
         )
