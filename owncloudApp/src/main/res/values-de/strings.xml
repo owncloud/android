@@ -738,6 +738,7 @@
   <string name="content_description_delete_share">Teilen löschen</string>
   <string name="content_description_file_operations">%1$s Operationen</string>
   <string name="content_description_sort_by_name_ascending"> %1$s aufsteigend sortieren</string>
+  <string name="content_description_create_new_folder">Neuen Ordner Erstellen</string>
   <string name="create_shortcut_dialog_title">Verknüpfung erstellen</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">Die URL muss mit https:// oder http:// beginnen, damit sie im Browser geöffnet werden kann.</string>
@@ -750,4 +751,8 @@
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Fragen Sie nach Hilfe in unserem <a href="%1$s"><b>Forum</b></a>, <a href="%2$s"><b>chatten Sie mit uns</b></a> oder machen Sie einen Beitrag auf <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Schaltfläche</string>
+  <string name="pattern_label">Muster</string>
+  <string name="image_preview_label">Bildvorschau</string>
+  <string name="login_label">Anmelden</string>
+  <string name="details_label">Details</string>
 </resources>

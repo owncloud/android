@@ -670,6 +670,7 @@
   <string name="release_notes_4_3_0_title_accessibility_improvements">Përmirësime përdorimi nga persona me aftësi të kufizuara</string>
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Disa përmirësime për ta bërë aplikacionin më të lehtë për persona me aftësi të kufizuara</string>
   <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">U shtuan disa mekanizma për përgjatë riprovash, për përmirësim të qëndrueshmërisë</string>
+  <string name="release_notes_4_4_0_title_resharing_capability">Përmirësime në pjesë private</string>
   <string name="release_notes_bugfixes_title">Ndreqje të metash të vockla</string>
   <string name="release_notes_bugfixes_subtitle">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
   <!--Open in web-->
@@ -735,6 +736,7 @@
   <string name="content_description_delete_share">Fshini pjesë</string>
   <string name="content_description_file_operations">%1$s veprime</string>
   <string name="content_description_sort_by_name_ascending">Renditi sipas %1$s në rend rritës</string>
+  <string name="content_description_create_new_folder">Krijo dosje të re</string>
   <string name="create_shortcut_dialog_title">Krijoni një shkurtore</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URL-ja duhet të fillojë me https:// ose http:// , që të mund të hapet në shfletues</string>
@@ -747,4 +749,16 @@
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë në <a href="%1$s"><b>forumin</b></a> tonë, <a href="%2$s"><b>bisedoni me ne</b></a>, ose kontribuoni në <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Lidhje</string>
   <string name="button_role_accessibility">Buton</string>
+  <string name="folder_picker_label">Zgjedhës dosjeje</string>
+  <string name="passcode_label">Kodkalim</string>
+  <string name="pattern_label">Mostër</string>
+  <string name="receive_external_files_label">Marrje kartelash të jashtme</string>
+  <string name="video_preview_label">Paraparje videosh</string>
+  <string name="release_notes_label">Shënime hedhjeje në qarkullim</string>
+  <string name="image_preview_label">Paraparje figure</string>
+  <string name="login_label">Hyrje</string>
+  <string name="whats_new_label">Ç’ka të re</string>
+  <string name="audio_preview_label">Paradëgjim audioje</string>
+  <string name="details_label">Hollësi</string>
+  <string name="text_preview_label">Paraparje teksti</string>
 </resources>

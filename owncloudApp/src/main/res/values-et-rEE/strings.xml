@@ -673,8 +673,14 @@
   <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Mõned täiustused, et teha rakendus paremini juurdepääsetavaks</string>
   <string name="release_notes_4_4_0_title_improved_from_original_folder_auto_upload">Automaatsed üleslaadimised on ühtlasemad</string>
   <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">Lisatud mõned mehhanismid korduskatsete töökindluse parandamiseks</string>
+  <string name="release_notes_4_4_0_title_resharing_capability">Privaatsete jagamiste parendused</string>
+  <string name="release_notes_4_4_0_subtitle_resharing_capability">\"Saab jagada\" valikut näidatakse ainult siis, kui kasutaja saab muuta ja muudab privaatset jagamist</string>
   <string name="release_notes_bugfixes_title">Väiksemad veaparandused</string>
   <string name="release_notes_bugfixes_subtitle">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
+  <string name="release_notes_4_4_6_4_bugfixes_title">Nimekirja filtreerimine peale seadme pööramist</string>
+  <string name="release_notes_4_4_6_4_bugfixes_subtitle">Seadme pööramisel arvestatakse seadistuse muudatust selliselt, et nimekirja filtreerimine toimib</string>
+  <string name="release_notes_4_4_0_title_audio_player_android14">Muusika mängija probleemid</string>
+  <string name="release_notes_4_4_0_subtitle_audio_player_android14">Android 14+ seadmed saavad audio faile rakenduses korrektselt mängida</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -738,6 +744,8 @@
   <string name="content_description_delete_share">Kustuta jagamine</string>
   <string name="content_description_file_operations">%1$s tegevus(t)</string>
   <string name="content_description_sort_by_name_ascending">Sorteeri %1$s järgi tõusvalt</string>
+  <string name="content_description_sort_by_name_descending">Sorteeri %1$s järgi kahanevalt</string>
+  <string name="content_description_create_new_folder">Loo uus kaust</string>
   <string name="create_shortcut_dialog_title">Loo otsetee</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">Brauseris avamiseks peab URL alguses olema kas http:// või https://</string>
@@ -750,4 +758,16 @@
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Küsi abi <a href="%1$s"><b>foorumist</b></a>, <a href="%2$s"><b>vestle meiega</b></a> või panusta <a href="%3$s"><b>GitHub\'is</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Nupp</string>
+  <string name="folder_picker_label">Kausta valija</string>
+  <string name="passcode_label">Pääsukood</string>
+  <string name="pattern_label">Muster</string>
+  <string name="receive_external_files_label">Võta vastu väliseid faile</string>
+  <string name="video_preview_label">Video eelvaade</string>
+  <string name="release_notes_label">Väljalaske märkmed</string>
+  <string name="image_preview_label">Pildi eelvaade</string>
+  <string name="login_label">Logi sisse</string>
+  <string name="whats_new_label">Uuendused</string>
+  <string name="audio_preview_label">Audio eelvaade</string>
+  <string name="details_label">Üksikasjad</string>
+  <string name="text_preview_label">Teksti eelvaade</string>
 </resources>

@@ -730,6 +730,7 @@
   <string name="content_description_edit_share">共有を編集</string>
   <string name="content_description_delete_share">共有を削除</string>
   <string name="content_description_file_operations">%1$s個の操作</string>
+  <string name="content_description_create_new_folder">新しいフォルダーを作成</string>
   <string name="create_shortcut_dialog_title">ショートカットを作成</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URLはブラウザーで開けるように、 http:// または https:// で始まる必要があります。</string>
@@ -741,4 +742,8 @@
   <string name="feedback_dialog_get_in_contact_title">問い合わせる</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[私たちの<a href="%1$s"><b>フォーラム</b></a>、<a href="%2$s"><b>ライブチャット</b></a>でヘルプを受けるか、<a href="%3$s"><b>GitHub</b></a>で開発に貢献する ]]></string>
   <string name="link_role_accessibility">リンク</string>
+  <string name="pattern_label">パターン</string>
+  <string name="image_preview_label">イメージプレビュー</string>
+  <string name="login_label">ログイン</string>
+  <string name="details_label">詳細</string>
 </resources>

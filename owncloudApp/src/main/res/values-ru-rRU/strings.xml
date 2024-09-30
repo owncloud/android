@@ -725,7 +725,12 @@
   <string name="content_description_edit_share">Редактировать Поделиться</string>
   <string name="content_description_delete_share">Удалить долю</string>
   <string name="content_description_file_operations">%1$s  операции</string>
+  <string name="content_description_create_new_folder">Создать новую папку</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Открыть ссылку</string>
   <string name="link_role_accessibility">Ссылка</string>
+  <string name="pattern_label">Шаблон</string>
+  <string name="image_preview_label">Предпросмотр</string>
+  <string name="login_label">Вход</string>
+  <string name="details_label">Подробно</string>
 </resources>
