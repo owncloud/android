@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -45,6 +45,38 @@ val OC_FOLDER = OCFile(
     length = 123123123
 )
 
+val OC_PARENT_FOLDER_WITH_SPACE_ID = OCFile(
+    id = 123,
+    parentId = 1,
+    remotePath = "/Folder",
+    owner = OC_ACCOUNT_NAME,
+    permissions = "RDNVCK",
+    remoteId = "00000003oci9p7er2hay2",
+    privateLink = "http://server.url/f/5",
+    creationTimestamp = 0,
+    modificationTimestamp = 1593510589000,
+    etag = "5efb0c13c688g",
+    mimeType = "DIR",
+    length = 123123123,
+    spaceId = OC_SPACE_PERSONAL.id
+)
+
+val OC_FOLDER_WITH_SPACE_ID = OCFile(
+    id = 125,
+    parentId = 123,
+    remotePath = "/Folder/Photos",
+    owner = OC_ACCOUNT_NAME,
+    permissions = "RDNVCK",
+    remoteId = "00000003oci9p7er2hay3",
+    privateLink = "http://server.url/f/6",
+    creationTimestamp = 0,
+    modificationTimestamp = 1593510589000,
+    etag = "5efb0c13c688h",
+    mimeType = "DIR",
+    length = 0,
+    spaceId = OC_SPACE_PERSONAL.id
+)
+
 val OC_FILE = OCFile(
     id = 124,
     parentId = 122,
@@ -75,6 +107,22 @@ val OC_FILE_AVAILABLE_OFFLINE = OCFile(
     mimeType = "image/jpeg",
     length = 3000000,
     availableOfflineStatus = AvailableOfflineStatus.AVAILABLE_OFFLINE
+)
+
+val OC_FILE_WITH_SPACE_ID = OCFile(
+    id = 126,
+    parentId = 123,
+    remotePath = "/Folder/image2.jpt",
+    owner = OC_ACCOUNT_NAME,
+    permissions = "RDNVCK",
+    remoteId = "00000003oci9p7er2hox",
+    privateLink = "http://server.url/f/7",
+    creationTimestamp = 1593510589000,
+    modificationTimestamp = 1593510589000,
+    etag = "5efb0c13c688i",
+    mimeType = "image/jpeg",
+    length = 3000000,
+    availableOfflineStatus = AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
 )
 
 val OC_FILE_WITH_SYNC_INFO = OCFileWithSyncInfo(
