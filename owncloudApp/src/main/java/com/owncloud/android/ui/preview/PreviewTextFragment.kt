@@ -37,6 +37,7 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.owncloud.android.R
@@ -157,6 +158,7 @@ class PreviewTextFragment : FileFragment() {
                 val fileToSetAsAvailableOffline = ArrayList<OCFile>()
                 fileToSetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(fileToSetAsAvailableOffline))
+                Snackbar.make(requireView(), R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG).show()
                 true
             }
 
@@ -164,6 +166,7 @@ class PreviewTextFragment : FileFragment() {
                 val fileToUnsetAsAvailableOffline = ArrayList<OCFile>()
                 fileToUnsetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline))
+                Snackbar.make(requireView(), R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG).show()
                 true
             }
 
@@ -211,12 +214,12 @@ class PreviewTextFragment : FileFragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         mContainerActivity.storageManager?.let {
-            val safeFile = file
+            val safeFile = previewTextViewModel.getCurrentFile() ?: return
             val accountName = it.account.name
-            previewTextViewModel.filterMenuOptions(safeFile, accountName)
+            previewTextViewModel.filterMenuOptions(safeFile.file, accountName)
 
             collectLatestLifecycleFlow(previewTextViewModel.menuOptions) { menuOptions ->
-                val hasWritePermission = safeFile.hasWritePermission
+                val hasWritePermission = safeFile.file.hasWritePermission
                 menu.filterMenuOptions(menuOptions, hasWritePermission)
             }
         }
