@@ -46,6 +46,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.github.chrisbanes.photoview.PhotoView
+import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.databinding.PreviewImageFragmentBinding
 import com.owncloud.android.domain.files.model.MIME_SVG
@@ -234,11 +235,13 @@ class PreviewImageFragment : FileFragment() {
 
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
+                showSnackbarMessage()
                 true
             }
 
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
+                showSnackbarMessage()
                 true
             }
 
@@ -330,6 +333,15 @@ class PreviewImageFragment : FileFragment() {
 
     private fun getBackgroundColor(file: OCFile): Int {
         return if (isSVGFile(file)) Color.WHITE else Color.BLACK
+    }
+
+    private fun showSnackbarMessage(){
+        val snackbar = Snackbar.make(requireView(), R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG)
+        val snackbarView = snackbar.view
+        val params = snackbarView.layoutParams as ViewGroup.MarginLayoutParams
+        params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, 100)
+        snackbarView.layoutParams = params
+        snackbar.show()
     }
 
     /**
