@@ -22,6 +22,7 @@ androidxTestMonitor = "1.6.1"
 androidxTestUiAutomator ="2.2.0"
 androidxWork = "2.8.1"
 coil = "2.2.2"
+detekt="1.20.0"
 dexopener = "2.0.5"
 disklrucache = "2.0.2"
 media3 ="1.1.1"
@@ -124,3 +125,4 @@ markwon = ["markwon-core", "markwon-ext-tables", "markwon-ext-strikethrough", "m
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
