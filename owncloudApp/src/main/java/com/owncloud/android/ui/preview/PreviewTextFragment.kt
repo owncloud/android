@@ -227,15 +227,12 @@ class PreviewTextFragment : FileFragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         mContainerActivity.storageManager?.let {
+            val safeFile = file
             val accountName = it.account.name
-            collectLatestLifecycleFlow(previewTextViewModel.getCurrentFile()) { currentFile ->
-                if (currentFile != null) {
-                    previewTextViewModel.filterMenuOptions(currentFile, accountName)
-                }
-            }
+            previewTextViewModel.filterMenuOptions(safeFile,accountName)
 
             collectLatestLifecycleFlow(previewTextViewModel.menuOptions) { menuOptions ->
-                val hasWritePermission = file.hasWritePermission
+                val hasWritePermission = safeFile.hasWritePermission
                 menu.filterMenuOptions(menuOptions, hasWritePermission)
             }
         }
