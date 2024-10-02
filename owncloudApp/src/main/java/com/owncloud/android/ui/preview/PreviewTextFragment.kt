@@ -69,7 +69,7 @@ class PreviewTextFragment : FileFragment() {
     private lateinit var textLoadTask: TextLoadAsyncTask
 
     private val previewTextViewModel by viewModel<PreviewTextViewModel> {
-        parametersOf(file.id)
+        parametersOf(requireArguments().getParcelable(EXTRA_FILE))
     }
     private val fileOperationsViewModel by viewModel<FileOperationsViewModel>()
 

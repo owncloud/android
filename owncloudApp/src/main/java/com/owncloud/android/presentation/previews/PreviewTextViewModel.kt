@@ -41,13 +41,13 @@ class PreviewTextViewModel(
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
-    idFile: Long
+    ocFile: OCFile
 ) : ViewModel() {
 
     private val _menuOptions: MutableStateFlow<List<FileMenuOption>> = MutableStateFlow(emptyList())
     val menuOptions: StateFlow<List<FileMenuOption>> = _menuOptions
 
-    private val currentFile: Flow<OCFile?> = getFileByIdAsStreamUseCase(GetFileByIdAsStreamUseCase.Params(idFile))
+    private val currentFile: Flow<OCFile?> = getFileByIdAsStreamUseCase(GetFileByIdAsStreamUseCase.Params(ocFile.id!!))
 
     fun getCurrentFile(): Flow<OCFile?> = currentFile
 
