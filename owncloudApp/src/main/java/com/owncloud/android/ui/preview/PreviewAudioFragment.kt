@@ -42,6 +42,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
@@ -285,11 +286,13 @@ class PreviewAudioFragment : FileFragment() {
 
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
+                Snackbar.make(requireView(), R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG).show()
                 true
             }
 
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
+                Snackbar.make(requireView(), R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG).show()
                 true
             }
 
