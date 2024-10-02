@@ -60,6 +60,7 @@ import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 /**
@@ -86,7 +87,10 @@ class PreviewAudioFragment : FileFragment() {
     private var mediaServiceConnection: MediaServiceConnection? = null
     private var autoplay = true
 
-    private val previewAudioViewModel by viewModel<PreviewAudioViewModel>()
+    private val previewAudioViewModel by viewModel<PreviewAudioViewModel>() {
+        parametersOf(requireArguments().getParcelable(EXTRA_FILE))
+    }
+
     private val fileOperationsViewModel: FileOperationsViewModel by inject()
 
     /**
@@ -115,6 +119,16 @@ class PreviewAudioFragment : FileFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        collectLatestLifecycleFlow(previewAudioViewModel.getCurrentFile()) { currentFile ->
+            if (currentFile != null) {
+                file = currentFile
+                requireActivity().invalidateOptionsMenu()
+            } else {
+                requireActivity().onBackPressed()
+            }
+
+        }
 
         imagePreview = view.findViewById(R.id.image_preview)
         mediaController = view.findViewById(R.id.media_controller)
@@ -227,7 +241,7 @@ class PreviewAudioFragment : FileFragment() {
         super.onPrepareOptionsMenu(menu)
         val safeFile = file
         val accountName = account!!.name
-        previewAudioViewModel.filterMenuOptions(safeFile, accountName)
+        previewAudioViewModel.filterMenuOptions(safeFile,accountName)
 
         collectLatestLifecycleFlow(previewAudioViewModel.menuOptions) { menuOptions ->
             val hasWritePermission = safeFile.hasWritePermission

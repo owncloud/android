@@ -25,9 +25,11 @@ import androidx.lifecycle.viewModelScope
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -37,10 +39,16 @@ class PreviewAudioViewModel(
     private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
+    ocFile: OCFile
 ) : ViewModel() {
 
     private val _menuOptions: MutableStateFlow<List<FileMenuOption>> = MutableStateFlow(emptyList())
     val menuOptions: StateFlow<List<FileMenuOption>> = _menuOptions
+
+    private val currentFile: Flow<OCFile?> = getFileByIdAsStreamUseCase(GetFileByIdAsStreamUseCase.Params(ocFile.id!!))
+
+    fun getCurrentFile(): Flow<OCFile?> = currentFile
 
     fun filterMenuOptions(file: OCFile, accountName: String) {
         val shareViaLinkAllowed = contextProvider.getBoolean(R.bool.share_via_link_feature)
