@@ -56,6 +56,7 @@ import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.getScopeName
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.io.BufferedWriter
 import java.io.FileInputStream
@@ -67,7 +68,9 @@ class PreviewTextFragment : FileFragment() {
     private var account: Account? = null
     private lateinit var textLoadTask: TextLoadAsyncTask
 
-    private val previewTextViewModel by viewModel<PreviewTextViewModel>()
+    private val previewTextViewModel by viewModel<PreviewTextViewModel> {
+        parametersOf(file.id)
+    }
     private val fileOperationsViewModel by viewModel<FileOperationsViewModel>()
 
     private lateinit var binding: PreviewTextFragmentBinding
@@ -112,6 +115,16 @@ class PreviewTextFragment : FileFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        collectLatestLifecycleFlow(previewTextViewModel.getCurrentFile()) { currentFile ->
+            if (currentFile != null) {
+                file = currentFile
+                requireActivity().invalidateOptionsMenu()
+            } else {
+                requireActivity().onBackPressed()
+            }
+
+        }
+
         loadAndShowTextPreview()
     }
 
@@ -214,12 +227,15 @@ class PreviewTextFragment : FileFragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         mContainerActivity.storageManager?.let {
-            val safeFile = previewTextViewModel.getCurrentFile() ?: return
             val accountName = it.account.name
-            previewTextViewModel.filterMenuOptions(safeFile.file, accountName)
+            collectLatestLifecycleFlow(previewTextViewModel.getCurrentFile()) { currentFile ->
+                if (currentFile != null) {
+                    previewTextViewModel.filterMenuOptions(currentFile, accountName)
+                }
+            }
 
             collectLatestLifecycleFlow(previewTextViewModel.menuOptions) { menuOptions ->
-                val hasWritePermission = safeFile.file.hasWritePermission
+                val hasWritePermission = file.hasWritePermission
                 menu.filterMenuOptions(menuOptions, hasWritePermission)
             }
         }
