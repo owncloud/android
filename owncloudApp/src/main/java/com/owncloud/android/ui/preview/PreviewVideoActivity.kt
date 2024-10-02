@@ -56,6 +56,7 @@ import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.trackselection.AdaptiveTrackSelection
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.ui.PlayerView
+import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.databinding.VideoPreviewBinding
 import com.owncloud.android.domain.files.model.OCFile
@@ -384,6 +385,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
                 val fileToSetAsAvailableOffline = ArrayList<OCFile>()
                 fileToSetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(SetFilesAsAvailableOffline(fileToSetAsAvailableOffline))
+                Snackbar.make(binding.root, R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG).show()
                 true
             }
 
@@ -391,6 +393,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
                 val fileToUnsetAsAvailableOffline = ArrayList<OCFile>()
                 fileToUnsetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline))
+                Snackbar.make(binding.root, R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG).show()
                 true
             }
 
