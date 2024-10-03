@@ -49,7 +49,7 @@ class PreviewImageViewModel(
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
     getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
-    ocFile:OCFile,
+    ocFile: OCFile,
 ) : ViewModel() {
 
 

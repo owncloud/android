@@ -229,7 +229,7 @@ class PreviewTextFragment : FileFragment() {
         mContainerActivity.storageManager?.let {
             val safeFile = file
             val accountName = it.account.name
-            previewTextViewModel.filterMenuOptions(safeFile,accountName)
+            previewTextViewModel.filterMenuOptions(safeFile, accountName)
 
             collectLatestLifecycleFlow(previewTextViewModel.menuOptions) { menuOptions ->
                 val hasWritePermission = safeFile.hasWritePermission
