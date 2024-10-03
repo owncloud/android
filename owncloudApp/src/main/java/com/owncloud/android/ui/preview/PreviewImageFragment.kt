@@ -349,10 +349,9 @@ class PreviewImageFragment : FileFragment() {
 
     private fun showSnackbarMessage(){
         val snackbar = Snackbar.make(requireView(), R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG)
-        val snackbarView = snackbar.view
-        val params = snackbarView.layoutParams as ViewGroup.MarginLayoutParams
+        val params = snackbar.view.layoutParams as ViewGroup.MarginLayoutParams
         params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, 100)
-        snackbarView.layoutParams = params
+        snackbar.view.layoutParams = params
         snackbar.show()
     }
 
