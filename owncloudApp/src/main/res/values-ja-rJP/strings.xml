@@ -667,8 +667,6 @@
   <string name="release_notes_footer">%1$sのご利用ありがとうございます。</string>
   <string name="release_notes_proceed">続行</string>
   <string name="release_notes_icon">リリースノートのアイコン</string>
-  <string name="release_notes_4_3_0_title_accessibility_improvements">アクセシビリティの改善</string>
-  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">アクセシビリティに配慮するためにいくつかの改善が行われました。</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Webで開く</string>
   <string name="ic_action_open_with_web">%1$s(Web) で開く</string>

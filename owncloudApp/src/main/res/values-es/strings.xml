@@ -630,7 +630,6 @@ Póngase en contacto con su administrador</string>
   <string name="release_notes_footer">Gracias por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Proceder</string>
   <string name="release_notes_icon">Icono notas de lanzamiento</string>
-  <string name="release_notes_4_3_0_title_accessibility_improvements">Mejoras en accesibilidad</string>
   <string name="release_notes_bugfixes_title">Solución de problemas</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir en web</string>
