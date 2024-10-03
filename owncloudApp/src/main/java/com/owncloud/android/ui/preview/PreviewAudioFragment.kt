@@ -241,7 +241,7 @@ class PreviewAudioFragment : FileFragment() {
         super.onPrepareOptionsMenu(menu)
         val safeFile = file
         val accountName = account!!.name
-        previewAudioViewModel.filterMenuOptions(safeFile,accountName)
+        previewAudioViewModel.filterMenuOptions(safeFile, accountName)
 
         collectLatestLifecycleFlow(previewAudioViewModel.menuOptions) { menuOptions ->
             val hasWritePermission = safeFile.hasWritePermission
