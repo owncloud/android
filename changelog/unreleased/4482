@@ -1,0 +1,7 @@
+Enhancement: Add status message when (un)setting av. offline from preview
+
+A message has been added in all previews when the (un)setting av. offline buttons are clicked.
+The options menu has been updated in all previews depending on the file status.
+
+https://github.com/owncloud/android/issues/4382
+https://github.com/owncloud/android/pull/4482
