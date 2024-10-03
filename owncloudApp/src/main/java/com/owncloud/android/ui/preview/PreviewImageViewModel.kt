@@ -30,11 +30,13 @@ import androidx.work.WorkInfo
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -45,14 +47,21 @@ class PreviewImageViewModel(
     private val getLiveDataForFinishedDownloadsFromAccountUseCase: GetLiveDataForFinishedDownloadsFromAccountUseCase,
     private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
     private val contextProvider: ContextProvider,
-    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
+    ocFile:OCFile,
 ) : ViewModel() {
+
 
     private val _downloads = MediatorLiveData<List<Pair<OCFile, WorkInfo>>>()
     val downloads: LiveData<List<Pair<OCFile, WorkInfo>>> = _downloads
 
     private val _menuOptions: MutableStateFlow<List<FileMenuOption>> = MutableStateFlow(emptyList())
     val menuOptions: StateFlow<List<FileMenuOption>> = _menuOptions
+
+    private val currentFile: Flow<OCFile?> = getFileByIdAsStreamUseCase(GetFileByIdAsStreamUseCase.Params(ocFile.id!!))
+
+    fun getCurrentFile(): Flow<OCFile?> = currentFile
 
     fun startListeningToDownloadsFromAccount(account: Account) {
         _downloads.addSource(

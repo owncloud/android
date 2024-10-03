@@ -65,6 +65,7 @@ import com.owncloud.android.usecases.transfers.DOWNLOAD_FINISH_MESSAGE
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 /**
@@ -74,7 +75,9 @@ class PreviewImageActivity : FileActivity(),
     FileFragment.ContainerActivity,
     OnPageChangeListener {
 
-    private val previewImageViewModel: PreviewImageViewModel by viewModel()
+    private val previewImageViewModel by viewModel <PreviewImageViewModel> {
+        parametersOf(file)
+    }
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
 
     private lateinit var viewPager: ViewPager
