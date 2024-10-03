@@ -44,37 +44,6 @@ class ReleaseNotesViewModel(
     }
 
     companion object {
-        val releaseNotesList = listOf(
-            ReleaseNote(
-                title = R.string.release_notes_4_4_0_title_improved_from_original_folder_auto_upload,
-                subtitle = R.string.release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_4_0_title_resharing_capability,
-                subtitle = R.string.release_notes_4_4_0_subtitle_resharing_capability,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_4_6_4_bugfixes_title,
-                subtitle = R.string.release_notes_4_4_6_4_bugfixes_subtitle,
-                type = ReleaseNoteType.BUGFIX
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_4_0_title_audio_player_android14,
-                subtitle = R.string.release_notes_4_4_0_subtitle_audio_player_android14,
-                type = ReleaseNoteType.BUGFIX
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_4_3_0_title_accessibility_improvements,
-                subtitle = R.string.release_notes_4_3_0_subtitle_accessibility_improvements,
-                type = ReleaseNoteType.ENHANCEMENT
-            ),
-            ReleaseNote(
-                title = R.string.release_notes_bugfixes_title,
-                subtitle = R.string.release_notes_bugfixes_subtitle,
-                type = ReleaseNoteType.BUGFIX
-            ),
-        )
+        val releaseNotesList : List <ReleaseNote> = emptyList()
     }
 }
