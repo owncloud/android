@@ -725,20 +725,9 @@
     <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
-
-    <string name="release_notes_4_3_0_title_accessibility_improvements">Improvements in accessibility</string>
-    <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Some improvements to make the application more accessible</string>
-    <string name="release_notes_4_4_0_title_improved_from_original_folder_auto_upload">Auto uploads more consistent</string>
-    <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">Added some mechanisms over retries to improve reliability</string>
-    <string name="release_notes_4_4_0_title_resharing_capability">Improvements in private shares</string>
-    <string name="release_notes_4_4_0_subtitle_resharing_capability">The \"can share\" option is now only shown when editing a private share if the user is able to edit it</string>
     <string name="release_notes_bugfixes_title">Minor bugfixes</string>
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
 
-    <string name="release_notes_4_4_6_4_bugfixes_title">List filtering after rotating device</string>
-    <string name="release_notes_4_4_6_4_bugfixes_subtitle">Configuration changes have been handled when rotating the device so that list filtering works</string>
-    <string name="release_notes_4_4_0_title_audio_player_android14">Audio player problems</string>
-    <string name="release_notes_4_4_0_subtitle_audio_player_android14">Devices with Android 14+ can now play correctly audio files in the app</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
