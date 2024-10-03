@@ -669,10 +669,6 @@
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
   <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
-  <string name="release_notes_4_3_0_title_accessibility_improvements">Verbesserung der Zugänglichkeit</string>
-  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Einige Verbesserungen, um die Anwendung besser zugänglich zu machen</string>
-  <string name="release_notes_4_4_0_title_improved_from_original_folder_auto_upload">Automatisches Hochladen ist konsistenter</string>
-  <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">Einige Mechanismen für Wiederholungen wurden hinzugefügt, dies verbessert die Zuverlässigkeit</string>
   <string name="release_notes_bugfixes_title">Geringfügige Fehler behoben</string>
   <string name="release_notes_bugfixes_subtitle">Einige Fehler wurden behoben, um die Benutzung der App zu verbessern.</string>
   <!--Open in web-->

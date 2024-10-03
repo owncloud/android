@@ -669,8 +669,6 @@
   <string name="release_notes_footer">Kiitos kun käytät %1$s.\n❤</string>
   <string name="release_notes_proceed">Jatka</string>
   <string name="release_notes_icon">Julkaisutiedotteen ikoni</string>
-  <string name="release_notes_4_3_0_title_accessibility_improvements">Päivityksiä tavoitettavuudessa</string>
-  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Joitain parannuksia sovelluksen tavoitettavuuteen</string>
   <string name="release_notes_bugfixes_title">Pieniä bugikorjauksia</string>
   <string name="release_notes_bugfixes_subtitle">Joitain bugeja korjattu sovelluksen käyttökokemuksen parantamiseksi</string>
   <!--Open in web-->
