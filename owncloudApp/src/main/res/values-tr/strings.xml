@@ -568,7 +568,12 @@
   <string name="content_description_manage_accounts">Hesapları yönet</string>
   <string name="content_description_search">Ara</string>
   <string name="content_description_remove_account">Hesabı kaldır</string>
+  <string name="content_description_create_new_folder">Yeni klasör oluştur</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Bağlantıyı aç</string>
   <string name="link_role_accessibility">Bağlantı</string>
+  <string name="pattern_label">Desen</string>
+  <string name="image_preview_label">Resim önizleme</string>
+  <string name="login_label">Oturum Aç</string>
+  <string name="details_label">Ayrıntılar</string>
 </resources>
