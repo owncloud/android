@@ -734,6 +734,7 @@
   <string name="content_description_delete_share">Teilen löschen</string>
   <string name="content_description_file_operations">%1$s Operationen</string>
   <string name="content_description_sort_by_name_ascending"> %1$s aufsteigend sortieren</string>
+  <string name="content_description_sort_by_name_descending"> %1$s absteigend sortieren</string>
   <string name="content_description_create_new_folder">Neuen Ordner Erstellen</string>
   <string name="create_shortcut_dialog_title">Verknüpfung erstellen</string>
   <string name="create_shortcut_dialog_url">URL</string>
@@ -747,8 +748,16 @@
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Fragen Sie nach Hilfe in unserem <a href="%1$s"><b>Forum</b></a>, <a href="%2$s"><b>chatten Sie mit uns</b></a> oder machen Sie einen Beitrag auf <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Schaltfläche</string>
+  <string name="folder_picker_label">Ordnerauswahl</string>
+  <string name="passcode_label">PIN-Sperre</string>
   <string name="pattern_label">Muster</string>
+  <string name="receive_external_files_label">Externe Dateien empfangen</string>
+  <string name="video_preview_label">Videovorschau</string>
+  <string name="release_notes_label">Versionshinweise</string>
   <string name="image_preview_label">Bildvorschau</string>
   <string name="login_label">Anmelden</string>
+  <string name="whats_new_label">Was ist neu</string>
+  <string name="audio_preview_label">Audiovorschau</string>
   <string name="details_label">Details</string>
+  <string name="text_preview_label">Textvorschau</string>
 </resources>
