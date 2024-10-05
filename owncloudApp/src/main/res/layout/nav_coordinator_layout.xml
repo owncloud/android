@@ -50,10 +50,12 @@
         android:visibility="visible"
         app:itemIconTint="@color/primary_button_text_color"
         app:itemTextColor="@color/primary_button_text_color"
-        app:labelVisibilityMode="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:labelVisibilityMode="labeled"
+        app:activeIndicatorEnabled="true"
+        app:activeIndicatorColor="@color/active_indicator_color"
         app:menu="@menu/bottom_navbar_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
