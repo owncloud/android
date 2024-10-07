@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -100,6 +100,20 @@ class OCLocalSpacesDataSource(
             accountName = accountName,
             filterDriveTypes = setOf(DRIVE_TYPE_PERSONAL, DRIVE_TYPE_PROJECT),
         ).map { it.toModel() }
+    }
+
+    override fun getPersonalAndSharesAndProjectSpacesForAccount(accountName: String): List<OCSpace> {
+        val allSpaces = spacesDao.getSpacesByDriveTypeForAccount(
+            accountName = accountName,
+            filterDriveTypes = setOf(DRIVE_TYPE_PERSONAL, DRIVE_TYPE_PROJECT),
+        ).map { it.toModel() }.toMutableList()
+        spacesDao.getSpaceByIdForAccount(
+            spaceId = SPACE_ID_SHARES,
+            accountName = accountName
+        )?.let {
+            allSpaces.add(it.toModel())
+        }
+        return allSpaces
     }
 
     override fun getSpaceWithSpecialsByIdForAccount(spaceId: String?, accountName: String): OCSpace {
