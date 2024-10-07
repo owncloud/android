@@ -36,6 +36,8 @@ import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.domain.camerauploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
+import com.owncloud.android.domain.exceptions.NetworkErrorException
+import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.exceptions.UnauthorizedException
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.usecases.GetWebDavUrlForSpaceUseCase
@@ -58,6 +60,7 @@ import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSyst
 import com.owncloud.android.lib.resources.files.chunks.ChunkedUploadFromFileSystemOperation.Companion.CHUNK_SIZE
 import com.owncloud.android.lib.resources.files.services.implementation.OCChunkService
 import com.owncloud.android.presentation.authentication.AccountUtils
+import com.owncloud.android.utils.ConnectivityUtils.isInternetAvailable
 import com.owncloud.android.utils.NotificationUtils
 import com.owncloud.android.utils.RemoteFileUtils.Companion.getAvailableRemotePath
 import com.owncloud.android.utils.SecurityUtils
@@ -124,9 +127,22 @@ class UploadFileFromContentUriWorker(
             Result.success()
         } catch (throwable: Throwable) {
             Timber.e(throwable)
-            showNotification(throwable)
-            updateUploadsDatabaseWithResult(throwable)
-            Result.failure()
+            val isNetworkError = throwable is NetworkErrorException || throwable is NoConnectionWithServerException
+            val shouldRetry = isNetworkError && isInternetAvailable(appContext)
+
+            if (shouldRetry) {
+                if (runAttemptCount < MAX_RETRIES) {
+                    Result.retry()
+                } else {
+                    showNotification(throwable)
+                    updateUploadsDatabaseWithResult(throwable)
+                    Result.failure()
+                }
+            } else {
+                showNotification(throwable)
+                updateUploadsDatabaseWithResult(throwable)
+                Result.failure()
+            }
         }
     }
 
@@ -378,6 +394,8 @@ class UploadFileFromContentUriWorker(
     }
 
     companion object {
+        const val SECONDS_BACKOFF_DELAY = 10_000L
+        const val MAX_RETRIES = 2
         const val KEY_PARAM_ACCOUNT_NAME = "KEY_PARAM_ACCOUNT_NAME"
         const val KEY_PARAM_BEHAVIOR = "KEY_PARAM_BEHAVIOR"
         const val KEY_PARAM_CONTENT_URI = "KEY_PARAM_CONTENT_URI"
