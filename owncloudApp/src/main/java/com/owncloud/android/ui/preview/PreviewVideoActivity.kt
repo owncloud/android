@@ -8,6 +8,7 @@
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -37,7 +38,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.Window
 import androidx.annotation.OptIn
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowCompat
@@ -62,7 +62,6 @@ import com.owncloud.android.R
 import com.owncloud.android.databinding.VideoPreviewBinding
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.utils.Event
-import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.filterMenuOptions
 import com.owncloud.android.extensions.sendDownloadedFilesByShareSheet
 import com.owncloud.android.extensions.showErrorInSnackbar
@@ -86,7 +85,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(UnstableApi::class)
 class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlayerTaskListener, FileFragment.ContainerActivity, MenuProvider {
     private var account: Account? = null
@@ -97,7 +95,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
     private var playWhenReady = true
     private var playbackPosition: Long = 0
     private var windowInsetsController: WindowInsetsControllerCompat? = null
-    private val previewVideoViewModel: PreviewVideoViewModel by viewModel() { parametersOf(intent.getParcelableExtra(EXTRA_FILE, OCFile::class.java)) }
+    private val previewVideoViewModel: PreviewVideoViewModel by viewModel { parametersOf(intent.getParcelableExtra(EXTRA_FILE)) }
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
     private val transfersViewModel: TransfersViewModel by viewModel()
 
@@ -333,8 +331,6 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
     }
 
     override fun onPrepareMenu(menu: Menu) {
-
-
         val safeFile = file
         val accountName = account!!.name
         previewVideoViewModel.filterMenuOptions(safeFile, accountName)
@@ -401,7 +397,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
                 val fileToSetAsAvailableOffline = ArrayList<OCFile>()
                 fileToSetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(SetFilesAsAvailableOffline(fileToSetAsAvailableOffline))
-                Snackbar.make(binding.root, R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root, R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 
@@ -409,7 +405,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
                 val fileToUnsetAsAvailableOffline = ArrayList<OCFile>()
                 fileToUnsetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline))
-                Snackbar.make(binding.root, R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root, R.string.confirmation_unset_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 

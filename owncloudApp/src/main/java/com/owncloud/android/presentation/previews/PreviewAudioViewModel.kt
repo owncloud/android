@@ -2,8 +2,9 @@
  * ownCloud Android client application
  *
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -37,10 +38,10 @@ import kotlinx.coroutines.launch
 
 class PreviewAudioViewModel(
     private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
+    getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
-    getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
-    ocFile: OCFile
+    ocFile: OCFile,
 ) : ViewModel() {
 
     private val _menuOptions: MutableStateFlow<List<FileMenuOption>> = MutableStateFlow(emptyList())
