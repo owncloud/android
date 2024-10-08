@@ -28,7 +28,7 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.owncloud.android.R
 import com.owncloud.android.data.executeRemoteOperation
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.exceptions.LocalFileNotFoundException
 import com.owncloud.android.domain.exceptions.UnauthorizedException

@@ -25,8 +25,8 @@ package com.owncloud.android.presentation.accounts
 import android.accounts.Account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
-import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
+import com.owncloud.android.domain.automaticuploads.model.AutomaticUploadsConfiguration
+import com.owncloud.android.domain.automaticuploads.usecases.GetAutomaticUploadsConfigurationUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
@@ -40,18 +40,18 @@ import kotlinx.coroutines.launch
 class ManageAccountsViewModel(
     private val accountProvider: AccountProvider,
     private val removeLocalFilesForAccountUseCase: RemoveLocalFilesForAccountUseCase,
-    private val getCameraUploadsConfigurationUseCase: GetCameraUploadsConfigurationUseCase,
+    private val getAutomaticUploadsConfigurationUseCase: GetAutomaticUploadsConfigurationUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
     private val _cleanAccountLocalStorageFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
     val cleanAccountLocalStorageFlow: StateFlow<Event<UIResult<Unit>>?> = _cleanAccountLocalStorageFlow
 
-    private var cameraUploadsConfiguration: CameraUploadsConfiguration? = null
+    private var automaticUploadsConfiguration: AutomaticUploadsConfiguration? = null
 
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            cameraUploadsConfiguration = getCameraUploadsConfigurationUseCase(Unit).getDataOrNull()
+            automaticUploadsConfiguration = getAutomaticUploadsConfigurationUseCase(Unit).getDataOrNull()
         }
     }
 
@@ -73,8 +73,8 @@ class ManageAccountsViewModel(
         )
     }
 
-    fun hasCameraUploadsAttached(accountName: String): Boolean {
-        return accountName == cameraUploadsConfiguration?.pictureUploadsConfiguration?.accountName ||
-                accountName == cameraUploadsConfiguration?.videoUploadsConfiguration?.accountName
+    fun hasAutomaticUploadsAttached(accountName: String): Boolean {
+        return accountName == automaticUploadsConfiguration?.pictureUploadsConfiguration?.accountName ||
+                accountName == automaticUploadsConfiguration?.videoUploadsConfiguration?.accountName
     }
 }

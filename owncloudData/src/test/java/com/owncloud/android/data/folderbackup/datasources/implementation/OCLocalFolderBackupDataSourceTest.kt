@@ -22,7 +22,7 @@ package com.owncloud.android.data.folderbackup.datasources.implementation
 
 import com.owncloud.android.data.folderbackup.datasources.implementation.OCLocalFolderBackupDataSource.Companion.toModel
 import com.owncloud.android.data.folderbackup.db.FolderBackupDao
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration
 import com.owncloud.android.testutil.OC_BACKUP
 import com.owncloud.android.testutil.OC_BACKUP_ENTITY
 import io.mockk.every
@@ -47,11 +47,11 @@ class OCLocalFolderBackupDataSourceTest {
     }
 
     @Test
-    fun `getCameraUploadsConfiguration returns a CameraUploadsConfiguration when having valid configurations`() {
+    fun `getAutomaticUploadsConfiguration returns an AutomaticUploadsConfiguration when having valid configurations`() {
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } returns OC_BACKUP_ENTITY
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } returns OC_BACKUP_ENTITY
 
-        val resultCurrent = ocLocalFolderBackupDataSource.getCameraUploadsConfiguration()
+        val resultCurrent = ocLocalFolderBackupDataSource.getAutomaticUploadsConfiguration()
 
         assertEquals(OC_BACKUP_ENTITY.toModel(), resultCurrent?.pictureUploadsConfiguration)
         assertEquals(OC_BACKUP_ENTITY.toModel(), resultCurrent?.videoUploadsConfiguration)
@@ -63,11 +63,11 @@ class OCLocalFolderBackupDataSourceTest {
     }
 
     @Test
-    fun `getCameraUploadsConfiguration returns null when there are not configurations`() {
+    fun `getAutomaticUploadsConfiguration returns null when there are not configurations`() {
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.pictureUploadsName) } returns null
         every { folderBackupDao.getFolderBackUpConfigurationByName(FolderBackUpConfiguration.videoUploadsName) } returns null
 
-        val resultCurrent = ocLocalFolderBackupDataSource.getCameraUploadsConfiguration()
+        val resultCurrent = ocLocalFolderBackupDataSource.getAutomaticUploadsConfiguration()
 
         assertNull(resultCurrent)
 
@@ -78,7 +78,7 @@ class OCLocalFolderBackupDataSourceTest {
     }
 
     @Test
-    fun `getFolderBackupConfigurationByNameAsFlow returns a Flow of CameraUploadsConfiguration when having valid configurations`() = runBlocking {
+    fun `getFolderBackupConfigurationByNameAsFlow returns a Flow of AutomaticUploadsConfiguration when having valid configurations`() = runBlocking {
         every { folderBackupDao.getFolderBackUpConfigurationByNameAsFlow(FolderBackUpConfiguration.pictureUploadsName) } returns flowOf(
             OC_BACKUP_ENTITY
         )

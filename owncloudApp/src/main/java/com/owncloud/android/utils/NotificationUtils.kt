@@ -123,7 +123,7 @@ object NotificationUtils {
         return PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), showUploadListIntent, pendingIntentFlags)
     }
 
-    fun composePendingIntentToCameraUploads(context: Context, notificationKey: String): PendingIntent {
+    fun composePendingIntentToAutomaticUploads(context: Context, notificationKey: String): PendingIntent {
         val openSettingsActivity = Intent(context, SettingsActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             putExtra(KEY_NOTIFICATION_INTENT, notificationKey)

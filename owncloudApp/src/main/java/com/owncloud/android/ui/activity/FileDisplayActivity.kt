@@ -62,7 +62,7 @@ import com.owncloud.android.MainApp
 import com.owncloud.android.R
 import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.databinding.ActivityMainBinding
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.exceptions.AccountNotFoundException
 import com.owncloud.android.domain.exceptions.DeepLinkException
