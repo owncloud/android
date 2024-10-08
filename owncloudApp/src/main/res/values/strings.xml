@@ -58,9 +58,9 @@
     <string name="prefs_touches_with_other_visible_windows_summary">Allow touches when the view is obscured by another visible window. Enable it to use light filtering apps.</string>
     <string name="confirmation_touches_with_other_windows_title">Are you sure you want to enable this feature?</string>
     <string name="confirmation_touches_with_other_windows_message">Use this feature at your own risk. A malicious application could try to spoof you into unknowingly performing some actions, using other views.</string>
-    <string name="prefs_subsection_picture_uploads">Auto-upload pictures</string>
+    <string name="prefs_subsection_picture_uploads">Automatic picture uploads</string>
     <string name="prefs_subsection_picture_uploads_summary">Manage location and behavior of the pictures uploaded automatically</string>
-    <string name="prefs_subsection_video_uploads">Auto-upload videos</string>
+    <string name="prefs_subsection_video_uploads">Automatic video uploads</string>
     <string name="prefs_subsection_video_uploads_summary">Manage location and behavior of the videos uploaded automatically</string>
     <string name="prefs_camera_picture_upload">Picture uploads</string>
     <string name="prefs_camera_picture_upload_summary">Automatically upload pictures taken by camera</string>
