@@ -29,7 +29,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import com.owncloud.android.domain.BaseUseCase
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.workers.RemoveSourceFileWorker
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
 import timber.log.Timber

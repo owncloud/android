@@ -16,16 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.domain.camerauploads.usecases
+package com.owncloud.android.domain.automaticuploads.usecases
 
-import com.owncloud.android.domain.BaseUseCase
-import com.owncloud.android.domain.camerauploads.FolderBackupRepository
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.pictureUploadsName
+import com.owncloud.android.domain.BaseUseCaseWithResult
+import com.owncloud.android.domain.automaticuploads.FolderBackupRepository
+import com.owncloud.android.domain.automaticuploads.model.AutomaticUploadsConfiguration
 
-class ResetPictureUploadsUseCase(
+class GetAutomaticUploadsConfigurationUseCase(
     private val folderBackupRepository: FolderBackupRepository
-) : BaseUseCase<Unit, Unit>() {
+) : BaseUseCaseWithResult<AutomaticUploadsConfiguration?, Unit>() {
 
-    override fun run(params: Unit) =
-        folderBackupRepository.resetFolderBackupConfigurationByName(pictureUploadsName)
+    override fun run(params: Unit): AutomaticUploadsConfiguration? =
+        folderBackupRepository.getAutomaticUploadsConfiguration()
 }

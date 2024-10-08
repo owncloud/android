@@ -47,8 +47,8 @@ import com.owncloud.android.presentation.security.passcode.PasscodeAction
 import com.owncloud.android.presentation.security.pattern.PatternViewModel
 import com.owncloud.android.presentation.settings.SettingsViewModel
 import com.owncloud.android.presentation.settings.advanced.SettingsAdvancedViewModel
-import com.owncloud.android.presentation.settings.autouploads.SettingsPictureUploadsViewModel
-import com.owncloud.android.presentation.settings.autouploads.SettingsVideoUploadsViewModel
+import com.owncloud.android.presentation.settings.automaticuploads.SettingsPictureUploadsViewModel
+import com.owncloud.android.presentation.settings.automaticuploads.SettingsVideoUploadsViewModel
 import com.owncloud.android.presentation.settings.logging.SettingsLogsViewModel
 import com.owncloud.android.presentation.settings.more.SettingsMoreViewModel
 import com.owncloud.android.presentation.settings.security.SettingsSecurityViewModel

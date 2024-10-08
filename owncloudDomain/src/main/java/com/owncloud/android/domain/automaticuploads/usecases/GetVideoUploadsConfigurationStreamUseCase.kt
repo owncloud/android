@@ -16,20 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.domain.camerauploads.usecases
+package com.owncloud.android.domain.automaticuploads.usecases
 
-import com.owncloud.android.domain.BaseUseCaseWithResult
-import com.owncloud.android.domain.camerauploads.FolderBackupRepository
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.automaticuploads.FolderBackupRepository
+import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration.Companion.videoUploadsName
+import kotlinx.coroutines.flow.Flow
 
-class SaveVideoUploadsConfigurationUseCase(
+class GetVideoUploadsConfigurationStreamUseCase(
     private val folderBackupRepository: FolderBackupRepository
-) : BaseUseCaseWithResult<Unit, SaveVideoUploadsConfigurationUseCase.Params>() {
+) : BaseUseCase<Flow<FolderBackUpConfiguration?>, Unit>() {
 
-    override fun run(params: Params) =
-        folderBackupRepository.saveFolderBackupConfiguration(params.videoUploadsConfiguration)
-
-    data class Params(
-        val videoUploadsConfiguration: FolderBackUpConfiguration
-    )
+    override fun run(params: Unit): Flow<FolderBackUpConfiguration?> =
+        folderBackupRepository.getFolderBackupConfigurationByNameAsFlow(videoUploadsName)
 }

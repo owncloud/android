@@ -27,9 +27,9 @@ import com.owncloud.android.data.sharing.shares.datasources.LocalShareDataSource
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.domain.BaseUseCase
-import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
-import com.owncloud.android.domain.camerauploads.usecases.ResetPictureUploadsUseCase
-import com.owncloud.android.domain.camerauploads.usecases.ResetVideoUploadsUseCase
+import com.owncloud.android.domain.automaticuploads.usecases.GetAutomaticUploadsConfigurationUseCase
+import com.owncloud.android.domain.automaticuploads.usecases.ResetPictureUploadsUseCase
+import com.owncloud.android.domain.automaticuploads.usecases.ResetVideoUploadsUseCase
 import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccountUseCase
 
 /*
@@ -38,7 +38,7 @@ import com.owncloud.android.usecases.transfers.uploads.CancelTransfersFromAccoun
 * need an OwncloudAccount that there is not at this point.
 */
 class RemoveAccountUseCase(
-    private val getCameraUploadsConfigurationUseCase: GetCameraUploadsConfigurationUseCase,
+    private val getAutomaticUploadsConfigurationUseCase: GetAutomaticUploadsConfigurationUseCase,
     private val resetPictureUploadsUseCase: ResetPictureUploadsUseCase,
     private val resetVideoUploadsUseCase: ResetVideoUploadsUseCase,
     private val cancelTransfersFromAccountUseCase: CancelTransfersFromAccountUseCase,
@@ -52,7 +52,7 @@ class RemoveAccountUseCase(
 
     override fun run(params: Params) {
         // Reset camera uploads if they were enabled for the removed account
-        val cameraUploadsConfiguration = getCameraUploadsConfigurationUseCase(Unit)
+        val cameraUploadsConfiguration = getAutomaticUploadsConfigurationUseCase(Unit)
         if (params.accountName == cameraUploadsConfiguration.getDataOrNull()?.pictureUploadsConfiguration?.accountName) {
             resetPictureUploadsUseCase(Unit)
         }

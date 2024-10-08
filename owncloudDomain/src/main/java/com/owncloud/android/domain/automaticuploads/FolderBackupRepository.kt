@@ -16,11 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.domain.camerauploads.model
+package com.owncloud.android.domain.automaticuploads
 
-data class CameraUploadsConfiguration(
-    val pictureUploadsConfiguration: FolderBackUpConfiguration?,
-    val videoUploadsConfiguration: FolderBackUpConfiguration?
-) {
-    fun areCameraUploadsDisabled() = pictureUploadsConfiguration == null && videoUploadsConfiguration == null
+import com.owncloud.android.domain.automaticuploads.model.AutomaticUploadsConfiguration
+import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration
+import kotlinx.coroutines.flow.Flow
+
+interface FolderBackupRepository {
+    fun getAutomaticUploadsConfiguration(): AutomaticUploadsConfiguration?
+
+    fun getFolderBackupConfigurationByNameAsFlow(name: String): Flow<FolderBackUpConfiguration?>
+
+    fun saveFolderBackupConfiguration(folderBackUpConfiguration: FolderBackUpConfiguration)
+
+    fun resetFolderBackupConfigurationByName(name: String)
 }

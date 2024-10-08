@@ -99,7 +99,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
 
     override fun removeAccount(account: Account) {
         dialogView.isVisible = false
-        val hasAccountAttachedCameraUploads = manageAccountsViewModel.hasCameraUploadsAttached(account.name)
+        val hasAccountAttachedCameraUploads = manageAccountsViewModel.hasAutomaticUploadsAttached(account.name)
         val dialog = AlertDialog.Builder(requireContext())
             .setMessage(getString(
                 if (hasAccountAttachedCameraUploads) R.string.confirmation_remove_account_alert_camera_uploads

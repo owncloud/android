@@ -22,11 +22,11 @@ import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.folderbackup.datasources.LocalFolderBackupDataSource
 import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
 import com.owncloud.android.data.folderbackup.db.FolderBackupDao
-import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.pictureUploadsName
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.videoUploadsName
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.automaticuploads.model.AutomaticUploadsConfiguration
+import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration.Companion.pictureUploadsName
+import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration.Companion.videoUploadsName
+import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -34,13 +34,13 @@ class OCLocalFolderBackupDataSource(
     private val folderBackupDao: FolderBackupDao,
 ) : LocalFolderBackupDataSource {
 
-    override fun getCameraUploadsConfiguration(): CameraUploadsConfiguration? {
+    override fun getAutomaticUploadsConfiguration(): AutomaticUploadsConfiguration? {
         val pictureUploadsConfiguration = folderBackupDao.getFolderBackUpConfigurationByName(pictureUploadsName)
         val videoUploadsConfiguration = folderBackupDao.getFolderBackUpConfigurationByName(videoUploadsName)
 
         if (pictureUploadsConfiguration == null && videoUploadsConfiguration == null) return null
 
-        return CameraUploadsConfiguration(
+        return AutomaticUploadsConfiguration(
             pictureUploadsConfiguration = pictureUploadsConfiguration?.toModel(),
             videoUploadsConfiguration = videoUploadsConfiguration?.toModel(),
         )
