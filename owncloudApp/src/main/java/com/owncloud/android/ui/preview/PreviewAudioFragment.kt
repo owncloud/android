@@ -8,6 +8,7 @@
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -87,7 +88,7 @@ class PreviewAudioFragment : FileFragment() {
     private var mediaServiceConnection: MediaServiceConnection? = null
     private var autoplay = true
 
-    private val previewAudioViewModel by viewModel<PreviewAudioViewModel>() {
+    private val previewAudioViewModel by viewModel<PreviewAudioViewModel> {
         parametersOf(requireArguments().getParcelable(EXTRA_FILE))
     }
 
@@ -300,13 +301,13 @@ class PreviewAudioFragment : FileFragment() {
 
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
-                Snackbar.make(requireView(), R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(requireView(), R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
-                Snackbar.make(requireView(), R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(requireView(), R.string.confirmation_unset_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 

@@ -171,7 +171,7 @@ class PreviewTextFragment : FileFragment() {
                 val fileToSetAsAvailableOffline = ArrayList<OCFile>()
                 fileToSetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(fileToSetAsAvailableOffline))
-                Snackbar.make(requireView(), R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(requireView(), R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 
@@ -179,7 +179,7 @@ class PreviewTextFragment : FileFragment() {
                 val fileToUnsetAsAvailableOffline = ArrayList<OCFile>()
                 fileToUnsetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline))
-                Snackbar.make(requireView(), R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(requireView(), R.string.confirmation_unset_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 

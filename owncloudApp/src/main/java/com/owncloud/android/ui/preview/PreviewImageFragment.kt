@@ -8,6 +8,7 @@
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -247,13 +248,13 @@ class PreviewImageFragment : FileFragment() {
 
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
-                showSnackbarMessage()
+                showSnackbarMessage(setAvailableOffline = true)
                 true
             }
 
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
-                showSnackbarMessage()
+                showSnackbarMessage(setAvailableOffline = false)
                 true
             }
 
@@ -347,8 +348,13 @@ class PreviewImageFragment : FileFragment() {
         return if (isSVGFile(file)) Color.WHITE else Color.BLACK
     }
 
-    private fun showSnackbarMessage() {
-        val snackbar = Snackbar.make(requireView(), R.string.sync_file_nothing_to_do_msg, Snackbar.LENGTH_LONG)
+    private fun showSnackbarMessage(setAvailableOffline: Boolean) {
+        val snackbarString = if (setAvailableOffline) {
+            R.string.confirmation_set_available_offline
+        } else {
+            R.string.confirmation_unset_available_offline
+        }
+        val snackbar = Snackbar.make(requireView(), snackbarString, Snackbar.LENGTH_LONG)
         val params = snackbar.view.layoutParams as ViewGroup.MarginLayoutParams
         params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, 100)
         snackbar.view.layoutParams = params

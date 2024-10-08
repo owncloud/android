@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -46,12 +47,11 @@ class PreviewImageViewModel(
     private val getFileByIdUseCase: GetFileByIdUseCase,
     private val getLiveDataForFinishedDownloadsFromAccountUseCase: GetLiveDataForFinishedDownloadsFromAccountUseCase,
     private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
+    getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
     private val contextProvider: ContextProvider,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
-    getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
     ocFile: OCFile,
 ) : ViewModel() {
-
 
     private val _downloads = MediatorLiveData<List<Pair<OCFile, WorkInfo>>>()
     val downloads: LiveData<List<Pair<OCFile, WorkInfo>>> = _downloads
