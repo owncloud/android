@@ -54,9 +54,7 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Zezwól na dotyk gdy widok jest przesłonięty przez inne widoczne okno. Włącz w celu używania aplikacji filtrujących światło.</string>
   <string name="confirmation_touches_with_other_windows_title">Czy jesteś pewny, że chcesz włączyć tą funkcję?</string>
   <string name="confirmation_touches_with_other_windows_message">Używaj tej funkcjonalności na własną odpowiedzialność, złośliwa aplikacja może nakłonić Cię do wykonania innych akcji, używając innych widoków.</string>
-  <string name="prefs_subsection_picture_uploads">Automatycznie wysyłaj obrazy</string>
   <string name="prefs_subsection_picture_uploads_summary">Automatycznie zarządzaj lokalizacją i zachowaniem wysyłanych obrazów</string>
-  <string name="prefs_subsection_video_uploads">Automatyczne wysyłaj wideo</string>
   <string name="prefs_subsection_video_uploads_summary">Automatycznie zarządzaj lokalizacją i zachowaniem wysyłanych wideo</string>
   <string name="prefs_camera_picture_upload">Wrzucanie obrazków</string>
   <string name="prefs_camera_picture_upload_summary">Automatycznie wrzuć obrazki zrobione przez kamerę</string>

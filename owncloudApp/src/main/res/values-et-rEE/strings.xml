@@ -57,9 +57,7 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Luba puutumine kui vaade on häiritud mõne teise nähtava aknaga. Lülita sisse, et kasutada kergeid filtreerimisrakendusi.</string>
   <string name="confirmation_touches_with_other_windows_title">Oled sa kindel, et soovid seda võimalust aktiveerida?</string>
   <string name="confirmation_touches_with_other_windows_message">Kastua seda funktsionaalsust omal vastutusel. Pahatahtlik rakendus võib petta sind tegema soovimatut, kasutades teisi vaateid.</string>
-  <string name="prefs_subsection_picture_uploads">Automaatne fotode üleslaadimine</string>
   <string name="prefs_subsection_picture_uploads_summary">Määra automaatselt üleslaetavate piltide asukoht ja käitumine</string>
-  <string name="prefs_subsection_video_uploads">Automaatne videote üleslaadimine</string>
   <string name="prefs_subsection_video_uploads_summary">Määra automaatselt üleslaetavate videote asukoht ja käitumine</string>
   <string name="prefs_camera_picture_upload">Piltide üleslaadimine</string>
   <string name="prefs_camera_picture_upload_summary">Laadi kaameraga tehtud pildid automaatselt üles</string>

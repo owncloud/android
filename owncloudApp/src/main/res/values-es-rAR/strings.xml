@@ -50,7 +50,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir clicks mientras que la vista está oscurecida por otra ventana visible. Habilítalo para utilizar aplicaciones de filtro de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">¿Estás seguro que quieres habilitar esta funcionalidad?</string>
   <string name="confirmation_touches_with_other_windows_message">Utiliza esta funcionalidad bajo tu propia responsabilidad, una aplicación maliciosa podría tratar de engañarte a realizar algunas acciones, sin que te des cuenta, utilizando otras vistas.</string>
-  <string name="prefs_subsection_video_uploads">Subir videos automáticamente</string>
   <string name="prefs_camera_picture_upload">Carga de imágenes</string>
   <string name="prefs_camera_picture_upload_summary">Cargar imágenes automáticamente tomadas desde la cámara</string>
   <string name="prefs_camera_picture_upload_path_title">Ruta de carga de la imagen</string>

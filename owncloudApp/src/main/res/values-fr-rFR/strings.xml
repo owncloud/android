@@ -52,9 +52,7 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Autoriser les interactions quand une autre fenêtre visible se superpose a l\'affichage. Activer pour permettre le fonctionnement des applications de filtre lumineux.</string>
   <string name="confirmation_touches_with_other_windows_title">Souhaitez vous vraiment activer cette fonctionnalité ?</string>
   <string name="confirmation_touches_with_other_windows_message">Utilisez cette fonctionnalité à vos propres risques. Une application malveillante pourrait tenter de vous pousser à effectuer des actions en falsifiant l\'affichage.</string>
-  <string name="prefs_subsection_picture_uploads">Téléchargement automatique de photos</string>
   <string name="prefs_subsection_picture_uploads_summary">Gérer l\'emplacement et le comportement des images téléchargées automatiquement</string>
-  <string name="prefs_subsection_video_uploads">Téléchargement automatique de vidéos</string>
   <string name="prefs_subsection_video_uploads_summary">Gérer l\'emplacement et le comportement des vidéos téléchargées automatiquement</string>
   <string name="prefs_camera_picture_upload">Téléversements d\'images</string>
   <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les images prises par l\'appareil photo</string>
