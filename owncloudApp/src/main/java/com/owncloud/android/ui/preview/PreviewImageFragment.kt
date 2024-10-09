@@ -248,13 +248,13 @@ class PreviewImageFragment : FileFragment() {
 
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
-                showSnackbarMessage(setAvailableOffline = true)
+                Snackbar.make(requireActivity().window.decorView, R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
-                showSnackbarMessage(setAvailableOffline = false)
+                Snackbar.make(requireActivity().window.decorView, R.string.confirmation_unset_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 
@@ -346,19 +346,6 @@ class PreviewImageFragment : FileFragment() {
 
     private fun getBackgroundColor(file: OCFile): Int {
         return if (isSVGFile(file)) Color.WHITE else Color.BLACK
-    }
-
-    private fun showSnackbarMessage(setAvailableOffline: Boolean) {
-        val snackbarString = if (setAvailableOffline) {
-            R.string.confirmation_set_available_offline
-        } else {
-            R.string.confirmation_unset_available_offline
-        }
-        val snackbar = Snackbar.make(requireView(), snackbarString, Snackbar.LENGTH_LONG)
-        val params = snackbar.view.layoutParams as ViewGroup.MarginLayoutParams
-        params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, 100)
-        snackbar.view.layoutParams = params
-        snackbar.show()
     }
 
     /**
