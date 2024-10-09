@@ -301,7 +301,7 @@ class PreviewAudioFragment : FileFragment() {
 
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
-                    Snackbar.make(requireView(), R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(requireView(), R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 
