@@ -2,7 +2,8 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Jorge Aguado Recio
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,5 +31,7 @@ data class UserQuotaEntity(
     @PrimaryKey
     val accountName: String,
     val used: Long,
-    val available: Long
+    val available: Long,
+    val total: Long? = null,
+    val state: String? = null
 )

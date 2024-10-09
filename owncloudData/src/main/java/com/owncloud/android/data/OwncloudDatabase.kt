@@ -80,6 +80,7 @@ import com.owncloud.android.data.user.db.UserQuotaEntity
         AutoMigration(from = 40, to = 41),
         AutoMigration(from = 43, to = 44),
         AutoMigration(from = 44, to = 45),
+        AutoMigration(from = 45, to = 46),
     ],
     version = ProviderMeta.DB_VERSION,
     exportSchema = true
