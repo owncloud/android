@@ -19,17 +19,17 @@
 package com.owncloud.android.data.folderbackup
 
 import com.owncloud.android.data.folderbackup.datasources.LocalFolderBackupDataSource
-import com.owncloud.android.domain.camerauploads.FolderBackupRepository
-import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.automaticuploads.FolderBackupRepository
+import com.owncloud.android.domain.automaticuploads.model.AutomaticUploadsConfiguration
+import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration
 import kotlinx.coroutines.flow.Flow
 
 class OCFolderBackupRepository(
     private val localFolderBackupDataSource: LocalFolderBackupDataSource
 ) : FolderBackupRepository {
 
-    override fun getCameraUploadsConfiguration(): CameraUploadsConfiguration? =
-        localFolderBackupDataSource.getCameraUploadsConfiguration()
+    override fun getAutomaticUploadsConfiguration(): AutomaticUploadsConfiguration? =
+        localFolderBackupDataSource.getAutomaticUploadsConfiguration()
 
     override fun getFolderBackupConfigurationByNameAsFlow(name: String): Flow<FolderBackUpConfiguration?> =
         localFolderBackupDataSource.getFolderBackupConfigurationByNameAsFlow(name)

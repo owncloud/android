@@ -62,7 +62,7 @@ import com.owncloud.android.data.providers.SharedPreferencesProvider
 import com.owncloud.android.data.providers.implementation.OCSharedPreferencesProvider
 import com.owncloud.android.data.transfers.db.OCTransferEntity
 import com.owncloud.android.db.ProviderMeta.ProviderTableMeta
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.domain.files.model.LIST_MIME_DIR
 import com.owncloud.android.domain.transfers.model.TransferStatus
 import com.owncloud.android.domain.transfers.model.UploadEnqueuedBy
@@ -358,7 +358,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                 if (uri.pathSegments.size > 1) {
                     sqlQuery.appendWhere(ProviderTableMeta._ID + "=" + uri.pathSegments[1])
                 }
-                sqlQuery.projectionMap = cameraUploadSyncProjectionMap
+                sqlQuery.projectionMap = automaticUploadSyncProjectionMap
             }
             QUOTAS -> {
                 sqlQuery.tables = ProviderTableMeta.USER_QUOTAS_TABLE_NAME
@@ -981,7 +981,7 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                         videoUploadsConfiguration?.let { backupLocalDataSource.saveFolderBackupConfiguration(it) }
                         if (pictureUploadsConfiguration != null || videoUploadsConfiguration != null) {
                             val workManagerProvider = WorkManagerProvider(context!!)
-                            workManagerProvider.enqueueCameraUploadsWorker()
+                            workManagerProvider.enqueueAutomaticUploadsWorker()
                         }
                     }
                     cursor.close()
@@ -1052,8 +1052,8 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
                             for (upload in uploads) {
                                 ocTransferDao.insertOrReplace(upload)
                                 if (upload.status == TransferStatus.TRANSFER_QUEUED.value &&
-                                    upload.createdBy != UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_PICTURE.ordinal &&
-                                    upload.createdBy != UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_VIDEO.ordinal
+                                    upload.createdBy != UploadEnqueuedBy.ENQUEUED_AS_AUTOMATIC_UPLOAD_PICTURE.ordinal &&
+                                    upload.createdBy != UploadEnqueuedBy.ENQUEUED_AS_AUTOMATIC_UPLOAD_VIDEO.ordinal
                                 ) {
                                     val localFile = File(upload.localPath)
                                     val uploadFileFromSystemUseCase = UploadFileFromSystemUseCase(WorkManager.getInstance(context!!))
@@ -1499,13 +1499,13 @@ class FileContentProvider(val executors: Executors = Executors()) : ContentProvi
             uploadProjectionMap[ProviderTableMeta.UPLOADS_TRANSFER_ID] = ProviderTableMeta.UPLOADS_TRANSFER_ID
         }
 
-        private val cameraUploadSyncProjectionMap = HashMap<String, String>()
+        private val automaticUploadSyncProjectionMap = HashMap<String, String>()
 
         init {
-            cameraUploadSyncProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
-            cameraUploadSyncProjectionMap[ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP] =
+            automaticUploadSyncProjectionMap[ProviderTableMeta._ID] = ProviderTableMeta._ID
+            automaticUploadSyncProjectionMap[ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP] =
                 ProviderTableMeta.PICTURES_LAST_SYNC_TIMESTAMP
-            cameraUploadSyncProjectionMap[ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP] =
+            automaticUploadSyncProjectionMap[ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP] =
                 ProviderTableMeta.VIDEOS_LAST_SYNC_TIMESTAMP
         }
 

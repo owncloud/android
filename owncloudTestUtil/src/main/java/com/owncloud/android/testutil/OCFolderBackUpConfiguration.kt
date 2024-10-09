@@ -20,8 +20,8 @@
 
 package com.owncloud.android.testutil
 
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
 
 val OC_BACKUP = FolderBackUpConfiguration(

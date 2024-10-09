@@ -38,7 +38,7 @@ import com.owncloud.android.data.webfinger.repository.OCWebFingerRepository
 import com.owncloud.android.domain.appregistry.AppRegistryRepository
 import com.owncloud.android.domain.authentication.AuthenticationRepository
 import com.owncloud.android.domain.authentication.oauth.OAuthRepository
-import com.owncloud.android.domain.camerauploads.FolderBackupRepository
+import com.owncloud.android.domain.automaticuploads.FolderBackupRepository
 import com.owncloud.android.domain.capabilities.CapabilityRepository
 import com.owncloud.android.domain.files.FileRepository
 import com.owncloud.android.domain.server.ServerInfoRepository

@@ -35,7 +35,7 @@ import com.owncloud.android.extensions.getRunningWorkInfosLiveData
 import com.owncloud.android.workers.AccountDiscoveryWorker
 import com.owncloud.android.workers.AvailableOfflinePeriodicWorker
 import com.owncloud.android.workers.AvailableOfflinePeriodicWorker.Companion.AVAILABLE_OFFLINE_PERIODIC_WORKER
-import com.owncloud.android.workers.CameraUploadsWorker
+import com.owncloud.android.workers.AutomaticUploadsWorker
 import com.owncloud.android.workers.OldLogsCollectorWorker
 import com.owncloud.android.workers.RemoveLocallyFilesWithLastUsageOlderThanGivenTimeWorker
 import com.owncloud.android.workers.UploadFileFromContentUriWorker
@@ -44,15 +44,15 @@ import com.owncloud.android.workers.UploadFileFromFileSystemWorker
 class WorkManagerProvider(
     val context: Context
 ) {
-    fun enqueueCameraUploadsWorker() {
-        val cameraUploadsWorker = PeriodicWorkRequestBuilder<CameraUploadsWorker>(
-            repeatInterval = CameraUploadsWorker.repeatInterval,
-            repeatIntervalTimeUnit = CameraUploadsWorker.repeatIntervalTimeUnit
-        ).addTag(CameraUploadsWorker.CAMERA_UPLOADS_WORKER)
+    fun enqueueAutomaticUploadsWorker() {
+        val automaticUploadsWorker = PeriodicWorkRequestBuilder<AutomaticUploadsWorker>(
+            repeatInterval = AutomaticUploadsWorker.repeatInterval,
+            repeatIntervalTimeUnit = AutomaticUploadsWorker.repeatIntervalTimeUnit
+        ).addTag(AutomaticUploadsWorker.AUTOMATIC_UPLOADS_WORKER)
             .build()
 
         WorkManager.getInstance(context)
-            .enqueueUniquePeriodicWork(CameraUploadsWorker.CAMERA_UPLOADS_WORKER, ExistingPeriodicWorkPolicy.KEEP, cameraUploadsWorker)
+            .enqueueUniquePeriodicWork(AutomaticUploadsWorker.AUTOMATIC_UPLOADS_WORKER, ExistingPeriodicWorkPolicy.KEEP, automaticUploadsWorker)
     }
 
     fun enqueueOldLogsCollectorWorker() {

@@ -41,14 +41,14 @@
 
     <Preference
         app:allowDividerAbove="true"
-        app:fragment="com.owncloud.android.presentation.settings.autouploads.SettingsPictureUploadsFragment"
+        app:fragment="com.owncloud.android.presentation.settings.automaticuploads.SettingsPictureUploadsFragment"
         app:icon="@drawable/ic_picture_uploads"
         app:key="picture_uploads_subsection"
         app:summary="@string/prefs_subsection_picture_uploads_summary"
         app:title="@string/prefs_subsection_picture_uploads" />
 
     <Preference
-        app:fragment="com.owncloud.android.presentation.settings.autouploads.SettingsVideoUploadsFragment"
+        app:fragment="com.owncloud.android.presentation.settings.automaticuploads.SettingsVideoUploadsFragment"
         app:icon="@drawable/ic_video_uploads"
         app:key="video_uploads_subsection"
         app:summary="@string/prefs_subsection_video_uploads_summary"

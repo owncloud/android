@@ -30,11 +30,11 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.owncloud.android.R
 import com.owncloud.android.domain.UseCaseResult
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
-import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
-import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConfigurationUseCase
-import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
+import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
+import com.owncloud.android.domain.automaticuploads.usecases.GetAutomaticUploadsConfigurationUseCase
+import com.owncloud.android.domain.automaticuploads.usecases.SavePictureUploadsConfigurationUseCase
+import com.owncloud.android.domain.automaticuploads.usecases.SaveVideoUploadsConfigurationUseCase
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus
@@ -52,7 +52,7 @@ import java.io.File
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
-class CameraUploadsWorker(
+class AutomaticUploadsWorker(
     val appContext: Context,
     workerParameters: WorkerParameters
 ) : CoroutineWorker(
@@ -70,16 +70,16 @@ class CameraUploadsWorker(
             }
     }
 
-    private val getCameraUploadsConfigurationUseCase: GetCameraUploadsConfigurationUseCase by inject()
+    private val getAutomaticUploadsConfigurationUseCase: GetAutomaticUploadsConfigurationUseCase by inject()
 
     private val transferRepository: TransferRepository by inject()
 
     override suspend fun doWork(): Result {
-        Timber.i("Starting CameraUploadsWorker with UUID ${this.id}")
-        when (val useCaseResult = getCameraUploadsConfigurationUseCase(Unit)) {
+        Timber.i("Starting AutomaticUploadsWorker with UUID ${this.id}")
+        when (val useCaseResult = getAutomaticUploadsConfigurationUseCase(Unit)) {
             is UseCaseResult.Success -> {
                 val cameraUploadsConfiguration = useCaseResult.data
-                if (cameraUploadsConfiguration == null || cameraUploadsConfiguration.areCameraUploadsDisabled()) {
+                if (cameraUploadsConfiguration == null || cameraUploadsConfiguration.areAutomaticUploadsDisabled()) {
                     cancelWorker()
                     return Result.success()
                 }
@@ -117,7 +117,7 @@ class CameraUploadsWorker(
     }
 
     private fun cancelWorker() {
-        WorkManager.getInstance(appContext).cancelUniqueWork(CAMERA_UPLOADS_WORKER)
+        WorkManager.getInstance(appContext).cancelUniqueWork(AUTOMATIC_UPLOADS_WORKER)
     }
 
     private fun syncFolder(folderBackUpConfiguration: FolderBackUpConfiguration?) {
@@ -148,8 +148,8 @@ class CameraUploadsWorker(
                 accountName = folderBackUpConfiguration.accountName,
                 behavior = folderBackUpConfiguration.behavior,
                 createdByWorker = when (syncType) {
-                    SyncType.PICTURE_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_PICTURE
-                    SyncType.VIDEO_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_CAMERA_UPLOAD_VIDEO
+                    SyncType.PICTURE_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_AUTOMATIC_UPLOAD_PICTURE
+                    SyncType.VIDEO_UPLOADS -> UploadEnqueuedBy.ENQUEUED_AS_AUTOMATIC_UPLOAD_VIDEO
                 },
                 spaceId = folderBackUpConfiguration.spaceId
             )
@@ -207,7 +207,7 @@ class CameraUploadsWorker(
             contentText = appContext.getString(contentText),
             notificationChannelId = UPLOAD_NOTIFICATION_CHANNEL_ID,
             notificationId = syncType.getNotificationId(),
-            intent = NotificationUtils.composePendingIntentToCameraUploads(appContext, notificationKey),
+            intent = NotificationUtils.composePendingIntentToAutomaticUploads(appContext, notificationKey),
             onGoing = false,
             timeOut = null
         )
@@ -309,7 +309,7 @@ class CameraUploadsWorker(
     }
 
     companion object {
-        const val CAMERA_UPLOADS_WORKER = "CAMERA_UPLOADS_WORKER"
+        const val AUTOMATIC_UPLOADS_WORKER = "AUTOMATIC_UPLOADS_WORKER"
         const val repeatInterval: Long = 15L
         val repeatIntervalTimeUnit: TimeUnit = TimeUnit.MINUTES
         private const val pictureUploadsNotificationId = 101

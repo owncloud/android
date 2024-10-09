@@ -54,9 +54,7 @@
   <string name="prefs_touches_with_other_visible_windows">带有其他可见窗口的键</string>
   <string name="prefs_touches_with_other_visible_windows_summary">当视图被另一个可见窗口遮挡时允许触摸。 启用它以使用滤光应用程序。</string>
   <string name="confirmation_touches_with_other_windows_title">你确定要启用此功能吗？</string>
-  <string name="prefs_subsection_picture_uploads">自动上传图片</string>
   <string name="prefs_subsection_picture_uploads_summary">管理自动上传图片的位置和方式</string>
-  <string name="prefs_subsection_video_uploads">自动上传视频</string>
   <string name="prefs_subsection_video_uploads_summary">管理自动上传视频的位置和方式</string>
   <string name="prefs_camera_picture_upload">图片上传</string>
   <string name="prefs_camera_picture_upload_summary">自动上传相机拍摄的图片</string>
