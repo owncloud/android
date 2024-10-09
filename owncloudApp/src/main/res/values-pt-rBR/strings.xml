@@ -57,9 +57,7 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques quando a visualização é obscurecida por outra janela visível. Ativá-lo para usar aplicativos de filtragem de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">Tem certeza de que deseja ativar esse recurso?</string>
   <string name="confirmation_touches_with_other_windows_message">Use esse recurso por sua conta e risco. Um aplicativo malicioso pode tentar enganar você para que você execute algumas ações sem saber, usando outras visualizações.</string>
-  <string name="prefs_subsection_picture_uploads">Carregar fotos automaticamente</string>
   <string name="prefs_subsection_picture_uploads_summary">Gerencie a localização e o comportamento das fotos enviadas automaticamente</string>
-  <string name="prefs_subsection_video_uploads">Carregar vídeos automaticamente</string>
   <string name="prefs_subsection_video_uploads_summary">Gerencie a localização e o comportamento dos vídeos enviados automaticamente</string>
   <string name="prefs_camera_picture_upload">Enviar fotos</string>
   <string name="prefs_camera_picture_upload_summary">Carregar automaticamente fotos tiradas pela câmera</string>

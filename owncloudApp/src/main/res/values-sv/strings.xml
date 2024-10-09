@@ -48,8 +48,6 @@
   <string name="prefs_lock_application_entries_1minute">Efter 1 minut</string>
   <string name="prefs_lock_application_entries_5minutes">Efter 5 minuter</string>
   <string name="prefs_lock_application_entries_30minutes">Efter 30 minuter</string>
-  <string name="prefs_subsection_picture_uploads">Ladda upp bilder automatiskt</string>
-  <string name="prefs_subsection_video_uploads">Ladda upp videor automatiskt</string>
   <string name="prefs_subsection_video_uploads_summary">Hantera platser och beteenden av videorna som har laddats upp automatiskt</string>
   <string name="prefs_camera_picture_upload">Bilduppladdningar</string>
   <string name="prefs_camera_picture_upload_summary">Ladda upp bilder tagna av kameran automatiskt </string>

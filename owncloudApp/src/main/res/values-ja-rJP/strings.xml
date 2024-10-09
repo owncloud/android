@@ -56,9 +56,7 @@
   <string name="prefs_touches_with_other_visible_windows_summary">他のウィンドウで視界が遮られている場合にタッチを許可する。ライトフィルタリングアプリの使用を有効にする。</string>
   <string name="confirmation_touches_with_other_windows_title">本当にこの機能を有効にしますか？</string>
   <string name="confirmation_touches_with_other_windows_message">この機能は自己責任で使用してください。悪意のあるアプリケーションは、他のビューを使用して、あなたが知らないうちに何らかのアクションを実行するようになりすまそうとする可能性があります。</string>
-  <string name="prefs_subsection_picture_uploads">写真の自動アップロード</string>
   <string name="prefs_subsection_picture_uploads_summary">自動的にアップロードされた写真の場所と動作を管理する</string>
-  <string name="prefs_subsection_video_uploads">ビデオの自動アップロード</string>
   <string name="prefs_subsection_video_uploads_summary">自動的にアップロードされた動画の場所と動作を管理する</string>
   <string name="prefs_camera_picture_upload">ピクチャーアップロード</string>
   <string name="prefs_camera_picture_upload_summary">カメラで撮影した画像を自動アップロード</string>
