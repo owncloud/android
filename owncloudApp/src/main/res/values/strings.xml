@@ -369,6 +369,8 @@
 
     <string name="set_available_offline">Set as available offline</string>
     <string name="unset_available_offline">Unset as available offline</string>
+    <string name="confirmation_set_available_offline">The file was set as available offline correctly</string>
+    <string name="confirmation_unset_available_offline">The file was unset as available offline correctly</string>
     <string name="common_rename">Rename</string>
     <string name="common_remove">Remove</string>
     <string name="confirmation_remove_file_alert">Do you really want to remove %1$s?</string>
@@ -727,6 +729,8 @@
     <string name="release_notes_icon">Release note icon</string>
     <string name="release_notes_bugfixes_title">Minor bugfixes</string>
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
+    <string name="release_notes_4_5_0_title_feedback_in_previews">Feedback when (un)setting av. offline in all previews</string>
+    <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Added feedback when (un)setting av. offline in all previews and updated options menu depending on file status</string>
 
 
     <!-- Open in web -->

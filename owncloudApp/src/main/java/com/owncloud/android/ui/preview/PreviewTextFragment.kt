@@ -37,6 +37,7 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.owncloud.android.R
@@ -55,6 +56,7 @@ import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.getScopeName
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.io.BufferedWriter
 import java.io.FileInputStream
@@ -66,7 +68,9 @@ class PreviewTextFragment : FileFragment() {
     private var account: Account? = null
     private lateinit var textLoadTask: TextLoadAsyncTask
 
-    private val previewTextViewModel by viewModel<PreviewTextViewModel>()
+    private val previewTextViewModel by viewModel<PreviewTextViewModel> {
+        parametersOf(requireArguments().getParcelable(EXTRA_FILE))
+    }
     private val fileOperationsViewModel by viewModel<FileOperationsViewModel>()
 
     private lateinit var binding: PreviewTextFragmentBinding
@@ -111,6 +115,16 @@ class PreviewTextFragment : FileFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        collectLatestLifecycleFlow(previewTextViewModel.getCurrentFile()) { currentFile ->
+            if (currentFile != null) {
+                file = currentFile
+                requireActivity().invalidateOptionsMenu()
+            } else {
+                requireActivity().onBackPressed()
+            }
+
+        }
+
         loadAndShowTextPreview()
     }
 
@@ -157,6 +171,7 @@ class PreviewTextFragment : FileFragment() {
                 val fileToSetAsAvailableOffline = ArrayList<OCFile>()
                 fileToSetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(fileToSetAsAvailableOffline))
+                Snackbar.make(requireView(), R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 
@@ -164,6 +179,7 @@ class PreviewTextFragment : FileFragment() {
                 val fileToUnsetAsAvailableOffline = ArrayList<OCFile>()
                 fileToUnsetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline))
+                Snackbar.make(requireView(), R.string.confirmation_unset_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 

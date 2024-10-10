@@ -34,6 +34,7 @@ ownCloud admins and users.
 ## Summary
 
 * Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
+* Enhancement - Add status message when (un)setting av. offline from preview: [#4382](https://github.com/owncloud/android/issues/4382)
 
 ## Details
 
@@ -44,6 +45,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4252
    https://github.com/owncloud/android/pull/4492
+
+* Enhancement - Add status message when (un)setting av. offline from preview: [#4382](https://github.com/owncloud/android/issues/4382)
+
+   A message has been added in all previews when the (un)setting av. offline
+   buttons are clicked. The options menu has been updated in all previews depending
+   on the file status.
+
+   https://github.com/owncloud/android/issues/4382
+   https://github.com/owncloud/android/pull/4482
 
 # Changelog for ownCloud Android Client [4.4.0] (2024-09-30)
 

@@ -8,6 +8,7 @@
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -56,6 +57,7 @@ import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.trackselection.AdaptiveTrackSelection
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.ui.PlayerView
+import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.databinding.VideoPreviewBinding
 import com.owncloud.android.domain.files.model.OCFile
@@ -80,6 +82,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 @OptIn(UnstableApi::class)
@@ -92,7 +95,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
     private var playWhenReady = true
     private var playbackPosition: Long = 0
     private var windowInsetsController: WindowInsetsControllerCompat? = null
-    private val previewVideoViewModel: PreviewVideoViewModel by viewModel()
+    private val previewVideoViewModel: PreviewVideoViewModel by viewModel { parametersOf(intent.getParcelableExtra(EXTRA_FILE)) }
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
     private val transfersViewModel: TransfersViewModel by viewModel()
 
@@ -125,6 +128,16 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
             }
             playWhenReady = savedInstanceState.getBoolean(EXTRA_AUTOPLAY, true)
             playbackPosition = savedInstanceState.getLong(EXTRA_PLAY_POSITION, 0)
+        }
+
+        collectLatestLifecycleFlow(previewVideoViewModel.getCurrentFile()) { currentFile ->
+            if (currentFile != null) {
+                file = currentFile
+                this.invalidateOptionsMenu()
+            } else {
+                this.onBackPressed()
+            }
+
         }
 
         checkNotNull(file) { "Instanced with a NULL OCFile" }
@@ -384,6 +397,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
                 val fileToSetAsAvailableOffline = ArrayList<OCFile>()
                 fileToSetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(SetFilesAsAvailableOffline(fileToSetAsAvailableOffline))
+                Snackbar.make(binding.root, R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 
@@ -391,6 +405,7 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
                 val fileToUnsetAsAvailableOffline = ArrayList<OCFile>()
                 fileToUnsetAsAvailableOffline.add(file)
                 fileOperationsViewModel.performOperation(UnsetFilesAsAvailableOffline(fileToUnsetAsAvailableOffline))
+                Snackbar.make(binding.root, R.string.confirmation_unset_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 

@@ -8,6 +8,7 @@
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -46,6 +47,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.github.chrisbanes.photoview.PhotoView
+import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.databinding.PreviewImageFragmentBinding
 import com.owncloud.android.domain.files.model.MIME_SVG
@@ -61,6 +63,7 @@ import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.io.File
 
@@ -87,7 +90,9 @@ class PreviewImageFragment : FileFragment() {
     private var _binding: PreviewImageFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val previewImageViewModel by viewModel<PreviewImageViewModel>()
+    private val previewImageViewModel by viewModel<PreviewImageViewModel>() {
+        parametersOf(requireArguments().getParcelable(ARG_FILE))
+    }
     private val fileOperationsViewModel: FileOperationsViewModel by inject()
 
     /**
@@ -140,6 +145,15 @@ class PreviewImageFragment : FileFragment() {
                 }
             } else {
                 ignoreFirstSavedState = false
+            }
+        }
+
+        collectLatestLifecycleFlow(previewImageViewModel.getCurrentFile()) { currentFile ->
+            if (currentFile != null) {
+                file = currentFile
+                requireActivity().invalidateOptionsMenu()
+            } else {
+                requireActivity().onBackPressed()
             }
         }
 
@@ -234,11 +248,13 @@ class PreviewImageFragment : FileFragment() {
 
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
+                Snackbar.make(requireActivity().window.decorView, R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
+                Snackbar.make(requireActivity().window.decorView, R.string.confirmation_unset_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 

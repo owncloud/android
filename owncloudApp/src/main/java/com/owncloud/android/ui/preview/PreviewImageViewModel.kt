@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -30,11 +31,13 @@ import androidx.work.WorkInfo
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.FileMenuOption
 import com.owncloud.android.domain.files.model.OCFile
+import com.owncloud.android.domain.files.usecases.GetFileByIdAsStreamUseCase
 import com.owncloud.android.domain.files.usecases.GetFileByIdUseCase
 import com.owncloud.android.providers.ContextProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.files.FilterFileMenuOptionsUseCase
 import com.owncloud.android.usecases.transfers.downloads.GetLiveDataForFinishedDownloadsFromAccountUseCase
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -44,8 +47,10 @@ class PreviewImageViewModel(
     private val getFileByIdUseCase: GetFileByIdUseCase,
     private val getLiveDataForFinishedDownloadsFromAccountUseCase: GetLiveDataForFinishedDownloadsFromAccountUseCase,
     private val filterFileMenuOptionsUseCase: FilterFileMenuOptionsUseCase,
+    getFileByIdAsStreamUseCase: GetFileByIdAsStreamUseCase,
     private val contextProvider: ContextProvider,
-    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider
+    private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
+    ocFile: OCFile,
 ) : ViewModel() {
 
     private val _downloads = MediatorLiveData<List<Pair<OCFile, WorkInfo>>>()
@@ -53,6 +58,10 @@ class PreviewImageViewModel(
 
     private val _menuOptions: MutableStateFlow<List<FileMenuOption>> = MutableStateFlow(emptyList())
     val menuOptions: StateFlow<List<FileMenuOption>> = _menuOptions
+
+    private val currentFile: Flow<OCFile?> = getFileByIdAsStreamUseCase(GetFileByIdAsStreamUseCase.Params(ocFile.id!!))
+
+    fun getCurrentFile(): Flow<OCFile?> = currentFile
 
     fun startListeningToDownloadsFromAccount(account: Account) {
         _downloads.addSource(
