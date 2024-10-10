@@ -8,6 +8,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavon
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -321,9 +322,54 @@ abstract class DrawerActivity : ToolbarActivity() {
 
                             }
 
+                            userQuota.state == "exceeded" -> {
+                                getAccountQuotaBar()?.run {
+                                    isVisible = true
+                                    progress = 100
+                                }
+                                getAccountQuotaText()?.run {
+                                    text = String.format(
+                                        getString(R.string.drawer_exceeded_quota),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.used, context),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.total, context),
+                                        userQuota.getRelative()
+                                    )
+                                }
+                            }
+
                             userQuota.available == 0L -> { // Quota 0, guest users
                                 getAccountQuotaBar()?.isVisible = false
                                 getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
+                            }
+
+                            userQuota.state == "nearing" -> {
+                                getAccountQuotaBar()?.run {
+                                    isVisible = true
+                                    progress = ceil(userQuota.getRelative()).toInt()
+                                }
+                                getAccountQuotaText()?.run {
+                                    text = String.format(
+                                        getString(R.string.drawer_nearing_quota),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.used, context),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.total, context),
+                                        userQuota.getRelative()
+                                    )
+                                }
+                            }
+
+                            userQuota.state == "critical" -> {
+                                getAccountQuotaBar()?.run {
+                                    isVisible = true
+                                    progress = ceil(userQuota.getRelative()).toInt()
+                                }
+                                getAccountQuotaText()?.run {
+                                    text = String.format(
+                                        getString(R.string.drawer_critical_quota),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.used, context),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.total, context),
+                                        userQuota.getRelative()
+                                    )
+                                }
                             }
 
                             else -> { // Limited quota
@@ -335,7 +381,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 getAccountQuotaText()?.text = String.format(
                                     getString(R.string.drawer_quota),
                                     DisplayUtils.bytesToHumanReadable(userQuota.used, this),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.total, this),
                                     userQuota.getRelative()
                                 )
                             }
