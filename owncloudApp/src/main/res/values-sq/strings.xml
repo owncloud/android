@@ -357,6 +357,8 @@
   <string name="auth_account_does_not_exist">Llogaria s\’ekziston ende te pajisja</string>
   <string name="set_available_offline">Caktojeni si të passhëm jo në linjë</string>
   <string name="unset_available_offline">Hiqeni si të passhëm jo në linjë</string>
+  <string name="confirmation_set_available_offline">Kartela u kalua me sukses si e pashme jashtë linje</string>
+  <string name="confirmation_unset_available_offline">Kartela u hoq me sukses si e pashme jashtë linje</string>
   <string name="common_rename">Riemërtojeni</string>
   <string name="common_remove">Hiqe</string>
   <string name="confirmation_remove_file_alert">Doni vërtet të hiqet %1$s?</string>
