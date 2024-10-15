@@ -27,6 +27,7 @@ import com.owncloud.android.data.files.db.OCFileSyncEntity
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
+import com.owncloud.android.domain.files.model.OCMetaFile
 import com.owncloud.android.lib.resources.files.RemoteFile
 import com.owncloud.android.lib.resources.files.RemoteMetaFile
 
@@ -41,6 +42,21 @@ val OC_FOLDER = OCFile(
     creationTimestamp = 0,
     modificationTimestamp = 1593510589000,
     etag = "5efb0c13c688f",
+    mimeType = "DIR",
+    length = 123123123
+)
+
+val OC_ROOT_FOLDER = OCFile(
+    id = 1,
+    parentId = 0,
+    remotePath = "/",
+    owner = OC_ACCOUNT_NAME,
+    permissions = "RDNVCK",
+    remoteId = "00000003oci9p7er2hay4",
+    privateLink = "http://server.url/f/8",
+    creationTimestamp = 0,
+    modificationTimestamp = 1593510589000,
+    etag = "5efb0c13c688k",
     mimeType = "DIR",
     length = 123123123
 )
@@ -151,6 +167,14 @@ val OC_FILE_WITH_SYNC_INFO_AND_WITHOUT_PERSONAL_SPACE = OCFileWithSyncInfo(
 val OC_FILE_WITH_SYNC_INFO_AVAILABLE_OFFLINE = OCFileWithSyncInfo(
     file = OC_FILE_AVAILABLE_OFFLINE,
     space = OC_SPACE_PROJECT_WITH_IMAGE
+)
+
+val OC_META_FILE = OCMetaFile(
+    path = OC_FILE.remotePath
+)
+
+val OC_META_FILE_ROOT_FOLDER = OCMetaFile(
+    path = OC_ROOT_FOLDER.remotePath
 )
 
 val OC_FILES_WITH_SYNC_INFO = listOf(OC_FILE_WITH_SYNC_INFO, OC_FILE_WITH_SYNC_INFO, OC_FILE_WITH_SYNC_INFO)

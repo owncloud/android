@@ -3,7 +3,7 @@
  *
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -122,6 +122,26 @@ val OC_SPACE_PERSONAL = OC_SPACE_PROJECT_WITH_IMAGE.copy(
     driveAlias = "personal/admin",
     driveType = "personal",
     name = "Admin",
+    description = null,
+    special = null
+)
+
+val OC_SPACE_SHARES = OCSpace(
+    accountName = OC_ACCOUNT_NAME,
+    driveAlias = "virtual/shares",
+    driveType = "virtual",
+    id = "a0ca6a90-a365-4782-871e-d44447bbc668\$a0ca6a90-a365-4782-871e-d44447bbc668",
+    lastModifiedDateTime = "2024-01-01T00:00:00.00000000Z",
+    name = "Shares",
+    owner = null,
+    quota = null,
+    root = SpaceRoot(
+        eTag = "989c7968dbbbde8c5fd9849b9123c384",
+        id = "a0ca6a90-a365-4782-871e-d44447bbc668\$a0ca6a90-a365-4782-871e-d44447bbc668",
+        webDavUrl = "https://server.com/dav/spaces/a0ca6a90-a365-4782-871e-d44447bbc668\$a0ca6a90-a365-4782-871e-d44447bbc668",
+        deleted = null
+    ),
+    webUrl = "https://server.com/f/a0ca6a90-a365-4782-871e-d44447bbc668\$a0ca6a90-a365-4782-871e-d44447bbc669",
     description = null,
     special = null
 )
