@@ -4,6 +4,7 @@
  * @author Javier Rodríguez Pérez
  * @author Aitor Ballesteros Pavón
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -27,6 +28,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.camerauploads.model.CameraUploadsConfiguration
 import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
+import com.owncloud.android.domain.user.model.UserQuota
+import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
@@ -41,11 +44,15 @@ class ManageAccountsViewModel(
     private val accountProvider: AccountProvider,
     private val removeLocalFilesForAccountUseCase: RemoveLocalFilesForAccountUseCase,
     private val getCameraUploadsConfigurationUseCase: GetCameraUploadsConfigurationUseCase,
+    private val getUserQuotasUseCase: GetUserQuotasUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
     private val _cleanAccountLocalStorageFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
     val cleanAccountLocalStorageFlow: StateFlow<Event<UIResult<Unit>>?> = _cleanAccountLocalStorageFlow
+
+    private val _userQuotas = MutableStateFlow<List<UserQuota>>(emptyList())
+    val userQuotas: StateFlow<List<UserQuota>> get() = _userQuotas
 
     private var cameraUploadsConfiguration: CameraUploadsConfiguration? = null
 
@@ -76,5 +83,11 @@ class ManageAccountsViewModel(
     fun hasCameraUploadsAttached(accountName: String): Boolean {
         return accountName == cameraUploadsConfiguration?.pictureUploadsConfiguration?.accountName ||
                 accountName == cameraUploadsConfiguration?.videoUploadsConfiguration?.accountName
+    }
+
+    fun loadUserQuotas() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            _userQuotas.value = getUserQuotasUseCase(Unit)
+        }
     }
 }
