@@ -4,6 +4,7 @@
  * @author Javier Rodríguez Pérez
  * @author Aitor Ballesteros Pavón
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -25,6 +26,8 @@ package com.owncloud.android.presentation.accounts
 import android.accounts.Account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.owncloud.android.domain.user.model.UserQuota
+import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.automaticuploads.model.AutomaticUploadsConfiguration
 import com.owncloud.android.domain.automaticuploads.usecases.GetAutomaticUploadsConfigurationUseCase
 import com.owncloud.android.domain.utils.Event
@@ -41,11 +44,15 @@ class ManageAccountsViewModel(
     private val accountProvider: AccountProvider,
     private val removeLocalFilesForAccountUseCase: RemoveLocalFilesForAccountUseCase,
     private val getAutomaticUploadsConfigurationUseCase: GetAutomaticUploadsConfigurationUseCase,
+    private val getUserQuotasUseCase: GetUserQuotasUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
     private val _cleanAccountLocalStorageFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
     val cleanAccountLocalStorageFlow: StateFlow<Event<UIResult<Unit>>?> = _cleanAccountLocalStorageFlow
+
+    private val _userQuotas = MutableStateFlow<List<UserQuota>>(emptyList())
+    val userQuotas: StateFlow<List<UserQuota>> get() = _userQuotas
 
     private var automaticUploadsConfiguration: AutomaticUploadsConfiguration? = null
 
@@ -76,5 +83,11 @@ class ManageAccountsViewModel(
     fun hasAutomaticUploadsAttached(accountName: String): Boolean {
         return accountName == automaticUploadsConfiguration?.pictureUploadsConfiguration?.accountName ||
                 accountName == automaticUploadsConfiguration?.videoUploadsConfiguration?.accountName
+    }
+
+    fun loadUserQuotas() {
+        viewModelScope.launch(coroutinesDispatcherProvider.io) {
+            _userQuotas.value = getUserQuotasUseCase(Unit)
+        }
     }
 }

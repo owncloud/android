@@ -3,6 +3,7 @@
  *
  * @author Javier Rodríguez Pérez
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -22,14 +23,18 @@
 package com.owncloud.android.presentation.accounts
 
 import android.accounts.Account
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AccountActionBinding
 import com.owncloud.android.databinding.AccountItemBinding
+import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.extensions.setAccessibilityRole
 import com.owncloud.android.lib.common.OwnCloudAccount
 import com.owncloud.android.presentation.authentication.AccountUtils
@@ -37,8 +42,12 @@ import com.owncloud.android.presentation.avatar.AvatarUtils
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 import timber.log.Timber
+import kotlin.math.ceil
 
-class ManageAccountsAdapter(private val accountListener: AccountAdapterListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ManageAccountsAdapter(
+    private val context: Context,
+    private val accountListener: AccountAdapterListener,
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var accountItemsList = listOf<AccountRecyclerItem>()
 
@@ -68,6 +77,7 @@ class ManageAccountsAdapter(private val accountListener: AccountAdapterListener)
             is AccountManagementViewHolder -> {
                 val accountItem = getItem(position) as AccountRecyclerItem.AccountItem
                 val account: Account = accountItem.account
+                val userQuota: UserQuota? = accountItem.userQuota
                 val accountAvatarRadiusDimension = holder.itemView.context.resources.getDimension(R.dimen.list_item_avatar_icon_radius)
 
                 try {
@@ -82,6 +92,11 @@ class ManageAccountsAdapter(private val accountListener: AccountAdapterListener)
                 holder.binding.name.tag = account.name
 
                 holder.binding.account.text = DisplayUtils.convertIdn(account.name, false)
+
+                // update the quota
+                if (userQuota != null) {
+                    updateQuota(holder.binding.manageAccountsQuotaText, holder.binding.manageAccountsQuotaBar, userQuota)
+                }
 
                 try {
                     val avatarUtils = AvatarUtils()
@@ -137,8 +152,41 @@ class ManageAccountsAdapter(private val accountListener: AccountAdapterListener)
 
     fun getItem(position: Int) = accountItemsList[position]
 
+    private fun updateQuota (quotaText: TextView, quotaBar: ProgressBar, userQuota: UserQuota){
+        when {
+            userQuota.available < 0 -> {
+                quotaBar.visibility = View.GONE
+                quotaText.text = DisplayUtils.bytesToHumanReadable(userQuota.used, context)
+            }
+
+            userQuota.state == "exceeded" -> {
+                quotaBar.progress = 100
+                quotaText.text = String.format(
+                    context.getString(R.string.manage_accounts_quota),
+                    DisplayUtils.bytesToHumanReadable(userQuota.used, context),
+                    DisplayUtils.bytesToHumanReadable(userQuota.total, context)
+                )
+            }
+
+            userQuota.available == 0L ->  {
+                quotaBar.visibility = View.GONE
+                quotaText.text = context.getString(R.string.drawer_unavailable_used_storage)
+
+            }
+
+            else -> {
+                quotaBar.progress = ceil(userQuota.getRelative()).toInt()
+                quotaText.text = String.format(
+                    context.getString(R.string.manage_accounts_quota),
+                    DisplayUtils.bytesToHumanReadable(userQuota.used, context),
+                    DisplayUtils.bytesToHumanReadable(userQuota.total, context)
+                )
+            }
+        }
+    }
+
     sealed class AccountRecyclerItem {
-        data class AccountItem(val account: Account) : AccountRecyclerItem()
+        data class AccountItem(val account: Account, val userQuota: UserQuota?) : AccountRecyclerItem()
         object NewAccount : AccountRecyclerItem()
     }
 

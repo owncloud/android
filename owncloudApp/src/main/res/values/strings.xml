@@ -514,6 +514,8 @@
     <string name="prefs_category_accounts">Accounts</string>
     <string name="prefs_add_account">Add account</string>
     <string name="drawer_manage_accounts">Manage accounts</string>
+    <string name="manage_accounts_quota">%1$s / %2$s</string>
+    <string name="used_quota_title_manage_accounts">Used: </string>
     <string name="auth_redirect_non_secure_connection_title">Secure connection is redirected through an unsecured route.</string>
 
     <string name="actionbar_logger">Logs</string>
