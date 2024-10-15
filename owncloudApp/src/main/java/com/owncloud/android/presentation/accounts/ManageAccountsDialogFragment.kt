@@ -33,6 +33,8 @@ import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,22 +55,21 @@ import timber.log.Timber
 
 class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
 
-    private var accountListAdapter: ManageAccountsAdapter = ManageAccountsAdapter(this)
+    private lateinit var accountListAdapter: ManageAccountsAdapter
     private var currentAccount: Account? = null
+
+    private val manageAccountsViewModel: ManageAccountsViewModel by viewModel()
 
     private lateinit var dialogView: View
     private lateinit var parentActivity: ToolbarActivity
 
-    private val manageAccountsViewModel: ManageAccountsViewModel by viewModel()
-
     override fun onStart() {
         super.onStart()
-
-        accountListAdapter.submitAccountList(accountList = getAccountListItems())
 
         parentActivity = requireActivity() as ToolbarActivity
         currentAccount = requireArguments().getParcelable(KEY_CURRENT_ACCOUNT)
 
+        manageAccountsViewModel.loadUserQuotas()
         subscribeToViewModels()
     }
 
@@ -77,14 +78,6 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
         val inflater = this.layoutInflater
         dialogView = inflater.inflate(R.layout.manage_accounts_dialog, null)
         builder.setView(dialogView)
-
-        val recyclerView = dialogView.findViewById<RecyclerView>(R.id.account_list_recycler_view)
-
-        recyclerView.apply {
-            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(requireContext())
-            adapter = accountListAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
 
         val closeButton = dialogView.findViewById<ImageView>(R.id.cross)
         closeButton.setOnClickListener {
@@ -245,7 +238,27 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
                         showErrorInSnackbar(R.string.common_error_unknown, uiResult.error)
                         Timber.e(uiResult.error)
                     }
+                }
+            }
+        }
 
+        collectLatestLifecycleFlow(manageAccountsViewModel.userQuotas) { listUserQuotas ->
+            if (listUserQuotas.isNotEmpty()){
+                // hide the progress bar and show manage accounts dialog
+                val indeterminateProgressBar = dialogView.findViewById<ProgressBar>(R.id.indeterminate_progress_bar)
+                indeterminateProgressBar.visibility = View.GONE
+                val manageAccountsLayout = dialogView.findViewById<LinearLayout>(R.id.manage_accounts_layout)
+                manageAccountsLayout.visibility = View.VISIBLE
+
+                accountListAdapter = ManageAccountsAdapter(requireContext(),this)
+                accountListAdapter.submitAccountList(accountList = getAccountListItems())
+
+                val recyclerView = dialogView.findViewById<RecyclerView>(R.id.account_list_recycler_view)
+
+                recyclerView.apply {
+                    filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(requireContext())
+                    adapter = accountListAdapter
+                    layoutManager = LinearLayoutManager(requireContext())
                 }
             }
         }
@@ -259,14 +272,19 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
     private fun getAccountListItems(): List<ManageAccountsAdapter.AccountRecyclerItem> {
         val accountList = manageAccountsViewModel.getLoggedAccounts()
         val provisionalAccountList = mutableListOf<ManageAccountsAdapter.AccountRecyclerItem>()
-        accountList.forEach {
-            provisionalAccountList.add(ManageAccountsAdapter.AccountRecyclerItem.AccountItem(it))
+
+        collectLatestLifecycleFlow(manageAccountsViewModel.userQuotas) { userQuotasList ->
+            accountList.forEach { account ->
+                val userQuota = userQuotasList.firstOrNull{ userQuota -> userQuota.accountName == account.name }
+                provisionalAccountList.add(ManageAccountsAdapter.AccountRecyclerItem.AccountItem(account, userQuota))
+            }
+
+            // Add Create Account item at the end of account list if multi-account is enabled
+            if (resources.getBoolean(R.bool.multiaccount_support) || accountList.isEmpty() || userQuotasList.isNotEmpty()) {
+                provisionalAccountList.add(ManageAccountsAdapter.AccountRecyclerItem.NewAccount)
+            }
         }
 
-        // Add Create Account item at the end of account list if multi-account is enabled
-        if (resources.getBoolean(R.bool.multiaccount_support) || accountList.isEmpty()) {
-            provisionalAccountList.add(ManageAccountsAdapter.AccountRecyclerItem.NewAccount)
-        }
         return provisionalAccountList
     }
 
@@ -281,5 +299,4 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
             return ManageAccountsDialogFragment().apply { arguments = args }
         }
     }
-
 }
