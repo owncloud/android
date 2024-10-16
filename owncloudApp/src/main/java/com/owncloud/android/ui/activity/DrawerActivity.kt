@@ -322,7 +322,7 @@ abstract class DrawerActivity : ToolbarActivity() {
 
                             }
 
-                            userQuota.state == "exceeded" -> {
+                            userQuota.state == EXCEEDED_STATE -> {
                                 getAccountQuotaBar()?.run {
                                     isVisible = true
                                     progress = 100
@@ -342,7 +342,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
                             }
 
-                            userQuota.state == "nearing" -> {
+                            userQuota.state == NEARING_STATE -> {
                                 getAccountQuotaBar()?.run {
                                     isVisible = true
                                     progress = ceil(userQuota.getRelative()).toInt()
@@ -357,7 +357,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 }
                             }
 
-                            userQuota.state == "critical" -> {
+                            userQuota.state == CRITICAL_STATE -> {
                                 getAccountQuotaBar()?.run {
                                     isVisible = true
                                     progress = ceil(userQuota.getRelative()).toInt()
@@ -586,5 +586,8 @@ abstract class DrawerActivity : ToolbarActivity() {
         const val SURVEY_URL = "https://owncloud.com/android-app-feedback"
         private const val KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE"
         private const val KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM"
+        private const val EXCEEDED_STATE = "exceeded"
+        private const val NEARING_STATE = "nearing"
+        private const val CRITICAL_STATE = "critical"
     }
 }

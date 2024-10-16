@@ -159,7 +159,7 @@ class ManageAccountsAdapter(
                 quotaText.text = DisplayUtils.bytesToHumanReadable(userQuota.used, context)
             }
 
-            userQuota.state == "exceeded" -> {
+            userQuota.state == EXCEEDED_STATE -> {
                 quotaBar.progress = 100
                 quotaText.text = String.format(
                     context.getString(R.string.manage_accounts_quota),
@@ -217,5 +217,9 @@ class ManageAccountsAdapter(
         fun cleanAccountLocalStorage(account: Account)
         fun createAccount()
         fun switchAccount(position: Int)
+    }
+
+    companion object {
+        private const val EXCEEDED_STATE = "exceeded"
     }
 }
