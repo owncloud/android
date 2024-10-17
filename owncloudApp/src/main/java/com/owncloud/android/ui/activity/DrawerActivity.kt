@@ -287,6 +287,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     open fun openDrawer() {
         getDrawerLayout()?.openDrawer(GravityCompat.START)
         findViewById<View>(R.id.nav_view).requestFocus()
+        updateQuota()
     }
 
     /**

@@ -1004,6 +1004,11 @@ class FileDisplayActivity : FileActivity(),
                     file = storageManager.getFileById(lastRemovedFile.parentId!!)
                     cleanSecondFragment()
                 }
+
+                // Refresh the spaces and update the quota
+                val spacesListViewModel: SpacesListViewModel by viewModel { parametersOf(account.name, false) }
+                spacesListViewModel.refreshSpacesFromServer()
+
                 invalidateOptionsMenu()
             }
 
