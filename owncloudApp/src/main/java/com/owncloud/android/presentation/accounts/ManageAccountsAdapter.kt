@@ -24,6 +24,7 @@ package com.owncloud.android.presentation.accounts
 
 import android.accounts.Account
 import android.content.Context
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -160,7 +161,10 @@ class ManageAccountsAdapter(
             }
 
             userQuota.state == EXCEEDED_STATE -> {
-                quotaBar.progress = 100
+                quotaBar.run{
+                    progress = 100
+                    progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
+                }
                 quotaText.text = String.format(
                     context.getString(R.string.manage_accounts_quota),
                     DisplayUtils.bytesToHumanReadable(userQuota.used, context),
