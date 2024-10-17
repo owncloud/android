@@ -50,7 +50,7 @@
         android:visibility="visible"
         app:itemIconTint="@color/primary_button_text_color"
         app:itemTextColor="@color/primary_button_text_color"
-        app:labelVisibilityMode="auto"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -836,5 +836,7 @@
     <string name="audio_preview_label">Audio preview</string>
     <string name="details_label">Details</string>
     <string name="text_preview_label">Text preview</string>
+    <string name="release_notes_title_enhanced_bottom_nav_bar">Added text labels on bottom bar</string>
+    <string name="release_notes_subtitle_bottom_nav_bar">Text labels were added and default active indicator is used to show which section is selected on the bottom bar</string>
 
 </resources>
