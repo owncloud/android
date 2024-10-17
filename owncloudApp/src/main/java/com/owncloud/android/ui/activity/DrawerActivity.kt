@@ -31,6 +31,7 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerFuture
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
@@ -326,6 +327,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 getAccountQuotaBar()?.run {
                                     isVisible = true
                                     progress = 100
+                                    progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
                                 }
                                 getAccountQuotaText()?.run {
                                     text = String.format(
