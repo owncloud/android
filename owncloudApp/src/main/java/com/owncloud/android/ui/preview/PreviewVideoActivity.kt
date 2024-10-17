@@ -8,6 +8,7 @@
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -71,6 +72,7 @@ import com.owncloud.android.presentation.files.operations.FileOperationsViewMode
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.TAG_REMOVE_FILES_DIALOG_FRAGMENT
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.newInstance
 import com.owncloud.android.presentation.previews.PreviewVideoViewModel
+import com.owncloud.android.presentation.spaces.SpacesListViewModel
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
@@ -80,6 +82,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 @OptIn(UnstableApi::class)
@@ -178,6 +181,11 @@ class PreviewVideoActivity : FileActivity(), Player.Listener, OnPrepareVideoPlay
 
                 is UIResult.Loading -> showLoadingDialog(R.string.wait_a_moment)
                 is UIResult.Success -> {
+
+                    // Refresh the spaces and update the quota
+                    val spacesListViewModel: SpacesListViewModel by viewModel { parametersOf(account?.name, false) }
+                    spacesListViewModel.refreshSpacesFromServer()
+
                     dismissLoadingDialog()
                     finish()
                 }
