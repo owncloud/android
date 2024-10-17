@@ -67,6 +67,8 @@
 
     <color name="file_docxf">#66a6a3</color>
 
+    <color name="quota_exceeded">#c53030</color>
+
     <!-- Bottom Sheet Fragment -->
     <color name="bottom_sheet_fragment_item_color">#6E758C</color>
     <color name="bottom_sheet_fragment_title_color">#6E758C</color>
