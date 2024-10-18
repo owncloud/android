@@ -1079,6 +1079,10 @@ class FileDisplayActivity : FileActivity(),
                         launchCopyFile(data, replace)
                     }
                 }
+
+                // Refresh the spaces and update the quota
+                val spacesListViewModel: SpacesListViewModel by viewModel { parametersOf(account.name, false) }
+                spacesListViewModel.refreshSpacesFromServer()
             }
 
             is UIResult.Error -> {

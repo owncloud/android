@@ -111,6 +111,7 @@ import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragm
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.TAG_REMOVE_FILES_DIALOG_FRAGMENT
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
+import com.owncloud.android.presentation.spaces.SpacesListViewModel
 import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.ui.activity.FileActivity
@@ -145,6 +146,7 @@ class MainFileListFragment : Fragment(),
     }
     private val fileOperationsViewModel by sharedViewModel<FileOperationsViewModel>()
     private val transfersViewModel by viewModel<TransfersViewModel>()
+    private val spacesListViewModel: SpacesListViewModel by viewModel { parametersOf(AccountUtils.getCurrentOwnCloudAccount(requireContext()).name, false) }
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
@@ -634,6 +636,10 @@ class MainFileListFragment : Fragment(),
         fileOperationsViewModel.refreshFolderLiveData.observe(viewLifecycleOwner) {
             binding.syncProgressBar.isIndeterminate = it.peekContent().isLoading
             binding.swipeRefreshMainFileList.isRefreshing = it.peekContent().isLoading
+
+            // Refresh the spaces and update the quota
+            spacesListViewModel.refreshSpacesFromServer()
+
             hideRefreshFab()
         }
 
