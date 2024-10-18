@@ -764,4 +764,6 @@
   <string name="audio_preview_label">Audio eelvaade</string>
   <string name="details_label">Üksikasjad</string>
   <string name="text_preview_label">Teksti eelvaade</string>
+  <string name="release_notes_title_enhanced_bottom_nav_bar">Alumisele ribale on lisatud tekstisildid</string>
+  <string name="release_notes_subtitle_bottom_nav_bar">Alumisele ribale on lisatud tekstisildid ning näidatakse vaikimisi aktiivset valitud sektsiooni</string>
 </resources>
