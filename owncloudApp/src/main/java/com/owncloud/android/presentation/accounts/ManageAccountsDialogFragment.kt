@@ -58,10 +58,10 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
     private lateinit var accountListAdapter: ManageAccountsAdapter
     private var currentAccount: Account? = null
 
-    private val manageAccountsViewModel: ManageAccountsViewModel by viewModel()
-
     private lateinit var dialogView: View
     private lateinit var parentActivity: ToolbarActivity
+
+    private val manageAccountsViewModel: ManageAccountsViewModel by viewModel()
 
     override fun onStart() {
         super.onStart()
@@ -243,14 +243,14 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
         }
 
         collectLatestLifecycleFlow(manageAccountsViewModel.userQuotas) { listUserQuotas ->
-            if (listUserQuotas.isNotEmpty()){
+            if (listUserQuotas.isNotEmpty()) {
                 // hide the progress bar and show manage accounts dialog
                 val indeterminateProgressBar = dialogView.findViewById<ProgressBar>(R.id.indeterminate_progress_bar)
                 indeterminateProgressBar.visibility = View.GONE
                 val manageAccountsLayout = dialogView.findViewById<LinearLayout>(R.id.manage_accounts_layout)
                 manageAccountsLayout.visibility = View.VISIBLE
 
-                accountListAdapter = ManageAccountsAdapter(requireContext(),this)
+                accountListAdapter = ManageAccountsAdapter(requireContext(), this)
                 accountListAdapter.submitAccountList(accountList = getAccountListItems())
 
                 val recyclerView = dialogView.findViewById<RecyclerView>(R.id.account_list_recycler_view)
@@ -275,7 +275,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
 
         collectLatestLifecycleFlow(manageAccountsViewModel.userQuotas) { userQuotasList ->
             accountList.forEach { account ->
-                val userQuota = userQuotasList.firstOrNull{ userQuota -> userQuota.accountName == account.name }
+                val userQuota = userQuotasList.firstOrNull { userQuota -> userQuota.accountName == account.name }
                 provisionalAccountList.add(ManageAccountsAdapter.AccountRecyclerItem.AccountItem(account, userQuota))
             }
 
@@ -299,4 +299,5 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
             return ManageAccountsDialogFragment().apply { arguments = args }
         }
     }
+
 }

@@ -153,7 +153,7 @@ class ManageAccountsAdapter(
 
     fun getItem(position: Int) = accountItemsList[position]
 
-    private fun updateQuota (quotaText: TextView, quotaBar: ProgressBar, userQuota: UserQuota){
+    private fun updateQuota(quotaText: TextView, quotaBar: ProgressBar, userQuota: UserQuota) {
         when {
             userQuota.available < 0 -> {
                 quotaBar.visibility = View.GONE
@@ -161,7 +161,7 @@ class ManageAccountsAdapter(
             }
 
             userQuota.state == EXCEEDED_STATE -> {
-                quotaBar.run{
+                quotaBar.run {
                     progress = 100
                     progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
                 }
