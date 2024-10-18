@@ -68,13 +68,11 @@ interface FileRepository {
     fun saveFile(file: OCFile)
     fun saveConflict(fileId: Long, eTagInConflict: String)
     fun cleanConflict(fileId: Long)
-    fun saveUploadWorkerUuid(fileId: Long, workerUuid: UUID)
-    fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID)
-    fun cleanWorkersUuid(fileId: Long)
-
     fun disableThumbnailsForFile(fileId: Long)
     fun updateFileWithNewAvailableOfflineStatus(ocFile: OCFile, newAvailableOfflineStatus: AvailableOfflineStatus)
-    fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
     fun updateFileWithLastUsage(fileId: Long, lastUsage: Long?)
+    fun updateDownloadedFilesStorageDirectoryInStoragePath(oldDirectory: String, newDirectory: String)
+    fun saveDownloadWorkerUuid(fileId: Long, workerUuid: UUID)
+    fun cleanWorkersUuid(fileId: Long)
 
 }
