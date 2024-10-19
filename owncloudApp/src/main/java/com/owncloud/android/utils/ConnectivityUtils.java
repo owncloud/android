@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author David A. Velasco
- * Copyright (C) 2017 ownCloud GmbH.
+ * @author Aitor Ballesteros Pavón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,6 +23,8 @@ package com.owncloud.android.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 
 import timber.log.Timber;
@@ -50,5 +54,25 @@ public class ConnectivityUtils {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
         return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+    }
+
+    public static boolean isInternetAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        Network network = connectivityManager.getActiveNetwork();
+        if (network == null) return false;
+
+        NetworkCapabilities activeNetwork = connectivityManager.getNetworkCapabilities(network);
+        if (activeNetwork == null) return false;
+
+        if (activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+            return true;
+        } else if (activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+            return true;
+        } else if (activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
