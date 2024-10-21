@@ -125,6 +125,10 @@ val OC_FILE_AVAILABLE_OFFLINE = OCFile(
     availableOfflineStatus = AvailableOfflineStatus.AVAILABLE_OFFLINE
 )
 
+val OC_FILE_DOWNLOADED = OC_FILE.copy(
+    storagePath = "/local/storage/path/username@demo.owncloud.com/Photos/image.jpt"
+)
+
 val OC_FILE_WITH_SPACE_ID = OCFile(
     id = 126,
     parentId = 123,
@@ -138,7 +142,8 @@ val OC_FILE_WITH_SPACE_ID = OCFile(
     etag = "5efb0c13c688i",
     mimeType = "image/jpeg",
     length = 3000000,
-    availableOfflineStatus = AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE
+    availableOfflineStatus = AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE,
+    spaceId = OC_SPACE_PERSONAL.id
 )
 
 val OC_FILE_WITH_SYNC_INFO = OCFileWithSyncInfo(

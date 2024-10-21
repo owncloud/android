@@ -28,17 +28,17 @@ import com.owncloud.android.data.providers.LocalStorageProvider
 import com.owncloud.android.data.spaces.datasources.LocalSpacesDataSource
 import com.owncloud.android.domain.exceptions.ConflictException
 import com.owncloud.android.domain.exceptions.FileNotFoundException
-import com.owncloud.android.domain.exceptions.NoConnectionWithServerException
 import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.MIME_DIR
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PATH
-import com.owncloud.android.testutil.OC_ACCOUNT_NAME
+import com.owncloud.android.testutil.OC_AVAILABLE_OFFLINE_FILES
 import com.owncloud.android.testutil.OC_FILE
-import com.owncloud.android.testutil.OC_FILE_ENTITY
+import com.owncloud.android.testutil.OC_FILE_AVAILABLE_OFFLINE
+import com.owncloud.android.testutil.OC_FILE_DOWNLOADED
 import com.owncloud.android.testutil.OC_FILE_WITH_SPACE_ID
+import com.owncloud.android.testutil.OC_FILE_WITH_SYNC_INFO
 import com.owncloud.android.testutil.OC_FILE_WITH_SYNC_INFO_AND_SPACE
-import com.owncloud.android.testutil.OC_FOLDER
 import com.owncloud.android.testutil.OC_FOLDER_WITH_SPACE_ID
 import com.owncloud.android.testutil.OC_META_FILE
 import com.owncloud.android.testutil.OC_META_FILE_ROOT_FOLDER
@@ -76,6 +76,7 @@ class OCFileRepositoryTest {
     private val ocFileRepositorySpy = spyk(ocFileRepository)
 
     private val expectedRemotePath = OC_FOLDER_WITH_SPACE_ID.remotePath + OC_FILE_WITH_SPACE_ID.fileName
+    private val storagePath = "/local/storage/path/username@demo.owncloud.com/Folder/Photos/image2.jpt"
     private val remoteId = "remoteId"
     private val searchText = "image"
 
@@ -163,15 +164,15 @@ class OCFileRepositoryTest {
 
         assertEquals(listOf(OC_FILE_WITH_SPACE_ID), filesNeedAction)
 
+        val sourceAndTargetSpaceId = OC_FILE_WITH_SPACE_ID.spaceId
+        val sourceAndTargetOwner = OC_FILE_WITH_SPACE_ID.owner
+        verify(exactly = 2) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = sourceAndTargetSpaceId,
+                accountName = sourceAndTargetOwner
+            )
+        }
         verify(exactly = 1) {
-            localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FILE_WITH_SPACE_ID.spaceId,
-                accountName = OC_FILE_WITH_SPACE_ID.owner
-            )
-            localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
-                accountName = OC_FOLDER_WITH_SPACE_ID.owner
-            )
             remoteFileDataSource.checkPathExistence(
                 path = expectedRemotePath,
                 isUserLogged = true,
@@ -206,15 +207,15 @@ class OCFileRepositoryTest {
 
         assertEquals(emptyList<OCFile>(), filesNeedAction)
 
+        val sourceAndTargetSpaceId = OC_FILE_WITH_SPACE_ID.spaceId
+        val sourceAndTargetOwner = OC_FILE_WITH_SPACE_ID.owner
+        verify(exactly = 2) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = sourceAndTargetSpaceId,
+                accountName = sourceAndTargetOwner
+            )
+        }
         verify(exactly = 1) {
-            localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FILE_WITH_SPACE_ID.spaceId,
-                accountName = OC_FILE_WITH_SPACE_ID.owner
-            )
-            localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
-                accountName = OC_FOLDER_WITH_SPACE_ID.owner
-            )
             remoteFileDataSource.checkPathExistence(
                 path = expectedRemotePath,
                 isUserLogged = true,
@@ -256,15 +257,15 @@ class OCFileRepositoryTest {
 
         assertEquals(emptyList<OCFile>(), filesNeedAction)
 
+        val sourceAndTargetSpaceId = OC_FILE_WITH_SPACE_ID.spaceId
+        val sourceAndTargetOwner = OC_FILE_WITH_SPACE_ID.owner
+        verify(exactly = 2) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = sourceAndTargetSpaceId,
+                accountName = sourceAndTargetOwner
+            )
+        }
         verify(exactly = 1) {
-            localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FILE_WITH_SPACE_ID.spaceId,
-                accountName = OC_FILE_WITH_SPACE_ID.owner
-            )
-            localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
-                accountName = OC_FOLDER_WITH_SPACE_ID.owner
-            )
             remoteFileDataSource.copyFile(
                 sourceRemotePath = OC_FILE_WITH_SPACE_ID.remotePath,
                 targetRemotePath = expectedRemotePath,
@@ -309,14 +310,20 @@ class OCFileRepositoryTest {
 
         assertEquals(emptyList<OCFile>(), filesNeedAction)
 
-        verify(exactly = 1) {
+        val sourceAndTargetSpaceId = OC_FILE_WITH_SPACE_ID.spaceId
+        val sourceAndTargetOwner = OC_FILE_WITH_SPACE_ID.owner
+        verify(exactly = 2) {
             localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FILE_WITH_SPACE_ID.spaceId,
-                accountName = OC_FILE_WITH_SPACE_ID.owner
+                spaceId = sourceAndTargetSpaceId,
+                accountName = sourceAndTargetOwner
             )
-            localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
-                accountName = OC_FOLDER_WITH_SPACE_ID.owner
+        }
+        verify(exactly = 1) {
+            remoteFileDataSource.getAvailableRemotePath(
+                remotePath = expectedRemotePath,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+                isUserLogged = true
             )
             remoteFileDataSource.copyFile(
                 sourceRemotePath = OC_FILE_WITH_SPACE_ID.remotePath,
@@ -342,14 +349,12 @@ class OCFileRepositoryTest {
 
         assertEquals(emptyList<OCFile>(), filesNeedAction)
 
-        verify(exactly = 1) {
+        val sourceAndTargetSpaceId = OC_FILE_WITH_SPACE_ID.spaceId
+        val sourceAndTargetOwner = OC_FILE_WITH_SPACE_ID.owner
+        verify(exactly = 2) {
             localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FILE_WITH_SPACE_ID.spaceId,
-                accountName = OC_FILE_WITH_SPACE_ID.owner
-            )
-            localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
-                accountName = OC_FOLDER_WITH_SPACE_ID.owner
+                spaceId = sourceAndTargetSpaceId,
+                accountName = sourceAndTargetOwner
             )
         }
     }
@@ -382,15 +387,15 @@ class OCFileRepositoryTest {
             ocFileRepository.copyFile(listOf(OC_FILE_WITH_SPACE_ID), OC_FOLDER_WITH_SPACE_ID, emptyList(), true)
         }
 
+        val sourceAndTargetSpaceId = OC_FILE_WITH_SPACE_ID.spaceId
+        val sourceAndTargetOwner = OC_FILE_WITH_SPACE_ID.owner
+        verify(exactly = 2) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = sourceAndTargetSpaceId,
+                accountName = sourceAndTargetOwner
+            )
+        }
         verify(exactly = 1) {
-            localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FILE_WITH_SPACE_ID.spaceId,
-                accountName = OC_FILE_WITH_SPACE_ID.owner
-            )
-            localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
-                accountName = OC_FOLDER_WITH_SPACE_ID.owner
-            )
             remoteFileDataSource.checkPathExistence(
                 path = expectedRemotePath,
                 isUserLogged = true,
@@ -439,15 +444,15 @@ class OCFileRepositoryTest {
             ocFileRepository.copyFile(listOf(OC_FILE_WITH_SPACE_ID), OC_FOLDER_WITH_SPACE_ID, emptyList(), true)
         }
 
+        val sourceAndTargetSpaceId = OC_FILE_WITH_SPACE_ID.spaceId
+        val sourceAndTargetOwner = OC_FILE_WITH_SPACE_ID.owner
+        verify(exactly = 2) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = sourceAndTargetSpaceId,
+                accountName = sourceAndTargetOwner
+            )
+        }
         verify(exactly = 1) {
-            localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FILE_WITH_SPACE_ID.spaceId,
-                accountName = OC_FILE_WITH_SPACE_ID.owner
-            )
-            localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
-                accountName = OC_FOLDER_WITH_SPACE_ID.owner
-            )
             remoteFileDataSource.checkPathExistence(
                 path = expectedRemotePath,
                 isUserLogged = true,
@@ -893,22 +898,553 @@ class OCFileRepositoryTest {
         }
     }
 
-    /*
-
     @Test
-    fun `getDownloadedFilesForAccount returns a list of OCFile`() {
+    fun `getFolderContent returns a list of OCFiles`() {
         every {
-            localFileDataSource.getDownloadedFilesForAccount(OC_ACCOUNT_NAME)
-        } returns listOf(OC_FILE)
+            localFileDataSource.getFolderContent(OC_PARENT_FOLDER_WITH_SPACE_ID.id!!)
+        } returns listOf(OC_FILE_WITH_SPACE_ID)
 
-        val result = ocFileRepository.getDownloadedFilesForAccount(OC_ACCOUNT_NAME)
-
-        assertEquals(listOf(OC_FILE), result)
+        val listOfFiles = ocFileRepository.getFolderContent(OC_PARENT_FOLDER_WITH_SPACE_ID.id!!)
+        assertEquals(listOf(OC_FILE_WITH_SPACE_ID), listOfFiles)
 
         verify(exactly = 1) {
-            localFileDataSource.getDownloadedFilesForAccount(OC_ACCOUNT_NAME)
+            localFileDataSource.getFolderContent(OC_PARENT_FOLDER_WITH_SPACE_ID.id!!)
         }
     }
+
+    @Test
+    fun `getFolderContentWithSyncInfoAsFlow returns a Flow with a list of OCFileWithSyncInfo`() = runTest {
+        every {
+            localFileDataSource.getFolderContentWithSyncInfoAsFlow(OC_PARENT_FOLDER_WITH_SPACE_ID.id!!)
+        } returns flowOf(listOf(OC_FILE_WITH_SYNC_INFO))
+
+        val listOfFiles = ocFileRepository.getFolderContentWithSyncInfoAsFlow(OC_PARENT_FOLDER_WITH_SPACE_ID.id!!).first()
+        assertEquals(listOf(OC_FILE_WITH_SYNC_INFO), listOfFiles)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFolderContentWithSyncInfoAsFlow(OC_PARENT_FOLDER_WITH_SPACE_ID.id!!)
+        }
+    }
+
+    @Test
+    fun `getFolderImages returns a list of OCFiles`() {
+        every {
+            localFileDataSource.getFolderImages(OC_PARENT_FOLDER_WITH_SPACE_ID.id!!)
+        } returns listOf(OC_FILE_WITH_SPACE_ID)
+
+        val listOfFiles = ocFileRepository.getFolderImages(OC_PARENT_FOLDER_WITH_SPACE_ID.id!!)
+        assertEquals(listOf(OC_FILE_WITH_SPACE_ID), listOfFiles)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFolderImages(OC_PARENT_FOLDER_WITH_SPACE_ID.id!!)
+        }
+    }
+
+    @Test
+    fun `getSharedByLinkWithSyncInfoForAccountAsFlow returns a Flow with a list of OCFileWithSyncInfo`() = runTest {
+        every {
+            localFileDataSource.getSharedByLinkWithSyncInfoForAccountAsFlow(OC_FILE_WITH_SYNC_INFO.file.owner)
+        } returns flowOf(listOf(OC_FILE_WITH_SYNC_INFO))
+
+        val listOfFiles = ocFileRepository.getSharedByLinkWithSyncInfoForAccountAsFlow(OC_FILE_WITH_SYNC_INFO.file.owner).first()
+        assertEquals(listOf(OC_FILE_WITH_SYNC_INFO), listOfFiles)
+
+        verify(exactly = 1) {
+            localFileDataSource.getSharedByLinkWithSyncInfoForAccountAsFlow(OC_FILE_WITH_SYNC_INFO.file.owner)
+        }
+    }
+
+    @Test
+    fun `getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow returns a Flow with a list of OCFileWithSyncInfo`() = runTest {
+        every {
+            localFileDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_FILE_WITH_SYNC_INFO.file.owner)
+        } returns flowOf(listOf(OC_FILE_WITH_SYNC_INFO))
+
+        val listOfFiles = ocFileRepository.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_FILE_WITH_SYNC_INFO.file.owner).first()
+        assertEquals(listOf(OC_FILE_WITH_SYNC_INFO), listOfFiles)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFilesWithSyncInfoAvailableOfflineFromAccountAsFlow(OC_FILE_WITH_SYNC_INFO.file.owner)
+        }
+    }
+
+    @Test
+    fun `getFilesAvailableOfflineFromAccount returns a list of OCFiles`() {
+        every {
+            localFileDataSource.getFilesAvailableOfflineFromAccount(OC_FILE_AVAILABLE_OFFLINE.owner)
+        } returns listOf(OC_FILE_AVAILABLE_OFFLINE)
+
+        val listOfFiles = ocFileRepository.getFilesAvailableOfflineFromAccount(OC_FILE_AVAILABLE_OFFLINE.owner)
+        assertEquals(listOf(OC_FILE_AVAILABLE_OFFLINE), listOfFiles)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFilesAvailableOfflineFromAccount(OC_FILE_AVAILABLE_OFFLINE.owner)
+        }
+    }
+
+    @Test
+    fun `getFilesAvailableOfflineFromEveryAccount returns a list of OCFiles`() {
+        every {
+            localFileDataSource.getFilesAvailableOfflineFromEveryAccount()
+        } returns OC_AVAILABLE_OFFLINE_FILES
+
+        val listOfFiles = ocFileRepository.getFilesAvailableOfflineFromEveryAccount()
+        assertEquals(OC_AVAILABLE_OFFLINE_FILES, listOfFiles)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFilesAvailableOfflineFromEveryAccount()
+        }
+    }
+
+    @Test
+    fun `getDownloadedFilesForAccount returns a list of OCFiles`() {
+        every {
+            localFileDataSource.getDownloadedFilesForAccount(OC_FILE_DOWNLOADED.owner)
+        } returns listOf(OC_FILE_DOWNLOADED)
+
+        val listOfFiles = ocFileRepository.getDownloadedFilesForAccount(OC_FILE_DOWNLOADED.owner)
+        assertEquals(listOf(OC_FILE_DOWNLOADED), listOfFiles)
+
+        verify(exactly = 1) {
+            localFileDataSource.getDownloadedFilesForAccount(OC_FILE_DOWNLOADED.owner)
+        }
+    }
+
+    @Test
+    fun `getFilesWithLastUsageOlderThanGivenTime returns a list of OCFiles`() {
+        every {
+            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(0)
+        } returns listOf(OC_FILE_WITH_SPACE_ID)
+
+        val listOfFiles = ocFileRepository.getFilesWithLastUsageOlderThanGivenTime(0)
+        assertEquals(listOf(OC_FILE_WITH_SPACE_ID), listOfFiles)
+
+        verify(exactly = 1) {
+            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(0)
+        }
+    }
+
+    @Test
+    fun `moveFile returns a list with the OCFile in conflict (the moved OCFile) when replace parameter is empty and expected path already exists`() {
+        every {
+            remoteFileDataSource.checkPathExistence(
+                path = expectedRemotePath,
+                isUserLogged = true,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl
+            )
+        } returns true
+
+        val filesNeedAction = ocFileRepository.moveFile(listOf(OC_FILE_WITH_SPACE_ID), OC_FOLDER_WITH_SPACE_ID, emptyList(), true)
+
+        assertEquals(listOf(OC_FILE_WITH_SPACE_ID), filesNeedAction)
+
+        verify(exactly = 1) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner
+            )
+            remoteFileDataSource.checkPathExistence(
+                path = expectedRemotePath,
+                isUserLogged = true,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl
+            )
+        }
+    }
+
+    @Test
+    fun `moveFile returns an empty list with no OCFiles in conflict when replace parameter is empty and expected path doesn't exist`() {
+        every {
+            remoteFileDataSource.checkPathExistence(
+                path = expectedRemotePath,
+                isUserLogged = true,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl
+            )
+        } returns false
+        every {
+            localStorageProvider.getDefaultSavePathFor(
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                remotePath = expectedRemotePath,
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId
+            )
+        } returns storagePath
+
+        val filesNeedAction = ocFileRepository.moveFile(listOf(OC_FILE_WITH_SPACE_ID), OC_FOLDER_WITH_SPACE_ID, emptyList(), true)
+
+        assertEquals(emptyList<OCFile>(), filesNeedAction)
+
+        verify(exactly = 1) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner
+            )
+            remoteFileDataSource.checkPathExistence(
+                path = expectedRemotePath,
+                isUserLogged = true,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+            )
+            localStorageProvider.getDefaultSavePathFor(
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                remotePath = expectedRemotePath,
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId
+            )
+            remoteFileDataSource.moveFile(
+                sourceRemotePath = OC_FILE_WITH_SPACE_ID.remotePath,
+                targetRemotePath = expectedRemotePath,
+                accountName = OC_FILE_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+                replace = false
+            )
+            localFileDataSource.moveFile(
+                sourceFile = OC_FILE_WITH_SPACE_ID,
+                targetFolder = OC_FOLDER_WITH_SPACE_ID,
+                finalRemotePath = expectedRemotePath,
+                finalStoragePath = storagePath
+            )
+            localStorageProvider.moveLocalFile(
+                ocFile = OC_FILE_WITH_SPACE_ID,
+                finalStoragePath = storagePath
+            )
+        }
+    }
+
+    @Test
+    fun `moveFile returns an empty list with no OCFiles in conflict when replace parameter is empty, expected path doesn't exist and file has a conflict`() {
+        val fileWithConflict = OC_FILE_WITH_SPACE_ID.copy(
+            etagInConflict = "5efb0c13c688i"
+        )
+        every {
+            remoteFileDataSource.checkPathExistence(
+                path = expectedRemotePath,
+                isUserLogged = true,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl
+            )
+        } returns false
+        every {
+            localStorageProvider.getDefaultSavePathFor(
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                remotePath = expectedRemotePath,
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId
+            )
+        } returns storagePath
+
+        val filesNeedAction = ocFileRepository.moveFile(listOf(fileWithConflict), OC_FOLDER_WITH_SPACE_ID, emptyList(), true)
+
+        assertEquals(emptyList<OCFile>(), filesNeedAction)
+
+        verify(exactly = 1) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner
+            )
+            remoteFileDataSource.checkPathExistence(
+                path = expectedRemotePath,
+                isUserLogged = true,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+            )
+            localStorageProvider.getDefaultSavePathFor(
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                remotePath = expectedRemotePath,
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId
+            )
+            remoteFileDataSource.moveFile(
+                sourceRemotePath = fileWithConflict.remotePath,
+                targetRemotePath = expectedRemotePath,
+                accountName = fileWithConflict.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+                replace = false
+            )
+            localFileDataSource.cleanConflict(fileWithConflict.id!!)
+            localFileDataSource.moveFile(
+                sourceFile = fileWithConflict,
+                targetFolder = OC_FOLDER_WITH_SPACE_ID,
+                finalRemotePath = expectedRemotePath,
+                finalStoragePath = storagePath
+            )
+            localFileDataSource.saveConflict(fileWithConflict.id!!, fileWithConflict.etagInConflict!!)
+            localStorageProvider.moveLocalFile(
+                ocFile = fileWithConflict,
+                finalStoragePath = storagePath
+            )
+        }
+    }
+
+    @Test
+    fun `moveFile returns an empty list with no OCFiles in conflict when replace parameter is true`() {
+        every {
+            localStorageProvider.getDefaultSavePathFor(
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                remotePath = expectedRemotePath,
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId
+            )
+        } returns storagePath
+
+        val filesNeedAction = ocFileRepository.moveFile(listOf(OC_FILE_WITH_SPACE_ID), OC_FOLDER_WITH_SPACE_ID, listOf(true), true)
+
+        assertEquals(emptyList<OCFile>(), filesNeedAction)
+
+        verify(exactly = 1) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner
+            )
+            localStorageProvider.getDefaultSavePathFor(
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                remotePath = expectedRemotePath,
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId
+            )
+            remoteFileDataSource.moveFile(
+                sourceRemotePath = OC_FILE_WITH_SPACE_ID.remotePath,
+                targetRemotePath = expectedRemotePath,
+                accountName = OC_FILE_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+                replace = true
+            )
+            localFileDataSource.moveFile(
+                sourceFile = OC_FILE_WITH_SPACE_ID,
+                targetFolder = OC_FOLDER_WITH_SPACE_ID,
+                finalRemotePath = expectedRemotePath,
+                finalStoragePath = storagePath
+            )
+            localStorageProvider.moveLocalFile(
+                ocFile = OC_FILE_WITH_SPACE_ID,
+                finalStoragePath = storagePath
+            )
+        }
+    }
+
+    @Test
+    fun `moveFile returns an empty list with no OCFiles in conflict when replace parameter is false`() {
+        val availableRemotePath = "$expectedRemotePath (1)"
+        val actualStoragePath = "/local/storage/path/username@demo.owncloud.com/Folder/Photos/image2 (1).jpt"
+        every {
+            remoteFileDataSource.getAvailableRemotePath(
+                remotePath = expectedRemotePath,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+                isUserLogged = true
+            )
+        } returns availableRemotePath
+        every {
+            localStorageProvider.getDefaultSavePathFor(
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                remotePath = availableRemotePath,
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId
+            )
+        } returns actualStoragePath
+
+        val filesNeedAction = ocFileRepository.moveFile(listOf(OC_FILE_WITH_SPACE_ID), OC_FOLDER_WITH_SPACE_ID, listOf(false), true)
+
+        assertEquals(emptyList<OCFile>(), filesNeedAction)
+
+        verify(exactly = 1) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner
+            )
+            remoteFileDataSource.getAvailableRemotePath(
+                remotePath = expectedRemotePath,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+                isUserLogged = true
+            )
+            localStorageProvider.getDefaultSavePathFor(
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                remotePath = availableRemotePath,
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId
+            )
+            remoteFileDataSource.moveFile(
+                sourceRemotePath = OC_FILE_WITH_SPACE_ID.remotePath,
+                targetRemotePath = availableRemotePath,
+                accountName = OC_FILE_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+                replace = false
+            )
+            localFileDataSource.moveFile(
+                sourceFile = OC_FILE_WITH_SPACE_ID,
+                targetFolder = OC_FOLDER_WITH_SPACE_ID,
+                finalRemotePath = availableRemotePath,
+                finalStoragePath = actualStoragePath
+            )
+            localStorageProvider.moveLocalFile(
+                ocFile = OC_FILE_WITH_SPACE_ID,
+                finalStoragePath = actualStoragePath
+            )
+        }
+    }
+
+    @Test
+    fun `moveFile returns an empty list with no OCFiles in conflict when replace parameter is null`() {
+        val filesNeedAction = ocFileRepository.moveFile(listOf(OC_FILE_WITH_SPACE_ID), OC_FOLDER_WITH_SPACE_ID, listOf(null), true)
+
+        assertEquals(emptyList<OCFile>(), filesNeedAction)
+
+        verify(exactly = 1) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner
+            )
+        }
+    }
+
+    @Test
+    fun `moveFile removes target folder locally and throws a ConflictException when replace parameter is empty and expected path doesn't exist but target folder doesn't exist anymore`() {
+        every {
+            remoteFileDataSource.checkPathExistence(
+                path = expectedRemotePath,
+                isUserLogged = true,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl
+            )
+        } returns false
+        every {
+            localStorageProvider.getDefaultSavePathFor(
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                remotePath = expectedRemotePath,
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId
+            )
+        } returns storagePath
+        every {
+            remoteFileDataSource.moveFile(
+                sourceRemotePath = OC_FILE_WITH_SPACE_ID.remotePath,
+                targetRemotePath = expectedRemotePath,
+                accountName = OC_FILE_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+                replace = false
+            )
+        } throws ConflictException()
+        every {
+            localFileDataSource.getFolderContent(OC_FOLDER_WITH_SPACE_ID.id!!)
+        } returns emptyList()
+
+        assertThrows(ConflictException::class.java) {
+            ocFileRepository.moveFile(listOf(OC_FILE_WITH_SPACE_ID), OC_FOLDER_WITH_SPACE_ID, emptyList(), true)
+        }
+
+        verify(exactly = 1) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner
+            )
+            remoteFileDataSource.checkPathExistence(
+                path = expectedRemotePath,
+                isUserLogged = true,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+            )
+            localStorageProvider.getDefaultSavePathFor(
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                remotePath = expectedRemotePath,
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId
+            )
+            remoteFileDataSource.moveFile(
+                sourceRemotePath = OC_FILE_WITH_SPACE_ID.remotePath,
+                targetRemotePath = expectedRemotePath,
+                accountName = OC_FILE_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+                replace = false
+            )
+            localFileDataSource.getFolderContent(OC_FOLDER_WITH_SPACE_ID.id!!)
+            localStorageProvider.deleteLocalFolderIfItHasNoFilesInside(OC_FOLDER_WITH_SPACE_ID)
+            localFileDataSource.deleteFile(OC_FOLDER_WITH_SPACE_ID.id!!)
+        }
+    }
+
+    @Test
+    fun `moveFile removes source file locally and throws a FileNotFoundException when replace parameter is empty and expected path doesn't exist but source file doesn't exist anymore`() {
+        every {
+            remoteFileDataSource.checkPathExistence(
+                path = expectedRemotePath,
+                isUserLogged = true,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl
+            )
+        } returns false
+        every {
+            localStorageProvider.getDefaultSavePathFor(
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                remotePath = expectedRemotePath,
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId
+            )
+        } returns storagePath
+        every {
+            remoteFileDataSource.moveFile(
+                sourceRemotePath = OC_FILE_WITH_SPACE_ID.remotePath,
+                targetRemotePath = expectedRemotePath,
+                accountName = OC_FILE_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+                replace = false
+            )
+        } throws FileNotFoundException()
+        every {
+            localStorageProvider.deleteLocalFile(OC_FILE_WITH_SPACE_ID)
+        } returns true
+
+        assertThrows(FileNotFoundException::class.java) {
+            ocFileRepository.moveFile(listOf(OC_FILE_WITH_SPACE_ID), OC_FOLDER_WITH_SPACE_ID, emptyList(), true)
+        }
+
+        verify(exactly = 1) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner
+            )
+            remoteFileDataSource.checkPathExistence(
+                path = expectedRemotePath,
+                isUserLogged = true,
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+            )
+            localStorageProvider.getDefaultSavePathFor(
+                accountName = OC_FOLDER_WITH_SPACE_ID.owner,
+                remotePath = expectedRemotePath,
+                spaceId = OC_FOLDER_WITH_SPACE_ID.spaceId
+            )
+            remoteFileDataSource.moveFile(
+                sourceRemotePath = OC_FILE_WITH_SPACE_ID.remotePath,
+                targetRemotePath = expectedRemotePath,
+                accountName = OC_FILE_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl,
+                replace = false
+            )
+            localStorageProvider.deleteLocalFile(OC_FILE_WITH_SPACE_ID)
+            localFileDataSource.deleteFile(OC_FILE_WITH_SPACE_ID.id!!)
+        }
+    }
+
+    @Test
+    fun `readFile returns a OCFile`() {
+        val ocFileWithoutSpaceId = OC_FILE_WITH_SPACE_ID.copy(spaceId = null)
+        every {
+            remoteFileDataSource.readFile(
+                remotePath = OC_FILE_WITH_SPACE_ID.remotePath,
+                accountName = OC_FILE_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl
+            )
+        } returns ocFileWithoutSpaceId
+
+        val ocFile = ocFileRepository.readFile(OC_FILE_WITH_SPACE_ID.remotePath, OC_FILE_WITH_SPACE_ID.owner, OC_FILE_WITH_SPACE_ID.spaceId)
+        assertEquals(OC_FILE_WITH_SPACE_ID, ocFile)
+
+        verify(exactly = 1) {
+            localSpacesDataSource.getWebDavUrlForSpace(
+                spaceId = OC_FILE_WITH_SPACE_ID.spaceId,
+                accountName = OC_FILE_WITH_SPACE_ID.owner
+            )
+            remoteFileDataSource.readFile(
+                remotePath = OC_FILE_WITH_SPACE_ID.remotePath,
+                accountName = OC_FILE_WITH_SPACE_ID.owner,
+                spaceWebDavUrl = OC_SPACE_PERSONAL.root.webDavUrl
+            )
+        }
+    }
+
+    /*
 
     @Test
     fun `get folder content - ok`() {
@@ -923,36 +1459,6 @@ class OCFileRepositoryTest {
         }
     }
 
-    @Test
-    fun `getFilesLastUsageIsOlderThanGivenTime returns a list of OCFile`() {
-        every {
-            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
-        } returns listOf(OC_FILE)
-
-        val result = ocFileRepository.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
-
-        assertEquals(listOf(OC_FILE), result)
-
-        verify(exactly = 1) {
-            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
-        }
-    }
-
-    @Test
-    fun `getFilesLastUsageIsOlderThanGivenTime returns an empty list when datasource returns an empty list`() {
-        every {
-            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
-        } returns emptyList()
-
-        val result = ocFileRepository.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
-
-        assertEquals(emptyList<OCFile>(), result)
-
-        verify(exactly = 1) {
-            localFileDataSource.getFilesWithLastUsageOlderThanGivenTime(timeInMilliseconds)
-        }
-    }
-
     @Test(expected = Exception::class)
     fun `get folder content - ko`() {
         every { localFileDataSource.getFolderContent(OC_FOLDER.parentId!!) } throws Exception()
@@ -961,30 +1467,6 @@ class OCFileRepositoryTest {
 
         verify(exactly = 1) {
             localFileDataSource.getFolderContent(OC_FOLDER.parentId!!)
-        }
-    }
-
-    @Test
-    fun `get folder images - ok`() {
-        every { localFileDataSource.getFolderImages(OC_FOLDER.parentId!!) } returns listOf(OC_FOLDER)
-
-        val folderContent = ocFileRepository.getFolderImages(OC_FOLDER.parentId!!)
-
-        assertEquals(listOf(OC_FOLDER), folderContent)
-
-        verify(exactly = 1) {
-            localFileDataSource.getFolderImages(OC_FOLDER.parentId!!)
-        }
-    }
-
-    @Test(expected = Exception::class)
-    fun `get folder images - ko`() {
-        every { localFileDataSource.getFolderImages(OC_FOLDER.parentId!!) } throws Exception()
-
-        ocFileRepository.getFolderImages(OC_FOLDER.parentId!!)
-
-        verify(exactly = 1) {
-            localFileDataSource.getFolderImages(OC_FOLDER.parentId!!)
         }
     }
 
