@@ -22,7 +22,6 @@
 
 package com.owncloud.android.domain.user.model
 
-import androidx.annotation.VisibleForTesting
 import kotlin.math.roundToLong
 
 data class UserQuota(
@@ -32,11 +31,13 @@ data class UserQuota(
     val total: Long,
     val state: String
 ) {
-    @VisibleForTesting
-    fun isLimited() = available > 0
 
     fun getRelative(): Double {
-        val relativeQuota = (used * 100).toDouble() / total
-        return (relativeQuota * 100).roundToLong() / 100.0
+        if (total == 0L) {
+            return 0.0
+        } else {
+            val relativeQuota = (used * 100).toDouble() / total
+            return (relativeQuota * 100).roundToLong() / 100.0
+        }
     }
 }
