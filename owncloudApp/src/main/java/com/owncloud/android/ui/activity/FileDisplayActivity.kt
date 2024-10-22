@@ -1042,6 +1042,10 @@ class FileDisplayActivity : FileActivity(),
                     showConflictDecisionDialog(uiResult = uiResult, data = it, replace = replace) { data, replace ->
                         launchMoveFile(data, replace)
                     }
+
+                    // Refresh the spaces and update the quota
+                    val spacesListViewModel: SpacesListViewModel by viewModel { parametersOf(account.name, false) }
+                    spacesListViewModel.refreshSpacesFromServer()
                 }
             }
 
@@ -1077,6 +1081,8 @@ class FileDisplayActivity : FileActivity(),
                 uiResult.data?.let {
                     showConflictDecisionDialog(uiResult = uiResult, data = it, replace = replace) { data, replace ->
                         launchCopyFile(data, replace)
+
+
                     }
                 }
 
