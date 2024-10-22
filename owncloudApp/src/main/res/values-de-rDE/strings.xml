@@ -5,6 +5,7 @@
   <string name="global_date">Datum</string>
   <string name="global_size">Größe</string>
   <string name="actionbar_search">Ordner durchsuchen</string>
+  <string name="actionbar_search_space">Suche in Spaces</string>
   <string name="actionbar_sync">Konto aktualisieren</string>
   <string name="actionbar_upload">Datei hochladen</string>
   <string name="actionbar_upload_from_apps">Inhalt von anderen Apps</string>
@@ -56,7 +57,9 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Berührungen zulassen, wenn die Ansicht von einem anderen sichtbaren Fenster verdeckt wird. Aktivieren Sie es, um Lichtfilter-Apps zu verwenden.</string>
   <string name="confirmation_touches_with_other_windows_title">Wollen Sie diese Funktion wirklich einschalten?</string>
   <string name="confirmation_touches_with_other_windows_message">Verwenden Sie diese Funktion auf eigene Verantwortung. Eine bösartige Anwendung könnte versuchen, Sie unwissentlich in anderen Ansichten Aktionen ausführen zu lassen.</string>
+  <string name="prefs_subsection_picture_uploads">Automatischer Bilder-Upload</string>
   <string name="prefs_subsection_picture_uploads_summary">Verwalten des Speicherortes und des Verhaltens der automatisch hochgeladenen Fotos</string>
+  <string name="prefs_subsection_video_uploads">Automatischer Video-Upload</string>
   <string name="prefs_subsection_video_uploads_summary">Verwalten des Speicherortes und des Verhaltens der automatisch hochgeladenen Videos</string>
   <string name="prefs_camera_picture_upload">Bild-Upload</string>
   <string name="prefs_camera_picture_upload_summary">Automatisch von der Kamera aufgenommene Bilder hochladen</string>
@@ -122,6 +125,7 @@
   <string name="recommend_subject">%1$s auf Ihrem Smartphone ausprobieren!</string>
   <string name="recommend_text">Ich möchte Sie einladen, %1$s auf Ihrem Smartphone zu verwenden!\nHier herunterladen: %2$s</string>
   <string name="error_reason">weil</string>
+  <string name="auth_failure_snackbar">Authentifizierung fehlgeschlagen. Melde Dich erneut an, um wieder Zugriff zu erhalten.</string>
   <string name="server_not_supported">Ihre Serverversion ist niedriger als 10 und wird daher nicht unterstützt. Bitte aktualisieren Sie Ihren Server auf eine neuere Version.</string>
   <string name="auth_failure_snackbar_action">Konto ändern</string>
   <string name="auth_oauth_failure">Das Zugriffstoken ist abgelaufen oder ungültig geworden. Melden Sie sich erneut an, um wieder Zugriff zu erhalten.</string>
