@@ -4,7 +4,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -27,6 +27,7 @@ import com.owncloud.android.data.files.db.OCFileSyncEntity
 import com.owncloud.android.domain.availableoffline.model.AvailableOfflineStatus
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFileWithSyncInfo
+import com.owncloud.android.domain.files.model.OCMetaFile
 import com.owncloud.android.lib.resources.files.RemoteFile
 import com.owncloud.android.lib.resources.files.RemoteMetaFile
 
@@ -43,6 +44,53 @@ val OC_FOLDER = OCFile(
     etag = "5efb0c13c688f",
     mimeType = "DIR",
     length = 123123123
+)
+
+val OC_ROOT_FOLDER = OCFile(
+    id = 1,
+    parentId = 0,
+    remotePath = "/",
+    owner = OC_ACCOUNT_NAME,
+    permissions = "RDNVCK",
+    remoteId = "00000003oci9p7er2hay4",
+    privateLink = "http://server.url/f/8",
+    creationTimestamp = 0,
+    modificationTimestamp = 1593510589000,
+    etag = "5efb0c13c688k",
+    mimeType = "DIR",
+    length = 123123123
+)
+
+val OC_PARENT_FOLDER_WITH_SPACE_ID = OCFile(
+    id = 123,
+    parentId = 1,
+    remotePath = "/Folder",
+    owner = OC_ACCOUNT_NAME,
+    permissions = "RDNVCK",
+    remoteId = "00000003oci9p7er2hay2",
+    privateLink = "http://server.url/f/5",
+    creationTimestamp = 0,
+    modificationTimestamp = 1593510589000,
+    etag = "5efb0c13c688g",
+    mimeType = "DIR",
+    length = 123123123,
+    spaceId = OC_SPACE_PERSONAL.id
+)
+
+val OC_FOLDER_WITH_SPACE_ID = OCFile(
+    id = 125,
+    parentId = 123,
+    remotePath = "/Folder/Photos",
+    owner = OC_ACCOUNT_NAME,
+    permissions = "RDNVCK",
+    remoteId = "00000003oci9p7er2hay3",
+    privateLink = "http://server.url/f/6",
+    creationTimestamp = 0,
+    modificationTimestamp = 1593510589000,
+    etag = "5efb0c13c688h",
+    mimeType = "DIR",
+    length = 0,
+    spaceId = OC_SPACE_PERSONAL.id
 )
 
 val OC_FILE = OCFile(
@@ -77,6 +125,27 @@ val OC_FILE_AVAILABLE_OFFLINE = OCFile(
     availableOfflineStatus = AvailableOfflineStatus.AVAILABLE_OFFLINE
 )
 
+val OC_FILE_DOWNLOADED = OC_FILE.copy(
+    storagePath = "/local/storage/path/username@demo.owncloud.com/Photos/image.jpt"
+)
+
+val OC_FILE_WITH_SPACE_ID = OCFile(
+    id = 126,
+    parentId = 123,
+    remotePath = "/Folder/image2.jpt",
+    owner = OC_ACCOUNT_NAME,
+    permissions = "RDNVCK",
+    remoteId = "00000003oci9p7er2hox",
+    privateLink = "http://server.url/f/7",
+    creationTimestamp = 1593510589000,
+    modificationTimestamp = 1593510589000,
+    etag = "5efb0c13c688i",
+    mimeType = "image/jpeg",
+    length = 3000000,
+    availableOfflineStatus = AvailableOfflineStatus.NOT_AVAILABLE_OFFLINE,
+    spaceId = OC_SPACE_PERSONAL.id
+)
+
 val OC_FILE_WITH_SYNC_INFO = OCFileWithSyncInfo(
     file = OC_FILE,
     uploadWorkerUuid = null,
@@ -103,6 +172,14 @@ val OC_FILE_WITH_SYNC_INFO_AND_WITHOUT_PERSONAL_SPACE = OCFileWithSyncInfo(
 val OC_FILE_WITH_SYNC_INFO_AVAILABLE_OFFLINE = OCFileWithSyncInfo(
     file = OC_FILE_AVAILABLE_OFFLINE,
     space = OC_SPACE_PROJECT_WITH_IMAGE
+)
+
+val OC_META_FILE = OCMetaFile(
+    path = OC_FILE.remotePath
+)
+
+val OC_META_FILE_ROOT_FOLDER = OCMetaFile(
+    path = OC_ROOT_FOLDER.remotePath
 )
 
 val OC_FILES_WITH_SYNC_INFO = listOf(OC_FILE_WITH_SYNC_INFO, OC_FILE_WITH_SYNC_INFO, OC_FILE_WITH_SYNC_INFO)
