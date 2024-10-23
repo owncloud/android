@@ -250,7 +250,7 @@ class UploadFileFromFileSystemWorker(
 
         val result = executeRemoteOperation { uploadFileOperation.execute(client) }
 
-        if (result == Unit) {
+        if (result == Unit && behavior == UploadBehavior.MOVE) {
             removeLocalFile() // Removed file from tmp folder
         }
     }
@@ -289,7 +289,7 @@ class UploadFileFromFileSystemWorker(
         )
 
         // Step 4: Remove tmp file folder after uploading
-        if (result == Unit) {
+        if (result == Unit && behavior == UploadBehavior.MOVE) {
             removeLocalFile()
         }
     }
