@@ -732,6 +732,8 @@
     <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">Added some mechanisms over retries to improve reliability</string>
     <string name="release_notes_4_4_0_title_resharing_capability">Improvements in private shares</string>
     <string name="release_notes_4_4_0_subtitle_resharing_capability">The \"can share\" option is now only shown when editing a private share if the user is able to edit it</string>
+    <string name="release_notes_4_4_1_title_file_size_0">File size after a local update</string>
+    <string name="release_notes_4_4_1_subtitle_file_size_0">Fixed file size after doing a local update</string>
     <string name="release_notes_bugfixes_title">Minor bugfixes</string>
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
 

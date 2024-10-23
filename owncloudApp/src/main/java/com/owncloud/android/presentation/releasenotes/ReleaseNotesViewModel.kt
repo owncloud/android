@@ -71,6 +71,11 @@ class ReleaseNotesViewModel(
                 type = ReleaseNoteType.ENHANCEMENT
             ),
             ReleaseNote(
+                title = R.string.release_notes_4_4_1_title_file_size_0,
+                subtitle = R.string.release_notes_4_4_1_subtitle_file_size_0,
+                type = ReleaseNoteType.BUGFIX
+            ),
+            ReleaseNote(
                 title = R.string.release_notes_bugfixes_title,
                 subtitle = R.string.release_notes_bugfixes_subtitle,
                 type = ReleaseNoteType.BUGFIX
