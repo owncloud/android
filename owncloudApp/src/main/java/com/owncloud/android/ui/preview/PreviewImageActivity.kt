@@ -6,6 +6,7 @@
  * @author Christian Schabesberger
  * @author Aitor Ballesteros Pavón
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -57,6 +58,7 @@ import com.owncloud.android.presentation.files.SortOrder
 import com.owncloud.android.presentation.files.SortType
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
+import com.owncloud.android.presentation.spaces.SpacesListViewModel
 import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.FileDisplayActivity
 import com.owncloud.android.ui.fragment.FileFragment
@@ -146,6 +148,11 @@ class PreviewImageActivity : FileActivity(),
 
                 is UIResult.Loading -> showLoadingDialog(R.string.wait_a_moment)
                 is UIResult.Success -> {
+
+                    // Refresh the spaces and update the quota
+                    val spacesListViewModel: SpacesListViewModel by viewModel { parametersOf(account.name, false) }
+                    spacesListViewModel.refreshSpacesFromServer()
+
                     dismissLoadingDialog()
                     finish()
                 }
