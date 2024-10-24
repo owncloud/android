@@ -1,0 +1,7 @@
+Enhancement: Added text labels for BottomNavigationView
+
+Text labels have been added below the icons, and the active indicator feature is implemented using the default itemActiveIndicatorStyle for better navigation experience.
+
+
+https://github.com/owncloud/android/issues/4484
+https://github.com/owncloud/android/pull/4498

@@ -1,0 +1,6 @@
+Change: replace auto-uploads with automatic uploads
+
+Wording change in the feature name, in order to make it clearer in translations and documentation
+
+https://github.com/owncloud/android/issues/4252
+https://github.com/owncloud/android/pull/4492
