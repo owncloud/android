@@ -1,5 +1,7 @@
 # Table of Contents
 
+* [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
+* [Changelog for 4.4.1](#changelog-for-owncloud-android-client-441-2024-10-28)
 * [Changelog for 4.4.0](#changelog-for-owncloud-android-client-440-2024-09-30)
 * [Changelog for 4.3.1](#changelog-for-owncloud-android-client-431-2024-07-22)
 * [Changelog for 4.3.0](#changelog-for-owncloud-android-client-430-2024-07-01)
@@ -23,6 +25,68 @@
 * [Changelog for 2.18.1](#changelog-for-owncloud-android-client-2181-2021-07-20)
 * [Changelog for 2.18.0](#changelog-for-owncloud-android-client-2180-2021-05-24)
 * [Changelog for 2.17 versions and below](#changelog-for-217-versions-and-below)
+# Changelog for ownCloud Android Client [unreleased] (UNRELEASED)
+
+The following sections list the changes in ownCloud Android Client unreleased relevant to
+ownCloud admins and users.
+
+[unreleased]: https://github.com/owncloud/android/compare/v4.4.1...master
+
+## Summary
+
+* Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
+* Enhancement - Add status message when (un)setting av. offline from preview: [#4382](https://github.com/owncloud/android/issues/4382)
+* Enhancement - Added text labels for BottomNavigationView: [#4484](https://github.com/owncloud/android/issues/4484)
+
+## Details
+
+* Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
+
+   Wording change in the feature name, in order to make it clearer in translations
+   and documentation
+
+   https://github.com/owncloud/android/issues/4252
+   https://github.com/owncloud/android/pull/4492
+
+* Enhancement - Add status message when (un)setting av. offline from preview: [#4382](https://github.com/owncloud/android/issues/4382)
+
+   A message has been added in all previews when the (un)setting av. offline
+   buttons are clicked. The options menu has been updated in all previews depending
+   on the file status.
+
+   https://github.com/owncloud/android/issues/4382
+   https://github.com/owncloud/android/pull/4482
+
+* Enhancement - Added text labels for BottomNavigationView: [#4484](https://github.com/owncloud/android/issues/4484)
+
+   Text labels have been added below the icons, and the active indicator feature is
+   implemented using the default itemActiveIndicatorStyle for better navigation
+   experience.
+
+   https://github.com/owncloud/android/issues/4484
+   https://github.com/owncloud/android/pull/4498
+
+# Changelog for ownCloud Android Client [4.4.1] (2024-10-28)
+
+The following sections list the changes in ownCloud Android Client 4.4.1 relevant to
+ownCloud admins and users.
+
+[4.4.1]: https://github.com/owncloud/android/compare/v4.4.0...v4.4.1
+
+## Summary
+
+* Bugfix - File size becomes 0 after a local update: [#4495](https://github.com/owncloud/android/issues/4495)
+
+## Details
+
+* Bugfix - File size becomes 0 after a local update: [#4495](https://github.com/owncloud/android/issues/4495)
+
+   The local copy of a file is not removed after a local update anymore. Therefore,
+   the file size has been fixed.
+
+   https://github.com/owncloud/android/issues/4495
+   https://github.com/owncloud/android/pull/4502
+
 # Changelog for ownCloud Android Client [4.4.0] (2024-09-30)
 
 The following sections list the changes in ownCloud Android Client 4.4.0 relevant to
