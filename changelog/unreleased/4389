@@ -1,0 +1,6 @@
+Enhancement: Unit tests for repository classes - Part 2
+
+Unit tests for OCFileRepository class have been completed.
+
+https://github.com/owncloud/android/issues/4233
+https://github.com/owncloud/android/pull/4389
