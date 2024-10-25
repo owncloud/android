@@ -745,7 +745,7 @@
   <string name="create_shortcut_dialog_url_information">Die URL muss mit https:// oder http:// beginnen, damit sie im Browser geöffnet werden kann.</string>
   <string name="create_shortcut_dialog_url_error_no_blanks">Die URL kann keine Leerzeichen enthalten</string>
   <string name="create_shortcut_dialog_url_extension">.url</string>
-  <string name="open_shortcut_description">Diese Verknüpfung zeigt auf:</string>
+  <string name="open_shortcut_description">Diese Verknüpfung verweist auf:</string>
   <string name="open_shortcut_title">Link öffnen</string>
   <string name="feedback_dialog_description">Verbessern Sie die App durch Ihr Feedback</string>
   <string name="feedback_dialog_get_in_contact_title">In Kontakt treten</string>

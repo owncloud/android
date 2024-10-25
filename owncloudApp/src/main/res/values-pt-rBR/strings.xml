@@ -57,7 +57,9 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permitir toques quando a visualização é obscurecida por outra janela visível. Ativá-lo para usar aplicativos de filtragem de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">Tem certeza de que deseja ativar esse recurso?</string>
   <string name="confirmation_touches_with_other_windows_message">Use esse recurso por sua conta e risco. Um aplicativo malicioso pode tentar enganar você para que você execute algumas ações sem saber, usando outras visualizações.</string>
+  <string name="prefs_subsection_picture_uploads">Upload automático de imagens</string>
   <string name="prefs_subsection_picture_uploads_summary">Gerencie a localização e o comportamento das fotos enviadas automaticamente</string>
+  <string name="prefs_subsection_video_uploads">Upload automático de vídeos</string>
   <string name="prefs_subsection_video_uploads_summary">Gerencie a localização e o comportamento dos vídeos enviados automaticamente</string>
   <string name="prefs_camera_picture_upload">Enviar fotos</string>
   <string name="prefs_camera_picture_upload_summary">Carregar automaticamente fotos tiradas pela câmera</string>
@@ -732,6 +734,7 @@
   <string name="content_description_delete_share">Excluir compartilhamento</string>
   <string name="content_description_file_operations">%1$s operações</string>
   <string name="content_description_sort_by_name_ascending">Classificar por %1$s crescente</string>
+  <string name="content_description_sort_by_name_descending">Classificar por %1$s decrescente</string>
   <string name="content_description_create_new_folder">Criar novo diretório</string>
   <string name="create_shortcut_dialog_title">Crie um atalho</string>
   <string name="create_shortcut_dialog_url">URL</string>
@@ -745,8 +748,16 @@
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Peça ajuda em nosso <a href="%1$s"><b>forum</b></a>, <a href="%2$s"><b>Converse conosco</b></a> ou contribua em <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Linque</string>
   <string name="button_role_accessibility">Botão</string>
+  <string name="folder_picker_label">Selecionador de pastas</string>
   <string name="pattern_label">Padrão</string>
+  <string name="receive_external_files_label">Recebe arquivos externos</string>
+  <string name="video_preview_label">Pré-visualição de vídeo</string>
+  <string name="release_notes_label">Notas de versão</string>
   <string name="image_preview_label">Pré-visualização da imagem</string>
   <string name="login_label">Login</string>
+  <string name="whats_new_label">Novidades</string>
+  <string name="audio_preview_label">Pré-visualição de áudio</string>
   <string name="details_label">Detalhes</string>
+  <string name="text_preview_label">Pré-visualição de texto</string>
+  <string name="release_notes_title_enhanced_bottom_nav_bar">Adicionou rótulos de texto na barra inferior</string>
 </resources>
