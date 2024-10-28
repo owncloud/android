@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -111,6 +112,7 @@ class UploadFileInConflictUseCase(
             UploadFileFromFileSystemWorker.KEY_PARAM_LAST_MODIFIED to lastModifiedInSeconds,
             UploadFileFromFileSystemWorker.KEY_PARAM_UPLOAD_PATH to uploadPath,
             UploadFileFromFileSystemWorker.KEY_PARAM_UPLOAD_ID to uploadIdInStorageManager,
+            UploadFileFromFileSystemWorker.KEY_PARAM_REMOVE_LOCAL to false
         )
 
         val constraints = Constraints.Builder()
