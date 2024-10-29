@@ -128,12 +128,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="15dp"
         android:layout_marginTop="@dimen/standard_half_margin">
 
         <TextView
-            android:layout_width="40dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/used_quota_title_manage_accounts"
             android:layout_marginEnd="10dp"
@@ -143,7 +143,7 @@
         <ProgressBar
             android:id="@+id/manage_accounts_quota_bar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="130dp"
+            android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginTop="3dp"
