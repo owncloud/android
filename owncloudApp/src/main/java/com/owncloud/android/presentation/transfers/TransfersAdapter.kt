@@ -101,7 +101,7 @@ class TransfersAdapter(
                         spacePathLine.path.text = if (it.endsWith("${OCFile.PATH_SEPARATOR}")) it else "$it${OCFile.PATH_SEPARATOR}"
                     }
 
-                    uploadFileSize.text = DisplayUtils.bytesToHumanReadable(transferItem.transfer.fileSize, holder.itemView.context)
+                    uploadFileSize.text = DisplayUtils.bytesToHumanReadable(transferItem.transfer.fileSize, holder.itemView.context, true)
 
                     uploadDate.isVisible =
                         transferItem.transfer.transferEndTimestamp != null && transferItem.transfer.status != TransferStatus.TRANSFER_FAILED

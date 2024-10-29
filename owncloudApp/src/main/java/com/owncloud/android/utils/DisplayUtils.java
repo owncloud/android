@@ -79,7 +79,7 @@ public class DisplayUtils {
      * @param bytes Input file size
      * @return Like something readable like "12 MB"
      */
-    public static String bytesToHumanReadable(long bytes, Context context) {
+    public static String bytesToHumanReadable(long bytes, Context context, Boolean includeDecimals) {
         if (bytes < 0) {
             return context.getString(R.string.common_pending);
 
@@ -95,6 +95,10 @@ public class DisplayUtils {
                     sizeScales[attachedSuff],
                     BigDecimal.ROUND_HALF_UP
             ).stripTrailingZeros();
+
+            if (!includeDecimals){
+                readableResult = readableResult.setScale(0, BigDecimal.ROUND_HALF_UP);
+            }
 
             // Unscale only values with ten exponent
             return (readableResult.scale() < 0 ?

@@ -157,7 +157,7 @@ class ManageAccountsAdapter(
         when {
             userQuota.available < 0 -> {
                 quotaBar.visibility = View.GONE
-                quotaText.text = DisplayUtils.bytesToHumanReadable(userQuota.used, context)
+                quotaText.text = DisplayUtils.bytesToHumanReadable(userQuota.used, context, false)
             }
 
             userQuota.state == EXCEEDED_STATE -> {
@@ -167,8 +167,8 @@ class ManageAccountsAdapter(
                 }
                 quotaText.text = String.format(
                     context.getString(R.string.manage_accounts_quota),
-                    DisplayUtils.bytesToHumanReadable(userQuota.used, context),
-                    DisplayUtils.bytesToHumanReadable(userQuota.total, context)
+                    DisplayUtils.bytesToHumanReadable(userQuota.used, context, false),
+                    DisplayUtils.bytesToHumanReadable(userQuota.total, context, false)
                 )
             }
 
@@ -182,8 +182,8 @@ class ManageAccountsAdapter(
                 quotaBar.progress = ceil(userQuota.getRelative()).toInt()
                 quotaText.text = String.format(
                     context.getString(R.string.manage_accounts_quota),
-                    DisplayUtils.bytesToHumanReadable(userQuota.used, context),
-                    DisplayUtils.bytesToHumanReadable(userQuota.total, context)
+                    DisplayUtils.bytesToHumanReadable(userQuota.used, context, false),
+                    DisplayUtils.bytesToHumanReadable(userQuota.total, context, false)
                 )
             }
         }

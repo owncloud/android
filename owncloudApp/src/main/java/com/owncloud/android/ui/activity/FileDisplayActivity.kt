@@ -1081,8 +1081,6 @@ class FileDisplayActivity : FileActivity(),
                 uiResult.data?.let {
                     showConflictDecisionDialog(uiResult = uiResult, data = it, replace = replace) { data, replace ->
                         launchCopyFile(data, replace)
-
-
                     }
                 }
 

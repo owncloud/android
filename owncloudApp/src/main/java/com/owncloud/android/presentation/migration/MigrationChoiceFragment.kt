@@ -41,7 +41,7 @@ class MigrationChoiceFragment : Fragment(R.layout.fragment_migration_choice) {
         view.findViewById<TextView>(R.id.migration_choice_subtitle)?.apply {
             text = getString(
                 R.string.scoped_storage_wizard_explanation,
-                bytesToHumanReadable(migrationChoiceState.legacyStorageSpaceInBytes, context)
+                bytesToHumanReadable(migrationChoiceState.legacyStorageSpaceInBytes, context, true)
             )
         }
 

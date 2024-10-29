@@ -319,7 +319,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 }
                                 getAccountQuotaText()?.text = String.format(
                                     getString(R.string.drawer_unavailable_free_storage),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.used, this)
+                                    DisplayUtils.bytesToHumanReadable(userQuota.used, this, true)
                                 )
 
                             }
@@ -333,8 +333,8 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 getAccountQuotaText()?.run {
                                     text = String.format(
                                         getString(R.string.drawer_exceeded_quota),
-                                        DisplayUtils.bytesToHumanReadable(userQuota.used, context),
-                                        DisplayUtils.bytesToHumanReadable(userQuota.total, context),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
                                         userQuota.getRelative()
                                     )
                                 }
@@ -353,8 +353,8 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 getAccountQuotaText()?.run {
                                     text = String.format(
                                         getString(R.string.drawer_nearing_quota),
-                                        DisplayUtils.bytesToHumanReadable(userQuota.used, context),
-                                        DisplayUtils.bytesToHumanReadable(userQuota.total, context),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
                                         userQuota.getRelative()
                                     )
                                 }
@@ -368,8 +368,8 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 getAccountQuotaText()?.run {
                                     text = String.format(
                                         getString(R.string.drawer_critical_quota),
-                                        DisplayUtils.bytesToHumanReadable(userQuota.used, context),
-                                        DisplayUtils.bytesToHumanReadable(userQuota.total, context),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
                                         userQuota.getRelative()
                                     )
                                 }
@@ -383,8 +383,8 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 }
                                 getAccountQuotaText()?.text = String.format(
                                     getString(R.string.drawer_quota),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.used, this),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.total, this),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.used, this, true),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.total, this, true),
                                     userQuota.getRelative()
                                 )
                             }

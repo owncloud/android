@@ -448,7 +448,7 @@ class MainFileListFragment : Fragment(),
                 fileNameBottomSheet.text = file.fileName
 
                 val fileSizeBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_size_bottom_sheet)
-                fileSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(file.length, requireContext())
+                fileSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(file.length, requireContext(), true)
 
                 val fileLastModBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_last_mod_bottom_sheet)
                 fileLastModBottomSheet.text = DisplayUtils.getRelativeTimestamp(requireContext(), file.modificationTimestamp)
