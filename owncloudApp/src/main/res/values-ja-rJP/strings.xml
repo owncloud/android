@@ -56,7 +56,9 @@
   <string name="prefs_touches_with_other_visible_windows_summary">他のウィンドウで視界が遮られている場合にタッチを許可する。ライトフィルタリングアプリの使用を有効にする。</string>
   <string name="confirmation_touches_with_other_windows_title">本当にこの機能を有効にしますか？</string>
   <string name="confirmation_touches_with_other_windows_message">この機能は自己責任で使用してください。悪意のあるアプリケーションは、他のビューを使用して、あなたが知らないうちに何らかのアクションを実行するようになりすまそうとする可能性があります。</string>
+  <string name="prefs_subsection_picture_uploads">自動画像アップロード</string>
   <string name="prefs_subsection_picture_uploads_summary">自動的にアップロードされた写真の場所と動作を管理する</string>
+  <string name="prefs_subsection_video_uploads">自動動画アップロード</string>
   <string name="prefs_subsection_video_uploads_summary">自動的にアップロードされた動画の場所と動作を管理する</string>
   <string name="prefs_camera_picture_upload">ピクチャーアップロード</string>
   <string name="prefs_camera_picture_upload_summary">カメラで撮影した画像を自動アップロード</string>
@@ -355,6 +357,8 @@
   <string name="auth_account_does_not_exist">デバイス上にまだアカウントが存在しません</string>
   <string name="set_available_offline">オフラインで利用可能に設定</string>
   <string name="unset_available_offline">オフラインで利用不可に設定</string>
+  <string name="confirmation_set_available_offline">ファイルのオフライン利用可能が正常に設定されました。</string>
+  <string name="confirmation_unset_available_offline">ファイルのオフライン利用可能が正常に解除されました。</string>
   <string name="common_rename">名前を変更</string>
   <string name="common_remove">削除</string>
   <string name="confirmation_remove_file_alert">本当に %1$s を削除しますか？</string>
@@ -665,6 +669,10 @@
   <string name="release_notes_footer">%1$sのご利用ありがとうございます。</string>
   <string name="release_notes_proceed">続行</string>
   <string name="release_notes_icon">リリースノートのアイコン</string>
+  <string name="release_notes_bugfixes_title">軽微なバグ修正</string>
+  <string name="release_notes_bugfixes_subtitle">アプリの使い心地を向上するため、いくつかのバグを修正しました</string>
+  <string name="release_notes_4_5_0_title_feedback_in_previews">すべてのプレビューでオフラインAV視聴設定(解除)時のフィードバック</string>
+  <string name="release_notes_4_5_0_subtitle_feedback_in_previews">すべてのプレビューで、AVオフライン視聴の設定(または解除)する際のフィードバックを追加し、ファイルのステータスに応じてオプションメニューを更新しました</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Webで開く</string>
   <string name="ic_action_open_with_web">%1$s(Web) で開く</string>
@@ -720,12 +728,15 @@
   <string name="content_description_get_edit_public_link">公開リンクを編集</string>
   <string name="content_description_remove_account">アカウント削除</string>
   <string name="content_description_add_new_content">新しいコンテンツを追加</string>
+  <string name="content_description_add_new_content_expanded">新しいコンテンツを追加</string>
   <string name="content_description_clean_account_storage">アカウントのデータをクリーンアップ</string>
   <string name="content_description_logo">ロゴ&lt;br&gt;</string>
   <string name="content_description_add_share">共有を追加</string>
   <string name="content_description_edit_share">共有を編集</string>
   <string name="content_description_delete_share">共有を削除</string>
   <string name="content_description_file_operations">%1$s個の操作</string>
+  <string name="content_description_sort_by_name_ascending">%1$s昇順で並べ替え</string>
+  <string name="content_description_sort_by_name_descending">%1$s降順で並べ替え</string>
   <string name="content_description_create_new_folder">新しいフォルダーを作成</string>
   <string name="create_shortcut_dialog_title">ショートカットを作成</string>
   <string name="create_shortcut_dialog_url">URL</string>
@@ -738,8 +749,19 @@
   <string name="feedback_dialog_get_in_contact_title">問い合わせる</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[私たちの<a href="%1$s"><b>フォーラム</b></a>、<a href="%2$s"><b>ライブチャット</b></a>でヘルプを受けるか、<a href="%3$s"><b>GitHub</b></a>で開発に貢献する ]]></string>
   <string name="link_role_accessibility">リンク</string>
+  <string name="button_role_accessibility">ボタン</string>
+  <string name="folder_picker_label">フォルダピッカー</string>
+  <string name="passcode_label">パスコード</string>
   <string name="pattern_label">パターン</string>
+  <string name="receive_external_files_label">外部のファイルを受信する</string>
+  <string name="video_preview_label">動画プレビュー</string>
+  <string name="release_notes_label">リリースノート</string>
   <string name="image_preview_label">イメージプレビュー</string>
   <string name="login_label">ログイン</string>
+  <string name="whats_new_label">新着情報</string>
+  <string name="audio_preview_label">音声プレビュー</string>
   <string name="details_label">詳細</string>
+  <string name="text_preview_label">文章プレビュー</string>
+  <string name="release_notes_title_enhanced_bottom_nav_bar">下部バーにテキストラベルを追加しました</string>
+  <string name="release_notes_subtitle_bottom_nav_bar">テキストラベルが追加され、標準の選択状態表示を使用して、どの項目が選択されているかが下部バーに表示されるようになりました</string>
 </resources>
