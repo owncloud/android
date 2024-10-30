@@ -1,7 +1,7 @@
 # Table of Contents
 
 * [Changelog for unreleased](#changelog-for-owncloud-android-client-unreleased-unreleased)
-* [Changelog for 4.4.1](#changelog-for-owncloud-android-client-441-2024-10-28)
+* [Changelog for 4.4.1](#changelog-for-owncloud-android-client-441-2024-10-30)
 * [Changelog for 4.4.0](#changelog-for-owncloud-android-client-440-2024-09-30)
 * [Changelog for 4.3.1](#changelog-for-owncloud-android-client-431-2024-07-22)
 * [Changelog for 4.3.0](#changelog-for-owncloud-android-client-430-2024-07-01)
@@ -66,7 +66,7 @@ ownCloud admins and users.
    https://github.com/owncloud/android/issues/4484
    https://github.com/owncloud/android/pull/4498
 
-# Changelog for ownCloud Android Client [4.4.1] (2024-10-28)
+# Changelog for ownCloud Android Client [4.4.1] (2024-10-30)
 
 The following sections list the changes in ownCloud Android Client 4.4.1 relevant to
 ownCloud admins and users.
