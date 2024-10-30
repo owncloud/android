@@ -1,0 +1,6 @@
+Bugfix: File size becomes 0 after a local update
+
+The local copy of a file is not removed after a local update anymore. Therefore, the file size has been fixed.
+
+https://github.com/owncloud/android/issues/4495
+https://github.com/owncloud/android/pull/4502

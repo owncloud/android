@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2023 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -81,6 +82,7 @@ class UploadFileFromFileSystemWorker(
     private lateinit var behavior: UploadBehavior
     private lateinit var uploadPath: String
     private lateinit var mimetype: String
+    private var removeLocal: Boolean = true
     private var uploadIdInStorageManager: Long = -1
     private lateinit var ocTransfer: OCTransfer
     private var fileSize: Long = 0
@@ -131,6 +133,7 @@ class UploadFileFromFileSystemWorker(
         val paramBehavior = workerParameters.inputData.getString(KEY_PARAM_BEHAVIOR)
         val paramFileSystemUri = workerParameters.inputData.getString(KEY_PARAM_LOCAL_PATH)
         val paramUploadId = workerParameters.inputData.getLong(KEY_PARAM_UPLOAD_ID, -1)
+        val paramRemoveLocal = workerParameters.inputData.getBoolean(KEY_PARAM_REMOVE_LOCAL, true)
 
         account = AccountUtils.getOwnCloudAccountByName(appContext, paramAccountName) ?: return false
         fileSystemPath = paramFileSystemUri.takeUnless { it.isNullOrBlank() } ?: return false
@@ -139,6 +142,7 @@ class UploadFileFromFileSystemWorker(
         lastModified = paramLastModified ?: return false
         uploadIdInStorageManager = paramUploadId.takeUnless { it == -1L } ?: return false
         ocTransfer = retrieveUploadInfoFromDatabase() ?: return false
+        removeLocal = paramRemoveLocal
 
         return true
     }
@@ -250,7 +254,7 @@ class UploadFileFromFileSystemWorker(
 
         val result = executeRemoteOperation { uploadFileOperation.execute(client) }
 
-        if (result == Unit) {
+        if (result == Unit && removeLocal) {
             removeLocalFile() // Removed file from tmp folder
         }
     }
@@ -289,7 +293,7 @@ class UploadFileFromFileSystemWorker(
         )
 
         // Step 4: Remove tmp file folder after uploading
-        if (result == Unit) {
+        if (result == Unit && removeLocal) {
             removeLocalFile()
         }
     }
@@ -401,5 +405,6 @@ class UploadFileFromFileSystemWorker(
         const val KEY_PARAM_LAST_MODIFIED = "KEY_PARAM_LAST_MODIFIED"
         const val KEY_PARAM_UPLOAD_PATH = "KEY_PARAM_UPLOAD_PATH"
         const val KEY_PARAM_UPLOAD_ID = "KEY_PARAM_UPLOAD_ID"
+        const val KEY_PARAM_REMOVE_LOCAL = "KEY_REMOVE_LOCAL"
     }
 }
