@@ -348,7 +348,7 @@
   <string name="auth_oauth_error">Autorisierung nicht erfolgreich</string>
   <string name="auth_oauth_error_access_denied">Zugriff durch den Autorisierungsserver abgelehnt</string>
   <string name="auth_wtf_reenter_URL">Unerwarteter Zustand; Bitte die Adresse des Servers erneut eingeben</string>
-  <string name="auth_expired_oauth_token_toast">Die Autorisierung ist abgelaufen. Die Autorisierung bitte nochmals durchführen</string>
+  <string name="auth_expired_oauth_token_toast">Die Autorisierung ist abgelaufen. Bitte autorisieren Sie sich erneut</string>
   <string name="auth_expired_basic_auth_toast">Bitte das aktuelle Passwort eingeben</string>
   <string name="auth_connecting_auth_server">Verbinden zum Authentifizierungs-Server ...</string>
   <string name="auth_unsupported_auth_method">Der Server unterstützt diese Authentifizierungsmethode nicht</string>
