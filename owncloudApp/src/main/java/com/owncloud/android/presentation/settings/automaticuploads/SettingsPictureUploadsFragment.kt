@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.presentation.settings.autouploads
+package com.owncloud.android.presentation.settings.automaticuploads
 
 import android.app.Activity
 import android.content.DialogInterface
@@ -47,7 +47,7 @@ import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_LA
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_PATH
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_SOURCE
 import com.owncloud.android.db.PreferenceManager.PREF__CAMERA_PICTURE_UPLOADS_WIFI_ONLY
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.extensions.showAlertDialog
 import com.owncloud.android.ui.activity.FolderPickerActivity
 import com.owncloud.android.utils.DisplayUtils

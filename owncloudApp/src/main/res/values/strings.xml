@@ -58,9 +58,9 @@
     <string name="prefs_touches_with_other_visible_windows_summary">Allow touches when the view is obscured by another visible window. Enable it to use light filtering apps.</string>
     <string name="confirmation_touches_with_other_windows_title">Are you sure you want to enable this feature?</string>
     <string name="confirmation_touches_with_other_windows_message">Use this feature at your own risk. A malicious application could try to spoof you into unknowingly performing some actions, using other views.</string>
-    <string name="prefs_subsection_picture_uploads">Auto-upload pictures</string>
+    <string name="prefs_subsection_picture_uploads">Automatic picture uploads</string>
     <string name="prefs_subsection_picture_uploads_summary">Manage location and behavior of the pictures uploaded automatically</string>
-    <string name="prefs_subsection_video_uploads">Auto-upload videos</string>
+    <string name="prefs_subsection_video_uploads">Automatic video uploads</string>
     <string name="prefs_subsection_video_uploads_summary">Manage location and behavior of the videos uploaded automatically</string>
     <string name="prefs_camera_picture_upload">Picture uploads</string>
     <string name="prefs_camera_picture_upload_summary">Automatically upload pictures taken by camera</string>
@@ -369,6 +369,8 @@
 
     <string name="set_available_offline">Set as available offline</string>
     <string name="unset_available_offline">Unset as available offline</string>
+    <string name="confirmation_set_available_offline">The file was set as available offline correctly</string>
+    <string name="confirmation_unset_available_offline">The file was unset as available offline correctly</string>
     <string name="common_rename">Rename</string>
     <string name="common_remove">Remove</string>
     <string name="confirmation_remove_file_alert">Do you really want to remove %1$s?</string>
@@ -725,22 +727,11 @@
     <string name="release_notes_footer">Thank you for using %1$s.\n&#10084;</string>
     <string name="release_notes_proceed">Proceed</string>
     <string name="release_notes_icon">Release note icon</string>
-
-    <string name="release_notes_4_3_0_title_accessibility_improvements">Improvements in accessibility</string>
-    <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Some improvements to make the application more accessible</string>
-    <string name="release_notes_4_4_0_title_improved_from_original_folder_auto_upload">Auto uploads more consistent</string>
-    <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">Added some mechanisms over retries to improve reliability</string>
-    <string name="release_notes_4_4_0_title_resharing_capability">Improvements in private shares</string>
-    <string name="release_notes_4_4_0_subtitle_resharing_capability">The \"can share\" option is now only shown when editing a private share if the user is able to edit it</string>
-    <string name="release_notes_4_4_1_title_file_size_0">Fixed local updates</string>
-    <string name="release_notes_4_4_1_subtitle_file_size_0">Local copy and file size of any file are now correct after a local update</string>
     <string name="release_notes_bugfixes_title">Minor bugfixes</string>
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
+    <string name="release_notes_4_5_0_title_feedback_in_previews">Feedback when (un)setting av. offline in all previews</string>
+    <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Added feedback when (un)setting av. offline in all previews and updated options menu depending on file status</string>
 
-    <string name="release_notes_4_4_6_4_bugfixes_title">List filtering after rotating device</string>
-    <string name="release_notes_4_4_6_4_bugfixes_subtitle">Configuration changes have been handled when rotating the device so that list filtering works</string>
-    <string name="release_notes_4_4_0_title_audio_player_android14">Audio player problems</string>
-    <string name="release_notes_4_4_0_subtitle_audio_player_android14">Devices with Android 14+ can now play correctly audio files in the app</string>
 
     <!-- Open in web -->
     <string name="ic_action_open_in_web">Open in web</string>
@@ -845,5 +836,7 @@
     <string name="audio_preview_label">Audio preview</string>
     <string name="details_label">Details</string>
     <string name="text_preview_label">Text preview</string>
+    <string name="release_notes_title_enhanced_bottom_nav_bar">Added text labels on bottom bar</string>
+    <string name="release_notes_subtitle_bottom_nav_bar">Text labels were added and default active indicator is used to show which section is selected on the bottom bar</string>
 
 </resources>

@@ -48,7 +48,6 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Επιτρέψτε το άγγιγμα όταν η προβολή καλύπτεται από άλλο ορατό παράθυρο. Ενεργοποιήστε τη χρήση εφαρμογών φιλτραρίσματος φωτός.</string>
   <string name="confirmation_touches_with_other_windows_title">Είστε βέβαιοι ότι θέλετε να ενεργοποιήσετε αυτήν τη λειτουργία;</string>
   <string name="confirmation_touches_with_other_windows_message">Χρησιμοποιήστε αυτήν τη λειτουργία με δική σας ευθύνη, μια κακόβουλη εφαρμογή θα μπορούσε να προσπαθήσει ώστε να εκτελέσετε κάποιες ενέργειες, χωρίς να γνωρίζετε, χρησιμοποιώντας άλλες προβολές.</string>
-  <string name="prefs_subsection_video_uploads">Αυτόματη μεταφόρτωση βίντεο</string>
   <string name="prefs_camera_picture_upload">Μεταφορτώσεις φωτογραφιών</string>
   <string name="prefs_camera_picture_upload_summary">Αυτόματη μεταφόρτωση φωτογραφιών που ελήφθησαν από την κάμερα</string>
   <string name="prefs_camera_picture_upload_path_title">Διαδρομή μεταφόρτωσης εικόνων</string>

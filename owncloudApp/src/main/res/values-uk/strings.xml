@@ -49,8 +49,6 @@
   <string name="prefs_lock_application_entries_30minutes">Через 30 хвилин</string>
   <string name="prefs_touches_with_other_visible_windows">Взаємодія з іншими відкритими вікнами</string>
   <string name="confirmation_touches_with_other_windows_title">Ви впевнені, що хочете включити цю функцію?</string>
-  <string name="prefs_subsection_picture_uploads">Автоматично завантажувати фотографії</string>
-  <string name="prefs_subsection_video_uploads">Автоматично завантажувати відео</string>
   <string name="prefs_subsection_video_uploads_summary">Керуйте місцеперебуванням та поведінкою відео, завантажених автоматично</string>
   <string name="prefs_camera_picture_upload">Завантаження зображень</string>
   <string name="prefs_camera_picture_upload_summary">Автоматично завантажувати зображення з камери</string>

@@ -22,7 +22,7 @@
 package com.owncloud.android.usecases.transfers.uploads
 
 import com.owncloud.android.domain.BaseUseCase
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.domain.transfers.TransferRepository
 import com.owncloud.android.domain.transfers.model.OCTransfer
 import com.owncloud.android.domain.transfers.model.TransferStatus

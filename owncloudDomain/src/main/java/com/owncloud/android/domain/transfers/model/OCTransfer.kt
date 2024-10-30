@@ -22,7 +22,7 @@
 package com.owncloud.android.domain.transfers.model
 
 import android.os.Parcelable
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import kotlinx.parcelize.Parcelize
 import java.io.File
 

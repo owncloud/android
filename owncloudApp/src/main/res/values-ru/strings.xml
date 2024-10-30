@@ -5,6 +5,7 @@
   <string name="global_date">Дата</string>
   <string name="global_size">Размер</string>
   <string name="actionbar_search">Поиск в текущей папке</string>
+  <string name="actionbar_search_space">Поиск пространств</string>
   <string name="actionbar_sync">Синхронизировать</string>
   <string name="actionbar_upload">Загрузить</string>
   <string name="actionbar_upload_from_apps">Содержимое из других приложений</string>
@@ -18,6 +19,7 @@
   <string name="actionbar_descending">Убывающий </string>
   <string name="actionbar_sort_title">Упорядочить по</string>
   <string name="fab_new_file">Новый документ</string>
+  <string name="fab_new_shortcut">Новый ярлык</string>
   <string name="drawer_item_all_files">Все файлы</string>
   <string name="drawer_item_only_available_offline">Доступные оффлайн</string>
   <string name="drawer_item_shared_by_link_files">Доступные по ссылке</string>
@@ -55,7 +57,7 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Разрешает взаимодействие, когда есть перекрытие другим видимым или прозрачным окном. Это нужно, если вы используете приложения для фильтрации света от экрана. Перекрывающее приложение сможет получать информацию о взаимодействии.</string>
   <string name="confirmation_touches_with_other_windows_title">Вы уверены, что хотите включить эту функцию?</string>
   <string name="confirmation_touches_with_other_windows_message">Используйте эту функцию на свой страх и риск. Вредоносное приложение может попытаться обманом заставить вас выполнить какие-либо действия, используя другие представления.</string>
-  <string name="prefs_subsection_picture_uploads">Автоматическая загрузка фотографий</string>
+  <string name="prefs_subsection_picture_uploads">Автоматическая загрузка изображений</string>
   <string name="prefs_subsection_picture_uploads_summary">Управляйте местоположением и поведением автоматически загружаемых фотографий</string>
   <string name="prefs_subsection_video_uploads">Автоматическая загрузка видео</string>
   <string name="prefs_subsection_video_uploads_summary">Настройка размещения и поведения видеороликов, загружаемых автоматически</string>
@@ -357,6 +359,8 @@
   <string name="auth_account_does_not_exist">Аккаунт ещё не существует на устройстве</string>
   <string name="set_available_offline">Сделать доступным автономно</string>
   <string name="unset_available_offline">Убрать доступность автономно</string>
+  <string name="confirmation_set_available_offline">Файл был успешно установлен для работы в оффлайн-режиме</string>
+  <string name="confirmation_unset_available_offline">Файл был успешно снят с оффлайн-доступа</string>
   <string name="common_rename">Переименовать</string>
   <string name="common_remove">Удалить</string>
   <string name="confirmation_remove_file_alert">Вы действительно хотите удалить %1$s?</string>
@@ -669,8 +673,10 @@
   <string name="release_notes_footer">Благодарим за использование %1$s.\n❤</string>
   <string name="release_notes_proceed">Продолжить</string>
   <string name="release_notes_icon">Иконка к примечанию релиза</string>
-  <string name="release_notes_4_3_0_title_accessibility_improvements">Улучшения доступности</string>
-  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Некоторые улучшения, чтобы сделать приложение более доступным.</string>
+  <string name="release_notes_bugfixes_title">Незначительные исправления ошибок</string>
+  <string name="release_notes_bugfixes_subtitle">Некоторые ошибки были исправлены для улучшения работы приложения</string>
+  <string name="release_notes_4_5_0_title_feedback_in_previews">Обратная связь при установке/снятии оффлайн-доступа во всех предварительных просмотрах</string>
+  <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Добавлена обратная связь при установке/снятии оффлайн-доступа во всех предварительных просмотрах и обновлено меню опций в зависимости от статуса файла</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Открыть в браузере</string>
   <string name="ic_action_open_with_web">Открыть в %1$s (веб)</string>
@@ -711,6 +717,7 @@
   <string name="insecure_http_url_title_dialog">Небезопасный HTTP-URL</string>
   <string name="insecure_http_url_message_dialog">Указанный вами URL-адрес использует протокол HTTP, а не зашифрованный протокол HTTPS. Если вы продолжите, ваше общение не будет зашифровано.</string>
   <string name="insecure_http_url_continue_button">Продолжить</string>
+  <string name="clean_data_account_message">Все загруженные файлы, которые недоступны в оффлайн-режиме, будут удалены из аккаунта %1$s</string>
   <string name="clean_data_account_title">удалить локальное хранилище</string>
   <string name="clean_data_account_button_yes">Очистить данные</string>
   <string name="content_description_menu">Меню</string>
@@ -725,13 +732,38 @@
   <string name="content_description_get_edit_public_link">Редактировать публичную ссылку</string>
   <string name="content_description_remove_account">Удалить аккаунт</string>
   <string name="content_description_add_new_content">Добавить новый контент</string>
+  <string name="content_description_add_new_content_expanded">Добавить новый контент, развернутый</string>
   <string name="content_description_clean_account_storage">Чистое хранилище учетных записей</string>
   <string name="content_description_logo">Лого</string>
   <string name="content_description_add_share">Добавить долю</string>
   <string name="content_description_edit_share">Редактировать Поделиться</string>
   <string name="content_description_delete_share">Удалить долю</string>
   <string name="content_description_file_operations">%1$s  операции</string>
+  <string name="content_description_sort_by_name_ascending">Сортировать %1$s по возрастанию</string>
+  <string name="content_description_sort_by_name_descending">Сортировать %1$s по убыванию</string>
+  <string name="content_description_create_new_folder">Создать новую папку</string>
+  <string name="create_shortcut_dialog_title">Создать ярлык</string>
   <string name="create_shortcut_dialog_url">URL</string>
+  <string name="create_shortcut_dialog_url_information">URL должен начинаться с https:// или http:// чтобы его можно было открыть в браузере</string>
+  <string name="create_shortcut_dialog_url_error_no_blanks">URL не должен содержать пробелы</string>
+  <string name="create_shortcut_dialog_url_extension">.url</string>
+  <string name="open_shortcut_description">Этот ярлык указывает на:</string>
   <string name="open_shortcut_title">Открыть ссылку</string>
+  <string name="feedback_dialog_description">Улучшите приложение с помощью ваших отзывов</string>
+  <string name="feedback_dialog_get_in_contact_title">Свяжитесь с нами</string>
+  <string name="feedback_dialog_get_in_contact_description"><![CDATA[Попросите помощи в нашем <a href="%1$s"><b> форуме </b></a>, <a href="%2$s"><b>чат с нами</b></a> или внесите свой вклад в <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Ссылка</string>
+  <string name="button_role_accessibility">Кнопка</string>
+  <string name="folder_picker_label">Выбор папки</string>
+  <string name="passcode_label">Пароль</string>
+  <string name="pattern_label">Шаблон</string>
+  <string name="receive_external_files_label">Получить внешние файлы</string>
+  <string name="video_preview_label">Предварительный просмотр видео</string>
+  <string name="release_notes_label">Примечания к выпуску</string>
+  <string name="image_preview_label">Предпросмотр</string>
+  <string name="login_label">Логин</string>
+  <string name="whats_new_label">Что нового</string>
+  <string name="audio_preview_label">Предварительный просмотр аудио</string>
+  <string name="details_label">Подробно</string>
+  <string name="text_preview_label">Предварительный просмотр текст файла</string>
 </resources>

@@ -52,8 +52,6 @@
   <string name="prefs_touches_with_other_visible_windows">Dotek s jinými viditelnými okny</string>
   <string name="prefs_touches_with_other_visible_windows_summary">Povolit dotek s aplikacemi, které mohou překrýt toto okno. Nutné pro povolení při použití filtrů světla.</string>
   <string name="confirmation_touches_with_other_windows_title">Jste si jisti, že chcete povolit tuto funkci?</string>
-  <string name="prefs_subsection_picture_uploads">Automatické nahrávání obrázků</string>
-  <string name="prefs_subsection_video_uploads">Automatické nahrávání videí</string>
   <string name="prefs_camera_picture_upload">Nahrání obrázku</string>
   <string name="prefs_camera_picture_upload_summary">Automaticky nahrát obrázky snímané kamerou</string>
   <string name="prefs_camera_picture_upload_path_title">Cesta k nahrání obrázku</string>
@@ -591,7 +589,12 @@ správce systému.</string>
   <string name="content_description_remove_account">Odebrat účet</string>
   <string name="content_description_logo">Logo</string>
   <string name="content_description_delete_share">Zrušit sdílení</string>
+  <string name="content_description_create_new_folder">Vytvořit novou složku</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Otevřít odkaz</string>
   <string name="link_role_accessibility">Odkaz</string>
+  <string name="pattern_label">Maska</string>
+  <string name="image_preview_label">Náhled obrázku</string>
+  <string name="login_label">Přihlásit</string>
+  <string name="details_label">Podrobnosti</string>
 </resources>

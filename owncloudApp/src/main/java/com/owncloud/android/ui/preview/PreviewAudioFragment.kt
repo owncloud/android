@@ -8,6 +8,7 @@
  * @author Shashvat Kedia
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -42,6 +43,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.google.android.material.snackbar.Snackbar
 import com.owncloud.android.R
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
@@ -59,6 +61,7 @@ import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.utils.PreferenceUtils
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 /**
@@ -85,7 +88,10 @@ class PreviewAudioFragment : FileFragment() {
     private var mediaServiceConnection: MediaServiceConnection? = null
     private var autoplay = true
 
-    private val previewAudioViewModel by viewModel<PreviewAudioViewModel>()
+    private val previewAudioViewModel by viewModel<PreviewAudioViewModel> {
+        parametersOf(requireArguments().getParcelable(EXTRA_FILE))
+    }
+
     private val fileOperationsViewModel: FileOperationsViewModel by inject()
 
     /**
@@ -114,6 +120,16 @@ class PreviewAudioFragment : FileFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        collectLatestLifecycleFlow(previewAudioViewModel.getCurrentFile()) { currentFile ->
+            if (currentFile != null) {
+                file = currentFile
+                requireActivity().invalidateOptionsMenu()
+            } else {
+                requireActivity().onBackPressed()
+            }
+
+        }
 
         imagePreview = view.findViewById(R.id.image_preview)
         mediaController = view.findViewById(R.id.media_controller)
@@ -285,11 +301,13 @@ class PreviewAudioFragment : FileFragment() {
 
             R.id.action_set_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.SetFilesAsAvailableOffline(listOf(file)))
+                Snackbar.make(requireView(), R.string.confirmation_set_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 
             R.id.action_unset_available_offline -> {
                 fileOperationsViewModel.performOperation(FileOperation.UnsetFilesAsAvailableOffline(listOf(file)))
+                Snackbar.make(requireView(), R.string.confirmation_unset_available_offline, Snackbar.LENGTH_LONG).show()
                 true
             }
 

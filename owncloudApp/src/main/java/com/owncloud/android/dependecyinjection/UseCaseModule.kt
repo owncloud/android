@@ -39,13 +39,13 @@ import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOf
 import com.owncloud.android.domain.availableoffline.usecases.GetFilesAvailableOfflineFromEveryAccountUseCase
 import com.owncloud.android.domain.availableoffline.usecases.SetFilesAsAvailableOfflineUseCase
 import com.owncloud.android.domain.availableoffline.usecases.UnsetFilesAsAvailableOfflineUseCase
-import com.owncloud.android.domain.camerauploads.usecases.GetCameraUploadsConfigurationUseCase
-import com.owncloud.android.domain.camerauploads.usecases.GetPictureUploadsConfigurationStreamUseCase
-import com.owncloud.android.domain.camerauploads.usecases.GetVideoUploadsConfigurationStreamUseCase
-import com.owncloud.android.domain.camerauploads.usecases.ResetPictureUploadsUseCase
-import com.owncloud.android.domain.camerauploads.usecases.ResetVideoUploadsUseCase
-import com.owncloud.android.domain.camerauploads.usecases.SavePictureUploadsConfigurationUseCase
-import com.owncloud.android.domain.camerauploads.usecases.SaveVideoUploadsConfigurationUseCase
+import com.owncloud.android.domain.automaticuploads.usecases.GetAutomaticUploadsConfigurationUseCase
+import com.owncloud.android.domain.automaticuploads.usecases.GetPictureUploadsConfigurationStreamUseCase
+import com.owncloud.android.domain.automaticuploads.usecases.GetVideoUploadsConfigurationStreamUseCase
+import com.owncloud.android.domain.automaticuploads.usecases.ResetPictureUploadsUseCase
+import com.owncloud.android.domain.automaticuploads.usecases.ResetVideoUploadsUseCase
+import com.owncloud.android.domain.automaticuploads.usecases.SavePictureUploadsConfigurationUseCase
+import com.owncloud.android.domain.automaticuploads.usecases.SaveVideoUploadsConfigurationUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetCapabilitiesAsLiveDataUseCase
 import com.owncloud.android.domain.capabilities.usecases.GetStoredCapabilitiesUseCase
 import com.owncloud.android.domain.capabilities.usecases.RefreshCapabilitiesFromServerAsyncUseCase
@@ -261,7 +261,7 @@ val useCaseModule = module {
     factoryOf(::GetServerInfoAsyncUseCase)
 
     // Camera Uploads
-    factoryOf(::GetCameraUploadsConfigurationUseCase)
+    factoryOf(::GetAutomaticUploadsConfigurationUseCase)
     factoryOf(::GetPictureUploadsConfigurationStreamUseCase)
     factoryOf(::GetVideoUploadsConfigurationStreamUseCase)
     factoryOf(::ResetPictureUploadsUseCase)

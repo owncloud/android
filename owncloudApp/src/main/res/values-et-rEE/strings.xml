@@ -57,9 +57,9 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Luba puutumine kui vaade on häiritud mõne teise nähtava aknaga. Lülita sisse, et kasutada kergeid filtreerimisrakendusi.</string>
   <string name="confirmation_touches_with_other_windows_title">Oled sa kindel, et soovid seda võimalust aktiveerida?</string>
   <string name="confirmation_touches_with_other_windows_message">Kastua seda funktsionaalsust omal vastutusel. Pahatahtlik rakendus võib petta sind tegema soovimatut, kasutades teisi vaateid.</string>
-  <string name="prefs_subsection_picture_uploads">Automaatne fotode üleslaadimine</string>
+  <string name="prefs_subsection_picture_uploads">Automaatsed piltide üleslaadimised</string>
   <string name="prefs_subsection_picture_uploads_summary">Määra automaatselt üleslaetavate piltide asukoht ja käitumine</string>
-  <string name="prefs_subsection_video_uploads">Automaatne videote üleslaadimine</string>
+  <string name="prefs_subsection_video_uploads">Automaatsed videote üleslaadimised</string>
   <string name="prefs_subsection_video_uploads_summary">Määra automaatselt üleslaetavate videote asukoht ja käitumine</string>
   <string name="prefs_camera_picture_upload">Piltide üleslaadimine</string>
   <string name="prefs_camera_picture_upload_summary">Laadi kaameraga tehtud pildid automaatselt üles</string>
@@ -358,6 +358,8 @@
   <string name="auth_account_does_not_exist">Kontot pole veel seadmes</string>
   <string name="set_available_offline">Määra saadavaks ilma võrguühenduseta</string>
   <string name="unset_available_offline">Eemalda saadavus ilma võrguühenduseta</string>
+  <string name="confirmation_set_available_offline">Fail märgiti saadavaks ilma võrguühenduseta</string>
+  <string name="confirmation_unset_available_offline">Fail märgiti mittesaadavaks ilma võrguühenduseta</string>
   <string name="common_rename">Nimeta ümber</string>
   <string name="common_remove">Eemalda</string>
   <string name="confirmation_remove_file_alert">Oled sa kindel, et soovid %1$s eemaldada?</string>
@@ -669,12 +671,10 @@
   <string name="release_notes_footer">Aitäh, et kasutad %1$si.\n❤</string>
   <string name="release_notes_proceed">Jätka</string>
   <string name="release_notes_icon">Väljalasketeavituse ikoon</string>
-  <string name="release_notes_4_3_0_title_accessibility_improvements">Juurdepääsetavuse täiustused</string>
-  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Mõned täiustused, et teha rakendus paremini juurdepääsetavaks</string>
-  <string name="release_notes_4_4_0_title_improved_from_original_folder_auto_upload">Automaatsed üleslaadimised on ühtlasemad</string>
-  <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">Lisatud mõned mehhanismid korduskatsete töökindluse parandamiseks</string>
   <string name="release_notes_bugfixes_title">Väiksemad veaparandused</string>
   <string name="release_notes_bugfixes_subtitle">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
+  <string name="release_notes_4_5_0_title_feedback_in_previews">Tagasiside kõikides eelvaadetes, kui võrguühenduseta failide saadavust muudetakse</string>
+  <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Lisatud on võrguühenduseta failide saadavuse tagasiside kõikidesse eelvaadetesse ning valikute menüüd uuendatakse vastavalt faili staatusele</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
@@ -738,6 +738,8 @@
   <string name="content_description_delete_share">Kustuta jagamine</string>
   <string name="content_description_file_operations">%1$s tegevus(t)</string>
   <string name="content_description_sort_by_name_ascending">Sorteeri %1$s järgi tõusvalt</string>
+  <string name="content_description_sort_by_name_descending">Sorteeri %1$s järgi kahanevalt</string>
+  <string name="content_description_create_new_folder">Loo uus kaust</string>
   <string name="create_shortcut_dialog_title">Loo otsetee</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">Brauseris avamiseks peab URL alguses olema kas http:// või https://</string>
@@ -750,4 +752,18 @@
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Küsi abi <a href="%1$s"><b>foorumist</b></a>, <a href="%2$s"><b>vestle meiega</b></a> või panusta <a href="%3$s"><b>GitHub\'is</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Nupp</string>
+  <string name="folder_picker_label">Kausta valija</string>
+  <string name="passcode_label">Pääsukood</string>
+  <string name="pattern_label">Muster</string>
+  <string name="receive_external_files_label">Võta vastu väliseid faile</string>
+  <string name="video_preview_label">Video eelvaade</string>
+  <string name="release_notes_label">Väljalaske märkmed</string>
+  <string name="image_preview_label">Pildi eelvaade</string>
+  <string name="login_label">Logi sisse</string>
+  <string name="whats_new_label">Uuendused</string>
+  <string name="audio_preview_label">Audio eelvaade</string>
+  <string name="details_label">Üksikasjad</string>
+  <string name="text_preview_label">Teksti eelvaade</string>
+  <string name="release_notes_title_enhanced_bottom_nav_bar">Alumisele ribale on lisatud tekstisildid</string>
+  <string name="release_notes_subtitle_bottom_nav_bar">Alumisele ribale on lisatud tekstisildid ning näidatakse vaikimisi aktiivset valitud sektsiooni</string>
 </resources>

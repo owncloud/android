@@ -57,9 +57,9 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Lejo prekje, kur pamja është zënë nga një tjetër dritare e dukshme. Aktivizojeni, që të përdorni aplikacione filtrimi drite.</string>
   <string name="confirmation_touches_with_other_windows_title">Jeni i sigurt se doni të aktivizohet kjo veçori?</string>
   <string name="confirmation_touches_with_other_windows_message">Përdoreni këtë veçori duke e mbajtur vetë përgjegjësinë. Një aplikacion dashakeq mund të përpiqej t\’ua hidhte duke ju bërë të kryeni, pa e kuptuar, disa veprime, ndërkohë që përdorni pamje të tjera.</string>
-  <string name="prefs_subsection_picture_uploads">Vetëngarko foto</string>
+  <string name="prefs_subsection_picture_uploads">Ngarkime të automatizuara fotosh</string>
   <string name="prefs_subsection_picture_uploads_summary">Administroni vendndodhje dhe sjellje të fotove të ngarkuara automatikisht</string>
-  <string name="prefs_subsection_video_uploads">Vetëngarko video</string>
+  <string name="prefs_subsection_video_uploads">Ngarkime të automatizuara videosh</string>
   <string name="prefs_subsection_video_uploads_summary">Administroni vendndodhje dhe sjellje të videove të ngarkuara automatikisht</string>
   <string name="prefs_camera_picture_upload">Ngarkime fotosh</string>
   <string name="prefs_camera_picture_upload_summary">Fotot e bëra nga kamera ngarkoji vetvetiu</string>
@@ -357,6 +357,8 @@
   <string name="auth_account_does_not_exist">Llogaria s\’ekziston ende te pajisja</string>
   <string name="set_available_offline">Caktojeni si të passhëm jo në linjë</string>
   <string name="unset_available_offline">Hiqeni si të passhëm jo në linjë</string>
+  <string name="confirmation_set_available_offline">Kartela u kalua me sukses si e pashme jashtë linje</string>
+  <string name="confirmation_unset_available_offline">Kartela u hoq me sukses si e pashme jashtë linje</string>
   <string name="common_rename">Riemërtojeni</string>
   <string name="common_remove">Hiqe</string>
   <string name="confirmation_remove_file_alert">Doni vërtet të hiqet %1$s?</string>
@@ -667,9 +669,6 @@
   <string name="release_notes_footer">Faleminderit për përdorimin e %1$s.\n❤</string>
   <string name="release_notes_proceed">Bëje</string>
   <string name="release_notes_icon">Ikonë shënimesh hedhjeje në qarkullim</string>
-  <string name="release_notes_4_3_0_title_accessibility_improvements">Përmirësime përdorimi nga persona me aftësi të kufizuara</string>
-  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Disa përmirësime për ta bërë aplikacionin më të lehtë për persona me aftësi të kufizuara</string>
-  <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">U shtuan disa mekanizma për përgjatë riprovash, për përmirësim të qëndrueshmërisë</string>
   <string name="release_notes_bugfixes_title">Ndreqje të metash të vockla</string>
   <string name="release_notes_bugfixes_subtitle">U ndreqën disa të meta, për të përmirësuar punimin te aplikacioni</string>
   <!--Open in web-->
@@ -735,6 +734,8 @@
   <string name="content_description_delete_share">Fshini pjesë</string>
   <string name="content_description_file_operations">%1$s veprime</string>
   <string name="content_description_sort_by_name_ascending">Renditi sipas %1$s në rend rritës</string>
+  <string name="content_description_sort_by_name_descending">Renditi në rend rritës sipas %1$s</string>
+  <string name="content_description_create_new_folder">Krijo dosje të re</string>
   <string name="create_shortcut_dialog_title">Krijoni një shkurtore</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">URL-ja duhet të fillojë me https:// ose http:// , që të mund të hapet në shfletues</string>
@@ -747,4 +748,18 @@
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kërkoni ndihmë në <a href="%1$s"><b>forumin</b></a> tonë, <a href="%2$s"><b>bisedoni me ne</b></a>, ose kontribuoni në <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Lidhje</string>
   <string name="button_role_accessibility">Buton</string>
+  <string name="folder_picker_label">Zgjedhës dosjeje</string>
+  <string name="passcode_label">Kodkalim</string>
+  <string name="pattern_label">Mostër</string>
+  <string name="receive_external_files_label">Marrje kartelash të jashtme</string>
+  <string name="video_preview_label">Paraparje videosh</string>
+  <string name="release_notes_label">Shënime hedhjeje në qarkullim</string>
+  <string name="image_preview_label">Paraparje figure</string>
+  <string name="login_label">Hyrje</string>
+  <string name="whats_new_label">Ç’ka të re</string>
+  <string name="audio_preview_label">Paradëgjim audioje</string>
+  <string name="details_label">Hollësi</string>
+  <string name="text_preview_label">Paraparje teksti</string>
+  <string name="release_notes_title_enhanced_bottom_nav_bar">U shtuan etiketa tekst te shtylla në fund</string>
+  <string name="release_notes_subtitle_bottom_nav_bar">U shtuan etiketa tekst dhe treguesi parazgjedhje për gjendje aktive përdoret për të treguar se cila ndarje është përzgjedhur te shtylla në fund</string>
 </resources>

@@ -55,9 +55,7 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Разрешает взаимодействие, когда есть перекрытие другим видимым или прозрачным окном. Это нужно, если вы используете приложения для фильтрации света от экрана. Перекрывающее приложение сможет получать информацию о взаимодействии.</string>
   <string name="confirmation_touches_with_other_windows_title">Вы уверены, что хотите включить эту функцию?</string>
   <string name="confirmation_touches_with_other_windows_message">Используйте на свой страх и риск: вредоносное приложение может попытаться вас обмануть, заставить незаметно выполнить некоторые действия, используя поддельные элементы интерфейса</string>
-  <string name="prefs_subsection_picture_uploads">Автозагрузка изображений</string>
   <string name="prefs_subsection_picture_uploads_summary">Настройка размещения и поведения изображений, загружаемых автоматически</string>
-  <string name="prefs_subsection_video_uploads">Автозагрузка видео</string>
   <string name="prefs_subsection_video_uploads_summary">Настройка размещения и поведения видеороликов, загружаемых автоматически</string>
   <string name="prefs_camera_picture_upload">Загрузка изображений</string>
   <string name="prefs_camera_picture_upload_summary">Автоматически загружать изображения, сделанные камерой</string>
@@ -663,8 +661,6 @@
   <string name="release_notes_footer">Благодарим за использование %1$s.\n❤</string>
   <string name="release_notes_proceed">Продолжить</string>
   <string name="release_notes_icon">Иконка к примечанию релиза</string>
-  <string name="release_notes_4_3_0_title_accessibility_improvements">Улучшения доступности</string>
-  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Некоторые улучшения, чтобы сделать приложение более доступным.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Открыть в браузере</string>
   <string name="ic_action_open_with_web">Открыть в %1$s (веб)</string>
@@ -725,7 +721,12 @@
   <string name="content_description_edit_share">Редактировать Поделиться</string>
   <string name="content_description_delete_share">Удалить долю</string>
   <string name="content_description_file_operations">%1$s  операции</string>
+  <string name="content_description_create_new_folder">Создать новую папку</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Открыть ссылку</string>
   <string name="link_role_accessibility">Ссылка</string>
+  <string name="pattern_label">Шаблон</string>
+  <string name="image_preview_label">Предпросмотр</string>
+  <string name="login_label">Вход</string>
+  <string name="details_label">Подробно</string>
 </resources>

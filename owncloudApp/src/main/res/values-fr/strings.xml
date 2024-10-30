@@ -55,9 +55,7 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Autoriser les interactions quand une autre fenêtre visible se superpose a l\'affichage. Activer pour utiliser le fonctionnement des applications de filtre lumineux.</string>
   <string name="confirmation_touches_with_other_windows_title">Êtes-vous sûr de vouloir activer cette fonctionnalité ?</string>
   <string name="confirmation_touches_with_other_windows_message">Utilisez cette fonctionnalité à vos propres risques. Une application malveillante pourrait tenter de vous pousser à effectuer des actions en falsifiant l\'affichage.</string>
-  <string name="prefs_subsection_picture_uploads">Téléversement automatique des photos</string>
   <string name="prefs_subsection_picture_uploads_summary">Gérer l\'emplacement et le comportement des images téléversées automatiquement</string>
-  <string name="prefs_subsection_video_uploads">Téléversement automatique des vidéos</string>
   <string name="prefs_subsection_video_uploads_summary">Gérer l\'emplacement et le comportement des vidéos téléversées automatiquement</string>
   <string name="prefs_camera_picture_upload">Envoi d\'images</string>
   <string name="prefs_camera_picture_upload_summary">Téléverser automatiquement les images prises par l\'appareil photo</string>
@@ -585,7 +583,12 @@ Téléchargez-le ici : %2$s</string>
   <string name="content_description_manage_accounts">Gérer les comptes</string>
   <string name="content_description_search">Rechercher</string>
   <string name="content_description_remove_account">Supprimer le compte</string>
+  <string name="content_description_create_new_folder">Créer un nouveau dossier</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="open_shortcut_title">Ouvrir le lien</string>
   <string name="link_role_accessibility">Lien</string>
+  <string name="pattern_label">Motif de nom</string>
+  <string name="image_preview_label">Prévisualisation de l\'image</string>
+  <string name="login_label">Identifiant</string>
+  <string name="details_label">Détails</string>
 </resources>

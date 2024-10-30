@@ -23,10 +23,10 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.FOLDER_BACKUP_TABLE_NAME
 import com.owncloud.android.data.providers.SharedPreferencesProvider
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.pictureUploadsName
-import com.owncloud.android.domain.camerauploads.model.FolderBackUpConfiguration.Companion.videoUploadsName
-import com.owncloud.android.domain.camerauploads.model.UploadBehavior
+import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration
+import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration.Companion.pictureUploadsName
+import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration.Companion.videoUploadsName
+import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import java.io.File
 
 val MIGRATION_33_34 = object : Migration(33, 34) {

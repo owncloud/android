@@ -57,9 +57,7 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Salli kosketukset vaikka näkymä on toisen näkyvän ikkunan peittämä. Ota se käyttöön, jotta voit käyttää kevyitä suodattavia sovelluksia.</string>
   <string name="confirmation_touches_with_other_windows_title">Haluatko todellakin ottaa tämän ominaisuuden käyttöön?</string>
   <string name="confirmation_touches_with_other_windows_message">Käytät tätä ominaisuutta omalla vastuullasi! Vihamielinen sovellus voisi muita näkymiä käyttäen yrittää saada sinut tietämättäsi tekemään joitain toimintoja. </string>
-  <string name="prefs_subsection_picture_uploads">Lähetä kuvat automaattisesti</string>
   <string name="prefs_subsection_picture_uploads_summary">Hallitse automaattisesti lähetettyjen kuvien sijaintia ja käyttäytymistä</string>
-  <string name="prefs_subsection_video_uploads">Lähetä videot automaattisesti</string>
   <string name="prefs_subsection_video_uploads_summary">Hallitse automaattisesti lähetettyjen videoiden sijaintia ja käyttäytymistä</string>
   <string name="prefs_camera_picture_upload">Kuvien lähetys</string>
   <string name="prefs_camera_picture_upload_summary">Lähetä automaattisesti kameralla otetut kuvat</string>
@@ -669,8 +667,6 @@
   <string name="release_notes_footer">Kiitos kun käytät %1$s.\n❤</string>
   <string name="release_notes_proceed">Jatka</string>
   <string name="release_notes_icon">Julkaisutiedotteen ikoni</string>
-  <string name="release_notes_4_3_0_title_accessibility_improvements">Päivityksiä tavoitettavuudessa</string>
-  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Joitain parannuksia sovelluksen tavoitettavuuteen</string>
   <string name="release_notes_bugfixes_title">Pieniä bugikorjauksia</string>
   <string name="release_notes_bugfixes_subtitle">Joitain bugeja korjattu sovelluksen käyttökokemuksen parantamiseksi</string>
   <!--Open in web-->
@@ -745,4 +741,8 @@
   <string name="feedback_dialog_get_in_contact_title">Pidä yhteyttä</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Kysy neuvoa <a href="%1$s"><b> foorumilla </b></a>, <a href="%2$s"><b> chattaa kanssamme </b></a> tai osallistu <a href="%3$s"><b> GitHub:ssa </b></a>]]></string>
   <string name="link_role_accessibility">Linkki</string>
+  <string name="pattern_label">Kaava</string>
+  <string name="image_preview_label">Kuvan esikatselu</string>
+  <string name="login_label">Kirjaudu</string>
+  <string name="details_label">Tiedot</string>
 </resources>

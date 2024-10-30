@@ -52,9 +52,7 @@
   <string name="prefs_touches_with_other_visible_windows_summary">מאפשר מגע כאשר התצוגה מוסתרת על ידי חלון גלוי אחר. יש לאפשר זאת לשימוש ביישומי סינון קלים.</string>
   <string name="confirmation_touches_with_other_windows_title">האם באמת לאפשר תכונה זו?</string>
   <string name="confirmation_touches_with_other_windows_message">יש לשתמש בתכונה זו באחריותך הבלבדית, יישום זדוני יכול לנסות לגרום לך לבצע כמה פעולות, לא רצוניות, באמצעות תצוגות אחרות.</string>
-  <string name="prefs_subsection_picture_uploads">העלאת תמונות אוטומטית</string>
   <string name="prefs_subsection_picture_uploads_summary">ניהול מיקום והתנהגות של התמונות שמועלות אוטומטית</string>
-  <string name="prefs_subsection_video_uploads">העלאת סרטונים אוטומטית</string>
   <string name="prefs_subsection_video_uploads_summary">ניהול מיקום והתנהגות של הסרטונים שמועלים אוטומטית</string>
   <string name="prefs_camera_picture_upload">העלאת תמונות</string>
   <string name="prefs_camera_picture_upload_summary">העלאת תמונות שצולמו במצלמה באופן אוטומטי</string>

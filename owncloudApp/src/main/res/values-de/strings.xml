@@ -57,9 +57,9 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Berührungen auch zulassen, wenn die Ansicht von einer anderen App überladen wird. Aktiviere diese Option, um zum Beispiel Lichtfilter-Apps verwenden zu können.</string>
   <string name="confirmation_touches_with_other_windows_title">Willst Du diese Funktion wirklich einschalten?</string>
   <string name="confirmation_touches_with_other_windows_message">Verwende diese Funktion auf eigene Verantwortung. Eine bösartige Anwendung könnte versuchen, dich unwissentlich in anderen Ansichten Aktionen ausführen zu lassen.</string>
-  <string name="prefs_subsection_picture_uploads">Bilder automatisch hochladen</string>
+  <string name="prefs_subsection_picture_uploads">Automatischer Bilder-Upload</string>
   <string name="prefs_subsection_picture_uploads_summary">Verwalten des Speicherortes und des Verhaltens der automatisch hochgeladenen Fotos</string>
-  <string name="prefs_subsection_video_uploads">Videos automatisch hochladen</string>
+  <string name="prefs_subsection_video_uploads">Automatischer Video-Upload</string>
   <string name="prefs_subsection_video_uploads_summary">Verwalten des Speicherortes und des Verhaltens der automatisch hochgeladenen Videos</string>
   <string name="prefs_camera_picture_upload">Bilder</string>
   <string name="prefs_camera_picture_upload_summary">Automatischer Upload von Fotos</string>
@@ -348,7 +348,7 @@
   <string name="auth_oauth_error">Autorisierung nicht erfolgreich</string>
   <string name="auth_oauth_error_access_denied">Zugriff durch den Autorisierungsserver abgelehnt</string>
   <string name="auth_wtf_reenter_URL">Unerwarteter Zustand; Bitte die Adresse des Servers erneut eingeben</string>
-  <string name="auth_expired_oauth_token_toast">Die Autorisierung ist abgelaufen. Die Autorisierung bitte nochmals durchführen</string>
+  <string name="auth_expired_oauth_token_toast">Die Autorisierung ist abgelaufen. Bitte autorisieren Sie sich erneut</string>
   <string name="auth_expired_basic_auth_toast">Bitte das aktuelle Passwort eingeben</string>
   <string name="auth_connecting_auth_server">Verbinden zum Authentifizierungs-Server ...</string>
   <string name="auth_unsupported_auth_method">Der Server unterstützt diese Authentifizierungsmethode nicht</string>
@@ -358,6 +358,8 @@
   <string name="auth_account_does_not_exist">Das Benutzerkonto ist bis jetzt noch nicht auf dem Gerät vorhanden</string>
   <string name="set_available_offline">Als Offline verfügbar markieren</string>
   <string name="unset_available_offline">Offline verfügbar Markierung entfernen</string>
+  <string name="confirmation_set_available_offline">Die Datei wurde erfolgreich als für offline verfügbar aktiviert.</string>
+  <string name="confirmation_unset_available_offline">Die Datei wurde erfolgreich als für offline verfügbar deaktiviert.</string>
   <string name="common_rename">Umbenennen</string>
   <string name="common_remove">Löschen</string>
   <string name="confirmation_remove_file_alert">Möchtest Du %1$s wirklich löschen?</string>
@@ -669,12 +671,10 @@
   <string name="release_notes_footer">Vielen Dank für die Verwendung von %1$s.\n</string>
   <string name="release_notes_proceed">Fortfahren</string>
   <string name="release_notes_icon">Icon für Veröffentlichungsnotizen</string>
-  <string name="release_notes_4_3_0_title_accessibility_improvements">Verbesserung der Zugänglichkeit</string>
-  <string name="release_notes_4_3_0_subtitle_accessibility_improvements">Einige Verbesserungen, um die Anwendung besser zugänglich zu machen</string>
-  <string name="release_notes_4_4_0_title_improved_from_original_folder_auto_upload">Automatisches Hochladen ist konsistenter</string>
-  <string name="release_notes_4_4_0_subtitle_improved_from_original_folder_auto_upload">Einige Mechanismen für Wiederholungen wurden hinzugefügt, dies verbessert die Zuverlässigkeit</string>
   <string name="release_notes_bugfixes_title">Geringfügige Fehler behoben</string>
   <string name="release_notes_bugfixes_subtitle">Einige Fehler wurden behoben, um die Benutzung der App zu verbessern.</string>
+  <string name="release_notes_4_5_0_title_feedback_in_previews">Feedback wenn (de)aktivieren für offline verfügbar in allen Vorschauen.</string>
+  <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Feedback hinzugefügt, wenn (de)aktivieren für offline verfügbar in allen Vorschauen, und Optionsmenü abhängig von Dateistatus aktualisiert</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
@@ -738,16 +738,32 @@
   <string name="content_description_delete_share">Teilen löschen</string>
   <string name="content_description_file_operations">%1$s Operationen</string>
   <string name="content_description_sort_by_name_ascending"> %1$s aufsteigend sortieren</string>
+  <string name="content_description_sort_by_name_descending"> %1$s absteigend sortieren</string>
+  <string name="content_description_create_new_folder">Neuen Ordner Erstellen</string>
   <string name="create_shortcut_dialog_title">Verknüpfung erstellen</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">Die URL muss mit https:// oder http:// beginnen, damit sie im Browser geöffnet werden kann.</string>
   <string name="create_shortcut_dialog_url_error_no_blanks">Die URL kann keine Leerzeichen enthalten</string>
   <string name="create_shortcut_dialog_url_extension">.url</string>
-  <string name="open_shortcut_description">Diese Verknüpfung zeigt auf:</string>
+  <string name="open_shortcut_description">Diese Verknüpfung verweist auf:</string>
   <string name="open_shortcut_title">Link öffnen</string>
   <string name="feedback_dialog_description">Verbessern Sie die App durch Ihr Feedback</string>
   <string name="feedback_dialog_get_in_contact_title">In Kontakt treten</string>
   <string name="feedback_dialog_get_in_contact_description"><![CDATA[ Fragen Sie nach Hilfe in unserem <a href="%1$s"><b>Forum</b></a>, <a href="%2$s"><b>chatten Sie mit uns</b></a> oder machen Sie einen Beitrag auf <a href="%3$s"><b>GitHub</b></a>]]></string>
   <string name="link_role_accessibility">Link</string>
   <string name="button_role_accessibility">Schaltfläche</string>
+  <string name="folder_picker_label">Ordnerauswahl</string>
+  <string name="passcode_label">PIN-Sperre</string>
+  <string name="pattern_label">Muster</string>
+  <string name="receive_external_files_label">Externe Dateien empfangen</string>
+  <string name="video_preview_label">Videovorschau</string>
+  <string name="release_notes_label">Versionshinweise</string>
+  <string name="image_preview_label">Bildvorschau</string>
+  <string name="login_label">Anmelden</string>
+  <string name="whats_new_label">Was ist neu</string>
+  <string name="audio_preview_label">Audiovorschau</string>
+  <string name="details_label">Details</string>
+  <string name="text_preview_label">Textvorschau</string>
+  <string name="release_notes_title_enhanced_bottom_nav_bar">Textbeschriftungen wurden in der unteren Leiste hinzugefügt</string>
+  <string name="release_notes_subtitle_bottom_nav_bar">Es wurden Textbeschriftungen hinzugefügt. Der standardmäßige Aktiv-Indikator zeigt in der unteren Leiste an welcher Abschnitt ausgewählt ist.</string>
 </resources>

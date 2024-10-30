@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.owncloud.android.domain.camerauploads.model
+package com.owncloud.android.domain.automaticuploads.model
 
 data class FolderBackUpConfiguration(
     val accountName: String,

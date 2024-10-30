@@ -57,9 +57,7 @@
   <string name="prefs_touches_with_other_visible_windows_summary">Permite los toques  cuando la vista está oculta por otra ventana visible. Habilítelo para utilizar aplicaciones de filtrado de luz.</string>
   <string name="confirmation_touches_with_other_windows_title">¿Está seguro que desea habilitar esta función?</string>
   <string name="confirmation_touches_with_other_windows_message">Use esta funcionalidad bajo su propio riesgo. Una aplicación maliciosa podría intentar engañarle para que realice algunas acciones sin que lo sepa, utilizando otras vistas.</string>
-  <string name="prefs_subsection_picture_uploads">Subida automática de imágenes</string>
   <string name="prefs_subsection_picture_uploads_summary">Administre localización y comportamiento de las imágenes subidas automáticamente</string>
-  <string name="prefs_subsection_video_uploads">Subida automática de videos</string>
   <string name="prefs_subsection_video_uploads_summary">Administre localización y comportamiento de los videos subidos automáticamente</string>
   <string name="prefs_camera_picture_upload">Cargas de imágenes</string>
   <string name="prefs_camera_picture_upload_summary">Carga automáticamente las fotos tomadas por cámara</string>
@@ -630,7 +628,6 @@ Póngase en contacto con su administrador</string>
   <string name="release_notes_footer">Gracias por usar %1$s.\n❤</string>
   <string name="release_notes_proceed">Proceder</string>
   <string name="release_notes_icon">Icono notas de lanzamiento</string>
-  <string name="release_notes_4_3_0_title_accessibility_improvements">Mejoras en accesibilidad</string>
   <string name="release_notes_bugfixes_title">Solución de problemas</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir en web</string>
@@ -674,6 +671,7 @@ Póngase en contacto con su administrador</string>
   <string name="content_description_delete_share">Borrar compartición</string>
   <string name="content_description_file_operations">%1$s operaciones</string>
   <string name="content_description_sort_by_name_ascending">Ordenar por %1$s ascendente</string>
+  <string name="content_description_create_new_folder">Crear carpeta nueva</string>
   <string name="create_shortcut_dialog_title">Crear un acceso directo</string>
   <string name="create_shortcut_dialog_url">URL</string>
   <string name="create_shortcut_dialog_url_information">La URL tiene que empezar con https:// o http:// para que pueda ser abierta por el navegador</string>
@@ -685,4 +683,8 @@ Póngase en contacto con su administrador</string>
   <string name="feedback_dialog_get_in_contact_title">Ponerse en contacto</string>
   <string name="link_role_accessibility">Enlace</string>
   <string name="button_role_accessibility">Botón</string>
+  <string name="pattern_label">Patrón</string>
+  <string name="image_preview_label">Previsualización de imagen</string>
+  <string name="login_label">Acceder</string>
+  <string name="details_label">Detalles</string>
 </resources>
