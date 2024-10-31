@@ -59,6 +59,7 @@ class ManageAccountsViewModel(
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             automaticUploadsConfiguration = getAutomaticUploadsConfigurationUseCase(Unit).getDataOrNull()
+            _userQuotas.value = getUserQuotasUseCase(Unit)
         }
     }
 
@@ -83,11 +84,5 @@ class ManageAccountsViewModel(
     fun hasAutomaticUploadsAttached(accountName: String): Boolean {
         return accountName == automaticUploadsConfiguration?.pictureUploadsConfiguration?.accountName ||
                 accountName == automaticUploadsConfiguration?.videoUploadsConfiguration?.accountName
-    }
-
-    fun loadUserQuotas() {
-        viewModelScope.launch(coroutinesDispatcherProvider.io) {
-            _userQuotas.value = getUserQuotasUseCase(Unit)
-        }
     }
 }

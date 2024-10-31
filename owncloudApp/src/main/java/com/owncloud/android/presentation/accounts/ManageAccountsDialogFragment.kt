@@ -68,8 +68,6 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
 
         parentActivity = requireActivity() as ToolbarActivity
         currentAccount = requireArguments().getParcelable(KEY_CURRENT_ACCOUNT)
-
-        manageAccountsViewModel.loadUserQuotas()
         subscribeToViewModels()
     }
 
