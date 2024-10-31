@@ -79,7 +79,7 @@ public class DisplayUtils {
      * @param bytes Input file size
      * @return Like something readable like "12 MB"
      */
-    public static String bytesToHumanReadable(long bytes, Context context, Boolean includeDecimals) {
+    public static String bytesToHumanReadable(long bytes, Context context, boolean includeDecimals) {
         if (bytes < 0) {
             return context.getString(R.string.common_pending);
 
@@ -96,7 +96,7 @@ public class DisplayUtils {
                     BigDecimal.ROUND_HALF_UP
             ).stripTrailingZeros();
 
-            if (!includeDecimals){
+            if (!includeDecimals) {
                 readableResult = readableResult.setScale(0, BigDecimal.ROUND_HALF_UP);
             }
 

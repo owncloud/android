@@ -736,8 +736,8 @@
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
     <string name="release_notes_4_5_0_title_feedback_in_previews">Feedback when (un)setting av. offline in all previews</string>
     <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Added feedback when (un)setting av. offline in all previews and updated options menu depending on file status</string>
-    <string name="release_notes_4_5_0_title_quota_improvements">Storage value in the manage accounts dialog and drawer menu</string>
-    <string name="release_notes_4_5_0_subtitle_quota_improvements">Added storage value in manage accounts dialog and updated in the drawer menu depending on the status.</string>
+    <string name="release_notes_4_5_0_title_quota_improvements">Improvements in storage occupation display</string>
+    <string name="release_notes_4_5_0_subtitle_quota_improvements">Storage occupation refreshed and available in accounts manager view, besides of drawer menu</string>
 
 
     <!-- Open in web -->
