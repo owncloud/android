@@ -250,7 +250,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
                 val manageAccountsLayout = dialogView.findViewById<LinearLayout>(R.id.manage_accounts_layout)
                 manageAccountsLayout.visibility = View.VISIBLE
 
-                accountListAdapter = ManageAccountsAdapter(requireContext(), this)
+                accountListAdapter = ManageAccountsAdapter(this)
                 accountListAdapter.submitAccountList(accountList = getAccountListItems())
 
                 val recyclerView = dialogView.findViewById<RecyclerView>(R.id.account_list_recycler_view)
@@ -276,7 +276,9 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
         collectLatestLifecycleFlow(manageAccountsViewModel.userQuotas) { userQuotasList ->
             accountList.forEach { account ->
                 val userQuota = userQuotasList.firstOrNull { userQuota -> userQuota.accountName == account.name }
-                provisionalAccountList.add(ManageAccountsAdapter.AccountRecyclerItem.AccountItem(account, userQuota))
+                if (userQuota != null) {
+                    provisionalAccountList.add(ManageAccountsAdapter.AccountRecyclerItem.AccountItem(account, userQuota))
+                }
             }
 
             // Add Create Account item at the end of account list if multi-account is enabled

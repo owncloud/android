@@ -46,7 +46,6 @@ import timber.log.Timber
 import kotlin.math.ceil
 
 class ManageAccountsAdapter(
-    private val context: Context,
     private val accountListener: AccountAdapterListener,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -78,7 +77,6 @@ class ManageAccountsAdapter(
             is AccountManagementViewHolder -> {
                 val accountItem = getItem(position) as AccountRecyclerItem.AccountItem
                 val account: Account = accountItem.account
-                val userQuota: UserQuota? = accountItem.userQuota
                 val accountAvatarRadiusDimension = holder.itemView.context.resources.getDimension(R.dimen.list_item_avatar_icon_radius)
 
                 try {
@@ -95,9 +93,13 @@ class ManageAccountsAdapter(
                 holder.binding.account.text = DisplayUtils.convertIdn(account.name, false)
 
                 // update the quota
-                if (userQuota != null) {
-                    updateQuota(holder.binding.manageAccountsQuotaText, holder.binding.manageAccountsQuotaBar, userQuota)
-                }
+                updateQuota(
+                    quotaText = holder.binding.manageAccountsQuotaText,
+                    quotaBar = holder.binding.manageAccountsQuotaBar,
+                    userQuota = accountItem.userQuota,
+                    context = holder.itemView.context
+                )
+
 
                 try {
                     val avatarUtils = AvatarUtils()
@@ -153,7 +155,7 @@ class ManageAccountsAdapter(
 
     fun getItem(position: Int) = accountItemsList[position]
 
-    private fun updateQuota(quotaText: TextView, quotaBar: ProgressBar, userQuota: UserQuota) {
+    private fun updateQuota(quotaText: TextView, quotaBar: ProgressBar, userQuota: UserQuota, context: Context) {
         when {
             userQuota.available < 0 -> {
                 quotaBar.visibility = View.GONE
@@ -190,7 +192,7 @@ class ManageAccountsAdapter(
     }
 
     sealed class AccountRecyclerItem {
-        data class AccountItem(val account: Account, val userQuota: UserQuota?) : AccountRecyclerItem()
+        data class AccountItem(val account: Account, val userQuota: UserQuota) : AccountRecyclerItem()
         object NewAccount : AccountRecyclerItem()
     }
 
