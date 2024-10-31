@@ -74,7 +74,6 @@ import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
-import kotlin.math.ceil
 
 /**
  * Base class to handle setup of the drawer implementation including avatar fetching and fallback
@@ -311,83 +310,75 @@ abstract class DrawerActivity : ToolbarActivity() {
             when (val uiResult = event.peekContent()) {
                 is UIResult.Success -> {
                     uiResult.data?.let { userQuota ->
-                        when {
-                            userQuota.available < 0 -> { // Pending, unknown or unlimited free storage
-                                getAccountQuotaBar()?.run {
-                                    isVisible = true
-                                    progress = 0
-                                }
-                                getAccountQuotaText()?.text = String.format(
-                                    getString(R.string.drawer_unavailable_free_storage),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.used, this, true)
-                                )
-
+                        if (userQuota.available < 0) { // Pending, unknown or unlimited free storage
+                            getAccountQuotaBar()?.apply {
+                                isVisible = true
+                                progress = 0
                             }
+                            getAccountQuotaText()?.text = String.format(
+                                getString(R.string.drawer_unavailable_free_storage),
+                                DisplayUtils.bytesToHumanReadable(userQuota.used, this, true)
+                            )
 
-                            userQuota.state == EXCEEDED_STATE -> {
-                                getAccountQuotaBar()?.run {
-                                    isVisible = true
-                                    progress = 100
-                                    progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
-                                }
-                                getAccountQuotaText()?.run {
-                                    text = String.format(
-                                        getString(R.string.drawer_exceeded_quota),
-                                        DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
-                                        DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
-                                        userQuota.getRelative()
-                                    )
-                                }
+                        } else if (userQuota.state == EXCEEDED_STATE) {
+                            getAccountQuotaBar()?.apply {
+                                isVisible = true
+                                progress = 100
+                                progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
                             }
-
-                            userQuota.available == 0L -> { // Quota 0, guest users
-                                getAccountQuotaBar()?.isVisible = false
-                                getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
-                            }
-
-                            userQuota.state == NEARING_STATE -> {
-                                getAccountQuotaBar()?.run {
-                                    isVisible = true
-                                    progress = ceil(userQuota.getRelative()).toInt()
-                                }
-                                getAccountQuotaText()?.run {
-                                    text = String.format(
-                                        getString(R.string.drawer_nearing_quota),
-                                        DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
-                                        DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
-                                        userQuota.getRelative()
-                                    )
-                                }
-                            }
-
-                            userQuota.state == CRITICAL_STATE -> {
-                                getAccountQuotaBar()?.run {
-                                    isVisible = true
-                                    progress = ceil(userQuota.getRelative()).toInt()
-                                }
-                                getAccountQuotaText()?.run {
-                                    text = String.format(
-                                        getString(R.string.drawer_critical_quota),
-                                        DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
-                                        DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
-                                        userQuota.getRelative()
-                                    )
-                                }
-                            }
-
-                            else -> { // Limited quota
-                                // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
-                                getAccountQuotaBar()?.run {
-                                    progress = ceil(userQuota.getRelative()).toInt()
-                                    isVisible = true
-                                }
-                                getAccountQuotaText()?.text = String.format(
-                                    getString(R.string.drawer_quota),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.used, this, true),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.total, this, true),
+                            getAccountQuotaText()?.apply {
+                                text = String.format(
+                                    getString(R.string.drawer_exceeded_quota),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
                                     userQuota.getRelative()
                                 )
                             }
+
+                        } else if (userQuota.available == 0L) { // Quota 0, guest users
+                            getAccountQuotaBar()?.isVisible = false
+                            getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
+
+                        } else if (userQuota.state == NEARING_STATE) {
+                            getAccountQuotaBar()?.apply {
+                                isVisible = true
+                                progress = userQuota.getRelative().toInt()
+                            }
+                            getAccountQuotaText()?.apply {
+                                text = String.format(
+                                    getString(R.string.drawer_nearing_quota),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
+                                    userQuota.getRelative()
+                                )
+                            }
+
+                        } else if (userQuota.state == CRITICAL_STATE) {
+                            getAccountQuotaBar()?.apply {
+                                isVisible = true
+                                progress = userQuota.getRelative().toInt()
+                            }
+                            getAccountQuotaText()?.apply {
+                                text = String.format(
+                                    getString(R.string.drawer_critical_quota),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
+                                    userQuota.getRelative()
+                                )
+                            }
+
+                        } else { // Limited quota
+                            // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
+                            getAccountQuotaBar()?.apply {
+                                progress = userQuota.getRelative().toInt()
+                                isVisible = true
+                            }
+                            getAccountQuotaText()?.text = String.format(
+                                getString(R.string.drawer_quota),
+                                DisplayUtils.bytesToHumanReadable(userQuota.used, this, true),
+                                DisplayUtils.bytesToHumanReadable(userQuota.total, this, true),
+                                userQuota.getRelative()
+                            )
                         }
                     }
                 }

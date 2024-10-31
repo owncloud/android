@@ -43,7 +43,6 @@ import com.owncloud.android.presentation.avatar.AvatarUtils
 import com.owncloud.android.utils.DisplayUtils
 import com.owncloud.android.utils.PreferenceUtils
 import timber.log.Timber
-import kotlin.math.ceil
 
 class ManageAccountsAdapter(
     private val accountListener: AccountAdapterListener,
@@ -156,38 +155,32 @@ class ManageAccountsAdapter(
     fun getItem(position: Int) = accountItemsList[position]
 
     private fun updateQuota(quotaText: TextView, quotaBar: ProgressBar, userQuota: UserQuota, context: Context) {
-        when {
-            userQuota.available < 0 -> {
-                quotaBar.visibility = View.GONE
-                quotaText.text = DisplayUtils.bytesToHumanReadable(userQuota.used, context, false)
-            }
+        if (userQuota.available < 0) {
+            quotaBar.visibility = View.GONE
+            quotaText.text = DisplayUtils.bytesToHumanReadable(userQuota.used, context, false)
 
-            userQuota.state == EXCEEDED_STATE -> {
-                quotaBar.run {
-                    progress = 100
-                    progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
-                }
-                quotaText.text = String.format(
-                    context.getString(R.string.manage_accounts_quota),
-                    DisplayUtils.bytesToHumanReadable(userQuota.used, context, false),
-                    DisplayUtils.bytesToHumanReadable(userQuota.total, context, false)
-                )
+        } else if (userQuota.state == EXCEEDED_STATE) {
+            quotaBar.apply {
+                progress = 100
+                progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
             }
+            quotaText.text = String.format(
+                context.getString(R.string.manage_accounts_quota),
+                DisplayUtils.bytesToHumanReadable(userQuota.used, context, false),
+                DisplayUtils.bytesToHumanReadable(userQuota.total, context, false)
+            )
 
-            userQuota.available == 0L ->  {
-                quotaBar.visibility = View.GONE
-                quotaText.text = context.getString(R.string.drawer_unavailable_used_storage)
+        } else if (userQuota.available == 0L) {
+            quotaBar.visibility = View.GONE
+            quotaText.text = context.getString(R.string.drawer_unavailable_used_storage)
 
-            }
-
-            else -> {
-                quotaBar.progress = ceil(userQuota.getRelative()).toInt()
-                quotaText.text = String.format(
-                    context.getString(R.string.manage_accounts_quota),
-                    DisplayUtils.bytesToHumanReadable(userQuota.used, context, false),
-                    DisplayUtils.bytesToHumanReadable(userQuota.total, context, false)
-                )
-            }
+        } else {
+            quotaBar.progress = userQuota.getRelative().toInt()
+            quotaText.text = String.format(
+                context.getString(R.string.manage_accounts_quota),
+                DisplayUtils.bytesToHumanReadable(userQuota.used, context, false),
+                DisplayUtils.bytesToHumanReadable(userQuota.total, context, false)
+            )
         }
     }
 
