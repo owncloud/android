@@ -358,6 +358,8 @@
   <string name="auth_account_does_not_exist">Conta ainda não existe no dispositivo</string>
   <string name="set_available_offline">Definir como disponível offline</string>
   <string name="unset_available_offline">Definir como não disponível offline</string>
+  <string name="confirmation_set_available_offline">O arquivo foi definido como disponível offline corretamente</string>
+  <string name="confirmation_unset_available_offline">O arquivo foi desmarcado como disponível offline corretamente</string>
   <string name="common_rename">Renomear</string>
   <string name="common_remove">Remover</string>
   <string name="confirmation_remove_file_alert">Você realmente deseja remover %1$s?</string>
@@ -671,6 +673,8 @@
   <string name="release_notes_icon">Ícone de nota de lançamento</string>
   <string name="release_notes_bugfixes_title">Pequenas correções de bugs</string>
   <string name="release_notes_bugfixes_subtitle">Alguns bugs foram corrigidos para melhorar a experiência no aplicativo</string>
+  <string name="release_notes_4_5_0_title_feedback_in_previews">Feedback quando (in)definir av. offline em todas as visualizações</string>
+  <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Adicionado feedback ao (des)configurar o av. offline em todas as visualizações e menu de opções atualizado dependendo do status do arquivo</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Abrir na web</string>
   <string name="ic_action_open_with_web">Abrir em%1$s (web)</string>
@@ -749,6 +753,7 @@
   <string name="link_role_accessibility">Linque</string>
   <string name="button_role_accessibility">Botão</string>
   <string name="folder_picker_label">Selecionador de pastas</string>
+  <string name="passcode_label">Senha</string>
   <string name="pattern_label">Padrão</string>
   <string name="receive_external_files_label">Recebe arquivos externos</string>
   <string name="video_preview_label">Pré-visualição de vídeo</string>
@@ -760,4 +765,5 @@
   <string name="details_label">Detalhes</string>
   <string name="text_preview_label">Pré-visualição de texto</string>
   <string name="release_notes_title_enhanced_bottom_nav_bar">Adicionou rótulos de texto na barra inferior</string>
+  <string name="release_notes_subtitle_bottom_nav_bar">Rótulos de texto foram adicionados e o indicador ativo padrão é usado para mostrar qual seção está selecionada na barra inferior</string>
 </resources>
