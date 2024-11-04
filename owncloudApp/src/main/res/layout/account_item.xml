@@ -20,13 +20,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="?android:attr/selectableItemBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:background="?android:attr/selectableItemBackground"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp">
 
         <ImageView
@@ -128,8 +128,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="@dimen/standard_margin"
+        android:layout_marginEnd="@dimen/standard_margin"
         android:layout_marginTop="@dimen/standard_half_margin">
 
         <TextView
@@ -146,10 +146,7 @@
             android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:layout_marginTop="3dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints" />
+            android:layout_marginTop="3dp" />
 
         <TextView
             android:id="@+id/manage_accounts_quota_text"
@@ -157,10 +154,7 @@
             android:layout_height="wrap_content"
             android:text="@string/drawer_loading_quota"
             android:textColor="@color/textColor"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/manage_accounts_quota_bar" />
+            android:textSize="14sp" />
     </LinearLayout>
 
 </LinearLayout>
