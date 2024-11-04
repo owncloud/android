@@ -36,6 +36,7 @@ ownCloud admins and users.
 
 * Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
 * Enhancement - Add status message when (un)setting av. offline from preview: [#4382](https://github.com/owncloud/android/issues/4382)
+* Enhancement - Upgraded AGP version to 8.7.2: [#4478](https://github.com/owncloud/android/issues/4478)
 * Enhancement - Added text labels for BottomNavigationView: [#4484](https://github.com/owncloud/android/issues/4484)
 
 ## Details
@@ -56,6 +57,14 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4382
    https://github.com/owncloud/android/pull/4482
+
+* Enhancement - Upgraded AGP version to 8.7.2: [#4478](https://github.com/owncloud/android/issues/4478)
+
+   The Android Gradle Plugin version has been upgraded to 8.7.2, together with
+   Gradle version (updated to 8.9) and JDK version (updated to JBR 17).
+
+   https://github.com/owncloud/android/issues/4478
+   https://github.com/owncloud/android/pull/4507
 
 * Enhancement - Added text labels for BottomNavigationView: [#4484](https://github.com/owncloud/android/issues/4484)
 
