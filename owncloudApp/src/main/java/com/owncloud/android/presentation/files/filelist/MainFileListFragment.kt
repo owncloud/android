@@ -146,7 +146,12 @@ class MainFileListFragment : Fragment(),
     }
     private val fileOperationsViewModel by sharedViewModel<FileOperationsViewModel>()
     private val transfersViewModel by viewModel<TransfersViewModel>()
-    private val spacesListViewModel: SpacesListViewModel by viewModel { parametersOf(AccountUtils.getCurrentOwnCloudAccount(requireContext()).name, false) }
+    private val spacesListViewModel: SpacesListViewModel by viewModel {
+        parametersOf(
+            requireArguments().getString(BUNDLE_ACCOUNT_NAME),
+            false,
+        )
+    }
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
@@ -1525,6 +1530,7 @@ class MainFileListFragment : Fragment(),
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
         val ARG_INITIAL_FOLDER_TO_DISPLAY = "${MainFileListFragment::class.java.canonicalName}.ARG_INITIAL_FOLDER_TO_DISPLAY}"
         val ARG_FILE_LIST_OPTION = "${MainFileListFragment::class.java.canonicalName}.FILE_LIST_OPTION}"
+        const val BUNDLE_ACCOUNT_NAME = "accountName"
         const val MAX_FILENAME_LENGTH = 223
         val forbiddenChars = listOf('/', '\\')
 
@@ -1539,11 +1545,13 @@ class MainFileListFragment : Fragment(),
             initialFolderToDisplay: OCFile,
             pickingAFolder: Boolean = false,
             fileListOption: FileListOption = FileListOption.ALL_FILES,
+            accountName: String,
         ): MainFileListFragment {
             val args = Bundle()
             args.putParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY, initialFolderToDisplay)
             args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
             args.putParcelable(ARG_FILE_LIST_OPTION, fileListOption)
+            args.putString(BUNDLE_ACCOUNT_NAME, accountName)
             return MainFileListFragment().apply { arguments = args }
         }
     }

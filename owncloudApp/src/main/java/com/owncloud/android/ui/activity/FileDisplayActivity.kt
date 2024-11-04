@@ -389,6 +389,7 @@ class FileDisplayActivity : FileActivity(),
         val mainListOfFiles = MainFileListFragment.newInstance(
             initialFolderToDisplay = file,
             fileListOption = fileListOption,
+            accountName = getCurrentOwnCloudAccount(applicationContext).name
         ).apply {
             fileActions = this@FileDisplayActivity
             uploadActions = this@FileDisplayActivity

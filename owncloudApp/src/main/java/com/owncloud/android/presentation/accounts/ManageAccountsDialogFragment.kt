@@ -41,6 +41,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.MainApp
 import com.owncloud.android.R
+import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.extensions.avoidScreenshotsIfNeeded
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
 import com.owncloud.android.extensions.showErrorInSnackbar
@@ -76,6 +77,12 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
         val inflater = this.layoutInflater
         dialogView = inflater.inflate(R.layout.manage_accounts_dialog, null)
         builder.setView(dialogView)
+
+        val recyclerView = dialogView.findViewById<RecyclerView>(R.id.account_list_recycler_view)
+        recyclerView.apply {
+            filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(requireContext())
+            layoutManager = LinearLayoutManager(requireContext())
+        }
 
         val closeButton = dialogView.findViewById<ImageView>(R.id.cross)
         closeButton.setOnClickListener {
@@ -186,7 +193,9 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
         if (future.isDone) {
             if (currentAccount == manageAccountsViewModel.getCurrentAccount()) {
                 // Create new adapter with the remaining accounts
-                accountListAdapter.submitAccountList(accountList = getAccountListItems())
+                collectLatestLifecycleFlow(manageAccountsViewModel.userQuotas) { listUserQuotas ->
+                    accountListAdapter.submitAccountList(accountList = getAccountListItems(listUserQuotas))
+                }
             } else if (manageAccountsViewModel.getLoggedAccounts().isEmpty()) {
                 // Show create account screen if there isn't any account
                 createAccount()
@@ -249,15 +258,10 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
                 manageAccountsLayout.visibility = View.VISIBLE
 
                 accountListAdapter = ManageAccountsAdapter(this)
-                accountListAdapter.submitAccountList(accountList = getAccountListItems())
+                accountListAdapter.submitAccountList(accountList = getAccountListItems(listUserQuotas))
 
                 val recyclerView = dialogView.findViewById<RecyclerView>(R.id.account_list_recycler_view)
-
-                recyclerView.apply {
-                    filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(requireContext())
-                    adapter = accountListAdapter
-                    layoutManager = LinearLayoutManager(requireContext())
-                }
+                recyclerView.adapter = accountListAdapter
             }
         }
     }
@@ -267,24 +271,20 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
      *
      * @return list of account list items
      */
-    private fun getAccountListItems(): List<ManageAccountsAdapter.AccountRecyclerItem> {
+    private fun getAccountListItems(userQuotasList: List<UserQuota>): List<ManageAccountsAdapter.AccountRecyclerItem> {
         val accountList = manageAccountsViewModel.getLoggedAccounts()
         val provisionalAccountList = mutableListOf<ManageAccountsAdapter.AccountRecyclerItem>()
-
-        collectLatestLifecycleFlow(manageAccountsViewModel.userQuotas) { userQuotasList ->
-            accountList.forEach { account ->
-                val userQuota = userQuotasList.firstOrNull { userQuota -> userQuota.accountName == account.name }
-                if (userQuota != null) {
-                    provisionalAccountList.add(ManageAccountsAdapter.AccountRecyclerItem.AccountItem(account, userQuota))
-                }
-            }
-
-            // Add Create Account item at the end of account list if multi-account is enabled
-            if (resources.getBoolean(R.bool.multiaccount_support) || accountList.isEmpty() || userQuotasList.isNotEmpty()) {
-                provisionalAccountList.add(ManageAccountsAdapter.AccountRecyclerItem.NewAccount)
+        accountList.forEach { account ->
+            val userQuota = userQuotasList.firstOrNull { userQuota -> userQuota.accountName == account.name }
+            if (userQuota != null) {
+                provisionalAccountList.add(ManageAccountsAdapter.AccountRecyclerItem.AccountItem(account, userQuota))
             }
         }
 
+        // Add Create Account item at the end of account list if multi-account is enabled
+        if (resources.getBoolean(R.bool.multiaccount_support) || accountList.isEmpty() || userQuotasList.isNotEmpty()) {
+            provisionalAccountList.add(ManageAccountsAdapter.AccountRecyclerItem.NewAccount)
+        }
         return provisionalAccountList
     }
 
