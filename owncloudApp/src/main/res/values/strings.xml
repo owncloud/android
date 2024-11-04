@@ -30,9 +30,9 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_loading_quota">Loading quota</string>
     <string name="drawer_quota">%1$s of %2$s used (%3$s %%)</string>
-    <string name="drawer_exceeded_quota">%1$s of %2$s used (%3$s %%)\nStorage full</string>
-    <string name="drawer_nearing_quota">%1$s of %2$s used (%3$s %%)\nStorage nearly full</string>
-    <string name="drawer_critical_quota">%1$s of %2$s used (%3$s %%)\nStorage very nearly full</string>
+    <string name="drawer_exceeded_quota">Storage full</string>
+    <string name="drawer_nearing_quota">Storage nearly full</string>
+    <string name="drawer_critical_quota">Storage very nearly full</string>
     <string name="drawer_unavailable_free_storage">%1$s in use</string>
     <string name="drawer_unavailable_used_storage">No storage usage information available</string>
     <string name="drawer_feedback">Feedback</string>

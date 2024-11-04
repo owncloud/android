@@ -328,12 +328,17 @@ abstract class DrawerActivity : ToolbarActivity() {
                             }
                             getAccountQuotaText()?.apply {
                                 text = String.format(
-                                    getString(R.string.drawer_exceeded_quota),
+                                    getString(R.string.drawer_quota),
                                     DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
                                     DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
                                     userQuota.getRelative()
                                 )
                             }
+                            getAccountQuotaStatusText()?.apply {
+                                visibility = View.VISIBLE
+                                text = getString(R.string.drawer_exceeded_quota)
+                            }
+
 
                         } else if (userQuota.available == 0L) { // Quota 0, guest users
                             getAccountQuotaBar()?.isVisible = false
@@ -346,11 +351,15 @@ abstract class DrawerActivity : ToolbarActivity() {
                             }
                             getAccountQuotaText()?.apply {
                                 text = String.format(
-                                    getString(R.string.drawer_nearing_quota),
+                                    getString(R.string.drawer_quota),
                                     DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
                                     DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
                                     userQuota.getRelative()
                                 )
+                            }
+                            getAccountQuotaStatusText()?.apply {
+                                visibility = View.VISIBLE
+                                text = getString(R.string.drawer_nearing_quota)
                             }
 
                         } else if (userQuota.state == CRITICAL_STATE) {
@@ -360,11 +369,15 @@ abstract class DrawerActivity : ToolbarActivity() {
                             }
                             getAccountQuotaText()?.apply {
                                 text = String.format(
-                                    getString(R.string.drawer_critical_quota),
+                                    getString(R.string.drawer_quota),
                                     DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
                                     DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
                                     userQuota.getRelative()
                                 )
+                            }
+                            getAccountQuotaStatusText()?.apply {
+                                visibility = View.VISIBLE
+                                text = getString(R.string.drawer_critical_quota)
                             }
 
                         } else { // Limited quota
@@ -540,6 +553,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     private fun getDrawerLinkIcon(): ImageView? = findViewById(R.id.drawer_link_icon)
     private fun getDrawerLinkText(): TextView? = findViewById(R.id.drawer_link_text)
     private fun getAccountQuotaText(): TextView? = findViewById(R.id.account_quota_text)
+    private fun getAccountQuotaStatusText(): TextView? = findViewById(R.id.account_quota_status_text)
     private fun getAccountQuotaBar(): ProgressBar? = findViewById(R.id.account_quota_bar)
     private fun getDrawerActiveUser() = findNavigationViewChildById(R.id.drawer_active_user) as ConstraintLayout?
     private fun getDrawerCurrentAccount() = findNavigationViewChildById(R.id.drawer_current_account) as AppCompatImageView?
