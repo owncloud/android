@@ -23,6 +23,7 @@ package com.owncloud.android.testutil
 import com.owncloud.android.domain.automaticuploads.model.FolderBackUpConfiguration
 import com.owncloud.android.domain.automaticuploads.model.UploadBehavior
 import com.owncloud.android.data.folderbackup.db.FolderBackUpEntity
+import com.owncloud.android.domain.automaticuploads.model.AutomaticUploadsConfiguration
 
 val OC_BACKUP = FolderBackUpConfiguration(
     accountName = "",
@@ -46,4 +47,9 @@ val OC_BACKUP_ENTITY = FolderBackUpEntity(
     lastSyncTimestamp = 1542628397,
     name = "",
     spaceId = null,
+)
+
+val OC_AUTOMATIC_UPLOADS_CONFIGURATION = AutomaticUploadsConfiguration(
+    pictureUploadsConfiguration = OC_BACKUP,
+    videoUploadsConfiguration = OC_BACKUP
 )
