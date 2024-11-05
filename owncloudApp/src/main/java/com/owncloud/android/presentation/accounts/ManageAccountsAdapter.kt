@@ -167,7 +167,7 @@ class ManageAccountsAdapter(
             quotaText.text = String.format(
                 context.getString(R.string.manage_accounts_quota),
                 DisplayUtils.bytesToHumanReadable(userQuota.used, context, false),
-                DisplayUtils.bytesToHumanReadable(userQuota.total, context, false)
+                DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, false)
             )
 
         } else if (userQuota.available == 0L) {
@@ -179,7 +179,7 @@ class ManageAccountsAdapter(
             quotaText.text = String.format(
                 context.getString(R.string.manage_accounts_quota),
                 DisplayUtils.bytesToHumanReadable(userQuota.used, context, false),
-                DisplayUtils.bytesToHumanReadable(userQuota.total, context, false)
+                DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, false)
             )
         }
     }

@@ -55,8 +55,8 @@ class OCLocalUserDataSource(
                 accountName = accountName,
                 available = available,
                 used = used,
-                total = total!!,
-                state = state!!
+                total = total,
+                state = state
             )
 
         @VisibleForTesting

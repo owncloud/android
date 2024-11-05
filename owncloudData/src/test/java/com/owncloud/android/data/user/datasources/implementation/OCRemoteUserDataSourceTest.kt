@@ -55,7 +55,7 @@ class OCRemoteUserDataSourceTest {
         used = OC_USER_QUOTA.used,
         free = OC_USER_QUOTA.available,
         relative = OC_USER_QUOTA.getRelative(),
-        total = OC_USER_QUOTA.total
+        total = OC_USER_QUOTA.getTotal()
     )
     private val remoteAvatar = RemoteAvatarData(
         avatarData = OC_USER_AVATAR.avatarData,

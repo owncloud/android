@@ -28,16 +28,18 @@ data class UserQuota(
     val accountName: String,
     val available: Long,
     val used: Long,
-    val total: Long,
-    val state: String
+    val total: Long?,
+    val state: String?
 ) {
 
     fun getRelative(): Double {
-        if (total == 0L) {
+        if (getTotal() == 0L) {
             return 0.0
         } else {
-            val relativeQuota = (used * 100).toDouble() / total
+            val relativeQuota = (used * 100).toDouble() / getTotal()
             return (relativeQuota * 100).roundToLong() / 100.0
         }
     }
+
+    fun getTotal(): Long = total ?: (available + used)
 }
