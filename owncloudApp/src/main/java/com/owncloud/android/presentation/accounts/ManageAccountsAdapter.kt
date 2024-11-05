@@ -159,7 +159,7 @@ class ManageAccountsAdapter(
             quotaBar.visibility = View.GONE
             quotaText.text = DisplayUtils.bytesToHumanReadable(userQuota.used, context, false)
 
-        } else if (userQuota.state == EXCEEDED_STATE) {
+        } else if (userQuota.isExceeded()) {
             quotaBar.apply {
                 progress = 100
                 progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
@@ -218,7 +218,4 @@ class ManageAccountsAdapter(
         fun switchAccount(position: Int)
     }
 
-    companion object {
-        private const val EXCEEDED_STATE = "exceeded"
-    }
 }

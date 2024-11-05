@@ -286,7 +286,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     open fun openDrawer() {
         getDrawerLayout()?.openDrawer(GravityCompat.START)
         findViewById<View>(R.id.nav_view).requestFocus()
-        updateQuota()
+        drawerViewModel.getStoredQuota(account.name)
     }
 
     /**
@@ -320,7 +320,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 DisplayUtils.bytesToHumanReadable(userQuota.used, this, true)
                             )
 
-                        } else if (userQuota.state == EXCEEDED_STATE) {
+                        } else if (userQuota.isExceeded()) {
                             getAccountQuotaBar()?.apply {
                                 isVisible = true
                                 progress = 100
@@ -330,7 +330,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 text = String.format(
                                     getString(R.string.drawer_quota),
                                     DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
                                     userQuota.getRelative()
                                 )
                             }
@@ -344,7 +344,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                             getAccountQuotaBar()?.isVisible = false
                             getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
 
-                        } else if (userQuota.state == NEARING_STATE) {
+                        } else if (userQuota.isNearing()) {
                             getAccountQuotaBar()?.apply {
                                 isVisible = true
                                 progress = userQuota.getRelative().toInt()
@@ -353,7 +353,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 text = String.format(
                                     getString(R.string.drawer_quota),
                                     DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
                                     userQuota.getRelative()
                                 )
                             }
@@ -362,7 +362,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 text = getString(R.string.drawer_nearing_quota)
                             }
 
-                        } else if (userQuota.state == CRITICAL_STATE) {
+                        } else if (userQuota.isCritical()) {
                             getAccountQuotaBar()?.apply {
                                 isVisible = true
                                 progress = userQuota.getRelative().toInt()
@@ -371,7 +371,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 text = String.format(
                                     getString(R.string.drawer_quota),
                                     DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.total, context, true),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
                                     userQuota.getRelative()
                                 )
                             }
@@ -389,7 +389,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                             getAccountQuotaText()?.text = String.format(
                                 getString(R.string.drawer_quota),
                                 DisplayUtils.bytesToHumanReadable(userQuota.used, this, true),
-                                DisplayUtils.bytesToHumanReadable(userQuota.total, this, true),
+                                DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this, true),
                                 userQuota.getRelative()
                             )
                         }
@@ -594,8 +594,5 @@ abstract class DrawerActivity : ToolbarActivity() {
         const val SURVEY_URL = "https://owncloud.com/android-app-feedback"
         private const val KEY_IS_ACCOUNT_CHOOSER_ACTIVE = "IS_ACCOUNT_CHOOSER_ACTIVE"
         private const val KEY_CHECKED_MENU_ITEM = "CHECKED_MENU_ITEM"
-        private const val EXCEEDED_STATE = "exceeded"
-        private const val NEARING_STATE = "nearing"
-        private const val CRITICAL_STATE = "critical"
     }
 }
