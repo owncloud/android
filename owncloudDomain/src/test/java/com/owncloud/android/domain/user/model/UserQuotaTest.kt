@@ -37,7 +37,7 @@ class UserQuotaTest {
 
         assertEquals(800, item.available)
         assertEquals(200, item.used)
-        assertEquals(1000, item.total)
+        assertEquals(1000, item.getTotal())
     }
 
     @Test
