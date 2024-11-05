@@ -314,11 +314,13 @@ abstract class DrawerActivity : ToolbarActivity() {
                             getAccountQuotaBar()?.apply {
                                 isVisible = true
                                 progress = 0
+                                progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
                             }
                             getAccountQuotaText()?.text = String.format(
                                 getString(R.string.drawer_unavailable_free_storage),
                                 DisplayUtils.bytesToHumanReadable(userQuota.used, this, true)
                             )
+                            getAccountQuotaStatusText()?.visibility = View.GONE
 
                         } else if (userQuota.isExceeded()) {
                             getAccountQuotaBar()?.apply {
@@ -343,11 +345,13 @@ abstract class DrawerActivity : ToolbarActivity() {
                         } else if (userQuota.available == 0L) { // Quota 0, guest users
                             getAccountQuotaBar()?.isVisible = false
                             getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
+                            getAccountQuotaStatusText()?.visibility = View.GONE
 
                         } else if (userQuota.isNearing()) {
                             getAccountQuotaBar()?.apply {
                                 isVisible = true
                                 progress = userQuota.getRelative().toInt()
+                                progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
                             }
                             getAccountQuotaText()?.apply {
                                 text = String.format(
@@ -366,6 +370,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                             getAccountQuotaBar()?.apply {
                                 isVisible = true
                                 progress = userQuota.getRelative().toInt()
+                                progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
                             }
                             getAccountQuotaText()?.apply {
                                 text = String.format(
@@ -385,6 +390,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                             getAccountQuotaBar()?.apply {
                                 progress = userQuota.getRelative().toInt()
                                 isVisible = true
+                                progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
                             }
                             getAccountQuotaText()?.text = String.format(
                                 getString(R.string.drawer_quota),
@@ -392,6 +398,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this, true),
                                 userQuota.getRelative()
                             )
+                            getAccountQuotaStatusText()?.visibility = View.GONE
                         }
                     }
                 }

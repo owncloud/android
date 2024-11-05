@@ -184,7 +184,7 @@ class FileDisplayActivity : FileActivity(),
 
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
     private val transfersViewModel: TransfersViewModel by viewModel()
-    private lateinit var spacesListViewModel : SpacesListViewModel
+    private lateinit var spacesListViewModel: SpacesListViewModel
 
     private val sharedPreferences: SharedPreferencesProvider by inject()
 
