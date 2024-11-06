@@ -322,7 +322,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                             )
                             getAccountQuotaStatusText()?.visibility = View.GONE
 
-                        } else if (userQuota.isExceeded()) {
+                        } else if (userQuota.isExceeded()) { // Exceeded storage. The value is over 100%
                             getAccountQuotaBar()?.apply {
                                 isVisible = true
                                 progress = 100
@@ -342,12 +342,12 @@ abstract class DrawerActivity : ToolbarActivity() {
                             }
 
 
-                        } else if (userQuota.available == 0L) { // Quota 0, guest users
+                        } else if (userQuota.available == 0L) { // Exceeded storage in oC10, quota 0, guest users
                             getAccountQuotaBar()?.isVisible = false
                             getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
                             getAccountQuotaStatusText()?.visibility = View.GONE
 
-                        } else if (userQuota.isNearing()) {
+                        } else if (userQuota.isNearing()) { // Nearing storage. Value between 75% and 90%
                             getAccountQuotaBar()?.apply {
                                 isVisible = true
                                 progress = userQuota.getRelative().toInt()
@@ -366,7 +366,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 text = getString(R.string.drawer_nearing_quota)
                             }
 
-                        } else if (userQuota.isCritical()) {
+                        } else if (userQuota.isCritical()) { // Critical storage. Value over 90%
                             getAccountQuotaBar()?.apply {
                                 isVisible = true
                                 progress = userQuota.getRelative().toInt()
@@ -385,7 +385,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 text = getString(R.string.drawer_critical_quota)
                             }
 
-                        } else { // Limited quota
+                        } else { // Limited storage. Value under 75%
                             // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
                             getAccountQuotaBar()?.apply {
                                 progress = userQuota.getRelative().toInt()
