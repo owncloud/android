@@ -30,12 +30,14 @@ import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.automaticuploads.model.AutomaticUploadsConfiguration
 import com.owncloud.android.domain.automaticuploads.usecases.GetAutomaticUploadsConfigurationUseCase
+import com.owncloud.android.domain.user.usecases.GetUserQuotasAsStreamUseCase
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.ViewModelExt.runUseCaseWithResult
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.providers.AccountProvider
 import com.owncloud.android.providers.CoroutinesDispatcherProvider
 import com.owncloud.android.usecases.files.RemoveLocalFilesForAccountUseCase
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -44,22 +46,20 @@ class ManageAccountsViewModel(
     private val accountProvider: AccountProvider,
     private val removeLocalFilesForAccountUseCase: RemoveLocalFilesForAccountUseCase,
     private val getAutomaticUploadsConfigurationUseCase: GetAutomaticUploadsConfigurationUseCase,
-    private val getUserQuotasUseCase: GetUserQuotasUseCase,
+    getUserQuotasAsStreamUseCase: GetUserQuotasAsStreamUseCase,
     private val coroutinesDispatcherProvider: CoroutinesDispatcherProvider,
 ) : ViewModel() {
 
     private val _cleanAccountLocalStorageFlow = MutableStateFlow<Event<UIResult<Unit>>?>(null)
     val cleanAccountLocalStorageFlow: StateFlow<Event<UIResult<Unit>>?> = _cleanAccountLocalStorageFlow
 
-    private val _userQuotas = MutableStateFlow<List<UserQuota>>(emptyList())
-    val userQuotas: StateFlow<List<UserQuota>> get() = _userQuotas
+    val userQuotas: Flow<List<UserQuota>> = getUserQuotasAsStreamUseCase(Unit)
 
     private var automaticUploadsConfiguration: AutomaticUploadsConfiguration? = null
 
     init {
         viewModelScope.launch(coroutinesDispatcherProvider.io) {
             automaticUploadsConfiguration = getAutomaticUploadsConfigurationUseCase(Unit).getDataOrNull()
-            _userQuotas.value = getUserQuotasUseCase(Unit)
         }
     }
 

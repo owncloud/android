@@ -104,6 +104,7 @@ import com.owncloud.android.domain.user.usecases.GetStoredQuotaUseCase
 import com.owncloud.android.domain.user.usecases.GetUserAvatarAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserInfoAsyncUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
+import com.owncloud.android.domain.user.usecases.GetUserQuotasAsStreamUseCase
 import com.owncloud.android.domain.user.usecases.RefreshUserQuotaFromServerAsyncUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstanceFromWebFingerUseCase
 import com.owncloud.android.domain.webfinger.usecases.GetOwnCloudInstancesFromAuthenticatedWebFingerUseCase
@@ -255,6 +256,7 @@ val useCaseModule = module {
     factoryOf(::GetUserAvatarAsyncUseCase)
     factoryOf(::GetUserInfoAsyncUseCase)
     factoryOf(::GetUserQuotasUseCase)
+    factoryOf(::GetUserQuotasAsStreamUseCase)
     factoryOf(::RefreshUserQuotaFromServerAsyncUseCase)
 
     // Server

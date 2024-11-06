@@ -20,6 +20,7 @@
 package com.owncloud.android.data.user.datasources
 
 import com.owncloud.android.domain.user.model.UserQuota
+import kotlinx.coroutines.flow.Flow
 
 interface LocalUserDataSource {
     fun saveQuotaForAccount(
@@ -32,6 +33,8 @@ interface LocalUserDataSource {
     ): UserQuota?
 
     fun getAllUserQuotas(): List<UserQuota>
+
+    fun getAllUserQuotasAsStream(): Flow<List<UserQuota>>
 
     fun deleteQuotaForAccount(
         accountName: String

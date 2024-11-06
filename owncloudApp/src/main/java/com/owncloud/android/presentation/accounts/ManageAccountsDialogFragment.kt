@@ -69,6 +69,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
 
         parentActivity = requireActivity() as ToolbarActivity
         currentAccount = requireArguments().getParcelable(KEY_CURRENT_ACCOUNT)
+
         subscribeToViewModels()
     }
 
@@ -191,12 +192,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
      */
     override fun run(future: AccountManagerFuture<Boolean>) {
         if (future.isDone) {
-            if (currentAccount == manageAccountsViewModel.getCurrentAccount()) {
-                // Create new adapter with the remaining accounts
-                collectLatestLifecycleFlow(manageAccountsViewModel.userQuotas) { listUserQuotas ->
-                    accountListAdapter.submitAccountList(accountList = getAccountListItems(listUserQuotas))
-                }
-            } else if (manageAccountsViewModel.getLoggedAccounts().isEmpty()) {
+           if (manageAccountsViewModel.getLoggedAccounts().isEmpty()) {
                 // Show create account screen if there isn't any account
                 createAccount()
             } else { // At least one account left
@@ -282,7 +278,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
         }
 
         // Add Create Account item at the end of account list if multi-account is enabled
-        if (resources.getBoolean(R.bool.multiaccount_support) || accountList.isEmpty() || userQuotasList.isNotEmpty()) {
+        if (resources.getBoolean(R.bool.multiaccount_support) || accountList.isEmpty()) {
             provisionalAccountList.add(ManageAccountsAdapter.AccountRecyclerItem.NewAccount)
         }
         return provisionalAccountList

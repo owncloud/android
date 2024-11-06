@@ -24,6 +24,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.owncloud.android.data.ProviderMeta
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
@@ -34,6 +35,9 @@ interface UserDao {
 
     @Query(SELECT_ALL_QUOTAS)
     fun getAllUserQuotas(): List<UserQuotaEntity>
+
+    @Query(SELECT_ALL_QUOTAS)
+    fun getAllUserQuotasAsStream(): Flow<List<UserQuotaEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrReplace(userQuotaEntity: UserQuotaEntity)

@@ -27,6 +27,7 @@ import com.owncloud.android.domain.user.UserRepository
 import com.owncloud.android.domain.user.model.UserAvatar
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.domain.user.model.UserQuota
+import kotlinx.coroutines.flow.Flow
 
 class OCUserRepository(
     private val localUserDataSource: LocalUserDataSource,
@@ -43,6 +44,9 @@ class OCUserRepository(
 
     override fun getAllUserQuotas(): List<UserQuota> =
         localUserDataSource.getAllUserQuotas()
+
+    override fun getAllUserQuotasAsStream(): Flow<List<UserQuota>> =
+        localUserDataSource.getAllUserQuotasAsStream()
 
     override fun getUserAvatar(accountName: String): UserAvatar =
         remoteUserDataSource.getUserAvatar(accountName)

@@ -28,6 +28,8 @@ import com.owncloud.android.data.user.db.UserDao
 import com.owncloud.android.data.user.db.UserQuotaEntity
 import com.owncloud.android.domain.user.model.UserQuotaStatus
 import com.owncloud.android.domain.user.model.UserQuota
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class OCLocalUserDataSource(
     private val userDao: UserDao
@@ -42,6 +44,12 @@ class OCLocalUserDataSource(
     override fun getAllUserQuotas(): List<UserQuota> {
         return userDao.getAllUserQuotas().map { userQuotaEntity ->
             userQuotaEntity.toModel()
+        }
+    }
+
+    override fun getAllUserQuotasAsStream(): Flow<List<UserQuota>> {
+        return userDao.getAllUserQuotasAsStream().map { userQuotasList ->
+            userQuotasList.map { it.toModel() }
         }
     }
 
