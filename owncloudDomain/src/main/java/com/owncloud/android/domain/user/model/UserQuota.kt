@@ -29,7 +29,7 @@ data class UserQuota(
     val available: Long,
     val used: Long,
     val total: Long?,
-    val state: String?
+    val state: UserQuotaStatus?
 ) {
 
     fun getRelative(): Double {
@@ -42,16 +42,4 @@ data class UserQuota(
     }
 
     fun getTotal(): Long = total ?: (available + used)
-
-    fun isExceeded(): Boolean = state == EXCEEDED_STATE
-
-    fun isCritical(): Boolean = state == CRITICAL_STATE
-
-    fun isNearing(): Boolean = state == NEARING_STATE
-
-    companion object {
-        private const val EXCEEDED_STATE = "exceeded"
-        private const val CRITICAL_STATE = "critical"
-        private const val NEARING_STATE = "nearing"
-    }
 }

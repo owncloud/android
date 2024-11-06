@@ -26,6 +26,7 @@ import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.data.user.db.UserDao
 import com.owncloud.android.data.user.db.UserQuotaEntity
+import com.owncloud.android.domain.user.model.UserQuotaStatus
 import com.owncloud.android.domain.user.model.UserQuota
 
 class OCLocalUserDataSource(
@@ -56,7 +57,7 @@ class OCLocalUserDataSource(
                 available = available,
                 used = used,
                 total = total,
-                state = state
+                state = UserQuotaStatus.fromValue(state!!)
             )
 
         @VisibleForTesting
@@ -66,7 +67,7 @@ class OCLocalUserDataSource(
                 available = available,
                 used = used,
                 total = total,
-                state = state
+                state = state?.value
             )
     }
 }

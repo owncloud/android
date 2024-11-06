@@ -57,6 +57,7 @@ import com.google.android.material.navigation.NavigationView
 import com.owncloud.android.R
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.files.model.FileListOption
+import com.owncloud.android.domain.user.model.UserQuotaStatus
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.openPrivacyPolicy
@@ -322,7 +323,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                             )
                             getAccountQuotaStatusText()?.visibility = View.GONE
 
-                        } else if (userQuota.isExceeded()) { // Exceeded storage. The value is over 100%
+                        } else if (userQuota.state == UserQuotaStatus.EXCEEDED) { // Exceeded storage. The value is over 100%
                             getAccountQuotaBar()?.apply {
                                 isVisible = true
                                 progress = 100
@@ -347,7 +348,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                             getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
                             getAccountQuotaStatusText()?.visibility = View.GONE
 
-                        } else if (userQuota.isNearing()) { // Nearing storage. Value between 75% and 90%
+                        } else if (userQuota.state == UserQuotaStatus.NEARING) { // Nearing storage. Value between 75% and 90%
                             getAccountQuotaBar()?.apply {
                                 isVisible = true
                                 progress = userQuota.getRelative().toInt()
@@ -366,7 +367,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                 text = getString(R.string.drawer_nearing_quota)
                             }
 
-                        } else if (userQuota.isCritical()) { // Critical storage. Value over 90%
+                        } else if (userQuota.state == UserQuotaStatus.CRITICAL) { // Critical storage. Value over 90%
                             getAccountQuotaBar()?.apply {
                                 isVisible = true
                                 progress = userQuota.getRelative().toInt()

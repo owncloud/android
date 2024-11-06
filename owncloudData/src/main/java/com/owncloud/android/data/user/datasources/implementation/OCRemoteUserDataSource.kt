@@ -23,6 +23,7 @@ package com.owncloud.android.data.user.datasources.implementation
 import com.owncloud.android.data.ClientManager
 import com.owncloud.android.data.executeRemoteOperation
 import com.owncloud.android.data.user.datasources.RemoteUserDataSource
+import com.owncloud.android.domain.user.model.UserQuotaStatus
 import com.owncloud.android.domain.user.model.UserAvatar
 import com.owncloud.android.domain.user.model.UserInfo
 import com.owncloud.android.domain.user.model.UserQuota
@@ -75,5 +76,5 @@ private fun GetRemoteUserQuotaOperation.RemoteQuota.toDomain(accountName: String
         available = this.free,
         used = this.used,
         total = this.total,
-        state = ""
+        state = UserQuotaStatus.fromValue("")
     )

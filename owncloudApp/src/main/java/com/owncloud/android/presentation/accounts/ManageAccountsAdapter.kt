@@ -35,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.owncloud.android.R
 import com.owncloud.android.databinding.AccountActionBinding
 import com.owncloud.android.databinding.AccountItemBinding
+import com.owncloud.android.domain.user.model.UserQuotaStatus
 import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.extensions.setAccessibilityRole
 import com.owncloud.android.lib.common.OwnCloudAccount
@@ -158,7 +159,7 @@ class ManageAccountsAdapter(
             quotaBar.visibility = View.GONE
             quotaText.text = DisplayUtils.bytesToHumanReadable(userQuota.used, context, false)
 
-        } else if (userQuota.isExceeded()) { // Exceeded storage. Value over 100%
+        } else if (userQuota.state == UserQuotaStatus.EXCEEDED) { // Exceeded storage. Value over 100%
             quotaBar.apply {
                 progress = 100
                 progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
