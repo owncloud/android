@@ -1,0 +1,7 @@
+Enhancement: Upgraded AGP version to 8.7.2
+
+The Android Gradle Plugin version has been upgraded to 8.7.2, together with Gradle version (updated to 8.9) and
+JDK version (updated to JBR 17).
+
+https://github.com/owncloud/android/issues/4478
+https://github.com/owncloud/android/pull/4507

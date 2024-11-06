@@ -305,7 +305,7 @@ class DownloadFileWorker(
             appContext,
             System.currentTimeMillis().toInt(),
             updateCredentialsIntent,
-            PendingIntent.FLAG_ONE_SHOT
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 
@@ -326,7 +326,7 @@ class DownloadFileWorker(
             appContext,
             System.currentTimeMillis().toInt(),
             showDetailsIntent,
-            0
+            PendingIntent.FLAG_IMMUTABLE
         )
     }
 
