@@ -127,7 +127,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/standard_margin"
         android:layout_marginEnd="@dimen/standard_margin"
         android:layout_marginTop="@dimen/standard_half_margin">
@@ -136,8 +136,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/used_quota_title_manage_accounts"
-            android:layout_marginEnd="10dp"
-            android:textSize="14sp"
+            android:layout_marginEnd="@dimen/item_file_grid_margin"
+            android:textSize="@dimen/two_line_secondary_text_size"
             android:textColor="@color/textColor"/>
 
         <ProgressBar
@@ -145,8 +145,8 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginTop="3dp" />
+            android:layout_marginEnd="@dimen/item_file_grid_margin"
+            android:layout_marginTop="@dimen/standard_quarter_margin" />
 
         <TextView
             android:id="@+id/manage_accounts_quota_text"
@@ -154,7 +154,7 @@
             android:layout_height="wrap_content"
             android:text="@string/drawer_loading_quota"
             android:textColor="@color/textColor"
-            android:textSize="14sp" />
+            android:textSize="@dimen/two_line_secondary_text_size" />
     </LinearLayout>
 
 </LinearLayout>
