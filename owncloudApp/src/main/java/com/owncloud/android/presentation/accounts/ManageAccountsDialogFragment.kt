@@ -61,6 +61,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
 
     private lateinit var dialogView: View
     private lateinit var parentActivity: ToolbarActivity
+    private lateinit var recyclerView: RecyclerView
 
     private val manageAccountsViewModel: ManageAccountsViewModel by viewModel()
 
@@ -79,11 +80,13 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
         dialogView = inflater.inflate(R.layout.manage_accounts_dialog, null)
         builder.setView(dialogView)
 
-        val recyclerView = dialogView.findViewById<RecyclerView>(R.id.account_list_recycler_view)
+        recyclerView = dialogView.findViewById(R.id.account_list_recycler_view)
         recyclerView.apply {
             filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(requireContext())
             layoutManager = LinearLayoutManager(requireContext())
         }
+
+        accountListAdapter = ManageAccountsAdapter(this)
 
         val closeButton = dialogView.findViewById<ImageView>(R.id.cross)
         closeButton.setOnClickListener {
@@ -191,20 +194,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
      * What happens when an account is removed
      */
     override fun run(future: AccountManagerFuture<Boolean>) {
-        if (future.isDone) {
-           if (manageAccountsViewModel.getLoggedAccounts().isEmpty()) {
-                // Show create account screen if there isn't any account
-                createAccount()
-            } else { // At least one account left
-                manageAccountsViewModel.getCurrentAccount()?.let {
-                    if (currentAccount != it) {
-                        parentActivity.showLoadingDialog(R.string.common_loading)
-                        dismiss()
-                        changeToAccountContext(it)
-                    }
-                }
-            }
-        }
+        // Nothing to do
     }
 
     private fun changeToAccountContext(account: Account) {
@@ -247,17 +237,25 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
 
         collectLatestLifecycleFlow(manageAccountsViewModel.userQuotas) { listUserQuotas ->
             if (listUserQuotas.isNotEmpty()) {
+                manageAccountsViewModel.getCurrentAccount()?.let {
+                    if (currentAccount != it) {
+                        parentActivity.showLoadingDialog(R.string.common_loading)
+                        dismiss()
+                        changeToAccountContext(it)
+                    }
+                }
                 // hide the progress bar and show manage accounts dialog
                 val indeterminateProgressBar = dialogView.findViewById<ProgressBar>(R.id.indeterminate_progress_bar)
                 indeterminateProgressBar.visibility = View.GONE
                 val manageAccountsLayout = dialogView.findViewById<LinearLayout>(R.id.manage_accounts_layout)
                 manageAccountsLayout.visibility = View.VISIBLE
 
-                accountListAdapter = ManageAccountsAdapter(this)
                 accountListAdapter.submitAccountList(accountList = getAccountListItems(listUserQuotas))
 
-                val recyclerView = dialogView.findViewById<RecyclerView>(R.id.account_list_recycler_view)
+                recyclerView = dialogView.findViewById(R.id.account_list_recycler_view)
                 recyclerView.adapter = accountListAdapter
+            } else {
+                createAccount()
             }
         }
     }

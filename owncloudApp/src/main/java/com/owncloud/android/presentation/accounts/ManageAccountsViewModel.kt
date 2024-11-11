@@ -27,7 +27,6 @@ import android.accounts.Account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.owncloud.android.domain.user.model.UserQuota
-import com.owncloud.android.domain.user.usecases.GetUserQuotasUseCase
 import com.owncloud.android.domain.automaticuploads.model.AutomaticUploadsConfiguration
 import com.owncloud.android.domain.automaticuploads.usecases.GetAutomaticUploadsConfigurationUseCase
 import com.owncloud.android.domain.user.usecases.GetUserQuotasAsStreamUseCase
