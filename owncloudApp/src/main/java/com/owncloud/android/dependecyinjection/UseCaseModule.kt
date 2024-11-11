@@ -255,8 +255,8 @@ val useCaseModule = module {
     factoryOf(::GetStoredQuotaUseCase)
     factoryOf(::GetUserAvatarAsyncUseCase)
     factoryOf(::GetUserInfoAsyncUseCase)
-    factoryOf(::GetUserQuotasUseCase)
     factoryOf(::GetUserQuotasAsStreamUseCase)
+    factoryOf(::GetUserQuotasUseCase)
     factoryOf(::RefreshUserQuotaFromServerAsyncUseCase)
 
     // Server

@@ -29,7 +29,7 @@ data class UserQuota(
     val available: Long,
     val used: Long,
     val total: Long?,
-    val state: UserQuotaStatus?
+    val state: UserQuotaState?
 ) {
 
     fun getRelative(): Double {
