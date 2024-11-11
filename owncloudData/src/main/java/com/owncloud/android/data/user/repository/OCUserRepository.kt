@@ -45,8 +45,8 @@ class OCUserRepository(
     override fun getAllUserQuotas(): List<UserQuota> =
         localUserDataSource.getAllUserQuotas()
 
-    override fun getAllUserQuotasAsStream(): Flow<List<UserQuota>> =
-        localUserDataSource.getAllUserQuotasAsStream()
+    override fun getAllUserQuotasAsFlow(): Flow<List<UserQuota>> =
+        localUserDataSource.getAllUserQuotasAsFlow()
 
     override fun getUserAvatar(accountName: String): UserAvatar =
         remoteUserDataSource.getUserAvatar(accountName)

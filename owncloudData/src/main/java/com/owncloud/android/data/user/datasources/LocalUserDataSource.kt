@@ -34,7 +34,7 @@ interface LocalUserDataSource {
 
     fun getAllUserQuotas(): List<UserQuota>
 
-    fun getAllUserQuotasAsStream(): Flow<List<UserQuota>>
+    fun getAllUserQuotasAsFlow(): Flow<List<UserQuota>>
 
     fun deleteQuotaForAccount(
         accountName: String

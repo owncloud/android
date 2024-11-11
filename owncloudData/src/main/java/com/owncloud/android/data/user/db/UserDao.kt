@@ -37,7 +37,7 @@ interface UserDao {
     fun getAllUserQuotas(): List<UserQuotaEntity>
 
     @Query(SELECT_ALL_QUOTAS)
-    fun getAllUserQuotasAsStream(): Flow<List<UserQuotaEntity>>
+    fun getAllUserQuotasAsFlow(): Flow<List<UserQuotaEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrReplace(userQuotaEntity: UserQuotaEntity)

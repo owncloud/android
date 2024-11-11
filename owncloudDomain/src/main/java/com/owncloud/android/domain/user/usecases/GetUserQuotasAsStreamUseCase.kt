@@ -9,5 +9,5 @@ class GetUserQuotasAsStreamUseCase(
     private val userRepository: UserRepository
 ) : BaseUseCase<Flow<List<UserQuota>>, Unit>() {
     override fun run(params: Unit): Flow<List<UserQuota>> =
-        userRepository.getAllUserQuotasAsStream()
+        userRepository.getAllUserQuotasAsFlow()
 }
