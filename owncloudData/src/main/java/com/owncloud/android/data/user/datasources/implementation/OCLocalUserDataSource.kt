@@ -26,7 +26,7 @@ import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.data.user.db.UserDao
 import com.owncloud.android.data.user.db.UserQuotaEntity
-import com.owncloud.android.domain.user.model.UserQuotaStatus
+import com.owncloud.android.domain.user.model.UserQuotaState
 import com.owncloud.android.domain.user.model.UserQuota
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -47,8 +47,8 @@ class OCLocalUserDataSource(
         }
     }
 
-    override fun getAllUserQuotasAsStream(): Flow<List<UserQuota>> {
-        return userDao.getAllUserQuotasAsStream().map { userQuotasList ->
+    override fun getAllUserQuotasAsFlow(): Flow<List<UserQuota>> {
+        return userDao.getAllUserQuotasAsFlow().map { userQuotasList ->
             userQuotasList.map { it.toModel() }
         }
     }
@@ -65,7 +65,7 @@ class OCLocalUserDataSource(
                 available = available,
                 used = used,
                 total = total,
-                state = UserQuotaStatus.fromValue(state!!)
+                state = state?.let { UserQuotaState.fromValue(it) }
             )
 
         @VisibleForTesting
