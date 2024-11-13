@@ -128,7 +128,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -184,7 +183,9 @@ class FileDisplayActivity : FileActivity(),
 
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
     private val transfersViewModel: TransfersViewModel by viewModel()
-    private lateinit var spacesListViewModel: SpacesListViewModel
+
+    private val spacesListViewModelLazy: Lazy<SpacesListViewModel> = inject { parametersOf(account.name, false) }
+    private val spacesListViewModel: SpacesListViewModel get() = spacesListViewModelLazy.value
 
     private val sharedPreferences: SharedPreferencesProvider by inject()
 
@@ -381,7 +382,6 @@ class FileDisplayActivity : FileActivity(),
             }
         }
 
-        spacesListViewModel = getViewModel { parametersOf(account.name, false) }
         spacesListViewModel.refreshSpacesFromServer()
     }
 

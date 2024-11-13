@@ -155,32 +155,36 @@ class ManageAccountsAdapter(
     fun getItem(position: Int) = accountItemsList[position]
 
     private fun updateQuota(quotaText: TextView, quotaBar: ProgressBar, userQuota: UserQuota, context: Context) {
-        if (userQuota.available < 0) { // Pending, unknown or unlimited free storage. The progress bar is hid
-            quotaBar.visibility = View.GONE
-            quotaText.text = DisplayUtils.bytesToHumanReadable(userQuota.used, context, false)
-
-        } else if (userQuota.state == UserQuotaState.EXCEEDED) { // Exceeded storage. Value over 100%
-            quotaBar.apply {
-                progress = 100
-                progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
+        when {
+            userQuota.available < 0 -> { // Pending, unknown or unlimited free storage. The progress bar is hid
+                quotaBar.visibility = View.GONE
+                quotaText.text = DisplayUtils.bytesToHumanReadable(userQuota.used, context, false)
             }
-            quotaText.text = String.format(
-                context.getString(R.string.manage_accounts_quota),
-                DisplayUtils.bytesToHumanReadable(userQuota.used, context, false),
-                DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, false)
-            )
 
-        } else if (userQuota.available == 0L) { // Exceeded storage in oC10. The progress bar is hid
-            quotaBar.visibility = View.GONE
-            quotaText.text = context.getString(R.string.drawer_unavailable_used_storage)
+            userQuota.available == 0L -> { // Exceeded storage. Value over 100%
+                quotaBar.apply {
+                    progress = 100
+                    progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
+                }
+                if (userQuota.state == UserQuotaState.EXCEEDED) { // oCIS
+                    quotaText.text = String.format(
+                        context.getString(R.string.manage_accounts_quota),
+                        DisplayUtils.bytesToHumanReadable(userQuota.used, context, false),
+                        DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, false)
+                    )
+                } else { // oC10
+                    quotaText.text = context.getString(R.string.drawer_exceeded_quota)
+                }
+            }
 
-        } else { // Limited storage. Value under 100%
-            quotaBar.progress = userQuota.getRelative().toInt()
-            quotaText.text = String.format(
-                context.getString(R.string.manage_accounts_quota),
-                DisplayUtils.bytesToHumanReadable(userQuota.used, context, false),
-                DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, false)
-            )
+            else -> { // Limited storage. Value under 100%
+                quotaBar.progress = userQuota.getRelative().toInt()
+                quotaText.text = String.format(
+                    context.getString(R.string.manage_accounts_quota),
+                    DisplayUtils.bytesToHumanReadable(userQuota.used, context, false),
+                    DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, false)
+                )
+            }
         }
     }
 

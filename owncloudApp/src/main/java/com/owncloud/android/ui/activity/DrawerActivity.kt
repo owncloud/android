@@ -311,99 +311,102 @@ abstract class DrawerActivity : ToolbarActivity() {
             when (val uiResult = event.peekContent()) {
                 is UIResult.Success -> {
                     uiResult.data?.let { userQuota ->
-                        if (userQuota.available < 0) { // Pending, unknown or unlimited free storage
-                            getAccountQuotaBar()?.apply {
-                                isVisible = true
-                                progress = 0
-                                progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
-                            }
-                            getAccountQuotaText()?.text = String.format(
-                                getString(R.string.drawer_unavailable_free_storage),
-                                DisplayUtils.bytesToHumanReadable(userQuota.used, this, true)
-                            )
-                            getAccountQuotaStatusText()?.visibility = View.GONE
-
-                        } else if (userQuota.state == UserQuotaState.EXCEEDED) { // Exceeded storage. The value is over 100%
-                            getAccountQuotaBar()?.apply {
-                                isVisible = true
-                                progress = 100
-                                progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
-                            }
-                            getAccountQuotaText()?.apply {
-                                text = String.format(
-                                    getString(R.string.drawer_quota),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
-                                    userQuota.getRelative()
+                        when {
+                            userQuota.available < 0 -> { // Pending, unknown or unlimited free storage
+                                getAccountQuotaBar()?.apply {
+                                    isVisible = true
+                                    progress = 0
+                                    progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
+                                }
+                                getAccountQuotaText()?.text = String.format(
+                                    getString(R.string.drawer_unavailable_free_storage),
+                                    DisplayUtils.bytesToHumanReadable(userQuota.used, this, true)
                                 )
-                            }
-                            getAccountQuotaStatusText()?.apply {
-                                visibility = View.VISIBLE
-                                text = getString(R.string.drawer_exceeded_quota)
+                                getAccountQuotaStatusText()?.visibility = View.GONE
                             }
 
+                            userQuota.available == 0L -> { // Exceeded storage. The value is over 100%.
+                                getAccountQuotaBar()?.apply {
+                                    isVisible = true
+                                    progress = 100
+                                    progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
+                                }
 
-                        } else if (userQuota.available == 0L) { // Exceeded storage in oC10, quota 0, guest users
-                            getAccountQuotaBar()?.isVisible = false
-                            getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
-                            getAccountQuotaStatusText()?.visibility = View.GONE
-
-                        } else if (userQuota.state == UserQuotaState.NEARING) { // Nearing storage. Value between 75% and 90%
-                            getAccountQuotaBar()?.apply {
-                                isVisible = true
-                                progress = userQuota.getRelative().toInt()
-                                progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
-                            }
-                            getAccountQuotaText()?.apply {
-                                text = String.format(
-                                    getString(R.string.drawer_quota),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
-                                    userQuota.getRelative()
-                                )
-                            }
-                            getAccountQuotaStatusText()?.apply {
-                                visibility = View.VISIBLE
-                                text = getString(R.string.drawer_nearing_quota)
-                            }
-
-                        } else if (userQuota.state == UserQuotaState.CRITICAL) { // Critical storage. Value over 90%
-                            getAccountQuotaBar()?.apply {
-                                isVisible = true
-                                progress = userQuota.getRelative().toInt()
-                                progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
-                            }
-                            getAccountQuotaText()?.apply {
-                                text = String.format(
-                                    getString(R.string.drawer_quota),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
-                                    userQuota.getRelative()
-                                )
-                            }
-                            getAccountQuotaStatusText()?.apply {
-                                visibility = View.VISIBLE
-                                text = getString(R.string.drawer_critical_quota)
+                                if (userQuota.state == UserQuotaState.EXCEEDED) { // oCIS
+                                    getAccountQuotaText()?.apply {
+                                        text = String.format(
+                                            getString(R.string.drawer_quota),
+                                            DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
+                                            DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
+                                            userQuota.getRelative()
+                                        )
+                                    }
+                                    getAccountQuotaStatusText()?.apply {
+                                        visibility = View.VISIBLE
+                                        text = getString(R.string.drawer_exceeded_quota)
+                                    }
+                                } else { // oC10
+                                    getAccountQuotaText()?.text = getString(R.string.drawer_exceeded_quota)
+                                    getAccountQuotaStatusText()?.visibility = View.GONE
+                                }
                             }
 
-                        } else { // Limited storage. Value under 75%
-                            // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
-                            getAccountQuotaBar()?.apply {
-                                progress = userQuota.getRelative().toInt()
-                                isVisible = true
-                                progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
+                            else -> { // Limited storage. Value under 100%
+                                if (userQuota.state == UserQuotaState.NEARING) { // Nearing storage. Value between 75% and 90%
+                                    getAccountQuotaBar()?.apply {
+                                        isVisible = true
+                                        progress = userQuota.getRelative().toInt()
+                                        progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
+                                    }
+                                    getAccountQuotaText()?.apply {
+                                        text = String.format(
+                                            getString(R.string.drawer_quota),
+                                            DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
+                                            DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
+                                            userQuota.getRelative()
+                                        )
+                                    }
+                                    getAccountQuotaStatusText()?.apply {
+                                        visibility = View.VISIBLE
+                                        text = getString(R.string.drawer_nearing_quota)
+                                    }
+                                } else if (userQuota.state == UserQuotaState.CRITICAL) { // Critical storage. Value over 90%
+                                    getAccountQuotaBar()?.apply {
+                                        isVisible = true
+                                        progress = userQuota.getRelative().toInt()
+                                        progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
+                                    }
+                                    getAccountQuotaText()?.apply {
+                                        text = String.format(
+                                            getString(R.string.drawer_quota),
+                                            DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
+                                            DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
+                                            userQuota.getRelative()
+                                        )
+                                    }
+                                    getAccountQuotaStatusText()?.apply {
+                                        visibility = View.VISIBLE
+                                        text = getString(R.string.drawer_critical_quota)
+                                    }
+                                } else { // Normal storage. Value under 75%
+                                    // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
+                                    getAccountQuotaBar()?.apply {
+                                        progress = userQuota.getRelative().toInt()
+                                        isVisible = true
+                                        progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
+                                    }
+                                    getAccountQuotaText()?.text = String.format(
+                                        getString(R.string.drawer_quota),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.used, this, true),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this, true),
+                                        userQuota.getRelative()
+                                    )
+                                    getAccountQuotaStatusText()?.visibility = View.GONE
+                                }
                             }
-                            getAccountQuotaText()?.text = String.format(
-                                getString(R.string.drawer_quota),
-                                DisplayUtils.bytesToHumanReadable(userQuota.used, this, true),
-                                DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this, true),
-                                userQuota.getRelative()
-                            )
-                            getAccountQuotaStatusText()?.visibility = View.GONE
                         }
                     }
                 }
-
                 is UIResult.Loading -> getAccountQuotaText()?.text = getString(R.string.drawer_loading_quota)
                 is UIResult.Error -> getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
             }
