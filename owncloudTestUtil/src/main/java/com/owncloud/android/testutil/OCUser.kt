@@ -33,7 +33,7 @@ val OC_USER_QUOTA = UserQuota(
     used = 80_000,
     available = 200_000,
     total = 280_000,
-    state = ""
+    state = null
 )
 
 val OC_USER_AVATAR = UserAvatar(

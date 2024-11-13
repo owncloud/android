@@ -32,7 +32,7 @@ class UserQuotaTest {
             800,
             200,
             1000,
-            "normal"
+            UserQuotaState.NORMAL
         )
 
         assertEquals(800, item.available)
@@ -47,7 +47,7 @@ class UserQuotaTest {
             available = 800,
             used = 200,
             total = 1000,
-            state = "normal"
+            state = UserQuotaState.NORMAL
         )
 
         val item2 = UserQuota(
@@ -55,7 +55,7 @@ class UserQuotaTest {
             800,
             200,
             1000,
-            "normal"
+            UserQuotaState.NORMAL
         )
 
         assertTrue(item1 == item2)
@@ -69,7 +69,7 @@ class UserQuotaTest {
             available = 800,
             used = 200,
             total = 1000,
-            state = "normal"
+            state = UserQuotaState.NORMAL
         )
 
         val item2 = UserQuota(
@@ -77,7 +77,7 @@ class UserQuotaTest {
             1000,
             200,
             1000,
-            "normal"
+            UserQuotaState.NORMAL
         )
 
         assertFalse(item1 == item2)
@@ -91,7 +91,7 @@ class UserQuotaTest {
             available = 800_000_000,
             used = 20_000_000,
             total = 820_000_000,
-            state = "normal"
+            state = UserQuotaState.NORMAL
         )
 
         assertTrue(item.total == 820_000_000.toLong())
@@ -104,7 +104,7 @@ class UserQuotaTest {
             available = 0,
             used = 20_000_000,
             total = 0,
-            state = "normal"
+            state = UserQuotaState.NORMAL
         )
 
         assertTrue(item.total == 0.toLong())
@@ -117,7 +117,7 @@ class UserQuotaTest {
             available = -3,
             used = 20_000_000,
             total = 0,
-            state = "normal"
+            state = UserQuotaState.NORMAL
         )
 
         assertTrue(item1.total == 0.toLong())
@@ -130,7 +130,7 @@ class UserQuotaTest {
             available = 200_000,
             used = 20_000,
             total = 220_000,
-            state = "normal"
+            state = UserQuotaState.NORMAL
         )
 
         assertTrue(item.available > 0)
@@ -143,7 +143,7 @@ class UserQuotaTest {
             available = -3,
             used = 20_000,
             total = 0,
-            state = "normal"
+            state = UserQuotaState.NORMAL
         )
 
         assertFalse(item.available > 0)
@@ -156,7 +156,7 @@ class UserQuotaTest {
             available = -3,
             used = 20_000,
             total = 0,
-            state = "normal"
+            state = UserQuotaState.NORMAL
         )
 
         assertEquals(0.0, item.getRelative(), 0.0001)
@@ -169,7 +169,7 @@ class UserQuotaTest {
             available = 80_000,
             used = 20_000,
             total = 100_000,
-            state = "normal"
+            state = UserQuotaState.NORMAL
         )
 
         assertEquals(20.0, item.getRelative(), 0.0001)
@@ -182,7 +182,7 @@ class UserQuotaTest {
             available = 0,
             used = 0,
             total = 0,
-            state = "normal"
+            state = UserQuotaState.NORMAL
         )
 
         assertEquals(0.0, item.getRelative(), 0.0001)
@@ -195,7 +195,7 @@ class UserQuotaTest {
             available = 75_000,
             used = 20_000,
             total = 95_000,
-            state = "normal"
+            state = UserQuotaState.NORMAL
         )
 
         assertEquals(21.05, item.getRelative(), 0.0001)
