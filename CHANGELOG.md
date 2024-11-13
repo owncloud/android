@@ -36,6 +36,7 @@ ownCloud admins and users.
 
 * Change - Replace auto-uploads with automatic uploads: [#4252](https://github.com/owncloud/android/issues/4252)
 * Enhancement - Add status message when (un)setting av. offline from preview: [#4382](https://github.com/owncloud/android/issues/4382)
+* Enhancement - Quota improvements from GraphAPI: [#4411](https://github.com/owncloud/android/issues/4411)
 * Enhancement - Upgraded AGP version to 8.7.2: [#4478](https://github.com/owncloud/android/issues/4478)
 * Enhancement - Added text labels for BottomNavigationView: [#4484](https://github.com/owncloud/android/issues/4484)
 
@@ -57,6 +58,15 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4382
    https://github.com/owncloud/android/pull/4482
+
+* Enhancement - Quota improvements from GraphAPI: [#4411](https://github.com/owncloud/android/issues/4411)
+
+   The quota in the drawer has been updated depending on its status and also when a
+   file is removed, copied, moved and after a refresh operation. In addition, the
+   quota value for each account has been added in the manage accounts dialog.
+
+   https://github.com/owncloud/android/issues/4411
+   https://github.com/owncloud/android/pull/4496
 
 * Enhancement - Upgraded AGP version to 8.7.2: [#4478](https://github.com/owncloud/android/issues/4478)
 
