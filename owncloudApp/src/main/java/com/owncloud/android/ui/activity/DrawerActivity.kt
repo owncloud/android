@@ -389,7 +389,6 @@ abstract class DrawerActivity : ToolbarActivity() {
                                         text = getString(R.string.drawer_critical_quota)
                                     }
                                 } else { // Normal storage. Value under 75%
-                                    // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
                                     getAccountQuotaBar()?.apply {
                                         progress = userQuota.getRelative().toInt()
                                         isVisible = true

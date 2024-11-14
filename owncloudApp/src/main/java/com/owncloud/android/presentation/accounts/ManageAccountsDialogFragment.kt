@@ -23,7 +23,6 @@ package com.owncloud.android.presentation.accounts
 
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.accounts.AccountManagerCallback
 import android.accounts.AccountManagerFuture
 import android.accounts.OperationCanceledException
 import android.app.AlertDialog
@@ -54,7 +53,7 @@ import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.AccountAdapterListener, AccountManagerCallback<Boolean> {
+class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.AccountAdapterListener {
 
     private lateinit var accountListAdapter: ManageAccountsAdapter
     private var currentAccount: Account? = null
@@ -109,7 +108,7 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
             )
             .setPositiveButton(getString(R.string.common_yes)) { _, _ ->
                 val accountManager = AccountManager.get(MainApp.appContext)
-                accountManager.removeAccount(account, this, null)
+                accountManager.removeAccount(account, null, null)
                 if (manageAccountsViewModel.getLoggedAccounts().size > 1) {
                     dialogView.isVisible = true
                 }
@@ -190,13 +189,6 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
         }
     }
 
-    /**
-     * What happens when an account is removed
-     */
-    override fun run(future: AccountManagerFuture<Boolean>) {
-        // Nothing to do
-    }
-
     private fun changeToAccountContext(account: Account) {
         AccountUtils.setCurrentOwnCloudAccount(
             parentActivity.applicationContext,
@@ -252,7 +244,6 @@ class ManageAccountsDialogFragment : DialogFragment(), ManageAccountsAdapter.Acc
 
                 accountListAdapter.submitAccountList(accountList = getAccountListItems(listUserQuotas))
 
-                recyclerView = dialogView.findViewById(R.id.account_list_recycler_view)
                 recyclerView.adapter = accountListAdapter
             } else {
                 createAccount()
