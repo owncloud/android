@@ -374,7 +374,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                     getAccountQuotaBar()?.apply {
                                         isVisible = true
                                         progress = userQuota.getRelative().toInt()
-                                        progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
+                                        progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
                                     }
                                     getAccountQuotaText()?.apply {
                                         text = String.format(
