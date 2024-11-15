@@ -370,7 +370,7 @@ abstract class DrawerActivity : ToolbarActivity() {
                                         visibility = View.VISIBLE
                                         text = getString(R.string.drawer_nearing_quota)
                                     }
-                                } else if (userQuota.state == UserQuotaState.CRITICAL) { // Critical storage. Value over 90%
+                                } else if (userQuota.state == UserQuotaState.CRITICAL || userQuota.state == UserQuotaState.EXCEEDED) { // Critical storage. Value over 90%
                                     getAccountQuotaBar()?.apply {
                                         isVisible = true
                                         progress = userQuota.getRelative().toInt()
