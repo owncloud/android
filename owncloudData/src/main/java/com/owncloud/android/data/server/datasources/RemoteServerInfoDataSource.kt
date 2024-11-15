@@ -1,7 +1,9 @@
 /**
  * ownCloud Android client application
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,5 +23,5 @@ package com.owncloud.android.data.server.datasources
 import com.owncloud.android.domain.server.model.ServerInfo
 
 interface RemoteServerInfoDataSource {
-    fun getServerInfo(path: String): ServerInfo
+    fun getServerInfo(path: String, enforceOIDC: Boolean): ServerInfo
 }

@@ -147,4 +147,7 @@
     <!-- Send login_hint and user parameters in login request -->
     <bool name="send_login_hint_and_user">true</bool>
 
+    <!-- Enforce OpenID Connect authentication flow -->
+    <bool name="enforce_oidc">false</bool>
+
 </resources>

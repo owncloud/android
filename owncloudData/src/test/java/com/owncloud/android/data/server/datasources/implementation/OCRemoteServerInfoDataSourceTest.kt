@@ -174,7 +174,7 @@ class OCRemoteServerInfoDataSourceTest {
         prepareRemoteStatusToBeRetrieved(remoteServerInfo)
         prepareAuthorizationMethodToBeRetrieved(AuthenticationMethod.BASIC_HTTP_AUTH, true)
 
-        val currentValue = ocRemoteServerInfoDatasource.getServerInfo(expectedValue.baseUrl)
+        val currentValue = ocRemoteServerInfoDatasource.getServerInfo(expectedValue.baseUrl, false)
         assertEquals(expectedValue, currentValue)
 
         verify(exactly = 1) { ocServerInfoService.getRemoteStatus(expectedValue.baseUrl, ocClientMocked) }
@@ -188,7 +188,7 @@ class OCRemoteServerInfoDataSourceTest {
         prepareRemoteStatusToBeRetrieved(remoteServerInfo.copy(baseUrl = expectedValue.baseUrl, isSecureConnection = false))
         prepareAuthorizationMethodToBeRetrieved(AuthenticationMethod.BASIC_HTTP_AUTH, true)
 
-        val currentValue = ocRemoteServerInfoDatasource.getServerInfo(expectedValue.baseUrl)
+        val currentValue = ocRemoteServerInfoDatasource.getServerInfo(expectedValue.baseUrl, false)
         assertEquals(expectedValue, currentValue)
 
         verify(exactly = 1) { ocServerInfoService.getRemoteStatus(expectedValue.baseUrl, ocClientMocked) }
@@ -202,7 +202,7 @@ class OCRemoteServerInfoDataSourceTest {
         prepareRemoteStatusToBeRetrieved(remoteServerInfo.copy(isSecureConnection = true))
         prepareAuthorizationMethodToBeRetrieved(AuthenticationMethod.BEARER_TOKEN, true)
 
-        val currentValue = ocRemoteServerInfoDatasource.getServerInfo(expectedValue.baseUrl)
+        val currentValue = ocRemoteServerInfoDatasource.getServerInfo(expectedValue.baseUrl, false)
         assertEquals(expectedValue, currentValue)
 
         verify(exactly = 1) { ocServerInfoService.getRemoteStatus(expectedValue.baseUrl, ocClientMocked) }
@@ -216,7 +216,7 @@ class OCRemoteServerInfoDataSourceTest {
         prepareRemoteStatusToBeRetrieved(remoteServerInfo.copy(baseUrl = expectedValue.baseUrl, isSecureConnection = true))
         prepareAuthorizationMethodToBeRetrieved(AuthenticationMethod.BEARER_TOKEN, true)
 
-        val currentValue = ocRemoteServerInfoDatasource.getServerInfo(expectedValue.baseUrl)
+        val currentValue = ocRemoteServerInfoDatasource.getServerInfo(expectedValue.baseUrl, false)
         assertEquals(expectedValue, currentValue)
 
         verify(exactly = 1) { ocServerInfoService.getRemoteStatus(expectedValue.baseUrl, ocClientMocked) }
@@ -227,7 +227,7 @@ class OCRemoteServerInfoDataSourceTest {
     fun `getServerInfo throws exception when there is no connection with the server`() {
         prepareRemoteStatusToBeRetrieved(remoteServerInfo, NoConnectionWithServerException())
 
-        ocRemoteServerInfoDatasource.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl)
+        ocRemoteServerInfoDatasource.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, false)
 
         verify(exactly = 1) { ocServerInfoService.getRemoteStatus(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, ocClientMocked) }
         verify(exactly = 0) { ocServerInfoService.checkPathExistence(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, false, ocClientMocked) }
