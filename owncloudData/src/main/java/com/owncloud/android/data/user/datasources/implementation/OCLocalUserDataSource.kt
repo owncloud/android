@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,7 +26,10 @@ import androidx.annotation.VisibleForTesting
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.data.user.db.UserDao
 import com.owncloud.android.data.user.db.UserQuotaEntity
+import com.owncloud.android.domain.user.model.UserQuotaState
 import com.owncloud.android.domain.user.model.UserQuota
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class OCLocalUserDataSource(
     private val userDao: UserDao
@@ -43,6 +47,12 @@ class OCLocalUserDataSource(
         }
     }
 
+    override fun getAllUserQuotasAsFlow(): Flow<List<UserQuota>> {
+        return userDao.getAllUserQuotasAsFlow().map { userQuotasList ->
+            userQuotasList.map { it.toModel() }
+        }
+    }
+
     override fun deleteQuotaForAccount(accountName: String) {
         userDao.deleteQuotaForAccount(accountName = accountName)
     }
@@ -53,7 +63,9 @@ class OCLocalUserDataSource(
             UserQuota(
                 accountName = accountName,
                 available = available,
-                used = used
+                used = used,
+                total = total,
+                state = state?.let { UserQuotaState.fromValue(it) }
             )
 
         @VisibleForTesting
@@ -61,7 +73,9 @@ class OCLocalUserDataSource(
             UserQuotaEntity(
                 accountName = accountName,
                 available = available,
-                used = used
+                used = used,
+                total = total,
+                state = state?.value
             )
     }
 }

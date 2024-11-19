@@ -213,7 +213,7 @@ class FileListAdapter(
                     view.binding.let {
                         it.fileListConstraintLayout.filterTouchesWhenObscured = PreferenceUtils.shouldDisallowTouchesWithOtherVisibleWindows(context)
                         it.Filename.text = file.fileName
-                        it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context)
+                        it.fileListSize.text = DisplayUtils.bytesToHumanReadable(file.length, context, true)
                         it.fileListLastMod.text = DisplayUtils.getRelativeTimestamp(context, file.modificationTimestamp)
                         it.threeDotMenu.isVisible = getCheckedItems().isEmpty()
                         it.threeDotMenu.contentDescription = context.getString(R.string.content_description_file_operations, file.fileName)

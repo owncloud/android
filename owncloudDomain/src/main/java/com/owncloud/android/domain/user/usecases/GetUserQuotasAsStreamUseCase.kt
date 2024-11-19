@@ -1,8 +1,8 @@
 /**
  * ownCloud Android client application
  *
- * @author Abel García de Prada
  * @author Jorge Aguado Recio
+ *
  * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,21 +17,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.owncloud.android.data.user.db
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.owncloud.android.data.ProviderMeta.ProviderTableMeta.USER_QUOTAS_TABLE_NAME
 
-/**
- * Represents one record of the UserQuota table.
- */
-@Entity(tableName = USER_QUOTAS_TABLE_NAME)
-data class UserQuotaEntity(
-    @PrimaryKey
-    val accountName: String,
-    val used: Long,
-    val available: Long,
-    val total: Long? = null,
-    val state: String? = null
-)
+package com.owncloud.android.domain.user.usecases
+
+import com.owncloud.android.domain.BaseUseCase
+import com.owncloud.android.domain.user.UserRepository
+import com.owncloud.android.domain.user.model.UserQuota
+import kotlinx.coroutines.flow.Flow
+
+class GetUserQuotasAsStreamUseCase(
+    private val userRepository: UserRepository
+) : BaseUseCase<Flow<List<UserQuota>>, Unit>() {
+    override fun run(params: Unit): Flow<List<UserQuota>> =
+        userRepository.getAllUserQuotasAsFlow()
+}

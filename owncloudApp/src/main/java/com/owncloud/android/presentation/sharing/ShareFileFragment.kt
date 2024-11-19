@@ -250,7 +250,7 @@ class ShareFileFragment : Fragment(), ShareUserListAdapter.ShareUserAdapterListe
         if (file!!.isFolder) {
             binding.shareFileSize.isVisible = false
         } else {
-            binding.shareFileSize.text = DisplayUtils.bytesToHumanReadable(file!!.length, activity)
+            binding.shareFileSize.text = DisplayUtils.bytesToHumanReadable(file!!.length, activity, true)
         }
 
         // Private link button

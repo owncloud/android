@@ -111,6 +111,7 @@ import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragm
 import com.owncloud.android.presentation.files.removefile.RemoveFilesDialogFragment.Companion.TAG_REMOVE_FILES_DIALOG_FRAGMENT
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment
 import com.owncloud.android.presentation.files.renamefile.RenameFileDialogFragment.Companion.FRAGMENT_TAG_RENAME_FILE
+import com.owncloud.android.presentation.spaces.SpacesListViewModel
 import com.owncloud.android.presentation.thumbnails.ThumbnailsRequester
 import com.owncloud.android.presentation.transfers.TransfersViewModel
 import com.owncloud.android.ui.activity.FileActivity
@@ -145,6 +146,12 @@ class MainFileListFragment : Fragment(),
     }
     private val fileOperationsViewModel by sharedViewModel<FileOperationsViewModel>()
     private val transfersViewModel by viewModel<TransfersViewModel>()
+    private val spacesListViewModel: SpacesListViewModel by viewModel {
+        parametersOf(
+            requireArguments().getString(ARG_ACCOUNT_NAME),
+            false,
+        )
+    }
 
     private var _binding: MainFileListFragmentBinding? = null
     private val binding get() = _binding!!
@@ -446,7 +453,7 @@ class MainFileListFragment : Fragment(),
                 fileNameBottomSheet.text = file.fileName
 
                 val fileSizeBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_size_bottom_sheet)
-                fileSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(file.length, requireContext())
+                fileSizeBottomSheet.text = DisplayUtils.bytesToHumanReadable(file.length, requireContext(), true)
 
                 val fileLastModBottomSheet = fileOptionsBottomSheetSingleFile.findViewById<TextView>(R.id.file_last_mod_bottom_sheet)
                 fileLastModBottomSheet.text = DisplayUtils.getRelativeTimestamp(requireContext(), file.modificationTimestamp)
@@ -634,6 +641,10 @@ class MainFileListFragment : Fragment(),
         fileOperationsViewModel.refreshFolderLiveData.observe(viewLifecycleOwner) {
             binding.syncProgressBar.isIndeterminate = it.peekContent().isLoading
             binding.swipeRefreshMainFileList.isRefreshing = it.peekContent().isLoading
+
+            // Refresh the spaces and update the quota
+            spacesListViewModel.refreshSpacesFromServer()
+
             hideRefreshFab()
         }
 
@@ -1519,6 +1530,7 @@ class MainFileListFragment : Fragment(),
         val ARG_PICKING_A_FOLDER = "${MainFileListFragment::class.java.canonicalName}.ARG_PICKING_A_FOLDER}"
         val ARG_INITIAL_FOLDER_TO_DISPLAY = "${MainFileListFragment::class.java.canonicalName}.ARG_INITIAL_FOLDER_TO_DISPLAY}"
         val ARG_FILE_LIST_OPTION = "${MainFileListFragment::class.java.canonicalName}.FILE_LIST_OPTION}"
+        val ARG_ACCOUNT_NAME = "${MainFileListFragment::class.java.canonicalName}.ARG_ACCOUNT_NAME}"
         const val MAX_FILENAME_LENGTH = 223
         val forbiddenChars = listOf('/', '\\')
 
@@ -1533,11 +1545,13 @@ class MainFileListFragment : Fragment(),
             initialFolderToDisplay: OCFile,
             pickingAFolder: Boolean = false,
             fileListOption: FileListOption = FileListOption.ALL_FILES,
+            accountName: String,
         ): MainFileListFragment {
             val args = Bundle()
             args.putParcelable(ARG_INITIAL_FOLDER_TO_DISPLAY, initialFolderToDisplay)
             args.putBoolean(ARG_PICKING_A_FOLDER, pickingAFolder)
             args.putParcelable(ARG_FILE_LIST_OPTION, fileListOption)
+            args.putString(ARG_ACCOUNT_NAME, accountName)
             return MainFileListFragment().apply { arguments = args }
         }
     }

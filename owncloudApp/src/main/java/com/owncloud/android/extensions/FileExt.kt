@@ -26,5 +26,5 @@ import java.io.File
 
 fun File.toLegibleStringSize(context: Context): String {
     val bytes = if (!exists()) 0L else length()
-    return DisplayUtils.bytesToHumanReadable(bytes, context)
+    return DisplayUtils.bytesToHumanReadable(bytes, context, true)
 }

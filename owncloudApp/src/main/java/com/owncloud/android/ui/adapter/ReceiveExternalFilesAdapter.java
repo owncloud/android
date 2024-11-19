@@ -143,7 +143,7 @@ public class ReceiveExternalFilesAdapter extends BaseAdapter implements ListAdap
 
         fileSizeV.setVisibility(View.VISIBLE);
         fileSizeSeparatorV.setVisibility(View.VISIBLE);
-        fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getLength(), mContext));
+        fileSizeV.setText(DisplayUtils.bytesToHumanReadable(file.getLength(), mContext, true));
 
         // get Thumbnail if file is image
         if (file.isImage() && file.getRemoteId() != null) {

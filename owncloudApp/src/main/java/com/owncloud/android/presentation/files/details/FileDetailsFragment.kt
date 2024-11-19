@@ -328,7 +328,7 @@ class FileDetailsFragment : FileFragment() {
 
     private fun updateDetails(ocFileWithSyncInfo: OCFileWithSyncInfo) {
         binding.fdname.text = ocFileWithSyncInfo.file.fileName
-        binding.fdSize.text = DisplayUtils.bytesToHumanReadable(ocFileWithSyncInfo.file.length, requireContext())
+        binding.fdSize.text = DisplayUtils.bytesToHumanReadable(ocFileWithSyncInfo.file.length, requireContext(), true)
         binding.fdPath.text = ocFileWithSyncInfo.file.getParentRemotePath()
         setLastSync(ocFileWithSyncInfo.file)
         setModified(ocFileWithSyncInfo.file)

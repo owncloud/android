@@ -30,6 +30,9 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_loading_quota">Loading quota</string>
     <string name="drawer_quota">%1$s of %2$s used (%3$s %%)</string>
+    <string name="drawer_exceeded_quota">Storage full</string>
+    <string name="drawer_nearing_quota">Storage nearly full</string>
+    <string name="drawer_critical_quota">Storage very nearly full</string>
     <string name="drawer_unavailable_free_storage">%1$s in use</string>
     <string name="drawer_unavailable_used_storage">No storage usage information available</string>
     <string name="drawer_feedback">Feedback</string>
@@ -511,6 +514,8 @@
     <string name="prefs_category_accounts">Accounts</string>
     <string name="prefs_add_account">Add account</string>
     <string name="drawer_manage_accounts">Manage accounts</string>
+    <string name="manage_accounts_quota">%1$s of %2$s</string>
+    <string name="used_quota_title_manage_accounts">Used:</string>
     <string name="auth_redirect_non_secure_connection_title">Secure connection is redirected through an unsecured route.</string>
 
     <string name="actionbar_logger">Logs</string>
@@ -731,6 +736,8 @@
     <string name="release_notes_bugfixes_subtitle">Some bugs were fixed to improve experience in the app</string>
     <string name="release_notes_4_5_0_title_feedback_in_previews">Feedback when (un)setting av. offline in all previews</string>
     <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Added feedback when (un)setting av. offline in all previews and updated options menu depending on file status</string>
+    <string name="release_notes_4_5_0_title_quota_improvements">Improvements in storage occupation display</string>
+    <string name="release_notes_4_5_0_subtitle_quota_improvements">Storage occupation refreshed frequently in file and refresh operations and available in accounts manager view, besides of drawer menu</string>
 
 
     <!-- Open in web -->

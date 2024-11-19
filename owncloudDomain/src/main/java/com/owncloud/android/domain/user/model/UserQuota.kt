@@ -3,8 +3,9 @@
  *
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
+ * @author Jorge Aguado Recio
  *
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,25 +22,24 @@
 
 package com.owncloud.android.domain.user.model
 
-import androidx.annotation.VisibleForTesting
 import kotlin.math.roundToLong
 
 data class UserQuota(
     val accountName: String,
     val available: Long,
-    val used: Long
+    val used: Long,
+    val total: Long?,
+    val state: UserQuotaState?
 ) {
-    @VisibleForTesting
-    fun isLimited() = available > 0
 
-    fun getRelative() = if (isLimited() && getTotal() > 0) {
-        val relativeQuota = (used * 100).toDouble() / getTotal()
-        (relativeQuota * 100).roundToLong() / 100.0
-    } else 0.0
-
-    fun getTotal() = if (isLimited()) {
-        available + used
-    } else {
-        0
+    fun getRelative(): Double {
+        if (getTotal() == 0L) {
+            return 0.0
+        } else {
+            val relativeQuota = (used * 100).toDouble() / getTotal()
+            return (relativeQuota * 100).roundToLong() / 100.0
+        }
     }
+
+    fun getTotal(): Long = total ?: (available + used)
 }

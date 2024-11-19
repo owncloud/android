@@ -128,6 +128,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -183,6 +184,7 @@ class FileDisplayActivity : FileActivity(),
 
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
     private val transfersViewModel: TransfersViewModel by viewModel()
+    private lateinit var  spacesListViewModel: SpacesListViewModel
 
     private val sharedPreferences: SharedPreferencesProvider by inject()
 
@@ -379,9 +381,7 @@ class FileDisplayActivity : FileActivity(),
             }
         }
 
-        val spacesListViewModel: SpacesListViewModel by viewModel {
-            parametersOf(account.name, false)
-        }
+        spacesListViewModel = getViewModel { parametersOf(account.name, false) }
         spacesListViewModel.refreshSpacesFromServer()
     }
 
@@ -389,6 +389,7 @@ class FileDisplayActivity : FileActivity(),
         val mainListOfFiles = MainFileListFragment.newInstance(
             initialFolderToDisplay = file,
             fileListOption = fileListOption,
+            accountName = getCurrentOwnCloudAccount(applicationContext).name
         ).apply {
             fileActions = this@FileDisplayActivity
             uploadActions = this@FileDisplayActivity
@@ -1004,6 +1005,10 @@ class FileDisplayActivity : FileActivity(),
                     file = storageManager.getFileById(lastRemovedFile.parentId!!)
                     cleanSecondFragment()
                 }
+
+                // Refresh the spaces and update the quota
+                spacesListViewModel.refreshSpacesFromServer()
+
                 invalidateOptionsMenu()
             }
 
@@ -1037,6 +1042,9 @@ class FileDisplayActivity : FileActivity(),
                     showConflictDecisionDialog(uiResult = uiResult, data = it, replace = replace) { data, replace ->
                         launchMoveFile(data, replace)
                     }
+
+                    // Refresh the spaces and update the quota
+                    spacesListViewModel.refreshSpacesFromServer()
                 }
             }
 
@@ -1074,6 +1082,9 @@ class FileDisplayActivity : FileActivity(),
                         launchCopyFile(data, replace)
                     }
                 }
+
+                // Refresh the spaces and update the quota
+                spacesListViewModel.refreshSpacesFromServer()
             }
 
             is UIResult.Error -> {

@@ -1,0 +1,7 @@
+Enhancement: Quota improvements from GraphAPI
+
+The quota in the drawer has been updated depending on its status and also when a file is removed, copied, moved and after a refresh operation.
+In addition, the quota value for each account has been added in the manage accounts dialog.
+
+https://github.com/owncloud/android/issues/4411
+https://github.com/owncloud/android/pull/4496

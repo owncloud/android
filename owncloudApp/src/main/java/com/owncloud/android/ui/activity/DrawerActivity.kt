@@ -8,6 +8,7 @@
  * @author Abel García de Prada
  * @author Juan Carlos Garrote Gascón
  * @author Aitor Ballesteros Pavon
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -30,6 +31,7 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerFuture
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
@@ -55,6 +57,7 @@ import com.google.android.material.navigation.NavigationView
 import com.owncloud.android.R
 import com.owncloud.android.domain.capabilities.model.OCCapability
 import com.owncloud.android.domain.files.model.FileListOption
+import com.owncloud.android.domain.user.model.UserQuotaState
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.goToUrl
 import com.owncloud.android.extensions.openPrivacyPolicy
@@ -72,7 +75,6 @@ import com.owncloud.android.utils.PreferenceUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
-import kotlin.math.ceil
 
 /**
  * Base class to handle setup of the drawer implementation including avatar fetching and fallback
@@ -285,6 +287,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     open fun openDrawer() {
         getDrawerLayout()?.openDrawer(GravityCompat.START)
         findViewById<View>(R.id.nav_view).requestFocus()
+        drawerViewModel.getStoredQuota(account.name)
     }
 
     /**
@@ -310,39 +313,99 @@ abstract class DrawerActivity : ToolbarActivity() {
                     uiResult.data?.let { userQuota ->
                         when {
                             userQuota.available < 0 -> { // Pending, unknown or unlimited free storage
-                                getAccountQuotaBar()?.run {
+                                getAccountQuotaBar()?.apply {
                                     isVisible = true
                                     progress = 0
+                                    progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
                                 }
                                 getAccountQuotaText()?.text = String.format(
                                     getString(R.string.drawer_unavailable_free_storage),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.used, this)
+                                    DisplayUtils.bytesToHumanReadable(userQuota.used, this, true)
                                 )
-
+                                getAccountQuotaStatusText()?.visibility = View.GONE
                             }
 
-                            userQuota.available == 0L -> { // Quota 0, guest users
-                                getAccountQuotaBar()?.isVisible = false
-                                getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
-                            }
-
-                            else -> { // Limited quota
-                                // Update progress bar rounding up to next int. Example: quota is 0.54 => 1
-                                getAccountQuotaBar()?.run {
-                                    progress = ceil(userQuota.getRelative()).toInt()
+                            userQuota.available == 0L -> { // Exceeded storage. The value is over 100%.
+                                getAccountQuotaBar()?.apply {
                                     isVisible = true
+                                    progress = 100
+                                    progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
                                 }
-                                getAccountQuotaText()?.text = String.format(
-                                    getString(R.string.drawer_quota),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.used, this),
-                                    DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this),
-                                    userQuota.getRelative()
-                                )
+
+                                if (userQuota.state == UserQuotaState.EXCEEDED) { // oCIS
+                                    getAccountQuotaText()?.apply {
+                                        text = String.format(
+                                            getString(R.string.drawer_quota),
+                                            DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
+                                            DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
+                                            userQuota.getRelative()
+                                        )
+                                    }
+                                    getAccountQuotaStatusText()?.apply {
+                                        visibility = View.VISIBLE
+                                        text = getString(R.string.drawer_exceeded_quota)
+                                    }
+                                } else { // oC10
+                                    getAccountQuotaText()?.text = getString(R.string.drawer_exceeded_quota)
+                                    getAccountQuotaStatusText()?.visibility = View.GONE
+                                }
+                            }
+
+                            else -> { // Limited storage. Value under 100%
+                                if (userQuota.state == UserQuotaState.NEARING) { // Nearing storage. Value between 75% and 90%
+                                    getAccountQuotaBar()?.apply {
+                                        isVisible = true
+                                        progress = userQuota.getRelative().toInt()
+                                        progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
+                                    }
+                                    getAccountQuotaText()?.apply {
+                                        text = String.format(
+                                            getString(R.string.drawer_quota),
+                                            DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
+                                            DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
+                                            userQuota.getRelative()
+                                        )
+                                    }
+                                    getAccountQuotaStatusText()?.apply {
+                                        visibility = View.VISIBLE
+                                        text = getString(R.string.drawer_nearing_quota)
+                                    }
+                                } else if (userQuota.state == UserQuotaState.CRITICAL || userQuota.state == UserQuotaState.EXCEEDED) { // Critical storage. Value over 90%
+                                    getAccountQuotaBar()?.apply {
+                                        isVisible = true
+                                        progress = userQuota.getRelative().toInt()
+                                        progressTintList = ColorStateList.valueOf(resources.getColor(R.color.quota_exceeded))
+                                    }
+                                    getAccountQuotaText()?.apply {
+                                        text = String.format(
+                                            getString(R.string.drawer_quota),
+                                            DisplayUtils.bytesToHumanReadable(userQuota.used, context, true),
+                                            DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), context, true),
+                                            userQuota.getRelative()
+                                        )
+                                    }
+                                    getAccountQuotaStatusText()?.apply {
+                                        visibility = View.VISIBLE
+                                        text = getString(R.string.drawer_critical_quota)
+                                    }
+                                } else { // Normal storage. Value under 75%
+                                    getAccountQuotaBar()?.apply {
+                                        progress = userQuota.getRelative().toInt()
+                                        isVisible = true
+                                        progressTintList = ColorStateList.valueOf(resources.getColor(R.color.color_accent))
+                                    }
+                                    getAccountQuotaText()?.text = String.format(
+                                        getString(R.string.drawer_quota),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.used, this, true),
+                                        DisplayUtils.bytesToHumanReadable(userQuota.getTotal(), this, true),
+                                        userQuota.getRelative()
+                                    )
+                                    getAccountQuotaStatusText()?.visibility = View.GONE
+                                }
                             }
                         }
                     }
                 }
-
                 is UIResult.Loading -> getAccountQuotaText()?.text = getString(R.string.drawer_loading_quota)
                 is UIResult.Error -> getAccountQuotaText()?.text = getString(R.string.drawer_unavailable_used_storage)
             }
@@ -500,6 +563,7 @@ abstract class DrawerActivity : ToolbarActivity() {
     private fun getDrawerLinkIcon(): ImageView? = findViewById(R.id.drawer_link_icon)
     private fun getDrawerLinkText(): TextView? = findViewById(R.id.drawer_link_text)
     private fun getAccountQuotaText(): TextView? = findViewById(R.id.account_quota_text)
+    private fun getAccountQuotaStatusText(): TextView? = findViewById(R.id.account_quota_status_text)
     private fun getAccountQuotaBar(): ProgressBar? = findViewById(R.id.account_quota_bar)
     private fun getDrawerActiveUser() = findNavigationViewChildById(R.id.drawer_active_user) as ConstraintLayout?
     private fun getDrawerCurrentAccount() = findNavigationViewChildById(R.id.drawer_current_account) as AppCompatImageView?

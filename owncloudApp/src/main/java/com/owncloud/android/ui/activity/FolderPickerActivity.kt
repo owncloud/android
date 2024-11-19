@@ -253,7 +253,7 @@ open class FolderPickerActivity : FileActivity(),
         file = safeInitialFolder
 
         safeInitialFolder?.let {
-            val mainListOfFiles = MainFileListFragment.newInstance(it, true, FileListOption.ALL_FILES)
+            val mainListOfFiles = MainFileListFragment.newInstance(it, true, FileListOption.ALL_FILES, account.name)
             mainListOfFiles.fileActions = this
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, mainListOfFiles, TAG_LIST_OF_FOLDERS)

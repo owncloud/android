@@ -27,6 +27,7 @@ import com.owncloud.android.data.spaces.datasources.RemoteSpacesDataSource
 import com.owncloud.android.data.user.datasources.LocalUserDataSource
 import com.owncloud.android.domain.spaces.SpacesRepository
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.user.model.UserQuotaState
 import com.owncloud.android.domain.user.model.UserQuota
 
 class OCSpacesRepository(
@@ -39,11 +40,10 @@ class OCSpacesRepository(
             localSpacesDataSource.saveSpacesForAccount(listOfSpaces)
             val personalSpace = listOfSpaces.find { it.isPersonal }
             personalSpace?.let {
-                lateinit var userQuota: UserQuota
-                if (it.quota?.total!!.toInt() == 0) {
-                    userQuota = UserQuota(accountName, -3, it.quota?.used!!)
+                val userQuota = if (it.quota?.total!!.toInt() == 0) {
+                    UserQuota(accountName, -3, it.quota?.used!!, it.quota?.total!!, UserQuotaState.fromValue(it.quota?.state!!))
                 } else {
-                    userQuota = UserQuota(accountName, it.quota?.remaining!!, it.quota?.used!!)
+                    UserQuota(accountName, it.quota?.remaining!!, it.quota?.used!!, it.quota?.total!!, UserQuotaState.fromValue(it.quota?.state!!))
                 }
                 localUserDataSource.saveQuotaForAccount(accountName, userQuota)
             }
