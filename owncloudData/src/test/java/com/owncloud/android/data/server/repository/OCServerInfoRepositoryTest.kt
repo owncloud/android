@@ -41,18 +41,18 @@ class OCServerInfoRepositoryTest {
 
     @Test
     fun getServerInfoSuccess() {
-        every { remoteServerInfoDataSource.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl) } returns OC_SECURE_SERVER_INFO_BASIC_AUTH
+        every { remoteServerInfoDataSource.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, false) } returns OC_SECURE_SERVER_INFO_BASIC_AUTH
 
-        val currentValue = ocServerInfoRepository.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, false)
+        val currentValue = ocServerInfoRepository.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, false, false)
         assertEquals(OC_SECURE_SERVER_INFO_BASIC_AUTH, currentValue)
 
-        verify { remoteServerInfoDataSource.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl) }
+        verify { remoteServerInfoDataSource.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, false) }
     }
 
     @Test(expected = NoConnectionWithServerException::class)
     fun getServerInfoNoConnection() {
-        every { remoteServerInfoDataSource.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl) } throws NoConnectionWithServerException()
+        every { remoteServerInfoDataSource.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, false) } throws NoConnectionWithServerException()
 
-        ocServerInfoRepository.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, false)
+        ocServerInfoRepository.getServerInfo(OC_SECURE_SERVER_INFO_BASIC_AUTH.baseUrl, false, false)
     }
 }

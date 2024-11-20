@@ -245,7 +245,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="@string/oauth2_redirect_uri_path"
+                    android:host="@string/oauth2_redirect_uri_host"
                     android:scheme="@string/oauth2_redirect_uri_scheme" />
             </intent-filter>
             <intent-filter>

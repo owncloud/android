@@ -126,7 +126,8 @@ class OAuthUtils {
         fun buildRedirectUri(context: Context): Uri =
             Uri.Builder()
                 .scheme(context.getString(R.string.oauth2_redirect_uri_scheme))
-                .authority(context.getString(R.string.oauth2_redirect_uri_path))
+                .authority(context.getString(R.string.oauth2_redirect_uri_host))
+                .path(context.getString(R.string.oauth2_redirect_uri_path))
                 .build()
     }
 }

@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -22,5 +24,5 @@ package com.owncloud.android.domain.server
 import com.owncloud.android.domain.server.model.ServerInfo
 
 interface ServerInfoRepository {
-    fun getServerInfo(path: String, creatingAccount: Boolean): ServerInfo
+    fun getServerInfo(path: String, creatingAccount: Boolean, enforceOIDC: Boolean): ServerInfo
 }

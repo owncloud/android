@@ -1,5 +1,5 @@
 /* ownCloud Android Library is available under MIT license
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   Copyright (C) 2024 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -59,6 +59,8 @@ public class HttpConstants {
     public static final String OAUTH_HEADER_REFRESH_TOKEN = "refresh_token";
     public static final String OAUTH_HEADER_CODE_VERIFIER = "code_verifier";
     public static final String OAUTH_HEADER_SCOPE = "scope";
+    public static final String OAUTH_BODY_CLIENT_ID = "client_id";
+    public static final String OAUTH_BODY_CLIENT_SECRET = "client_secret";
 
     /***********************************************************************************************************
      ************************************************ CONTENT TYPES ********************************************

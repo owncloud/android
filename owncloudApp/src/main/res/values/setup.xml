@@ -87,7 +87,8 @@
 
     <!-- constants that must be respected by the authorization server; if changed, the app must be rebuild -->
     <string name="oauth2_redirect_uri_scheme">oc</string>
-    <string name="oauth2_redirect_uri_path">android.owncloud.com</string>
+    <string name="oauth2_redirect_uri_host">android.owncloud.com</string>
+    <string name="oauth2_redirect_uri_path"></string>
     <string name="oauth2_openid_scope">openid offline_access email profile</string>
     <string name="oauth2_openid_prompt">select_account consent</string>
 
@@ -146,5 +147,8 @@
 
     <!-- Send login_hint and user parameters in login request -->
     <bool name="send_login_hint_and_user">true</bool>
+
+    <!-- Enforce OpenID Connect authentication flow -->
+    <bool name="enforce_oidc">false</bool>
 
 </resources>

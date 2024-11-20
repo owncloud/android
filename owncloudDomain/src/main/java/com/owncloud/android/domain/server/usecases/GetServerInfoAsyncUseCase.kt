@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -34,7 +36,7 @@ class GetServerInfoAsyncUseCase(
 ) : BaseUseCaseWithResult<ServerInfo, GetServerInfoAsyncUseCase.Params>() {
     override fun run(params: Params): ServerInfo {
         val normalizedServerUrl = normalizeProtocolPrefix(params.serverPath).trimEnd(TRAILING_SLASH)
-        val serverInfo = serverInfoRepository.getServerInfo(normalizedServerUrl, params.creatingAccount)
+        val serverInfo = serverInfoRepository.getServerInfo(normalizedServerUrl, params.creatingAccount, params.enforceOIDC)
         if (!serverInfo.isSecureConnection && params.secureConnectionEnforced) {
             throw SSLErrorException(NOT_HTTP_ALLOWED_MESSAGE, SSLErrorCode.NOT_HTTP_ALLOWED)
         }
@@ -44,6 +46,7 @@ class GetServerInfoAsyncUseCase(
     data class Params(
         val serverPath: String,
         val creatingAccount: Boolean,
+        val enforceOIDC: Boolean,
         val secureConnectionEnforced: Boolean,
     )
 

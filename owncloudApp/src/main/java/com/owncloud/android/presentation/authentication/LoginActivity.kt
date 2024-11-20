@@ -609,9 +609,22 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         }
 
         // Use oidc discovery one, or build an oauth endpoint using serverBaseUrl + Setup string.
-        val tokenEndPoint = when (val serverInfo = authenticationViewModel.serverInfo.value?.peekContent()?.getStoredData()) {
-            is ServerInfo.OIDCServer -> serverInfo.oidcServerConfiguration.tokenEndpoint
-            else -> "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
+        val tokenEndPoint: String
+
+        var clientId: String? = null
+        var clientSecret: String? = null
+
+        when (val serverInfo = authenticationViewModel.serverInfo.value?.peekContent()?.getStoredData()) {
+            is ServerInfo.OIDCServer -> {
+                tokenEndPoint = serverInfo.oidcServerConfiguration.tokenEndpoint
+                if (serverInfo.oidcServerConfiguration.isTokenEndpointAuthMethodSupportedClientSecretPost()) {
+                    clientId = clientRegistrationInfo?.clientId ?: contextProvider.getString(R.string.oauth2_client_id)
+                    clientSecret = clientRegistrationInfo?.clientSecret ?: contextProvider.getString(R.string.oauth2_client_secret)
+                }
+            }
+            else -> {
+                tokenEndPoint = "$serverBaseUrl${File.separator}${contextProvider.getString(R.string.oauth2_url_endpoint_access)}"
+            }
         }
 
         val scope = resources.getString(R.string.oauth2_openid_scope)
@@ -619,10 +632,12 @@ class LoginActivity : AppCompatActivity(), SslUntrustedCertDialog.OnSslUntrusted
         val requestToken = TokenRequest.AccessToken(
             baseUrl = serverBaseUrl,
             tokenEndpoint = tokenEndPoint,
-            authorizationCode = authorizationCode,
-            redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
             clientAuth = clientAuth,
             scope = scope,
+            clientId = clientId,
+            clientSecret = clientSecret,
+            authorizationCode = authorizationCode,
+            redirectUri = OAuthUtils.buildRedirectUri(applicationContext).toString(),
             codeVerifier = authenticationViewModel.codeVerifier
         )
 

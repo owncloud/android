@@ -1,0 +1,9 @@
+Enhancement: Enforce OIDC auth flow via branding
+
+A new branded parameter `enforce_oidc` has been added to enforce the app to follow the OIDC auth flow,
+and `clientId` and `clientSecret` are sent in token requests when required by server. Moreover, the
+app now supports branded redirect URIs with path due to the new branded parameter
+`oauth2_redirect_uri_path` (legacy `oauth2_redirect_uri_path` is now `oauth2_redirect_uri_host`).
+
+https://github.com/owncloud/android/issues/4500
+https://github.com/owncloud/android/pull/4516

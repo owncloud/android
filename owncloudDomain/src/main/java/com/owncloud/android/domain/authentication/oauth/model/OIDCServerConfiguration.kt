@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.domain.authentication.oauth.model
 
 data class OIDCServerConfiguration(
@@ -24,9 +27,12 @@ data class OIDCServerConfiguration(
     val endSessionEndpoint: String?,
     val issuer: String,
     val registrationEndpoint: String?,
-    val responseTypesSupported: List<String>,
+    val responseTypesSupported: List<String>?, // TODO: provisional, remove nullability ASAP
     val scopesSupported: List<String>?,
     val tokenEndpoint: String,
     val tokenEndpointAuthMethodsSupported: List<String>?,
     val userInfoEndpoint: String?,
-)
+) {
+    fun isTokenEndpointAuthMethodSupportedClientSecretPost(): Boolean =
+        tokenEndpointAuthMethodsSupported?.any { it == "client_secret_post" } ?: false
+}

@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -33,7 +35,7 @@ class OCServerInfoRepository(
     private val oidcRemoteOAuthDataSource: RemoteOAuthDataSource,
 ) : ServerInfoRepository {
 
-    override fun getServerInfo(path: String, creatingAccount: Boolean): ServerInfo {
+    override fun getServerInfo(path: String, creatingAccount: Boolean, enforceOIDC: Boolean): ServerInfo {
         val oidcIssuerFromWebFinger: String? = if (creatingAccount) retrieveOIDCIssuerFromWebFinger(serverUrl = path) else null
 
         if (oidcIssuerFromWebFinger != null) {
@@ -45,7 +47,7 @@ class OCServerInfoRepository(
             )
         }
 
-        val serverInfo = remoteServerInfoDataSource.getServerInfo(path)
+        val serverInfo = remoteServerInfoDataSource.getServerInfo(path, enforceOIDC)
 
         if (serverInfo is ServerInfo.BasicServer) {
             return serverInfo
