@@ -2,7 +2,9 @@
  * ownCloud Android client application
  *
  * @author Abel García de Prada
- * Copyright (C) 2020 ownCloud GmbH.
+ * @author Juan Carlos Garrote Gascón
+ *
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -16,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.owncloud.android.domain.authentication.oauth.model
 
 sealed class TokenRequest(
@@ -24,24 +27,30 @@ sealed class TokenRequest(
     val clientAuth: String,
     val grantType: String,
     val scope: String,
+    val clientId: String?,
+    val clientSecret: String?,
 ) {
     class AccessToken(
         baseUrl: String,
         tokenEndpoint: String,
         clientAuth: String,
         scope: String,
+        clientId: String? = null,
+        clientSecret: String? = null,
         val authorizationCode: String,
         val redirectUri: String,
         val codeVerifier: String
-    ) : TokenRequest(baseUrl, tokenEndpoint, clientAuth, GrantType.ACCESS_TOKEN.string, scope)
+    ) : TokenRequest(baseUrl, tokenEndpoint, clientAuth, GrantType.ACCESS_TOKEN.string, scope, clientId, clientSecret)
 
     class RefreshToken(
         baseUrl: String,
         tokenEndpoint: String,
         clientAuth: String,
         scope: String,
+        clientId: String? = null,
+        clientSecret: String? = null,
         val refreshToken: String? = null
-    ) : TokenRequest(baseUrl, tokenEndpoint, clientAuth, GrantType.REFRESH_TOKEN.string, scope)
+    ) : TokenRequest(baseUrl, tokenEndpoint, clientAuth, GrantType.REFRESH_TOKEN.string, scope, clientId, clientSecret)
 
     enum class GrantType(val string: String) {
         /** Request access token. [More info](https://tools.ietf.org/html/rfc6749#section-4.1.3) */

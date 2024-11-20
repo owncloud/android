@@ -7,7 +7,7 @@
  * @author Juan Carlos Garrote Gascón
  *
  * Copyright (C) 2012  Bartek Przybylski
- * Copyright (C) 2022 ownCloud GmbH.
+ * Copyright (C) 2024 ownCloud GmbH.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -343,6 +343,9 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         String clientId = accountManager.getUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_ID);
         String clientSecret = accountManager.getUserData(account, KEY_CLIENT_REGISTRATION_CLIENT_SECRET);
 
+        String clientIdForRequest = null;
+        String clientSecretForRequest = null;
+
         if (clientId == null) {
             Timber.d("Client Id not stored. Let's use the hardcoded one");
             clientId = mContext.getString(R.string.oauth2_client_id);
@@ -359,6 +362,11 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             // Use token endpoint retrieved from oidc discovery
             tokenEndpoint = oidcServerConfigurationUseCaseResult.getDataOrNull().getTokenEndpoint();
 
+            if (oidcServerConfigurationUseCaseResult.getDataOrNull() != null &&
+            oidcServerConfigurationUseCaseResult.getDataOrNull().isTokenEndpointAuthMethodSupportedClientSecretPost()) {
+                clientIdForRequest = clientId;
+                clientSecretForRequest = clientSecret;
+            }
         } else {
             Timber.d("OIDC Discovery failed. Server discovery info: [ %s ]",
                     oidcServerConfigurationUseCaseResult.getThrowableOrNull().toString());
@@ -375,6 +383,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                 tokenEndpoint,
                 clientAuth,
                 scope,
+                clientIdForRequest,
+                clientSecretForRequest,
                 refreshToken
         );
 

@@ -1,6 +1,6 @@
 /* ownCloud Android Library is available under MIT license
  *
- *   Copyright (C) 2020 ownCloud GmbH.
+ *   Copyright (C) 2024 ownCloud GmbH.
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,7 @@
  *   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  */
+
 package com.owncloud.android.lib.resources.oauth.params
 
 import com.owncloud.android.lib.common.http.HttpConstants
@@ -32,6 +33,8 @@ sealed class TokenRequestParams(
     val clientAuth: String,
     val grantType: String,
     val scope: String,
+    val clientId: String?,
+    val clientSecret: String?,
 ) {
     abstract fun toRequestBody(): RequestBody
 
@@ -40,19 +43,24 @@ sealed class TokenRequestParams(
         clientAuth: String,
         grantType: String,
         scope: String,
+        clientId: String?,
+        clientSecret: String?,
         val authorizationCode: String,
         val redirectUri: String,
         val codeVerifier: String,
-    ) : TokenRequestParams(tokenEndpoint, clientAuth, grantType, scope) {
+    ) : TokenRequestParams(tokenEndpoint, clientAuth, grantType, scope, clientId, clientSecret) {
 
         override fun toRequestBody(): RequestBody =
-            FormBody.Builder()
-                .add(HttpConstants.OAUTH_HEADER_AUTHORIZATION_CODE, authorizationCode)
-                .add(HttpConstants.OAUTH_HEADER_GRANT_TYPE, grantType)
-                .add(HttpConstants.OAUTH_HEADER_REDIRECT_URI, redirectUri)
-                .add(HttpConstants.OAUTH_HEADER_CODE_VERIFIER, codeVerifier)
-                .add(HttpConstants.OAUTH_HEADER_SCOPE, scope)
-                .build()
+            FormBody.Builder().apply {
+                add(HttpConstants.OAUTH_HEADER_AUTHORIZATION_CODE, authorizationCode)
+                add(HttpConstants.OAUTH_HEADER_GRANT_TYPE, grantType)
+                add(HttpConstants.OAUTH_HEADER_REDIRECT_URI, redirectUri)
+                add(HttpConstants.OAUTH_HEADER_CODE_VERIFIER, codeVerifier)
+                add(HttpConstants.OAUTH_HEADER_SCOPE, scope)
+                if (clientId != null) add(HttpConstants.OAUTH_BODY_CLIENT_ID, clientId)
+                if (clientSecret != null) add(HttpConstants.OAUTH_BODY_CLIENT_SECRET, clientSecret)
+            }.build()
+
     }
 
     class RefreshToken(
@@ -60,16 +68,18 @@ sealed class TokenRequestParams(
         clientAuth: String,
         grantType: String,
         scope: String,
+        clientId: String?,
+        clientSecret: String?,
         val refreshToken: String? = null
-    ) : TokenRequestParams(tokenEndpoint, clientAuth, grantType, scope) {
+    ) : TokenRequestParams(tokenEndpoint, clientAuth, grantType, scope, clientId, clientSecret) {
 
         override fun toRequestBody(): RequestBody =
             FormBody.Builder().apply {
                 add(HttpConstants.OAUTH_HEADER_GRANT_TYPE, grantType)
                 add(HttpConstants.OAUTH_HEADER_SCOPE, scope)
-                if (!refreshToken.isNullOrBlank()) {
-                    add(HttpConstants.OAUTH_HEADER_REFRESH_TOKEN, refreshToken)
-                }
+                if (!refreshToken.isNullOrBlank()) add(HttpConstants.OAUTH_HEADER_REFRESH_TOKEN, refreshToken)
+                if (clientId != null) add(HttpConstants.OAUTH_BODY_CLIENT_ID, clientId)
+                if (clientSecret != null) add(HttpConstants.OAUTH_BODY_CLIENT_SECRET, clientSecret)
             }.build()
 
     }
