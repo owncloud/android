@@ -127,6 +127,7 @@ class AuthenticationViewModelTest : ViewModelTest() {
         every { anyConstructed<OAuthUtils>().generateCodeChallenge(any()) } returns "CODE CHALLENGE"
         every { anyConstructed<OAuthUtils>().generateRandomState() } returns "STATE"
         every { contextProvider.getBoolean(R.bool.enforce_secure_connection) } returns false
+        every { contextProvider.getBoolean(R.bool.enforce_oidc) } returns false
 
         testCoroutineDispatcher.pauseDispatcher()
 
