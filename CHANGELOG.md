@@ -39,6 +39,7 @@ ownCloud admins and users.
 * Enhancement - Quota improvements from GraphAPI: [#4411](https://github.com/owncloud/android/issues/4411)
 * Enhancement - Upgraded AGP version to 8.7.2: [#4478](https://github.com/owncloud/android/issues/4478)
 * Enhancement - Added text labels for BottomNavigationView: [#4484](https://github.com/owncloud/android/issues/4484)
+* Enhancement - Enforce OIDC auth flow via branding: [#4500](https://github.com/owncloud/android/issues/4500)
 
 ## Details
 
@@ -84,6 +85,18 @@ ownCloud admins and users.
 
    https://github.com/owncloud/android/issues/4484
    https://github.com/owncloud/android/pull/4498
+
+* Enhancement - Enforce OIDC auth flow via branding: [#4500](https://github.com/owncloud/android/issues/4500)
+
+   A new branded parameter `enforce_oidc` has been added to enforce the app to
+   follow the OIDC auth flow, and `clientId` and `clientSecret` are sent in token
+   requests when required by server. Moreover, the app now supports branded
+   redirect URIs with path due to the new branded parameter
+   `oauth2_redirect_uri_path` (legacy `oauth2_redirect_uri_path` is now
+   `oauth2_redirect_uri_host`).
+
+   https://github.com/owncloud/android/issues/4500
+   https://github.com/owncloud/android/pull/4516
 
 # Changelog for ownCloud Android Client [4.4.1] (2024-10-30)
 
