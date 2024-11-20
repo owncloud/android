@@ -28,6 +28,7 @@ dependencies {
     debugImplementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
 
     // Detekt
+    detektPlugins libs.detekt.formatting
     detektPlugins libs.detekt.libraries
 }
 

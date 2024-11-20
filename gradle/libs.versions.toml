@@ -81,6 +81,7 @@ androidx-test-runner = { group = "androidx.test", name = "runner", version.ref =
 androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "androidxTestUiAutomator" }
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-libraries = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
 dexopener = { group = "com.github.tmurakami", name = "dexopener", version.ref = "dexopener" }
 disklrucache = { group = "com.jakewharton", name = "disklrucache", version.ref = "disklrucache" }

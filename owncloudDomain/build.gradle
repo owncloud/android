@@ -47,5 +47,6 @@ dependencies {
     testImplementation libs.mockk
 
     // Detekt
+    detektPlugins libs.detekt.formatting
     detektPlugins libs.detekt.libraries
 }

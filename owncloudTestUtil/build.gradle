@@ -35,5 +35,6 @@ dependencies {
     implementation libs.androidx.lifecycle.livedata.ktx
 
     // Detekt
+    detektPlugins libs.detekt.formatting
     detektPlugins libs.detekt.libraries
 }
