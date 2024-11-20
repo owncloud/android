@@ -62,6 +62,8 @@ comments:
   EndOfSentenceFormat:
     active: false
     endOfSentenceFormat: '([.?!][ \t\n\r\f<])|([.?!:]$)'
+  KDocReferencesNonPublicProperty:
+    active: false
   OutdatedDocumentation:
     active: false
     matchTypeParameters: true
@@ -136,6 +138,10 @@ complexity:
   NestedBlockDepth:
     active: true
     threshold: 5
+  NestedScopeFunctions:
+    active: false
+    threshold: 1
+    functions: ['kotlin.apply', 'kotlin.run', 'kotlin.with', 'kotlin.let', 'kotlin.also']
   ReplaceSafeCallChainWithRun:
     active: false
   StringLiteralDuplication:
