@@ -29,6 +29,9 @@
   <string name="drawer_open">Hape</string>
   <string name="drawer_loading_quota">Kuotë ngarkimesh</string>
   <string name="drawer_quota">%1$s nga %2$s e përdorur (%3$s %%)</string>
+  <string name="drawer_exceeded_quota">Depozita plot</string>
+  <string name="drawer_nearing_quota">Depozita thuajse plot</string>
+  <string name="drawer_critical_quota">Depozita vërtet thuajse plot</string>
   <string name="drawer_unavailable_free_storage">%1$s në përdorim</string>
   <string name="drawer_unavailable_used_storage">S\’ka hollësi përdorimi depozitime </string>
   <string name="drawer_feedback">Përshtypje</string>
@@ -484,6 +487,8 @@
   <string name="prefs_category_accounts">Llogari</string>
   <string name="prefs_add_account">Shtoni llogari</string>
   <string name="drawer_manage_accounts">Administroni llogari</string>
+  <string name="manage_accounts_quota">%1$s nga %2$s</string>
+  <string name="used_quota_title_manage_accounts">Të përdorur:</string>
   <string name="auth_redirect_non_secure_connection_title">Lidhja e sigurt është ridrejtuar përmes një rruge të pasigurt.</string>
   <string name="actionbar_logger">Regjistra</string>
   <string name="log_send_history_button">Historik dërgimesh</string>

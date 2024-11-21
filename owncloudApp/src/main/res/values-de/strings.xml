@@ -29,6 +29,9 @@
   <string name="drawer_open">Öffnen</string>
   <string name="drawer_loading_quota">Hochlade-Kontingent</string>
   <string name="drawer_quota">%1$s von %2$s verwendet (%3$s %%)</string>
+  <string name="drawer_exceeded_quota">Speicher ist voll</string>
+  <string name="drawer_nearing_quota">Speicher ist beinahe voll</string>
+  <string name="drawer_critical_quota">Speicher sehr kurz vor voll</string>
   <string name="drawer_unavailable_free_storage">%1$s verwendet</string>
   <string name="drawer_unavailable_used_storage">Keine Speichernutzungsinformationen verfügbar</string>
   <string name="drawer_feedback">Rückmeldungen</string>
@@ -486,6 +489,8 @@
   <string name="prefs_category_accounts">Konten</string>
   <string name="prefs_add_account">Konto hinzufügen</string>
   <string name="drawer_manage_accounts">Konten verwalten</string>
+  <string name="manage_accounts_quota">%1$s von %2$s</string>
+  <string name="used_quota_title_manage_accounts">Verwendet:</string>
   <string name="auth_redirect_non_secure_connection_title">Die gesicherte Verbindung wird durch eine ungesicherte Route geleitet.</string>
   <string name="actionbar_logger">Protokolle</string>
   <string name="log_send_history_button">versende die Chronik</string>
@@ -675,6 +680,8 @@
   <string name="release_notes_bugfixes_subtitle">Einige Fehler wurden behoben, um die Benutzung der App zu verbessern.</string>
   <string name="release_notes_4_5_0_title_feedback_in_previews">Feedback wenn (de)aktivieren für offline verfügbar in allen Vorschauen.</string>
   <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Feedback hinzugefügt, wenn (de)aktivieren für offline verfügbar in allen Vorschauen, und Optionsmenü abhängig von Dateistatus aktualisiert</string>
+  <string name="release_notes_4_5_0_title_quota_improvements">Verbesserungen bei der Anzeige der Speicherbelegung</string>
+  <string name="release_notes_4_5_0_subtitle_quota_improvements">Die Speicherbelegung wird bei Datei- und Aktualisierungsvorgängen häufig aktualisiert und ist neben dem Schubladenmenü auch in der kontenmanager Ansicht verfügbar.</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Öffnen im Webbrowser</string>
   <string name="ic_action_open_with_web">Öffnen in %1$s (web)</string>
