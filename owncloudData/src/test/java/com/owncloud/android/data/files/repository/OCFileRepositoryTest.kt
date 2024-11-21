@@ -99,12 +99,6 @@ class OCFileRepositoryTest {
 
     @Test
     fun `createFolder creates a new folder and saves it`() {
-        every {
-            localSpacesDataSource.getWebDavUrlForSpace(
-                spaceId = OC_PARENT_FOLDER_WITH_SPACE_ID.spaceId,
-                accountName = OC_PARENT_FOLDER_WITH_SPACE_ID.owner
-            )
-        } returns OC_SPACE_PERSONAL.root.webDavUrl
         // The result of this method is not used, so it can be anything
         every { localFileDataSource.saveFilesInFolderAndReturnTheFilesThatChanged(any(), any()) } returns emptyList()
 
