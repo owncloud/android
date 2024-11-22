@@ -29,6 +29,9 @@
   <string name="drawer_open">Ava</string>
   <string name="drawer_loading_quota">Laadimise limiit</string>
   <string name="drawer_quota"> %1$s kasutusel %2$s-st (%3$s %%)</string>
+  <string name="drawer_exceeded_quota">Salvestusruum täis</string>
+  <string name="drawer_nearing_quota">Salvestusruum peaaegu täis</string>
+  <string name="drawer_critical_quota">Salvestusruum peaaegu täiesti täis</string>
   <string name="drawer_unavailable_free_storage">%1$s kasutusel</string>
   <string name="drawer_unavailable_used_storage">Mahu kasutuse info pole saadaval</string>
   <string name="drawer_feedback">Tagasiside</string>
@@ -486,6 +489,8 @@
   <string name="prefs_category_accounts">Kontod</string>
   <string name="prefs_add_account">Lisa konto</string>
   <string name="drawer_manage_accounts">Halda kontosid</string>
+  <string name="manage_accounts_quota">%1$s %2$s-st</string>
+  <string name="used_quota_title_manage_accounts">Kasutatud:</string>
   <string name="auth_redirect_non_secure_connection_title">Turvalist ühendust suunatakse läbi turvamata ühenduse.</string>
   <string name="actionbar_logger">Logid</string>
   <string name="log_send_history_button">Saada ajalugu</string>
@@ -675,6 +680,8 @@
   <string name="release_notes_bugfixes_subtitle">Mõned vead parandati, et täiustada rakenduse kasutajakogemust</string>
   <string name="release_notes_4_5_0_title_feedback_in_previews">Tagasiside kõikides eelvaadetes, kui võrguühenduseta failide saadavust muudetakse</string>
   <string name="release_notes_4_5_0_subtitle_feedback_in_previews">Lisatud on võrguühenduseta failide saadavuse tagasiside kõikidesse eelvaadetesse ning valikute menüüd uuendatakse vastavalt faili staatusele</string>
+  <string name="release_notes_4_5_0_title_quota_improvements">Täiustused salvestusmahu kasutuse kuvamisel</string>
+  <string name="release_notes_4_5_0_subtitle_quota_improvements">Salvestusmahu kasutust värskendatakse faili- ja värskendustoimingutes tihti ning on lisaks menüüle saadaval ka kontode halduse vaates</string>
   <!--Open in web-->
   <string name="ic_action_open_in_web">Ava veebis</string>
   <string name="ic_action_open_with_web">Ava %1$s (veebis)</string>
