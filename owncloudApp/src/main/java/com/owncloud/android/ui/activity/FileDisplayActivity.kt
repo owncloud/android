@@ -179,7 +179,7 @@ class FileDisplayActivity : FileActivity(),
 
     private var syncInProgress = false
 
-    private var fileListOption = FileListOption.ALL_FILES
+    var fileListOption = FileListOption.ALL_FILES
     private var waitingToSend: OCFile? = null
     private var waitingToOpen: OCFile? = null
 
