@@ -4,6 +4,7 @@
  * @author David González Verdugo
  * @author Abel García de Prada
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2024 ownCloud GmbH.
  *
@@ -58,6 +59,7 @@ class DrawerViewModel(
         accountName: String
     ) = runUseCaseWithResult(
         coroutineDispatcher = coroutinesDispatcherProvider.io,
+        requiresConnection = false,
         showLoading = true,
         liveData = _userQuota,
         useCase = getStoredQuotaUseCase,
