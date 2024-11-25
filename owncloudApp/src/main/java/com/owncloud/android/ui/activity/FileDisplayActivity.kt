@@ -73,6 +73,7 @@ import com.owncloud.android.domain.files.model.FileListOption
 import com.owncloud.android.domain.files.model.OCFile
 import com.owncloud.android.domain.files.model.OCFile.Companion.ROOT_PARENT_ID
 import com.owncloud.android.domain.spaces.model.OCSpace
+import com.owncloud.android.domain.user.model.UserQuota
 import com.owncloud.android.domain.utils.Event
 import com.owncloud.android.extensions.checkPasscodeEnforced
 import com.owncloud.android.extensions.collectLatestLifecycleFlow
@@ -94,9 +95,11 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion
 import com.owncloud.android.operations.SyncProfileOperation
 import com.owncloud.android.presentation.authentication.AccountUtils.getCurrentOwnCloudAccount
 import com.owncloud.android.presentation.capabilities.CapabilityViewModel
+import com.owncloud.android.presentation.common.DrawerViewModel
 import com.owncloud.android.presentation.common.UIResult
 import com.owncloud.android.presentation.conflicts.ConflictsResolveActivity
 import com.owncloud.android.presentation.files.details.FileDetailsFragment
+import com.owncloud.android.presentation.files.filelist.MainEmptyListFragment
 import com.owncloud.android.presentation.files.filelist.MainFileListFragment
 import com.owncloud.android.presentation.files.operations.FileOperation
 import com.owncloud.android.presentation.files.operations.FileOperationsViewModel
@@ -185,6 +188,7 @@ class FileDisplayActivity : FileActivity(),
     private val fileOperationsViewModel: FileOperationsViewModel by viewModel()
     private val transfersViewModel: TransfersViewModel by viewModel()
     private lateinit var  spacesListViewModel: SpacesListViewModel
+    private val drawerViewModel: DrawerViewModel by viewModel()
 
     private val sharedPreferences: SharedPreferencesProvider by inject()
 
@@ -192,6 +196,8 @@ class FileDisplayActivity : FileActivity(),
         internal set
 
     private lateinit var binding: ActivityMainBinding
+
+    private var isLightUser = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Timber.v("onCreate() start")
@@ -318,7 +324,10 @@ class FileDisplayActivity : FileActivity(),
             capabilitiesViewModel.capabilities.observe(this, Event.EventObserver {
                 onCapabilitiesOperationFinish(it)
             })
-            navigateTo(fileListOption, initialState = true)
+
+            drawerViewModel.userQuota.observe(this, Event.EventObserver {
+                onUserQuotaOperationFinish(it)
+            })
         }
 
         startListeningToOperations()
@@ -419,6 +428,14 @@ class FileDisplayActivity : FileActivity(),
         this.fileListOption = FileListOption.SHARED_BY_LINK
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.left_fragment_container, sharesFragment)
+        transaction.commit()
+    }
+
+    private fun initAndShowEmptyPersonalFolder(){
+        val emptyListFragment = MainEmptyListFragment()
+        this.fileListOption = FileListOption.ALL_FILES
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.left_fragment_container, emptyListFragment)
         transaction.commit()
     }
 
@@ -1505,6 +1522,15 @@ class FileDisplayActivity : FileActivity(),
         }
     }
 
+    private fun onUserQuotaOperationFinish(uiResult: UIResult<UserQuota?>) {
+        if (uiResult is UIResult.Success) {
+            if (uiResult.data?.available == -4L) {
+                isLightUser = true
+            }
+        }
+        navigateTo(fileListOption, initialState = true)
+    }
+
     override fun onSavedCertificate() {
         startSyncFolderOperation(currentDir, false)
     }
@@ -1743,13 +1769,20 @@ class FileDisplayActivity : FileActivity(),
         val previousFileListOption = fileListOption
         when (newFileListOption) {
             FileListOption.ALL_FILES -> {
-                if (previousFileListOption != newFileListOption || initialState) {
-                    file = storageManager.getRootPersonalFolder()
+                if (isLightUser) {
+                    file = null
                     fileListOption = newFileListOption
-                    mainFileListFragment?.updateFileListOption(newFileListOption, file) ?: initAndShowListOfFiles(newFileListOption)
-                    updateToolbar(file)
+                    initAndShowEmptyPersonalFolder()
+                    updateToolbar(null)
                 } else {
-                    browseToRoot()
+                    if (previousFileListOption != newFileListOption || initialState) {
+                        file = storageManager.getRootPersonalFolder()
+                        fileListOption = newFileListOption
+                        mainFileListFragment?.updateFileListOption(newFileListOption, file) ?: initAndShowListOfFiles(newFileListOption)
+                        updateToolbar(file)
+                    } else {
+                        browseToRoot()
+                    }
                 }
             }
 

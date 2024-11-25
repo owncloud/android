@@ -165,6 +165,7 @@
     <string name="file_list_empty_title_available_offline">No available offline files</string>
     <string name="file_list_empty_title_shared_by_links">No shared links</string>
     <string name="file_list_empty_subtitle_all_files">Upload some content or sync with your devices!</string>
+    <string name="light_users_subtitle">Personal folder is not available</string>
     <string name="shares_list_empty_title">No shares</string>
     <string name="shares_list_empty_subtitle">You are not collaborating on other people\'s resources.</string>
     <string name="spaces_list_empty_subtitle">You don\'t have access to any space!</string>
