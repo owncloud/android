@@ -10,6 +10,7 @@
  * @author Abel García de Prada
  * @author John Kalimeris
  * @author Aitor Ballesteros Pavón
+ * @author Jorge Aguado Recio
  *
  * Copyright (C) 2012  Bartek Przybylski
  * Copyright (C) 2024 ownCloud GmbH.
@@ -179,7 +180,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     private boolean showHiddenFiles;
     private OCSharedPreferencesProvider sharedPreferencesProvider;
-    private OCSpace personalSpace;
+    private boolean areSpacesAllowed;
 
 
     Pattern pattern = Pattern.compile("[/\\\\]");
@@ -228,10 +229,11 @@ public class ReceiveExternalFilesActivity extends FileActivity
 
     }
     private void subscribeToViewModels() {
-        mReceiveExternalFilesViewModel.getPersonalSpaceLiveData().observe(this, ocSpace -> {
-            personalSpace = ocSpace;
+        mReceiveExternalFilesViewModel.areSpacesAllowed(getAccount().name);
+        mReceiveExternalFilesViewModel.getSpacesAreAllowed().observe(this, spaces -> {
+            areSpacesAllowed = spaces;
 
-            if (personalSpace == null) { // OC10 Server
+            if (!areSpacesAllowed) { // OC10 Server
                 showListOfFiles();
                 showRetainerFragment();
                 updateDirectoryList();
@@ -337,7 +339,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
     @Override
     protected void onAccountSet(boolean stateWasRecovered) {
         super.onAccountSet(mAccountWasRestored);
-        mReceiveExternalFilesViewModel.getPersonalSpaceForAccount(getAccount().name);
+        mReceiveExternalFilesViewModel.areSpacesAllowed(getAccount().name);
         initTargetFolder();
 
         mReceiveExternalFilesViewModel.getSyncFolderLiveData().observe(this, eventUiResult -> {
@@ -360,7 +362,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                 } else if (uiResult instanceof UIResult.Success) {
                     mSyncInProgress = false;
                     updateDirectoryList();
-                    if (mParents.size() == 1 && personalSpace == null) {
+                    if (mParents.size() == 1) {
                         updateToolbar(getString(R.string.uploader_top_message));
                     }
                     if(fragmentContainer.getVisibility() == View.VISIBLE) {
@@ -433,7 +435,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
                     onAccountSet(mAccountWasRestored);
                     dialog.dismiss();
                     PreferenceManager.setLastUploadPath("/", this);
-                    mReceiveExternalFilesViewModel.getPersonalSpaceForAccount(getAccount().name);
+                    mReceiveExternalFilesViewModel.areSpacesAllowed(getAccount().name);
                     mAccountSelected = true;
                     mAccountSelectionShowing = false;
                 });
@@ -458,7 +460,7 @@ public class ReceiveExternalFilesActivity extends FileActivity
             String full_path = generatePath(mParents);
             startSyncFolderOperation(getStorageManager().getFileByPath(full_path, currentSpaceId));
             updateDirectoryList();
-            if (mParents.size() <= 1 && personalSpace == null) {
+            if (mParents.size() <= 1) {
                 updateToolbar(getString(R.string.uploader_top_message));
             }
         }
